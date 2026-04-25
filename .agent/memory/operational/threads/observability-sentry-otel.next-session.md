@@ -1,10 +1,59 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — created
-[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
-after `pnpm check` exposed local smoke/UI/a11y gates blocked by
-missing Vercel release metadata; removed the arbitrary observability
-plan-density limit). The new plan is queued and unimplemented.
+**Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — fixed the branch gates
+first, updated the active startup-boundary plan to gate-green, and began
+committing in owner-requested chunks. Full `pnpm check` exits 0. WS3 release
+cancellation landed as `2822e525`
+(`fix(mcp): relocate production cancellation gate`). Lane B startup/release
+boundary implementation landed as `9ea3ccd8`
+(`fix(observability): decouple local startup from sentry release`). The
+remaining docs/continuity commit records the plan state. Reviewer dispatch is
+still not claimed: current tool policy permits sub-agents only when the owner
+explicitly authorises delegation.)
+
+**Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session handoff
+after completing
+[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+for the current branch state and beginning startup-boundary Phase 2 GREEN.
+Missing-symbol REDs now have typed production-owned seams; Sentry off mode no
+longer resolves/carries release identity; app-version header/meta consumers and
+local dev/smoke deploy-metadata stripping are wired. Focused tests, build,
+type-check, knip, and depcruise are green. `pnpm lint` and
+`pnpm markdownlint-check:root` still fail only on the staged WS3 lane.)
+
+**Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session handoff
+after moving
+[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+into the repo and marking it as the blocking next step before startup-boundary
+Phase 2 GREEN. Owner direction: full non-test gates must stay green during
+TDD; current RED import/type/build fallout must be classified and repaired
+before implementation claims resume.)
+
+**Prior refresh**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
+— WS3 of
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
+**PAUSED**, owner-directed, to resume in next session. WS3 substance
+(15-item amendment, script relocation, semver rewrite, 8-test rewrite)
+is **fully drafted, reviewer-gated at §3.0, and applied to the working
+tree** (8 files staged with `git mv` rename detection preserved + 1
+unstaged `knip.config.ts` mjs-glob fix). HEAD unchanged at `015ac99b`;
+no commit landed. Pre-commit `knip` blocked on a parallel-track
+unresolved import (`apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
+→ `./local-stub-env.js`, owned by the parallel
+`mcp-local-startup-release-boundary.plan.md` Phase 2 GREEN agent).
+**§3.0 reviewer gate caught two BLOCKING enumeration gaps**
+(`assumptions-reviewer` Disposition #6 + `architecture-reviewer-fred`
+Disposition #3 / positive-note #4 sub-clauses); enumeration expanded
+**13 → 15 items**; MAJORs and MINORs absorbed before staging.
+Resume instructions, exact pause-time `git status`, drafted commit
+message, and post-commit hash-fill follow-up are recorded in
+[`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
+
+**Prior refresh**: 2026-04-24 (Codex / cursor / GPT-5.5 — completed Phase 1
+RED tests for
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+after promoting it to active and completing Phase 0 inventory evidence. Phase 2
+GREEN is next; no runtime code has changed yet.
 
 **Prior refresh**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
 — fresh 1M-context session continuing Frodo identity per PDR-027
@@ -205,8 +254,10 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author` | 2026-04-24 | 2026-04-24 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer` | 2026-04-24 | 2026-04-25 |
+| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `session-handoff-closeout; startup-boundary-phase0-executor; startup-boundary-red-and-gate-recovery-planning; gate-recovery-executor; startup-boundary-phase2-partial-green` | 2026-04-24 | 2026-04-25 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
+| `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -216,14 +267,187 @@ new sessions add rows; they do not rewrite older attribution.
 
 ## Landing Target (per PDR-026)
 
-**This session (release-identifier plan landing + WS2 §2.0 BLOCKING fix,
-WS2 §2.1-§2.7 deferred)**: opener was the owner-authored payload
-inside `/jc-start-right-thorough`: (1) commit the plan-revision
-substance as a single `docs(plans)` landing; (2) WS2 §2.0 split of
-`resolveGitSha` decoupled from `ROOT_PACKAGE_VERSION` as a single
-commit; (3) WS2 §2.1-§2.7 unified `resolveRelease` + sentry-node
-adapter + validator + caller-discipline. **Landed 1 and 2; 3
-deferred.** Deferral-honesty discipline (per PDR-026):
+**This session (2026-04-25 Codex / codex / GPT-5 — gate-green and commit
+packaging)**: opener was owner direction to "fix the gates first, update the
+plan, then start committing in sensible chunks." Outcome:
+
+- **Full gate green**: `pnpm check` exits 0 on
+  `feat/otel_sentry_enhancements` after the startup-boundary fixes and plan
+  update. The broad check includes secrets scan, clean, root script tests,
+  turbo build/type-check/lint/test/UI/a11y/smoke gates, shell lint,
+  subagent/portability checks, knip, depcruise, markdownlint, and Prettier.
+- **WS3 chunk committed**: `2822e525`
+  (`fix(mcp): relocate production cancellation gate`) landed the production
+  cancellation script relocation, semver rewrite, ADR-163 second amendment,
+  dependency/knip follow-through, and WS3 resume evidence.
+- **Lane B implementation committed**: `9ea3ccd8`
+  (`fix(observability): decouple local startup from sentry release`) landed
+  build-identity extraction, Sentry off-mode release removal, live
+  `SENTRY_MODE=sentry` strictness, local gate `SENTRY_MODE=off` launch
+  boundaries, app-version header/meta consumers, CLI off-mode test correction,
+  and focused tests.
+- **Architectural decision carried forward**: `RuntimeConfig.buildIdentity`
+  remains intentionally deferred for the smallest gate-green slice. Build
+  identity is still the canonical app build/release fact; Sentry release is a
+  projection from build identity plus Sentry context.
+- **Reviewer honesty**: the active plan still records reviewer dispatch as
+  pending because current Codex tool policy only permits sub-agents when the
+  owner explicitly authorises delegation.
+
+**Prior session (2026-04-25 Codex / cursor / GPT-5.5 — gate recovery +
+startup-boundary Phase 2 partial GREEN, paused for owner-requested context
+compression)**: opener was owner direction to resume the observability thread on
+`feat/otel_sentry_enhancements`, first priority
+[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md),
+with explicit boundaries not to touch the parallel WS3 lane. **Landed in the
+working tree, not committed**:
+
+- **Gate recovery completed**: current failures classified into startup-boundary
+  lane vs staged WS3 residuals; missing-symbol REDs converted to typed
+  production-owned seams; cadence guard added to the active plan.
+- **Partial Phase 2 GREEN implemented**:
+  - off-mode Sentry config no longer resolves or exposes release identity;
+  - HTTP/search observability tolerate off-mode config without release;
+  - Express Sentry error-handler registration requires explicit live
+    `SENTRY_MODE=sentry`;
+  - `resolveRelease` accepts validated build identity as Sentry projection input
+    while deriving effective environment from Sentry context;
+  - app-version headers and landing-page metadata consume `RuntimeConfig.version`;
+  - local dev and local stub env paths strip inherited deploy release metadata.
+- **Validation green**:
+  - `pnpm --filter @oaknational/sentry-node test` (8 files / 105 tests);
+  - `pnpm --filter @oaknational/build-metadata test` (4 files / 41 tests);
+  - focused streamable-http command over 7 startup-boundary files (12 tests);
+  - `pnpm type-check`;
+  - `pnpm knip`;
+  - `pnpm build`;
+  - `pnpm depcruise` (1967 modules / 4253 dependencies / 0 violations).
+- **Residual gates**: `pnpm lint` and `pnpm markdownlint-check:root` fail only
+  on the staged WS3 lane. The startup-boundary lane does not own those files.
+
+**What prevented closure**: owner explicitly requested this deep continuity
+refresh plus `/jc-session-handoff`, then manual context compression before
+continuing. This is a named owner-directed context-management pause, not a
+technical blocker. Falsifiability: after compression, a continuing agent should
+be able to read this record plus the two active plans, rerun the focused green
+commands above, and resume from the unresolved Phase 2 decision rather than
+rediscovering gate state.
+
+**Next session re-attempts**: resume Lane B in
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+Phase 2. First decide whether `RuntimeConfig` should carry a first-class
+`AppBuildIdentity` value now; then rerun reviewers against the latest
+reviewer-driven fixes; then run `smoke:dev:stub`, `test:ui`, and `test:a11y`.
+
+**This session (2026-04-25 Jazzy — WS3 PAUSED at pre-commit
+knip-gate)**: opener was the owner-authored payload inside
+`/jc-start-right-thorough` directing pickup of the queued
+release-identifier plan starting from "WS2 §2.0 PREREQUISITE
+BLOCKING fix" → WS2 §2.1-§2.7 atomic landing. **Payload was
+substantively stale** — `a4e8facb` had already landed §2.0 and
+`f5a009ab` had already landed §2.1-§2.7. Owner confirmed via
+AskUserQuestion that the actual intended lane was **WS3** (the next
+commit boundary on the same plan, recorded in the payload as "a
+separate commit boundary AFTER WS2 GREEN"). Deferral-honesty
+discipline (per PDR-026):
+
+- **What was attempted**: full WS3 sequence — draft §3.4 amendment,
+  §3.0 reviewer gate dispatch, §3.1 relocate, §3.2 rewrite, §3.3
+  unit-test rewrite, §3.4 amendment application, single atomic
+  commit, quality gates.
+- **What landed in the working tree (staged, NOT committed; HEAD
+  still at `015ac99b`)**:
+  - 8 staged files preserving `git mv` rename detection: script +
+    unit-test moved from `packages/core/build-metadata/build-scripts/`
+    into `apps/oak-curriculum-mcp-streamable-http/build-scripts/`;
+    in-app shim replaced in-place; `.d.ts` companion deleted (was
+    untracked under `**/*.d.ts`); `semver@^7.7.4` +
+    `@types/semver@^7.7.1` added as app devDeps; lockfile refreshed;
+    script body rewritten (~205 → ~127 lines after Prettier; ~50
+    lines of decision logic) using canonical `semver` with
+    `VERCEL_GIT_COMMIT_REF === 'main'` branch gate + asymmetric
+    current/previous handling; 8-test rewrite covering all 5
+    truth-table rows + 2 fetch-fallback variants (8/8 green at pause
+    time); 15-item second amendment to ADR-163 §1 + §10 + Enforcement
+    and Reviewer Dispositions (renamed first-amendment block + new
+    second-amendment block); ADR index entry updated.
+  - 1 unstaged WS3 dependency: `knip.config.ts` (added
+    `'build-scripts/**/*.mjs'` to the streamable-http workspace's
+    `entry` + `project` globs so knip detects the new devDeps as
+    used). Must fold into the WS3 commit on resume.
+- **What landed in the §3.0 reviewer gate**: `docs-adr-reviewer` +
+  `assumptions-reviewer` dispatched on the drafted amendment.
+  **Both reported two BLOCKING findings** in the original 13-item
+  enumeration: `assumptions-reviewer` Disposition #6 (primary
+  anti-drift gate claim) and `architecture-reviewer-fred`
+  Disposition #3 (devDep edge for the contract test) +
+  positive-note #4 sub-clauses (boundary discipline for the
+  cross-resolver and wiring integration test placements). All
+  reference surfaces being retracted by Items 10 (§1 process-gap
+  paragraph) and 11 (top-level Enforcement §5). Enumeration
+  expanded **13 → 15 items** to retract them with note. MAJORs
+  (Item 1 line range narrowing to preserve the
+  `**Cancellation truth table**:` label; Item 10 line range
+  narrowing to preserve the trailing blockquote separator) and
+  MINORs (Item 11 retract-with-note framing per assumptions-reviewer
+  I1; Item 7 final bullet-order note; Item 9 grep-friendly
+  `[[TODO:FILL_WS3_COMMIT_HASH]]` placeholder; Item 2 phrasing
+  softened per assumptions-reviewer I3) all absorbed before the
+  staged diff was finalised. Full disposition record is in the
+  ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
+  block (staged).
+- **What prevented the WS3 commit**: pre-commit `knip` gate failed
+  on a **parallel-track unresolved import** — owner-tracked
+  parallel session's
+  `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
+  imports `./local-stub-env.js` which the parallel agent has not yet
+  landed. Per `.agent/rules/no-verify-requires-fresh-authorisation.md`,
+  hook bypass requires per-commit owner authorisation (no
+  carry-forward). Owner directed pause to next session. This is
+  the second cross-session instance of the
+  parallel-track-pre-commit-coupling pattern Frodo recorded
+  2026-04-24 (parallel agent's `validate-portability.mjs`
+  triggered the equivalent pre-commit `prettier --check` block).
+  Behaviour change held: don't fix or bypass the parallel track,
+  pause and surface to owner.
+- **Falsifiability**: a future session opens, verifies HEAD at
+  `015ac99b` (or advanced cleanly by parallel agent), confirms
+  parallel agent has landed `local-stub-env.js`, runs `git add
+  knip.config.ts` to fold the unstaged WS3 dependency, retries the
+  drafted commit (validated against commitlint at pause time —
+  zero errors, one cosmetic `footer-leading-blank` warning). If
+  the commit lands cleanly, the pause discipline held; if it
+  surfaces a fresh defect not caused by the parallel-track
+  coupling, the pause was misjudged.
+- **What next session re-attempts**: WS3 commit + post-commit
+  hash-fill + WS5 quality gates. Resume instructions are recorded
+  in
+  [`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
+
+**Behavioural carry-forward** (informed by Pippin's spiral 2026-04-24
+and Frodo's voluntary-stop discipline 2026-04-24): the §3.0 reviewer
+gate did the job it exists to do — caught two BLOCKING enumeration
+gaps before the amendment landed, exactly the failure mode the gate
+was installed to prevent (incomplete first-amendment enumeration was
+the precipitating drift this entire plan exists to repair). The
+mid-cycle BLOCKING findings were absorbed into the amendment
+substance (Items 14, 15a, 15b) — NOT into the plan body — preserving
+the "do not re-plan the plan" discipline. The pause at the
+pre-commit gate is the inverse move to Pippin's spiral applied at a
+different scale: when an external blocker surfaces (parallel-track
+coupling), name it, document the pause-state precisely, hand off.
+
+---
+
+**Prior session (2026-04-24 Frodo — release-identifier plan landing
+and WS2 §2.0 BLOCKING fix, WS2 §2.1-§2.7 deferred)**: opener was the
+owner-authored payload inside `/jc-start-right-thorough`: (1) commit
+the plan-revision substance as a single `docs(plans)` landing; (2)
+WS2 §2.0 split of `resolveGitSha` decoupled from
+`ROOT_PACKAGE_VERSION` as a single commit; (3) WS2 §2.1-§2.7 unified
+`resolveRelease` + sentry-node adapter + validator + caller-discipline.
+**Landed 1 and 2; 3 deferred.** Deferral-honesty discipline (per
+PDR-026):
 
 - **What was attempted**: full payload sequence 1 → 2 → 3.
 - **What landed**:
@@ -433,10 +657,18 @@ Evidence:
 ### Owning plan(s)
 
 - **Focused local-startup follow-up**:
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
-  — queued and not started; owns the `pnpm check` blocker where
-  local smoke/UI/a11y gates require deploy-only release metadata
-  before reaching their own assertions.
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+  — active; Phase 0 inventory and Phase 1 RED tests are complete.
+  [`phase-0-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
+  names the source-of-truth matrix, local gate preconditions, test
+  classification, ADR-163 decision, and Phase 1 RED targets.
+  [`phase-1-red-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-1-red-evidence.md)
+  records the focused failing tests and reviewer clearance for GREEN.
+- **Completed gate-recovery precondition**:
+  [`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+  — complete for the current branch state. It owns the failure ledger,
+  non-test gate restoration, RED reshaping into buildable seams, and
+  full-gate cadence guard.
 - **Next-session pickup**:
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
   — release-identifier alignment + ADR-163 amendment + cancellation
@@ -452,12 +684,13 @@ Evidence:
 
 ### Current objective
 
-Resolve the latest owner-surfaced observability boundary question before
-treating `pnpm check` as a clean closure gate. The focused startup/release
-plan is queued for that defect. The branch-primary release-identifier lane
-still resumes at **WS3** — cancellation-script rewrite + relocation into the
-consuming app workspace + ADR-163 §10 second amendment — when the owner
-returns to that work.
+Continue the startup-boundary Phase 2 GREEN work after the gate-recovery
+precondition. The wider cadence problem is now recorded and guarded:
+non-test gates must stay green even while behavioural tests fail. The
+branch-primary release-identifier lane remains paused at WS3; its prior
+pre-commit `knip` blocker from the unresolved `local-stub-env` import is
+resolved by Lane B's new typed seam, but WS3 still has its own staged lint and
+markdownlint residuals.
 
 ### Current state
 
@@ -485,13 +718,26 @@ returns to that work.
   tasks — 997 + 651 + other workspace tests all pass). Parallel-
   track `.agent/` and `docs/engineering/testing-patterns.md`
   modifications left unstaged (owner/parallel-agent surface).
-- **Latest Codex touch (2026-04-24)**: no runtime code changed. Created
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
-  after analysis showed streamable-http local startup/gates are coupled to
-  Sentry release resolution before `SENTRY_MODE=off` semantics can take
-  effect. Removed the plan-count/density invariant from
-  [`observability/README.md`](../../../plans/observability/README.md)
-  because it was arbitrary and misrouted the plan away from its owning lane.
+- **Latest Cursor/GPT-5.5 touch (2026-04-25)**: gate recovery and partial
+  Phase 2 GREEN are applied in the working tree, uncommitted. The focused
+  startup-boundary plan was promoted to active, Phase 0 and Phase 1 evidence
+  were recorded, and
+  [`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+  was completed after owner correction that missing-symbol REDs are not
+  acceptable TDD. The branch now has typed production-owned seams for app build
+  identity, local-stub env preparation, app-version headers, and validated-env
+  runtime config construction. Reviewer follow-up drove actual runtime wiring:
+  `SENTRY_MODE=off` no longer resolves or exposes Sentry release identity;
+  HTTP/search observability tolerate off mode without a release field; Sentry
+  Express error-handler registration requires explicit live `SENTRY_MODE=sentry`;
+  app-version response headers and landing-page meta tags consume
+  `RuntimeConfig.version`; local dev and local stub env planning strip inherited
+  deploy release metadata. The focused startup-boundary command now passes
+  7 files / 12 tests, `@oaknational/sentry-node` passes 8 files / 105 tests,
+  `@oaknational/build-metadata` passes 4 files / 41 tests, and `pnpm
+  type-check`, `pnpm knip`, `pnpm build`, and `pnpm depcruise` pass.
+  `pnpm lint` and `pnpm markdownlint-check:root` still fail only on the staged
+  WS3 lane; they must not be fixed under Lane B unless owner redirects.
 - **Prior session (2026-04-24, Frodo, earlier)**: two commits
   landed — `9a0f9ebc` (plan-revision landing as `docs(plans)`,
   5 files, +1723/-627) and `a4e8facb` (WS2 §2.0 split of
@@ -635,10 +881,20 @@ returns to that work.
 - End-to-end Sentry verification (WS6) requires a fresh preview
   deploy after WS2 lands. Push a no-op commit on
   `feat/otel_sentry_enhancements` if needed to trigger the deploy.
-- `pnpm check` currently fails in streamable-http `smoke:dev:stub`,
-  `test:a11y`, and `test:ui` unless the local startup/release-boundary
-  defect is fixed or deploy metadata is supplied. Do not paper over this by
-  injecting fake Vercel SHA values into unrelated gates.
+- `pnpm check` has not been re-run after the partial Phase 2 GREEN. Do not
+  claim aggregate health until it is run after WS3 residuals are either landed
+  or explicitly isolated by owner direction.
+- `pnpm lint` currently fails only in staged WS3 file
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  (one TSDoc `>` escape error and three `semver` named-export warnings).
+- `pnpm markdownlint-check:root` currently fails only in staged WS3 plan text
+  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
+  around a quoted `+ @types/semver` line.
+- The runtime shape is only partially canonical: `RuntimeConfig.version` now
+  feeds app-version consumers, and `resolveRelease` accepts `buildIdentity`,
+  but `RuntimeConfig` does not yet carry a first-class `AppBuildIdentity` value.
+  Next session must decide whether to complete that shape before claiming the
+  build-identity model is fully implemented.
 
 ### Standing decisions
 
@@ -667,10 +923,33 @@ returns to that work.
 
 ### Next safe step
 
-If continuing the latest owner focus, begin with
-[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
-Phase 0. That plan is the focused route to fixing the streamable-http
-`pnpm check` blocker without adding fake deploy metadata to local gates.
+**Two parallel lanes are active on this thread; owner direction selects which to
+resume first. Current owner direction before compression was to continue Lane B
+after handoff.**
+
+**Lane A — Resume WS3 release-identifier (paused 2026-04-25 Jazzy)**.
+Substance is staged in the working tree; ONLY blocked at the
+pre-commit gate by staged WS3 lint/markdown residuals now that the
+Lane B unresolved `local-stub-env` import has a typed seam. Resume
+instructions and exact pause-time `git status` are in
+[`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
+Step 1 is to fix the staged WS3 lint/markdown residuals inside the WS3 lane,
+fold `knip.config.ts` into the WS3 commit via explicit pathspec, retry the
+drafted commit, then run the hash-fill follow-up and WS5 quality gates.
+
+**Lane B — Gate recovery before startup-boundary Phase 2 GREEN
+(Codex/cursor GPT-5.5)**.
+[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+is complete for the current branch state. Resume
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+Phase 2 GREEN from its recorded partial GREEN state, using the completed
+[`Phase 0 evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
+and
+[`Phase 1 RED evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-1-red-evidence.md).
+Immediate next step: decide whether to add first-class `AppBuildIdentity` to
+`RuntimeConfig` now, then re-run reviewers against the latest reviewer-driven
+fixes and run `smoke:dev:stub`, `test:ui`, and `test:a11y` once the intended
+scope is confirmed.
 
 If the owner explicitly returns to the release-identifier lane, **Branch
 HEAD is `f5a009ab`** (may advance if parallel-track work lands further).

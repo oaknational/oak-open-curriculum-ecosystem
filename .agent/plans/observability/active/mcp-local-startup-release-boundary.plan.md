@@ -6,23 +6,26 @@ overview: >
 todos:
   - id: phase-0-boundary-inventory
     content: "Phase 0: Inventory composition roots, release identity inputs, gate contracts, and current failure evidence."
-    status: pending
+    status: completed
   - id: phase-1-red-tests
     content: "Phase 1: Add failing tests that prove SENTRY_MODE=off, full local startup, and gate-boundary contracts through injected env with no in-process IO or process.env access."
-    status: pending
+    status: completed
+  - id: quality-gate-recovery
+    content: "Quality gate recovery: classify current pnpm check failures, restore non-test gates, and add cadence guard before Phase 2 GREEN."
+    status: completed
   - id: phase-2-boundary-implementation
     content: "Phase 2: Refactor observability/release/startup boundaries, eliminate in-scope standards failures, and keep production release attribution strict."
-    status: pending
+    status: completed
   - id: phase-3-docs-and-gates
     content: "Phase 3: Update ADR/docs/plan references, run reviewer checks, prove no in-process IO/global-env regressions, then run pnpm check."
-    status: pending
+    status: in_progress
 ---
 
 # MCP Local Startup Release Boundary
 
-**Last Updated**: 2026-04-24  
-**Status**: 🔴 NOT STARTED — focused follow-up from `pnpm check`
-closure failure  
+**Last Updated**: 2026-04-25  
+**Status**: 🟢 GATE GREEN — full `pnpm check` passed; Lane B
+implementation committed  
 **Scope**: HTTP MCP app startup, Sentry release resolution, local
 smoke/UI/a11y gate contracts, and the tests/docs that govern those
 boundaries.
@@ -142,10 +145,73 @@ records a named, blocking follow-up before closure.
    extract an injected env-source or pure validated-env seam rather than testing
    through the IO path. No test reads or writes `process.env`, no in-process
    test performs IO, and no test-only app duplicates production composition.
+6. Keep observability always on. Disabling Sentry means disabling the external
+   Sentry sink adapter only; it must not disable stdout logging, OTel-shaped log
+   records, local spans, correlation context, or app-level observability helpers.
+7. Extract app build identity into its own boundary. Build identity is not
+   created by observability and is not owned by Sentry release resolution.
+   Observability, HTML pages, API responses, and Sentry adapters are consumers
+   of that identity.
 
 **Could it be simpler?** Yes: the simplest healthy shape is one release
-identity authority, one app factory/composition contract, and gate-specific
-tests that inject env/observability at the boundary they actually own.
+identity authority, one app build identity authority, one app
+factory/composition contract, and gate-specific tests that inject
+env/observability at the boundary they actually own.
+
+## Build Identity Boundary
+
+This plan now owns an explicit build-identity extraction before GREEN
+implementation proceeds.
+
+### Requirements
+
+- Every app build has a build/version identity, including local dev, local
+  smoke, Vercel preview, Vercel production on `main`, and production builds
+  from non-`main` branches used for user testing.
+- The identity value is determined by target environment (`development`,
+  `preview`, `production`), build context (`local`, `vercel`), and branch
+  (`main` or other). Production builds from non-`main` branches must keep their
+  distinct deploy identity rather than being forced into the `main` production
+  identity.
+- Build identity is orthogonal to Sentry and is the canonical build/release
+  fact for the app. `resolveRelease` becomes a Sentry-specific projection from
+  that build identity plus Sentry context; it is not a second source of app
+  identity. Build identity may be sent to Sentry as separate observability
+  metadata, but the Sentry `release` field remains the ADR-163 projection and
+  is never a fallback invented inside the Sentry adapter.
+- Runtime code consumes a typed identity value. It must not recalculate it via
+  Sentry config, ambient env reads, or deployment-only fallbacks.
+- Missing or unknown identity must fail fast with a helpful error at the
+  identity boundary, not later inside observability or the Sentry adapter.
+
+### Candidate Shape
+
+The GREEN implementation should consider an app-owned generated module such as
+`apps/oak-curriculum-mcp-streamable-http/src/.app-version.ts`:
+
+- the checked-in default exports an explicit unknown/unset sentinel;
+- build/dev startup tooling overwrites it with a generated identity for the
+  current context;
+- runtime imports the generated value through a small build-identity adapter;
+- the adapter throws or returns a typed `Result` with a helpful error if the
+  sentinel reaches a runtime path that requires a real identity.
+
+If the final home is a separate workspace, prefer extending
+`@oaknational/build-metadata` or creating a narrowly named build-identity
+workspace over adding app-local release logic to observability or Sentry
+packages.
+
+### Consumers
+
+- `RuntimeConfig.version` / future `RuntimeConfig.buildIdentity` fields.
+- `createHttpLogger` OTel `Resource['service.version']`.
+- `x-app-version` on API responses.
+- `<meta name="app-version" ...>` on HTML pages.
+- Sentry external sink adapter metadata such as an `app.version` tag, context,
+  or OTel resource attribute only when Sentry is enabled.
+- `resolveRelease(buildIdentity, sentryContext)` as the Sentry `release`
+  projection when Sentry is enabled. This projection remains governed by
+  ADR-163 and must not recalculate or replace build identity.
 
 ## Non-Goals
 
@@ -163,6 +229,11 @@ tests that inject env/observability at the boundary they actually own.
 ## Phase 0: Boundary Inventory
 
 **Goal**: turn the diagnosis into an ownership matrix before changing code.
+
+**Evidence**:
+[`mcp-local-startup-release-boundary.phase-0-evidence.md`](mcp-local-startup-release-boundary.phase-0-evidence.md)
+records the completed ownership matrix, local gate preconditions, test
+classification, ADR-163 decision, and Phase 1 RED target list.
 
 ### Tasks
 
@@ -240,6 +311,11 @@ tests that inject env/observability at the boundary they actually own.
 
 **Goal**: lock the desired boundary before refactoring.
 
+**Evidence**:
+[`mcp-local-startup-release-boundary.phase-1-red-evidence.md`](mcp-local-startup-release-boundary.phase-1-red-evidence.md)
+records the failing RED tests, focused commands, reviewer gates, and GREEN
+entry criteria.
+
 ### Required failing tests
 
 1. `@oaknational/sentry-node`: paired mode-boundary proof using the same
@@ -313,6 +389,9 @@ tests that inject env/observability at the boundary they actually own.
 - Each new test fails for the current architectural reason, not because of
   missing fixtures or unrelated setup.
 - The failure messages name release/startup boundary behaviour.
+- Build identity RED tests prove the generated identity boundary exists,
+  fails fast for the unknown sentinel, and supports local development without
+  Sentry metadata.
 - Existing release truth-table tests still cover production and preview
   attribution.
 - At least one RED test proves the full local env-data to runtime-config to
@@ -329,6 +408,106 @@ tests that inject env/observability at the boundary they actually own.
 ## Phase 2: Boundary Implementation
 
 **Goal**: make the tests pass by fixing ownership, not by hiding the symptom.
+
+**Precondition**:
+[`gate-recovery-cadence.plan.md`](gate-recovery-cadence.plan.md) must run
+before Phase 2 GREEN implementation continues. The current RED slice introduced
+missing-symbol and non-test gate failures; those must be converted into
+typed, buildable seams or otherwise classified in the gate ledger before
+implementation claims resume.
+
+**Precondition status (2026-04-25)**:
+[`gate-recovery-cadence.plan.md`](gate-recovery-cadence.plan.md) is complete
+for the current branch state. Missing-symbol REDs have typed seams, focused
+startup-boundary tests pass, and the non-test gates below pass:
+
+```bash
+pnpm --filter @oaknational/sentry-node test
+pnpm --filter @oaknational/build-metadata test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http exec vitest run \
+  src/observability/http-observability.integration.test.ts \
+  src/runtime-config.integration.test.ts \
+  src/build-identity.unit.test.ts \
+  src/app/app-version-header.unit.test.ts \
+  src/landing-page/render-landing-page.unit.test.ts \
+  smoke-tests/modes/local-stub-env.unit.test.ts \
+  operations/development/http-dev-contract.unit.test.ts
+pnpm type-check
+pnpm knip
+pnpm build
+pnpm depcruise
+```
+
+Post-resume gate recovery on 2026-04-25 fixed the WS3 lint/markdown residuals
+that were blocking root gates, then repaired the remaining root `pnpm test`
+residual in the search CLI observability contract. The refreshed focused and
+root non-mutating gates below now pass:
+
+```bash
+pnpm lint
+pnpm markdownlint-check:root
+pnpm type-check
+pnpm test
+pnpm knip
+pnpm depcruise
+pnpm build
+pnpm --filter @oaknational/sentry-node test
+pnpm --filter @oaknational/build-metadata test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:a11y
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub
+```
+
+Full repo gate confirmation now includes `pnpm check`, which passed after the
+Phase 2 GREEN plan update and formatting/fix tail.
+
+### Phase 2 GREEN state (2026-04-25)
+
+Implemented and validated in the working tree:
+
+- `@oaknational/sentry-node` off mode branches before Sentry release/Git SHA
+  resolution; `SentryOffConfig` no longer carries `release` or `releaseSource`.
+- HTTP and search CLI observability tolerate off-mode config without a Sentry
+  release field while keeping stdout/app observability intact.
+- Express Sentry error-handler registration is gated on explicit live
+  `SENTRY_MODE=sentry`, not raw `SENTRY_MODE !== 'off'`.
+- `resolveRelease` accepts canonical app build identity as Sentry projection
+  input, validates the projected value as Sentry-safe, and uses Sentry context
+  for the effective release environment.
+- HTTP app version consumers are wired: response header middleware emits
+  `x-app-version`, and the landing page meta tag consumes `RuntimeConfig.version`.
+- Local dev and local stub env planning strip inherited deploy release metadata
+  (`VERCEL_GIT_COMMIT_SHA`, `VERCEL_BRANCH_URL`, `SENTRY_RELEASE_OVERRIDE`).
+- Pure seams now exist for app build identity, local-stub env preparation,
+  app-version headers, and validated-env-to-runtime-config construction.
+- Local no-auth/browser gates and local-stub smoke explicitly set
+  `SENTRY_MODE=off` at their launch/env-preparation boundary. This keeps local
+  gate startup from requiring deploy-only Sentry release metadata while
+  preserving live `SENTRY_MODE=sentry` strictness.
+- Playwright UI/a11y package scripts clear inherited `NO_COLOR` before
+  launching Playwright, avoiding the Node `NO_COLOR`/`FORCE_COLOR` warning
+  without changing product runtime configuration.
+- Search CLI observability tests now match the separated contract: off mode
+  exposes service/environment without a Sentry release; live Sentry mode
+  exposes the validated Sentry release projection.
+- Lane B implementation landed as commit `9ea3ccd8`
+  (`fix(observability): decouple local startup from sentry release`). The
+  parallel WS3 release-cancellation chunk landed separately as commit
+  `2822e525` (`fix(mcp): relocate production cancellation gate`).
+
+Remaining non-code follow-through:
+
+- `RuntimeConfig` still carries `version` / `versionSource` rather than a
+  first-class `AppBuildIdentity`. For the smallest gate-green slice, this is an
+  intentional deferral: build identity remains the canonical app fact, Sentry
+  remains a projection consumer, and replacing the public runtime config shape
+  should happen only when the next architectural slice needs that stronger
+  type.
+- Reviewer dispatch is still pending for Phase 3. The current session did not
+  spawn reviewer agents because the active tool policy only permits sub-agents
+  when the owner explicitly authorises delegation.
+- Full `pnpm check` passed on 2026-04-25 before final commit packaging.
 
 ### Candidate implementation moves
 
@@ -356,6 +535,18 @@ and Phase 1 evidence. Expected options include:
 6. Replace smoke helper `process.env` mutation with explicit prepared env data
    or spawned process environment where the smoke boundary truly requires a
    process. Do not preserve the mutation path with compatibility wrappers.
+7. Extract build identity resolution before finalising observability GREEN.
+   The implementation may use an app-generated `.app-version.ts` module or a
+   dedicated build-identity workspace, but the result must be a typed app
+   identity consumed by runtime config. `resolveRelease` should consume that
+   identity as input for Sentry's `release` projection rather than calculating
+   app identity independently.
+8. Propagate app build identity from runtime config to non-observability
+   consumers: `x-app-version` response headers and HTML app-version metadata.
+9. Remove or rename `HttpObservability.release`. If the observability public
+   surface exposes identity, it must be named as app build identity and sourced
+   from the build-identity boundary. It must not expose a mode-dependent value
+   that sometimes means Sentry release and sometimes means app version.
 
 ### Acceptance Criteria
 
@@ -365,6 +556,15 @@ and Phase 1 evidence. Expected options include:
 - Local smoke/UI/a11y startup does not require `VERCEL_GIT_COMMIT_SHA`.
 - Production and preview Sentry release identifiers remain unchanged for
   ADR-163 truth-table rows.
+- App build identity has one source of truth, is available in local dev and
+  every build context, and is consumed by observability, HTML, API headers, and
+  Sentry sink adapters without being owned by any of them.
+- `HttpObservability` no longer exposes an ambiguous `release` field. Sentry
+  release identifiers are private to the Sentry adapter path and remain governed
+  by ADR-163.
+- Observability remains always on: stdout OTel logging, local spans,
+  correlation context, and app observability helpers still work when Sentry is
+  disabled or unavailable.
 - No new `process.env` reads or mutations appear in tests.
 - No new IO appears in in-process tests.
 - Existing relevant standards failures are fixed or have explicit closure
