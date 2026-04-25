@@ -165,7 +165,113 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Jiggly Pebble handoff + consolidate-docs run)**:
+**Status (2026-04-25 Jiggly Pebble consolidate-docs run, completing
+Fresh Prince's pre-staging)**: **completed this handoff** — owner-
+directed `/jc-consolidate-docs` run plus ADR/PDR gap evaluation
+walked end-to-end. Fresh Prince pre-staged the Deep Consolidation
+Status entry, three new pending-graduations register entries, and
+the napkin substance; this run completes the audits, runs the
+fitness gate, and surfaces the ADR/PDR gap candidates for owner
+decision.
+
+Findings:
+
+- **Step 1 / 2 documentation currency**: clean. Source plan
+  `multi-agent-collaboration-protocol.plan.md` has WS0
+  `completed`, WS1 `completed: true, landed_at: a5d33519`,
+  WS3/WS4/WS5 paused on evidence gate per `d56c4d38`. PR-87
+  quality plan has Reviewer Dispositions absorbed. Three local
+  commits unpushed (`2484066b`, `0c04e7d5`, `84cb05d1`); push is
+  the next-session precondition.
+- **Step 3 ephemeral sweep**: napkin (135 lines) carries Fresh
+  Prince's WS1-landing surprises and corrections, ready for
+  distillation. `.remember/` content already captured. Entry-points
+  (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) canonical (verified).
+- **Step 4 experience cross-scan**: no new experience files this
+  cycle; the-frame-was-the-fix pattern remains graduated; no new
+  cross-experience candidates surfaced.
+- **Step 5 pattern extraction + taxonomy / cross-plane scans**:
+  no entries resisted classification. Family B Layer 1 / Family B
+  complement: clean.
+- **Step 6 napkin rotation**: NOT NEEDED. Napkin at 135 lines —
+  well under the ~500-line rotation threshold. Distillation
+  applied without rotation.
+- **Step 7a ADR/PDR scan (per owner direction — in-tandem ADR/PDR
+  gap evaluation)**:
+  - **`tripwire-rules-need-observable-artefacts`**: at 3 instances
+    (WS0 `respect-active-agent-claims`; WS1 own-rule self-catch;
+    WS1 absorption shape required artefact-leaving step on every
+    branch). Register entry marked DUE. **PDR-shaped, not pattern-
+    shaped** per PDR-007 — names a tripwire-design *principle*
+    governing how the Practice's tripwire mechanisms are
+    constructed, not a one-off engineering pattern. **Candidate
+    home**: PDR-029 amendment (Perturbation-Mechanism Bundle)
+    naming "tripwire fires must leave observable artefacts" as a
+    Family-A Class-A.2 design principle. Surfaced for owner
+    decision.
+  - Other register candidates remain at 1 instance each; no further
+    PDR-readiness surfaced this pass.
+- **Step 7b graduation**: distilled.md gains three new sections
+  (tripwire-rules-need-observable-artefacts, owner-directed-pause-
+  as-load-bearing-planning-move, parallel-reviewer-dispatch-shape);
+  no `.agent/memory/active/patterns/` graduations this pass — the
+  tripwire-observability candidate is awaiting owner gate on
+  PDR-029-amendment-vs-pattern-file.
+- **Step 7c thread-register freshness audit (six checks)**: clean.
+  No stale `last_session`; no orphan threads; no missing fields;
+  no expired tracks (none exist); no duplicate identity rows
+  within thread; thread ↔ next-session correspondence intact.
+- **Step 7d bidirectional citation audit**:
+  `dont-break-build-without-fix-plan.md` ↔
+  `gate-recovery-cadence.plan.md` — both directions resolve (4
+  rule→plan citations; 1 plan→rule citation). Clean.
+- **Step 8 Practice Core refinement candidates** (owner-approval
+  required per PDR-003):
+  - **PDR-029 amendment** for tripwire-observability principle
+    (see Step 7a above).
+  - **PDR-026 amendment candidate** (workstream-pause-on-evidence
+    discipline): currently 1 instance only; pending until second
+    cross-plan instance.
+  - PDR-011 amendment for `.agent/state/` continuity-state class:
+    **already approved + landed** (`1309e810` + `28bc5062`).
+- **Step 9 fitness check (strict-hard)**: SOFT (13 soft, 0 hard,
+  0 critical). Strict-hard exits 0; consolidation closure
+  unblocked. New soft entry vs prior consolidation:
+  `agent-collaboration.md` is now at the soft-zone limit (260/260
+  lines) — routine compression candidate for next consolidation,
+  driven by WS1's "What This Directive Installs" extension; not
+  blocking.
+- **Step 10 practice exchange**: `practice-core/incoming/` empty;
+  `practice-context/outgoing/` has README only. Nothing to process.
+
+**Owner-action items surfaced (in tandem with consolidation)**:
+
+1. Decide PDR-029 amendment shape for *tripwire-rules-need-observable-
+   artefacts*: amendment to PDR-029 naming the principle, OR new
+   small PDR, OR `.agent/memory/active/patterns/` entry. The third
+   option treats it as engineering-pattern-shaped; the first two
+   treat it as Practice-governance-shaped. Per PDR-007 the
+   Practice-governance framing is correct.
+2. Confirm continued pause on multi-agent collaboration WS3/WS4/WS5
+   pending evidence accumulation (per `d56c4d38`).
+3. Review the prior consolidation's deferred PDR-011 `.agent/state/`
+   amendment outcome — landed in `1309e810`. No further action.
+
+**Deferred from this consolidation pass with deferral-honesty**:
+
+- **Practice Core PDR-029 amendment** (tripwire-observability
+  candidate): **constraint** — PDR-003 requires owner approval for
+  Core surface edits; surfaced as candidate, not edited.
+  **Falsifiability**: owner approves and the next consolidation
+  lands the diff; or rejects with rationale.
+- **`agent-collaboration.md` line-count compression**: at the soft
+  hard-limit (260/260) after WS1 added the "What This Directive
+  Installs (WS0 + WS1)" section. **Constraint**: routine
+  compression is not a consolidation-closure blocker; defer to a
+  natural next-amendment opportunity. **Falsifiability**: if the
+  file goes hard (>260 lines), an immediate amendment is required.
+
+**Prior status (2026-04-25 Jiggly Pebble handoff + consolidate-docs run)**:
 **completed this handoff** — `/jc-consolidate-docs` ran on owner direction
 after the WS0-handoff cycle, satisfying the prior Codex handoff's
 falsifiability check ("if the owner gives consolidation priority, run
@@ -344,6 +450,10 @@ step 7 uses this section as its primary queue.
 | 2026-04-25 | Napkin (Jazzy) + multi-agent collaboration plan Design Principle 1 | Pattern candidate: *advisory-not-enforced for agent-participating systems*. When designing systems where agents participate as reasoning peers (not as constrained subjects), default to information surfaces, not enforcement gates. Mechanical refusals will be routed around at the cost of architectural excellence. The Practice's existing no-bypass discipline (`--no-verify` per-commit authorisation) is evidence the repo already encodes this preference. Candidate home: PDR amendment to PDR-029 (tripwires fire as "consult and decide" not "refuse"); also lands as Design Principle 1 of the multi-agent collaboration plan when WS0 lands. | Second cross-system instance where agent-participating design considered enforcement and chose advisory, or explicit owner direction to elevate beyond the multi-agent collaboration plan's directive-level home. | pending |
 | 2026-04-25 | Napkin (Jiggly Pebble) + assumptions-reviewer finding on `respect-active-agent-claims` rule (WS0 landing) | Pattern candidate: *tripwire-rules-need-observable-artefacts*. Tripwire rules whose firing condition is "decided X" need an artefact-leaving step (e.g. "log your decision") or they are unobservable post-hoc. Compare against rules that are mechanically observable post-hoc (e.g. build-breakage rule — the build is or is not green). Candidate home: PDR-029 amendment alongside the existing tripwire-pattern rules, OR `.agent/memory/active/patterns/` if the pattern proves recurrent. | Second instance of a tripwire rule being adjusted to add an observable-artefact step after a reviewer / consolidation surfaces unobservability. | pending |
 | 2026-04-25 | Consolidate-docs step 4c (cross-experience scan, Jazzy session) | Pattern candidate: *reflexive-shape-correction across sessions*. Recent experience files (2026-04-21 reviewer-found-the-gaps, 2026-04-22 plan-was-not-the-conversation, 2026-04-23 three-reviewers-collapse, 2026-04-24 evasion-called-out, 2026-04-24 the-spiral-i-could-not-see, 2026-04-25 from-locks-to-knowledge) cluster around the same shape: agent reaches for the obvious / mechanical / enforcement-shaped tool; external feedback (owner, reviewer, parallel agent's experience) arrives as a question that exposes the framing rather than fixing the surface; agent reframes; the original "fix the surface" work dissolves. The pattern's name candidate: *the-frame-was-the-fix*. Six instances across five sessions in five days is well above pattern-graduation threshold. Candidate home: `.agent/memory/active/patterns/the-frame-was-the-fix.md` as a process pattern, possibly with PDR-shaped governance framing if the practice doctrine wants it elevated. | Second cross-experience scan reaches the same conclusion, or explicit owner direction to graduate. | pending |
+| 2026-04-25 | Napkin (Fresh Prince) + assumptions-reviewer finding on `register-active-areas-at-session-open` no-overlap branch (WS1 landing) | Promote *tripwire-rules-need-observable-artefacts* from pending → due. **Third instance** confirmed: the pattern was first surfaced 2026-04-25 by `assumptions-reviewer` on `respect-active-agent-claims` during WS0 landing; the second instance was the same reviewer applying the same diagnosis to my own WS1 rule draft. Absorption shape this session: amend the rule body to require an artefact-leaving step on every branch (`notes` value summarising the scan, or embryo-log entry). Pattern is now well-evidenced; ready for either a `.agent/memory/active/patterns/` graduation OR a PDR-029 amendment naming "tripwire fires must leave observable artefacts" as a tripwire-design principle. Owner gate. | Trigger met (third instance plus active absorption); awaits owner direction on graduation form (pattern file vs PDR-029 amendment). | due |
+| 2026-04-25 | Napkin (Fresh Prince) + WS1 pause execution | Pattern / PDR candidate: *workstream-pause-on-evidence discipline*. When an owner pauses a multi-workstream plan partway through to accumulate evidence rather than forcing forward motion, the structural surfaces touched are: source plan YAML todos + body Status section + thread next-session record + repo-continuity Active Threads + roadmap Adjacent entry + current-plans README. Five-to-six surfaces per pause is high enough to warrant a named ritual or a small skill ("pause the plan"). PDR-026 covers per-session landing commitment; this would be the per-workstream sibling. Candidate home: PDR-026 amendment naming pause-discipline, OR a new tiny PDR, OR a `.agent/skills/pause-plan/` skill. | Second instance of an owner-directed mid-plan pause that touches the same surface set, or explicit owner direction. | pending |
+| 2026-04-25 | Napkin (Fresh Prince) + fitness validator interaction during WS1 | Tooling/scanner candidate: *prose-line-width validator should treat markdown reference-link declarations as non-prose*. The `validate-practice-fitness.mjs` line classifier at `scripts/validate-practice-fitness.mjs:185-221` recognises `frontmatter`, `code-fence`, `code-block`, `table`, and `prose` — but `[label]: url` reference-link lines fall into `prose` and trip the 100-char prose-line-width hard limit when the URL alone exceeds the budget. Three times bit during WS1; the workaround was shortest-possible alias keys. Either rename ADRs to shorter slugs or extend the classifier to recognise `^\[[\w-]+\]:` as `link-reference` kind exempted from prose-line-width. Not ADR/PDR-shaped — this is config/tooling. Captured here so it routes to the right surface (likely a small dev-tools change at next consolidate-docs). | Second instance of a fitness false-positive on a reference-link line, or explicit owner direction to upgrade the classifier. | pending |
+| 2026-04-25 | Consolidate-docs cross-experience scan (Fresh Prince session) | Pattern candidate: *infrastructure-alive-at-install* (working name; sibling or refinement to the already-graduated `the-frame-was-the-fix`). Five experience files in four days (2026-04-22 the-rule-tested-itself; 2026-04-22 the-plan-was-not-the-conversation; 2026-04-25 jazzy from-locks-to-knowledge; 2026-04-25 jiggly-pebble the-mailbox-i-am-also-building; 2026-04-25 fresh-prince the-protocol-applied-to-itself) name variants of one shape: **the Practice surface is alive at install time**, not "we install it, then later see how it works." Each new piece of infrastructure is exercised by its own installation. The recursive shape — agent always inside the surface they are extending; structure converges on work, work converges on structure — is more specific than `the-frame-was-the-fix` (which is about reframing fixing the surface problem). Owner-decision candidates: (a) graduate as a new sibling pattern, (b) amend `the-frame-was-the-fix` to name self-applied-infrastructure as a sub-case, OR (c) elevate to a PDR observing the Practice has this property and what it implies for surface design. | Five instances live in the multi-agent collaboration protocol arc; cross-arc bar may not be met. Trigger: one further instance from a different lane, OR explicit owner direction. | pending |
 
 Historical deep-consolidation findings and session-close summaries are
 preserved in git history and

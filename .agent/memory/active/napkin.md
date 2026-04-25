@@ -62,4 +62,74 @@ archived to `archive/napkin-2026-04-22b.md`); 2026-04-22 (sessions
 
 ---
 
+## 2026-04-25 — Fresh Prince — WS1 landing and owner-directed pause
+
+**Surprise: the protocol applied to itself, bidirectionally, in the
+landing session.** WS1 of the multi-agent-collaboration-protocol was
+implemented while the WS0 surfaces were live. I declared intent in the
+embryo log at session-start, ran four reviewers in parallel during
+implementation, and the parallel Jiggly Pebble session (observability
+thread, PR-87 quality-finding analysis) appended their own embryo-log
+entry mid-session declaring explicit non-overlap with WS1 surfaces.
+The protocol's first bidirectional coordination event happened during
+the very landing commit that promoted the embryo log to a structured
+registry. Not surprising as design *ambition*; surprising as observed
+*reality* without any further iteration. The "knowledge and
+communication, not mechanical refusals" frame held in production for
+two independent sessions on the same day.
+
+**Surprise: the assumptions-reviewer caught my own rule violating the
+register's named pattern.** The pending-graduations register has a
+candidate `tripwire-rules-need-observable-artefacts` (originally
+captured 2026-04-25 by `assumptions-reviewer` on
+`respect-active-agent-claims` during WS0 landing). My WS1 rule draft
+had an unobservable no-overlap branch — an agent who skipped
+consultation and just registered a claim was post-hoc indistinguishable
+from one who consulted and found no overlap. This is the **third
+instance** of the same pattern. I absorbed the finding by mandating a
+`notes` artefact on no-overlap claims (or an embryo-log entry on
+fast-path). Promotes the pattern from candidate to ADR/PDR-ready —
+captured in 6b below.
+
+**Surprise: owner-directed pause is itself a load-bearing planning
+move.** Mid-session, owner directed pause of WS3/WS4/WS5 on evidence
+gate, which I'd been quietly deprioritising as "the next thing." The
+pause is the *correct* move (WS5 IS the evidence harvest; landing WS3
+without overlap-conversation evidence would freeze schema decisions
+prematurely). The reflexive "next workstream is next" assumption was
+suppressing the simpler answer: stop and let evidence accumulate.
+Captures the practice's first question — *could it be simpler without
+compromising quality?* — at the **workstream-sequencing** level, not
+just within a single workstream.
+
+**Correction: long URLs in markdown reference-link declarations
+flagged as prose-line-width violations.** Bit me three times during
+WS1 (ADR-150 link target; protocol-plan link in two operational
+files). The fitness validator's `kind: 'prose'` classifier
+(`scripts/validate-practice-fitness.mjs:185-221`) recognises
+frontmatter, code-fences, and tables, but not markdown reference-link
+declarations (`[label]: url`). Workaround during WS1: shortest-possible
+alias keys (`[p]:` rather than `[protocol-plan]:`) so the URL fits
+under 100 chars. Long-term either: (a) rename ADRs to shorter slugs,
+or (b) upgrade the validator to recognise `^\[[\w-]+\]:` as a
+non-prose line kind. Captured for graduation register.
+
+**Correction: structured pause needs five surfaces, not three.** The
+pause itself was clean (one commit, all gates first try) but required
+touching: (1) source plan YAML todos + body Status section, (2)
+thread next-session record, (3) repo-continuity Active Threads, (4)
+roadmap Adjacent entry, (5) current-plans README. Five surfaces per
+pause is high — there's a structural pattern here worth capturing
+(see 6b candidates).
+
+**What worked: parallel reviewer dispatch caught complementary
+issues.** Fred caught state-vs-memory boundary correctness; config
+caught the schema additive-only / `additionalProperties: false`
+internal contradiction; assumptions caught the unobservable tripwire
+branch and the missing `freshness_seconds` rationale; docs-adr caught
+the step-7e anchor parity gap and the ADR-150 plain-text reference.
+Four lenses, four orthogonal finding sets. The investment in
+parallel-dispatching paid off — sequential dispatch would have been
+~4× slower and produced the same set.
+
 <!-- New session entries appended below this line. -->

@@ -37,13 +37,64 @@ The merge-blocking simplification preference also lives there now.
 
 The agent-to-agent working model lives in
 [`agent-collaboration.md`][agent-collaboration]. The discovery surface
-is the embryo log at `.agent/state/collaboration/log.md`. Two
-foundational behavioural rules are loaded as session-open tripwires:
-[`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md)
+is the embryo log at `.agent/state/collaboration/log.md`. The
+structured claims registry (WS1) lives at
+`.agent/state/collaboration/active-claims.json`. Three foundational
+behavioural rules are loaded as session-open tripwires:
+[`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md),
+[`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md),
 and
-[`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md).
+[`register-active-areas-at-session-open`](../../rules/register-active-areas-at-session-open.md).
 Knowledge and communication, not mechanical refusals — locks would be
 routed around at the cost of architectural excellence.
+
+## Tripwire rules need observable artefacts
+
+A tripwire rule whose firing condition is "consult and decide X" is
+unobservable post-hoc unless the decision is recorded as an artefact.
+Compare against rules that are mechanically observable post-hoc (e.g.
+build-breakage rule — the build is or is not green). When designing
+a tripwire rule with a "decide" branch, require an artefact-leaving
+step on every outcome (a logged decision, a `notes` field on a claim,
+an embryo-log entry). Without it, the rule is satisfiable by silent
+proceed and the audit trail at consolidation cannot tell consultation
+from skip.
+
+Three observed instances on this branch (WS0
+`respect-active-agent-claims`; WS1 own-rule self-catch; WS1
+absorption shape). PDR-029 amendment candidate awaiting owner
+decision.
+
+## Owner-directed pause is a load-bearing planning move
+
+When an owner pauses a multi-workstream plan partway through to
+accumulate evidence rather than forcing forward motion, the pause is
+itself the correct execution. The reflexive "next workstream is
+next" assumption can suppress the simpler answer: stop and let
+evidence accumulate. Captures the practice's first question — *could
+it be simpler without compromising quality?* — at the workstream-
+sequencing level, not just within a single workstream.
+
+When pausing: touch the source plan YAML todos + Status section, the
+thread next-session record, repo-continuity Active Threads, the
+roadmap Adjacent entry, and the current-plans README. Five-to-six
+surfaces per pause is high enough to warrant a named ritual if
+recurrent.
+
+## Parallel reviewer dispatch is the right shape for substantive plans
+
+For plans introducing new architectural surfaces (directories,
+schemas, lifecycle mechanisms), dispatch reviewers in parallel rather
+than sequentially. Different reviewer roles see different things:
+adversarial structural reviewers (Wilma) catch boundary, threat-
+model, and lifecycle gaps; pre-landing reviewers (`docs-adr-reviewer`,
+`assumptions-reviewer`) catch substance-level errors that survive
+structural review (broken paths inherited from imprecise plan-body
+glosses; markdownlint violations; unobservable tripwires). Sequence:
+structural review shapes the design; pre-landing review validates
+the implementation faithfully embodies the design. Four parallel
+lenses produced four orthogonal finding sets in WS1; sequential
+dispatch would have been ~4× slower and produced the same set.
 
 ## Reviewer phasing
 
