@@ -4,6 +4,23 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-25 — PDR-011 amendment: live coordination state recognised as a sibling artefact class to memory
+
+Owner-approved amendment surfaced from the consolidate-docs run after
+WS0 of the multi-agent collaboration protocol landed. PDR-011's
+continuity-surface map now acknowledges `.agent/state/` as a live,
+ephemeral, signal-like surface class distinct from `.agent/memory/`'s
+durable, lessons-learned character. New §"Live coordination state
+(2026-04-25 amendment)" added with the state-vs-memory comparison table;
+Amendment Log updated; Host-local context extended to name the state
+surface. Substance: state surfaces feed memory via the existing
+capture → distil → graduate → enforce pipeline. State is not a fourth
+continuity type — operational / epistemic / institutional remain the
+three types — it is a sibling artefact class contributing signal to
+capture. Boundary cited to
+[`.agent/directives/agent-collaboration.md`](../directives/agent-collaboration.md)
+and `.agent/state/README.md`.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 8 (ARC CLOSE): doctrine-consolidation arc closed across eight sessions
 
 Owner instruction at session close: *"there is no next session,

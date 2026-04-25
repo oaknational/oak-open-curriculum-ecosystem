@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, amended 2026-04-21)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
@@ -76,6 +76,24 @@ unit).
   concrete evidence.
   See [PDR-027 §Amendment Log 2026-04-21 Session 5](PDR-027-threads-sessions-and-agent-identity.md#amendment-log)
   for the cross-PDR rationale.
+- **2026-04-25 — live coordination state recognised as a sibling
+  artefact class to memory.** WS0 of the multi-agent collaboration
+  protocol installed `.agent/state/` as the *live, ephemeral,
+  signal-like* surface where multiple agents on the same repo
+  coordinate via the embryo discovery log (`state/collaboration/log.md`)
+  and, from WS1, structured claims. The state-vs-memory boundary —
+  *state is truth-of-now; memory is truth-across-time* — is named
+  in [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md)
+  and `.agent/state/README.md`. State is **not a fourth continuity
+  type**; it is a sibling artefact class distinct from memory, used
+  for cross-agent coordination signal rather than cross-session
+  learning. The capture → distil → graduate → enforce pipeline,
+  the split-loop model, and the contract's authority-subordinate
+  relationship to plans are unchanged. Conversation entries from
+  state surfaces are first-class learning-loop inputs alongside the
+  napkin (per `agent-collaboration.md` §Conversations as First-Class
+  Learning-Loop Inputs); WS5's seed harvest reads across both.
+  §"Host-local context" extended to name the state surface.
 - **2026-04-21 Session 5 — runtime tactical track cards are
   git-tracked as portable doctrine.** §"The continuity contract"
   amended: tactical track cards (the per-`<thread>--<agent>--
@@ -319,6 +337,36 @@ records. Multiple next-session records are not multiple
 continuity contracts — there is still one canonical contract;
 the per-thread records are satellites scoped by thread.
 
+### Live coordination state (2026-04-25 amendment)
+
+Memory and state are sibling artefact classes:
+
+| Class | Lifecycle | Truth scope | Examples |
+|---|---|---|---|
+| **`.agent/memory/`** | Durable; entries survive across sessions | Truth-across-time (lessons-learned) | Napkin, distilled, patterns, threads, executive cards |
+| **`.agent/state/`** | Ephemeral; entries archive or expire | Truth-of-now (signal-like) | Embryo discovery log, structured claims (WS1+), conversation files (WS3+) |
+
+The state class is introduced for **cross-agent coordination signal**
+— what is happening *now* in the working tree across multiple
+parallel agent sessions — distinct from memory's role of preserving
+cross-session learning. The state-vs-memory boundary is enforced by
+two READMEs (`.agent/state/README.md` and `.agent/memory/`'s
+existing structure) and operationalised by the
+[`agent-collaboration.md`](../../directives/agent-collaboration.md)
+directive.
+
+State surfaces feed memory: live coordination signals generate
+evidence; that evidence is captured in the napkin and graduates into
+memory lessons when patterns earn promotion. Memory shapes how state
+surfaces are designed: lessons about agent-to-agent collaboration
+inform what state surfaces need.
+
+State is not a continuity *type* (operational / epistemic /
+institutional remain the three types). It is a continuity *artefact
+class* that sits alongside memory in the pipeline's capture stage,
+contributing signal that the pipeline distils, graduates, and
+enforces just as it does napkin signal.
+
 ### The surprise-to-enforcement pipeline
 
 Surprise and correction follow a named pipeline:
@@ -537,6 +585,14 @@ authored carries a **split-surface host**:
 - Ephemeral memory: `.agent/memory/active/napkin.md` (rotates at ~500
   lines).
 - Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
+- Live coordination state: `.agent/state/` (introduced 2026-04-25 by
+  WS0 of multi-agent collaboration protocol). Currently:
+  `state/collaboration/log.md` (embryo discovery log, schema-less,
+  append-only). WS1 adds `state/collaboration/active-claims.json`
+  (structured claims registry); WS3 adds `state/collaboration/conversations/`
+  (per-topic conversation files) and `state/collaboration/escalations/`
+  (owner-escalation surface). State surfaces are governed by
+  [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md).
 - Experience records: `.agent/experience/`.
 - Mid-session re-grounding: canonical `GO` skill with platform
   adapters.
