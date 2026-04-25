@@ -102,6 +102,31 @@ export interface ResolvedRelease {
 }
 
 /**
+ * Canonical error-kind discriminators for release resolution.
+ *
+ * @remarks Constant-type-predicate pattern: a `as const` object whose
+ * keys/values name every error kind, with the union type derived
+ * structurally below. Call sites use `RELEASE_ERROR_KINDS.<key>` instead
+ * of magic strings; ADR-153 names the rationale (one source of truth,
+ * no drift between the type and the literals).
+ *
+ * The follow-up refactor will lift the remaining bare unions
+ * (`ReleaseEnvironment`, `ReleaseSource`, `BuildIdentityContext`,
+ * `BuildIdentityBranch`) to the same shape and update call sites in
+ * `release-internals.ts`.
+ */
+export const RELEASE_ERROR_KINDS = {
+  invalid_release_override: 'invalid_release_override',
+  missing_application_version: 'missing_application_version',
+  invalid_application_version: 'invalid_application_version',
+  missing_branch_url_in_preview: 'missing_branch_url_in_preview',
+  missing_git_sha: 'missing_git_sha',
+  invalid_build_identity: 'invalid_build_identity',
+} as const;
+
+type ReleaseErrorKind = (typeof RELEASE_ERROR_KINDS)[keyof typeof RELEASE_ERROR_KINDS];
+
+/**
  * Errors that may short-circuit release-name resolution.
  *
  * @remarks Each `kind` corresponds to a single named failure mode in
@@ -111,12 +136,6 @@ export interface ResolvedRelease {
  * (all of them).
  */
 export interface ReleaseError {
-  readonly kind:
-    | 'invalid_release_override'
-    | 'missing_application_version'
-    | 'invalid_application_version'
-    | 'missing_branch_url_in_preview'
-    | 'missing_git_sha'
-    | 'invalid_build_identity';
+  readonly kind: ReleaseErrorKind;
   readonly message: string;
 }

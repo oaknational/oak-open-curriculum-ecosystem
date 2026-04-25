@@ -5,7 +5,11 @@ import { resolveRelease, type AppBuildIdentity, type ReleaseInput } from '../src
 const FULL_SHA = 'c8b666485ecb08b5dc27e428737b4077c0531f57';
 const SHORT_SHA = FULL_SHA.slice(0, 7);
 const APP_VERSION_FIXTURE = '1.5.0';
-const BRANCH_URL_FEAT_X = 'https://feat-x-poc-oak.vercel.thenational.academy';
+// VERCEL_BRANCH_URL is a hostname (no scheme) per
+// https://vercel.com/docs/environment-variables/system-environment-variables#VERCEL_BRANCH_URL
+// Captured shape from a real Vercel preview build (commit b0c565b4):
+//   poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy
+const BRANCH_URL_FEAT_X = 'feat-x-poc-oak.vercel.thenational.academy';
 const BRANCH_URL_LABEL_FEAT_X = 'feat-x-poc-oak';
 
 function env(overrides: Partial<ReleaseInput> = {}): ReleaseInput {
@@ -308,11 +312,27 @@ describe('resolveRelease — preview (branch-URL-host derivation)', () => {
     expect(result.error.kind).toBe('missing_branch_url_in_preview');
   });
 
-  it('returns missing_branch_url_in_preview for a malformed VERCEL_BRANCH_URL', () => {
+  it('rejects scheme-prefixed inputs (Vercel populates a hostname, not a URL)', () => {
     const result = resolveRelease(
       env({
         VERCEL_ENV: 'preview',
-        VERCEL_BRANCH_URL: 'not-a-url',
+        VERCEL_BRANCH_URL: 'https://feat-x-poc-oak.vercel.thenational.academy',
+      }),
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_branch_url_in_preview');
+    expect(result.error.message).toContain('must be a hostname, not a full URL');
+  });
+
+  it('returns missing_branch_url_in_preview for a hostname with disallowed characters', () => {
+    const result = resolveRelease(
+      env({
+        VERCEL_ENV: 'preview',
+        VERCEL_BRANCH_URL: 'host with space.example.com',
       }),
     );
 
@@ -327,7 +347,7 @@ describe('resolveRelease — preview (branch-URL-host derivation)', () => {
     const result = resolveRelease(
       env({
         VERCEL_ENV: 'preview',
-        VERCEL_BRANCH_URL: 'https://127.0.0.1/',
+        VERCEL_BRANCH_URL: '127.0.0.1',
       }),
     );
 
@@ -342,7 +362,7 @@ describe('resolveRelease — preview (branch-URL-host derivation)', () => {
     const result = resolveRelease(
       env({
         VERCEL_ENV: 'preview',
-        VERCEL_BRANCH_URL: 'https://[::1]/',
+        VERCEL_BRANCH_URL: '[::1]',
       }),
     );
 
@@ -351,6 +371,30 @@ describe('resolveRelease — preview (branch-URL-host derivation)', () => {
       return;
     }
     expect(result.error.kind).toBe('missing_branch_url_in_preview');
+  });
+
+  it('accepts the captured real Vercel preview shape', () => {
+    // Captured from build dpl_7ABBkZstCUKCqWXfmABCEpJjo3P3 (commit f1f28e85),
+    // 2026-04-25. This is the literal value Vercel injects on preview deploys
+    // of this repo's branches.
+    const realVercelHostname =
+      'poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy';
+    const result = resolveRelease(
+      env({
+        VERCEL_ENV: 'preview',
+        VERCEL_GIT_COMMIT_REF: 'feat/otel_sentry_enhancements',
+        VERCEL_BRANCH_URL: realVercelHostname,
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
+      }),
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.value).toBe('poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements');
+    expect(result.value.source).toBe('vercel_branch_url');
+    expect(result.value.environment).toBe('preview');
   });
 });
 
@@ -404,7 +448,22 @@ describe('resolveRelease — development (no VERCEL_ENV, or VERCEL_ENV=developme
   it('falls back to SHA when VERCEL_BRANCH_URL is malformed', () => {
     const result = resolveRelease(
       env({
-        VERCEL_BRANCH_URL: 'not-a-url',
+        VERCEL_BRANCH_URL: 'host with space.example.com',
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
+      }),
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.value).toBe(`dev-${SHORT_SHA}`);
+  });
+
+  it('falls back to SHA when VERCEL_BRANCH_URL is scheme-prefixed', () => {
+    const result = resolveRelease(
+      env({
+        VERCEL_BRANCH_URL: 'https://feat-x-poc-oak.vercel.thenational.academy',
         VERCEL_GIT_COMMIT_SHA: FULL_SHA,
       }),
     );

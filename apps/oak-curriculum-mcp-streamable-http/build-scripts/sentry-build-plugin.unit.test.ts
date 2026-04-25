@@ -31,7 +31,11 @@ const IDENTITY: SentryBuildPluginIdentity = {
 const COMMIT_SHA = 'abcdef1234567890abcdef1234567890abcdef12';
 const APP_VERSION = '1.5.0';
 const AUTH_TOKEN = 'sntrys-fake-token';
-const BRANCH_URL = 'https://feat-otel-poc-oak.vercel.thenational.academy';
+// VERCEL_BRANCH_URL is a hostname (no scheme) per
+// https://vercel.com/docs/environment-variables/system-environment-variables#VERCEL_BRANCH_URL
+// — "The domain name of a Generated Deployment URL". Captured shape
+// from a real Vercel preview build of this repo.
+const BRANCH_URL = 'feat-otel-poc-oak.vercel.thenational.academy';
 const BRANCH_URL_LABEL = 'feat-otel-poc-oak';
 
 function env(overrides: Partial<SentryBuildEnvironment> = {}): SentryBuildEnvironment {
