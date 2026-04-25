@@ -42,6 +42,36 @@
       "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan — claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
       "notes": "Closed at landing commit time. Archived as the founding entry in closed-claims.archive.json so future agents can see what a complete claim lifecycle looks like in real data, not just the schema definition. archived_at recorded below.",
       "archived_at": "2026-04-25"
+    },
+    {
+      "claim_id": "2919423e-1e58-4b92-912a-9c610c509e01",
+      "agent_id": {
+        "agent_name": "Fresh Prince",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md",
+            ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
+            ".agent/practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md",
+            ".agent/commands/consolidate-docs.md",
+            "scripts/validate-practice-fitness.mjs",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-25T18:46:15Z",
+      "freshness_seconds": 14400,
+      "intent": "Pending-graduations promotion pass per owner direction: PDR-029 v2 amendment (tripwire-observability + advisory-not-enforcing); PDR-015 amendment (assumption-challenge / discussion-before-absorption); PDR-018 amendment (plan placement follows ownership); register hygiene; evaluate owner-correction cluster on substance not instance-count.",
+      "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength — three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
+      "archived_at": "2026-04-25"
     }
   ]
 }
