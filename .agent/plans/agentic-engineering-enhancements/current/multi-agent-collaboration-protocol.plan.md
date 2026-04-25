@@ -22,16 +22,56 @@ todos:
     landed_on: 2026-04-25
   - id: ws3-conversation-and-sidebar
     content: WS3 — Add conversation file with versioned JSON schema (messages, claim updates, sidebar requests, sidebar messages, resolutions); install sidebar protocol with timeout fallbacks and owner-as-tiebreaker escalation.
-    status: pending
+    status: paused-on-evidence
+    paused_at: 2026-04-25
+    pause_reason: Owner-directed pause until WS5 evidence threshold (≥ 3 real parallel sessions using WS0+WS1 surfaces) is met. WS3 schema decisions risk being made without overlap-conversation evidence; WS5 is the natural gate.
   - id: ws4-operational-integration
     content: WS4 — Wire session-open registration into start-right-quick / start-right-thorough; wire session-close cleanup into session-handoff; wire stale-claim garbage collection into consolidate-docs.
-    status: pending
+    status: paused-on-evidence
+    paused_at: 2026-04-25
+    pause_reason: Partially landed in WS1 (start-right-quick + start-right-thorough already updated; consolidate-docs § 7e in place). Remaining WS4 scope (session-handoff cleanup wiring + any further integration polish) waits behind WS3 / WS5.
   - id: ws5-observation-and-refine
     content: WS5 — Observe at least three real parallel sessions; capture lessons into .agent/memory/collaboration/; refine schema or directive based on real usage. Refinement amendments land as separate commits, not WS5 itself.
-    status: pending
+    status: pending-evidence-accumulation
+    paused_at: 2026-04-25
+    pause_reason: WS5 IS the resumption gate — by definition cannot be "done" until 3+ parallel sessions have used the WS0+WS1 surfaces. Currently 1 parallel-coordination data point captured (Jiggly Pebble observability session, 2026-04-25, declared explicit non-overlap with WS1 surfaces via embryo log). 2 more required.
 ---
 
 # Multi-Agent Collaboration Protocol
+
+## Status: Paused-on-Evidence (2026-04-25)
+
+WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed.
+WS3, WS4, WS5 are **paused on owner direction** until enough real-world
+parallel-agent coordination evidence has accumulated to direct future
+effort.
+
+**Resumption gate**: at least three real parallel-session coordination
+events using the WS0 + WS1 surfaces (embryo log + active-claims registry +
+register-active-areas tripwire). The first data point landed 2026-04-25
+when a parallel observability-thread session declared explicit non-overlap
+with WS1 surfaces via the embryo log; two more comparable events are the
+proportionate threshold for resuming.
+
+**While paused, evidence accumulates passively** — every session on this
+repo that uses the WS0/WS1 surfaces produces evidence. No active session
+is needed to "wait."
+
+**What resumes the plan**: owner direction after the evidence threshold is
+visibly met (3+ embryo-log entries OR claims OR documented coordination
+decisions referencing each other). The natural inspection point is the
+next `/jc-consolidate-docs` pass; a periodic napkin-rotation cycle will
+also surface the count.
+
+**What remains pending under the gate**:
+
+- WS3 — conversation file + sidebar mechanism (largest remaining slice)
+- WS4 — operational wiring polish (session-handoff cleanup; partial
+  WS4 already landed in WS1)
+- WS5 — the evidence-harvest workstream itself
+
+If owner direction redirects effort to a different surface mid-pause, the
+plan stays paused indefinitely; the resumption gate does not auto-fire.
 
 ## Context
 

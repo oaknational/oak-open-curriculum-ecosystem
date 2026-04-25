@@ -237,16 +237,30 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) of the
-multi-agent collaboration protocol have landed. **WS3 is the next
-unblocked workstream** — install the conversation file + sidebar
-mechanism for structured peer exchange when claim-overlap warrants it.
-WS3 inputs include any new embryo-log entries and active-claims
-entries that have accumulated since WS1 landed (real-usage evidence
-informs the conversation file schema design). However, WS3 is not the
-current owner-stated priority — deployed-state observability
-validation on the pushed `feat/otel_sentry_enhancements` branch
-remains the priority per `repo-continuity.md § Next Safe Step`.
+**Thread paused on owner direction (2026-04-25).** WS0 (`63c66c88`),
+WS1 (`a5d33519`), and WS2 (`293742cd`) have landed; WS3 / WS4 / WS5 are
+**paused-on-evidence** until enough real-world parallel-agent
+coordination data has accumulated to properly direct future effort.
+
+**Resumption gate**: at least three real parallel-session coordination
+events using the WS0 + WS1 surfaces. First data point captured 2026-04-25
+(Jiggly Pebble observability session declared explicit non-overlap with
+WS1 surfaces via the embryo log mid-session); two more comparable events
+are the proportionate threshold.
+
+**While paused, evidence accumulates passively** — every session on this
+repo that uses the embryo log or active-claims registry produces evidence.
+No active session is required to "wait."
+
+**Inspection points** (where the evidence count is naturally surveyed):
+
+- `/jc-consolidate-docs` § 7e (stale-claim audit) — surfaces accumulated
+  claim activity per consolidation pass.
+- Napkin rotation — passing the rotation threshold is a natural moment
+  to count coordination events captured since WS1.
+
+**Resumption requires owner direction.** The gate does not auto-fire;
+owner re-evaluates when evidence threshold is visibly met.
 
 ### Current State
 
@@ -274,31 +288,36 @@ remains the priority per `repo-continuity.md § Next Safe Step`.
 
 ### Next Safe Step
 
-The next safe step on this thread is to **wait for owner direction**.
-WS1's observation seed is now open: across the next 3 overlapping-agent
-sessions, the seed question — *can simultaneous agents detect each
-other's claims via the registry, and use that detection to inform
-coordination decisions without mechanical refusal?* — is being
-validated by real usage. The Fresh Prince landing already collected
-the first data point: the parallel Jiggly Pebble session declared
-explicit non-overlap with WS1 surfaces via the embryo log mid-session.
+**No active step on this thread until the resumption gate fires.**
 
-When the owner is ready to resume on this thread, candidates are:
+The thread is paused. The next safe step is to do nothing on it
+proactively. Sessions on other threads that touch the WS0/WS1 surfaces
+will accumulate evidence passively; periodic consolidation passes will
+surface the count.
 
-1. **WS3 (conversation file + sidebar)** — unblocks WS5 evidence
-   harvest by giving overlap conversations a structured surface.
-   Plan body around line 734.
-2. **WS5 evidence harvest** — wait until at least three real parallel
-   sessions have used the WS0 + WS1 surfaces, then audit observation
-   seeds, refine schemas, and fold lessons back into the directive.
-3. **Pending-graduations register sweep** for collaboration-related
-   candidates (see `repo-continuity.md`).
+When the owner directs resumption (after evidence threshold is met),
+the candidates in priority order are:
 
-Reviewer routing for WS3: `assumptions-reviewer` (sidebar timeouts,
-parallel-sidebars-allowed decision, owner-escalation surface shape),
-`docs-adr-reviewer` (conversation schema and thread-record
-distinction), `architecture-reviewer-fred` (state-vs-memory boundary
-extension into conversations and escalations).
+1. **WS5 evidence harvest** — read all embryo-log entries, claims, and
+   napkin observations accumulated since WS1; map them against WS1's
+   observation seed (*can simultaneous agents detect each other's claims
+   and coordinate via registry, without mechanical refusal?*); document
+   what worked and what needs reshaping. WS5 outputs may motivate
+   amendments to the schema, the rule, the directive, or all three.
+2. **WS3 (conversation file + sidebar)** — unblocked once WS5 has
+   informed the conversation-file schema design with real overlap-
+   conversation evidence. Plan body around line 762 (line numbers
+   shifted from 734 after the new Status section landed).
+3. **Pending-graduations register sweep** — collaboration-related
+   candidates accumulate during the pause; the sweep should run when
+   resumption begins.
+
+Reviewer routing for WS3 (when eventually unblocked):
+`assumptions-reviewer` (sidebar timeouts, parallel-sidebars-allowed
+decision, owner-escalation surface shape), `docs-adr-reviewer`
+(conversation schema and thread-record distinction),
+`architecture-reviewer-fred` (state-vs-memory boundary extension into
+conversations and escalations).
 
 ### Active Track Links
 

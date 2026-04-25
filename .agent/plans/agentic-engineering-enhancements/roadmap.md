@@ -350,6 +350,38 @@ Adjacent:
   - complements reference-tier curation and ADR-144 fitness without changing
     thresholds or blocking behaviour
 
+### Adjacent — Multi-Agent Collaboration Protocol (MAC)
+
+- Strategic plan:
+  [multi-agent-collaboration-protocol.plan.md](current/multi-agent-collaboration-protocol.plan.md)
+- Goal:
+  - install structural infrastructure for parallel agents working on
+    the same repo without clashing — by *seeing* what each other is
+    doing and *talking* about overlap when it matters
+  - protocol is advisory not enforcing: knowledge and communication,
+    not mechanical refusals
+- Status: ⏸️ PAUSED-ON-EVIDENCE (2026-04-25)
+- Landings:
+  - WS0 (vocabulary + embryo discovery log + foundational rules) —
+    `63c66c88` 2026-04-25
+  - WS1 (structured claims registry + tripwire rule + stale-claim
+    audit + start-right wiring) — `a5d33519` 2026-04-25
+  - WS2 (collaboration memory class + founding pattern graduation) —
+    `293742cd` 2026-04-25
+- Resumption gate: ≥ 3 real parallel-session coordination events
+  using the WS0 + WS1 surfaces. First data point captured 2026-04-25
+  (Jiggly Pebble observability session declared explicit non-overlap
+  with WS1 surfaces via embryo log).
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - paused workstreams: WS3 (conversation file + sidebar mechanism),
+    WS4 (operational wiring polish — partially landed in WS1), WS5
+    (evidence-harvest workstream itself; this is the natural
+    resumption gate)
+  - while paused, evidence accumulates passively from any session
+    that uses the WS0/WS1 surfaces — no active session is required
+  - inspection points: `consolidate-docs § 7e`, napkin rotation
+
 ### Adjacent — Practice and Process Structural Improvements
 
 - Strategic plan:

@@ -26,6 +26,7 @@ plans when scheduled.
 | [agent-entrypoint-content-homing.plan.md](agent-entrypoint-content-homing.plan.md) | Adjacent: lossless homing of non-entrypoint AGENT.md content into durable homes while preserving discovery parity | QUEUED |
 | [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
+| [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing). WS0+WS1+WS2 landed; WS3+WS4+WS5 paused-on-evidence (resumption gate: ≥ 3 real parallel-coordination events) | PAUSED |
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)
