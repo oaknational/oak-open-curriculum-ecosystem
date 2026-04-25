@@ -33,8 +33,12 @@ Distillation merged into `distilled.md`:
 Pattern candidates retained in the pending-graduations register at
 `repo-continuity.md § Deep consolidation status`:
 
-- *the-frame-was-the-fix* (six instances across five sessions; ready
-  to graduate at second cross-experience confirmation).
+- *the-frame-was-the-fix* — **graduated 2026-04-25** to
+  [`.agent/memory/active/patterns/the-frame-was-the-fix.md`](../patterns/the-frame-was-the-fix.md)
+  after cross-experience scans across two consolidate-docs runs
+  reached the same conclusion (six original instances + a
+  frame-held variant from the WS0 landing session; eight instances
+  total).
 - *advisory-not-enforced for agent-participating systems* (WS0
   landing provided same-day operational evidence; trigger remains
   "second cross-system instance").
