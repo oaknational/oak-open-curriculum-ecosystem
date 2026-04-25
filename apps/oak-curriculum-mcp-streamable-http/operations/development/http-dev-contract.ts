@@ -147,11 +147,17 @@ function isHttpDevMode(input: string): input is HttpDevMode {
 }
 
 function resolveServerEnv(parentEnv: NodeJS.ProcessEnv, mode: HttpDevMode): NodeJS.ProcessEnv {
+  const localEnv = { ...parentEnv };
+  delete localEnv.VERCEL_GIT_COMMIT_SHA;
+  delete localEnv.VERCEL_BRANCH_URL;
+  delete localEnv.SENTRY_RELEASE_OVERRIDE;
+
   return {
-    ...parentEnv,
+    ...localEnv,
     ALLOWED_HOSTS: LOCAL_ALLOWED_HOSTS,
     DANGEROUSLY_DISABLE_AUTH: mode === 'observe-noauth' ? 'true' : 'false',
     LOG_LEVEL: 'debug',
+    ...(mode === 'observe-noauth' ? { SENTRY_MODE: 'off' } : {}),
   };
 }
 

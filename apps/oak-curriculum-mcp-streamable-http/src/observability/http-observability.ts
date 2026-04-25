@@ -46,7 +46,7 @@ export interface HttpObservability {
   withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T>;
   readonly service: string;
   readonly environment: string;
-  readonly release: string;
+  readonly release?: string;
   readonly tracer: Tracer | undefined;
   readonly fixtureStore?: FixtureSentryStore;
   createLogger(options?: HttpLoggerOptions): Logger;
@@ -112,7 +112,7 @@ interface BuildObservabilityParams {
   readonly sentryRuntime: SentryNodeRuntime;
   readonly serviceName: string;
   readonly environment: string;
-  readonly release: string;
+  readonly release?: string;
   readonly tracer: Tracer | undefined;
   readonly stdoutSink?: LogSink;
 }
@@ -124,7 +124,7 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
   const observability: HttpObservability = {
     service: params.serviceName,
     environment: params.environment,
-    release: params.release,
+    ...(params.release ? { release: params.release } : {}),
     tracer: params.tracer,
     fixtureStore: params.sentryRuntime.fixtureStore,
     getActiveSpanContext: spanFunctions.getActiveSpanContext,
@@ -224,7 +224,7 @@ export function createHttpObservability(
       sentryRuntime,
       serviceName,
       environment: sentryConfig.environment,
-      release: sentryConfig.release,
+      ...(sentryConfig.mode === 'off' ? {} : { release: sentryConfig.release }),
       tracer,
       stdoutSink: options?.stdoutSink,
     }),

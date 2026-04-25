@@ -53,6 +53,7 @@
 
 import type { Result } from '@oaknational/result';
 
+import { resolveBuildIdentityRelease } from './release-build-identity.js';
 import {
   deriveEnvironment,
   resolveDevelopmentRelease,
@@ -63,6 +64,9 @@ import {
 import type { ReleaseError, ReleaseInput, ResolvedRelease } from './release-types.js';
 
 export type {
+  AppBuildIdentity,
+  BuildIdentityBranch,
+  BuildIdentityContext,
   ReleaseEnvironment,
   ReleaseError,
   ReleaseInput,
@@ -85,6 +89,10 @@ export function resolveRelease(input: ReleaseInput): Result<ResolvedRelease, Rel
   const override = resolveOverride(input, environment);
   if (override) {
     return override;
+  }
+
+  if (input.buildIdentity) {
+    return resolveBuildIdentityRelease(input.buildIdentity, environment);
   }
 
   if (environment === 'production') {

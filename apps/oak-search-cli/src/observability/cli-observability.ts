@@ -48,7 +48,7 @@ interface CliSpanOptions<T> {
 export interface CliObservability {
   readonly service: string;
   readonly environment: string;
-  readonly release: string;
+  readonly release?: string;
   readonly sentrySink: LogSink | null;
   readonly fixtureStore?: FixtureSentryStore;
   withSpan<T>(options: CliSpanOptions<T>): Promise<T>;
@@ -95,7 +95,7 @@ function buildCliObservability(params: BuildCliObservabilityParams): CliObservab
   return {
     service: serviceName,
     environment: sentryConfig.environment,
-    release: sentryConfig.release,
+    ...(sentryConfig.mode === 'off' ? {} : { release: sentryConfig.release }),
     sentrySink: createSentryLogSink(sentryRuntime),
     fixtureStore: sentryRuntime.fixtureStore,
 

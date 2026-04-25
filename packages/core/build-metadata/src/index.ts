@@ -9,6 +9,9 @@ export {
 
 export {
   resolveRelease,
+  type AppBuildIdentity,
+  type BuildIdentityBranch,
+  type BuildIdentityContext,
   type ReleaseEnvironment,
   type ReleaseError,
   type ReleaseInput,

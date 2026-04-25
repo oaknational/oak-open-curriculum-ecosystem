@@ -177,6 +177,8 @@ function toObservabilityConfigError(error: ReleaseError): ObservabilityConfigErr
       return { kind: 'missing_branch_url_in_preview' };
     case 'missing_git_sha':
       return { kind: 'missing_git_sha' };
+    case 'invalid_build_identity':
+      return { kind: 'invalid_build_identity', value: error.message };
     default: {
       const exhaustive: never = error.kind;
       throw new Error(`Unhandled ReleaseError kind: ${String(exhaustive)}`);

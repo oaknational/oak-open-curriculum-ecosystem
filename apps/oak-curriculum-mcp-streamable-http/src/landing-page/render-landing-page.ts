@@ -15,6 +15,16 @@ import { renderToolsSection } from './render-tools-section.js';
 const WORKSPACE_GITHUB_URL =
   'https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http';
 
+function renderHtmlHead(appVersion: string | undefined): string {
+  if (!appVersion) {
+    return HTML_HEAD;
+  }
+
+  const appVersionMeta = `    <meta name="app-version" content="${appVersion}" />\n`;
+
+  return HTML_HEAD.replace('</head>', `${appVersionMeta}</head>`);
+}
+
 /**
  * Renders the complete landing page HTML.
  *
@@ -30,6 +40,7 @@ const WORKSPACE_GITHUB_URL =
  * @param vercelHost - Optional Vercel host header value for URL resolution.
  *   When provided, the config snippet uses HTTPS with this host.
  *   When absent, defaults to localhost for development.
+ * @param appVersion - Optional app build identity for HTML metadata.
  * @returns Complete HTML string for the landing page
  *
  * @example
@@ -41,12 +52,12 @@ const WORKSPACE_GITHUB_URL =
  * const devHtml = renderLandingPageHtml();
  * ```
  */
-export function renderLandingPageHtml(vercelHost?: string): string {
+export function renderLandingPageHtml(vercelHost?: string, appVersion?: string): string {
   const toolsSection = renderToolsSection();
   const promptsSection = renderPromptsSection();
   const resourcesSection = renderResourcesSection();
 
-  return `${HTML_HEAD}
+  return `${renderHtmlHead(appVersion)}
   <body>
     <main class="wrap" aria-labelledby="title">
       <img class="logo" src="/oak-national-academy-logo-512.png" alt="Oak National Academy logo" width="120" height="120" />

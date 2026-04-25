@@ -2,7 +2,6 @@ import type { RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
-
 import type { ToolHandlerOverrides } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
@@ -20,6 +19,7 @@ import {
   setupErrorHandlers,
   type SentryExpressErrorHandlerSetup,
 } from './app/bootstrap-error-handlers.js';
+import { createAppVersionHeaders } from './app/app-version-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
@@ -29,7 +29,6 @@ import type { RateLimiterFactory } from './rate-limiting/index.js';
 import { initializeCoreEndpoints } from './app/core-endpoints.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 export { loadRuntimeConfig } from './runtime-config.js';
-
 export interface CreateAppOptions {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
@@ -77,8 +76,8 @@ export interface CreateAppOptions {
    * error logger. Production callers pass `setupExpressErrorHandler` from
    * `@sentry/node`; tests omit this or inject a recording fake.
    *
-   * @remarks Only provide when `SENTRY_MODE !== 'off'` — the handler is
-   * inert without `Sentry.init()` but registration is unnecessary overhead.
+   * @remarks Only provide for live Sentry mode. Fixture/off modes must not
+   * register the external Sentry Express handler.
    *
    * @see ADR-078 for the dependency injection rationale
    */
@@ -115,6 +114,13 @@ function setupPreAuthPhases(
   );
 }
 
+function mountAppVersionHeader(app: ExpressWithAppId, appVersion: string): void {
+  app.use((_req, res, next) => {
+    res.set(createAppVersionHeaders(appVersion));
+    next();
+  });
+}
+
 function setupPostAuthPhases(
   app: ExpressWithAppId,
   options: CreateAppOptions,
@@ -135,7 +141,14 @@ function setupPostAuthPhases(
     options.observability,
   );
 
-  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, options.runtimeConfig.displayHostname);
+  mountAppVersionHeader(app, options.runtimeConfig.version);
+  mountStaticContentRoutes(
+    app,
+    dnsRebindingMiddleware,
+    log,
+    options.runtimeConfig.displayHostname,
+    options.runtimeConfig.version,
+  );
   app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
   runBootstrapPhase(

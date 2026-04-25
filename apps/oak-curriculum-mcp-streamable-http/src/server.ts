@@ -77,7 +77,7 @@ async function loadConfiguredApp(): Promise<NodeRequestHandler> {
     observability,
     getWidgetHtml: () => WIDGET_HTML_CONTENT,
     setupSentryErrorHandler:
-      runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+      runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });
 }
 

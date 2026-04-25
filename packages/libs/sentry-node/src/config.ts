@@ -33,13 +33,6 @@ interface ResolvedConfigInputs {
   readonly mode: SentryMode;
   readonly flags: ParsedSentryBooleanFlags;
   readonly environment: ResolvedSentryEnvironment;
-  readonly release: ResolvedSentryRelease;
-  readonly gitSha:
-    | {
-        readonly value: string;
-        readonly source: GitShaSource;
-      }
-    | undefined;
 }
 
 function isSentryMode(value: string): value is SentryMode {
@@ -99,18 +92,11 @@ function parseBooleanFlags(
   });
 }
 
-function createOffConfig(
-  environment: ResolvedSentryEnvironment,
-  release: ResolvedSentryRelease,
-  gitSha: { readonly value: string; readonly source: GitShaSource } | undefined,
-): SentryOffConfig {
+function createOffConfig(environment: ResolvedSentryEnvironment): SentryOffConfig {
   return {
     mode: 'off',
     environment: environment.value,
     environmentSource: environment.source,
-    release: release.value,
-    releaseSource: release.source,
-    ...(gitSha ? { gitSha: gitSha.value, gitShaSource: gitSha.source } : {}),
     enableLogs: false,
     sendDefaultPii: false,
     debug: false,
@@ -185,24 +171,10 @@ function resolveConfigInputs(
     return flagResult;
   }
 
-  const releaseResult = resolveSentryRelease(input);
-
-  if (!releaseResult.ok) {
-    return releaseResult;
-  }
-
-  const gitShaResult = resolveGitSha(input);
-
-  if (!gitShaResult.ok) {
-    return gitShaResult;
-  }
-
   return ok({
     mode: modeResult.value,
     flags: flagResult.value,
     environment: resolveSentryEnvironment(input),
-    release: releaseResult.value,
-    gitSha: gitShaResult.value,
   });
 }
 
@@ -215,15 +187,27 @@ export function createSentryConfig(
     return resolvedResult;
   }
 
-  const { mode, flags, environment, release, gitSha } = resolvedResult.value;
+  const { mode, flags, environment } = resolvedResult.value;
 
   if (mode === 'off') {
-    return ok(createOffConfig(environment, release, gitSha));
+    return ok(createOffConfig(environment));
+  }
+
+  const releaseResult = resolveSentryRelease(input);
+
+  if (!releaseResult.ok) {
+    return releaseResult;
+  }
+
+  const gitShaResult = resolveGitSha(input);
+
+  if (!gitShaResult.ok) {
+    return gitShaResult;
   }
 
   if (mode === 'fixture') {
-    return ok(createFixtureConfig(environment, release, flags, gitSha));
+    return ok(createFixtureConfig(environment, releaseResult.value, flags, gitShaResult.value));
   }
 
-  return createLiveConfig(input, environment, release, flags, gitSha);
+  return createLiveConfig(input, environment, releaseResult.value, flags, gitShaResult.value);
 }

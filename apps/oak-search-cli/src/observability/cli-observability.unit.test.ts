@@ -312,7 +312,7 @@ describe('createCliObservability', () => {
     });
   });
 
-  it('exposes service, environment, and release metadata', () => {
+  it('off mode: exposes service and environment without Sentry release metadata', () => {
     const result = createCliObservability(createRuntimeConfig('off'));
 
     expect(result.ok).toBe(true);
@@ -322,6 +322,20 @@ describe('createCliObservability', () => {
 
     expect(result.value.service).toBe('oak-search-cli');
     expect(typeof result.value.environment).toBe('string');
-    expect(typeof result.value.release).toBe('string');
+    expect(result.value.release).toBeUndefined();
+  });
+
+  it('sentry mode: exposes Sentry release metadata', () => {
+    const sdk = createFakeSentrySdk();
+    const result = createCliObservability(createRuntimeConfig('sentry'), {
+      sentrySdk: sdk.sdk,
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.release).toBe('release-123');
   });
 });

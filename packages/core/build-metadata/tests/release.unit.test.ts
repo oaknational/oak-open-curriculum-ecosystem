@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveRelease, type ReleaseInput } from '../src/release.js';
+import { resolveRelease, type AppBuildIdentity, type ReleaseInput } from '../src/release.js';
 
 const FULL_SHA = 'c8b666485ecb08b5dc27e428737b4077c0531f57';
 const SHORT_SHA = FULL_SHA.slice(0, 7);
@@ -11,6 +11,74 @@ const BRANCH_URL_LABEL_FEAT_X = 'feat-x-poc-oak';
 function env(overrides: Partial<ReleaseInput> = {}): ReleaseInput {
   return overrides;
 }
+
+describe('resolveRelease — projection from canonical build identity', () => {
+  it('projects local development build identity into the Sentry release value', () => {
+    const buildIdentityInput = {
+      buildIdentity: {
+        value: 'local-dev',
+        buildContext: 'local',
+        targetEnvironment: 'development',
+        branch: 'other',
+      } satisfies AppBuildIdentity,
+    } satisfies ReleaseInput;
+
+    const result = resolveRelease(buildIdentityInput);
+
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        value: 'local-dev',
+        source: 'build_identity',
+        environment: 'development',
+      },
+    });
+  });
+
+  it('rejects build identity values that are not valid Sentry release names', () => {
+    const result = resolveRelease({
+      buildIdentity: {
+        value: 'local/dev',
+        buildContext: 'local',
+        targetEnvironment: 'development',
+        branch: 'other',
+      },
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      error: {
+        kind: 'invalid_build_identity',
+        message:
+          'Cannot project app build identity "local/dev" to a Sentry release. ' +
+          'Expected a Sentry-safe release name (no slash or backslash, no ' +
+          'newlines or tabs, not "." / ".." / single space, length 1-200).',
+      },
+    });
+  });
+
+  it('uses Sentry context for the effective release environment', () => {
+    const result = resolveRelease({
+      buildIdentity: {
+        value: 'branch-build',
+        buildContext: 'vercel',
+        targetEnvironment: 'production',
+        branch: 'other',
+      },
+      VERCEL_ENV: 'production',
+      VERCEL_GIT_COMMIT_REF: 'feature/build-identity',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        value: 'branch-build',
+        source: 'build_identity',
+        environment: 'preview',
+      },
+    });
+  });
+});
 
 describe('resolveRelease — SENTRY_RELEASE_OVERRIDE precedence', () => {
   it('uses the override in any environment context', () => {
@@ -73,7 +141,7 @@ describe('resolveRelease — SENTRY_RELEASE_OVERRIDE precedence', () => {
     ['.', 'single dot'],
     ['..', 'double dot'],
     ['has/slash', 'forward slash'],
-    ['has\\backslash', 'backslash'],
+    [String.raw`has\backslash`, 'backslash'],
     ['has\nnewline', 'newline'],
     ['has\ttab', 'tab'],
   ])('rejects the denied override "%s" (%s)', (invalidOverride) => {

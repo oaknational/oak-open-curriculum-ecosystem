@@ -34,10 +34,30 @@ export type ReleaseSource =
   | 'SENTRY_RELEASE_OVERRIDE'
   | 'application_version'
   | 'vercel_branch_url'
-  | 'development_short_sha';
+  | 'development_short_sha'
+  | 'build_identity';
 
 /** Effective deployment environment the release name was derived for. */
 export type ReleaseEnvironment = 'production' | 'preview' | 'development';
+
+/** App-level build context that produced the current identity. */
+export type BuildIdentityContext = 'local' | 'vercel';
+
+/** Branch class that produced the current identity. */
+export type BuildIdentityBranch = 'main' | 'other';
+
+/**
+ * Canonical app build identity consumed by release projections.
+ *
+ * @remarks This is the app's build/version fact. Observability and Sentry
+ * consume it; they do not create it.
+ */
+export interface AppBuildIdentity {
+  readonly value: string;
+  readonly buildContext: BuildIdentityContext;
+  readonly targetEnvironment: ReleaseEnvironment;
+  readonly branch: BuildIdentityBranch;
+}
 
 /**
  * Subset of environment variables consumed by `resolveRelease`.
@@ -57,6 +77,7 @@ export type ReleaseEnvironment = 'production' | 'preview' | 'development';
  * (snapshotted at the boundary), not `process.env` itself.
  */
 export interface ReleaseInput {
+  readonly buildIdentity?: AppBuildIdentity;
   readonly SENTRY_RELEASE_OVERRIDE?: string;
   readonly VERCEL_ENV?: string;
   readonly VERCEL_BRANCH_URL?: string;
@@ -95,6 +116,7 @@ export interface ReleaseError {
     | 'missing_application_version'
     | 'invalid_application_version'
     | 'missing_branch_url_in_preview'
-    | 'missing_git_sha';
+    | 'missing_git_sha'
+    | 'invalid_build_identity';
   readonly message: string;
 }

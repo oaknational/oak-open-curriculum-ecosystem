@@ -63,6 +63,7 @@ describe('resolveHttpDevExecutionPlan', () => {
         ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
         DANGEROUSLY_DISABLE_AUTH: 'true',
         LOG_LEVEL: 'debug',
+        SENTRY_MODE: 'off',
       },
       output: {
         kind: 'tee',
@@ -86,5 +87,25 @@ describe('resolveHttpDevExecutionPlan', () => {
       LOG_LEVEL: 'debug',
     });
     expect(plan.server.output).toStrictEqual({ kind: 'inherit' });
+  });
+
+  it('does not synthesize deploy release metadata for local UI and a11y startup', () => {
+    const plan = resolveHttpDevExecutionPlan({
+      mode: 'observe-noauth',
+      workspaceRoot,
+      parentEnv: {
+        ...parentEnv,
+        VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
+        VERCEL_BRANCH_URL: 'feature.example.vercel.app',
+        SENTRY_RELEASE_OVERRIDE: 'inherited-release',
+        SENTRY_MODE: 'sentry',
+      },
+      now,
+    });
+
+    expect(plan.server.env.VERCEL_GIT_COMMIT_SHA).toBeUndefined();
+    expect(plan.server.env.VERCEL_BRANCH_URL).toBeUndefined();
+    expect(plan.server.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();
+    expect(plan.server.env.SENTRY_MODE).toBe('off');
   });
 });

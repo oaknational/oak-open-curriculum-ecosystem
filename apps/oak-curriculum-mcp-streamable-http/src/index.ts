@@ -38,7 +38,7 @@ await startConfiguredHttpServer({
       ...opts,
       getWidgetHtml: () => WIDGET_HTML_CONTENT,
       setupSentryErrorHandler:
-        config.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+        config.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
     }),
   bootstrapApp,
   createServer: (app) => {

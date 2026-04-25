@@ -105,10 +105,6 @@ export interface SentryOffConfig {
   readonly mode: 'off';
   readonly environment: string;
   readonly environmentSource: SentryEnvironmentSource;
-  readonly release: string;
-  readonly releaseSource: SentryReleaseSource;
-  readonly gitSha?: string;
-  readonly gitShaSource?: GitShaSource;
   readonly enableLogs: false;
   readonly sendDefaultPii: false;
   readonly debug: false;
@@ -160,6 +156,7 @@ export type ObservabilityConfigError =
   | { readonly kind: 'invalid_git_sha'; readonly value: string }
   | { readonly kind: 'missing_git_sha' }
   | { readonly kind: 'invalid_release_override'; readonly value: string }
+  | { readonly kind: 'invalid_build_identity'; readonly value: string }
   | { readonly kind: 'missing_branch_url_in_preview' }
   | { readonly kind: 'invalid_release_registration_override' };
 

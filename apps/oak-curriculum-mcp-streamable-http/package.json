@@ -37,8 +37,8 @@
     "test:watch": "vitest",
     "test:widget": "vitest run --config vitest.widget.config.ts",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:ui": "playwright test --grep-invert @a11y",
-    "test:a11y": "playwright test --grep @a11y",
+    "test:ui": "env -u NO_COLOR playwright test --grep-invert @a11y",
+    "test:a11y": "env -u NO_COLOR playwright test --grep @a11y",
     "test:widget:ui": "playwright test --config playwright.widget.config.ts --grep-invert @a11y",
     "test:widget:a11y": "playwright test --config playwright.widget.config.ts --grep @a11y"
   },

@@ -5,7 +5,7 @@ const FULL_SHA = 'c8b666485ecb08b5dc27e428737b4077c0531f57';
 const SHORT_SHA = FULL_SHA.slice(0, 7);
 
 describe('createSentryConfig', () => {
-  it('defaults to off with deterministic environment and dev-shortsha release', () => {
+  it('defaults to off without becoming a Sentry release carrier', () => {
     const result = createSentryConfig({
       APP_VERSION: '1.5.0',
       APP_VERSION_SOURCE: 'root_package_json',
@@ -22,15 +22,15 @@ describe('createSentryConfig', () => {
       mode: 'off',
       environment: 'development',
       environmentSource: 'development',
-      release: `dev-${SHORT_SHA}`,
-      releaseSource: 'development_short_sha',
       enableLogs: false,
       sendDefaultPii: false,
       debug: false,
     });
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
   });
 
-  it('uses application_version on production/main with a valid APP_VERSION', () => {
+  it('does not use production app version as a Sentry release carrier in off mode', () => {
     const result = createSentryConfig({
       SENTRY_MODE: 'off',
       VERCEL_ENV: 'production',
@@ -45,9 +45,9 @@ describe('createSentryConfig', () => {
       return;
     }
 
-    expect(result.value.release).toBe('1.5.0');
-    expect(result.value.releaseSource).toBe('application_version');
     expect(result.value.environment).toBe('production');
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
   });
 
   it('uses explicit environment and release inputs when present', () => {
@@ -67,6 +67,10 @@ describe('createSentryConfig', () => {
 
     expect(result.value.environment).toBe('preview');
     expect(result.value.environmentSource).toBe('SENTRY_ENVIRONMENT_OVERRIDE');
+    expect(result.value.mode).toBe('fixture');
+    if (result.value.mode !== 'fixture') {
+      return;
+    }
     expect(result.value.release).toBe('abcdef123');
     expect(result.value.releaseSource).toBe('SENTRY_RELEASE_OVERRIDE');
   });
@@ -109,6 +113,41 @@ describe('createSentryConfig', () => {
     expect(result.ok).toBe(true);
   });
 
+  it('keeps off mode green when deploy release metadata is absent', () => {
+    const result = createSentryConfig({
+      SENTRY_MODE: 'off',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+    });
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.mode).toBe('off');
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
+  });
+
+  it('keeps live mode strict when deploy release metadata is absent', () => {
+    expect(
+      createSentryConfig({
+        SENTRY_MODE: 'sentry',
+        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+        SENTRY_TRACES_SAMPLE_RATE: '0.5',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+      }),
+    ).toEqual({
+      ok: false,
+      error: {
+        kind: 'missing_git_sha',
+      },
+    });
+  });
+
   it('treats off mode as a kill switch even when live-only inputs are present', () => {
     const result = createSentryConfig({
       SENTRY_MODE: 'off',
@@ -130,6 +169,8 @@ describe('createSentryConfig', () => {
       enableLogs: false,
       debug: false,
     });
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
   });
 
   it('uses dev-shortsha in fixture mode on development', () => {

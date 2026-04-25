@@ -15,6 +15,7 @@ type ValueConfigError = Extract<
   | { readonly kind: 'invalid_traces_sample_rate' }
   | { readonly kind: 'invalid_git_sha' }
   | { readonly kind: 'invalid_release_override' }
+  | { readonly kind: 'invalid_build_identity' }
 >;
 
 /**
@@ -33,6 +34,7 @@ function isValueConfigError(error: ObservabilityConfigError): error is ValueConf
     case 'invalid_traces_sample_rate':
     case 'invalid_git_sha':
     case 'invalid_release_override':
+    case 'invalid_build_identity':
       return true;
     default:
       return false;
@@ -53,6 +55,8 @@ function describeValueConfigError(error: ValueConfigError): string {
       return `Invalid git SHA value: ${error.value}`;
     case 'invalid_release_override':
       return `Invalid SENTRY_RELEASE_OVERRIDE value: ${error.value}`;
+    case 'invalid_build_identity':
+      return `Invalid app build identity value: ${error.value}`;
     default: {
       const exhaustive: never = error;
       throw new Error(`Unhandled value config error kind: ${String(exhaustive)}`);

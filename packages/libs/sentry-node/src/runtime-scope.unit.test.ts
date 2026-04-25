@@ -68,8 +68,6 @@ function createOffConfig(): Extract<ParsedSentryConfig, { readonly mode: 'off' }
     mode: 'off',
     environment: 'test',
     environmentSource: 'SENTRY_ENVIRONMENT_OVERRIDE',
-    release: 'test-1.0.0',
-    releaseSource: 'application_version',
     enableLogs: false,
     sendDefaultPii: false,
     debug: false,
