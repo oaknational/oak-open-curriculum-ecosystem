@@ -1,4 +1,34 @@
 {
   "schema_version": "1.0.0",
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "2919423e-1e58-4b92-912a-9c610c509e01",
+      "agent_id": {
+        "agent_name": "Fresh Prince",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md",
+            ".agent/practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md",
+            ".agent/directives/principles.md",
+            ".agent/directives/user-collaboration.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-25T18:46:15Z",
+      "freshness_seconds": 14400,
+      "intent": "Pending-graduations promotion pass per owner direction: PDR-029 v2 amendment (tripwire-observability + advisory-not-enforcing); PDR-015 amendment (assumption-challenge / discussion-before-absorption); register hygiene (dedupe + graduate-mark + merge); evaluate owner-correction cluster on substance not instance-count and choose proportionate landing per item.",
+      "notes": "Overlap with Keen Dahl on .agent/memory/operational/repo-continuity.md acknowledged; their edits target Current Session Focus (top of file), mine target the Pending-Graduations Register (further down). Coordination decision: proceed in parallel; sections do not collide. Embryo-log ping appended for explicit visibility per the new artefact-leaving discipline."
+    }
+  ]
 }
