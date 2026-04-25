@@ -1,6 +1,36 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-25 (Jiggly Pebble / claude-code /
+**Last refreshed**: 2026-04-25 (Fresh Prince / claude-code /
+claude-opus-4-7-1m — **WS1 of the multi-agent collaboration protocol
+landed as a single atomic commit `a5d33519`** on
+`feat/otel_sentry_enhancements`. 20 files, 881 insertions, 165
+deletions. All pre-commit gates green first try (lint, markdownlint,
+prettier-check, knip, depcruise, type-check, test, portability-check).
+Surfaces installed: structured `active-claims.json` + JSON Schema
+authority + `closed-claims.archive.json`; new tripwire rule
+`register-active-areas-at-session-open` with three platform adapters;
+operational entry `collaboration-state-conventions.md` carrying
+schema-field provenance and `freshness_seconds` rationale; new
+`consolidate-docs § 7e` stale-claim audit step; both `start-right`
+skills updated. Pre-landing reviewer dispatch (Fred,
+config-reviewer, assumptions-reviewer, docs-adr-reviewer) absorbed three
+MAJORs (schema additive-only/additionalProperties reconciliation;
+observable-artefact requirement on no-overlap claims; `freshness_seconds`
+default rationale) and several proportionate MINORs. Self-application
+pilot landed: a single Fresh Prince claim opened-and-closed within the
+WS1 commit, archived as the founding entry in
+`closed-claims.archive.json`. **Coordination event**: parallel
+`Jiggly Pebble` (`claude-code` / `claude-opus-4-7-1m`,
+observability-sentry-otel thread, PR-87 quality-finding analysis)
+appended their own embryo-log entry mid-session declaring areas
+explicitly NOT including WS1 surfaces. Protocol functioning
+bidirectionally, again. **Next**: WS2 of the protocol is already
+landed (`293742cd`); WS3 (conversation file + sidebar mechanism) is the
+next workstream and is unblocked, but is not the current priority —
+deployed-state observability validation remains the owner's stated
+focus per `repo-continuity.md`.
+
+**Prior refresh**: 2026-04-25 (Jiggly Pebble / claude-code /
 claude-opus-4-7-1m — **WS0 of the multi-agent collaboration protocol
 landed as a single atomic commit `63c66c88`** on
 `feat/otel_sentry_enhancements`. **WS0 seed fired same-day**: parallel
@@ -100,7 +130,7 @@ and
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
-| `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-claims-registry-author` | 2026-04-25 | 2026-04-25 |
+| `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519` | 2026-04-25 | 2026-04-25 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -195,7 +225,9 @@ nl -ba .agent/directives/AGENT.md
 
 - Primary (active multi-workstream lane):
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
-  — WS0 landed `63c66c88`; WS1–WS5 remain.
+  — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
+  `293742cd`. WS3 (conversation file + sidebar mechanism), WS4
+  (operational integration), WS5 (observation harvest) remain.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -205,15 +237,16 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-WS0 of the multi-agent collaboration protocol has landed (`63c66c88`).
-**WS1 is the next workstream** — promote the schema-less embryo log
-into a structured claims registry at
-`.agent/state/collaboration/active-claims.json` with versioned schema,
-add the `register-active-areas-at-session-open` tripwire rule, and
-document the freshness/staleness lifecycle. WS1 inputs include any
-embryo-log entries that have accumulated since WS0 landed (real-usage
-evidence informs schema design). Earlier AGENT homing and hard-fitness
-remediation work is complete and committed.
+WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) of the
+multi-agent collaboration protocol have landed. **WS3 is the next
+unblocked workstream** — install the conversation file + sidebar
+mechanism for structured peer exchange when claim-overlap warrants it.
+WS3 inputs include any new embryo-log entries and active-claims
+entries that have accumulated since WS1 landed (real-usage evidence
+informs the conversation file schema design). However, WS3 is not the
+current owner-stated priority — deployed-state observability
+validation on the pushed `feat/otel_sentry_enhancements` branch
+remains the priority per `repo-continuity.md § Next Safe Step`.
 
 ### Current State
 
@@ -241,21 +274,31 @@ remediation work is complete and committed.
 
 ### Next Safe Step
 
-WS1 of the multi-agent collaboration protocol is the next implementation
-slice. Pre-WS1 inputs to read: every entry written to
-`.agent/state/collaboration/log.md` since WS0 landed at `63c66c88` —
-these inform the schema design for `active-claims.json`. The plan body
-WS1 section names the starting schema; observed embryo-log usage may
-add or remove fields. Reviewer routing for WS1: `architecture-reviewer-fred`
-(state-vs-memory boundary), `config-reviewer` (JSON schema versioning),
-`assumptions-reviewer` (single-level claim model under advisory framing).
+The next safe step on this thread is to **wait for owner direction**.
+WS1's observation seed is now open: across the next 3 overlapping-agent
+sessions, the seed question — *can simultaneous agents detect each
+other's claims via the registry, and use that detection to inform
+coordination decisions without mechanical refusal?* — is being
+validated by real usage. The Fresh Prince landing already collected
+the first data point: the parallel Jiggly Pebble session declared
+explicit non-overlap with WS1 surfaces via the embryo log mid-session.
 
-Coordination follow-up from WS0 landing: the parallel observability-
-sentry-otel agent should integrate the two stale `collaboration.md`
-references in their `next-session.md` into their next commit on the
-observability thread (line ~160 *Coordination flag* narrative; line
-~753 *staged collaboration-reference* recap). Surfaced in the embryo
-log for discovery.
+When the owner is ready to resume on this thread, candidates are:
+
+1. **WS3 (conversation file + sidebar)** — unblocks WS5 evidence
+   harvest by giving overlap conversations a structured surface.
+   Plan body around line 734.
+2. **WS5 evidence harvest** — wait until at least three real parallel
+   sessions have used the WS0 + WS1 surfaces, then audit observation
+   seeds, refine schemas, and fold lessons back into the directive.
+3. **Pending-graduations register sweep** for collaboration-related
+   candidates (see `repo-continuity.md`).
+
+Reviewer routing for WS3: `assumptions-reviewer` (sidebar timeouts,
+parallel-sidebars-allowed decision, owner-escalation surface shape),
+`docs-adr-reviewer` (conversation schema and thread-record
+distinction), `architecture-reviewer-fred` (state-vs-memory boundary
+extension into conversations and escalations).
 
 ### Active Track Links
 
