@@ -163,14 +163,56 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Jazzy handoff)**: due — explicit owner direction
-to run `/jc-consolidate-docs` after this session-handoff. Triggers
-firing: napkin growth (now well above rotation threshold after this
-session's substantial entries), accumulated pending-graduations
-register entries from multiple sessions, multiple new candidates
-captured today (Jazzy adversarial-review-discussion gate, operational-
-seed-per-WS pattern, advisory-not-enforced principle). Will continue
-into `/jc-consolidate-docs` immediately after this handoff completes.
+**Status (2026-04-25 Jazzy handoff + consolidate-docs run)**:
+**completed this handoff** — `/jc-consolidate-docs` ran post-handoff
+per explicit owner direction. Findings:
+
+- **Step 4c cross-experience scan**: identified `the-frame-was-the-fix`
+  pattern candidate (6 instances across 5 sessions in 5 days);
+  added to pending-graduations register.
+- **Step 7a ADR/PDR scan**: this session surfaced four register
+  candidates (discussion-before-absorption gate, operational-seed-
+  per-WS pattern, advisory-not-enforced principle, frame-was-the-fix
+  pattern) — all are first-instance-only in their respective
+  scopes and stay pending. Nothing surfaced as PDR-ready in this
+  pass.
+- **Step 7c thread-register freshness audit (six checks)**: clean.
+  No stale `last_session`, no orphan threads, no missing fields,
+  no expired track cards (none exist), no duplicate identity rows,
+  no thread ↔ next-session correspondence breaks. Both threads
+  (observability-sentry-otel, agentic-engineering-enhancements)
+  fully refreshed for Jazzy.
+- **Step 9 fitness check**: 11 soft warnings, 0 hard, 0 critical.
+  All within hard limits; no urgent action. Practice Core files
+  (practice-bootstrap, practice-lineage) hover near soft target —
+  routine compression candidates for a future consolidation, not
+  blocking.
+- **Step 10 practice exchange**: `practice-core/incoming/` empty;
+  `practice-context/outgoing/` has README only. Nothing to process.
+
+**Deferred from this consolidation pass with deferral-honesty**:
+
+- **Step 6 napkin rotation**: napkin at 1221 lines, rotation
+  overdue per the ~500-line convention. **Constraint**: another
+  agent (Codex/cursor/GPT-5.5) is currently working on quality-
+  gate remediation and commits in the working tree; rotation
+  creates a new archive file + modifies napkin.md + modifies
+  distilled.md, all of which risks file-level collisions with the
+  parallel agent's pre-commit gate runs. **Falsifiability**: a
+  future agent at session-open checks `git log --oneline | head -5`
+  to confirm the parallel agent's commits have landed cleanly,
+  then runs rotation as the first consolidate-docs step. If
+  rotation cannot complete cleanly even after the parallel work
+  lands, the constraint was misjudged.
+- **Step 8 Practice Core review**: PDR-003 requires owner approval
+  for Core edits; the session is closing per owner direction
+  (cold start for WS0 in fresh session). **Constraint**: owner
+  attention not available for Core-edit approval cycle in this
+  consolidation. **Falsifiability**: next consolidation pass after
+  WS0 lands re-examines whether any of the four register candidates
+  surfaced this session (advisory-not-enforced, frame-was-the-fix,
+  etc.) require immediate Core amendment vs. continued register
+  pending status.
 
 **Prior status (2026-04-25 Cursor/GPT-5.5 handoff)**: due — `napkin.md` is
 still above the rotation threshold (`wc -l` reports 1045 lines), and that
@@ -211,6 +253,7 @@ step 7 uses this section as its primary queue.
 | 2026-04-25 | Napkin (Jazzy) + Wilma adversarial review of multi-agent collaboration plan | Sibling to PDR-015 candidate above: discussion-before-absorption gate per adversarial-review output. When a Wilma-class adversarial review surfaces BLOCKING findings, dispatch an owner-led discussion about whether the design's central claim is right BEFORE absorbing findings as binding work items. Some findings dissolve under reframing rather than requiring hardening. Candidate home: PDR-015 amendment alongside the assumption-challenge gate. | Second cross-session instance of adversarial-review findings being absorbed mechanically without claim-level discussion producing a worse outcome than reframing would have. | pending |
 | 2026-04-25 | Napkin (Jazzy) + multi-agent collaboration plan WS-architecture | Pattern candidate: *operational-seed-per-workstream for protocol plans*. Plans that introduce new behavioural / cultural / protocol surfaces (vs purely-technical refactors) benefit from per-WS operational seeds (named questions for subsequent observation) alongside mechanical acceptance. Candidate home: `.agent/memory/active/patterns/` + amendment to plan-template / `jc-plan` skill if it generalises. | Second protocol-plan instance using the per-WS-seed structure, or explicit owner direction to promote. | pending |
 | 2026-04-25 | Napkin (Jazzy) + multi-agent collaboration plan Design Principle 1 | Pattern candidate: *advisory-not-enforced for agent-participating systems*. When designing systems where agents participate as reasoning peers (not as constrained subjects), default to information surfaces, not enforcement gates. Mechanical refusals will be routed around at the cost of architectural excellence. The Practice's existing no-bypass discipline (`--no-verify` per-commit authorisation) is evidence the repo already encodes this preference. Candidate home: PDR amendment to PDR-029 (tripwires fire as "consult and decide" not "refuse"); also lands as Design Principle 1 of the multi-agent collaboration plan when WS0 lands. | Second cross-system instance where agent-participating design considered enforcement and chose advisory, or explicit owner direction to elevate beyond the multi-agent collaboration plan's directive-level home. | pending |
+| 2026-04-25 | Consolidate-docs step 4c (cross-experience scan, Jazzy session) | Pattern candidate: *reflexive-shape-correction across sessions*. Recent experience files (2026-04-21 reviewer-found-the-gaps, 2026-04-22 plan-was-not-the-conversation, 2026-04-23 three-reviewers-collapse, 2026-04-24 evasion-called-out, 2026-04-24 the-spiral-i-could-not-see, 2026-04-25 from-locks-to-knowledge) cluster around the same shape: agent reaches for the obvious / mechanical / enforcement-shaped tool; external feedback (owner, reviewer, parallel agent's experience) arrives as a question that exposes the framing rather than fixing the surface; agent reframes; the original "fix the surface" work dissolves. The pattern's name candidate: *the-frame-was-the-fix*. Six instances across five sessions in five days is well above pattern-graduation threshold. Candidate home: `.agent/memory/active/patterns/the-frame-was-the-fix.md` as a process pattern, possibly with PDR-shaped governance framing if the practice doctrine wants it elevated. | Second cross-experience scan reaches the same conclusion, or explicit owner direction to graduate. | pending |
 
 Historical deep-consolidation findings and session-close summaries are
 preserved in git history and
