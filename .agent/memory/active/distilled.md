@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-21.md`
-(sessions 2026-02-10 to 2026-04-21).
+`napkin-2026-02-24.md` through `napkin-2026-04-25.md`
+(sessions 2026-02-10 to 2026-04-25).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -30,8 +30,41 @@ context with no natural permanent home.
   completion checklists, resolved open questions).
 
 Collaboration-specific entries formerly in this section graduated
-to the [collaboration directive][collaboration] on 2026-04-24.
+to the [user-collaboration directive][user-collaboration] on 2026-04-24.
 The merge-blocking simplification preference also lives there now.
+
+## Multi-agent collaboration
+
+The agent-to-agent working model lives in
+[`agent-collaboration.md`][agent-collaboration]. The discovery surface
+is the embryo log at `.agent/state/collaboration/log.md`. Two
+foundational behavioural rules are loaded as session-open tripwires:
+[`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md)
+and
+[`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md).
+Knowledge and communication, not mechanical refusals — locks would be
+routed around at the cost of architectural excellence.
+
+## Reviewer phasing
+
+Different reviewer roles see different things. Adversarial structural
+reviewers (Wilma) catch boundary, threat-model, and lifecycle gaps but
+are not designed to validate citation correctness. Pre-landing
+reviewers (`docs-adr-reviewer`, `assumptions-reviewer`) catch the
+substance-level errors that survive structural review (broken
+ADR/PDR paths inherited from imprecise plan-body glosses; markdownlint
+violations; unobservable tripwires). Sequence: structural review
+shapes the design; pre-landing review validates the implementation
+faithfully embodies the design.
+
+## ADR/PDR citation discipline
+
+When citing an ADR or PDR by number, verify the filename and the
+substance against the live decision-record file. Plan-body glosses are
+shorthand, not authoritative — they can name an ADR/PDR by topic
+without precisely matching the file's actual content. Inheriting a
+plan body's gloss without verification produces broken links and
+substantively misattributed citations.
 
 ## Process
 
@@ -97,5 +130,6 @@ deferred to the SDK codegen decomposition plan for a separate session:
 Build-system entries graduated on 2026-04-24 to
 [`docs/engineering/build-system.md`][build-system].
 
-[collaboration]: ../../directives/user-collaboration.md
+[user-collaboration]: ../../directives/user-collaboration.md
+[agent-collaboration]: ../../directives/agent-collaboration.md
 [build-system]: ../../../docs/engineering/build-system.md

@@ -122,3 +122,21 @@ Packaging the observability reviewer-reintegration slice on
 worktree. I will not stage `.codex/config.toml`, agentic-collaboration plan /
 thread changes, the Jiggly Pebble experience file, or unrelated napkin hunks
 unless the owner redirects.
+
+### 2026-04-25T00:00Z — `Codex` / `codex` / `GPT-5` / `unknown` — observability pushed-handoff
+
+Owner pushed `feat/otel_sentry_enhancements` after the reviewer-reintegration
+package landed as `d9cb54e8`; local branch is in sync with origin at
+`cc71507b`.
+
+**Areas touched for handoff only:**
+
+- `.agent/memory/operational/repo-continuity.md`
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
+- `.agent/plans/observability/active/mcp-local-startup-release-boundary.plan.md`
+- `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
+- `.agent/memory/active/napkin.md`
+
+**Coordination note:** next Sentry-focused session should start at deployed-state
+validation for the pushed branch. Current uncommitted changes are handoff-only;
+continue preserving unrelated WIP if it reappears.

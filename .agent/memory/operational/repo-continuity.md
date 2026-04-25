@@ -9,14 +9,14 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 # Repo Continuity
 
 **Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — session handoff
-after reviewer-finding reintegration and the markdown-code-block rule sidecar
-on `feat/otel_sentry_enhancements`. WS3 release cancellation is landed as
-`2822e525`; Lane B startup/release boundary is landed as `9ea3ccd8`;
-reviewer findings were folded into code/docs. Focused tests,
+after reviewer-finding reintegration was packaged as `d9cb54e8` and the
+owner pushed `feat/otel_sentry_enhancements`. Branch is in sync with origin at
+`cc71507b`; the pushed history includes WS3 `2822e525`, Lane B `9ea3ccd8`, and
+the reviewer-reintegration / MD040 sidecar package `d9cb54e8`. Focused tests,
 `pnpm type-check`, `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`,
 targeted markdownlint, `pnpm portability:check`, `pnpm markdownlint-check:root`,
-and `git diff --check` pass. Local `.codex/config.toml` is a user-local dirty
-file and must not be touched.)
+and `git diff --check` passed before the final handoff edits. Full
+`pnpm check` was not rerun after those final doc-only edits.)
 
 **Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session
 handoff after completing gate recovery for the startup-boundary lane
@@ -29,7 +29,8 @@ It is not a doctrine store, historical log, or plan substitute.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`.
+- Branch: `feat/otel_sentry_enhancements` (in sync with origin at
+  `cc71507b`; observability package commit `d9cb54e8` is pushed).
 - Branch-level success criterion: the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread:
@@ -49,7 +50,7 @@ state live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25 |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25 |
 | `agentic-engineering-enhancements` | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation; markdown-code-block-rule / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / multi-agent-collaboration-protocol-WS0-landed-as-63c66c88 / 2026-04-25 |
 
 The `memory-feedback` thread is archived as of 2026-04-22 Session 8.
@@ -69,15 +70,15 @@ Current branch-primary objective:
 - WS3 cancellation relocation/rewrite **landed** as `2822e525`.
 - Lane B startup/release boundary **landed** as `9ea3ccd8`, with
   `pnpm check` green before the reviewer-finding reintegration pass.
-- Owner-authorized reviewer-finding reintegration is implemented and broadly
-  checked; the markdown-code-block sidecar added the MD040 rule and fixed the
+- Owner-authorized reviewer-finding reintegration **landed as `d9cb54e8`** and
+  is pushed. The markdown-code-block sidecar added the MD040 rule and fixed the
   known unlanguaged fence. Root markdownlint-check passes; full `pnpm check`
-  has not been rerun after the handoff-only doc updates.
+  has not been rerun after the final handoff-only doc updates.
 
 ## Current Session Focus
 
-The latest observability focus is reviewer-finding reintegration after
-owner-authorized dispatch:
+The latest observability focus is handoff after the pushed reviewer-finding
+reintegration package:
 
 - [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
   is active in Phase 3 reintegration. Phase 0/1 evidence, gate recovery, and
@@ -87,11 +88,14 @@ owner-authorized dispatch:
   it; `resolveRelease` is the Sentry projection from build identity plus
   Sentry context. First-class `RuntimeConfig.buildIdentity` remains a named
   future canonicalisation task, not forgotten scope.
-- Reviewer findings handled: build-time Sentry env projection resolves
+- Reviewer findings handled in `d9cb54e8`: build-time Sentry env projection resolves
   canonical app version; runtime env includes `VERCEL_GIT_COMMIT_REF`; local
   no-auth paths strip inherited production labels; Search CLI ingest-harness
   tests are no longer excluded; continuity/ADR/operator docs no longer claim
   WS3 is pending.
+- The next Sentry-focused session should start from deployed-state validation
+  for the pushed branch, not from packaging. If aggregate repo health is to be
+  claimed, rerun full `pnpm check` first.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -127,21 +131,24 @@ Expected next session, per owner direction:
 
 1. Read
    [`observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
-2. Preserve unrelated/parallel working-tree changes, especially the user-local
-   `.codex/config.toml` change. Do not reset, restage broadly, or claim staged
-   WS3 residue exists.
-3. Resume the original observability plan work from reviewer-reintegration
-   closure: preserve the mixed worktree, package/stage only the intended
-   observability/search/doc changes if committing, and rerun the focused gates
-   that match any touched files.
-4. Keep `RuntimeConfig.buildIdentity`, `HttpObservability.release` public-surface
+2. Preserve unrelated/parallel working-tree changes if they reappear; do not
+   reset, restage broadly, or claim staged WS3 residue exists.
+3. Confirm the pushed branch produced the expected Vercel deployment, then
+   collect WS6 deployed-state evidence: release name, environment, deploy
+   linkage, `git.commit.sha`, source maps / Debug IDs, and event attribution
+   in Sentry for the pushed observability package.
+4. If the next session needs to claim aggregate repo health before or after
+   deployed-state validation, rerun full `pnpm check`. The latest package only
+   claims focused gates plus repo-level `type-check`, `lint`, `knip`, `test`,
+   `build`, root markdownlint, portability, and `git diff --check`.
+5. Keep `RuntimeConfig.buildIdentity`, `HttpObservability.release` public-surface
    cleanup, and remaining smoke composition-root global mutation cleanup routed
    to
    [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
    unless the owner explicitly broadens this slice.
-5. Do not continue into soft-fitness or deep-consolidation work by default.
+6. Do not continue into soft-fitness or deep-consolidation work by default.
    Napkin rotation remains due, but the owner explicitly directed the next
-   session back to original observability plan work.
+   session to be Sentry focused.
 
 ## Open Owner-Decision Items
 
@@ -158,24 +165,83 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Jiggly Pebble handoff)**: due — milestone trigger
-fired (WS0 of multi-agent collaboration protocol landed `63c66c88`) and
-napkin pressure persists (`wc -l .agent/memory/active/napkin.md` now
-~1380 lines after this session's entries, well above the ~500-line
-rotation convention). New register entry added this handoff:
-*tripwire-rules-need-observable-artefacts* pattern candidate surfaced
-by the assumptions-reviewer's WS0 finding on `respect-active-agent-claims`.
-**Constraint at handoff close (now resolved)**: parallel Codex/codex/GPT-5
-agent had substantial in-flight WIP at the time the handoff began;
-running consolidation under those conditions risked file-collision.
-**Constraint update**: the parallel agent landed their reviewer-
-reintegration slice as `d9cb54e8` while this handoff was being written,
-and the working tree returned to clean state (only this handoff's own
-edits remain). The falsifiability check from the original deferral
-note has been MET. **Recommendation for next session**: the next agent
-on this branch can run `/jc-consolidate-docs` as the first action with
-no remaining file-collision constraint, picking up napkin rotation,
-distilled refresh, and the four-plus pending pattern candidates.
+**Status (2026-04-25 Jiggly Pebble handoff + consolidate-docs run)**:
+**completed this handoff** — `/jc-consolidate-docs` ran on owner direction
+after the WS0-handoff cycle, satisfying the prior Codex handoff's
+falsifiability check ("if the owner gives consolidation priority, run
+`/jc-consolidate-docs`"). Findings:
+
+- **Step 1 / 2 documentation currency**: clean. Source plan
+  `multi-agent-collaboration-protocol.plan.md` has WS0 marked
+  `completed` with `landed_at: 63c66c88`. Active plans contain only
+  status / next-step / execution content, not documentation drift.
+- **Step 3 ephemeral sweep**: `.remember/now.md` content already
+  captured in the 2026-04-25 Jazzy napkin entries — no new insight
+  to extract. Entry-points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`)
+  are canonical heading + AGENT pointer (verified by session-handoff
+  6d sweep).
+- **Step 4 experience cross-scan**: 10 experience files since
+  2026-04-21 cluster strongly around the *the-frame-was-the-fix*
+  pattern (6 instances flagged in the prior consolidation;
+  2026-04-25 jiggly-pebble adds a 7th-instance variant —
+  *frame-held* / *frame-travels*: when the prior session's reframing
+  is inherited cleanly by a different identity, the surface-fix loop
+  is short-circuited entirely). The pattern is past graduation
+  threshold; surfaced as ready for promotion to
+  `.agent/memory/active/patterns/the-frame-was-the-fix.md` at owner
+  direction.
+- **Step 5 pattern extraction + taxonomy / cross-plane scans**: no
+  napkin entries this rotation resisted classification into
+  `active`/`operational`/`executive`; no `cross_plane: true` tags
+  surfaced. Family B Layer 1 / Family B complement: clean. Pattern
+  candidates retained in this register; nothing graduated to
+  `memory/active/patterns/` this pass.
+- **Step 6 napkin rotation**: outgoing napkin (1422 lines) archived
+  to `archive/napkin-2026-04-25.md`; fresh napkin written; three
+  new sections merged into `distilled.md` (multi-agent
+  collaboration, reviewer phasing, ADR/PDR citation discipline);
+  `distilled.md` now 134 lines (within 200 target).
+- **Step 7a ADR/PDR scan**: nothing rises to immediate ADR or PDR
+  promotion. The pending register's many candidates (frame-was-the-fix,
+  advisory-not-enforced, operational-seed-per-WS,
+  discussion-before-absorption, tripwire-rules-need-observable-artefacts)
+  remain pending against their stated trigger conditions.
+- **Step 7b graduation**: no settled-with-natural-home entries
+  required moves this pass. The new distilled sections are at the
+  right level (process knowledge with directive references).
+- **Step 7c thread-register freshness audit (six checks)**: clean.
+  No stale `last_session` (max 4 days); no orphan threads; no
+  missing fields; no expired track cards (none exist); no duplicate
+  identity rows within thread; thread ↔ next-session correspondence
+  intact.
+- **Step 7d bidirectional citation audit**:
+  `dont-break-build-without-fix-plan.md` ↔
+  `gate-recovery-cadence.plan.md` — both directions resolve (4 rule→plan
+  citations; 1 plan→rule citation under plan's `## Cross-references`).
+  Clean.
+- **Step 8 Practice Core refinement candidate** (owner-approval
+  required per PDR-003): WS0 introduced `.agent/state/` as a live
+  signal-like surface distinct from `.agent/memory/`. PDR-011
+  (Continuity Surfaces and Surprise Pipeline) names napkin /
+  distilled / patterns / threads / executive surfaces but does not
+  yet acknowledge `.agent/state/` as a continuity-state class.
+  Candidate amendment: extend PDR-011's continuity-surface map to
+  include `.agent/state/` with the state-vs-memory boundary cited
+  to the new `agent-collaboration.md` directive. Surfaced for owner
+  decision; not edited.
+- **Step 9 fitness check (strict-hard)**: SOFT (12 soft, 0 hard, 0
+  critical). Strict-hard exits 0; consolidation closure is unblocked.
+- **Step 10 practice exchange**: `practice-core/incoming/` empty;
+  `practice-context/outgoing/` has README only. Nothing to process.
+
+**Deferred from this consolidation pass with deferral-honesty**:
+
+- **Practice Core PDR-011 amendment** (the `.agent/state/`
+  candidate above): **constraint** — PDR-003 requires owner approval
+  for any Core surface edit; surfaced as candidate, not edited.
+  **Falsifiability**: owner reviews the candidate and either
+  approves the amendment (next consolidation lands the diff) or
+  rejects it with rationale (entry removed from candidate list).
 
 **Prior status (2026-04-25 Codex handoff)**: due — napkin rotation remains over the
 ~500-line convention (`wc -l` now reports 1222 lines). Not run in this handoff
