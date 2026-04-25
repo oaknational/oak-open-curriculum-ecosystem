@@ -148,6 +148,8 @@ function isHttpDevMode(input: string): input is HttpDevMode {
 
 function resolveServerEnv(parentEnv: NodeJS.ProcessEnv, mode: HttpDevMode): NodeJS.ProcessEnv {
   const localEnv = { ...parentEnv };
+  delete localEnv.VERCEL_ENV;
+  delete localEnv.VERCEL_GIT_COMMIT_REF;
   delete localEnv.VERCEL_GIT_COMMIT_SHA;
   delete localEnv.VERCEL_BRANCH_URL;
   delete localEnv.SENTRY_RELEASE_OVERRIDE;

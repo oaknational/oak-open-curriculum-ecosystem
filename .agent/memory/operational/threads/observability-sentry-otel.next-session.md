@@ -1,15 +1,19 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — fixed the branch gates
-first, updated the active startup-boundary plan to gate-green, and began
-committing in owner-requested chunks. Full `pnpm check` exits 0. WS3 release
-cancellation landed as `2822e525`
+**Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — session handoff after
+reviewer-finding reintegration and the markdown-code-block rule sidecar.
+Earlier in this session the branch gates were fixed and full `pnpm check`
+exited 0. WS3 release cancellation landed as `2822e525`
 (`fix(mcp): relocate production cancellation gate`). Lane B startup/release
 boundary implementation landed as `9ea3ccd8`
-(`fix(observability): decouple local startup from sentry release`). The
-remaining docs/continuity commit records the plan state. Reviewer dispatch is
-still not claimed: current tool policy permits sub-agents only when the owner
-explicitly authorises delegation.)
+(`fix(observability): decouple local startup from sentry release`). Reviewer
+findings are now folded back into code/docs; focused tests, `pnpm type-check`,
+`pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`, targeted markdownlint,
+`pnpm portability:check`, and `git diff --check` pass. The MD040 offender was
+fixed by adding a platform-agnostic markdown-code-block rule;
+`pnpm markdownlint-check:root` now passes. No staged WS3 residue is expected.
+`RuntimeConfig.buildIdentity` remains intentionally deferred to the future
+canonicalisation lane.)
 
 **Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session handoff
 after completing
@@ -254,7 +258,7 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer` | 2026-04-24 | 2026-04-25 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration` | 2026-04-24 | 2026-04-25 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `session-handoff-closeout; startup-boundary-phase0-executor; startup-boundary-red-and-gate-recovery-planning; gate-recovery-executor; startup-boundary-phase2-partial-green` | 2026-04-24 | 2026-04-25 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
@@ -290,9 +294,10 @@ plan, then start committing in sensible chunks." Outcome:
   remains intentionally deferred for the smallest gate-green slice. Build
   identity is still the canonical app build/release fact; Sentry release is a
   projection from build identity plus Sentry context.
-- **Reviewer honesty**: the active plan still records reviewer dispatch as
-  pending because current Codex tool policy only permits sub-agents when the
-  owner explicitly authorises delegation.
+- **Reviewer reintegration now active**: owner authorised sub-agent dispatch.
+  Reviewers reported concrete blockers; this session is folding those findings
+  into code/docs and rerunning gates. `RuntimeConfig.buildIdentity` remains an
+  intentional future-canonicalisation deferral, not forgotten scope.
 
 **Prior session (2026-04-25 Codex / cursor / GPT-5.5 — gate recovery +
 startup-boundary Phase 2 partial GREEN, paused for owner-requested context
@@ -390,8 +395,8 @@ discipline (per PDR-026):
   `**Cancellation truth table**:` label; Item 10 line range
   narrowing to preserve the trailing blockquote separator) and
   MINORs (Item 11 retract-with-note framing per assumptions-reviewer
-  I1; Item 7 final bullet-order note; Item 9 grep-friendly
-  `[[TODO:FILL_WS3_COMMIT_HASH]]` placeholder; Item 2 phrasing
+  I1; Item 7 final bullet-order note; Item 9 grep-friendly commit-hash
+  placeholder later filled with `2822e525`; Item 2 phrasing
   softened per assumptions-reviewer I3) all absorbed before the
   staged diff was finalised. Full disposition record is in the
   ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
@@ -684,13 +689,13 @@ Evidence:
 
 ### Current objective
 
-Continue the startup-boundary Phase 2 GREEN work after the gate-recovery
-precondition. The wider cadence problem is now recorded and guarded:
-non-test gates must stay green even while behavioural tests fail. The
-branch-primary release-identifier lane remains paused at WS3; its prior
-pre-commit `knip` blocker from the unresolved `local-stub-env` import is
-resolved by Lane B's new typed seam, but WS3 still has its own staged lint and
-markdownlint residuals.
+Reviewer-finding reintegration after the gate-green state is implemented. WS3
+is landed (`2822e525`), Lane B is landed (`9ea3ccd8`), and no staged WS3
+residue is expected. The next session should resume the original observability
+plan work from this closure point: preserve the mixed worktree, package/stage
+only the intended observability/search/doc changes if committing, and leave
+parallel collaboration-doc, memory, and `.codex/config.toml` changes alone
+unless the owner redirects.
 
 ### Current state
 
@@ -881,20 +886,17 @@ markdownlint residuals.
 - End-to-end Sentry verification (WS6) requires a fresh preview
   deploy after WS2 lands. Push a no-op commit on
   `feat/otel_sentry_enhancements` if needed to trigger the deploy.
-- `pnpm check` has not been re-run after the partial Phase 2 GREEN. Do not
-  claim aggregate health until it is run after WS3 residuals are either landed
-  or explicitly isolated by owner direction.
-- `pnpm lint` currently fails only in staged WS3 file
-  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
-  (one TSDoc `>` escape error and three `semver` named-export warnings).
-- `pnpm markdownlint-check:root` currently fails only in staged WS3 plan text
-  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
-  around a quoted `+ @types/semver` line.
-- The runtime shape is only partially canonical: `RuntimeConfig.version` now
-  feeds app-version consumers, and `resolveRelease` accepts `buildIdentity`,
-  but `RuntimeConfig` does not yet carry a first-class `AppBuildIdentity` value.
-  Next session must decide whether to complete that shape before claiming the
-  build-identity model is fully implemented.
+- Full `pnpm check` was green after WS3/Lane B commits and before this
+  reintegration pass. After reintegration, focused tests, `pnpm type-check`,
+  `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`, targeted markdownlint,
+  `pnpm portability:check`, `pnpm markdownlint-check:root`, and
+  `git diff --check` pass. Full `pnpm check` was not rerun after the
+  handoff-only doc updates.
+- The runtime shape is intentionally only partially canonical:
+  `RuntimeConfig.version` feeds app-version consumers and Sentry projection
+  inputs, but `RuntimeConfig` does not yet carry a first-class
+  `AppBuildIdentity` value. That remains routed to
+  `mcp-http-runtime-canonicalisation.plan.md`.
 
 ### Standing decisions
 
@@ -923,106 +925,25 @@ markdownlint residuals.
 
 ### Next safe step
 
-**Two parallel lanes are active on this thread; owner direction selects which to
-resume first. Current owner direction before compression was to continue Lane B
-after handoff.**
+Continue from reviewer-finding reintegration closure:
 
-**Lane A — Resume WS3 release-identifier (paused 2026-04-25 Jazzy)**.
-Substance is staged in the working tree; ONLY blocked at the
-pre-commit gate by staged WS3 lint/markdown residuals now that the
-Lane B unresolved `local-stub-env` import has a typed seam. Resume
-instructions and exact pause-time `git status` are in
-[`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
-Step 1 is to fix the staged WS3 lint/markdown residuals inside the WS3 lane,
-fold `knip.config.ts` into the WS3 commit via explicit pathspec, retry the
-drafted commit, then run the hash-fill follow-up and WS5 quality gates.
+1. Preserve unrelated/parallel changes, especially the user-local
+   `.codex/config.toml` modification and the active collaboration/memory
+   surfaces.
+2. Do not claim full `pnpm check` green unless it is rerun after the final
+   handoff/doc-only edits.
+3. If packaging this slice, stage only the observability/search/doc files
+   changed by this reintegration pass and the two new
+   `sentry-build-environment` files.
+4. Keep first-class `RuntimeConfig.buildIdentity`, public
+   `HttpObservability.release` removal/rename, and remaining smoke
+   composition-root global mutation cleanup routed to
+   [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
+   unless owner explicitly broadens this slice.
 
-**Lane B — Gate recovery before startup-boundary Phase 2 GREEN
-(Codex/cursor GPT-5.5)**.
-[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
-is complete for the current branch state. Resume
-[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
-Phase 2 GREEN from its recorded partial GREEN state, using the completed
-[`Phase 0 evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
-and
-[`Phase 1 RED evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-1-red-evidence.md).
-Immediate next step: decide whether to add first-class `AppBuildIdentity` to
-`RuntimeConfig` now, then re-run reviewers against the latest reviewer-driven
-fixes and run `smoke:dev:stub`, `test:ui`, and `test:a11y` once the intended
-scope is confirmed.
-
-If the owner explicitly returns to the release-identifier lane, **Branch
-HEAD is `f5a009ab`** (may advance if parallel-track work lands further).
-WS2 is fully landed; WS3 is the next commit boundary per the plan's
-explicit discipline — it lands as a separate commit after WS2, not folded in.
-
-**WS3 scope (read the plan body's WS3 for canonical detail)**:
-
-1. **§3.0 Pre-landing reviewer dispatch** (MUST run before drafting
-   the WS3 commit): dispatch `docs-adr-reviewer` on the draft §3.4
-   amendment text; dispatch `assumptions-reviewer` if scope warrants.
-   Same discipline as WS0.2.
-2. **§3.1 Relocate** the canonical script and its unit-test file
-   from `packages/core/build-metadata/build-scripts/` into
-   `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, delete
-   the existing thin `.mjs` + `.d.ts` shim. Add `semver` as a
-   `devDependency` of the app workspace (NOT a runtime dep of
-   build-metadata — build-time tooling only). `vercel.json`'s
-   existing `ignoreCommand` path already resolves to the new
-   canonical location; no change required.
-3. **§3.2 Rewrite** the script body as ~50 lines using the canonical
-   npm `semver` package (`semver.lte` for the comparison; drop the
-   hand-rolled regex parser). Add the missing
-   `VERCEL_GIT_COMMIT_REF === 'main'` branch gate. Asymmetric
-   input-resolution: `current` undefined → SKIP DEPLOYMENT (Vercel
-   `ignoreCommand` exit 0 = skip; with loud stderr); `previous`
-   undefined → continue (first build or unresolvable previous SHA).
-4. **§3.3 Unit-test rewrite**: one test per truth-table row (5 rows).
-   Preserve coverage of fetch-fallback recovery on resolvable
-   `previous` SHA where applicable.
-5. **§3.4 Re-amend ADR-163 §10** with the full 13-item retraction
-   enumeration per plan. A 14th amendment is the failure mode this
-   plan exists to prevent — read the enumeration carefully before
-   editing the ADR.
-6. **§3.5 Confirm shim elimination is structural** — no further
-   action; the relocate step in §3.1 handles it by replacement.
-7. **§3.6 End-to-end proof on next production deploy** — owner-run
-   validation; out of scope for the commit itself.
-
-**Deterministic validation (per plan §WS3 Acceptance)**:
-
-```bash
-pnpm --filter oak-curriculum-mcp-streamable-http test
-pnpm --filter @oaknational/build-metadata test
-pnpm depcruise
-```
-
-Plus the pre-commit hook's full turbo run.
-
-**Commit message hint** (subject under 100 chars):
-`refactor(mcp-http,build-metadata): relocate and simplify production cancellation script (WS3)`
-or similar. Body explains the relocation + simplification + branch
-gate addition + asymmetric input handling, and references the
-ADR-163 §10 second amendment landing in the same commit.
-
-**Post-WS3 sequence**: WS4 (docs), WS5 (quality gates), WS6
-(adversarial review), WS7 (doc propagation).
-
-**Behavioural carry-forward** (read before opening WS3 in a fresh
-session): the WS2 §2.1-§2.7 atomic landing confirmed Frodo's
-voluntary-stop-prediction from the prior session — the fresh-session
-approach worked. For WS3, the metacognition experiences from Pippin
-(spiral) and Frodo (same-shape-smaller-scale) remain load-bearing:
-the pre-landing reviewer dispatch in §3.0 is the plan-prescribed
-reviewer gate; do NOT dispatch additional reviewers mid-cycle
-absorbing findings unless they block the next code action. The
-§3.4 13-item amendment enumeration is the single authoritative
-source — do not re-plan it.
-
-If owner-run validation of the previously-archived corrective lane
-surfaces a fresh repo defect in parallel, that takes priority — open
-the smallest targeted repair lane that names that defect explicitly,
-park the release-identifier plan briefly.
+If owner-run validation of the previously archived corrective lane surfaces a
+fresh repo defect in parallel, that takes priority: open the smallest targeted
+repair lane that names that defect explicitly.
 
 ### Active track links
 

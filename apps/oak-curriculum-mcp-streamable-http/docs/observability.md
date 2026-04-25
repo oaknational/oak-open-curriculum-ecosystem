@@ -112,12 +112,12 @@ gated on `SENTRY_MODE`:
 ```ts
 // src/index.ts:40-41
 setupSentryErrorHandler:
-  config.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+  config.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
 ```
 
 The handler function is **DI-injected**: the app layer passes
 `setupExpressErrorHandler` from `@sentry/node` in production, or `undefined`
-in `off` mode. Tests inject a recording fake and assert on its invocation,
+in `off` / `fixture` modes. Tests inject a recording fake and assert on its invocation,
 so the handler contract is covered without booting the Sentry SDK. See
 [`src/app/bootstrap-error-handlers.ts`](../src/app/bootstrap-error-handlers.ts)
 for the DI type.
@@ -216,16 +216,20 @@ release identity is a no-op and the original deploy's commit attribution
 is retained across Vercel manual redeploys.
 
 Vercel runs this without a `buildCommand` override. The composition root
-reads `process.env` once at the boundary; the two pure factories it calls
-([`build-scripts/esbuild-config.ts`](../build-scripts/esbuild-config.ts)
-for the Oak-owned esbuild contract,
-[`build-scripts/sentry-build-plugin.ts`](../build-scripts/sentry-build-plugin.ts)
-for the env → registration intent) take env as a typed parameter so the
+reads `process.env` once at the boundary; pure helpers project app-version
+identity into the Sentry build env, build Oak-owned esbuild options, and map
+env → registration intent:
+[`build-scripts/sentry-build-environment.ts`](../build-scripts/sentry-build-environment.ts),
+[`build-scripts/esbuild-config.ts`](../build-scripts/esbuild-config.ts), and
+[`build-scripts/sentry-build-plugin.ts`](../build-scripts/sentry-build-plugin.ts).
+Those helpers take env or env-derived literals as typed parameters so the
 ADR-163 policy logic stays test-driven.
 
-`SENTRY_RELEASE_REGISTRATION_OVERRIDE=false` skips the plugin entirely
+Leaving the local-dev override pair unset skips the plugin entirely
 (the build runs and produces `dist/` with hidden source-maps but does not
-talk to Sentry). This is the local-dev default per ADR-163 §4.
+talk to Sentry). Set `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` together with
+`SENTRY_RELEASE_OVERRIDE=<version>` to force a local registration rehearsal
+per ADR-163 §4.
 
 The plugin runs only in the Vercel Build Command — never in PR-check CI,
 which remains network-free per ADR-161. Operational flow + log-grep
@@ -255,10 +259,13 @@ root replaces orchestrator script) for the full reframing.
 [ADR-163 Sentry Release Identifier, Source-Map Attachment, and Vercel
 Production Attribution](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
 
-Release and environment resolve fail-fast at startup:
+Environment resolves at startup; Sentry release resolves only for live/fixture
+Sentry modes and for build-time release registration:
 
-- **Release = root repo `package.json` semver.** `SENTRY_RELEASE_OVERRIDE`
-  is the only explicit override. See ADR-163 §1.
+- **Release = ADR-163 per-environment projection.** `SENTRY_RELEASE_OVERRIDE`
+  wins first. Otherwise production-on-`main` uses the resolved application
+  version, preview / production-from-non-main uses the `VERCEL_BRANCH_URL`
+  host label, and development uses `dev-<shortSha>`. See ADR-163 §1.
 - **Git SHA is metadata, not the release identifier.** Resolves from
   `GIT_SHA_OVERRIDE` or `VERCEL_GIT_COMMIT_SHA`, attached as the
   `git.commit.sha` Sentry tag and via `releases set-commits`. See
@@ -271,14 +278,15 @@ Release and environment resolve fail-fast at startup:
   unless both `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` and
   `SENTRY_RELEASE_OVERRIDE=<version>` are set. See ADR-163 §4.
 
-Invalid override values and missing root `package.json` version are startup
-errors (fail-fast, not silent drift).
+Invalid override values and missing application version are startup errors
+where that identity is required (fail-fast, not silent drift). `SENTRY_MODE=off`
+does not require Sentry release metadata.
 
 The root package version is only bumped by the `semantic-release`
 workflow (`.github/workflows/release.yml`). Preview and local builds
-can legitimately contain commits newer than the current release
-version; the `git.commit.sha` tag distinguishes them within a single
-release. On Vercel production, repo-owned build gating cancels non-
+can legitimately contain commits newer than the current production
+version; their Sentry release is not the production semver row. On
+Vercel production, repo-owned build gating cancels non-
 release builds before they run via `vercel.json` `ignoreCommand`,
 preventing version drift under an old semantic-release tag.
 

@@ -63,11 +63,11 @@ In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-c
 
 Auto-resolved (no need to set on Vercel):
 
-| Variable             | Falls back to                                                                                                                                                                                                                                                                                                                                                                      |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SENTRY_RELEASE`     | Root repo `package.json` semver (resolved via `APP_VERSION` in `resolveSentryRelease`). **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2.                                                                                           |
-| `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`. |
-| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `@sentry/esbuild-plugin`'s `release.setCommits.commit` field (with `repo` pinned to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                                                                                                         |
+| Variable             | Falls back to                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SENTRY_RELEASE`     | ADR-163 per-environment release projection: production-on-`main` uses resolved app semver; preview / production-from-non-main uses the `VERCEL_BRANCH_URL` host label; development uses `dev-<shortSha>`; `SENTRY_RELEASE_OVERRIDE` wins first. **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2. |
+| `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`.                                                               |
+| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `@sentry/esbuild-plugin`'s `release.setCommits.commit` field (with `repo` pinned to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                                                                                                                                                                       |
 
 Optional:
 
@@ -107,8 +107,8 @@ for the historical CLI split, `.sentryclirc` composition rules, and
 the artefact-bundle-vs-release model that still describes the resulting
 Sentry-side state.
 
-1. Ensure `SENTRY_RELEASE` resolves to the deployed root `package.json`
-   semver. The SHA is attached separately as a Sentry tag and via
+1. Ensure `SENTRY_RELEASE` resolves to the ADR-163 release row for the
+   deployment being inspected. The SHA is attached separately as a Sentry tag and via
    `releases set-commits`. See
    [ADR-163 §1–§2](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
 2. The MCP app's `build` script automatically invokes
@@ -129,14 +129,12 @@ Sentry-side state.
    at event time is the Debug ID, not the release string.
 
 Local evidence generation: set
-`SENTRY_RELEASE_REGISTRATION_OVERRIDE=true` plus
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` plus
 `SENTRY_RELEASE_OVERRIDE=<version>` (and a valid `SENTRY_AUTH_TOKEN`)
 and run `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http
 build`. The composition root will exercise the same sequence the
-Vercel Build Command uses. Setting
-`SENTRY_RELEASE_REGISTRATION_OVERRIDE=false` (or leaving the override
-pair unset in dev) skips the plugin entirely and just produces `dist/`
-with hidden source-maps.
+Vercel Build Command uses. Leaving the override pair unset in dev skips
+the plugin entirely and just produces `dist/` with hidden source-maps.
 
 ## Step 3b: Release → commit → deploy linkage (Vercel build-time)
 
@@ -187,7 +185,7 @@ sentryEsbuildPlugin({
   project: 'oak-open-curriculum-mcp',
   authToken: process.env.SENTRY_AUTH_TOKEN,
   release: {
-    name: VERSION, // semver from root package.json — ADR-163 §1
+    name: RELEASE, // ADR-163 per-environment release projection
     finalize: true, // §6.5
     setCommits: {
       auto: false, // §6.2 — explicit form, --auto rejected by ADR-163 Alt 8
@@ -230,18 +228,18 @@ crossings; everything else comes from `@sentry/esbuild-plugin` itself
 on stdout/stderr (vendor-controlled format). These form the operational
 contract for troubleshooting:
 
-| Pattern                                                                            | Channel       | Meaning                                                                                                                                                        |
-| ---------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `[esbuild.config] Sentry plugin skipped: registration_disabled_by_policy`          | stdout        | `createSentryBuildPlugin` returned `kind=disabled` per ADR-163 §3 / §4 policy (dev without override pair). No-op.                                              |
-| `[esbuild.config] Sentry plugin enabled: release=<ver> env=<env>`                  | stdout        | Plugin injected with the resolved release name and environment. Vendor logs follow on stdout/stderr.                                                           |
-| `[esbuild.config] Sentry build-plugin intent error: { kind: '<k>', ... }`          | stderr        | Boundary read failed (missing `SENTRY_AUTH_TOKEN`, `SENTRY_RELEASE`, etc., or commit SHA missing in registered env). Build aborts with non-zero exit.          |
-| Vendor `@sentry/esbuild-plugin` log lines about release upsert / source-map upload | stdout/stderr | Vendor-controlled output covering the §6.0–§6.6 outcomes (release create-or-update, set-commits, debug-id injection, artefact upload, finalize, deploy event). |
+| Pattern                                                                            | Channel       | Meaning                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `[esbuild.config] Sentry plugin skipped: registration_disabled_by_policy`          | stdout        | `createSentryBuildPlugin` returned `kind=disabled` per ADR-163 §3 / §4 policy (dev without override pair). No-op.                                                              |
+| `[esbuild.config] Sentry plugin enabled: release=<ver> env=<env>`                  | stdout        | Plugin injected with the resolved release name and environment. Vendor logs follow on stdout/stderr.                                                                           |
+| `[esbuild.config] Sentry build-plugin intent error: { kind: '<k>', ... }`          | stderr        | Boundary read failed (missing `SENTRY_AUTH_TOKEN`, app version / branch URL for the selected release row, or commit SHA in a registered env). Build aborts with non-zero exit. |
+| Vendor `@sentry/esbuild-plugin` log lines about release upsert / source-map upload | stdout/stderr | Vendor-controlled output covering the §6.0–§6.6 outcomes (release create-or-update, set-commits, debug-id injection, artefact upload, finalize, deploy event).                 |
 
 **Verification**:
 
-1. `sentry api organizations/oak-national-academy/releases/<semver>/commits/`
+1. `sentry api organizations/oak-national-academy/releases/<release-name>/commits/`
    lists the build-commit under the release.
-2. `sentry api organizations/oak-national-academy/releases/<semver>/deploys/`
+2. `sentry api organizations/oak-national-academy/releases/<release-name>/deploys/`
    lists the deploy for the resolved environment.
 3. One release entry in the Sentry UI covers both preview and
    production deploys of the same version (one release → many

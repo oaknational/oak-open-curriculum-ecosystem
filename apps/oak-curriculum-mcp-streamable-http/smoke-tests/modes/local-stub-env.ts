@@ -9,14 +9,16 @@ export interface LocalStubProcessEnvInput {
 /**
  * Create the child-process environment for local stub smoke startup.
  *
- * @remarks Local smoke gates must not inherit deploy release metadata because
- * they are not proving Sentry release registration.
+ * @remarks Local smoke gates must not inherit deploy metadata because they are
+ * not proving production branch attribution or Sentry release registration.
  */
 export function createLocalStubProcessEnv({
   parentEnv,
   port,
 }: LocalStubProcessEnvInput): NodeJS.ProcessEnv {
   const localEnv = { ...parentEnv };
+  delete localEnv.VERCEL_ENV;
+  delete localEnv.VERCEL_GIT_COMMIT_REF;
   delete localEnv.VERCEL_GIT_COMMIT_SHA;
   delete localEnv.VERCEL_BRANCH_URL;
   delete localEnv.SENTRY_RELEASE_OVERRIDE;

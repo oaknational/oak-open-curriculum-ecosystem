@@ -40,8 +40,7 @@ todos:
     status: completed
   - id: ws3-cancellation-rewrite-and-relocate
     content: "WS3 (REWRITE + RELOCATE): (a) Move `vercel-ignore-production-non-release-build.mjs` AND its `*.unit.test.mjs` from `packages/core/build-metadata/build-scripts/` INTO `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, REPLACING the existing thin ~17-line shim AND DELETING its companion `.d.ts` declaration file. Add `semver` as a `devDependency` of the app workspace (NOT a runtime dep of build-metadata — the script is build-time tooling, not part of any published artefact). `vercel.json`'s `ignoreCommand` keeps its existing `node build-scripts/vercel-ignore-production-non-release-build.mjs` path — no upward traversal, no Vercel deploy-probe contingency, no fallback. (b) Replace the script body with a ~50-line implementation using `semver.lte` and the simpler `VERCEL_GIT_COMMIT_REF === main AND semver.lte(current, previous)` rule. Add the missing branch gate. Asymmetric handling: current undefined → SKIP DEPLOYMENT (Vercel-correct semantics: `ignoreCommand` exit 0 = skip, NOT a failed build) with loud stderr; previous undefined → continue (first build). (c) Rewrite unit tests one-per-truth-table-row (5 rows); preserve coverage of fetch-fallback recovery on resolvable previous SHA. (d) Re-amend ADR-163 §10 with the FULL retraction enumeration: drop the truth table's fail-open row, drop the `Workspace invocation shim` prose, drop `Enforcement §6 wiring integration test` + its in-text reference, update the canonical script path text to its new in-app location, retract assumptions-reviewer Disposition #5 (two-file shim no longer exists), update History."
-    status: pending
-    priority: next
+    status: completed
   - id: ws4-refactor-docs
     content: "WS4 (REFACTOR): TSDoc on every changed symbol; rewrite release resolution section in observability.md and sentry-deployment-runbook.md; update napkin if a generalisable pattern emerges."
     status: pending
@@ -59,15 +58,17 @@ isProject: false
 
 # Sentry Release Identifier — Single Source of Truth
 
-**Last Updated**: 2026-04-24
-**Status**: 🟢 EXECUTING — WS0, WS1, AND WS2 landed:
+**Last Updated**: 2026-04-25
+**Status**: 🟢 EXECUTING — WS0, WS1, WS2, AND WS3 landed:
 ADR-163 amendment + reviewer dispositions (WS0, `06bf25d7`); three-layer
 pre-flight audit (WS1, read-only); `resolveGitSha` module split
 (WS2 §2.0, `a4e8facb`); unified `resolveRelease` + sentry-node thin
 adapter + atomic old-shape replacement + validator alignment +
-composition-root snapshot-env (WS2 §2.1-§2.7, `f5a009ab`). **WS3 is
-next**: relocate + rewrite the cancellation script into the consuming
-app workspace + ADR-163 §10 second amendment.
+composition-root snapshot-env (WS2 §2.1-§2.7, `f5a009ab`); relocation +
+rewrite of the cancellation script into the consuming app workspace plus
+ADR-163 §10 second amendment (WS3, `2822e525`). **WS4/WS5/WS6/WS7 remain
+pending**: docs propagation, quality gates, post-execution review, and live
+verification.
 **Scope**: Collapse build-time and runtime release resolution to ONE
 implementation in `@oaknational/build-metadata`'s `resolveRelease`
 (structural single source of truth, not contract-tested duplication);
@@ -116,25 +117,14 @@ are settled and not re-opened by this plan:
      that carry the previous version do NOT trigger a production
      deploy; only semantic-release commits (which monotonically
      increment per Oak's single-`main`-branch model) do.
-   - Mechanism exists at
-     `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`,
+   - Mechanism now exists at
+     `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`,
      wired via `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
-     `ignoreCommand`. The current implementation is over-built (~205
-     lines, hand-rolled semver parser/comparator, missing the
-     `VERCEL_GIT_COMMIT_REF === 'main'` gate that §1's truth table
-     requires, conflates transient git-resolution failures with
-     deterministic repo defects under a single fail-open clause).
-   - This plan's job for this requirement is **rewrite to the simpler
-     rule** (WS3 — ~50 lines using the canonical `semver` package,
-     branch-gate added, asymmetric current/previous handling) +
-     unit-test rewrite + ADR-163 §10 re-amendment to reflect the new
-     behaviour + **relocation of the canonical script INTO the consuming
-     app workspace** (replacing the existing thin ~17-line shim) so
-     `vercel.json`'s existing `./build-scripts/...` `ignoreCommand` path
-     stays unchanged, no upward path traversal is required, and the
-     single-consumer abstraction is collapsed at the source per
-     principles (`Don't extract single-consumer abstractions`,
-     `WE DON'T HEDGE`). See WS3.
+     `ignoreCommand`. WS3 landed the rewrite/relocation in `2822e525`:
+     canonical `semver`, the `VERCEL_GIT_COMMIT_REF === 'main'` branch
+     gate, asymmetric current/previous handling, in-app unit tests, and
+     ADR-163 §10 re-amendment. The former cross-workspace canonical
+     script and in-app shim are gone.
 
 Both requirements MUST end this plan as **true and proven** — proven by:
 the structural single source of truth (one resolver, used by both
@@ -206,12 +196,11 @@ being re-issued by merge-commit builds.
   Post-collapse this consumes the SAME `resolveRelease` output as the
   runtime path — third release-consumer parity is automatic.
 - `vercel-ignore-production-non-release-build.mjs` (canonical at
-  `packages/core/build-metadata/build-scripts/`) + the thin ~17-line shim at
-  `apps/oak-curriculum-mcp-streamable-http/build-scripts/` + canonical
-  unit tests at `packages/core/build-metadata/build-scripts/` — the
-  production cancellation mechanism. WS3 relocates the canonical script
-  AND its unit tests INTO the app workspace (replacing the shim);
-  `vercel.json` keeps its existing `./build-scripts/...` path.
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/`) + its
+  in-app unit tests — the production cancellation mechanism. WS3
+  relocated the script and tests into the app workspace in `2822e525`,
+  replacing the old shim and deleting the cross-workspace canonical
+  copy; `vercel.json` kept its existing `./build-scripts/...` path.
 - `vercel.json` `ignoreCommand` — currently `node build-scripts/vercel-ignore-production-non-release-build.mjs`.
   This string is **unchanged** by WS3 — the relocation makes the path
   resolve directly to the (now in-app) canonical script instead of via
@@ -944,62 +933,16 @@ pnpm depcruise:check
 
 ## WS3 — Cancellation: relocate, rewrite, and amend ADR-163
 
-> **PAUSED 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6)** —
-> WS3 substance is fully drafted, reviewer-gated, and applied to the
-> working tree, but the WS3 commit has not landed: pre-commit `knip`
-> blocks on a parallel-track unresolved import in
-> `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
-> (the parallel `mcp-local-startup-release-boundary.plan.md` agent
-> has not yet landed `local-stub-env.js`). HEAD is unchanged at
-> `015ac99b`.
->
-> **What landed in the working tree** (staged, preserves `git mv`
-> rename detection): script + unit-test moved from
-> `packages/core/build-metadata/build-scripts/` into
-> `apps/oak-curriculum-mcp-streamable-http/build-scripts/`; in-app
-> shim replaced in-place; `.d.ts` companion deleted; `semver@^7.7.4`
-> and `@types/semver@^7.7.1` added as app devDeps; lockfile refreshed;
-> script body rewritten via canonical `semver` with main-branch
-> gate + asymmetric current/previous handling; 8-test rewrite
-> covering all 5 truth-table rows + 2 fetch-fallback variants
-> (8/8 green at pause time); 15-item second amendment applied to
-> ADR-163 §1 + §10 + Enforcement + Reviewer Dispositions (renamed
-> first-amendment block + new second-amendment block); ADR index
-> entry updated.
->
-> **Unstaged WS3 dependency**: `knip.config.ts`
-> (`'build-scripts/**/*.mjs'` glob added to the
-> `apps/oak-curriculum-mcp-streamable-http` workspace's `entry` +
-> `project` arrays so knip detects the new `semver` /
-> `@types/semver` devDeps as used). Must fold into the WS3 commit
-> on resume.
->
-> **§3.0 reviewer gate outcome**: `docs-adr-reviewer` +
-> `assumptions-reviewer` dispatched on the drafted amendment.
-> Both reported **two BLOCKING findings** in the original 13-item
-> enumeration (`assumptions-reviewer` Disposition #6 +
-> `architecture-reviewer-fred` Disposition #3 / positive-note #4
-> sub-clauses — all referenced surfaces being retracted by Items
-> 10 and 11). Enumeration expanded **13 → 15 items** to cover them.
-> MAJORs and MINORs absorbed (line-range narrowing, retract-with-note
-> uniformity, grep-friendly placeholder, Item 2 phrasing softened
-> per assumptions-reviewer I3). Full disposition record is in the
-> ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
-> block (staged).
->
-> **Resume instructions and full pause-state snapshot** (including
-> exact `git status` shape at pause, parallel-track files the
-> resuming agent must NOT touch, drafted commit message subject and
-> the post-commit hash-fill follow-up):
->
-> [`sentry-release-identifier-ws3-resume.evidence.md`](../active/sentry-release-identifier-ws3-resume.evidence.md)
->
-> Resume in the next session after either (a) the parallel agent
-> lands `local-stub-env.js` (re-running `pnpm knip` will confirm),
-> or (b) fresh `--no-verify` authorisation per
-> `.agent/rules/no-verify-requires-fresh-authorisation.md`.
+> **LANDED 2026-04-25 (Codex / codex / GPT-5) as `2822e525`** —
+> the previous Jazzy pause was consumed. The canonical cancellation
+> script and unit test now live in
+> `apps/oak-curriculum-mcp-streamable-http/build-scripts/`; the shim and
+> `.d.ts` companion are deleted; `semver` is declared in the app workspace;
+> the ADR-163 §10 second amendment is landed and its placeholder commit hash
+> has been filled. The old pause-time knip blocker was resolved by the
+> startup-boundary lane before the commit landed.
 
-WS3 lands three changes in a single commit, preceded by a
+WS3 landed three changes in `2822e525`, preceded by the
 pre-landing reviewer dispatch:
 
 0. **Pre-landing reviewer dispatch** (§3.0): draft the §3.4

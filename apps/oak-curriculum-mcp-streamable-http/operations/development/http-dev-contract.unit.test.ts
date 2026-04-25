@@ -95,6 +95,8 @@ describe('resolveHttpDevExecutionPlan', () => {
       workspaceRoot,
       parentEnv: {
         ...parentEnv,
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
         VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
         VERCEL_BRANCH_URL: 'feature.example.vercel.app',
         SENTRY_RELEASE_OVERRIDE: 'inherited-release',
@@ -103,6 +105,8 @@ describe('resolveHttpDevExecutionPlan', () => {
       now,
     });
 
+    expect(plan.server.env.VERCEL_ENV).toBeUndefined();
+    expect(plan.server.env.VERCEL_GIT_COMMIT_REF).toBeUndefined();
     expect(plan.server.env.VERCEL_GIT_COMMIT_SHA).toBeUndefined();
     expect(plan.server.env.VERCEL_BRANCH_URL).toBeUndefined();
     expect(plan.server.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();

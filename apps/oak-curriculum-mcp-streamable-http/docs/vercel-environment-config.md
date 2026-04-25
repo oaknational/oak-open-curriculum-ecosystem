@@ -29,7 +29,7 @@ This reference lists the environment variables and platform settings required to
 | `SENTRY_DSN`                           | —                                                                                                 | Required when `SENTRY_MODE=sentry`; Sentry project DSN                                                                                                                                                                           |
 | `SENTRY_TRACES_SAMPLE_RATE`            | —                                                                                                 | Numeric 0.0–1.0; required for live mode                                                                                                                                                                                          |
 | `SENTRY_ENVIRONMENT_OVERRIDE`          | Falls back to `VERCEL_ENV` → `development`                                                        | Explicit override only; `NODE_ENV` is intentionally ignored                                                                                                                                                                      |
-| `SENTRY_RELEASE_OVERRIDE`              | Falls back to the root repo `package.json` version                                                | Explicit override only; use when you need a release value different from the app version                                                                                                                                         |
+| `SENTRY_RELEASE_OVERRIDE`              | Unset                                                                                             | Explicit override only; when absent, ADR-163 derives release from the environment row (production app version, preview branch URL host, or development short SHA)                                                                |
 | `APP_VERSION_OVERRIDE`                 | Falls back to the root repo `package.json` version                                                | Explicit override only; build and startup fail if neither yields a valid version                                                                                                                                                 |
 | `GIT_SHA_OVERRIDE`                     | Falls back to `VERCEL_GIT_COMMIT_SHA`                                                             | Explicit override only; attached as the `git.commit.sha` Sentry tag and via `releases set-commits`. Never the release identifier. See ADR-163 §2.                                                                                |
 | `VERCEL_GIT_COMMIT_REF`                | Consumed read-only from Vercel system env                                                         | Branch name. Required to match `main` before `VERCEL_ENV=production` results in a `production` Sentry environment (ADR-163 §3). Missing branch on a production build is treated as a mislabel guard and downgrades to `preview`. |
@@ -196,8 +196,10 @@ The MCP server intentionally avoids broad fallback chains.
   — a `VERCEL_ENV=production` build from a non-main branch is downgraded
   to `preview`. See the
   [ADR-163 §3 truth table](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain).
-- Release: `SENTRY_RELEASE_OVERRIDE` → root repo `package.json` version
-  (semver; never the git SHA).
+- Release: `SENTRY_RELEASE_OVERRIDE` → ADR-163 environment projection
+  (production-on-`main` app version, preview / production-from-non-main
+  `VERCEL_BRANCH_URL` host label, or development `dev-<shortSha>`; never the
+  git SHA).
 - Git SHA metadata: `GIT_SHA_OVERRIDE` → `VERCEL_GIT_COMMIT_SHA` —
   attached as the `git.commit.sha` Sentry tag, indexed and filterable.
 - Local-dev registration override: both
@@ -206,12 +208,11 @@ The MCP server intentionally avoids broad fallback chains.
 
 `NODE_ENV` is not used for Sentry environment resolution because deployment
 systems frequently override it opaquely. The root repo `package.json` version
-is the canonical application version for now. It is updated by the GitHub
-`semantic-release` workflow. Preview and local builds can therefore
-legitimately share the same release version across multiple commits,
-with git SHA metadata distinguishing them. Production avoids ghost
-releases by cancelling builds whose root `package.json` version has not
-advanced beyond the previous successful production deployment.
+is the canonical application version fallback for now. It is updated by the
+GitHub `semantic-release` workflow. Production avoids ghost releases by
+cancelling builds whose root `package.json` version has not advanced beyond the
+previous successful production deployment; preview releases use the branch URL
+host label instead of reusing the production semver row.
 
 ## Production build gating
 

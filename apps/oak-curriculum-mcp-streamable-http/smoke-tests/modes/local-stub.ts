@@ -16,6 +16,8 @@ export async function prepareLocalStubEnvironment(
   });
 
   delete process.env.OAK_API_KEY;
+  delete process.env.VERCEL_ENV;
+  delete process.env.VERCEL_GIT_COMMIT_REF;
   delete process.env.VERCEL_GIT_COMMIT_SHA;
   delete process.env.VERCEL_BRANCH_URL;
   delete process.env.SENTRY_RELEASE_OVERRIDE;

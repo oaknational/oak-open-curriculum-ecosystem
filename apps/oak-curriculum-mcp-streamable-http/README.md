@@ -198,7 +198,7 @@ Summary:
   [`src/app/core-endpoints.ts:98`](./src/app/core-endpoints.ts); inert under
   `off` because `@sentry/node` is not initialised.
 - The Sentry Express error handler is DI-injected from `src/index.ts` when
-  `SENTRY_MODE !== 'off'`.
+  `SENTRY_MODE=sentry`.
 - Every outbound payload passes through the non-bypassable redaction barrier
   in [`@oaknational/sentry-node`](../../packages/libs/sentry-node/README.md).
 
@@ -226,15 +226,17 @@ Summary:
 
 Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
 
-Runtime metadata is resolved fail-fast:
+Runtime metadata is resolved fail-fast where the selected mode needs it:
 
 - application version comes from the root repo `package.json` unless
   `APP_VERSION_OVERRIDE` is set
-- release comes from `SENTRY_RELEASE_OVERRIDE` or that resolved application
-  version
+- Sentry release comes from `SENTRY_RELEASE_OVERRIDE` or the ADR-163
+  environment row: production-on-`main` app version, preview /
+  production-from-non-main branch URL host, or development `dev-<shortSha>`
 - git SHA metadata comes from `GIT_SHA_OVERRIDE` or `VERCEL_GIT_COMMIT_SHA`
 - invalid override values and missing application version are startup errors
 - the build also fails early if the root package version is missing or invalid
+- `SENTRY_MODE=off` does not require Sentry release metadata
 
 Vercel production builds have an additional repo-owned gate:
 

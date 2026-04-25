@@ -1,7 +1,7 @@
 # No Warning Toleration
 
 Operationalises [`principles.md` §Code Quality](../directives/principles.md)
-and [ADR-163 (Sentry release / commits / deploy linkage)](../../docs/architecture/architectural-decisions/163-sentry-release-orchestration.md)
+and [ADR-163 (Sentry release / commits / deploy linkage)](../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
 §6/§7 (entry-point boundary discipline + non-deferrable-warnings amendment).
 
 Pattern reference:

@@ -42,6 +42,7 @@ import {
   MCP_SUPPORT_ENTRY_POINTS,
   createMcpEsbuildOptions,
 } from './build-scripts/esbuild-config.js';
+import { createSentryBuildEnvironment } from './build-scripts/sentry-build-environment.js';
 import {
   createSentryBuildPlugin,
   type ResolvedBuildTimeGitSha,
@@ -56,29 +57,18 @@ const IDENTITY: SentryBuildPluginIdentity = {
   repoSlug: 'oaknational/oak-open-curriculum-ecosystem',
 };
 
-// Snapshot the build-time env at the boundary. Explicit field-by-field
-// projection preserves excess-property checking (Wilma MINOR #11) and
-// makes subsequent `process.env` mutations inert for re-evaluation.
-const env: SentryBuildEnvironment = {
-  SENTRY_MODE: process.env.SENTRY_MODE,
-  SENTRY_DSN: process.env.SENTRY_DSN,
-  SENTRY_ENVIRONMENT_OVERRIDE: process.env.SENTRY_ENVIRONMENT_OVERRIDE,
-  SENTRY_RELEASE_OVERRIDE: process.env.SENTRY_RELEASE_OVERRIDE,
-  SENTRY_RELEASE_REGISTRATION_OVERRIDE: process.env.SENTRY_RELEASE_REGISTRATION_OVERRIDE,
-  SENTRY_TRACES_SAMPLE_RATE: process.env.SENTRY_TRACES_SAMPLE_RATE,
-  SENTRY_ENABLE_LOGS: process.env.SENTRY_ENABLE_LOGS,
-  SENTRY_SEND_DEFAULT_PII: process.env.SENTRY_SEND_DEFAULT_PII,
-  SENTRY_DEBUG: process.env.SENTRY_DEBUG,
-  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-  VERCEL_ENV: process.env.VERCEL_ENV,
-  VERCEL_BRANCH_URL: process.env.VERCEL_BRANCH_URL,
-  VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
-  VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
-  APP_VERSION: process.env.APP_VERSION,
-  APP_VERSION_SOURCE: undefined,
-  GIT_SHA: process.env.GIT_SHA,
-  GIT_SHA_SOURCE: undefined,
-};
+// Snapshot the build-time env at the boundary. `createSentryBuildEnvironment`
+// keeps the app build identity as the canonical version fact, then projects it
+// into the Sentry release surface.
+const envResult = createSentryBuildEnvironment(process.env);
+
+if (!envResult.ok) {
+  throw new Error(
+    `[esbuild.config] Sentry build environment error: ${JSON.stringify(envResult.error)}`,
+  );
+}
+
+const env: SentryBuildEnvironment = envResult.value;
 
 const intent = createSentryBuildPlugin(env, IDENTITY);
 

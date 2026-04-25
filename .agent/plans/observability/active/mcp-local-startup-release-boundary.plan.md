@@ -18,14 +18,17 @@ todos:
     status: completed
   - id: phase-3-docs-and-gates
     content: "Phase 3: Update ADR/docs/plan references, run reviewer checks, prove no in-process IO/global-env regressions, then run pnpm check."
-    status: in_progress
+    status: completed
 ---
 
 # MCP Local Startup Release Boundary
 
 **Last Updated**: 2026-04-25  
-**Status**: 🟢 GATE GREEN — full `pnpm check` passed; Lane B
-implementation committed  
+**Status**: 🟢 REVIEWER FINDING REINTEGRATION COMPLETE — focused tests,
+`pnpm type-check`, `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`,
+targeted markdownlint, `pnpm portability:check`, and `git diff --check` pass.
+`pnpm markdownlint-check:root` also passes after the MD040 sidecar rule fix.
+Full `pnpm check` was not rerun after handoff-only doc updates.
 **Scope**: HTTP MCP app startup, Sentry release resolution, local
 smoke/UI/a11y gate contracts, and the tests/docs that govern those
 boundaries.
@@ -478,7 +481,8 @@ Implemented and validated in the working tree:
 - HTTP app version consumers are wired: response header middleware emits
   `x-app-version`, and the landing page meta tag consumes `RuntimeConfig.version`.
 - Local dev and local stub env planning strip inherited deploy release metadata
-  (`VERCEL_GIT_COMMIT_SHA`, `VERCEL_BRANCH_URL`, `SENTRY_RELEASE_OVERRIDE`).
+  and production-branch labels (`VERCEL_ENV`, `VERCEL_GIT_COMMIT_REF`,
+  `VERCEL_GIT_COMMIT_SHA`, `VERCEL_BRANCH_URL`, `SENTRY_RELEASE_OVERRIDE`).
 - Pure seams now exist for app build identity, local-stub env preparation,
   app-version headers, and validated-env-to-runtime-config construction.
 - Local no-auth/browser gates and local-stub smoke explicitly set
@@ -504,10 +508,39 @@ Remaining non-code follow-through:
   remains a projection consumer, and replacing the public runtime config shape
   should happen only when the next architectural slice needs that stronger
   type.
-- Reviewer dispatch is still pending for Phase 3. The current session did not
-  spawn reviewer agents because the active tool policy only permits sub-agents
-  when the owner explicitly authorises delegation.
-- Full `pnpm check` passed on 2026-04-25 before final commit packaging.
+- Reviewer dispatch was initially not claimed because the active tool policy
+  only permits sub-agents when the owner explicitly authorises delegation. The
+  owner has now authorised it; sentry, test, config, code, architecture, and
+  docs/ADR reviewers have reported findings. This reintegration pass accepts
+  the concrete blockers and either fixes them here or routes them below.
+- Full `pnpm check` passed on 2026-04-25 before reviewer reintegration.
+  After reintegration, the broad code gates listed in Phase 3 pass; aggregate
+  `pnpm check` has not been rerun after the final handoff-only doc updates.
+  The MD040 blocker was fixed via a platform-agnostic rule sidecar; root
+  `pnpm markdownlint-check:root` now passes.
+
+Reviewer-finding routing after owner authorization:
+
+- Fixed in this pass: HTTP runtime env now includes `VERCEL_GIT_COMMIT_REF`;
+  build-time Sentry env projection resolves `APP_VERSION` from
+  `APP_VERSION_OVERRIDE` / root package version rather than trusting raw
+  `process.env.APP_VERSION`; local no-auth launchers strip inherited
+  `VERCEL_ENV` and `VERCEL_GIT_COMMIT_REF`; widget Playwright scripts clear
+  `NO_COLOR`; the Search CLI ingest-harness test is no longer excluded.
+- Proved in this pass: explicit env → `createRuntimeConfigFromValidatedEnv` →
+  `createHttpObservability` production/main live Sentry chain; `/` app-version
+  header + meta behavior through `createApp`.
+- Routed to
+  [`mcp-http-runtime-canonicalisation.plan.md`](../future/mcp-http-runtime-canonicalisation.plan.md):
+  replacing `RuntimeConfig.version` / `versionSource` with first-class
+  `RuntimeConfig.buildIdentity`, removing or renaming the public
+  `HttpObservability.release` field, and replacing remaining smoke composition
+  roots that necessarily mutate `process.env` before spawning.
+- Routed as a standards follow-up before final branch closeout: remove the
+  source-read assertion in
+  `packages/core/build-metadata/tests/git-sha.unit.test.ts` or replace it with
+  a behavioural test. It was not introduced by this slice, but reviewer
+  coverage correctly identified it as a plan-scoped standards gap.
 
 ### Candidate implementation moves
 
@@ -556,12 +589,14 @@ and Phase 1 evidence. Expected options include:
 - Local smoke/UI/a11y startup does not require `VERCEL_GIT_COMMIT_SHA`.
 - Production and preview Sentry release identifiers remain unchanged for
   ADR-163 truth-table rows.
-- App build identity has one source of truth, is available in local dev and
-  every build context, and is consumed by observability, HTML, API headers, and
-  Sentry sink adapters without being owned by any of them.
-- `HttpObservability` no longer exposes an ambiguous `release` field. Sentry
-  release identifiers are private to the Sentry adapter path and remain governed
-  by ADR-163.
+- App version/build identity has one source of truth for this slice and is
+  consumed by observability, HTML, API headers, and Sentry sink adapters without
+  being owned by any of them. First-class `RuntimeConfig.buildIdentity` remains
+  deliberately deferred to the future canonicalisation plan named above.
+- Off-mode `HttpObservability` no longer exposes a release field. Live/fixture
+  observability still expose the Sentry release for compatibility; removing or
+  renaming that public field is deliberately deferred to the future
+  canonicalisation plan named above.
 - Observability remains always on: stdout OTel logging, local spans,
   correlation context, and app observability helpers still work when Sentry is
   disabled or unavailable.
@@ -581,7 +616,7 @@ and Phase 1 evidence. Expected options include:
 Update whichever surfaces Phase 0/2 prove are impacted:
 
 - `docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md`
-- `docs/architecture/architectural-decisions/121-quality-gate-scope.md`
+- `docs/architecture/architectural-decisions/121-quality-gate-surfaces.md`
 - `docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md`
 - `docs/engineering/build-system.md`
 - `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
@@ -594,25 +629,22 @@ edited.
 
 ### Reviewer Scheduling
 
-Mandatory before implementation:
+Owner authorization for sub-agent dispatch was granted after the initial
+gate-green state. Findings are treated as Phase 3 reintegration inputs:
 
-- `sentry-reviewer` — Sentry mode/release semantics.
-- `test-reviewer` — test boundaries, no global env usage, in-process IO
-  prohibition, proof value, category naming, and whether any existing standards
-  failure remains.
-
-Conditional reviewers:
-
-- `architecture-reviewer-fred` — only if ADR-163 text or an ADR-owned
-  source-of-truth boundary changes.
-- `docs-adr-reviewer` — only if docs or ADR edits land.
-- `release-readiness-reviewer` — only if production/preview release semantics
-  change or deploy attribution confidence needs final release-go/no-go review.
-
-Post-implementation:
-
-- `code-reviewer` — behavioural regressions and integration risks, per the
-  repository reviewer policy.
+- `sentry-reviewer` — accepted the live-mode strictness shape but blocked on
+  missing runtime `VERCEL_GIT_COMMIT_REF`.
+- `test-reviewer` — required a full env → runtime config → observability proof
+  and surfaced remaining standards follow-ups.
+- `config-reviewer` — required removing the Search CLI ingest-harness test
+  exclusion and clearing `NO_COLOR` for widget Playwright scripts.
+- `architecture-reviewer-fred` — accepted `RuntimeConfig.buildIdentity`
+  deferral for this slice, but required build-time Sentry env projection to use
+  canonical app-version resolution.
+- `docs-adr-reviewer` — required ADR/plan/continuity refresh and commit-hash
+  placeholder consumption.
+- `code-reviewer` — required local no-auth startup to strip inherited
+  production branch metadata.
 
 ### Quality Gates
 
@@ -651,6 +683,20 @@ pnpm check
 
 If `pnpm check` fails for unrelated existing or parallel-track work, stop and
 record the exact failing gate, evidence, and residual risk.
+
+Reviewer reintegration validation completed on 2026-04-25:
+
+- Focused HTTP/Sentry/build-metadata/search tests passed, including the new
+  build-time Sentry projection proof and app-version header/meta proof.
+- `pnpm type-check`, `pnpm lint`, `pnpm knip`, `pnpm test`, and `pnpm build`
+  all passed.
+- Targeted markdownlint over the changed observability/operator docs passed.
+- `pnpm portability:check` passed after adding the sidecar
+  markdown-code-block rule and platform adapters.
+- `git diff --check` passed.
+- `pnpm markdownlint-check:root` passed after the MD040 sidecar fix.
+- Aggregate `pnpm check` is intentionally not claimed green because it was not
+  rerun after the final handoff-only doc updates.
 
 ## Risk Register
 

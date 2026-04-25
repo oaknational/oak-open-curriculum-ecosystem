@@ -17,15 +17,7 @@ export default defineConfig({
     // See: test-isolation-architecture-fix.md
     isolate: true,
     pool: 'forks',
-    exclude: [
-      '**/*.e2e.test.ts',
-      'node_modules',
-      'dist',
-      // Ingest harness test causes OOM in forked worker due to heavy import graph.
-      // Skipped as this workspace is being extracted into SDK+CLI.
-      // See: .agent/plans/semantic-search/active/search-sdk-cli.plan.md
-      'src/lib/indexing/ingest-harness.unit.test.ts',
-    ],
+    exclude: ['**/*.e2e.test.ts', 'node_modules', 'dist'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

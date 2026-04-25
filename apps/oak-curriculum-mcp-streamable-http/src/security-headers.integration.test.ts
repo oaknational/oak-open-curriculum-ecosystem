@@ -121,6 +121,13 @@ describe('Security Headers (Integration)', () => {
       expect(res.status).toBe(200);
       expect(res.type).toBe('text/html');
     });
+
+    it('exposes the runtime app version in the response header and HTML metadata', async () => {
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['x-app-version']).toBe('0.0.0-test');
+      expect(res.text).toContain('<meta name="app-version" content="0.0.0-test" />');
+    });
   });
 
   describe('/healthz - JSON endpoint', () => {

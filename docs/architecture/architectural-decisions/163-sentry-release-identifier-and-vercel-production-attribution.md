@@ -640,11 +640,18 @@ The L-7 and L-8 work together to ratify three contract changes:
   local Node listener and must not be reused as the deployed `main`.
 
 `resolveSentryEnvironment` implements the §3 truth table.
-`resolveSentryRelease` is unchanged (root semver via `APP_VERSION`
-fallback). `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
-enforces the deployed-entry contract with two repo-owned gates:
+`resolveSentryRelease` is now a thin adapter over the canonical
+`@oaknational/build-metadata` `resolveRelease(input)` resolver. The
+HTTP runtime schema includes `VERCEL_GIT_COMMIT_REF`, so runtime Sentry
+events receive the same production-main vs preview attribution inputs
+that the Vercel build-time registration path receives. The MCP app
+resolves the application version at the app build/runtime boundary and
+projects it into Sentry's release input as `APP_VERSION`; Sentry
+observability consumes that identity, it does not create it.
+`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts` enforces the
+deployed-entry contract with two repo-owned gates:
 `assertNoEsbuildWarnings(...)` and
-`assertVercelDefaultExportFunction(...)`.
+`assertBuiltServerDefaultExport(...)`.
 
 ### 9. GitHub release workflow — already correctly wired
 
@@ -1027,7 +1034,7 @@ intact.
   the deploy-boundary contract itself, and Enforcement §2 replaces the
   old orchestrator-preflight framing with the build-output contract
   gate (`assertNoEsbuildWarnings` +
-  `assertVercelDefaultExportFunction`). This closes the exact
+  `assertBuiltServerDefaultExport`). This closes the exact
   2026-04-22 preview failure mode where a green build could still ship
   an unimportable deployed entry.
 - **2026-04-24** — Two co-equal amendments recording owner direction
@@ -1099,7 +1106,7 @@ ReleaseInput` so that `@oaknational/sentry-node` delegates at
   `Reviewer Dispositions (2026-04-24 second amendment)` block at the
   bottom of this file. This is the second amendment to ADR-163's §1 +
   §10 pair; the first landed at commit `06bf25d7`, the second at
-  commit `[[TODO:FILL_WS3_COMMIT_HASH]]`.
+  commit `2822e525`.
 
 ## Reviewer Dispositions (2026-04-24 first amendment)
 
@@ -1314,7 +1321,8 @@ information.
 5. **MINOR (Item 11 retract-with-replacement-note framing)** —
    **ACCEPTED**; merged with assumptions-reviewer I1.
 6. **MINOR (Item 9 placeholder → grep-friendly token)** —
-   **ACCEPTED**; `[[TODO:FILL_WS3_COMMIT_HASH]]` installed.
+   **ACCEPTED**; placeholder installed for pre-commit review and filled
+   with `2822e525` after WS3 landed.
 7. **MINOR (Item 7 final bullet-order note)** — **ACCEPTED**; order
    documented as Canonical implementation → Wiring → Unit tests →
    Comparator → Wiring-integration-test-removed.

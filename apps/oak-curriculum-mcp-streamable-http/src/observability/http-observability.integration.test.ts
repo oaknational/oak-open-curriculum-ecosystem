@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { LogEvent, LogSink } from '@oaknational/logger';
 import type { SentryNodeSdk } from '@oaknational/sentry-node';
-import type { AuthDisabledRuntimeConfig } from '../runtime-config.js';
+import type { Env } from '../env.js';
+import type { RuntimeConfig } from '../runtime-config.js';
+import { createRuntimeConfigFromValidatedEnv } from '../runtime-config-from-validated-env.js';
 import { createHttpObservability } from './http-observability.js';
 
 interface CapturingStdoutSink {
@@ -56,29 +58,39 @@ function createCapturingStdoutSink(): CapturingStdoutSink {
   };
 }
 
-function createOffRuntimeConfigWithoutDeployReleaseMetadata(): AuthDisabledRuntimeConfig {
+function baseEnv(overrides: Partial<Env> = {}): Env {
   return {
-    dangerouslyDisableAuth: true,
-    useStubTools: false,
-    version: '1.2.3-test',
-    versionSource: 'APP_VERSION_OVERRIDE',
-    vercelHostnames: [],
-    env: {
-      OAK_API_KEY: 'test-api-key',
-      ELASTICSEARCH_URL: 'https://example-elasticsearch.test',
-      ELASTICSEARCH_API_KEY: 'test-es-key',
-      DANGEROUSLY_DISABLE_AUTH: 'true',
-      LOG_LEVEL: 'info',
-      SENTRY_MODE: 'off',
-    },
+    OAK_API_KEY: 'test-api-key',
+    ELASTICSEARCH_URL: 'https://example-elasticsearch.test',
+    ELASTICSEARCH_API_KEY: 'test-es-key',
+    LOG_LEVEL: 'info',
+    APP_VERSION_OVERRIDE: '1.2.3-test',
+    ...overrides,
   };
+}
+
+function expectRuntimeConfig(input: Env): RuntimeConfig {
+  const result = createRuntimeConfigFromValidatedEnv(input);
+
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    throw new Error(`Expected runtime config, got ${JSON.stringify(result.error)}`);
+  }
+
+  return result.value;
 }
 
 describe('createHttpObservability', () => {
   it('constructs off-mode observability without deploy release metadata', () => {
     const sdk = createFakeSentrySdk();
     const stdout = createCapturingStdoutSink();
-    const result = createHttpObservability(createOffRuntimeConfigWithoutDeployReleaseMetadata(), {
+    const runtimeConfig = expectRuntimeConfig(
+      baseEnv({
+        DANGEROUSLY_DISABLE_AUTH: 'true',
+        SENTRY_MODE: 'off',
+      }),
+    );
+    const result = createHttpObservability(runtimeConfig, {
       sentrySdk: sdk,
       stdoutSink: stdout.sink,
     });
@@ -110,5 +122,42 @@ describe('createHttpObservability', () => {
       },
     });
     expect(event?.line).toBe(`${JSON.stringify(event?.otelRecord)}\n`);
+  });
+
+  it('propagates validated production-main env into live Sentry release identity', () => {
+    const sdk = createFakeSentrySdk();
+    const runtimeConfig = expectRuntimeConfig(
+      baseEnv({
+        CLERK_PUBLISHABLE_KEY: 'test-clerk-publishable-key',
+        CLERK_SECRET_KEY: 'test-clerk-secret-key',
+        APP_VERSION_OVERRIDE: '1.2.3',
+        SENTRY_MODE: 'sentry',
+        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+        SENTRY_TRACES_SAMPLE_RATE: '0.5',
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+        VERCEL_GIT_COMMIT_SHA: 'abcdef1234567890abcdef1234567890abcdef12',
+      }),
+    );
+
+    const result = createHttpObservability(runtimeConfig, {
+      sentrySdk: sdk,
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.environment).toBe('production');
+    expect(result.value.release).toBe('1.2.3');
+    expect(sdk.init).toHaveBeenCalledOnce();
+    expect(sdk.init).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environment: 'production',
+        release: '1.2.3',
+        tracesSampleRate: 0.5,
+      }),
+    );
   });
 });

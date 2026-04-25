@@ -355,8 +355,10 @@ pnpm exec sentry-cli sourcemaps inject "$DIST_DIR"
 pnpm exec sentry-cli sourcemaps upload --release "$RELEASE" "$DIST_DIR"
 ```
 
-- `$RELEASE` is the root repo `package.json` semver (never the git
-  SHA). See
+- `$RELEASE` is the ADR-163 per-environment release projection (never the git
+  SHA): production-on-`main` app version, preview / production-from-non-main
+  branch URL host, development `dev-<shortSha>`, or an explicit
+  `SENTRY_RELEASE_OVERRIDE`. See
   [ADR-163 §1–§2](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
 - `--release` is a convenience tag (surfaces the bundle in the
   release UI and drives weak association); the match key is the
