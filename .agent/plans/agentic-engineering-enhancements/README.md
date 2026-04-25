@@ -48,7 +48,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/web-api-gdpr-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API GDPR capability — personal-data obligations, consent, deletion/export, and retention semantics at API boundaries |
 | `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
 | `current/planning-specialist-capability.plan.md` | Plan | Planning specialist — plan architecture, lifecycle, discoverability, integration routing, and documentation sync (promoted from future/ 2026-04-20) |
-| `current/practice-and-process-structural-improvements.plan.md` | Plan | Structural Practice/process gap closure — collaboration directive, Planning discipline reconciliation, portability PDR/ADR, and final distilled graduation |
+| `current/practice-and-process-structural-improvements.plan.md` | Plan | Structural Practice/process gap closure — user-collaboration directive, Planning discipline reconciliation, portability PDR/ADR, and final distilled graduation |
 | `current/agent-infrastructure-portability-remediation.plan.md` | Plan | Agent artefact portability remediation — vendor skill canonicalisation, thin-wrapper parity, validator hardening, and ADR-125 documentation updates |
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |

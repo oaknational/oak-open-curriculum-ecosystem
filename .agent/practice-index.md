@@ -14,7 +14,8 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | ----------------------------------------------------------------- | --------------------------------------------------------- |
 | [AGENT.md](directives/AGENT.md)                                   | Operational entry point for agents                        |
 | [principles.md](directives/principles.md)                         | Authoritative rules — must be followed at all times       |
-| [collaboration.md](directives/collaboration.md)                   | Agent-human working model                                 |
+| [user-collaboration.md](directives/user-collaboration.md)         | Agent-to-owner working model                              |
+| [agent-collaboration.md](directives/agent-collaboration.md)       | Agent-to-agent working model                              |
 | [testing-strategy.md](directives/testing-strategy.md)             | TDD at all levels                                         |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
 | [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |

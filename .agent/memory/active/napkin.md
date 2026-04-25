@@ -820,8 +820,9 @@ owner-direction call, not a session-handoff call.
   1. **Behavioural norms** (agent-human collaboration model,
      scope discipline, risk classification, dialogue-not-
      authority) — no directive exists. Needs a new directive
-     (e.g. `behavioural.md` or `collaboration.md` in
-     `.agent/directives/`).
+     (e.g. `behavioural.md` or `user-collaboration.md` in
+     `.agent/directives/`; the latter has since been installed via the
+     directive rename in WS0 of the multi-agent collaboration protocol).
   2. **Planning discipline** (discoverability, narrative-first
      sequencing, parent-child reconciliation, validation
      closures) — plan templates have structure but not process.

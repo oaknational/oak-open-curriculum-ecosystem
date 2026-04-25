@@ -357,9 +357,10 @@ Adjacent:
 - Goal:
   - create permanent homes for process knowledge currently stranded in
     `distilled.md`
-  - add a collaboration directive for the agent-human working model, scope
-    discipline, risk classification, feedback, onboarding, and archive
-    discipline
+  - add a user-collaboration directive for the agent-to-owner working model,
+    scope discipline, risk classification, feedback, onboarding, and archive
+    discipline (the multi-agent collaboration protocol's WS0 has since
+    landed both `user-collaboration.md` and `agent-collaboration.md`)
   - feed Planning discipline into the dedicated Planning specialist capability
     plan instead of creating a duplicate generic planning skill
   - author portability PDR/ADR doctrine after, or in parallel with, the ADR-125

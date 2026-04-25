@@ -224,6 +224,14 @@ held over).
 
    Record each finding as `[thread-slug-or-path]: <observed state> (<what the rule says it should be>)`. Present the aggregated list to the owner at consolidation close. The audit's enforcement force is that this step is part of `/jc-consolidate-docs` — any agent running the consolidation ritual is obligated to walk the six checks, not remember them. The "do not silently skip" posture is the same authority as earlier steps (7a ADR/PDR scan, 7b graduation application).
 
+   **7d. Validate bidirectional rule ↔ plan citations.** Some `.agent/rules/` entries cite an authority surface in `.agent/plans/` (or vice versa) where the citation is load-bearing for the rule's authority. When such a pair exists, both directions must resolve so the rule and plan evolve together.
+
+   Walk the named pairs and confirm each direction resolves:
+
+   - [`.agent/rules/dont-break-build-without-fix-plan.md`](../rules/dont-break-build-without-fix-plan.md) ↔ [`.agent/plans/observability/active/gate-recovery-cadence.plan.md`](../plans/observability/active/gate-recovery-cadence.plan.md). Rule cites plan's `## Intent` and `## Recovery Sequence` point 2; plan cites rule under its own `## Cross-references` section. Flag any direction missing or pointing at a stale file path.
+
+   Findings surface as `[<rule>] ↔ [<plan>]: <observed direction missing>`. New bidirectional pairs are added here when subsequent rules cite plan authorities.
+
 8. **Review the Practice Core for upstream refinement.** The previous step moves new knowledge *into* permanent homes (downstream). This step does the opposite: reads *existing* Practice Core content against current practice and surfaces refinement opportunities (upstream). Without this step, the Core carries intent, mechanisms, examples, and templates that drift from current practice as everything around them evolves. Session learning that contradicts, extends, or refines existing Core substance must reach the Core or the Core stagnates.
 
    **Surfaces reviewed**:

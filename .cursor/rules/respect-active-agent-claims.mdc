@@ -1,0 +1,6 @@
+---
+description: Consult the agent-to-agent discovery surface before operating in another agent's area.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/respect-active-agent-claims.md`.

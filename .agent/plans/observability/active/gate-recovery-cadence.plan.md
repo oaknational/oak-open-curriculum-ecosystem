@@ -190,6 +190,16 @@ Only after those pass should `pnpm check` be used as the aggregate closure gate;
 any residual aggregate failure must be added to the ledger before implementation
 continues.
 
+## Cross-references
+
+- [`.agent/rules/dont-break-build-without-fix-plan.md`](../../../rules/dont-break-build-without-fix-plan.md)
+  — operationalises this plan's `## Intent` and `## Recovery Sequence` point 2
+  for the cross-agent context introduced by
+  [`.agent/directives/agent-collaboration.md`](../../../directives/agent-collaboration.md).
+  The bidirectional reference (rule cites plan; plan cites rule) is validated
+  at consolidation time per the audit step in
+  [`.agent/commands/consolidate-docs.md`](../../../commands/consolidate-docs.md).
+
 ## Handoff Notes
 
 - This plan restored the cadence invariant for the startup-boundary lane and

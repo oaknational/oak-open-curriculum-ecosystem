@@ -86,8 +86,10 @@ classification, dialogue model, discovery-based onboarding)
 are scattered in distilled.md as "User Preferences" — a lazy
 category that fails to recognise what they are.
 
-**Deliverable**: `.agent/directives/collaboration.md` — the
-agent-human working model.
+**Deliverable**: `.agent/directives/user-collaboration.md` — the
+agent-to-owner working model. (Renamed from `collaboration.md` in WS0
+of the multi-agent collaboration protocol; the agent-to-agent half is
+covered by the sibling `agent-collaboration.md` directive.)
 
 **Content** (drawn from distilled + owner feedback):
 

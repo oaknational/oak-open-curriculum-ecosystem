@@ -17,9 +17,13 @@ referenced homes.
 
 Commit to British spelling, grammar, and date formats. Reflect on your current
 task; update your task list if needed. Apply the
-[collaboration directive](./collaboration.md): dialogue, scope discipline,
-human risk acceptance, direct verification, discovery-based onboarding, and
-archive discipline.
+[user-collaboration directive](./user-collaboration.md): dialogue, scope
+discipline, human risk acceptance, direct verification, discovery-based
+onboarding, and archive discipline. For agent-to-agent collaboration, also
+apply the [agent-collaboration directive](./agent-collaboration.md):
+knowledge and communication (not mechanical refusals), peer dialogue,
+five communication channels, identity vs liveness, and the bootstrap
+fast-path.
 
 For planning work, read [metacognition.md](./metacognition.md) and follow its
 reflection discipline before finalising a plan.
@@ -125,7 +129,8 @@ additive identity rule.
 Use these links by trigger:
 
 - Core practice: [Development Practice][development],
-  [Collaboration Practice](./collaboration.md),
+  [User Collaboration Practice](./user-collaboration.md),
+  [Agent Collaboration Practice](./agent-collaboration.md),
   [Testing Strategy](testing-strategy.md), [TypeScript Practice][typescript],
   [Safety and Security][security]
 - Architecture and schema: [Architecture][architecture], [ADR index][adr-index],

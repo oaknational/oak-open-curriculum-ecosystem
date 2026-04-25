@@ -97,5 +97,5 @@ deferred to the SDK codegen decomposition plan for a separate session:
 Build-system entries graduated on 2026-04-24 to
 [`docs/engineering/build-system.md`][build-system].
 
-[collaboration]: ../../directives/collaboration.md
+[collaboration]: ../../directives/user-collaboration.md
 [build-system]: ../../../docs/engineering/build-system.md

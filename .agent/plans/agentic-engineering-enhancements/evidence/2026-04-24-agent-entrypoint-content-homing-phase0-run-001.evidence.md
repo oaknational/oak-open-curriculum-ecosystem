@@ -35,8 +35,9 @@
   metacognition.
 - Disposition: keep.
 - Target: `.agent/directives/AGENT.md`, with detail in
-  `.agent/directives/collaboration.md` and
-  `.agent/directives/metacognition.md`.
+  `.agent/directives/user-collaboration.md` (renamed from
+  `collaboration.md` in WS0 of the multi-agent collaboration protocol)
+  and `.agent/directives/metacognition.md`.
 - Discovery path: AGENT grounding section links both directives.
 
 ### L-003: Practice Orientation
