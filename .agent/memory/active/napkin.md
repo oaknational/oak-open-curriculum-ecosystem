@@ -19,6 +19,328 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6, late-session) — multi-agent collaboration protocol plan: discussion-driven framing, Wilma adversarial review absorbed, owner-corrected from enforcement to advisory
+
+**Session shape**: continuation of the 2026-04-25 Jazzy session that
+opened on WS3 release-identifier and paused at the parallel-track
+knip blocker. Owner pivoted to a new question: design infrastructure
+for parallel agents working on the same repo without clashing.
+Authored
+`.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md`
+(1349 lines, six workstreams). Wilma adversarial review surfaced 2
+BLOCKING + 7 MAJOR + 7 MINOR + 4 POSITIVE findings. Owner-directed
+discussion settled the central design commitment before absorbing
+findings, which substantially reframed the plan. No commits — owner
+directed cold start for WS0 in a fresh session.
+
+### Surprise (architectural — owner-corrected from enforcement to advisory)
+
+- **Expected**: WS1 would install structured claims with exclusivity
+  levels (`exclusive` / `advisory`) and a registration rule that
+  *refused entry* to claimed areas. The plan's first draft had this
+  shape; Wilma's MAJOR-3 (embryo unsafe as communication) and MAJOR-5
+  (TTL salvage reactive) were reasonable critiques *of the
+  enforcement model*.
+- **Actual**: owner direction in discussion: "we must provide
+  knowledge and the means to communicate and discuss, not mechanical
+  refusals that will simply be routed around at the cost of
+  architectural excellence." The plan reframed: claims are *signals*
+  not *locks*; rule fires "do not proceed until you have consulted and
+  decided," NOT "refuse if you find a claim." Substance of the
+  decision is agent judgement informed by shared knowledge.
+- **Why expectation failed**: I drafted the protocol from the failure
+  mode (parallel-track gate clashes) and reached for the obvious
+  enforcement model — locks, refusals, exclusivity levels. The
+  enforcement model is mechanically tractable but architecturally
+  wrong: agents will route around mechanical refusals, producing
+  worse outcomes than honest agent judgement informed by shared
+  knowledge. The advisory model takes more discipline but is the
+  right shape for a system where agents are the active reasoning
+  participants, not the constrained subjects.
+- **Behaviour change**: when designing systems where agents
+  participate as reasoning peers (not as constrained subjects),
+  default to *information surfaces* not *enforcement gates*. Locks
+  presume the constrained-subject framing. Knowledge surfaces presume
+  the reasoning-peer framing. The Practice's no-mechanical-bypass
+  doctrine (`--no-verify` discipline, no hook-skipping without
+  authorisation) is evidence: this repo already encodes the
+  preference for judgement-with-doctrine over enforcement.
+- **Source plane**: `active` (architectural design principle worth
+  graduating to a pattern; plan's Design Principle 1 makes it load-
+  bearing in the agent-collaboration directive when WS0 lands).
+
+### Surprise (process — discussion-before-revision changes the answer)
+
+- **Expected**: when Wilma's findings landed, the obvious next move
+  was to absorb them mechanically — fix what she flagged, harden the
+  identified weaknesses.
+- **Actual**: owner directed discussion FIRST about what WS0 and WS1
+  were *trying to achieve and prove*. That discussion surfaced the
+  enforcement-vs-advisory question, which dissolved several of
+  Wilma's findings (MAJOR-3 embryo, MAJOR-5 TTL salvage, BLOCKING-1
+  bootstrap chicken-and-egg) rather than requiring me to harden
+  against them. Hardening against MAJOR-3 would have meant making
+  the embryo synchronise (hard-push-on-write); the advisory reframing
+  meant the embryo is correctly an audit trail and synchronisation
+  is not the goal at WS0.
+- **Why expectation failed**: I treated the review findings as
+  "binding work items" by default — the same anti-pattern Pippin
+  recorded 2026-04-24 (review-finding absorption became plan-body
+  inflation). Discussion-before-revision converts findings from
+  "things to harden against" into "evidence about the design," some
+  of which is best addressed by changing the design rather than
+  hardening it.
+- **Behaviour change**: when adversarial review lands BLOCKING
+  findings, the first move is *not* to absorb them — it's to ask
+  whether the design's central claim is the right claim. If the
+  claim is right, harden as the findings demand. If the claim is
+  wrong, the findings may dissolve under reframing. Owner-directed
+  discussion at this layer is high-leverage.
+- **Source plane**: `active` (cross-session pattern about
+  review-cycle discipline; possible PDR-015-amendment input — the
+  pending assumption-challenge gate per architectural-review output
+  may need a sibling: *discussion-before-absorption gate per
+  adversarial-review output*).
+
+### Observation (operational seeds as plan-architecture refinement)
+
+- The plan was originally drafted with WS5 as a single late
+  observation phase — "run sessions, capture lessons, propose
+  refinements." That conflated *mechanical completion* (verifiable
+  at commit time) with *operational completion* (verifiable only by
+  observation). Owner direction "all workstreams need operational
+  seeds and validation" partitioned the conflation: each WS now lands
+  with both a mechanical acceptance set AND a named operational seed
+  (a question that subsequent sessions answer); WS5 reframed from
+  observation phase into *consolidation harvest* of all seeds.
+- This is a generalisable plan-architecture refinement, not specific
+  to this plan. Plans that introduce new behavioural / cultural /
+  protocol surfaces (vs purely-technical refactors) benefit from
+  per-WS operational seeds because mechanical completion does not
+  prove the protocol works in real use.
+- **Pattern candidate**: *operational-seed-per-workstream for
+  protocol plans*. Promote on a second instance.
+- **Source plane**: `active`.
+
+### Observation (Wilma's adversarial reviewer is high-yield for protocol plans)
+
+- 14 distinct findings on a single plan, including 2 BLOCKING that
+  caught real gaps in the design. The dispositions table is now part
+  of the plan as audit trail. Wilma's adversarial framing was the
+  right tool for this kind of plan — speculative, multi-part,
+  introduces new top-level concepts (`.agent/state/`).
+- **Behaviour reinforcement**: for plans that introduce new
+  architectural surfaces (directories, schemas, lifecycle
+  mechanisms), dispatch `architecture-reviewer-wilma` adversarially
+  *before* implementation. Cheap; high-yield. Distinct from the
+  mandatory pre-landing reviewers (docs-adr, assumptions) — Wilma is
+  pre-implementation, the others are pre-landing-of-implementation.
+
+---
+
+## 2026-04-25 (Codex / cursor / GPT-5.5) — gate recovery re-grounding correction
+
+### What Was Done
+
+- Completed `gate-recovery-cadence.plan.md` for the current branch state:
+  classified gate failures, restored startup-boundary type/knip/build/depcruise
+  health, and added explicit cadence guard language.
+- Began `mcp-local-startup-release-boundary.plan.md` Phase 2 GREEN:
+  off-mode Sentry config now branches before release/Git SHA resolution; off
+  config no longer carries release fields; HTTP/search observability tolerate
+  off mode without release; Express Sentry handler registration requires
+  explicit live `SENTRY_MODE=sentry`; app-version header/meta consumers are
+  wired; local dev and local stub env planning strip inherited deploy release
+  metadata.
+- Reviewer feedback changed the implementation from "compile-green seams" to
+  "production-owned seams with real callers" where the current slice made that
+  direct and safe.
+- Current green evidence before handoff: focused startup-boundary tests
+  (7 files / 12 tests), `@oaknational/sentry-node` tests (8 files / 105 tests),
+  `@oaknational/build-metadata` tests (4 files / 41 tests), `pnpm type-check`,
+  `pnpm knip`, `pnpm build`, and `pnpm depcruise`.
+
+### Mistakes Made
+
+- During gate-recovery seam work, I briefly reached for underscore-prefixed
+  destructuring bindings to drop inherited deploy metadata from a copied env
+  object. Owner corrected this immediately. The established rule is explicit:
+  do not prefix unused variables with an underscore. Correct pattern here is to
+  avoid creating unused bindings at all, e.g. copy the env object and delete the
+  deploy-only keys, or construct the target shape directly.
+
+### Patterns to Remember
+
+- RED tests that import missing modules are not acceptable RED in this repo
+  because they break type/lint/knip before behavioural proof is reached. The
+  minimum safe shape is a typed production-owned seam that compiles and fails
+  behaviourally.
+- "Production-owned seam" means the seam is either already wired into a real
+  composition path or explicitly recorded as not yet wired. Test-only seams that
+  pass without changing runtime behaviour should trigger reviewer escalation.
+- Sentry off mode is an external-sink kill switch, not an app-observability
+  kill switch. It should skip Sentry release/Git SHA requirements and Sentry
+  Express error-handler registration while keeping stdout OTel logging and app
+  observability alive.
+- Build identity projection into Sentry release must still validate against
+  Sentry release-name rules and derive effective Sentry environment from Sentry
+  context. Build identity is app truth; Sentry release is a projection, not a
+  raw copy.
+
+## 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6, execution session paused at pre-commit gate) — release-identifier WS3: drafting + §3.0 reviewer gate + amendment application; commit blocked on parallel-track coupling
+
+**Session shape**: opened via `/jc-start-right-thorough` wrapping
+`/jc-metacognition` + `/jc-plan` with a long owner payload directing
+pickup of the queued release-identifier plan starting from "WS2 §2.0
+PREREQUISITE BLOCKING fix" → WS2 §2.1-§2.7 atomic landing. **Payload
+was substantively stale**: `a4e8facb` had already landed §2.0;
+`f5a009ab` had already landed §2.1-§2.7; the working-tree state the
+payload described (12 staged files, 15 commits ahead) had been
+superseded by 191 commits-ahead with only 4 memory/continuity files
+unstaged. Surfaced the staleness directly via AskUserQuestion (per
+the direct-answer-discipline feedback memory); owner confirmed actual
+intended lane was WS3 (the next commit boundary on the same plan).
+WS3 substance fully drafted, reviewer-gated at §3.0, applied to ADR +
+ADR index + script + tests + package.json + lockfile + knip config
+(8 files staged with `git mv` rename detection preserved + 1
+unstaged `knip.config.ts` mjs-glob fix). Commit blocked at
+pre-commit `knip` on parallel-track unresolved import; owner
+directed pause to next session. HEAD unchanged at `015ac99b`.
+
+**Observations / Surprises**:
+
+### Surprise (payload validity / pause-state-aware grounding)
+
+- **Expected**: payload's prescribed sequence reflected current
+  branch state.
+- **Actual**: payload was stale — every prescribed action (commit
+  12 staged files, do WS2 §2.0 BLOCKING fix, do WS2 §2.1-§2.7) had
+  already landed in commits authored by Frodo (claude-code /
+  claude-opus-4-7-1m) earlier the same day-window as the payload
+  was authored. The "12 staged files" framing was a snapshot from
+  Frodo's mid-session state, not from current HEAD.
+- **Why expectation failed**: the payload was authored before
+  Frodo's later same-day session committed §2.1-§2.7. The mismatch
+  was visible by `git log --oneline -20` showing both
+  `a4e8facb` and `f5a009ab` between the payload's described state
+  and current HEAD.
+- **Behaviour change**: at session-start grounding, run `git log
+  --oneline | head -20`, `git rev-parse HEAD`, and `git status
+  --short` BEFORE accepting payload prescriptions as current. If
+  the payload's described HEAD or staged-file count differs from
+  reality by more than one or two commits, name the staleness
+  directly and ask the owner to confirm intent. This is the
+  Pippin-spiral inverse — don't silently re-frame a stale
+  prescription as current; surface the divergence.
+
+### Observation (§3.0 reviewer gate caught what it exists to catch)
+
+- The plan's §3.0 pre-landing reviewer dispatch was the entire
+  reason the plan exists in this shape. The first ADR-163
+  amendment (commit `06bf25d7`) shipped with an incomplete
+  9-item enumeration that left §1 pointing at a non-existent
+  contract test — exactly the drift class this plan repairs.
+  WS3.4's §3.0 gate caught the analogous failure mode in MY
+  drafted enumeration: 13 items missed retracting
+  `assumptions-reviewer` Disposition #6 (which references the
+  "primary anti-drift gate" claim Item 10 retracts from §1) and
+  `architecture-reviewer-fred` Disposition #3 + positive-note #4
+  sub-clauses (which reference the contract test devDep edge and
+  test placement boundary discipline). Both reviewers
+  independently identified the same gap. Enumeration expanded
+  13 → 15 items. The gate paid for itself.
+- **Behaviour reinforcement**: when drafting an amendment that
+  retracts text, grep ALL parallel surfaces (Reviewer Dispositions,
+  positive notes, History entries, top-level Enforcement lists,
+  cross-reference prose) for any quote of the retracted text BEFORE
+  drafting the enumeration. The 13-item enumeration was authored
+  via the plan body's mandate; the 15-item enumeration was authored
+  by adding a "find the parallel surfaces" pass per the BLOCKING
+  reviewer findings.
+
+### Surprise (knip mjs-glob gap)
+
+- **Expected**: knip would detect `semver` import in the moved
+  canonical `.mjs` script as a used dependency.
+- **Actual**: pre-commit knip flagged `semver` and `@types/semver`
+  as unused devDependencies. Investigation showed the
+  streamable-http app's knip config had `'build-scripts/**/*.ts'`
+  in both `entry` and `project` arrays — `.mjs` files were
+  unscanned. The previous canonical lived in
+  `packages/core/build-metadata/` which uses defaults (no
+  per-workspace config), so the `.mjs` was scanned there; the move
+  exposed the gap.
+- **Why expectation failed**: knip globs are extension-explicit.
+  The streamable-http config inherited the same gap any workspace
+  with a `.mjs`-only `build-scripts/` sub-path would have, but no
+  such sub-path existed before WS3 introduced one.
+- **Behaviour change**: when relocating a `.mjs` build script into
+  a workspace whose knip config doesn't already include `.mjs` in
+  build-scripts globs, update `knip.config.ts` in the same commit.
+  Future check: when adding any non-`.ts` source file to a
+  workspace's existing source globs, audit whether knip's `entry` /
+  `project` arrays include the new extension. (Captured as a fix in
+  `knip.config.ts` on this branch — unstaged at pause time, must
+  fold into the WS3 commit on resume.)
+
+### Observation (parallel-track coupling — second cross-session instance)
+
+- **Frodo recorded 2026-04-24** (in this same napkin file): "full-
+  repo pre-commit gates couple commits across parallel tracks; if
+  you hit a format-check failure on a file you have not touched,
+  the correct move is to ask, not to fix or bypass." Frodo's
+  instance was a prettier-check failure on
+  `scripts/validate-portability.mjs` (parallel-track WIP).
+- **This session**: pre-commit `knip` failure on
+  `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
+  (parallel-track Phase 1 RED test importing
+  `./local-stub-env.js` which the parallel agent has not yet
+  landed). Same shape, different gate. Held the discipline:
+  surfaced to owner, did not bypass with `--no-verify`, did not
+  modify the parallel-track file, did not delete the unresolved
+  import. Owner directed pause to next session.
+- **Reinforces and extends**: the pattern generalises across
+  pre-commit gate types (prettier, knip, depcruise, lint, type-
+  check). Any of them can become a parallel-track-coupling
+  blocker when one agent's WIP triggers a gate against another
+  agent's pristine staged work. **Behaviour change for future
+  similar calls**: include the gate type in the surface message
+  to owner ("pre-commit `knip` on import to file owned by
+  parallel `mcp-local-startup-release-boundary` lane") so the
+  owner can route to the right resolution (wait for parallel
+  landing vs. fresh `--no-verify` authorisation) without
+  re-investigation.
+- **Pattern candidate**: *full-repo-pre-commit-gates-couple-
+  parallel-tracks* — second cross-session instance now recorded.
+  Eligible for promotion to `.agent/memory/active/patterns/` on a
+  third instance OR explicit owner direction. The pattern names
+  the failure mode AND the discipline (surface, don't fix or
+  bypass) AND the routing question for owner (which side
+  resolves first).
+- **Source plane**: `active` (cross-session pattern with two
+  recorded instances; ready for graduation register entry on the
+  third instance).
+
+### Observation (commit message drafting — multi-paragraph footer trap)
+
+- **Expected**: commitlint-conventional with default config would
+  treat the `Co-Authored-By:` trailer as the footer and not flag
+  earlier paragraphs.
+- **Actual**: first commit-message draft included a
+  `Plan: <very-long-path>` footer-style line above the trailer;
+  commitlint flagged `footer-max-line-length` (102 chars > 100)
+  and warned `footer-leading-blank` because the rule treats the
+  whole final block as the footer. Restructured: folded the plan
+  reference into the body prose; left only the `Co-Authored-By:`
+  trailer in the footer position.
+- **Behaviour change**: in commit-message drafts, only the
+  `Co-Authored-By:` (or other Git-trailer-format) lines should
+  appear in the footer position. References to plans, tickets, or
+  other context that doesn't match the `Token: value` trailer
+  format belong in the body prose, not the footer.
+
+---
+
 ## 2026-04-24 (Codex / codex / GPT-5, execution session) — AGENT homing + hard fitness clearance
 
 **Session shape**: picked up the `agentic-engineering-enhancements` thread
@@ -794,3 +1116,106 @@ owner-direction call, not a session-handoff call.
 - **Behaviour change**: plan placement follows owning boundary and next action.
   If planning volume is a problem, address discoverability, status, or closure
   quality directly instead of imposing a folder-level number cap.
+
+## 2026-04-24 (Codex / cursor / GPT-5.5) — grouped commit closeout and session handoff
+
+### What Was Done
+
+- Landed the completed work in four grouped commits:
+  `9c866634`, `fa069efe`, `ccc2ca46`, and `015ac99b`.
+- Ran focused validation and reviewer checks before committing: search-cli
+  type-check/lint/test, subagents check, portability check, markdownlint,
+  practice vocabulary, practice fitness informational, plus test/config/docs
+  reviewers for the affected surfaces.
+- Started the session-handoff workflow after the user closed the session.
+
+### Observation (review before commit)
+
+- The docs reviewer caught two real drift issues before the doctrine commit:
+  ADR-078's in-process E2E example omitted the async `createApp` observability
+  dependency, and the smoke composition-root exception was not named consistently
+  across rules/directives.
+- **Behaviour change**: for doctrine commits that tighten a rule, run a
+  docs/ADR consistency review before committing; the important failures are
+  often examples and carve-outs, not just headline wording.
+
+## 2026-04-24 (Codex / cursor / GPT-5.5) — startup-boundary Phase 0
+
+### Observation
+
+- Promoting `mcp-local-startup-release-boundary.plan.md` to active exposed the
+  real next design move: `SentryOffConfig` currently has the same release-field
+  requirement as fixture/live config, so `SENTRY_MODE=off` cannot be honest
+  until the Sentry config type shape or input-resolution order changes. ADR-163
+  does not need amendment for that move because it governs release identity and
+  registration when Sentry delivery/registration is in play; off mode should
+  have no Sentry release identity requirement at all.
+
+## 2026-04-24 (Codex / cursor / GPT-5.5) — startup-boundary Phase 1 RED
+
+### Observation
+
+- The RED tests needed to guard against two false-green paths: synthesising a
+  dummy release identity for off mode, and inheriting deploy release metadata
+  from parent env into local gates. Reviewer feedback tightened the tests from
+  "off mode eventually succeeds" to "off mode carries no Sentry release
+  identity" and from "clean local env has no deploy keys" to "local launcher
+  env strips inherited deploy release keys".
+- Parallel WS3 work produced unrelated build-script test failures during the
+  app-wide test run. Isolating the startup-boundary files with a targeted Vitest
+  command separated this lane's intended RED evidence from the parallel lane.
+
+## 2026-04-25 (Codex / cursor / GPT-5.5) — gate recovery handoff
+
+### Surprise (TDD cadence)
+
+- **Expected**: Phase 1 RED could leave behavioural tests failing while the next
+  session moved straight into Phase 2 GREEN.
+- **Actual**: several REDs imported missing modules (`build-identity.js`,
+  `local-stub-env.js`, `app-version-header.js`), which means build/type/knip
+  gates fail before behaviour is reached. Owner also flagged that `pnpm check`
+  currently has 11 failing gates, which is a system-level cadence failure, not
+  just ordinary TDD red.
+- **Why expectation failed**: I treated missing-symbol REDs as acceptable
+  design pressure, but this repo's gate discipline requires non-test gates to
+  remain green during RED. RED should be behavioural assertion failure, not
+  import/type/build failure.
+- **Behaviour change**: before adding more RED tests, create a failure ledger
+  and restore non-test gate health with typed seams that compile and fail
+  behaviourally. Full-gate cadence is now an explicit precondition via
+  `gate-recovery-cadence.plan.md`.
+
+### Correction (build identity boundary)
+
+- **Expected**: startup-boundary work could fix Sentry off-mode by making
+  `SentryOffConfig` stop requiring release identity and by removing/renaming
+  `HttpObservability.release`.
+- **Actual**: owner clarified the deeper model: app build identity is the
+  canonical current build/release fact for the app. Observability consumes that
+  identity; it does not create it. Other consumers include HTML meta tags and
+  `x-app-version` response headers. `resolveRelease` should become the Sentry
+  projection from build identity plus Sentry context, not a parallel app
+  identity authority.
+- **Behaviour change**: do not frame build identity as Sentry metadata first.
+  Extract build identity into its own boundary, then make observability,
+  headers, HTML, and Sentry release projection consume it through their own
+  contracts.
+
+## 2026-04-25 (Codex / codex / GPT-5) — startup-boundary gate green
+
+### Observation
+
+- Full `pnpm check` now exits 0 on `feat/otel_sentry_enhancements` after the
+  Lane B startup-boundary fixes. The smallest gate-green slice was to make
+  local launch boundaries explicitly choose `SENTRY_MODE=off`, keep live
+  `SENTRY_MODE=sentry` strict, clear inherited `NO_COLOR` only in Playwright
+  gate scripts, and update the stale search CLI off-mode release assertion.
+- The first two commit chunks landed cleanly through hooks:
+  `2822e525` (`fix(mcp): relocate production cancellation gate`) for WS3, and
+  `9ea3ccd8` (`fix(observability): decouple local startup from sentry release`)
+  for Lane B implementation.
+- The first-class `RuntimeConfig.buildIdentity` move remains intentionally
+  deferred. Build identity is still the app-owned canonical fact; Sentry
+  release remains a projection. Deferring the public runtime config shape keeps
+  this commit slice focused on boundary correctness rather than broad API
+  churn.

@@ -1,9 +1,31 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — session
-handoff after AGENT homing, hard-fitness clearance, and focused
-observability boundary-plan creation). The latest Codex session
-implemented:
+**Last refreshed**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
+— authored the
+[`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+to install structural infrastructure for parallel agents working on
+the same repo without clashing. Plan is 1349 lines, six workstreams
+(WS0–WS5), Wilma-reviewed adversarially with 14 findings absorbed
+(2 BLOCKING, 7 MAJOR, 7 MINOR — full disposition table in the plan).
+Owner direction settled the central design commitment 2026-04-25 in
+discussion: **"knowledge and communication, not mechanical refusals"** —
+mechanical refusals would be routed around at the cost of
+architectural excellence. WS0 (directive rename `collaboration` →
+`user-collaboration` + new `agent-collaboration` directive + embryo
+discovery log + three foundational rules + state-vs-memory split +
+executive memory entry + platform-adapter audit) is the foundation,
+ready to start in a fresh session. No commits made this session for
+this plan — file is untracked in working tree; owner directed cold
+start for WS0 in a fresh session to avoid context-pollution from
+this design discussion. Plan is additive to (and references) the
+active
+[`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
+in the parallel observability thread.
+
+**Prior refresh**: 2026-04-24 (Codex / cursor / GPT-5.5 — session
+handoff after grouped commits landed AGENT homing, hard-fitness
+clearance, search-cli smoke DI, and focused observability boundary-plan
+state). The latest committed session implemented:
 [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md),
 created the Phase 0 evidence ledger, slimmed AGENT into an entrypoint, and
 cleared all hard fitness findings reported by
@@ -31,6 +53,8 @@ and
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation` | 2026-04-24 | 2026-04-24 |
+| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout` | 2026-04-24 | 2026-04-24 |
+| `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -62,8 +86,12 @@ new sessions add rows; matching platform/model/agent_name updates
   rules, principles, scanners, and decision records;
 - created the two queued plans listed in the header.
 
-**Latest session landed as working-tree artefacts, not a commit**:
+**Latest session landed as grouped commits**:
 
+- `9c866634` — `test(search-cli): inject smoke env through vitest context`;
+- `fa069efe` — `chore(agents): update cursor reviewer model metadata`;
+- `ccc2ca46` — `docs(practice): home agent directives and testing doctrine`;
+- `015ac99b` — `docs(continuity): record plan handoff state`;
 - implemented the AGENT homing plan and marked its todos complete;
 - added the AGENT source-to-target ledger under plan evidence;
 - moved durable reviewer, agent-tool, artefact, command, and commit detail to
@@ -79,13 +107,13 @@ new sessions add rows; matching platform/model/agent_name updates
   "assert effects, not constants" testing principle, and corrected the moved
   TDD recipe examples.
 - after analysing the streamable-http `pnpm check` blocker, created
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
   and removed the arbitrary observability plan-density limit that had
-  misrouted the plan on first placement.
+  misrouted the plan on first placement. The plan has since been promoted to
+  active, Phase 0 evidence has landed, and Phase 1 RED evidence now makes
+  Phase 2 GREEN the next observability step.
 
-Deferral honesty: the AGENT and hard-fitness work has landed in the worktree.
-If this session closes without a commit, the next session should review the
-working-tree diff and gate evidence before committing or continuing. The
+Deferral honesty: the AGENT and hard-fitness work has landed in commits. The
 local startup/release-boundary plan is deliberately unimplemented; it is a
 queued follow-up, not hidden completion.
 
@@ -128,13 +156,15 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-AGENT homing and known hard-fitness remediation are complete in the worktree.
+AGENT homing and known hard-fitness remediation are complete and committed.
 The remaining agentic-engineering work is soft-fitness / role-architecture
 follow-up unless the owner names a new hard blocker.
 
 ### Current State
 
 - `pnpm practice:fitness:informational` reports SOFT, with no hard files.
+- Grouped commits landed the search-cli smoke DI fix, reviewer metadata update,
+  practice/testing doctrine homing, and continuity/plan handoff state.
 - `AGENT.md`, `principles.md`, and `testing-strategy.md` are healthy.
 - Sub-agent review findings have been integrated: valid lost knowledge was
   restored and incorrect transfer details were corrected.
@@ -142,7 +172,9 @@ follow-up unless the owner names a new hard blocker.
   `smoke:dev:stub`, `test:a11y`, and `test:ui` because
   `VERCEL_GIT_COMMIT_SHA` is missing for Sentry release resolution.
 - A focused observability plan now captures that blocker:
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md).
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md).
+  It has completed Phase 1 RED; observability work now resumes at Phase 2
+  GREEN, not RED planning.
 - Broader TypeScript/development/troubleshooting restructuring remains queued
   separately in the knowledge-role plan.
 
@@ -154,14 +186,9 @@ follow-up unless the owner names a new hard blocker.
 
 ### Next Safe Step
 
-Validate and commit the current working-tree changes if this session has not
-already done so. Include the new, trackable files
-`apps/oak-search-cli/smoke-test-env.ts`,
-`apps/oak-search-cli/vitest-provided-context.d.ts`, the AGENT evidence ledger,
-`docs/engineering/testing-tdd-recipes.md`, and
-`observability/current/mcp-local-startup-release-boundary.plan.md`. If
-continuing implementation, take the next owner-named slice from the
-knowledge-role documentation restructure plan or switch to the new
+No practice-docs implementation step is pending from the completed AGENT homing
+work. If continuing implementation, take the next owner-named slice from the
+knowledge-role documentation restructure plan, or switch to the new
 observability plan if the owner wants the `pnpm check` blocker fixed first.
 
 ### Active Track Links
