@@ -1,3 +1,4 @@
+sandbox_mode = "workspace-write"
 [features]
 multi_agent = true
 
@@ -88,3 +89,6 @@ config_file = ".codex/agents/design-system-reviewer.toml"
 [agents."react-component-reviewer"]
 description = "React component architecture reviewer for hooks, render performance, prop API design, and composition patterns."
 config_file = ".codex/agents/react-component-reviewer.toml"
+
+[sandbox_workspace_write]
+network_access = true
