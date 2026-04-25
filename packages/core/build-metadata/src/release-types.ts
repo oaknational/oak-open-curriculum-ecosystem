@@ -11,12 +11,19 @@
 /**
  * Source the resolved release name was derived from.
  *
- * @remarks Mirrors the rows of the §Truth Tables release-identifier
- * table in the observability plan:
+ * @remarks Constant-type-predicate pattern (ADR-153): the runtime
+ * constant is the single source of truth; the union type is derived
+ * structurally. Call sites use `RELEASE_SOURCES.<key>` instead of
+ * magic strings.
+ *
+ * Mirrors the rows of the §Truth Tables release-identifier table in
+ * the observability plan:
  *
  * - `SENTRY_RELEASE_OVERRIDE` — operator-supplied literal, takes
  *   precedence in any environment so local-dev rehearsals and one-off
- *   probes work without code changes.
+ *   probes work without code changes. The value is uppercase to match
+ *   the env-var name that triggered it; the rest are lowercase
+ *   derivation-method names.
  * - `application_version` — root `package.json` semver, used only on
  *   `VERCEL_ENV === 'production'` AND `VERCEL_GIT_COMMIT_REF === 'main'`
  *   (the only context where the root version is the released semver per
@@ -29,22 +36,60 @@
  * - `development_short_sha` — `dev-<shortSha>`, derived from
  *   `VERCEL_GIT_COMMIT_SHA`. Used for local builds without a Vercel
  *   branch URL.
+ * - `build_identity` — projected from the `AppBuildIdentity` injected
+ *   by the composition root.
  */
-export type ReleaseSource =
-  | 'SENTRY_RELEASE_OVERRIDE'
-  | 'application_version'
-  | 'vercel_branch_url'
-  | 'development_short_sha'
-  | 'build_identity';
+export const RELEASE_SOURCES = {
+  sentry_release_override: 'SENTRY_RELEASE_OVERRIDE',
+  application_version: 'application_version',
+  vercel_branch_url: 'vercel_branch_url',
+  development_short_sha: 'development_short_sha',
+  build_identity: 'build_identity',
+} as const;
 
-/** Effective deployment environment the release name was derived for. */
-export type ReleaseEnvironment = 'production' | 'preview' | 'development';
+export type ReleaseSource = (typeof RELEASE_SOURCES)[keyof typeof RELEASE_SOURCES];
 
-/** App-level build context that produced the current identity. */
-export type BuildIdentityContext = 'local' | 'vercel';
+/**
+ * Effective deployment environment the release name was derived for.
+ *
+ * @remarks Constant-type-predicate pattern (ADR-153). Call sites use
+ * `RELEASE_ENVIRONMENTS.<key>` instead of magic strings.
+ */
+export const RELEASE_ENVIRONMENTS = {
+  production: 'production',
+  preview: 'preview',
+  development: 'development',
+} as const;
 
-/** Branch class that produced the current identity. */
-export type BuildIdentityBranch = 'main' | 'other';
+export type ReleaseEnvironment = (typeof RELEASE_ENVIRONMENTS)[keyof typeof RELEASE_ENVIRONMENTS];
+
+/**
+ * App-level build context that produced the current identity.
+ *
+ * @remarks Constant-type-predicate pattern (ADR-153).
+ */
+export const BUILD_IDENTITY_CONTEXTS = {
+  local: 'local',
+  vercel: 'vercel',
+} as const;
+
+export type BuildIdentityContext =
+  (typeof BUILD_IDENTITY_CONTEXTS)[keyof typeof BUILD_IDENTITY_CONTEXTS];
+
+/**
+ * Branch class that produced the current identity.
+ *
+ * @remarks Constant-type-predicate pattern (ADR-153). The `main` value
+ * is the canonical name for the production-deploy branch — also used
+ * directly in environment-derivation comparisons.
+ */
+export const BUILD_IDENTITY_BRANCHES = {
+  main: 'main',
+  other: 'other',
+} as const;
+
+export type BuildIdentityBranch =
+  (typeof BUILD_IDENTITY_BRANCHES)[keyof typeof BUILD_IDENTITY_BRANCHES];
 
 /**
  * Canonical app build identity consumed by release projections.

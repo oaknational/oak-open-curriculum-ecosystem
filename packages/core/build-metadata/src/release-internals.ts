@@ -15,14 +15,17 @@ import { prerelease as semverPrerelease, valid as semverValid } from 'semver';
 
 import { parseBranchUrlLabel } from './release-branch-url.js';
 import { isValidReleaseName } from './release-name-validation.js';
-import type {
-  ReleaseEnvironment,
-  ReleaseError,
-  ReleaseInput,
-  ResolvedRelease,
+import {
+  BUILD_IDENTITY_BRANCHES,
+  RELEASE_ENVIRONMENTS,
+  RELEASE_ERROR_KINDS,
+  RELEASE_SOURCES,
+  type ReleaseEnvironment,
+  type ReleaseError,
+  type ReleaseInput,
+  type ResolvedRelease,
 } from './release-types.js';
 
-const MAIN_BRANCH = 'main';
 const SHORT_SHA_LENGTH = 7;
 
 function trimToUndefined(value: string | undefined): string | undefined {
@@ -47,15 +50,15 @@ export function deriveEnvironment(input: ReleaseInput): ReleaseEnvironment {
   const vercelEnv = trimToUndefined(input.VERCEL_ENV);
   const branch = trimToUndefined(input.VERCEL_GIT_COMMIT_REF);
 
-  if (vercelEnv === 'production' && branch === MAIN_BRANCH) {
-    return 'production';
+  if (vercelEnv === RELEASE_ENVIRONMENTS.production && branch === BUILD_IDENTITY_BRANCHES.main) {
+    return RELEASE_ENVIRONMENTS.production;
   }
 
-  if (vercelEnv === 'production' || vercelEnv === 'preview') {
-    return 'preview';
+  if (vercelEnv === RELEASE_ENVIRONMENTS.production || vercelEnv === RELEASE_ENVIRONMENTS.preview) {
+    return RELEASE_ENVIRONMENTS.preview;
   }
 
-  return 'development';
+  return RELEASE_ENVIRONMENTS.development;
 }
 
 /**
@@ -76,7 +79,7 @@ export function resolveOverride(
 
   if (!isValidReleaseName(override)) {
     return err({
-      kind: 'invalid_release_override',
+      kind: RELEASE_ERROR_KINDS.invalid_release_override,
       message:
         `Invalid SENTRY_RELEASE_OVERRIDE value "${override}". ` +
         'Expected a Sentry-safe release name (no slash or backslash, no ' +
@@ -86,7 +89,7 @@ export function resolveOverride(
 
   return ok({
     value: override,
-    source: 'SENTRY_RELEASE_OVERRIDE',
+    source: RELEASE_SOURCES.sentry_release_override,
     environment,
   });
 }
@@ -107,7 +110,7 @@ export function resolveProductionRelease(
 
   if (!version) {
     return err({
-      kind: 'missing_application_version',
+      kind: RELEASE_ERROR_KINDS.missing_application_version,
       message:
         'Cannot resolve release on production: APP_VERSION is not set. ' +
         'The composition root must resolve APP_VERSION (from root ' +
@@ -118,7 +121,7 @@ export function resolveProductionRelease(
 
   if (semverValid(version) === null) {
     return err({
-      kind: 'invalid_application_version',
+      kind: RELEASE_ERROR_KINDS.invalid_application_version,
       message:
         `Cannot resolve release on production: APP_VERSION "${version}" is ` +
         'not a valid semver. Ensure semantic-release ran successfully before ' +
@@ -128,7 +131,7 @@ export function resolveProductionRelease(
 
   if (semverPrerelease(version) !== null) {
     return err({
-      kind: 'invalid_application_version',
+      kind: RELEASE_ERROR_KINDS.invalid_application_version,
       message:
         `Cannot resolve release on production: APP_VERSION "${version}" is a ` +
         'pre-release identifier. Oak does not publish pre-releases to main.',
@@ -137,8 +140,8 @@ export function resolveProductionRelease(
 
   return ok({
     value: version,
-    source: 'application_version',
-    environment: 'production',
+    source: RELEASE_SOURCES.application_version,
+    environment: RELEASE_ENVIRONMENTS.production,
   });
 }
 
@@ -151,7 +154,7 @@ export function resolvePreviewRelease(input: ReleaseInput): Result<ResolvedRelea
 
   if (!branchUrl) {
     return err({
-      kind: 'missing_branch_url_in_preview',
+      kind: RELEASE_ERROR_KINDS.missing_branch_url_in_preview,
       message:
         'Cannot resolve preview release: VERCEL_BRANCH_URL is not set. ' +
         'Vercel preview builds always populate this; set it manually for ' +
@@ -167,8 +170,8 @@ export function resolvePreviewRelease(input: ReleaseInput): Result<ResolvedRelea
 
   return ok({
     value: label,
-    source: 'vercel_branch_url',
-    environment: 'preview',
+    source: RELEASE_SOURCES.vercel_branch_url,
+    environment: RELEASE_ENVIRONMENTS.preview,
   });
 }
 
@@ -189,8 +192,8 @@ export function resolveDevelopmentRelease(
     if (typeof label === 'string') {
       return ok({
         value: label,
-        source: 'vercel_branch_url',
-        environment: 'development',
+        source: RELEASE_SOURCES.vercel_branch_url,
+        environment: RELEASE_ENVIRONMENTS.development,
       });
     }
     // Fall through to SHA-based path: a malformed local VERCEL_BRANCH_URL
@@ -201,7 +204,7 @@ export function resolveDevelopmentRelease(
 
   if (!sha) {
     return err({
-      kind: 'missing_git_sha',
+      kind: RELEASE_ERROR_KINDS.missing_git_sha,
       message:
         'Cannot resolve development release: VERCEL_GIT_COMMIT_SHA is not ' +
         'set and no usable VERCEL_BRANCH_URL. Set VERCEL_GIT_COMMIT_SHA or ' +
@@ -211,7 +214,7 @@ export function resolveDevelopmentRelease(
 
   return ok({
     value: `dev-${sha.slice(0, SHORT_SHA_LENGTH)}`,
-    source: 'development_short_sha',
-    environment: 'development',
+    source: RELEASE_SOURCES.development_short_sha,
+    environment: RELEASE_ENVIRONMENTS.development,
   });
 }

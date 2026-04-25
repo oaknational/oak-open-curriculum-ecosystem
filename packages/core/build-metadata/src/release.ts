@@ -61,7 +61,12 @@ import {
   resolvePreviewRelease,
   resolveProductionRelease,
 } from './release-internals.js';
-import type { ReleaseError, ReleaseInput, ResolvedRelease } from './release-types.js';
+import {
+  RELEASE_ENVIRONMENTS,
+  type ReleaseError,
+  type ReleaseInput,
+  type ResolvedRelease,
+} from './release-types.js';
 
 export type {
   AppBuildIdentity,
@@ -95,11 +100,11 @@ export function resolveRelease(input: ReleaseInput): Result<ResolvedRelease, Rel
     return resolveBuildIdentityRelease(input.buildIdentity, environment);
   }
 
-  if (environment === 'production') {
+  if (environment === RELEASE_ENVIRONMENTS.production) {
     return resolveProductionRelease(input);
   }
 
-  if (environment === 'preview') {
+  if (environment === RELEASE_ENVIRONMENTS.preview) {
     return resolvePreviewRelease(input);
   }
 
