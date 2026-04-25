@@ -165,7 +165,24 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Jiggly Pebble consolidate-docs run, completing
+**Status (2026-04-25 Fresh Prince second handoff after promotion pass)**:
+**not due** — the post-WS1 continuation arc closed cleanly. The arc
+delivered: WS1 landing (`a5d33519`); owner-directed pause of WS3+
+(`d56c4d38`); consolidate-docs run with ADR/PDR gap evaluation
+(`2d99711f` + `b0c565b4`); pending-graduations promotion pass landing
+PDR-029 v2 + PDR-015 + PDR-018 amendments plus the prose-line-width
+validator extension (`f1f28e85`); claim closure (`d0c78648`). All
+deferred items carry explicit falsifiability per PDR-026; register's
+Pending entries are now proportionate (single-instance candidates
+with real triggers, plus a healthy hygiene pass). Multi-turn
+coordination with Keen Dahl (observability thread, claims `0f5f0968-…`
+and `2919423e-…` archived) exercised the protocol at production
+strength — first real use of `heartbeat_at`, three back-and-forth
+turns of structured-registry + embryo-log coordination, additive
+merges on shared state surfaces. The next session-handoff continues
+from a clean state.
+
+**Prior status (2026-04-25 Jiggly Pebble consolidate-docs run, completing
 Fresh Prince's pre-staging)**: **completed this handoff** — owner-
 directed `/jc-consolidate-docs` run plus ADR/PDR gap evaluation
 walked end-to-end. Fresh Prince pre-staged the Deep Consolidation

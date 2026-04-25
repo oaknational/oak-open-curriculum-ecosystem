@@ -132,4 +132,60 @@ Four lenses, four orthogonal finding sets. The investment in
 parallel-dispatching paid off — sequential dispatch would have been
 ~4× slower and produced the same set.
 
+## 2026-04-25 — Fresh Prince — register-promotion pass and the protocol's first multi-turn dance
+
+**Surprise: the protocol's first multi-turn coordination dance under
+real concurrent load.** Keen Dahl was working PR-87 Phase 0 on the
+observability thread while I was running the register-promotion pass
+on the agentic-engineering-enhancements thread. We both claimed
+`repo-continuity.md`, `active-claims.json`, `log.md`. **Three back-and-
+forth turns** via the structured registry plus embryo log: my
+overlap-ping → Keen Dahl narrowed their claim and added a heartbeat →
+both commits landed cleanly with additive merges. The `heartbeat_at`
+field saw its first real use in production coordination, not just
+self-application. The protocol passed under conditions it was
+designed for — concurrent agents, shared surfaces, no orchestrator —
+without anyone needing to retreat to mechanical refusal or owner
+escalation.
+
+**Surprise: instance-count-as-trigger is the wrong measure for
+owner-correction graduations.** The user explicitly named this:
+"multiple occurrences is not the right measure, we need to evaluate
+them and choose if and how to promote." Three of the four
+owner-correction items had no second instance, but on substance one
+was already-graduated (direct-answer in user-collaboration), one had
+clear small landing site (fitness-compression in consolidate-docs §
+9), and one generalised cleanly to a PDR-018 amendment (plan-placement).
+The trigger condition format itself ("second instance, or owner
+direction") creates an asymmetric gate where instance-count gates
+forever even when substance is ready and owner-direction gates
+trivially. Worth recording: **owner-direction-triggered candidates
+should be evaluated on substance at consolidation, not held
+indefinitely waiting for an unlikely second instance.**
+
+**Correction: I added a register entry for `tripwire-rules-need-
+observable-artefacts` as a NEW row instead of updating the existing
+1-instance entry to 3 instances + `due`.** The duplicate sat in the
+register through one commit before the metacognition step caught it.
+Lesson: **before adding a register entry, check for an existing
+entry on the same candidate and update-in-place rather than appending
+a sibling.** Captured in the metacognition observation that the
+register accumulates without cross-cutting review.
+
+**What worked: PDR-003 care-and-consult under self-direction.** Three
+Practice Core PDR amendments landed in one commit. PDR-003 says
+"owner approves each amendment before editing Core surfaces" — the
+owner pre-approved the substance ("yes to promoting everything that
+is ready") and I drafted-and-landed in the same turn. The drafts
+faithfully captured the substance the owner approved. The discipline
+worked because the substance had been precisely surfaced before
+approval, not handed over as "do whatever you think is best."
+
+**What worked: the consolidate-docs cross-experience scan caught a
+register-hygiene problem.** Without the metacognition pass before
+listing the register, I would have presented 17 entries entry-by-
+entry and missed the duplicate, the stale-graduated, and the two
+mergeable siblings. The cross-cutting view turns 17 decisions into
+~5 decisions plus housekeeping.
+
 <!-- New session entries appended below this line. -->
