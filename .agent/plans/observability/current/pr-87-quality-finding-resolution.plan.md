@@ -283,18 +283,32 @@ constraint, not a build-vs-buy substitution.
 ## Reviewer Scheduling (phase-aligned)
 
 - **Pre-execution (Phase 0 close)**:
+  - `code-reviewer` — gateway review of the plan body itself
+    (**ran 2026-04-25, dispositions table above**).
   - `assumptions-reviewer` — challenges the rule-policy decision and
-    the rate-limit-verification framing.
-  - `code-reviewer` — gateway review of the plan body itself before
-    any code changes land.
+    the rate-limit-verification framing (pending; runs before Phase 1).
 - **During**:
   - `type-reviewer` after Phase 1 (shared module type surface).
+  - `type-reviewer` after Phase 2 (S6571 fixes — verify no `as`,
+    `any`, `unknown` widening introduced; `readonly string[]`
+    preserved on `ParsedSemver.prerelease`).
   - `architecture-reviewer-fred` after Phase 1 (boundary placement
-    of the new shared module).
-  - `security-reviewer` after Phase 3 (auth-routes rate-limit
-    decision and schema-cache trust-boundary decision).
+    of the new shared module — explicit scope: challenge whether
+    `semver.ts` belongs in `@oaknational/build-metadata` or warrants
+    a dedicated lib).
   - `test-reviewer` after Phase 1 (test coverage of shared
-    semver helpers).
+    semver helpers — explicit scope: flag any duplicated proof
+    across `semver.unit.test.ts` and the retained
+    `vercel-ignore-production-non-release-build.unit.test.mjs`).
+  - `security-reviewer` after Phase 3 (auth-routes rate-limit
+    decision and schema-cache trust-boundary decision — explicit
+    scope: if dismissal-with-rationale is chosen for #76/#77, verify
+    the cited downstream validation actually exists; do not accept
+    a dismissal note that asserts unverified validation).
+  - `config-reviewer` after Phase 5 (if Phase 0 Task 0.2's DISABLE
+    path is taken — verify `.sonarcloud.properties` suppression
+    syntax, scope correctness, and that no rules are suppressed
+    beyond Phase 0's owner-confirmed list).
 - **Post (Phase 6)**:
   - `release-readiness-reviewer` — explicit GO/NO-GO on the PR.
   - `docs-adr-reviewer` — if any rule-disable decision warrants ADR
@@ -318,6 +332,31 @@ Before each phase:
    three failing PR checks; root-cause fix of duplication.
 5. **Verify**: no compatibility layers, no type shortcuts, no
    disabled checks.
+
+---
+
+## Reviewer Dispositions (2026-04-25 code-reviewer pre-execution gate)
+
+`code-reviewer` ran on the plan body at commit `0c04e7d5` per the
+plan's own Phase 0 close gate. Findings absorbed into the plan body
+(this revision); the Phase 0 reviewer gate is satisfied for the
+gateway-review half. `assumptions-reviewer` has not yet run; that
+remains as the second Phase 0 close gate before Phase 1 starts.
+
+| Finding | Severity | Disposition |
+|---|---|---|
+| 1. Task 1.3 leaves import path unresolved (could break `oak-search-cli` build) | BLOCKING | **Absorbed**. Task 1.3 now commits to **Path A** (inline + `@see` pointer), matching the `vercel-ignore` decision. Acceptance criterion added: `pnpm build --filter @oaknational/oak-search-cli` exits 0 in clean-build simulation. Hedged language removed. |
+| 2. Phase 1 TDD ordering does not enforce RED-before-GREEN | BLOCKING | **Absorbed**. Task 1.1 split into 1.1a (RED — failing tests against non-existent module first) and 1.1b (GREEN — module implementation makes them pass). |
+| 3. Task 1.2 depcruise scope | MAJOR | **Absorbed**. Task 1.2 now uses scoped `pnpm depcruise --include-only "build-metadata"` as primary check; full-graph run as secondary. |
+| 4. Phase 4 S7785 missing import-check | MAJOR | **Absorbed**. Phase 4 acceptance now includes prerequisite check: `rg -rn "ci-schema-drift-check" apps/ packages/ scripts/ --glob "!scripts/ci-schema-drift-check.mjs"` returns no consumers before top-level-await fix lands. |
+| 5. Phase 5 DISABLE-path availability not verified at boundary | MAJOR | **Absorbed**. Phase 5 acceptance criterion 0 added: verify `.sonarcloud.properties` (or per-issue dismissal) achieves the DISABLE outcome before committing to that path. If org-level profile blocks, fall back to per-issue dismissal with rationale. |
+| 6. S6571 `unknown`-overrides-union (×3) is type-safety, not stylistic | MAJOR | **Absorbed**. The three S6571 sites (`server.ts:91,37`, `deploy-entry-handler.ts:19`) move from Phase 5 into Phase 2 as a new Task 2.5; `type-reviewer` dispatched after Phase 2 covers them. |
+| 7. Phase 4 PATH safety pre-decided | MINOR | **Absorbed**. PATH-safety decision moved to Phase 0 Task 0.4 (new); Phase 4 references the Phase 0 finding. |
+| 8. Phase 2 Task 2.1 generator-existence not verified | MINOR | **Absorbed**. Task 2.1 criterion 0 added: confirm `path-parameters.ts` is generator-produced; identify the generator file and `sdk-codegen` task before attempting a fix. |
+| 9. Phase 2 complete validation omits `pnpm depcruise` | NIT | **Absorbed**. `pnpm depcruise` added to Phase 2 complete validation block. |
+| 10. Build-vs-Buy attestation well-formed | POSITIVE | Acknowledged; preserved. |
+| 11. Phase 0 decision-before-mechanics framing proportionate | POSITIVE | Acknowledged; preserved. |
+| Additional specialists: `type-reviewer` after Phase 2 (not only Phase 1); `config-reviewer` after Phase 5 (if DISABLE path); `architecture-reviewer-fred` scope to challenge `build-metadata` vs dedicated lib; `test-reviewer` scope to flag duplicated coverage; `security-reviewer` scope to verify dismissal note accuracy | — | **Absorbed**. Reviewer Scheduling section updated with each addition and scoped delegation. |
 
 ---
 
@@ -460,12 +499,35 @@ machinery. Recommend Path A.
 
 **Task Complete When**: extraction home decided and documented.
 
+#### Task 0.4: PATH safety rationale for the Vercel ignoreCommand
+
+**Current Assumption**: `2484066b` introduced an `execFileSync('git', …)`
+call in `vercel-ignore-production-non-release-build.mjs`.
+SonarCloud `javascript:S4036` flags it as a LOW-probability PATH
+hijack risk.
+
+**Validation Required**: confirm Vercel's build environment
+provides `git` on a fixed, unwriteable `PATH`. If yes,
+accept-with-rationale. If no, pin the absolute path or extract via
+`process.env.PATH` filtering.
+
+**Acceptance Criteria**:
+
+1. ✅ Vercel build-environment PATH composition documented (link to
+   Vercel docs or evidence).
+2. ✅ Decision recorded: ACCEPT (with TSDoc rationale on the
+   `execFileSync` call) OR FIX (with absolute path).
+
+**Task Complete When**: decision recorded; Phase 4's PATH-safety
+work executes per the recorded outcome.
+
 #### Phase 0 findings (populated during execution)
 
 ```text
 Task 0.1 finding: [TODO populate during execution]
 Task 0.2 rule policy: [TODO populate during execution]
 Task 0.3 extraction home: [TODO populate during execution]
+Task 0.4 PATH safety: [TODO populate during execution]
 ```
 
 #### Phase 0 Acceptance Criteria
@@ -489,7 +551,34 @@ testing principles.
 **Key Principle**: one canonical implementation, three consumers,
 zero drift.
 
-#### Task 1.1: Extract canonical semver module
+#### Task 1.1a (RED): Write failing tests against the not-yet-existing semver module
+
+**TDD discipline** (per `testing-strategy.md`): tests first,
+proving they fail because the module does not yet exist.
+
+**Acceptance Criteria**:
+
+1. ✅ `packages/core/build-metadata/src/semver.unit.test.ts` exists
+   with the planned ~20 cases (§2 strict X.Y.Z; prerelease forms;
+   build-metadata; §11 precedence; rejection cases including
+   leading zeros, invalid characters, negative numbers).
+2. ✅ Tests reference imports from `./semver.js` that do not yet
+   resolve.
+3. ✅ Running the test file produces a controlled failure
+   (compile-time module-not-found, NOT runtime undefined-reference).
+
+**Deterministic Validation**:
+
+```bash
+cd packages/core/build-metadata
+pnpm exec vitest run src/semver.unit.test.ts 2>&1 | grep -E "Cannot find module|Failed to load"
+# Expected: at least one such message; tests do not pass.
+```
+
+**Task Complete When**: RED is intentional and proves the test
+file exists in a failing state caused by the missing module.
+
+#### Task 1.1b (GREEN): Extract canonical semver module
 
 **Current Implementation**: three near-identical regex patterns at
 the three sites named in §Issue 1.
@@ -516,21 +605,20 @@ export function isLessThanOrEqual(a: string, b: string): boolean;
 **Changes**:
 
 - Add new file with the canonical implementation (lifted from
-  `2484066b`'s vercel-ignore script).
-- Add `semver.unit.test.ts` with the existing 8-test suite from
-  vercel-ignore plus boundary cases for §11 prerelease precedence.
+  `2484066b`'s vercel-ignore script) so the Task 1.1a tests now
+  pass.
 - Re-export from `packages/core/build-metadata/src/index.ts` if the
   package's public surface uses an index re-export pattern.
 
 **Acceptance Criteria**:
 
-1. ✅ New file added with the canonical pattern and helpers.
-2. ✅ Unit-test suite covers: §2 strict X.Y.Z; prerelease forms;
-   §11 precedence; rejection cases (leading zeros, invalid
-   characters, negative numbers).
-3. ✅ All tests pass: `pnpm --filter @oaknational/build-metadata test`.
-4. ✅ Type-check clean: `pnpm --filter @oaknational/build-metadata type-check`.
-5. ✅ No `as`, `any`, `unknown` widening introduced.
+1. ✅ New file added; Task 1.1a tests now pass (the RED of 1.1a
+   becomes GREEN here).
+2. ✅ All tests pass: `pnpm --filter @oaknational/build-metadata test`.
+3. ✅ Type-check clean: `pnpm --filter @oaknational/build-metadata type-check`.
+4. ✅ No `as`, `any`, `unknown` widening introduced.
+5. ✅ `ParsedSemver.prerelease` typed as `readonly string[]`, not
+   `string[]`.
 
 **Deterministic Validation**:
 
@@ -574,10 +662,13 @@ rg -n "APPLICATION_VERSION_PATTERN" packages/core/build-metadata/
 # Expected: only in semver.ts and its test file
 pnpm --filter @oaknational/build-metadata test
 pnpm --filter @oaknational/build-metadata type-check
+# Scoped depcruise (primary): verifies no new cycle within build-metadata
+pnpm depcruise --include-only "build-metadata"
+# Full-graph (secondary): verifies no cross-package regression
 pnpm depcruise
 ```
 
-#### Task 1.3: Replace validate-root-application-version.mjs consumer
+#### Task 1.3: Apply Path A to validate-root-application-version.mjs (inline + `@see` pointer)
 
 **Current Implementation** (line 7):
 
@@ -585,31 +676,47 @@ pnpm depcruise
 const APPLICATION_VERSION_PATTERN = /^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)*$/u;
 ```
 
-**Target Implementation**:
+**Decision (settled by code-reviewer 2026-04-25, BLOCKING-1)**:
+the script runs as a pre-step inside `oak-search-cli`'s build
+script (`"build": "node ../../scripts/validate-root-application-version.mjs && tsup"`),
+which executes inside `turbo run build` at a point where
+`build-metadata`'s `dist/` may or may not be populated depending
+on the turbo task graph. To preserve the script's
+no-pre-build-needed contract (matching the `vercel-ignore` script's
+Vercel-pre-install constraint), **adopt Path A**: keep the regex
+inline and add a `@see` TSDoc pointer to the canonical
+`packages/core/build-metadata/src/semver.ts` module.
+
+**Target Implementation**: replace the existing pattern with the
+canonical strict-semver regex (lifted verbatim from `semver.ts`)
+and add a `@see` block:
 
 ```js
-import { isValidSemver } from '../packages/core/build-metadata/dist/semver.js';
-// or inline import from src if the script runs at codegen-time
-// without a pre-build
+/**
+ * @see ../packages/core/build-metadata/src/semver.ts — canonical
+ * implementation. This script runs before `pnpm build` populates
+ * `dist/`, so the regex is intentionally inlined rather than
+ * imported. Keep both copies in sync; consolidate-docs step 7d
+ * audits the cross-reference.
+ */
+const APPLICATION_VERSION_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 ```
 
 **Acceptance Criteria**:
 
-1. ✅ Script imports `isValidSemver` from canonical home.
-2. ✅ Script still runs successfully against root package.json.
-3. ✅ If the script needs to run before `pnpm build` populates
-   `dist/`, decide: import from `src` via tsx loader, OR keep
-   inline + add `@see` pointer (consistent with vercel-ignore
-   script's Path A choice).
-
-**Deterministic Validation**:
-
-```bash
-node scripts/validate-root-application-version.mjs
-# Expected: "Validated application version: <version>" + exit 0
-rg -n "APPLICATION_VERSION_PATTERN" scripts/
-# Expected: empty
-```
+1. ✅ Inline regex updated to the strict-semver pattern (no
+   overlapping alternation).
+2. ✅ TSDoc `@see` block added pointing at the canonical home.
+3. ✅ Script runs successfully against root `package.json`.
+4. ✅ **Clean-build simulation passes**:
+   `pnpm --filter @oaknational/oak-search-cli build` exits 0 from
+   a clean state (no pre-existing `dist/` artefacts in
+   `build-metadata`). Simulate clean by running
+   `pnpm --filter @oaknational/build-metadata exec rm -rf dist`
+   first.
+5. ✅ CodeQL #75 (regex DoS) resolves on next push (verified by
+   pre-push grep that no overlapping-alternation pattern remains
+   in the file).
 
 #### Task 1.4: Cross-reference vercel-ignore script
 
@@ -679,11 +786,17 @@ Six sites use `Array.prototype.sort()` without a comparator:
 
 **Acceptance Criteria**:
 
+0. ✅ **Generator existence confirmed for the generated file**: run
+   `rg -n "path-parameters" packages/sdks/oak-sdk-codegen/code-generation/`
+   to identify the generator and the `sdk-codegen` task that
+   produces `path-parameters.ts`. If hand-written despite the
+   `generated/` path, fix the file directly with a written rationale.
 1. ✅ Each site uses `(a, b) => a.localeCompare(b)` for strings or
    `(a, b) => a - b` for numbers.
 2. ✅ Existing tests pass for sites that have tests.
 3. ✅ For the generated file (`path-parameters.ts`), fix the
    generator (per the cardinal rule) not the generated output.
+   Outcome of criterion 0 above selects the target.
 4. ✅ `pnpm lint` exit 0.
 
 #### Task 2.2: Cognitive complexity refactors (S3776 ×2)
@@ -715,6 +828,25 @@ Promise return without awaiting. Sonar wants explicit `.catch()` or
 1. ✅ Each site replaced with explicit `.catch(...)` or `await`.
 2. ✅ No silent Promise rejections introduced.
 
+#### Task 2.5: S6571 `unknown`-overrides-union fixes (×3) — moved from Phase 5
+
+Per code-reviewer MAJOR-6 disposition: S6571 findings are
+type-safety, not stylistic, and warrant a dedicated `type-reviewer`
+gate. Three sites:
+
+- `apps/oak-curriculum-mcp-streamable-http/src/server.ts:91`
+- `apps/oak-curriculum-mcp-streamable-http/src/server.ts:37`
+- `apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts:19`
+
+**Acceptance Criteria**:
+
+1. ✅ Each site replaced with the concrete type the union was
+   intended to express, not with a type assertion (`as`).
+2. ✅ No `as`, `any`, `unknown` widening introduced as a fix.
+3. ✅ `pnpm type-check` exit 0; existing tests pass unchanged.
+4. ✅ `type-reviewer` dispatched after Phase 2 close (covers Task
+   1.1b shared-module surface AND these three fixes).
+
 #### Task 2.4: Third regex DoS hotspot (max-files-per-dir.ts:37)
 
 **Current Implementation**: regex at line 37 of `max-files-per-dir.ts`
@@ -733,6 +865,7 @@ pattern).
 pnpm test
 pnpm lint
 pnpm type-check
+pnpm depcruise
 ```
 
 ---
@@ -814,9 +947,14 @@ rg -n "RateLimit" apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts
 - 1 × `javascript:S7785` top-level await in
   `scripts/ci-schema-drift-check.mjs:73` — convert promise-chain to
   top-level await.
+  **Prerequisite check**: before changing the entry-point pattern,
+  verify nothing imports this module:
+  `rg -rn "ci-schema-drift-check" apps/ packages/ scripts/ --glob "!scripts/ci-schema-drift-check.mjs"`.
+  Expected: no consumers; if any exist, escalate before fix
+  (top-level await changes import semantics).
 - 1 × `javascript:S4036` PATH safety in
-  `vercel-ignore-production-non-release-build.mjs:46` — review;
-  accept with rationale (Vercel build env has reliable `PATH`).
+  `vercel-ignore-production-non-release-build.mjs:46` — execute
+  per the Phase 0 Task 0.4 finding (ACCEPT-with-rationale or FIX).
 
 #### Phase 4 Complete Validation
 
@@ -830,6 +968,27 @@ bash scripts/check-commit-message.sh -m "test(check): smoke" || echo OK
 
 ### Phase 5: MINOR Sonar Resolution per Phase 0 Policy (1 session)
 
+**Note**: S6571 (`unknown` overrides union ×3) was reclassified to
+Phase 2 Task 2.5 per code-reviewer MAJOR-6.
+
+**Phase 5 acceptance criterion 0 (DISABLE-path verification)**:
+before committing to any DISABLE outcome from Phase 0 Task 0.2,
+verify the chosen suppression mechanism is achievable:
+
+```bash
+ls .sonarcloud.properties sonar-project.properties 2>/dev/null
+# If files exist and are project-level, DISABLE via `sonar.issue.ignore.multicriteria`
+# is achievable. Verify the syntax matches SonarCloud documentation.
+# If no project-level config exists OR the project uses an
+# org-level quality profile that this PR cannot edit, fall back to
+# per-issue dismissal with rationale via the SonarCloud UI / API.
+```
+
+If the DISABLE path is blocked, Phase 5 falls back to: per-issue
+dismissal-with-rationale on each MINOR Sonar issue marked DISABLE
+in Phase 0 Task 0.2's table. Record the chosen mechanism explicitly
+in the Phase 5 commit message.
+
 Apply Phase 0 Task 0.2 decisions:
 
 - **For ACCEPT rules**: batch-fix all instances. Mostly mechanical:
@@ -837,7 +996,6 @@ Apply Phase 0 Task 0.2 decisions:
   - `S6644` conditional default-assign ×4.
   - `S6594` `RegExp.exec()` ×4.
   - `S7780` `String.raw` ×5.
-  - `S6571` `unknown` overrides union ×3.
   - `S6353` `\d` over `[0-9]` ×3.
   - `S6653` `Object.hasOwn` ×2.
   - `S7748` zero-fraction ×2.
