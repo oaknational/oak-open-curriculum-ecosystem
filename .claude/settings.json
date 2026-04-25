@@ -3,9 +3,7 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:www.elastic.co)",
-      "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:playwright.dev)",
-      "WebFetch(domain:modelcontextprotocol.github.io)",
       "WebFetch(domain:zod.dev)",
       "Bash(git status:*)",
       "Bash(git mv:*)",
@@ -47,7 +45,6 @@
       "Bash(npm view:*)",
       "Bash(git clone:*)",
       "WebFetch(domain:docs.sentry.io)",
-      "WebFetch(domain:github.com)",
       "WebFetch(domain:support.claude.com)",
       "WebFetch(domain:developers.openai.com)",
       "WebFetch(domain:sentry.io)",
@@ -153,11 +150,11 @@
   },
   "enabledPlugins": {
     "mcp-apps@mcp-apps": true,
-    "linear@claude-plugins-official": true,
     "sentry@claude-plugins-official": true,
     "remember@claude-plugins-official": true,
     "mcp-server-dev@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
-    "github@claude-plugins-official": true
+    "linear@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true
   }
 }

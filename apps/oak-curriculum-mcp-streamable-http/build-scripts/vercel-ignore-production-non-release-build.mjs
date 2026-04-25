@@ -5,7 +5,105 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { lte, valid } from 'semver';
+// Vercel runs this script as the ignoreCommand BEFORE pnpm install, so it
+// must depend on Node built-ins only. Inline semver parsing covers the §10
+// truth-table semantics: a strict X.Y.Z (with optional prerelease + build
+// metadata per semver §2) and a `lte` comparison that follows semver §11
+// precedence rules. Build-metadata is ignored in precedence per the spec.
+const SEMVER_PATTERN =
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+function parseSemver(version) {
+  const match = SEMVER_PATTERN.exec(version);
+  if (!match) {
+    return null;
+  }
+  const [, major, minor, patch, prerelease] = match;
+  return {
+    major: Number(major),
+    minor: Number(minor),
+    patch: Number(patch),
+    prerelease: prerelease ? prerelease.split('.') : [],
+  };
+}
+
+function isValidSemver(version) {
+  return parseSemver(version) !== null;
+}
+
+function comparePrereleaseIdentifiers(a, b) {
+  const aIsNumeric = /^\d+$/.test(a);
+  const bIsNumeric = /^\d+$/.test(b);
+  if (aIsNumeric && bIsNumeric) {
+    const aNumber = Number(a);
+    const bNumber = Number(b);
+    if (aNumber < bNumber) {
+      return -1;
+    }
+    if (aNumber > bNumber) {
+      return 1;
+    }
+    return 0;
+  }
+  if (aIsNumeric) {
+    return -1;
+  }
+  if (bIsNumeric) {
+    return 1;
+  }
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+}
+
+function comparePrereleaseArrays(a, b) {
+  const length = Math.min(a.length, b.length);
+  for (let index = 0; index < length; index += 1) {
+    const result = comparePrereleaseIdentifiers(a[index], b[index]);
+    if (result !== 0) {
+      return result;
+    }
+  }
+  if (a.length < b.length) {
+    return -1;
+  }
+  if (a.length > b.length) {
+    return 1;
+  }
+  return 0;
+}
+
+function isLessThanOrEqual(currentVersion, previousVersion) {
+  const current = parseSemver(currentVersion);
+  const previous = parseSemver(previousVersion);
+  if (!current || !previous) {
+    return false;
+  }
+  for (const key of ['major', 'minor', 'patch']) {
+    if (current[key] < previous[key]) {
+      return true;
+    }
+    if (current[key] > previous[key]) {
+      return false;
+    }
+  }
+  // Major/minor/patch are equal — apply semver §11 prerelease precedence:
+  // a version with prerelease has lower precedence than one without.
+  if (current.prerelease.length === 0 && previous.prerelease.length === 0) {
+    return true;
+  }
+  if (current.prerelease.length > 0 && previous.prerelease.length === 0) {
+    return true;
+  }
+  if (current.prerelease.length === 0 && previous.prerelease.length > 0) {
+    return false;
+  }
+  return comparePrereleaseArrays(current.prerelease, previous.prerelease) <= 0;
+}
 
 function trimToUndefined(value) {
   const trimmed = value?.trim();
@@ -16,7 +114,7 @@ function safeReadCurrentVersion(readFile, packageJsonPath) {
   try {
     const parsed = JSON.parse(readFile(packageJsonPath, 'utf8'));
     const version = trimToUndefined(parsed.version);
-    return version && valid(version) ? version : undefined;
+    return version && isValidSemver(version) ? version : undefined;
   } catch {
     return undefined;
   }
@@ -36,7 +134,7 @@ function safeReadPreviousVersion(executeGitCommand, repositoryRoot, previousSha)
     }
     const parsed = JSON.parse(text);
     const previousVersion = trimToUndefined(parsed.version);
-    return previousVersion && valid(previousVersion) ? previousVersion : undefined;
+    return previousVersion && isValidSemver(previousVersion) ? previousVersion : undefined;
   } catch {
     return undefined;
   }
@@ -62,13 +160,18 @@ function runGitCommand(args, cwd) {
  * - `main`, current unresolvable → CANCEL with stderr diagnostic.
  * - `main`, previous unresolvable / unset → continue (no previous to
  *   beat; first build).
- * - `main`, current ≤ previous (semver.lte) → CANCEL.
+ * - `main`, current ≤ previous (semver-precedence) → CANCEL.
  * - `main`, current \> previous → continue.
  *
  * Asymmetry rationale: current unresolvable is a deterministic repo
  * defect under Oak's single-root-package.json topology; previous
  * unresolvable is dominated by transient causes. The first amendment's
  * single fail-open clause is superseded by this asymmetry.
+ *
+ * Dependency posture: this script runs as Vercel's `ignoreCommand`,
+ * which executes BEFORE `pnpm install`. It MUST therefore depend only
+ * on Node built-ins. Semver validation and precedence comparison are
+ * inlined above per semver.org §2 / §11.
  */
 export function runVercelIgnoreCommand(options) {
   const stdout = options.stdout ?? process.stdout;
@@ -100,7 +203,7 @@ export function runVercelIgnoreCommand(options) {
   const previousSha = trimToUndefined(env.VERCEL_GIT_PREVIOUS_SHA);
   const previousVersion = safeReadPreviousVersion(executeGitCommand, repositoryRoot, previousSha);
 
-  if (previousVersion && lte(currentVersion, previousVersion)) {
+  if (previousVersion && isLessThanOrEqual(currentVersion, previousVersion)) {
     stdout.write(
       `Cancelling production build: root package.json version ${currentVersion} did not advance beyond previous deployed version ${previousVersion} (${previousSha}).\n`,
     );

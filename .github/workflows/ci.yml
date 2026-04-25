@@ -62,12 +62,6 @@ jobs:
       - name: Validate portability
         run: pnpm portability:check
 
-      - name: Run knip (unused code detection)
-        run: pnpm knip
-
-      - name: Run depcruise (circular deps, orphans, layer violations)
-        run: pnpm depcruise
-
       - name: Run root-level script tests
         run: pnpm test:root-scripts
 
@@ -83,6 +77,13 @@ jobs:
         run: >-
           pnpm exec turbo run sdk-codegen build type-check lint test test:e2e
           test:ui smoke:dev:stub --summarize --log-order=grouped --continue
+
+      # Run after build (knip + depcruise both resolve through built dist/ outputs)
+      - name: Run knip (unused code detection)
+        run: pnpm knip
+
+      - name: Run depcruise (circular deps, orphans, layer violations)
+        run: pnpm depcruise
 
       - name: Report Turbo summary
         if: always()
