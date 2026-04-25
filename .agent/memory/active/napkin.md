@@ -19,6 +19,156 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-25 (Jiggly Pebble / claude-code / claude-opus-4-7-1m) — multi-agent collaboration protocol WS0 landed as `63c66c88`, protocol's first overlap test passed via embryo log
+
+**Session shape**: cold-start of WS0 from the prior Jazzy session's
+plan. Owner directed cold start to avoid context-pollution from the
+design discussion. 11-phase execution (pre-flight → rename → new
+canonical content → rules → platform mirrors → cross-reference sweep
+→ bidirectional citation → embryo log first entry → reviewer dispatch
+→ pre-commit gates → atomic commit). Landed in one atomic commit;
+all gates green on first attempt. Source plan is the design authority,
+WS0 todo marked completed.
+
+### Surprise (operational — protocol's first overlap test happened during its own landing)
+
+- **Expected**: parallel-agent overlap would emerge during a future
+  WS1+ session as observation evidence for the advisory model.
+- **Actual**: a parallel Codex/codex/GPT-5 agent on the
+  observability-sentry-otel thread held substantial in-flight edits
+  to `observability-sentry-otel.next-session.md` — exactly the file I
+  needed to sweep for `collaboration.md` references. The overlap
+  surfaced inside the WS0 landing session itself.
+- **Why expectation failed**: I assumed the protocol's first real
+  test would come *after* WS0 landed (the seed harvest framing in
+  WS5). Instead the protocol's very installation surfaced an overlap
+  that needed the protocol's own central design commitment — knowledge
+  and communication, not mechanical refusal — to resolve.
+- **Behaviour applied**: backed out my two sweep edits on the one
+  contested file, surfaced the gap in the embryo log entry, named
+  the parallel agent's identity, and committed without their WIP. The
+  parallel agent integrates the rename on their next commit. No
+  mechanical refusal; coordination via shared knowledge.
+- **What this teaches**: a protocol that installs by addressing its
+  own design problem at install-time has unusually strong evidence
+  of fitness — the first data point came for free. The WS5 seed
+  harvest will look back on this entry as the founding instance.
+- **Source plane**: `active` (operational pattern; consider as
+  evidence at WS5 seed harvest).
+
+### Surprise (review — `docs-adr-reviewer` caught ADR-path drift the source plan itself had)
+
+- **Expected**: the source plan's Foundation Alignment section named
+  ADR-150 (capture-distil-graduate-enforce) and ADR-125 (three-layer
+  agent artefact model) — the directive draft followed the same
+  shorthand.
+- **Actual**: BLOCKING-1 from the reviewer found *two broken ADR
+  paths*. The actual filenames are `150-continuity-surfaces-...` and
+  `125-agent-artefact-portability.md`, not what the gloss suggested.
+  Worse: ADR-150's body does not contain the "files first /
+  capture-distil-graduate-enforce" doctrine — that lives in PDR-011.
+  The source plan body had imprecise references; the directive
+  inherited them.
+- **Why expectation failed**: I treated the source plan's references
+  as authoritative because the plan was Wilma-reviewed. But Wilma's
+  review was structural (boundaries, threat model), not
+  reference-validation. The docs-adr-reviewer phase caught what
+  Wilma's phase didn't.
+- **Behaviour change**: when citing ADRs/PDRs by number, verify the
+  filename and the actual doctrine substance against the live ADR/PDR
+  body — do NOT inherit a plan body's gloss without verification.
+  This is a mini-pattern that may already be implicit in the live-docs
+  doctrine but worth surfacing.
+- **Source plane**: `active`.
+
+### Surprise (tooling — fitness validator counts link reference definitions as prose)
+
+- **Expected**: long markdown link-reference definitions
+  (`[name]: <long-path>`) at the bottom of a directive would not
+  count against `fitness_line_length` because they are syntactic
+  markdown infrastructure, not prose.
+- **Actual**: the validator at
+  `scripts/validate-practice-fitness.mjs` `classifyLines()` returns
+  `kind: 'prose'` for any line not in frontmatter, code-block, or
+  table. Reference definitions ARE prose to the validator. Three
+  flagged lines (132, 125, 114 chars) needed restructuring before
+  the gate would clear.
+- **Behaviour change**: when long-path ADR/PDR cites are unavoidable
+  (ADR-150's filename is 70+ chars), prefer prose-only mention
+  (cite by number with descriptive context) over markdown links;
+  use short reference keys (`[p]:` instead of `[protocol-plan]:`)
+  when link-style is essential.
+- **Source plane**: `active`.
+
+### Observation (the protocol's "consult and decide" tripwire needed an observable artefact)
+
+- The assumptions-reviewer flagged that `respect-active-agent-claims`
+  was unobservable post-hoc at WS0: agents could "consult and
+  decide" silently, leaving no artefact of compliance. Added one-line
+  wording: *"Document your decision in the embryo log. The decision
+  is the artefact that proves consultation."* — converts the
+  tripwire from inner-state to evidence-bearing.
+- **Generalisable principle**: tripwire rules whose firing condition
+  is "decided X" need an artefact-leaving step or they are unobservable.
+  Compare the build-breakage rule which IS observable post-hoc (the
+  build is or is not green).
+- **Pattern candidate**: *tripwire-rules-need-observable-artefacts*.
+  Promote on a second instance.
+- **Source plane**: `active`.
+
+### Surprise (operational — WS0 seed fired same-day, before the session closed)
+
+- **Expected**: WS0's operational seed — *"can a sequential agent at
+  session-open discover what other agents have recently been working
+  on, by reading the embryo log under the new rule?"* — was framed
+  for validation across the next 3 sessions. I expected the first
+  data point to come *next* session at earliest.
+- **Actual**: the parallel observability-thread agent (Codex / codex
+  / GPT-5) appended their own signed entry to
+  `.agent/state/collaboration/log.md` *during* my session-handoff,
+  before WS0's own commit cycle had closed. Their entry declared
+  their packaging boundary explicitly: *"I will stage by explicit
+  pathspec ... I will not stage `.codex/config.toml`, agentic-
+  collaboration plan / thread changes, the Jiggly Pebble experience
+  file, or unrelated napkin hunks unless the owner redirects."* They
+  read mine, named me by identity ("the Jiggly Pebble experience
+  file"), and signed their own.
+- **What this means**: the protocol is functioning *bidirectionally*
+  on day one. The parallel agent did not just become aware of my
+  work via repo-continuity — they used the embryo log surface to
+  declare their own boundary in response to mine. This is exactly
+  the *information surface* loop Design Principle 1 names:
+  knowledge-and-communication operating as designed.
+- **Subsequent confirmation**: their commit `d9cb54e8` landed
+  preserving my plan / thread / experience / napkin edits exactly
+  as their embryo entry promised. The discipline traveled from the
+  embryo log into the actual commit.
+- **WS0 seed status**: **validated, single instance**. The seed's
+  3-session validation window remains open for additional evidence,
+  but one strong instance landed inside the WS0 commit cycle itself.
+- **Source plane**: `active` (operational evidence; WS5 seed harvest
+  input).
+
+### Observation (parallel agent introduced a new rule mid-session)
+
+- The parallel agent created
+  `.agent/rules/markdown-code-blocks-must-have-language.md` (and three
+  platform mirrors) during my session, registered it via root
+  CLAUDE/AGENTS/GEMINI.md (later reverted to canonical pointer
+  shape), and added MD040 explicitly to `.markdownlint.json`.
+- I followed the new rule without it being in my plan — all my
+  fenced code blocks already had language tags except one (the
+  decision tree in `agent-collaboration-channels.md`, which the
+  linter auto-fixed to ` ```text` between my edits).
+- This is an example of **the system improving while I'm using it**.
+  The rule the parallel agent installed strengthened the next
+  reviewer's gate against my work; my work strengthened the next
+  agent's coordination surfaces. Both directions of improvement
+  happened in the same 24-hour window.
+- **Source plane**: `active`.
+
+---
+
 ## 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6, late-session) — multi-agent collaboration protocol plan: discussion-driven framing, Wilma adversarial review absorbed, owner-corrected from enforcement to advisory
 
 **Session shape**: continuation of the 2026-04-25 Jazzy session that
@@ -1220,3 +1370,36 @@ owner-direction call, not a session-handoff call.
   release remains a projection. Deferring the public runtime config shape keeps
   this commit slice focused on boundary correctness rather than broad API
   churn.
+
+## 2026-04-25 (Codex / codex / GPT-5) — reviewer reintegration closeout and MD040 sidecar
+
+### What Was Done
+
+- Folded owner-authorized reviewer findings into the startup-boundary lane:
+  build-time Sentry env projection now uses canonical app-version resolution,
+  runtime env includes `VERCEL_GIT_COMMIT_REF`, local no-auth paths strip
+  inherited Vercel/Sentry deploy labels, widget Playwright scripts clear
+  `NO_COLOR`, and the Search CLI ingest-harness unit test is no longer
+  excluded.
+- Added a platform-agnostic markdown-code-block rule:
+  `.agent/rules/markdown-code-blocks-must-have-language.md`, thin Claude/Codex/
+  Cursor adapters, explicit `.markdownlint.json` MD040, and a `text` info string
+  on the existing decision-tree fence that had been blocking root markdownlint.
+
+### Correction (entrypoint hooks vs. platform-agnostic rule routing)
+
+- **Expected**: adding a direct one-line rule hook to root `CLAUDE.md`,
+  `AGENTS.md`, and `GEMINI.md` would be the right "project instructions" hook.
+- **Actual**: `session-handoff` step 6d makes root entrypoints canonical
+  heading-plus-AGENT-pointer surfaces. The better platform-agnostic shape is:
+  canonical rule in `.agent/rules/`, thin platform adapters, explicit gate
+  enforcement, and the existing `AGENT.md` rule-loading contract.
+- **Behaviour change**: when adding future rules, do not put bespoke rule hooks
+  in root platform entrypoints. Keep the root entrypoints clean, add canonical
+  `.agent/rules/` content first, then adapter layers and gate enforcement.
+
+### Validation
+
+- `pnpm portability:check`, targeted markdownlint on touched files, Prettier
+  check on touched files, and `git diff --check` passed.
+- Root `pnpm markdownlint-check:root` passes after the MD040 offender is fixed.

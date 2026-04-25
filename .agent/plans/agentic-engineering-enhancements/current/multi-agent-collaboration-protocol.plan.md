@@ -9,7 +9,9 @@ overview: >
 todos:
   - id: ws0-directive-anchor
     content: WS0 — Rename collaboration → user-collaboration; create agent-collaboration directive; install the two foundational behavioural rules; sweep cross-references; install follow-agent-collaboration-practice rule.
-    status: pending
+    status: completed
+    landed_at: 63c66c88
+    landed_on: 2026-04-25
   - id: ws1-state-claims
     content: WS1 — Create .agent/state/ directory + collaboration claims registry with versioned JSON schema; add register-active-areas-at-session-open rule; document TTL/heartbeat/salvage lifecycle.
     status: pending

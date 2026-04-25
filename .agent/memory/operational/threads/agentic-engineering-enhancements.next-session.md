@@ -1,6 +1,50 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
+**Last refreshed**: 2026-04-25 (Jiggly Pebble / claude-code /
+claude-opus-4-7-1m — **WS0 of the multi-agent collaboration protocol
+landed as a single atomic commit `63c66c88`** on
+`feat/otel_sentry_enhancements`. **WS0 seed fired same-day**: parallel
+observability-thread agent (Codex / codex / GPT-5) appended their own
+signed entry to the embryo log `.agent/state/collaboration/log.md`
+during my session-handoff, declaring their packaging boundary. Their
+commit `d9cb54e8` then landed preserving every Jiggly Pebble plan /
+thread / experience / napkin edit exactly as their embryo entry
+promised. The protocol is functioning bidirectionally on day one. 34 files, 760 insertions, 22 deletions.
+Directive rename (`collaboration.md` → `user-collaboration.md`), new
+sibling `agent-collaboration.md` directive, four canonical rules with
+12 platform-adapter mirrors, `.agent/state/` bootstrap with embryo
+discovery log + first signed entry, executive memory channel-card,
+13-surface cross-reference sweep (1 deferred — see Coordination event
+below), bidirectional citation between
+`dont-break-build-without-fix-plan.md` and
+`gate-recovery-cadence.plan.md`, `consolidate-docs.md` step 7d for
+citation audit. Pre-landing reviewer dispatch
+(`docs-adr-reviewer` + `assumptions-reviewer`) absorbed two BLOCKING
+(broken ADR paths; markdownlint MD053) and three proportionate MAJORs
+(consult-decide observability via "log your decision"; fast-path
+overhead reconciliation to "minimum overhead — one read, one write";
+concrete-now 24-hour bridge for "recent"). Deferred MAJORs (citation
+archival drift) and MINORs recorded for follow-up. All pre-commit
+gates green on first attempt. **Coordination event**: parallel
+Codex/GPT-5 agent on observability thread held in-flight edits to
+`observability-sentry-otel.next-session.md`; my two sweep edits on
+that file backed out and surfaced in the embryo log for parallel
+agent integration. The protocol's first real coordination test —
+applied to itself — passed via the embryo log, not via mechanical
+refusal. **Next**: WS1 (promote embryo to structured claims registry
+with `active-claims.json` + `register-active-areas-at-session-open`
+rule) is unblocked.)
+
+**Prior refresh**: 2026-04-25 (Codex / codex / GPT-5 — sidecar
+markdown-code-block rule added during observability handoff. Canonical rule
+landed at `.agent/rules/markdown-code-blocks-must-have-language.md` with
+Claude/Codex/Cursor adapters; MD040 is explicit in `.markdownlint.json`;
+root entrypoints were kept in canonical heading + AGENT pointer shape per
+session-handoff entrypoint-drift discipline. `pnpm portability:check`,
+targeted markdownlint, `pnpm markdownlint-check:root`, Prettier check, and
+`git diff --check` pass.)
+
+**Prior refresh**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
 — authored the
 [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
 to install structural infrastructure for parallel agents working on
@@ -52,10 +96,10 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation` | 2026-04-24 | 2026-04-24 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule` | 2026-04-24 | 2026-04-25 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
-| `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-implementation` | 2026-04-25 | 2026-04-25 |
+| `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -148,7 +192,10 @@ nl -ba .agent/directives/AGENT.md
 
 ### Owning Plans
 
-- Primary:
+- Primary (active multi-workstream lane):
+  [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+  — WS0 landed `63c66c88`; WS1–WS5 remain.
+- Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
   [`knowledge-role-documentation-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md)
@@ -157,9 +204,15 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-AGENT homing and known hard-fitness remediation are complete and committed.
-The remaining agentic-engineering work is soft-fitness / role-architecture
-follow-up unless the owner names a new hard blocker.
+WS0 of the multi-agent collaboration protocol has landed (`63c66c88`).
+**WS1 is the next workstream** — promote the schema-less embryo log
+into a structured claims registry at
+`.agent/state/collaboration/active-claims.json` with versioned schema,
+add the `register-active-areas-at-session-open` tripwire rule, and
+document the freshness/staleness lifecycle. WS1 inputs include any
+embryo-log entries that have accumulated since WS0 landed (real-usage
+evidence informs schema design). Earlier AGENT homing and hard-fitness
+remediation work is complete and committed.
 
 ### Current State
 
@@ -187,10 +240,21 @@ follow-up unless the owner names a new hard blocker.
 
 ### Next Safe Step
 
-No practice-docs implementation step is pending from the completed AGENT homing
-work. If continuing implementation, take the next owner-named slice from the
-knowledge-role documentation restructure plan, or switch to the new
-observability plan if the owner wants the `pnpm check` blocker fixed first.
+WS1 of the multi-agent collaboration protocol is the next implementation
+slice. Pre-WS1 inputs to read: every entry written to
+`.agent/state/collaboration/log.md` since WS0 landed at `63c66c88` —
+these inform the schema design for `active-claims.json`. The plan body
+WS1 section names the starting schema; observed embryo-log usage may
+add or remove fields. Reviewer routing for WS1: `architecture-reviewer-fred`
+(state-vs-memory boundary), `config-reviewer` (JSON schema versioning),
+`assumptions-reviewer` (single-level claim model under advisory framing).
+
+Coordination follow-up from WS0 landing: the parallel observability-
+sentry-otel agent should integrate the two stale `collaboration.md`
+references in their `next-session.md` into their next commit on the
+observability thread (line ~160 *Coordination flag* narrative; line
+~753 *staged collaboration-reference* recap). Surfaced in the embryo
+log for discovery.
 
 ### Active Track Links
 

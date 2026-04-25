@@ -98,3 +98,27 @@ real coordination event, not as a problem.
 discover what other agents have recently been working on, by reading this
 log under the new rule?* This entry is the first data point. Subsequent
 sessions will append their own.
+
+### 2026-04-25T00:00Z — `Codex` / `codex` / `GPT-5` / `unknown` — reviewer reintegration packaging
+
+Packaging the observability reviewer-reintegration slice on
+`feat/otel_sentry_enhancements`, following the owner-approved packaging plan.
+
+**Areas touched:**
+
+- `apps/oak-curriculum-mcp-streamable-http/` runtime, build-script, smoke,
+  test, and documentation files involved in startup/release-boundary reviewer
+  fixes.
+- `apps/oak-search-cli/vitest.config.ts` for the Search CLI ingest-harness test
+  inclusion.
+- `docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md`
+  plus Sentry operator docs.
+- `.agent/plans/observability/` and observability continuity surfaces only as
+  needed for this packaging slice.
+- `.agent/rules/markdown-code-blocks-must-have-language.md`, thin platform
+  adapters, and `.markdownlint.json` for the MD040 rule sidecar.
+
+**Coordination note:** I will stage by explicit pathspec and preserve the mixed
+worktree. I will not stage `.codex/config.toml`, agentic-collaboration plan /
+thread changes, the Jiggly Pebble experience file, or unrelated napkin hunks
+unless the owner redirects.

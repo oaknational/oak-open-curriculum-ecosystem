@@ -8,19 +8,15 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
-— session handoff after authoring
-[`multi-agent-collaboration-protocol.plan.md`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
-on the agentic-engineering-enhancements thread. Plan is 1349 lines,
-six workstreams, Wilma-reviewed adversarially with 14 findings
-absorbed. Owner direction settled the central design commitment:
-"knowledge and communication, not mechanical refusals." WS0 ready to
-start in a fresh session. No commits this session — plan file is
-untracked; observability-sentry-otel WS3 release-identifier work
-remains staged-but-not-committed at the parallel-track knip blocker
-documented earlier in the day; quality-gate remediation work by the
-parallel Codex/cursor/GPT-5.5 agent is in flight in the working tree
-and not touched.)
+**Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — session handoff
+after reviewer-finding reintegration and the markdown-code-block rule sidecar
+on `feat/otel_sentry_enhancements`. WS3 release cancellation is landed as
+`2822e525`; Lane B startup/release boundary is landed as `9ea3ccd8`;
+reviewer findings were folded into code/docs. Focused tests,
+`pnpm type-check`, `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`,
+targeted markdownlint, `pnpm portability:check`, `pnpm markdownlint-check:root`,
+and `git diff --check` pass. Local `.codex/config.toml` is a user-local dirty
+file and must not be touched.)
 
 **Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session
 handoff after completing gate recovery for the startup-boundary lane
@@ -53,8 +49,8 @@ state live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author / 2026-04-24; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25 |
-| `agentic-engineering-enhancements` | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation / 2026-04-24; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25 |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25 |
+| `agentic-engineering-enhancements` | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation; markdown-code-block-rule / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / multi-agent-collaboration-protocol-WS0-landed-as-63c66c88 / 2026-04-25 |
 
 The `memory-feedback` thread is archived as of 2026-04-22 Session 8.
 If doctrine-consolidation work resumes, start a new thread or revive
@@ -69,33 +65,33 @@ Current branch-primary objective:
 
 - WS2 §2.1-§2.7 **landed** as `f5a009ab` (unified `resolveRelease`,
   sentry-node thin adapter, atomic old-shape replacement, validator
-  alignment, composition-root snapshot-env);
-- two observability lanes are active: WS3 of
-  [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
-  is paused with staged lint/markdown residuals; startup-boundary work has run
-  [`gate-recovery-cadence.plan.md`](../../plans/observability/active/gate-recovery-cadence.plan.md)
-  and is now part-way through Phase 2 GREEN.
+  alignment, composition-root snapshot-env).
+- WS3 cancellation relocation/rewrite **landed** as `2822e525`.
+- Lane B startup/release boundary **landed** as `9ea3ccd8`, with
+  `pnpm check` green before the reviewer-finding reintegration pass.
+- Owner-authorized reviewer-finding reintegration is implemented and broadly
+  checked; the markdown-code-block sidecar added the MD040 rule and fixed the
+  known unlanguaged fence. Root markdownlint-check passes; full `pnpm check`
+  has not been rerun after the handoff-only doc updates.
 
 ## Current Session Focus
 
-The latest Cursor/GPT-5.5 closeout is an implementation/handoff update on the
-observability thread:
+The latest observability focus is reviewer-finding reintegration after
+owner-authorized dispatch:
 
 - [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
-  is active with Phase 0 and Phase 1 RED evidence recorded, gate recovery
-  complete, and Phase 2 GREEN partially implemented in the working tree.
+  is active in Phase 3 reintegration. Phase 0/1 evidence, gate recovery, and
+  Lane B implementation are landed.
 - Owner clarified the build-identity model: build identity is the canonical
   build/release fact for the app; observability consumes it but does not create
   it; `resolveRelease` is the Sentry projection from build identity plus
-  Sentry context.
-- [`gate-recovery-cadence.plan.md`](../../plans/observability/active/gate-recovery-cadence.plan.md)
-  is complete for the current branch state. Missing-symbol REDs now have typed
-  production-owned seams; Sentry off mode no longer resolves/carries release
-  identity; app-version headers/meta and local deploy-metadata stripping are
-  wired.
-- Parallel WS3 release-identifier work is staged/paused in the working tree and
-  remains owned by the Jazzy session record. `pnpm lint` and
-  `pnpm markdownlint-check:root` currently fail only there.
+  Sentry context. First-class `RuntimeConfig.buildIdentity` remains a named
+  future canonicalisation task, not forgotten scope.
+- Reviewer findings handled: build-time Sentry env projection resolves
+  canonical app version; runtime env includes `VERCEL_GIT_COMMIT_REF`; local
+  no-auth paths strip inherited production labels; Search CLI ingest-harness
+  tests are no longer excluded; continuity/ADR/operator docs no longer claim
+  WS3 is pending.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -129,24 +125,23 @@ Current branch non-goals:
 
 Expected next session, per owner direction:
 
-1. Read both touched thread records:
-   [`agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
-   and
+1. Read
    [`observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
-2. Preserve unrelated/parallel working-tree changes. The tree contains both
-   startup-boundary RED/gate-recovery changes and staged/paused WS3 changes;
-   do not reset, restage broadly, or edit WS3 files unless explicitly directed.
-3. If continuing the latest owner focus, resume
-   [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
-   Phase 2 GREEN from its recorded partial GREEN state. Decide whether
-   `RuntimeConfig` should now carry first-class `AppBuildIdentity`, then rerun
-   reviewers and the local gates (`smoke:dev:stub`, `test:ui`, `test:a11y`).
-4. If explicitly returning to the branch-primary release-identifier
-   lane instead, resume WS3 from
-   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
-   and run its WS3.0 pre-landing reviewer dispatch first.
-5. Do not continue into soft-fitness work by default. Soft pressure is a
-   signal for deliberate role routing, not opportunistic trimming.
+2. Preserve unrelated/parallel working-tree changes, especially the user-local
+   `.codex/config.toml` change. Do not reset, restage broadly, or claim staged
+   WS3 residue exists.
+3. Resume the original observability plan work from reviewer-reintegration
+   closure: preserve the mixed worktree, package/stage only the intended
+   observability/search/doc changes if committing, and rerun the focused gates
+   that match any touched files.
+4. Keep `RuntimeConfig.buildIdentity`, `HttpObservability.release` public-surface
+   cleanup, and remaining smoke composition-root global mutation cleanup routed
+   to
+   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
+   unless the owner explicitly broadens this slice.
+5. Do not continue into soft-fitness or deep-consolidation work by default.
+   Napkin rotation remains due, but the owner explicitly directed the next
+   session back to original observability plan work.
 
 ## Open Owner-Decision Items
 
@@ -163,7 +158,35 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Jazzy handoff + consolidate-docs run)**:
+**Status (2026-04-25 Jiggly Pebble handoff)**: due — milestone trigger
+fired (WS0 of multi-agent collaboration protocol landed `63c66c88`) and
+napkin pressure persists (`wc -l .agent/memory/active/napkin.md` now
+~1380 lines after this session's entries, well above the ~500-line
+rotation convention). New register entry added this handoff:
+*tripwire-rules-need-observable-artefacts* pattern candidate surfaced
+by the assumptions-reviewer's WS0 finding on `respect-active-agent-claims`.
+**Constraint at handoff close (now resolved)**: parallel Codex/codex/GPT-5
+agent had substantial in-flight WIP at the time the handoff began;
+running consolidation under those conditions risked file-collision.
+**Constraint update**: the parallel agent landed their reviewer-
+reintegration slice as `d9cb54e8` while this handoff was being written,
+and the working tree returned to clean state (only this handoff's own
+edits remain). The falsifiability check from the original deferral
+note has been MET. **Recommendation for next session**: the next agent
+on this branch can run `/jc-consolidate-docs` as the first action with
+no remaining file-collision constraint, picking up napkin rotation,
+distilled refresh, and the four-plus pending pattern candidates.
+
+**Prior status (2026-04-25 Codex handoff)**: due — napkin rotation remains over the
+~500-line convention (`wc -l` now reports 1222 lines). Not run in this handoff
+because the owner explicitly directed the next session back to the original
+observability plan work and the working tree contains active parallel
+practice/collaboration edits. Falsifiability: the next agent can check
+`wc -l .agent/memory/active/napkin.md` and `git status --short`; if the
+parallel memory/doc surfaces are owned in that session, run
+`jc-consolidate-docs`.
+
+**Prior status (2026-04-25 Jazzy handoff + consolidate-docs run)**:
 **completed this handoff** — `/jc-consolidate-docs` ran post-handoff
 per explicit owner direction. Findings:
 
@@ -253,6 +276,7 @@ step 7 uses this section as its primary queue.
 | 2026-04-25 | Napkin (Jazzy) + Wilma adversarial review of multi-agent collaboration plan | Sibling to PDR-015 candidate above: discussion-before-absorption gate per adversarial-review output. When a Wilma-class adversarial review surfaces BLOCKING findings, dispatch an owner-led discussion about whether the design's central claim is right BEFORE absorbing findings as binding work items. Some findings dissolve under reframing rather than requiring hardening. Candidate home: PDR-015 amendment alongside the assumption-challenge gate. | Second cross-session instance of adversarial-review findings being absorbed mechanically without claim-level discussion producing a worse outcome than reframing would have. | pending |
 | 2026-04-25 | Napkin (Jazzy) + multi-agent collaboration plan WS-architecture | Pattern candidate: *operational-seed-per-workstream for protocol plans*. Plans that introduce new behavioural / cultural / protocol surfaces (vs purely-technical refactors) benefit from per-WS operational seeds (named questions for subsequent observation) alongside mechanical acceptance. Candidate home: `.agent/memory/active/patterns/` + amendment to plan-template / `jc-plan` skill if it generalises. | Second protocol-plan instance using the per-WS-seed structure, or explicit owner direction to promote. | pending |
 | 2026-04-25 | Napkin (Jazzy) + multi-agent collaboration plan Design Principle 1 | Pattern candidate: *advisory-not-enforced for agent-participating systems*. When designing systems where agents participate as reasoning peers (not as constrained subjects), default to information surfaces, not enforcement gates. Mechanical refusals will be routed around at the cost of architectural excellence. The Practice's existing no-bypass discipline (`--no-verify` per-commit authorisation) is evidence the repo already encodes this preference. Candidate home: PDR amendment to PDR-029 (tripwires fire as "consult and decide" not "refuse"); also lands as Design Principle 1 of the multi-agent collaboration plan when WS0 lands. | Second cross-system instance where agent-participating design considered enforcement and chose advisory, or explicit owner direction to elevate beyond the multi-agent collaboration plan's directive-level home. | pending |
+| 2026-04-25 | Napkin (Jiggly Pebble) + assumptions-reviewer finding on `respect-active-agent-claims` rule (WS0 landing) | Pattern candidate: *tripwire-rules-need-observable-artefacts*. Tripwire rules whose firing condition is "decided X" need an artefact-leaving step (e.g. "log your decision") or they are unobservable post-hoc. Compare against rules that are mechanically observable post-hoc (e.g. build-breakage rule — the build is or is not green). Candidate home: PDR-029 amendment alongside the existing tripwire-pattern rules, OR `.agent/memory/active/patterns/` if the pattern proves recurrent. | Second instance of a tripwire rule being adjusted to add an observable-artefact step after a reviewer / consolidation surfaces unobservability. | pending |
 | 2026-04-25 | Consolidate-docs step 4c (cross-experience scan, Jazzy session) | Pattern candidate: *reflexive-shape-correction across sessions*. Recent experience files (2026-04-21 reviewer-found-the-gaps, 2026-04-22 plan-was-not-the-conversation, 2026-04-23 three-reviewers-collapse, 2026-04-24 evasion-called-out, 2026-04-24 the-spiral-i-could-not-see, 2026-04-25 from-locks-to-knowledge) cluster around the same shape: agent reaches for the obvious / mechanical / enforcement-shaped tool; external feedback (owner, reviewer, parallel agent's experience) arrives as a question that exposes the framing rather than fixing the surface; agent reframes; the original "fix the surface" work dissolves. The pattern's name candidate: *the-frame-was-the-fix*. Six instances across five sessions in five days is well above pattern-graduation threshold. Candidate home: `.agent/memory/active/patterns/the-frame-was-the-fix.md` as a process pattern, possibly with PDR-shaped governance framing if the practice doctrine wants it elevated. | Second cross-experience scan reaches the same conclusion, or explicit owner direction to graduate. | pending |
 
 Historical deep-consolidation findings and session-close summaries are
