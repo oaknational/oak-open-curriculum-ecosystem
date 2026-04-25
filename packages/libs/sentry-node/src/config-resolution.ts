@@ -1,4 +1,7 @@
 import {
+  BUILD_IDENTITY_BRANCHES,
+  RELEASE_ENVIRONMENTS,
+  RELEASE_ERROR_KINDS,
   resolveRelease,
   type ReleaseError,
   type ResolvedRelease,
@@ -23,7 +26,6 @@ const ENVIRONMENT_PRECEDENCE = [
 
 const GIT_SHA_PRECEDENCE = ['GIT_SHA', 'VERCEL_GIT_COMMIT_SHA'] as const;
 
-const MAIN_BRANCH = 'main';
 const REGISTRATION_OVERRIDE_ENABLED = '1';
 
 function getEnvironmentValue(
@@ -53,18 +55,22 @@ export function resolveSentryEnvironment(
       continue;
     }
 
-    if (source === 'VERCEL_ENV' && value === 'production' && !isOnMainBranch(input)) {
-      return { value: 'preview', source };
+    if (
+      source === 'VERCEL_ENV' &&
+      value === RELEASE_ENVIRONMENTS.production &&
+      !isOnMainBranch(input)
+    ) {
+      return { value: RELEASE_ENVIRONMENTS.preview, source };
     }
 
     return { value, source };
   }
 
-  return { value: 'development', source: 'development' };
+  return { value: RELEASE_ENVIRONMENTS.development, source: 'development' };
 }
 
 function isOnMainBranch(input: SentryConfigEnvironment): boolean {
-  return trimToUndefined(input.VERCEL_GIT_COMMIT_REF) === MAIN_BRANCH;
+  return trimToUndefined(input.VERCEL_GIT_COMMIT_REF) === BUILD_IDENTITY_BRANCHES.main;
 }
 
 function isRegistrationOverrideEnabled(input: SentryConfigEnvironment): boolean {
@@ -81,8 +87,8 @@ function derivePolicyFromEnv(input: SentryConfigEnvironment): ResolvedSentryRegi
   const vercelEnv = trimToUndefined(input.VERCEL_ENV);
   const ref = trimToUndefined(input.VERCEL_GIT_COMMIT_REF);
 
-  if (vercelEnv === 'production') {
-    if (ref === MAIN_BRANCH) {
+  if (vercelEnv === RELEASE_ENVIRONMENTS.production) {
+    if (ref === BUILD_IDENTITY_BRANCHES.main) {
       return { registerRelease: true };
     }
 
@@ -92,7 +98,7 @@ function derivePolicyFromEnv(input: SentryConfigEnvironment): ResolvedSentryRegi
     return { registerRelease: true, warning };
   }
 
-  if (vercelEnv === 'preview') {
+  if (vercelEnv === RELEASE_ENVIRONMENTS.preview) {
     return { registerRelease: true };
   }
 
@@ -167,17 +173,17 @@ function toResolvedSentryRelease(release: ResolvedRelease): ResolvedSentryReleas
 
 function toObservabilityConfigError(error: ReleaseError): ObservabilityConfigError {
   switch (error.kind) {
-    case 'invalid_release_override':
+    case RELEASE_ERROR_KINDS.invalid_release_override:
       return { kind: 'invalid_release_override', value: error.message };
-    case 'missing_application_version':
+    case RELEASE_ERROR_KINDS.missing_application_version:
       return { kind: 'missing_app_version' };
-    case 'invalid_application_version':
+    case RELEASE_ERROR_KINDS.invalid_application_version:
       return { kind: 'invalid_app_version', value: error.message };
-    case 'missing_branch_url_in_preview':
+    case RELEASE_ERROR_KINDS.missing_branch_url_in_preview:
       return { kind: 'missing_branch_url_in_preview' };
-    case 'missing_git_sha':
+    case RELEASE_ERROR_KINDS.missing_git_sha:
       return { kind: 'missing_git_sha' };
-    case 'invalid_build_identity':
+    case RELEASE_ERROR_KINDS.invalid_build_identity:
       return { kind: 'invalid_build_identity', value: error.message };
     default: {
       const exhaustive: never = error.kind;

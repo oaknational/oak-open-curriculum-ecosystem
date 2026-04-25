@@ -8,6 +8,11 @@ export {
 } from './runtime-metadata.js';
 
 export {
+  BUILD_IDENTITY_BRANCHES,
+  BUILD_IDENTITY_CONTEXTS,
+  RELEASE_ENVIRONMENTS,
+  RELEASE_ERROR_KINDS,
+  RELEASE_SOURCES,
   resolveRelease,
   type AppBuildIdentity,
   type BuildIdentityBranch,

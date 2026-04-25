@@ -68,6 +68,13 @@ import {
   type ResolvedRelease,
 } from './release-types.js';
 
+export {
+  BUILD_IDENTITY_BRANCHES,
+  BUILD_IDENTITY_CONTEXTS,
+  RELEASE_ENVIRONMENTS,
+  RELEASE_ERROR_KINDS,
+  RELEASE_SOURCES,
+} from './release-types.js';
 export type {
   AppBuildIdentity,
   BuildIdentityBranch,
