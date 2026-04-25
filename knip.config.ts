@@ -52,6 +52,7 @@ const config: KnipConfig = {
         'src/application.ts',
         'src/server.ts',
         'build-scripts/**/*.ts',
+        'build-scripts/**/*.mjs',
         'operations/**/*.ts',
         'scripts/**/*.js',
         'widget/src/main.tsx',
@@ -61,6 +62,7 @@ const config: KnipConfig = {
       project: [
         'src/**/*.ts',
         'build-scripts/**/*.ts',
+        'build-scripts/**/*.mjs',
         'e2e-tests/**/*.ts',
         'operations/**/*.ts',
         'scripts/**/*.js',

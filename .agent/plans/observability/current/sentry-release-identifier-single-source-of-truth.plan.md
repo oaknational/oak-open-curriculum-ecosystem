@@ -944,6 +944,61 @@ pnpm depcruise:check
 
 ## WS3 — Cancellation: relocate, rewrite, and amend ADR-163
 
+> **PAUSED 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6)** —
+> WS3 substance is fully drafted, reviewer-gated, and applied to the
+> working tree, but the WS3 commit has not landed: pre-commit `knip`
+> blocks on a parallel-track unresolved import in
+> `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
+> (the parallel `mcp-local-startup-release-boundary.plan.md` agent
+> has not yet landed `local-stub-env.js`). HEAD is unchanged at
+> `015ac99b`.
+>
+> **What landed in the working tree** (staged, preserves `git mv`
+> rename detection): script + unit-test moved from
+> `packages/core/build-metadata/build-scripts/` into
+> `apps/oak-curriculum-mcp-streamable-http/build-scripts/`; in-app
+> shim replaced in-place; `.d.ts` companion deleted; `semver@^7.7.4`
+> and `@types/semver@^7.7.1` added as app devDeps; lockfile refreshed;
+> script body rewritten via canonical `semver` with main-branch
+> gate + asymmetric current/previous handling; 8-test rewrite
+> covering all 5 truth-table rows + 2 fetch-fallback variants
+> (8/8 green at pause time); 15-item second amendment applied to
+> ADR-163 §1 + §10 + Enforcement + Reviewer Dispositions (renamed
+> first-amendment block + new second-amendment block); ADR index
+> entry updated.
+>
+> **Unstaged WS3 dependency**: `knip.config.ts`
+> (`'build-scripts/**/*.mjs'` glob added to the
+> `apps/oak-curriculum-mcp-streamable-http` workspace's `entry` +
+> `project` arrays so knip detects the new `semver` /
+> `@types/semver` devDeps as used). Must fold into the WS3 commit
+> on resume.
+>
+> **§3.0 reviewer gate outcome**: `docs-adr-reviewer` +
+> `assumptions-reviewer` dispatched on the drafted amendment.
+> Both reported **two BLOCKING findings** in the original 13-item
+> enumeration (`assumptions-reviewer` Disposition #6 +
+> `architecture-reviewer-fred` Disposition #3 / positive-note #4
+> sub-clauses — all referenced surfaces being retracted by Items
+> 10 and 11). Enumeration expanded **13 → 15 items** to cover them.
+> MAJORs and MINORs absorbed (line-range narrowing, retract-with-note
+> uniformity, grep-friendly placeholder, Item 2 phrasing softened
+> per assumptions-reviewer I3). Full disposition record is in the
+> ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
+> block (staged).
+>
+> **Resume instructions and full pause-state snapshot** (including
+> exact `git status` shape at pause, parallel-track files the
+> resuming agent must NOT touch, drafted commit message subject and
+> the post-commit hash-fill follow-up):
+>
+> [`sentry-release-identifier-ws3-resume.evidence.md`](../active/sentry-release-identifier-ws3-resume.evidence.md)
+>
+> Resume in the next session after either (a) the parallel agent
+> lands `local-stub-env.js` (re-running `pnpm knip` will confirm),
+> or (b) fresh `--no-verify` authorisation per
+> `.agent/rules/no-verify-requires-fresh-authorisation.md`.
+
 WS3 lands three changes in a single commit, preceded by a
 pre-landing reviewer dispatch:
 

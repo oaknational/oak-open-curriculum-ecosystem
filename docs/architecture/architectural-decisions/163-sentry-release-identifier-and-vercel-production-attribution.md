@@ -163,27 +163,32 @@ the ADR.
 > amendment. Code review and reviewer dispatch on the L-8 lane did not
 > detect the divergence because no test asserted cross-resolver shape
 > equivalence — both resolvers' unit tests passed because each was
-> internally consistent. The vendor failure mode this drift produced
-> is **split-release pollution**, not ingest rejection: Sentry will
+> internally consistent. The vendor failure mode this drift produced is
+> **split-release pollution**, not ingest rejection: Sentry will
 > auto-create a release the first time it sees an event tagged with an
 > unknown identifier (Sentry docs,
 > `https://docs.sentry.io/platforms/javascript/guides/node/configuration/releases/`),
-> so the build-time `releases new` registered release A and the
-> runtime events landed on auto-created release B, fragmenting
-> commit / deploy / release-health data across two release entities
-> for the same logical preview deployment. The fix is **structural**,
-> not procedural: a new cross-resolver contract test
-> (`packages/libs/sentry-node/tests/release-identifier-cross-resolver.contract.unit.test.ts`,
-> added in WS1.1 of the release-identifier plan) asserts byte-identical
-> output from `resolveBuildTimeRelease` and `resolveSentryRelease` for
-> every row of the truth table above. The test runs in `pnpm test`;
-> any future shape divergence fails the build, not Sentry's
-> regression-attribution surface. This is the **primary anti-drift
-> gate for release-identifier equivalence** that this amendment names;
-> it does NOT close every possible resolver drift mode (e.g. source-
-> provenance or error-shape drift in fields the equality test does not
-> compare) — those gaps remain the responsibility of each resolver's
-> own unit tests. Mirrored in Enforcement §5 below.
+> so the build-time `releases new` registered release A and the runtime
+> events landed on auto-created release B, fragmenting commit / deploy /
+> release-health data across two release entities for the same logical
+> preview deployment.
+>
+> **Structural fix (second amendment, 2026-04-24)**: the fix is
+> structural and goes further than the first amendment promised. WS2 of
+> `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
+> (commit `f5a009ab`) collapsed `resolveBuildTimeRelease` and the
+> runtime-resolution path into a single `resolveRelease` function in
+> `@oaknational/build-metadata`. `@oaknational/sentry-node` delegates at
+> runtime via `SentryConfigEnvironment extends ReleaseInput`, so the
+> build-time resolver and the runtime resolver are the same function —
+> shape divergence between them is impossible by construction. The
+> dep-cruise edge `libs ← core` (enforced by the existing boundary
+> rules) is the structural gate that prevents future inversion. The
+> first amendment's plan to add a cross-resolver contract test in
+> `packages/libs/sentry-node/tests/release-identifier-cross-resolver.contract.unit.test.ts`
+> is superseded by the collapse — there is no second resolver to compare
+> against. Enforcement §5 is retracted accordingly and replaced with a
+> structural-unification note (see Enforcement §5 below).
 >
 > **The §1 text below is preserved as historical record of the
 > L-7/L-8 mechanism specification before this amendment.**
@@ -683,64 +688,80 @@ bump the semver) do.
 
 **Cancellation truth table**:
 
-| `VERCEL_ENV`     | `VERCEL_GIT_PREVIOUS_SHA` | Current vs previous root `package.json` version | Outcome                              |
-| ---------------- | ------------------------- | ----------------------------------------------- | ------------------------------------ |
-| not `production` | (any)                     | (any)                                           | Continue build                       |
-| `production`     | unset                     | (any)                                           | Continue build (first deploy)        |
-| `production`     | set, resolvable           | current ≤ previous                              | **CANCEL build**                     |
-| `production`     | set, resolvable           | current > previous                              | Continue build                       |
-| `production`     | set, unresolvable         | (cannot compare)                                | Continue build (with stderr warning) |
+| Branch (`VERCEL_GIT_COMMIT_REF`) | Current version (root `package.json`) | Previous version (`VERCEL_GIT_PREVIOUS_SHA:package.json`) | Outcome                | Reason                                                                                                                           |
+| -------------------------------- | ------------------------------------- | --------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| not `main`                       | (not read)                            | (not read)                                                | Continue build         | Branch gate; per §1 only `main` triggers a production identifier.                                                                |
+| `main`                           | resolvable                            | unresolvable / unset                                      | Continue build         | First build OR previous SHA absent / git-unreachable; treated as "no previous to beat".                                          |
+| `main`                           | resolvable                            | resolvable, current ≤ previous                            | **CANCEL build**       | Version did not increment; this is a merge / hot-fix-on-main / accidental downgrade.                                             |
+| `main`                           | resolvable                            | resolvable, current > previous                            | Continue build         | Semantic-release commit advanced the version; the production identifier is fresh.                                                |
+| `main`                           | unresolvable                          | (not read)                                                | **CANCEL with stderr** | Build error: the current app version cannot be determined from root `package.json`. Diagnostic message printed; non-recoverable. |
 
 Mapping to Vercel `ignoreCommand` exit codes: exit 0 = "ignore this
 build" (Vercel cancels), exit 1 = "do not ignore" (Vercel proceeds).
-The script returns exit 0 only for the "current ≤ previous" row.
+The script returns exit 0 on rows 3 (current ≤ previous) and 5
+(current unresolvable); exit 1 on rows 1, 2, 4.
 
-The "set, unresolvable / continue with stderr warning" row is
-intentionally **fail-open**: Oak prefers an accidental extra production
-build (which is itself bounded by the existing `semantic-release`
-serialisation in §9) over a false cancellation when prior-deployment
-state cannot be resolved. The stderr diagnostic is the structured
+**Asymmetry rationale**: an unresolvable **current** version is a
+deterministic repo defect under Oak's current build topology (single
+root `package.json` read by all consumers) — missing or malformed file,
+missing `version` field, or non-semver value. The script cancels with a
+stderr diagnostic so the failure surfaces at build time rather than at
+Sentry-ingest time; bumping a patch / merging a fresh version bump is
+the recovery path, not a retry. An unresolvable **previous** version is
+dominated by transient causes (first deploy, shallow clone,
+`VERCEL_GIT_PREVIOUS_SHA` unset, fetch failure); the script treats it
+as "no previous to beat" and continues silently, because the next build
+with a resolvable previous will re-gate. This asymmetry replaces the
+first amendment's single fail-open clause and eliminates the separate
+"warn and continue" outcome for previous-resolution failure. If Oak's
+build topology changes (e.g. nested roots, per-workspace version
+sourcing), the "current is a deterministic defect" claim needs
+revisiting. The stderr diagnostic on row 5 is the structured
 operator-visible signal per `.agent/rules/no-warning-toleration.md` §3
 (Vercel build logs are the structured-signal capture surface; the
 script does not silently swallow the diagnostic).
 
-**Enforcement mechanism** (already in place; this amendment names it):
+**Enforcement mechanism** (second amendment, 2026-04-24):
 
 - **Canonical implementation**:
-  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
-  exports the pure `runVercelIgnoreCommand` function. All decision
-  logic (current-vs-previous semver comparison, exit-code mapping,
-  warning emission) lives here. Unit-tested in the same directory.
-- **Workspace invocation shim**:
   `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
-  is a thin `#!/usr/bin/env node` wrapper that imports
-  `runVercelIgnoreCommand` from the canonical implementation, supplies
-  `repositoryRoot` and `process.env`, and propagates the exit code.
-  Current wiring uses a canonical implementation plus a thin workspace
-  shim because Vercel `ignoreCommand` is invoked from the app
-  workspace cwd; the split keeps `vercel.json` free of relative-
-  package paths and keeps decision logic in one place. Other shapes
-  (e.g. inlining the script in the app workspace, or invoking the
-  canonical script directly from `vercel.json` via a relative path)
-  remain available if the workspace topology changes.
-- **Wiring**: `apps/oak-curriculum-mcp-streamable-http/vercel.json`
-  `ignoreCommand` field is
-  `node build-scripts/vercel-ignore-production-non-release-build.mjs`
-  (workspace-relative; the shim above). Vercel runs the shim before
-  every build and uses its exit code to decide whether to proceed.
-- **Wiring integration test**:
-  `apps/oak-curriculum-mcp-streamable-http/tests/vercel-ignore-command-wiring.integration.test.ts`
-  (added in WS1.4 of the release-identifier plan) asserts that
-  `vercel.json` parses, contains `ignoreCommand`, and the command
-  resolves to the workspace shim on disk. Renaming, moving, or
-  removing either the shim or the canonical implementation fails this
-  test. Mirrored in Enforcement §6 below.
+  exports the pure `runVercelIgnoreCommand` function. All decision
+  logic (branch gate, current-vs-previous semver comparison,
+  exit-code mapping, stderr diagnostic emission) lives here. The
+  script is co-located with its sole consumer and `#!/usr/bin/env
+node` headed so `vercel.json`'s `ignoreCommand` invokes it
+  directly.
+- **Wiring**:
+  `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
+  `ignoreCommand` field names the workspace-relative path to the
+  canonical implementation. Vercel runs that command before every
+  build and uses its exit code to decide whether to proceed. The
+  field value is unchanged by WS3 of the release-identifier plan —
+  it previously resolved to a workspace shim, and now resolves
+  directly to the canonical implementation at the same path. The
+  literal command string is owned by `vercel.json`, not by this ADR.
 - **Unit tests**:
-  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
   covers all rows of the truth table above and is the proof for the
-  rule itself. The shim has no decision logic and therefore needs no
-  separate unit test (the wiring integration test covers its existence
-  and import resolution).
+  rule itself.
+- **Comparator**: the version comparison uses the npm `semver`
+  package's `semver.lte` function rather than hand-rolled comparison
+  logic. `semver.valid()` validates both current and previous version
+  strings; `semver.lte(current, previous)` determines the
+  cancel/continue outcome on rows 3 and 4. The package is declared as
+  a `devDependency` of the `apps/oak-curriculum-mcp-streamable-http`
+  workspace (build-time tooling for the one consumer only).
+- **Wiring integration test — removed**: Enforcement §6 (added by the
+  first amendment) was removed because the wiring drift surface it
+  would have guarded was structurally eliminated by relocating the
+  canonical script into the consuming app workspace (WS3.1 of
+  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`).
+  Per `.agent/directives/testing-strategy.md` `Test real behaviour,
+not implementation details`, no behavioural test was lost — the
+  script's unit tests at the new in-app location cover the rule's
+  behaviour, and Vercel's deploy probe covers wiring. There is no
+  longer an indirection layer between `vercel.json` and the canonical
+  implementation for an integration test to assert against.
 
 Rationale: the §1 release identifier is meaningful only if production
 deploys correspond exactly to semantic-release commits. Without this
@@ -905,31 +926,21 @@ intact.
    the release/deploy realisation. This ADR now names the esbuild
    composition root + deployed-entry contract that make that pipeline
    bootable in practice.
-5. **Cross-resolver contract test** (added by the §1 amendment
-   2026-04-24) in
-   `packages/libs/sentry-node/tests/release-identifier-cross-resolver.contract.unit.test.ts`:
-   asserts that `resolveBuildTimeRelease` and `resolveSentryRelease`
-   return the **same release identifier string** for every row of the
-   §1 per-environment truth table. Lives in `sentry-node` (downstream
-   of `build-metadata` in the dep graph) and runs in `pnpm test`.
-   WS1.1 of the release-identifier plan adds `@oaknational/build-metadata`
-   as a devDependency of `@oaknational/sentry-node` to enable this
-   import (`libs ← core` direction; no boundary violation). This is
-   the **primary anti-drift gate for release-identifier equivalence**:
-   any future divergence between build-time and runtime release
-   identifiers fails the build, not Sentry's regression-attribution
-   surface. It does NOT close every possible resolver drift mode —
-   each resolver's own unit tests still cover source-provenance and
-   error-shape invariants.
-6. **Production cancellation wiring integration test** (added by the
-   §10 amendment 2026-04-24) in
-   `apps/oak-curriculum-mcp-streamable-http/tests/vercel-ignore-command-wiring.integration.test.ts`:
-   asserts that `vercel.json` parses, contains `ignoreCommand`, and
-   the command resolves to the canonical workspace shim that delegates
-   to
-   `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`.
-   Catches structural drift (file moved, file renamed, `vercel.json`
-   key removed) that the script's own unit tests cannot observe.
+5. **Structural release-identifier unification** (replaces the
+   cross-resolver contract test that was added by the §1 amendment
+   2026-04-24 and retracted 2026-04-24 second amendment). Build-time
+   and runtime release identifiers are produced by a single
+   `resolveRelease` function in `@oaknational/build-metadata`
+   (introduced by WS2 of the release-identifier plan, commit
+   `f5a009ab`). `@oaknational/sentry-node` consumes the resolver via
+   `SentryConfigEnvironment extends ReleaseInput`, so there is no
+   parallel runtime resolver to drift against. The dep-cruise edge
+   `libs ← core` is the structural gate preventing inversion; the
+   TypeScript type system prevents shape divergence at compile time.
+   No runtime contract test is required — the drift surface has been
+   eliminated, not merely guarded. The prior Enforcement §5 text
+   (which named the contract test as the primary anti-drift gate) is
+   preserved in the first-amendment History entry for lineage.
 
 ## References
 
@@ -1045,8 +1056,52 @@ intact.
   Reviewer dispositions: see the
   `Reviewer Dispositions (2026-04-24 amendment)` block at the bottom
   of this file.
+- **2026-04-24 (second amendment, §10 retraction)** — Amendment during
+  WS3 of
+  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`.
+  §10's first amendment (above) named a canonical implementation in
+  `packages/core/build-metadata/build-scripts/` plus a workspace shim
+  in `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, with a
+  wiring integration test (Enforcement §6) as the structural gate
+  catching shim-vs-canonical drift. WS3 of the release-identifier plan
+  relocates the canonical script directly into the app workspace
+  (single consumer), eliminates the shim in-place, deletes the `.d.ts`
+  companion, rewrites the ~205-line hand-rolled implementation as ~50
+  lines using the npm `semver` package, and adds the
+  `VERCEL_GIT_COMMIT_REF === 'main'` branch gate that the first
+  amendment's truth table required but the script omitted. §10's truth
+  table is replaced; the fail-open paragraph is dropped in favour of
+  asymmetric current/previous handling; the workspace-shim subsection
+  is dropped; the wiring integration test Enforcement §6 entry is
+  dropped; path references throughout §10 are updated to the new
+  canonical location; the `vercel.json` literal command string is
+  replaced with a symbolic reference. The §1 amendment's "structural
+  fix" paragraph (which named a cross-resolver contract test as the
+  primary anti-drift gate) is retracted in favour of a structural
+  collapse: WS2 of the release-identifier plan (commit `f5a009ab`)
+  unified `resolveBuildTimeRelease` and the runtime-resolution path
+  into a single `resolveRelease` function in
+  `@oaknational/build-metadata`, with `SentryConfigEnvironment extends
+ReleaseInput` so that `@oaknational/sentry-node` delegates at
+  runtime — shape divergence between build-time and runtime is
+  impossible by construction, and the anti-drift gate is the type
+  system and the dep-cruise `libs ← core` edge rather than a runtime
+  contract test. Enforcement §5 (cross-resolver contract test) is
+  retracted accordingly. The assumptions-reviewer Dispositions #4
+  (fail-open row), #5 (two-file shim explanation), and #6 (cross-
+  resolver contract test as primary anti-drift gate) are retracted
+  because the text they confirmed has been replaced, along with
+  architecture-reviewer-fred Disposition #3 (the contract test's
+  devDep edge) and two sub-clauses of its positive note #4 (boundary
+  discipline for the cross-resolver and wiring integration test
+  placements). Reviewer dispositions for this second amendment are
+  recorded in the
+  `Reviewer Dispositions (2026-04-24 second amendment)` block at the
+  bottom of this file. This is the second amendment to ADR-163's §1 +
+  §10 pair; the first landed at commit `06bf25d7`, the second at
+  commit `[[TODO:FILL_WS3_COMMIT_HASH]]`.
 
-## Reviewer Dispositions (2026-04-24 amendment)
+## Reviewer Dispositions (2026-04-24 first amendment)
 
 Per the WS0.2 step of
 `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
@@ -1084,22 +1139,41 @@ precision). Other findings: IMPORTANT #3, #4, #6; SUGGESTION #5.
    revisiting the amendment ("if Vercel changes that host shape, this
    amendment must be revisited") spelled out.
 4. **Finding #4 (IMPORTANT — §10 unresolvable row as fail-open
-   trade-off)** — **ACCEPTED**. §10 now states the trade-off
-   explicitly ("intentionally fail-open: Oak prefers an accidental
-   extra production build … over a false cancellation when prior-
-   deployment state cannot be resolved") and additionally notes the
-   bound is the `semantic-release` serialisation already named in §9.
+   trade-off)** — **ACCEPTED at first amendment; retracted at second
+   amendment (2026-04-24 §10 retraction)**: the fail-open framing this
+   disposition confirmed has been replaced by the asymmetric
+   current/previous handling in the second amendment. The concern the
+   original finding addressed (resolution-failure tolerance) is now
+   handled more precisely: unresolvable **previous** version collapses
+   into "no previous to beat" and continues silently; unresolvable
+   **current** version is a deterministic repo defect and cancels with
+   a stderr diagnostic. The disposition is moot; the new framing
+   supersedes it.
 5. **Finding #5 (SUGGESTION — soften two-file shim explanation)** —
-   **ACCEPTED**. §10 wiring text now reads "current wiring uses a
-   canonical implementation plus a thin workspace shim because …";
-   alternative wirings are noted as available if the workspace
-   topology changes.
+   **ACCEPTED at first amendment; retracted at second amendment
+   (2026-04-24 §10 retraction)**: the two-file shim framing addressed
+   by this disposition was superseded by WS3.1 of the release-
+   identifier plan, which relocated the canonical script directly into
+   the app workspace. The suggestion is moot — no shim remains to
+   explain.
 6. **Finding #6 (IMPORTANT — tighten anti-drift gate claim)** —
-   **ACCEPTED**. §1 amendment now describes the cross-resolver
-   contract test as the **"primary anti-drift gate for release-
-   identifier equivalence"** and explicitly notes residual drift
-   modes (source-provenance, error-shape) remain the responsibility
-   of each resolver's own unit tests. Mirrored in Enforcement §5.
+   **ACCEPTED at first amendment; superseded at second amendment
+   (2026-04-24 §10 retraction)**: the "primary anti-drift gate for
+   release-identifier equivalence" text this disposition confirmed in
+   §1 and mirrored in Enforcement §5 has itself been retracted. WS2
+   of the release-identifier plan (commit `f5a009ab`) collapsed
+   build-time and runtime resolvers into a single `resolveRelease`
+   function in `@oaknational/build-metadata`, with
+   `@oaknational/sentry-node` delegating at runtime via
+   `SentryConfigEnvironment extends ReleaseInput`. There is no second
+   resolver for a contract test to compare against; the drift surface
+   has been eliminated rather than guarded. The residual drift modes
+   Finding #6 asked to be named (source-provenance, error-shape) are
+   subsumed by the structural collapse — they remain the
+   responsibility of the single resolver's unit tests in
+   `@oaknational/build-metadata`. The disposition is moot; the
+   structural collapse supersedes the tightening this finding
+   requested.
 
 ### `sentry-reviewer`
 
@@ -1171,11 +1245,126 @@ positive notes (no action).
    logs as the structured-signal capture surface.
 3. **Finding #3 (SUGGESTION — note new `sentry-node → build-metadata`
    devDep edge introduced by the cross-resolver contract test)** —
-   **ACCEPTED**. Enforcement §5 now flags the new devDep edge with
-   the dep direction explicit (`libs ← core`, no boundary violation),
-   so WS1.1 of the release-identifier plan implements it deliberately.
-4. **Findings #4–#10 (POSITIVE NOTES)** — acknowledged. Boundary
-   discipline (cross-resolver test placement, wiring integration test
-   placement), §10 co-equality framing, process-gap wording, replace-
-   don't-bridge compliance, cardinal rule non-invocation, and ADR
-   structural hygiene all pass principles review. No action required.
+   **ACCEPTED at first amendment; superseded at second amendment
+   (2026-04-24 §10 retraction)**: the contract test that would have
+   introduced a `devDependency` edge is superseded by WS2's structural
+   collapse (commit `f5a009ab`), which introduces a **runtime**
+   `dependency` edge `@oaknational/sentry-node →
+@oaknational/build-metadata` (via `SentryConfigEnvironment extends
+ReleaseInput` and `resolveSentryRelease` delegation). The dep
+   direction is unchanged (`libs ← core`, no boundary violation); the
+   edge's purpose tightened from devDep-for-test to
+   runtime-for-delegation. The disposition's concern (deliberate
+   dep-edge introduction with direction explicit) is preserved and
+   strengthened by the structural collapse.
+4. **Findings #4–#10 (POSITIVE NOTES)** — acknowledged at first
+   amendment; two sub-clauses retracted at second amendment
+   (2026-04-24 §10 retraction). The "boundary discipline
+   (cross-resolver test placement, wiring integration test placement)"
+   sub-clause is retracted because both tests are retracted in the
+   second amendment: the cross-resolver contract test is superseded by
+   the `resolveRelease` structural collapse, and the wiring
+   integration test is superseded by the script relocation into the
+   consuming app workspace. The remaining sub-clauses (§10
+   co-equality framing, process-gap wording, replace-don't-bridge
+   compliance, cardinal rule non-invocation, ADR structural hygiene)
+   remain accepted and unchanged. No further action required beyond
+   this retraction note.
+
+## Reviewer Dispositions (2026-04-24 second amendment)
+
+Per the §3.0 step of
+`.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
+the §10 retraction above was dispatched to `docs-adr-reviewer` and
+`assumptions-reviewer` BEFORE landing. Reviewer findings are action
+items per principles §Reviewer findings; acceptances and rejections are
+recorded inline below with rationale.
+
+### `docs-adr-reviewer`
+
+**Recommendation**: BLOCK ON two findings (incomplete enumeration —
+`assumptions-reviewer` Disposition #6 and
+`architecture-reviewer-fred` Disposition #3 + positive-note #4
+sub-clauses). Other findings: MAJOR on two line-range items; MINOR on
+three prose / placeholder items; NITs and POSITIVE NOTES noted for
+information.
+
+**Dispositions**:
+
+1. **BLOCKING (Cross-check Matrix missed Disposition #6)** —
+   **ACCEPTED**. Enumeration expanded from 13 → 14 items to add an
+   explicit retraction of `assumptions-reviewer` Disposition #6
+   (parallel to Items 8 and 12 for Dispositions #4 and #5). Without
+   this, Disposition #6 would remain as a dangling reference to
+   §1/Enforcement-§5 text retracted elsewhere in this amendment — the
+   same drift class this amendment exists to repair.
+2. **BLOCKING (Cross-check Matrix missed architecture-reviewer-fred
+   Disposition #3 + positive-note #4 sub-clauses)** — **ACCEPTED**.
+   Enumeration expanded further to Item 15 covering both Fred
+   sub-surfaces. Item 15a retracts Disposition #3 (devDep edge — now
+   supersedes as runtime dep edge via WS2's collapse); Item 15b
+   retracts two sub-clauses of positive-note #4 (cross-resolver and
+   wiring-integration-test placement boundary-discipline claims).
+3. **MAJOR (Item 1 line range)** — **ACCEPTED**. Range narrowed to
+   preserve the `**Cancellation truth table**:` label and its blank
+   line intact.
+4. **MAJOR (Item 10 line range)** — **ACCEPTED**. Range narrowed to
+   preserve the trailing blockquote separator before the preserved
+   historical-record sentence intact.
+5. **MINOR (Item 11 retract-with-replacement-note framing)** —
+   **ACCEPTED**; merged with assumptions-reviewer I1.
+6. **MINOR (Item 9 placeholder → grep-friendly token)** —
+   **ACCEPTED**; `[[TODO:FILL_WS3_COMMIT_HASH]]` installed.
+7. **MINOR (Item 7 final bullet-order note)** — **ACCEPTED**; order
+   documented as Canonical implementation → Wiring → Unit tests →
+   Comparator → Wiring-integration-test-removed.
+8. **NITs and POSITIVE NOTES** — acknowledged; no action.
+
+### `assumptions-reviewer`
+
+**Recommendation**: BLOCK on B1 (Disposition #6 dangling reference).
+IMPORTANT I1 (retract-with-note uniformity), I2 (atomic-commit
+proportionality + commit-body enumeration), I3 (Item 2 phrasing
+softening). SUGGESTIONS and NOTES for information.
+
+**Dispositions**:
+
+1. **BLOCKING (B1 — Disposition #6 must be retracted)** —
+   **ACCEPTED**; folded as Item 14 above (parallel to Items 8 and
+   12). The 13 → 15 enumeration expansion is preferred over silently
+   extending Item 12 — each retraction is self-contained and the
+   count in the History entry accurately reflects the scope.
+2. **IMPORTANT (I1 — retract-with-note uniformity for Items 10, 11)**
+   — **ACCEPTED**. Item 11 reframed to retract-with-replacement-note
+   ("replaces the cross-resolver contract test that was added by the
+   §1 amendment 2026-04-24 and retracted 2026-04-24 second
+   amendment"). Item 10 structural-fix-rewrite framing kept; the
+   retraction lineage is preserved inline via the History block and
+   the superseded-text-preserved-in-History pattern per ADR-053.
+3. **IMPORTANT (I2 — atomic commit + commit-body enumeration)** —
+   **ACCEPTED**. Atomic 15-item commit posture confirmed as
+   proportional (Items 10, 11 are structurally coupled to WS2 via
+   `f5a009ab`; separating them would create cross-amendment pointers
+   and a 14th amendment surface). The WS3 commit message body lists
+   all items as bullets, not prose, so `git log` readers see full
+   scope without reading the diff.
+4. **IMPORTANT (I3 — Item 2 phrasing softening)** — **ACCEPTED**.
+   Softened to "deterministic repo defect under Oak's current build
+   topology" with explicit revisit-trigger note ("if Oak's build
+   topology changes (e.g. nested roots, per-workspace version
+   sourcing), the 'current is a deterministic defect' claim needs
+   revisiting").
+5. **SUGGESTION (S1 — History-entry summary sentence)** — **REJECTED
+   (not load-bearing)**: the History entry is dense but scannable.
+   A summary opening sentence can be added as polish in a future
+   amendment if a third reader reports friction. Rejecting preserves
+   the current-amendment scope discipline.
+6. **SUGGESTION (S2 — fill-at-landing sanity check records three
+   assumptions-reviewer dispositions)** — **ACCEPTED**; this
+   dispositions block records Dispositions #4, #5, #6 as retracted.
+7. **NOTES (N1–N3)** — acknowledged; no action.
+
+**Q1 (Item 14 vs extend Item 12)**: new Item 14 (and Item 15 for
+Fred parallels) — enumeration count accurately reflects scope.
+**Q2 (Item 2 softening)**: adopted. **Q3 (commit message body)**:
+confirmed — WS3 commit body enumerates all items inline.
