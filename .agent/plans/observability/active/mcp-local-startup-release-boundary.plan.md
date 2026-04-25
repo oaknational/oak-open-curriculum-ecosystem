@@ -24,11 +24,12 @@ todos:
 # MCP Local Startup Release Boundary
 
 **Last Updated**: 2026-04-25  
-**Status**: 🟢 REVIEWER FINDING REINTEGRATION COMPLETE — focused tests,
+**Status**: 🟢 REVIEWER FINDING REINTEGRATION COMPLETE — packaged as
+`d9cb54e8` and pushed. Focused tests,
 `pnpm type-check`, `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`,
 targeted markdownlint, `pnpm portability:check`, and `git diff --check` pass.
 `pnpm markdownlint-check:root` also passes after the MD040 sidecar rule fix.
-Full `pnpm check` was not rerun after handoff-only doc updates.
+Full `pnpm check` was not rerun after final handoff-only doc updates.
 **Scope**: HTTP MCP app startup, Sentry release resolution, local
 smoke/UI/a11y gate contracts, and the tests/docs that govern those
 boundaries.

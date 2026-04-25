@@ -43,10 +43,10 @@ todos:
     status: completed
   - id: ws4-refactor-docs
     content: "WS4 (REFACTOR): TSDoc on every changed symbol; rewrite release resolution section in observability.md and sentry-deployment-runbook.md; update napkin if a generalisable pattern emerges."
-    status: pending
+    status: in_progress
   - id: ws5-quality-gates
     content: "WS5: pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm smoke:dev:stub. Exit 0, no filtering."
-    status: pending
+    status: in_progress
   - id: ws6-adversarial-review
     content: "WS6: post-execution reviewers — sentry-reviewer (vendor-canonical idiom), docs-adr-reviewer (ADR-163 amendment fidelity), release-readiness-reviewer (preview AND production attribution proven via Sentry MCP find_releases + search_events on a fresh deploy)."
     status: pending
@@ -59,16 +59,20 @@ isProject: false
 # Sentry Release Identifier — Single Source of Truth
 
 **Last Updated**: 2026-04-25
-**Status**: 🟢 EXECUTING — WS0, WS1, WS2, AND WS3 landed:
+**Status**: 🟢 EXECUTING — WS0, WS1, WS2, AND WS3 landed; WS4/WS5 partly
+covered by pushed reviewer-reintegration package `d9cb54e8`:
 ADR-163 amendment + reviewer dispositions (WS0, `06bf25d7`); three-layer
 pre-flight audit (WS1, read-only); `resolveGitSha` module split
 (WS2 §2.0, `a4e8facb`); unified `resolveRelease` + sentry-node thin
 adapter + atomic old-shape replacement + validator alignment +
 composition-root snapshot-env (WS2 §2.1-§2.7, `f5a009ab`); relocation +
 rewrite of the cancellation script into the consuming app workspace plus
-ADR-163 §10 second amendment (WS3, `2822e525`). **WS4/WS5/WS6/WS7 remain
-pending**: docs propagation, quality gates, post-execution review, and live
-verification.
+ADR-163 §10 second amendment (WS3, `2822e525`). `d9cb54e8` refreshed
+operator docs/ADR references, added the Sentry build-env projection helper,
+re-included Search CLI ingest tests, and added the MD040 sidecar. **Do not
+mark WS5 complete yet**: the exact aggregate `pnpm check` / WS5 sequence was
+not rerun after final handoff edits. **WS6 deployed-state verification is the
+next Sentry-focused step after the owner push.**
 **Scope**: Collapse build-time and runtime release resolution to ONE
 implementation in `@oaknational/build-metadata`'s `resolveRelease`
 (structural single source of truth, not contract-tested duplication);
@@ -1394,6 +1398,14 @@ re-stating the rule.
 
 > See [Quality Gates component](../../templates/components/quality-gates.md)
 
+**Closeout note (2026-04-25 Codex)**: reviewer-reintegration commit
+`d9cb54e8` ran focused HTTP/Search tests plus `pnpm type-check`, `pnpm lint`,
+`pnpm knip`, `pnpm test`, `pnpm build`, root markdownlint, portability, and
+`git diff --check`; the commit hook also ran Prettier, root markdownlint,
+knip, depcruise, and cached Turbo type-check/lint/test. The exact aggregate
+WS5 command below / full `pnpm check` was **not** rerun after final handoff
+doc-only edits.
+
 ```bash
 pnpm clean && \
 pnpm sdk-codegen && \
@@ -1432,6 +1444,12 @@ before WS6.
 ## WS6 — Adversarial Review (POST-execution)
 
 > See [Adversarial Review component](../../templates/components/adversarial-review.md)
+
+**Next Sentry-focused step after owner push (2026-04-25)**: identify the
+Vercel deployment triggered by pushed branch `feat/otel_sentry_enhancements`
+(local/origin head observed at `cc71507b`, with observability payload
+`d9cb54e8`) and collect deployed-state evidence before asking reviewers to
+sign off.
 
 Reviewers fire against the landed code AND deployed-state evidence:
 

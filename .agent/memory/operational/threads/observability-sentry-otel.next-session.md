@@ -1,19 +1,19 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — session handoff after
-reviewer-finding reintegration and the markdown-code-block rule sidecar.
-Earlier in this session the branch gates were fixed and full `pnpm check`
-exited 0. WS3 release cancellation landed as `2822e525`
+reviewer-finding reintegration packaged as `d9cb54e8` and owner push.
+Branch is in sync with origin at `cc71507b`; the pushed history includes WS3
+release cancellation `2822e525`
 (`fix(mcp): relocate production cancellation gate`). Lane B startup/release
 boundary implementation landed as `9ea3ccd8`
 (`fix(observability): decouple local startup from sentry release`). Reviewer
 findings are now folded back into code/docs; focused tests, `pnpm type-check`,
 `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`, targeted markdownlint,
-`pnpm portability:check`, and `git diff --check` pass. The MD040 offender was
-fixed by adding a platform-agnostic markdown-code-block rule;
-`pnpm markdownlint-check:root` now passes. No staged WS3 residue is expected.
-`RuntimeConfig.buildIdentity` remains intentionally deferred to the future
-canonicalisation lane.)
+`pnpm portability:check`, `pnpm markdownlint-check:root`, and
+`git diff --check` passed before final handoff edits. Full `pnpm check` was
+not rerun after those final doc-only edits. No staged WS3 residue is expected.
+Next Sentry-focused session should collect deployed-state evidence for the
+pushed branch.)
 
 **Prior refresh**: 2026-04-25 (Codex / cursor / GPT-5.5 — session handoff
 after completing
@@ -258,7 +258,7 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration` | 2026-04-24 | 2026-04-25 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff` | 2026-04-24 | 2026-04-25 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `session-handoff-closeout; startup-boundary-phase0-executor; startup-boundary-red-and-gate-recovery-planning; gate-recovery-executor; startup-boundary-phase2-partial-green` | 2026-04-24 | 2026-04-25 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
@@ -298,6 +298,12 @@ plan, then start committing in sensible chunks." Outcome:
   Reviewers reported concrete blockers; this session is folding those findings
   into code/docs and rerunning gates. `RuntimeConfig.buildIdentity` remains an
   intentional future-canonicalisation deferral, not forgotten scope.
+- **Reviewer reintegration landed and pushed**: `d9cb54e8`
+  (`fix(observability): close startup-boundary reviewer findings`) packaged the
+  reviewer fixes, Search CLI inclusion, docs/ADR updates, Sentry build-env
+  helper, and MD040 rule sidecar. Owner pushed the branch; local
+  `feat/otel_sentry_enhancements` is in sync with origin at `cc71507b`.
+  Full `pnpm check` was not rerun after the final handoff-only docs.
 
 **Prior session (2026-04-25 Codex / cursor / GPT-5.5 — gate recovery +
 startup-boundary Phase 2 partial GREEN, paused for owner-requested context
@@ -663,7 +669,7 @@ Evidence:
 
 - **Focused local-startup follow-up**:
   [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
-  — active; Phase 0 inventory and Phase 1 RED tests are complete.
+  — active record; all phases completed and packaged in `d9cb54e8`.
   [`phase-0-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
   names the source-of-truth matrix, local gate preconditions, test
   classification, ADR-163 decision, and Phase 1 RED targets.
@@ -677,7 +683,8 @@ Evidence:
 - **Next-session pickup**:
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
   — release-identifier alignment + ADR-163 amendment + cancellation
-  ADR linkage.
+  ADR linkage. Next Sentry-focused work is deployed-state / WS6 evidence,
+  with full `pnpm check` only if aggregate repo health is to be claimed.
 - **Repo-owned corrective lane closure record**:
   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
 - **Parent context**:
@@ -689,16 +696,28 @@ Evidence:
 
 ### Current objective
 
-Reviewer-finding reintegration after the gate-green state is implemented. WS3
-is landed (`2822e525`), Lane B is landed (`9ea3ccd8`), and no staged WS3
-residue is expected. The next session should resume the original observability
-plan work from this closure point: preserve the mixed worktree, package/stage
-only the intended observability/search/doc changes if committing, and leave
-parallel collaboration-doc, memory, and `.codex/config.toml` changes alone
-unless the owner redirects.
+Reviewer-finding reintegration is implemented, committed, and pushed. WS3 is
+landed (`2822e525`), Lane B is landed (`9ea3ccd8`), and the reviewer package is
+landed (`d9cb54e8`). No staged WS3 residue is expected. The next Sentry-focused
+session should start with deployed-state validation for the pushed branch, while
+preserving any unrelated WIP if it reappears.
 
 ### Current state
 
+- **Latest Codex/codex closeout (2026-04-25)**: reviewer reintegration landed
+  as `d9cb54e8` and was pushed by the owner. The branch is in sync with origin
+  at `cc71507b`; the latest pushed commit is a user/local Codex-network config
+  commit, while `d9cb54e8` is the observability payload. Package contents:
+  `createSentryBuildEnvironment(processEnv)`, runtime
+  `VERCEL_GIT_COMMIT_REF` schema inclusion, local no-auth env scrubbing, Search
+  CLI ingest-harness test inclusion, docs/ADR refresh, Sentry build-env tests,
+  and MD040 markdown-code-block sidecar. Gates run before final handoff edits:
+  focused HTTP tests/UI/a11y/smoke, Search CLI tests, `pnpm type-check`,
+  `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`,
+  `pnpm markdownlint-check:root`, `pnpm portability:check`, and
+  `git diff --check`. Commit hook also passed Prettier, markdownlint, knip,
+  depcruise, and cached Turbo type-check/lint/test. Full `pnpm check` was not
+  rerun after final doc-only handoff edits.
 - **Latest session (2026-04-24, Frodo / claude-code / claude-opus-4-7-1m,
   WS2 §2.1-§2.7 atomic landing)**: single commit `f5a009ab` on
   `feat/otel_sentry_enhancements` (29 files, +1341/-930). Landed
@@ -873,30 +892,19 @@ unless the owner redirects.
 
 ### Blockers / low-confidence areas
 
-- WS1 sets up the cross-resolver contract test as a new file; needs
-  to live where both `packages/core/build-metadata` and
-  `packages/libs/sentry-node` are accessible. ADR §1 + §10 names the
-  edge as `libs ← core` devDependency; WS1 establishes that edge if
-  not already present.
-- WS1 cancellation-wiring integration check must read
-  `apps/oak-curriculum-mcp-streamable-http/vercel.json` and assert
-  the `ignoreCommand` resolves to the canonical script via the
-  workspace shim — i.e. catches accidental shim deletion or path
-  drift, not script logic (already covered by unit tests).
-- End-to-end Sentry verification (WS6) requires a fresh preview
-  deploy after WS2 lands. Push a no-op commit on
-  `feat/otel_sentry_enhancements` if needed to trigger the deploy.
-- Full `pnpm check` was green after WS3/Lane B commits and before this
-  reintegration pass. After reintegration, focused tests, `pnpm type-check`,
-  `pnpm lint`, `pnpm knip`, `pnpm test`, `pnpm build`, targeted markdownlint,
-  `pnpm portability:check`, `pnpm markdownlint-check:root`, and
-  `git diff --check` pass. Full `pnpm check` was not rerun after the
-  handoff-only doc updates.
+- Deployed-state evidence has not been collected in this session. The pushed
+  branch should have triggered Vercel; the next agent must verify the actual
+  deployment before making Sentry release/readiness claims.
+- Full `pnpm check` was green earlier after WS3/Lane B commits, but was not
+  rerun after reviewer reintegration and final handoff-only doc edits. Do not
+  claim aggregate repo health until it is rerun.
 - The runtime shape is intentionally only partially canonical:
   `RuntimeConfig.version` feeds app-version consumers and Sentry projection
   inputs, but `RuntimeConfig` does not yet carry a first-class
   `AppBuildIdentity` value. That remains routed to
   `mcp-http-runtime-canonicalisation.plan.md`.
+- Current uncommitted changes after this handoff are continuity-only. Preserve
+  any unrelated WIP if it reappears; do not reset or restage broadly.
 
 ### Standing decisions
 
@@ -925,25 +933,26 @@ unless the owner redirects.
 
 ### Next safe step
 
-Continue from reviewer-finding reintegration closure:
+Start the next Sentry-focused session from deployed-state validation:
 
-1. Preserve unrelated/parallel changes, especially the user-local
-   `.codex/config.toml` modification and the active collaboration/memory
-   surfaces.
-2. Do not claim full `pnpm check` green unless it is rerun after the final
-   handoff/doc-only edits.
-3. If packaging this slice, stage only the observability/search/doc files
-   changed by this reintegration pass and the two new
-   `sentry-build-environment` files.
-4. Keep first-class `RuntimeConfig.buildIdentity`, public
+1. Preserve unrelated/parallel changes if they reappear.
+2. Confirm the pushed branch state (`origin/feat/otel_sentry_enhancements` at
+   `cc71507b`, with observability payload `d9cb54e8`) and identify the Vercel
+   deployment it triggered.
+3. Collect WS6 evidence against that deployment: resolved release name,
+   environment, deploy linkage, `git.commit.sha`, source maps / Debug IDs, and
+   representative Sentry events. Record evidence in the release-identifier plan
+   or a linked evidence file.
+4. If aggregate repo health must be claimed, rerun full `pnpm check`; otherwise
+   preserve the explicit caveat that it was not rerun after final handoff edits.
+5. Keep first-class `RuntimeConfig.buildIdentity`, public
    `HttpObservability.release` removal/rename, and remaining smoke
    composition-root global mutation cleanup routed to
    [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
    unless owner explicitly broadens this slice.
 
-If owner-run validation of the previously archived corrective lane surfaces a
-fresh repo defect in parallel, that takes priority: open the smallest targeted
-repair lane that names that defect explicitly.
+If deployed-state validation surfaces a fresh repo defect, open the smallest
+targeted repair lane that names that defect explicitly.
 
 ### Active track links
 
