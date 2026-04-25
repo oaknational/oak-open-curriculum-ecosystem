@@ -232,6 +232,47 @@ held over).
 
    Findings surface as `[<rule>] ↔ [<plan>]: <observed direction missing>`. New bidirectional pairs are added here when subsequent rules cite plan authorities.
 
+   <a id="stale-claim-audit"></a>**7e. Audit the active-claims registry for stale entries.** The
+   [`active-claims.json`](../state/collaboration/active-claims.json)
+   registry is signal-like state, not durable memory. Stale claims are noise
+   to be archived at consolidation, not blockers that strand other agents.
+   The audit shape:
+
+   1. Read `.agent/state/collaboration/active-claims.json`. For every
+      entry, compute `staleness_threshold = claimed_at + freshness_seconds`
+      (default `freshness_seconds` is 14400 = 4 hours). Use `heartbeat_at`
+      in place of `claimed_at` if present and more recent.
+   2. **Stale entries**: any claim where `staleness_threshold < now()`.
+      Move each stale entry to
+      [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
+      preserving the entry verbatim and adding `archived_at` (today's ISO
+      8601 date) at the top of the archived entry. Remove the entry from
+      `active-claims.json`. Archive, do not delete — conversation files,
+      napkin observations, and embryo-log entries may cite archived
+      `claim_id` values permanently.
+   3. **Unclosed-but-fresh entries**: any claim whose agent has not
+      registered a subsequent thread-record entry (no `last_session`
+      update in the matching `<thread>.next-session.md` since
+      `claimed_at`). This is *informational only* — possible crash, not a
+      block. Surface to the owner as `[<claim_id>] <agent_name>: claim
+      open since <claimed_at>; no thread-record activity since`. The agent
+      is not stranded by a peer's silent failure to close a claim; the
+      stale-archive pass cleans up at the next staleness threshold.
+   4. **Schema validation**: confirm `active-claims.json` and
+      `closed-claims.archive.json` parse as JSON and conform to
+      [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
+      Malformed JSON or schema violations surface as
+      `[<file>]: <validator output>` for owner review. There is no
+      automated validation tooling at this surface (per the source plan's
+      files-first non-goal); the audit relies on the consolidator running
+      `node -e 'JSON.parse(...)'` or a similar inline check.
+
+   Findings surface alongside the 7a–7d findings; archival edits land as
+   normal consolidation diffs. New cross-thread coordination signals
+   (e.g. an unclosed claim from an agent on another thread) flow up to
+   `repo-continuity.md § Active threads` if they affect another thread's
+   next safe step.
+
 8. **Review the Practice Core for upstream refinement.** The previous step moves new knowledge *into* permanent homes (downstream). This step does the opposite: reads *existing* Practice Core content against current practice and surfaces refinement opportunities (upstream). Without this step, the Core carries intent, mechanisms, examples, and templates that drift from current practice as everything around them evolves. Session learning that contradicts, extends, or refines existing Core substance must reach the Core or the Core stagnates.
 
    **Surfaces reviewed**:

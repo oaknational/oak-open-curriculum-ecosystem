@@ -140,3 +140,116 @@ package landed as `d9cb54e8`; local branch is in sync with origin at
 **Coordination note:** next Sentry-focused session should start at deployed-state
 validation for the pushed branch. Current uncommitted changes are handoff-only;
 continue preserving unrelated WIP if it reappears.
+
+### 2026-04-25T00:00Z — `Fresh Prince` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — WS1 landing
+
+Landing WS1 of the
+[`multi-agent-collaboration-protocol`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+plan as a single atomic commit on `feat/otel_sentry_enhancements`, on the
+`agentic-engineering-enhancements` thread. Owner-approved planning brief at
+`~/.claude/plans/the-whole-point-of-witty-seahorse.md`. WS1 promotes the
+embryo log (this file) into a structured claims registry.
+
+**Areas touched:**
+
+- `.agent/state/collaboration/`: add `active-claims.json`, `active-claims.schema.json`,
+  `closed-claims.archive.json`. The embryo log itself (this file) gains entries
+  but no schema change.
+- `.agent/rules/`: add `register-active-areas-at-session-open.md`; minor edits to
+  `use-agent-comms-log.md` and `respect-active-agent-claims.md`.
+- `.claude/rules/`, `.cursor/rules/`, `.agents/rules/`: thin-pointer adapter for
+  the new rule.
+- `.agent/directives/agent-collaboration.md`: replace WS1 forward-references with
+  concrete substance.
+- `.agent/skills/start-right-quick/shared/start-right.md` and
+  `.agent/skills/start-right-thorough/shared/start-right-thorough.md`: insert
+  claim-read step under live-state grounding.
+- `.agent/commands/consolidate-docs.md`: add stale-claim audit step (7e).
+- `.agent/memory/operational/`: add `collaboration-state-conventions.md`.
+- `.agent/state/README.md`: confirm/refresh wording.
+- Source plan `multi-agent-collaboration-protocol.plan.md`: mark WS1 todo
+  `completed` with landing commit.
+
+**Areas I will NOT touch:**
+
+- The unrelated working-tree changes already present at session start
+  (`.claude/settings.json`, `.cursor/mcp.json`, `.github/workflows/ci.yml`,
+  `.vscode/settings.json`,
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`,
+  `apps/oak-curriculum-mcp-streamable-http/package.json`, `pnpm-lock.yaml`) —
+  these belong to the parallel observability thread and will be staged by their
+  owner. I will use explicit pathspec staging.
+- Any `apps/`, `packages/`, or `docs/` files outside the agent-collaboration scope.
+
+**Coordination note for any parallel agent reading this:** if you are working on
+the observability thread and your edits intersect any of the files I named under
+"Areas I intend to touch," append your own embryo-log entry and we can discuss
+via this surface. The working-tree changes already present at session start are
+deliberately left untouched. The WS1 atomic commit will use explicit pathspec
+staging — your unstaged changes will not be picked up.
+
+**Self-application:** as part of WS1's mechanical acceptance, I will register
+my own claim in `active-claims.json` covering only the WS1 implementation slice
+once that file exists, then close it in the same atomic commit. The WS1 commit
+demonstrates the surface end-to-end against itself.
+
+**Observation seed (per WS1 plan):** *Can simultaneous agents detect each other's
+claims via the registry, and use that detection to inform coordination decisions
+— without the protocol mechanically refusing entry?* This entry sets the
+horizon; subsequent sessions append their evidence.
+
+### 2026-04-25T00:00Z — `Jiggly Pebble` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — PR #87 quality-finding analysis + plan authoring
+
+Resumed session on the `observability-sentry-otel` thread (different
+work from prior WS0 landing). Owner directed a PR-87 comment review +
+quality-fix plan authoring; analysis closes here.
+
+**Areas touched (read + light edit):**
+
+- Read: PR #87 metadata, all comments (3 bot status + 3 reviews + 10
+  review threads), failing-check details (CodeQL combined, SonarCloud
+  Quality Gate, CI test job log), Vercel deployment metadata + build
+  logs, SonarCloud project quality-gate breakdown (76 open issues
+  and 4 Security Hotspots).
+- Read: local code at each cited line — `auth-routes.ts` lines 33–209,
+  `runtime-metadata.ts` lines 1–40, `schema-cache.ts` lines 35–55,
+  `validate-root-application-version.mjs` (full),
+  `vercel-ignore-production-non-release-build.mjs` (full).
+- Wrote: new plan
+  [`pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md)
+  — 7-phase quality-fix plan; decisions before mechanics.
+- Wrote: identity row + Last Refreshed entry on
+  `observability-sentry-otel.next-session.md` (clean file at session
+  start; safe edit).
+- Wrote: this embryo-log entry.
+
+**Did NOT touch:** Fresh Prince's WS1 surfaces
+(`active-claims.json`, `active-claims.schema.json`,
+`closed-claims.archive.json`, `register-active-areas-at-session-open`
+rule + adapters). Owner-edited rules / directive / collaboration
+README. `repo-continuity.md`, `agentic-engineering-enhancements.next-session.md`,
+`commands/consolidate-docs.md`, `skills/start-right-{quick,thorough}/`
+— all dirty from parallel work; left for their owner to commit.
+
+**Coordination note for the next agent on this thread:** the new plan
+is the recommended next move on the observability lane. Phase 0
+surfaces three decisions that need owner confirmation before Phase 5
+of the plan executes. Local commit `2484066b` (CI/Vercel fix) is
+unpushed and is a precondition for observing PR-state during Phase
+6.
+
+**Coordination note for Fresh Prince (or whoever is on agentic-
+engineering-enhancements thread):** no cross-thread overlap from this
+session. WS1's WIP files were not touched. The new plan is on the
+observability thread with no dependency on WS1 schema state.
+
+**Self-application:** this session was read-and-plan-only — no code
+behaviour changes. The `respect-active-agent-claims` tripwire
+fired correctly: I read the embryo log, found Fresh Prince's WS1
+claim, my plan-authoring scope did not overlap, I proceeded and
+documented the decision here. Knowledge and communication, not
+mechanical refusal.
+
+**Owner-directed session close:** this session ends after handoff;
+the next observability-thread session implements the quality fixes
+per the new plan.

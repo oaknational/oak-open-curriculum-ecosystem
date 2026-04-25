@@ -19,21 +19,18 @@ It complements, but does not replace,
 repository principle, surface the conflict and discuss it rather than
 silently choosing one.
 
-## What This Directive Installs (WS0)
+## What This Directive Installs
 
-WS0 of the [`multi-agent-collaboration-protocol`][p] plan establishes:
-
-- the **vocabulary** of agent-to-agent collaboration — the working model,
-  the channel taxonomy, the identity-vs-liveness distinction;
-- a **discoverability surface** for sequential agents — the embryo
-  discovery log at `.agent/state/collaboration/log.md`;
-- the **two foundational behavioural rules** — `dont-break-build-without-fix-plan`
-  and `respect-active-agent-claims`.
-
-WS0 establishes the vocabulary and a discovery surface. **It does not by
-itself prevent parallel-agent clashes**; that is WS1's claim, building on
-this foundation. WS3 adds structured conversation files and the sidebar
-mechanism. WS5 harvests evidence and drives refinement.
+This directive is grown by the [`multi-agent-collaboration-protocol`][p]
+plan. WS0 + WS1 (landed) install: vocabulary, the embryo discovery log,
+the structured claims registry, the JSON Schema authority, the staleness
+archive, and three behavioural rules (`dont-break-build-without-fix-plan`,
+`respect-active-agent-claims`,
+[`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)).
+WS3 adds conversation files and the sidebar mechanism. WS5 harvests
+evidence and drives refinement. Operational detail (schemas, lifecycle,
+field provenance) lives in
+[`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Knowledge and Communication, Not Mechanical Refusals
 
@@ -60,26 +57,20 @@ Locks are the wrong tool for reasoning peers.
 ## Working Model
 
 The collaboration model between agents is **dialogue**, not authority
-hierarchy. There is no orchestrator agent and no peer with veto power. The
-owner is the final tiebreaker, surfaced explicitly through named channels
-when peer agreement does not converge.
+hierarchy. No orchestrator, no peer with veto power; the owner is the
+final tiebreaker, surfaced through named channels when peer agreement
+does not converge. Agents consult the surface before operating in
+another agent's area; constructively challenge peer direction that
+appears wrong; treat shared infrastructure (build, type, lint, static
+analysis) as a shared good and do not break it without a fix plan;
+match scope to the work in front of them; preserve conversation
+evidence so future refinements cite real exchanges, not reconstructed
+memory.
 
-Agents should:
-
-- consult the surface before operating in another agent's area;
-- constructively challenge a peer's direction that appears wrong, damaging,
-  or inconsistent with settled doctrine;
-- treat shared infrastructure (build, type, lint, static analysis) as a
-  shared good — do not break it without a fix plan;
-- match scope to the work in front of them; do not opportunistically expand
-  into a peer's area without coordination;
-- preserve conversation evidence so future refinements can cite real
-  exchanges, not reconstructed memory.
-
-Overrides are rare. The normal posture is shared reasoning across the
-working tree: make the concern visible, explain why it matters, and let the
-peer respond. If there is no response and the work blocks, escalate via the
-explicit owner-escalation channel (WS3).
+The normal posture is shared reasoning across the working tree: make
+the concern visible, explain why it matters, let the peer respond. If
+the work blocks without response, escalate via the explicit
+owner-escalation channel (WS3).
 
 ## Scope Discipline Across Agent Boundaries
 
@@ -105,15 +96,18 @@ rule operationalises this for cross-agent context.
 
 ### b. Don't Operate in Another Agent's Area Without Consulting the Surface
 
-"Area" is provisionally defined as: any file path, plan, ADR, or workspace
-currently named in another agent's recent embryo-log entry or (from WS1)
-active claim entry.
+"Area" is defined as: any file path, plan, ADR, or workspace currently
+named in another agent's recent embryo-log entry or in an active claim
+entry in
+[`active-claims.json`](../state/collaboration/active-claims.json).
 
 The
 [`respect-active-agent-claims`](../rules/respect-active-agent-claims.md)
 rule fires as a tripwire: *do not proceed until you have consulted the
 surface and decided how to coordinate*. It does **not** fire as: *refuse
-if a claim exists*.
+if a claim exists*. The companion
+[`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)
+rule operationalises the consult-and-register half of the same tripwire.
 
 ## Communication Channels
 
@@ -129,22 +123,14 @@ shape of what you need to communicate.
 | Reviewer dispatch | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (docs-adr, assumptions, etc.) | already in use |
 | Owner question via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing-information that only the owner can supply | already in use |
 
-A few channel-selection rules:
-
-- The **embryo log is a discovery surface, not a synchronisation surface**.
-  Two agents writing simultaneously produce eventually-consistent
-  interleaved entries. That is by design and is fine for discovery — later
-  readers benefit from earlier writers' notes.
-- **Reviewer dispatch is not peer collaboration**. Reviewer sub-agents
-  (`docs-adr-reviewer`, `assumptions-reviewer`, etc.) are
-  fork-blocking-rejoin invocations *inside one agent's session*. They are
-  not peers; they do not have parallel sessions; they do not register
-  claims. Peer collaboration is asynchronous between independent sessions.
-- **Owner is the final tiebreaker**, surfaced through a named channel
-  (`AskUserQuestion`, or — from WS3 — the
-  `.agent/state/collaboration/escalations/` directory polled at
-  `consolidate-docs`). Peer agreement is the default; owner escalation is
-  the last move when agreement fails.
+Channel-selection rules: the **embryo log is a discovery surface, not a
+synchronisation surface** — eventually-consistent interleaved appends are
+fine. **Reviewer dispatch is not peer collaboration** — reviewer
+sub-agents are fork-blocking-rejoin within one agent's session and do
+not register claims. **Owner is the final tiebreaker**, surfaced through
+`AskUserQuestion` or (from WS3) the polled escalations directory; peer
+agreement is the default, owner escalation is the last move when
+agreement fails.
 
 ## Identity vs Liveness
 
@@ -156,9 +142,13 @@ These are different concerns and live in different surfaces.
   [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
   rule installs the session-open tripwire.
 - **Liveness** is when-was-this-agent-last-active-here, a *freshness
-  signal* on a claim. Liveness lives in `.agent/state/` and is introduced
-  by WS1's structured claims. Stale claims become **noise to be audited
-  at consolidation**, not blockers that strand other agents.
+  signal* on a claim. Liveness lives on the structured-claims surface;
+  each claim carries `claimed_at`, optional `heartbeat_at`, and a
+  `freshness_seconds` budget (default 14400 = 4 hours). After expiry the
+  claim is **stale** — noise to be audited at consolidation, not a blocker
+  that strands other agents. Stale claims are archived (not deleted) by
+  `consolidate-docs` so conversation files and napkin observations can
+  cite archived claims permanently.
 
 The PDR-027 identity schema is reused inside claim entries. No new
 identity concept is introduced.
@@ -166,68 +156,59 @@ identity concept is introduced.
 ## Bootstrap Fast-Path
 
 The single-agent case (no other agents present) pays the protocol's
-**minimum overhead — one read, one write**. The agent reads the embryo
-log (and from WS1, `active-claims.json`); finding no other claims, the
-agent logs *"no other agents present"* to the embryo log and proceeds.
-The single write is load-bearing: it is the discovery seed for whatever
-sequential agent comes next. WS1's
-`register-active-areas-at-session-open` rule (forward reference)
-implements the structured form of the same early-return.
+**minimum overhead — one read, one write**. The agent reads
+[`active-claims.json`](../state/collaboration/active-claims.json) and the
+[embryo log](../state/collaboration/log.md); finding no other claims, the
+agent logs *"no other agents present"* to the embryo log, registers its
+own claim covering the session's intended areas, and proceeds. The single
+write is load-bearing: it is the discovery seed for whatever sequential
+agent comes next. The
+[`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)
+rule operationalises this early-return.
 
 The fast-path is not an exception to the protocol; it is the protocol's
 minimum-overhead shape under low contention. Solo sessions do not pay
 parallel-session coordination overhead beyond the single-write seed.
 
-## Conversations as First-Class Learning-Loop Inputs
+## Conversations as Learning-Loop Inputs
 
-The embryo log, structured claims (WS1), conversation files (WS3), and
-sidebar transcripts (WS3) are durable evidence alongside the napkin. When
-a refinement to this directive or to the claim/conversation schemas is
-drafted, it cites entries from those surfaces directly — the same way a
-refinement cites a napkin observation.
-
-Lessons captured from agent-to-agent conversations land as napkin
-observations through the standard learning-loop. WS5's seed harvest reads
-across all of them. This wiring is named here so future agents do not
-have to discover it: **the surfaces this directive installs are
-learning-loop inputs, not just operational coordination.**
+Embryo-log entries, claim entries, conversation files (WS3), and sidebar
+transcripts (WS3) are durable evidence alongside the napkin. Refinements
+to this directive or to the claim/conversation schemas cite entries from
+those surfaces directly. Lessons graduate via the standard learning-loop;
+WS5's seed harvest reads across all of them.
 
 ## Schema Evolution
 
-JSON schemas in `.agent/state/collaboration/` carry an explicit
-`schema_version` field from the first commit. Compatibility is
-**additive-only within a major version**: a v1.x agent reading a v1.y
-file (`y > x`) ignores unrecognised fields and preserves them on
-write-back. Major-version mismatch causes the agent to bail out with an
-error pointing at the protocol upgrade.
-
-The model is documented in each schema's `$comment_compatibility` block.
-The embryo log at WS0 is intentionally schema-less and exempt from this
-rule; structure crystallises at WS1/WS3 informed by observed embryo-log
-usage.
+JSON schemas in `.agent/state/collaboration/` carry `schema_version` from
+their first commit. Compatibility is **additive-only within a major
+version**: v1.x agents reading v1.y files (`y > x`) ignore unrecognised
+fields and preserve them on write-back; major-version mismatch causes the
+agent to bail out. The contract is documented in each schema's
+`$comment_compatibility` block. Field provenance and lifecycle detail live
+in [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
+Field reductions land as major-version bumps.
 
 ## Threat Model
 
-The protocol assumes **trusted agents**. Agents follow the doctrine in
-good faith: claims describe real intent, embryo-log entries are honest,
-build-breakage is reported. Misbehaving agents (claiming excessive scope,
-never releasing claims, fabricating entries) are out of scope; the owner
-is responsible for detecting and resolving these cases at consolidation.
-A hostile-agent threat model — claim integrity, signed entries, tamper
-detection — is a future PDR if the trust assumption breaks down.
+The protocol assumes **trusted agents** acting in good faith. Misbehaving
+agents (excessive scope claims, never-released claims, fabricated entries)
+are out of scope; the owner detects and resolves these at consolidation.
+A hostile-agent threat model is a future PDR if the trust assumption
+breaks down. **Future agents who suspect the trust assumption is failing
+should NOT add hardening (signed entries, claim-integrity checks, scope
+quotas) — surface the suspicion to the owner, who decides whether to open
+a hostile-agent threat-model PDR.** The protocol is deliberately advisory;
+hardening would be a category error.
 
 ## Founding Pattern
 
-The motivating evidence for this entire directive is captured at
-[`parallel-track-pre-commit-gate-coupling`][founding-pattern] in the
-collaboration-patterns memory class. Three cross-session instances
-within a 48-hour window (Frodo prettier 2026-04-24, Pippin auto-staging
-2026-04-24, Jazzy knip 2026-04-25) demonstrated that full-repo
-pre-commit gates couple parallel agent sessions. The pattern documents
-the failure shape, the discipline ("surface, don't bypass, route to
-owner"), and names this directive's structural fix as the corrective
-work. New instances of the pattern surface in
-[`napkin.md`][napkin] and feed
+Three cross-session instances of full-repo pre-commit gates coupling
+parallel agent sessions inside a 48-hour window (Frodo prettier
+2026-04-24, Pippin auto-staging 2026-04-24, Jazzy knip 2026-04-25)
+motivated this directive. The pattern is captured at
+[`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
+instances surface in [`napkin.md`][napkin] and feed
 [WS5's seed harvest][p].
 
 ## Foundation Alignment
@@ -247,11 +228,10 @@ This directive operationalises:
   — capture → distil → graduate → enforce pipeline; files first, code
   only when files prove the design.
 - ADR-150 (continuity surfaces, session handoff, surprise pipeline) —
-  host-side continuity-surfaces decision (paired with PDR-011); under
+  host-side companion to PDR-011; under
   `docs/architecture/architectural-decisions/`.
-- [ADR-125](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-  — canonical content in `.agent/`; thin platform adapters; platform
-  entrypoints.
+- [ADR-125][adr-125] — canonical content in `.agent/`; thin platform
+  adapters; platform entrypoints.
 
 ## Cross-references
 
@@ -262,6 +242,13 @@ This directive operationalises:
   distinction.
 - [`.agent/state/collaboration/log.md`](../state/collaboration/log.md) —
   embryo discovery log (WS0).
+- [`active-claims.json`][active-claims] — structured claims registry (WS1).
+- [`active-claims.schema.json`][active-claims-schema] — JSON Schema
+  authority (WS1).
+- [`closed-claims.archive.json`][closed-claims] — staleness archive (WS1).
+- [`collaboration-state-conventions.md`][state-conventions] — operational
+  guide to lifecycle, schema-field provenance, and trusted-agents threat
+  model.
 - [`agent-collaboration-channels.md`][channels-card] — five-channel
   reference card.
 - [`threads/README.md`][threads-readme] — thread convention and
@@ -272,3 +259,8 @@ This directive operationalises:
 [threads-readme]: ../memory/operational/threads/README.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
 [napkin]: ../memory/active/napkin.md
+[active-claims]: ../state/collaboration/active-claims.json
+[active-claims-schema]: ../state/collaboration/active-claims.schema.json
+[closed-claims]: ../state/collaboration/closed-claims.archive.json
+[state-conventions]: ../memory/operational/collaboration-state-conventions.md
+[adr-125]: ../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md

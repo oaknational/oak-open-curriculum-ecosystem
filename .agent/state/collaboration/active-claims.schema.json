@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "active-claims.schema.json",
+  "title": "Active Agent Claims Registry",
+  "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step (which validates a file against the schema declared by the file's own schema_version, not against an older or newer schema). It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields rather than rejecting the file. The runtime contract is field-preservation; the authoring/validation contract is no-free-form-expansion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "claims"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"],
+      "description": "Semantic version of this registry schema. Major version controls compatibility per $comment_compatibility."
+    },
+    "claims": {
+      "type": "array",
+      "description": "Currently-active claims. Empty array means no agent has registered an active claim. Stale claims are archived to closed-claims.archive.json by consolidate-docs.",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "agent_id",
+        "thread",
+        "areas",
+        "claimed_at",
+        "intent"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this claim entry. UUID v4 recommended; any string that is unique across the active and archived registries is acceptable."
+        },
+        "agent_id": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "thread": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Slug of the thread this claim is on (e.g. 'agentic-engineering-enhancements'). Matches a thread record at .agent/memory/operational/threads/<slug>.next-session.md."
+        },
+        "areas": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Areas of the repo this claim covers. At least one area required.",
+          "items": {
+            "$ref": "#/$defs/area"
+          }
+        },
+        "claimed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when this claim was registered."
+        },
+        "freshness_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "default": 14400,
+          "description": "How long this claim should be treated as current. After claimed_at + freshness_seconds, the claim is stale (noise to be audited at consolidation, not a blocker that strands other agents). Default 14400 (4 hours)."
+        },
+        "heartbeat_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional ISO 8601 timestamp updated by the agent during long sessions to keep a claim fresh. Absence means the claim is as fresh as claimed_at."
+        },
+        "sidebar_open": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether a WS3 sidebar conversation is currently open against this claim. Forward-reference; WS3 fills in the sidebar mechanism."
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short free-form description of what the agent intends. Strength of signal is communicated through the prose here ('atomic refactor in progress, please coordinate' vs 'routine edits, ping me if you also touch this'). Single-level claim model — no exclusivity gradient field; intent prose carries strength."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional free-form coordination note for whoever reads this entry."
+        },
+        "archived_at": {
+          "type": "string",
+          "format": "date",
+          "description": "Optional ISO 8601 date set by consolidate-docs § 7e when archiving a stale claim to closed-claims.archive.json. Presence indicates the entry has been archived; absence indicates it is (or was) active. This field should only appear in closed-claims.archive.json — its presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        }
+      }
+    },
+    "agent_id": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_name", "platform", "model", "session_id_prefix"],
+      "description": "Per PDR-027 agent identity schema. Reused unchanged from thread-record identity rows.",
+      "properties": {
+        "agent_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Persistent descriptive name for this agent on this thread."
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Platform identifier: claude-code, cursor, codex, gemini, etc."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical model id, e.g. claude-opus-4-7-1m."
+        },
+        "session_id_prefix": {
+          "type": "string",
+          "description": "First 6 characters of the harness session ID; 'unknown' if not exposed."
+        }
+      }
+    },
+    "area": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "patterns"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["files", "workspace", "plan", "adr"],
+          "description": "Kind of area being claimed. 'files' for path globs; 'workspace' for a pnpm workspace name; 'plan' for a plan file slug; 'adr' for an ADR number."
+        },
+        "patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Patterns identifying the area. Globs for files; workspace names for workspace; plan file paths for plan; ADR numbers (e.g. 'ADR-163') for adr."
+        }
+      }
+    }
+  }
+}

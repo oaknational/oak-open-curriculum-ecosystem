@@ -25,6 +25,16 @@ Read and internalise these documents:
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
 
+## Active-Claims Registry
+
+Before any edit, read `.agent/state/collaboration/active-claims.json` and
+apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
+rule. Bootstrap fast-path: if no entries other than your own, log
+"no other agents present" to `.agent/state/collaboration/log.md` and
+proceed. On overlap, consult the embryo log and decide how to coordinate
+(proceed with caution / ping / sidebar / ask owner). Then register your
+own claim covering the areas you intend to touch.
+
 ## Learning-Loop Surfaces
 
 Before engaging with the work, scan the active-memory capture surfaces:

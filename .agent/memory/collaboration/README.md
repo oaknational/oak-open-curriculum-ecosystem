@@ -11,16 +11,16 @@ split_strategy: "Each pattern entry is one file; this README is the index. As th
 Lessons-learned about **agent-to-agent collaboration patterns**, distinct
 from `.agent/memory/active/patterns/` (code/architecture/process patterns).
 This memory class was installed by WS2 of the
-[`multi-agent-collaboration-protocol`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
-plan as a sibling to the active-patterns class — same lifecycle (capture in
-napkin → distil → graduate to permanent file when the pattern earns it),
-different substance (cross-agent coordination patterns, not single-agent
+[multi-agent-collaboration-protocol][p] plan as a sibling to
+the active-patterns class — same lifecycle (capture in napkin → distil →
+graduate to permanent file when the pattern earns it), different
+substance (cross-agent coordination patterns, not single-agent
 engineering patterns).
 
 ## Lifecycle
 
-Per [PDR-011 §The surprise-to-enforcement pipeline](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md):
-capture → distil → graduate → enforce. Collaboration-pattern instances
+Per [PDR-011 §The surprise-to-enforcement pipeline][pdr-011]: capture →
+distil → graduate → enforce. Collaboration-pattern instances
 follow the same path. Capture: napkin entry from a session that observed
 the pattern. Distil: cross-session entries refined into `distilled.md`.
 Graduate: stable, multi-instance pattern earns a permanent file in this
@@ -69,8 +69,10 @@ related_rule: <optional path to .agent/rules/ entry>
 
 - [`agent-collaboration.md`](../../directives/agent-collaboration.md) —
   agent-to-agent working model.
-- [PDR-011](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)
-  — capture→distil→graduate→enforce pipeline; `.agent/state/` and
-  `.agent/memory/` as sibling classes.
+- [PDR-011][pdr-011] — capture→distil→graduate→enforce pipeline;
+  `.agent/state/` and `.agent/memory/` as sibling classes.
 - [`active/patterns/README.md`](../active/patterns/README.md) — sibling
   class for single-agent engineering patterns.
+
+[p]: ../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
+[pdr-011]: ../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md

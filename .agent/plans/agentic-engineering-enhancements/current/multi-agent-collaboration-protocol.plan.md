@@ -14,7 +14,8 @@ todos:
     landed_on: 2026-04-25
   - id: ws1-state-claims
     content: WS1 — Create .agent/state/ directory + collaboration claims registry with versioned JSON schema; add register-active-areas-at-session-open rule; document TTL/heartbeat/salvage lifecycle.
-    status: pending
+    status: completed
+    landed_on: 2026-04-25
   - id: ws2-collaboration-memory
     content: WS2 — Create .agent/memory/collaboration/ memory class for durable collaboration lessons; graduate the parallel-track-pre-commit-gate-coupling pattern from the napkin as the founding entry.
     status: completed
