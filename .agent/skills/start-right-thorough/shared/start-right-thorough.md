@@ -3,7 +3,7 @@ prompt_id: start-right-thorough
 title: "Start Right (Thorough)"
 type: workflow
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-04-26
 ---
 
 # Start Right (Thorough)
@@ -29,11 +29,16 @@ Read and internalise these documents:
 
 Before any edit, read `.agent/state/collaboration/active-claims.json` and
 apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
-rule. Bootstrap fast-path: if no entries other than your own, log
-"no other agents present" to `.agent/state/collaboration/log.md` and
-proceed. On overlap, consult the shared communication log and decide how
-to coordinate (proceed with caution / ping / sidebar / ask owner). Then
-register your own claim covering the areas you intend to touch.
+rule. Also scan `.agent/state/collaboration/log.md` and any open
+`.agent/state/collaboration/conversations/*.json` files for the thread
+or areas you will touch. Bootstrap fast-path: if no entries other than
+your own exist, log "no other agents present" to the shared
+communication log and proceed. On overlap, consult the log and decision
+threads before deciding how to coordinate (proceed with caution, ping,
+append/open a decision thread, or ask the owner). Then register your own
+claim covering the areas you intend to touch. Sidebar, timeout, and
+owner-escalation mechanics remain WS3B and must not be used unless
+explicitly promoted.
 
 ## Learning-Loop Surfaces
 
@@ -70,6 +75,21 @@ Before diving in, pause and ask:
 4. **What assumptions am I making? Are they valid?**
 
 Step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you.
+
+## Work Shape and Simple Plan
+
+Before the first non-planning edit, leave an observable work-shape
+artefact:
+
+- trivial work uses the landing target or explicit no-landing reason;
+- bounded non-trivial work records a simple plan in chat or the touched
+  thread record, naming goal, scope, validation, and lifecycle touch
+  points;
+- multi-session, architectural, Practice, cross-workspace, or high-risk
+  work uses an executable repo plan in `current/` or `active/`.
+
+Do not force a repo plan file for every small edit. The requirement is
+that the work shape and validation path are visible before mutation.
 
 ## Practice Box
 

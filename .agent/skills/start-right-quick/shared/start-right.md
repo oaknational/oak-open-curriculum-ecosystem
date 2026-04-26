@@ -3,7 +3,7 @@ prompt_id: start-right-quick
 title: "Start Right (Quick)"
 type: workflow
 status: active
-last_updated: 2026-04-20
+last_updated: 2026-04-26
 ---
 
 # Start Right (Quick)
@@ -66,14 +66,26 @@ Read in order; stop at whichever answers your next-step question:
 1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
-4. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
-5. `.agent/state/collaboration/active-claims.json` — active-claims
-   registry. Apply the
+4. `.agent/state/collaboration/active-claims.json` — active-claims
+   registry
+5. `.agent/state/collaboration/log.md` — recent free-form
+   collaboration context
+6. `.agent/state/collaboration/conversations/*.json` — open WS3A
+   decision threads and unresolved decision requests for the touched
+   thread or area
+7. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+
+Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
-   rule: if no entries other than your own, log "no other agents
-   present" to `.agent/state/collaboration/log.md` and proceed
-   (bootstrap fast-path); on overlap, consult the shared communication
-   log and decide how to coordinate before any edit.
+rule before any edit: enumerate the areas you intend to touch, register
+your own active claim, and leave an artefact proving the registry was
+consulted. If no entries other than your own exist, log "no other agents
+present" to `.agent/state/collaboration/log.md` and proceed (bootstrap
+fast-path). On overlap, consult the shared communication log and any
+open decision-thread files before deciding whether to proceed, ping,
+append a decision thread, or ask the owner. Sidebar, timeout, and
+owner-escalation mechanics remain WS3B and must not be used unless
+explicitly promoted.
 
 ### 5. Active plans
 
@@ -114,6 +126,21 @@ If no landing is appropriate:
 Bounded exceptions: deep-consolidation, Core-trinity refinement, and
 root-cause investigation sessions. Any other no-landing session is
 drift.
+
+## Work Shape and Simple Plan
+
+Before the first non-planning edit, leave a small observable plan
+artefact whose size matches the work:
+
+- **Trivial work**: the landing target or no-landing reason is enough.
+- **Bounded non-trivial work**: record a simple plan in chat or the
+  touched thread record naming goal, scope, validation, and lifecycle
+  touch points.
+- **Multi-session, architectural, Practice, cross-workspace, or high-risk
+  work**: use an executable repo plan in `current/` or `active/`.
+
+This is a work-shape declaration, not a repo plan file for every edit.
+It operationalises PDR-026 without turning small fixes into plan theatre.
 
 For observability work specifically: if the landing moves a matrix
 cell in
