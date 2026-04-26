@@ -270,7 +270,25 @@ These are visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-26 Frolicking Toast, post-chunked-landing)**:
+**Status (2026-04-26 Frolicking Toast, post-graduation-pass)**:
+not due — owner-directed `/jc-consolidate-docs` ran and graduated 7
+doctrine entries from distilled.md to permanent homes:
+
+- New ADR-164 (config-load side effects)
+- ADR-153 amendment (call-site uptake clause)
+- New PDR-033 (vendor-doc-review-for-unknown-unknowns)
+- New PDR-034 (test fixtures encode production shape)
+- PDR-015 amendment (parallel reviewer dispatch + phasing)
+- PDR-026 amendment (owner-directed pause as load-bearing)
+- New pattern instance vendor-doc-review-for-unknown-unknowns.md
+
+Distilled.md fitness: 301 → 204 lines (HARD → SOFT). All landed
+locally as commit `cb358e8d`; push deferred on
+parallel-track-pre-commit-gate-coupling per shared-comms-log
+2026-04-26T18:25Z entry. Pending-graduations register update
+deferred until push clears.
+
+**Prior status (2026-04-26 Frolicking Toast, post-chunked-landing)**:
 due. Chunked-commit umbrella claim
 `4535f2ff-0420-4bde-bfb8-af0db656e359` closed at 17:00Z after six
 chunks landed (`e37a5795`, `38472766`, `9925ad59`, `9bd91f81`,
