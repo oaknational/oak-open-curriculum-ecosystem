@@ -94,7 +94,8 @@ todos:
     status: dissolved
   - id: l-imm-operational-hardening
     content: "L-IMM (Phase 3, IMMEDIATE post-2026-04-26 Sentry validation): operational hardening bundle covering custom error fingerprinting (event.fingerprint logic in beforeSend for known error families), ignoreErrors/denyUrls allow-list for known-noise patterns, shutdownTimeout/flush review (raise DEFAULT_SENTRY_FLUSH_TIMEOUT_MS from 2_000 to ~5_000 to reduce Lambda drop risk under burst load), maxBreadcrumbs tuning (verify default 100 is sufficient for long-running MCP sessions), sendClientReports verification (default true, confirm enabled), and Vercel ↔ Sentry Marketplace integration verification (confirm what's wired vs hand-rolled). Identified 2026-04-26 by gap analysis against Sentry official docs."
-    status: pending
+    status: completed
+    note: "Closed 2026-04-26. Five code/docs sub-items landed as independent commits; Sub-item 6 closed when the owner verified the Vercel Sentry Marketplace plugin is active and configured."
   - id: l-ops-operational-maturity
     content: "L-OPS (Phase 5, DEFERRED): operational-maturity bundle covering cron monitoring (Sentry.cron / Sentry.withMonitor for any Vercel Cron handlers + deploy-time scripts; gated on cron jobs being added), Performance Issue auto-detection (server-side Sentry project settings for slow-query / N+1 / large-payload detection thresholds), Inbound Filters at Sentry server level (project-side noise reduction), Spotlight dev-mode (@spotlightjs/spotlight devDependency for local-iteration without Sentry quota), cache instrumentation (cacheIntegration; gated on cache adoption beyond OAuth metadata), and webhook integrations (Slack/Linear issue routing — project settings, not SDK code). Identified 2026-04-26 from Sentry docs; deferred because each item is either gated on a downstream adoption (cron jobs, cache, alpha distributions) or is server-side configuration that doesn't affect the SDK contract."
     status: deferred
@@ -1468,16 +1469,15 @@ describing how to query feedback and the fixed schema.
 
 ### L-IMM Operational hardening (immediate, post-2026-04-26 validation)
 
-**Status**: ✅ closed-pending-3d (2026-04-26 by Frolicking Toast /
-claude-code / claude-opus-4-7-1m). 5 of 6 sub-items landed as
-independent commits on `feat/otel_sentry_enhancements`; Sub-item 6
-(Vercel ↔ Sentry Marketplace verify) is PENDING owner-touch per owner
-direction at plan-time, with a documentation surface landed in
+**Status**: ✅ closed (2026-04-26). Frolicking Toast / claude-code /
+claude-opus-4-7-1m landed five of six sub-items as independent commits
+on `feat/otel_sentry_enhancements`; Sub-item 6 then closed when the
+owner verified the Vercel Sentry Marketplace plugin is active and
+configured. The live verified-state paragraph is in
 `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` § Vercel
-↔ Sentry Marketplace integration — verification PENDING (commit
-`aa53ff87`). The lane plan body remains in force as authoritative
-description; the execution wrapper that orchestrated the landing
-sequence has rotated to
+↔ Sentry Marketplace integration. The lane plan body remains in force
+as authoritative description; the execution wrapper that orchestrated
+the landing sequence has rotated to
 [`archive/completed/sentry-immediate-next-steps.plan.md`](../archive/completed/sentry-immediate-next-steps.plan.md).
 
 **Landed commits (one per sub-item)**:
@@ -1485,7 +1485,8 @@ sequence has rotated to
 - Tier 1 — flush timeout 2s → 5s: `55355270`
 - Tier 3a + 3b — maxBreadcrumbs / sendClientReports verify: `c80ee8eb`
 - Tier 3c — ignoreErrors / denyUrls scaffold: `bfb000ff`
-- Tier 3d — Marketplace PENDING surface: `aa53ff87`
+- Tier 3d — Marketplace PENDING surface: `aa53ff87`; owner
+  verification closed 2026-04-26
 - Tier 2 — hybrid error fingerprinting: `6c65e75d`
 
 **Reviewer findings absorbed at Tier 2**: sentry-reviewer MAJOR
@@ -1509,7 +1510,8 @@ proved the major Sentry capabilities (release attribution, source
 upload, symbolication, redaction, breadcrumbs, internal trace
 propagation, custom correlation tag) are wired. Six smaller gaps
 remain — captured here so they don't drift back into "unknown
-unknowns".
+unknowns". All six are now closed as of the owner Marketplace
+verification on 2026-04-26.
 
 #### Sub-item 1 — Custom error fingerprinting (`event.fingerprint`)
 
@@ -1534,7 +1536,9 @@ leak into fingerprint keys.
 **GREEN**: Add `applyFingerprint(event)` step to `createSentryHooks`
 that examines the top exception and assigns
 `event.fingerprint = ['<error-class-name>']` for the named
-families. Default Sentry behaviour preserved for everything else.
+families. Corrected by reviewer feedback during implementation to the
+hybrid Sentry shape `['{{ default }}', '<error-class-name>']`, which
+preserves default stack-aware grouping inside the error family.
 
 **REFACTOR**: TSDoc on the fingerprint table; entry in
 `packages/libs/sentry-node/README.md` § Fingerprinting; observability.md
@@ -1638,7 +1642,10 @@ decision; if not, document why we kept hand-rolled.
 
 **Acceptance**: a paragraph in observability.md or sentry-node
 README that names the current state (Marketplace vs hand-rolled)
-with rationale.
+with rationale. Closed 2026-04-26: owner verified the Vercel Sentry
+Marketplace plugin is active and configured; the live app doc records
+the Marketplace plugin as configured platform state while preserving
+the repo-owned `SENTRY_*` / `@sentry/esbuild-plugin` build policy.
 
 **Cross-references**:
 

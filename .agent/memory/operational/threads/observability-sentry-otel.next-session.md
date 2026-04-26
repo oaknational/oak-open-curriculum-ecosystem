@@ -1,23 +1,24 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-26 (Frolicking Toast / claude-code /
-claude-opus-4-7-1m — L-IMM execution session. Five Sentry-node
-operational-hardening sub-items landed as five commits on
-`feat/otel_sentry_enhancements`; sixth sub-item (Vercel Marketplace
-verify) landed as a documentation surface for owner-touch.
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
+after owner verification closeout and same-branch collaboration correction.
+L-IMM remains fully closed; PR-87 quality remediation remains the
+branch-primary blocker.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — owner
+verification closeout for L-IMM Sub-item 6. The owner confirmed the
+Vercel Sentry Marketplace plugin is active and configured; live
+Sentry status surfaces now record L-IMM as fully closed.)
 
 **Outcomes**:
 
-- **L-IMM lane closed at 5 of 6** with status
-  `✅ closed-pending-3d` in
+- **L-IMM lane closed at 6 of 6** with status `✅ closed` in
   [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-  § L-IMM. Sub-item 6 (Marketplace verify) requires Vercel project-
-  settings access; the inspection surface is now in
+  § L-IMM. Sub-item 6 (Marketplace verify) closed when the owner
+  confirmed in Vercel project settings that the Sentry Marketplace
+  plugin is active and configured. The verified-state paragraph is in
   [`apps/oak-curriculum-mcp-streamable-http/docs/observability.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md)
-  § Vercel ↔ Sentry Marketplace integration — verification PENDING.
-  When the owner completes the audit, replace that section with the
-  verified-state paragraph and the Sub-item-6 todo flips to
-  `completed`.
+  § Vercel ↔ Sentry Marketplace integration.
 - **Sentry status now**: "good enough for now" per owner direction at
   plan-time. Subsequent Sentry work (L-1, L-3, L-4b, L-OPS) remains
   deferred. The `feat/otel_sentry_enhancements` branch is ready for
@@ -42,12 +43,24 @@ verify) landed as a documentation surface for owner-touch.
 - `aa53ff87` Tier 3d — Vercel Marketplace PENDING surface
 - `6c65e75d` Tier 2 — hybrid error fingerprinting (post-redaction)
 
+**Owner verification closeout**:
+
+- 2026-04-26 — owner confirmed the Vercel Sentry Marketplace plugin is
+  active and configured. The PENDING surface in observability.md was
+  replaced with verified state; L-IMM status moved from
+  `closed-pending-3d` to `closed`.
+- 2026-04-26 handoff note — branch work now runs under an explicit
+  same-branch collaboration experiment. Frolicking Toast currently holds the
+  commit-window umbrella claim while chunking Practice/collaboration files;
+  PR-87 remediation may proceed on the same branch only with visible
+  commit-window / path-ownership communication.
+
 **Plan rotation**:
 [`current/sentry-immediate-next-steps.plan.md`](../../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
 moved to `archive/completed/` after Sub-item 6 was accepted as PENDING
 on owner direction. The lane plan body in
 [`active/sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-remains as authoritative description of the lane.
+now carries the final owner-verified closure state.
 
 **Co-tenant during this session**: Codex worked the
 agentic-engineering-enhancements thread in parallel (claim
@@ -59,15 +72,13 @@ branch artefact and are documented in the new memory feedback note
 
 **Next-session pickup paths**:
 
-1. **Owner audits Vercel Marketplace** (Sub-item 6 closure): inspect
-   Vercel project settings → Integrations and replace the PENDING
-   section in observability.md with the verified state. Single-
-   commit follow-up; flips lane status to `✅ closed`.
-2. **PR-87 quality lane** (parallel plan
+1. **PR-87 quality lane** (parallel plan
    [`pr-87-quality-finding-resolution.plan.md`](../../../plans/observability/current/pr-87-quality-finding-resolution.plan.md))
-   — separate scope, runs in parallel with this lane on the same
-   branch.
-3. **Deployed-state validation** of the new fingerprinting on the
+   — branch-primary merge blocker. It may run on the same branch as the
+   commit-steward work, but overlap must be communicated before staging or
+   committing so the same-branch friction remains observable rather than
+   becoming misleading history.
+2. **Deployed-state validation** of the new fingerprinting on the
    next preview deploy: hit `/test-error?mode=...` via
    `apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh`
    and confirm the new Sentry issues carry the hybrid fingerprint
@@ -534,7 +545,7 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff` | 2026-04-24 | 2026-04-25 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff; marketplace-verification-closeout; sentry-state-handoff-under-same-branch-experiment` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `session-handoff-closeout; startup-boundary-phase0-executor; startup-boundary-red-and-gate-recovery-planning; gate-recovery-executor; startup-boundary-phase2-partial-green` | 2026-04-24 | 2026-04-25 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |

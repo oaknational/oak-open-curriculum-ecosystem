@@ -265,68 +265,37 @@ Current families and the fingerprint table live in
 See that file for the addition pattern when a new error family
 needs locked grouping.
 
-## Vercel ↔ Sentry Marketplace integration — verification PENDING
+## Vercel ↔ Sentry Marketplace integration
 
-**Status (2026-04-26 L-IMM Sub-item 6)**: VERIFICATION PENDING —
-requires Vercel project-settings access. The agent landing this
-plan cannot inspect Vercel's UI; this section captures the surface
-the owner inspects to close the verification.
+**Status (2026-04-26 L-IMM Sub-item 6)**: VERIFIED. The owner
+confirmed in Vercel project settings that the Sentry Marketplace
+plugin is active and configured for the project.
 
-**Why this matters.** Sentry has two ways to provision DSN /
-auth-token / release-attribution metadata for a Vercel project:
+The active Marketplace plugin is complementary to the repo-owned
+build/runtime contract. This app still treats the explicit
+`SENTRY_*` environment-variable contract, Turbo task-env
+pass-through, and `@sentry/esbuild-plugin` wiring as the
+auditable build path for release registration, deploy linkage, and
+source-map upload. The Marketplace connection is therefore recorded
+as configured platform state, not as a replacement for the
+repo-tracked Sentry build policy.
 
-1. **Vercel ↔ Sentry Marketplace integration** (auto-provisioning).
-   Connecting the integration in Vercel project settings injects
-   `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_PROJECT`,
-   `SENTRY_ORG`, and related env vars into preview + production
-   environments without manual configuration.
-2. **Hand-rolled `SENTRY_*` env-var pass-through** (current shape).
-   The repo declares the env vars as Vercel project settings and
-   relies on Turbo's task-env pass-through (commit `216a7fd2` —
-   `fix(turbo): pass SENTRY_* env vars through to build tasks`) to
-   make them visible during the Vercel build command. This is the
-   shape that produced today's working Sentry integration on this
-   branch.
-
-The two are not mutually exclusive — the Marketplace integration
-is one source of the env vars; hand-rolled values can override or
-supplement it. The verification confirms which source is
-authoritative today and whether any redundancy exists.
-
-**Inspection steps for the owner**:
-
-1. Open Vercel project settings for `oak-open-curriculum-mcp` →
-   **Integrations** tab.
-2. Note whether Sentry appears under installed integrations.
-   - If yes: record which env vars it auto-provisions and which
-     environments (preview / production / development) it covers.
-   - If no: confirm hand-rolled env vars are the sole source.
-3. Cross-reference against the env-var list visible in
-   **Settings → Environment Variables**: any value that matches a
-   Marketplace-managed key is duplicate / overridden.
-4. Cross-reference against
-   [`vercel.json`](../vercel.json) and the workspace's
-   [`package.json`](../package.json) build scripts to confirm none
-   of them assume the integration is connected.
-
-**Deliverable on completion**: replace this section with a
-paragraph naming the verified state (Marketplace-connected vs
-hand-rolled) plus rationale. If Marketplace is connected, document
-which env vars it manages and the override precedence. If not,
-document why hand-rolled was kept (typical reasons: scoping
-control, audit trail, integration-version stability).
+The two sources are not mutually exclusive: the Marketplace plugin
+can manage the project-level Vercel/Sentry connection, while
+repo-declared `SENTRY_*` values continue to make the build contract
+visible in versioned code and operational docs. If either source
+changes later, re-run the preview Sentry validation path before
+claiming release or source-map behaviour still holds.
 
 **Related context**:
 
 - The lane plan body lives in
   [`active/sentry-observability-maximisation-mcp.plan.md`](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
   § L-IMM Sub-item 6.
-- The execution wrapper that gates closure on this verification
-  lives in
+- The execution wrapper that gated closure on this verification lives in
   [`archive/completed/sentry-immediate-next-steps.plan.md`](../../../.agent/plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
   Tier 3d.
-- The L-IMM lane closes on 5/6 with this item PENDING per owner
-  direction at plan-time (2026-04-26).
+- This verification closed L-IMM Sub-item 6 on 2026-04-26.
 
 ## Release and metadata resolution
 
