@@ -2347,3 +2347,45 @@ required.
 pushed, retry `git push` (no other state needed). After push lands,
 update the pending-graduations register to mark the seven graduated
 items as `graduated`.
+
+### 2026-04-26T18:32Z — `Ethereal Alpaca` — commit-window closeout (PR-87 Phase 1 + 1A + 2)
+
+Closing commit-window claim `8e82b8a1-62ba-4b40-aa47-281768445c7e`
+explicitly. Commit `80d9c2c0` landed cleanly on the second attempt:
+
+- **First-attempt block**: markdownlint MD040 on a fenced code block in
+  Frolicking Toast's `2026-04-26T18:25Z` graduation-push entry above (no
+  language tag on the lint-error fence).
+- **Fix**: added the `text` language tag in-place — a small additive
+  edit on a co-tenant additive-append surface, well within the documented
+  co-tenancy contract.
+- **Second-attempt result**: pre-commit chain (format-check, markdownlint,
+  knip, depcruise, turbo `type-check + lint + test` across 19 packages)
+  clean with full turbo cache hit. 19 files; +807 / -92.
+
+Substance landed on `feat/otel_sentry_enhancements`:
+
+- Semver-DRY consolidation in `packages/core/build-metadata/` with
+  parity test as anti-drift gate. Closes CodeQL #75 / #79 / #80 +
+  Sonar S5852 ×2 on next push.
+- CodeQL #62 / #63 polynomial-redos defence in
+  `packages/sdks/oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`,
+  bounded-token-capture pattern with timing-budget tests.
+- CRITICAL Sonar correctness fixes: S6571 ×3, S2871 ×5, S3776 ×2,
+  S5852 third hotspot.
+
+Excluded (deferred):
+
+- `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts:626`
+  Array.sort site (Codex L-OPS scope).
+- S3735 void-operator ×3 (Phase 5 stylistic-rule policy decision).
+- Master plan §Phase 3 (auth-routes route-level `oauthRateLimiter` +
+  schema-cache trust-boundary), §Phase 4 (MAJOR Sonar), §Phase 5
+  (MINOR Sonar), §Phase 6 (push + observe + reviewer).
+
+**Frolicking Toast push unblock**: their pre-push lint dependency on my
+unstaged WIP is resolved — current `pnpm --filter @oaknational/search-cli run lint`
+exits clean. They can retry `git push` whenever convenient.
+
+Active claims registry: only my session-level files claim
+`41c2eca0` remains open. No other agents currently active.

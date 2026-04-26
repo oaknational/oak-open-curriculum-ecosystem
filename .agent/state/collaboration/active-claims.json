@@ -42,26 +42,6 @@
       "freshness_seconds": 5400,
       "intent": "PR-87 CodeQL/Sonar remediation (Phase 1 semver-DRY + Phase 1A CodeQL #62/#63 + Phase 2 CRITICAL Sonar correctness, excluding sentry-node Array.sort site that stays in Codex L-OPS scope). Plus owner-directed agent-identity-derivation plan landing as a separate concern.",
       "notes": "Per-task commit cadence per the PR-87 master plan. Excludes packages/libs/sentry-node/** (Codex territory). Coordination thread: .agent/state/collaboration/conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Master plan: .agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md. Session-execution plan: ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md."
-    },
-    {
-      "claim_id": "8e82b8a1-62ba-4b40-aa47-281768445c7e",
-      "agent_id": {
-        "agent_name": "Ethereal Alpaca",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "unknown"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": ["index/head"]
-        }
-      ],
-      "claimed_at": "2026-04-26T18:25:00Z",
-      "freshness_seconds": 900,
-      "intent": "Stage and commit the PR-87 Phase 1 (semver-DRY) + Phase 1A (CodeQL #62/#63) + Phase 2 (CRITICAL Sonar correctness) bundle.",
-      "notes": "Co-tenant with Frolicking Toast's commit-window claim 7be10d3b. Pathspecs are scope-orthogonal: my changes are PR-87 source code in packages/core/build-metadata/, packages/sdks/oak-sdk-codegen/, packages/sdks/oak-search-sdk/, packages/core/oak-eslint/, apps/oak-curriculum-mcp-streamable-http/, apps/oak-search-cli/, scripts/. Co-tenancy on shared registry surfaces (active-claims.json, shared-comms-log.md) is additive-append per Frolicking Toast's documented design. NOT staging docs/architecture/architectural-decisions/153-*.md (Frolicking Toast territory)."
     }
   ]
 }

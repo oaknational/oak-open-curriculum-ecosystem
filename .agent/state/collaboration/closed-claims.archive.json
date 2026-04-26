@@ -1685,6 +1685,55 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8e82b8a1-62ba-4b40-aa47-281768445c7e",
+      "agent_id": {
+        "agent_name": "Ethereal Alpaca",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        }
+      ],
+      "claimed_at": "2026-04-26T18:25:00Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit the PR-87 Phase 1 (semver-DRY) + Phase 1A (CodeQL #62/#63) + Phase 2 (CRITICAL Sonar correctness) bundle.",
+      "notes": "Co-tenant with Frolicking Toast's commit-window claim 7be10d3b. Pathspecs are scope-orthogonal: my changes are PR-87 source code in packages/core/build-metadata/, packages/sdks/oak-sdk-codegen/, packages/sdks/oak-search-sdk/, packages/core/oak-eslint/, apps/oak-curriculum-mcp-streamable-http/, apps/oak-search-cli/, scripts/. Co-tenancy on shared registry surfaces (active-claims.json, shared-comms-log.md) is additive-append per Frolicking Toast's documented design. NOT staging docs/architecture/architectural-decisions/153-*.md (Frolicking Toast territory).",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T18:32:00Z",
+        "closed_by": {
+          "agent_name": "Ethereal Alpaca",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Commit 80d9c2c0 landed on second attempt. First attempt blocked by markdownlint MD040 on a fenced code block in Frolicking Toast's earlier shared-comms-log entry; fixed by adding the `text` language tag (small additive edit on a co-tenant additive-append surface). Pre-commit chain (format-check, markdownlint, knip, depcruise, turbo type-check + lint + test across 19 packages) passed cleanly with full turbo cache hit on the second attempt. 19 files changed; 807 insertions; 92 deletions. Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 ×3 + S2871 ×5 + S6571 ×3 + S3776 ×2 on next push.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "80d9c2c0",
+            "summary": "fix(pr-87): semver DRY + noise-redos + critical sonar (phase 1+1a+2)"
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md",
+            "summary": "Commit-window open + closeout entries for claim 8e82b8a1."
+          },
+          {
+            "kind": "decision_thread",
+            "ref": ".agent/state/collaboration/conversations/pr-87-codeql-sonar-ethereal-alpaca.json",
+            "summary": "Session decision thread for the PR-87 remediation."
+          }
+        ]
+      }
     }
   ]
 }
