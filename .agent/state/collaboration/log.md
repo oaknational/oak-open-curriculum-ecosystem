@@ -1257,6 +1257,68 @@ it from `active-claims.json`.
 No WS3B sidebar, timeout, owner-escalation, hook-enforcement, SDK WIP, or
 observability app/probe work was started.
 
+### 2026-04-26T14:13Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS4A coordination closeout claim
+
+Registering claim `2253d7e6-26d8-44ef-a51a-e89f09a55abe` on the
+`agentic-engineering-enhancements` thread for the remaining
+owner-directed coordination-plan cleanup, `jc-session-handoff`, and
+`jc-consolidate-docs` closeout.
+
+Areas covered:
+
+- `.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/roadmap.md`
+- `.agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
+- `.agent/memory/operational/repo-continuity.md`
+- `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
+- `.agent/memory/executive/invoke-code-reviewers.md`
+- `.agent/memory/active/napkin.md`
+- `.agent/directives/AGENT.md`
+- `.agent/practice-core/practice.md`
+- `.agent/practice-core/CHANGELOG.md`
+- `.agent/directives/agent-collaboration.md`
+- `.agent/state/collaboration/log.md`
+
+Active-claim scan found no existing active claims. This is a late
+closeout registration for the remaining lifecycle edits; it will be
+closed explicitly during session handoff.
+
+Area set expanded after reviewer findings to cover reviewer-invocation,
+napkin capture, AGENT line-width fitness cleanup, Practice Core, its
+changelog, and agent-collaboration directive wording.
+
+### 2026-04-26T14:20:12Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS4A coordination closeout
+
+Closing claim `2253d7e6-26d8-44ef-a51a-e89f09a55abe` explicitly.
+
+Completed:
+
+- reconciled the parent multi-agent collaboration plan and roadmap after
+  WS4A;
+- absorbed `docs-adr-reviewer` and `assumptions-reviewer` findings;
+- clarified reviewer guidance so sub-agent review is standard/preferred
+  evidence while only blocking findings and hard gate failures block closure;
+- ran `jc-session-handoff` and `jc-consolidate-docs` closeout surfaces;
+- validated JSON/Ajv schemas, targeted markdownlint, `git diff --check`,
+  `pnpm practice:fitness:strict-hard`,
+  `pnpm practice:fitness:informational`, `pnpm portability:check`, and
+  `pnpm practice:vocabulary`.
+
+No WS3B sidebar, timeout, file-backed owner escalation, hook reminder,
+dashboard expansion, SDK/product work, commit, or push was started.
+
+### 2026-04-26T14:32:27Z — `Codex` / `codex` / `GPT-5` / `unknown` — learning-first fitness correction claim
+
+Registering claim `3d1cc697-dd3d-4e48-9276-3e8a01242905` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: apply the owner correction that fitness limits, including hard
+limits, are signals and must never suppress capture, distillation, or
+knowledge preservation. Touched surfaces are expected to include
+`consolidate-docs`, Practice Core, continuity, napkin, and this log.
+
+Active-claim scan found no existing active claims.
+
 ### 2026-04-26T14:45Z — `Sharded Stroustrup` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — observability session-close
 
 Closing observability-sentry-otel thread session. **No active claim
@@ -1311,3 +1373,50 @@ handoff needed.
 [`sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md)
 (L-IMM Tiers 1-3) and
 [`pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md).
+
+### 2026-04-26T15:30Z — `Frolicking Toast` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — observability L-IMM session-open
+
+Opening session on `feat/otel_sentry_enhancements` for the L-IMM lane
+of `sentry-observability-maximisation-mcp.plan.md`. Wrapper plan:
+[`current/sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md).
+
+**Areas claimed** (claim `c1a25f27-eacf-4a18-9528-f0b971c46f08`):
+
+- `packages/libs/sentry-node/src/**`
+- `packages/libs/sentry-node/README.md`
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+- `.agent/plans/observability/current/sentry-immediate-next-steps.plan.md`
+- `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
+
+**Parallel claim noted**: Codex `3d1cc697-dd3d-4e48-9276-3e8a01242905`
+on agentic-engineering-enhancements. **No file overlap** with my scope.
+This log file is designed for concurrent append; my entry follows the
+existing chronology.
+
+**Plan shape (six tiers, one commit per sub-item)**:
+
+1. Tier 1 — flush timeout 2_000 → 5_000 (~10 min)
+2. Tier 3a + 3b — verify maxBreadcrumbs + sendClientReports (bundle commit)
+3. Tier 3c — ignoreErrors / denyUrls scaffold (RED-first)
+4. Tier 3d — Vercel Marketplace verify (PENDING — owner-touch surface)
+5. Tier 2 — custom error fingerprinting (RED-first; reviewer dispatch)
+6. Closure — lane status flip, plan rotation, next-session refresh
+
+**Closure shape**: 5 of 6 tiers land as `completed`; Tier 3d marked
+PENDING per owner direction at plan-time (requires Vercel project-
+settings access). L-IMM lane flips to `✅ closed-pending-3d`.
+
+**Branch state surfaced for whoever reads next**: brief named HEAD
+`f8ecf57c` but actual HEAD at session-open is `7ecac966` (Codex's five
+WS3A protocol commits ahead). Working tree carries staged
+practice/ADR changes + unstaged collaboration-state changes (Codex's
+WIP). I will commit ONLY `packages/libs/sentry-node/**` files using
+explicit `git add <path>` — never `git add -A` or `git add .` — so the
+parallel WIP stays untouched.
+
+**Parallel-track gate-coupling posture** (per
+`parallel-track-pre-commit-gate-coupling` pattern + owner direction
+at plan-time): if a pre-commit/pre-push gate fails on a file outside
+my scope, I will surface here and pause my push. No `--no-verify`
+without fresh authorisation.
