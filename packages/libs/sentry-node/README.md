@@ -218,6 +218,42 @@ prediction.
 
 [lv-integration]: https://docs.sentry.io/platforms/javascript/guides/node/configuration/integrations/local-variables/
 
+### Breadcrumb cap inherits Sentry's default (100)
+
+`createSentryInitOptions` does not set `maxBreadcrumbs` explicitly, so
+the Sentry SDK's default cap of **100** applies. The breadcrumb queue
+is FIFO; once it fills, the oldest entries are dropped silently.
+
+**Empirical decision (2026-04-26 L-IMM Sub-item 4 verification)**:
+inspection of the three test-error issues from the
+2026-04-26 Sentry validation walk
+(`OAK-OPEN-CURRICULUM-MCP-{7,8,9}`) shows **3 breadcrumbs per event**
+— two `info [http]` entries and one `error [console]` Node deprecation
+warning. None come close to the 100-entry cap. No action taken; the
+default stands.
+
+If a future error class shows breadcrumb truncation in production
+(arrays at the 100 cap), raise `maxBreadcrumbs` to 200-500 in
+`createSentryInitOptions` and document the new evidence count alongside
+the change. The Sentry SDK has no warning when truncation happens —
+the cap is silent — so detection is by inspection of representative
+issues, not by a runtime signal.
+
+### Client-side drop reporting (sendClientReports) inherits Sentry's default (true)
+
+`createSentryInitOptions` does not set `sendClientReports` explicitly,
+so the Sentry SDK's default of **`true`** applies. This means the SDK
+emits client-report events when its internal rate limiter or transport
+drops events; we therefore have visibility into SDK-side drops in the
+Sentry UI under the project's outcomes view.
+
+**Audit decision (2026-04-26 L-IMM Sub-item 5 verification)**: the
+default behaviour (drop reporting enabled) is the desired posture for
+this package — silent drops would be a meaningful observability gap.
+No code change. If a future ADR ever proposes setting
+`sendClientReports: false`, the rationale must justify why we would
+prefer to lose drop visibility (none currently exists).
+
 ### Outbound trace propagation is opt-in via DEFAULT_TRACE_PROPAGATION_TARGETS
 
 The `tracePropagationTargets` Sentry option (set via
