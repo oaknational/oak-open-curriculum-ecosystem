@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "sidebar-open-valid",
+  "thread": "agentic-engineering-enhancements",
+  "status": "open",
+  "title": "Open sidebar for overlapping collaboration-state edits",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:10:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "decision_request",
+      "created_at": "2026-04-26T18:10:00Z",
+      "body": "The collaboration-state files need a short focused exchange before editing."
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "sidebar_request",
+      "created_at": "2026-04-26T18:11:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Please confirm whether the schema expansion should include role handoff in the joint_decision entry shape.",
+      "sidebar_id": "schema-role-handoff",
+      "target_participants": [
+        {
+          "agent_name": "Owner",
+          "platform": "human",
+          "model": "human",
+          "session_id_prefix": "unknown"
+        }
+      ],
+      "response_due_at": "2026-04-26T18:21:00Z",
+      "expires_at": "2026-04-26T18:41:00Z"
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "sidebar_message",
+      "created_at": "2026-04-26T18:12:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Yes, role handoff belongs in the joint decision lifecycle rather than a separate surface.",
+      "sidebar_id": "schema-role-handoff"
+    }
+  ]
+}

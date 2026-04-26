@@ -70,10 +70,12 @@ Read in order; stop at whichever answers your next-step question:
    registry
 5. `.agent/state/collaboration/shared-comms-log.md` — recent free-form
    collaboration context
-6. `.agent/state/collaboration/conversations/*.json` — open WS3A
-   decision threads and unresolved decision requests for the touched
-   thread or area
-7. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+6. `.agent/state/collaboration/conversations/*.json` — open decision
+   threads, sidebars, joint decisions, unresolved decision requests, and
+   evidence obligations for the touched thread or area
+7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
+   escalation cases for the touched thread or area
+8. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
 
 Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
@@ -82,10 +84,9 @@ your own active claim, and leave an artefact proving the registry was
 consulted. If no entries other than your own exist, log "no other agents
 present" to `.agent/state/collaboration/shared-comms-log.md` and proceed (bootstrap
 fast-path). On overlap, consult the shared communication log and any
-open decision-thread files before deciding whether to proceed, ping,
-append a decision thread, or ask the owner. Sidebar, timeout, and
-owner-escalation mechanics remain WS3B and must not be used unless
-explicitly promoted.
+open decision-thread and escalation files before deciding whether to
+proceed, ping, append a decision thread, request a sidebar, record a
+joint decision, open or close an escalation, or ask the owner.
 
 Before staging or committing, use the always-active commit skill. It
 checks for a fresh `git:index/head` commit-window claim, opens one if the

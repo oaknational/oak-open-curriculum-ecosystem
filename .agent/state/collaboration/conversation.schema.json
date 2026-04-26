@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "conversation.schema.json",
   "title": "Agent Collaboration Decision Thread",
-  "description": "Lightweight async decision-thread file for structured overlap discussion, concrete decision requests, decisions, resolutions, and evidence. Decision threads are operational state under .agent/state/collaboration/conversations/ and are distinct from shared log narrative, active claims, napkin learning, and durable thread records.",
-  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) preserve unrecognised fields on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is false for authored v1.0.0 files: new fields require a coordinated schema_version bump. This v1.0.0 contract intentionally excludes sidebar, timeout, and escalation fields.",
+  "description": "Lightweight async decision-thread file for structured overlap discussion, sidebars, joint decisions, concrete decision requests, decisions, resolutions, and evidence. Decision threads are operational state under .agent/state/collaboration/conversations/ and are distinct from shared log narrative, active claims, escalation case files, napkin learning, and durable thread records.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) preserve unrecognised fields on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is false for authored files. v1.0.0 conversation files remain valid with only the original entry kinds: message, claim_update, decision_request, decision, resolution, and evidence. v1.1.0 adds sidebar_request, sidebar_message, sidebar_resolution, joint_decision, and joint_decision_acknowledgement entry kinds. The event-list model remains append-only: derive current sidebar, decision, and role state from the latest relevant entry for the same sidebar_id or joint_decision_id.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.0.0"],
+      "enum": ["1.0.0", "1.1.0"],
       "description": "Semantic version of this decision-thread schema."
     },
     "conversation_id": {
@@ -44,12 +44,8 @@
       "description": "Human-readable topic for this decision thread."
     },
     "participants": {
-      "type": "array",
-      "minItems": 1,
-      "description": "Agents or humans who have participated or are expected to respond.",
-      "items": {
-        "$ref": "active-claims.schema.json#/$defs/agent_id"
-      }
+      "$ref": "#/$defs/participant_list",
+      "description": "Agents or humans who have participated or are expected to respond."
     },
     "opened_at": {
       "type": "string",
@@ -66,7 +62,7 @@
       "minItems": 1,
       "description": "Ordered decision-thread entries.",
       "items": {
-        "$ref": "#/$defs/entry"
+        "$ref": "#/$defs/entry_v1_1"
       }
     }
   },
@@ -98,19 +94,84 @@
           "required": ["closed_at"]
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.0.0"
+          }
+        },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/entry_v1_0"
+            }
+          }
+        }
+      }
     }
   ],
   "$defs": {
-    "entry": {
+    "slug": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "participant_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "active-claims.schema.json#/$defs/agent_id"
+      }
+    },
+    "joint_role_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "agent"],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["discusser", "decider", "recorder", "actor"],
+          "description": "Role this participant holds for the joint decision."
+        },
+        "agent": {
+          "$ref": "active-claims.schema.json#/$defs/agent_id"
+        },
+        "responsibility": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Concrete responsibility for recorder or actor roles."
+        }
+      }
+    },
+    "joint_role_assignments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/joint_role_assignment"
+      },
+      "contains": {
+        "type": "object",
+        "required": ["role"],
+        "properties": {
+          "role": {
+            "const": "decider"
+          }
+        }
+      },
+      "description": "Joint decisions require at least one decider. The owner may be a decider."
+    },
+    "entry_v1_0": {
       "type": "object",
       "additionalProperties": false,
       "required": ["entry_id", "kind", "created_at"],
       "properties": {
         "entry_id": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "^[a-z0-9][a-z0-9-]*$",
-          "description": "Stable identifier unique within this decision thread."
+          "$ref": "#/$defs/slug"
         },
         "kind": {
           "type": "string",
@@ -121,40 +182,33 @@
             "decision",
             "resolution",
             "evidence"
-          ],
-          "description": "Narrow decision-thread entry kind."
+          ]
         },
         "created_at": {
           "type": "string",
-          "format": "date-time",
-          "description": "ISO 8601 timestamp when this entry was authored."
+          "format": "date-time"
         },
         "author": {
-          "$ref": "active-claims.schema.json#/$defs/agent_id",
-          "description": "Optional author identity for the entry."
+          "$ref": "active-claims.schema.json#/$defs/agent_id"
         },
         "body": {
           "type": "string",
-          "minLength": 1,
-          "description": "Human-readable content for message, claim update, decision request, decision, or resolution entries."
+          "minLength": 1
         },
         "claim_id": {
           "type": "string",
-          "format": "uuid",
-          "description": "Claim identifier referenced by a claim_update entry."
+          "format": "uuid"
         },
         "evidence": {
           "type": "array",
           "minItems": 1,
-          "description": "Structured evidence references compatible with active-claims evidence refs.",
           "items": {
             "$ref": "active-claims.schema.json#/$defs/evidence_ref"
           }
         },
         "outcome": {
           "type": "string",
-          "enum": ["resolved", "deferred", "superseded", "no_action_needed"],
-          "description": "Resolution outcome for a resolution entry."
+          "enum": ["resolved", "deferred", "superseded", "no_action_needed"]
         }
       },
       "allOf": [
@@ -234,6 +288,361 @@
           },
           "then": {
             "required": ["evidence"]
+          }
+        }
+      ]
+    },
+    "entry_v1_1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry_id", "kind", "created_at"],
+      "properties": {
+        "entry_id": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable identifier unique within this decision thread."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "message",
+            "claim_update",
+            "decision_request",
+            "decision",
+            "resolution",
+            "evidence",
+            "sidebar_request",
+            "sidebar_message",
+            "sidebar_resolution",
+            "joint_decision",
+            "joint_decision_acknowledgement"
+          ],
+          "description": "Narrow decision-thread entry kind."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when this entry was authored."
+        },
+        "author": {
+          "$ref": "active-claims.schema.json#/$defs/agent_id",
+          "description": "Optional author identity for the entry. Required for sidebars and joint-decision entries."
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable content for message, request, decision, sidebar, joint-decision, or resolution entries."
+        },
+        "claim_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Claim identifier referenced by a claim_update entry."
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Structured evidence references compatible with active-claims evidence refs.",
+          "items": {
+            "$ref": "active-claims.schema.json#/$defs/evidence_ref"
+          }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "deferred",
+            "superseded",
+            "no_action_needed",
+            "declined",
+            "expired",
+            "escalated"
+          ],
+          "description": "Resolution outcome. Sidebar resolutions use resolved, declined, expired, escalated, or no_action_needed."
+        },
+        "sidebar_id": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable identifier for a short-lived sidebar within this conversation."
+        },
+        "target_participants": {
+          "$ref": "#/$defs/participant_list",
+          "description": "Participants asked to respond to a sidebar request."
+        },
+        "response_due_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Advisory response deadline for a sidebar request."
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Wall-clock expiry for a sidebar request. Expiry makes the sidebar stale for reporting; it does not auto-resolve it."
+        },
+        "joint_decision_id": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable identifier for a joint decision within this conversation."
+        },
+        "joint_decision_state": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "decided",
+            "recorder_pending",
+            "actor_pending",
+            "role_handoff",
+            "complete",
+            "abandoned"
+          ],
+          "description": "Current lifecycle state being recorded for the joint decision."
+        },
+        "roles": {
+          "$ref": "#/$defs/joint_role_assignments",
+          "description": "Role assignments for a joint decision."
+        },
+        "ack_due_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Explicit wall-clock acknowledgement deadline. Workflow default is created_at + 24 hours."
+        },
+        "acknowledgement": {
+          "type": "string",
+          "enum": ["acknowledged", "declined", "owner_decided"],
+          "description": "Acknowledgement outcome for a joint_decision_acknowledgement entry."
+        },
+        "handoff_to": {
+          "$ref": "active-claims.schema.json#/$defs/agent_id",
+          "description": "Agent receiving recorder or actor responsibility during a role handoff."
+        },
+        "next_action": {
+          "$ref": "active-claims.schema.json#/$defs/evidence_ref",
+          "description": "Durable reference to the next-action surface when a role handoff cannot cite completion evidence yet."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "message"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["body"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "claim_update"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["claim_id", "body"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "decision_request"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["body"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "decision"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["body"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "resolution"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["outcome", "body"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "evidence"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["evidence"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "sidebar_request"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": [
+              "author",
+              "body",
+              "sidebar_id",
+              "target_participants",
+              "response_due_at",
+              "expires_at"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "sidebar_message"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["author", "body", "sidebar_id"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "sidebar_resolution"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["author", "body", "sidebar_id", "outcome"],
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "resolved",
+                  "declined",
+                  "expired",
+                  "escalated",
+                  "no_action_needed"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "joint_decision"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": [
+              "author",
+              "body",
+              "joint_decision_id",
+              "joint_decision_state",
+              "roles"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "joint_decision"
+              },
+              "joint_decision_state": {
+                "const": "proposed"
+              }
+            },
+            "required": ["kind", "joint_decision_state"]
+          },
+          "then": {
+            "required": ["ack_due_at"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "joint_decision"
+              },
+              "joint_decision_state": {
+                "const": "complete"
+              }
+            },
+            "required": ["kind", "joint_decision_state"]
+          },
+          "then": {
+            "required": ["evidence"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "joint_decision"
+              },
+              "joint_decision_state": {
+                "const": "role_handoff"
+              }
+            },
+            "required": ["kind", "joint_decision_state"]
+          },
+          "then": {
+            "required": ["handoff_to", "body"],
+            "anyOf": [
+              {
+                "required": ["evidence"]
+              },
+              {
+                "required": ["next_action"]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "joint_decision_acknowledgement"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": [
+              "author",
+              "body",
+              "joint_decision_id",
+              "acknowledgement"
+            ]
           }
         }
       ]

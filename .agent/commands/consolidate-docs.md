@@ -257,7 +257,8 @@ to preserve a green fitness report by starving the learning loop.
    [`active-claims.json`](../state/collaboration/active-claims.json),
    [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
    and
-   [`conversations/`](../state/collaboration/conversations/) surfaces are
+   [`conversations/`](../state/collaboration/conversations/) plus
+   [`escalations/`](../state/collaboration/escalations/) surfaces are
    signal-like state plus durable lifecycle history. The audit reports the
    live protocol state before archiving stale entries. Findings are
    informational unless they identify malformed state.
@@ -302,18 +303,43 @@ to preserve a green fitness report by starving the learning loop.
       unresolved threads; surface them as owner-review noise, not blockers.
       Open threads with a `decision_request` and no later `decision` or
       `resolution` are unresolved decisions.
-   6. **Evidence-bundle check**: for non-trivial protocol claims in plans,
+   6. **Sidebar snapshot**: within each open conversation, group
+      `sidebar_request`, `sidebar_message`, and `sidebar_resolution`
+      entries by `sidebar_id`. Report
+      `[sidebar] <conversation_id>#<sidebar_id>: open|resolved|declined|expired|escalated|stale`.
+      A sidebar is stale when the latest entry for that `sidebar_id` is not
+      a `sidebar_resolution` and the latest request's `expires_at < now()`.
+      Stale sidebars are owner-review signals, not automatic closures.
+   7. **Joint-decision snapshot**: within each open conversation, group
+      `joint_decision` and `joint_decision_acknowledgement` entries by
+      `joint_decision_id`. Report
+      `[joint-decision] <conversation_id>#<joint_decision_id>: <latest-state>; ack=<complete|missing|declined|overdue>; evidence=<present|missing>`.
+      A proposed joint decision with no acknowledgement after `ack_due_at`
+      is overdue. A `complete` joint decision without evidence is malformed.
+      A `role_handoff` without `handoff_to` and evidence or `next_action`
+      is malformed. Unacknowledged proposals are not settled commitments.
+   8. **Escalation snapshot**: scan
+      `.agent/state/collaboration/escalations/*.json`. Report
+      `[escalation] <escalation_id> <status> <thread>: <title>`.
+      Every escalation must reference `conversation_id` and
+      `originating_entry_id`. A closed escalation must cite
+      `resolution_conversation_entry_id`; that entry is the durable
+      decision authority. Escalation files are live unresolved case
+      records, not report mirrors and not final decision records.
+   9. **Evidence-bundle check**: for non-trivial protocol claims in plans,
       claims, or decision threads, confirm the artefact names a claim
       statement, claim class, evidence references, verification status, and
       next action / owner. Missing fields surface as
       `[evidence-bundle] <path-or-id>: <missing field>`.
-   7. **Schema validation**: confirm `active-claims.json` parses as JSON
+   10. **Schema validation**: confirm `active-claims.json` parses as JSON
       and conforms to
       [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
       Confirm `closed-claims.archive.json` parses as JSON and conforms to
       [`closed-claims.schema.json`](../state/collaboration/closed-claims.schema.json).
       Confirm each conversation file parses as JSON and conforms to
       [`conversation.schema.json`](../state/collaboration/conversation.schema.json).
+      Confirm each escalation file parses as JSON and conforms to
+      [`escalation.schema.json`](../state/collaboration/escalation.schema.json).
       Malformed JSON or schema violations surface as
       `[<file>]: <validator output>` for owner review. There is no
       automated validation tooling at this surface (per the source plan's

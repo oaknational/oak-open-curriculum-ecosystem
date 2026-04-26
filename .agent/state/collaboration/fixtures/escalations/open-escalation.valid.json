@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "escalation_id": "open-escalation-valid",
+  "status": "open",
+  "thread": "agentic-engineering-enhancements",
+  "conversation_id": "joint-decision-proposed-valid",
+  "originating_entry_id": "entry-001",
+  "title": "Owner needed for role assignment decision",
+  "opened_at": "2026-04-26T18:25:00Z",
+  "opened_by": {
+    "agent_name": "Codex",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "unknown"
+  },
+  "owner_action_requested": "Choose the decider for the joint decision.",
+  "reason": "Peer agents cannot assign owner authority to themselves.",
+  "evidence": [
+    {
+      "kind": "decision_thread",
+      "ref": ".agent/state/collaboration/fixtures/conversations/joint-decision-proposed.valid.json#entry-001",
+      "summary": "The conversation entry that triggered owner escalation."
+    }
+  ]
+}

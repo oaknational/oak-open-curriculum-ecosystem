@@ -26,16 +26,17 @@ plans when scheduled.
 | [agent-entrypoint-content-homing.plan.md](agent-entrypoint-content-homing.plan.md) | Adjacent: lossless homing of non-entrypoint AGENT.md content into durable homes while preserving discovery parity | QUEUED |
 | [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
-| [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; narrow WS4A lifecycle integration implemented; WS3B gate satisfied; WS5 remains observation-gated | LIFECYCLE-INTEGRATION-COMPLETE |
-| [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: existing sidebar, timeout, and owner-escalation design preserved as a separate plan; promotion gate satisfied 2026-04-26, implementation not started | GATE-SATISFIED |
+| [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; WS4A lifecycle integration implemented; WS3B sidebar/escalation and joint-decision integration implemented; WS5 remains observation-gated | WS3B-IMPLEMENTED |
+| [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: sidebar, timeout, and owner-escalation design implemented with conversation-schema and escalation-state support | IMPLEMENTED |
 
 Recently completed:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
 closed WS3A on 2026-04-26. A narrow WS4A lifecycle integration pass then
 made start-right, session-handoff, plan templates, and Practice/ADR surfaces
 recognise WS0-WS3A collaboration state. Additional three-agent phase-transition
-evidence then satisfied the WS3B promotion gate; implementation remains
-unstarted.
+evidence then satisfied the WS3B promotion gate; the owner-approved
+implementation pass installed sidebars, owner escalation, and
+joint-decision integration on 2026-04-26.
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)

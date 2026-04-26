@@ -18,14 +18,15 @@ how-it-works-in-practice companion.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
-| [`log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
+| [`shared-comms-log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
 | [`active-claims.json`][active-claims] | Structured JSON; queryable registry | Append-on-claim; remove after durable close; stale-archive by consolidation | WS1 |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
 | [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
 | [`closed-claims.archive.json`][closed-claims] | JSON archive preserving claim body plus closure metadata | Append-on-explicit-close, stale archive, or owner-forced close; never deleted; permanent reference for `claim_id` citations | WS1/WS3A |
-| [`conversation.schema.json`][conversation-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
-| [`conversations/`][conversations-dir] | Structured per-topic JSON decision threads | Created on decision-thread open; closed with a `resolution`; open/stale state reported by consolidation | WS3A |
-| `escalations/` (forward) | One file per active owner-escalation | Deferred to WS3B; do not create until owner direction or decision-thread evidence promotes the sibling plan | WS3B paused |
+| [`conversation.schema.json`][conversation-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A/WS3B/joint decisions |
+| [`conversations/`][conversations-dir] | Structured per-topic JSON decision threads | Created on decision-thread open; sidebars and joint decisions append entries; closed with a `resolution` when the topic is done | WS3A/WS3B/joint decisions |
+| [`escalation.schema.json`][escalation-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; escalation files close by referencing the conversation entry that resolved them | WS3B |
+| [`escalations/`][escalations-dir] | One file per active owner escalation | Created after a conversation entry exists; closed after owner resolution is written back to that conversation | WS3B |
 
 ## Schema-Field Provenance
 
@@ -47,17 +48,19 @@ evidence.
 | `thread` (slug) | First-principles | Cross-thread visibility requires explicit thread reference; log entries were implicitly within their working session |
 | `freshness_seconds` (default 14400) | First-principles | Liveness signal for stale-audit; 4 hours is the starting default (rationale below) |
 | `heartbeat_at` (optional) | First-principles | Long-session freshness refresh |
-| `sidebar_open` (boolean default false) | First-principles | Forward-reference field for WS3 sidebar mechanism |
+| `sidebar_open` (boolean default false) | First-principles | Whether a sidebar is currently open against this claim |
 | `closure.kind` | Observed + first-principles | Explicit close and stale archival are observed; owner-forced close is reserved for owner intervention |
 | `closure.closed_at` / `closed_by` | First-principles | Claim history needs time and actor for durable closure provenance |
 | `closure.evidence[]` | Observed | WS5 showed claim outcomes need durable refs to logs, claims, plans, napkin, and thread records |
 
-Decision-thread fields reuse the same PDR-027 `agent_id` shape and
+Conversation fields reuse the same PDR-027 `agent_id` shape and
 `evidence_ref` enum from `active-claims.schema.json`. The v1.0.0
 conversation schema keeps its surface deliberately narrow: `message`,
 `claim_update`, `decision_request`, `decision`, `resolution`, and
-`evidence` entries only. It contains no sidebar, timeout, or escalation
-fields.
+`evidence` entries only. The v1.1.0 schema adds sidebar entries and
+joint-decision entries while preserving the same append-only event-list
+model. Escalations are separate live case files and must write owner
+resolution back into the referenced conversation.
 
 ## Default `freshness_seconds = 14400` (rationale)
 
@@ -127,7 +130,7 @@ overlap or protocol question needs more structure than the shared
 communication log. Good reasons include a concrete `decision_request`, a
 claim scope change that needs peer acknowledgement, or evidence that
 should stay attached to a resolution. Keep ordinary discovery notes in
-`log.md`; keep live area ownership in `active-claims.json`.
+`shared-comms-log.md`; keep live area ownership in `active-claims.json`.
 
 ### Close a decision thread
 
@@ -138,11 +141,46 @@ entries when it explains the route taken. Do not copy the body into the
 thread record; thread records carry cross-session lane state and may cite
 the decision-thread file by path.
 
+### Use a sidebar
+
+Append `sidebar_request` when a short focused exchange is needed inside
+an existing conversation. It requires `sidebar_id`, `author`,
+`target_participants`, `body`, `response_due_at`, and `expires_at`.
+Default workflow timing is wall-clock: `expires_at = created_at + 30
+minutes`. The 10 turn-pair limit is advisory; a turn-pair is one
+requester sidebar message followed by at least one target reply before
+the next requester message. Timeout never auto-resolves; append
+`sidebar_resolution` deliberately with `outcome: "expired"` if the
+expired sidebar should be closed as expired.
+
+### Record a joint decision
+
+Append `joint_decision` when agents need a shared commitment rather than
+a one-way signal. Roles are `discusser`, `decider`, `recorder`, and
+`actor`; at least one decider is required, and the owner may be the
+decider. Proposed joint decisions use explicit `ack_due_at` timestamps
+(workflow default: `created_at + 24 hours`). Unacknowledged proposals are
+not settled commitments. Completion requires evidence. Role handoff uses
+`joint_decision_state: "role_handoff"`, `handoff_to`, and either
+`evidence` or `next_action`.
+
+### Open and close an escalation
+
+Open `.agent/state/collaboration/escalations/<id>.json` only after a
+conversation exists. The escalation must cite `conversation_id` and
+`originating_entry_id`; it is a live owner-facing unresolved case record,
+not the durable decision. When the owner resolves the case, write the
+durable result back into the conversation as a `decision`,
+`joint_decision`, or `resolution` entry, then close the escalation with
+`resolution_conversation_entry_id`.
+
 ### Protocol observability and evidence bundles
 
 `consolidate-docs § 7e` reports active/stale claims, recent closures,
-open/stale decision threads, unresolved decision requests, and malformed
-state. Non-trivial protocol claims should carry a small evidence bundle:
+open/stale decision threads, unresolved decision requests, open/stale
+sidebars, unacknowledged or evidence-missing joint decisions, active
+escalations, and malformed state. Non-trivial protocol claims should
+carry a small evidence bundle:
 claim statement, claim class (`lifecycle`, `coordination`, `policy`, or
 `validation`), evidence refs using the shared enum, verification status
 (`verified`, `partial`, or `needs-owner`), and next action / owner.
@@ -197,6 +235,9 @@ fields:
 - [`conversation.schema.json`][conversation-schema] and
   [`conversations/`][conversations-dir] — decision-thread contract and
   examples.
+- [`escalation.schema.json`][escalation-schema] and
+  [`escalations/`][escalations-dir] — owner-escalation contract and live
+  case directory.
 - [`consolidate-docs.md § 7e`][consolidate-7e] — stale-claim audit
   step.
 - [`parallel-track-pre-commit-gate-coupling.md`][founding-pattern] —
@@ -210,6 +251,8 @@ fields:
 [closed-claims]: ../../state/collaboration/closed-claims.archive.json
 [conversation-schema]: ../../state/collaboration/conversation.schema.json
 [conversations-dir]: ../../state/collaboration/conversations/
+[escalation-schema]: ../../state/collaboration/escalation.schema.json
+[escalations-dir]: ../../state/collaboration/escalations/
 [register-rule]: ../../rules/register-active-areas-at-session-open.md
 [log-rule]: ../../rules/use-agent-comms-log.md
 [respect-rule]: ../../rules/respect-active-agent-claims.md

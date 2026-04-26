@@ -328,12 +328,27 @@ asks for more, this command must not trigger:
    4. Scan `.agent/state/collaboration/conversations/*.json` for open
       decision threads on touched threads or entries where your agent
       participated. If this session changed the decision state, append the
-      appropriate `message`, `claim_update`, `decision`, `resolution`, or
-      `evidence` entry. If no relevant open decision-thread handoff is
+      appropriate `message`, `claim_update`, `decision`, `resolution`,
+      `evidence`, sidebar, `joint_decision`, or
+      `joint_decision_acknowledgement` entry. Close, resolve,
+      acknowledge, evidence, or explicitly hand off obligations your
+      session created. If no relevant open decision-thread handoff is
       needed, state that explicitly.
-   5. Do not create sidebar, timeout, or owner-escalation artefacts here.
-      Those remain WS3B and require explicit owner promotion or real
-      decision-thread evidence.
+   5. Scan `.agent/state/collaboration/escalations/*.json` for open
+      escalations on touched threads or conversations where your agent
+      participated. If the owner resolved an escalation this session,
+      write the durable result back to the conversation first, then close
+      the escalation by referencing that conversation entry. If the
+      escalation remains open, carry the owner-facing next action into the
+      thread record instead of duplicating the whole case file.
+   6. For sidebars, expired `expires_at` values are stale-reporting
+      signals only. They do not auto-resolve; append
+      `sidebar_resolution` with `outcome: "expired"` only when an agent
+      deliberately closes the sidebar as expired.
+   7. For joint decisions, unacknowledged proposals are not settled
+      commitments. Recorder/actor completion requires evidence; role
+      handoff requires `handoff_to` plus evidence or a durable
+      `next_action` reference.
 
 9. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.

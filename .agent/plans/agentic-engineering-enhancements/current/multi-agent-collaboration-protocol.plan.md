@@ -33,14 +33,16 @@ todos:
       right next automatic step. Execute the evidence/claim-history/
       decision-thread slice first.
   - id: ws3b-sidebar-and-escalation
-    content: WS3B — Preserve the existing sidebar, timeout, and owner-escalation design as a separate sibling plan.
-    status: gate-satisfied
+    content: WS3B — Implement sidebar, timeout, and owner-escalation design as a separate sibling plan.
+    status: completed
     split_plan: multi-agent-collaboration-sidebar-and-escalation.plan.md
     split_on: 2026-04-26
-    pause_reason: >
+    completed_on: 2026-04-26
+    completion_note: >
       Three-agent phase-transition evidence and owner direction satisfied
-      the promotion gate on 2026-04-26. Implementation remains a separate
-      execution pass.
+      the promotion gate on 2026-04-26. Implementation installed
+      sidebar entries, escalation case files, workflow reporting, and
+      joint-decision integration.
   - id: ws4-operational-integration
     content: WS4 — Wire session-open registration into start-right-quick / start-right-thorough; wire session-close cleanup into session-handoff; wire stale-claim garbage collection into consolidate-docs.
     status: completed
@@ -51,8 +53,9 @@ todos:
       session-handoff now closes own claims and decision-thread
       participation; plan templates include lifecycle triggers and the
       simple-plan work-shape tier; Practice Core / ADR surfaces recognise
-      collaboration state as first-class. WS3B was not implemented and
-      hook-based reminders remain deferred.
+      collaboration state as first-class. WS3B later implemented
+      sidebars, escalation, and joint-decision integration; hook-based
+      reminders remain deferred.
   - id: ws5-observation-and-refine
     content: WS5 — Observe at least three real parallel sessions; capture lessons into .agent/memory/collaboration/; refine schema or directive based on real usage. Refinement amendments land as separate commits, not WS5 itself.
     status: paused-post-ws4a-observation-harvest
@@ -68,7 +71,7 @@ todos:
 
 # Multi-Agent Collaboration Protocol
 
-## Status: WS4A + Commit-Window Refinement Complete; WS3B Gate Satisfied (2026-04-26)
+## Status: WS4A + Commit-Window Refinement Complete; WS3B Implemented (2026-04-26)
 
 WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed.
 WS3 has been split under owner direction after the WS5 evidence harvest:
@@ -82,21 +85,21 @@ WS3 has been split under owner direction after the WS5 evidence harvest:
   [`../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - **WS3B**:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](multi-agent-collaboration-sidebar-and-escalation.plan.md)
-  preserves the sidebar, timeout, and owner-escalation design as a
-  separate plan. Its promotion gate is satisfied; implementation has not
-  started.
+  implements sidebar, timeout, and owner-escalation design as a sibling
+  plan. Its implementation also carried the owner-approved joint-agent
+  decision protocol into the conversation schema and lifecycle workflows.
 
 WS4 resumed under owner direction as a narrow lifecycle-integration pass
 after WS3A completed. That pass is complete: start-right, session-handoff,
-plan templates, Practice Core, and ADR-facing surfaces now make WS0-WS3A
-collaboration state part of the ordinary lifecycle. It did **not** start
-WS3B sidebar, timeout, or owner-escalation implementation.
+plan templates, Practice Core, and ADR-facing surfaces made WS0-WS3A
+collaboration state part of the ordinary lifecycle. WS3B is now a later
+completed implementation pass.
 
 The 2026-04-26 owner-directed commit-window refinement is complete in the
 working tree: `git:index/head` is now a short-lived active-claim area before
 staging or committing, and the commit skill closes the claim on success,
 failure, or abort. This extends WS1's advisory claim model; it does not add
-hooks, locks, or WS3B mechanisms.
+hooks or locks.
 
 WS5 remains **paused on owner direction**. The evidence surface has moved on
 since the original 2026-04-25 pause: later shared-communication-log entries
@@ -118,16 +121,16 @@ is needed to "wait."
 
 **What resumes the plan**: owner direction after inspecting the evidence
 threshold (3+ shared-communication-log entries OR claims OR documented
-coordination decisions referencing each other). The natural inspection
-point is the next `/jc-consolidate-docs` pass or an owner-directed WS5
-harvest.
+coordination decisions referencing each other). The gate fired and WS3B
+implemented sidebars, escalation, and joint decisions. Future inspections
+now feed WS5 harvest and refinement, not WS3B promotion.
 
 **What remains pending under the gate**:
 
-- WS3B — sidebar and owner-escalation mechanism, gate satisfied;
-  implementation not started
+- WS3B — implemented; first real sidebar/joint-decision events still feed
+  WS5 seed harvest.
 - WS4A — lifecycle integration complete; any future hook reminder or
-  dashboard expansion remains evidence-gated follow-up, not active scope
+  dashboard expansion remains evidence-gated follow-up, not active scope.
 - WS5 — the evidence-harvest workstream itself
 
 If owner direction redirects effort to a different surface mid-pause, the

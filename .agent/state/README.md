@@ -28,7 +28,7 @@ Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
-- [`log.md`](collaboration/shared-comms-log.md) — shared communication log
+- [`shared-comms-log.md`](collaboration/shared-comms-log.md) — shared communication log
   (schema-less, append-only, eventually-consistent). Discovery surface
   for sequential agents at session-open. Coexists with structured
   surfaces installed by later workstreams.
@@ -40,13 +40,12 @@ plan.
   closes (WS3A).
 - [`conversation.schema.json`](collaboration/conversation.schema.json) and
   [`conversations/`](collaboration/conversations/) — lightweight async
-  decision-thread contract and examples for structured overlap discussion
-  (WS3A).
-
-WS3B sidebar, timeout, and owner-escalation surfaces remain
-evidence-gated. Do not create `.agent/state/collaboration/escalations/`
-unless the owner explicitly promotes the sibling plan or real
-decision-thread evidence proves async coordination insufficient.
+  decision-thread, sidebar, and joint-decision contract and examples for
+  structured overlap discussion (WS3A/WS3B/joint decisions).
+- [`escalation.schema.json`](collaboration/escalation.schema.json) and
+  [`escalations/`](collaboration/escalations/) — live owner-facing
+  unresolved case records. Escalations close only after the durable owner
+  resolution is written back into the referenced conversation.
 
 ## Authority
 
@@ -72,9 +71,12 @@ This directory is governed by:
   blockers — see
   [`.agent/commands/consolidate-docs.md`](../commands/consolidate-docs.md)
   for the audit step. It reports active/stale claims, recent closures,
-  open/stale decision threads, unresolved decision requests, and
-  evidence-bundle gaps.
-- **Decision threads stay narrow** — use them for concrete async
-  decisions and evidence. Use the shared log for lightweight discovery,
-  active claims for live ownership and commit windows, the napkin for
-  learning, and thread records for cross-session lane state.
+  open/stale decision threads, open/stale sidebars, unresolved decision
+  requests, unacknowledged or evidence-missing joint decisions, active
+  escalations, and evidence-bundle gaps.
+- **Decision threads own structured coordination** — use them for concrete
+  async decisions, sidebars, joint commitments, resolutions, and evidence.
+  Use the shared log for lightweight discovery, active claims for live
+  ownership and commit windows, escalations for unresolved owner-facing
+  cases, the napkin for learning, and thread records for cross-session
+  lane state.

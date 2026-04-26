@@ -1,6 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Frolicking Toast / claude-code /
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implemented
+owner-approved coordination architecture consolidation. Conversation
+schema v1.1.0 now supports sidebars and joint decisions; escalation
+schema and `escalations/` directory exist; start-right, session-handoff,
+consolidate-docs, collaboration rules, directives, and state indexes now
+surface sidebars, escalations, and joint-decision obligations. Intent-to-
+commit/session-counter remains separate future work. Active claim
+`e3ea9c06-f985-4fd4-b920-aa0c8e4f0e71` closed explicitly; active claims
+registry is empty.)
+
+**Prior refresh**: 2026-04-26 (Frolicking Toast / claude-code /
 claude-opus-4-7-1m — session handoff after the owner-directed
 chunked landing closed cleanly. Two commit-window claims opened and
 closed today (`4535f2ff` umbrella for the 6-chunk landing, then
@@ -512,8 +522,8 @@ and same-branch friction capture are complete in the working tree (refreshed
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
-WS3B's promotion gate is satisfied but implementation has not started; WS5 now
-means post-WS4A real-session observation / seed harvest.
+WS3B is implemented; WS5 now means post-WS4A/WS3B real-session
+observation / seed harvest.
 
 The current experiment deliberately keeps agents on the same branch so
 coordination frictions remain visible. Do not convert that into a worktree
@@ -525,11 +535,13 @@ announcements.
 appear to satisfy the original 3+ coordination-event inspection threshold, but
 that evidence was used to split and complete WS3A, then to justify the
 narrow WS4A lifecycle pass. Later three-agent phase-transition evidence
-satisfied the WS3B gate; it does not auto-implement WS3B or resume WS5.
+satisfied the WS3B gate; owner direction then implemented WS3B plus
+joint-decision integration. It does not resume WS5 automatically.
 
 **Inspection points**: `/jc-consolidate-docs` § 7e now audits open/stale
-claims, recent closures, decision-thread state, unresolved decisions, evidence
-bundle gaps, and schema validation.
+claims, recent closures, decision-thread state, sidebars, joint decisions,
+active escalations, unresolved decisions, evidence-bundle gaps, and schema
+validation.
 
 ### Current State
 
@@ -542,6 +554,11 @@ bundle gaps, and schema validation.
   collaboration rules, active/closed-claim schemas, state README,
   consolidation audit, channel card, founding pattern, and continuity
   surfaces.
+- WS3B sidebar/escalation and joint-agent decision integration is
+  implemented across conversation schema v1.1.0, escalation schema,
+  fixtures, start-right, session-handoff, consolidate-docs,
+  collaboration rules, directives, channel card, state README, and state
+  conventions.
 - The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - `repo-continuity.md` has been compacted from an overgrown historical surface
@@ -552,22 +569,11 @@ bundle gaps, and schema validation.
   undo the learning. The next structural response is an explicit lane or
   owner-approved deferral to bring `distilled.md` below hard by graduating,
   pruning, or splitting without deleting signal.
-- WS3B sidebar, timeout, and owner-escalation promotion gate is satisfied in
-  the sibling current plan; implementation has not started.
-- Frolicking Toast currently owns the active commit-window umbrella claim
-  `4535f2ff-0420-4bde-bfb8-af0db656e359` while chunk-committing accumulated
-  collaboration / Practice work. Chunk 1 landed at `e37a5795`; chunk 2 landed
-  at `38472766`; chunk 3 landed at `9925ad59`; chunk 4 memory-pattern files
-  landed locally at `9bd91f81` and were one commit ahead of origin at this
-  handoff.
-- Codex had no active claim to close for this handoff. The handoff touched
-  overlapping coordination surfaces deliberately and recorded the overlap in
-  the shared log rather than staging or committing.
-- The working tree still contains unrelated MCP/SDK TypeScript WIP. Do not
-  absorb that into the WS3A documentation closeout.
+- Active claim `e3ea9c06-f985-4fd4-b920-aa0c8e4f0e71` closed explicitly
+  into the closed-claims archive.
 - The owner-requested Practice-integration / lifecycle-automation
   exploration has been implemented as the narrow WS4A lifecycle pass; no
-  automation hooks or WS3B mechanisms were started.
+  automation hooks were started.
 - Reviewer closeout for this cleanup used `docs-adr-reviewer` and
   `assumptions-reviewer`; actionable findings were absorbed into the parent
   plan, roadmap, reviewer guidance, Practice Core, and agent-collaboration
@@ -580,48 +586,44 @@ bundle gaps, and schema validation.
 - Deep consolidation is due: hard `distilled.md` fitness pressure remains, and
   the napkin contains fired / sharpened promotion triggers that need
   deliberate convergence.
-- The active commit-steward claim is a real shared-index owner. Same-branch
+- Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
-  that claim is the failure mode being studied.
+  another fresh claim is the failure mode being studied.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
-- Before WS3B implementation, run reviewer routing:
-  `assumptions-reviewer` for timeout/promotion legitimacy,
-  `docs-adr-reviewer` for escalation visibility, and
-  `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
+- Assumptions review already challenged the implementation plan. Future
+  refinements should use `docs-adr-reviewer` for schema/docs coherence
+  and `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
 
 ### Next Safe Step
 
-**No WS3A, WS4A, commit-window, or handoff implementation remains open for
-Codex. Do not start WS3B implementation unless the owner explicitly asks for
-that execution pass. Frolicking Toast's active commit-steward claim remains
-open and should be treated as the live same-branch coordination experiment.**
+**No WS3A, WS4A, commit-window, WS3B sidebar/escalation, or
+joint-decision implementation remains open for Codex. Continue to treat
+same-branch coordination as the live experiment: claims, sidebars, joint
+decisions, and escalations should make friction visible rather than hiding
+it.**
 
 Choose the lane deliberately:
 
-1. **Chunked commit stewardship / same-branch experiment** — let the active
-   Frolicking Toast commit-window claim either complete or coordinate explicitly
-   before any other agent stages. If overlap is necessary, record the
-   handshake; do not silently sequence or hide the friction.
-2. **Coordination architecture audit** — a Codex follow-up can start read-only:
-   count active and planned coordination surfaces, classify each as
-   authoritative source / report / mirror, and identify duplicated authority or
-   unclear write timing.
-3. **Consolidation pass** — run `jc-consolidate-docs` deliberately for the
+1. **First real sidebar / joint-decision seed** — when a real overlap uses
+   `sidebar_*` or `joint_decision*` entries, capture whether it reached
+   resolution without becoming a permission gate or default owner
+   escalation.
+2. **Consolidation pass** — run `jc-consolidate-docs` deliberately for the
    due hard-fitness / pattern-promotion / phase-transition convergence work.
    Do this as thread-scoped convergence, not as a hidden handoff add-on.
-4. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+3. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-5. **Observability branch-primary** — read the
+4. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-6. **Lifecycle integration follow-up** — only if owner-directed, observe
+5. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether the new start-right / handoff / template lifecycle triggers are
    actually used in the next few sessions. Do not add hooks without evidence;
-   WS3B already has satisfied promotion evidence but remains unimplemented.
-5. **Other agentic engineering work** — pick an owner-directed queued plan.
-   WS3B is one possible explicit implementation pass, not background work.
+   first real sidebar/joint-decision usage should feed WS5 observation.
+6. **Other agentic engineering work** — pick an owner-directed queued plan.
+   WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
 

@@ -8,7 +8,15 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implementation of
+owner-approved coordination architecture consolidation. WS3B
+sidebar/escalation and joint-agent decision workflow integration now live
+in schema, fixtures, directives, rules, start-right, session-handoff,
+consolidate-docs, and state indexes. Active claim
+`e3ea9c06-f985-4fd4-b920-aa0c8e4f0e71` closed explicitly; active claims
+registry is empty.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
 same-branch collaboration correction. The owner clarified that avoiding the
 shared branch would remove the signal the collaboration work is meant to study;
 friction should be made observable through communication. No Codex claim was
@@ -71,14 +79,12 @@ thread records and plans; old session narrative belongs in `archive/`.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `9bd91f81`, one commit
-  ahead of origin `9925ad59` at the time of this handoff, with a dirty working
-  tree and an active Frolicking Toast commit-window claim.
-- Current dirty work includes Frolicking Toast's chunked collaboration /
-  Practice landing (chunk 4 landed locally at `9bd91f81`), Codex
-  continuity/handoff edits, Sentry owner-verification closeout surfaces, and
-  other unstaged memory/state surfaces. Treat these as intentionally separate
-  surfaces unless a later commit-steward note says they have been bundled.
+- Branch: `feat/otel_sentry_enhancements` at local HEAD `cec08441`, ahead of
+  origin `5a39592a` at this refresh.
+- Current dirty work is this Codex coordination-architecture implementation:
+  sidebars, escalation, and joint-decision schema/docs/fixture/workflow
+  surfaces. No unrelated MCP/SDK WIP appears in `git status --short` at this
+  refresh.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -103,8 +109,9 @@ thread records and plans; old session narrative belongs in `archive/`.
 - The future intent-to-commit plan has promotion-threshold evidence for
   staged-bundle integrity failures: substitution, disappearance, and
   accretion. Implementation remains owner-gated.
-- WS3B sidebar / timeout / owner-escalation promotion gate is satisfied
-  as of 2026-04-26; implementation has not started.
+- WS3B sidebar / timeout / owner-escalation and joint-agent decision
+  workflow integration are implemented. First real sidebar/joint-decision
+  usage should feed WS5 observation.
 
 ## Active Threads
 
@@ -166,16 +173,10 @@ substitution / disappearance / accretion evidence surfaced during
 co-tenancy; documented in shared log and Codex's plan.
 
 **Codex (this handoff) — agentic-engineering-enhancements**:
-captured the owner's correction that same-branch friction is the experiment,
-not a reason to route work into separate worktrees. The napkin, this
-continuity file, the agentic thread record, observability thread record, and
-shared log now record that communication / handshakes should make friction
-visible before it becomes misleading history. No sidebar, escalation, hook
-automation, staging, commit, or PR-87 remediation work was performed by this
-handoff.
-
-No WS3B implementation, SDK/product work outside the Sentry lane,
-or hook-based automation started in this Codex handoff.
+implemented the approved coordination architecture consolidation: sidebars,
+owner escalation, and joint-agent decisions. Intent-to-commit/session-counter
+remains separate future work. No hook automation, staging, commit, or PR-87
+remediation work was performed by this implementation pass.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -195,8 +196,8 @@ these branch-relevant constraints:
 
 Current branch non-goals:
 
-- do not implement WS3B without an explicit execution pass, even though the
-  promotion gate is now satisfied;
+- do not implement intent-to-commit/session-counter without explicit owner
+  direction;
 - do not reopen broader canonicalisation opportunistically;
 - do not treat monitor setup or owner-handled preview validation as in-repo
   acceptance work;
@@ -207,23 +208,24 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Same-branch collaboration experiment is live** — Frolicking Toast holds
-   active claim `4535f2ff-0420-4bde-bfb8-af0db656e359` covering
-   `git:index/head` and broad collaboration / Practice surfaces while
-   chunk-committing accumulated work. Other agents may continue on the same
-   branch, but should make overlap explicit before staging or committing:
-   announce commit windows, preserve visible path ownership, and turn shared
-   surfaces into handshakes rather than silent sequencing.
-2. **Distilled-memory structural response** — because learning was correctly
+1. **Same-branch collaboration experiment is live** — other agents may
+   continue on the same branch, but should make overlap explicit before
+   staging or committing: announce commit windows, preserve visible path
+   ownership, and turn shared surfaces into handshakes rather than silent
+   sequencing.
+2. **First real sidebar / joint-decision seed** — when a real overlap uses
+   the new entries, capture whether it reached resolution without becoming a
+   permission gate or default owner escalation.
+3. **Distilled-memory structural response** — because learning was correctly
    preserved first, `distilled.md` now carries hard fitness pressure. The
    next consolidation-memory move is an explicit remediation lane or
    owner-approved deferral to bring `distilled.md` below hard by
    graduating, pruning, or splitting without deleting signal.
-3. **MCP / SDK dirty work** — run targeted type-checks for
+4. **MCP / SDK dirty work** — run targeted type-checks for
    `@oaknational/oak-curriculum-sdk` and the repo root, then resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt. Do not fold that work
-   into the WS3A documentation closeout.
-4. **Observability branch-primary (L-IMM closed 2026-04-26 at 6/6;
+   into the coordination-architecture implementation.
+5. **Observability branch-primary (L-IMM closed 2026-04-26 at 6/6;
    PR-87 quality lane still active)** —
    - L-IMM lane (operational hardening): closed at 6/6 after owner
      verification that the Vercel Sentry Marketplace plugin is active
@@ -245,15 +247,13 @@ Choose the lane deliberately:
      [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
      closed 2026-04-26 with full Phase 1-5 findings tables; rotate to
      archive/completed/ on next consolidate-docs.
-5. **Lifecycle integration follow-up** — only if owner-directed, observe
+6. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
-   real sessions. Do not add hook reminders without evidence. WS3B now has
-   satisfied promotion evidence but still needs an explicit implementation
-   pass.
-6. **Other agentic engineering work** — WS3A, WS4A, the commit-window
-   refinement, and this Codex handoff have no further Codex implementation
-   open. Start WS3B only as an explicit implementation pass. Otherwise pick a
-   queued plan from the current/roadmap surfaces.
+   real sessions. Do not add hook reminders without evidence. First real
+   sidebar/joint-decision usage should feed WS5 observation.
+7. **Other agentic engineering work** — WS3A, WS4A, commit-window,
+   WS3B, and joint-decision implementation are complete. Pick a queued
+   owner-directed plan from the current/roadmap surfaces.
 
 ## Open Owner-Decision Items
 

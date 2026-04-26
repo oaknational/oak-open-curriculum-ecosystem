@@ -23,9 +23,11 @@ consultation at all):
   and any open decision-thread files for context, then decide how to
   coordinate: proceed with caution, ping the other agent via the shared
   communication log, open or append a decision thread under
-  `.agent/state/collaboration/conversations/`, or ask the owner via
-  `AskUserQuestion`. Sidebar, timeout, and owner-escalation mechanics are
-  WS3B and remain paused until explicitly promoted.
+  `.agent/state/collaboration/conversations/`, request a sidebar inside
+  that conversation, record a joint decision when peer commitment is
+  needed, open an owner escalation under
+  `.agent/state/collaboration/escalations/`, or ask the owner via
+  `AskUserQuestion`.
   Record the decision in your own claim's `notes` field citing the other
   agent's `claim_id` and, when used, the `conversation_id` (and additionally
   append a shared-communication-log entry if the decision requires
@@ -138,7 +140,8 @@ The authoritative schema is
 [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
 Every entry carries: `claim_id`, `agent_id` block (PDR-027 identity), `thread`
 slug, `areas` array, `claimed_at`, `freshness_seconds` (default 14400 = 4
-hours), optional `heartbeat_at`, `sidebar_open` (forward WS3B field),
+hours), optional `heartbeat_at`, `sidebar_open` (whether a sidebar is
+open against the claim),
 `intent` prose, and optional `notes`. Commit-window claims normally use
 `areas.kind: "git"` with `patterns: ["index/head"]` and
 `freshness_seconds: 900`.
@@ -178,8 +181,11 @@ end-to-end against itself.
   — durable closure-history surface for explicit, stale, and owner-forced
   claim closure.
 - [`conversation.schema.json`](../state/collaboration/conversation.schema.json)
-  and [`conversations/`](../state/collaboration/conversations/) — WS3A
-  decision-thread contract and examples.
+  and [`conversations/`](../state/collaboration/conversations/) —
+  decision-thread, sidebar, and joint-decision contract and examples.
+- [`escalation.schema.json`](../state/collaboration/escalation.schema.json)
+  and [`escalations/`](../state/collaboration/escalations/) — owner-facing
+  unresolved case records.
 - [`use-agent-comms-log.md`](use-agent-comms-log.md) — shared-communication-log usage
   rule; sibling tripwire on intent declaration.
 - [`respect-active-agent-claims.md`](respect-active-agent-claims.md) —

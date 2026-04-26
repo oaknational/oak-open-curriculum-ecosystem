@@ -29,16 +29,16 @@ Read and internalise these documents:
 
 Before any edit, read `.agent/state/collaboration/active-claims.json` and
 apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
-rule. Also scan `.agent/state/collaboration/shared-comms-log.md` and any open
-`.agent/state/collaboration/conversations/*.json` files for the thread
+rule. Also scan `.agent/state/collaboration/shared-comms-log.md`, any open
+`.agent/state/collaboration/conversations/*.json` files, and any active
+`.agent/state/collaboration/escalations/*.json` files for the thread
 or areas you will touch. Bootstrap fast-path: if no entries other than
 your own exist, log "no other agents present" to the shared
 communication log and proceed. On overlap, consult the log and decision
 threads before deciding how to coordinate (proceed with caution, ping,
-append/open a decision thread, or ask the owner). Then register your own
-claim covering the areas you intend to touch. Sidebar, timeout, and
-owner-escalation mechanics remain WS3B and must not be used unless
-explicitly promoted.
+append/open a decision thread, request a sidebar, record a joint
+decision, open or close an escalation, or ask the owner). Then register
+your own claim covering the areas you intend to touch.
 
 Before staging or committing, use the always-active commit skill. It
 checks for a fresh `git:index/head` commit-window claim, opens one if the

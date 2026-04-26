@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "joint-decision-proposed-valid",
+  "thread": "agentic-engineering-enhancements",
+  "status": "open",
+  "title": "Proposed joint decision with explicit roles",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:20:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:20:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Proposal: implement sidebars and escalation in the same lifecycle slice because escalation can be produced by unresolved sidebars.",
+      "joint_decision_id": "sidebar-escalation-slice",
+      "joint_decision_state": "proposed",
+      "roles": [
+        {
+          "role": "decider",
+          "agent": {
+            "agent_name": "Owner",
+            "platform": "human",
+            "model": "human",
+            "session_id_prefix": "unknown"
+          },
+          "responsibility": "Accept or reject the proposed lifecycle slice boundary."
+        },
+        {
+          "role": "recorder",
+          "agent": {
+            "agent_name": "Codex",
+            "platform": "codex",
+            "model": "GPT-5",
+            "session_id_prefix": "unknown"
+          },
+          "responsibility": "Record the accepted decision in the conversation and update workflow docs."
+        }
+      ],
+      "ack_due_at": "2026-04-27T18:20:00Z"
+    }
+  ]
+}

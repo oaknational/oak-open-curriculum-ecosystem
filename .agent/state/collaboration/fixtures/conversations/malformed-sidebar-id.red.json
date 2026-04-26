@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "malformed-sidebar-id-red",
+  "thread": "agentic-engineering-enhancements",
+  "status": "open",
+  "title": "Malformed sidebar identifier",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:10:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "sidebar_request",
+      "created_at": "2026-04-26T18:10:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "This fixture should fail schema validation because sidebar_id is not slug-like.",
+      "sidebar_id": "Sidebar 1",
+      "target_participants": [
+        {
+          "agent_name": "Owner",
+          "platform": "human",
+          "model": "human",
+          "session_id_prefix": "unknown"
+        }
+      ],
+      "response_due_at": "2026-04-26T18:20:00Z",
+      "expires_at": "2026-04-26T18:40:00Z"
+    }
+  ]
+}

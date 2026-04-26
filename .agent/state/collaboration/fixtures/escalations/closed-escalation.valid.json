@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "escalation_id": "closed-escalation-valid",
+  "status": "closed",
+  "thread": "agentic-engineering-enhancements",
+  "conversation_id": "joint-decision-complete-with-role-handoff-valid",
+  "originating_entry_id": "entry-001",
+  "title": "Owner resolved role assignment decision",
+  "opened_at": "2026-04-26T18:25:00Z",
+  "opened_by": {
+    "agent_name": "Codex",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "unknown"
+  },
+  "owner_action_requested": "Choose whether Codex or Ethereal Alpaca acts.",
+  "reason": "The decision assigns cross-agent work and needs owner tiebreak authority.",
+  "evidence": [
+    {
+      "kind": "decision_thread",
+      "ref": ".agent/state/collaboration/fixtures/conversations/joint-decision-complete-with-role-handoff.valid.json#entry-002",
+      "summary": "Owner acknowledgement records the resolution in the conversation."
+    }
+  ],
+  "closed_at": "2026-04-26T18:55:00Z",
+  "closed_by": {
+    "agent_name": "Codex",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "unknown"
+  },
+  "resolution_conversation_entry_id": "entry-002",
+  "resolution_summary": "Owner approved the split; the escalation closed by reference to the conversation entry."
+}

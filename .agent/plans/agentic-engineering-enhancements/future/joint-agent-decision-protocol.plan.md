@@ -1,14 +1,15 @@
 ---
 name: "Joint Agent Decision Protocol"
-overview: "Add an agent-to-agent decision protocol that goes beyond signalling: discuss → decide jointly → assign who records the decision → assign who acts on it → close the loop. Sits alongside WS3B sidebar/escalation; addresses the phase-transition observation that 3+ agents whose threads occasionally touch break the existing async-only signalling surfaces."
+overview: "Implemented agent-to-agent decision protocol that goes beyond signalling: discuss, decide jointly, assign who records the decision, assign who acts on it, and close the loop. Sits alongside WS3B sidebar/escalation; addresses the phase-transition observation that 3+ agents whose threads occasionally touch break the existing async-only signalling surfaces."
 isProject: false
 ---
 
-# Joint Agent Decision Protocol — Strategic Plan
+# Joint Agent Decision Protocol
 
-**Status**: 🟡 NOT STARTED (future / strategic intent)
-**Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 owner direction
-and observed phase transition; promote when implementation capacity opens)
+**Status**: IMPLEMENTED 2026-04-26 as part of the owner-approved
+coordination architecture consolidation pass.
+**Promotion signal**: Owner confirmed sidebars, escalation, and joint
+agent decisions were already proven necessary; implementation proceeded.
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS3 family
 **Related**:
@@ -98,10 +99,7 @@ both agents can cite when their actions diverge from the agreed plan.
 
 ---
 
-## Proposed Direction (high-level)
-
-Detailed design happens at promotion time; this section sketches the
-shape so a future implementer can pick it up without re-deriving.
+## Implemented Direction
 
 ### 1. Decision-thread schema extension
 
@@ -116,11 +114,11 @@ Extend with two new kinds:
 - `joint_decision_acknowledgement`: a peer-acknowledgement entry from
   each named participant confirming they accept their assigned role.
 
-A `joint_decision` entry is not durable until at least one
-`joint_decision_acknowledgement` from each named participant is
-recorded. Until then it is a `joint_decision_proposal` (status field).
-Decisions without acknowledgements expire under the standard
-decision-thread staleness audit.
+A `joint_decision` entry is not a settled commitment until the required
+decider acknowledgement or owner decision is recorded. Proposed
+decisions use explicit wall-clock `ack_due_at` timestamps; the workflow
+default is `created_at + 24 hours`. Session-count TTLs remain out of
+scope until a session-counter primitive exists.
 
 ### 2. Role-assignment vocabulary
 
@@ -129,7 +127,7 @@ Extend `agent-collaboration.md` with a small fixed vocabulary:
 | Role | Meaning |
 |---|---|
 | `discusser` | Participates in pre-decision exchange; not bound to any post-decision action. |
-| `decider` | Has formal say in the joint_decision. Joint = ≥ 2 deciders. |
+| `decider` | Has formal say in the joint_decision. At least one decider is required; the owner may be the decider. |
 | `recorder` | Owns updating the named durable artefact (plan, ADR, rule, doc, schema, etc.) to reflect the decision. |
 | `actor` | Owns implementing the decision in code/config/state. |
 
@@ -142,7 +140,9 @@ explicitly assigned by name; "we'll figure it out" is not allowed.
 close) gains a new sub-step: **for every joint_decision the exiting
 agent holds an unfulfilled `recorder` or `actor` role on**, either
 complete the action this session, or post a `role_handoff` decision
-thread entry naming the agent or owner who takes over.
+thread entry naming the agent or owner who takes over. The implemented
+schema represents this as `joint_decision_state: "role_handoff"` with
+`handoff_to` and either evidence or a durable `next_action` reference.
 
 This prevents the "I assumed you were doing it" failure mode.
 
@@ -151,45 +151,29 @@ This prevents the "I assumed you were doing it" failure mode.
 The collaboration-state audit gains a sixth report:
 
 > **Joint-decision snapshot**: enumerate joint_decision entries by status
-> (`proposal`, `decided`, `recorder_pending`, `actor_pending`, `complete`,
-> `abandoned`). Items with `recorder_pending` or `actor_pending` older
-> than 3 sessions surface as `[joint-decision-stalled]`. Action: surface
-> to owner, do not auto-resolve.
+> (`proposed`, `decided`, `recorder_pending`, `actor_pending`,
+> `role_handoff`, `complete`, `abandoned`). Items with overdue
+> `ack_due_at`, missing acknowledgement, missing completion evidence, or
+> malformed role handoff surface as findings. Action: surface to owner,
+> do not auto-resolve.
 
-### 5. Sidebar integration (depends on WS3B)
+### 5. Sidebar integration
 
-WS3B's sidebar mechanism is the natural discussion surface. When a
-sidebar resolves with a `joint_decision`, the resolution entry MUST
-name recorder and actor. Sidebars that close without role assignment are
-flagged at consolidation as incomplete.
-
-If WS3B remains paused, this plan can install a degenerate version using
-only async decision threads — slower discussion, but the
-decide/record/act protocol still applies.
+WS3B's sidebar mechanism is the natural discussion surface. A sidebar may
+resolve by pointing to a `joint_decision`; joint commitments themselves
+live in `joint_decision` and `joint_decision_acknowledgement` entries.
+Sidebars that expire without `sidebar_resolution` surface as stale
+coordination obligations during consolidation.
 
 ---
 
-## Promotion Trigger
+## Implementation Result
 
-Promote from `future/` → `current/` when **any** of:
-
-1. Owner explicitly directs promotion. (As of 2026-04-26 the owner has
-   said "this is sufficient evidence to justify the further agent
-   collaboration work" — close to but not quite an explicit promotion
-   instruction. Treat as evidence-met, not yet promoted.)
-2. A second three-agent-touching session is observed (e.g. another
-   ~90-minute window where 3+ identities edit overlapping surfaces and
-   produce ≥ 2 clashes of any clash type A/B/C).
-3. WS3B sidebar lands and the first real sidebar-resolved decision lacks
-   a recorder/actor assignment, producing a follow-up clash.
-4. A decision thread reaches `decision` kind without being acted on
-   within 3 sessions, and the inaction is observably caused by ambiguous
-   role assignment rather than by deliberate deferral.
-
-Threshold reasoning: this protocol is heavier than WS3B alone, and
-should not land speculatively. The phase-transition observation justifies
-the future plan; an additional concrete instance justifies promotion to
-`current/` for execution.
+The owner explicitly confirmed that sidebars, escalation, and joint-agent
+decisions were already proven necessary. This plan therefore landed in
+the same coordination pass as WS3B rather than waiting for another
+promotion gate. The implementation remains advisory and does not add
+mechanical refusal semantics.
 
 ---
 
@@ -201,10 +185,9 @@ the future plan; an additional concrete instance justifies promotion to
    This plan and WS3B may land in either order; this plan reads cleaner
    if WS3B lands first because the sidebar is the canonical discussion
    surface.
-3. `intent-to-commit-and-session-counter.plan.md` landed: complementary
-   defence at the commit window. Joint-decision is the discussion-level
-   defence; intent-to-commit is the commit-level defence. They protect
-   against the same clash taxonomy at different layers.
+3. `intent-to-commit-and-session-counter.plan.md` remains a separate
+   future defence at the commit window. It was deliberately not bundled
+   into this pass.
 
 ---
 
@@ -212,8 +195,7 @@ the future plan; an additional concrete instance justifies promotion to
 
 > See [Lifecycle Triggers component](../../templates/components/lifecycle-triggers.md)
 
-When promoted, this is multi-session, Practice-domain, schema-changing
-work touching:
+This was multi-session, Practice-domain, schema-changing work touching:
 
 - `conversation.schema.json` (extension to v1.1.0 or v2.0.0)
 - `agent-collaboration.md` directive (role vocabulary)
@@ -222,17 +204,16 @@ work touching:
 - `register-active-areas-at-session-open.md` rule (role-awareness at
   session-open)
 
-Plan execution registers an active claim covering the conversation
-schema, directive, command, rule, and any rule-adapter mirrors;
-self-applies the protocol (the implementing agent records joint_decision
-entries with peers as the implementation lands); closes own claim with
-`closure.kind: "explicit"` evidencing the decision-thread artefacts.
+Plan execution registered an active claim covering the conversation
+schema, directive, command, rule, and collaboration state surfaces.
 
 ---
 
 ## Reviewer Scheduling (phase-aligned)
 
-When promoted, follow the standard three-phase rhythm:
+The implementation plan was reviewed by `assumptions-reviewer` before
+landing. Future refinements should follow the standard three-phase
+rhythm:
 
 ### Plan-phase (PRE-ExitPlanMode in `current/`) — challenges solution-class
 
@@ -269,9 +250,9 @@ When promoted, follow the standard three-phase rhythm:
 |---|---|
 | **Protocol becomes mandatory bureaucracy** — every overlap requires a joint_decision and the cost outweighs the value. | Trigger language: joint_decision is for **bilateral commitments**, not unilateral signals. The shared log and decision threads remain the primary surfaces; joint_decision is reserved for "we both have to follow through". |
 | **Role-assignment too rigid** — the four-role vocabulary can't model nuanced collaborations. | Default vocabulary is small and additive; future extensions can add roles via schema bump. The acceptance test is "does this cover the phase-transition cases observed 2026-04-26?" not "does this cover every possible coordination shape?". |
-| **Acknowledgement requirement creates async deadlocks** — agent A proposes, agent B never sees it (different sessions, different platforms), proposal expires, no decision is made. | TTL-based proposal expiry (reuse intent_to_commit's session-counter primitive); proposal expiry surfaces at consolidate-docs § 7e and prompts owner attention. Owner remains the final tiebreaker. |
+| **Acknowledgement requirement creates async deadlocks** — agent A proposes, agent B never sees it (different sessions, different platforms), proposal expires, no decision is made. | Use explicit wall-clock `ack_due_at`; overdue acknowledgements surface at consolidate-docs § 7e and prompt owner attention. Owner remains the final tiebreaker. |
 | **Self-application paradox** — the protocol's first landing requires agreement between agents who don't yet have the protocol. | Initial landing is single-agent (the implementing agent owns recorder + actor); joint_decision is exercised on the next inter-agent coordination event after landing. |
-| **Sidebar dependency** — if WS3B never lands, joint_decision lacks its canonical discussion surface. | Plan supports degenerate async-only execution. WS3B is preferred but not required; a `joint_decision_proposal` entry on a decision thread is a valid pre-discussion artefact. |
+| **Sidebar dependency** — if WS3B never lands, joint_decision lacks its canonical discussion surface. | Resolved by landing WS3B sidebars in the same implementation pass. |
 | **Two agents on well-separated threads pay the cost** — the protocol is justified by the 3-agent phase transition; smaller setups don't need it. | Only fire `joint_decision` on **bilateral commitments**; ordinary single-agent work does not invoke this protocol. The cost only applies when the value applies. |
 
 ---
@@ -296,62 +277,53 @@ When promoted, follow the standard three-phase rhythm:
 
 ## Documentation Propagation
 
-When promoted, update propagation surfaces:
+Implementation updated the operational surfaces required for this pass:
 
-1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-   — extend artefact taxonomy with joint-decision.
-2. `.agent/practice-core/practice.md` — Collaboration State surface
-   names existing channels; add joint-decision when implementation lands.
-3. `.agent/practice-core/CHANGELOG.md` — record schema extension and
-   protocol installation.
-4. `.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md`
-   — collaboration-state row extends to cover joint-decision artefacts.
-5. `.agent/memory/operational/collaboration-state-conventions.md` — add
+1. `.agent/memory/operational/collaboration-state-conventions.md` — add
    the joint-decision lifecycle and role-vocabulary guidance.
-6. `.agent/skills/start-right-quick/shared/start-right.md` and
+2. `.agent/skills/start-right-quick/shared/start-right.md` and
    `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
    — add joint-decision read at session-open ("are there any decisions
    I'm a recorder/actor on?").
-7. `.agent/commands/session-handoff.md` — role-handoff sub-step under § 8.
-8. `.agent/commands/consolidate-docs.md` — § 7e joint-decision snapshot.
-9. `.agent/directives/agent-collaboration.md` — role vocabulary section.
+3. `.agent/commands/session-handoff.md` — role-handoff sub-step under § 8.
+4. `.agent/commands/consolidate-docs.md` — § 7e joint-decision snapshot.
+5. `.agent/directives/agent-collaboration.md` — role vocabulary and
+   channel guidance.
+
+Practice Core / ADR propagation is a consolidation candidate, not part of
+this implementation pass, unless the owner asks for a Practice Core
+release.
 
 ---
 
-## Open Design Questions
+## Design Decisions Landed
 
-Deferred to plan-phase reviewer dispatch when promoted:
-
-1. **Two new entry kinds vs one with a `participants` field**: cleaner
-   schema vs more flexible. Default in this plan: two kinds
+1. **Two new entry kinds vs one with a `participants` field**: landed as
+   two kinds
    (`joint_decision` + `joint_decision_acknowledgement`).
-2. **Role vocabulary granularity**: 4 roles (discusser/decider/recorder/
-   actor) vs 2 (decider + executor combining recorder+actor). Default: 4.
-3. **Acknowledgement timeout**: does a proposal without acknowledgement
-   in N sessions auto-decay, or stay live indefinitely? Default: TTL
-   matches `intent_to_commit.ttl_sessions` (3 sessions).
-4. **Sidebar integration timing**: land joint-decision before, after,
-   or alongside WS3B sidebar? Default: prefer WS3B first, but allow
-   degenerate async-only joint-decision.
-5. **Owner-as-decider**: can the owner be a `decider` on a
-   joint_decision, or only as the final tiebreaker after peer agreement
-   fails? Default: owner can be a decider; useful when owner is in the
-   conversation.
+2. **Role vocabulary granularity**: landed four roles:
+   `discusser`, `decider`, `recorder`, `actor`.
+3. **Acknowledgement timeout**: landed explicit wall-clock `ack_due_at`
+   with workflow default `created_at + 24 hours`; no session-count TTL.
+4. **Sidebar integration timing**: landed alongside WS3B.
+5. **Owner-as-decider**: landed owner as a valid `decider`.
 
 ---
 
 ## Self-Application Test
 
-When implemented, the very first joint_decision recorded on this branch
-or any future branch MUST involve at least two agents and complete the
-full lifecycle: proposal → acknowledgement(s) → decided → recorded
-(durable artefact updated by named recorder) → acted (work landed by
-named actor) → loop closed. Reference the joint_decision ID in both
-the recorded artefact and the actor's commit message.
+The implementation pass installs examples, fixtures, and workflow
+reporting. The first real inter-agent `joint_decision` recorded on this
+branch should complete the full lifecycle: proposal -> acknowledgement(s)
+-> decided -> recorded (durable artefact updated by named recorder) ->
+acted (work landed by named actor) -> loop closed. Reference the
+joint_decision ID in both the recorded artefact and the actor's commit
+message when that first real event occurs.
 
 This mirrors the WS1 self-application pilot
 ([`a5d33519`](../../../state/collaboration/closed-claims.archive.json))
-and the intent_to_commit self-application test.
+and the intent_to_commit self-application test, while keeping
+intent-to-commit out of this pass.
 
 ---
 

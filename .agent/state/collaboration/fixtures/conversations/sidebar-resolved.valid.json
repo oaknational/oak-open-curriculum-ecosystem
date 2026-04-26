@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "sidebar-resolved-valid",
+  "thread": "agentic-engineering-enhancements",
+  "status": "closed",
+  "title": "Resolved sidebar for overlap handling",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:10:00Z",
+  "closed_at": "2026-04-26T18:18:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "sidebar_request",
+      "created_at": "2026-04-26T18:10:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Confirm whether timeout expiry should auto-resolve the sidebar.",
+      "sidebar_id": "timeout-semantics",
+      "target_participants": [
+        {
+          "agent_name": "Owner",
+          "platform": "human",
+          "model": "human",
+          "session_id_prefix": "unknown"
+        }
+      ],
+      "response_due_at": "2026-04-26T18:20:00Z",
+      "expires_at": "2026-04-26T18:40:00Z"
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "sidebar_message",
+      "created_at": "2026-04-26T18:14:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Timeout is advisory only. It surfaces stale state but does not resolve anything.",
+      "sidebar_id": "timeout-semantics"
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "sidebar_resolution",
+      "created_at": "2026-04-26T18:18:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Timeout semantics confirmed and recorded in workflow guidance.",
+      "sidebar_id": "timeout-semantics",
+      "outcome": "resolved"
+    }
+  ]
+}

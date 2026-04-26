@@ -22,9 +22,16 @@ The substance of the decision is yours. Available options:
 - **open or append a decision thread** — create or cite
   `.agent/state/collaboration/conversations/<id>.json` when the overlap
   needs structured async questions, decisions, resolutions, or evidence;
-- **request a sidebar** — deferred WS3B mechanism; do not use unless the
-  owner explicitly promotes it or decision-thread evidence proves async
-  coordination insufficient;
+- **request a sidebar** — append `sidebar_request` /
+  `sidebar_message` / `sidebar_resolution` entries inside a decision
+  thread when a short focused exchange is needed;
+- **record a joint decision** — append `joint_decision` and
+  `joint_decision_acknowledgement` entries when the overlap needs a
+  shared commitment, decider, recorder, or actor;
+- **open an owner escalation** — create
+  `.agent/state/collaboration/escalations/<id>.json` when peer
+  agreement cannot resolve the block, then write the durable owner
+  resolution back to the conversation;
 - **ask the owner** — `AskUserQuestion` for hard-blocking sync
   (always available).
 
@@ -76,13 +83,12 @@ to avoid concurrent commit attempts.
 - **Decision threads** —
   [`.agent/state/collaboration/conversations/`](../state/collaboration/conversations/)
   holds structured async decision-thread files when overlap needs concrete
-  `decision_request`, `decision`, `resolution`, or evidence entries.
-
-## Forward references
-
-WS3A introduces decision-thread files for structured async peer exchange.
-WS3B keeps sidebar, timeout, and owner-escalation mechanics paused until
-owner direction or real decision-thread evidence promotes them.
+  `decision_request`, sidebar, `joint_decision`, `decision`,
+  `resolution`, or evidence entries.
+- **Owner escalations** —
+  [`.agent/state/collaboration/escalations/`](../state/collaboration/escalations/)
+  holds live unresolved owner-facing case files. Escalations do not own
+  the final decision; the conversation does.
 
 ## Bootstrap fast-path
 
@@ -106,3 +112,5 @@ without further coordination overhead.
   [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 - Decision-thread schema:
   [`conversation.schema.json`](../state/collaboration/conversation.schema.json).
+- Escalation schema:
+  [`escalation.schema.json`](../state/collaboration/escalation.schema.json).

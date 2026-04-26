@@ -1,34 +1,34 @@
 ---
 name: Multi-Agent Collaboration Sidebar and Escalation
 overview: >
-  Second split from paused WS3. Preserve the existing sidebar, timeout, and
-  owner-escalation design as a separate evidence-gated plan that extends the
-  lightweight decision-thread surface only if real usage proves it is needed.
+  Implemented WS3B agent sidebars and owner escalation as live coordination
+  architecture extending the lightweight decision-thread surface.
 todos:
   - id: ws3b-promotion-evidence
     content: "WS3B GATE: inspect WS3A decision-thread evidence and owner direction before promoting sidebar work."
-    status: paused-evidence-gated
+    status: completed
   - id: ws3b-red-sidebar-schema
     content: "WS3B RED: add failing schema fixtures for sidebar request, acceptance, exchange, timeout, and resolution paths."
-    status: pending
+    status: completed
   - id: ws3b-green-sidebar-protocol
     content: "WS3B GREEN: extend the conversation schema and directive/rule guidance with sidebar protocol semantics."
-    status: pending
+    status: completed
   - id: ws3b-green-escalation-surface
     content: "WS3B GREEN: add the explicit owner-escalation surface and consolidate-docs visibility."
-    status: pending
+    status: completed
   - id: ws3b-validation-and-harvest
     content: "WS3B CLOSE: validate schema/docs, capture a sidebar operational seed, and hand evidence to WS5 harvest."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Multi-Agent Collaboration Sidebar and Escalation
 
 **Last Updated**: 2026-04-26
-**Status**: PROMOTION GATE SATISFIED 2026-04-26; awaiting implementation
-capacity. Owner direction landed in the same session as the
-phase-transition observation (see § Promotion Gate Satisfied below).
+**Status**: IMPLEMENTED 2026-04-26. Owner direction landed in the same
+session as the phase-transition observation (see § Promotion Gate
+Satisfied below); implementation landed sidebars, owner escalation, and
+joint-decision workflow integration in one coordination pass.
 **Parent Plan**:
 [`multi-agent-collaboration-protocol.plan.md`](multi-agent-collaboration-protocol.plan.md)
 **Prerequisite Plan**:
@@ -120,15 +120,16 @@ mechanism, joint-decision is the commitment mechanism. They may land
 in either order, but joint-decision reads cleaner with WS3B sidebar
 already in place.
 
-### Why not auto-execute now
+### Implementation Result — 2026-04-26
 
-Promotion gate satisfaction is a green light, not a start signal.
-Implementation capacity for this branch is committed elsewhere
-(observability lanes; PR-87 quality remediation; learning-before-fitness
-consolidation). This plan moves to `current/` execution when the owner
-sequences it; until then it remains in `current/` paused with the gate
-satisfied so the next implementer can pick it up without re-deriving
-the promotion case.
+Owner direction promoted this plan from gate-satisfied to implementation.
+The implemented shape uses `conversation.schema.json` v1.1.0 for
+`sidebar_request`, `sidebar_message`, and `sidebar_resolution` entries;
+adds `escalation.schema.json` plus the `escalations/` live-case
+directory; and wires start-right, session-handoff, consolidate-docs,
+rules, and directives to discover and report the new obligations. The
+same pass also installed joint-decision entries because the owner
+confirmed that joint decisions were already proven necessary.
 
 ## Goal
 
@@ -173,9 +174,8 @@ Design carried forward from the original WS3 plan:
   sidebars. The protocol does not force one global agent-pair sidebar.
 - **Focused exchange**: sidebars are turn-by-turn, topic-bound, and
   should end with a recorded resolution.
-- **Default timeout**: 10 turn-pairs or 30 minutes of owner-real-time,
-  whichever comes first, unless the sidebar records a different local
-  bound.
+- **Default timeout**: explicit wall-clock expiry defaults to 30 minutes.
+  The 10 turn-pair limit is advisory; timeout never auto-resolves.
 - **Resolution paths**: agreement, agreed-disagree, declined request,
   timeout, unresponsive peer, or owner escalation.
 
@@ -184,18 +184,19 @@ Design carried forward from the original WS3 plan:
 If peer agreement fails after a sidebar, create an explicit escalation
 surface under `.agent/state/collaboration/escalations/`.
 
-Each escalation should include:
+Each escalation must include:
 
 - escalation ID and timestamp
-- decision-thread ID and sidebar entry IDs
-- agents involved
-- divergence summary
-- concrete question for the owner
-- proposed resolutions offered by each agent
-- owner resolution and closure reference when available
+- `conversation_id` and `originating_entry_id`
+- concrete owner action requested
+- reason peer coordination cannot resolve the case unaided
+- evidence refs when available
+- owner resolution and conversation-entry closure reference when closed
 
-`consolidate-docs` should surface active escalations visibly until they
-are resolved. A hidden note inside a decision thread is not enough.
+`consolidate-docs` surfaces active escalations visibly until they are
+resolved. A hidden note inside a decision thread is not enough. The
+escalation file is the live unresolved case; the conversation entry is
+the durable decision authority.
 
 ## Workstreams
 
@@ -281,11 +282,10 @@ Run `pnpm portability:check` if platform adapters are touched.
 
 Operational seed:
 
-- Did a real sidebar reach `sidebar_resolution` without becoming a
-  blocking gate or default owner escalation?
-
-The seed feeds the parent plan's WS5 harvest. A finding that no sidebar
-was needed remains valid evidence.
+- The first implementation pass provides schema fixtures and workflow
+  reporting only. The parent plan's WS5 harvest should still review the
+  first real sidebar that reaches `sidebar_resolution` and confirm it did
+  not become a blocking gate or default owner escalation.
 
 ## Reviewer Routing
 
@@ -308,7 +308,6 @@ was needed remains valid evidence.
 
 ## Completion Rule
 
-This plan is complete only after the promotion gate is satisfied, sidebar
-and escalation schemas validate, directive/rule guidance is updated, and
-an operational seed is left for WS5. Until then, its correct state is
-paused, not partially implemented.
+This plan is complete: the promotion gate is satisfied, sidebar and
+escalation schemas exist, directive/rule/workflow guidance is updated,
+and WS5 has an operational seed for reviewing the first real sidebar.

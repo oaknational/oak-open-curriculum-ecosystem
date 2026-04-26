@@ -102,7 +102,7 @@
         "sidebar_open": {
           "type": "boolean",
           "default": false,
-          "description": "Whether a WS3 sidebar conversation is currently open against this claim. Forward-reference; WS3 fills in the sidebar mechanism."
+          "description": "Whether a sidebar conversation is currently open against this claim. The conversation file owns sidebar lifecycle; this field is only a liveness hint."
         },
         "intent": {
           "type": "string",

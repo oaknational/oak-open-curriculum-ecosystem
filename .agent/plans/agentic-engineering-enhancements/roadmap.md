@@ -361,8 +361,8 @@ Adjacent:
     claim-closure history, and lightweight decision threads; complete
     and archived 2026-04-26
   - [multi-agent-collaboration-sidebar-and-escalation.plan.md](current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
-    — WS3B: sidebar, timeout, and owner-escalation mechanics; promotion
-    gate satisfied 2026-04-26, implementation not started
+    — WS3B: sidebar, timeout, and owner-escalation mechanics;
+    implemented 2026-04-26 alongside joint-decision integration
 - Goal:
   - install structural infrastructure for parallel agents working on
     the same repo without clashing — by *seeing* what each other is
@@ -373,8 +373,7 @@ Adjacent:
     agent-team features may help build it, but repo-owned markdown/JSON/
     rules/commands/skills/hooks surfaces must remain sufficient to
     operate it
-- Status: ✅ LIFECYCLE-INTEGRATION-COMPLETE; WS3B gate satisfied and
-  awaiting implementation capacity; WS5 paused on post-WS4A observation
+- Status: ✅ WS3B-IMPLEMENTED; WS5 paused on post-WS4A/WS3B observation
   (refreshed 2026-04-26)
 - Landings:
   - WS0 (vocabulary + shared communication log + foundational rules) —
@@ -389,6 +388,9 @@ Adjacent:
     uncommitted 2026-04-26; start-right, session-handoff,
     consolidate-docs, plan templates, and Practice / ADR surfaces now
     recognise WS0-WS3A collaboration state
+  - WS3B sidebar/escalation + joint-decision integration —
+    uncommitted 2026-04-26; conversation schema v1.1.0,
+    escalation schema, fixtures, and workflow reporting installed
 - Evidence gates:
   - Original WS3 evidence inspection: ≥ 3 real parallel-session
     coordination events using the WS0 + WS1 surfaces. Owner-directed
@@ -396,16 +398,16 @@ Adjacent:
   - WS4A was then owner-authorised and completed as a narrow
     lifecycle-integration pass.
   - Three-agent phase-transition evidence and owner direction satisfied the
-    WS3B promotion gate on 2026-04-26; implementation still requires an
-    explicit execution pass.
+    WS3B promotion gate on 2026-04-26; owner-approved implementation
+    landed the same day.
   - Remaining WS5 scope is post-WS4A observation / seed harvest across
     real sessions.
 - Notes:
   - intentionally outside the numbered phase sequence
   - split workstreams: WS3A (decision-thread / claim-history /
-    observability; complete), WS3B (sidebar / escalation, gate satisfied
-    but not implemented), WS4A (lifecycle integration; complete), WS5
-    (harvest/refinement evidence; paused)
+    observability; complete), WS3B (sidebar / escalation; complete), WS4A
+    (lifecycle integration; complete), WS5 (harvest/refinement evidence;
+    paused)
   - while WS5 is paused, evidence accumulates passively from any session
     that uses the WS0/WS1 surfaces — no active session is required
   - inspection points: `consolidate-docs § 7e`, napkin rotation
