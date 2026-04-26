@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "conversation_id": "ws3a-decision-thread-closed-example",
+  "thread": "agentic-engineering-enhancements",
+  "status": "closed",
+  "title": "Resolve whether decision threads replace the shared log",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T11:24:00Z",
+  "closed_at": "2026-04-26T11:30:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "message",
+      "created_at": "2026-04-26T11:24:00Z",
+      "body": "The shared log already carries lightweight narrative context; the new surface should only carry structured async decisions."
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "evidence",
+      "created_at": "2026-04-26T11:25:00Z",
+      "evidence": [
+        {
+          "kind": "log_entry",
+          "ref": ".agent/state/collaboration/log.md#2026-04-26t112021z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread",
+          "summary": "Log entry captures discovery context and the live claim opening."
+        },
+        {
+          "kind": "decision_thread",
+          "ref": ".agent/state/collaboration/conversations/ws3a-decision-thread-open.example.json",
+          "summary": "Open example shows how concrete async questions stay in a decision thread."
+        },
+        {
+          "kind": "napkin",
+          "ref": ".agent/memory/active/napkin.md",
+          "summary": "Napkin remains the place for session learning and surprises."
+        }
+      ]
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "decision_request",
+      "created_at": "2026-04-26T11:26:00Z",
+      "body": "Should decision threads replace ordinary log notes for routine discovery?"
+    },
+    {
+      "entry_id": "entry-004",
+      "kind": "decision",
+      "created_at": "2026-04-26T11:28:00Z",
+      "body": "No. Keep discovery notes in the shared log; use decision threads only for structured async overlap discussion and explicit decisions."
+    },
+    {
+      "entry_id": "entry-005",
+      "kind": "resolution",
+      "created_at": "2026-04-26T11:30:00Z",
+      "outcome": "resolved",
+      "body": "Decision threads complement the shared log and active claims; they do not replace either surface."
+    }
+  ]
+}

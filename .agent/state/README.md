@@ -24,7 +24,7 @@ into `.agent/memory/` lessons when patterns earn promotion. Lessons in
 
 ### `.agent/state/collaboration/`
 
-Installed by WS0 of the
+Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
@@ -32,11 +32,20 @@ plan.
   (schema-less, append-only, eventually-consistent). Discovery surface
   for sequential agents at session-open. Coexists with structured
   surfaces installed by later workstreams.
+- [`active-claims.json`](collaboration/active-claims.json) — live "I am
+  touching this area now" registry (WS1).
+- [`closed-claims.archive.json`](collaboration/closed-claims.archive.json)
+  — durable claim-closure history for explicit, stale, and owner-forced
+  closes (WS3A).
+- [`conversation.schema.json`](collaboration/conversation.schema.json) and
+  [`conversations/`](collaboration/conversations/) — lightweight async
+  decision-thread contract and examples for structured overlap discussion
+  (WS3A).
 
-WS1, WS3, and WS4 introduce additional structured surfaces alongside the
-shared communication log: `active-claims.json` (WS1), `closed-claims.archive.json`
-(WS1), `conversations/` (WS3), and `escalations/` (WS3). Each surface has
-its own schema and lifecycle, documented at the point of introduction.
+WS3B sidebar, timeout, and owner-escalation surfaces remain
+evidence-gated. Do not create `.agent/state/collaboration/escalations/`
+unless the owner explicitly promotes the sibling plan or real
+decision-thread evidence proves async coordination insufficient.
 
 ## Authority
 
@@ -48,6 +57,9 @@ This directory is governed by:
   — area-consultation tripwire.
 - [`.agent/rules/use-agent-comms-log.md`](../rules/use-agent-comms-log.md)
   — shared-communication-log usage discipline.
+- [`.agent/memory/operational/collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md)
+  — operational lifecycle and channel-selection guidance for collaboration
+  state.
 
 ## Lifecycle Discipline
 
@@ -58,5 +70,10 @@ This directory is governed by:
 - **Stale entries become noise to be audited at consolidation**, not
   blockers — see
   [`.agent/commands/consolidate-docs.md`](../commands/consolidate-docs.md)
-  for the audit step (WS1 introduces archival of stale claims to
-  `closed-claims.archive.json`).
+  for the audit step. It reports active/stale claims, recent closures,
+  open/stale decision threads, unresolved decision requests, and
+  evidence-bundle gaps.
+- **Decision threads stay narrow** — use them for concrete async
+  decisions and evidence. Use the shared log for lightweight discovery,
+  active claims for live ownership, the napkin for learning, and thread
+  records for cross-session lane state.

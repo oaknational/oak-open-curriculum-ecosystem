@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.1.0",
+  "claims": [
+    {
+      "claim_id": "d4b28f30-543d-4935-a776-65b7826fe5a1",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+            ".agent/state/collaboration/log.md",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T07:45:07Z",
+      "freshness_seconds": 14400,
+      "intent": "Split WS3 into the WS3A decision-thread / claim-history plan and the WS3B sidebar / escalation plan.",
+      "notes": "RED fixture: this claim was explicitly closed in the shared communication log but is not durably represented with closure metadata in the live closed-claims archive.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T07:51:42Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Plan split complete; WS3A and WS3B separated and claim removed from active state.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t075142z--codex--codex--gpt-5--unknown--ws3-plan-split-claim-close",
+            "summary": "Shared communication log records the explicit close."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "WS3A plan exists as the claimed outcome."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -3,15 +3,15 @@
   "$id": "active-claims.schema.json",
   "title": "Active Agent Claims Registry",
   "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
-  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step (which validates a file against the schema declared by the file's own schema_version, not against an older or newer schema). It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields rather than rejecting the file. The runtime contract is field-preservation; the authoring/validation contract is no-free-form-expansion.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step (which validates a file against the schema declared by the file's own schema_version, not against an older or newer schema). It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields rather than rejecting the file. The runtime contract is field-preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "claims"],
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.0.0"],
-      "description": "Semantic version of this registry schema. Major version controls compatibility per $comment_compatibility."
+      "enum": ["1.1.0"],
+      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory."
     },
     "claims": {
       "type": "array",
@@ -89,6 +89,10 @@
           "type": "string",
           "format": "date",
           "description": "Optional ISO 8601 date set by consolidate-docs § 7e when archiving a stale claim to closed-claims.archive.json. Presence indicates the entry has been archived; absence indicates it is (or was) active. This field should only appear in closed-claims.archive.json — its presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        },
+        "closure": {
+          "$ref": "#/$defs/closure",
+          "description": "Structured closure metadata required in closed-claims.archive.json. Presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
         }
       }
     },
@@ -137,6 +141,77 @@
             "minLength": 1
           },
           "description": "Patterns identifying the area. Globs for files; workspace names for workspace; plan file paths for plan; ADR numbers (e.g. 'ADR-163') for adr."
+        }
+      }
+    },
+    "closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "closed_at",
+        "closed_by",
+        "summary",
+        "evidence"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["explicit", "stale", "owner_forced"],
+          "description": "How the claim left the active registry: normal agent close, staleness archival, or owner-directed close."
+        },
+        "closed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the claim was closed or archived."
+        },
+        "closed_by": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable closure outcome."
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          },
+          "description": "Structured references that justify or explain the closure."
+        }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref", "summary"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "log_entry",
+            "decision_thread",
+            "claim",
+            "plan",
+            "adr",
+            "napkin",
+            "thread_record",
+            "commit",
+            "command_output"
+          ],
+          "description": "Kind of repository evidence the reference points at."
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative repository path, claim_id, commit hash, or durable evidence anchor."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this evidence supports the closure."
         }
       }
     }

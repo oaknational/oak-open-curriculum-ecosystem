@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "closed-claims.schema.json",
+  "title": "Closed Agent Claims Archive",
+  "description": "Durable archive of claims that have left active-claims.json. Closed claims preserve the original claim body and add structured closure metadata for explicit, stale, and owner-forced closure.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "claims"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.1.0"],
+      "description": "Semantic version of the closed-claims archive schema. Version 1.1.0 adds required closure metadata while preserving the original claim body."
+    },
+    "claims": {
+      "type": "array",
+      "description": "Claims that have left the active registry. Each entry preserves the original claim and records how it closed.",
+      "items": {
+        "$ref": "#/$defs/closed_claim"
+      }
+    }
+  },
+  "$defs": {
+    "closed_claim": {
+      "allOf": [
+        {
+          "$ref": "active-claims.schema.json#/$defs/claim"
+        },
+        {
+          "type": "object",
+          "required": ["archived_at", "closure"],
+          "properties": {
+            "archived_at": {
+              "type": "string",
+              "format": "date"
+            },
+            "closure": {
+              "$ref": "active-claims.schema.json#/$defs/closure"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

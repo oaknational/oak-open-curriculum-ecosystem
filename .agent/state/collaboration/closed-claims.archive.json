@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "claims": [
     {
       "claim_id": "fbde22cf-3bea-4c22-83ba-dd17e09d4508",
@@ -41,7 +41,30 @@
       "sidebar_open": false,
       "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan — claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
       "notes": "Closed at landing commit time. Archived as the founding entry in closed-claims.archive.json so future agents can see what a complete claim lifecycle looks like in real data, not just the schema definition. archived_at recorded below.",
-      "archived_at": "2026-04-25"
+      "archived_at": "2026-04-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-25T16:36:12Z",
+        "closed_by": {
+          "agent_name": "Fresh Prince",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS1 self-application claim closed at landing; the registry returned to clean active state and preserved the founding claim lifecycle.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "a5d33519",
+            "summary": "WS1 claims registry landing commit."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record documents WS1 landed and the self-application pilot archived the founding claim."
+          }
+        ]
+      }
     },
     {
       "claim_id": "2919423e-1e58-4b92-912a-9c610c509e01",
@@ -71,7 +94,623 @@
       "freshness_seconds": 14400,
       "intent": "Pending-graduations promotion pass per owner direction: PDR-029 v2 amendment (tripwire-observability + advisory-not-enforcing); PDR-015 amendment (assumption-challenge / discussion-before-absorption); PDR-018 amendment (plan placement follows ownership); register hygiene; evaluate owner-correction cluster on substance not instance-count.",
       "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength — three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
-      "archived_at": "2026-04-25"
+      "archived_at": "2026-04-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-25T18:59:39Z",
+        "closed_by": {
+          "agent_name": "Fresh Prince",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Register-promotion pass claim closed at session end and archived with its doctrine landing evidence.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "f1f28e85",
+            "summary": "PDR-029, PDR-015, and PDR-018 amendments landed."
+          },
+          {
+            "kind": "commit",
+            "ref": "d0c78648",
+            "summary": "Claim moved from active registry into closed-claims archive."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md",
+            "summary": "Shared communication log records the multi-turn coordination dance and claim close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "65a6f416-e111-4596-b242-bc9e7d1c0540",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/closed-claims.schema.json",
+            ".agent/state/collaboration/fixtures/claim-history/**",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/log.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T09:03:39Z",
+      "freshness_seconds": 14400,
+      "intent": "Implement WS3A GREEN claim-history only: add durable closed-claim schema and closure metadata for explicit, stale, and owner-forced claim closure. Do not begin decision-thread schema or WS3B sidebar/escalation work.",
+      "notes": "Scanned registry: 1 active Sharded Stroustrup observability claim, no overlap with WS3A claim-history surfaces. Observed unrelated SDK WIP in git status without taking ownership.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T09:08:09Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS3A claim-history GREEN complete; durable closure metadata now exists for explicit, stale, and owner-forced claim closure.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "Plan marks ws3a-green-claim-history complete and records GREEN validation evidence."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t090809z--codex--codex--gpt-5--unknown--ws3a-green-claim-history-close",
+            "summary": "Shared communication log records the explicit close."
+          },
+          {
+            "kind": "claim",
+            "ref": ".agent/state/collaboration/closed-claims.archive.json#65a6f416-e111-4596-b242-bc9e7d1c0540",
+            "summary": "This archive entry preserves the closed claim and closure metadata."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ced7f13e-5aa9-4056-97d5-e8a9e09763f5",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T09:16:34Z",
+      "freshness_seconds": 14400,
+      "intent": "Run jc-session-handoff for the WS3A claim-history session and prepare next-session surfaces for the remaining WS3A decision-thread, observability, and close slices.",
+      "notes": "Scanned registry: 1 active Sharded Stroustrup observability claim, no overlap with handoff surfaces. Repo-continuity is hard in practice fitness but owner explicitly requested session handoff, not deep consolidation.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T09:23:45Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS3A session handoff complete; continuation surfaces point to decision-thread GREEN, observability refactor, and final WS3A close before any WS3B work.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record names the next safe WS3A slices and preserves WS3B as evidence-gated."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "Plan checklist shows RED and claim-history GREEN complete, with decision-thread, observability, and close pending."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t092345z--codex--codex--gpt-5--unknown--ws3a-session-handoff-close",
+            "summary": "Shared communication log records the handoff claim close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3339466c-3f0e-4b2d-ae89-e4638c1b200a",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/conversation.schema.json",
+            ".agent/state/collaboration/conversations/**",
+            ".agent/state/collaboration/fixtures/conversations/**",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/rules/use-agent-comms-log.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/state/README.md",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/memory/operational/threads/README.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T11:20:21Z",
+      "freshness_seconds": 14400,
+      "intent": "Implement only WS3A GREEN decision-thread surfaces: add the conversation schema, conversations examples, GREEN fixtures, and routing guidance for log vs claim vs decision thread vs napkin/thread record.",
+      "notes": "Scanned registry: 1 active claim; no overlap with Sharded Stroustrup claim b3e0c581-940e-4ac8-841b-0e9bf3fbf90a because it covers observability app/probe and observability thread surfaces, while this claim covers WS3A decision-thread docs/state only.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T11:26:14Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS3A decision-thread GREEN complete; lightweight async decision-thread schema, examples, fixtures, and channel-routing guidance now exist while WS3B remains paused.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "Plan marks ws3a-green-decision-thread complete and records GREEN validation evidence."
+          },
+          {
+            "kind": "decision_thread",
+            "ref": ".agent/state/collaboration/conversations/ws3a-decision-thread-closed.example.json",
+            "summary": "Closed example demonstrates v1.0.0 resolution and evidence structure."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t112614z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread-close",
+            "summary": "Shared communication log records the explicit close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "42d6042d-80ec-400d-8311-9fe04ac2ad85",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/commands/consolidate-docs.md",
+            ".agent/state/README.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/threads/README.md",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T13:10:35Z",
+      "freshness_seconds": 14400,
+      "intent": "Complete the two remaining WS3A slices: protocol-observability refactor and final validation/handoff, without starting WS3B sidebar, timeout, or owner-escalation work.",
+      "notes": "Scanned registry: 1 active Sharded Stroustrup observability claim; no overlap because that claim covers app /test-error, env, application, probe, and observability-thread surfaces. This claim covers WS3A collaboration docs/state only. Repo-continuity deep consolidation remains out of scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T13:13:47Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS3A observability refactor and validation/handoff complete; WS3A is closed with WS3B still evidence-gated.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "Plan marks ws3a-refactor-observability and ws3a-validation-and-handoff complete."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record says no WS3A implementation remains open and WS3B remains gated."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t131347z--codex--codex--gpt-5--unknown--ws3a-observability-and-close-close",
+            "summary": "Shared communication log records the explicit close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b3e0c581-940e-4ac8-841b-0e9bf3fbf90a",
+      "agent_id": {
+        "agent_name": "Sharded Stroustrup",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/test-error/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/env.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/application.ts",
+            "apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh",
+            ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T07:52:14Z",
+      "freshness_seconds": 14400,
+      "intent": "Add /test-error route (shared secret + rate limit + three modes) to MCP HTTP app for repeatable Sentry capture validation, including source-code-upload symbolication proof on the current preview release. Update probe script + Phase 2 evidence.",
+      "notes": "Bootstrap fast-path: registry was empty at re-claim. This is a code change in apps/oak-curriculum-mcp-streamable-http; reviewer roster is code-reviewer + security-reviewer (shared-secret comparison) + test-reviewer.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-04-26T13:22:00Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Claim exceeded its freshness window and was archived during the WS3A consolidate-docs stale-claim audit; no observability app or probe files were edited by this pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": ".agent/state/collaboration/closed-claims.archive.json#b3e0c581-940e-4ac8-841b-0e9bf3fbf90a",
+            "summary": "Archive entry preserves the stale observability claim and its original scope."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            "summary": "Observability continuation state remains in the thread record after stale claim archival."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t132200z--codex--codex--gpt-5--unknown--stale-claim-archive",
+            "summary": "Shared communication log records the stale-claim archival performed during consolidation."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5fa53c4a-c322-4441-be16-441b17968190",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            "AGENTS.md",
+            "CLAUDE.md",
+            "GEMINI.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T13:15:52Z",
+      "freshness_seconds": 14400,
+      "intent": "Run jc-session-handoff and jc-consolidate-docs after completing WS3A, including compact repo-continuity refresh, plan hygiene/archive, stale claim audit, and final validation.",
+      "notes": "Scanned registry: 1 active Sharded Stroustrup observability claim. No direct edit overlap with observability app/probe files; that stale claim was archived through the consolidate-docs stale-claim audit.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T13:24:03Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "WS3A session-handoff and consolidate-docs pass complete; WS3A plan archived, repo-continuity compacted, stale claim audited, and targeted validation rerun with WS3B still evidence-gated.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record records WS3A closed, repo-continuity compacted, and WS3B still evidence-gated."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "Completed WS3A split plan is archived out of current plans."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T13:24Z",
+            "summary": "jq, Ajv 2020 schema checks, targeted markdownlint, git diff --check, strict-hard practice fitness, and informational practice fitness passed."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t132403z--codex--codex--gpt-5--unknown--ws3a-handoff-and-consolidation-close",
+            "summary": "Shared communication log records this explicit claim close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2d3ba510-3eec-46ed-85ee-deba649361d0",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T13:29:47Z",
+      "freshness_seconds": 14400,
+      "intent": "Capture owner-requested next-session exploration questions about Practice integration of collaboration mechanisms and lifecycle automation touch points; do not implement the exploration now.",
+      "notes": "Active registry was empty. This is a small continuity capture only.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T13:30:13Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Captured owner-requested next-session Practice integration and lifecycle automation exploration prompt without starting implementation.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record next-safe-step list now includes the next-session exploration prompt."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Repo continuity next-safe-step list now includes the owner-requested exploration."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t133013z--codex--codex--gpt-5--unknown--next-session-automation-exploration-capture-close",
+            "summary": "Shared communication log records this explicit capture close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2fa02bed-4aa0-42ad-97ac-a9c695ab3079",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T13:32:18Z",
+      "freshness_seconds": 14400,
+      "intent": "Run final jc-session-handoff after capturing next-session start statement; refresh only continuity state that changed and validate.",
+      "notes": "Active registry was empty. No implementation, automation design, WS3B, SDK, or observability app/probe work in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T13:33:12Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Final session handoff complete: continuity surfaces refreshed after the next-session start statement capture, entrypoints checked, no new deep-consolidation trigger fired, and targeted validation passed.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record has final handoff refresh, updated identity role, and next-session exploration prompt."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Repo continuity records the final handoff state and marks deep consolidation not due after completed consolidation."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T13:33Z",
+            "summary": "jq, targeted markdownlint, git diff --check, and pnpm practice:fitness --strict-hard passed."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t133312z--codex--codex--gpt-5--unknown--final-session-handoff-close",
+            "summary": "Shared communication log records this explicit handoff close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2e4cd180-d385-4131-9683-f71b6dedf08c",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/commands/start-right-*.md",
+            ".agent/commands/plan.md",
+            ".agent/commands/session-handoff.md",
+            ".agent/skills/start-right-*/**",
+            ".agents/skills/jc-start-right-*/**",
+            ".agents/skills/jc-session-handoff/**",
+            ".claude/commands/jc-start-right-*.md",
+            ".claude/commands/jc-session-handoff.md",
+            ".cursor/commands/jc-start-right-*.md",
+            ".cursor/commands/jc-session-handoff.md",
+            ".gemini/commands/jc-start-right-*.toml",
+            ".gemini/commands/jc-session-handoff.toml",
+            ".agent/plans/templates/**",
+            ".agent/plans/agentic-engineering-enhancements/documentation-sync-log.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-lineage.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/practice-core/practice-verification.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            ".agent/practice-index.md",
+            "docs/architecture/architectural-decisions/119-agentic-engineering-practice.md",
+            "docs/architecture/architectural-decisions/124-practice-propagation-model.md",
+            ".agent/memory/executive/invoke-code-reviewers.md",
+            ".agent/state/collaboration/**",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T13:40:03Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement the owner-approved WS4-style lifecycle integration pass for collaboration Practice docs and templates; no WS3B sidebar, timeout, or escalation work.",
+      "notes": "Bootstrap fast-path: scanned registry before edits; no other active claims present. Area set expanded during implementation to cover plan command, documentation-sync, Practice Core, ADR-124, PDR-024, and reviewer-invocation surfaces touched by the WS4A lifecycle pass.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T13:52:16Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Owner-approved WS4A lifecycle integration implemented: start-right surfaces claims and decision threads, session-handoff closes collaboration state, plan templates include lifecycle triggers and simple-plan work-shape tiers, and Practice/ADR surfaces recognise collaboration state.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "summary": "Parent plan records WS4A lifecycle integration as complete while WS3B and hook reminders remain evidence-gated."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record describes the implemented lifecycle pass, date normalisation, and next safe steps."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T13:52Z",
+            "summary": "JSON parse, Ajv schema validation, targeted markdownlint, git diff --check, practice fitness strict-hard/informational, portability check, and practice vocabulary passed."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t135216z--codex--codex--gpt-5--unknown--ws4-style-lifecycle-integration-close",
+            "summary": "Shared communication log records this explicit lifecycle pass close."
+          }
+        ]
+      }
     }
   ]
 }

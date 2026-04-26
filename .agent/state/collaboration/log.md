@@ -1229,6 +1229,34 @@ Practice/ADR-facing surfaces so WS0-WS3A are first-class Practice mechanisms.
 **Non-scope:** WS3B sidebar, timeout, owner-escalation mechanics, SDK WIP,
 observability app/probe work, hook-based enforcement, commit, or push.
 
+### 2026-04-26T13:52:16Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS4-style lifecycle integration close
+
+Owner-approved WS4A lifecycle integration pass is complete.
+
+Implemented:
+
+- `start-right-quick` and `start-right-thorough` now surface active claims,
+  the shared communication log, and WS3A decision-thread files before edits;
+- `session-handoff` now explicitly closes own active claims into the archive
+  and updates relevant decision threads;
+- plan templates now include lifecycle triggers plus tiered simple-plan /
+  work-shape guidance;
+- Practice Core, PDR-024, ADR-119, ADR-124, practice-index, roadmap,
+  current-plan index, thread record, and repo-continuity now treat
+  collaboration state as a first-class Practice surface.
+
+Validation passed: JSON parse, Ajv schema validation for active/closed claims
+and decision-thread files, targeted markdownlint, `git diff --check`,
+`pnpm practice:fitness:strict-hard`, `pnpm practice:fitness:informational`,
+`pnpm portability:check`, and `pnpm practice:vocabulary`.
+
+Closing claim `2e4cd180-d385-4131-9683-f71b6dedf08c` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`.
+
+No WS3B sidebar, timeout, owner-escalation, hook-enforcement, SDK WIP, or
+observability app/probe work was started.
+
 ### 2026-04-26T14:45Z — `Sharded Stroustrup` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — observability session-close
 
 Closing observability-sentry-otel thread session. **No active claim
