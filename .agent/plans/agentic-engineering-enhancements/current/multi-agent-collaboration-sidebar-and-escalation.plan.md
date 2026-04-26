@@ -26,7 +26,9 @@ isProject: false
 # Multi-Agent Collaboration Sidebar and Escalation
 
 **Last Updated**: 2026-04-26
-**Status**: PAUSED - evidence gated behind WS3A and owner direction
+**Status**: PROMOTION GATE SATISFIED 2026-04-26; awaiting implementation
+capacity. Owner direction landed in the same session as the
+phase-transition observation (see § Promotion Gate Satisfied below).
 **Parent Plan**:
 [`multi-agent-collaboration-protocol.plan.md`](multi-agent-collaboration-protocol.plan.md)
 **Prerequisite Plan**:
@@ -60,6 +62,73 @@ Do not start implementation until one of these happens:
 
 The absence of sidebar demand is valid evidence. If WS3A decision threads
 resolve real overlaps cleanly, this plan can remain paused or be retired.
+
+## Promotion Gate Satisfied — 2026-04-26
+
+The first criterion fired: **owner explicitly promoted further agent
+collaboration work** after reviewing the 2026-04-26 evidence accumulated
+on `feat/otel_sentry_enhancements`:
+
+> "All of this is also evidence that agents need to be able to discuss
+> and make joint decisions and agree on how those decisions will be
+> recorded, by whom, and how they will be acted on, and by whom. This is
+> sufficient evidence to justify the further agent collaboration work."
+>
+> "At the moment the system as a whole seems to be able to handle two
+> agents on well separated threads reasonably well, but three agents
+> whose threads occasionally touch has caused multiple clashes... this
+> is a clear phase transition point."
+
+### Evidence summary
+
+In a 90-minute window the branch carried three concurrent agent
+identities (Sturdy Otter, Codex, Frolicking Toast) with overlapping
+touch areas. The session produced:
+
+- **Three lock-contention events** at 15:36, 15:43, 15:59.
+- **A small taxonomy of three commit-time clash types** — A
+  substitution (commit `8f44a941`), B disappearance (`b014ca20`), C
+  accretion (`9af63a84`) — recorded as evidence in
+  [`intent-to-commit-and-session-counter.plan.md`](../future/intent-to-commit-and-session-counter.plan.md)
+  (the commit-window defence).
+- **Owner-flagged correction** twice in two separate exchanges that the
+  problem is not just lock contention but also the absence of agent-to-
+  agent discussion and joint commitment.
+
+### Phase transition observation
+
+The phase transition lives in the count of touching threads, not the
+count of agents. Two-agent / well-separated-thread parallel work was
+fine; three-agent / touching-thread parallel work crossed a threshold
+where async-only signalling stopped preventing collisions. The
+collaboration protocol must add a synchronous-discussion mechanism (this
+plan's sidebar) and a joint-decision-with-role-assignment mechanism (a
+sibling future plan; see Related below) to scale further.
+
+### Related new future plan
+
+A sibling future plan was authored in the same session capturing the
+joint-decision dimension of the owner's promotion direction:
+
+- [`joint-agent-decision-protocol.plan.md`](../future/joint-agent-decision-protocol.plan.md)
+  — discuss → decide → record → act, with explicit role assignment at
+  each phase. WS3B sidebar provides the canonical discussion surface
+  this sibling plan builds on.
+
+The two plans are complementary, not competing: WS3B is the discussion
+mechanism, joint-decision is the commitment mechanism. They may land
+in either order, but joint-decision reads cleaner with WS3B sidebar
+already in place.
+
+### Why not auto-execute now
+
+Promotion gate satisfaction is a green light, not a start signal.
+Implementation capacity for this branch is committed elsewhere
+(observability lanes; PR-87 quality remediation; learning-before-fitness
+consolidation). This plan moves to `current/` execution when the owner
+sequences it; until then it remains in `current/` paused with the gate
+satisfied so the next implementer can pick it up without re-deriving
+the promotion case.
 
 ## Goal
 
