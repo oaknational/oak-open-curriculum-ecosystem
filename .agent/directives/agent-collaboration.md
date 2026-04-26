@@ -21,9 +21,10 @@ silently choosing one.
 
 This directive is grown by the [`multi-agent-collaboration-protocol`][p].
 WS0 + WS1 landed vocabulary, the shared log, claims, schemas, staleness
-archive, and tripwire rules. WS3A adds decision-thread files and durable
-claim closure history. WS3B keeps sidebar, timeout, and file-backed owner
-escalation evidence-gated. WS5 harvests evidence. Operational detail lives in
+archive, and tripwire rules. WS3A adds decision threads and durable closure
+history. The commit-window refinement adds short-lived `git` claims for the
+shared index / HEAD surface. WS3B keeps sidebar, timeout, and file-backed
+owner escalation evidence-gated. WS5 harvests evidence. Details live in
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Knowledge and Communication, Not Mechanical Refusals
@@ -77,7 +78,7 @@ owner-escalation directory is WS3B work and is not installed by WS3A.
 
 ## Scope Discipline Across Agent Boundaries
 
-Two foundational rules, named here as load-bearing principles:
+Three foundational rules, named here as load-bearing principles:
 
 ### a. Don't Break the Build Without a Fix Plan
 
@@ -99,9 +100,9 @@ rule operationalises this for cross-agent context.
 
 ### b. Don't Operate in Another Agent's Area Without Consulting the Surface
 
-"Area" is defined as: any file path, plan, ADR, or workspace currently
-named in another agent's recent shared-communication-log entry or in an active claim
-entry in
+"Area" is defined as: any file path, plan, ADR, workspace, or git
+transaction surface currently named in another agent's recent
+shared-communication-log entry or in an active claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json).
 
 The
@@ -112,10 +113,18 @@ if a claim exists*. The companion
 [`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)
 rule operationalises the consult-and-register half of the same tripwire.
 
+### c. Treat Commit as a Short-Lived Shared Transaction Surface
+
+The git lock prevents repository corruption, but it does not communicate
+intent before agents race the shared index and `HEAD`. Before staging or
+committing, use the commit skill to check, open, and close a short-lived
+`git:index/head` claim. This is awareness and auditability, not a second
+mechanical lock.
+
 ## Communication Channels
 
-Five primary channels plus owner questions exist; they have different
-shapes. Pick the one that fits what you need to communicate. The
+Five primary communication channels plus active claims and owner questions
+exist; they have different shapes. Pick the one that fits what you need. The
 file-backed owner-escalation surface remains deferred to WS3B and exists
 only if that evidence-gated sibling plan is promoted.
 
@@ -132,9 +141,10 @@ Channel-selection rules: the **shared communication log is a discovery
 surface, not a synchronisation surface** — use it for discovery notes,
 lightweight narrative context, and signed "I noticed X" updates.
 **Active claims are live liveness signals** — use them for "I am
-touching this area now." **Decision threads are structured async
-coordination** — use them for overlap discussions that need concrete
-decision requests, decisions, resolutions, or evidence refs. **The
+touching this area now" and for short-lived `git:index/head` commit
+windows. **Decision threads are structured async coordination** — use
+them for overlap discussions that need concrete decision requests,
+decisions, resolutions, or evidence refs. **The
 napkin is session learning and surprises**, not the live coordination
 surface. **Thread records are durable cross-session continuity and lane
 state**, not the place to copy decision-thread bodies. **Reviewer
@@ -160,18 +170,17 @@ These are different concerns and live in different surfaces.
   claim is **stale** — noise to be audited at consolidation, not a blocker
   that strands other agents. Closed claims are archived, not silently
   deleted: explicit, stale, and owner-forced closes all preserve
-  `closure.kind`, `closed_at`, `closed_by`, and evidence refs.
+  `closure.kind`, `closed_at`, `closed_by`, and evidence refs. Commit-window
+  claims normally use 900 seconds because the index / HEAD transaction should
+  last minutes, not hours.
 
 ## Bootstrap Fast-Path
 
 The single-agent case (no other agents present) pays the protocol's
-**minimum overhead — one read, one write**. The agent reads
-[`active-claims.json`](../state/collaboration/active-claims.json) and the
-[shared communication log](../state/collaboration/log.md); finding no other claims, the
-agent logs *"no other agents present"* to the shared communication log, registers its
-own claim covering the session's intended areas, and proceeds. The single
-write is load-bearing: it is the discovery seed for whatever sequential
-agent comes next. The
+**minimum overhead — one read, one write**: read active claims and the
+shared log, log *"no other agents present"*, register the session claim,
+and proceed. The single write is load-bearing: it is the discovery seed for
+whatever sequential agent comes next. The
 [`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)
 rule operationalises this early-return.
 
@@ -207,9 +216,8 @@ are out of scope; the owner detects and resolves these at consolidation.
 A hostile-agent threat model is a future PDR if the trust assumption
 breaks down. **Future agents who suspect the trust assumption is failing
 should NOT add hardening (signed entries, claim-integrity checks, scope
-quotas) — surface the suspicion to the owner, who decides whether to open
-a hostile-agent threat-model PDR.** The protocol is deliberately advisory;
-hardening would be a category error.
+quotas) — surface the suspicion to the owner.** The protocol is deliberately
+advisory; hardening would be a category error.
 
 ## Founding Pattern
 
@@ -219,7 +227,8 @@ parallel agent sessions inside a 48-hour window (Frodo prettier
 motivated this directive. The pattern is captured at
 [`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
 instances surface in [`napkin.md`][napkin] and feed
-[WS5's seed harvest][p].
+[WS5's seed harvest][p]. Commit-window claims apply the same lesson to the
+narrower git transaction surface: expose intent before staging or commit.
 
 ## Foundation Alignment
 

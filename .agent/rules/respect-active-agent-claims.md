@@ -38,8 +38,9 @@ and Communication, Not Mechanical Refusals.
 
 ## Definition of "area"
 
-Any file path, plan, ADR, or workspace currently named in another
-agent's recent shared-communication-log entry or in an active claim entry in
+Any file path, plan, ADR, workspace, or git transaction surface currently
+named in another agent's recent shared-communication-log entry or in an active
+claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json).
 
 For shared-communication-log entries, "recent" is bounded by the 24-hour
@@ -51,6 +52,12 @@ are archived by `consolidate-docs § 7e` to
 [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json)
 with `closure.kind: "stale"`. Normal and owner-forced closes use the
 same archive with `closure.kind: "explicit"` or `"owner_forced"`.
+
+A fresh claim with `areas.kind: "git"` and `patterns: ["index/head"]`
+means another agent is in the short-lived staging/commit window. Do not race
+that window; coordinate through the shared log, decision thread, or owner
+question. This is not a second mechanical lock, but the default judgement is
+to avoid concurrent commit attempts.
 
 ## Discovery surfaces
 

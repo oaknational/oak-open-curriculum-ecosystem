@@ -40,6 +40,11 @@ claim covering the areas you intend to touch. Sidebar, timeout, and
 owner-escalation mechanics remain WS3B and must not be used unless
 explicitly promoted.
 
+Before staging or committing, use the always-active commit skill. It
+checks for a fresh `git:index/head` commit-window claim, opens one if the
+window is clear, and closes it after the commit attempt with the SHA or
+failure reason.
+
 ## Learning-Loop Surfaces
 
 Before engaging with the work, scan the active-memory capture surfaces:
@@ -93,7 +98,7 @@ that the work shape and validation path are visible before mutation.
 
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
+Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs`.
 
 ## Commit
 
@@ -154,7 +159,7 @@ pnpm smoke:dev:stub
 
 # Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure gate (used by jc-consolidate-docs step 8):
+# Consolidation-closure signal (used by jc-consolidate-docs):
 #   pnpm practice:fitness:strict-hard
 # Vocabulary consistency (ADR-144 §Key Principles #1):
 #   pnpm practice:vocabulary

@@ -6,7 +6,7 @@ description: >-
   format. Always active, every commit, every session, no trigger required.
   Enumerates live commitlint constraints inline at draft time, validates the
   drafted message via scripts/check-commit-message.sh BEFORE invoking
-  git commit.
+  git commit, and coordinates the short-lived git index/head commit window.
 ---
 
 # Commit Current Work
@@ -16,8 +16,8 @@ commitlint from a post-hoc rejection surface (the `commit-msg` hook fires
 *after* a full message has been drafted) into an **active, pre-draft tripwire**:
 the constraints are enumerated inline before drafting, the message is
 validated by `scripts/check-commit-message.sh` before `git commit` is invoked,
-and the paused commit-attempt diagnostic log is kept documented for reactivation
-only when the owner asks for that trace.
+and the shared git index/head window is claimed briefly before staging or
+committing.
 
 **Always-on** — every commit, every session, no trigger required.
 
@@ -92,6 +92,81 @@ Run these steps **before** formulating the commit message.
    commit headers — factor that into the message draft if the change touches
    version-bearing files.
 
+## Commit Window Protocol
+
+Staging and committing touch the shared git index and `HEAD`, even when file
+edits do not overlap. Before staging or invoking `git commit`:
+
+1. Read
+   [`.agent/state/collaboration/active-claims.json`](../../state/collaboration/active-claims.json)
+   and recent
+   [`.agent/state/collaboration/log.md`](../../state/collaboration/log.md)
+   entries for a fresh `git:index/head` claim.
+2. Inspect `git diff --staged --name-only`. If the staged set is non-empty
+   and not wholly within your intended scope, pause and coordinate or ask the
+   owner before opening or continuing the commit window.
+3. If another fresh commit-window claim exists, coordinate through the shared
+   log, decision thread, or owner question instead of racing the git lock.
+4. If the window is clear, open a short-lived active claim entry under
+   `claims[]`:
+
+   ```json
+   {
+     "claim_id": "<uuid-v4>",
+     "agent_id": {
+       "agent_name": "<name>",
+       "platform": "<platform>",
+       "model": "<model>",
+       "session_id_prefix": "<prefix>"
+     },
+     "thread": "<thread-slug>",
+     "areas": [
+       {
+         "kind": "git",
+         "patterns": ["index/head"]
+       }
+     ],
+     "claimed_at": "<iso-8601-now>",
+     "freshness_seconds": 900,
+     "intent": "Stage and commit <summary>.",
+     "notes": "Pathspecs: <paths>; gates: <state>; peer claims: <summary>."
+   }
+   ```
+
+5. Append a shared-log entry naming the intended pathspecs, current staged set,
+   gate state, and peer-claim scan.
+6. Stage only explicit pathspecs, validate the message, and commit.
+7. Close the commit-window claim after every exit once opened: success,
+   staging failure, message-validation failure, hook failure, or deliberate
+   abort. Archive the claim with the resulting SHA, failure reason, or abort
+   reason and next action in `closure.summary`.
+
+This protocol is awareness and auditability, not a second mechanical lock.
+If git reports an index lock, treat it as a commit-window collision: inspect
+active claims and the log. Do not delete `.git/index.lock` unless the owner
+authorises it after you have proved no git process is active.
+
+### Physical lock wait
+
+It is valid to wait for `.git/index.lock` to disappear as a final physical
+guard. Claude Code may use its Monitor tool for this. Codex and Cursor should
+use an equivalent bounded shell wait unless a custom monitor tool is
+configured:
+
+```bash
+deadline=$((SECONDS + 300))
+while [ -e .git/index.lock ]; do
+  if [ "$SECONDS" -ge "$deadline" ]; then
+    echo "Timed out waiting for .git/index.lock"
+    exit 124
+  fi
+  sleep 1
+done
+```
+
+The wait is not coordination. It complements, but never replaces, the
+`git:index/head` active claim and shared-log entry.
+
 ## Process
 
 1. **Check status**: `git status` — see all changes.
@@ -101,17 +176,19 @@ Run these steps **before** formulating the commit message.
    the turbo cache by running `bash .husky/pre-commit` separately — the real
    commit will warm it; the pre-prime is wasted ~30s and confuses symptom
    for cause.
-4. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
+4. **Open the commit-window claim** using the protocol above.
+5. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
    `bulk-downloads/`. Review each file staged.
-5. **Draft the message** against the enumerated constraints.
-6. **Validate the message via `scripts/check-commit-message.sh` BEFORE
+6. **Draft the message** against the enumerated constraints.
+7. **Validate the message via `scripts/check-commit-message.sh` BEFORE
    invoking `git commit`** (see below). If validation fails, rewrite and
    re-validate — do not let the `commit-msg` hook be your first check.
-7. **Commit** using the HEREDOC template below so multi-line body formatting
+8. **Commit** using the HEREDOC template below so multi-line body formatting
    survives the shell. Cursor-Shell-tool users add the file-redirect
    workaround documented under "Cursor Shell tool — stream truncation
    workaround" below.
-8. **Verify**: `git status` — confirm the commit succeeded.
+9. **Verify and close**: `git status` — confirm the commit succeeded, then
+   close the commit-window claim with the SHA or failure reason.
 
 ## Pre-Commit Validation (replaces the manual format-check)
 

@@ -38,6 +38,40 @@ edit. The substance of the decision is **agent judgement**. This rule does
 of scope (see [`agent-collaboration.md` § Knowledge and Communication, Not
 Mechanical Refusals](../directives/agent-collaboration.md)).
 
+## Commit-window claims
+
+Before staging or committing, repeat the consultation step for the shared git
+transaction surface. If no fresh `git:index/head` claim exists, register a
+short-lived claim entry under `claims[]`:
+
+```json
+{
+  "claim_id": "<uuid-v4>",
+  "agent_id": {
+    "agent_name": "<name>",
+    "platform": "<platform>",
+    "model": "<model>",
+    "session_id_prefix": "<prefix>"
+  },
+  "thread": "<thread-slug>",
+  "areas": [
+    {
+      "kind": "git",
+      "patterns": ["index/head"]
+    }
+  ],
+  "claimed_at": "<iso-8601-now>",
+  "freshness_seconds": 900,
+  "intent": "Stage and commit <summary>.",
+  "notes": "Pathspecs: <paths>; gates: <state>; peer claims: <summary>."
+}
+```
+
+Append a shared-log entry when the claim opens, then close it after the commit
+attempt or abort with the resulting SHA, failure reason, or abort reason. If
+another fresh `git:index/head` claim exists, coordinate rather than racing the
+git lock.
+
 ## At session close
 
 Write durable closure history, then remove your active entry:
@@ -88,9 +122,10 @@ Enumerate structurally, not from memory:
 2. Read the plan body the landing target points at; list every file path,
    plan slug, ADR number, or workspace it names.
 3. Add any incidental areas you anticipate touching (config files,
-   adjacent rules, etc.).
+   adjacent rules, etc.). Add a `git:index/head` area only when you are
+   ready to stage or commit.
 4. Group the list into entries shaped per the schema's `area` definition:
-   `{ kind, patterns }`. `kind` is `files | workspace | plan | adr`;
+   `{ kind, patterns }`. `kind` is `files | workspace | plan | adr | git`;
    `patterns` is an array of globs / slugs / numbers.
 
 Over-claim slightly is better than under-claim — the cost of a slightly broad
@@ -104,7 +139,9 @@ The authoritative schema is
 Every entry carries: `claim_id`, `agent_id` block (PDR-027 identity), `thread`
 slug, `areas` array, `claimed_at`, `freshness_seconds` (default 14400 = 4
 hours), optional `heartbeat_at`, `sidebar_open` (forward WS3B field),
-`intent` prose, and optional `notes`.
+`intent` prose, and optional `notes`. Commit-window claims normally use
+`areas.kind: "git"` with `patterns: ["index/head"]` and
+`freshness_seconds: 900`.
 
 **Single-level claim model**: there is no `exclusive` vs `advisory` field.
 All claims are advisory; strength of signal is communicated via the `intent`

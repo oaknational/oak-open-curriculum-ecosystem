@@ -33,7 +33,8 @@ plan.
   for sequential agents at session-open. Coexists with structured
   surfaces installed by later workstreams.
 - [`active-claims.json`](collaboration/active-claims.json) — live "I am
-  touching this area now" registry (WS1).
+  touching this area or the git index/head commit window now" registry
+  (WS1 + commit-window refinement).
 - [`closed-claims.archive.json`](collaboration/closed-claims.archive.json)
   — durable claim-closure history for explicit, stale, and owner-forced
   closes (WS3A).
@@ -75,5 +76,5 @@ This directory is governed by:
   evidence-bundle gaps.
 - **Decision threads stay narrow** — use them for concrete async
   decisions and evidence. Use the shared log for lightweight discovery,
-  active claims for live ownership, the napkin for learning, and thread
-  records for cross-session lane state.
+  active claims for live ownership and commit windows, the napkin for
+  learning, and thread records for cross-session lane state.

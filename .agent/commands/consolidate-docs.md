@@ -268,6 +268,7 @@ to preserve a green fitness report by starving the learning loop.
       (default `freshness_seconds` is 14400 = 4 hours). Use `heartbeat_at`
       in place of `claimed_at` if present and more recent. Report
       `[active] <claim_id> <thread> <agent_name>: fresh|stale; areas=<n>`.
+      If any area is `git:index/head`, mark it as a commit-window claim.
    2. **Stale entries**: any claim where `staleness_threshold < now()`.
       Move each stale entry to
       [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
@@ -277,7 +278,8 @@ to preserve a green fitness report by starving the learning loop.
       references. Remove the entry from `active-claims.json`. Archive, do
       not delete — conversation files, napkin observations, and
       shared-communication-log entries may cite archived `claim_id` values
-      permanently.
+      permanently. A stale commit-window claim is a high-signal interrupted
+      staging/commit attempt; archive it as stale and surface the summary.
    3. **Unclosed-but-fresh entries**: any claim whose agent has not
       registered a subsequent thread-record entry (no `last_session`
       update in the matching `<thread>.next-session.md` since
@@ -285,7 +287,9 @@ to preserve a green fitness report by starving the learning loop.
       block. Surface to the owner as `[<claim_id>] <agent_name>: claim
       open since <claimed_at>; no thread-record activity since`. The agent
       is not stranded by a peer's silent failure to close a claim; the
-      stale-archive pass cleans up at the next staleness threshold.
+      stale-archive pass cleans up at the next staleness threshold. Fresh
+      commit-window claims are stronger liveness signals than normal area
+      claims and should be surfaced before any consolidation commit.
    4. **Explicit and owner-forced closes**: ordinary session close should
       already have archived the claim with `closure.kind: "explicit"`.
       Owner-directed cleanup uses `closure.kind: "owner_forced"` and
@@ -371,10 +375,10 @@ to preserve a green fitness report by starving the learning loop.
    - `healthy`: within design envelope. No action.
    - `soft` ("think about it"): above target, within hard limit. Consider refinement at this consolidation or the next natural boundary. Never blocks.
    - `hard` ("do something soon"): above hard limit but within
-     `hard limit × CRITICAL_RATIO` (1.5). Route to remediation before
-     ordinary closure when possible; if the hard condition was created by
-     preserving learning, record the follow-up structure work rather than
-     rolling back or suppressing the learning.
+     `hard limit × CRITICAL_RATIO` (1.5). Preserve learning first, then
+     remediate before consolidation closure, open an explicit remediation
+     lane, or record owner-approved deferral. Do not roll back or suppress
+     the learning to make the gate green.
    - `critical` ("loop failure signal"): above `hard limit × CRITICAL_RATIO`.
      Stop routine work and open a remediation lane — see ADR-144 §Loop
      Health. Critical is a loop-health alarm, not permission to delete or
@@ -392,11 +396,12 @@ to preserve a green fitness report by starving the learning loop.
 
    At consolidation closure, run `pnpm practice:fitness --strict-hard` to
    expose unresolved hard or critical pressure. If the command fails because
-   knowledge was preserved correctly, do not undo the knowledge. Record the
-   failed fitness state, name the structural response (refine, split,
-   graduate, or owner-approved limit change), and carry that work forward.
-   Changes to fitness thresholds are self-documenting via frontmatter. An
-   ADR amendment is only needed if the fitness system itself changes.
+   knowledge was preserved correctly, do not undo the knowledge. Closure
+   still needs a concrete disposition: remediate now, open an explicit
+   remediation lane with acceptance criteria, or record owner-approved
+   deferral/limit change. Changes to fitness thresholds are self-documenting
+   via frontmatter. An ADR amendment is only needed if the fitness system
+   itself changes.
 10. **Manage the practice exchange.** Two directions:
 
    **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally — including `practice-core/decision-records/` (PDRs) and `practice-core/patterns/` (general abstractions), which are now first-class Core surfaces per PDR-007; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md` or (when substantial) to a dedicated PDR.

@@ -52,8 +52,8 @@ Representative rules:
 | [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
 | [follow-agent-collaboration-practice.md](rules/follow-agent-collaboration-practice.md) | Follow the agent-to-agent working model |
 | [use-agent-comms-log.md](rules/use-agent-comms-log.md) | Announce non-trivial intent in the shared communication log |
-| [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits |
-| [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim |
+| [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits and commit-window claims before staging/commit |
+| [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim or commit window |
 | [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
 | [read-diagnostic-artefacts-in-full.md](rules/read-diagnostic-artefacts-in-full.md) | Read complete diagnostic output before hypothesising |
 | [consolidate-at-third-consumer.md](rules/consolidate-at-third-consumer.md) | Canonicalise duplicated shapes at the third consumer |
@@ -66,7 +66,8 @@ Representative rules:
 WS0-WS3A collaboration state lives under
 [`state/collaboration/`](state/collaboration/). It is the repo-owned
 coordination layer for shared log entries, active claims, closed claim
-history, and decision threads. `start-right` reads it before edits,
+history, commit-window claims, and decision threads. `start-right` reads it before edits,
+the commit skill opens/closes `git:index/head` claims before staging or committing,
 `session-handoff` closes the agent's own active state, and
 `consolidate-docs` audits stale or unresolved entries. WS3B sidebar,
 timeout, and escalation state is intentionally absent until promoted by

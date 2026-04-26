@@ -3,15 +3,15 @@
   "$id": "active-claims.schema.json",
   "title": "Active Agent Claims Registry",
   "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
-  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step (which validates a file against the schema declared by the file's own schema_version, not against an older or newer schema). It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields rather than rejecting the file. The runtime contract is field-preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; v1.2.0 also treats area.kind enum expansion as additive, so older runtime readers preserve unknown area kinds as opaque claimed areas rather than rejecting the registry. major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step. The maintained latest schema validates supported v1.x files and narrows v1.1.0 validation where enum shape changed; do not validate v1.2.0 files with an older v1.1.0 schema. It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields and opaque enum values rather than rejecting the file. The runtime contract is preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "claims"],
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.1.0"],
-      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory."
+      "enum": ["1.1.0", "1.2.0"],
+      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims."
     },
     "claims": {
       "type": "array",
@@ -21,6 +21,34 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "const": "1.1.0" }
+        }
+      },
+      "then": {
+        "properties": {
+          "claims": {
+            "items": {
+              "properties": {
+                "areas": {
+                  "items": {
+                    "properties": {
+                      "kind": {
+                        "enum": ["files", "workspace", "plan", "adr"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "claim": {
       "type": "object",
@@ -130,8 +158,8 @@
       "properties": {
         "kind": {
           "type": "string",
-          "enum": ["files", "workspace", "plan", "adr"],
-          "description": "Kind of area being claimed. 'files' for path globs; 'workspace' for a pnpm workspace name; 'plan' for a plan file slug; 'adr' for an ADR number."
+          "enum": ["files", "workspace", "plan", "adr", "git"],
+          "description": "Kind of area being claimed. 'files' for path globs; 'workspace' for a pnpm workspace name; 'plan' for a plan file slug; 'adr' for an ADR number; 'git' for shared git transaction surfaces such as index/head."
         },
         "patterns": {
           "type": "array",
@@ -140,7 +168,7 @@
             "type": "string",
             "minLength": 1
           },
-          "description": "Patterns identifying the area. Globs for files; workspace names for workspace; plan file paths for plan; ADR numbers (e.g. 'ADR-163') for adr."
+          "description": "Patterns identifying the area. Globs for files; workspace names for workspace; plan file paths for plan; ADR numbers (e.g. 'ADR-163') for adr; git transaction labels (e.g. 'index/head') for git."
         }
       }
     },

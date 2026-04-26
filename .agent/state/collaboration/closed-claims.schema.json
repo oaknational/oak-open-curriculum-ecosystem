@@ -9,8 +9,8 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.1.0"],
-      "description": "Semantic version of the closed-claims archive schema. Version 1.1.0 adds required closure metadata while preserving the original claim body."
+      "enum": ["1.1.0", "1.2.0"],
+      "description": "Semantic version of the closed-claims archive schema. Version 1.1.0 adds required closure metadata while preserving the original claim body. Version 1.2.0 accepts closed claims with git area entries for commit-window history."
     },
     "claims": {
       "type": "array",
@@ -20,6 +20,34 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "const": "1.1.0" }
+        }
+      },
+      "then": {
+        "properties": {
+          "claims": {
+            "items": {
+              "properties": {
+                "areas": {
+                  "items": {
+                    "properties": {
+                      "kind": {
+                        "enum": ["files", "workspace", "plan", "adr"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "closed_claim": {
       "allOf": [

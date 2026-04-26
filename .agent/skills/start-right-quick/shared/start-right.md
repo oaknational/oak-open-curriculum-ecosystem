@@ -87,6 +87,11 @@ append a decision thread, or ask the owner. Sidebar, timeout, and
 owner-escalation mechanics remain WS3B and must not be used unless
 explicitly promoted.
 
+Before staging or committing, use the always-active commit skill. It
+checks for a fresh `git:index/head` commit-window claim, opens one if the
+window is clear, and closes it after the commit attempt with the SHA or
+failure reason.
+
 ### 5. Active plans
 
 Read the active plan(s) named in the thread's next-session record.
@@ -104,8 +109,7 @@ git log --oneline --decorate -5
 
 Check `.agent/practice-core/incoming/` for practice-core files. If
 present, alert the user — incoming material may carry learnings from
-another repo. Full integration happens during `/jc-consolidate-docs`
-(step 8).
+another repo. Full integration happens during `/jc-consolidate-docs`.
 
 ## Per-Session Landing Commitment
 
@@ -222,7 +226,7 @@ pnpm smoke:dev:stub
 
 # Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure gate (run via jc-consolidate-docs step 8):
+# Consolidation-closure signal (run via jc-consolidate-docs):
 #   pnpm practice:fitness:strict-hard
 # Vocabulary consistency (ADR-144 §Key Principles #1):
 #   pnpm practice:vocabulary
