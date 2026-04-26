@@ -1055,9 +1055,10 @@ surfaces install in Session 4 as well.
   teaches, compares, and evolves at the concept level — not the file or
   name level. The knowledge flow extracts concepts from instances;
   Practice exchange compares concepts across repos.
-- Promoted "substance before fitness" as a foundational principle.
-  Concepts must be written at the weight they deserve first; fitness
-  limits are a post-writing editorial concern.
+- Promoted "substance before fitness" as a foundational principle
+  (amended 2026-04-26 to "learning before fitness"). Concepts must be
+  written at the weight they deserve first; fitness limits are
+  post-writing health signals, not learning constraints.
 - Added Architectural Decision Records section to practice-bootstrap.md:
   portable ADR template, lifecycle states, learning loop connection.
   ADRs are the graduation target of the knowledge flow.

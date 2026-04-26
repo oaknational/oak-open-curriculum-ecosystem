@@ -153,7 +153,7 @@ purpose is to surface loop-level failure modes before they re-emerge.
   it the diagnostic treatment it requires instead of burying it inside
   "blocking violation" language.
 - Routine commit flow is no longer interrupted by near-limit drift;
-  consolidation closure still enforces.
+  consolidation closure still enforces explicit disposition.
 
 ### Negative
 

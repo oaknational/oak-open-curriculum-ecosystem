@@ -167,7 +167,7 @@ runs at three points:
    the Bootstrap Checklist in `practice-verification.md` confirms
    every vital surface is present and operational.
 2. **Routine consolidation** — the `consolidate-docs` workflow's
-   upstream-review step (per the command's step 8) re-verifies
+   upstream-review flow re-verifies
    that each vital surface still exists and is connected; silent
    drift (a renamed entry-point, a broken practice-index link, a
    missing start-flow skill) is surfaced here.
@@ -263,7 +263,7 @@ Alternatives rejected:
 - The `practice-verification.md` Bootstrap Checklist enumerates
   every vital surface from Categories A, B, D, and E — no surface
   from this PDR's tables may be absent from the checklist.
-- The `consolidate-docs` upstream-review step (step 8) re-verifies
+- The `consolidate-docs` upstream-review flow re-verifies
   vital-surface integrity at every consolidation.
 - Hydration, plasmid integration, and transplantation each produce
   a result in which every vital surface is present; if any

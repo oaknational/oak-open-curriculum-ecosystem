@@ -338,7 +338,7 @@ Every repo with a Practice has a canonical location for incoming material:
 The Practice Box is checked at two points:
 
 1. **Session start** (via `start-right-quick`) — alert the user if files are present.
-2. **Consolidation** (via the `jc-consolidate-docs` command step 8) — perform the full integration
+2. **Consolidation** (via the `jc-consolidate-docs` command) — perform the full integration
    flow.
 
 ### Integration Flow

@@ -10,7 +10,7 @@ pdr_kind: governance
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract);
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
-(plan documents follow the substance-before-fitness discipline;
+(plan documents follow the learning-before-fitness discipline;
 this PDR defines the role separation between plans and their
 index READMEs);
 [PDR-016](PDR-016-claim-propagation-and-reference-quality.md)

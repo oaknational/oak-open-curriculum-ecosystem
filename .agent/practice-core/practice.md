@@ -387,7 +387,7 @@ each host repo's local artefacts.
 is normally empty. When files arrive:
 
 - **At session start** (via start-right), agents alert the user.
-- **At consolidation** (via `/jc-consolidate-docs` step 8), agents perform the full integration
+- **At consolidation** (via `/jc-consolidate-docs`), agents perform the full integration
   flow: check the provenance chain, compare against the full local Practice system (not just
   `practice.md` — also rules, skills, commands, and directives), apply the three-part bar,
   propose specific changes, and clear the box after integration.

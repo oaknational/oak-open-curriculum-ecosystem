@@ -35,8 +35,9 @@ quality:
    Fitness is a post-writing health signal — not a writing constraint.
    Concepts should be written, captured, distilled, and graduated at the
    weight they deserve first; fitness pressure is handled holistically
-   afterwards through compression of redundant content
-   elsewhere, splitting, or raising limits.
+   afterwards through refinement of redundant content elsewhere,
+   graduation to a permanent home, splitting, or owner-approved hard
+   limit changes.
 
 3. **Current-plan promotion discipline.** A plan is only truly
    `current/` when it is both **decision-ready** (scope, acceptance
@@ -55,7 +56,7 @@ but corrodes the flow over time.
 
 **Consolidation runs across sessions (not just the current one).
 Concepts are written at the weight they deserve, with fitness
-handled editorially afterwards. Plans promoted to `current/` are
+handled structurally afterwards. Plans promoted to `current/` are
 both decision-ready and session-entry-ready.**
 
 ### Cross-session consolidation
@@ -90,9 +91,11 @@ When writing a concept to a permanent home:
    threshold.
 3. **Then** check fitness across the file's declared metrics.
 4. **Then** handle any fitness signal structurally — through
-   compression of redundant content elsewhere in the file, splitting
-   the file, or raising the metric's declared limit if the weight is
-   justified.
+   compression of redundant content elsewhere in the file, graduation
+   to a more permanent home, splitting the file, or owner-approved
+   changes to hard limits when the weight is justified. Agents may
+   raise soft targets modestly with rationale; hard limits belong to
+   the owner.
 
 Fitness metrics are signals, not constraints on learning. A concept
 that needs 200 lines to teach properly should be written in 200
@@ -290,7 +293,7 @@ Alternatives rejected:
 - **Single-session consolidation only.** Faster, but misses the
   cross-session patterns that are often the most load-bearing.
 - **Fitness as writing constraint.** Keeps files neat; destroys
-  concept quality. Substance always matters more than line count.
+  concept quality. Learning always matters more than line count.
 - **Promotion based on decision-readiness alone.** Leaves
   session-entry gaps that surface as friction the next time the
   plan is picked up.
@@ -302,12 +305,11 @@ Alternatives rejected:
 - Cross-thread consolidation reads the multi-session corpus,
   not just the current session.
 - Permanent-home writes happen at full substance; fitness is
-  handled editorially in step 6 of the consolidation workflow, not
-  during writing.
+  handled structurally after preservation, not during writing.
 - Promotion to `current/` verifies both decision-readiness and
   session-entry-readiness before the promotion completes.
 - Fitness metric overruns triggered by substance-first writing are
-  handled per the fitness model (three-zone; ADR-144 or equivalent
+  handled per the fitness model (four-zone; ADR-144 or equivalent
   per host repo), not by post-hoc concept trimming.
 
 ### Forbidden
