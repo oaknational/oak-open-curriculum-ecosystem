@@ -14,7 +14,6 @@ import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
 } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
@@ -76,7 +75,6 @@ CROSS-TOOL WORKFLOWS:
     openWorldHint: false,
   },
   _meta: {
-    ui: { resourceUri: WIDGET_URI },
     securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
   },
 } as const;

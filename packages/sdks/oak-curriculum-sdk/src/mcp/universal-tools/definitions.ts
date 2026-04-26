@@ -84,9 +84,11 @@ interface AggregatedToolDefShape {
  * Annotations match generated tools: read-only, non-destructive, idempotent.
  *
  * **`_meta` contract (ADR-141)**:
- * - Widget tools (`search`, `get-curriculum-model`, `user-search`,
- *   `user-search-query`) declare `_meta: { ui: { resourceUri: WIDGET_URI }, securitySchemes }`.
- * - All other aggregated tools declare `_meta: { securitySchemes }` (no widget UI).
+ * - Tools in `WIDGET_TOOL_NAMES` (`get-curriculum-model`, `user-search`) declare
+ *   `_meta: { ui: { resourceUri: WIDGET_URI }, securitySchemes }`.
+ * - `user-search-query` declares `_meta: { ui: { visibility: ['app'] }, securitySchemes }`
+ *   (app-only helper: no widget `resourceUri`).
+ * - All other aggregated tools declare `_meta: { securitySchemes }` (no `ui`).
  * - All aggregated tools mirror `securitySchemes` into `_meta` for clients
  *   that only read `_meta`, matching the generated tools' pattern.
  * - The widget allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).

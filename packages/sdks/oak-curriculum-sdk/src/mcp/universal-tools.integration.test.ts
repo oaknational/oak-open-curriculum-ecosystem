@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
-import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
+import {
+  isAppToolEntry,
+  listUniversalTools,
+  generatedToolRegistry,
+} from './universal-tools/index.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
-import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './universal-tools/types.js';
 
@@ -105,33 +108,57 @@ describe('listUniversalTools annotations', () => {
   });
 });
 
-// WIDGET_TOOL_NAMES imported from canonical source above.
-
 /**
- * Integration tests for MCP Apps standard _meta fields (ADR-141).
- *
- * Verifies that listUniversalTools() exposes _meta.ui only for allowlisted
- * widget tools, and that all other tools have no _meta.ui.
+ * MCP Apps wiring (ADR-141): which tools are recognised as opening the embedded
+ * app (`registerAppTool`) vs plain tools, and how app-only helpers are marked.
+ * Asserts behaviour (host-facing metadata), not the codegen allowlist set.
  */
-describe('listUniversalTools _meta integration', () => {
-  it('widget tools get _meta.ui.resourceUri, non-widget tools do not', () => {
+describe('listUniversalTools MCP Apps metadata behaviour', () => {
+  it('orientation and user search expose a widget resource URI for embedded UI', () => {
     const tools = listUniversalTools(generatedToolRegistry);
+    const modelTool = tools.find((t) => t.name === 'get-curriculum-model');
+    const userSearch = tools.find((t) => t.name === 'user-search');
 
-    for (const tool of tools) {
-      if (WIDGET_TOOL_NAMES.has(tool.name)) {
-        expect(tool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-      } else {
-        expect(tool._meta?.ui).toBeUndefined();
-      }
+    expect(modelTool, 'get-curriculum-model').toBeDefined();
+    expect(userSearch, 'user-search').toBeDefined();
+    if (!modelTool || !userSearch) {
+      return;
+    }
+
+    expect(isAppToolEntry(modelTool)).toBe(true);
+    expect(isAppToolEntry(userSearch)).toBe(true);
+    if (isAppToolEntry(modelTool) && isAppToolEntry(userSearch)) {
+      const uri = /^ui:\/\/widget\/.+\.html$/;
+      expect(modelTool._meta.ui.resourceUri).toMatch(uri);
+      expect(userSearch._meta.ui.resourceUri).toMatch(uri);
+    }
+  });
+
+  it('agent search is not an embedded-app tool (no widget resource on list entries)', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const search = tools.find((t) => t.name === 'search');
+    expect(search).toBeDefined();
+    if (search) {
+      expect(isAppToolEntry(search)).toBe(false);
+      expect(search._meta?.ui?.resourceUri).toBeUndefined();
+    }
+  });
+
+  it('user-search-query is app-scoped and does not open the widget (helper for the app)', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const query = tools.find((t) => t.name === 'user-search-query');
+    expect(query).toBeDefined();
+    if (query) {
+      expect(isAppToolEntry(query)).toBe(false);
+      expect(query._meta?.ui?.resourceUri).toBeUndefined();
+      expect(query._meta?.ui?.visibility).toEqual(['app']);
     }
   });
 });
 
 /**
- * Verify generated tools have _meta with securitySchemes but no widget UI.
- *
- * Generated tools are not in the WIDGET_TOOL_NAMES allowlist, so they should
- * have _meta.securitySchemes but no _meta.ui.
+ * OpenAPI-derived tools: invocable with declared auth; no embedded MCP App
+ * for typical REST-shaped operations.
  */
 describe('generated tools _meta integration', () => {
   const aggregatedNameSet = new Set<string>(typeSafeKeys(AGGREGATED_TOOL_DEFS));
@@ -147,14 +174,20 @@ describe('generated tools _meta integration', () => {
     }
   });
 
-  it('generated tools have _meta.securitySchemes but no _meta.ui', () => {
+  it('a representative API-derived tool lists auth in _meta but no widget URI', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const generatedTools = tools.filter((t) => !aggregatedNameSet.has(t.name));
-    const sampleTool = generatedTools[0];
-
-    expect(sampleTool).toBeDefined();
-    expect(sampleTool._meta?.ui).toBeUndefined();
-    expect(sampleTool._meta?.securitySchemes).toBeDefined();
+    const name = 'get-key-stages-subject-lessons' as const;
+    const tool = tools.find((t) => t.name === name);
+    expect(
+      tool,
+      'expected a generated tool with a stable name; update if OpenAPI renames the operation',
+    ).toBeDefined();
+    if (!tool) {
+      return;
+    }
+    expect(isAppToolEntry(tool)).toBe(false);
+    expect(tool._meta?.ui?.resourceUri).toBeUndefined();
+    expect(tool._meta?.securitySchemes?.length).toBeGreaterThan(0);
   });
 
   it('fails fast when a generated tool is missing a title or description', () => {

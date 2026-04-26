@@ -32,4 +32,4 @@ export const WIDGET_URI = "ui://widget/oak-curriculum-app-local.html" as const;
  *
  * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
  */
-export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(["search","get-curriculum-model","user-search","user-search-query"]);
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(["get-curriculum-model","user-search"]);

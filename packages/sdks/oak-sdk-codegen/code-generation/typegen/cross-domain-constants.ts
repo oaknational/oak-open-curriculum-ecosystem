@@ -37,18 +37,16 @@ export const BASE_WIDGET_URI = `ui://widget/oak-curriculum-app-${generateWidgetU
 /**
  * Tools that should advertise a widget UI via `_meta.ui.resourceUri`.
  *
- * Only tools in this set emit `_meta.ui` in the codegen output and in
- * aggregated definitions. All other tools have no widget UI — MCP clients
- * will not attempt to render a widget for their results.
+ * Only allowlisted **names** emit `_meta.ui.resourceUri` in codegen and in
+ * aggregated tool definitions. Other tools must not include `resourceUri`
+ * in `_meta.ui` (even if they use `_meta.ui.visibility` for app-only helpers).
  *
  * Tools in this set get `_meta.ui.resourceUri` in their codegen output
- * and in aggregated definitions. All other tools have no widget UI.
+ * and in aggregated definitions.
  *
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
 export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set([
-  'search',
   'get-curriculum-model',
   'user-search',
-  'user-search-query',
 ]);

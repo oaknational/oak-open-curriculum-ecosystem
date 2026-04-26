@@ -116,8 +116,12 @@ export interface ToolAnnotations {
 export interface ToolMeta {
   /** MCP Apps UI metadata for widget tools */
   readonly ui?: {
-    /** URI of the UI resource to display for this tool (e.g. ui://widget/app.html) */
-    readonly resourceUri: string;
+    /**
+     * URI of the UI resource to display for this tool (e.g. `ui://widget/app.html`).
+     * Omit when the tool does not open an embedded app, but may still set
+     * {@link visibility} (e.g. app-only helper tools with no widget).
+     */
+    readonly resourceUri?: string;
     /**
      * Tool visibility for MCP Apps hosts.
      *

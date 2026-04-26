@@ -1,12 +1,9 @@
 /**
  * User-facing MCP App search tools.
  *
- * This module provides the user-search and user-search-query tools for the
- * MCP App interface. Both tools provide interactive, visual search experiences
- * backed by the Search SDK.
- *
- * - `user-search`: UI-first search entry point (model + app visible)
- * - `user-search-query`: app-only helper (hidden from model)
+ * User-facing search for the MCP App: **`user-search`** (widget + model) and
+ * **`user-search-query`** (same execution; app-only visibility for
+ * `callServerTool` from the UI, no widget `resourceUri`).
  *
  * @example
  * ```typescript
