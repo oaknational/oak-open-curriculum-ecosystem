@@ -1,12 +1,15 @@
 ---
 name: "Intent to Commit + Session Counter"
-overview: "Add advisory intent_to_commit signalling to the active-claims registry, gated by a session-count TTL, with the commit skill writing intent before staging and clearing it after the commit lands."
+overview: "Add advisory intent_to_commit / commit-queue signalling to the active-claims registry, gated by a session-count TTL, with the commit skill writing intent before staging and verifying staged ownership before commit."
 isProject: false
 ---
 
 # Intent to Commit + Session Counter — Strategic Plan
 
 **Status**: 🟡 NOT STARTED (future / strategic intent)
+**Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 owner observed
+wrong-intent commit capture; promote only when owner explicitly asks to
+implement the queue)
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:
@@ -16,7 +19,8 @@ isProject: false
 [`commit/SKILL.md`](../../../skills/commit/SKILL.md);
 [`register-active-areas-at-session-open.md`](../../../rules/register-active-areas-at-session-open.md);
 [`consolidate-docs.md § 7e`](../../../commands/consolidate-docs.md);
-[`feedback_no_delete_git_lock.md`](../../memory/active/patterns/) (memory feedback file referencing this gap)
+[`napkin.md`](../../../memory/active/napkin.md);
+[`collaboration log`](../../../state/collaboration/log.md)
 
 ---
 
@@ -27,9 +31,11 @@ shared communication log (free-form discovery), the active-claims registry
 (area-level "I'm working in this region"), and decision threads (structured
 async coordination). None of these directly addresses the **commit window**:
 the short-lived interval where an agent is staging files, the pre-commit
-hook is running, and `.git/index.lock` is held.
+hook is running, and `.git/index.lock` is held. They also do not ensure that
+the files in the index still belong to the agent whose commit message and
+intent are about to become durable history.
 
-Three concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
+Six concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
 2026-04-26:
 
 1. **Three observed lock-contention events**: 15:36, 15:43, 15:59. Each was
@@ -43,21 +49,64 @@ Three concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
 3. **Index wipe under contention**: an agent's staged set was lost when a
    parallel agent's commit landed on the same branch, requiring re-staging.
    Staging is not durable when contention is live; the registry surface is.
+4. **Wrong-intent commit capture (clash type A — substitution)**: another
+   agent's staged files landed under the wrong agent's commit message
+   (commit `8f44a941`). The intended files were entirely **replaced** in
+   the index by foreign-staged content during the long pre-commit-hook
+   window, but the original author's commit message was applied to the
+   resulting tree. The file contents were correct and the branch was not
+   broken, but durable history described the wrong intent. This is worse
+   than a lock failure because the commit succeeds while the authorial /
+   intent bundle is misleading. Defended by: VERIFY OWNERSHIP step
+   (§ 2.6) — the staged set is checked against `intent.files` immediately
+   before `git commit` and the commit is aborted if foreign content is
+   present.
+5. **Empty no-op commit (clash type B — disappearance)**: an agent's
+   staged set vanished entirely between `git add` and `git commit`
+   finalization (commit `b014ca20`). The commit succeeded with the
+   author's intended message but produced a tree identical to its parent
+   — durable history records work that did not actually land. Distinct
+   from clash type A because no foreign content arrives; the index is
+   simply emptied of the agent's stages by a parallel commit consuming
+   them. Defended by: same VERIFY OWNERSHIP step (§ 2.6) — an empty
+   staged set or a staged set missing any of `intent.files` aborts the
+   commit, preventing no-op history.
+6. **Incidental foreign-content bundle (clash type C — accretion)**: the
+   agent's intended files landed correctly **plus** unrelated
+   foreign-staged content from a parallel agent's WIP was swept into the
+   same commit (commit `9af63a84` bundled `.agent/state/collaboration/log.md`
+   alongside the intended plan files). The intended history label is at
+   least partially honest (the intended files are there) but additional
+   foreign work is now attributed to the same commit and authorial bundle.
+   Distinct from A and B: A is replacement, B is disappearance, C is
+   over-inclusion. Defended by: `staged_fingerprint` field plus the
+   strict-equality VERIFY OWNERSHIP step (§ 2.6) — the staged set must
+   equal `intent.files` exactly, not just contain them.
+
+The three clash types (A substitution, B disappearance, C accretion) form a
+small taxonomy the queue and verify-ownership steps must defend against
+together. The queue (§ 2.4 WAIT/QUEUE) reduces the probability of any
+clash by serialising commit windows; the verify step (§ 2.6 VERIFY
+OWNERSHIP) is the strict last-line defence that catches any clash the
+queue missed.
 
 The intent of this plan is to install a **non-binding, advisory** intent
-signal on the active-claims registry, written by the commit skill before
-staging and cleared after the commit lands, gated by a **session-count
-TTL** that tracks agent activity rather than wall-clock time.
+signal and lightweight commit queue on the active-claims registry, written by
+the commit skill before staging, verified against the staged set immediately
+before commit, and cleared after the commit lands, gated by a
+**session-count TTL** that tracks agent activity rather than wall-clock time.
 
 The signal is advisory because the WS3A doctrine is "knowledge and
 communication, not mechanical refusals" — the lock itself remains the
 synchronization primitive; intents are a discovery surface upstream of it.
+The queue is likewise advisory: it tells agents whose intent owns the next
+commit window, and it forces a self-check before making history durable.
 
 ---
 
 ## Proposed Solution
 
-### 1. Schema bump — `active-claims.schema.json` v1.1.0 → v1.2.0
+### 1. Schema bump — `active-claims.schema.json` v1.2.0 → v1.3.0
 
 Two additive changes (compatible with v1.x readers per the
 `$comment_compatibility` discipline):
@@ -81,6 +130,7 @@ matching `$defs/intent_to_commit`:
   "additionalProperties": false,
   "required": [
     "files",
+    "commit_subject",
     "started_at",
     "session_counter_started",
     "session_counter_last_seen",
@@ -91,12 +141,16 @@ matching `$defs/intent_to_commit`:
     "files":                     { "type": "array", "minItems": 1,
                                    "items": { "type": "string", "minLength": 1 },
                                    "description": "Repository-relative file paths the agent intends to stage." },
+    "staged_fingerprint":        { "type": "string",
+                                   "description": "Optional stable summary of git diff --cached --name-status after staging; used to detect foreign staged content before commit." },
+    "commit_subject":            { "type": "string", "minLength": 1,
+                                   "description": "Draft commit subject so peers can see the intended durable history label before it lands." },
     "started_at":                { "type": "string", "format": "date-time" },
     "session_counter_started":   { "type": "integer", "minimum": 0 },
     "session_counter_last_seen": { "type": "integer", "minimum": 0,
                                    "description": "Refreshed by the owning agent only, at every session-open and on every commit-skill invocation. Stale = (registry.session_counter - this) > ttl_sessions." },
     "ttl_sessions":              { "type": "integer", "minimum": 1, "default": 3 },
-    "phase":                     { "type": "string", "enum": ["staging","pre_commit","complete","abandoned"] },
+    "phase":                     { "type": "string", "enum": ["queued","staging","pre_commit","complete","abandoned"] },
     "completed_at":              { "type": "string", "format": "date-time" },
     "completed_commit":          { "type": "string", "minLength": 7,
                                    "description": "Commit SHA when phase=complete." },
@@ -108,7 +162,7 @@ matching `$defs/intent_to_commit`:
 **1c. `closed-claims.schema.json`** reuses
 `active-claims.schema.json#/$defs/claim` via `allOf`, so closed claims
 naturally carry `intent_to_commit` if it was set at close time. Bump
-`closed-claims.schema.json` to v1.2.0 in lockstep so the version line
+`closed-claims.schema.json` to v1.3.0 in lockstep so the version line
 remains coherent.
 
 ### 2. Commit-skill protocol changes — `commit/SKILL.md`
@@ -123,23 +177,30 @@ commit window." Extend that coordination to write and clear the intent:
 3. POST INTENT — atomic update to active-claims.json:
      claim.intent_to_commit = {
        files: <about-to-stage list>,
+       commit_subject: <draft subject>,
        started_at: now(),
        session_counter_started: registry.session_counter,
        session_counter_last_seen: registry.session_counter,
        ttl_sessions: 3,
-       phase: "staging"
+       phase: "queued"
      }
-4. git add <files>
-5. UPDATE PHASE — phase: "pre_commit" (advisory: "hooks running, expect lock soon").
-6. git commit (pre-commit hooks fire, lock held).
-7a. ON SUCCESS — atomic update:
+4. WAIT / QUEUE — if another fresh intent is phase=queued/staging/pre_commit,
+   wait or coordinate before staging. This is advisory, not refusal, but
+   default discipline is one commit owner at a time.
+5. UPDATE PHASE — phase: "staging"; git add <files>.
+6. VERIFY OWNERSHIP — compute git diff --cached --name-status. If the staged
+   set is not exactly this intent's files, abort before commit and coordinate.
+   This prevents wrong-intent commits.
+7. UPDATE PHASE — phase: "pre_commit" (advisory: "hooks running, expect lock soon").
+8. git commit (pre-commit hooks fire, lock held).
+9a. ON SUCCESS — atomic update:
        phase: "complete"
        completed_at: now()
        completed_commit: <new HEAD SHA>
     Then, in the same atomic write, REMOVE the intent_to_commit field
     (the commit landing IS the durable record; clearing keeps the
     registry small).
-7b. ON FAILURE — leave phase at "staging" or "pre_commit" and decide:
+9b. ON FAILURE — leave phase at "staging" or "pre_commit" and decide:
        - Retry: refresh started_at + session_counter_last_seen, keep going.
        - Abandon: set phase: "abandoned" so other agents see the dead intent
          until TTL clears it.
@@ -208,6 +269,14 @@ contextually:
 The lock itself remains the synchronization primitive in all three
 cases. The intent is upstream signal, not downstream gate.
 
+Pre-commit ownership check (an agent about to run `git commit`): compare
+`git diff --cached --name-status` with the agent's own fresh
+`intent_to_commit.files`. If the staged set contains files outside that
+intent, stop before commit. The correct next step is to unstage only with
+owner/author coordination, wait for the owning agent to commit, or open a
+decision thread. This check prevents correct file contents from landing under
+the wrong commit description.
+
 ---
 
 ## Build-vs-Buy Attestation
@@ -244,10 +313,14 @@ Promote from `future/` → `current/` when **either**:
    feature branch (three are already on `feat/otel_sentry_enhancements`
    2026-04-26), **or**
 3. A second observed instance of an agent's staged set being wiped by
-   parallel-commit churn is recorded in the napkin or shared log.
+   parallel-commit churn is recorded in the napkin or shared log, **or**
+4. Any observed instance of another agent's staged files landing under the
+   wrong agent's commit message / intent description.
 
 Threshold reasoning: three is already on the branch as of 2026-04-26;
-the trigger is "next instance, OR the owner says go".
+the trigger is "next instance, wrong-intent capture, OR the owner says go".
+The wrong-intent capture threshold is lower because it creates misleading
+durable history even when the branch remains green.
 
 ---
 
@@ -296,7 +369,7 @@ When promoted, follow the standard three-phase reviewer rhythm:
 - `docs-adr-reviewer` — directive, rule, and command updates align with
   the schema.
 - `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS / NO-GO with
-  explicit migration note (v1.1.0 → v1.2.0 schema bump).
+  explicit migration note (v1.2.0 → v1.3.0 schema bump).
 
 ---
 
@@ -310,6 +383,7 @@ When promoted, follow the standard three-phase reviewer rhythm:
 | **Premature optimisation**: only 3 contention events observed; could be a 2026-04-26 anomaly rather than a recurring pattern. | Promotion trigger is explicit: a fourth incident or owner-direct promotion. If the contention rate stays at three forever, the plan stays in `future/`. |
 | **Self-application during landing**: the commit skill that lands the protocol must use the protocol it's landing. | Stage the schema bump in a single atomic commit before the commit-skill update lands; manually post the first intent for the implementation commit if needed. |
 | **Drift between intent and reality**: agent posts intent, then changes their mind about which files to stage. | Intent is advisory; refreshing it before each `git add` is part of the commit-skill workflow. Mismatched intent vs actual stage is not a failure mode that breaks anything — only the commit-skill self-discipline. |
+| **Wrong-intent commit capture**: one agent's staged set lands under another agent's commit message. | Commit skill verifies staged files against the posting agent's fresh intent immediately before `git commit`; mismatch aborts before history is written. |
 
 ---
 
@@ -323,8 +397,8 @@ When promoted, follow the standard three-phase reviewer rhythm:
   consolidate-docs needing to validate it, (c) the session-count TTL
   needing schema-grounded fields. Free-form would not satisfy any of the
   three.
-- **principles.md §Strict and Complete** — additive schema bump (1.1.0 →
-  1.2.0), explicit phase enum, no optional/permissive fallback.
+- **principles.md §Strict and Complete** — additive schema bump (1.2.0 →
+  1.3.0), explicit phase enum, no optional/permissive fallback.
 - **principles.md §Owner Direction Beats Plan** — owner already flagged
   the gap twice; this plan formalises their direction.
 - **agent-collaboration.md §Knowledge and Communication, Not Mechanical
@@ -342,11 +416,11 @@ When promoted, update propagation surfaces:
    — extend artefact taxonomy with intent_to_commit.
 2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
    — note the schema bump in the practice-index bridge link list if a
-   v1.2.0 example is added.
+   v1.3.0 example is added.
 3. `.agent/practice-core/practice.md` — Collaboration State surface
    already names "active claims, closed claim history, and decision
    threads"; add intent-to-commit when implementation lands.
-4. `.agent/practice-core/CHANGELOG.md` — record the v1.2.0 schema bump
+4. `.agent/practice-core/CHANGELOG.md` — record the v1.3.0 schema bump
    and intent-to-commit installation.
 5. `.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md`
    — collaboration-state row already names the relevant files; either
@@ -379,7 +453,7 @@ plan is promoted, not resolved in this strategic intent:
    plan: 3.
 3. **Areas vs files in `intent_to_commit`**: pure files (matches `git add`
    argument list) vs globs/areas (matches active-claim shape). Default:
-   files only for v1.2.0; revisit if commit batches grow large.
+   files only for v1.3.0; revisit if commit batches grow large.
 4. **Audit trail of completed intents**: discard on commit (current
    design — git log + closed claims are the durable record) vs preserve
    in `closed-claims.archive.json`. Default: discard.
@@ -399,8 +473,9 @@ plan is promoted, not resolved in this strategic intent:
 - **No mechanical refusal mechanic**: agents read intents but never
   refuse work based on them. The lock and the shared log do the
   enforcement.
-- **No global commit serialization**: this is not a queue or a mutex;
-  it is a discovery surface.
+- **No mechanical global commit serialization**: this is not a mutex. The
+  queue is advisory and exists to preserve intent/ownership before history is
+  written.
 - **No WS3B mechanics**: no sidebar, no timeout, no owner-escalation
   triggered by intents. Those remain paused.
 - **No extension to product-level commits outside this branch's
@@ -440,7 +515,7 @@ landing commit.
 - [Sidebar and Escalation (WS3B, paused)](../current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
   — independent; intents do not promote WS3B mechanics.
 - [WS3A Decision Thread + Claim History (archived completed)](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
-  — schema lineage; v1.2.0 builds on v1.1.0 from this plan.
+  — schema lineage; v1.3.0 builds on v1.2.0's `git` area kind.
 
 ---
 
