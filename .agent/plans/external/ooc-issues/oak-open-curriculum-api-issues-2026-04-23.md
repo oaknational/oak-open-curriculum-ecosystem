@@ -1,4 +1,4 @@
-# Oak Open Curriculum API — Issue Report (2026-04-23)
+# Oak Open Curriculum API — Issue Report (2026-04-23; **Issue 1 revised 2026-04-26**)
 
 A consolidated set of issues observed against the Oak Open Curriculum
 public REST API at `https://open-api.thenational.academy/api/v0`.
@@ -12,77 +12,93 @@ valid bearer token.
 
 ---
 
-## Issue 1 — Threads endpoints return HTTP 500 with a raw upstream GraphQL error
+## Issue 1 — Thread units (and related) return HTTP 500 with a raw GraphQL schema error
 
-### Endpoints
+### Endpoints (per published OpenAPI in `oak-sdk-codegen` 0.6.0+)
 
-- `GET /threads/{slug}`
-- `GET /threads/{slug}/units`
+- `GET /api/v0/threads` — list all threads
+- `GET /api/v0/threads/{threadSlug}/units` — units belonging to a thread
+
+**Spec alignment note (2026-04-26):** The public OpenAPI snapshot in this
+monorepo names only the two paths above under `/threads*`. An earlier draft
+of this report also referenced `GET /threads/{slug}` and
+`GET /threads/{slug}/progressions`; those paths are **not** present in that
+spec snapshot. Tools such as `get-thread-progressions` in the MCP may use
+SDK-baked or generated graph data and are not guaranteed to be thin wrappers
+over a specific HTTP route.
 
 ### Observed behaviour
 
-Both endpoints return HTTP 500 for slugs that the API itself treats as
-valid identifiers elsewhere. The response body forwards a raw
-GraphQL/Hasura schema-validation error string verbatim:
-
-```json
-{
-  "message": "Upstream server error (500): field 'threads' not found in type: 'query_root'",
-  "code": "INTERNAL_SERVER_ERROR"
-}
-```
-
-A sibling endpoint on the same identifier
-(`GET /threads/{slug}/progressions`) returns 200 with valid data, so
-the slug is genuinely a known thread; only these two endpoints fail.
+- `GET /api/v0/threads/{threadSlug}/units` can return **HTTP 500** with a body
+  that includes a **raw GraphQL schema validation error** (Hasura-style),
+  for example:
+  - `"Upstream server error (500): field 'threads' not found in type: 'query_root'"`
+- The same project may return **200** for `GET /api/v0/threads` (thread list)
+  for a valid token, so "threads" as a *curriculum* concept and slug can still
+  be discoverable even when the units-by-slug call fails.
+- The failure is **repeatable** (not transient-only); retries are unlikely to
+  help if the server-side query is invalid against the current GraphQL schema.
 
 ### Expected behaviour
 
-1. The endpoint resolves the requested resource and returns 200 with
-   the thread metadata or unit list.
-2. If the resource is genuinely unavailable, return a typed
-   application error such as `404 NOT_FOUND` rather than a 500.
-3. In no case forward an internal storage-layer error message
-   (GraphQL field names, Hasura signatures, etc.) to API consumers.
+1. `GET /api/v0/threads/{threadSlug}/units` returns **200** with a response
+   matching the published schema when the `threadSlug` exists and is
+   published, or a **4xx** with a stable, documented error code when it does
+   not.
+2. **5xx** responses are reserved for genuine service or dependency failures,
+   and ideally do not echo internal schema field names to API consumers.
+3. Behaviour is **consistent** with other thread-related public operations
+   when the same identifier is used.
 
-### Why the observed behaviour is a problem
+### Why the observed behaviour is a problem (impact)
 
-- Two of the headline navigation paths for the "thread" concept
-  (resolve a thread by slug, list its units) are unusable.
-- A 500 response is indistinguishable from a transient outage, but the
-  failure here is deterministic — retries do not help.
-- The leaked error string exposes internal storage-layer topology
-  (the existence and naming of GraphQL root fields backed by Hasura),
-  which is a small-but-real information leak across the public
-  boundary and an unactionable signal for clients.
-- Inconsistency with the working `progressions` endpoint suggests the
-  REST → GraphQL mapping is pointing at a missing/renamed resolver,
-  which is the kind of regression an explicit typed contract would
-  have caught.
+- A primary consumer path for curriculum threads — **ordered units in a
+  thread** — is unreliable or broken for API clients.
+- **500** responses train operators and integrators to treat the failure as
+  "outage" or "retry", which is a poor match for a **schema-level** error that
+  will not self-heal without a service or contract change.
+- Leaked GraphQL/Hasura phrasing in the error body is **not actionable** for
+  most API users and can expose internal integration detail.
 
 ### Why the expected behaviour is a benefit
 
-- Restores two primary navigation paths in the curriculum thread model.
-- Lets clients distinguish "my request was wrong" (4xx, actionable)
-  from "the service is unhealthy" (5xx, retry/back off) reliably.
-- Removes internal implementation strings from the public response
-  surface, so the public contract is decoupled from the storage
-  technology.
+- Restores a predictable, testable **HTTP contract** for thread navigation.
+- Clear **4xx vs 5xx** separation supports correct client and monitoring
+  behaviour.
+- Keeps the public error surface decoupled from storage technology.
 
-### Reproduce
+### Steps to reproduce
 
 ```bash
-# Failing — both return 500 with the GraphQL error string above
-curl -i -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/threads/number"
+# List threads (will typically succeed with a valid token)
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/threads" | head -c 500
 
+# Units for a known thread slug (observed: may return 500 with query_root error)
 curl -i -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/threads/number/units"
-
-# Working contrast — same slug, sibling endpoint returns 200 with data
-curl -i -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/threads/number/progressions"
+  "https://open-api.thenational.academy/api/v0/threads/number-multiplication-and-division/units"
 ```
+
+Replace the slug with any thread slug returned from the list if needed.
+
+### Root cause analysis (potentially useful context — not a work order)
+
+A code review of **`oak-openapi`** (`src/lib/handlers/threads/threads.ts`, as
+of 2026-04-26) shows **two different GraphQL entry points** in the same
+module:
+
+- **List** (`getAllThreads`) issues a query against the root field
+  **`published_mv_threads_1`** (see `threadView` in `src/lib/owaClient.ts`).
+- **Units by slug** (`getThreadUnits`) issues a query against a root field
+  named **`threads`**, with nested `thread_units` / `unit` selections.
+
+If the Hasura (or equivalent) **GraphQL schema** exposed to that service no
+longer defines **`query_root.threads`**, schema validation fails with exactly
+the observed message, while the list path can still work. That is **internal
+to the public API service** (how it maps REST to its configured GraphQL
+schema); it does not change what API consumers are allowed to do — **this
+ecosystem still consumes data only via the public HTTP API** (see
+`docs/architecture/openapi-pipeline.md`).
 
 ---
 

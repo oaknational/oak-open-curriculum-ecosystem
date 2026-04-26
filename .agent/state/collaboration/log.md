@@ -762,3 +762,24 @@ line that began with `#69`.
 Next action: stage and commit only the relevant agent-collaboration
 terminology, platform-independence, and handoff surfaces. The
 observability files remain in the working tree for their owning thread.
+
+### 2026-04-26 — `Codex` / `cursor` / `GPT-5.5` / `unknown` — API boundary + ooc-issues (session-handoff)
+
+**Intent:** document-only — no overlap with `observability-sentry-otel` lanes.
+
+- Added **Consumer data boundary** to
+  `docs/architecture/openapi-pipeline.md` (ecosystem consumes curriculum
+  data only via the public HTTP API; no direct Hasura / materialised views /
+  other internal Oak data systems).
+- Rewrote
+  `.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`
+  **Issue 1** (endpoints aligned to spec; progressions / orphan paths
+  clarified as stale; informational `oak-openapi` RCA).
+- Marked
+  `.agent/reports/oak-openapi-bug-report-2026-03-07.md` **Issue 2** list
+  GraphQL snippet as **stale** vs current `published_mv_threads_1` list
+  handler.
+- Updated `repo-continuity` (invariants, deep consolidation, active
+  threads), `napkin`, `agentic-engineering-enhancements` thread record +
+  identity row; pending-graduation row for optional future rule elevation of
+  API-only boundary.

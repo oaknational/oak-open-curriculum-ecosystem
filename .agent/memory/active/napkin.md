@@ -8,6 +8,26 @@ live in the register at
 
 ---
 
+## 2026-04-26 — API consumer boundary + ooc-issues thread refresh (Cursor / GPT-5.5 / Codex)
+
+**Surprise (minor):** external issue **Issue 1** listed HTTP paths and a
+"progressions" contrast that the published OpenAPI snapshot in
+`oak-sdk-codegen` does not enumerate; the report had to be reconciled to
+**observed/expected/impact/reproduce** and to label **stale** the old
+`oak-openapi-bug-report` GraphQL list snippet (list handler now uses
+`published_mv_threads_1`, not `threads`).
+
+**Lesson:** consumer docs must stay aligned with the **public contract** and
+**this monorepo’s boundary** (API-only; no direct MV/Hasura) — see
+`docs/architecture/openapi-pipeline.md` **Consumer data boundary**. RCA on
+`oak-openapi` belongs in the issue file as *informational*, not as ecosystem
+work items.
+
+**Promotion trigger:** N/A (documentation capture). Distillation candidate
+only if the API-only boundary repeats as a near-violation.
+
+---
+
 ## 2026-04-26 — Sharded Stroustrup — alignment-check before per-system claim validation
 
 **Surprise**: when validating an observability claim across local

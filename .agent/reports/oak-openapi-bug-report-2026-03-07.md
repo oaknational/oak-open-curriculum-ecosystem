@@ -89,6 +89,19 @@ Either:
 
 ## Issue 2: `/threads` response schema omits subject context
 
+> **Stale (partial) — 2026-04-26:** The **GraphQL fragment** in the *Root
+> cause* subsection below (a `threads(where:…)` list query) **no longer matches**
+> the current `oak-openapi` implementation of `GET /threads`. As of
+> `src/lib/handlers/threads/threads.ts`, the list handler queries the root
+> field `published_mv_threads_1` (via `threadView` in `src/lib/owaClient.ts`),
+> not a root field named `threads`. The *product* issue — list responses omit
+> subject context for filtering — may still be valid; verify against live
+> responses. For thread **units** failures and the `query_root.threads` error,
+> see
+> [`.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`](../plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md)
+> **Issue 1** (expected behaviour, impact, reproduce, and informational root
+> cause).
+
 ### Summary
 
 The `GET /api/v0/threads` endpoint returns threads with only `title` and `slug`.

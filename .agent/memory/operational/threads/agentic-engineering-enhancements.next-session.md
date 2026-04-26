@@ -1,6 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
+**Last refreshed**: 2026-04-26 (Cursor / GPT-5.5 / Codex — documentation-only:
+public-API **consumer boundary** in `docs/architecture/openapi-pipeline.md`
+(no direct Hasura / materialised views / internal Oak DB from this
+monorepo); **Issue 1** refresh in
+`.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`
+(threads endpoints: observed/expected/impact/reproduce + informational
+`oak-openapi` GraphQL entry-point note); **stale** annotation on
+`.agent/reports/oak-openapi-bug-report-2026-03-07.md` Issue 2 list-query
+snippet; `repo-continuity` invariants + deep-consolidation status updated.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
 after collaboration terminology and platform-independence refresh. The
 former "embryo" vocabulary has been replaced on live surfaces with
 **shared communication log/system** language. Owner's platform-independence
@@ -142,7 +152,7 @@ and
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff` | 2026-04-24 | 2026-04-26 |
-| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout` | 2026-04-24 | 2026-04-24 |
+| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
 | `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
