@@ -1734,6 +1734,92 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "41c2eca0-d74d-43a2-a174-e5a32661284e",
+      "agent_id": {
+        "agent_name": "Ethereal Alpaca",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/build-metadata/src/**",
+            "packages/core/build-metadata/tests/**",
+            "packages/core/build-metadata/package.json",
+            "packages/sdks/oak-search-sdk/src/retrieval/query-processing/**",
+            "packages/core/oak-eslint/src/rules/max-files-per-dir.ts",
+            "packages/core/oak-eslint/src/rules/require-observability-emission.ts",
+            "scripts/validate-root-application-version.mjs",
+            "scripts/validate-eslint-boundaries.ts",
+            "scripts/validate-practice-fitness.mjs",
+            "packages/sdks/oak-sdk-codegen/code-generation/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/server.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-search-cli/src/cli/admin/index.ts",
+            "apps/oak-search-cli/src/cli/eval/index.ts",
+            ".agent/state/collaboration/conversations/pr-87-codeql-sonar-ethereal-alpaca.json",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/plans/architecture-and-infrastructure/current/agent-identity-derivation.plan.md",
+            ".agent/plans/architecture-and-infrastructure/current/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T17:55:00Z",
+      "freshness_seconds": 5400,
+      "intent": "PR-87 CodeQL/Sonar remediation (Phase 1 semver-DRY + Phase 1A CodeQL #62/#63 + Phase 2 CRITICAL Sonar correctness, excluding sentry-node Array.sort site that stays in Codex L-OPS scope). Plus owner-directed agent-identity-derivation plan landing as a separate concern.",
+      "notes": "Per-task commit cadence per the PR-87 master plan. Excludes packages/libs/sentry-node/** (Codex territory). Coordination thread: .agent/state/collaboration/conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Master plan: .agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md. Session-execution plan: ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T18:35:00Z",
+        "closed_by": {
+          "agent_name": "Ethereal Alpaca",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Session-end closure. PR-87 Phase 1 + 1A + 2 landed in commits 80d9c2c0 (substantive) + a85b903c (plan) + 7eb8a546 (commit-window record); session execution plan at ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md complete for in-scope phases. Phase 3-6 deferred to a follow-up session per the master plan. Three local commits NOT pushed — owner decides timing. Decision thread closed at conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Active claims registry empty at session close.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "80d9c2c0",
+            "summary": "Substantive PR-87 remediation: 19 files, +807/-92."
+          },
+          {
+            "kind": "commit",
+            "ref": "a85b903c",
+            "summary": "Agent-identity-derivation plan landing + session-open record."
+          },
+          {
+            "kind": "commit",
+            "ref": "7eb8a546",
+            "summary": "Commit-window 8e82b8a1 closure record."
+          },
+          {
+            "kind": "decision_thread",
+            "ref": ".agent/state/collaboration/conversations/pr-87-codeql-sonar-ethereal-alpaca.json",
+            "summary": "Closed at 2026-04-26T18:35:00Z with resolution entry-007."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md",
+            "summary": "Master PR-87 quality plan; Phase 1, 1A, 2 closed by this session; Phase 3-6 next-session work."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/architecture-and-infrastructure/current/agent-identity-derivation.plan.md",
+            "summary": "Parallel plan for owner's separate session; Phase 0 wordlist approval gates code work."
+          }
+        ]
+      }
     }
   ]
 }

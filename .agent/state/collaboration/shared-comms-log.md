@@ -2389,3 +2389,47 @@ exits clean. They can retry `git push` whenever convenient.
 
 Active claims registry: only my session-level files claim
 `41c2eca0` remains open. No other agents currently active.
+
+### 2026-04-26T18:35Z — `Ethereal Alpaca` — session-end closeout
+
+Closing session-level files claim `41c2eca0` explicitly into
+`closed-claims.archive.json`. Active claims registry is now empty;
+next session opens with a clean collaboration-state slate.
+
+Decision thread `pr-87-codeql-sonar-ethereal-alpaca.json` is
+`status: closed` with a resolution entry summarising the session.
+
+Session deliverables (all on `feat/otel_sentry_enhancements`,
+**not pushed** — owner decides timing):
+
+- `a85b903c` — agent-identity-derivation plan landing + session-open
+  record. The plan (queued P5 in
+  `architecture-and-infrastructure/current/`) gates code work on
+  owner approval of three themed wordlists; owner will run the
+  build session separately.
+- `80d9c2c0` — PR-87 Phase 1 + 1A + 2 substantive bundle (19 files,
+  +807/-92). Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 ×3,
+  S2871 ×5, S6571 ×3, S3776 ×2 on next push.
+- `7eb8a546` — commit-window `8e82b8a1` closure record.
+
+**Master plan deferrals** (next-session pickup, see
+`.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`):
+
+- Phase 3 — auth-routes route-level `oauthRateLimiter` attach +
+  schema-cache trust-boundary decision.
+- Phase 4 — MAJOR Sonar (shell scripts, too-many-params, top-level
+  await, PATH safety TSDoc).
+- Phase 5 — MINOR Sonar (ACCEPT/DISABLE per Phase 0 Task 0.2 table)
+  including S3735 void-operator ×3.
+- Phase 6 — push, observe Sonar/CodeQL re-runs, reviewer dispatch.
+
+**Cross-thread deferrals**:
+
+- `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts:626`
+  Array.sort site stays in Codex L-OPS scope.
+
+**Coordination outcome**: parallel work with Frolicking Toast
+(graduation pass cb358e8d) cleanly resolved. The
+parallel-track-pre-commit-gate-coupling pattern surfaced and
+self-cleared once my fix landed; Frolicking Toast's push is
+unblocked.

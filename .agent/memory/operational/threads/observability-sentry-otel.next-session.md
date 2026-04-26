@@ -1,14 +1,18 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
+**Last refreshed**: 2026-04-26 (Ethereal Alpaca / claude-code /
+claude-opus-4-7-1m — PR-87 Phase 1 + 1A + 2 execution closeout.
+Three commits landed locally on `feat/otel_sentry_enhancements`
+(`a85b903c`, `80d9c2c0`, `7eb8a546`); not yet pushed.
+CodeQL #62, #63, #75, #79, #80 and Sonar S5852 ×3, S2871 ×5,
+S6571 ×3, S3776 ×2 will close on next push. Master plan Phase 3-6
+deferred. Decision thread
+`conversations/pr-87-codeql-sonar-ethereal-alpaca.json` closed.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
 after owner verification closeout and same-branch collaboration correction.
 L-IMM remains fully closed; PR-87 quality remediation remains the
 branch-primary blocker.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — owner
-verification closeout for L-IMM Sub-item 6. The owner confirmed the
-Vercel Sentry Marketplace plugin is active and configured; live
-Sentry status surfaces now record L-IMM as fully closed.)
 
 **Outcomes**:
 
@@ -554,6 +558,7 @@ rehearsal).
 | `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan` | 2026-04-25 | 2026-04-26 |
 | `Sharded Stroustrup` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `sentry-preview-validation-end-to-end-empirical-closure; test-error-route-shipped; correlation-id-sentry-tag; widget-metadata-fragile-tests-removed; doc-driven-gap-finding-on-sentry-docs; L-IMM-and-L-OPS-lanes-into-maximisation; sentry-immediate-and-pr-87-parallel-execution-split; consolidation-rationalisation-memo` | 2026-04-26 | 2026-04-26 |
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `L-IMM-execution-tier-1-flush-timeout-tier-3a-3b-verifications-tier-3c-ignore-errors-scaffold-tier-3d-marketplace-pending-tier-2-fingerprinting-with-reviewer-dispatch` | 2026-04-26 | 2026-04-26 |
+| `Ethereal Alpaca` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-1-1a-2-execution-semver-dry-noise-redos-critical-sonar; agent-identity-derivation-plan-author; co-tenant-with-frolicking-toast-graduation-pass` | 2026-04-26 | 2026-04-26 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
