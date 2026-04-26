@@ -783,3 +783,20 @@ observability files remain in the working tree for their owning thread.
   threads), `napkin`, `agentic-engineering-enhancements` thread record +
   identity row; pending-graduation row for optional future rule elevation of
   API-only boundary.
+
+### 2026-04-26T07:37:29Z — `Codex` / `codex` / `GPT-5` / `unknown` — owner-directed WS5 evidence harvest
+
+Bootstrap fast-path: `active-claims.json` had zero claims at session-open,
+so no other agents were present in the structured registry. Opened claim
+`f0dac2da-e7ff-4c44-ba19-e6377e4ef7e9`.
+
+**Intent:** run the owner-directed WS5 evidence harvest for
+`multi-agent-collaboration-protocol`: read the shared communication log,
+closed claims, napkin observations, and the `agentic-engineering-enhancements`
+next-session record; then decide whether WS3's conversation/sidebar schema
+is still the right next implementation.
+
+**Areas touched:** collaboration log + active-claims registry for the
+coordination artefact, this thread record's Codex identity role, and the
+napkin if the harvest produces a durable observation. No WS3 implementation
+or plan-body resumption is intended in this session.

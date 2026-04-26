@@ -1,4 +1,36 @@
 {
   "schema_version": "1.0.0",
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "f0dac2da-e7ff-4c44-ba19-e6377e4ef7e9",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/log.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T07:37:29Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-directed WS5 evidence harvest: read the shared communication log, closed claims, napkin observations, and agentic-engineering thread record; decide whether WS3 conversation/sidebar schema remains the right next implementation.",
+      "notes": "Bootstrap fast-path: active registry had 0 claims, so no other agents present and no overlap with existing active claims."
+    }
+  ]
 }
