@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "claims": [
     {
       "claim_id": "fbde22cf-3bea-4c22-83ba-dd17e09d4508",
@@ -785,6 +785,321 @@
             "kind": "log_entry",
             "ref": ".agent/state/collaboration/log.md#2026-04-26t142012z--codex--codex--gpt-5--unknown--ws4a-coordination-closeout",
             "summary": "Shared communication log records this explicit close."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3d1cc697-dd3d-4e48-9276-3e8a01242905",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/commands/consolidate-docs.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-lineage.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md",
+            ".agent/practice-core/decision-records/PDR-023-documentation-structure-discipline.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-04-26.md",
+            ".agent/memory/active/patterns/README.md",
+            ".agent/memory/active/patterns/substance-before-fitness.md",
+            ".agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T14:32:27Z",
+      "freshness_seconds": 14400,
+      "intent": "Apply owner correction that learning preservation outranks fitness limits; update consolidation/Practice surfaces and close the claim explicitly.",
+      "notes": "Active-claim scan found no existing active claims. This is a narrow doctrine correction: fitness functions are signals and must not suppress capture, distillation, or knowledge preservation.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T14:46:55Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Learning-before-fitness correction complete: signal preserved via napkin archive/distillation, doctrine updated, reviewer findings absorbed, and hard distilled.md pressure routed to explicit structural response/owner-approved deferral rather than deletion.",
+        "evidence": [
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/archive/napkin-2026-04-26.md",
+            "summary": "Outgoing napkin archived in full before distillation, preserving session signal without trimming for fitness."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/active/distilled.md",
+            "summary": "High-signal learnings were distilled despite the file intentionally entering hard fitness pressure."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Continuity records the learning-first correction and explicit distilled-memory structural-response next step."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T14:46Z",
+            "summary": "JSON/Ajv validation, targeted markdownlint, git diff --check, portability check, and fitness vocabulary passed; practice fitness strict-hard intentionally reports distilled.md hard pressure."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t144655z--codex--codex--gpt-5--unknown--learning-first-fitness-correction-closeout",
+            "summary": "Shared communication log records explicit closeout, validation status, reviewer disposition, and the remaining parallel observability claim."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "da765204-2d81-4f83-be67-df47f20e5c13",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".cursor/rules/register-active-areas-at-session-open.mdc",
+            ".cursor/rules/respect-active-agent-claims.mdc",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/closed-claims.schema.json",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md",
+            ".agents/skills/commit/SKILL.md",
+            ".claude/skills/commit/SKILL.md",
+            ".cursor/skills/commit/SKILL.md",
+            ".agent/state/README.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/memory/collaboration/parallel-track-pre-commit-gate-coupling.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/practice-index.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T14:52:27Z",
+      "freshness_seconds": 14400,
+      "intent": "Install commit-window awareness so parallel agents treat git index/head as a short-lived shared transaction surface before staging or committing.",
+      "notes": "Active-claim scan found one observability claim (c1a25f27) with no file overlap. Shared log append is the only shared coordination surface touched; no SDK/product or observability lane files are in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:06:03Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Commit-window protocol refinement complete: git:index/head active-claim area documented across schema, commit skill, start-right, collaboration rules, consolidation audit, Practice index, and continuity surfaces; reviewer findings absorbed; no staging or commit performed.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t150603z--codex--codex--gpt-5--unknown--commit-window-protocol-closeout",
+            "summary": "Shared log records closeout scope, validation status, reviewer disposition, and remaining parallel observability claim."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "summary": "Current protocol plan records the owner-directed commit-window refinement and its non-WS3B scope."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures landed state and next safe step after the commit-window refinement."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-26--codex--commit-window-as-shared-transaction-surface",
+            "summary": "Napkin captures the learning that git locks prevent corruption but do not preserve coordination understanding."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T15:05Z",
+            "summary": "JSON/Ajv validation, targeted markdownlint, git diff --check, portability check, and vocabulary check passed; practice fitness reports only expected distilled.md hard pressure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a30ea592-d6fb-47e2-9bdf-91cd5207ba2e",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:11:30Z",
+      "freshness_seconds": 14400,
+      "intent": "Record owner-agreed lock-wait nuance: Claude Monitor can wait for .git/index.lock, Codex/Cursor use shell-equivalent waits, and lock waits are physical guards rather than coordination.",
+      "notes": "Active-claim scan found one observability claim (c1a25f27) with no file overlap. Staged observability files are present and will not be touched.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:13:14Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Lock-wait nuance captured: Claude Monitor, Codex shell waits, and Cursor shell waits are physical guards for .git/index.lock, not replacements for git:index/head active claims and shared-log coordination.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t151314z--codex--codex--gpt-5--unknown--lock-wait-nuance-closeout",
+            "summary": "Shared log records closeout scope, validation status, and untouched observability staged files."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures the lock-wait nuance and next safe state."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-26--codex--lock-wait-is-physical-not-social",
+            "summary": "Napkin captures that lock waits are physical guards while active claims are the coordination layer."
+          },
+          {
+            "kind": "command_output",
+            "ref": "local validation output 2026-04-26T15:13Z",
+            "summary": "Targeted markdownlint, JSON/Ajv validation, git diff --check, portability, vocabulary, and informational fitness checks ran."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c1a25f27-eacf-4a18-9528-f0b971c46f08",
+      "agent_id": {
+        "agent_name": "Frolicking Toast",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/sentry-node/src/**",
+            "packages/libs/sentry-node/README.md",
+            "apps/oak-curriculum-mcp-streamable-http/docs/observability.md",
+            ".agent/plans/observability/current/sentry-immediate-next-steps.plan.md",
+            ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:30:00Z",
+      "freshness_seconds": 14400,
+      "intent": "Execute L-IMM lane (Tiers 1, 3a, 3b, 3c, 2; 3d marked PENDING owner-touch). Six sub-items, each commits independently per sentry-immediate-next-steps.plan.md. Closure: lane status flipped to closed-pending-3d on 5/6.",
+      "notes": "Runs in parallel with Codex's agentic-engineering-enhancements claim (3d1cc697). No file overlap: my scope is sentry-node and observability docs; Codex's scope is .agent/practice-core/ and .agent/memory/. Shared log.md is designed for concurrent append. Brief stated HEAD f8ecf57c but actual HEAD at session-open is 7ecac966 (5 Codex commits ahead); my scope is unaffected.",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T16:15:00Z",
+        "closed_by": {
+          "agent_name": "Frolicking Toast",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "L-IMM lane closed at 5 of 6 sub-items per owner direction at plan-time. Five Sentry-node operational-hardening commits landed; Sub-item 6 (Vercel Marketplace verify) is PENDING owner-touch with a documentation surface for inspection. Three reviewers ran on Tier 2; one MAJOR (single-element fingerprint override) absorbed via switch to hybrid fingerprint shape. Lane status flipped to closed-pending-3d; execution wrapper plan rotated to archive/completed.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "55355270",
+            "summary": "Tier 1 - flush timeout 2s to 5s in DEFAULT_SENTRY_FLUSH_TIMEOUT_MS."
+          },
+          {
+            "kind": "commit",
+            "ref": "c80ee8eb",
+            "summary": "Tier 3a + 3b - verify maxBreadcrumbs / sendClientReports state; defaults retained."
+          },
+          {
+            "kind": "commit",
+            "ref": "bfb000ff",
+            "summary": "Tier 3c - ignoreErrors / denyUrls scaffold (RED-first); README Allow-list policy section."
+          },
+          {
+            "kind": "commit",
+            "ref": "aa53ff87",
+            "summary": "Tier 3d - Vercel Marketplace PENDING surface in observability.md."
+          },
+          {
+            "kind": "commit",
+            "ref": "6c65e75d",
+            "summary": "Tier 2 - hybrid error fingerprinting (post-redaction) for known families."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            "summary": "L-IMM lane status flipped to closed-pending-3d with five-commit landed-list."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/archive/completed/sentry-immediate-next-steps.plan.md",
+            "summary": "Execution wrapper plan rotated from current/ to archive/completed/ after 5/6 closure."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            "summary": "Top-of-file refresh records L-IMM closure, the five-commit landing, reviewer findings absorbed, and next-session pickup paths."
+          },
+          {
+            "kind": "command_output",
+            "ref": "scoped gates 2026-04-26T16:00-16:10Z",
+            "summary": "pnpm --filter @oaknational/sentry-node lint type-check test all green at 9 files / 120 tests after each tier; full pre-commit + pre-push gates green for every push."
           }
         ]
       }

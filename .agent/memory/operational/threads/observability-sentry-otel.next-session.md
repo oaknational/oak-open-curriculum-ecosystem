@@ -1,6 +1,89 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-26 (Sharded Stroustrup / claude-code /
+**Last refreshed**: 2026-04-26 (Frolicking Toast / claude-code /
+claude-opus-4-7-1m — L-IMM execution session. Five Sentry-node
+operational-hardening sub-items landed as five commits on
+`feat/otel_sentry_enhancements`; sixth sub-item (Vercel Marketplace
+verify) landed as a documentation surface for owner-touch.
+
+**Outcomes**:
+
+- **L-IMM lane closed at 5 of 6** with status
+  `✅ closed-pending-3d` in
+  [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+  § L-IMM. Sub-item 6 (Marketplace verify) requires Vercel project-
+  settings access; the inspection surface is now in
+  [`apps/oak-curriculum-mcp-streamable-http/docs/observability.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md)
+  § Vercel ↔ Sentry Marketplace integration — verification PENDING.
+  When the owner completes the audit, replace that section with the
+  verified-state paragraph and the Sub-item-6 todo flips to
+  `completed`.
+- **Sentry status now**: "good enough for now" per owner direction at
+  plan-time. Subsequent Sentry work (L-1, L-3, L-4b, L-OPS) remains
+  deferred. The `feat/otel_sentry_enhancements` branch is ready for
+  merge once PR-87 quality lane closes too.
+- **Reviewer dispatch on Tier 2** (custom error fingerprinting):
+  three reviewers (`code-reviewer`, `sentry-reviewer`, `test-reviewer`)
+  ran in parallel. `sentry-reviewer` flagged a MAJOR — single-element
+  fingerprint shape `['<class-name>']` is a full override and would
+  collapse intra-family stack-aware grouping. Absorbed by switching
+  to the canonical hybrid form `['{{ default }}', '<class-name>']`,
+  which preserves Sentry's default grouping inside a family while
+  pinning the family identity. Other findings absorbed: early-return
+  guard → positive `not.toHaveProperty`; consumer-hook composition
+  test added; constants-only `KNOWN_ERROR_FAMILIES` membership test
+  dropped; README addition pattern wording tightened to "MUST".
+
+**Five commits landed today** (one per sub-item):
+
+- `55355270` Tier 1 — flush timeout 2s → 5s
+- `c80ee8eb` Tier 3a + 3b — maxBreadcrumbs / sendClientReports verify
+- `bfb000ff` Tier 3c — ignoreErrors / denyUrls scaffold (RED-first)
+- `aa53ff87` Tier 3d — Vercel Marketplace PENDING surface
+- `6c65e75d` Tier 2 — hybrid error fingerprinting (post-redaction)
+
+**Plan rotation**:
+[`current/sentry-immediate-next-steps.plan.md`](../../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
+moved to `archive/completed/` after Sub-item 6 was accepted as PENDING
+on owner direction. The lane plan body in
+[`active/sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+remains as authoritative description of the lane.
+
+**Co-tenant during this session**: Codex worked the
+agentic-engineering-enhancements thread in parallel (claim
+`3d1cc697`). No file overlap with my Sentry scope. Three concurrent-
+commit race conditions surfaced harmlessly during my git operations
+— all resolved by retry; index-lock collisions are a known shared-
+branch artefact and are documented in the new memory feedback note
+`feedback_no_delete_git_lock` (do not delete `.git/index.lock`).
+
+**Next-session pickup paths**:
+
+1. **Owner audits Vercel Marketplace** (Sub-item 6 closure): inspect
+   Vercel project settings → Integrations and replace the PENDING
+   section in observability.md with the verified state. Single-
+   commit follow-up; flips lane status to `✅ closed`.
+2. **PR-87 quality lane** (parallel plan
+   [`pr-87-quality-finding-resolution.plan.md`](../../../plans/observability/current/pr-87-quality-finding-resolution.plan.md))
+   — separate scope, runs in parallel with this lane on the same
+   branch.
+3. **Deployed-state validation** of the new fingerprinting on the
+   next preview deploy: hit `/test-error?mode=...` via
+   `apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh`
+   and confirm the new Sentry issues carry the hybrid fingerprint
+   (`['{{ default }}', 'TestError*']`). Note the issue-merge
+   discontinuity callout — existing OAK-OPEN-CURRICULUM-MCP-{7,8,9}
+   issues retain old grouping; new occurrences attach to NEW issue
+   IDs.
+
+**Branch state at close**: `feat/otel_sentry_enhancements` HEAD
+`6c65e75d`, ahead of session-open by five Sentry commits plus
+Codex's parallel-track Practice/agentic-engineering commits. Push
+range over the session: `f8ecf57c..6c65e75d`.
+
+---
+
+**Prior refresh**: 2026-04-26 (Sharded Stroustrup / claude-code /
 claude-opus-4-7-1m — full session arc spanning Sentry validation,
 diagnostic route addition, gap-finding, and parallel-execution
 split. Eight commits pushed today on PR #87; HEAD `2f766fe4`.

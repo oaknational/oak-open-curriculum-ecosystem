@@ -1420,3 +1420,201 @@ parallel WIP stays untouched.
 at plan-time): if a pre-commit/pre-push gate fails on a file outside
 my scope, I will surface here and pause my push. No `--no-verify`
 without fresh authorisation.
+
+### 2026-04-26T14:46:55Z — `Codex` / `codex` / `GPT-5` / `unknown` — learning-first fitness correction closeout
+
+Closing claim `3d1cc697-dd3d-4e48-9276-3e8a01242905` explicitly.
+
+Completed:
+
+- corrected the doctrine inversion: learning, understanding, and knowledge
+  preservation come first; fitness limits are health signals and never a
+  reason to suppress capture, distillation, graduation, or useful writing;
+- archived the outgoing napkin to
+  `.agent/memory/active/archive/napkin-2026-04-26.md`, distilled the
+  high-signal entries into `.agent/memory/active/distilled.md`, and started
+  a fresh napkin;
+- updated `consolidate-docs`, Practice Core, PDR-014, ADR-144, continuity,
+  start-right skill text, and the active pattern surface so hard/critical
+  fitness pressure requires concrete disposition after preservation:
+  remediate, open an explicit remediation lane, or record owner-approved
+  deferral/limit change;
+- absorbed `docs-adr-reviewer` and `assumptions-reviewer` findings.
+
+Validation:
+
+- JSON parse and Ajv collaboration schema validation passed;
+- targeted markdownlint, `git diff --check`, `pnpm portability:check`, and
+  `pnpm practice:vocabulary` passed;
+- `pnpm practice:fitness:informational` reports expected hard pressure:
+  `.agent/memory/active/distilled.md` is 301 lines against a 275-line hard
+  limit;
+- `pnpm practice:fitness:strict-hard` exits 1 for the same expected hard
+  signal. This is preserved deliberately and routed to an explicit
+  distilled-memory structural-response lane or owner-approved deferral, not
+  undone by deleting signal.
+
+No WS3B sidebar, timeout, file-backed owner escalation, hook automation,
+SDK/product work, commit, push, or staging was started. Parallel claim
+`c1a25f27-eacf-4a18-9528-f0b971c46f08` remains active for the observability
+lane and has no file overlap with this closeout.
+
+### 2026-04-26T14:52:27Z — `Codex` / `codex` / `GPT-5` / `unknown` — commit-window protocol claim
+
+Opening claim `da765204-2d81-4f83-be67-df47f20e5c13` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: install the owner-requested commit-window protocol so parallel agents
+know that `git commit` serialises through the git index / HEAD lock, and so
+agents leave a short-lived visible claim before staging or committing.
+
+Active-claim scan found one active observability claim
+`c1a25f27-eacf-4a18-9528-f0b971c46f08` with no file overlap. This work will
+touch collaboration doctrine, claim schema, start-right/commit workflow
+guidance, consolidation audit text, and the agentic-engineering thread
+record. Shared log append is expected; no SDK/product files, observability
+plan files, staging, commit, push, WS3B sidebar, timeout, or owner-escalation
+mechanism work is in scope.
+
+Simple plan:
+
+1. Add a `git` claim area for `index/head` and document commit-window
+   semantics.
+2. Teach start-right, active-claim rules, and commit skill to check/open/close
+   short-lived commit claims before staging or committing.
+3. Extend consolidation/state conventions so stale commit-window claims are
+   auditable.
+4. Run targeted validation and reviewer pass, then explicitly close this
+   claim.
+
+### 2026-04-26T15:06:03Z — `Codex` / `codex` / `GPT-5` / `unknown` — commit-window protocol closeout
+
+Closing claim `da765204-2d81-4f83-be67-df47f20e5c13` explicitly.
+
+Completed:
+
+- added `git` as a collaboration claim area in v1.2.0 schema surfaces,
+  with compatibility notes for enum expansion and older-version validation;
+- updated the commit skill so agents check active commit-window claims,
+  inspect pre-existing staged content, open a short-lived `git:index/head`
+  claim before staging/commit, and close it on success, failure, or abort;
+- refreshed start-right, collaboration rules, consolidation audit, state
+  README, channel/routing guidance, founding pattern, current protocol plan,
+  Practice index, continuity, thread record, napkin, and platform adapters;
+- absorbed `docs-adr-reviewer` and `assumptions-reviewer` findings.
+
+Validation before close:
+
+- JSON parse and Ajv collaboration schema validation passed;
+- targeted markdownlint and `git diff --check` passed;
+- `pnpm portability:check` and `pnpm practice:vocabulary` passed;
+- `pnpm practice:fitness:informational` still reports the expected hard
+  `distilled.md` pressure from the learning-first correction; touched
+  collaboration surfaces remain below hard limits.
+
+No staging, commit, push, WS3B sidebar/timeout/owner-escalation mechanism,
+or hook automation was started. Parallel claim
+`c1a25f27-eacf-4a18-9528-f0b971c46f08` remains active for the observability
+lane and has no file overlap with this closeout.
+
+### 2026-04-26T15:11:30Z — `Codex` / `codex` / `GPT-5` / `unknown` — lock-wait nuance claim
+
+Opening claim `a30ea592-d6fb-47e2-9bdf-91cd5207ba2e` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: record the owner-agreed nuance that Claude's Monitor can physically
+wait for `.git/index.lock` to disappear, while Codex and likely Cursor use
+an equivalent shell wait loop unless a custom tool is configured. This is a
+commit-window implementation note, not a replacement for `git:index/head`
+active claims.
+
+Active-claim scan found one observability claim
+`c1a25f27-eacf-4a18-9528-f0b971c46f08` with no file overlap. The working tree
+also has staged observability files in that claim's scope; this note will not
+stage, unstage, commit, or touch those files.
+
+### 2026-04-26T15:13:14Z — `Codex` / `codex` / `GPT-5` / `unknown` — lock-wait nuance closeout
+
+Closing claim `a30ea592-d6fb-47e2-9bdf-91cd5207ba2e` explicitly.
+
+Completed:
+
+- added a physical lock-wait note to the commit skill: Claude may use Monitor,
+  while Codex and Cursor should use a bounded shell wait unless a custom
+  monitor exists;
+- captured the distinction in napkin, repo-continuity, and the
+  `agentic-engineering-enhancements` thread record: lock waits are physical
+  guards, not coordination;
+- scanned `.remember/` buffers and homed the git-lock / Monitor observation;
+- ran session-handoff and consolidate-docs checks for entry-point drift,
+  tactical tracks, decision threads, active claims, schema validity, and
+  fitness state.
+
+Validation before close:
+
+- targeted markdownlint, JSON parse, Ajv collaboration schema validation,
+  `git diff --check`, `pnpm portability:check`, and
+  `pnpm practice:vocabulary` passed;
+- `pnpm practice:fitness:informational` reports the known expected
+  `distilled.md` hard pressure and no new hard pressure from this note.
+
+No staging, unstaging, commit, push, hook automation, or WS3B mechanism was
+started. Parallel claim `c1a25f27-eacf-4a18-9528-f0b971c46f08` remains active
+for the observability lane; staged observability files were left untouched.
+
+### 2026-04-26T16:15Z — `Frolicking Toast` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — observability L-IMM session-close
+
+Closing claim `c1a25f27-eacf-4a18-9528-f0b971c46f08` explicitly into
+[`closed-claims.archive.json`](closed-claims.archive.json). The
+L-IMM lane in
+[`active/sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+is now `✅ closed-pending-3d` on 5 of 6 sub-items per owner direction
+at plan-time.
+
+**Five commits landed today (one per sub-item, each independently
+deployable)**:
+
+- `55355270` Tier 1 — flush timeout 2s → 5s
+- `c80ee8eb` Tier 3a + 3b — maxBreadcrumbs / sendClientReports verify
+- `bfb000ff` Tier 3c — ignoreErrors / denyUrls scaffold (RED-first)
+- `aa53ff87` Tier 3d — Vercel Marketplace PENDING surface
+- `6c65e75d` Tier 2 — hybrid error fingerprinting (post-redaction)
+
+**Sub-item 6 PENDING note**: Vercel ↔ Sentry Marketplace verify
+requires Vercel project-settings access. The inspection surface is
+documented in
+[`apps/oak-curriculum-mcp-streamable-http/docs/observability.md`](../../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md)
+§ Vercel ↔ Sentry Marketplace integration — verification PENDING. The
+owner replaces that section with the verified-state paragraph after
+inspecting Vercel settings; lane status flips to `✅ closed` at that
+point.
+
+**Reviewer dispatch on Tier 2** (custom error fingerprinting):
+`code-reviewer`, `sentry-reviewer`, and `test-reviewer` ran in
+parallel. `sentry-reviewer` MAJOR — single-element fingerprint
+override would collapse intra-family stack-aware grouping —
+absorbed by switching to the canonical hybrid form
+`['{{ default }}', '<class-name>']`. Other findings (early-return
+guard, consumer-hook composition coverage gap, README "MUST"
+wording, drop-the-constants-test) all absorbed. 120/120 scoped
+tests green.
+
+**Plan rotation**:
+[`current/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
+moved to `archive/completed/` after Sub-item 6 was accepted as
+PENDING on owner direction.
+
+**Parallel-track coordination during this session**: Codex's
+agentic-engineering-enhancements claim (`3d1cc697`) ran throughout.
+No file overlap with my Sentry scope. Three concurrent-commit race
+conditions surfaced harmlessly (index-lock collisions resolved by
+retry). The new
+[`feedback_no_delete_git_lock`](../../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_no_delete_git_lock.md)
+memory captured the discipline: a foreign lock means another agent
+is committing in parallel; wait/retry, don't `rm`.
+
+**Branch state at close**: `feat/otel_sentry_enhancements` HEAD
+`6c65e75d`, push range over the session: `f8ecf57c..6c65e75d`. Next
+sessions: owner-side Vercel Marketplace audit; PR-87 quality lane;
+deployed-state validation of new fingerprint with the issue-merge
+discontinuity callout already documented.

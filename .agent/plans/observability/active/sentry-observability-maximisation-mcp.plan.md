@@ -1468,11 +1468,40 @@ describing how to query feedback and the fixed schema.
 
 ### L-IMM Operational hardening (immediate, post-2026-04-26 validation)
 
-**Status**: 🟡 IMMEDIATE — pre-PR-87 quality work. Identified by
-2026-04-26 gap analysis against Sentry official docs after the
-source-code-upload validation closed. Each sub-item is small and
-independently deployable; landing them as a single lane keeps the
-review surface focused.
+**Status**: ✅ closed-pending-3d (2026-04-26 by Frolicking Toast /
+claude-code / claude-opus-4-7-1m). 5 of 6 sub-items landed as
+independent commits on `feat/otel_sentry_enhancements`; Sub-item 6
+(Vercel ↔ Sentry Marketplace verify) is PENDING owner-touch per owner
+direction at plan-time, with a documentation surface landed in
+`apps/oak-curriculum-mcp-streamable-http/docs/observability.md` § Vercel
+↔ Sentry Marketplace integration — verification PENDING (commit
+`aa53ff87`). The lane plan body remains in force as authoritative
+description; the execution wrapper that orchestrated the landing
+sequence has rotated to
+[`archive/completed/sentry-immediate-next-steps.plan.md`](../archive/completed/sentry-immediate-next-steps.plan.md).
+
+**Landed commits (one per sub-item)**:
+
+- Tier 1 — flush timeout 2s → 5s: `55355270`
+- Tier 3a + 3b — maxBreadcrumbs / sendClientReports verify: `c80ee8eb`
+- Tier 3c — ignoreErrors / denyUrls scaffold: `bfb000ff`
+- Tier 3d — Marketplace PENDING surface: `aa53ff87`
+- Tier 2 — hybrid error fingerprinting: `6c65e75d`
+
+**Reviewer findings absorbed at Tier 2**: sentry-reviewer MAJOR
+(single-element fingerprint override → hybrid `['{{ default }}',
+'<class-name>']` shape); code-reviewer + test-reviewer MINOR (early-
+return guard → positive `not.toHaveProperty` assertion; consumer-hook
+composition test added; constants-only KNOWN_ERROR_FAMILIES test
+dropped); README addition pattern wording tightened to "MUST".
+
+---
+
+**Origin status (preserved for thread continuity)**: 🟡 IMMEDIATE —
+pre-PR-87 quality work. Identified by 2026-04-26 gap analysis against
+Sentry official docs after the source-code-upload validation closed.
+Each sub-item is small and independently deployable; landing them as a
+single lane keeps the review surface focused.
 
 **Origin**: closure of
 [`sentry-preview-validation-and-quality-triage.plan.md`](../current/sentry-preview-validation-and-quality-triage.plan.md)

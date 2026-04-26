@@ -323,7 +323,7 @@ control, audit trail, integration-version stability).
   § L-IMM Sub-item 6.
 - The execution wrapper that gates closure on this verification
   lives in
-  [`current/sentry-immediate-next-steps.plan.md`](../../../.agent/plans/observability/current/sentry-immediate-next-steps.plan.md)
+  [`archive/completed/sentry-immediate-next-steps.plan.md`](../../../.agent/plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
   Tier 3d.
 - The L-IMM lane closes on 5/6 with this item PENDING per owner
   direction at plan-time (2026-04-26).

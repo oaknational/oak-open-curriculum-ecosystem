@@ -12,22 +12,41 @@ overview: >
 todos:
   - id: tier-1-flush-timeout
     content: "Tier 1 — DEFAULT_SENTRY_FLUSH_TIMEOUT_MS 2_000 → 5_000 in packages/libs/sentry-node/src/runtime-sdk.ts. ~10 min including test + TSDoc. High impact (reduces Lambda drop risk under bursty errors)."
-    status: pending
+    status: completed
+    landed_at: 2026-04-26
+    landed_in: 55355270
   - id: tier-3a-max-breadcrumbs-verify
     content: "Tier 3a — verify maxBreadcrumbs (Sentry default 100) is sufficient for long-running MCP sessions; raise + document if cap is hitting. Read existing config + sample captured issues for breadcrumb counts."
-    status: pending
+    status: completed
+    landed_at: 2026-04-26
+    landed_in: c80ee8eb
+    evidence: 3 breadcrumbs per event on OAK-OPEN-CURRICULUM-MCP-{7,8,9}; default 100 retained
   - id: tier-3b-send-client-reports-verify
     content: "Tier 3b — verify sendClientReports is enabled (Sentry default true). 5-minute audit of runtime-sdk.ts + ADR rationale if explicitly false."
-    status: pending
+    status: completed
+    landed_at: 2026-04-26
+    landed_in: c80ee8eb
+    evidence: not set explicitly in createSentryInitOptions; Sentry default `true` retained
   - id: tier-3c-ignore-errors-scaffold
     content: "Tier 3c — wire ignoreErrors / denyUrls allow-list scaffolding into SentryLiveConfig + createSentryInitOptions. Seed empty list (no known noise yet); document the pattern for future additions."
-    status: pending
+    status: completed
+    landed_at: 2026-04-26
+    landed_in: bfb000ff
+    evidence: 3 RED tests then GREEN at 108/108; README § Allow-list policy documents drop-vs-redact
   - id: tier-3d-vercel-marketplace-verify
     content: "Tier 3d — confirm Vercel ↔ Sentry Marketplace integration state (connected vs hand-rolled) and document in observability.md or sentry-node README. Owner-touch: requires Vercel project-settings access."
     status: pending
+    pending_reason: owner-touch — requires Vercel project-settings access
+    surface_landed_at: 2026-04-26
+    surface_landed_in: aa53ff87
+    closure_decision: lane closes on 5/6 per owner direction at plan-time; this item closes when the owner completes the audit
   - id: tier-2-fingerprinting
-    content: "Tier 2 — custom error fingerprinting. Add applyFingerprint(event) step to createSentryHooks that assigns event.fingerprint for known error families (JsonRpcError_*, McpToolError, TestError*). ~1-2 hours including RED unit tests. High impact for issue grouping."
-    status: pending
+    content: "Tier 2 — custom error fingerprinting. Add applyFingerprint(event) step to createSentryHooks that assigns event.fingerprint for known error families (TestErrorUnhandled, TestErrorHandled, TestErrorRejected, McpError). ~1-2 hours including RED unit tests. High impact for issue grouping."
+    status: completed
+    landed_at: 2026-04-26
+    landed_in: 6c65e75d
+    evidence: 9 RED tests on runtime-fingerprint + 3 composition tests in runtime-sdk; reviewers (code, sentry, test) ran in parallel; sentry-reviewer MAJOR (single-element override) absorbed via switch to hybrid `['{{ default }}', '<class-name>']` shape; code-reviewer + test-reviewer MINOR/NIT all absorbed; 120/120 tests green
+    fingerprint_shape: hybrid (`['{{ default }}', '<class-name>']`) — preserves Sentry default stack-aware grouping within a family
 isProject: false
 ---
 
