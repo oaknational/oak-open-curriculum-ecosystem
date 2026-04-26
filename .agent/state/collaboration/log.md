@@ -927,3 +927,359 @@ pushing, or reverting working-tree changes — i.e., failure to
 relinquish on session end. Surfacing per
 `parallel-track-pre-commit-gate-coupling`; the WIP is left in place
 for the owner to triage with the originating agent.
+
+### 2026-04-26T08:56:23Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A RED fixtures
+
+Opened claim `8f5919b9-7f8f-4a61-a65f-2ef69818305a`.
+
+**Intent:** implement WS3A RED only: record the WS5 evidence baseline in
+the decision-thread / claim-history plan, add failing claim-history and
+decision-thread fixtures, and run the targeted RED validation.
+
+**Coordination:** observed Sharded Stroustrup's active
+`observability-sentry-otel` claim for `/test-error` implementation. No
+overlap with this WS3A RED scope. Also observed unrelated SDK WIP in git
+status and will not touch it.
+
+**Areas touched:** `.agent/state/collaboration/fixtures/**`,
+`.agent/state/collaboration/active-claims.json`,
+`.agent/state/collaboration/log.md`, and the WS3A current plan.
+
+**Non-scope:** WS3B sidebar, timeout, owner-escalation, repo-continuity
+deep consolidation, observability app/probe surfaces, and SDK WIP.
+
+### 2026-04-26T09:05:00Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A RED claim close
+
+WS3A RED complete. The plan now records the WS5 evidence baseline and
+expected failing validation; RED fixtures exist for explicit claim close,
+stale archive, owner-forced close, open decision thread, and closed
+decision thread with evidence references.
+
+Closing claim `8f5919b9-7f8f-4a61-a65f-2ef69818305a`. The remaining
+active registry entry is Sharded Stroustrup's separate observability
+claim. WS3B sidebar, timeout, and owner-escalation work remain untouched.
+
+### 2026-04-26T09:03:39Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A GREEN claim-history
+
+Opened claim `65a6f416-e111-4596-b242-bc9e7d1c0540`.
+
+**Intent:** implement WS3A GREEN claim-history only: add durable
+closed-claim schema support and closure metadata for explicit, stale, and
+owner-forced claim closure.
+
+**Coordination:** observed Sharded Stroustrup's active observability claim
+and no overlap with this claim-history slice. The unrelated SDK WIP remains
+out of scope.
+
+**Areas touched:** closed-claims archive/schema, claim-history fixtures,
+claim-close guidance in collaboration directive/rules, `consolidate-docs`
+stale-claim audit prose, collaboration-state conventions, this log,
+active-claims registry, thread continuity, and the WS3A plan.
+
+**Non-scope:** decision-thread schema, `.agent/state/collaboration/conversations/`,
+WS3B sidebar, timeouts, owner-escalation, repo-continuity consolidation,
+observability app/probe surfaces, and SDK WIP.
+
+### 2026-04-26T09:08:09Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A GREEN claim-history close
+
+WS3A GREEN claim-history complete. The closed-claims archive now has a
+v1.1.0 schema, existing archive entries carry structured `closure`
+metadata, and claim-close guidance records explicit, stale, and
+owner-forced closure as durable archive entries before active-claim removal.
+
+Closing claim `65a6f416-e111-4596-b242-bc9e7d1c0540` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`. Decision-thread schema, `conversations/`,
+WS3B sidebar, timeout, and owner-escalation work remain untouched.
+
+### 2026-04-26T09:16:34Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A session handoff
+
+Opened claim `ced7f13e-5aa9-4056-97d5-e8a9e09763f5`.
+
+**Intent:** run `jc-session-handoff` for the WS3A claim-history session,
+refresh plan and continuation surfaces, and write the next-session opening
+statement.
+
+**Coordination:** observed Sharded Stroustrup's active observability claim
+and no overlap with this handoff scope. Repo-continuity is hard in practice
+fitness, but the owner explicitly requested session handoff rather than
+deep consolidation.
+
+**Areas touched:** repo-continuity, agentic-engineering thread record,
+agentic collaboration plan/index/roadmap surfaces, napkin, active/closed
+claim state, and this log.
+
+**Non-scope:** WS3B sidebar/escalation implementation, observability code,
+SDK WIP, and repo-continuity deep consolidation.
+
+### 2026-04-26T09:23:45Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A session handoff close
+
+`jc-session-handoff` complete for the WS3A claim-history session. Plan and
+continuation surfaces now point the next session to WS3A GREEN
+decision-thread first, then protocol-observability refactor, then final
+WS3A validation/handoff. WS3B remains evidence-gated.
+
+Closing claim `ced7f13e-5aa9-4056-97d5-e8a9e09763f5` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`.
+
+### 2026-04-26T11:20:21Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A GREEN decision-thread
+
+Opened claim `3339466c-3f0e-4b2d-ae89-e4638c1b200a`.
+
+**Intent:** implement WS3A GREEN decision-thread only: add
+`conversation.schema.json`, `.agent/state/collaboration/conversations/`,
+open/closed examples, and guidance for log vs claim vs decision thread vs
+napkin/thread record.
+
+**Coordination:** observed Sharded Stroustrup's active observability claim
+`b3e0c581-940e-4ac8-841b-0e9bf3fbf90a`; no overlap with this WS3A
+decision-thread slice. The unrelated SDK WIP remains out of scope.
+
+**Areas touched:** `.agent/state/collaboration/conversation.schema.json`,
+`.agent/state/collaboration/conversations/**`,
+`.agent/state/collaboration/fixtures/conversations/**`,
+`.agent/directives/agent-collaboration.md`,
+`.agent/rules/use-agent-comms-log.md`,
+`.agent/rules/register-active-areas-at-session-open.md`,
+`.agent/rules/respect-active-agent-claims.md`,
+`.agent/memory/operational/collaboration-state-conventions.md`,
+`.agent/state/README.md`, `.agent/memory/executive/agent-collaboration-channels.md`,
+`.agent/memory/operational/threads/README.md`, the WS3A plan/index surfaces,
+`.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`,
+`.agent/memory/active/napkin.md`, `.agent/state/collaboration/active-claims.json`,
+`.agent/state/collaboration/closed-claims.archive.json`, and this log.
+
+**Non-scope:** WS3B sidebar, timeout, owner-escalation,
+`.agent/state/collaboration/escalations/`, observability app/probe surfaces,
+SDK WIP, and repo-continuity deep consolidation.
+
+### 2026-04-26T11:26:14Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A GREEN decision-thread close
+
+WS3A GREEN decision-thread complete. The collaboration state now has
+`conversation.schema.json`, `.agent/state/collaboration/conversations/`,
+open and closed examples, GREEN validation fixtures that preserve the
+RED-history filenames, and guidance for choosing between the shared log,
+active claims, decision threads, the napkin, and thread records.
+
+Closing claim `3339466c-3f0e-4b2d-ae89-e4638c1b200a` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`. WS3A protocol-observability refactor and
+final validation/handoff remain pending. WS3B sidebar, timeout, and
+owner-escalation work remain untouched.
+
+### 2026-04-26T13:10:35Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A observability and close
+
+Opened claim `42d6042d-80ec-400d-8311-9fe04ac2ad85`.
+
+**Intent:** complete the two remaining WS3A slices:
+`ws3a-refactor-observability` and `ws3a-validation-and-handoff`.
+
+**Coordination:** observed Sharded Stroustrup's active observability
+claim `b3e0c581-940e-4ac8-841b-0e9bf3fbf90a`; no overlap with this
+WS3A docs/state slice. Repo-continuity deep consolidation remains out
+of scope.
+
+**Areas touched:** `consolidate-docs`, state discovery, collaboration
+guidance, evidence-bundle conventions, WS3A plan/index/roadmap surfaces,
+the agentic-engineering thread record, napkin, active/closed claim
+state, and this log.
+
+**Non-scope:** WS3B sidebar, timeout, owner-escalation,
+`.agent/state/collaboration/escalations/`, SDK WIP, observability app /
+probe surfaces, and repo-continuity deep consolidation.
+
+### 2026-04-26T13:13:47Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A observability and close close
+
+WS3A observability refactor and validation/handoff are complete.
+`consolidate-docs § 7e` now reports claim lifecycle state,
+decision-thread state, unresolved decisions, evidence-bundle gaps, and
+schema validation. WS3A plan/index/roadmap/thread surfaces now mark WS3A
+complete.
+
+Closing claim `42d6042d-80ec-400d-8311-9fe04ac2ad85` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`. WS3B remains evidence-gated; no sidebar,
+timeout, owner-escalation, SDK, observability app/probe, or
+repo-continuity deep-consolidation work was started.
+
+### 2026-04-26T13:15:52Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A handoff and consolidation
+
+Opened claim `5fa53c4a-c322-4441-be16-441b17968190`.
+
+**Intent:** run `jc-session-handoff` and `jc-consolidate-docs` now that
+WS3A is complete: refresh continuity, archive or update plan surfaces,
+run stale-claim / decision-thread observability, and validate the final
+state.
+
+**Coordination:** observed Sharded Stroustrup's active observability claim
+`b3e0c581-940e-4ac8-841b-0e9bf3fbf90a`. No direct edit overlap with its
+app/probe files; the claim is stale by freshness and may be archived only
+through the consolidate-docs stale-claim audit.
+
+**Areas touched:** repo-continuity, the agentic-engineering thread record,
+WS3A plan/index/roadmap surfaces, napkin/distilled if consolidation
+requires it, entry-point drift sweep, active/closed collaboration state,
+and this log.
+
+**Non-scope:** WS3B implementation, SDK WIP, observability app/probe
+surfaces, and new product code.
+
+### 2026-04-26T13:22:00Z — `Codex` / `codex` / `GPT-5` / `unknown` — Stale claim archive
+
+Archived stale claim `b3e0c581-940e-4ac8-841b-0e9bf3fbf90a` from
+`active-claims.json` to `closed-claims.archive.json` with
+`closure.kind: "stale"`.
+
+Reason: Sharded Stroustrup's observability claim exceeded its
+`freshness_seconds` window during the WS3A `consolidate-docs` pass. This
+state hygiene touched only collaboration registries and this log; no
+observability app, probe, or plan implementation files were edited.
+
+### 2026-04-26T13:24:03Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3A handoff and consolidation close
+
+`jc-session-handoff` and `jc-consolidate-docs` are complete for WS3A.
+The completed WS3A split plan is archived under
+`archive/completed/`; `repo-continuity.md` has been compacted into a
+live-state surface with the pre-compaction body preserved in
+`archive/repo-continuity-session-history-2026-04-26.md`; the stale
+observability claim was archived with `closure.kind: "stale"`.
+
+Validation passed: `jq empty`, Ajv 2020 schema checks for active claims,
+closed claims, claim-history fixtures, and decision-thread
+fixtures/examples, targeted markdownlint, `git diff --check`,
+`pnpm practice:fitness --strict-hard`, and
+`pnpm practice:fitness:informational`.
+
+Closing claim `5fa53c4a-c322-4441-be16-441b17968190` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`. WS3B remains evidence-gated; no sidebar,
+timeout, owner-escalation, SDK WIP, or observability app/probe work was
+started.
+
+### 2026-04-26T13:29:47Z — `Codex` / `codex` / `GPT-5` / `unknown` — Next-session automation exploration capture
+
+Opened claim `2d3ba510-3eec-46ed-85ee-deba649361d0`.
+
+**Intent:** capture the owner's requested next-session exploration, without
+starting it now. The next session should ask how fully the new
+collaboration and coordination mechanisms are reflected in the Practice,
+then inspect how start-right, session-handoff, and consolidate-docs flows
+could become more automatic.
+
+**Questions to preserve:** touch points for triggering those flows; whether
+every plan and plan template has appropriate lifecycle-trigger components;
+whether a rule should require all work to be described in at least a simple
+plan; and what automation or governance options have not yet been
+considered.
+
+### 2026-04-26T13:30:13Z — `Codex` / `codex` / `GPT-5` / `unknown` — Next-session automation exploration capture close
+
+Captured the owner's next-session exploration prompt in
+`repo-continuity.md` and the `agentic-engineering-enhancements` thread
+record. Closing claim `2d3ba510-3eec-46ed-85ee-deba649361d0` by archiving
+it to `closed-claims.archive.json` with `closure.kind: "explicit"` and
+removing it from `active-claims.json`.
+
+No automation design, plan-template changes, rule changes, WS3B work, or
+implementation work was started.
+
+### 2026-04-26T13:32:18Z — `Codex` / `codex` / `GPT-5` / `unknown` — Final session handoff
+
+Opened claim `2fa02bed-4aa0-42ad-97ac-a9c695ab3079`.
+
+**Intent:** run a final `jc-session-handoff` after capturing the
+next-session start statement. Scope is continuity refresh and validation
+only: repo-continuity, the agentic-engineering thread record,
+active/closed collaboration registries, and this log.
+
+**Non-scope:** automation design, plan-template changes, new rules, WS3B,
+SDK WIP, observability app/probe work, commit, or push.
+
+### 2026-04-26T13:33:12Z — `Codex` / `codex` / `GPT-5` / `unknown` — Final session handoff close
+
+Final `jc-session-handoff` complete. Refreshed `repo-continuity.md` and the
+`agentic-engineering-enhancements` thread record after the next-session
+start statement capture; entrypoint sweep found canonical pointer-only
+`AGENTS.md`, `CLAUDE.md`, and `GEMINI.md`; `.remember/` scan found no new
+agentic-engineering handoff item requiring napkin promotion.
+
+Deep consolidation status is `not due after completed consolidation`:
+WS3A consolidation already ran in this closeout, and this final handoff
+only captured next-session exploration state.
+
+Validation passed: `jq empty`, targeted markdownlint, `git diff --check`,
+and `pnpm practice:fitness --strict-hard`.
+
+Closing claim `2fa02bed-4aa0-42ad-97ac-a9c695ab3079` by archiving it to
+`closed-claims.archive.json` with `closure.kind: "explicit"` and removing
+it from `active-claims.json`.
+
+### 2026-04-26T13:40:03Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS4-style lifecycle integration pass
+
+No other agents present in `active-claims.json`; opened claim
+`2e4cd180-d385-4131-9683-f71b6dedf08c`.
+
+**Intent:** implement the owner-approved narrow lifecycle integration pass:
+make start-right surface active claims plus WS3A decision threads, make
+session-handoff close claims and decision-thread participation explicitly,
+add reusable lifecycle-trigger guidance to plan templates, and refresh
+Practice/ADR-facing surfaces so WS0-WS3A are first-class Practice mechanisms.
+
+**Non-scope:** WS3B sidebar, timeout, owner-escalation mechanics, SDK WIP,
+observability app/probe work, hook-based enforcement, commit, or push.
+
+### 2026-04-26T14:45Z — `Sharded Stroustrup` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — observability session-close
+
+Closing observability-sentry-otel thread session. **No active claim
+to close** — my prior claim `b3e0c581-940e-4ac8-841b-0e9bf3fbf90a`
+was already archived as `stale` at 13:22Z by Codex's WS3A
+consolidate-docs stale-claim audit. Close-out edits this turn
+(continuity surfaces, identity row, log entry, plan refinements)
+are being made without an active claim — surfacing this as a known
+audit-trail gap. Codex's parallel claim
+`2e4cd180-d385-4131-9683-f71b6dedf08c` (WS4 lifecycle integration,
+agentic-engineering-enhancements thread) remains active and does
+NOT overlap with the observability surfaces I'm touching.
+
+**Decision-thread state**: no open decision threads on touched
+threads (`.agent/state/collaboration/conversations/` contains only
+WS3A example fixtures). Step 8.4 outcome: no decision-thread
+handoff needed.
+
+**Session output (full arc)**:
+
+- Eight commits pushed today on `feat/otel_sentry_enhancements`
+  ending at `2f766fe4`: `8df25ce5` (Phase 2 evidence pre-route),
+  `63d48f4a` (`/test-error` route + tests + probe), `71397d47`
+  (.env.example doc), `dbc04a47` (Phase 2 evidence with empirical
+  proof), `8ae15f06` (fragile widget-metadata e2e tests removed),
+  `1fc23ed1` (`correlation_id` Sentry tag + Lambda local-vars
+  doc), `002ee3e8` (L-IMM/L-OPS lanes + consolidation memo +
+  gap-finding lesson), `2f766fe4` (parallel-execution split:
+  sentry-immediate-next-steps plan + PR-87 plan refined).
+- Three Sentry issues captured-and-resolved
+  `OAK-OPEN-CURRICULUM-MCP-{7,8,9}` proving source-code-upload +
+  symbolication on current preview release.
+- Two new plans created
+  (`current/sentry-immediate-next-steps.plan.md`,
+  `future/observability-plan-consolidation-and-rationalisation.plan.md`),
+  one plan refined with parallel-execution framing
+  (`current/pr-87-quality-finding-resolution.plan.md`), and one
+  active plan augmented with two new lanes
+  (`active/sentry-observability-maximisation-mcp.plan.md` L-IMM and
+  L-OPS).
+- Two pattern candidates captured in napkin
+  (`vendor-doc-review-for-unknown-unknowns`,
+  `alignment-check-precedes-claim-validation`) — both already in
+  the pending-graduations register.
+- Failure-to-relinquish observation logged for nine SDK files
+  modified in working tree without an active claim. Per owner
+  direction "fix any issues properly, regardless of source
+  thread" — committing now in close-out alongside other working-
+  tree changes.
+
+**Next session**: split into two parallel plans,
+[`sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md)
+(L-IMM Tiers 1-3) and
+[`pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md).

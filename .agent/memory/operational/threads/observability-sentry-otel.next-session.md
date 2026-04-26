@@ -1,9 +1,84 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-26 (Sharded Stroustrup / claude-code /
-claude-opus-4-7-1m — sentry-preview-validation-and-quality-triage
-walk against PR HEAD `66de47a2`. All six phases of the substrate
-plan executed; findings tables populated. **Phase 1 baseline**:
+claude-opus-4-7-1m — full session arc spanning Sentry validation,
+diagnostic route addition, gap-finding, and parallel-execution
+split. Eight commits pushed today on PR #87; HEAD `2f766fe4`.
+
+**Major outputs**:
+
+- **Sentry preview validation closed** — six-phase substrate plan
+  walked end-to-end. Key empirical findings: deployment matches HEAD,
+  release attribution works on errors AND transactions, source code
+  upload + symbolication empirically proven on the current preview
+  release via three captured-then-resolved test issues
+  `OAK-OPEN-CURRICULUM-MCP-{7,8,9}`, breadcrumbs wired, internal
+  trace propagation works with parent-child spans, PII redaction
+  proven empirically via the `token=[REDACTED]` substitution in
+  every test-error issue's message text, custom `correlation_id`
+  Sentry tag landed in `correlation/middleware.ts`.
+- **Diagnostic `/test-error` route shipped** (commit `63d48f4a`):
+  preview-only, secret-gated (`TEST_ERROR_SECRET` env var,
+  production-forbidden by env-schema super-refine), rate-limited via
+  the existing `oauthRateLimiter`, three modes (handled / unhandled
+  / rejected). Probe script at
+  `apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh`
+  drives the route. Both make repeatable Sentry capture validation
+  trivially repeatable for any future session.
+- **Doc-driven gap-finding lesson** captured in
+  `.agent/memory/active/napkin.md` § 2026-04-26 — Sharded Stroustrup
+  — doc-driven gap-finding for unknown-unknowns. Pattern candidate
+  name `vendor-doc-review-for-unknown-unknowns`. Six items the
+  3499-line maximisation plan didn't capture were surfaced by a
+  single Sentry-docs review session.
+- **Plan landings**:
+  - `current/sentry-immediate-next-steps.plan.md` (new) —
+    execution-sequence wrapper around L-IMM with three tiers; both
+    high-impact-or-low-effort items remaining for next-session
+    execution.
+  - `current/pr-87-quality-finding-resolution.plan.md` (refined) —
+    gains a Parallel-execution context section so it runs in
+    parallel with the Sentry-immediate plan.
+  - `future/observability-plan-consolidation-and-rationalisation.plan.md`
+    (new) — substrate memo for an owner-led future session that
+    rationalises the 18 observability plans (5 dependency knots, 3
+    archive candidates, 7 decisions for the session to produce).
+  - `active/sentry-observability-maximisation-mcp.plan.md` —
+    augmented with L-IMM (Phase 3, immediate hardening) and L-OPS
+    (Phase 5, deferred operational maturity) lanes plus an L-3
+    adjunct on explicit `Sentry.startSpan` for critical paths.
+- **Fragile e2e tests removed** (commit `8ae15f06`) — two
+  widget-metadata e2e tests violated multiple `testing-strategy.md`
+  principles (asserted internal shape, not behaviour; duplicated a
+  unit-level proof). Removal documented with full citations of the
+  violated principles. Same invariant remains covered at the right
+  level by `universal-tools.unit.test.ts`.
+- **Failure-to-relinquish observation logged** — nine SDK files
+  modified in working tree without an active claim were a prior
+  agent's WIP that didn't commit, push, or revert before closing.
+  Surfaced in the embryo log; resolved this session by committing
+  the now-tested-clean SDK changes alongside the close-out.
+
+**Sentry status as of session close**: Tier 1 (flush timeout) and
+Tier 2 (custom error fingerprinting) and Tier 3 (verifications +
+ignoreErrors scaffolding + Vercel-Sentry Marketplace audit) remain
+as next-session work in
+[`current/sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md).
+After those land, Sentry is "good enough for now" per owner
+direction; further Sentry work is in L-1, L-3, L-4b, L-OPS lanes
+which are deferred. The PR-87 quality remediation plan
+[`pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md)
+runs in parallel.
+
+**Three commits captured the session-close work**:
+
+- TODO populate after this session's commits land
+
+**Prior session-walk note** (preserved for continuity, the rest of
+this entry is context for HOW the validation was done):
+sentry-preview-validation-and-quality-triage walk against PR HEAD
+`66de47a2`. All six phases of the substrate plan executed; findings
+tables populated. **Phase 1 baseline**:
 deployment `dpl_9z4XxbhWtS3iHgyyhdQZAzzxbmV9` READY, SHA matches PR
 head, four MCP endpoints respond as designed (with the refinement
 that POST /mcp returns 406 without `Accept: text/event-stream` —
@@ -46,7 +121,7 @@ this scan. Promotion trigger: second instance OR owner direction.
 **Prior refresh**: 2026-04-26 (Keen Dahl / claude-code /
 claude-opus-4-7-1m — VERCEL_BRANCH_URL bug fix + magic-strings refactor
 
-+ next-session validation plan. Six commits today on the PR-87 branch:
+- next-session validation plan. Six commits today on the PR-87 branch:
 `6485773f` (the bug fix — VERCEL_BRANCH_URL is hostname-not-URL per
 Vercel docs; the broken-since `3feaea861` Vercel preview now succeeds);
 `c2b1c1e5` (lift four bare unions in `release-types.ts` to the
@@ -71,7 +146,7 @@ assumptions-reviewer retry) are absorbed in the plan body's Reviewer
 Dispositions table. **Vercel preview is GREEN** at deploy
 `dpl_FtjdEbwRN2qwM1m78hzoQoEDG95R` (commit `6485773f`'s pred);
 re-confirm at next session-open against current HEAD `325605a4`. CodeQL
-+ SonarCloud + CI test job were all blocked behind the smoke-config
+- SonarCloud + CI test job were all blocked behind the smoke-config
 issue too; expected to re-run cleanly against the new HEAD now.
 **Next session reads `sentry-preview-validation-and-quality-triage.plan.md`
 end-to-end before any tool calls** — that plan is the next-session brief
@@ -268,7 +343,7 @@ three new parallel plans.
 3. **Three new parallel plans** are active alongside this thread —
    none block release-identifier work, but the next session should
    know they exist so cross-plan coordination is deliberate:
-   + [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
+   - [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
      — three-layer artefact-model audit + remediation. Touches
      `.agents/skills/`, `.claude/skills/`, ADR-125, vendor skill
      installations. **Coordination flag**: this plan's Phase 1
@@ -276,12 +351,12 @@ three new parallel plans.
      shells across `.agents/skills/clerk-*/`. Future vendor-skill
      installs touched by observability work should read its current
      state before installing.
-   + [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
+   - [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
      — fills structural gaps in the Practice (behavioural directive,
      planning skill, portability PDR/ADR). **Coordination flag**:
      when this plan lands `.agent/directives/collaboration.md`, the
      directive-grounding read at session start changes shape.
-   + [`aggregated-tool-result-type-remediation.plan.md`](../../../plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md)
+   - [`aggregated-tool-result-type-remediation.plan.md`](../../../plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md)
      — composed-tool result-type pipeline. Eventually meets the MCP
      HTTP runtime work this thread covers; not blocking now.
 
@@ -327,18 +402,18 @@ cross-resolver contract test as the structural anti-drift gate.
 
 The relevant plan surfaces are now:
 
-+ [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
+- [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
   — **next-session pickup**; the release-identifier alignment plan.
-+ [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+- [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
   — archived closure record for the completed repo-owned corrective
   lane.
-+ [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+- [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
   — parent context; the L-8 lane that landed the diverging
   build-time resolver this plan corrects.
-+ [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
+- [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
   — separate future home for broader runtime simplification once
   owner-run validation is complete.
-+ [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
+- [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
   — closed note confirming monitor creation/operation are owner-external.
 
 Underlying branch evidence still in force:
@@ -361,11 +436,11 @@ rehearsal).
 
 ## Thread identity
 
-+ **Thread**: `observability-sentry-otel`
-+ **Thread purpose**: product-grade Sentry / OTel observability for
+- **Thread**: `observability-sentry-otel`
+- **Thread purpose**: product-grade Sentry / OTel observability for
   the MCP HTTP server on Vercel, including release attribution,
   deploy proof, and request-context diagnostics.
-+ **Branch**: `feat/otel_sentry_enhancements` (branch-primary)
+- **Branch**: `feat/otel_sentry_enhancements` (branch-primary)
 
 ## Participating agent identities
 
@@ -382,6 +457,7 @@ rehearsal).
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored` | 2026-04-25 | 2026-04-25 |
 | `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan` | 2026-04-25 | 2026-04-26 |
+| `Sharded Stroustrup` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `sentry-preview-validation-end-to-end-empirical-closure; test-error-route-shipped; correlation-id-sentry-tag; widget-metadata-fragile-tests-removed; doc-driven-gap-finding-on-sentry-docs; L-IMM-and-L-OPS-lanes-into-maximisation; sentry-immediate-and-pr-87-parallel-execution-split; consolidation-rationalisation-memo` | 2026-04-26 | 2026-04-26 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -395,30 +471,30 @@ new sessions add rows; they do not rewrite older attribution.
 packaging)**: opener was owner direction to "fix the gates first, update the
 plan, then start committing in sensible chunks." Outcome:
 
-+ **Full gate green**: `pnpm check` exits 0 on
+- **Full gate green**: `pnpm check` exits 0 on
   `feat/otel_sentry_enhancements` after the startup-boundary fixes and plan
   update. The broad check includes secrets scan, clean, root script tests,
   turbo build/type-check/lint/test/UI/a11y/smoke gates, shell lint,
   subagent/portability checks, knip, depcruise, markdownlint, and Prettier.
-+ **WS3 chunk committed**: `2822e525`
+- **WS3 chunk committed**: `2822e525`
   (`fix(mcp): relocate production cancellation gate`) landed the production
   cancellation script relocation, semver rewrite, ADR-163 second amendment,
   dependency/knip follow-through, and WS3 resume evidence.
-+ **Lane B implementation committed**: `9ea3ccd8`
+- **Lane B implementation committed**: `9ea3ccd8`
   (`fix(observability): decouple local startup from sentry release`) landed
   build-identity extraction, Sentry off-mode release removal, live
   `SENTRY_MODE=sentry` strictness, local gate `SENTRY_MODE=off` launch
   boundaries, app-version header/meta consumers, CLI off-mode test correction,
   and focused tests.
-+ **Architectural decision carried forward**: `RuntimeConfig.buildIdentity`
+- **Architectural decision carried forward**: `RuntimeConfig.buildIdentity`
   remains intentionally deferred for the smallest gate-green slice. Build
   identity is still the canonical app build/release fact; Sentry release is a
   projection from build identity plus Sentry context.
-+ **Reviewer reintegration now active**: owner authorised sub-agent dispatch.
+- **Reviewer reintegration now active**: owner authorised sub-agent dispatch.
   Reviewers reported concrete blockers; this session is folding those findings
   into code/docs and rerunning gates. `RuntimeConfig.buildIdentity` remains an
   intentional future-canonicalisation deferral, not forgotten scope.
-+ **Reviewer reintegration landed and pushed**: `d9cb54e8`
+- **Reviewer reintegration landed and pushed**: `d9cb54e8`
   (`fix(observability): close startup-boundary reviewer findings`) packaged the
   reviewer fixes, Search CLI inclusion, docs/ADR updates, Sentry build-env
   helper, and MD040 rule sidecar. Owner pushed the branch; local
@@ -433,27 +509,27 @@ compression)**: opener was owner direction to resume the observability thread on
 with explicit boundaries not to touch the parallel WS3 lane. **Landed in the
 working tree, not committed**:
 
-+ **Gate recovery completed**: current failures classified into startup-boundary
+- **Gate recovery completed**: current failures classified into startup-boundary
   lane vs staged WS3 residuals; missing-symbol REDs converted to typed
   production-owned seams; cadence guard added to the active plan.
-+ **Partial Phase 2 GREEN implemented**:
-  + off-mode Sentry config no longer resolves or exposes release identity;
-  + HTTP/search observability tolerate off-mode config without release;
-  + Express Sentry error-handler registration requires explicit live
+- **Partial Phase 2 GREEN implemented**:
+  - off-mode Sentry config no longer resolves or exposes release identity;
+  - HTTP/search observability tolerate off-mode config without release;
+  - Express Sentry error-handler registration requires explicit live
     `SENTRY_MODE=sentry`;
-  + `resolveRelease` accepts validated build identity as Sentry projection input
+  - `resolveRelease` accepts validated build identity as Sentry projection input
     while deriving effective environment from Sentry context;
-  + app-version headers and landing-page metadata consume `RuntimeConfig.version`;
-  + local dev and local stub env paths strip inherited deploy release metadata.
-+ **Validation green**:
-  + `pnpm --filter @oaknational/sentry-node test` (8 files / 105 tests);
-  + `pnpm --filter @oaknational/build-metadata test` (4 files / 41 tests);
-  + focused streamable-http command over 7 startup-boundary files (12 tests);
-  + `pnpm type-check`;
-  + `pnpm knip`;
-  + `pnpm build`;
-  + `pnpm depcruise` (1967 modules / 4253 dependencies / 0 violations).
-+ **Residual gates**: `pnpm lint` and `pnpm markdownlint-check:root` fail only
+  - app-version headers and landing-page metadata consume `RuntimeConfig.version`;
+  - local dev and local stub env paths strip inherited deploy release metadata.
+- **Validation green**:
+  - `pnpm --filter @oaknational/sentry-node test` (8 files / 105 tests);
+  - `pnpm --filter @oaknational/build-metadata test` (4 files / 41 tests);
+  - focused streamable-http command over 7 startup-boundary files (12 tests);
+  - `pnpm type-check`;
+  - `pnpm knip`;
+  - `pnpm build`;
+  - `pnpm depcruise` (1967 modules / 4253 dependencies / 0 violations).
+- **Residual gates**: `pnpm lint` and `pnpm markdownlint-check:root` fail only
   on the staged WS3 lane. The startup-boundary lane does not own those files.
 
 **What prevented closure**: owner explicitly requested this deep continuity
@@ -482,13 +558,13 @@ commit boundary on the same plan, recorded in the payload as "a
 separate commit boundary AFTER WS2 GREEN"). Deferral-honesty
 discipline (per PDR-026):
 
-+ **What was attempted**: full WS3 sequence — draft §3.4 amendment,
+- **What was attempted**: full WS3 sequence — draft §3.4 amendment,
   §3.0 reviewer gate dispatch, §3.1 relocate, §3.2 rewrite, §3.3
   unit-test rewrite, §3.4 amendment application, single atomic
   commit, quality gates.
-+ **What landed in the working tree (staged, NOT committed; HEAD
+- **What landed in the working tree (staged, NOT committed; HEAD
   still at `015ac99b`)**:
-  + 8 staged files preserving `git mv` rename detection: script +
+  - 8 staged files preserving `git mv` rename detection: script +
     unit-test moved from `packages/core/build-metadata/build-scripts/`
     into `apps/oak-curriculum-mcp-streamable-http/build-scripts/`;
     in-app shim replaced in-place; `.d.ts` companion deleted (was
@@ -502,11 +578,11 @@ discipline (per PDR-026):
     time); 15-item second amendment to ADR-163 §1 + §10 + Enforcement
     and Reviewer Dispositions (renamed first-amendment block + new
     second-amendment block); ADR index entry updated.
-  + 1 unstaged WS3 dependency: `knip.config.ts` (added
+  - 1 unstaged WS3 dependency: `knip.config.ts` (added
     `'build-scripts/**/*.mjs'` to the streamable-http workspace's
     `entry` + `project` globs so knip detects the new devDeps as
     used). Must fold into the WS3 commit on resume.
-+ **What landed in the §3.0 reviewer gate**: `docs-adr-reviewer` +
+- **What landed in the §3.0 reviewer gate**: `docs-adr-reviewer` +
   `assumptions-reviewer` dispatched on the drafted amendment.
   **Both reported two BLOCKING findings** in the original 13-item
   enumeration: `assumptions-reviewer` Disposition #6 (primary
@@ -527,7 +603,7 @@ discipline (per PDR-026):
   staged diff was finalised. Full disposition record is in the
   ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
   block (staged).
-+ **What prevented the WS3 commit**: pre-commit `knip` gate failed
+- **What prevented the WS3 commit**: pre-commit `knip` gate failed
   on a **parallel-track unresolved import** — owner-tracked
   parallel session's
   `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.unit.test.ts:3`
@@ -541,7 +617,7 @@ discipline (per PDR-026):
   triggered the equivalent pre-commit `prettier --check` block).
   Behaviour change held: don't fix or bypass the parallel track,
   pause and surface to owner.
-+ **Falsifiability**: a future session opens, verifies HEAD at
+- **Falsifiability**: a future session opens, verifies HEAD at
   `015ac99b` (or advanced cleanly by parallel agent), confirms
   parallel agent has landed `local-stub-env.js`, runs `git add
   knip.config.ts` to fold the unstaged WS3 dependency, retries the
@@ -550,7 +626,7 @@ discipline (per PDR-026):
   the commit lands cleanly, the pause discipline held; if it
   surfaces a fresh defect not caused by the parallel-track
   coupling, the pause was misjudged.
-+ **What next session re-attempts**: WS3 commit + post-commit
+- **What next session re-attempts**: WS3 commit + post-commit
   hash-fill + WS5 quality gates. Resume instructions are recorded
   in
   [`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
@@ -580,9 +656,9 @@ WS2 §2.0 split of `resolveGitSha` decoupled from
 **Landed 1 and 2; 3 deferred.** Deferral-honesty discipline (per
 PDR-026):
 
-+ **What was attempted**: full payload sequence 1 → 2 → 3.
-+ **What landed**:
-  + `9a0f9ebc` — `docs(plans): land release-identifier plan
+- **What was attempted**: full payload sequence 1 → 2 → 3.
+- **What landed**:
+  - `9a0f9ebc` — `docs(plans): land release-identifier plan
     revisions + observability thread carry-forward`. 5 files,
     +1723/-627. Release-identifier substance only; practice-
     enhancement staged files (agentic-engineering-enhancements
@@ -591,7 +667,7 @@ PDR-026):
     untracked by explicit pathspec commit, not unstaged, per the
     "do not interfere with the parallel track's staging state"
     discipline the owner's mid-session note sharpened.
-  + `a4e8facb` — `refactor(build-metadata): split resolveGitSha
+  - `a4e8facb` — `refactor(build-metadata): split resolveGitSha
     into git-sha.ts, decouple from @oaknational/env`. 6 files,
     +129/-111. WS2 §2.0 prerequisite: `resolveGitSha`,
     `GitShaSource`, `trimToUndefined`, `RuntimeMetadataError`,
@@ -609,7 +685,7 @@ PDR-026):
     pass; full pre-commit gates green (format, markdownlint,
     knip, depcruise clean at 1954 modules / 0 violations, 74
     turbo tasks).
-+ **What prevented WS2 §2.1-§2.7**: named priority trade-off —
+- **What prevented WS2 §2.1-§2.7**: named priority trade-off —
   *single-atomic-commit discipline vs session context depth*.
   The plan explicitly mandates WS2 §2.1-§2.7 as one atomic
   commit (WS2 overall is one commit per the plan's stated
@@ -635,7 +711,7 @@ PDR-026):
   than push through under attention/context pressure; owner
   accepted (*"we will continue in a fresh session, run the
   session handoff process please"*).
-+ **Falsifiability**: a future agent opens a fresh session,
+- **Falsifiability**: a future agent opens a fresh session,
   reads the plan's WS2 §2.1-§2.7 sections, and lands the single
   atomic commit with all gates green. If that fresh session
   encounters material blockers not foreseen in the plan body
@@ -643,7 +719,7 @@ PDR-026):
   the trade-off is refuted — a fresh session wasn't the missing
   ingredient. If they land cleanly in one commit, the trade-off
   held.
-+ **What next session re-attempts**: WS2 §2.1-§2.7 as a single
+- **What next session re-attempts**: WS2 §2.1-§2.7 as a single
   atomic commit per the plan body, starting from branch HEAD
   `a4e8facb`. Plan authority is durable; `git-sha.ts` is
   stable; type shape changes now cascade from a known clean
@@ -673,9 +749,9 @@ boundary"*. **Unlanded.** What was attempted, what prevented,
 what next session re-attempts (per PDR-026 §Deferral-honesty
 discipline):
 
-+ **What was attempted**: WS1 RED contract tests on the
+- **What was attempted**: WS1 RED contract tests on the
   release-identifier plan.
-+ **What prevented**: a named owner trade-off, not a clock or
+- **What prevented**: a named owner trade-off, not a clock or
   budget excuse. The owner explicitly directed the sequence
   Tier 1 review → revise → Tier 2 review → fix all → audit
   before any code execution (selections recorded in transcript
@@ -695,7 +771,7 @@ discipline):
   WS1, WS2, WS3, WS3.4 (ADR-163 §10 second amendment), and the
   Documentation Propagation table. WS1 audit (3 layers,
   read-only) confirmed no architectural surprises blocking WS2.
-+ **Falsifiability**: the owner's explicit selections are
+- **Falsifiability**: the owner's explicit selections are
   preserved in the agent transcript; the plan diff
   (`git diff --cached .agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
   ~+994 lines) is the artefact of the cycle; the WS1 audit
@@ -706,7 +782,7 @@ discipline):
   commit advances the plan to GREEN with materially fewer
   in-flight reviewer cycles than would have been needed without
   this session's work.
-+ **What next session re-attempts**: WS2 GREEN — the resolver
+- **What next session re-attempts**: WS2 GREEN — the resolver
   collapse implementation. WS1 RED as originally specified is
   superseded; per the revised plan, RED tests are now folded
   into WS2 step-by-step under TDD discipline (see
@@ -744,27 +820,27 @@ of
 [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
 in commit `06bf25d7`:
 
-+ ADR-163 §1 rewritten with the per-environment release-identifier
+- ADR-163 §1 rewritten with the per-environment release-identifier
   truth table (production = root `package.json` semver;
   preview/non-main-production = `VERCEL_BRANCH_URL` host's leftmost
   label; development = `dev-<shortSha>`; `SENTRY_RELEASE_OVERRIDE`
   always wins; both build-time and runtime resolvers must produce the
   SAME string per environment).
-+ ADR-163 §10 added: production-build cancellation rule formalised,
+- ADR-163 §10 added: production-build cancellation rule formalised,
   including its truth table, the canonical script path
   (`packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`),
   the workspace shim, the `vercel.json` `ignoreCommand` wiring, and
   the fail-open trade-off when previous-version resolution fails.
-+ §3 and §5 cross-linked to §1's per-environment grain so the "one
+- §3 and §5 cross-linked to §1's per-environment grain so the "one
   release → many deploys" model now operates per-environment, not
   across the preview→production boundary.
-+ Process-gap finding: cross-resolver contract test named as the
+- Process-gap finding: cross-resolver contract test named as the
   structural anti-drift gate (not procedural review discipline),
   with the new `libs ← core` devDependency edge documented.
-+ Four new Alternatives Considered entries (#11–#14) and two new
+- Four new Alternatives Considered entries (#11–#14) and two new
   Enforcement items (#5 cross-resolver contract; #6 cancellation
   wiring integration).
-+ Reviewer Dispositions block records the WS0.2 reviewer pass:
+- Reviewer Dispositions block records the WS0.2 reviewer pass:
   `assumptions-reviewer`, `sentry-reviewer`,
   `architecture-reviewer-fred` — all BLOCKING + IMPORTANT findings
   ACCEPTED and applied (notably: qualifying `VERCEL_BRANCH_URL` as
@@ -775,10 +851,10 @@ in commit `06bf25d7`:
 
 Evidence:
 
-+ ADR amendment + plan file landed in `06bf25d7` (single commit, all
+- ADR amendment + plan file landed in `06bf25d7` (single commit, all
   pre-commit gates passed including dep-cruise + 74-task turbo cache);
-+ `feat/otel_sentry_enhancements` branch advanced;
-+ WS1 is the next workstream and lands as a separate commit per the
+- `feat/otel_sentry_enhancements` branch advanced;
+- WS1 is the next workstream and lands as a separate commit per the
   user's turn-boundary instruction.
 
 ---
@@ -787,7 +863,7 @@ Evidence:
 
 ### Owning plan(s)
 
-+ **Focused local-startup follow-up**:
+- **Focused local-startup follow-up**:
   [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
   — active record; all phases completed and packaged in `d9cb54e8`.
   [`phase-0-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
@@ -795,17 +871,17 @@ Evidence:
   classification, ADR-163 decision, and Phase 1 RED targets.
   [`phase-1-red-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-1-red-evidence.md)
   records the focused failing tests and reviewer clearance for GREEN.
-+ **Completed gate-recovery precondition**:
+- **Completed gate-recovery precondition**:
   [`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)
   — complete for the current branch state. It owns the failure ledger,
   non-test gate restoration, RED reshaping into buildable seams, and
   full-gate cadence guard.
-+ **Next-session pickup**:
+- **Next-session pickup**:
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
   — release-identifier alignment + ADR-163 amendment + cancellation
   ADR linkage. Next Sentry-focused work is deployed-state / WS6 evidence,
   with full `pnpm check` only if aggregate repo health is to be claimed.
-+ **Next-session pickup (PR #87 unblock)**:
+- **Next-session pickup (PR #87 unblock)**:
   [`pr-87-quality-finding-resolution.plan.md`](../../../plans/observability/current/pr-87-quality-finding-resolution.plan.md)
   — clear the three failing PR checks (CodeQL combined, SonarCloud
   Quality Gate, CI test) by phased remediation of CodeQL alerts +
@@ -814,13 +890,13 @@ Evidence:
   policy, semver extraction home) before Phase 1 mechanical work
   starts. Local commit `2484066b` (CI/Vercel fix, unpushed) is a
   precondition; push first to observe baseline state.
-+ **Repo-owned corrective lane closure record**:
+- **Repo-owned corrective lane closure record**:
   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-+ **Parent context**:
+- **Parent context**:
   [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-+ **Separate future work**:
+- **Separate future work**:
   [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
-+ **Closed repo monitoring lane**:
+- **Closed repo monitoring lane**:
   [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
 
 ### Current objective
@@ -846,7 +922,7 @@ Either path preserves any unrelated WIP if it reappears.
 
 ### Current state
 
-+ **Latest Codex/codex closeout (2026-04-25)**: reviewer reintegration landed
+- **Latest Codex/codex closeout (2026-04-25)**: reviewer reintegration landed
   as `d9cb54e8` and was pushed by the owner. The branch is in sync with origin
   at `cc71507b`; the latest pushed commit is a user/local Codex-network config
   commit, while `d9cb54e8` is the observability payload. Package contents:
@@ -860,7 +936,7 @@ Either path preserves any unrelated WIP if it reappears.
   `git diff --check`. Commit hook also passed Prettier, markdownlint, knip,
   depcruise, and cached Turbo type-check/lint/test. Full `pnpm check` was not
   rerun after final doc-only handoff edits.
-+ **Latest session (2026-04-24, Frodo / claude-code / claude-opus-4-7-1m,
+- **Latest session (2026-04-24, Frodo / claude-code / claude-opus-4-7-1m,
   WS2 §2.1-§2.7 atomic landing)**: single commit `f5a009ab` on
   `feat/otel_sentry_enhancements` (29 files, +1341/-930). Landed
   the architectural collapse: unified `resolveRelease` in
@@ -884,7 +960,7 @@ Either path preserves any unrelated WIP if it reappears.
   tasks — 997 + 651 + other workspace tests all pass). Parallel-
   track `.agent/` and `docs/engineering/testing-patterns.md`
   modifications left unstaged (owner/parallel-agent surface).
-+ **Latest Cursor/GPT-5.5 touch (2026-04-25)**: gate recovery and partial
+- **Latest Cursor/GPT-5.5 touch (2026-04-25)**: gate recovery and partial
   Phase 2 GREEN are applied in the working tree, uncommitted. The focused
   startup-boundary plan was promoted to active, Phase 0 and Phase 1 evidence
   were recorded, and
@@ -904,7 +980,7 @@ Either path preserves any unrelated WIP if it reappears.
   type-check`, `pnpm knip`, `pnpm build`, and `pnpm depcruise` pass.
   `pnpm lint` and `pnpm markdownlint-check:root` still fail only on the staged
   WS3 lane; they must not be fixed under Lane B unless owner redirects.
-+ **Prior session (2026-04-24, Frodo, earlier)**: two commits
+- **Prior session (2026-04-24, Frodo, earlier)**: two commits
   landed — `9a0f9ebc` (plan-revision landing as `docs(plans)`,
   5 files, +1723/-627) and `a4e8facb` (WS2 §2.0 split of
   `resolveGitSha` into new `packages/core/build-metadata/src/git-sha.ts`,
@@ -936,11 +1012,11 @@ Either path preserves any unrelated WIP if it reappears.
   defensive validation of structured inputs (not a parallel
   implementation of the same resolver), per Pippin's audit
   note.
-+ **WS2 §2.1-§2.7 is LANDED** as `f5a009ab` (see above for
+- **WS2 §2.1-§2.7 is LANDED** as `f5a009ab` (see above for
   highlights). **WS3 (cancellation-script rewrite + relocate +
   ADR-163 §10 second amendment) is the next commit boundary.**
   See §Next safe step for the concrete WS3 sequence.
-+ **Prior session (2026-04-24, Pippin, planning + reviewer cycle)**:
+- **Prior session (2026-04-24, Pippin, planning + reviewer cycle)**:
   no commits landed; the working tree carried 12 staged files
   including ~+994 lines of substantive plan revision to
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
@@ -968,7 +1044,7 @@ Either path preserves any unrelated WIP if it reappears.
   doc row added). `sentry-build-plugin.ts` path corrected
   (lives at `apps/oak-curriculum-mcp-streamable-http/build-scripts/`,
   not `packages/libs/sentry-node/src/`).
-+ **Pre-flight WS1 audit completed (this session, read-only,
+- **Pre-flight WS1 audit completed (this session, read-only,
   no commits)**: 3 layers — string-pattern `rg`, import-site `rg`
   (incl. `await import()` patterns), `pnpm knip` + `pnpm depcruise`.
   Knip + depcruise both clean (1952 modules, 4232 deps, 0
@@ -983,7 +1059,7 @@ Either path preserves any unrelated WIP if it reappears.
   rename can be deferred to a future hygiene sweep without
   blocking WS2; `esbuild.config.ts` imports `ResolvedBuildTimeRelease`
   type which is handled by WS2's type-rename mechanics.
-+ **Intra-session micro-lane (prior 2026-04-24 session, `6764457d`)**:
+- **Intra-session micro-lane (prior 2026-04-24 session, `6764457d`)**:
   deleted
   `apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-examples-metadata.e2e.test.ts`
   and added
@@ -996,15 +1072,15 @@ Either path preserves any unrelated WIP if it reappears.
   libraries, duplicating existing proofs, asserting content at
   E2E level). E2E suite now 22 files / 155 tests (was 23 / 159);
   no functional code changed.
-+ WS0 landed: ADR-163 amendment + plan file in `06bf25d7`; continuity
+- WS0 landed: ADR-163 amendment + plan file in `06bf25d7`; continuity
   refresh in `7b4de7a4`.
-+ Plan body refined to encode the WS3 cancellation-script rewrite +
+- Plan body refined to encode the WS3 cancellation-script rewrite +
   WS2 validator denylist correction; **landed in the meta-session
   sweep at `ffec98b0`** alongside cross-cutting practice/portability/
   sdk-mcp work. Plan authority is now durable; next session opens
   the plan, reads the current WS3 + WS2.5 sections as authoritative,
   and proceeds straight to WS1 RED.
-+ Cancellation script at
+- Cancellation script at
   `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
   is over-built (~205 lines, hand-rolled semver parser/comparator,
   missing the `VERCEL_GIT_COMMIT_REF === 'main'` branch gate that ADR
@@ -1014,63 +1090,63 @@ Either path preserves any unrelated WIP if it reappears.
   Wiring (via `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
   `ignoreCommand`) is correct and stays unchanged; the wiring
   integration check folds into WS1.4.
-+ `semver` is NOT yet a workspace dependency; WS3.1 adds it to
+- `semver` is NOT yet a workspace dependency; WS3.1 adds it to
   `packages/core/build-metadata/package.json`.
-+ Build-time `resolvePreviewRelease` still emits
+- Build-time `resolvePreviewRelease` still emits
   `preview-<slug>-<sha>` (the divergent shape); runtime
   `resolveSentryRelease` still emits semver everywhere. WS1 RED
   tests pin the new contract, WS2 GREEN rewrites both resolvers to
   consume `VERCEL_BRANCH_URL` host's leftmost label, AND corrects
   `isValidReleaseName` to mirror Sentry's documented denylist (accept
   `latest`, reject `/`).
-+ `VERCEL_BRANCH_URL` is already in the env schema
+- `VERCEL_BRANCH_URL` is already in the env schema
   (`apps/oak-curriculum-mcp-streamable-http/src/env.ts`) and used in
   `runtime-config.ts` for hostname allowlisting; no schema change
   needed for the resolver work.
-+ The bounded repo-owned corrective lane remains complete and
+- The bounded repo-owned corrective lane remains complete and
   archived; `fb047f86` still supplies L-8 Correction WI 1-5; the
   `dist/server.js` deploy boundary is the verified deploy shape.
-+ No active repo-owned blocker beyond the plan's WS sequence.
+- No active repo-owned blocker beyond the plan's WS sequence.
 
 ### Blockers / low-confidence areas
 
-+ Deployed-state evidence has not been collected in this session. The pushed
+- Deployed-state evidence has not been collected in this session. The pushed
   branch should have triggered Vercel; the next agent must verify the actual
   deployment before making Sentry release/readiness claims.
-+ Full `pnpm check` was green earlier after WS3/Lane B commits, but was not
+- Full `pnpm check` was green earlier after WS3/Lane B commits, but was not
   rerun after reviewer reintegration and final handoff-only doc edits. Do not
   claim aggregate repo health until it is rerun.
-+ The runtime shape is intentionally only partially canonical:
+- The runtime shape is intentionally only partially canonical:
   `RuntimeConfig.version` feeds app-version consumers and Sentry projection
   inputs, but `RuntimeConfig` does not yet carry a first-class
   `AppBuildIdentity` value. That remains routed to
   `mcp-http-runtime-canonicalisation.plan.md`.
-+ Current uncommitted changes after this handoff are continuity-only. Preserve
+- Current uncommitted changes after this handoff are continuity-only. Preserve
   any unrelated WIP if it reappears; do not reset or restage broadly.
 
 ### Standing decisions
 
-+ This was **one bounded repo-owned follow-through lane**, not an
+- This was **one bounded repo-owned follow-through lane**, not an
   ongoing stream of repo monitoring work.
-+ There is **no repo-owned monitor setup lane**. Repo scope stops at a
+- There is **no repo-owned monitor setup lane**. Repo scope stops at a
   clean handoff into owner-handled validation; monitor setup remains
   outside the repo.
-+ There are **no follow-up placeholders**. Future work either has a
+- There are **no follow-up placeholders**. Future work either has a
   real home or is deleted.
-+ Canonicalisation remains valuable, but it is explicitly separate
+- Canonicalisation remains valuable, but it is explicitly separate
   from the deploy-boundary repair.
-+ The local runner stack stays unless the verified deploy contract
+- The local runner stack stays unless the verified deploy contract
   proves a smaller change is required.
-+ No child-process proof in tests. Production-only branches are covered
+- No child-process proof in tests. Production-only branches are covered
   by DI-friendly code tests plus a realistic production-build gate
   under representative env.
-+ A green repo-root rerun retires the old consumer backlog, but it does
+- A green repo-root rerun retires the old consumer backlog, but it does
   not replace a correctness review against the repository rules.
-+ No fallbacks, no wrappers, no JS-specific override paths, no
+- No fallbacks, no wrappers, no JS-specific override paths, no
   compatibility layers.
-+ One fixed ESM-only export-surface contract across internal
+- One fixed ESM-only export-surface contract across internal
   workspaces; no CJS support and no per-workspace improvisation.
-+ No further repo coding session is queued on this lane unless
+- No further repo coding session is queued on this lane unless
   owner-run validation surfaces a fresh repo defect.
 
 ### Next safe step
@@ -1098,18 +1174,18 @@ targeted repair lane that names that defect explicitly.
 
 ### Active track links
 
-+ None. `.agent/memory/operational/tracks/` contains only
+- None. `.agent/memory/operational/tracks/` contains only
   `.gitkeep` and `README.md`.
 
 ### Promotion watchlist
 
-+ PDR-015 candidate for an assumption-challenge gate on
+- PDR-015 candidate for an assumption-challenge gate on
   architectural-review outputs if the pattern recurs.
-+ ADR-163 amendment candidate widened this session: its gate-mapping
+- ADR-163 amendment candidate widened this session: its gate-mapping
   table now also needs to cover the realistic production-build gate for
   env-gated Sentry esbuild-plugin paths once child-process proof is
   rejected by testing doctrine.
-+ Future promotion of
+- Future promotion of
   [`mcp-http-runtime-canonicalisation.plan.md`](../../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
   only after owner-run validation is complete and there is real
   appetite for runtime simplification.
@@ -1118,15 +1194,15 @@ targeted repair lane that names that defect explicitly.
 
 ## Earlier Landed Substance Still In Force
 
-+ **Warnings are not deferrable**. Build warnings from vendor tooling
+- **Warnings are not deferrable**. Build warnings from vendor tooling
   are treated as blocking failures, not "verify later" notes.
-+ **The root cause of the failing preview is known**:
+- **The root cause of the failing preview is known**:
   `dist/index.js` was the deployed artefact, and its export shape did
   not honour Vercel's Express adapter contract.
-+ **Preview proof is gated on Step 4 honesty**. A green build or an app-
+- **Preview proof is gated on Step 4 honesty**. A green build or an app-
   local green test run is not sufficient while the repo still has
   hidden strictness/test-doctrine gaps.
-+ **L-8 is still the parent engineering lane** in
+- **L-8 is still the parent engineering lane** in
   [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md);
   the archived corrective-lane closure record now captures the repo
   work that previously sat between L-8 and owner-run validation.
@@ -1141,9 +1217,9 @@ for this branch.
 
 Do **not**:
 
-+ pre-empt the contract with a guessed export shape;
-+ reopen broader canonicalisation work;
-+ recreate a repo monitoring lane;
-+ invent a new repo-owned repair cycle without a fresh defect from
+- pre-empt the contract with a guessed export shape;
+- reopen broader canonicalisation work;
+- recreate a repo monitoring lane;
+- invent a new repo-owned repair cycle without a fresh defect from
   owner-run validation;
-+ treat monitor setup as in-repo acceptance work.
+- treat monitor setup as in-repo acceptance work.

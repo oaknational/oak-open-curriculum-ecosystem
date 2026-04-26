@@ -8,6 +8,26 @@ live in the register at
 
 ---
 
+## 2026-04-26 — Codex — WS3A closeout made protocol state observable
+
+**Surprise:** the lightweight decision-thread slice did not need a bigger
+coordination surface to close cleanly; it needed the existing consolidation
+ritual to see more of the lifecycle. Once `consolidate-docs` could report
+open/stale claims, recent closures, decision-thread state, unresolved
+decisions, evidence gaps, and schema validation, the missing "dashboard" was
+mostly a better audit path through repo-owned state.
+
+**Lesson:** for protocol work, first try widening the regular state audit
+before adding a new always-visible surface. If a lifecycle can be answered
+from structured files plus consolidation output, that is usually simpler than
+introducing a persistent panel or escalation mechanism.
+
+**Promotion trigger:** second protocol slice where an observability gap is
+resolved by extending the consolidation audit rather than adding a new surface,
+or owner direction.
+
+---
+
 ## 2026-04-26 — Sharded Stroustrup — doc-driven gap-finding for unknown-unknowns
 
 **Surprise** (owner-directed): after I finished the Sentry-validation
@@ -527,6 +547,13 @@ decisions, resolutions, and evidence. Behaviour change: when adding a new
 coordination surface, document what it is *not* for at the same time as
 the schema. Otherwise the new surface will silently absorb the jobs of the
 shared log, active claim, napkin, and thread record.
+
+**Observability belongs in the ritual that already looks.** The WS3A close
+worked because protocol visibility was wired into `consolidate-docs § 7e`
+rather than invented as a separate dashboard. Behaviour change: for
+Practice protocol state, first ask which existing ritual already audits
+the surface; put the summary there before creating another inspection
+surface.
 
 ---
 

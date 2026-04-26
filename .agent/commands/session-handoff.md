@@ -305,25 +305,55 @@ asks for more, this command must not trigger:
    the enumeration, and cannot honestly mark handoff complete
    while any touched thread remains un-updated.
 
-8. **Run the consolidation gate.** Check the trigger checklist in
+8. **Close collaboration lifecycle surfaces.** This is the session-close
+   counterpart to
+   [`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md).
+   It keeps WS1/WS3A state clean without waiting for a stale-claim
+   consolidation pass.
+
+   1. Read `.agent/state/collaboration/active-claims.json` and find
+      claims matching your PDR-027 identity and any thread touched this
+      session.
+   2. For every matching claim, copy the full claim entry into
+      `.agent/state/collaboration/closed-claims.archive.json`, add
+      `archived_at`, and add `closure.kind: "explicit"`,
+      `closure.closed_at`, `closure.closed_by`, `closure.summary`, and
+      at least one `closure.evidence[]` reference. Evidence can cite the
+      shared communication log, the touched thread record, a plan, a
+      command output, or another durable artefact that explains the
+      closure.
+   3. Remove the closed claim from `active-claims.json`. If no matching
+      active claim exists, state that explicitly in the handoff output so
+      "no claim to close" is observable.
+   4. Scan `.agent/state/collaboration/conversations/*.json` for open
+      decision threads on touched threads or entries where your agent
+      participated. If this session changed the decision state, append the
+      appropriate `message`, `claim_update`, `decision`, `resolution`, or
+      `evidence` entry. If no relevant open decision-thread handoff is
+      needed, state that explicitly.
+   5. Do not create sidebar, timeout, or owner-escalation artefacts here.
+      Those remain WS3B and require explicit owner promotion or real
+      decision-thread evidence.
+
+9. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.
 
    - If no trigger fires, set `Deep consolidation status` to
      `not due — <reason>` in `.agent/memory/operational/repo-continuity.md` and stop here.
    - If one or more triggers fire, set `Deep consolidation status` to
-     `due — <reason>` and continue to step 9.
+     `due — <reason>` and continue to step 10.
 
-9. **Escalate only when the deeper loop is clearly warranted.**
+10. **Escalate only when the deeper loop is clearly warranted.**
 
-   - If the triggered work is already well-bounded and belongs to this
-     closeout, continue immediately into `jc-consolidate-docs`.
-   - If deep consolidation is due but not well-bounded for this closeout,
-     stop after marking `due — <reason>` so the next session can pick it up
-     deliberately.
-   - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
-     to `completed this handoff — <reason>`.
+    - If the triggered work is already well-bounded and belongs to this
+      closeout, continue immediately into `jc-consolidate-docs`.
+    - If deep consolidation is due but not well-bounded for this closeout,
+      stop after marking `due — <reason>` so the next session can pick it up
+      deliberately.
+    - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
+      to `completed this handoff — <reason>`.
 
-10. **Keep the boundary clean.** `session-handoff` includes the consolidation
+11. **Keep the boundary clean.** `session-handoff` includes the consolidation
     gate and can escalate into `jc-consolidate-docs` when appropriate, but
     ordinary sessions remain lightweight. It does not smuggle in review or git
     actions.
