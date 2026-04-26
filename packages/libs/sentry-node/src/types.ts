@@ -136,6 +136,19 @@ export interface SentryLiveConfig {
   readonly enableLogs: boolean;
   readonly sendDefaultPii: false;
   readonly debug: boolean;
+  /**
+   * SDK-side error-message allow-list. Matching events are dropped by
+   * the Sentry SDK before `beforeSend` (i.e. before the redaction
+   * barrier). Empty / unset in alpha; see the sentry-node README's
+   * Allow-list policy section for the addition pattern.
+   */
+  readonly ignoreErrors?: readonly (string | RegExp)[];
+  /**
+   * SDK-side URL allow-list. Matching frame-source URLs are dropped
+   * by the Sentry SDK before `beforeSend`. Empty / unset in alpha;
+   * see the sentry-node README's Allow-list policy section.
+   */
+  readonly denyUrls?: readonly (string | RegExp)[];
 }
 
 export type ParsedSentryConfig = SentryOffConfig | SentryFixtureConfig | SentryLiveConfig;

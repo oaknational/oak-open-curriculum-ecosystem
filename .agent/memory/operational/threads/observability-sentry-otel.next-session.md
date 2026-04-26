@@ -458,6 +458,7 @@ rehearsal).
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored` | 2026-04-25 | 2026-04-25 |
 | `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan` | 2026-04-25 | 2026-04-26 |
 | `Sharded Stroustrup` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `sentry-preview-validation-end-to-end-empirical-closure; test-error-route-shipped; correlation-id-sentry-tag; widget-metadata-fragile-tests-removed; doc-driven-gap-finding-on-sentry-docs; L-IMM-and-L-OPS-lanes-into-maximisation; sentry-immediate-and-pr-87-parallel-execution-split; consolidation-rationalisation-memo` | 2026-04-26 | 2026-04-26 |
+| `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `L-IMM-execution-tier-1-flush-timeout-tier-3a-3b-verifications-tier-3c-ignore-errors-scaffold-tier-3d-marketplace-pending-tier-2-fingerprinting-with-reviewer-dispatch` | 2026-04-26 | 2026-04-26 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

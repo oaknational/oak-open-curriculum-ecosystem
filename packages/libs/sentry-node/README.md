@@ -254,6 +254,45 @@ No code change. If a future ADR ever proposes setting
 `sendClientReports: false`, the rationale must justify why we would
 prefer to lose drop visibility (none currently exists).
 
+### Allow-list policy: ignoreErrors / denyUrls scaffold (L-IMM Sub-item 2)
+
+`SentryLiveConfig` exposes optional `ignoreErrors` and `denyUrls`
+fields that flow through `createSentryInitOptions` into
+`NodeOptions`. Both are seeded **empty in alpha** — the scaffold is
+in place so future PRs can add patterns without touching the type or
+the init-options shape.
+
+**Where these run in the Sentry pipeline.** `ignoreErrors` and
+`denyUrls` are evaluated by the Sentry SDK **before** the redaction
+barrier's `beforeSend` chain runs. A matching event is dropped at
+the SDK boundary and never reaches `redactSentryEvent`,
+`applyFingerprint`, or any consumer-supplied post-redaction hook.
+
+**Drop versus redact.** Use the allow-list when you want the event
+to disappear entirely from Sentry's pipeline (no quota consumed, no
+issue created, no breadcrumb retained). Use the redaction barrier
+(ADR-160) when you want the event captured but with sensitive fields
+sanitised. Drop wins over redact because it stops the pipeline; if
+you can match a noise pattern at the SDK boundary, prefer that to
+loading work onto the redaction stage.
+
+**Addition pattern.** When production traffic surfaces a noisy error
+or URL the operator wants to suppress:
+
+1. Add the pattern (string substring or `RegExp`) to a top-level
+   constant in the consuming app's runtime config alongside the
+   existing `SentryLiveConfig` literal — keep the seed in
+   application code, not in this library, since the noise judgement
+   is application-specific.
+2. Land a unit test asserting the new pattern is in the resolved
+   `NodeOptions.ignoreErrors` / `denyUrls` array.
+3. Cite the issue or alert that motivated the addition in a TSDoc
+   comment so future readers can re-evaluate when the underlying
+   noise source changes.
+4. **Do not** add patterns speculatively. The empty-in-alpha posture
+   is deliberate; every pattern is a silent capture-suppression that
+   needs evidence to justify.
+
 ### Outbound trace propagation is opt-in via DEFAULT_TRACE_PROPAGATION_TARGETS
 
 The `tracePropagationTargets` Sentry option (set via

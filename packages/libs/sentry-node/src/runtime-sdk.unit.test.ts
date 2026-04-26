@@ -72,3 +72,37 @@ describe('createSentryInitOptions — initialScope.tags carries OTel git.commit.
     });
   });
 });
+
+// L-IMM Sub-item 2 — SDK-side allow-list scaffold. Sentry's own
+// ignoreErrors / denyUrls run BEFORE beforeSend, so they drop events
+// at the SDK boundary without consuming downstream pipeline budget.
+// These tests assert the option pass-through shape; the seed
+// allow-lists are deliberately empty in alpha (no known production
+// noise yet), but the scaffold must be in place so future PRs can
+// add patterns without touching the type.
+describe('createSentryInitOptions — ignoreErrors / denyUrls allow-list scaffold (L-IMM Sub-item 2)', () => {
+  it('passes ignoreErrors through to NodeOptions when configured', () => {
+    const ignoreErrors = ['ResizeObserver loop limit exceeded', /^NetworkError/u] as const;
+    const initOptions = createSentryInitOptions(liveConfig({ ignoreErrors }), {
+      serviceName: 'oak-http',
+    });
+
+    expect(initOptions.ignoreErrors).toEqual(ignoreErrors);
+  });
+
+  it('passes denyUrls through to NodeOptions when configured', () => {
+    const denyUrls = ['https://noisy.third-party.example/', /\/static\/legacy\//u] as const;
+    const initOptions = createSentryInitOptions(liveConfig({ denyUrls }), {
+      serviceName: 'oak-http',
+    });
+
+    expect(initOptions.denyUrls).toEqual(denyUrls);
+  });
+
+  it('omits both fields when neither is configured', () => {
+    const initOptions = createSentryInitOptions(liveConfig(), { serviceName: 'oak-http' });
+
+    expect(initOptions.ignoreErrors).toBeUndefined();
+    expect(initOptions.denyUrls).toBeUndefined();
+  });
+});

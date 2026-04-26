@@ -128,6 +128,12 @@ export function createSentryInitOptions(
     sendDefaultPii: config.sendDefaultPii,
     debug: config.debug,
     tracePropagationTargets: [...DEFAULT_TRACE_PROPAGATION_TARGETS],
+    // L-IMM Sub-item 2 — allow-list scaffold. Both fields are
+    // optional on `SentryLiveConfig` and intentionally unset in
+    // alpha; passing `undefined` is the documented Sentry SDK posture
+    // for "use the default" (no entries dropped pre-`beforeSend`).
+    ...(config.ignoreErrors !== undefined ? { ignoreErrors: [...config.ignoreErrors] } : {}),
+    ...(config.denyUrls !== undefined ? { denyUrls: [...config.denyUrls] } : {}),
     initialScope: {
       tags: {
         service: options.serviceName,
