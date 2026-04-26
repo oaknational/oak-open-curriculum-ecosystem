@@ -4,6 +4,21 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-26 — collaboration lifecycle made portable Practice
+
+WS4-style lifecycle integration promoted WS0-WS3A collaboration state from
+local operational docs into the Practice-facing surfaces. `practice.md`
+now names `.agent/state/` collaboration state as a structural and workflow
+surface; `practice-lineage.md` teaches start-right / session-handoff
+coordination responsibilities; PDR-024 names collaboration-state
+consultation as a vital integration surface. ADR-119 and ADR-124 were
+refreshed so the ADR narrative matches the live Practice Core package and
+repo-owned coordination state. Closeout review also clarified the Practice
+Core quality taxonomy: hard gates are always blocking, while specialist
+review is preferred evidence whose findings require disposition and block
+only when classified as blocking or when they surface hard gate / rule
+failures.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-25 — PDR-011 amendment: live coordination state recognised as a sibling artefact class to memory
 
 Owner-approved amendment surfaced from the consolidate-docs run after

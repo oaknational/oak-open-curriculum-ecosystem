@@ -398,7 +398,7 @@ surface matrix.
 | Command          | File                     | Core logic                                                                                                                                                                                                                             |
 | ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | start-right      | `jc-start-right.md`      | Read and follow the start-right-quick skill.                                                                                                                                                                                           |
-| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, sync next-action surfaces, capture surprises, and escalate into `jc-consolidate-docs` only when due.                                                        |
+| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, close own collaboration claims, update decision threads, capture surprises, and escalate into `jc-consolidate-docs` only when due.                          |
 | gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test`. All blocking; restart after any fix.                                                                                                                            |
 | commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, and use a conventional commit. Never force push, amend pushed commits, or use `--no-verify`.                                                                     |
 | consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract patterns. Rotate napkin. Manage fitness. Integrate incoming Practice Box. Broadcast outgoing context. See §Consolidation Workflow. |
@@ -440,11 +440,11 @@ Session workflows live as canonical skills. Commands and platform adapters
 are thin wrappers.
 
 - **start-right-quick** — the default session entry point. Read directives,
-  memory, guiding questions, practice box, then apply session priority:
+  memory, collaboration state, guiding questions, practice box, then apply session priority:
   (1) bugs first, (2) unfinished planned work second, (3) new work last.
 - **start-right-thorough** — extends quick with domain context reading,
-  metacognition, testing-strategy review, practice orientation, and an
-  execution outline.
+  metacognition, testing-strategy review, practice orientation,
+  collaboration-overlap checks, and an execution outline.
 - **go** — mid-session re-grounding. Read directives, identify intent,
   structure the todo list with ACTION/REVIEW/GROUNDING cadence.
 

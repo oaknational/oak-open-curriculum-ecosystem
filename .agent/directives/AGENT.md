@@ -44,7 +44,11 @@ Start with:
 - [practice-lineage.md](../practice-core/practice-lineage.md) — cross-repo
   propagation and plasmid exchange
 
-Agent onboarding starts with `start-right-quick` or `start-right-thorough`.
+All work MUST start with the `start-right-quick` or `start-right-thorough`
+skills. If neither has been specified then read
+[`.agent/skills/start-right-quick/SKILL.md`](../skills/start-right-quick/SKILL.md)
+immediately after reading this file, and apply it.
+
 For the layering contract, authority order, and routing rule, see
 [orientation.md](./orientation.md).
 
@@ -182,10 +186,3 @@ pnpm practice:fitness:informational
 pnpm practice:vocabulary
 pnpm check
 ```
-
-## Remember
-
-1. Periodically re-ground using [GO](../skills/go/shared/go.md)
-   (ACTION/REVIEW/GROUNDING cadence).
-2. When in doubt, make it simpler without compromising quality. Think in
-   layers: functions, modules, packages.

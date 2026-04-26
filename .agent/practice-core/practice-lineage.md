@@ -152,22 +152,26 @@ inline for short-lived projects.
 
 The Practice is driven by slash commands that initiate structured workflows:
 
-- **start-right-quick** -- Default session entry point. Read directives (AGENT.md,
-  principles, testing-strategy, metacognition), read memory files, ask guiding
-  questions (right problem? right layer? simpler? assumptions?), check the
-  Practice Box, apply session priority (bugs first, unfinished work second,
-  new work last), discuss the first step with the user.
+- **start-right-quick** -- Default session entry point. Read directives
+  (AGENT.md, principles, testing-strategy, metacognition), read memory and
+  collaboration-state files, ask guiding questions (right problem? right
+  layer? simpler? assumptions?), check the Practice Box, apply session
+  priority (bugs first, unfinished work second, new work last), declare the
+  smallest sufficient work shape, and discuss the first step with the user.
 - **start-right-thorough** -- Deep session grounding. Run start-right-quick
   first, then read domain context (current/README.md, relevant plans), apply
-  metacognition, review testing strategy, read Practice orientation, and draft
-  an execution outline with key risks.
+  metacognition, review testing strategy, read Practice orientation, scan
+  active claims and decision threads for overlap, and draft an execution
+  outline with key risks.
 - **go** -- Mid-session re-grounding with structured execution. Read directives
   and memory, identify the current plan and declare intent, apply session
   priority, then structure the todo list with ACTION/REVIEW/GROUNDING cadence:
   every action followed by a review step, periodic grounding re-reads, and
   holistic reviews every fourth cycle.
-- **session-handoff** -- Lightweight end-of-session continuity update with
-  conditional escalation into `consolidate-docs` when deep convergence is due.
+- **session-handoff** -- Lightweight end-of-session continuity update. Close
+  the agent's own active collaboration claims, update relevant decision
+  threads, refresh continuity state, and conditionally escalate into
+  `consolidate-docs` when deep convergence is due.
 - **gates** -- Run quality gates in order: `type-check -> lint -> build ->
   test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them,
@@ -208,6 +212,9 @@ adapter formats:
 - Reviewer findings route to a lane or a rejection; never deferred without a home
 - Every `future/` plan carries a named, testable promotion trigger
 - Compressed neutral labels ("stretch", "deferred", "follow-up") are corrected to explicit forms
+- Agent-to-agent coordination is observable: consult active claims and
+  decision threads before overlapping edits, leave a collaboration artefact,
+  and close own claims at handoff
 
 ### The Knowledge Flow
 

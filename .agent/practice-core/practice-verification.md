@@ -43,7 +43,8 @@ After creating all files, validate:
 5. Every agent's reading requirements point to files that exist.
 6. `AGENTS.md` links to `AGENT.md`, which links to `principles.md` and
    `testing-strategy.md`.
-7. The `start-right-quick` skill references all foundation documents.
+7. The `start-right-quick` skill references all foundation documents and
+   the collaboration-state consultation surfaces used before mutation.
 8. The napkin rule points to a napkin skill that exists.
 9. **Canonical quality gates** (per PDR-008) are wired in
    `package.json` (or the host ecosystem's script-layer equivalent):
@@ -90,6 +91,9 @@ consolidation, and transplantation close.
 + **Start-flow skills**: canonical session-start workflows exist
   (typically `start-right-quick`, `start-right-thorough`) with
   platform adapters per PDR-009.
++ **Collaboration-state consultation**: repo-owned coordination state
+  exists for shared log entries, active claims, closed claim history,
+  and decision threads; start-flow skills tell agents when to read it.
 + **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at both `practice-core/patterns/` (general abstractions)
   and `memory/active/patterns/` (instances).

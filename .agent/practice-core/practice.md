@@ -38,6 +38,7 @@ graph TB
         SA[Sub-agents]
         QG[Quality Gates]
         MEM[Institutional Memory]
+        STATE[Collaboration State]
     end
 
     subgraph Tooling ["Tooling — how it is used"]
@@ -86,8 +87,9 @@ This layer defines _why_ the Practice works.
 ### Structure
 
 The organisational patterns. Directives (`.agent/directives/`), plans
-(`.agent/plans/`), ADRs, sub-agent prompt architecture, quality gates, and
-institutional memory (`.agent/memory/`). **Cross-agent standardisation**
+(`.agent/plans/`), ADRs, sub-agent prompt architecture, quality gates,
+institutional memory (`.agent/memory/`), and collaboration state
+(`.agent/state/`). **Cross-agent standardisation**
 (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to
 keep the Practice portable and platform-agnostic. This layer defines _what_ the
 Practice consists of.
@@ -228,7 +230,8 @@ resumptions cheap; consolidation owns graduation and Practice evolution.
 
 ```mermaid
 graph LR
-    CMD[Commands / Skills] --> PLAN[Plans]
+    CMD[Commands / Skills] --> STATE[Collaboration State]
+    STATE --> PLAN[Plans]
     PLAN --> SUPP[Supporting Artefacts]
     PLAN --> WORK[Implementation]
     WORK --> QG[Quality Gates]
@@ -250,6 +253,13 @@ graph LR
   [practice-bootstrap.md §Continuity Contract](practice-bootstrap.md#continuity-contract)
   for the full specification including contract fields, host options, and the
   handoff/consolidation split
+- **Collaboration state** (`.agent/state/collaboration/`) — repo-owned
+  coordination state for agent-to-agent work: shared communication log,
+  active claims, closed claim history, and WS3A decision threads. Start-right
+  reads it before edits, session-handoff closes the agent's own lifecycle
+  entries, and consolidate-docs audits stale or unresolved state. Sidebar,
+  timeout, and owner-escalation state is not part of the active mechanism
+  unless promoted by explicit evidence.
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from
   strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — cross-collection overview
@@ -269,9 +279,13 @@ graph LR
      additionally impacted docs/READMEs. Apply the consolidate-docs command
 - **Quality gates** — a multi-layered verification taxonomy covering
   formatting, type-checking, linting, static analysis, testing, mutation
-  testing, build, accessibility, and specialist review. No single layer
-  is sufficient; the layers are complementary. All gates are always
-  blocking. See `.agent/directives/principles.md` for the full taxonomy.
+  testing, build, and accessibility. No single layer is sufficient; the
+  layers are complementary. Hard quality gates are always blocking. See
+  `.agent/directives/principles.md` for the full taxonomy.
+- **Specialist review** — preferred review evidence for non-trivial changes.
+  Reviewer findings require explicit disposition. Findings classified as
+  blocking, or findings that surface hard gate / rule failures, block closure;
+  non-blocking findings do not automatically block completion.
 
 ## Artefact Map
 
@@ -281,6 +295,7 @@ graph LR
 | `.agent/practice-core/`                                                    | Practice Core package: plasmid trinity, entry points, changelog, provenance, and required directories (`decision-records/` for portable Practice governance / PDRs, `patterns/` for general abstract patterns, `incoming/` for the Practice Box) |
 | `.agent/plans/`                                                            | Work planning — active, paused, archived, research, and optional supporting templates                                                                           |
 | `.agent/memory/`                                                           | Institutional memory in three modes (see [`memory/README.md`](../memory/README.md)): `active/` — learning loop (napkin, distilled, patterns); continuous during sessions; read at session start. `operational/` — continuity (repo-continuity, threads, tracks); refreshed per session; read at session resume. `executive/` — organisational contract (artefact inventory, reviewer catalogue, platform-surface matrix); refreshed only when artefact architecture evolves; ad-hoc lookup when taking a governed action. |
+| `.agent/state/`                                                            | Live repo-owned state for operational coordination; collaboration state records shared log entries, active claims, closed claim history, and decision threads. |
 | `.agent/experience/`                                                       | Experiential records across sessions                                                                                                                            |
 | `.agent/skills/`                                                           | Canonical skills — session workflows and passive capabilities (platform-agnostic)                                                                               |
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |
@@ -309,9 +324,10 @@ acceptance criteria.
 The Practice Core binds to the host repo through named integration
 surfaces that create flows in both directions: Core → Repo
 (orientation, via the entry-point chain, practice-index bridge,
-start-flow skills, pattern discovery skill, rule activation) and Repo
-→ Core (feedback, via capture/refinement/graduation surfaces, Practice
-Box inbound, ephemeral exchange outbound). Cross-cutting canonical
+start-flow skills, collaboration-state consultation, pattern discovery
+skill, rule activation) and Repo → Core (feedback, via
+capture/refinement/graduation surfaces, Practice Box inbound,
+collaboration-state audits, ephemeral exchange outbound). Cross-cutting canonical
 contracts (agent artefact architecture, quality-gate naming,
 specialist capability pattern, continuity surfaces, ecosystem dev
 tooling) make the bidirectional flows coherent across the Practice

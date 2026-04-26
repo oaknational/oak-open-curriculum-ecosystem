@@ -10,8 +10,8 @@ Over the course of building this repository — across SDK extraction,
 MCP tool wiring, OAuth flows, search integration, and quality
 remediation — a system of interlocking artefacts emerged organically:
 directives, rules, plans, templates, sub-agents, quality gates,
-institutional memory, experiential records, and platform-specific
-bindings.
+institutional memory, live collaboration state, experiential records,
+and platform-specific bindings.
 
 Each piece was created to solve a concrete problem: rules to prevent
 repeated mistakes, sub-agents to provide specialist review, plans to
@@ -78,8 +78,12 @@ codebase:
   consolidation
 - **Learning mechanisms** — napkin, distilled learnings, experience
   records
-- **Platform bindings** — Cursor rules, commands, agents, skills;
-  Codex/Claude entry points
+- **Agent-to-agent coordination** — shared communication log, active
+  claims, closed claim history, and decision threads
+- **Operational state** — repo-owned live state that start-right,
+  session-handoff, and consolidate-docs read or update
+- **Platform bindings** — canonical `.agent/` content plus thin
+  Cursor, Claude, Codex, Gemini, and portable `.agents/` adapters
 
 It _excludes_ the product code itself (SDK, MCP servers, search
 system, applications) — those are what the practice produces, not
@@ -103,7 +107,8 @@ The practice operates in three layers:
 3. **Tooling** — the platform-specific implementations that
    define _how_ the practice is used.
 
-The plan hierarchy, workflow details, artefact map, and layer
+The plan hierarchy, workflow details, artefact map, collaboration-state
+contract, and layer
 content are documented in the practice guide
 ([practice.md](../../../.agent/practice-core/practice.md)), which
 serves as the orienting map for day-to-day use.
@@ -143,7 +148,7 @@ Minimum canonical update surfaces are:
 
 Additionally, update any impacted ADRs, `/docs/` pages, and README files.
 Apply the consolidation workflow in
-`.cursor/commands/jc-consolidate-docs.md` before closing major phases.
+`.agent/commands/consolidate-docs.md` before closing major phases.
 
 ### Why "Practice" and Not "Framework"
 

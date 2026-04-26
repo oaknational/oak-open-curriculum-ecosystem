@@ -35,7 +35,7 @@ as executive memory — it is operational reference, not doctrine.)
 
 The governance layer is larger than a single file:
 
-- **35 canonical rules** live in [`.agent/rules/`](rules/)
+- **41 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
   [`.agents/rules/`](../.agents/rules/)
@@ -50,12 +50,27 @@ Representative rules:
 | ---------------------------------------------------------- | ----------------------------------------------------- |
 | [follow-the-practice.md](rules/follow-the-practice.md)     | Keep work aligned with the full Practice system       |
 | [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
+| [follow-agent-collaboration-practice.md](rules/follow-agent-collaboration-practice.md) | Follow the agent-to-agent working model |
+| [use-agent-comms-log.md](rules/use-agent-comms-log.md) | Announce non-trivial intent in the shared communication log |
+| [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits |
+| [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim |
 | [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
 | [read-diagnostic-artefacts-in-full.md](rules/read-diagnostic-artefacts-in-full.md) | Read complete diagnostic output before hypothesising |
 | [consolidate-at-third-consumer.md](rules/consolidate-at-third-consumer.md) | Canonicalise duplicated shapes at the third consumer |
 | [tdd-for-refactoring.md](rules/tdd-for-refactoring.md)     | Enforce RED → GREEN → REFACTOR during refactoring     |
 | [no-type-shortcuts.md](rules/no-type-shortcuts.md)         | Prevent type-erasing shortcuts and assertion drift    |
 | [invoke-code-reviewers.md](rules/invoke-code-reviewers.md) | Require the reviewer matrix after non-trivial changes |
+
+### Collaboration State Surface
+
+WS0-WS3A collaboration state lives under
+[`state/collaboration/`](state/collaboration/). It is the repo-owned
+coordination layer for shared log entries, active claims, closed claim
+history, and decision threads. `start-right` reads it before edits,
+`session-handoff` closes the agent's own active state, and
+`consolidate-docs` audits stale or unresolved entries. WS3B sidebar,
+timeout, and escalation state is intentionally absent until promoted by
+owner direction or real decision-thread evidence.
 
 Hook support:
 
@@ -135,6 +150,7 @@ and `.agents/skills/patterns/`.
 | [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
+| [`.agent/state/`](state/)                                                                     | Live coordination state — collaboration log, active claims, closed claims, and decision threads |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |
