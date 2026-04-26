@@ -7,9 +7,9 @@ isProject: false
 # Intent to Commit + Session Counter — Strategic Plan
 
 **Status**: 🟡 NOT STARTED (future / strategic intent)
-**Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 owner observed
-wrong-intent commit capture; promote only when owner explicitly asks to
-implement the queue)
+**Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 staged-bundle
+integrity failures now include substitution, disappearance, and accretion;
+promote only when owner explicitly asks to implement the queue)
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:

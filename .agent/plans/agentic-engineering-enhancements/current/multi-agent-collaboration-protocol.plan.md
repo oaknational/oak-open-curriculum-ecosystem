@@ -33,14 +33,14 @@ todos:
       right next automatic step. Execute the evidence/claim-history/
       decision-thread slice first.
   - id: ws3b-sidebar-and-escalation
-    content: WS3B — Preserve the existing sidebar, timeout, and owner-escalation design as a separate evidence-gated sibling plan.
-    status: paused-evidence-gated
+    content: WS3B — Preserve the existing sidebar, timeout, and owner-escalation design as a separate sibling plan.
+    status: gate-satisfied
     split_plan: multi-agent-collaboration-sidebar-and-escalation.plan.md
     split_on: 2026-04-26
     pause_reason: >
-      Sidebar and escalation work must wait for owner direction or
-      real decision-thread evidence that async coordination is
-      insufficient.
+      Three-agent phase-transition evidence and owner direction satisfied
+      the promotion gate on 2026-04-26. Implementation remains a separate
+      execution pass.
   - id: ws4-operational-integration
     content: WS4 — Wire session-open registration into start-right-quick / start-right-thorough; wire session-close cleanup into session-handoff; wire stale-claim garbage collection into consolidate-docs.
     status: completed
@@ -51,7 +51,7 @@ todos:
       session-handoff now closes own claims and decision-thread
       participation; plan templates include lifecycle triggers and the
       simple-plan work-shape tier; Practice Core / ADR surfaces recognise
-      collaboration state as first-class. WS3B remains evidence-gated and
+      collaboration state as first-class. WS3B was not implemented and
       hook-based reminders remain deferred.
   - id: ws5-observation-and-refine
     content: WS5 — Observe at least three real parallel sessions; capture lessons into .agent/memory/collaboration/; refine schema or directive based on real usage. Refinement amendments land as separate commits, not WS5 itself.
@@ -59,7 +59,7 @@ todos:
     paused_at: 2026-04-25
     pause_reason: >
       The original owner-directed WS5 evidence inspection completed on
-      2026-04-26 and split WS3 into completed WS3A plus paused WS3B.
+      2026-04-26 and split WS3 into completed WS3A plus then-paused WS3B.
       WS4A was separately owner-authorised and completed the same day.
       Remaining WS5 scope is the post-WS4A observation / seed harvest:
       observe real sessions using the lifecycle-integrated protocol,
@@ -68,7 +68,7 @@ todos:
 
 # Multi-Agent Collaboration Protocol
 
-## Status: WS4A Lifecycle Integration Complete; WS3B/WS5 Paused (2026-04-26)
+## Status: WS4A + Commit-Window Refinement Complete; WS3B Gate Satisfied (2026-04-26)
 
 WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed.
 WS3 has been split under owner direction after the WS5 evidence harvest:
@@ -83,13 +83,20 @@ WS3 has been split under owner direction after the WS5 evidence harvest:
 - **WS3B**:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](multi-agent-collaboration-sidebar-and-escalation.plan.md)
   preserves the sidebar, timeout, and owner-escalation design as a
-  separate evidence-gated plan.
+  separate plan. Its promotion gate is satisfied; implementation has not
+  started.
 
 WS4 resumed under owner direction as a narrow lifecycle-integration pass
 after WS3A completed. That pass is complete: start-right, session-handoff,
 plan templates, Practice Core, and ADR-facing surfaces now make WS0-WS3A
 collaboration state part of the ordinary lifecycle. It did **not** start
-WS3B sidebar, timeout, or owner-escalation work.
+WS3B sidebar, timeout, or owner-escalation implementation.
+
+The 2026-04-26 owner-directed commit-window refinement is complete in the
+working tree: `git:index/head` is now a short-lived active-claim area before
+staging or committing, and the commit skill closes the claim on success,
+failure, or abort. This extends WS1's advisory claim model; it does not add
+hooks, locks, or WS3B mechanisms.
 
 WS5 remains **paused on owner direction**. The evidence surface has moved on
 since the original 2026-04-25 pause: later shared-communication-log entries
@@ -99,11 +106,11 @@ including the Fresh Prince / Keen Dahl register-and-log exchange on
 
 **Resumption gate**: at least three real parallel-session coordination
 events using the WS0 + WS1 surfaces (shared communication log +
-active-claims registry + register-active-areas tripwire). The gate now
-appears to be met, but that only moves the plan from evidence accumulation
-to **owner inspection**. It does not auto-resume WS3B or WS5.
-Owner direction split WS3A out first, then authorised the WS4A lifecycle
-integration pass. It does not auto-resume WS3B or WS5.
+active-claims registry + register-active-areas tripwire). The gate was then
+satisfied by the 2026-04-26 three-agent phase-transition evidence and owner
+direction. It does not auto-implement WS3B or resume WS5.
+Owner direction split WS3A out first, authorised the WS4A lifecycle
+integration pass, and then supplied enough evidence for WS3B promotion.
 
 **While paused, evidence accumulates passively** — every session on this
 repo that uses the WS0/WS1 surfaces produces evidence. No active session
@@ -117,8 +124,8 @@ harvest.
 
 **What remains pending under the gate**:
 
-- WS3B — sidebar and owner-escalation mechanism, paused behind WS3A
-  evidence and owner direction
+- WS3B — sidebar and owner-escalation mechanism, gate satisfied;
+  implementation not started
 - WS4A — lifecycle integration complete; any future hook reminder or
   dashboard expansion remains evidence-gated follow-up, not active scope
 - WS5 — the evidence-harvest workstream itself
@@ -380,7 +387,7 @@ files-first / schema-later in its strictest form.
    - **Communication channels and when to use each** (the channels named
      in the Design Principles): thread record, shared communication log,
      conversation / decision-thread file (forward reference to WS3A),
-     sidebar (forward reference to evidence-gated WS3B), reviewer
+     sidebar (forward reference to gate-satisfied WS3B), reviewer
      dispatch, owner question.
    - **Identity vs liveness** distinction with forward references to
      PDR-027 (identity) and WS1 (liveness/claims).
@@ -869,8 +876,8 @@ Authoritative split plans:
   decision-thread surface.
 - [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](multi-agent-collaboration-sidebar-and-escalation.plan.md)
   owns WS3B: sidebar request/message/resolution, timeout discipline,
-  and explicit owner escalation. It remains paused until owner
-  direction or real decision-thread evidence proves the need.
+  and explicit owner escalation. Its promotion gate is satisfied; execution
+  remains a separate implementation pass.
 
 #### WS3A Operational Seed
 
@@ -1114,13 +1121,13 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/directives/agent-collaboration.md` — the new sibling directive (WS0; extended WS1, WS3A, and WS3B if promoted)
 - `.agent/rules/follow-agent-collaboration-practice.md` — sibling to existing follow-rule (WS0)
 - `.agent/rules/dont-break-build-without-fix-plan.md` — atomic rule citing gate-recovery-cadence (WS0)
-- `.agent/rules/respect-active-agent-claims.md` — atomic rule with WS1/WS3A forward refs (WS0; extended WS3A and WS3B if promoted)
+- `.agent/rules/respect-active-agent-claims.md` — atomic rule with WS1/WS3A forward refs and commit-window awareness (WS0; extended WS3A and WS3B if promoted)
 - `.agent/rules/use-agent-comms-log.md` — atomic rule pointing at the shared communication log (WS0; extended WS1)
-- `.agent/rules/register-active-areas-at-session-open.md` — atomic rule, parallel to register-identity-on-thread-join (WS1)
+- `.agent/rules/register-active-areas-at-session-open.md` — atomic rule, parallel to register-identity-on-thread-join, including `git:index/head` commit-window claims (WS1 + commit-window refinement)
 - `.agent/state/README.md` — explains state-vs-memory distinction (WS0)
 - `.agent/state/collaboration/log.md` — schema-less shared communication log (WS0; preserved alongside structured surfaces in WS1, WS3A, and WS3B if promoted)
-- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage (WS1)
-- `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims (WS1)
+- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage; v1.2.0 also carries short-lived git transaction claims (WS1 + commit-window refinement)
+- `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims, including `areas.kind: "git"` in v1.2.0 (WS1 + commit-window refinement)
 - `.agent/state/collaboration/conversations/` — directory of per-topic decision-thread files (WS3A; extended by WS3B if promoted)
 - `.agent/state/collaboration/conversation.schema.json` — JSON schema for decision threads (WS3A; extended by WS3B if promoted)
 - `.agent/memory/collaboration/README.md` — explains the new memory class (WS2)
@@ -1144,6 +1151,7 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md` (WS0)
 - `.agent/plans/observability/active/gate-recovery-cadence.plan.md` (WS0 — bidirectional reference between gate-recovery and the new rule)
 - `.agent/rules/follow-collaboration-practice.md` (WS0 — re-pointed to user-collaboration.md)
+- `.agent/skills/commit/SKILL.md` and commit skill adapters (commit-window refinement)
 - `.agent/skills/start-right-quick/`, `start-right-thorough/`, `session-handoff/` and platform adapters (WS4A)
 - `.agent/commands/consolidate-docs.md` (WS1; WS3A; WS3B if promoted; WS4A)
 - `.agent/memory/executive/invoke-code-reviewers.md` (WS4A)
@@ -1208,9 +1216,10 @@ closure history. The split WS3A slice is complete in local
 documentation/state: claim-history, decision-thread, observability, and
 handoff surfaces have landed.
 
-**WS3B depends on WS3A evidence and owner direction**. Sidebars open
-against decision-thread topics and claims only if the lighter async
-surface proves insufficient.
+**WS3B depends on WS3A evidence and owner direction**. That promotion gate is
+now satisfied by the 2026-04-26 phase-transition evidence. Sidebars still open
+against decision-thread topics and claims only when the tighter exchange is
+needed, and implementation remains a separate pass.
 
 **WS4A wired existing operational surfaces** to use WS1 + WS3A
 machinery. It is operationally required for the protocol to be reliably
