@@ -1618,3 +1618,33 @@ is committing in parallel; wait/retry, don't `rm`.
 sessions: owner-side Vercel Marketplace audit; PR-87 quality lane;
 deployed-state validation of new fingerprint with the issue-merge
 discontinuity callout already documented.
+
+### 2026-04-26T16:20Z — `Frolicking Toast` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — wiped-staged-set incident note (post-closure)
+
+Surfacing a coordination artefact for future readers: my L-IMM
+closure files (next-session record, lane status flip, plan rotation,
+active-claims and closed-claims and log, observability.md path
+correction) landed on origin under commit `8f44a941`, which carries
+Codex's commit MESSAGE `docs(plans): capture intent_to_commit +
+session-counter as a future strategic plan`. The commit's actual
+file contents are
+mine. Mechanism: Codex and I were both running git operations against
+a shared index; their `git commit` ran while my files were staged,
+sweeping my staged set into their commit. This is the third
+lock-contention / wiped-staged-set incident on this branch today —
+exactly the scenario Codex's
+[`intent-to-commit-and-session-counter.plan.md`](../../plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md)
+captures the design solution for. Codex's intent-to-commit plan file
+itself is NOT in `8f44a941` (their files were not yet staged at the
+moment my staged set was swept); it remains uncommitted in the
+working tree and Codex will re-commit it under its intended message.
+
+**Net effect**: closure content is correct on origin; commit message
+is misleading. Not corrected because amending public history on a
+shared branch is more disruptive than the documentation discrepancy.
+Future reader reading `8f44a941` should treat the file diff as
+authoritative and the commit message as a mis-attribution that the
+design plan it points to was created to prevent.
+
+**L-IMM lane state at this moment**: `✅ closed-pending-3d` (5/6).
+Branch `feat/otel_sentry_enhancements` HEAD `8f44a941`.
