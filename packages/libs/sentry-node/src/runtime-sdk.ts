@@ -25,7 +25,29 @@ import {
   redactSentryTransaction,
 } from './runtime-redaction.js';
 
-export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 2_000;
+/**
+ * Default timeout used by {@link SentryNodeRuntime.flush} and
+ * {@link SentryNodeRuntime.close} when the caller does not pass an
+ * explicit `timeoutMs`.
+ *
+ * @remarks
+ * **Lambda freeze-and-resume trade-off.** On Vercel's Node.js runtime
+ * the function is frozen after handler return. In-flight Sentry
+ * events that have not yet been transmitted are buffered; under
+ * bursty error scenarios the SDK can hold multiple events in the
+ * queue when freeze begins. A short flush window (the previous
+ * 2_000ms value) raised the risk of dropped events; a longer window
+ * extends the Lambda billing-time tail by the corresponding amount.
+ *
+ * **Empirical context (2026-04-26 L-IMM Sub-item 3 hardening)**: the
+ * Sentry validation walk produced single-error captures cleanly at
+ * 2s, but bursty error patterns are known to lose events under
+ * freeze; raising to 5s biases for capture completeness over a small
+ * billing-tail extension. Existing flush-timing contract tests in
+ * `runtime-sinks.unit.test.ts` cover the constant indirectly via
+ * timeout behaviour and still pass.
+ */
+export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 5_000;
 
 /**
  * Targets for outbound trace propagation (`sentry-trace` + `baggage`
