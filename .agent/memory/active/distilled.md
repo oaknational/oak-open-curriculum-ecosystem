@@ -54,6 +54,17 @@ but the repo-owned markdown/JSON/rules/commands/skills/hooks surfaces are
 the operating substrate and must remain sufficient without platform-native
 collaboration features.
 
+Before adding a new always-visible coordination surface, widen the regular
+state audit first. WS3A showed that active claims, closure history, decision
+threads, unresolved decision requests, evidence bundles, and schema
+validation became usable once `consolidate-docs` reported them together.
+Structured state plus consolidation output is usually the first dashboard.
+
+Split evidenced durability gaps from speculative coordination mechanisms.
+WS3A claim-history / decision-thread work was grounded in real harvest
+evidence; WS3B sidebar, timeout, and file-backed owner escalation remain
+promotion-gated until async decision threads prove insufficient.
+
 ## Tripwire rules need observable artefacts
 
 A tripwire rule whose firing condition is "consult and decide X" is
@@ -114,6 +125,13 @@ violations; unobservable tripwires). Sequence: structural review
 shapes the design; pre-landing review validates the implementation
 faithfully embodies the design.
 
+Specialist sub-agent review is standard and preferred evidence for
+substantive work when the platform supports it. Review itself is not
+automatically blocking; findings require explicit disposition. Blocking
+findings, hard gate failures, and rule failures block closure. Non-blocking
+findings still need implementation, rejection with rationale, or
+owner-visible deferral evidence.
+
 ## ADR/PDR citation discipline
 
 When citing an ADR or PDR by number, verify the filename and the
@@ -146,6 +164,17 @@ external tools or proposing new code, exhaust workspace inventory:
   schema-validate-then-narrow flow; `@oaknational/build-metadata`
   already has the constant-type-predicate pattern in place. Extending
   existing infrastructure beats parallel implementations every time.
+- **Vendor-platform plans**: periodically scan the vendor's official docs
+  for capabilities not yet represented in the plan. Internal review checks
+  reasoning inside the plan's worldview; vendor-doc review finds the
+  opportunity set the plan forgot to imagine. Record both newly adopted
+  capabilities and informed declines so future agents do not rediscover
+  the same surface.
+- **Cross-system observability claims**: before investigating one system's
+  behaviour, align all relevant artefacts first. For Vercel / Sentry /
+  GitHub validation, compare local HEAD, origin, PR head, latest Vercel
+  deployment SHA, and Sentry deploy/release metadata. If they disagree,
+  establish which artefact is being tested before making runtime claims.
 
 Captured in `feedback_workspace_first_for_diagnostics`,
 `feedback_gh_pr_checks_over_brief`, and
@@ -210,6 +239,11 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
+- **Learning before fitness**: capture, distil, graduate, and write the
+  signal fully even when the destination file is near or over a fitness
+  limit. Fitness limits are health signals. They route structural follow-up
+  — refine, split, graduate, or adjust limits — but never justify starving
+  the learning loop.
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).
