@@ -92,6 +92,13 @@ todos:
   - id: l-doc-final
     content: "L-DOC final: DISSOLVED 2026-04-20. Docs are definition-of-done on every lane, not a separate phase — a separate L-DOC-final lane creates a drift window where code lands in Phases 3 and 4 without matching docs, which violates the repo's no-drift discipline. Each lane's REFACTOR phase now gates on: per-loop TSDoc on owning functions; ADR index entries for any new ADR touched; propagation to `sentry-deployment-runbook.md`, `sentry-cli-usage.md`, `production-debugging-runbook.md`, and `environment-variables.md` for the specific signals that lane emits; `docs-adr-reviewer` close review. `documentation-sync-log.md` entries land per-lane at lane close, not in a final sweep."
     status: dissolved
+  - id: l-imm-operational-hardening
+    content: "L-IMM (Phase 3, IMMEDIATE post-2026-04-26 Sentry validation): operational hardening bundle covering custom error fingerprinting (event.fingerprint logic in beforeSend for known error families), ignoreErrors/denyUrls allow-list for known-noise patterns, shutdownTimeout/flush review (raise DEFAULT_SENTRY_FLUSH_TIMEOUT_MS from 2_000 to ~5_000 to reduce Lambda drop risk under burst load), maxBreadcrumbs tuning (verify default 100 is sufficient for long-running MCP sessions), sendClientReports verification (default true, confirm enabled), and Vercel ↔ Sentry Marketplace integration verification (confirm what's wired vs hand-rolled). Identified 2026-04-26 by gap analysis against Sentry official docs."
+    status: pending
+  - id: l-ops-operational-maturity
+    content: "L-OPS (Phase 5, DEFERRED): operational-maturity bundle covering cron monitoring (Sentry.cron / Sentry.withMonitor for any Vercel Cron handlers + deploy-time scripts; gated on cron jobs being added), Performance Issue auto-detection (server-side Sentry project settings for slow-query / N+1 / large-payload detection thresholds), Inbound Filters at Sentry server level (project-side noise reduction), Spotlight dev-mode (@spotlightjs/spotlight devDependency for local-iteration without Sentry quota), cache instrumentation (cacheIntegration; gated on cache adoption beyond OAuth metadata), and webhook integrations (Slack/Linear issue routing — project settings, not SDK code). Identified 2026-04-26 from Sentry docs; deferred because each item is either gated on a downstream adoption (cron jobs, cache, alpha distributions) or is server-side configuration that doesn't affect the SDK contract."
+    status: deferred
+    note: "Each sub-item can graduate to its own lane on owner direction. None blocks public-alpha shipping."
   - id: ws-quality-gates
     content: "Full quality gate chain after each phase (pnpm check)"
     status: pending
@@ -1287,6 +1294,18 @@ body never flows into the context.
 **Acceptance**: fixture-mode captures include the `mcp_request` context
 with the expected shape and no argument values.
 
+**Adjunct (added 2026-04-26)** — explicit `Sentry.startSpan`
+wrappings for known critical paths. The default
+auto-instrumentation captures `http.server`, `oak.http.request.mcp`,
+and the bootstrap span family, but domain-specific operations
+("search query lifecycle", "tool invocation lifecycle", "OAuth
+proxy upstream call lifecycle") deserve explicit named spans so
+the Sentry trace view tells a story aligned with product semantics.
+Within L-3 scope: identify 5-10 such operations and wrap with
+`Sentry.startSpan({ name, op })` + appropriate attributes (taken
+from the redacted `mcp_request` context). Closes the sparseness
+gap surfaced by the 2026-04-26 gap analysis.
+
 **Cross-references** (per ADR-162 event-schema contract):
 
 - [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
@@ -1447,6 +1466,162 @@ describing how to query feedback and the fixed schema.
   to the schema defined there; any enum evolution is a coordinated
   change across both plans.
 
+### L-IMM Operational hardening (immediate, post-2026-04-26 validation)
+
+**Status**: 🟡 IMMEDIATE — pre-PR-87 quality work. Identified by
+2026-04-26 gap analysis against Sentry official docs after the
+source-code-upload validation closed. Each sub-item is small and
+independently deployable; landing them as a single lane keeps the
+review surface focused.
+
+**Origin**: closure of
+[`sentry-preview-validation-and-quality-triage.plan.md`](../current/sentry-preview-validation-and-quality-triage.plan.md)
+proved the major Sentry capabilities (release attribution, source
+upload, symbolication, redaction, breadcrumbs, internal trace
+propagation, custom correlation tag) are wired. Six smaller gaps
+remain — captured here so they don't drift back into "unknown
+unknowns".
+
+#### Sub-item 1 — Custom error fingerprinting (`event.fingerprint`)
+
+**Objective**. Improve issue grouping for known error families so
+the issues stream reflects domain semantics, not stack-trace
+coincidence.
+
+**Evidence motivating this**: Sentry issue
+`OAK-OPEN-CURRICULUM-MCP-1` has 108 events under a single
+fingerprint; without explicit fingerprinting we cannot tell whether
+that grouping is correct or whether it merges unrelated errors.
+
+**RED**: Unit tests in
+`packages/libs/sentry-node/src/runtime-fingerprint.unit.test.ts`
+(new) covering: (a) known-class errors (e.g. `JsonRpcError_*`,
+`McpToolError`, `TestError*` from the diagnostic route) get
+class-keyed fingerprints; (b) unknown errors fall through to
+Sentry's default fingerprint behaviour; (c) the fingerprint logic
+runs inside `beforeSend` AFTER the redaction barrier so PII can't
+leak into fingerprint keys.
+
+**GREEN**: Add `applyFingerprint(event)` step to `createSentryHooks`
+that examines the top exception and assigns
+`event.fingerprint = ['<error-class-name>']` for the named
+families. Default Sentry behaviour preserved for everything else.
+
+**REFACTOR**: TSDoc on the fingerprint table; entry in
+`packages/libs/sentry-node/README.md` § Fingerprinting; observability.md
+update.
+
+**Acceptance**: fixture-mode tests prove the fingerprint chain;
+post-deploy, the test-error route's three modes (handled /
+unhandled / rejected) produce three distinct issues (proven during
+the 2026-04-26 validation — issues `#7`, `#8`, `#9`) without
+fingerprinting code, demonstrating that the BASELINE grouping is
+already domain-aligned for these classes; the explicit
+fingerprinting locks that behaviour in for future error families.
+
+#### Sub-item 2 — `ignoreErrors` / `denyUrls` allow-list
+
+**Objective**. Suppress known-noise patterns at SDK init time
+before they consume Sentry quota or pollute the issues view.
+
+**RED**: Unit tests asserting that events matching the configured
+ignore patterns are dropped before `beforeSend` (Sentry SDK drops
+them earlier in the pipeline) and that non-matching events pass
+through unchanged.
+
+**GREEN**: Add `ignoreErrors: readonly (string | RegExp)[]` and
+optionally `denyUrls: readonly (string | RegExp)[]` to
+`SentryLiveConfig`; pass through to `createSentryInitOptions`. Seed
+list with concrete known-noise patterns (none today; bootstrap with
+empty list, document the pattern for future additions).
+
+**REFACTOR**: Document the ignore-list policy in sentry-node README;
+mention coordination with the redaction barrier (some patterns may
+be ignorable AND redactable; ignore wins because it drops the event
+entirely).
+
+**Acceptance**: SDK config tests prove the option flows through;
+seed list is empty in alpha (no known noise yet to ignore); future
+PRs add patterns as production traffic surfaces real noise.
+
+#### Sub-item 3 — Flush / shutdown timeout review
+
+**Objective**. Reduce Sentry-event drop risk during Lambda
+freeze-and-resume cycles by raising the flush timeout from the
+current 2_000ms.
+
+**Investigation**: Lambda freezes the runtime after handler return.
+In-flight Sentry events that haven't been transmitted are buffered;
+on next cold start they may or may not be picked up depending on
+the SDK's persistence behaviour. A 2_000ms flush is short for
+bursty error scenarios where multiple events queue.
+
+**RED**: No new test coverage required — `DEFAULT_SENTRY_FLUSH_TIMEOUT_MS`
+is a constant; existing flush-timing tests in
+`packages/libs/sentry-node/src/runtime-sinks.unit.test.ts` cover
+the contract.
+
+**GREEN**: Update `DEFAULT_SENTRY_FLUSH_TIMEOUT_MS` from `2_000` to
+`5_000` in `runtime-sdk.ts`. Document trade-off in TSDoc:
+longer flush window reduces drop risk but extends Lambda
+billing-time tail by the corresponding amount.
+
+**REFACTOR**: TSDoc note on the constant explaining the Lambda
+trade-off; sentry-node README § Runtime-constraint notes amended.
+
+**Acceptance**: constant updated; existing tests pass; document the
+choice with rationale so future change is informed.
+
+#### Sub-item 4 — `maxBreadcrumbs` tuning verification
+
+**Objective**. Verify that the default 100-breadcrumb cap is
+sufficient for long-running MCP sessions; raise if not.
+
+**Investigation**: read `runtime-sdk.ts`, confirm `maxBreadcrumbs`
+isn't explicitly set (defaults to Sentry's 100). Inspect captured
+issues from production to see whether breadcrumb counts are
+hitting the cap (truncated breadcrumb arrays).
+
+**Acceptance**: empirical evidence one way or the other —
+no-action if cap holds; raise to 200-500 with rationale if cap is
+hitting.
+
+#### Sub-item 5 — `sendClientReports` verification
+
+**Objective**. Confirm Sentry's client-side drop reporting is
+enabled (default true in @sentry/node) so we know when events are
+being dropped by SDK-side rate limiters.
+
+**Acceptance**: option visible / verified in `runtime-sdk.ts`; any
+explicit `false` requires an ADR rationale.
+
+#### Sub-item 6 — Vercel ↔ Sentry Marketplace integration verification
+
+**Objective**. Confirm whether the deployed Vercel ↔ Sentry
+Marketplace integration is connected (auto-provisions DSN +
+sourcemap upload) versus our hand-rolled `SENTRY_*` env-var
+pass-through (commit `216a7fd2` history).
+
+**Investigation**: check Vercel project settings → Integrations
+tab; cross-reference against `vercel.json` + `package.json` build
+scripts. If Marketplace is connected, document the bypass-or-use
+decision; if not, document why we kept hand-rolled.
+
+**Acceptance**: a paragraph in observability.md or sentry-node
+README that names the current state (Marketplace vs hand-rolled)
+with rationale.
+
+**Cross-references**:
+
+- Issues `OAK-OPEN-CURRICULUM-MCP-{7,8,9}` (Sentry, 2026-04-26)
+  empirically demonstrated the baseline grouping for the three
+  test-error modes is already domain-aligned without fingerprinting,
+  so Sub-item 1 codifies a working behaviour rather than introducing
+  new grouping. Source-map / rendered-source-context proof for
+  these issues lives in
+  [`sentry-preview-validation-and-quality-triage.plan.md`](../current/sentry-preview-validation-and-quality-triage.plan.md)
+  § Phase 2 findings.
+
 ---
 
 ## Phase 4 — Cross-axis
@@ -1600,6 +1775,55 @@ value from Phases 1–4. Record decision as an ADR.
 
 **Acceptance**: ADR merged; the parent plan's strategy-close-out
 obligation is discharged.
+
+### L-OPS Operational maturity (deferred bundle)
+
+**Status**: 🔵 **DEFERRED to public beta or later**. Identified
+2026-04-26 by gap analysis against Sentry official docs after
+L-IMM closure. Each sub-item is gated on a downstream condition
+(cron jobs being added, alpha distributions accumulating, cache
+adoption, dev-experience priority); none blocks public-alpha
+shipping. Body below preserves continuity so the items aren't lost
+to "unknown unknowns" drift.
+
+**Sub-items** (each can graduate to its own lane on owner direction):
+
+- **Cron monitoring** (`Sentry.cron(...)` / `Sentry.withMonitor(...)`).
+  Detects missed or silent-failed scheduled jobs. Gate: introduction
+  of any Vercel Cron handler or recurring deploy-time script. The
+  current `vercel-ignore-production-non-release-build.mjs` is a
+  candidate but is one-shot per build, not a true cron. Wrap if
+  Vercel Cron is added. Sentry docs:
+  <https://docs.sentry.io/platforms/javascript/guides/node/crons/>.
+- **Performance Issue auto-detection** (Sentry server-side). Auto-
+  detects slow DB queries, N+1 patterns, large payloads, slow
+  rendering. Gate: real alpha traffic so detection thresholds aren't
+  picked from speculation. Project-side configuration; no SDK code.
+- **Inbound Filters** (Sentry server-side). Drops events matching
+  patterns (legacy browsers, web crawlers, etc.) at the Sentry-
+  server boundary so they never count against quota. Server-only;
+  complementary to L-IMM Sub-item 2's SDK-side `ignoreErrors`.
+- **Spotlight dev-mode** (`@spotlightjs/spotlight`). Local-dev
+  sidecar that intercepts events before they reach Sentry. Zero
+  Sentry quota in dev iteration; faster feedback loop. Gate: DX
+  priority; not an operational risk.
+- **Cache instrumentation** (`cacheIntegration`). Tracks cache hit
+  / miss spans (Redis, in-memory, etc.). Gate: cache adoption
+  beyond OAuth metadata. Wire when first runtime cache lands.
+- **Webhook integrations** (Slack / Linear / GitHub issue routing).
+  Project settings, not SDK. Gate: alert volume sufficient to
+  justify routing automation. Solo-owner project may defer
+  indefinitely.
+
+**Acceptance** (lane closure, when reached): each sub-item either
+graduated to its own lane with its own acceptance, or has a
+documented rationale for closing without action.
+
+**Cross-reference**:
+
+- L-IMM (Phase 3) is the SDK-side hardening counterpart; L-OPS is
+  the operational-platform-side counterpart. Together they close
+  the 2026-04-26 gap-analysis findings.
 
 ### L-DOC (final) — DISSOLVED 2026-04-20
 

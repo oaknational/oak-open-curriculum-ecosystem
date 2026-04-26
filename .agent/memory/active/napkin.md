@@ -8,6 +8,76 @@ live in the register at
 
 ---
 
+## 2026-04-26 — Sharded Stroustrup — doc-driven gap-finding for unknown-unknowns
+
+**Surprise** (owner-directed): after I finished the Sentry-validation
+work and produced a confident-feeling "fully proven" report, the owner
+asked me to scan official Sentry docs for capabilities that **weren't
+even in our plans**. The scan turned up six material gaps the
+maximisation-mcp plan (3275 lines, multi-reviewer-cycled) didn't
+capture: custom error fingerprinting; `ignoreErrors` / `denyUrls`
+SDK-side allow-list; flush / `shutdownTimeout` review under Lambda
+freeze cycle; cron monitoring; Performance Issue auto-detection;
+Spotlight dev-mode sidecar.
+
+Plans written from internal first-principles + accumulated review
+cycles **don't automatically catch capabilities the vendor exposes
+that no one on the project has yet thought to use**. Internal review
+surfaces gaps in our reasoning; vendor-doc review surfaces gaps in
+our opportunity-set. These are different blind-spot classes and
+require different review lenses.
+
+**Lesson** (candidate for distilled.md graduation): **plans that
+target a third-party platform should periodically be cross-checked
+against that platform's official documentation for capabilities not
+yet captured**. The check is cheap (a single doc-traversal session)
+and surfaces opportunities that internal review structurally cannot.
+
+The check has two outputs that should both land in the plan:
+
+1. Items we should plan for that we hadn't (the gap list).
+2. Items the vendor offers that we deliberately won't use (the
+   informed-decline list). The decline list prevents future readers
+   from re-discovering and re-evaluating the same surface area.
+
+**Promotion trigger**: second instance of "vendor-doc review surfaced
+a gap our plans hadn't captured" OR owner direction. Captured this
+once today (Sentry); applies symmetrically to Clerk, Vercel,
+Elasticsearch, OpenAI/Anthropic, Linear, GitHub. Each integration
+boundary is a candidate doc-review surface.
+
+**Pattern candidate name**: `vendor-doc-review-for-unknown-unknowns`
+(sibling to `alignment-check-precedes-claim-validation` and
+`workspace-first-before-external-tooling`).
+
+**Mechanism observation**: the gap was found by asking a sub-agent
+to **scan canonical Sentry docs for capabilities relevant to our
+deployment shape but not in any plan**. The frame "things the vendor
+offers we haven't planned to use" is what made the search productive.
+A different frame ("review my Sentry implementation") would have
+stayed inside the existing plan's worldview and missed the gap.
+
+---
+
+## 2026-04-26 — Codex — WS3A claim-history self-application
+
+**Surprise:** the claim-history GREEN slice needed to apply itself before
+handoff. Adding `closure` metadata to existing archive entries was not
+enough; the current WS3A claim also had to close through the new explicit
+archive path, or the docs would describe a lifecycle the session did not
+exercise.
+
+**Correction:** additive schema reuse still needs a version bump. Because
+`active-claims.schema.json` now carries reusable closure definitions for
+`closed-claims.schema.json`, the active registry moved to `schema_version:
+"1.1.0"` rather than leaving a changed contract labelled as `1.0.0`.
+
+**Promotion trigger:** none yet. Treat as evidence for the existing
+`infrastructure-alive-at-install` pattern candidate if another Practice
+surface later has to self-apply its own lifecycle during installation.
+
+---
+
 ## 2026-04-26 — API consumer boundary + ooc-issues thread refresh (Cursor / GPT-5.5 / Codex)
 
 **Surprise (minor):** external issue **Issue 1** listed HTTP paths and a
@@ -421,3 +491,60 @@ clears.** Session-handoff wants `repo-continuity.md` updated, but Sharded
 Stroustrup owns that file right now. The honest bridge from action to impact
 is to leave the thread record precise, leave a log note, and make the
 repo-continuity reconciliation falsifiable once their claim closes.
+
+**WS5 harvest finding: the next gap is traceability, not synchronous
+conversation.** The shared communication log and active-claims registry
+already handled non-overlap, overlap ping/ack, claim-scope narrowing, and a
+pre-commit gate-coupling event without mechanical refusal or owner escalation.
+No real sidebar need has appeared. Behaviour change: do not implement the
+full WS3 sidebar/escalation schema as the next automatic slice. Either split
+WS3 into a smaller conversation/decision-thread surface first, or do a WS1/WS4
+refinement that makes claim closure history durable before adding sidebar
+machinery.
+
+**Claim-history gap surfaced by harvest.** `closed-claims.archive.json`
+currently has only the two Fresh Prince archived claims, while later Keen
+Dahl, Sharded Stroustrup, and Codex claim lifecycles are preserved mainly in
+the shared communication log. That is acceptable for human evidence harvest,
+but weak as a structured evidence source. Behaviour change: before relying on
+"closed claims" as WS5 evidence, decide whether normal claim closure should
+archive a historical entry or whether the archive is intentionally stale-only.
+
+**Plan split should follow the evidence gradient.** The owner-directed WS3
+split is right because it separates the proven gap from the speculative
+mechanism. Evidence provision, protocol observability, claim-closure history,
+and lightweight decision threads are all grounded in the WS5 harvest. Sidebar
+timeouts and owner escalation remain plausible, but not yet evidenced.
+Behaviour change: when an evidence-gated plan contains both a validated
+durability gap and a speculative coordination mechanism, split the validated
+gap into the next executable plan and leave the speculative mechanism as a
+separate promotion-gated sibling.
+
+**Decision-thread GREEN made channel boundaries executable.** The useful
+move was not "add another place to write prose"; it was to give async
+coordination a narrow schema with entry kinds for decision requests,
+decisions, resolutions, and evidence. Behaviour change: when adding a new
+coordination surface, document what it is *not* for at the same time as
+the schema. Otherwise the new surface will silently absorb the jobs of the
+shared log, active claim, napkin, and thread record.
+
+---
+
+## 2026-04-27 — MCP Apps widget list + tests vs configuration (Composer / cursor)
+
+**Surprise:** tightening the widget allowlist surfaced **TypeScript** gaps
+after `ToolMeta.ui.resourceUri` became optional; the owner **deferred
+type fixes** to the next pass.
+
+**Lesson (reinforces invariants):** [testing-strategy.md](../../directives/testing-strategy.md)
+— tests should prove **host-visible behaviour** (e.g. `isAppToolEntry`,
+which tools get an embedded `ui://` resource) rather than mirroring
+`WIDGET_TOOL_NAMES` as a second source of truth.
+
+**Promotion trigger:** N/A (capture). **ADR candidate:** only if optional
+`resourceUri` + `visibility` combinations multiply; else document in TSDoc
+only.
+
+**`user-search` vs `user-search-query`:** one product user search (`user-search`);
+`user-search-query` is the same execution path with app-only visibility for
+`callServerTool`, not a second teacher-facing tool.
