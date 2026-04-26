@@ -1,11 +1,27 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — WS4A plan-state
-cleanup, reviewer-norm correction, `jc-session-handoff`, and
-`jc-consolidate-docs` closeout. Parent plan and roadmap now distinguish the
-completed WS3 evidence harvest from remaining post-WS4A WS5 observation;
-reviewer guidance now treats specialist review as preferred evidence with
-explicit finding disposition, not universal blocking.)
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — WS3B and
+joint-decision status reconciled. Three-agent phase-transition evidence
+satisfied the WS3B gate and introduced a future joint-decision protocol.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-bundle
+evidence taxonomy reflected. The future intent-to-commit plan now treats
+substitution, disappearance, and accretion as distinct staged-bundle integrity
+failures.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — lock-wait nuance
+captured. Claude Monitor / Codex shell wait / Cursor shell wait are noted
+as physical lock guards, not substitutes for commit-window claims.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-window
+protocol pass. The git index/head transaction window is now represented as
+a short-lived active-claim area before staging or committing.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — learning-first
+fitness correction added after WS4A closeout. Napkin rotated to
+`archive/napkin-2026-04-26.md`; high-signal learnings distilled even though
+that intentionally creates fitness pressure. Consolidation / Practice /
+ADR-144 surfaces now say learning preservation outranks fitness limits.)
 
 **Prior refresh**: 2026-04-26 (Composer / cursor — `jc-session-handoff`
 only: MCP Apps widget allowlist + `ToolMeta` + universal-tools test
@@ -20,8 +36,9 @@ workstream is now two split plan files: WS3A
 for evidence provision, protocol observability, durable claim-closure
 history, and lightweight decision threads; WS3B
 [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
-for sidebar / timeout / owner-escalation mechanics, paused behind WS3A
-evidence and owner direction. Parent plan, current README, roadmap,
+for sidebar / timeout / owner-escalation mechanics. Its promotion gate is
+satisfied as of 2026-04-26; implementation has not started. Parent plan,
+current README, roadmap,
 napkin, and collaboration log were reconciled. WS3B still must not
 auto-resume. Session handoff refreshed repo-continuity and marked deep
 consolidation due, not run, because `repo-continuity.md` is hard in
@@ -178,12 +195,13 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout` | 2026-04-24 | 2026-04-26 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
 | `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff` | 2026-04-26 | 2026-04-26 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
 | `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
+| `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -195,6 +213,63 @@ new sessions add rows; matching platform/model/agent_name updates
 ## Landing Target (per PDR-026)
 
 **Latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, WS3B and joint-decision status reconciliation):**
+
+- current README, roadmap, parent MAC plan, repo-continuity, and this thread
+  record now reflect that WS3B's promotion gate is satisfied but
+  implementation has not started;
+- future README now lists the newly recorded
+  `joint-agent-decision-protocol.plan.md`;
+- no staging, commit, hook automation, or WS3B mechanism was started.
+
+**Prior latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, commit-bundle evidence taxonomy):**
+
+- future intent-to-commit plan now treats three staged-bundle integrity
+  failures as promotion-threshold evidence: substitution, disappearance, and
+  accretion;
+- napkin captures that the durable unit is the full bundle: agent intent,
+  intended pathspecs, staged diff, and commit subject;
+- no staging, commit, hook automation, or WS3B mechanism was started.
+
+**Prior latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, lock-wait nuance):**
+
+- commit skill now states Claude may use Monitor to wait for
+  `.git/index.lock`, while Codex/Cursor should use a bounded shell wait unless
+  a custom monitor exists;
+- the note explicitly preserves the distinction: lock waits are physical
+  guards, while `git:index/head` active claims and shared-log entries are the
+  coordination layer;
+- no staging, commit, hook automation, or WS3B mechanism was started.
+
+**Prior latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, commit-window protocol refinement):**
+
+- git index/head is now an explicit short-lived active-claim area
+  (`git:index/head`) before staging or committing;
+- the commit skill, start-right workflows, collaboration rules, state
+  schemas, state README, consolidation audit, channel card, founding
+  collaboration pattern, repo-continuity, and napkin carry the protocol;
+- platform commit adapters now point agents at the same canonical
+  commit-window-aware skill;
+- no WS3B sidebar/timeout/owner-escalation mechanics or hook automation
+  were started.
+
+**Prior latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, learning-first correction after WS4A closeout):**
+
+- owner correction applied: fitness limits, including hard and critical
+  signals, must never suppress capture, distillation, graduation, or useful
+  writing;
+- outgoing napkin archived to
+  [`napkin-2026-04-26.md`](../../active/archive/napkin-2026-04-26.md), and
+  high-signal entries distilled into `distilled.md`;
+- `consolidate-docs`, PDR-014, ADR-144, Practice Core, repo-continuity, and
+  this thread record now say learning comes first and fitness pressure routes
+  follow-up structure work.
+
+**Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS4A plan-state cleanup and consolidation closeout):**
 
 - parent MAC plan and roadmap now distinguish the completed WS3 evidence
@@ -224,7 +299,8 @@ new sessions add rows; matching platform/model/agent_name updates
   state as a first-class Practice surface;
 - `invoke-code-reviewers.md` now distinguishes reviewer dispatch from
   peer collaboration state;
-- WS3B sidebar, timeout, and owner-escalation work remains paused.
+- WS3B sidebar, timeout, and owner-escalation gate is satisfied;
+  implementation remains a separate pass.
 
 **Prior session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS3A complete):**
@@ -252,7 +328,8 @@ new sessions add rows; matching platform/model/agent_name updates
   evidence-bundle gaps, and schema validation;
 - marked `ws3a-refactor-observability` and `ws3a-validation-and-handoff`
   complete in the WS3A plan and refreshed current-plan/roadmap status;
-- WS3B sidebar, timeout, and owner-escalation surfaces remain paused.
+- WS3B sidebar, timeout, and owner-escalation surfaces remain unimplemented;
+  their promotion gate is satisfied.
 
 **Prior session landed as uncommitted documentation/state edits
 (2026-04-26 Codex):**
@@ -358,16 +435,16 @@ nl -ba .agent/directives/AGENT.md
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
   `293742cd`. WS3 is split: WS3A is complete and archived, WS3B sidebar /
-  escalation is evidence-gated, WS4A lifecycle integration is complete,
-  and WS5 remains owner-gated.
+  escalation gate is satisfied, WS4A lifecycle integration is complete, and
+  WS5 remains owner-gated.
 - Completed split plan:
   [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   — WS3A evidence provision, protocol observability, durable claim-closure
   history, and lightweight decision threads.
-- Paused sibling plan:
+- Gate-satisfied sibling plan:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
-  — WS3B sidebar, timeout, and owner-escalation mechanics; paused until owner
-  direction or real decision-thread evidence promotes it.
+  — WS3B sidebar, timeout, and owner-escalation mechanics; promotion gate
+  satisfied, implementation not started.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -377,17 +454,19 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-**WS4A lifecycle integration and plan-state cleanup are complete
-(refreshed 2026-04-26).** WS0 (`63c66c88`), WS1 (`a5d33519`), WS2
-(`293742cd`), WS3A, and the owner-approved lifecycle wiring pass have
-landed in the working tree. Follow-up cleanup reconciled reviewer norm
-wording and the WS5 status distinction. WS3B remains owner/evidence gated;
-WS5 now means post-WS4A real-session observation / seed harvest.
+**WS4A lifecycle integration, plan-state cleanup, and the commit-window
+refinement are complete in the working tree (refreshed 2026-04-26).**
+WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
+owner-approved lifecycle wiring pass, and the `git:index/head`
+coordination refinement are reflected in documentation/state surfaces.
+WS3B's promotion gate is satisfied but implementation has not started; WS5 now
+means post-WS4A real-session observation / seed harvest.
 
 **Resumption gate**: the later 2026-04-25 shared-communication-log entries
 appear to satisfy the original 3+ coordination-event inspection threshold, but
 that evidence was used to split and complete WS3A, then to justify the
-narrow WS4A lifecycle pass. It does not auto-promote WS3B or WS5.
+narrow WS4A lifecycle pass. Later three-agent phase-transition evidence
+satisfied the WS3B gate; it does not auto-implement WS3B or resume WS5.
 
 **Inspection points**: `/jc-consolidate-docs` § 7e now audits open/stale
 claims, recent closures, decision-thread state, unresolved decisions, evidence
@@ -400,15 +479,22 @@ bundle gaps, and schema validation.
 - WS4A lifecycle integration is complete across start-right,
   session-handoff, plan templates, Practice Core, ADR-119, ADR-124, and
   practice-index surfaces.
+- Commit-window coordination is implemented across commit skill, start-right,
+  collaboration rules, active/closed-claim schemas, state README,
+  consolidation audit, channel card, founding pattern, and continuity
+  surfaces.
 - The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - `repo-continuity.md` has been compacted from an overgrown historical surface
   into a live-state index; the pre-compaction body is archived at
-  `archive/repo-continuity-session-history-2026-04-26.md`.
-- `pnpm practice:fitness --strict-hard` passes after the compaction;
-  informational mode reports only soft findings.
-- WS3B sidebar, timeout, and owner-escalation work remains paused in the
-  sibling current plan.
+  `../archive/repo-continuity-session-history-2026-04-26.md`.
+- `distilled.md` intentionally exceeds its hard line limit after the
+  learning-first distillation. This is the correct fitness signal; do not
+  undo the learning. The next structural response is an explicit lane or
+  owner-approved deferral to bring `distilled.md` below hard by graduating,
+  pruning, or splitting without deleting signal.
+- WS3B sidebar, timeout, and owner-escalation promotion gate is satisfied in
+  the sibling current plan; implementation has not started.
 - The working tree still contains unrelated MCP/SDK TypeScript WIP. Do not
   absorb that into the WS3A documentation closeout.
 - The owner-requested Practice-integration / lifecycle-automation
@@ -426,16 +512,16 @@ bundle gaps, and schema validation.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
-- If WS3B is promoted, run reviewer routing before implementation:
+- Before WS3B implementation, run reviewer routing:
   `assumptions-reviewer` for timeout/promotion legitimacy,
   `docs-adr-reviewer` for escalation visibility, and
   `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
 
 ### Next Safe Step
 
-**No WS3A or WS4A implementation remains open. Do not start WS3B unless the owner
-explicitly promotes it or real decision-thread evidence proves async
-coordination insufficient.**
+**No WS3A, WS4A, or commit-window implementation remains open after the
+current active claim is closed. Do not start WS3B implementation unless the
+owner explicitly asks for that execution pass.**
 
 Choose the lane deliberately:
 
@@ -446,11 +532,10 @@ Choose the lane deliberately:
    executable brief before validation/triage work.
 3. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether the new start-right / handoff / template lifecycle triggers are
-   actually used in the next few sessions. Do not add hooks or WS3B surfaces
-   without evidence.
+   actually used in the next few sessions. Do not add hooks without evidence;
+   WS3B already has satisfied promotion evidence but remains unimplemented.
 4. **Other agentic engineering work** — pick an owner-directed queued plan.
-   WS3B stays paused unless promoted by owner direction or real
-   decision-thread evidence.
+   WS3B is one possible explicit implementation pass, not background work.
 
 ### Active Track Links
 

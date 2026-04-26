@@ -183,3 +183,48 @@ advisory-first and then verify exact staged-set ownership immediately before
 
 **Promotion trigger:** the future intent-to-commit plan now records concrete
 evidence for all three clash types on 2026-04-26.
+
+---
+
+## 2026-04-26 — Sturdy Otter — phase transition at 3 agents touching threads
+
+**Surprise:** the WS3A async-only signalling that scaled smoothly 1→2 agents
+on separated threads broke once a third agent's thread occasionally touched
+the others'. In a 90-minute window with three concurrent identities (Sturdy
+Otter / Codex / Frolicking Toast) the branch produced three lock-contention
+events plus three commit-time clash types (substitution / disappearance /
+accretion). Same protocol, same agents, different count of touching threads —
+the failure mode is structural, not workmanship.
+
+**Lesson:** signalling tells peers *what you're doing*. It does not produce
+*bilateral commitment*. At 3+ agents-touching, signalling alone leaves
+agents independently doing the locally-correct thing while producing
+globally-incorrect outcomes (clashes, redundant work, ambiguous follow-
+through). The next layer up — discuss → decide jointly → assign recorder →
+assign actor — is what scales further.
+
+**Promotion trigger:** captured in `joint-agent-decision-protocol.plan.md`
+(future, evidence-met) alongside the WS3B sidebar plan whose promotion gate
+this same evidence satisfied.
+
+---
+
+## 2026-04-26 — Sturdy Otter — recursive demonstration
+
+**Surprise:** the work was capturing failure modes of parallel agent
+coordination while suffering them in real time. Each clash that happened to
+my own commits became an evidence item in the plan describing how to
+prevent it. The intent-to-commit plan landed under exactly the conditions
+it would have prevented — three commit attempts before it stuck cleanly
+(`8f44a941` substitution, `b014ca20` disappearance, `9af63a84` success).
+
+**Lesson:** the owner observation "this is a clear phase transition point"
+had a quality the same evidence wouldn't have had if collected from logs.
+Sitting *inside* the failure mode while documenting it produced a sharper
+problem statement than retrospective analysis would have. Worth preserving
+this dynamic: when a coordination protocol is being designed under live
+pressure from its own absence, the design tends to be more honest about
+what the protocol must defend against.
+
+**Promotion trigger:** none new; captured here as session texture for
+PDR-011 §Surprise Pipeline.

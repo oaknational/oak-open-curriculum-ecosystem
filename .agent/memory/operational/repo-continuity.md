@@ -8,7 +8,14 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — commit-bundle
+**Last refreshed**: 2026-04-26 (Sturdy Otter / claude-code / claude-opus-4-7-1m
+— WS3A/WS4A 13-commit backlog cleanup landed under 3-agent contention;
+intent-to-commit and joint-agent-decision-protocol future plans authored;
+WS3B sidebar promotion gate satisfied; phase-transition evidence recorded;
+clash taxonomy A/B/C named. PR-87 quality remediation moves to a separate
+thread.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-bundle
 evidence taxonomy reflected. The future intent-to-commit plan now treats
 substitution, disappearance, and accretion as distinct staged-bundle integrity
 failures.)
@@ -78,8 +85,8 @@ thread records and plans; old session narrative belongs in `archive/`.
 - The future intent-to-commit plan has promotion-threshold evidence for
   staged-bundle integrity failures: substitution, disappearance, and
   accretion. Implementation remains owner-gated.
-- WS3B sidebar / timeout / owner-escalation work remains paused and
-  evidence-gated.
+- WS3B sidebar / timeout / owner-escalation promotion gate is satisfied
+  as of 2026-04-26; implementation has not started.
 
 ## Active Threads
 
@@ -89,7 +96,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identity: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identity: Codex / `codex` / `GPT-5` / commit-window-protocol / 2026-04-26. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Sturdy Otter / `claude-code` / `claude-opus-4-7-1m` / phase-transition-evidence-and-future-plans / 2026-04-26; Codex / `codex` / `GPT-5` / commit-bundle-evidence-taxonomy / 2026-04-26. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -155,8 +162,8 @@ these branch-relevant constraints:
 
 Current branch non-goals:
 
-- do not promote WS3B unless the owner directs it or decision-thread evidence
-  proves async coordination insufficient;
+- do not implement WS3B without an explicit execution pass, even though the
+  promotion gate is now satisfied;
 - do not reopen broader canonicalisation opportunistically;
 - do not treat monitor setup or owner-handled preview validation as in-repo
   acceptance work;
@@ -205,12 +212,13 @@ Choose the lane deliberately:
      archive/completed/ on next consolidate-docs.
 4. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
-   real sessions. Do not add hook reminders or WS3B sidebars/escalations
-   without evidence.
+   real sessions. Do not add hook reminders without evidence. WS3B now has
+   satisfied promotion evidence but still needs an explicit implementation
+   pass.
 5. **Other agentic engineering work** — WS3A, WS4A, and the commit-window
-   refinement are closed once the current claim is archived. Start WS3B
-   only after owner promotion or real decision-thread evidence. Otherwise pick
-   a queued plan from the current/roadmap surfaces.
+   refinement are closed once the current claim is archived. Start WS3B only
+   as an explicit implementation pass. Otherwise pick a queued plan from the
+   current/roadmap surfaces.
 
 ## Open Owner-Decision Items
 
@@ -222,8 +230,8 @@ These are visible owner-appetite items, not blockers for the active lanes:
    `.agent/reference/README.md` and the archived reference/notes plan.
 3. `boundary-enforcement-with-eslint.md` promotion proposal under PDR-032,
    same destination set as above.
-4. Whether to promote WS3B sidebar/escalation after observing real WS3A
-   decision-thread use.
+4. Whether to implement WS3B sidebar/escalation now that the promotion gate
+   is satisfied.
 
 ## Deep Consolidation Status
 
