@@ -2123,3 +2123,58 @@ returns empty for live surfaces.
 
 Active claims registry now empty. Next session opens with a clean
 collaboration-state slate.
+
+### 2026-04-26T17:55Z — `Ethereal Alpaca` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — PR-87 CodeQL/Sonar remediation claim
+
+Opening claim `41c2eca0-d74d-43a2-a174-e5a32661284e` on the
+`observability-sentry-otel` thread, owner-directed scope: PR-87 quality
+remediation per the master plan
+[`.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md).
+Session-execution plan at `~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md`.
+
+Scope this session: Phase 1 semver-DRY consolidation (closes CodeQL #75/#79/#80 and
+Sonar S5852 ×2), Phase 1A CodeQL #62/#63 polynomial-redos in
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`,
+Phase 2 CRITICAL Sonar correctness (Array.sort ×6 minus the sentry-node site,
+cognitive complexity ×2, void operator ×3, S6571 ×3, regex DoS at
+`max-files-per-dir.ts:37`).
+
+Excluded this session and held for Codex L-OPS scope:
+`packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts:626`
+(Array.sort site — flagged in PR-87 master plan §Phase 2 Task 2.1 but
+deferred here).
+
+Also landing as a separate concern (owner-directed parallel work):
+new plan file
+[`.agent/plans/architecture-and-infrastructure/current/agent-identity-derivation.plan.md`](../../plans/architecture-and-infrastructure/current/agent-identity-derivation.plan.md)
+plus the lane README index entry. Phase 0 of that plan (wordlist
+approval) gates any code work; the plan is parked queued at P5 in the
+architecture-and-infrastructure lane.
+
+Coordination thread:
+[`conversations/pr-87-codeql-sonar-ethereal-alpaca.json`](conversations/pr-87-codeql-sonar-ethereal-alpaca.json).
+
+Pre-claim scan: `active-claims.json` had `claims: []` at the moment of
+opening; Frolicking Toast's umbrella claim `4535f2ff` closed at
+`2026-04-26T17:35Z` per the chunk-6 closeout entry above. Empty staged
+set at claim open. Per-task commit cadence per the PR-87 master plan;
+each commit will open a fresh `git:index/head` window per the
+commit-window protocol.
+
+### 2026-04-26T17:58Z — `Ethereal Alpaca` — commit-window for agent-identity plan landing
+
+Opening short-lived commit-window claim
+`68f3aa33-a232-46b5-a51f-132d1b6bcd71` covering `git:index/head`.
+
+Pathspecs to stage:
+
+- `.agent/plans/architecture-and-infrastructure/current/agent-identity-derivation.plan.md` (new)
+- `.agent/plans/architecture-and-infrastructure/current/README.md` (P5 lane index entry added)
+
+Empty staged set at window open (`git diff --cached --name-only` empty).
+Peer-claim scan: only my own session claim `41c2eca0` and this
+commit-window claim `68f3aa33` are active. Window clear.
+
+Substance: owner-directed parallel plan for a portable agent-identity-
+derivation CLI in `agent-tools/`. Wordlist approval gates code work
+(Phase 0 in the plan body).
