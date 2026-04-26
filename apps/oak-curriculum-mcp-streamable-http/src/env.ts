@@ -41,6 +41,20 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     APP_VERSION_OVERRIDE: z.string().optional(),
     GIT_SHA_OVERRIDE: z.string().optional(),
     OAK_API_BASE_URL: z.url().optional(),
+    /**
+     * Shared secret that gates the diagnostic `/test-error` route.
+     *
+     * When set in `preview` or `development` environments, registers
+     * `POST /test-error` for repeatable Sentry capture validation
+     * (handled / unhandled / rejected modes). Forbidden in
+     * production — `superRefine` below makes that a hard startup
+     * failure.
+     *
+     * Minimum 16 chars to discourage trivial brute-force; rate-
+     * limited at the route level via the existing `oauthRateLimiter`
+     * (30 req / 15 min / IP).
+     */
+    TEST_ERROR_SECRET: z.string().min(16).optional(),
   });
 
 /**
@@ -62,6 +76,21 @@ export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
       message:
         'DANGEROUSLY_DISABLE_AUTH cannot be true in production. ' +
         'This flag is for local development only.',
+    });
+    return;
+  }
+
+  // Production safety: TEST_ERROR_SECRET must NEVER be set in production.
+  // The /test-error route exists for diagnostic capture validation;
+  // production has no need for it and a misconfigured secret would
+  // expose a controlled-throw surface to the public internet.
+  if (data.TEST_ERROR_SECRET && data.VERCEL_ENV === RELEASE_ENVIRONMENTS.production) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['TEST_ERROR_SECRET'],
+      message:
+        'TEST_ERROR_SECRET must not be set in production. ' +
+        'The /test-error route is for preview/development diagnostic use only.',
     });
     return;
   }

@@ -4,7 +4,7 @@ import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 import type { ToolHandlerOverrides } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
-import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
+import { setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
@@ -21,12 +21,13 @@ import {
 } from './app/bootstrap-error-handlers.js';
 import { createAppVersionHeaders } from './app/app-version-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
-import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import type { HttpObservability } from './observability/http-observability.js';
 import { createRateLimiters } from './rate-limiting/create-rate-limiters.js';
 import type { RateLimiterFactory } from './rate-limiting/index.js';
 import { initializeCoreEndpoints } from './app/core-endpoints.js';
+import { runOAuthAndAuthContextPhases } from './app/orchestration.js';
+import { registerDiagnosticRoutesIfEnabled } from './test-error/register-diagnostic-routes.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 export { loadRuntimeConfig } from './runtime-config.js';
 export interface CreateAppOptions {
@@ -169,9 +170,6 @@ function setupPostAuthPhases(
     },
     options.observability,
   );
-
-  // Error handlers must be registered AFTER all routes (Sentry docs requirement)
-  setupErrorHandlers(app, log, options.observability, options.setupSentryErrorHandler);
 }
 
 /** Logs the final bootstrap summary: route count, timing, and registered paths. */
@@ -210,28 +208,18 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
   );
 
-  await setupOAuthAndCaching(
+  await runOAuthAndAuthContextPhases({
     app,
-    options.runtimeConfig,
+    runtimeConfig: options.runtimeConfig,
+    observability: options.observability,
+    clerkMiddlewareFactory: options.clerkMiddlewareFactory,
+    upstreamMetadata: options.upstreamMetadata,
     log,
     bootstrapTimer,
     appId,
     allowedHosts,
-    options.observability,
-    options.upstreamMetadata,
     oauthRateLimiter,
-  );
-
-  runBootstrapPhase(
-    log,
-    bootstrapTimer,
-    'setupGlobalAuthContext',
-    appId,
-    () => {
-      setupGlobalAuthContext(app, options.runtimeConfig, log, options.clerkMiddlewareFactory);
-    },
-    options.observability,
-  );
+  });
 
   setupPostAuthPhases(
     app,
@@ -244,6 +232,17 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     mcpRateLimiter,
     assetRateLimiter,
   );
+
+  registerDiagnosticRoutesIfEnabled({
+    app,
+    env: options.runtimeConfig.env,
+    oauthRateLimiter,
+    observability: options.observability,
+    log,
+  });
+
+  // Error handlers registered AFTER all routes (Sentry docs).
+  setupErrorHandlers(app, log, options.observability, options.setupSentryErrorHandler);
 
   logBootstrapSummary(app, log, appId, bootstrapTimer);
   return app;

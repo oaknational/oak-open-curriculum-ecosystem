@@ -800,3 +800,55 @@ is still the right next implementation.
 coordination artefact, this thread record's Codex identity role, and the
 napkin if the harvest produces a durable observation. No WS3 implementation
 or plan-body resumption is intended in this session.
+
+### 2026-04-26T07:37:29Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS5 harvest claim close
+
+Harvest complete. Finding: the protocol evidence validates shared-log +
+claims coordination, but does **not** yet validate the full WS3 sidebar and
+owner-escalation machinery as the next automatic implementation. The next
+implementation should be either a smaller conversation/decision-thread
+surface or a claim-closure-history refinement before sidebar mechanics.
+
+Closing claim `f0dac2da-e7ff-4c44-ba19-e6377e4ef7e9`; final registry state
+returns to empty.
+
+### 2026-04-26T07:45:07Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3 plan split
+
+Opened claim `d4b28f30-543d-4935-a776-65b7826fe5a1`.
+
+**Intent:** under owner direction, split the paused WS3 plan into two
+separate files: first, evidence provision, protocol observability, claim
+closure history durability, and a lightweight conversation/decision-thread
+surface; second, the existing sidebar and owner-escalation functionality,
+kept evidence-gated rather than auto-resumed.
+
+**Areas touched:** the multi-agent collaboration current plan and index
+surfaces, the agentic-engineering roadmap / next-session continuity where
+they describe WS3, plus the collaboration log and active-claims registry for
+this coordination artefact.
+
+### 2026-04-26T07:51:42Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3 plan split claim close
+
+Plan split complete. Created separate current-plan files for WS3A
+decision-thread / claim-history / observability work and WS3B sidebar /
+escalation work; reconciled the parent plan, current index, roadmap,
+thread next-session record, napkin observation, and this log.
+
+Closing claim `d4b28f30-543d-4935-a776-65b7826fe5a1`; final registry state
+returns to empty. WS3B remains evidence-gated and must not auto-resume.
+
+### 2026-04-26T07:52Z — `Sharded Stroustrup` — re-opened claim for /test-error implementation
+
+Re-opening claim `b3e0c581-940e-4ac8-841b-0e9bf3fbf90a` to implement
+the owner-authorised follow-ups from prior session:
+
+1. `/test-error` route with shared secret + rate limit + three
+   modes (handled, unhandled, rejected) — closes the source-code-
+   upload empirical gap on the current preview release.
+2. Probe script enhancement to drive the new route.
+3. Phase 2 evidence update.
+
+Bootstrap fast-path: no other active claims at session-resume.
+Reviewer roster expands to include `security-reviewer` (shared
+secret with constant-time compare) + `test-reviewer` (new tests
+for new code).

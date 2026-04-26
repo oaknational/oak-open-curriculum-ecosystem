@@ -885,17 +885,71 @@ not a replacement: it correctly surfaces that the issues stream is
 silent for the probe set, and that's why the active path exists as
 a supplement.
 
-### Source maps / Debug IDs
+### Source maps / Debug IDs / Source-code upload
 
-Not directly queryable through the project-scoped Sentry MCP; the
-`find_releases` tool returns `New Issues: 0` and a release record
-but no artifact bundle inventory. **Inferred-positive**: if source
-maps were missing, `findOrCreateRelease` in the esbuild plugin would
-fail-loudly during build (per the architectural decision in
-ADR-163). Build success + transactions tagged with the release ⇒
-release-publish step ran successfully. Direct visual confirmation
-remains an owner-side check via the Sentry web UI's
-"Release > Artifacts" tab if required.
+**Empirical evidence from owner-directed active probe (2026-04-26)**:
+
+Owner directed a deeper validation after the initial passive
+evidence. Running
+[`apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh`](../../../../apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh)
+with the malformed-JSON target generated a real Sentry issue under
+the current preview release:
+
+| Field | Value | Interpretation |
+|---|---|---|
+| Issue | [`OAK-OPEN-CURRICULUM-MCP-6`](https://oak-national-academy.sentry.io/issues/OAK-OPEN-CURRICULUM-MCP-6) | error event captured ✅ |
+| Title | `SyntaxError: Expected property name or '}' in JSON at position 1` | matches probe payload |
+| Captured at | `2026-04-26T07:42:21.531Z` | matches probe `Sent at` exactly |
+| Tag `release` | `poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements` | release attribution works on errors ✅ |
+| Tag `git.commit.sha` | `8df25ce50ddeb4237b586b4966a395b39ce993bf` | per-event git provenance is the **deployed HEAD**, even though the release-level `last_commit` lags ✅ |
+| Tag `environment` | `preview` | correct |
+| Tag `handled` | `yes` | captured via `setupExpressErrorHandler` chain |
+| Tag `service` | `oak-curriculum-mcp-streamable-http` | correct |
+| Trace | `3f72b538197eb24d3142a22e749d88b9 / a383014300a82a20`, sampled=true | trace correlation works ✅ |
+| Cloud | `cloud.provider: vercel`, `cloud.region: lhr1` | Vercel context captured ✅ |
+| HTTP | method=POST url=/mcp body captured | request context captured ✅ |
+| Stack | `raw-body@3.0.2/index.js:287` → `body-parser@2.2.2/lib/types/json.js:72` | third-party frames captured with line/column ✅ |
+
+**Source-code upload status (current preview release)**:
+**EMPIRICALLY UNVERIFIED**. The malformed-JSON probe produces a
+stack trace that contains only third-party frames (raw-body,
+body-parser) — there is no application-source frame in the call
+path because the parse error happens before any application code
+runs. We have direct evidence that source-code upload works for
+**older releases** (issue
+[`OAK-OPEN-CURRICULUM-MCP-2`](https://oak-national-academy.sentry.io/issues/OAK-OPEN-CURRICULUM-MCP-2)
+on `release: evidence-2026-04-16-http-mcp-sentry-validation` shows
+`../src/__test-tools__/register-test-error-tool.ts:91:29` with
+rendered source-line context lines 88-94 displayed). Same upload
+pipeline runs on every build, so transitive evidence is strong;
+but the current preview release has no issue with app-source
+frames yet.
+
+**Closure path landed in this commit**:
+[`POST /test-error`](../../../../apps/oak-curriculum-mcp-streamable-http/src/test-error/test-error-route.ts)
+diagnostic route with:
+
+- Shared-secret authentication (`X-Test-Error-Secret`,
+  constant-time compare, min 16 chars)
+- Rate-limited via existing `oauthRateLimiter` (30 req / 15 min /
+  IP)
+- Three modes — `handled` (captureHandledError 4xx-equivalent),
+  `unhandled` (5xx via Express error chain), `rejected` (5xx via
+  async rejection)
+- Production-forbidden by `HttpEnvSchema` super-refine
+  (`TEST_ERROR_SECRET` must NOT be set when `VERCEL_ENV ===
+  production`)
+- Probe script extended with `--target=test-error --mode=unhandled
+  --secret=<value>`
+
+**Owner action required to close the gap**: set
+`TEST_ERROR_SECRET` to a 16+ char string in the Vercel preview
+environment variables, wait for deploy, run the probe with
+`--target=test-error --mode=unhandled`. Expected outcome: a Sentry
+issue with stack frames pointing at
+`src/test-error/test-error-route.ts:LINE` with rendered TS source
+context, proving source-code upload + symbolication on the current
+release.
 
 ### Phase 2 acceptance — ✅ MET (with one inferred-positive)
 
