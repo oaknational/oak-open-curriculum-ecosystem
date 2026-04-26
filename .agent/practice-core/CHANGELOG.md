@@ -4,6 +4,17 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-26 — learning before fitness correction
+
+Owner corrected a consolidation inversion: fitness limits, including hard and
+critical thresholds, are health signals and must never outrank preserving
+understanding. `consolidate-docs`, `practice.md`, `practice-lineage.md`,
+`practice-bootstrap.md`, PDR-014, and ADR-144 now say capture,
+distillation, graduation, and useful writing happen first; fitness pressure
+created by preserving knowledge is routed to later structural response
+(refine, split, graduate, or owner-approved limit change), not used to
+suppress learning.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-26 — collaboration lifecycle made portable Practice
 
 WS4-style lifecycle integration promoted WS0-WS3A collaboration state from

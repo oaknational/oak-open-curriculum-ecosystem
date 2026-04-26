@@ -29,13 +29,13 @@ quality:
    together. A consolidation that reviews only the current session's
    napkin misses the patterns that require multi-session synthesis.
 
-2. **Substance before fitness.** When writing a concept to a
-   permanent home, artificially constraining the concept to stay
-   under a character or line budget produces under-weighted content
-   that fails to teach. Fitness is a post-writing editorial
-   concern — not a writing constraint. Concepts should be written
-   at the weight they deserve first; fitness pressure is handled
-   holistically afterwards through compression of redundant content
+2. **Learning before fitness.** When writing a concept to a permanent
+   home, artificially constraining the concept to stay under a character
+   or line budget produces under-weighted content that fails to teach.
+   Fitness is a post-writing health signal — not a writing constraint.
+   Concepts should be written, captured, distilled, and graduated at the
+   weight they deserve first; fitness pressure is handled holistically
+   afterwards through compression of redundant content
    elsewhere, splitting, or raising limits.
 
 3. **Current-plan promotion discipline.** A plan is only truly
@@ -79,19 +79,22 @@ Practically:
   than a single-session handoff — it captures the emergent patterns
   that single-session handoffs cannot.
 
-### Substance before fitness
+### Learning before fitness
 
 When writing a concept to a permanent home:
 
 1. **Write the concept fully** at the weight it deserves, in every
    location where it belongs.
-2. **Then** check fitness across the file's declared metrics.
-3. **Then** handle any fitness violation editorially — through
+2. **Preserve the learning fully** through capture, distillation, and
+   graduation even when the destination file is near or over a fitness
+   threshold.
+3. **Then** check fitness across the file's declared metrics.
+4. **Then** handle any fitness signal structurally — through
    compression of redundant content elsewhere in the file, splitting
    the file, or raising the metric's declared limit if the weight is
    justified.
 
-Fitness metrics are signals, not constraints on writing. A concept
+Fitness metrics are signals, not constraints on learning. A concept
 that needs 200 lines to teach properly should be written in 200
 lines; the file's target may need to rise, other content may need
 to compress, or a split may be appropriate — but the concept is
@@ -265,15 +268,14 @@ compounding workaround debt only becomes visible when three sessions'
 worth of workarounds are read together; a repeated failure mode at
 different abstraction layers requires multi-session aggregation.
 
-**Why substance before fitness.** Fitness limits exist to prevent
-unbounded growth, not to cap individual concepts. When limits
-constrain writing, concepts are trimmed to fit rather than written
-at their required weight. The result is documentation that is
-technically within limits but substantively under-weighted —
-teaching poorly, requiring repeated explanation, failing the
-self-teaching property. Treating fitness as editorial (applied
-after writing) preserves substance; treating it as constraint
-(applied during writing) sacrifices substance.
+**Why learning before fitness.** Fitness limits exist to prevent
+unbounded growth, not to cap individual concepts or suppress
+distillation. When limits constrain writing, concepts are trimmed to fit
+rather than written at their required weight. The result is documentation
+that is technically within limits but substantively under-weighted —
+teaching poorly, requiring repeated explanation, failing the self-teaching
+property. Treating fitness as a structural follow-up signal preserves
+substance; treating it as a constraint sacrifices substance.
 
 **Why decision-ready + session-entry-ready are both required.** A
 plan can be decision-ready (the what is settled) but not
@@ -341,7 +343,7 @@ Proven instances retained with `related_pdr: PDR-014`:
   visible across all four.
 - `.agent/memory/active/patterns/substance-before-fitness.md` — proven
   during Practice Core authoring (2026-04-05); also cited directly
-  in `practice.md` §Substance before fitness.
+  in `practice.md` §Learning before fitness.
 - `.agent/memory/active/patterns/current-plan-promotion.md` — statistical
   roadmap review plus observational tranche promotion (2026-03-22,
   algo-experiments).

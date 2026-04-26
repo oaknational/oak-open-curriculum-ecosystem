@@ -75,12 +75,14 @@ reveals equivalences that file-level diffing misses. Travelling content must
 carry the concept itself — what it is, how it works, why it matters — not a
 pointer to where a host repo documents it.
 
-**Substance before fitness.** When writing concepts to their correct homes,
-always write at the weight the concept deserves first. Deal with fitness
-limits holistically afterward — through compression, splitting, or raising
-limits. Artificially constraining a concept during writing to stay within a
-count underweights vital understanding. Fitness is a post-writing editorial
-concern, never a writing constraint.
+**Learning before fitness.** When writing concepts to their correct homes,
+always write at the weight the concept deserves first. Capture, distil, and
+graduate the signal fully even when the destination file is near, at, or over
+a fitness limit. Deal with fitness limits afterward — through compression,
+splitting, graduation, or owner-approved limit changes. Artificially
+constraining a concept during writing to stay within a count underweights
+vital understanding. Fitness is a post-writing health signal, never a reason
+to suppress learning.
 
 This layer defines _why_ the Practice works.
 
@@ -166,9 +168,10 @@ simply moves the accumulation problem downstream.
   ADR-144): `fitness_line_target` (soft), `fitness_line_limit` (hard),
   `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100). Each
   metric lands in one of four zones: `healthy` → `soft` → `hard` → `critical`,
-  where `critical` is `hard limit × 1.5`. `soft` is a refinement signal;
-  `hard` blocks at consolidation closure; `critical` always blocks and triggers
-  a loop-health post-mortem
+  where `critical` is `hard limit × 1.5`. All zones are signals. `hard` and
+  `critical` demand structural response and may block ordinary closure, but
+  they must not block capture, distillation, graduation, or preservation of
+  understanding
 - **Practice Core** → the trinity files carry all four fields. See
   [practice-lineage.md §Fitness Functions](practice-lineage.md#fitness-functions).
 

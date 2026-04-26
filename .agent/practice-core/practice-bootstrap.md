@@ -732,17 +732,17 @@ implement a consolidation command with this abstract workflow:
    signal); not yet stable — leave for further validation. Fitness
    limits are a signal to action (step 6), never a reason to defer.
 6. **Manage fitness thresholds** (three-zone model, ADR-144). Fitness
-   is a post-writing editorial concern, never a writing constraint.
-   Write at the weight the concept deserves, then deal with zones
-   here. Each metric lands in `healthy` → `soft` → `hard` → `critical`,
-   where critical is `hard limit × 1.5`.
+   is a post-writing health signal, never a learning constraint.
+   Write, capture, distil, and graduate at the weight the signal deserves,
+   then deal with zones here. Each metric lands in `healthy` → `soft` →
+   `hard` → `critical`, where critical is `hard limit × 1.5`.
    - `soft`: refine, split, or extend target (modestly, with rationale).
      Never blocks.
-   - `hard`: refine or split before closing the current consolidation.
-     Blocking at closure (`pnpm practice:fitness --strict-hard`). Only
-     the user may raise the hard limits.
-   - `critical`: loop failure. Remediate AND run the three-question
-     post-mortem from ADR-144 §Loop Health.
+   - `hard`: refine, split, graduate, or raise with owner approval.
+     Treat the validator failure as a signal to route structural work;
+     do not roll back or suppress preserved learning.
+   - `critical`: loop failure. Preserve the learning, open a remediation
+     lane, and run the three-question post-mortem from ADR-144 §Loop Health.
 7. **Manage the practice exchange.** Two directions:
    - _Incoming_: integrate files from `.agent/practice-core/incoming/`
      following the provenance chain and three-part bar. Practice evolution

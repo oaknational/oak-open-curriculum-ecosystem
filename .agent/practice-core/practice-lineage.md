@@ -293,16 +293,16 @@ frontmatter excluded).
 | Frontmatter key       | Threshold | What it guards                                                        |
 | --------------------- | --------- | --------------------------------------------------------------------- |
 | `fitness_line_target` | Soft      | Content lines — signal to refine; agents may extend modestly          |
-| `fitness_line_limit`  | Hard      | Content lines — cannot exceed without user approval                   |
+| `fitness_line_limit`  | Hard      | Content lines — structural response signal, not a learning veto       |
 | `fitness_char_limit`  | Hard      | Content characters — honest volume (ungameable)                       |
 | `fitness_line_length` | Hard      | Prose line width — readability and diff quality; always 100           |
 
 Metrics land in `healthy`/`soft`/`hard`/`critical` where `critical` =
-`hard limit × 1.5`. `soft` never blocks; `hard` blocks at consolidation
-closure; `critical` blocks always and triggers the ADR-144 §Loop Health
-post-mortem. Only the user raises hard limits. All governed files carry
-all four fields; shallow entry points (README, quickstart, VISION) are
-exempt.
+`hard limit × 1.5`. All zones are signals. `hard` and `critical` require
+structural response and may stop routine cleanup, but they must not suppress
+capture, distillation, graduation, or preservation of understanding. Only
+the user raises hard limits. All governed files carry all four fields;
+shallow entry points (README, quickstart, VISION) are exempt.
 
 ### Growth Governance
 
@@ -634,13 +634,14 @@ validated across 3+ repos.
 - **Portable does not mean symmetrical.** Support only evidenced platform mappings.
 - **Architectural excellence over expediency.**
 - **Apps are thin; libraries own domain logic.**
-- **Substance before fitness.** When writing concepts to their correct
-  homes, always write at the weight the concept deserves first. Deal
-  with fitness limits holistically afterward — compress, split, or
-  raise limits as a separate editorial pass. Constraining a concept
-  during writing to avoid exceeding a count artificially underweights
-  vital understanding. The concept must arrive fully formed; the
-  container adjusts to hold it.
+- **Learning before fitness.** When writing concepts to their correct
+  homes, always write at the weight the concept deserves first. Capture,
+  distil, and graduate the signal fully even if the container is already
+  near or over a fitness limit. Deal with fitness limits holistically
+  afterward — compress, split, graduate, or raise limits as a separate
+  structural pass. Constraining learning to avoid exceeding a count
+  artificially underweights vital understanding. The concept must arrive
+  fully formed; the container adjusts to hold it.
 
 ### Active Principles
 

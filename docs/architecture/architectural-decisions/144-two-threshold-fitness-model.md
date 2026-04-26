@@ -4,6 +4,9 @@
 **Date**: 2026-04-17
 **Supersedes**: ADR-144 (two-threshold model, 2026-04-01) — amended in place. Git
 history preserves the prior revision.
+**Amended**: 2026-04-26 — clarified that hard and critical zones are
+structural health signals, never reasons to suppress capture, distillation,
+graduation, or knowledge preservation.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -47,12 +50,12 @@ something soon_ → _loop failure_ — that sits above `healthy`. Fitness result
 land in one of the four zone labels per metric, derived from the declared
 thresholds and a single global ratio.
 
-| Zone       | Condition                                                    | Meaning                                          | Required response                                                                                                                |
-| ---------- | ------------------------------------------------------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `healthy`  | count ≤ target (or ≤ hard limit where no target is declared) | Within design envelope                           | None                                                                                                                             |
-| `soft`     | target < count ≤ hard limit                                  | Drifting; refinement opportunity                 | Consider refinement at the next natural boundary — consolidation, plan closure, or refactor touching the file. **Never blocks.** |
-| `hard`     | hard limit < count ≤ hard limit × `CRITICAL_RATIO`           | Overweight; remediate before the next closure    | Remediate before closing the current consolidation cycle. Advisory at routine commit; **blocking at consolidation closure**.     |
-| `critical` | count > hard limit × `CRITICAL_RATIO`                        | Loop failure — governance has not fired upstream | Stop routine work. Open a remediation lane. Conduct a loop-health post-mortem (see §Loop Health below). **Blocking always.**     |
+| Zone       | Condition                                                    | Meaning                                          | Required response                                                                                                                 |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `healthy`  | count ≤ target (or ≤ hard limit where no target is declared) | Within design envelope                           | None                                                                                                                              |
+| `soft`     | target < count ≤ hard limit                                  | Drifting; refinement opportunity                 | Consider refinement at the next natural boundary — consolidation, plan closure, or refactor touching the file. **Never blocks.**  |
+| `hard`     | hard limit < count ≤ hard limit × `CRITICAL_RATIO`           | Overweight; structural response needed           | Remediate, split, graduate, or route owner-approved limit change at the next natural boundary. Never suppress preserved learning. |
+| `critical` | count > hard limit × `CRITICAL_RATIO`                        | Loop failure — governance has not fired upstream | Stop routine work. Open a remediation lane. Conduct a loop-health post-mortem (see §Loop Health below). Preserve the learning.    |
 
 `CRITICAL_RATIO` is declared once in the validator
 (`scripts/validate-practice-fitness.mjs`) as a named constant. Its current
@@ -70,16 +73,18 @@ all its declared metrics.
 
 ### Exit code semantics
 
-| Mode                     | Invoked via                                                                     | Exits 1 on           |
-| ------------------------ | ------------------------------------------------------------------------------- | -------------------- |
-| `--informational`        | `pnpm practice:fitness:informational`, `pnpm check`                             | Nothing (always 0)   |
-| strict (default)         | `pnpm practice:fitness`                                                         | `critical`           |
-| strict + `--strict-hard` | Consolidation closure gate (used by `consolidate-docs` step 8 when closing out) | `hard` or `critical` |
+| Mode                     | Invoked via                                         | Exits 1 on           |
+| ------------------------ | --------------------------------------------------- | -------------------- |
+| `--informational`        | `pnpm practice:fitness:informational`, `pnpm check` | Nothing (always 0)   |
+| strict (default)         | `pnpm practice:fitness`                             | `critical`           |
+| strict + `--strict-hard` | Consolidation closure signal                        | `hard` or `critical` |
 
 Routine work proceeds uninterrupted in `soft` and `hard` zones because the
 actionable response there is "plan remediation", not "halt progress". `critical`
-is always blocking because it signals that the earlier zones failed to elicit
-the required remediation.
+blocks routine work because it signals that the earlier zones failed to elicit
+the required remediation. It does not block preserving understanding: capture,
+distillation, and graduation still write the signal first, then route the
+fitness failure to structural remediation.
 
 ### Key Principles
 
