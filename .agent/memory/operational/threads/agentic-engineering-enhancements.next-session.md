@@ -1,6 +1,33 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Cursor / GPT-5.5 / Codex — documentation-only:
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — WS4A plan-state
+cleanup, reviewer-norm correction, `jc-session-handoff`, and
+`jc-consolidate-docs` closeout. Parent plan and roadmap now distinguish the
+completed WS3 evidence harvest from remaining post-WS4A WS5 observation;
+reviewer guidance now treats specialist review as preferred evidence with
+explicit finding disposition, not universal blocking.)
+
+**Prior refresh**: 2026-04-26 (Composer / cursor — `jc-session-handoff`
+only: MCP Apps widget allowlist + `ToolMeta` + universal-tools test
+behaviour work documented in `repo-continuity.md`; type-check debt called
+out for next session. No plan-body edits. Date normalised from a
+future-dated `2026-04-27` entry during the WS4A lifecycle pass.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — owner-directed
+WS3 plan split. The former bundled "conversation file + sidebar"
+workstream is now two split plan files: WS3A
+[`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+for evidence provision, protocol observability, durable claim-closure
+history, and lightweight decision threads; WS3B
+[`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+for sidebar / timeout / owner-escalation mechanics, paused behind WS3A
+evidence and owner direction. Parent plan, current README, roadmap,
+napkin, and collaboration log were reconciled. WS3B still must not
+auto-resume. Session handoff refreshed repo-continuity and marked deep
+consolidation due, not run, because `repo-continuity.md` is hard in
+practice fitness.)
+
+**Prior refresh**: 2026-04-26 (Cursor / GPT-5.5 / Codex — documentation-only:
 public-API **consumer boundary** in `docs/architecture/openapi-pipeline.md`
 (no direct Hasura / materialised views / internal Oak DB from this
 monorepo); **Issue 1** refresh in
@@ -151,8 +178,9 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review` | 2026-04-24 | 2026-04-26 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
+| `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff` | 2026-04-26 | 2026-04-26 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
 | `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
@@ -167,6 +195,66 @@ new sessions add rows; matching platform/model/agent_name updates
 ## Landing Target (per PDR-026)
 
 **Latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, WS4A plan-state cleanup and consolidation closeout):**
+
+- parent MAC plan and roadmap now distinguish the completed WS3 evidence
+  harvest from remaining post-WS4A observation / seed harvest work;
+- stale WS3/WS4 wording, per-WS seed counts, and stale-conversation wording
+  were corrected after `docs-adr-reviewer` findings;
+- reviewer governance now says specialist sub-agent review is preferred
+  evidence for substantive work, while findings require disposition and
+  only blocking findings / hard gate failures block closure;
+- `agent-collaboration.md` now says existing owner questions are distinct
+  from the deferred WS3B file-backed owner-escalation surface;
+- napkin date hygiene corrected the future-dated Composer entry from
+  2026-04-27 to 2026-04-26.
+
+**Prior latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, WS4A lifecycle integration):**
+
+- start-right quick/thorough now explicitly read active claims, the
+  shared communication log, and WS3A decision-thread files before edits;
+- session-handoff now closes own active claims into the closed-claims
+  archive and updates relevant decision threads before the consolidation
+  gate;
+- plan templates now include a lifecycle-trigger component and tiered
+  simple-plan/work-shape requirement;
+- Practice Core, PDR-024, ADR-119, ADR-124, practice-index, roadmap,
+  current-plan index, and documentation-sync log now treat collaboration
+  state as a first-class Practice surface;
+- `invoke-code-reviewers.md` now distinguishes reviewer dispatch from
+  peer collaboration state;
+- WS3B sidebar, timeout, and owner-escalation work remains paused.
+
+**Prior session landed as uncommitted documentation/state edits
+(2026-04-26 Codex, WS3A complete):**
+
+- codified the WS5 harvest baseline and RED fixtures for claim-history
+  and decision-thread surfaces;
+- added `closed-claims.schema.json`, migrated `closed-claims.archive.json`
+  to v1.1.0 with structured `closure` metadata, and updated claim-close
+  guidance across the directive, rules, state conventions, and
+  `consolidate-docs`;
+- self-applied the new closure path: the WS3A claim-history claim is in
+  `closed-claims.archive.json` with `closure.kind: "explicit"`;
+- validation: claim-history JSON/Ajv/closure checks and decision-thread
+  jq/file-dir/Ajv checks passed, along with targeted markdownlint,
+  `git diff --check`, and `pnpm practice:fitness:informational`. The only
+  hard fitness finding remains `repo-continuity.md`, already marked for
+  separate deep consolidation.
+- added `conversation.schema.json`,
+  `.agent/state/collaboration/conversations/`, open/closed examples, and
+  GREEN conversation fixtures preserving the RED filenames as history;
+- updated collaboration guidance for when to use the shared log, an
+  active claim, a decision thread, the napkin, and the thread record;
+- wired `consolidate-docs § 7e` to report active/stale claims, recent
+  closures, open/stale decision threads, unresolved decision requests,
+  evidence-bundle gaps, and schema validation;
+- marked `ws3a-refactor-observability` and `ws3a-validation-and-handoff`
+  complete in the WS3A plan and refreshed current-plan/roadmap status;
+- WS3B sidebar, timeout, and owner-escalation surfaces remain paused.
+
+**Prior session landed as uncommitted documentation/state edits
 (2026-04-26 Codex):**
 
 - renamed the live "embryo" terminology to **shared communication log/system**
@@ -183,14 +271,6 @@ new sessions add rows; matching platform/model/agent_name updates
   the unrelated/claimed `repo-continuity.md` hard finding remaining;
   `pnpm markdownlint-check:root` passed once, then a final rerun picked up
   Sharded's claimed PR-87 plan MD018 issue and was left untouched.
-
-Deferral honesty: the repo-continuity session-handoff update was not written
-because Sharded Stroustrup's active claim
-`d3ac3f74-2110-4da8-a4d0-2e01fa213613` covers
-`.agent/memory/operational/repo-continuity.md`. Future falsifiability check:
-read `.agent/state/collaboration/active-claims.json`; once that claim closes,
-reconcile repo-continuity Active Threads / Deep Consolidation Status against
-this thread record and the shared communication log.
 
 **Prior session landed as artefacts, not a commit**:
 
@@ -277,8 +357,17 @@ nl -ba .agent/directives/AGENT.md
 - Primary (active multi-workstream lane):
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
-  `293742cd`. WS3 (conversation file + sidebar mechanism), WS4
-  (operational integration), WS5 (observation harvest) remain.
+  `293742cd`. WS3 is split: WS3A is complete and archived, WS3B sidebar /
+  escalation is evidence-gated, WS4A lifecycle integration is complete,
+  and WS5 remains owner-gated.
+- Completed split plan:
+  [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+  — WS3A evidence provision, protocol observability, durable claim-closure
+  history, and lightweight decision threads.
+- Paused sibling plan:
+  [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+  — WS3B sidebar, timeout, and owner-escalation mechanics; paused until owner
+  direction or real decision-thread evidence promotes it.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -288,116 +377,80 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-**Thread paused on owner direction (refreshed 2026-04-26).** WS0
-(`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed; WS3 /
-WS4 / WS5 remain paused for owner review.
+**WS4A lifecycle integration and plan-state cleanup are complete
+(refreshed 2026-04-26).** WS0 (`63c66c88`), WS1 (`a5d33519`), WS2
+(`293742cd`), WS3A, and the owner-approved lifecycle wiring pass have
+landed in the working tree. Follow-up cleanup reconciled reviewer norm
+wording and the WS5 status distinction. WS3B remains owner/evidence gated;
+WS5 now means post-WS4A real-session observation / seed harvest.
 
-**Resumption gate**: at least three real parallel-session coordination
-events using the WS0 + WS1 surfaces. The later 2026-04-25
-shared-communication-log entries appear to satisfy this inspection
-threshold (Fresh Prince explicitly counted event 3; Keen Dahl's
-acknowledgement-with-scope-adjustment recorded event 4). Treat this as
-ready for owner-directed WS5 evidence harvest, not automatic WS3+ resumption.
+**Resumption gate**: the later 2026-04-25 shared-communication-log entries
+appear to satisfy the original 3+ coordination-event inspection threshold, but
+that evidence was used to split and complete WS3A, then to justify the
+narrow WS4A lifecycle pass. It does not auto-promote WS3B or WS5.
 
-**While paused, evidence accumulates passively** — every session on this
-repo that uses the shared communication log or active-claims registry produces evidence.
-No active session is required to "wait."
-
-**Inspection points** (where the evidence count is naturally surveyed):
-
-- `/jc-consolidate-docs` § 7e (stale-claim audit) — surfaces accumulated
-  claim activity per consolidation pass.
-- Napkin rotation — passing the rotation threshold is a natural moment
-  to count coordination events captured since WS1.
-
-**Resumption requires owner direction.** The gate does not auto-fire;
-owner re-evaluates when evidence threshold is visibly met.
+**Inspection points**: `/jc-consolidate-docs` § 7e now audits open/stale
+claims, recent closures, decision-thread state, unresolved decisions, evidence
+bundle gaps, and schema validation.
 
 ### Current State
 
-- `pnpm practice:fitness:informational` reports one hard file:
-  `repo-continuity.md` (lines + chars). That file is currently inside
-  Sharded Stroustrup's active claim, so this handoff did not edit it.
-- `agent-collaboration.md` and `distilled.md` are now soft only after the
-  platform-independence/terminology edits; no caused hard fitness findings
-  remain on the surfaces this session touched.
-- `pnpm markdownlint-check:root` passed after the collaboration edits, then a
-  final rerun failed on Sharded's claimed
-  `pr-87-quality-finding-resolution.plan.md` MD018 issue. Leave that to the
-  observability agent/session unless the owner redirects.
-- `jq empty .agent/state/collaboration/active-claims.json` and
-  `git diff --check` pass.
-- Multi-agent collaboration terminology has been refreshed from "embryo" to
-  "shared communication log/system" on live doctrine surfaces; historical
-  entries retain old terms with a terminology note in the log.
-- Platform independence is now a load-bearing protocol constraint:
-  platform-native agent-team features may help build/inspect, but the
-  repo-owned markdown/JSON/rules/commands/skills/hooks surfaces must operate
-  independently.
-- The WS5 evidence threshold appears met by 2026-04-25 coordination events;
-  WS3+ still does not auto-resume.
-- Grouped commits landed the search-cli smoke DI fix, reviewer metadata update,
-  practice/testing doctrine homing, and continuity/plan handoff state.
-- `AGENT.md`, `principles.md`, and `testing-strategy.md` are healthy.
-- Sub-agent review findings have been integrated: valid lost knowledge was
-  restored and incorrect transfer details were corrected.
-- `pnpm check` was attempted and failed only in streamable-http
-  `smoke:dev:stub`, `test:a11y`, and `test:ui` because
-  `VERCEL_GIT_COMMIT_SHA` is missing for Sentry release resolution.
-- A focused observability plan now captures that blocker:
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md).
-  It has completed Phase 1 RED; observability work now resumes at Phase 2
-  GREEN, not RED planning.
-- Broader TypeScript/development/troubleshooting restructuring remains queued
-  separately in the knowledge-role plan.
+- WS3A RED, claim-history GREEN, decision-thread GREEN, protocol-observability
+  refactor, and validation/handoff are complete.
+- WS4A lifecycle integration is complete across start-right,
+  session-handoff, plan templates, Practice Core, ADR-119, ADR-124, and
+  practice-index surfaces.
+- The completed WS3A split plan lives in
+  [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
+- `repo-continuity.md` has been compacted from an overgrown historical surface
+  into a live-state index; the pre-compaction body is archived at
+  `archive/repo-continuity-session-history-2026-04-26.md`.
+- `pnpm practice:fitness --strict-hard` passes after the compaction;
+  informational mode reports only soft findings.
+- WS3B sidebar, timeout, and owner-escalation work remains paused in the
+  sibling current plan.
+- The working tree still contains unrelated MCP/SDK TypeScript WIP. Do not
+  absorb that into the WS3A documentation closeout.
+- The owner-requested Practice-integration / lifecycle-automation
+  exploration has been implemented as the narrow WS4A lifecycle pass; no
+  automation hooks or WS3B mechanisms were started.
+- Reviewer closeout for this cleanup used `docs-adr-reviewer` and
+  `assumptions-reviewer`; actionable findings were absorbed into the parent
+  plan, roadmap, reviewer guidance, Practice Core, and agent-collaboration
+  directive.
 
 ### Blockers / Low-Confidence Areas
 
-- `repo-continuity.md` was not updated by this handoff because it is actively
-  claimed by Sharded Stroustrup; reconcile it after their claim closes.
-- Sharded-owned observability surfaces are dirty in the working tree. Do not
-  absorb or rewrite them from this thread unless the owner explicitly redirects.
+- Full branch gates are not claimed green; current repo state includes separate
+  MCP/SDK TypeScript debt outside WS3A.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
+- If WS3B is promoted, run reviewer routing before implementation:
+  `assumptions-reviewer` for timeout/promotion legitimacy,
+  `docs-adr-reviewer` for escalation visibility, and
+  `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
 
 ### Next Safe Step
 
-**No active step on this thread until the owner directs evidence harvest
-or resumption review.**
+**No WS3A or WS4A implementation remains open. Do not start WS3B unless the owner
+explicitly promotes it or real decision-thread evidence proves async
+coordination insufficient.**
 
-The thread is paused. The next safe step is to do nothing on it
-proactively. Sessions on other threads that touch the WS0/WS1 surfaces
-will accumulate evidence passively; periodic consolidation passes will
-surface the count.
+Choose the lane deliberately:
 
-Before any owner-directed resumption, reconcile `repo-continuity.md` once
-Sharded Stroustrup's claim on that file closes, because session-handoff could
-not safely update that repo-level surface during this pass.
-
-When the owner directs resumption or evidence harvest, the candidates in
-priority order are:
-
-1. **WS5 evidence harvest** — read all shared-communication-log entries, claims, and
-   napkin observations accumulated since WS1; map them against WS1's
-   observation seed (*can simultaneous agents detect each other's claims
-   and coordinate via registry, without mechanical refusal?*); document
-   what worked and what needs reshaping. WS5 outputs may motivate
-   amendments to the schema, the rule, the directive, or all three.
-2. **WS3 (conversation file + sidebar)** — unblocked once WS5 has
-   informed the conversation-file schema design with real overlap-
-   conversation evidence. Plan body around line 762 (line numbers
-   shifted from 734 after the new Status section landed).
-3. **Pending-graduations register sweep** — collaboration-related
-   candidates accumulate during the pause; the sweep should run when
-   resumption begins.
-
-Reviewer routing for WS3 (when eventually unblocked):
-`assumptions-reviewer` (sidebar timeouts, parallel-sidebars-allowed
-decision, owner-escalation surface shape), `docs-adr-reviewer`
-(conversation schema and thread-record distinction),
-`architecture-reviewer-fred` (state-vs-memory boundary extension into
-conversations and escalations).
+1. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+   `ToolMeta` / `listUniversalTools` TypeScript debt.
+2. **Observability branch-primary** — read the
+   [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
+   executable brief before validation/triage work.
+3. **Lifecycle integration follow-up** — only if owner-directed, observe
+   whether the new start-right / handoff / template lifecycle triggers are
+   actually used in the next few sessions. Do not add hooks or WS3B surfaces
+   without evidence.
+4. **Other agentic engineering work** — pick an owner-directed queued plan.
+   WS3B stays paused unless promoted by owner direction or real
+   decision-thread evidence.
 
 ### Active Track Links
 

@@ -46,7 +46,15 @@ One `*.next-session.md` file per active thread. Each file contains:
 | --- | --- | --- |
 | [`../repo-continuity.md`](../repo-continuity.md) | All threads; invariants; active-threads index | Long-lived; refreshed per session-handoff |
 | [`<slug>.next-session.md`](.) (this dir) | One thread's next-session landing target **and lane state** (workstream surface retired 2026-04-21 Session 5; see [`../workstreams/README.md`](../workstreams/README.md)) | Short-horizon landing; long-lived lane state |
+| [`../../state/collaboration/conversations/`](../../state/collaboration/conversations/) | One structured async decision topic | Operational state; open until `resolution`, then retained as evidence |
 | [`../tracks/`](../tracks/) | Tactical per-session coordination cards | Ephemeral; resolve/delete at session close |
+
+Thread records are durable cross-session continuity and lane state. Do
+not copy decision-thread bodies into them; cite the decision-thread file
+when a decision affects the next safe step. Use the napkin for session
+learning and surprises, not for live ownership or decision requests.
+At handoff, summarise only open/stale decision threads that change the
+thread's next safe step; ordinary closed threads remain evidence by path.
 
 ## Identity schema
 
