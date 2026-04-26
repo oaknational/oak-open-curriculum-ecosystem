@@ -20,14 +20,17 @@ consultation at all):
 - **(b) Overlap with another agent's active claim** — consult the shared
   communication log at
   [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
-  and any open conversation files for context, then decide how to
+  and any open decision-thread files for context, then decide how to
   coordinate: proceed with caution, ping the other agent via the shared
-  communication log, open a sidebar (WS3), or ask the owner via
-  `AskUserQuestion`.
+  communication log, open or append a decision thread under
+  `.agent/state/collaboration/conversations/`, or ask the owner via
+  `AskUserQuestion`. Sidebar, timeout, and owner-escalation mechanics are
+  WS3B and remain paused until explicitly promoted.
   Record the decision in your own claim's `notes` field citing the other
-  agent's `claim_id` (and additionally append a shared-communication-log
-  entry if the decision requires response). The `notes` field plus optional
-  shared-communication-log entry are the artefacts.
+  agent's `claim_id` and, when used, the `conversation_id` (and additionally
+  append a shared-communication-log entry if the decision requires
+  response). The `notes` field plus optional log or decision-thread entry
+  are the artefacts.
 
 Consult the registry and decide how to coordinate before proceeding to any
 edit. The substance of the decision is **agent judgement**. This rule does
@@ -37,18 +40,19 @@ Mechanical Refusals](../directives/agent-collaboration.md)).
 
 ## At session close
 
-Either:
+Write durable closure history, then remove your active entry:
 
-- **Close your claim** — remove your entry from `active-claims.json` (or
-  set `freshness_seconds` to a value that has already elapsed so
-  consolidate-docs archives it), or
-- **Leave it for staleness audit** — if the claim's work is finished but
-  no other agent is waiting on the area, it is acceptable to leave the
-  claim and let consolidate-docs archive it on its next pass. Staleness is
-  not a failure mode; it is the protocol's garbage collection.
+1. Copy the active claim into `closed-claims.archive.json`.
+2. Add `archived_at` plus `closure.kind: "explicit"`,
+   `closure.closed_at`, `closure.closed_by`, `closure.summary`, and at
+   least one `closure.evidence[]` reference.
+3. Remove your entry from `active-claims.json`.
 
-Crashed sessions whose claims never close are handled by the consolidate-docs
-stale-claim audit. The agent is not stranded by a peer's failure to close.
+If the owner closes a claim on an agent's behalf, use
+`closure.kind: "owner_forced"` and cite the owner direction. Crashed
+sessions whose claims never close are handled by the consolidate-docs
+stale-claim audit with `closure.kind: "stale"`. The agent is not stranded
+by a peer's failure to close.
 
 ## Why this rule exists
 
@@ -99,8 +103,8 @@ The authoritative schema is
 [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
 Every entry carries: `claim_id`, `agent_id` block (PDR-027 identity), `thread`
 slug, `areas` array, `claimed_at`, `freshness_seconds` (default 14400 = 4
-hours), optional `heartbeat_at`, `sidebar_open` (WS3), `intent` prose, and
-optional `notes`.
+hours), optional `heartbeat_at`, `sidebar_open` (forward WS3B field),
+`intent` prose, and optional `notes`.
 
 **Single-level claim model**: there is no `exclusive` vs `advisory` field.
 All claims are advisory; strength of signal is communicated via the `intent`
@@ -128,11 +132,17 @@ end-to-end against itself.
 - [`agent-collaboration.md`](../directives/agent-collaboration.md) —
   agent-to-agent working model and channel taxonomy.
 - [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json)
-  — schema authority.
+  — active-registry schema authority.
+- [`closed-claims.schema.json`](../state/collaboration/closed-claims.schema.json)
+  — closed-claim archive schema authority.
 - [`active-claims.json`](../state/collaboration/active-claims.json) —
   active registry.
 - [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json)
-  — archival surface populated by consolidate-docs at staleness threshold.
+  — durable closure-history surface for explicit, stale, and owner-forced
+  claim closure.
+- [`conversation.schema.json`](../state/collaboration/conversation.schema.json)
+  and [`conversations/`](../state/collaboration/conversations/) — WS3A
+  decision-thread contract and examples.
 - [`use-agent-comms-log.md`](use-agent-comms-log.md) — shared-communication-log usage
   rule; sibling tripwire on intent declaration.
 - [`respect-active-agent-claims.md`](respect-active-agent-claims.md) —

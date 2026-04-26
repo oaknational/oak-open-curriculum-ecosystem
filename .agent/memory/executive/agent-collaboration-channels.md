@@ -1,8 +1,9 @@
 # Agent Collaboration Channels
 
-Five primary communication channels plus owner escalation exist between
+Five primary communication channels plus owner questions exist between
 agents working in this repo. Pick the one that fits the shape of what you
-need to communicate. Full working model lives in
+need to communicate. Sidebar and file-backed owner escalation remain WS3B
+work until explicitly promoted. Full working model lives in
 [`agent-collaboration.md`](../../directives/agent-collaboration.md);
 this card is an index for at-a-glance routing.
 
@@ -12,8 +13,8 @@ this card is an index for at-a-glance routing.
 | --- | --- | --- | --- |
 | 1 | **Thread record** `<slug>.next-session.md` | Durable async, narrative, multi-session | Continuity across sessions on a single thread; identity registration; landing target |
 | 2 | **Shared communication log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Leave notes for whoever reads next; discover what other agents have been working on |
-| 3 | **Conversation file** `state/collaboration/conversations/<id>.json` (WS3) | Structured per-topic JSON, async | Live exchange between agents on overlap topics needing more structure than the shared communication log |
-| 4 | **Sidebar** (WS3) | Short-lived focused exchange by mutual agreement | Tighter coordination when async is too slow; either agent may decline |
+| 3 | **Decision thread** `state/collaboration/conversations/<id>.json` (WS3A) | Structured per-topic JSON, async | Concrete overlap discussion, decision requests, decisions, resolutions, and evidence |
+| 4 | **Sidebar** (WS3B paused) | Short-lived focused exchange by mutual agreement | Deferred; use only if owner direction or decision-thread evidence promotes WS3B |
 | 5 | **Reviewer dispatch** | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (`docs-adr-reviewer`, `assumptions-reviewer`, etc.) — **not** peer collaboration |
 | 5b | **Owner question** via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing information that only the owner can supply |
 
@@ -32,18 +33,17 @@ Need to communicate something to another agent?
 ├── Just leaving a discovery note ("I'm touching X")?
 │   └── Shared communication log (2)
 │
-├── Live exchange on a coordination topic?
-│   ├── Async OK
-│   │   └── Conversation file (3) — WS3
-│   └── Need it now
-│       └── Sidebar by mutual agreement (4) — WS3
+├── Concrete async coordination decision or evidence bundle?
+│   └── Decision thread (3) — WS3A
+│
+├── Need tighter live coordination than async can provide?
+│   └── Sidebar (4) only after WS3B is explicitly promoted
 │
 ├── Need expert review of a draft?
 │   └── Reviewer dispatch (5) — fork-blocking-rejoin in your own session
 │
 └── Disagreement that won't converge, or missing decision-class info?
-    └── Owner question via AskUserQuestion (5b) — or, in WS3,
-        the explicit escalations/ surface
+    └── Owner question via AskUserQuestion (5b)
 ```
 
 ## Cross-references
@@ -54,5 +54,7 @@ Need to communicate something to another agent?
   shared-communication-log usage discipline.
 - [`respect-active-agent-claims.md`](../../rules/respect-active-agent-claims.md)
   — area-consultation tripwire.
+- [`conversation.schema.json`](../../state/collaboration/conversation.schema.json)
+  — WS3A decision-thread schema.
 - [`invoke-code-reviewers.md`](invoke-code-reviewers.md) — reviewer
   dispatch routing.

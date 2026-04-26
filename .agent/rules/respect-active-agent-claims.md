@@ -19,8 +19,12 @@ The substance of the decision is yours. Available options:
   overlap decision in `notes`, and proceed;
 - **ping the other agent via the shared communication log** — append a directed note
   citing the other agent's `claim_id`;
-- **request a sidebar** — short-lived focused exchange by mutual
-  agreement *(available from WS3)*;
+- **open or append a decision thread** — create or cite
+  `.agent/state/collaboration/conversations/<id>.json` when the overlap
+  needs structured async questions, decisions, resolutions, or evidence;
+- **request a sidebar** — deferred WS3B mechanism; do not use unless the
+  owner explicitly promotes it or decision-thread evidence proves async
+  coordination insufficient;
 - **ask the owner** — `AskUserQuestion` for hard-blocking sync
   (always available).
 
@@ -44,7 +48,9 @@ audited at consolidation, not blockers. For active claims, freshness is
 authoritative: the `freshness_seconds` field (default 14400 = 4 hours)
 plus optional `heartbeat_at` define the active window; expired claims
 are archived by `consolidate-docs § 7e` to
-[`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json).
+[`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json)
+with `closure.kind: "stale"`. Normal and owner-forced closes use the
+same archive with `closure.kind: "explicit"` or `"owner_forced"`.
 
 ## Discovery surfaces
 
@@ -60,12 +66,16 @@ are archived by `consolidate-docs § 7e` to
   coordination notes that do not fit the claim schema. The
   [`use-agent-comms-log.md`](use-agent-comms-log.md) rule installs the
   write side of this discipline.
+- **Decision threads** —
+  [`.agent/state/collaboration/conversations/`](../state/collaboration/conversations/)
+  holds structured async decision-thread files when overlap needs concrete
+  `decision_request`, `decision`, `resolution`, or evidence entries.
 
 ## Forward references
 
-**WS3** introduces conversation files and the sidebar mechanism for
-structured peer exchange when overlap warrants it. Until WS3 lands,
-overlap discussion happens in the shared communication log or via owner question.
+WS3A introduces decision-thread files for structured async peer exchange.
+WS3B keeps sidebar, timeout, and owner-escalation mechanics paused until
+owner direction or real decision-thread evidence promotes them.
 
 ## Bootstrap fast-path
 
@@ -87,3 +97,5 @@ without further coordination overhead.
   (sibling tripwire pattern).
 - Operational guide:
   [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
+- Decision-thread schema:
+  [`conversation.schema.json`](../state/collaboration/conversation.schema.json).

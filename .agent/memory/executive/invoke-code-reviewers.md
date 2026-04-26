@@ -95,6 +95,15 @@ This keeps reintegration cheaper and reduces clarification loops. Mailbox
 delivery alone is not reintegration; the parent lane must absorb the outcome
 back into the authoritative plan or dialogue.
 
+## Reviewer Dispatch vs Peer Collaboration
+
+Reviewer dispatch is a fork-blocking-rejoin channel inside one agent's
+session. It does not replace peer collaboration state. Agents doing
+non-trivial overlapping work still use the shared communication log,
+active-claims registry, and WS3A decision threads per
+`agent-collaboration.md`; reviewers do not register active claims unless
+the owner explicitly gives them implementation ownership.
+
 ## When to Invoke
 
 Non-trivial changes include:
@@ -195,6 +204,16 @@ Invoke each specialist as a read-only sub-agent, giving it specific context abou
 - Report which required specialists were invoked.
 - For any not invoked, explicitly state `N/A` with justification.
 - Do not claim "comprehensive review" if required specialists were skipped without rationale.
-- Reviewer findings are implementation work by default: implement all findings unless explicitly rejected as incorrect, with rationale recorded in the session output.
-- Integrate reviewer dispositions before landing the artefact under review; post-landing amendments need a fresh review loop and leave wrong doctrine live in the interim.
-- Do not mark the change complete or proceed to merge until every finding is either implemented or explicitly rejected as incorrect with written rationale; triage is not deferral (`owner-triaged` means resolved or explicitly rejected with rationale, never backlog-only deferral).
+- Reviewer findings require explicit disposition. Accepted findings are
+  implementation work; rejected findings need written rationale; non-blocking
+  deferrals need deferral-honesty evidence and an owner-visible next action.
+- Integrate reviewer dispositions before landing the artefact under review
+  when the finding is blocking or when the finding affects live doctrine.
+  Post-landing amendments need a fresh review loop and leave wrong doctrine
+  live in the interim.
+- Do not mark the change complete or proceed to merge with unresolved
+  blocking findings, hard gate failures, or rule failures. Non-blocking
+  findings do not automatically block closure, but they still need a written
+  disposition; triage is not silent deferral (`owner-triaged` means resolved,
+  explicitly rejected with rationale, or deliberately deferred with
+  owner-visible evidence).

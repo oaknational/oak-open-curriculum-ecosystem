@@ -19,11 +19,13 @@ how-it-works-in-practice companion.
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
 | [`log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
-| [`active-claims.json`][active-claims] | Structured JSON; queryable registry | Append-on-claim; remove-on-close; archive-on-staleness | WS1 |
-| [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1 |
-| [`closed-claims.archive.json`][closed-claims] | JSON archive (same shape as active) | Append-on-archive by `consolidate-docs § 7e`; never deleted; permanent reference for `claim_id` citations | WS1 |
-| `conversations/` (forward) | Structured per-topic JSON | Created on conversation open; closed on resolution; archived after 30 days inactive | WS3 |
-| `escalations/` (forward) | One file per active owner-escalation | Created on escalation; resolved when owner writes resolution; surfaced in `repo-continuity.md` until resolved | WS3 |
+| [`active-claims.json`][active-claims] | Structured JSON; queryable registry | Append-on-claim; remove after durable close; stale-archive by consolidation | WS1 |
+| [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
+| [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
+| [`closed-claims.archive.json`][closed-claims] | JSON archive preserving claim body plus closure metadata | Append-on-explicit-close, stale archive, or owner-forced close; never deleted; permanent reference for `claim_id` citations | WS1/WS3A |
+| [`conversation.schema.json`][conversation-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
+| [`conversations/`][conversations-dir] | Structured per-topic JSON decision threads | Created on decision-thread open; closed with a `resolution`; open/stale state reported by consolidation | WS3A |
+| `escalations/` (forward) | One file per active owner-escalation | Deferred to WS3B; do not create until owner direction or decision-thread evidence promotes the sibling plan | WS3B paused |
 
 ## Schema-Field Provenance
 
@@ -46,29 +48,24 @@ evidence.
 | `freshness_seconds` (default 14400) | First-principles | Liveness signal for stale-audit; 4 hours is the starting default (rationale below) |
 | `heartbeat_at` (optional) | First-principles | Long-session freshness refresh |
 | `sidebar_open` (boolean default false) | First-principles | Forward-reference field for WS3 sidebar mechanism |
+| `closure.kind` | Observed + first-principles | Explicit close and stale archival are observed; owner-forced close is reserved for owner intervention |
+| `closure.closed_at` / `closed_by` | First-principles | Claim history needs time and actor for durable closure provenance |
+| `closure.evidence[]` | Observed | WS5 showed claim outcomes need durable refs to logs, claims, plans, napkin, and thread records |
+
+Decision-thread fields reuse the same PDR-027 `agent_id` shape and
+`evidence_ref` enum from `active-claims.schema.json`. The v1.0.0
+conversation schema keeps its surface deliberately narrow: `message`,
+`claim_update`, `decision_request`, `decision`, `resolution`, and
+`evidence` entries only. It contains no sidebar, timeout, or escalation
+fields.
 
 ## Default `freshness_seconds = 14400` (rationale)
 
-Four hours errs slightly long, deliberately. The calibration inputs:
-
-- **Reference session length in this repo** — typical sessions on this
-  branch run ~1–3 hours of working time. A 4-hour budget covers the
-  whole session for almost all sessions without `heartbeat_at` refresh.
-- **Reference handoff cadence** — sequential agents typically open
-  hours-after-close, not days-after-close. A 4-hour window is short
-  enough to cycle out before the next agent opens, long enough that the
-  prior agent's claim is still visible during a typical handoff.
-- **Trade-off direction** — premature staleness would push noise to
-  consolidate-docs *during* live sessions (an agent's claim expires
-  mid-edit, another agent reading the registry sees stale liveness).
-  Delayed staleness only pushes noise to consolidate-docs *between*
-  sessions, where it is cheap to archive. The shorter direction is the
-  worse failure mode; 4 hours is the longer-leaning choice that still
-  cycles well within a day.
-
-This default is a starting point, not a calibration outcome. WS5
-evidence — three real parallel sessions worth of registry usage — is
-the planned re-evaluation gate.
+Four hours errs slightly long, deliberately. Typical sessions on this
+branch run ~1–3 hours; a 4-hour budget covers most sessions without
+`heartbeat_at` refresh and still cycles well within a day. Premature
+staleness is worse than delayed staleness because it creates false noise
+during live edits. WS5 evidence is the planned re-evaluation gate.
 
 ## Lifecycle
 
@@ -95,19 +92,20 @@ The refreshed window is `heartbeat_at + freshness_seconds`, not
 
 ### Close at session end
 
-Either remove the entry from `active-claims.json`, or set
-`freshness_seconds` to `1` (forces archival on the next consolidate-docs
-pass). Removal is preferred — the entry was load-bearing only while the
-session was active.
+Copy the active claim into `closed-claims.archive.json`, add
+`archived_at` plus `closure.kind: "explicit"`, `closure.closed_at`,
+`closure.closed_by`, `closure.summary`, and one or more
+`closure.evidence[]` references, then remove the active entry. Removal
+without a closed-claim record silently erases lifecycle history.
 
 ### Stale entries — automatic archival
 
 `consolidate-docs § 7e` walks `active-claims.json`, computes
 `claimed_at + freshness_seconds` (or `heartbeat_at + freshness_seconds`
 if newer), and archives any expired entry to `closed-claims.archive.json`
-with an `archived_at` ISO date prepended. Stale claims are *noise*, not
-*blockers*. The system does not strand agents waiting on a peer's
-forgotten claim.
+with `archived_at` and `closure.kind: "stale"`. Stale claims are
+*noise*, not *blockers*. The system does not strand agents waiting on a
+peer's forgotten claim.
 
 ### Unclosed-but-fresh entries
 
@@ -117,6 +115,33 @@ informational signal — possibly a crashed session. The owner reviews at
 consolidation. The next staleness threshold archives the entry
 automatically; no special intervention is required.
 
+### Open a decision thread
+
+Open `.agent/state/collaboration/conversations/<id>.json` when an
+overlap or protocol question needs more structure than the shared
+communication log. Good reasons include a concrete `decision_request`, a
+claim scope change that needs peer acknowledgement, or evidence that
+should stay attached to a resolution. Keep ordinary discovery notes in
+`log.md`; keep live area ownership in `active-claims.json`.
+
+### Close a decision thread
+
+Append a `decision` entry when the route is chosen, then a `resolution`
+entry with `outcome` and `body`, set `status: "closed"`, and add
+`closed_at`. Cite the decision thread from related claim closures or log
+entries when it explains the route taken. Do not copy the body into the
+thread record; thread records carry cross-session lane state and may cite
+the decision-thread file by path.
+
+### Protocol observability and evidence bundles
+
+`consolidate-docs § 7e` reports active/stale claims, recent closures,
+open/stale decision threads, unresolved decision requests, and malformed
+state. Non-trivial protocol claims should carry a small evidence bundle:
+claim statement, claim class (`lifecycle`, `coordination`, `policy`, or
+`validation`), evidence refs using the shared enum, verification status
+(`verified`, `partial`, or `needs-owner`), and next action / owner.
+
 ## Trusted-Agents Threat Model
 
 The protocol assumes **trusted agents** acting in good faith. This means:
@@ -124,7 +149,8 @@ The protocol assumes **trusted agents** acting in good faith. This means:
 - **Honest claims** — claims describe real intent and real areas of
   work; agents do not over-claim to lock peers out.
 - **Honest closures** — agents close their claims at session end (or
-  let staleness archive them naturally); agents do not falsify activity.
+  let staleness archive them naturally) with closure evidence; agents do
+  not falsify activity.
 - **Honest build-breakage reports** — agents declare known build
   breakage in the shared communication log rather than committing through a green
   gate they know is wrong.
@@ -162,6 +188,9 @@ fields:
 - [`use-agent-comms-log.md`][log-rule] — shared-communication-log usage rule.
 - [`respect-active-agent-claims.md`][respect-rule] — scope-discipline
   rule.
+- [`conversation.schema.json`][conversation-schema] and
+  [`conversations/`][conversations-dir] — decision-thread contract and
+  examples.
 - [`consolidate-docs.md § 7e`][consolidate-7e] — stale-claim audit
   step.
 - [`parallel-track-pre-commit-gate-coupling.md`][founding-pattern] —
@@ -171,7 +200,10 @@ fields:
 [log]: ../../state/collaboration/log.md
 [active-claims]: ../../state/collaboration/active-claims.json
 [active-claims-schema]: ../../state/collaboration/active-claims.schema.json
+[closed-claims-schema]: ../../state/collaboration/closed-claims.schema.json
 [closed-claims]: ../../state/collaboration/closed-claims.archive.json
+[conversation-schema]: ../../state/collaboration/conversation.schema.json
+[conversations-dir]: ../../state/collaboration/conversations/
 [register-rule]: ../../rules/register-active-areas-at-session-open.md
 [log-rule]: ../../rules/use-agent-comms-log.md
 [respect-rule]: ../../rules/respect-active-agent-claims.md

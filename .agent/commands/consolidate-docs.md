@@ -232,24 +232,31 @@ held over).
 
    Findings surface as `[<rule>] ↔ [<plan>]: <observed direction missing>`. New bidirectional pairs are added here when subsequent rules cite plan authorities.
 
-   <a id="stale-claim-audit"></a>**7e. Audit the active-claims registry for stale entries.** The
-   [`active-claims.json`](../state/collaboration/active-claims.json)
-   registry is signal-like state, not durable memory. Stale claims are noise
-   to be archived at consolidation, not blockers that strand other agents.
-   The audit shape:
+   <a id="stale-claim-audit"></a>**7e. Audit collaboration state for protocol observability.** The
+   [`active-claims.json`](../state/collaboration/active-claims.json),
+   [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
+   and
+   [`conversations/`](../state/collaboration/conversations/) surfaces are
+   signal-like state plus durable lifecycle history. The audit reports the
+   live protocol state before archiving stale entries. Findings are
+   informational unless they identify malformed state.
 
-   1. Read `.agent/state/collaboration/active-claims.json`. For every
+   1. **Active-claim snapshot**: read
+      `.agent/state/collaboration/active-claims.json`. For every
       entry, compute `staleness_threshold = claimed_at + freshness_seconds`
       (default `freshness_seconds` is 14400 = 4 hours). Use `heartbeat_at`
-      in place of `claimed_at` if present and more recent.
+      in place of `claimed_at` if present and more recent. Report
+      `[active] <claim_id> <thread> <agent_name>: fresh|stale; areas=<n>`.
    2. **Stale entries**: any claim where `staleness_threshold < now()`.
       Move each stale entry to
       [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
-      preserving the entry verbatim and adding `archived_at` (today's ISO
-      8601 date) at the top of the archived entry. Remove the entry from
-      `active-claims.json`. Archive, do not delete — conversation files,
-      napkin observations, and shared-communication-log entries may cite archived
-      `claim_id` values permanently.
+      preserving the entry verbatim and adding `archived_at` plus
+      `closure.kind: "stale"`, `closure.closed_at`, `closure.closed_by`,
+      `closure.summary`, and one or more `closure.evidence[]`
+      references. Remove the entry from `active-claims.json`. Archive, do
+      not delete — conversation files, napkin observations, and
+      shared-communication-log entries may cite archived `claim_id` values
+      permanently.
    3. **Unclosed-but-fresh entries**: any claim whose agent has not
       registered a subsequent thread-record entry (no `last_session`
       update in the matching `<thread>.next-session.md` since
@@ -258,9 +265,30 @@ held over).
       open since <claimed_at>; no thread-record activity since`. The agent
       is not stranded by a peer's silent failure to close a claim; the
       stale-archive pass cleans up at the next staleness threshold.
-   4. **Schema validation**: confirm `active-claims.json` and
-      `closed-claims.archive.json` parse as JSON and conform to
+   4. **Explicit and owner-forced closes**: ordinary session close should
+      already have archived the claim with `closure.kind: "explicit"`.
+      Owner-directed cleanup uses `closure.kind: "owner_forced"` and
+      cites the owner direction as evidence. Report recent closures as
+      `[closed] <claim_id> <kind> <closed_at>: <summary>`.
+   5. **Decision-thread snapshot**: scan
+      `.agent/state/collaboration/conversations/*.json`. Report
+      `[decision-thread] <conversation_id> <status> <thread>: <title>`.
+      Open threads whose latest entry is more than 7 days old are stale
+      unresolved threads; surface them as owner-review noise, not blockers.
+      Open threads with a `decision_request` and no later `decision` or
+      `resolution` are unresolved decisions.
+   6. **Evidence-bundle check**: for non-trivial protocol claims in plans,
+      claims, or decision threads, confirm the artefact names a claim
+      statement, claim class, evidence references, verification status, and
+      next action / owner. Missing fields surface as
+      `[evidence-bundle] <path-or-id>: <missing field>`.
+   7. **Schema validation**: confirm `active-claims.json` parses as JSON
+      and conforms to
       [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
+      Confirm `closed-claims.archive.json` parses as JSON and conforms to
+      [`closed-claims.schema.json`](../state/collaboration/closed-claims.schema.json).
+      Confirm each conversation file parses as JSON and conforms to
+      [`conversation.schema.json`](../state/collaboration/conversation.schema.json).
       Malformed JSON or schema violations surface as
       `[<file>]: <validator output>` for owner review. There is no
       automated validation tooling at this surface (per the source plan's

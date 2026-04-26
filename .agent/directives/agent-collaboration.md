@@ -8,11 +8,9 @@ split_strategy: "Extract per-channel protocol detail to companion docs as channe
 
 # Agent Collaboration Practice
 
-This directive defines the agent-to-agent working model for this repository.
-Its sibling, [`user-collaboration.md`](user-collaboration.md), governs the
-agent-to-owner working model. Together they make explicit what was
-previously implicit: collaboration in this repo has two distinct halves, and
-both need a settled doctrine.
+This directive defines the agent-to-agent working model. Its sibling,
+[`user-collaboration.md`](user-collaboration.md), governs agent-to-owner
+collaboration. Together they keep those two halves explicit.
 
 It complements, but does not replace,
 [`principles.md`](principles.md). If a collaboration habit conflicts with a
@@ -21,15 +19,11 @@ silently choosing one.
 
 ## What This Directive Installs
 
-This directive is grown by the [`multi-agent-collaboration-protocol`][p]
-plan. WS0 + WS1 (landed) install: vocabulary, the shared communication log,
-the structured claims registry, the JSON Schema authority, the staleness
-archive, and three behavioural rules (`dont-break-build-without-fix-plan`,
-`respect-active-agent-claims`,
-[`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)).
-WS3 adds conversation files and the sidebar mechanism. WS5 harvests
-evidence and drives refinement. Operational detail (schemas, lifecycle,
-field provenance) lives in
+This directive is grown by the [`multi-agent-collaboration-protocol`][p].
+WS0 + WS1 landed vocabulary, the shared log, claims, schemas, staleness
+archive, and tripwire rules. WS3A adds decision-thread files and durable
+claim closure history. WS3B keeps sidebar, timeout, and file-backed owner
+escalation evidence-gated. WS5 harvests evidence. Operational detail lives in
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Knowledge and Communication, Not Mechanical Refusals
@@ -78,8 +72,8 @@ memory.
 
 The normal posture is shared reasoning across the working tree: make
 the concern visible, explain why it matters, let the peer respond. If
-the work blocks without response, escalate via the explicit
-owner-escalation channel (WS3).
+the work blocks without response, ask the owner directly. The repo-owned
+owner-escalation directory is WS3B work and is not installed by WS3A.
 
 ## Scope Discipline Across Agent Boundaries
 
@@ -120,26 +114,35 @@ rule operationalises the consult-and-register half of the same tripwire.
 
 ## Communication Channels
 
-Five primary channels plus owner escalation exist; they have different
-shapes. Pick the one that fits what you need to communicate.
+Five primary channels plus owner questions exist; they have different
+shapes. Pick the one that fits what you need to communicate. The
+file-backed owner-escalation surface remains deferred to WS3B and exists
+only if that evidence-gated sibling plan is promoted.
 
 | Channel | Shape | Primary use | Forward ref |
 | --- | --- | --- | --- |
 | Thread record `<slug>.next-session.md` | Durable async, narrative, per-thread, multi-session | Continuity across sessions on a single thread | PDR-027 |
 | **Shared communication log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
-| Conversation file `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Live exchange between agents on overlap topics needing more structure than the shared communication log | WS3 |
-| Sidebar | Short-lived focused exchange by mutual agreement | Tighter coordination when async is too slow | WS3 |
+| Decision thread `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Concrete overlap discussion, decision requests, decisions, resolutions, and evidence | WS3A |
+| Sidebar | Short-lived focused exchange by mutual agreement | Deferred; only for tighter coordination if WS3B is explicitly promoted | WS3B paused |
 | Reviewer dispatch | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (docs-adr, assumptions, etc.) | already in use |
 | Owner question via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing-information that only the owner can supply | already in use |
 
-Channel-selection rules: the **shared communication log is a discovery surface, not a
-synchronisation surface** — eventually-consistent interleaved appends are
-fine. **Reviewer dispatch is not peer collaboration** — reviewer
-sub-agents are fork-blocking-rejoin within one agent's session and do
-not register claims. **Owner is the final tiebreaker**, surfaced through
-`AskUserQuestion` or (from WS3) the polled escalations directory; peer
-agreement is the default, owner escalation is the last move when
-agreement fails.
+Channel-selection rules: the **shared communication log is a discovery
+surface, not a synchronisation surface** — use it for discovery notes,
+lightweight narrative context, and signed "I noticed X" updates.
+**Active claims are live liveness signals** — use them for "I am
+touching this area now." **Decision threads are structured async
+coordination** — use them for overlap discussions that need concrete
+decision requests, decisions, resolutions, or evidence refs. **The
+napkin is session learning and surprises**, not the live coordination
+surface. **Thread records are durable cross-session continuity and lane
+state**, not the place to copy decision-thread bodies. **Reviewer
+dispatch is not peer collaboration** — reviewer sub-agents are
+fork-blocking-rejoin within one agent's session and do not register
+claims. **Owner is the final tiebreaker**, surfaced through an owner
+question such as `AskUserQuestion`; peer agreement is the default.
+File-backed owner escalation remains deferred to WS3B.
 
 ## Identity vs Liveness
 
@@ -155,12 +158,9 @@ These are different concerns and live in different surfaces.
   each claim carries `claimed_at`, optional `heartbeat_at`, and a
   `freshness_seconds` budget (default 14400 = 4 hours). After expiry the
   claim is **stale** — noise to be audited at consolidation, not a blocker
-  that strands other agents. Stale claims are archived (not deleted) by
-  `consolidate-docs` so conversation files and napkin observations can
-  cite archived claims permanently.
-
-The PDR-027 identity schema is reused inside claim entries. No new
-identity concept is introduced.
+  that strands other agents. Closed claims are archived, not silently
+  deleted: explicit, stale, and owner-forced closes all preserve
+  `closure.kind`, `closed_at`, `closed_by`, and evidence refs.
 
 ## Bootstrap Fast-Path
 
@@ -181,9 +181,10 @@ parallel-session coordination overhead beyond the single-write seed.
 
 ## Conversations as Learning-Loop Inputs
 
-Shared-communication-log entries, claim entries, conversation files (WS3), and sidebar
-transcripts (WS3) are durable evidence alongside the napkin. Refinements
-to this directive or to the claim/conversation schemas cite entries from
+Shared-communication-log entries, active and closed claim entries, and
+decision-thread files are durable evidence alongside the napkin. If WS3B
+later lands, sidebar transcripts join this evidence set. Refinements to
+this directive or to the claim/conversation schemas cite entries from
 those surfaces directly. Lessons graduate via the standard learning-loop;
 WS5's seed harvest reads across all of them.
 
@@ -229,24 +230,14 @@ ADR-125 (canonical `.agent/` content with thin platform adapters).
 
 ## Cross-references
 
-- [`user-collaboration.md`](user-collaboration.md) — sibling directive for
-  the agent-to-owner working model.
-- [`principles.md`](principles.md) — repository principles.
-- [`.agent/state/README.md`](../state/README.md) — state-vs-memory
-  distinction.
-- [`.agent/state/collaboration/log.md`](../state/collaboration/log.md) —
-  shared communication log (WS0).
-- [`active-claims.json`][active-claims] — structured claims registry (WS1).
-- [`active-claims.schema.json`][active-claims-schema] — JSON Schema
-  authority (WS1).
-- [`closed-claims.archive.json`][closed-claims] — staleness archive (WS1).
-- [`collaboration-state-conventions.md`][state-conventions] — operational
-  guide to lifecycle, schema-field provenance, and trusted-agents threat
-  model.
-- [`agent-collaboration-channels.md`][channels-card] — communication-channel
-  reference card.
-- [`threads/README.md`][threads-readme] — thread convention and
-  additive-identity rule.
+Core doctrine: [`user-collaboration.md`](user-collaboration.md),
+[`principles.md`](principles.md), and [`.agent/state/README.md`](../state/README.md).
+Core state: [log](../state/collaboration/log.md), [active claims][active-claims],
+[closed claims][closed-claims], [conversation schema][conversation-schema], and
+[conversations][conversations-dir]. Operational companions:
+[`collaboration-state-conventions.md`][state-conventions],
+[`agent-collaboration-channels.md`][channels-card], and
+[`threads/README.md`][threads-readme].
 
 [p]: ../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
@@ -254,6 +245,7 @@ ADR-125 (canonical `.agent/` content with thin platform adapters).
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
 [napkin]: ../memory/active/napkin.md
 [active-claims]: ../state/collaboration/active-claims.json
-[active-claims-schema]: ../state/collaboration/active-claims.schema.json
 [closed-claims]: ../state/collaboration/closed-claims.archive.json
+[conversation-schema]: ../state/collaboration/conversation.schema.json
+[conversations-dir]: ../state/collaboration/conversations/
 [state-conventions]: ../memory/operational/collaboration-state-conventions.md
