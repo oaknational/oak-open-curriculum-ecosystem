@@ -1,6 +1,49 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-26 (Keen Dahl / claude-code /
+**Last refreshed**: 2026-04-26 (Sharded Stroustrup / claude-code /
+claude-opus-4-7-1m — sentry-preview-validation-and-quality-triage
+walk against PR HEAD `66de47a2`. All six phases of the substrate
+plan executed; findings tables populated. **Phase 1 baseline**:
+deployment `dpl_9z4XxbhWtS3iHgyyhdQZAzzxbmV9` READY, SHA matches PR
+head, four MCP endpoints respond as designed (with the refinement
+that POST /mcp returns 406 without `Accept: text/event-stream` —
+content negotiation runs before auth gate; the 401 path is reached
+with the correct Accept header and emits proper RFC 9728
+`WWW-Authenticate: Bearer resource_metadata=...`). **Phase 2
+Sentry**: release `poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`
+exists with last_commit `9bcc8ffc` (NOT the current HEAD —
+investigated per owner direction; mechanism is **Turbo build-task
+caching**, not Sentry plugin idempotency: the four post-`9bcc8ffc`
+commits are docs-only or non-CI-config-only, so the MCP-HTTP build
+task is a 100% cache replay and the Sentry esbuild plugin doesn't
+re-execute. Bundle is byte-equivalent; release attribution is
+correct in substance). 194 spans tagged with the release in the
+last hour, including the Phase 1 baseline probes I just ran. Issues
+stream silent — explained: a 401 isn't an unhandled exception.
+**Phase 3 CodeQL**: 12 open alerts. Full triage table populated.
+4 net-new vs PR-87 plan: alert #5 already named (Phase 0 finding
+0.1); alerts #62 + #63 are real correctness findings on
+`oak-search-sdk` **(triggers Phase 5 override gate — held for owner
+direction)**; alerts #69 + #72 are false-positives uniform with
+the DI-opacity shape of alerts #70/#71. PR-87 plan-body line
+numbers updated for #70/#71 (113/115 not 187/193 — earlier
+refactor commits shifted lines) and disposition reasoning
+corrected (DI-opacity, not line-attribution artefact). **Phase 4 Sonar**: QG ERROR (5.1% duplication, 0%
+hotspots reviewed, 77 violations). Drift +1 issue (S5843 complexity
+on the inline semver regex; closes on PR-87 Phase 1). All 4
+hotspots already named in PR-87 with dispositions. **Phase 5**:
+override gate triggered by #62/#63 — surfaced for owner. Other
+findings safely routed: #69, #72 added as Phase 5 dismiss-with-
+rationale; #70/#71 reasoning corrected; #5 cross-referenced; S5843
+acceptance added to PR-87 Phase 1 Task 1.4. **Phase 6**: this
+refresh + commit. **One alignment-check lesson** captured in
+napkin.md: before per-system observability claim validation, run an
+explicit alignment scan across local HEAD / origin HEAD / Vercel
+deployment SHA / Sentry release commit / GitHub PR head — owner
+caught me jumping straight to a hypothesis about Sentry without
+this scan. Promotion trigger: second instance OR owner direction.
+
+**Prior refresh**: 2026-04-26 (Keen Dahl / claude-code /
 claude-opus-4-7-1m — VERCEL_BRANCH_URL bug fix + magic-strings refactor
 
 + next-session validation plan. Six commits today on the PR-87 branch:

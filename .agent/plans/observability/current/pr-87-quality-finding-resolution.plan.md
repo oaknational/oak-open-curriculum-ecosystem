@@ -130,10 +130,13 @@ is just not adjacent to the write.
 
 ### Issue 3: Auth-routes rate-limiting alerts (NEEDS VERIFICATION)
 
-CodeQL alerts #70 and #71 cite `auth-routes.ts:187` and `:193`.
-Reading the local file, those line numbers are inside
-`setupAuthRoutes`'s control flow, not direct route handlers. The
-actual route registrations in this file:
+CodeQL alerts #70 and #71 cite `auth-routes.ts:113` and `:115`
+(per fresh raw-JSON fetch 2026-04-26 against PR HEAD `66de47a2`;
+the prior plan-body citation of `:187/:193` was authored against
+`d318b8bd` and the lines moved with subsequent refactor commits).
+Reading the local file, those line numbers ARE the route
+registrations (`app.post('/mcp', mcpRateLimiter, mcpRouter, ...)`
+and the parallel `app.get`). The route registrations:
 
 - `/mcp` POST + GET (lines 33, 35, 113, 115): `mcpRateLimiter`
   applied ✅
@@ -146,7 +149,9 @@ The PR description names an OAuth rate-limit profile (30 req/15min
 endpoints, not only token-exchange / callback. CodeQL's category is
 "auth handler not rate-limited"; the *finding* is plausibly real
 for the OAuth metadata routes if no path-prefix `app.use` covers
-them.
+them. CodeQL alert #5 is the OAuth metadata variant
+(`auth-routes.ts:80`) — captured separately from #70/#71 and
+already named in §Phase 0 finding 0.1.
 
 ### Issue 4: 76 SonarCloud OPEN issues (mixed severity, mixed validity)
 
@@ -391,7 +396,11 @@ shape BEFORE mechanical work, so Phase 1+ executes deterministically.
 
 **Current Assumption**: PR description states "OAuth: 30 req/15min/IP
 /asset proxy: 60 req/min/IP" rate-limit profiles. CodeQL alerts
-70/71 cite auth-routes.ts:187/193 as missing rate-limiting.
+70/71 cite auth-routes.ts:113/115 as missing rate-limiting (lines
+re-verified 2026-04-26 against PR HEAD `66de47a2`; the
+`mcpRateLimiter` IS attached at both registrations and the alerts
+are DI-opacity false-positives — see Issue 3 for the corrected
+disposition).
 
 **Validation Required**: confirm whether OAuth metadata endpoints
 (`/.well-known/oauth-protected-resource{,/mcp}`,
@@ -540,10 +549,25 @@ Confirmed via `rg "RateLimit" apps/oak-curriculum-mcp-streamable-http/src/`:
 is wired only on `/mcp` POST/GET. No path-prefix `app.use(...)` middleware
 covers the `.well-known/*` paths.
 
-CodeQL alerts #70 and #71 are **correct**. The actual line citations
-(`auth-routes.ts:187, :193`) point inside `setupAuthRoutes`'s control flow
-rather than the route registrations; this is a CodeQL line-attribution
-artefact, not a misclassification of the underlying issue.
+CodeQL alerts #70 and #71 cite `auth-routes.ts:113, :115` (current
+HEAD `66de47a2`; lines re-fetched from raw JSON 2026-04-26). These
+ARE the `app.post('/mcp', mcpRateLimiter, ...)` and
+`app.get('/mcp', mcpRateLimiter, ...)` route registrations. The
+`mcpRateLimiter` IS attached as middleware at both sites.
+**Disposition reasoning**: CodeQL's dataflow analysis cannot
+recognise the `RequestHandler` parameter as a rate-limiter because
+`mcpRateLimiter` is injected via DI (the function takes it as a
+`RequestHandler` parameter, not a direct call to a known
+rate-limiting library). This is a **DI-opacity false-positive**, not
+a real coverage gap.
+
+Alert #72 (`oauth-proxy/oauth-proxy-routes.ts:68`,
+`router.post('/oauth/register', oauthRateLimiter, asyncRoute(...))`)
+fits the same DI-opacity pattern and resolves identically. Alert
+\#69 (`bootstrap-helpers.ts:148`, inside `setupBaseMiddleware`) is a
+different false-positive shape — CodeQL misclassifies the
+`app.use(expressJson(...))` middleware-setup site as a
+route-handler.
 
 **Decision (recorded; implementation in Phase 3 Task 3.2)**: apply
 `oauthRateLimiter` (already-defined 30 req/15min/IP profile) to the four
@@ -940,6 +964,14 @@ to the canonical home naming the constraint.
    `packages/core/build-metadata/src/semver.ts` and naming the
    pre-`pnpm install` constraint as the reason for non-extraction.
 3. ✅ Existing 8-test unit suite still passes.
+4. ✅ Sonar issue `AZ3F9zi6MMAbgOavey_4` (`javascript:S5843`,
+   "Simplify this regular expression to reduce its complexity from
+   32 to the 20 allowed", `:14`) resolves once the inline regex
+   migrates to the canonical module's pattern (or, if the inline
+   path retains its own regex per the pre-`pnpm install`
+   constraint, the simplified pattern from the canonical home is
+   substituted). Captured 2026-04-26 from PR-87 Sonar drift table
+   in `sentry-preview-validation-and-quality-triage.plan.md`.
 
 **Deterministic Validation**:
 
@@ -1097,23 +1129,39 @@ CodeQL alert as accepted in the dismissal note.
 2. ✅ Either way, CodeQL alerts #76 and #77 closed (resolved or
    dismissed).
 
-#### Task 3.2: Auth-routes rate-limiting (#70, #71)
+#### Task 3.2: Auth-routes rate-limiting (#5, #69, #70, #71, #72)
 
-Per Phase 0 Task 0.1 finding:
+**Updated 2026-04-26 against fresh PR HEAD `66de47a2` raw-JSON
+fetch.** The cluster has five members (was framed as #70/#71 only):
 
-- **If gap found** (OAuth metadata routes lack rate-limiting):
-  install path-prefix `app.use('/.well-known/oauth*', oauthRateLimiter)`
-  middleware OR equivalent per the existing `RateLimiterFactory`
-  pattern.
-- **If no gap** (rate-limiting covers them via existing wiring):
-  dismiss CodeQL alerts #70 and #71 with rationale citing the
-  covering middleware location.
+- **#5** `auth-routes.ts:80` (OAuth AS metadata route, GET) — **REAL
+  GAP**. Per Phase 0 Task 0.1 decision: install `oauthRateLimiter`
+  via route-level attach on the four `.well-known/*` handlers
+  (lines 77, 78, 80, 92). Closes #5.
+- **#69** `bootstrap-helpers.ts:148` (`setupBaseMiddleware` body) —
+  **FALSE-POSITIVE**: CodeQL misclassifies the
+  `app.use(expressJson(...))` middleware-setup site as a
+  route-handler. Dismiss with rationale.
+- **#70** `auth-routes.ts:113` (`app.post('/mcp', mcpRateLimiter,
+  mcpRouter, ...)`) — **DI-OPACITY FALSE-POSITIVE**. The
+  `mcpRateLimiter` IS attached. Dismiss with rationale citing the
+  injected-middleware pattern.
+- **#71** `auth-routes.ts:115` (parallel `app.get`) — same as #70.
+  Dismiss with rationale.
+- **#72** `oauth-proxy/oauth-proxy-routes.ts:68`
+  (`router.post('/oauth/register', oauthRateLimiter, asyncRoute(...))`) —
+  same DI-opacity shape as #70/#71. The `oauthRateLimiter` IS
+  attached. Dismiss with rationale.
 
 **Acceptance Criteria**:
 
-1. ✅ CodeQL alerts #70 and #71 closed.
-2. ✅ If middleware added, integration tests verify the rate-limit
-   profile applies to OAuth metadata routes.
+1. ✅ CodeQL alert #5 closed via `oauthRateLimiter` route-level
+   attach to OAuth metadata endpoints.
+2. ✅ Integration test verifies the OAuth rate-limit profile
+   applies to the metadata routes.
+3. ✅ CodeQL alerts #69, #70, #71, #72 dismissed with rationale
+   citing the DI-opacity / middleware-setup false-positive shape
+   and pointing at the route-registration source location.
 
 #### Phase 3 Complete Validation
 
@@ -1174,6 +1222,30 @@ bash scripts/check-commit-message.sh -m "test(check): smoke" || echo OK
 
 **Note**: S6571 (`unknown` overrides union ×3) was reclassified to
 Phase 2 Task 2.5 per code-reviewer MAJOR-6.
+
+**Override-gate item — held for owner direction (2026-04-26)**:
+CodeQL alerts #62 and #63 (`js/polynomial-redos`) on
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts:36-38`
+are net-new real correctness findings. **Verified reachable from
+this PR's release scope**:
+`apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts:21`
+imports `@oaknational/oak-search-sdk`, and
+`removeNoisePhrases(params.query)` is invoked at
+`create-retrieval-service.ts:97, :151` on user-supplied query
+input. The vulnerable regex sits on the live query-processing
+path exercised by the MCP HTTP app's search tools.
+
+Two options recorded in
+`sentry-preview-validation-and-quality-triage.plan.md` § Phase 5
+routing decisions (Option C disqualified by the reachability
+check); **revised default if no owner direction is Option A**
+(add as new Phase 1A task in PR-87 with fix path: bound the
+noise-pattern matches with possessive quantifiers / anchored
+boundaries / token-based replacement; run `assumptions-reviewer`
+on the PR-87 delta). Option B (decouple to a parallel-shipping
+plan) is acceptable only if the parallel PR ships before or
+concurrently with PR-87's release. **Resolve before Phase 1
+starts.**
 
 **Phase 5 acceptance criterion 0 (DISABLE-path verification)**:
 before committing to any DISABLE outcome from Phase 0 Task 0.2,

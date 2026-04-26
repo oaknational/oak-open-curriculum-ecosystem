@@ -8,7 +8,27 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-25 (Codex / codex / GPT-5 — session handoff
+**Last refreshed**: 2026-04-26 (Cursor / GPT-5.5 / Codex — session handoff
+after **consumer data boundary** + **external API issue report** updates:
+`docs/architecture/openapi-pipeline.md` now states ecosystem code must use
+only the public Oak Open Curriculum API (no direct Hasura / MV / internal
+data access); `.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`
+Issue 1 rewritten (observed / expected / impact / reproduce; stale endpoint
+and progressions claims removed; `oak-openapi` dual GraphQL entry points noted
+as informational RCA); `.agent/reports/oak-openapi-bug-report-2026-03-07.md`
+Issue 2 annotated **stale** for the list-query snippet vs current
+`published_mv_threads_1` list handler. No production code; branch state
+unchanged by this handoff.)
+
+**Prior 2026-04-26 refresh** (Sharded Stroustrup / claude-code /
+claude-opus-4-7-1m — sentry-preview-validation-and-quality-triage
+walked end-to-end against PR HEAD `66de47a2`; findings tables
+populated, Phase 5 override-gate item surfaced for owner direction
+on the oak-search-sdk regex DoS that is **verified reachable** on
+PR-87's release scope. Doc-only diff in scope of that session;
+production code untouched.)
+
+**Prior refresh**: 2026-04-25 (Codex / codex / GPT-5 — session handoff
 after reviewer-finding reintegration was packaged as `d9cb54e8` and the
 owner pushed `feat/otel_sentry_enhancements`. Branch is in sync with origin at
 `cc71507b`; the pushed history includes WS3 `2822e525`, Lane B `9ea3ccd8`, and
@@ -51,7 +71,7 @@ state live in each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Keen Dahl / pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan / 2026-04-25→2026-04-26 |
-| `agentic-engineering-enhancements` (**paused-on-evidence 2026-04-25**) | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation. Multi-agent collaboration protocol WS0+WS1+WS2 landed; WS3+WS4+WS5 paused until ≥ 3 real parallel-coordination events accumulate. | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation; markdown-code-block-rule / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / multi-agent-collaboration-protocol-WS0-landed-as-63c66c88 / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Fresh Prince / multi-agent-collaboration-protocol-WS1-landed-as-a5d33519 / 2026-04-25 |
+| `agentic-engineering-enhancements` (**paused-on-evidence 2026-04-25**) | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation. Multi-agent collaboration protocol WS0+WS1+WS2 landed; WS3+WS4+WS5 paused until ≥ 3 real parallel-coordination events accumulate. | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `cursor` / `GPT-5.5` / Codex / openapi-boundary-and-ooc-issue-report-refresh / 2026-04-26; `codex` / `GPT-5` / Codex / practice-docs-consolidation; markdown-code-block-rule / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / multi-agent-collaboration-protocol-WS0-landed-as-63c66c88 / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Fresh Prince / multi-agent-collaboration-protocol-WS1-landed-as-a5d33519 / 2026-04-25 |
 
 The `memory-feedback` thread is archived as of 2026-04-22 Session 8.
 If doctrine-consolidation work resumes, start a new thread or revive
@@ -77,8 +97,51 @@ Current branch-primary objective:
 
 ## Current Session Focus
 
-The 2026-04-26 (Keen Dahl) session landed seven commits on PR #87
-(`feat/otel_sentry_enhancements`), pushed to remote at HEAD `325605a4`.
+The 2026-04-26 (Sharded Stroustrup) session walked all six phases
+of
+[`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
+against PR HEAD `66de47a2`. Findings tables for Phases 1–4 are
+populated in the plan body; Phase 5 routed safely most findings
+into the receiving PR-87 plan body (line-number corrections for
+CodeQL #70/#71 from 187/193 → 113/115; disposition-reasoning
+corrected from "line-attribution artefact" → "DI-opacity
+false-positive"; alerts #5/#69/#72 added to PR-87 Task 3.2; S5843
+acceptance added to PR-87 Phase 1 Task 1.4). One override-gate
+item is held for owner direction: CodeQL #62/#63
+(`js/polynomial-redos` in
+`oak-search-sdk/.../remove-noise-phrases.ts`), **verified
+reachable** from MCP HTTP app via
+`apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts:21`
+on user-supplied query input. Two options recorded; revised default
+without owner direction is Option A (add as PR-87 Phase 1A).
+
+Sentry observability is wired correctly: 194 spans tagged with the
+release in the last hour, including baseline probes. The release's
+`last_commit` (`9bcc8ffc`) is 4 commits behind HEAD because the
+post-`9bcc8ffc` commits are docs-only or non-CI vitest config and
+the MCP-HTTP build hits Turbo cache (no Sentry plugin
+re-execution). Bundle is byte-equivalent; release attribution is
+correct in substance. Sonar Quality Gate ERROR (5.1% duplication,
+0% hotspots reviewed, 77 violations); +1 drift (S5843, closes on
+PR-87 Phase 1).
+
+**Next session reads
+[`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
+§ Phase 1–5 findings tables before any PR-87 fix work** — those
+tables are the evidence baseline. The override-gate-pending item
+must be resolved before PR-87 Phase 1 starts.
+
+Lesson captured in
+[`napkin.md`](../active/napkin.md): alignment-check across local
+HEAD / origin / Vercel deploy / Sentry release / GitHub PR head
+must precede per-system observability claim validation. Promotion
+trigger: second instance OR owner direction.
+
+### Prior — 2026-04-26 (Keen Dahl) — VERCEL_BRANCH_URL bug fix + magic-strings refactor
+
+The earlier 2026-04-26 (Keen Dahl) session landed seven commits on
+PR #87 (`feat/otel_sentry_enhancements`), pushed to remote at HEAD
+`325605a4`.
 
 - **Vercel preview deployment is GREEN** — fixed by commit `6485773f`
   (the `VERCEL_BRANCH_URL` is hostname-not-URL bug; Vercel's docs
@@ -148,7 +211,11 @@ the current branch safely:
   composition roots may read, validate, and inject ambient env;
 - `--no-verify` requires fresh per-invocation owner authorisation;
 - no warning toleration;
-- owner direction beats plan.
+- owner direction beats plan;
+- **curriculum data in this monorepo**: consume only via the published Oak
+  Open Curriculum HTTP API and generated SDK — **not** direct Hasura, materialised
+  view names as connection targets, or other internal Oak data systems (see
+  `docs/architecture/openapi-pipeline.md` **Consumer data boundary**).
 
 Current branch non-goals:
 
@@ -212,6 +279,12 @@ These are visible owner-appetite items, not blockers for
    PDR-032 — same destination set as above.
 
 ## Deep Consolidation Status
+
+**Status (2026-04-26 Cursor — second handoff, documentation-only)**: **not
+due** — `openapi-pipeline` boundary note + ooc-issues Issue 1 + bug-report
+stale callout; no plan closure, no napkin rotation pressure, no new
+pending-graduations row (invariants bullet captures the API boundary). No
+`jc-consolidate-docs` run.
 
 **Status (2026-04-26 Keen Dahl session-handoff)**: **not due** — the
 2026-04-26 session landed seven commits (six product, one continuity),

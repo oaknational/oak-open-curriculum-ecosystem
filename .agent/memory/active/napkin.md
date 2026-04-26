@@ -8,6 +8,50 @@ live in the register at
 
 ---
 
+## 2026-04-26 — Sharded Stroustrup — alignment-check before per-system claim validation
+
+**Surprise**: when validating an observability claim across local
+git, GitHub, Vercel, and Sentry, I jumped straight from "Sentry shows
+last_commit `9bcc8ffc` not current HEAD `66de47a2`" to a hypothesis
+about Sentry release-publish idempotency without first establishing
+which systems were actually aligned. Owner caught this:
+*"validate your assumption ... by comparing local head, github head,
+and the Vercel preview build latest state, to see what commit each is
+at. All changes should be pushed before a validation like this."*
+
+**Lesson** (candidate for distilled.md graduation): **before
+investigating per-system observability claims, run an alignment
+check across all relevant systems first**. For a Vercel/Sentry/GitHub
+observability stack, that means:
+
+1. local HEAD == origin/<branch> HEAD (no unpushed commits)
+2. local working tree clean OR all unstaged changes are out of scope
+3. Vercel latest deployment SHA == origin HEAD SHA
+4. Sentry last_deploy timestamp post-dates the latest Vercel deploy
+   AND Sentry last_commit == origin HEAD SHA
+5. GitHub PR head SHA == origin HEAD SHA
+
+If any of these disagree, **establish why before claiming anything
+about runtime correctness**. Otherwise you may be testing the wrong
+artefact entirely.
+
+In my session (2026-04-26): items 1, 2, 3, 5 passed; item 4 failed
+(Sentry last_commit was `9bcc8ffc`, four commits behind origin HEAD).
+Investigating WHY revealed: Turbo build-task caching skipped fresh
+Sentry plugin runs for the four post-`9bcc8ffc` commits because
+production code didn't change — so the cached log replay covered the
+entire MCP-HTTP build. **Mechanism is Turbo cache, NOT Sentry
+release-publish idempotency** (my initial Phase 2 hypothesis was
+wrong about the mechanism, right about the outcome).
+
+**Promotion trigger**: second instance of "alignment-check skipped
+on observability validation" or owner direction.
+
+**Pattern candidate name**: `alignment-check-precedes-claim-validation`
+(sibling to `workspace-first-before-external-tooling`).
+
+---
+
 **Rotation**: 2026-04-25 (Jiggly Pebble consolidation, after WS0 of
 the multi-agent collaboration protocol landed at `63c66c88`).
 Outgoing napkin (1422 lines, sessions 2026-04-22 through 2026-04-25,
