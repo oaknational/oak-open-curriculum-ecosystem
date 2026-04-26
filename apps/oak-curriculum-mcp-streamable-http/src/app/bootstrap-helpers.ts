@@ -131,16 +131,14 @@ export async function runAsyncBootstrapPhase<T>(
   }
 }
 
-/**
- * Sets up base Express middleware (JSON parsing, correlation, request logging).
- *
- * @remarks Error handling middleware is registered separately via
- * {@link setupErrorHandlers} after all routes, per Sentry's requirement
- * that error handlers are added "after all controllers."
- */
-export function setupBaseMiddleware(app: Express, log: Logger): void {
+/** Sets up base Express middleware (JSON parsing, correlation, request logging). Error handlers register separately via {@link setupErrorHandlers} after all routes (Sentry requirement). */
+export function setupBaseMiddleware(
+  app: Express,
+  log: Logger,
+  observability?: Pick<HttpObservability, 'setTag'>,
+): void {
   app.use(expressJson({ limit: '1mb' }));
-  app.use(createCorrelationMiddleware(log));
+  app.use(createCorrelationMiddleware(log, { observability }));
 
   const debugEnabled = log.isLevelEnabled?.(logLevelToSeverityNumber('DEBUG')) ?? false;
   if (debugEnabled) {

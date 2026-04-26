@@ -162,4 +162,88 @@ describe('createCorrelationMiddleware', () => {
       expect.not.objectContaining({ slowRequest: true }),
     );
   });
+
+  describe('Sentry scope tagging', () => {
+    function makeFakeObservability(): {
+      readonly setTag: (key: string, value: string) => void;
+      readonly calls: readonly (readonly [string, string])[];
+    } {
+      const calls: (readonly [string, string])[] = [];
+      const setTag = (key: string, value: string): void => {
+        calls.push([key, value]);
+      };
+      return { setTag, calls };
+    }
+
+    function createTaggingApp(
+      logger: Logger,
+      observability: { readonly setTag: (key: string, value: string) => void },
+    ): ReturnType<typeof express> {
+      const app = express();
+      app.use(createCorrelationMiddleware(logger, { observability }));
+      app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
+        if (typeof res.locals.correlationId !== 'string') {
+          throw new Error('Expected correlationId in res.locals');
+        }
+        res.json({ correlationId: res.locals.correlationId });
+      });
+      return app;
+    }
+
+    it('tags the Sentry scope with correlation_id when observability is provided', async () => {
+      const logger = createFakeLogger();
+      const obs = makeFakeObservability();
+      const app = createTaggingApp(logger, obs);
+
+      const response = await request(app).get('/test');
+      const correlationIdHeader = response.headers['x-correlation-id'];
+      const correlationId =
+        typeof correlationIdHeader === 'string' ? correlationIdHeader : String(correlationIdHeader);
+
+      expect(obs.calls).toEqual([['correlation_id', correlationId]]);
+    });
+
+    it('uses the client-provided X-Correlation-ID for the tag value', async () => {
+      const logger = createFakeLogger();
+      const obs = makeFakeObservability();
+      const app = createTaggingApp(logger, obs);
+
+      const incomingId = 'caller-supplied-12345';
+      await request(app).get('/test').set('X-Correlation-ID', incomingId);
+
+      expect(obs.calls).toEqual([['correlation_id', incomingId]]);
+    });
+
+    it('does not tag when observability is not injected (DI optional)', async () => {
+      const logger = createFakeLogger();
+      const app = createTestApp(logger);
+
+      const response = await request(app).get('/test');
+
+      expect(response.status).toBe(200);
+      // No assertion on setTag — the un-injected path simply skips
+      // tagging and continues. This guards against a regression where
+      // the middleware required observability.
+    });
+
+    it('issues one tag per request (concurrent requests stay isolated)', async () => {
+      const logger = createFakeLogger();
+      const obs = makeFakeObservability();
+      const app = createTaggingApp(logger, obs);
+
+      await Promise.all([
+        request(app).get('/test'),
+        request(app).get('/test'),
+        request(app).get('/test'),
+      ]);
+
+      expect(obs.calls).toHaveLength(3);
+      const tagValues = obs.calls.map(([, value]) => value);
+      const uniqueValues = new Set(tagValues);
+      expect(uniqueValues.size).toBe(3);
+      for (const [key] of obs.calls) {
+        expect(key).toBe('correlation_id');
+      }
+    });
+  });
 });

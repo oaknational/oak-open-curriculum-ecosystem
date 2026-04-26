@@ -171,6 +171,71 @@ mirror, not a replacement.
 In `fixture` and `off` modes the logger sink is inert; the logger still
 emits stdout JSON normally.
 
+## Runtime-constraint notes
+
+### Local variables in stack frames are not available on Vercel Lambda
+
+Sentry's [`localVariablesIntegration`][lv-integration] can capture
+in-scope variable values at every frame of a thrown error's stack,
+which is highly useful for debugging. **It does not function on
+Vercel's Firecracker microVMs and is therefore not available to this
+package's deployed callers.**
+
+The integration works by attaching to the V8 inspector debug protocol
+(via Node's `--inspect` flag, or the equivalent `vm` API). Vercel's
+Lambda runtime does not expose the inspector port: Firecracker isolates
+each function instance and the runtime entry point is not invoked with
+`--inspect`. The integration's session establishment fails silently and
+falls back to no-op variable capture.
+
+What that means in practice for stack traces captured under
+`@oaknational/sentry-node` running on Vercel:
+
+- ✅ File path, line, column resolved (proven by source-map upload —
+  see ADR-163 §Source-Map Attachment)
+- ✅ Function name preserved
+- ✅ Rendered source-line context (proves source upload, not just maps)
+- ✅ First-party vs third-party frame distinction
+- ❌ **Local variable values at frame** — not available
+- ❌ **Function arguments at frame** — not available
+
+**No package-side change is available.** Owners considering adoption
+of this package should size the trade-off as: source-line context is
+captured (so the THROW SITE is fully diagnosable from the source
+file); the variable values at the throw site must be reconstructed
+from logs, breadcrumbs, or explicit `Sentry.setContext` calls.
+
+The constraint **only binds this package's Vercel-deployed callers**.
+Long-running Node hosts (a self-hosted server, local development, an
+EC2 instance) have inspector access and the integration would
+function there with no code change.
+
+**Empirical evidence**: 2026-04-26 Sentry validation captured three
+issues from the live deployed preview (`OAK-OPEN-CURRICULUM-MCP-7`,
+`-8`, `-9`) — all show file:line:col + rendered source context, none
+show local variable values. This matches the runtime-constraint
+prediction.
+
+[lv-integration]: https://docs.sentry.io/platforms/javascript/guides/node/configuration/integrations/local-variables/
+
+### Outbound trace propagation is opt-in via DEFAULT_TRACE_PROPAGATION_TARGETS
+
+The `tracePropagationTargets` Sentry option (set via
+`DEFAULT_TRACE_PROPAGATION_TARGETS` in `runtime-sdk.ts`) controls
+whether `httpIntegration` adds `sentry-trace` and `baggage` headers
+to outbound HTTP calls. **The default is empty.** Internal trace
+correlation within a single Lambda is unaffected — spans created by
+the SDK's instrumentation share a trace ID locally. Cross-process
+trace continuity to downstream services requires those services'
+hostnames to be added to the targets list.
+
+**Future state (2026-04-26 owner direction)**: targets will be
+extended to include internal Oak service hostnames once the Search
+service is also wired to the same Sentry organisation. Until then,
+external upstreams (Clerk, third-party APIs) deliberately do NOT
+receive trace context — leaking trace IDs across trust boundaries is
+a compliance / cost concern.
+
 ## Related
 
 - [ADR-078 Dependency Injection](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)

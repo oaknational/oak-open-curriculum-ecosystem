@@ -26,6 +26,29 @@ import {
 } from './runtime-redaction.js';
 
 export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 2_000;
+
+/**
+ * Targets for outbound trace propagation (`sentry-trace` + `baggage`
+ * headers added to outbound HTTP calls by `httpIntegration`).
+ *
+ * @remarks Empty by default — the MCP HTTP server's only outbound
+ * upstreams (Clerk, third parties) are external trust boundaries
+ * where leaking trace context is undesirable on compliance and
+ * downstream-cost grounds.
+ *
+ * **Future state (owner direction, 2026-04-26)**: this list will be
+ * extended once the Search service (`apps/oak-search-cli` /
+ * `packages/sdks/oak-search-sdk` callers) is also wired to the same
+ * Sentry org. At that point internal Oak service hostnames go in this
+ * list so trace IDs flow MCP server ↔ search service while still
+ * NOT propagating to Clerk / external third parties.
+ *
+ * Internal trace correlation WITHIN a single Lambda is unaffected by
+ * this list and works today — proven by the four-span POST /mcp
+ * trace captured during 2026-04-26 Sentry validation (HTTP server →
+ * Clerk verify outbound → MCP server span → Oak custom span all
+ * under the same trace ID).
+ */
 export const DEFAULT_TRACE_PROPAGATION_TARGETS: readonly string[] = Object.freeze([]);
 
 /**

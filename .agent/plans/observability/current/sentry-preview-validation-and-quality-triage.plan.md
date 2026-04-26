@@ -1025,6 +1025,50 @@ The captures meet every quality bar a debugging session needs:
 3. ✅ Deploy event registered.
 4. ✅ Findings recorded above before Phase 3.
 
+### Debugging-quality additional checks (2026-04-26)
+
+Owner-directed deeper investigation after the source-code-upload gap
+closed:
+
+- **Breadcrumbs ✅** — issue `OAK-OPEN-CURRICULUM-MCP-7` shows three
+  breadcrumbs (`http` GET, `console` deprecation warning, `http` POST)
+  with `url=[Filtered]` confirming redaction applies. The default
+  `httpIntegration` and `consoleIntegration` are wired and active.
+- **Trace propagation (internal) ✅** — four-span trace
+  `9e24ca64ea33d92dbd91f9931a7a389b` from the 2026-04-26 07:01 probe
+  proves http.server → mcp.server → http.client (Clerk verify) →
+  oak.http.request.mcp all share one trace ID locally.
+- **Trace propagation (external) ⚠️ deliberately disabled** —
+  `DEFAULT_TRACE_PROPAGATION_TARGETS = []` in `runtime-sdk.ts`. Owner
+  direction (2026-04-26): extend the targets list when the Search
+  service joins the same Sentry org; do not propagate to external
+  third parties (Clerk etc.) on compliance / cost grounds.
+- **PII redaction ✅** — already proven at the right level by 178
+  lines of unit tests (`redaction.unit.test.ts`) + 628 lines of
+  barrier-composition tests (`runtime-redaction-barrier.unit.test.ts`,
+  including bypass-validation suite) + ADR-160 structural closure.
+  Empirical evidence on the current preview release: every captured
+  issue (#7/8/9) shows `token=[REDACTED]` in error messages where the
+  probe constructed `token=${token}` — the barrier matched the
+  `token` key in `FULLY_REDACTED_KEYS` and substituted before send.
+  No additional probe needed.
+- **Local variables in stack frames ⚠️ Lambda-runtime constraint** —
+  Sentry's `localVariablesIntegration` requires V8 inspector access
+  via `--inspect`; Vercel Firecracker microVMs don't expose this. The
+  integration silently no-ops in Lambda. **Constraint documented in**
+  [`packages/libs/sentry-node/README.md` § Runtime-constraint notes](../../../../packages/libs/sentry-node/README.md#runtime-constraint-notes)
+  with the trade-off framing and the empirical-evidence pointer
+  (issues #7/8/9 show no variables, matching the prediction).
+- **Custom-header capture as event tags 🟡 → ✅** — fix landed:
+  `createCorrelationMiddleware` now takes an optional
+  `observability` injection and tags
+  `correlation_id=<value>` on the per-request Sentry scope so every
+  captured event surfaces the same ID that's in the
+  `X-Correlation-ID` response header and application logs. Tagging
+  is request-scoped via `@sentry/node`'s `httpIntegration`
+  async-hooks isolation. Tests added in
+  `correlation/middleware.integration.test.ts § Sentry scope tagging`.
+
 ### Phase 2 acceptance — ✅ MET (with one inferred-positive)
 
 1. ✅ Release attribution confirmed end-to-end (transactions

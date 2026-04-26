@@ -36,52 +36,15 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
-  /**
-   * Returns the built widget HTML content for the MCP App resource.
-   *
-   * Production callers provide `() => WIDGET_HTML_CONTENT` using the committed
-   * codegen constant. Tests inject a trivial fake: `() => '<html>test</html>'`.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   * @see src/generated/widget-html-content.ts — Committed codegen constant
-   */
+  /** Returns built widget HTML for the MCP App resource. Prod: codegen constant; tests: trivial fake. (ADR-078) */
   readonly getWidgetHtml: () => string;
-  /**
-   * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
-   * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
-   * and uses this value directly. Required for tests; production callers
-   * omit this so the metadata is fetched at startup.
-   */
+  /** Upstream AS metadata for OAuth proxy; provided by tests, fetched at startup in prod. */
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
-  /**
-   * Factory for creating the global Clerk authentication middleware.
-   * When provided, replaces the hard import of `clerkMiddleware` from
-   * `@clerk/express`, enabling tests to inject a no-op middleware
-   * without `vi.mock`. Production callers omit this.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   */
+  /** Factory for global Clerk middleware (tests inject no-op; prod omits). (ADR-078) */
   readonly clerkMiddlewareFactory?: () => RequestHandler;
-  /**
-   * Factory for creating per-IP rate limiting middleware. When provided,
-   * replaces the default `express-rate-limit` factory, enabling tests to
-   * inject a no-op or recording fake. Production callers omit this.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   * @see ADR-158 for the multi-layer security architecture
-   */
+  /** Factory for per-IP rate-limit middleware (tests inject fake; prod omits). (ADR-078, ADR-158) */
   readonly rateLimiterFactory?: RateLimiterFactory;
-  /**
-   * Sentry Express error handler registration function. When provided,
-   * registers Sentry-native error capture middleware before the enriched
-   * error logger. Production callers pass `setupExpressErrorHandler` from
-   * `@sentry/node`; tests omit this or inject a recording fake.
-   *
-   * @remarks Only provide for live Sentry mode. Fixture/off modes must not
-   * register the external Sentry Express handler.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   */
+  /** Sentry Express error-handler registration; live mode only, not fixture/off. (ADR-078) */
   readonly setupSentryErrorHandler?: SentryExpressErrorHandlerSetup;
 }
 
@@ -100,7 +63,7 @@ function setupPreAuthPhases(
     'setupBaseMiddleware',
     appId,
     () => {
-      setupBaseMiddleware(app, log);
+      setupBaseMiddleware(app, log, options.observability);
     },
     options.observability,
   );
@@ -172,7 +135,6 @@ function setupPostAuthPhases(
   );
 }
 
-/** Logs the final bootstrap summary: route count, timing, and registered paths. */
 function logBootstrapSummary(
   app: ExpressWithAppId,
   log: Logger,
@@ -184,12 +146,8 @@ function logBootstrapSummary(
   logRegisteredRoutes(log, appId, routes);
 }
 
-/**
- * Creates and configures an Express application instance for MCP over HTTP.
- * Middleware order: base → security → rate limiters → OAuth → auth context → core → static → /mcp → auth routes → error handlers.
- */
-// observability-emission-exempt: orchestration wrapper; concrete emissions live
-// in initializeAppInstance, runBootstrapPhase, and nested setup helpers.
+/** Creates an Express MCP-over-HTTP app. See ADR-143 / ADR-160 for middleware order. */
+// observability-emission-exempt: orchestration wrapper; emissions live in nested helpers.
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });

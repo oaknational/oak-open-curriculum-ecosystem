@@ -8,6 +8,7 @@ import { startTimer, type Logger, type Timer } from '@oaknational/logger';
 
 import { generateCorrelationId } from './index.js';
 import { redactHeadersSummary } from '../logging/header-redaction.js';
+import type { HttpObservability } from '../observability/http-observability.js';
 
 /**
  * HTTP header name for correlation ID.
@@ -35,6 +36,22 @@ export interface CorrelationMiddlewareOptions {
    * Defaults to 2000ms.
    */
   readonly slowRequestThresholdMs?: number;
+  /**
+   * Optional observability surface used to tag the per-request Sentry
+   * scope with the correlation ID. When provided, every Sentry event
+   * captured during this request gets a `correlation_id` tag, enabling
+   * agents and humans to filter the issues stream by the same ID that
+   * appears in application logs and the `X-Correlation-ID` response
+   * header.
+   *
+   * @remarks `setTag` writes to the request-isolated scope created by
+   * `@sentry/node`'s `httpIntegration`; the tag does not leak to other
+   * requests. Production callers inject the live `HttpObservability`;
+   * tests omit this or inject a recording fake.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   */
+  readonly observability?: Pick<HttpObservability, 'setTag'>;
 }
 
 /**
@@ -103,6 +120,12 @@ export function createCorrelationMiddleware(
 
     // Add to response headers
     res.setHeader(CORRELATION_ID_HEADER, correlationId);
+
+    // Tag the per-request Sentry scope so any captured events surface
+    // the correlation ID for cross-system filtering. The scope is
+    // request-isolated by @sentry/node's httpIntegration so this tag
+    // does not leak across requests.
+    options?.observability?.setTag('correlation_id', correlationId);
 
     // Log request start with correlation ID and headers
     logger.debug('Request started', {
