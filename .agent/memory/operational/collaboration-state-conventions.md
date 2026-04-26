@@ -41,7 +41,7 @@ evidence.
 | `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-communication-log entry carried this; reuses PDR-027 identity schema unchanged |
 | `claimed_at` | Observed | Every entry timestamped ISO 8601 |
 | `intent` (free-form prose) | Observed | Every entry carried an action / intent line |
-| `areas` (kind + patterns) | Observed | Every entry used a nested **Areas touched** list with path patterns |
+| `areas` (kind + patterns) | Observed | Every entry used a nested **Areas touched** list with path patterns; v1.2.0 adds `git:index/head` for commit windows |
 | `notes` (optional prose) | Observed | Every entry carried a *Coordination note* paragraph |
 | `claim_id` (uuid) | First-principles | Registry needs entry identity; the log was append-only and did not need this |
 | `thread` (slug) | First-principles | Cross-thread visibility requires explicit thread reference; log entries were implicitly within their working session |
@@ -66,6 +66,8 @@ branch run ~1–3 hours; a 4-hour budget covers most sessions without
 `heartbeat_at` refresh and still cycles well within a day. Premature
 staleness is worse than delayed staleness because it creates false noise
 during live edits. WS5 evidence is the planned re-evaluation gate.
+Commit-window claims intentionally override this to 900 seconds because
+staging/commit should be brief.
 
 ## Lifecycle
 
@@ -82,6 +84,9 @@ during live edits. WS5 evidence is the planned re-evaluation gate.
 3. The default `freshness_seconds` (14400 = 4 hours) is appropriate for
    most slices. Long sessions either set a larger value at open time or
    refresh `heartbeat_at` periodically.
+4. Before staging or committing, open a short-lived `git:index/head` claim
+   with `freshness_seconds: 900`, append a shared-log note, and close it
+   immediately after success, failure, or abort with the SHA or reason.
 
 ### Refresh during work
 
@@ -168,9 +173,10 @@ harvests evidence across at least three real parallel sessions and
 drives refinement amendments. Refinements may add, remove, or reshape
 fields:
 
-- **Adding a field** lands as a minor-version bump
-  (`schema_version: "1.1.0"` etc.). Agents reading older files preserve
-  unrecognised fields on write-back.
+- **Adding a field or enum value** lands as a minor-version bump
+  (`schema_version: "1.1.0"` etc.). Older agents preserve unrecognised
+  fields and opaque enum values on write-back; maintained schemas narrow
+  older-version validation where an enum shape changed.
 - **Removing a field** lands as a major-version bump
   (`schema_version: "2.0.0"` etc.). Agents reading older-major files
   bail out with an error pointing at the protocol upgrade. Migration

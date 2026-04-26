@@ -1,7 +1,11 @@
 ---
 related_pdr: PDR-014
-name: Substance Before Fitness
-use_this_when: Writing concepts to files that have size/fitness limits
+name: Learning Before Fitness
+aliases:
+  - Substance Before Fitness
+use_this_when: >-
+  Capturing, distilling, graduating, or writing learning into files that
+  have size/fitness limits
 category: process
 proven_in: .agent/practice-core/practice.md
 proven_date: 2026-04-05
@@ -14,31 +18,37 @@ barrier:
 
 ## Principle
 
-When writing concepts to their correct permanent homes, always write at
-the weight the concept deserves first. Deal with fitness limits
-holistically afterward — through compression of redundant content
-elsewhere, splitting, or raising limits. Fitness is a post-writing
-editorial concern, never a writing constraint.
+When learning belongs in its correct home, preserve it at the weight
+the signal deserves first. Capture, distil, graduate, and write the
+understanding fully even when the destination file is near or over a
+fitness limit. Fitness is a post-writing health signal, never a reason
+to suppress learning.
+
+The filename is retained for link stability; the doctrine it carries is
+now "learning before fitness".
 
 ## Pattern
 
 1. **Write the concept fully** at the weight it deserves, in every
    location where it belongs.
-2. **Run fitness checks** after writing is complete.
-3. **Compress holistically** — find redundancy, verbosity, and
-   duplication _elsewhere_ in the file, not in the concept you just
-   wrote.
-4. If compression is insufficient, **split** the file by
-   responsibility or **raise limits** with rationale.
+2. **Preserve the learning fully** through capture, distillation, and
+   graduation even when the destination is overweight.
+3. **Run fitness checks** after writing is complete.
+4. **Respond structurally** — refine redundancy elsewhere, graduate
+   stable entries to permanent homes, split the file by responsibility,
+   or record owner-approved hard-limit changes. Agents may raise soft
+   targets modestly with rationale; hard limits belong to the owner.
 
 ## Anti-pattern
 
 Checking the character count after each sentence and trimming the
-concept to fit. This produces content shaped by a budget rather than by
-the concept's own substance. The result looks complete but fails to
-teach — key connections, examples, and implications are silently
-dropped. The agent is often unaware they are doing this until the user
-notices the concept is underweight.
+concept to fit, or declining to rotate/distil a napkin because
+`distilled.md` is already heavy. This produces content shaped by a
+budget rather than by the concept's own substance. The result looks
+complete but fails to teach — key connections, examples, and
+implications are silently dropped. The agent is often unaware they are
+doing this until the user notices the concept is underweight or the
+learning loop has been starved.
 
 ## When to Apply
 

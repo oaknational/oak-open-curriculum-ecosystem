@@ -86,12 +86,15 @@ plan. The protocol's WS0 installed:
 - the [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md)
   rule firing as a session-open tripwire requiring consultation of the
   discovery surface before operating in another agent's area.
+- the commit-window refinement, which treats `git:index/head` as a
+  short-lived active-claim area before staging or committing.
 
-Subsequent workstreams (WS1 structured claims, WS3 conversation files +
-sidebars) extend the structural fix toward higher-fidelity coordination
-state. The pattern's complete enforcement edge will land at WS5 evidence
-harvest, when accumulated multi-session evidence either confirms the
-advisory model is sufficient or triggers the named hook-based reminders.
+Subsequent workstreams (WS1 structured claims, WS3A decision threads, and
+deferred WS3B sidebar mechanics) extend the structural fix toward
+higher-fidelity coordination state. The pattern's complete enforcement edge
+will land at WS5 evidence harvest, when accumulated multi-session evidence
+either confirms the advisory model is sufficient or triggers the named
+hook-based reminders.
 
 ## Knowledge and communication, not mechanical refusals
 
@@ -113,6 +116,8 @@ When you observe an instance of this pattern in a session:
 - Record the coordination event in the shared communication log
   ([`state/collaboration/log.md`](../../state/collaboration/log.md)) so
   the parallel agent has the trace.
+- If the event happens during staging or commit, record whether a fresh
+  `git:index/head` claim existed and how the commit-window claim closed.
 - If the resolution required `--no-verify`, link the fresh
   authorisation note in the commit message.
 

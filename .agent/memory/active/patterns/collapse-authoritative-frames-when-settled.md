@@ -133,5 +133,5 @@ the documentation layer — drift accumulates in the gap between them.
 - `nothing-unplanned-without-a-promotion-trigger.md` — the planning-
   layer sibling. Same underlying principle, a different layer.
 - `substance-before-fitness.md` — companion: when to collapse, the
-  substance question comes first; fitness compression happens after
-  the collapse has happened, not as a substitute for it.
+  learning question comes first; fitness response happens after the
+  collapse has happened, not as a substitute for preserving signal.
