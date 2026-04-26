@@ -8,7 +8,22 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-26 (Sturdy Otter / claude-code / claude-opus-4-7-1m
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
+same-branch collaboration correction. The owner clarified that avoiding the
+shared branch would remove the signal the collaboration work is meant to study;
+friction should be made observable through communication. No Codex claim was
+open to close; Frolicking Toast's commit-window umbrella claim remains active.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — owner verification
+closeout for L-IMM Sub-item 6. The owner confirmed the Vercel Sentry
+Marketplace plugin is active and configured; L-IMM is now fully closed.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff for
+WS3B/joint-decision status reconciliation. No active claims remain; WS3B gate
+is satisfied but implementation is not started; deep consolidation is due for
+known hard fitness and pattern-candidate convergence.)
+
+**Prior refresh**: 2026-04-26 (Sturdy Otter / claude-code / claude-opus-4-7-1m
 — WS3A/WS4A 13-commit backlog cleanup landed under 3-agent contention;
 intent-to-commit and joint-agent-decision-protocol future plans authored;
 WS3B sidebar promotion gate satisfied; phase-transition evidence recorded;
@@ -56,11 +71,14 @@ thread records and plans; old session narrative belongs in `archive/`.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `6c65e75d`, with a
-  dirty working tree.
-- Current dirty work includes WS3A/WS4A collaboration docs/state, the
-  commit-window protocol refinement, and pre-existing MCP/SDK TypeScript
-  work. Treat these as separate surfaces.
+- Branch: `feat/otel_sentry_enhancements` at local HEAD `9bd91f81`, one commit
+  ahead of origin `9925ad59` at the time of this handoff, with a dirty working
+  tree and an active Frolicking Toast commit-window claim.
+- Current dirty work includes Frolicking Toast's chunked collaboration /
+  Practice landing (chunk 4 landed locally at `9bd91f81`), Codex
+  continuity/handoff edits, Sentry owner-verification closeout surfaces, and
+  other unstaged memory/state surfaces. Treat these as intentionally separate
+  surfaces unless a later commit-steward note says they have been bundled.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -95,8 +113,8 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identity: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Sturdy Otter / `claude-code` / `claude-opus-4-7-1m` / phase-transition-evidence-and-future-plans / 2026-04-26; Codex / `codex` / `GPT-5` / commit-bundle-evidence-taxonomy / 2026-04-26. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26; Codex / `codex` / `GPT-5` / marketplace-verification-closeout-and-handoff / 2026-04-26. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Sturdy Otter / `claude-code` / `claude-opus-4-7-1m` / phase-transition-evidence-and-future-plans / 2026-04-26; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / chunked-commit-stewardship / 2026-04-26; Codex / `codex` / `GPT-5` / same-branch-friction-metacognition-and-handoff / 2026-04-26. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -119,19 +137,25 @@ Current branch-primary facts:
 
 ## Current Session Focus
 
-Two parallel sessions ran on `feat/otel_sentry_enhancements`
-2026-04-26 with non-overlapping scope. Both closed at session-end.
+Multiple overlapping sessions ran on
+`feat/otel_sentry_enhancements` 2026-04-26. Frolicking Toast's
+commit-window umbrella claim closed cleanly at 17:00Z after the
+six-chunk landing finished — that session was the first
+self-application of the commit-window protocol Codex landed earlier
+the same day. The umbrella claim's full lifecycle (open → 6 chunks
+→ explicit close with evidence) is observable in the shared
+communication log between 16:35Z and 17:00Z.
 
-**Frolicking Toast (this handoff) — observability-sentry-otel**:
-executed the L-IMM (operational hardening) lane to closure on 5/6
-sub-items. Five Sentry-node commits landed (one per sub-item):
+**Frolicking Toast + owner verification — observability-sentry-otel**:
+executed the L-IMM (operational hardening) lane to closure on 6/6
+sub-items. Five Sentry-node commits landed:
 flush timeout 2s → 5s; maxBreadcrumbs / sendClientReports verify;
 ignoreErrors / denyUrls scaffold (RED-first); Vercel Marketplace
-PENDING surface; hybrid error fingerprinting (post-redaction).
-Sub-item 6 (Vercel Marketplace verify) is PENDING owner-touch.
-Three reviewers ran on Tier 2 fingerprinting; all findings absorbed.
-Lane status flipped to `✅ closed-pending-3d`; wrapper plan rotated
-to archive/completed/.
+PENDING surface; hybrid error fingerprinting (post-redaction). The
+owner then confirmed the Vercel Sentry Marketplace plugin is active
+and configured, closing Sub-item 6. Three reviewers ran on Tier 2
+fingerprinting; all findings absorbed. Lane status flipped to
+`✅ closed`; wrapper plan rotated to archive/completed/.
 
 **Codex (separate session) — agentic-engineering-enhancements**:
 captured the commit-window coordination protocol design (intent-
@@ -141,8 +165,17 @@ surfaces. Three concurrent-commit race conditions plus staged-bundle
 substitution / disappearance / accretion evidence surfaced during
 co-tenancy; documented in shared log and Codex's plan.
 
+**Codex (this handoff) — agentic-engineering-enhancements**:
+captured the owner's correction that same-branch friction is the experiment,
+not a reason to route work into separate worktrees. The napkin, this
+continuity file, the agentic thread record, observability thread record, and
+shared log now record that communication / handshakes should make friction
+visible before it becomes misleading history. No sidebar, escalation, hook
+automation, staging, commit, or PR-87 remediation work was performed by this
+handoff.
+
 No WS3B implementation, SDK/product work outside the Sentry lane,
-or hook-based automation started in either session.
+or hook-based automation started in this Codex handoff.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -174,26 +207,28 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Distilled-memory structural response** — because learning was correctly
+1. **Same-branch collaboration experiment is live** — Frolicking Toast holds
+   active claim `4535f2ff-0420-4bde-bfb8-af0db656e359` covering
+   `git:index/head` and broad collaboration / Practice surfaces while
+   chunk-committing accumulated work. Other agents may continue on the same
+   branch, but should make overlap explicit before staging or committing:
+   announce commit windows, preserve visible path ownership, and turn shared
+   surfaces into handshakes rather than silent sequencing.
+2. **Distilled-memory structural response** — because learning was correctly
    preserved first, `distilled.md` now carries hard fitness pressure. The
    next consolidation-memory move is an explicit remediation lane or
    owner-approved deferral to bring `distilled.md` below hard by
    graduating, pruning, or splitting without deleting signal.
-2. **MCP / SDK dirty work** — run targeted type-checks for
+3. **MCP / SDK dirty work** — run targeted type-checks for
    `@oaknational/oak-curriculum-sdk` and the repo root, then resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt. Do not fold that work
    into the WS3A documentation closeout.
-3. **Observability branch-primary (L-IMM closed 2026-04-26 at 5/6;
+4. **Observability branch-primary (L-IMM closed 2026-04-26 at 6/6;
    PR-87 quality lane still active)** —
-   - L-IMM lane (operational hardening): closed at 5/6 with Sub-item 6
-     (Vercel Marketplace verify) PENDING owner-touch. The execution
-     wrapper rotated to
+   - L-IMM lane (operational hardening): closed at 6/6 after owner
+     verification that the Vercel Sentry Marketplace plugin is active
+     and configured. The execution wrapper rotated to
      [`archive/completed/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md).
-     Pickup: owner inspects Vercel project settings → Integrations and
-     replaces the PENDING section in
-     `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
-     with the verified-state paragraph, then lane status flips to
-     `✅ closed`.
    - [`current/pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md):
      CodeQL + SonarCloud quality remediation with a parallel-execution
      context section. Phase 0 owner gates open; Phases 1-6 are the fix
@@ -210,15 +245,15 @@ Choose the lane deliberately:
      [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
      closed 2026-04-26 with full Phase 1-5 findings tables; rotate to
      archive/completed/ on next consolidate-docs.
-4. **Lifecycle integration follow-up** — only if owner-directed, observe
+5. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders without evidence. WS3B now has
    satisfied promotion evidence but still needs an explicit implementation
    pass.
-5. **Other agentic engineering work** — WS3A, WS4A, and the commit-window
-   refinement are closed once the current claim is archived. Start WS3B only
-   as an explicit implementation pass. Otherwise pick a queued plan from the
-   current/roadmap surfaces.
+6. **Other agentic engineering work** — WS3A, WS4A, the commit-window
+   refinement, and this Codex handoff have no further Codex implementation
+   open. Start WS3B only as an explicit implementation pass. Otherwise pick a
+   queued plan from the current/roadmap surfaces.
 
 ## Open Owner-Decision Items
 
@@ -235,14 +270,51 @@ These are visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-26 Frolicking Toast, L-IMM closure handoff)**:
+**Status (2026-04-26 Frolicking Toast, post-chunked-landing)**:
+due. Chunked-commit umbrella claim
+`4535f2ff-0420-4bde-bfb8-af0db656e359` closed at 17:00Z after six
+chunks landed (`e37a5795`, `38472766`, `9925ad59`, `9bd91f81`,
+`564e284f`, plus this continuity record). The shared index is no
+longer Frolicking-Toast-owned. Triggers that were `due` at the
+prior handoff (distilled.md hard fitness pressure; multiple fired
+pattern triggers; chunked-commit protocol evidence) remain unaddressed
+and are now ready for `jc-consolidate-docs` whenever the owner
+schedules it. Chunk 6 (embryo log → shared-comms-log rename) runs
+next under a separate brief commit-window claim and does not block
+consolidation.
+
+**Prior status (2026-04-26 Codex, same-branch collaboration handoff)**:
+due — `distilled.md` remains in hard fitness pressure after the
+learning-first preservation correction, the napkin contains fired or sharpened
+coordination-pattern evidence (`vendor-doc-review-for-unknown-unknowns`,
+three-agent phase transition, same-branch friction as signal), and the active
+Frolicking Toast chunked-commit claim is producing real protocol evidence.
+This is not run inside this lightweight handoff because the triggered work is
+thread-scoped convergence and the commit-steward claim is still active.
+Falsifiability: run `pnpm practice:fitness:informational`, inspect
+`napkin.md` promotion triggers, inspect active/closed collaboration state,
+and then run `jc-consolidate-docs` deliberately once the chunked commit pass is
+no longer the immediate shared-index owner.
+
+**Prior status (2026-04-26 Codex, WS3B/joint-decision status handoff)**:
+due — `distilled.md` remains in hard fitness pressure after the
+learning-first preservation correction, and the napkin now contains at least
+one fired pattern-promotion trigger (`vendor-doc-review-for-unknown-unknowns`)
+plus the three-agent phase-transition evidence now captured in future plans.
+This is not run inside this lightweight handoff because the triggered work is
+thread-scoped convergence: pattern graduation, fitness management, and
+possible Practice/ADR/PDR routing. Falsifiability: run
+`pnpm practice:fitness:informational`, inspect `napkin.md` promotion triggers,
+and then run `jc-consolidate-docs` deliberately.
+
+**Prior status (2026-04-26 Frolicking Toast, L-IMM closure handoff)**:
 not due — lightweight session handoff for L-IMM execution closure.
 No `consolidate-docs` trigger fired (no third-instance pattern; no
 napkin overflow; no register sweep due; no thread reorganisation).
 Five Sentry-node commits + closure surfaces landed; all gates green
-per scoped runs and pre-commit / pre-push hooks. Sub-item 6 PENDING
-owner-touch is recorded in the thread next-session record and the
-lane plan body, not as a deferred consolidation item here.
+per scoped runs and pre-commit / pre-push hooks. Sub-item 6 owner-touch
+closed after the owner confirmed the Vercel Sentry Marketplace plugin is
+active and configured.
 
 **Prior status (2026-04-26 Codex, lock-wait note handoff/consolidation)**:
 completed this handoff for the owner-agreed lock-wait nuance. The commit

@@ -1045,6 +1045,7 @@
       "freshness_seconds": 14400,
       "intent": "Execute L-IMM lane (Tiers 1, 3a, 3b, 3c, 2; 3d marked PENDING owner-touch). Six sub-items, each commits independently per sentry-immediate-next-steps.plan.md. Closure: lane status flipped to closed-pending-3d on 5/6.",
       "notes": "Runs in parallel with Codex's agentic-engineering-enhancements claim (3d1cc697). No file overlap: my scope is sentry-node and observability docs; Codex's scope is .agent/practice-core/ and .agent/memory/. Shared log.md is designed for concurrent append. Brief stated HEAD f8ecf57c but actual HEAD at session-open is 7ecac966 (5 Codex commits ahead); my scope is unaffected.",
+      "archived_at": "2026-04-26",
       "closure": {
         "kind": "explicit",
         "closed_at": "2026-04-26T16:15:00Z",
@@ -1100,6 +1101,419 @@
             "kind": "command_output",
             "ref": "scoped gates 2026-04-26T16:00-16:10Z",
             "summary": "pnpm --filter @oaknational/sentry-node lint type-check test all green at 9 files / 120 tests after each tier; full pre-commit + pre-push gates green for every push."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e2cad903-427a-43a2-bce1-c0228e4a391b",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:23:37Z",
+      "freshness_seconds": 14400,
+      "intent": "Capture the wrong-intent commit incident and tighten the future commit-queue plan around authorial ownership, not only lock contention.",
+      "notes": "Active-claim scan found no active claims. Staged set is empty; no staging, commit, push, or history rewrite is in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:25:57Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Wrong-intent commit incident captured: future intent-to-commit/session-counter plan now covers advisory commit queueing and staged-set ownership verification before git commit.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t152557z--codex--codex--gpt-5--unknown--wrong-intent-commit-incident-closeout",
+            "summary": "Shared log records closeout and validation status."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Future plan now treats wrong-intent commit capture as a promotion signal and adds staged-set ownership verification."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-26--codex--wrong-intent-commits-are-worse-than-lock-failures",
+            "summary": "Napkin captures the learning that lock waits do not preserve the staged-files plus commit-message intent bundle."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c4f8cca9-4ede-4079-aa45-e86248a11df1",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:28:22Z",
+      "freshness_seconds": 900,
+      "intent": "Repair closed-claims archive schema hygiene discovered during validation by adding missing archived_at metadata to an already-closed claim.",
+      "notes": "Active-claim scan found no active claims. No staging, commit, push, or history rewrite is in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:28:36Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Closed-claims archive hygiene repaired by adding missing archived_at metadata to the already-closed Frolicking Toast L-IMM claim.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t152836z--codex--codex--gpt-5--unknown--closed-claim-archive-hygiene-closeout",
+            "summary": "Shared log records the schema-hygiene repair and validation."
+          },
+          {
+            "kind": "command_output",
+            "ref": "Ajv collaboration schema validation 2026-04-26T15:28Z",
+            "summary": "Validation initially found claims[15] missing archived_at; repair uses closure.closed_at date 2026-04-26."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ed70a710-1294-4e78-9ded-0fd10a85d6b0",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:32:19Z",
+      "freshness_seconds": 900,
+      "intent": "Reflect newly recorded commit-bundle evidence across the future commit-queue plan, napkin, continuity, and shared collaboration log.",
+      "notes": "Active-claim scan found no active claims. Staged set is empty; no staging, commit, push, or history rewrite is in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:33:00Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Additional commit-bundle evidence reflected across the future commit-queue plan, napkin, continuity, thread record, and collaboration log.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t153300z--codex--codex--gpt-5--unknown--commit-bundle-evidence-taxonomy-closeout",
+            "summary": "Shared log records the reflected staged-bundle integrity taxonomy."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Promotion signal now names substitution, disappearance, and accretion as staged-bundle integrity failures."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-26--codex--commit-bundles-need-integrity-not-just-locking",
+            "summary": "Napkin captures the durable unit as agent intent, intended pathspecs, staged diff, and commit subject."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "28a39ee0-263c-4bfa-b5fd-efa30dd6486b",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:34:17Z",
+      "freshness_seconds": 900,
+      "intent": "Reconcile plan indexes and continuity surfaces after additional evidence satisfied the WS3B promotion gate and introduced the joint-agent decision future plan.",
+      "notes": "Active-claim scan found no active claims. The new future plan file is untracked and was read but not edited. No staging, commit, push, or history rewrite is in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:37:05Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Plan indexes and continuity surfaces reconciled after WS3B promotion-gate evidence and the joint-agent decision future plan were recorded.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t153705z--codex--codex--gpt-5--unknown--ws3b-and-joint-decision-status-reconciliation-closeout",
+            "summary": "Shared log records status reconciliation and validation."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "summary": "Parent plan now says WS3B gate is satisfied and implementation has not started."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            "summary": "Future README now lists the joint-agent decision protocol and updated intent-to-commit evidence."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a74ed3e9-b8e9-41dc-a50d-96bcfca776a0",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T15:58:05Z",
+      "freshness_seconds": 900,
+      "intent": "Run jc-session-handoff for the Codex collaboration-status reconciliation session and close continuity surfaces cleanly.",
+      "notes": "Active-claim scan found no active claims. Staged set is empty; no commit, push, or history rewrite is in scope.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T15:59:02Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Session handoff completed for Codex WS3B/joint-decision status reconciliation; continuity surfaces refreshed and consolidation marked due.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t155902z--codex--codex--gpt-5--unknown--session-handoff-closeout",
+            "summary": "Shared log records handoff closeout."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures landing, next safe step, and due consolidation."
+          },
+          {
+            "kind": "command_output",
+            "ref": "session-handoff validation 2026-04-26T15:59Z",
+            "summary": "Validation performed after handoff: JSON parse, markdownlint, git diff check, and collaboration Ajv schema validation."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a8ba6f42-7f70-4483-9b99-027c02df5bc2",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/docs/observability.md",
+            ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T16:06:24Z",
+      "freshness_seconds": 14400,
+      "intent": "Record owner verification that the Vercel Sentry Marketplace plugin is active and configured, closing L-IMM Sub-item 6.",
+      "notes": "Active-claim scan found no other active claims; scope is live Sentry status surfaces only. Archived completed wrapper remains untouched.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T16:08:49Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Owner verification recorded; L-IMM Sub-item 6 and the operational-hardening lane now show fully closed.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md#2026-04-26t160849z--codex--codex--gpt-5--unknown--vercel-sentry-marketplace-verification-closeout",
+            "summary": "Shared log records owner verification closeout and validation."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            "summary": "Active L-IMM lane now records status as closed."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4535f2ff-0420-4bde-bfb8-af0db656e359",
+      "agent_id": {
+        "agent_name": "Frolicking Toast",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/**",
+            ".agent/skills/commit/**",
+            ".agents/skills/commit/**",
+            ".claude/skills/commit/**",
+            ".cursor/skills/commit/**",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".cursor/rules/register-active-areas-at-session-open.mdc",
+            ".cursor/rules/respect-active-agent-claims.mdc",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/practice-index.md",
+            ".agent/practice-core/**",
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
+            ".agent/plans/agentic-engineering-enhancements/**",
+            ".agent/memory/active/**",
+            ".agent/memory/collaboration/**",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/memory/operational/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T16:35:00Z",
+      "freshness_seconds": 3600,
+      "intent": "Owner-directed: chunk-commit accumulated parallel-agent work in 6 intent-driven chunks. Self-applies the commit-window protocol that Chunk 1 implements. Commits cite Codex / Sturdy Otter authorship in commit body where their substance dominates; Frolicking Toast is the orchestrator for the multi-chunk landing.",
+      "notes": "Umbrella commit-window claim for the 6-chunk landing. Per-chunk lifecycle visible in shared communication log entries between 16:35Z and 17:00Z. Chunk 5 was split into 5a (observability L-IMM owner-verified closure) and 5b (cross-thread continuity record) on inspection of working tree.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T17:00:00Z",
+        "closed_by": {
+          "agent_name": "Frolicking Toast",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Six chunks landed (1, 2, 3, 4, 5a, 5b) covering the commit-window protocol foundation, plans, Practice Core learning-first correction, memory patterns, observability L-IMM full closure, and the cross-thread continuity record. Chunk 6 (embryo log rename) is a separate commit-window claim and runs after this umbrella closes.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "e37a5795",
+            "summary": "Chunk 1 — commit-window protocol with git:index/head claims (schemas v1.2.0). 16 files, +275/-74."
+          },
+          {
+            "kind": "commit",
+            "ref": "38472766",
+            "summary": "Chunk 2 — commit-window protocol + joint-decision protocol plan updates. 5 files, +58/-44."
+          },
+          {
+            "kind": "commit",
+            "ref": "9925ad59",
+            "summary": "Chunk 3 — learning-first fitness correction across Practice Core + ADR-144. 7 files, +22/-19."
+          },
+          {
+            "kind": "commit",
+            "ref": "9bd91f81",
+            "summary": "Chunk 4 — pattern-library refresh for commit-window + learning-first. 6 files, +64/-37."
+          },
+          {
+            "kind": "commit",
+            "ref": "564e284f",
+            "summary": "Chunk 5a — close L-IMM lane fully after owner Marketplace verification. 3 files, +78/-91."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/log.md",
+            "summary": "Six per-chunk staging notes plus this closure capture the audit trail. Includes evidence notes on two commit-time footguns surfaced by self-applying the protocol (commitlint subject-case rule on 'L-IMM' subject-leading; markdownlint MD004 on '+' bullets in log entries)."
           }
         ]
       }

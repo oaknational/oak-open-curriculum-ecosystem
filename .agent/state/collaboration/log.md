@@ -1648,3 +1648,396 @@ design plan it points to was created to prevent.
 
 **L-IMM lane state at this moment**: `✅ closed-pending-3d` (5/6).
 Branch `feat/otel_sentry_enhancements` HEAD `8f44a941`.
+
+### 2026-04-26T15:23:37Z — `Codex` / `codex` / `GPT-5` / `unknown` — wrong-intent commit incident claim
+
+Opening claim `e2cad903-427a-43a2-bce1-c0228e4a391b` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: capture the newly observed failure mode where an agent-authored staged
+set was swept into another agent's commit, leaving correct file contents but
+a misleading commit message / intent description. This tightens the future
+intent-to-commit plan around authorial ownership and commit queueing, not only
+lock contention.
+
+Active-claim scan found no active claims. `git diff --cached --name-status`
+is empty at claim open. No staging, commit, push, or history rewrite is in
+scope.
+
+### 2026-04-26T15:33:00Z — `Codex` / `codex` / `GPT-5` / `unknown` — commit-bundle evidence taxonomy closeout
+
+Closing claim `ed70a710-1294-4e78-9ded-0fd10a85d6b0` explicitly.
+
+Completed:
+
+- updated the future intent-to-commit plan's promotion signal so it names all
+  three staged-bundle integrity failures: substitution, disappearance, and
+  accretion;
+- added a napkin entry capturing the durable commit unit as agent intent,
+  intended pathspecs, staged diff, and commit subject;
+- refreshed repo-continuity and the `agentic-engineering-enhancements` thread
+  record so future sessions see the stronger evidence at session open.
+
+Validation before close: JSON parse, targeted markdownlint, and
+`git diff --check` passed. No staging, commit, push, history rewrite, hook
+automation, or WS3B mechanism was performed.
+
+### 2026-04-26T15:34:17Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3B and joint-decision status reconciliation claim
+
+Opening claim `28a39ee0-263c-4bfa-b5fd-efa30dd6486b` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: reconcile nearby plan indexes and continuity surfaces after reading
+the newly recorded `joint-agent-decision-protocol.plan.md` future plan and the
+updated WS3B sidebar plan. The key evidence change is that the sidebar
+promotion gate is now satisfied, while implementation still has not started.
+
+Active-claim scan found no active claims. The new future plan file is
+untracked and was read but not edited. No staging, commit, push, or history
+rewrite is in scope.
+
+### 2026-04-26T15:37:05Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3B and joint-decision status reconciliation closeout
+
+Closing claim `28a39ee0-263c-4bfa-b5fd-efa30dd6486b` explicitly.
+
+Completed:
+
+- reconciled current README, roadmap, parent MAC plan, repo-continuity, and
+  the `agentic-engineering-enhancements` thread record so WS3B is gate
+  satisfied but not implemented;
+- listed the new `joint-agent-decision-protocol.plan.md` in the future-plan
+  README;
+- updated the intent-to-commit future README row to mention v1.3.0 and the
+  substitution / disappearance / accretion evidence.
+
+Validation before close: JSON parse, targeted markdownlint, and
+`git diff --check` passed. No staging, commit, push, history rewrite, hook
+automation, or WS3B implementation was performed.
+
+### 2026-04-26T15:58:05Z — `Codex` / `codex` / `GPT-5` / `unknown` — session-handoff claim
+
+Opening claim `a74ed3e9-b8e9-41dc-a50d-96bcfca776a0` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: run `jc-session-handoff` for the Codex collaboration-status
+reconciliation session. Update repo-continuity, the touched thread record,
+and collaboration lifecycle state; do not stage, commit, push, or rewrite
+history.
+
+Active-claim scan found no active claims. `git diff --cached --name-status`
+is empty at claim open.
+
+### 2026-04-26T16:06:24Z — `Codex` / `codex` / `GPT-5` / `unknown` — Vercel-Sentry Marketplace verification closeout claim
+
+Opening claim `a8ba6f42-7f70-4483-9b99-027c02df5bc2` on the
+`observability-sentry-otel` thread.
+
+Scope: record owner verification that the Vercel Sentry Marketplace plugin is
+active and configured, closing L-IMM Sub-item 6. Touch set is the live app
+observability doc, the active Sentry maximisation lane, and the
+observability-sentry-otel continuity surfaces. The archived completed wrapper is
+historical and remains untouched.
+
+Active-claim scan found no active claims. No staging, commit, push, or history
+rewrite is in scope unless the owner asks for it after the status update.
+
+### 2026-04-26T16:08:49Z — `Codex` / `codex` / `GPT-5` / `unknown` — Vercel-Sentry Marketplace verification closeout
+
+Closing claim `a8ba6f42-7f70-4483-9b99-027c02df5bc2` explicitly.
+
+Completed:
+
+- replaced the app observability doc's PENDING Marketplace section with the
+  owner-verified state;
+- flipped L-IMM from `closed-pending-3d` / frontmatter `pending` to fully
+  `closed` / `completed`;
+- refreshed repo-continuity and the `observability-sentry-otel` thread record
+  so Sub-item 6 is no longer advertised as next work;
+- left the archived completed execution wrapper untouched as historical record.
+
+Validation before close: targeted markdownlint, JSON parse, Ajv collaboration
+schema validation, `git diff --check`, and `@oaknational/sentry-node` tests
+passed. No staging, commit, push, or history rewrite was performed.
+
+### 2026-04-26T15:59:02Z — `Codex` / `codex` / `GPT-5` / `unknown` — session-handoff closeout
+
+Closing claim `a74ed3e9-b8e9-41dc-a50d-96bcfca776a0` explicitly.
+
+Completed:
+
+- refreshed `repo-continuity.md` with current HEAD `e4705169`, current active
+  identities, the WS3B gate-satisfied / not-implemented distinction, and the
+  deep-consolidation due state;
+- refreshed the `agentic-engineering-enhancements` thread record with the
+  handoff landing, updated Codex identity role, blockers, and next safe step;
+- scanned entry points, tactical tracks, `.remember/` buffers, and decision
+  thread examples; no entry-point drift, tactical-track action, or decision
+  thread handoff was needed;
+- marked `jc-consolidate-docs` due rather than running it inside this
+  lightweight handoff because the triggered work is thread-scoped convergence.
+
+No staging, commit, push, history rewrite, hook automation, or WS3B
+implementation was performed.
+
+### 2026-04-26T15:25:57Z — `Codex` / `codex` / `GPT-5` / `unknown` — wrong-intent commit incident closeout
+
+Closing claim `e2cad903-427a-43a2-bce1-c0228e4a391b` explicitly.
+
+Completed:
+
+- amended the future intent-to-commit/session-counter plan so it covers
+  wrong-intent commit capture and advisory commit queueing, not only lock
+  contention;
+- marked the future plan's evidence threshold as met while keeping
+  implementation gated on explicit owner direction;
+- added a staged-set ownership check to the proposed commit-skill flow;
+- captured the learning in the napkin.
+
+Validation before close: targeted markdownlint, JSON parse, and
+`git diff --check` passed. No staging, commit, push, or history rewrite was
+performed.
+
+### 2026-04-26T15:28:22Z — `Codex` / `codex` / `GPT-5` / `unknown` — closed-claim archive hygiene claim
+
+Opening claim `c4f8cca9-4ede-4079-aa45-e86248a11df1` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: repair one closed-claims archive schema hygiene issue found during
+post-note validation. The Frolicking Toast L-IMM closed claim already carries
+`closure.closed_at: 2026-04-26T16:15:00Z` but is missing the top-level
+`archived_at` field required by `closed-claims.schema.json`.
+
+Active-claim scan found no active claims. No staging, commit, push, or history
+rewrite is in scope.
+
+### 2026-04-26T15:28:36Z — `Codex` / `codex` / `GPT-5` / `unknown` — closed-claim archive hygiene closeout
+
+Closing claim `c4f8cca9-4ede-4079-aa45-e86248a11df1` explicitly.
+
+Completed:
+
+- added `archived_at: "2026-04-26"` to the already-closed Frolicking Toast
+  L-IMM claim, matching its `closure.closed_at` date;
+- archived this short schema-hygiene claim into
+  `closed-claims.archive.json`.
+
+Validation before close: JSON parse and targeted markdownlint passed. Full
+collaboration Ajv validation is rerun after close. No staging, commit, push,
+or history rewrite was performed.
+
+### 2026-04-26T15:32:19Z — `Codex` / `codex` / `GPT-5` / `unknown` — commit-bundle evidence taxonomy claim
+
+Opening claim `ed70a710-1294-4e78-9ded-0fd10a85d6b0` on the
+`agentic-engineering-enhancements` thread.
+
+Scope: reflect the additional recorded commit-bundle evidence now captured in
+the future intent-to-commit plan. The evidence is no longer only lock
+contention or one wrong-intent commit: it now distinguishes substitution,
+disappearance, and accretion failures in the staged-files + commit-message
+bundle.
+
+Active-claim scan found no active claims. `git diff --cached --name-status`
+is empty at claim open. No staging, commit, push, or history rewrite is in
+scope.
+
+### 2026-04-26T16:35Z — `Frolicking Toast` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — umbrella commit-window claim for chunked landing
+
+Opening claim `4535f2ff-0420-4bde-bfb8-af0db656e359` per the new commit-
+window protocol that Codex landed earlier today, in the parent plan
+[`multi-agent-collaboration-protocol.plan.md`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+and the future plan
+[`intent-to-commit-and-session-counter.plan.md`](../../plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md).
+
+**Owner-directed scope**: chunk-commit ~40 outstanding files representing
+accumulated parallel-agent design work into intent-driven commit groups.
+Authorship attribution preserved in commit bodies. This is the FIRST
+self-application of the commit-window protocol, captured here as live
+evidence for the protocol's promotion threshold.
+
+**Chunks (intent-driven, not file-count-driven)**:
+
+1. Commit-window protocol foundation — schemas v1.2.0, skill, rules,
+   start-right, commands, practice-index, state README.
+2. Plans — parent, future, roadmap, intent-to-commit, joint-decision.
+3. Practice Core learning-first correction — PDR-014, PDR-023, PDR-024,
+   lineage, practice.md, CHANGELOG, ADR-144.
+4. Memory pattern surfaces — patterns, executive, collaboration.
+5. Continuity & state record — napkin, repo-continuity, thread record,
+   log entries, claims registries.
+6. Embryo log → shared-comms-log rename and reference cleanup.
+
+**Per-chunk lifecycle**: each chunk gets its own log entry naming the
+substance and pathspecs at staging time, plus a closure note when the
+commit lands. The umbrella claim itself closes after Chunk 6 lands.
+
+**Evidence-collection note (per owner direction "record additional
+evidence notes as you go")**: the self-applied protocol will surface
+operational details — staging-window length, claim-overlap incidents,
+hook-failure behaviour. Captured in napkin during the work, not at
+the end.
+
+### 2026-04-26T16:38Z — `Frolicking Toast` — chunk 1 staging note (commit-window protocol foundation)
+
+Staging chunk 1 under umbrella claim `4535f2ff`. Pathspecs:
+
+- `.agent/state/collaboration/active-claims.schema.json` (v1.2.0 with `git` area kind)
+- `.agent/state/collaboration/closed-claims.schema.json`
+- `.agent/skills/commit/SKILL.md` + `.agents/skills/commit/SKILL.md` + `.claude/skills/commit/SKILL.md` + `.cursor/skills/commit/SKILL.md` (canonical + 3 platform mirrors)
+- `.agent/directives/agent-collaboration.md` (third foundational rule for commit-window)
+- `.agent/rules/register-active-areas-at-session-open.md` + `.cursor/rules/register-active-areas-at-session-open.mdc`
+- `.agent/rules/respect-active-agent-claims.md` + `.cursor/rules/respect-active-agent-claims.mdc`
+- `.agent/skills/start-right-quick/shared/start-right.md`
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
+- `.agent/commands/consolidate-docs.md`
+- `.agent/practice-index.md` (rules table updated for commit-window references)
+- `.agent/state/README.md`
+
+Author attribution: substance is Codex / `codex` / `GPT-5` (intent-to-commit
+plan implementation). Committing under Frolicking Toast / `claude-code` per
+owner direction; commit body cites Codex authorship.
+
+Empty staged set check via `git diff --cached --name-only`: empty before
+staging chunk 1. Peer-claim scan: only my umbrella claim active. Window clear.
+
+### 2026-04-26T16:42Z — `Frolicking Toast` — chunk 1 closure note + chunk 2 staging note (plans)
+
+Chunk 1 landed at `e37a5795` (16 files, +275/-74). Pre-commit + pre-push
+gates green. Pushed to origin.
+
+Chunk 2 staging under umbrella `4535f2ff`. Pathspecs: parent plan,
+current README, future README, intent-to-commit-and-session-counter,
+roadmap. The joint-agent-decision-protocol plan is already tracked
+(committed in `6769a1f9` by Codex) so it does NOT need staging here;
+this chunk's modifications layer on top of that landing.
+
+Author attribution: substance is Codex (`codex` / `GPT-5`) for the
+intent-to-commit plan and roadmap; Sturdy Otter (`claude-code`) for
+the joint-decision references and 3-agent phase-transition framing
+in parent + current README.
+
+Empty staged set check: clean before staging chunk 2. Window clear.
+
+### 2026-04-26T16:45Z — `Frolicking Toast` — chunk 2 closure + chunk 3 staging (Practice Core learning-first)
+
+Chunk 2 landed at `38472766` (5 files, +58/-44). Pre-commit + pre-push
+gates green; pushed to origin.
+
+Chunk 3 staging under umbrella `4535f2ff`. Practice Core learning-first
+correction: PDR-014 (consolidation and knowledge-flow discipline),
+PDR-023 (documentation-structure discipline), PDR-024 (vital integration
+surfaces), practice-lineage, practice.md, CHANGELOG, plus the host
+ADR-144 (two-threshold fitness model) absorbing the same correction.
+
+Substance: owner-corrected doctrine — fitness limits are post-writing
+health signals, never reasons to suppress capture, distillation, or
+graduation. Agents may raise soft targets modestly with rationale; hard
+limits belong to the owner. Substantive in PDR-014 (~22 lines changed),
+incidental in the others.
+
+Author attribution: substance is Codex (`codex` / `GPT-5`) absorbing
+owner direction earlier today. Landing under Frolicking Toast as part
+of the umbrella claim's chunked landing.
+
+Empty staged set check: clean. Window clear.
+
+### 2026-04-26T16:20:48Z — `Codex` / `codex` / `GPT-5` / `unknown` — session handoff under active commit-steward claim
+
+Running `jc-session-handoff` after owner clarified the collaboration
+experiment: the agents should remain on the same branch so coordination
+frictions are observable, not hidden by separate worktrees.
+
+Overlap note: active claim
+`4535f2ff-0420-4bde-bfb8-af0db656e359` by Frolicking Toast covers
+`git:index/head` plus broad collaboration / Practice surfaces. This handoff
+touched overlapping continuity surfaces deliberately:
+
+- `.agent/memory/active/napkin.md`
+- `.agent/memory/operational/repo-continuity.md`
+- `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
+- `.agent/state/collaboration/log.md`
+
+Codex has no active claim to close. No staging, commit, push, sidebar,
+owner-escalation file, PR-87 remediation, or decision-thread state change is
+in scope. The handoff records that same-branch overlap is allowed, but commit
+windows, path ownership, and shared-surface handoffs must be visible before
+history is written.
+
+### 2026-04-26T16:48Z — `Frolicking Toast` — chunk 3 closure + chunk 4 staging (memory pattern surfaces)
+
+Chunk 3 landed at `9925ad59` (7 files, +22/-19). Pre-commit + pre-push
+gates green; pushed.
+
+Chunk 4 staging under umbrella `4535f2ff`. Memory pattern surfaces:
+patterns README, collapse-authoritative-frames-when-settled,
+substance-before-fitness (renamed in spirit to "Learning Before
+Fitness"; filename retained for link stability),
+parallel-track-pre-commit-gate-coupling, agent-collaboration-channels
+(executive), collaboration-state-conventions (operational).
+
+Substance: pattern-library refresh aligned with both the
+learning-first correction (chunk 3) and the commit-window protocol
+(chunk 1). The substance-before-fitness pattern's name, `use_this_when`,
+and principle paragraphs are revised to lead with learning preservation;
+the file path is preserved so existing link references stay valid.
+
+Empty staged set check: clean. Window clear.
+
+### 2026-04-26T16:55Z — `Frolicking Toast` — chunk 4 closure + chunk 5a staging (observability L-IMM owner-verified closure)
+
+Chunk 4 landed at `9bd91f81` (6 files, +64/-37). Pre-commit + pre-push
+gates green; pushed.
+
+Chunk 5 split into 5a (observability L-IMM owner-verified closure)
+and 5b (cross-thread continuity & state record) on inspection of the
+working tree: between chunks 1-4 landing and now, Codex absorbed the
+owner's verification of Vercel Marketplace integration (Sub-item 6
+PENDING → COMPLETED). The L-IMM lane is now fully `✅ closed`, not
+`closed-pending-3d`. That closure is its own intent.
+
+Chunk 5a staging under umbrella `4535f2ff`. Pathspecs:
+
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
+  PENDING section replaced with verified-state paragraph.
+- `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md` —
+  L-IMM lane status flipped to `✅ closed` (full closure).
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md` —
+  Codex's refresh recording owner verification.
+
+Author attribution: substance is the owner's verification + Codex's
+documentation closeout. Landing under Frolicking Toast as part of
+the umbrella claim's chunked landing.
+
+Empty staged set check: clean. Window clear.
+
+### 2026-04-26T17:00Z — `Frolicking Toast` — chunk 5a closure + chunk 5b staging (continuity & state record + umbrella claim closure)
+
+Chunk 5a landed at `564e284f` (3 files, +78/-91). Pre-commit + pre-push
+gates green; pushed.
+
+Chunk 5b is the continuity & state record commit. Pathspecs:
+
+- `.agent/memory/active/napkin.md`
+- `.agent/memory/operational/repo-continuity.md`
+- `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
+- `.agent/state/collaboration/active-claims.json` (umbrella claim removal)
+- `.agent/state/collaboration/closed-claims.archive.json` (umbrella claim closure block)
+- `.agent/state/collaboration/log.md` (this entry + the entire chunked-landing audit trail)
+
+This commit also closes umbrella claim `4535f2ff-0420-4bde-bfb8-af0db656e359`.
+After commit: chunk 6 is the embryo log rename, which is a separate
+commit-window claim.
+
+**Evidence note**: the self-applied protocol surfaced two operational
+findings this hour, captured in napkin entries:
+
+1. Commit-message subject case (commitlint rejects "L-IMM" subject-leading
+   because of subject-case rule) — required reword. The `scripts/check-
+   commit-message.sh` validation pre-commit catches it cheaply.
+2. Markdownlint MD004/MD032 fires on any line beginning with `+` (the
+   "intended bullet character is `-`" rule). Recurring footgun when
+   writing log entries with multi-item parenthetical lists; the
+   workaround is comma-separated phrasing.
+
+Both findings should inform the commit skill's "validate before
+invoking git commit" expansion in a future iteration.

@@ -8,6 +8,50 @@ live in the register at
 
 ---
 
+## 2026-04-26 — Frolicking Toast — self-applying the commit-window protocol surfaced two pre-commit footguns
+
+**Context:** owner-directed multi-chunk commit landing under umbrella
+claim `4535f2ff-0420-4bde-bfb8-af0db656e359`, self-applying the
+commit-window protocol that chunk 1 implements. Six chunks, one
+per intent. Each chunk: open claim (or re-use umbrella), append
+log entry naming pathspecs, stage, validate message, commit, push.
+
+**Surprise A — commitlint subject-case on identifier-leading subjects.**
+Drafted a chunk-5a subject `docs(observability): L-IMM lane fully
+closed after owner verification`. Commitlint rejected on
+`subject-case`: the subject leads with `L-IMM` (uppercase). Reword
+to `close L-IMM lane fully after owner Marketplace verification`
+(verb-leading) passed. The `scripts/check-commit-message.sh`
+validation catches it cheaply BEFORE invoking `git commit`, but
+only if the agent runs it pre-flight. The commit skill mandates
+the validation; this incident proves the mandate's value.
+
+**Surprise B — markdownlint MD004 on `+` bullets and indented
+continuation lines in log entries.** Wrote chunk-1 staging entry
+with parenthetical multi-item lists like `(parent plan ... + future
+plan ...)`. Markdownlint interprets the `+` as a list-item bullet
+in the wrong style (the repo enforces `-` style). Fix: comma-
+separated phrasing or full sentences instead of `+`-joined lists.
+The pre-commit hook catches it before the commit lands but the
+recovery loop costs ~30s per occurrence.
+
+**Lesson:** the commit skill's validate-before-invoking-git-commit
+discipline is well-shaped — it caught both footguns inside the
+commit window before history was rewritten. The remaining gap is
+the message itself: agents drafting subjects don't always remember
+the case rule (especially for technical identifiers like
+`L-IMM`/`PR-87`/`ADR-163` which look natural at the start of a
+sentence). Adding `scripts/check-commit-message.sh -m "<draft>"`
+to the commit skill's prep step (already there but easily skipped)
+would surface case violations without invoking git at all.
+
+**Promotion trigger:** captured here as evidence; no separate
+graduation needed. The commit skill already mandates validation;
+this entry strengthens the case for habitual pre-flight use vs.
+trust-the-hook reflex.
+
+---
+
 ## 2026-04-26 — Frolicking Toast — vendor-doc review caught a fingerprint policy regression before merge
 
 **Surprise:** my Tier 2 fingerprinting implementation drafted
@@ -228,3 +272,24 @@ what the protocol must defend against.
 
 **Promotion trigger:** none new; captured here as session texture for
 PDR-011 §Surprise Pipeline.
+
+---
+
+## 2026-04-26 — Codex — same-branch friction is the experiment, not noise
+
+**Correction:** I initially framed separate worktrees / branches as the
+safest way to let one agent commit while another remediates PR-87. The owner
+clarified that the point of the current work is to identify the frictions
+that constrain multiple agents collaborating on the **same branch at the same
+time**, then remove those frictions through communication. Avoiding the
+shared branch would remove the signal the experiment is meant to study.
+
+**Lesson:** for collaboration-architecture work, safety is not always
+isolation. The better guard is observability: explicit commit-window
+announcements, visible path ownership, no silent staging, no lock deletion,
+and a handshaked decision when two agents need the same surface. Friction is
+data when it is captured before it becomes misleading history.
+
+**Promotion trigger:** none new. This sharpens the existing
+intent-to-commit and joint-agent-decision protocol evidence rather than
+opening a separate lane.
