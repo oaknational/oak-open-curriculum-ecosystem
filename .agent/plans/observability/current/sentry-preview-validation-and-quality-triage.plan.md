@@ -951,6 +951,80 @@ issue with stack frames pointing at
 context, proving source-code upload + symbolication on the current
 release.
 
+### Source-code upload — EMPIRICALLY PROVEN (2026-04-26)
+
+Owner set `TEST_ERROR_SECRET` (preview-only, production-forbidden by
+env-schema super-refine), Vercel redeployed (`dpl_DDkHnHZj7RmTG6qYevk1BDU9UHKZ`
+for SHA `71397d47`), and the probe ran all three modes
+successfully against the deployed preview. **All three captures
+include rendered TS source-line context**, definitively proving the
+source-code-upload pipeline works for the current preview release.
+
+| Mode | Issue | Frame | Rendered source context |
+|---|---|---|---|
+| `unhandled` | [`OAK-OPEN-CURRICULUM-MCP-7`](https://oak-national-academy.sentry.io/issues/OAK-OPEN-CURRICULUM-MCP-7) | `src/test-error/test-error-route.ts:175:12` (`dispatchMode`) | lines 172-178 with `→ 175 │ next(new TestErrorUnhandled(token));` |
+| `rejected` | [`OAK-OPEN-CURRICULUM-MCP-8`](https://oak-national-academy.sentry.io/issues/OAK-OPEN-CURRICULUM-MCP-8) | `src/test-error/test-error-route.ts:181:22` (`dispatchMode`) | lines 178-184 with `→ 181 │ Promise.reject(new TestErrorRejected(token)).catch(next);` |
+| `handled` | [`OAK-OPEN-CURRICULUM-MCP-9`](https://oak-national-academy.sentry.io/issues/OAK-OPEN-CURRICULUM-MCP-9) | `src/test-error/test-error-route.ts:162:41` (`dispatchMode`) | lines 159-165 with `→ 162 │ observability.captureHandledError(new TestErrorHandled(token), {` |
+
+All three events tagged with:
+
+- `release: poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`
+- `git.commit.sha: 71397d470a5fab556d5dd96b0793e5068cbb7c93` (the deployed HEAD)
+- `environment: preview`
+- `cloud.provider: vercel`, `cloud.region: lhr1`
+- `service: oak-curriculum-mcp-streamable-http`
+- Trace IDs + span IDs, `sampled: true`, `client_sample_rate: 1`
+- Mechanism distinguishes the paths: `auto.middleware.express`
+  (unhandled) vs `generic` (handled, rejected via captureHandledError-equivalent)
+- `handled: no` for unhandled mode; `handled: yes` for the two
+  caught paths
+
+Note: rate-limited via the existing `oauthRateLimiter` (30 req /
+15 min / IP); shared secret with constant-time compare on the
+`X-Test-Error-Secret` header. The route is **entirely absent** in
+production builds (env-schema super-refine forbids
+`TEST_ERROR_SECRET` in production), so there is no public attack
+surface added by shipping the route.
+
+All three test issues marked `resolved` in Sentry post-validation
+to keep the unresolved-issues view clean.
+
+### Stack-trace usefulness for agents and humans — PROVEN
+
+The captures meet every quality bar a debugging session needs:
+
+- ✅ **First-party file path** — `src/test-error/test-error-route.ts`
+- ✅ **Line + column resolution** — accurate to the exact statement
+- ✅ **Rendered source-line context** — Sentry shows lines around
+  the throw, NOT just file:line position. This requires source
+  files to be uploaded to Sentry alongside the source maps.
+- ✅ **Function name preserved** — `dispatchMode` resolved from
+  the minified bundle frame.
+- ✅ **First-party vs third-party distinction** — Sentry highlights
+  the application frame as "Most Relevant" while still capturing
+  the express-rate-limit / router stack for context.
+- ✅ **Mechanism tagging** — `auto.middleware.express` for
+  Express-chain captures, `generic` for explicit
+  `captureHandledError` calls; agents can filter by capture path.
+- ✅ **Trace correlation** — every error has trace + span IDs
+  linking back to transactions; cross-system trace works.
+- ✅ **Per-event git provenance** — `git.commit.sha` tag is the
+  deployed HEAD, not the release's `last_commit`; this is what
+  agents and humans need to identify the exact commit that shipped
+  the bug.
+- ✅ **Rich operational context** — Vercel region, Lambda app
+  memory, runtime version, request method/URL/body, user, locale,
+  timezone all attached as tags / context.
+
+### Phase 2 acceptance — ✅ FULLY MET (no inferred-positives remaining)
+
+1. ✅ Release attribution confirmed end-to-end on errors AND
+   transactions.
+2. ✅ Source maps + Debug IDs work; source files uploaded;
+   rendered source-line context displayed.
+3. ✅ Deploy event registered.
+4. ✅ Findings recorded above before Phase 3.
+
 ### Phase 2 acceptance — ✅ MET (with one inferred-positive)
 
 1. ✅ Release attribution confirmed end-to-end (transactions
