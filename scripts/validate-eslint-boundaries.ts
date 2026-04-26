@@ -32,7 +32,7 @@ function readWorkspacePackageNames(relativeDir: string): string[] {
     .map((entry) => resolve(workspaceDir, entry.name, 'package.json'))
     .filter((packageJsonPath) => existsSync(packageJsonPath))
     .map((packageJsonPath) => readPackageName(packageJsonPath))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 }
 
 function assertEqual<T>(label: string, actual: readonly T[], expected: readonly T[]): void {
@@ -56,14 +56,22 @@ function main(): void {
   const actualLibPackageNames = readWorkspacePackageNames('packages/libs');
   const declaredLibPackageNames = [...LIB_PACKAGES]
     .map((packageName) => `@oaknational/${packageName}`)
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
   assertEqual('Library boundary inventory', declaredLibPackageNames, actualLibPackageNames);
 
   const actualAppPackageNames = readWorkspacePackageNames('apps');
-  assertEqual('App boundary inventory', [...APP_PACKAGE_IMPORTS].sort(), actualAppPackageNames);
+  assertEqual(
+    'App boundary inventory',
+    [...APP_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
+    actualAppPackageNames,
+  );
 
   const actualSdkPackageNames = readWorkspacePackageNames('packages/sdks');
-  assertEqual('SDK boundary inventory', [...SDK_PACKAGE_IMPORTS].sort(), actualSdkPackageNames);
+  assertEqual(
+    'SDK boundary inventory',
+    [...SDK_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
+    actualSdkPackageNames,
+  );
 
   const toolingPackagePath = resolve(repoRoot, 'agent-tools/package.json');
   assertEqual(

@@ -13,10 +13,7 @@
 /**
  * Node-style request handler used at the deploy boundary.
  */
-type DeployEntryHandler<TRequest, TResponse> = (
-  request: TRequest,
-  response: TResponse,
-) => Promise<unknown> | unknown;
+type DeployEntryHandler<TRequest, TResponse> = (request: TRequest, response: TResponse) => unknown;
 
 /**
  * Dependencies for {@link createDeployEntryHandler}.

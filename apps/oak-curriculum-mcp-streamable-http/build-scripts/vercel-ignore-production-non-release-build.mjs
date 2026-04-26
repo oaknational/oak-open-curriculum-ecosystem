@@ -10,6 +10,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 // truth-table semantics: a strict X.Y.Z (with optional prerelease + build
 // metadata per semver §2) and a `lte` comparison that follows semver §11
 // precedence rules. Build-metadata is ignored in precedence per the spec.
+//
+// @see ../../../../packages/core/build-metadata/src/semver.ts —
+// canonical npm-`semver`-backed implementation. The two implementations
+// MUST stay byte-equivalent on the regex pattern and behaviour-equivalent
+// on validity + ≤ comparison; the parity test at
+// `packages/core/build-metadata/tests/semver-parity.test.ts` is the
+// anti-drift gate.
 const SEMVER_PATTERN =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 

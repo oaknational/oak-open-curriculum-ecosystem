@@ -4,7 +4,21 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const APPLICATION_VERSION_PATTERN = /^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)*$/u;
+/**
+ * @see ../packages/core/build-metadata/src/semver.ts — canonical
+ * implementation. This script runs as a `pnpm build` pre-step inside
+ * `oak-search-cli`'s build (`"build": "node ../../scripts/validate-root-application-version.mjs && tsup"`),
+ * which executes inside `turbo run build` at a point where
+ * `@oaknational/build-metadata`'s `dist/` may or may not be populated
+ * depending on the turbo task graph. To preserve the
+ * no-pre-build-needed contract, the regex is intentionally inlined
+ * rather than imported. Keep this copy byte-equivalent to the
+ * canonical {@link SEMVER_PATTERN}; the parity test at
+ * `packages/core/build-metadata/tests/semver-parity.test.ts` is the
+ * anti-drift gate.
+ */
+const APPLICATION_VERSION_PATTERN =
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 function trimToUndefined(value) {
   const trimmed = value?.trim();

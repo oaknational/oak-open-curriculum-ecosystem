@@ -2,6 +2,7 @@ import { ROOT_PACKAGE_VERSION } from '@oaknational/env';
 import { err, ok, type Result } from '@oaknational/result';
 
 import { NO_DIAGNOSTICS, trimToUndefined, type RuntimeMetadataError } from './git-sha.js';
+import { isValidSemver } from './semver.js';
 
 export type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';
 
@@ -11,19 +12,13 @@ export interface VercelDisplayHostnameEnvironment {
   readonly VERCEL_PROJECT_PRODUCTION_URL?: string;
 }
 
-const APPLICATION_VERSION_PATTERN = /^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)*$/u;
-
-function isValidApplicationVersion(value: string): boolean {
-  return APPLICATION_VERSION_PATTERN.test(value);
-}
-
 function resolveOverrideApplicationVersion(
   override: string,
 ): Result<
   { readonly value: string; readonly source: ApplicationVersionSource },
   RuntimeMetadataError
 > {
-  if (!isValidApplicationVersion(override)) {
+  if (!isValidSemver(override)) {
     return err({
       kind: 'invalid_application_version',
       message:
@@ -52,7 +47,7 @@ function resolveRootPackageApplicationVersion(): Result<
     });
   }
 
-  if (!isValidApplicationVersion(rootVersion)) {
+  if (!isValidSemver(rootVersion)) {
     return err({
       kind: 'invalid_application_version',
       message:

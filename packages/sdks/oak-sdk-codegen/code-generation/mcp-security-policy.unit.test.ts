@@ -94,12 +94,12 @@ describe('MCP Security Policy Configuration', () => {
   describe('getScopesSupported', () => {
     it('returns the same scope set as DEFAULT_AUTH_SCHEME.scopes', () => {
       const scopes = getScopesSupported();
-      expect(scopes).toEqual([...DEFAULT_AUTH_SCHEME.scopes].sort());
+      expect(scopes).toEqual([...DEFAULT_AUTH_SCHEME.scopes].sort((a, b) => a.localeCompare(b)));
     });
 
     it('returns sorted array', () => {
       const scopes = getScopesSupported();
-      const sorted = [...scopes].sort();
+      const sorted = [...scopes].sort((a, b) => a.localeCompare(b));
       expect(scopes).toEqual(sorted);
     });
 

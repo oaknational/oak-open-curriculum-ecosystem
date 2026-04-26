@@ -31,10 +31,7 @@ import { loadRuntimeConfig } from './runtime-config.js';
 const processEnv = process.env;
 const startDir = process.cwd();
 
-type NodeRequestHandler = (
-  request: IncomingMessage,
-  response: ServerResponse,
-) => Promise<unknown> | unknown;
+type NodeRequestHandler = (request: IncomingMessage, response: ServerResponse) => unknown;
 
 /**
  * Load the runtime configuration or throw a boundary error.
@@ -85,10 +82,7 @@ const lazyDeployEntryHandler = createDeployEntryHandler<IncomingMessage, ServerR
   loadHandler: loadConfiguredApp,
 });
 
-export function deployEntryHandler(
-  request: IncomingMessage,
-  response: ServerResponse,
-): Promise<unknown> | unknown {
+export function deployEntryHandler(request: IncomingMessage, response: ServerResponse): unknown {
   return lazyDeployEntryHandler(request, response);
 }
 

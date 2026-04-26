@@ -2231,7 +2231,7 @@ Graduation commit `cb358e8d` (8 files, +804/-134) landed locally but
 push blocked by `@oaknational/search-cli#lint` failing on Ethereal
 Alpaca's unstaged WIP:
 
-```
+```text
 apps/oak-search-cli/src/cli/admin/index.ts:76:9
   '_futureObservability' is assigned a value but never used
 apps/oak-search-cli/src/cli/eval/index.ts:85:3

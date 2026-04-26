@@ -25,3 +25,11 @@ export {
 } from './release.js';
 
 export { buildBuildInfo, serialiseBuildInfo, type BuildInfo } from './build-info.js';
+
+export {
+  isLessThanOrEqual,
+  isValidSemver,
+  parseSemver,
+  SEMVER_PATTERN,
+  type ParsedSemver,
+} from './semver.js';

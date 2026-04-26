@@ -232,6 +232,112 @@ function classifyLines(content) {
 }
 
 /**
+ * Build the line-zone messages for a fitness-managed file.
+ *
+ * @param {'healthy' | 'soft' | 'hard' | 'critical' | null} zone
+ * @param {number} totalLines
+ * @param {number | null} targetLines
+ * @param {number | null} limitLines
+ * @returns {{ zone: 'soft' | 'hard' | 'critical', metric: 'lines', text: string }[]}
+ */
+function buildLineZoneMessages(zone, totalLines, targetLines, limitLines) {
+  if (zone === 'soft') {
+    return [
+      {
+        zone: 'soft',
+        metric: 'lines',
+        text: `Lines: ${totalLines} above target ${targetLines} (limit ${limitLines})`,
+      },
+    ];
+  }
+  if (zone === 'hard') {
+    const critical = Math.floor((limitLines ?? 0) * CRITICAL_RATIO);
+    return [
+      {
+        zone: 'hard',
+        metric: 'lines',
+        text: `Lines: ${totalLines} above hard limit ${limitLines} (critical ${critical})`,
+      },
+    ];
+  }
+  if (zone === 'critical') {
+    const critical = Math.floor((limitLines ?? 0) * CRITICAL_RATIO);
+    return [
+      {
+        zone: 'critical',
+        metric: 'lines',
+        text: `Lines: ${totalLines} above critical threshold ${critical} — loop failure signal`,
+      },
+    ];
+  }
+  return [];
+}
+
+/**
+ * Build the character-zone messages for a fitness-managed file.
+ *
+ * @param {'healthy' | 'hard' | 'critical' | null} zone
+ * @param {number} totalChars
+ * @param {number | null} limitChars
+ * @returns {{ zone: 'hard' | 'critical', metric: 'chars', text: string }[]}
+ */
+function buildCharZoneMessages(zone, totalChars, limitChars) {
+  if (zone === 'hard') {
+    return [
+      {
+        zone: 'hard',
+        metric: 'chars',
+        text: `Characters: ${totalChars} above hard limit ${limitChars}`,
+      },
+    ];
+  }
+  if (zone === 'critical') {
+    const critical = Math.floor((limitChars ?? 0) * CRITICAL_RATIO);
+    return [
+      {
+        zone: 'critical',
+        metric: 'chars',
+        text: `Characters: ${totalChars} above critical threshold ${critical} — loop failure signal`,
+      },
+    ];
+  }
+  return [];
+}
+
+/**
+ * Build the prose-line-width messages for a fitness-managed file.
+ *
+ * @param {'healthy' | 'hard' | 'critical' | null} zone
+ * @param {number} violationCount
+ * @param {number} maxProseLen
+ * @param {number} maxProseLineNum
+ * @param {number | null} maxProseLineWidth
+ * @returns {{ zone: 'hard' | 'critical', metric: 'prose', text: string }[]}
+ */
+function buildProseZoneMessages(
+  zone,
+  violationCount,
+  maxProseLen,
+  maxProseLineNum,
+  maxProseLineWidth,
+) {
+  if (zone !== 'hard' && zone !== 'critical') {
+    return [];
+  }
+  const label = zone === 'critical' ? 'critical threshold' : 'hard limit';
+  const critical = Math.floor((maxProseLineWidth ?? 0) * CRITICAL_RATIO);
+  const threshold = zone === 'critical' ? critical : maxProseLineWidth;
+  const suffix = zone === 'critical' ? ' — loop failure signal' : '';
+  return [
+    {
+      zone,
+      metric: 'prose',
+      text: `Prose line width: ${violationCount} line(s) above ${label} ${threshold} (longest ${maxProseLen} at line ${maxProseLineNum})${suffix}`,
+    },
+  ];
+}
+
+/**
  * Check a single fitness-managed file against the three-zone fitness model
  * (ADR-144).
  *
@@ -302,53 +408,17 @@ export function evaluateFitnessFile(relPath, content) {
   const proseZone = classifyFitnessZone(maxProseLen, null, maxProseLineWidth);
   const overallZone = worstZone([lineZone, charZone, proseZone]);
 
-  const zoneMessages = [];
-
-  if (lineZone === 'soft') {
-    zoneMessages.push({
-      zone: 'soft',
-      metric: 'lines',
-      text: `Lines: ${totalLines} above target ${targetLines} (limit ${limitLines})`,
-    });
-  } else if (lineZone === 'hard') {
-    zoneMessages.push({
-      zone: 'hard',
-      metric: 'lines',
-      text: `Lines: ${totalLines} above hard limit ${limitLines} (critical ${Math.floor((limitLines ?? 0) * CRITICAL_RATIO)})`,
-    });
-  } else if (lineZone === 'critical') {
-    zoneMessages.push({
-      zone: 'critical',
-      metric: 'lines',
-      text: `Lines: ${totalLines} above critical threshold ${Math.floor((limitLines ?? 0) * CRITICAL_RATIO)} — loop failure signal`,
-    });
-  }
-
-  if (charZone === 'hard') {
-    zoneMessages.push({
-      zone: 'hard',
-      metric: 'chars',
-      text: `Characters: ${totalChars} above hard limit ${limitChars}`,
-    });
-  } else if (charZone === 'critical') {
-    zoneMessages.push({
-      zone: 'critical',
-      metric: 'chars',
-      text: `Characters: ${totalChars} above critical threshold ${Math.floor((limitChars ?? 0) * CRITICAL_RATIO)} — loop failure signal`,
-    });
-  }
-
-  if (proseZone === 'hard' || proseZone === 'critical') {
-    const label = proseZone === 'critical' ? 'critical threshold' : 'hard limit';
-    const critical = Math.floor((maxProseLineWidth ?? 0) * CRITICAL_RATIO);
-    const threshold = proseZone === 'critical' ? critical : maxProseLineWidth;
-    const suffix = proseZone === 'critical' ? ' — loop failure signal' : '';
-    zoneMessages.push({
-      zone: proseZone,
-      metric: 'prose',
-      text: `Prose line width: ${proseViolations.length} line(s) above ${label} ${threshold} (longest ${maxProseLen} at line ${maxProseLineNum})${suffix}`,
-    });
-  }
+  const zoneMessages = [
+    ...buildLineZoneMessages(lineZone, totalLines, targetLines, limitLines),
+    ...buildCharZoneMessages(charZone, totalChars, limitChars),
+    ...buildProseZoneMessages(
+      proseZone,
+      proseViolations.length,
+      maxProseLen,
+      maxProseLineNum,
+      maxProseLineWidth,
+    ),
+  ];
 
   return {
     filename: relPath,

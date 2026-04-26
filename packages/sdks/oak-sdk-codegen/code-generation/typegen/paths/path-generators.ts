@@ -88,7 +88,7 @@ export const API_HTTP_METHODS: readonly ApiHttpMethod[] = [...new Set(
   Object.values(schema.paths).flatMap((p) =>
     Object.keys(p).filter((k): k is ApiHttpMethod => possibleMethodSet.has(k))
   ),
-)].sort();
+)].sort((a, b) => a.localeCompare(b));
 export function isApiHttpMethod(maybeMethod: string): maybeMethod is ApiHttpMethod {
   const methods: readonly string[] = API_HTTP_METHODS;
   return methods.includes(maybeMethod);

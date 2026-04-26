@@ -103,6 +103,35 @@ function isAsyncFunctionLikeType(type: string): boolean {
   );
 }
 
+function isAsyncFunctionExpression(
+  init: TSESTree.Expression,
+): init is TSESTree.FunctionExpression | TSESTree.ArrowFunctionExpression {
+  if (init.type !== 'FunctionExpression' && init.type !== 'ArrowFunctionExpression') {
+    return false;
+  }
+  return init.async;
+}
+
+function declaratorName(declarator: TSESTree.VariableDeclarator): string {
+  return declarator.id.type === 'Identifier' ? declarator.id.name : '<anonymous>';
+}
+
+function collectFromVariableDeclaration(
+  node: TSESTree.ExportNamedDeclaration,
+  decl: TSESTree.VariableDeclaration,
+  out: RecordedExport[],
+): void {
+  for (const declarator of decl.declarations) {
+    const init = declarator.init;
+    if (!init || !isAsyncFunctionLikeType(init.type)) {
+      continue;
+    }
+    if (isAsyncFunctionExpression(init)) {
+      out.push({ anchor: node, reportNode: init, name: declaratorName(declarator) });
+    }
+  }
+}
+
 function collectFromNamedExport(
   node: TSESTree.ExportNamedDeclaration,
   out: RecordedExport[],
@@ -119,18 +148,7 @@ function collectFromNamedExport(
     return;
   }
   if (decl.type === 'VariableDeclaration') {
-    for (const declarator of decl.declarations) {
-      const init = declarator.init;
-      if (!init) continue;
-      if (!isAsyncFunctionLikeType(init.type)) continue;
-      if (
-        (init.type === 'FunctionExpression' || init.type === 'ArrowFunctionExpression') &&
-        init.async
-      ) {
-        const name = declarator.id.type === 'Identifier' ? declarator.id.name : '<anonymous>';
-        out.push({ anchor: node, reportNode: init, name });
-      }
-    }
+    collectFromVariableDeclaration(node, decl, out);
   }
 }
 

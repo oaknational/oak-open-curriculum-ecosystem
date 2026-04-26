@@ -33,8 +33,16 @@ function toPosix(value: string): string {
   return value.split(path.sep).join('/');
 }
 
+function stripTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value.charAt(end - 1) === '/') {
+    end -= 1;
+  }
+  return value.slice(0, end);
+}
+
 function normaliseDirectory(value: string): string {
-  const normalised = toPosix(value).replace(/\/+$/u, '');
+  const normalised = stripTrailingSlashes(toPosix(value));
 
   return normalised === '' ? '.' : normalised;
 }
@@ -73,7 +81,7 @@ export function evaluateMaxFilesPerDir({
 
   const matchedFiles = [...inventory.files]
     .filter((name) => minimatch(name, pattern, { dot: true }))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 
   if (matchedFiles.length <= maxFiles) {
     return null;
