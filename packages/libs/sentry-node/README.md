@@ -254,6 +254,82 @@ No code change. If a future ADR ever proposes setting
 `sendClientReports: false`, the rationale must justify why we would
 prefer to lose drop visibility (none currently exists).
 
+### Fingerprinting: hybrid grouping anchor for known error families (L-IMM Sub-item 1)
+
+`createSentryHooks` `beforeSend` runs `applyFingerprint` AFTER the
+redaction barrier. The fingerprint step inspects
+`event.exception.values[0].type` and, when the class name is in
+`KNOWN_ERROR_FAMILIES` (in
+[`runtime-fingerprint.ts`](src/runtime-fingerprint.ts)), assigns the
+**hybrid** Sentry fingerprint shape
+`event.fingerprint = ['{{ default }}', '<class-name>']`. The
+`{{ default }}` sentinel preserves Sentry's stack-aware default
+grouping; the class-name token augments it with an explicit anchor.
+
+**Why hybrid, not class-only.** A bare class-name fingerprint
+(`['<class-name>']`) is a full override that collapses every event of
+the class into a single Sentry issue — losing stack-aware
+discrimination within a family. The hybrid form keeps Sentry's
+default grouping (stack frames, in-app-vs-vendor frames, exception
+chain) inside the family while pinning the family identity against
+silent regressions in Sentry's grouping algorithm. Reference: [Sentry
+SDK fingerprinting docs][sdk-fingerprinting].
+
+**Composition order is load-bearing**: the redaction barrier strips
+PII first; the fingerprint step reads the post-redaction event and
+therefore cannot leak a sensitive substring into a fingerprint key.
+The post-redaction consumer-supplied `beforeSend` hook (if any) runs
+last and receives the fingerprinted event.
+
+**Pre-fingerprint filtering.** SDK-level `ignoreErrors` / `denyUrls`
+allow-list entries (the Allow-list policy section below) are
+evaluated by the Sentry SDK BEFORE `beforeSend`, so an ignored event
+never reaches `applyFingerprint`. Drop wins over fingerprint just as
+it wins over redaction.
+
+**Current families** (anchored 2026-04-26):
+
+| `event.exception.values[0].type` | Sentry fingerprint                        |
+| -------------------------------- | ----------------------------------------- |
+| `TestErrorUnhandled`             | `['{{ default }}', 'TestErrorUnhandled']` |
+| `TestErrorHandled`               | `['{{ default }}', 'TestErrorHandled']`   |
+| `TestErrorRejected`              | `['{{ default }}', 'TestErrorRejected']`  |
+| `McpError`                       | `['{{ default }}', 'McpError']`           |
+
+The three `TestError*` classes belong to the diagnostic
+`/test-error` route in `oak-curriculum-mcp-streamable-http`;
+`McpError` is the MCP protocol's canonical error class
+(`@modelcontextprotocol/sdk`). Empirical baseline: issues
+`OAK-OPEN-CURRICULUM-MCP-{7,8,9}` from the 2026-04-26 Sentry
+validation walk already produced three distinct issues for the three
+test-error modes without explicit fingerprinting; the hybrid form
+preserves that behaviour and adds a future-proof anchor.
+
+**Issue-merge discontinuity at rollout.** Per Sentry's
+[event-grouping docs][event-grouping], grouping changes apply to NEW
+events only. Existing issues for `McpError` / `TestError*` retain
+their old grouping; new occurrences after this code lands attach to a
+NEW Sentry issue ID. If alert-continuity matters, perform a one-off
+"merge" in the Sentry UI after rollout, or accept the discontinuity.
+
+**Adding a family**:
+
+1. Add the class name to `KNOWN_ERROR_FAMILIES` in
+   `runtime-fingerprint.ts`.
+2. Add a unit test in `runtime-fingerprint.unit.test.ts` asserting
+   the hybrid fingerprint assignment for the new class.
+3. If the new family is **application-specific rather than
+   library-shared**, the addition MUST go into the consuming app's
+   `postRedactionHooks.beforeSend` (which runs after the library's
+   chain), NOT into the library list. The library list is reserved
+   for families that are stable across all consumers of this package.
+4. Cite the issue / observability question that motivated the
+   addition in a TSDoc comment so future readers understand the
+   grouping decision.
+
+[sdk-fingerprinting]: https://docs.sentry.io/platforms/javascript/guides/node/usage/sdk-fingerprinting/
+[event-grouping]: https://docs.sentry.io/concepts/data-management/event-grouping/
+
 ### Allow-list policy: ignoreErrors / denyUrls scaffold (L-IMM Sub-item 2)
 
 `SentryLiveConfig` exposes optional `ignoreErrors` and `denyUrls`

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createSentryInitOptions } from './runtime-sdk.js';
-import type { SentryLiveConfig } from './types.js';
+import type { SentryErrorEvent, SentryLiveConfig, SentryPostRedactionHooks } from './types.js';
 
 // ADR-163 §2 — OTel `code.git.commit.sha` tag convention lives on
 // `initialScope.tags` via the `git.commit.sha` key. These tests prove the
@@ -70,6 +70,106 @@ describe('createSentryInitOptions — initialScope.tags carries OTel git.commit.
       release: 'release-123',
       'git.commit.sha': 'fedcba9876543',
     });
+  });
+});
+
+// L-IMM Sub-item 1 — fingerprint composition order. The
+// fingerprint step must run AFTER the redaction barrier so a
+// redaction-target field (e.g. a token in an error message) cannot
+// leak into the fingerprint key. The redaction transform writes the
+// canonical `[REDACTED]` placeholder in place of sensitive substrings;
+// the fingerprint step reads from the post-redaction event. Per
+// Sentry docs the canonical fingerprint shape combines the SDK's
+// default-grouping sentinel with an explicit class-name token so
+// stack-aware grouping is preserved within a family.
+describe('createSentryInitOptions — fingerprint runs AFTER redaction (L-IMM Sub-item 1)', () => {
+  it('passes the redacted event into the fingerprint step', () => {
+    const initOptions = createSentryInitOptions(liveConfig(), { serviceName: 'oak-http' });
+    const beforeSend = initOptions.beforeSend;
+    if (typeof beforeSend !== 'function') {
+      throw new Error('beforeSend must be wired by createSentryInitOptions');
+    }
+
+    const inputEvent = {
+      type: undefined,
+      event_id: 'fingerprint-after-redaction-fixture',
+      timestamp: 1_700_000_001,
+      exception: {
+        values: [
+          {
+            type: 'TestErrorHandled',
+            value: 'fixture token=secret-token-please-redact',
+          },
+        ],
+      },
+      message: 'fixture token=secret-token-please-redact',
+    };
+    const result = beforeSend(inputEvent, {});
+
+    if (result === null || typeof result !== 'object' || 'then' in result) {
+      throw new Error('beforeSend must return the post-redaction event synchronously');
+    }
+    expect(result.fingerprint).toEqual(['{{ default }}', 'TestErrorHandled']);
+
+    const topException = result.exception?.values?.[0];
+    expect(topException?.value).not.toContain('secret-token-please-redact');
+  });
+
+  it('leaves unknown error classes untouched (no fingerprint set)', () => {
+    const initOptions = createSentryInitOptions(liveConfig(), { serviceName: 'oak-http' });
+    const beforeSend = initOptions.beforeSend;
+    if (typeof beforeSend !== 'function') {
+      throw new Error('beforeSend must be wired by createSentryInitOptions');
+    }
+
+    const inputEvent = {
+      type: undefined,
+      event_id: 'unknown-class-fixture',
+      timestamp: 1_700_000_002,
+      exception: {
+        values: [
+          {
+            type: 'SomeUnknownError',
+            value: 'fixture',
+          },
+        ],
+      },
+    };
+    const result = beforeSend(inputEvent, {});
+
+    expect(result).toBeDefined();
+    expect(result).toBeTypeOf('object');
+    expect(result).not.toHaveProperty('fingerprint');
+  });
+
+  it('passes the fingerprinted event to a consumer post-redaction beforeSend hook', () => {
+    let captured: SentryErrorEvent | undefined;
+    const consumerBeforeSend: NonNullable<SentryPostRedactionHooks['beforeSend']> = (event) => {
+      captured = event;
+      return event;
+    };
+    const postRedactionHooks: SentryPostRedactionHooks = { beforeSend: consumerBeforeSend };
+    const initOptions = createSentryInitOptions(liveConfig(), {
+      serviceName: 'oak-http',
+      postRedactionHooks,
+    });
+    const beforeSend = initOptions.beforeSend;
+    if (typeof beforeSend !== 'function') {
+      throw new Error('beforeSend must be wired by createSentryInitOptions');
+    }
+
+    const inputEvent: SentryErrorEvent = {
+      type: undefined,
+      event_id: 'consumer-hook-after-fingerprint-fixture',
+      timestamp: 1_700_000_003,
+      exception: {
+        values: [{ type: 'TestErrorHandled', value: 'fixture' }],
+      },
+    };
+    beforeSend(inputEvent, {});
+
+    expect(captured).toBeDefined();
+    expect(captured?.fingerprint).toEqual(['{{ default }}', 'TestErrorHandled']);
   });
 });
 

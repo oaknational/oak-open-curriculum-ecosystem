@@ -24,6 +24,7 @@ import {
   redactSentrySpan,
   redactSentryTransaction,
 } from './runtime-redaction.js';
+import { applyFingerprint } from './runtime-fingerprint.js';
 
 /**
  * Default timeout used by {@link SentryNodeRuntime.flush} and
@@ -89,10 +90,14 @@ export type SentryRedactionHooks = Pick<
 function createSentryHooks(postRedactionHooks?: SentryPostRedactionHooks): SentryRedactionHooks {
   return {
     beforeSend(event, hint) {
+      // Composition order is load-bearing: redaction MUST run before
+      // fingerprinting so PII can never leak into a fingerprint key.
+      // The post-redaction consumer hook (if supplied) runs last.
       const redactedEvent = redactSentryEvent(event);
+      const fingerprintedEvent = applyFingerprint(redactedEvent);
       return postRedactionHooks?.beforeSend
-        ? postRedactionHooks.beforeSend(redactedEvent, hint)
-        : redactedEvent;
+        ? postRedactionHooks.beforeSend(fingerprintedEvent, hint)
+        : fingerprintedEvent;
     },
     beforeBreadcrumb(breadcrumb, hint) {
       const redactedBreadcrumb = redactSentryBreadcrumb(breadcrumb);

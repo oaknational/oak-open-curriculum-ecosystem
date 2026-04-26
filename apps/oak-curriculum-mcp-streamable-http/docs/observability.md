@@ -253,6 +253,18 @@ and friends) wrapping `sentry-cli` invocations, plus a
 amendment 2026-04-21 (HOW → WHAT) and §7 amendment 2026-04-21 (composition
 root replaces orchestrator script) for the full reframing.
 
+## Issue grouping by error class (custom fingerprinting)
+
+The MCP HTTP server's `beforeSend` chain runs `applyFingerprint`
+AFTER the redaction barrier so known error families get a stable,
+class-keyed Sentry fingerprint. This locks issue grouping to domain
+semantics rather than stack-trace coincidence.
+
+Current families and the fingerprint table live in
+[`packages/libs/sentry-node/README.md` § Fingerprinting](../../../packages/libs/sentry-node/README.md#fingerprinting-locked-grouping-for-known-error-families-l-imm-sub-item-1).
+See that file for the addition pattern when a new error family
+needs locked grouping.
+
 ## Vercel ↔ Sentry Marketplace integration — verification PENDING
 
 **Status (2026-04-26 L-IMM Sub-item 6)**: VERIFICATION PENDING —
