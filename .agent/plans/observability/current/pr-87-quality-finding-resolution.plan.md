@@ -35,12 +35,62 @@ todos:
 
 # PR #87 Quality Finding Resolution
 
-**Last Updated**: 2026-04-25
-**Status**: 🔴 NOT STARTED
+**Last Updated**: 2026-04-26
+**Status**: 🔴 NOT STARTED — runs in parallel with
+[`sentry-immediate-next-steps.plan.md`](sentry-immediate-next-steps.plan.md)
 **Scope**: Resolve all CodeQL, SonarCloud, and Security Hotspot
 findings flagged on PR #87 so the three failing checks (CodeQL
 combined, SonarCloud Quality Gate, CI test) clear and the PR is
 mergeable.
+
+---
+
+## Parallel-execution context (added 2026-04-26)
+
+This plan and
+[`sentry-immediate-next-steps.plan.md`](sentry-immediate-next-steps.plan.md)
+run **in parallel on the same branch** (`feat/otel_sentry_enhancements`).
+Owner direction 2026-04-26: "split the pr87 quality remediation
+work into a separate plan that we can run in parallel".
+
+**Why parallel works here**:
+
+- The Sentry-immediate plan touches `packages/libs/sentry-node/src/**`
+  plus small SDK config documentation.
+- This plan touches
+  `packages/core/build-metadata/src/`,
+  `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`,
+  `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/`,
+  `packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts`,
+  `scripts/validate-root-application-version.mjs`, plus
+  quality-rule configuration. The two scopes do not structurally
+  overlap.
+- Both plans commit per-sub-item / per-task with no batching;
+  conflicts (if any) would be lexical, not semantic.
+
+**Coordination requirements** (per
+[`register-active-areas-at-session-open`](../../rules/register-active-areas-at-session-open.md)):
+
+- Each agent **opens a claim** in
+  `.agent/state/collaboration/active-claims.json` covering its
+  specific file set **before any non-trivial edit**.
+- **Embryo-log entries** at session-open and session-close per
+  `register-active-areas-at-session-open.md`.
+- **Pre-commit gate failures from the parallel agent's WIP**:
+  surface (don't bypass), check the parallel claim, ping if
+  unresolved per
+  `parallel-track-pre-commit-gate-coupling` pattern.
+
+**Commit cadence** (matching the Sentry-immediate plan): each
+discrete fix commits independently. Phase 1 (semver-DRY
+consolidation) is one commit because it's an atomic refactor;
+Phase 2's six Array.sort fixes can be six separate commits or one
+bundled commit — the agent decides at the time based on review
+load. Phase 5 stylistic-rule resolution is per-rule commits.
+
+**If running solo** (one agent does both plans serially): the
+parallel framing still applies — finish each sub-item with a clean
+commit before starting the next.
 
 ---
 
