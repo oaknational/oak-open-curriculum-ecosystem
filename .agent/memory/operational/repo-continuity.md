@@ -77,25 +77,62 @@ Current branch-primary objective:
 
 ## Current Session Focus
 
-The latest observability focus is handoff after the pushed reviewer-finding
-reintegration package:
+The 2026-04-26 (Keen Dahl) session landed seven commits on PR #87
+(`feat/otel_sentry_enhancements`), pushed to remote at HEAD `325605a4`.
 
-- [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
-  is active in Phase 3 reintegration. Phase 0/1 evidence, gate recovery, and
-  Lane B implementation are landed.
-- Owner clarified the build-identity model: build identity is the canonical
-  build/release fact for the app; observability consumes it but does not create
-  it; `resolveRelease` is the Sentry projection from build identity plus
-  Sentry context. First-class `RuntimeConfig.buildIdentity` remains a named
-  future canonicalisation task, not forgotten scope.
-- Reviewer findings handled in `d9cb54e8`: build-time Sentry env projection resolves
-  canonical app version; runtime env includes `VERCEL_GIT_COMMIT_REF`; local
-  no-auth paths strip inherited production labels; Search CLI ingest-harness
-  tests are no longer excluded; continuity/ADR/operator docs no longer claim
-  WS3 is pending.
-- The next Sentry-focused session should start from deployed-state validation
-  for the pushed branch, not from packaging. If aggregate repo health is to be
-  claimed, rerun full `pnpm check` first.
+- **Vercel preview deployment is GREEN** — fixed by commit `6485773f`
+  (the `VERCEL_BRANCH_URL` is hostname-not-URL bug; Vercel's docs
+  define this as a domain name, not a URL, and the code was calling
+  `new URL(branchUrl).hostname` which threw on schemeless input). The
+  preview had been broken for at least 5 commits since `3feaea861`.
+  The bug-fix commit also added a captured-real-shape regression
+  test pinned to the literal value Vercel produced for this branch.
+- **Magic strings in `release-types.ts` lifted to constant-type-predicate
+  pattern** (commits `c2b1c1e5`, `27a7ae78`) — `ReleaseSource`,
+  `ReleaseEnvironment`, `BuildIdentityContext`, `BuildIdentityBranch`
+  now follow ADR-153 with runtime constants used at every call site
+  inside the build-metadata package and consumed cross-package by
+  sentry-node. The duplicate `MAIN_BRANCH = 'main'` in sentry-node
+  collapsed into `BUILD_IDENTITY_BRANCHES.main`.
+- **`@oaknational/env` gains `BuildEnvSchema`** (commit `51e548e8`) —
+  centralises Vercel system env vars with the hostname-not-URL
+  refinement encoded as a Zod refinement at the schema boundary. The
+  MCP HTTP app's runtime `env.ts` now extends
+  `BuildEnvSchema.shape` instead of inlining the same fields,
+  collapsing one layer of duplication. Build-time path
+  (`sentry-build-environment.ts`) migration is queued for next
+  session.
+- **CI test job unblocked** (commit `f4bf2fa1`) — root cause was NOT
+  test miscategorisation; it was `apps/oak-search-cli/vitest.smoke.config.ts`
+  validating Elasticsearch credentials at module load. `pnpm knip`
+  walks all vitest configs to discover entry points and threw
+  whenever `ELASTICSEARCH_*` was unset (which is by design in
+  GitHub CI — smoke tests don't run there). Fix: defer validation
+  to `smoke-test.setup.ts` which only runs during actual test
+  execution. Smoke test files (`*.smoke.test.ts`) remain correctly
+  categorised and stay out of CI as designed.
+- **Recurrence-prevention items surfaced as future plan** (commit
+  `9bcc8ffc`) — a new ESLint rule `no-bare-discriminator-union`
+  (sibling to `no-export-trivial-type-aliases`) and a workspace-first
+  amendment to `.agent/rules/read-diagnostic-artefacts-in-full.md`.
+  Owner-directed as high-priority future work, not blocking this PR.
+- **Next-session plan added** (commit `325605a4`) —
+  [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
+  with both pre-execution gates (code-reviewer + assumptions-reviewer)
+  ran and 12 findings absorbed into a Reviewer Dispositions table.
+  Six phases: deployment baseline → Sentry validation → CodeQL
+  triage → Sonar triage → route-to-PR-87 → handoff.
+- **Owner clarification** (still in force from prior session): build
+  identity is the canonical build/release fact for the app;
+  observability consumes it but does not create it; `resolveRelease`
+  is the Sentry projection from build identity plus Sentry context.
+  First-class `RuntimeConfig.buildIdentity` remains a named future
+  canonicalisation task, not forgotten scope.
+
+**Next session reads `sentry-preview-validation-and-quality-triage.plan.md`
+end-to-end before any tool calls** — that plan IS the next-session brief
+in executable form. Do NOT start with packaging or fixes; start with
+deployed-state validation per the plan's Phase 1.
 
 ## Repo-Wide Invariants / Non-Goals
 

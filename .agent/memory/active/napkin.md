@@ -189,3 +189,124 @@ mergeable siblings. The cross-cutting view turns 17 decisions into
 ~5 decisions plus housekeeping.
 
 <!-- New session entries appended below this line. -->
+
+## 2026-04-26 — Keen Dahl session (VERCEL_BRANCH_URL bug + magic-strings refactor + next-session plan)
+
+### What surprised me
+
+**The bug was sitting in plain sight in tests that "passed".** The
+`release.unit.test.ts` fixture was `https://feat-x-poc-oak.vercel.thenational.academy`
+and the production code was `new URL(branchUrl).hostname`. Both
+"agreed" on the wrong contract. The schema-first directive's
+`§Test Data Anchoring` warns about this exactly: *"Tests that agree
+with code on the wrong contract are worse than no tests."* I knew
+that principle and still missed the bug for a session and a half
+before the owner pointed at the real Vercel docs. Tests passing is
+necessary but not sufficient evidence of correctness; the question
+"do my fixtures match the production shape?" needs a separate gate.
+
+**Workspace-first applies to packages, not just diagnostic logs.**
+Three times in one session I missed that the workspace already had
+what I was about to propose: (1) the smoking-gun build log was in
+`vercel_logs/`, (2) `gh pr checks 87` listed Vercel as a 4th failing
+check the brief omitted, (3) `@oaknational/env` already had the
+schema infrastructure I was about to duplicate. Same shape three
+times. Captured all three as memories. The general principle:
+**before proposing infrastructure, search the workspace; before
+investigating a failure, search the workspace; before trusting a
+brief's enumeration, search the workspace.**
+
+**Half-applied refactors look like full ones until lint says otherwise.**
+I added `RELEASE_ERROR_KINDS` as the runtime constant + derived type
+but left call sites using magic strings. ESLint caught it via
+`@typescript-eslint/no-unused-vars` ("constant is only used as a
+type"). Owner reframed: that lint rule isn't *opposing* the
+constant-type-predicate pattern, it's *catching the half-applied
+state*. The full pattern is (1) `as const` constant + (2) derived
+type + (3) call sites use the constant; the lint rule fires when
+(1)+(2) exist but (3) is missing. Same fix, different framing —
+"satisfy lint" is the wrong frame, "complete the pattern" is the
+right one.
+
+### What worked
+
+**Subagent transcript recovery** — when the assumptions-reviewer
+ran out of credits, the full transcript was on disk at
+`~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`
+including every tool call. I read what the prior agent had already
+processed and briefed a fresh dispatch with that context as a
+"don't re-read these in full" preamble. The retry delivered a
+substantive review (3 MAJOR + 2 MINOR + 2 POSITIVE) in 3 tool uses
+instead of timing out again. Captured as `feedback_subagent_transcript_recovery`.
+
+**Cross-reviewer absorption catches things one reviewer misses.**
+code-reviewer NIT-6 (assumptions-reviewer routing for net-new
+findings) and assumptions-reviewer MAJOR-C (Phase 5 boundary leak
+on PR-87 plan-body edits) are the same finding from two angles —
+one names the specialist, the other names the trigger condition.
+Combining them gives the cleanest absorption: the trigger condition
+re-dispatches the specialist. **Two reviewers is genuinely better
+than one when their lenses are different.**
+
+**Defer-validation-to-actual-execution at config-load boundaries.**
+`vitest.smoke.config.ts` was throwing on missing Elasticsearch creds
+at module-load — but `pnpm knip` loads vitest configs to discover
+entry points and never runs the tests. Same fix shape as the smoke
+test categorisation question itself: the *test files* are correctly
+categorised, but the *config-evaluation side effect* was conflated
+with *test execution*. Defer the validation to `setupFiles` (which
+only runs at execution time) and the config loads cleanly for
+static analysis.
+
+### Corrections / mistakes
+
+**I framed PR #87's failing Vercel check as "Phase-1+ work"** at the
+end of the original session. Owner correction: "all gate failures
+are blocking at all times, regardless of cause or location" — this
+is a literal repo principle, not a slogan. Pre-existing red gates
+do not get rebadged as "later work" just because they predate the
+current session. The bug-fix that unblocked the gate was a 1-line
+regex change and an extra Zod refinement; the inhibitor wasn't
+effort, it was framing.
+
+**I proposed adding a Zod schema to `sentry-build-environment.ts`**
+without surveying `@oaknational/env`. The owner's correction
+("we already have this infrastructure") triggered three findings:
+the existing `SentryEnvSchema` exists in `core/env`; the
+`@oaknational/env-resolution` `resolveEnv` already does the
+schema-validate-then-narrow flow; and `@oaknational/env` was the
+right home for the new `BuildEnvSchema`. The rework was small once
+diagnosed but the *original proposal* would have created a parallel
+implementation.
+
+### Pattern candidates (for register update at next consolidation)
+
+- **Test fixtures encoding the same wrong assumption as production
+  code** — instances: `BRANCH_URL_FEAT_X = 'https://...'` in two
+  separate test files. Both test files passed. Both had to be
+  rewritten with realistic shapes. Pattern candidate: *captured-
+  real-shape regression tests as the only defence against
+  fixture-code conflation*. Likely cross-cuts other test data.
+
+- **Workspace-first across artefact classes** — three captured
+  instances in one day (logs, PR-state, packages) suggests a
+  general principle: **before consulting external systems or
+  proposing new infrastructure, exhaust workspace inventory.** May
+  warrant lifting from feedback memories to a Practice rule. The
+  three feedback files name the specific failure modes; a single
+  rule would name the general class.
+
+- **Half-applied constant-type-predicate as a lint-detectable state**
+  — `@typescript-eslint/no-unused-vars` already catches the (1)+(2)
+  half; a custom `prefer-runtime-constant-over-string-literal` would
+  catch the (3) half. The future plan
+  `recurrence-prevention-after-vercel-branch-url-bug.plan.md`
+  already names a related rule (`no-bare-discriminator-union`); the
+  two could be one rule with two failure modes.
+
+- **Config-load side effects vs test-execution side effects** — the
+  smoke-config issue is the canonical instance. Pattern candidate:
+  *config files MUST be safely loadable for static analysis without
+  the resources their tests require*. Generalisable across vitest,
+  ESLint, prettier, knip, depcruise — any tool that loads configs
+  to discover entry points.

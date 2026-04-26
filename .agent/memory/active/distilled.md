@@ -117,6 +117,88 @@ without precisely matching the file's actual content. Inheriting a
 plan body's gloss without verification produces broken links and
 substantively misattributed citations.
 
+## Workspace-first before external tooling or new infrastructure
+
+Three failure modes share one shape and one fix. Before reaching for
+external tools or proposing new code, exhaust workspace inventory:
+
+- **Diagnostic failure investigation**: when remote tooling truncates
+  (Vercel MCP, Sentry MCP, GitHub API), search the workspace for
+  owner-provided artefacts (`vercel_logs/`, `test-results/`,
+  `coverage/`) BEFORE retrying the same tool with bigger limits.
+  The owner may have downloaded the complete artefact locally.
+- **Brief enumeration of failing checks**: a brief listing failing PR
+  checks is a snapshot from when the prior session closed. Run
+  `gh pr checks <PR>` first; cross-check against the brief. Pre-existing
+  red gates the brief omitted are still blocking — *all gate failures
+  are blocking at all times, regardless of cause or location*
+  (principles.md §Code Quality).
+- **Infrastructure proposals**: before adding new Zod schemas /
+  validation pipelines / helper modules, survey existing `core/` and
+  `libs/` packages. `@oaknational/env` already has shared schema
+  contracts; `@oaknational/env-resolution` already has the
+  schema-validate-then-narrow flow; `@oaknational/build-metadata`
+  already has the constant-type-predicate pattern in place. Extending
+  existing infrastructure beats parallel implementations every time.
+
+Captured in `feedback_workspace_first_for_diagnostics`,
+`feedback_gh_pr_checks_over_brief`, and
+`feedback_check_workspace_packages_before_proposing` (2026-04-26
+session).
+
+## Test fixtures must encode the production shape, not the code's expectation
+
+If a test fixture and the production code agree on the wrong contract,
+the tests pass and the bug ships. The `VERCEL_BRANCH_URL` bug
+(2026-04-26) sat in plain sight for ~5 commits because the test
+fixture was `https://feat-x-poc-oak.vercel.thenational.academy` and
+the production code called `new URL(branchUrl).hostname` — both wrong
+in the same direction. Real Vercel value is hostname only.
+
+Anchor critical fixtures to **captured real production values** with
+date-stamped citations to the source documentation. If the input
+shape is documented, the fixture should match the docs literally;
+if the input shape is captured from a real deployment, record the
+deployment ID and date alongside the fixture. This is principles.md
+§Test Data Anchoring made operational: *"Tests that agree with code
+on the wrong contract are worse than no tests."*
+
+## Constant-type-predicate pattern is half-applied without call-site uptake
+
+ADR-153 (Constant-Type-Predicate Pattern) requires three components:
+(1) `as const` runtime constant naming every value, (2) union type
+derived structurally via `(typeof X)[keyof typeof X]`, (3) every call
+site uses the constant rather than a magic-string literal. Adding (1)
+and (2) without (3) leaves the pattern half-applied — the runtime
+constant is dead code by knip's standards and `@typescript-eslint/no-unused-vars`
+fires with "is assigned a value but only used as a type".
+
+That lint rule isn't opposing the pattern, it's catching the
+half-applied state. The fix is to complete the pattern, not to delete
+the constant. A future custom rule (`no-bare-discriminator-union`,
+queued at `plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md`)
+catches the symmetric failure mode (a bare union exists with no
+backing constant) at the source-of-truth level.
+
+## Config-load side effects must not require test-execution resources
+
+Static analysis tools (knip, IDE indexing, depcruise) load config
+files to discover entry points but do NOT run the tests those configs
+describe. A vitest config that throws at module load when test-time
+credentials are missing breaks the static-analysis tools too — even
+when the tests it describes are correctly excluded from CI runs.
+
+Defer credential / env validation to `setupFiles`, which only run
+during actual test execution. The validation IS still required at
+test time; just not at config-load time. Pattern: propagate the
+validation error message via the config's `provide` block so the
+setup file can re-check and throw with a clear message.
+
+This applies symmetrically to ESLint configs, Prettier configs, and
+any other tool config that does work at module-evaluation time. The
+canonical instance: `apps/oak-search-cli/vitest.smoke.config.ts`
+fixed in commit `f4bf2fa1`.
+
 ## Process
 
 Planning-discipline entries in this section remain routed to the
