@@ -107,7 +107,7 @@ marked as host-local context and not carrying decision substance.
 | [PDR-012](PDR-012-review-findings-routing-discipline.md) | Review-Findings Routing Discipline | Accepted |
 | [PDR-013](PDR-013-grounding-and-framing-discipline.md) | Grounding and Framing Discipline | Accepted |
 | [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md) | Consolidation and Knowledge-Flow Discipline | Accepted |
-| [PDR-015](PDR-015-reviewer-authority-and-dispatch.md) | Reviewer Authority and Dispatch Discipline | Accepted (amended 2026-04-21) |
+| [PDR-015](PDR-015-reviewer-authority-and-dispatch.md) | Reviewer Authority and Dispatch Discipline | Accepted (amended 2026-04-21, 2026-04-25, 2026-04-26) |
 | [PDR-016](PDR-016-claim-propagation-and-reference-quality.md) | Claim Propagation and Reference Quality | Accepted |
 | [PDR-017](PDR-017-workaround-hygiene-and-fix-discipline.md) | Workaround Hygiene and Fix-at-Source Discipline | Accepted |
 | [PDR-018](PDR-018-planning-discipline.md) | Planning Discipline — End Goals and Workflow Contracts | Accepted |
@@ -118,9 +118,12 @@ marked as host-local context and not carrying decision substance.
 | [PDR-023](PDR-023-documentation-structure-discipline.md) | Documentation Structure Discipline — README as Index | Accepted |
 | [PDR-024](PDR-024-vital-integration-surfaces.md) | Vital Integration Surfaces Between Repo and Practice Core | Accepted |
 | [PDR-025](PDR-025-quality-gate-dismissal-discipline.md) | Quality-Gate Dismissal Discipline | Accepted |
-| [PDR-026](PDR-026-per-session-landing-commitment.md) | Per-Session Landing Commitment | Accepted (amended 2026-04-21) |
+| [PDR-026](PDR-026-per-session-landing-commitment.md) | Per-Session Landing Commitment | Accepted (amended 2026-04-21, 2026-04-22, 2026-04-26) |
 | [PDR-027](PDR-027-threads-sessions-and-agent-identity.md) | Threads, Sessions, and Agent Identity | Accepted |
 | [PDR-028](PDR-028-executive-memory-feedback-loop.md) | Executive-Memory Feedback Loop | Accepted |
 | [PDR-029](PDR-029-perturbation-mechanism-bundle.md) | Perturbation-Mechanism Bundle | Accepted |
 | [PDR-030](PDR-030-plane-tag-vocabulary.md) | Plane-Tag Vocabulary | Accepted |
 | [PDR-031](PDR-031-build-vs-buy-attestation.md) | Build-vs-Buy Attestation Pre-ExitPlanMode | Accepted |
+| [PDR-032](PDR-032-reference-tier-as-curated-library.md) | Reference Tier as Curated Library | Accepted |
+| [PDR-033](PDR-033-vendor-doc-review-for-unknown-unknowns.md) | Vendor-Doc Review for Unknown Unknowns in Third-Party Platform Plans | Accepted |
+| [PDR-034](PDR-034-test-fixtures-encode-production-shape.md) | Test Fixtures Encode Production Shape, Not the Code's Expectation | Accepted |

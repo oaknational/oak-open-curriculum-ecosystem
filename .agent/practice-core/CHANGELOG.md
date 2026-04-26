@@ -4,6 +4,48 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-26 — graduation pass landing four PDR additions plus two amendments
+
+Owner-directed `/jc-consolidate-docs` graduation pass routed seven
+distilled-md doctrine entries to permanent homes per the genotype/
+phenotype routing rule (PDRs and patterns are genotypes broadly
+applicable across repos; ADRs are phenotypes specific to this
+repo). Practice-Core changes:
+
+- **PDR-033 (NEW)** — Vendor-Doc Review for Unknown Unknowns in
+  Third-Party Platform Plans. Plans targeting third-party platforms
+  must schedule a vendor-doc review pass at plan time AND dispatch
+  the matching vendor-specialist reviewer at substantive
+  implementation time. Two empirical instances on Sentry on
+  2026-04-26 (capability gap + contract violation), both invisible
+  to in-house reviewers.
+- **PDR-034 (NEW)** — Test Fixtures Encode Production Shape, Not
+  the Code's Expectation. Fixtures crossing trust boundaries must
+  anchor to documented or captured production reality with a
+  date-stamped citation. Operationalises principles.md
+  §Test Data Anchoring at the fixture-authorship level.
+- **PDR-015 (AMENDED)** — Reviewer Authority and Dispatch
+  Discipline gains a 2026-04-26 amendment for parallel reviewer
+  dispatch and structural-then-pre-landing review phasing.
+  Different reviewer roles see different things; sentry-reviewer
+  catching the fingerprint MAJOR while code+test-reviewer passed
+  with NIT/MINOR is the canonical instance.
+- **PDR-026 (AMENDED)** — Per-Session Landing Commitment gains a
+  2026-04-26 amendment establishing owner-directed pause as a
+  load-bearing planning move. The pause IS the session's landing
+  target, not a deferral. Touches five-to-six surfaces; ritual
+  extraction queued if the pattern fires three times.
+
+Practice-instance pattern (memory/active/patterns/) added:
+`vendor-doc-review-for-unknown-unknowns.md` carrying the in-repo
+proof and operational mechanics, citing PDR-033 as the cross-repo
+doctrine.
+
+Adjacent host-repo work (recorded for cross-reference, not
+travelling with Core): new ADR-164 (config-load side effects) and
+ADR-153 amendment (call-site uptake) landed on this repo's ADR
+surface.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-26 — learning before fitness correction
 
 Owner corrected a consolidation inversion: fitness limits, including hard and

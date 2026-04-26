@@ -66,11 +66,12 @@ four steps:
 5. **Call-site uptake** — every call site MUST reference the
    constant or its derived type, not a magic-string literal. Adding
    steps 1-4 without step 5 leaves the constant as dead code by
-   `pnpm knip` standards and triggers `@typescript-eslint/no-unused-
-   vars` with "is assigned a value but only used as a type". The
-   correct response to that lint signal is to complete the pattern
-   at the call site, not to delete the constant. A future custom
-   ESLint rule (`no-bare-discriminator-union`) catches the symmetric
+   `pnpm knip` standards and triggers
+   `@typescript-eslint/no-unused-vars` with "is assigned a value
+   but only used as a type". The correct response to that lint
+   signal is to complete the pattern at the call site, not to
+   delete the constant. A future custom ESLint rule
+   (`no-bare-discriminator-union`) catches the symmetric
    failure mode (a bare union exists with no backing constant) at
    the source-of-truth level.
 

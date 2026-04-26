@@ -422,7 +422,7 @@ snapshots.
   owner direction; status: pending.
 - 2026-04-25; owner-directed WS1 pause execution; workstream-pause ritual or
   PDR-026 amendment; trigger: second mid-plan pause or owner direction; status:
-  pending.
+  graduated 2026-04-26 to PDR-026 amendment (commit `cb358e8d`).
 - 2026-04-25; collaboration protocol self-application evidence;
   `infrastructure-alive-at-install`; trigger: one instance from a different
   lane or owner direction; status: pending.
@@ -431,16 +431,31 @@ snapshots.
   second cross-session instance or owner direction; status: pending.
 - 2026-04-26; Vercel branch URL fixture bug; testing-strategy amendment for
   production-shaped fixture anchoring; trigger: second cross-session instance
-  or owner direction; status: pending.
+  or owner direction; status: graduated 2026-04-26 to PDR-034 (commit
+  `cb358e8d`).
 - 2026-04-26; OpenAPI/OOC issues boundary; rule with teeth for API-only
   consumer data boundary; trigger: second near-violation or owner direction;
   status: pending.
 - 2026-04-26; Sentry doc-driven gap finding; vendor-doc review for
   unknown-unknowns in third-party platform plans; trigger: second platform
-  instance or owner direction; status: pending.
+  instance or owner direction; status: graduated 2026-04-26 to PDR-033 +
+  pattern instance `vendor-doc-review-for-unknown-unknowns.md` (commit
+  `cb358e8d`). Owner directed graduation on same-platform second-instance
+  evidence (Sentry capability gap + Sentry contract violation) plus
+  structural-applicability argument across vendors.
 - 2026-04-26; observability validation correction; alignment check before
   per-system claim validation; trigger: second skipped-alignment instance or
   owner direction; status: pending.
 - 2026-04-26; WS3A closeout; protocol observability by consolidation audit
   before new visible surfaces; trigger: second protocol slice with the same
   shape or owner direction; status: pending.
+- 2026-04-26; config-load side effects must not require test-execution
+  resources; ADR for vitest/ESLint/Prettier configs in this repo's toolchain;
+  trigger: graduation pass; status: graduated 2026-04-26 to ADR-164 (commit
+  `cb358e8d`).
+- 2026-04-26; constant-type-predicate pattern half-applied without
+  call-site uptake; ADR-153 amendment for Step 5; trigger: graduation pass;
+  status: graduated 2026-04-26 to ADR-153 amendment (commit `cb358e8d`).
+- 2026-04-26; parallel reviewer dispatch + structural-then-pre-landing
+  review phasing; PDR-015 amendment; trigger: graduation pass; status:
+  graduated 2026-04-26 to PDR-015 amendment (commit `cb358e8d`).

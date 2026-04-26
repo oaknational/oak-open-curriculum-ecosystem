@@ -185,6 +185,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-161: Network-Free PR-Check CI Boundary](161-network-free-pr-check-ci-boundary.md)
 - [ADR-162: Observability-First — Every Capability Emits Across Five Axes](162-observability-first.md) ← **Proposed** (extends ADR-143; acceptance gated on Phase 5 of the observability strategy restructure)
 - [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](163-sentry-release-identifier-and-vercel-production-attribution.md) (operationalises L-7 release/deploy linkage; Accepted 2026-04-19; amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)
+- [ADR-164: Config-Load Side Effects Must Not Require Test-Execution Resources](164-config-load-side-effects.md) (vitest/ESLint/Prettier configs must not throw at module-evaluation time on missing test-time credentials; Accepted 2026-04-26)
+- [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md) — 2026-04-26 amendment adds Step 5 (call-site uptake) to the four-step pattern.
 
 ## Key Architectural Decisions
 
