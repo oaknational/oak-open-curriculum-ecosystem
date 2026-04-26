@@ -22,46 +22,62 @@ todos:
     landed_on: 2026-04-25
   - id: ws3-conversation-and-sidebar
     content: WS3 — Add conversation file with versioned JSON schema (messages, claim updates, sidebar requests, sidebar messages, resolutions); install sidebar protocol with timeout fallbacks and owner-as-tiebreaker escalation.
-    status: paused-on-evidence
+    status: paused-owner-review
     paused_at: 2026-04-25
-    pause_reason: Owner-directed pause until WS5 evidence threshold (≥ 3 real parallel sessions using WS0+WS1 surfaces) is met. WS3 schema decisions risk being made without overlap-conversation evidence; WS5 is the natural gate.
+    pause_reason: >
+      Owner-directed pause remains in force. Later 2026-04-25
+      shared-communication-log entries appear to satisfy the ≥ 3 real
+      coordination-event threshold, but WS3 schema work must not
+      auto-resume until the owner explicitly directs evidence
+      harvest/resumption.
   - id: ws4-operational-integration
     content: WS4 — Wire session-open registration into start-right-quick / start-right-thorough; wire session-close cleanup into session-handoff; wire stale-claim garbage collection into consolidate-docs.
-    status: paused-on-evidence
+    status: paused-owner-review
     paused_at: 2026-04-25
-    pause_reason: Partially landed in WS1 (start-right-quick + start-right-thorough already updated; consolidate-docs § 7e in place). Remaining WS4 scope (session-handoff cleanup wiring + any further integration polish) waits behind WS3 / WS5.
+    pause_reason: >
+      Partially landed in WS1 (start-right-quick + start-right-thorough
+      already updated; consolidate-docs § 7e in place). Remaining WS4
+      scope (session-handoff cleanup wiring + any further integration
+      polish) waits behind owner-directed WS3 / WS5 evidence review.
   - id: ws5-observation-and-refine
     content: WS5 — Observe at least three real parallel sessions; capture lessons into .agent/memory/collaboration/; refine schema or directive based on real usage. Refinement amendments land as separate commits, not WS5 itself.
-    status: pending-evidence-accumulation
+    status: ready-for-owner-directed-evidence-harvest
     paused_at: 2026-04-25
-    pause_reason: WS5 IS the resumption gate — by definition cannot be "done" until 3+ parallel sessions have used the WS0+WS1 surfaces. Currently 1 parallel-coordination data point captured (Jiggly Pebble observability session, 2026-04-25, declared explicit non-overlap with WS1 surfaces via embryo log). 2 more required.
+    pause_reason: >
+      WS5 IS the resumption gate. The shared communication log now records
+      at least three 2026-04-25 real coordination events using WS0+WS1
+      surfaces (including the later Fresh Prince / Keen Dahl
+      register-and-log exchange). This satisfies the evidence-inspection
+      threshold, but does not auto-fire WS3+ resumption; owner-directed
+      harvest is required.
 ---
 
 # Multi-Agent Collaboration Protocol
 
-## Status: Paused-on-Evidence (2026-04-25)
+## Status: Paused for Owner Review (2026-04-26 Refresh)
 
 WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed.
-WS3, WS4, WS5 are **paused on owner direction** until enough real-world
-parallel-agent coordination evidence has accumulated to direct future
-effort.
+WS3, WS4, and WS5 remain **paused on owner direction**. The evidence
+surface has moved on since the original 2026-04-25 pause: later
+shared-communication-log entries record at least three real coordination
+events using the WS0 + WS1 surfaces, including the Fresh Prince / Keen Dahl
+register-and-log exchange on 2026-04-25.
 
 **Resumption gate**: at least three real parallel-session coordination
-events using the WS0 + WS1 surfaces (embryo log + active-claims registry +
-register-active-areas tripwire). The first data point landed 2026-04-25
-when a parallel observability-thread session declared explicit non-overlap
-with WS1 surfaces via the embryo log; two more comparable events are the
-proportionate threshold for resuming.
+events using the WS0 + WS1 surfaces (shared communication log +
+active-claims registry + register-active-areas tripwire). The gate now
+appears to be met, but that only moves the plan from evidence accumulation
+to **owner inspection**. It does not auto-resume WS3, WS4, or WS5.
 
 **While paused, evidence accumulates passively** — every session on this
 repo that uses the WS0/WS1 surfaces produces evidence. No active session
 is needed to "wait."
 
-**What resumes the plan**: owner direction after the evidence threshold is
-visibly met (3+ embryo-log entries OR claims OR documented coordination
-decisions referencing each other). The natural inspection point is the
-next `/jc-consolidate-docs` pass; a periodic napkin-rotation cycle will
-also surface the count.
+**What resumes the plan**: owner direction after inspecting the evidence
+threshold (3+ shared-communication-log entries OR claims OR documented
+coordination decisions referencing each other). The natural inspection
+point is the next `/jc-consolidate-docs` pass or an owner-directed WS5
+harvest.
 
 **What remains pending under the gate**:
 
@@ -104,9 +120,9 @@ ownership, or conflict resolution. The proposal is to install one.
    one-time observation phase into a consolidation harvest of the seeds.
 4. Real usage informs the conversation file and sidebar mechanism before
    they are crystallised; the schemas at WS1/WS3 are starting points
-   informed by observed usage of WS0's embryo log. WS5's seeds drive
+   informed by observed usage of WS0's shared communication log. WS5's seeds drive
    refinement amendments as separate commits.
-5. The directive rename + new directive + embryo log lands as the
+5. The directive rename + new directive + shared communication log lands as the
    foundation; every subsequent piece extends without rewriting prior
    slices.
 
@@ -122,12 +138,23 @@ ownership, or conflict resolution. The proposal is to install one.
    owner direction 2026-04-25 in discussion of WS0/WS1 operational
    claims. **Every other principle in this list is in service to this
    one.**
-2. **Existing `collaboration.md` is implicitly user-only**. Renaming to
+2. **Platform independence is a core value and operating constraint**.
+   The collaboration system must be able to operate fully from repo-owned
+   markdown, JSON, rules, commands, skills, hooks, and other portable
+   surfaces that any capable agent system can read and write.
+   Platform-native agent-team features may help build, inspect, or stress
+   test this system, and platform-specific tools may feed lessons back into
+   the repo-owned surfaces, but they are optional accelerants. They must
+   never become operational dependencies, fallbacks, or replacements for
+   the repo-owned protocol. Where a coordination behaviour can be platform
+   agnostic, make it platform agnostic; use platform-specific affordances
+   only behind adapters or as non-authoritative aids.
+3. **Existing `collaboration.md` is implicitly user-only**. Renaming to
    `user-collaboration.md` and adding a sibling `agent-collaboration.md`
    names what is already implicit and creates symmetric room for the
    agent↔agent half. Every cross-reference to `collaboration.md` must be
    swept; the rename is a topology shift, not a relabel.
-3. **Live coordination state is not durable memory**. Claims, sidebar
+4. **Live coordination state is not durable memory**. Claims, sidebar
    slots, heartbeats, and TTL-managed entries belong in
    `.agent/state/collaboration/` — JSON, ephemeral, signal-like
    (information about what is happening now). Cross-session lessons
@@ -137,22 +164,23 @@ ownership, or conflict resolution. The proposal is to install one.
    requirements diverge. Note the deliberate language shift from earlier
    drafts: state is *signal-like*, not *lock-like*. Locks would be
    enforcement; signals are information.
-4. **Identity is already solved; liveness signals are the new piece**.
+5. **Identity is already solved; liveness signals are the new piece**.
    PDR-027 covers identity additively across sessions. Liveness ("when
    was this agent last active here?") becomes a *freshness signal* on
    claims, not a lock-expiry mechanism. Stale claims are noise to be
    audited at consolidation, not blockers that strand other agents.
-5. **Five communication channels exist; they have different shapes**:
+6. **Five primary communication channels plus owner escalation exist; they
+   have different shapes**:
    - **Thread record `next-session.md`**: durable async (already in
      use). Narrative, per-thread, multi-session continuity.
-   - **Embryo log `state/collaboration/log.md`** (new at WS0): a
+   - **Shared communication log `state/collaboration/log.md`** (new at WS0): a
      schema-less append-only markdown surface. Discoverability primitive
      — agents leave notes for whoever reads next. Eventually consistent;
      not a synchronisation surface. Persists alongside structured
      surfaces in later WS as the free-form discussion log.
    - **Conversation file** (new at WS3): structured per-topic file for
      live async exchange between agents on overlap topics that need more
-     structure than the embryo log.
+     structure than the shared communication log.
    - **Sidebar** (new at WS3): short-lived focused exchange, by mutual
      agreement. Means to discuss when async exchange is too slow. Not a
      blocking gate — agents may decline a sidebar request.
@@ -161,9 +189,9 @@ ownership, or conflict resolution. The proposal is to install one.
      the directive so agents pick the right channel).
    - **Owner question via AskUserQuestion**: hard-blocking sync to
      human (already in use).
-   The `agent-collaboration` directive names all five and gives
+   The `agent-collaboration` directive names all channels and gives
    when-to-use-which guidance.
-6. **Build-breakage rule cites, does not restate, the gate-recovery
+7. **Build-breakage rule cites, does not restate, the gate-recovery
    principle**. The active `gate-recovery-cadence.plan.md` names the
    non-negotiable: "build/type/lint/static-analysis must stay green even
    during TDD; RED is allowed only as intentional failing behavioural
@@ -172,7 +200,7 @@ ownership, or conflict resolution. The proposal is to install one.
    drift between the two surfaces. WS0 acceptance includes a
    bidirectional cross-reference validated at consolidate-docs (Wilma
    MINOR-10).
-7. **Schema evolution is a day-one concern**. JSON schemas carry an
+8. **Schema evolution is a day-one concern**. JSON schemas carry an
    explicit `schema_version` field from the first commit, and an
    explicit compatibility model: **additive-only schema evolution
    within a major version**. Agents read forward (a v1.0 agent reading
@@ -181,11 +209,11 @@ ownership, or conflict resolution. The proposal is to install one.
    with an error pointing at the protocol upgrade. The model is named
    in the schema's `$comment` field and in `agent-collaboration.md`.
    (Wilma MAJOR-4.)
-8. **Bootstrap fast-path**. Single-agent case (no other agents present
+9. **Bootstrap fast-path**. Single-agent case (no other agents present
    in the registry) pays no coordination overhead beyond reading the
    registry once. The directive names a fast-path so solo sessions
    don't waste cycles on empty-registry coordination.
-9. **Discoverability is structural**. "Don't operate in another agent's
+10. **Discoverability is structural**. "Don't operate in another agent's
    area without letting them know first" requires both a discovery
    surface and a registration discipline — without them, the rule is
    undiscoverable. The parallel is `register-identity-on-thread-join.md`:
@@ -194,17 +222,17 @@ ownership, or conflict resolution. The proposal is to install one.
    the surface and decided how to coordinate" — *not* "do not proceed
    if you find a claim." The substance of the decision is agent
    judgement.
-10. **Sub-agent dispatch ≠ peer collaboration**. Reviewer sub-agents
+11. **Sub-agent dispatch ≠ peer collaboration**. Reviewer sub-agents
     (docs-adr-reviewer, etc.) are fork-blocking-rejoin within ONE
     agent's session. Peer collaboration is asynchronous between
     independent sessions. The directive names the distinction so
     agents pick the right channel.
-11. **Owner is the final tiebreaker, surfaced explicitly**. When peer
+12. **Owner is the final tiebreaker, surfaced explicitly**. When peer
     discussion does not converge, escalation to owner is the explicit
     last move via a *named surface* (not a passive note in a
     conversation file hoping the owner reads it). WS3 names the
     escalation surface concretely. (Wilma MINOR-9.)
-12. **Threat model: trusted agents only**. The protocol assumes agents
+13. **Threat model: trusted agents only**. The protocol assumes agents
     follow the doctrine in good faith. Misbehaving agents (claiming
     excessive scope, never releasing claims, fabricating entries) are
     out of scope; the owner is responsible for detecting and resolving
@@ -226,6 +254,9 @@ ownership, or conflict resolution. The proposal is to install one.
   per-platform binary. The pattern follows ADR-150's
   capture→distil→graduate→enforce pipeline: files first, code only when
   files prove the design. (See Follow-up Work for evidence-gated hooks.)
+- **No platform-native agent-team dependency**. Platform-specific team or
+  collaboration features may help build or test the protocol, but the
+  protocol itself must remain operable from repo-owned portable surfaces.
 - **No threat model beyond trusted agents**. The protocol assumes agents
   follow the doctrine in good faith. Misbehaving agents are out of scope.
 - **All agents work on the same branch**. Isolation is conventional
@@ -234,19 +265,20 @@ ownership, or conflict resolution. The proposal is to install one.
 
 ## Workstreams
 
-### WS0 — Directive Anchor + Embryonic Communication Primitive (Foundation)
+### WS0 — Directive Anchor + Shared Communication System (Foundation)
 
 **Goal**: install the directive structure as the foundation, plus the
 smallest possible communication primitive — an empty markdown log with no
 schema other than "use this." Every later workstream references the new
-`agent-collaboration.md` and the embryo log; landing them first means later
-WS extend without rewriting.
+`agent-collaboration.md` and the shared communication log; landing them
+first means later WS extend without rewriting.
 
-**Why the embryo lands at WS0, not WS1**: the foundational behavioural rule
-*"don't operate in another agent's area without letting them know first"*
-needs somewhere for the message to land. Without a communication surface,
-the rule is unenforceable in any meaningful sense — there is no "letting
-them know." The embryo is the minimum-viable target: a markdown file in
+**Why the shared communication log lands at WS0, not WS1**: the
+foundational behavioural rule *"don't operate in another agent's area
+without letting them know first"* needs somewhere for the message to land.
+Without a communication surface, the rule is unenforceable in any meaningful
+sense — there is no "letting them know." The shared communication log is
+the basic shared communication system: a markdown file in
 `.agent/state/collaboration/` that any agent can append to. No schema, no
 TTL, no structure beyond chronological appending. WS5 observation tells us
 what structure agents actually use; WS1 and WS3 then crystallise the
@@ -303,10 +335,10 @@ files-first / schema-later in its strictest form.
      without consulting the surface and deciding how to coordinate;
      don't break the build unless you'll fix it soon — citing the
      gate-recovery-cadence principle verbatim).
-   - **Communication channels and when to use each** (the five named in
-     Design Principle 4): thread record, conversation file (forward
-     reference to WS3), sidebar (forward reference to WS3), reviewer
-     dispatch, owner question.
+   - **Communication channels and when to use each** (the channels named
+     in the Design Principles): thread record, shared communication log,
+     conversation file (forward reference to WS3), sidebar (forward
+     reference to WS3), reviewer dispatch, owner question.
    - **Identity vs liveness** distinction with forward references to
      PDR-027 (identity) and WS1 (liveness/claims).
    - **Bootstrap fast-path**: single-agent case skips claim-checking;
@@ -314,9 +346,9 @@ files-first / schema-later in its strictest form.
    - **Sub-agent dispatch is not peer collaboration**: explicit rule
      that reviewer sub-agents are inside one agent's session and do not
      count as peer collaboration.
-   - **Conversations are first-class learning-loop inputs**: the embryo
-     log and (later) structured claims, conversation files, and
-     sidebar transcripts are durable evidence alongside the napkin.
+   - **Conversations are first-class learning-loop inputs**: the shared
+     communication log and (later) structured claims, conversation files,
+     and sidebar transcripts are durable evidence alongside the napkin.
      Lessons captured from conversations land as napkin observations
      just like any other lesson; refinement amendments to the protocol
      cite both napkin entries and conversation entries as evidence.
@@ -333,7 +365,7 @@ files-first / schema-later in its strictest form.
      b. *Don't operate in another agent's area without consulting the
         surface and deciding how to coordinate* — defines "area"
         provisionally as: "any file path, plan, ADR, or workspace
-        currently named in another agent's recent embryo-log entry or
+        currently named in another agent's recent shared-communication-log entry or
         (from WS1) active claim entry." The rule fires as a tripwire:
         "do not proceed until you have consulted the surface and
         decided how to coordinate." It does NOT fire as: "refuse if a
@@ -358,7 +390,7 @@ files-first / schema-later in its strictest form.
    surface both.
 8. **New executive memory entry**:
    `.agent/memory/executive/agent-collaboration-channels.md` — a one-page
-   reference card naming the five communication channels and the
+   reference card naming the communication channels and the
    when-to-use-which decision tree. Executive entries are short, durable,
    index-card-shaped (per existing convention with `invoke-code-reviewers.md`).
 9. **Bootstrap the `.agent/state/` directory** with a `README.md` that
@@ -367,11 +399,11 @@ files-first / schema-later in its strictest form.
    truth-across-time). This is the same directory WS1 will populate
    with structured claims; landing the directory and its README in WS0
    means WS1 doesn't have to re-explain the boundary.
-10. **Create the embryonic discovery surface** at
+10. **Create the shared communication surface** at
     `.agent/state/collaboration/log.md`. Initial contents:
 
     ```markdown
-    # Agent-to-Agent Discovery Log
+    # Agent-to-Agent Shared Communication Log
 
     Append-only chronological log. **This is a discovery surface, not
     a synchronisation surface.** Two agents writing simultaneously
@@ -402,8 +434,9 @@ files-first / schema-later in its strictest form.
     chronological appending — no rotation, no archive, no JSON. The
     point is that *any* agent can read it and *any* agent can write to
     it, before any structure has been agreed. (Wilma MAJOR-3 is
-    resolved by this reframing — the embryo's role is discovery, not
-    communication; eventually-consistent appends are fine.)
+    resolved by this reframing — the shared communication log's role is
+    discovery and basic communication, not synchronisation;
+    eventually-consistent appends are fine.)
 
 11. **Create the rule** at `.agent/rules/use-agent-comms-log.md` —
     atomic two-line content: "Before starting work on any non-trivial
@@ -411,11 +444,12 @@ files-first / schema-later in its strictest form.
     naming what you intend to touch and signing with your agent
     identity. Read recent entries first to discover what other agents
     have been working on." Loaded by all platform adapters per
-    ADR-125. The rule's minimalism is the point: it gives the embryo a
-    load-bearing target without prematurely structuring it.
+    ADR-125. The rule's minimalism is the point: it gives the shared
+    communication system a load-bearing target without prematurely
+    structuring it.
 
 12. **Update `.agent/rules/respect-active-agent-claims.md`** (created
-    in task 6) to reference the embryo log as the current
+    in task 6) to reference the shared communication log as the current
     discovery-and-signalling surface, with forward reference to WS1's
     structured claims for the future. The rule's enforcement force is
     "do not proceed until you have consulted the surface and decided
@@ -445,7 +479,7 @@ files-first / schema-later in its strictest form.
   `.agent/rules/dont-break-build-without-fix-plan.md`,
   `.agent/rules/respect-active-agent-claims.md`, and
   `.agent/rules/use-agent-comms-log.md` are atomic, cite their
-  authority (or in the embryo log's case, are deliberately
+  authority (or in the shared communication log's case, are deliberately
   unstructured), and are loaded by all platform adapters via the same
   technique used for the existing `register-identity-on-thread-join.md`
   rule (verified during task 13 platform-adapter audit).
@@ -470,15 +504,15 @@ files-first / schema-later in its strictest form.
   resolved before WS0 lands. (Wilma BLOCKING-2.)
 - **Single atomic commit** for the directive rename + sweep + new
   directive + new rules + AGENT.md update + executive memory entry +
-  state directory + embryo log. No partial-state intermediate.
+  state directory + shared communication log. No partial-state intermediate.
 
 #### Operational Seed (validated by observation in next 3 sessions)
 
 - **Seed question**: *Can a sequential agent at session-open discover
   what other agents have recently been working on, by reading the
-  embryo log under the new rule?*
+  shared communication log under the new rule?*
 - **Validation**: across the next 3 sessions touching this repo, at
-  least one agent appends an entry to the embryo log naming their
+  least one agent appends an entry to the shared communication log naming their
   intended work (per the `use-agent-comms-log` rule), and at least one
   subsequent session demonstrably reads prior entries (evidenced by a
   napkin observation, a thread-record entry, or an in-session
@@ -492,7 +526,7 @@ files-first / schema-later in its strictest form.
 
 #### Bootstrap Coordination (Wilma BLOCKING-1, relaxed under advisory model)
 
-WS0 is non-self-bootstrapping by definition — the embryo log it creates
+WS0 is non-self-bootstrapping by definition — the shared communication log it creates
 is the first place an agent could check for "is anyone else working on
 this." Mitigation: at WS0 land time, the executing agent uses existing
 surfaces to verify no other active work:
@@ -518,9 +552,9 @@ landing under enforced isolation.
   rules; whether the gate-recovery-cadence citation is the right
   authority surface).
 
-### WS1 — Promote The Embryo To Structured Claims (Minimum Viable Coordination)
+### WS1 — Promote Shared Signals To Structured Claims (Minimum Viable Coordination)
 
-**Goal**: promote WS0's schema-less embryo log into a structured claims
+**Goal**: promote WS0's schema-less shared communication log into a structured claims
 registry that converts "don't operate in another agent's area without
 letting them know first" from a discoverable rule into an enforceable
 session-open tripwire. The schema is informed by whatever usage emerged
@@ -606,9 +640,9 @@ usage shows agents need, and remove fields that no entry needed.
    the existing `register-identity-on-thread-join.md`. The rule fires
    as a tripwire: "Before any edit in this session, list the areas you
    intend to touch. For each, scan `active-claims.json` for overlapping
-   claims. If overlap, consult the embryo log and the conversation
+   claims. If overlap, consult the shared communication log and the conversation
    files for context, decide how to coordinate (proceed with caution,
-   ping the other agent via the embryo log, open a sidebar, ask the
+   ping the other agent via the shared communication log, open a sidebar, ask the
    owner), and document your decision. Whether or not you find an
    overlap, register your own claim entry. **Do not proceed until you
    have consulted and decided** — but the substance of the decision is
@@ -627,7 +661,7 @@ usage shows agents need, and remove fields that no entry needed.
    rule is the load-bearing tripwire that those skills implement. Add
    the bootstrap fast-path: if `active-claims.json` has no entries
    other than the current agent's own, log "no other agents present"
-   to the embryo log and proceed without further coordination overhead.
+   to the shared communication log and proceed without further coordination overhead.
 6. **Update `consolidate-docs.md`** to add a stale-claim audit step:
    any claim where `claimed_at + freshness_seconds < now()` is
    archived to `.agent/state/collaboration/closed-claims.archive.json`
@@ -645,16 +679,16 @@ usage shows agents need, and remove fields that no entry needed.
    short guide naming where state lives, lifecycle, and the
    trusted-agents threat model. Operational entries describe how the
    system runs, not what it's learned.
-9. **Preserve the embryo log**: `.agent/state/collaboration/log.md`
+9. **Preserve the shared communication log**: `.agent/state/collaboration/log.md`
    continues to exist alongside the new structured claims file. The
    log becomes the surface for free-form messages that don't fit the
    claim schema — discussion, questions, observations, things that
    aren't claims-of-area. Update `.agent/rules/use-agent-comms-log.md`
    to distinguish the two: claims-of-area in `active-claims.json`,
    free-form discussion and discovery in `log.md`. Per ADR-150's
-   capture→distil→graduate→enforce, the embryo doesn't get demolished
-   when the structured surface lands; both surfaces coexist with named
-   purposes.
+   capture→distil→graduate→enforce, the shared communication log is not
+   replaced when the structured surface lands; both surfaces coexist with
+   named purposes.
 
 #### Mechanical Acceptance (verifiable at commit time)
 
@@ -676,7 +710,7 @@ usage shows agents need, and remove fields that no entry needed.
 - `consolidate-docs.md` has a documented stale-claim audit step that
   archives, not deletes, expired claims.
 - The directive's WS1 section documents which schema fields came from
-  observed embryo-log usage and which from first-principles design.
+  observed shared-communication-log usage and which from first-principles design.
 - All pre-commit gates pass on the WS1 atomic commit.
 
 #### Operational Seed (validated by observation in next 3 sessions)
@@ -690,7 +724,7 @@ usage shows agents need, and remove fields that no entry needed.
   overlapping working trees), at least one claim is registered, at
   least one subsequent agent reads the registry and finds the claim,
   and the coordination decision (proceed / ping / sidebar / ask
-  owner) is documented in the embryo log or napkin.
+  owner) is documented in the shared communication log or napkin.
 - **Failure mode to watch**: agents register claims but other agents
   do not consult them; or agents detect claims and mechanically refuse
   entry rather than coordinating with judgement. Either signals the
@@ -814,7 +848,7 @@ a thread.
    ```
 
 2. **Define the sidebar protocol** in `agent-collaboration.md`:
-   - **Trigger**: a topic where async exchange via embryo log /
+   - **Trigger**: a topic where async exchange via shared communication log /
      conversation file is too slow and a tighter exchange is desired.
      Either agent may propose; both must accept (`sidebar_request` →
      `sidebar_message` opening from the other → sidebar is open).
@@ -984,7 +1018,7 @@ platforms.
 - **Validation**: across the next 3 sessions touching this repo and
   spanning at least 2 different platforms, every session shows
   evidence of automatic engagement (claim entry written at start,
-  prior claims read, embryo-log entry made).
+  prior claims read, shared-communication-log entry made).
 - **Failure mode to watch**: a platform's rule-loading mechanism
   doesn't fire the new tripwire; agents on that platform remain
   unaware of the protocol. This is the named evidence-gating-trigger
@@ -1006,8 +1040,8 @@ platforms.
 whether the protocol is reducing parallel-track clashes; surface
 refinement candidates as separate commits. WS5 is **not** a
 late-binding observation phase that designs schemas — schemas are
-designed at WS1/WS3 land time, informed by WS0's embryo usage. WS5's
-role is to *evaluate* the seeds each prior WS planted and the
+designed at WS1/WS3 land time, informed by WS0's shared-communication-log
+usage. WS5's role is to *evaluate* the seeds each prior WS planted and the
 protocol's overall fitness.
 
 **Capture surface**: the **napkin**, like every other learning-loop
@@ -1019,7 +1053,7 @@ napkin already handles structured per-session observations, and
 introducing a sibling surface would create wiring without benefit.
 
 **Conversations are first-class learning-loop inputs alongside the
-napkin**. The embryo log at `.agent/state/collaboration/log.md`,
+napkin**. The shared communication log at `.agent/state/collaboration/log.md`,
 structured claims in `active-claims.json`, conversation files, and
 sidebar transcripts are themselves durable evidence. When a refinement
 is drafted, it cites entries from those surfaces directly, the same
@@ -1036,14 +1070,14 @@ in 2026-04-24/25 pre-protocol).
 #### Tasks
 
 1. **Continuous capture from WS0 onwards**: agents writing to
-   `.agent/state/collaboration/log.md` (the embryo), and from WS1
+   `.agent/state/collaboration/log.md`, and from WS1
    onwards `active-claims.json`, are themselves WS5 input. Every
    entry is observed for what fields it uses, what feels awkward,
-   what's missing. WS1 and WS3 schema decisions cite the embryo
-   entries that informed them.
+   what's missing. WS1 and WS3 schema decisions cite the
+   shared-communication-log entries that informed them.
 2. **Harvest each WS's operational seed**:
    - WS0 seed (sequential discoverability): did agents append entries
-     to the embryo log; did subsequent agents read them?
+     to the shared communication log; did subsequent agents read them?
    - WS1 seed (simultaneous claim detection without enforcement): did
      overlapping-area agents detect each other and coordinate via
      judgement?
@@ -1112,17 +1146,17 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/rules/follow-agent-collaboration-practice.md` — sibling to existing follow-rule (WS0)
 - `.agent/rules/dont-break-build-without-fix-plan.md` — atomic rule citing gate-recovery-cadence (WS0)
 - `.agent/rules/respect-active-agent-claims.md` — atomic rule with WS1/WS3 forward refs (WS0; extended WS3)
-- `.agent/rules/use-agent-comms-log.md` — atomic rule pointing at the embryo log (WS0; extended WS1)
+- `.agent/rules/use-agent-comms-log.md` — atomic rule pointing at the shared communication log (WS0; extended WS1)
 - `.agent/rules/register-active-areas-at-session-open.md` — atomic rule, parallel to register-identity-on-thread-join (WS1)
 - `.agent/state/README.md` — explains state-vs-memory distinction (WS0)
-- `.agent/state/collaboration/log.md` — embryonic schema-less communication log (WS0; preserved alongside structured surfaces in WS1, WS3)
-- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed usage of the embryo (WS1)
+- `.agent/state/collaboration/log.md` — schema-less shared communication log (WS0; preserved alongside structured surfaces in WS1, WS3)
+- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage (WS1)
 - `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims (WS1)
 - `.agent/state/collaboration/conversations/` — directory of per-topic conversation files (WS3)
 - `.agent/state/collaboration/conversation.schema.json` — JSON schema for conversations (WS3)
 - `.agent/memory/collaboration/README.md` — explains the new memory class (WS2)
 - `.agent/memory/collaboration/parallel-track-pre-commit-gate-coupling.md` — founding pattern (WS2)
-- `.agent/memory/executive/agent-collaboration-channels.md` — five-channel reference card (WS0)
+- `.agent/memory/executive/agent-collaboration-channels.md` — communication-channel reference card (WS0)
 - `.agent/memory/operational/collaboration-state-conventions.md` — operational guide (WS1)
 
 ### Renamed files
@@ -1221,7 +1255,7 @@ those amendments are separate commits with their own gates.
 | State-vs-memory confusion at adoption time | Explicit READMEs in both `.agent/state/` and `.agent/memory/collaboration/` naming the distinction; reviewer dispatch by `architecture-reviewer-fred` on boundary discipline. |
 | Schema crystallises wrong fields, requires v2 retrofit | `schema_version` field from day one with additive-only major-version compatibility model named in schema and directive; WS5 observation checks "what fields were never used / what was missing"; refinement amendments are normal lifecycle. (Wilma MAJOR-4 absorbed.) |
 | Claims become a graveyard (stale entries cluttering the registry) | Under advisory model, stale claims are noise not blockers — no agent is stranded by them. Consolidate-docs archives stale claims to `closed-claims.archive.json`; pilot run proves archival end-to-end before WS2 starts. (Wilma MAJOR-5, MAJOR-6 absorbed.) |
-| Embryo log read after parallel writes shows interleaving | Embryo log is a *discovery* surface, not synchronisation. Eventually-consistent appends are fine for sequential agents reading later. (Wilma MAJOR-3 absorbed via reframing.) |
+| Shared communication log read after parallel writes shows interleaving | Shared communication log is a *discovery* surface, not synchronisation. Eventually-consistent appends are fine for sequential agents reading later. (Wilma MAJOR-3 absorbed via reframing.) |
 | Sidebar timeout too short / too long for real use | Default values are starting points; WS5 seed harvest calibrates; refinement amendments adjust. |
 | Bootstrap fast-path mis-fires (single agent pays full overhead) | Fast-path implementation in start-right-quick early-return; verified in WS1 pilot exercise. |
 | Owner-as-tiebreaker pathway used as the default escalation | Explicit doctrine in directive: peer agreement is the default; owner is the *last* move when agreement fails. Owner escalation surface (`escalations/`) makes prematurity visible. WS5 seed harvest flags overuse. |
@@ -1232,7 +1266,8 @@ those amendments are separate commits with their own gates.
 | Platform-adapter rule-loading varies across Claude/Cursor/Codex | WS0 task 13 audits this; WS4 task 1 re-audits and adjusts skill flows if any platform doesn't fire tripwire-loaded rules automatically. (Wilma MAJOR-7 absorbed.) |
 | Two agents attempt WS0 simultaneously | Worst case is git merge conflict on rename; second agent rebases or coordinates with owner via existing channels. The protocol's *function* does not depend on enforced isolation at WS0 land. (Wilma BLOCKING-1 absorbed under advisory model.) |
 | Bidirectional citation chain (rule ↔ gate-recovery-cadence) drifts silently | WS0 acceptance adds consolidate-docs validation step; WS4 wires the validation into the audit cycle. (Wilma MINOR-10 absorbed.) |
-| Misbehaving agent claims excessive scope or never closes claims | Trusted-agents threat model named explicitly in Design Principle 12. Owner detects and resolves at consolidation. Hostile-agent threat model is a future PDR, out of scope. (Wilma MINOR-11, MINOR-12 absorbed.) |
+| Platform-native agent-team features become an implicit dependency | Design Principle 2 forbids this. Platform-specific tools may help build or inspect the repo-owned system, but operation must remain markdown/JSON/rules/commands/skills/hooks first and portable across agent systems. |
+| Misbehaving agent claims excessive scope or never closes claims | Trusted-agents threat model named explicitly in Design Principle 13. Owner detects and resolves at consolidation. Hostile-agent threat model is a future PDR, out of scope. (Wilma MINOR-11, MINOR-12 absorbed.) |
 
 ## Wilma's Adversarial Review — Findings Absorbed
 
@@ -1244,7 +1279,7 @@ The plan was reviewed by `architecture-reviewer-wilma` 2026-04-25 against
 |---|---|---|
 | 1. WS0 bootstrap chicken-and-egg | BLOCKING | **Relaxed by advisory framing** — two simultaneous WS0 commits produce a merge conflict, not protocol failure. WS0 mechanical acceptance documents owner-mediated coordination via existing surfaces. |
 | 2. WS0 atomic-commit pre-commit gates | BLOCKING | **Absorbed** — every WS's mechanical acceptance now includes "all pre-commit gates pass on first attempt" as a first-class criterion. |
-| 3. Embryo not safe as communication | MAJOR | **Resolved by reframing** — embryo is a *discovery* surface, not synchronisation. Plan body now explicitly distinguishes; rule wording updated. |
+| 3. Former embryo log not safe as synchronisation | MAJOR | **Resolved by reframing** — the shared communication log is a *discovery and basic communication* surface, not synchronisation. Plan body now explicitly distinguishes; rule wording updated. |
 | 4. JSON schema versioning compatibility | MAJOR | **Absorbed** — schema includes `$comment_compatibility` block naming additive-only major-version model; directive documents it. |
 | 5. TTL salvage path vague | MAJOR | **Resolved by reframing** — under advisory model, stale claims are noise not blockers. No agent is stranded; archival not deletion. |
 | 6. State-vs-memory dangling references | MAJOR | **Absorbed** — stale claims archive to `closed-claims.archive.json`; conversation files reference archives durably. |
@@ -1252,10 +1287,10 @@ The plan was reviewed by `architecture-reviewer-wilma` 2026-04-25 against
 | 8. Sidebar request deadlock | MINOR | **Absorbed** — parallel sidebars allowed; no single-pair single-sidebar enforcement. |
 | 9. Sidebar timeout owner-escalation pathway | MINOR | **Absorbed** — explicit `.agent/state/collaboration/escalations/` directory, polled at consolidate-docs and surfaced in `repo-continuity.md`. |
 | 10. Directive-rule-plan circular authority drift | MINOR | **Absorbed** — bidirectional cross-reference validated at consolidate-docs (WS0 + WS4). |
-| 11. Threat model not named | MINOR | **Absorbed** — Design Principle 12 names trusted-agents threat model explicitly. |
+| 11. Threat model not named | MINOR | **Absorbed** — Design Principle 13 names trusted-agents threat model explicitly. |
 | 12. Conversation file integrity | MINOR | **Absorbed** — same trusted-agents threat model; hostile-agent integrity is future PDR. |
 | 13. WS5 observation criterion loose | MINOR | **Absorbed** — WS5 acceptance bounded: "three sessions logged, with explicit findings; no-sidebar is itself valid evidence; hook-trigger evaluation completed." |
-| 14. Schema informed by schema-less observations | MINOR | **Absorbed** — WS1 task 4 explicitly documents which fields came from observed embryo-log usage and which from first-principles design. |
+| 14. Schema informed by schema-less observations | MINOR | **Absorbed** — WS1 task 4 explicitly documents which fields came from observed shared-communication-log usage and which from first-principles design. |
 | Positive: workstream sequencing sound | POSITIVE | Acknowledged. |
 | Positive: state-vs-memory boundary clear | POSITIVE | Acknowledged. |
 | Positive: identity schema reuse from PDR-027 | POSITIVE | Acknowledged. |
@@ -1319,7 +1354,7 @@ This plan extends:
 - Cross-repo collaboration (agents on different repos coordinating).
   This plan covers single-repo only; cross-repo is a future PDR.
 - Hostile-agent threat model. This plan assumes trusted agents
-  (Design Principle 12); a hostile-agent threat model — claim
+  (Design Principle 13); a hostile-agent threat model — claim
   integrity, signed entries, tamper detection — is a future PDR if
   the trust assumption breaks down.
 
@@ -1372,22 +1407,29 @@ After WS5 completes, run `/jc-consolidate-docs` over the new surfaces:
    informed by shared knowledge. This principle is the central design
    commitment and constrains every workstream. (Settled 2026-04-25 in
    discussion of WS0/WS1 operational claims.)
-7. **Operational seeds in every workstream**. Each WS lands with both
+7. **Platform independence as core value and intent**. Where a
+   coordination behaviour can be platform agnostic, it should be. The
+   protocol may use platform-specific tools to help build, inspect, and
+   stress test the system, but those tools must never become the system
+   or a required fallback. The repo-owned markdown/JSON/rules/commands/
+   skills/hooks surfaces must be sufficient to operate fully. Settled
+   2026-04-26.
+8. **Operational seeds in every workstream**. Each WS lands with both
    mechanical acceptance (commit-time verifiable) and an operational
    seed (a named question to be answered by observation in subsequent
    sessions). WS5 reframes from a one-time observation phase into a
    consolidation harvest of all per-WS seeds.
-8. **WS4 is jointly required with WS1** for the protocol to function
+9. **WS4 is jointly required with WS1** for the protocol to function
    operationally. Tripwire-loaded rules fire automatically on platforms
    that load them at session-open, but the workflow surfaces need
    explicit integration so the protocol is reliably automatic across
    all platforms. Settled 2026-04-25.
-9. **Hooks are deferred and evidence-gated**. If rules and guidance
+10. **Hooks are deferred and evidence-gated**. If rules and guidance
    prove insufficient to keep agents using the discovery and
    communication surfaces, hook-based reminders may be installed.
    Critically: hooks would be reminders, not enforcement. They prompt;
    they do not refuse. The evidence trigger is named in WS5 and the
    per-WS seeds. Settled 2026-04-25.
-10. **No worktrees in any form**. Collaboration is on a shared working
+11. **No worktrees in any form**. Collaboration is on a shared working
     tree; isolation is conventional via claims, conversation, and
     sidebars.

@@ -67,7 +67,13 @@ Read in order; stop at whichever answers your next-step question:
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
 4. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
-5. `.agent/state/collaboration/active-claims.json` — active-claims registry. Apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md) rule: if no entries other than your own, log "no other agents present" to `.agent/state/collaboration/log.md` and proceed (bootstrap fast-path); on overlap, consult the embryo log and decide how to coordinate before any edit.
+5. `.agent/state/collaboration/active-claims.json` — active-claims
+   registry. Apply the
+   [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
+   rule: if no entries other than your own, log "no other agents
+   present" to `.agent/state/collaboration/log.md` and proceed
+   (bootstrap fast-path); on overlap, consult the shared communication
+   log and decide how to coordinate before any edit.
 
 ### 5. Active plans
 

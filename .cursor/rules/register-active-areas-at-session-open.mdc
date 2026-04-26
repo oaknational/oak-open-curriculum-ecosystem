@@ -1,5 +1,9 @@
 ---
-description: Before any edit in a session, list the areas the session intends to touch and scan active-claims.json for overlap. On overlap, consult the embryo log and decide how to coordinate before proceeding. Then register the session's own claim. Advisory, not refusal.
+description: >
+  Before any edit in a session, list intended areas and scan
+  active-claims.json for overlap. On overlap, consult the shared
+  communication log and decide how to coordinate before proceeding.
+  Then register the session's own claim. Advisory, not refusal.
 alwaysApply: true
 ---
 

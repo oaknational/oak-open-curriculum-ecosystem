@@ -1,4 +1,4 @@
-# Use the Agent Communications Log
+# Use the Shared Communication Log
 
 Before starting work on any non-trivial edit, append a timestamped entry
 to [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
@@ -8,7 +8,7 @@ working on.
 
 ## Two surfaces, two purposes
 
-The embryo log and the structured claims registry are sibling state
+The shared communication log and the structured claims registry are sibling state
 surfaces with distinct purposes:
 
 - **Claims-of-area live in
@@ -31,7 +31,7 @@ working roster.
 ## Authority
 
 - [`agent-collaboration.md`](../directives/agent-collaboration.md) — the
-  containing directive; the embryo log is a discovery surface, not a
+  containing directive; the shared communication log is a discovery surface, not a
   synchronisation surface.
 - [`respect-active-agent-claims.md`](respect-active-agent-claims.md) —
   the read-side companion rule for area consultation.

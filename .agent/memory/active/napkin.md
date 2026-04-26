@@ -18,7 +18,7 @@ thread agent's pushed-handoff entry) archived to
 Distillation merged into `distilled.md`:
 
 - **Multi-agent collaboration** section pointing at the new
-  `agent-collaboration.md` directive, the embryo log at
+  `agent-collaboration.md` directive, the shared communication log at
   `.agent/state/collaboration/log.md`, and the two foundational
   tripwire rules (`dont-break-build-without-fix-plan`,
   `respect-active-agent-claims`).
@@ -67,12 +67,13 @@ archived to `archive/napkin-2026-04-22b.md`); 2026-04-22 (sessions
 **Surprise: the protocol applied to itself, bidirectionally, in the
 landing session.** WS1 of the multi-agent-collaboration-protocol was
 implemented while the WS0 surfaces were live. I declared intent in the
-embryo log at session-start, ran four reviewers in parallel during
+shared communication log at session-start, ran four reviewers in parallel during
 implementation, and the parallel Jiggly Pebble session (observability
-thread, PR-87 quality-finding analysis) appended their own embryo-log
+thread, PR-87 quality-finding analysis) appended their own
+shared-communication-log
 entry mid-session declaring explicit non-overlap with WS1 surfaces.
 The protocol's first bidirectional coordination event happened during
-the very landing commit that promoted the embryo log to a structured
+the very landing commit that promoted the shared communication log to a structured
 registry. Not surprising as design *ambition*; surprising as observed
 *reality* without any further iteration. The "knowledge and
 communication, not mechanical refusals" frame held in production for
@@ -87,7 +88,7 @@ had an unobservable no-overlap branch — an agent who skipped
 consultation and just registered a claim was post-hoc indistinguishable
 from one who consulted and found no overlap. This is the **third
 instance** of the same pattern. I absorbed the finding by mandating a
-`notes` artefact on no-overlap claims (or an embryo-log entry on
+`notes` artefact on no-overlap claims (or a shared-communication-log entry on
 fast-path). Promotes the pattern from candidate to ADR/PDR-ready —
 captured in 6b below.
 
@@ -139,7 +140,7 @@ real concurrent load.** Keen Dahl was working PR-87 Phase 0 on the
 observability thread while I was running the register-promotion pass
 on the agentic-engineering-enhancements thread. We both claimed
 `repo-continuity.md`, `active-claims.json`, `log.md`. **Three back-and-
-forth turns** via the structured registry plus embryo log: my
+forth turns** via the structured registry plus shared communication log: my
 overlap-ping → Keen Dahl narrowed their claim and added a heartbeat →
 both commits landed cleanly with additive merges. The `heartbeat_at`
 field saw its first real use in production coordination, not just
@@ -310,3 +311,49 @@ implementation.
   the resources their tests require*. Generalisable across vitest,
   ESLint, prettier, knip, depcruise — any tool that loads configs
   to discover entry points.
+
+## 2026-04-26 — Codex — collaboration-plan exploration
+
+### Observations
+
+**Paused plan state can lag behind its evidence surfaces.** The
+multi-agent collaboration plan and thread record still said, before
+this refresh, that the paused-on-evidence gate had one coordination data
+point. The shared communication log later recorded a third/fourth real
+coordination event and explicitly said this should be surfaced for owner
+inspection without auto-resuming WS3+. Behaviour change: before treating
+a paused evidence gate as still below threshold, read the evidence surface
+named by the plan (`.agent/state/collaboration/log.md`, closed claims,
+and napkin) rather than trusting the status block alone.
+
+**Platform independence note should become doctrine, not just plan
+commentary.** The owner's new plan note strengthens an existing
+theme: platform-specific agent-team features may help build the
+repo-owned collaboration system, but they must never become an
+operational dependency of it. This fits ADR-125/PDR-009 style
+canonical-first portability: markdown/JSON/rules/commands/skills are
+the system substrate; platform-native collaboration features are
+optional build aids and evidence sources, not part of the protocol.
+
+**General principle: platform agnostic by default, platform specific by
+choice.** Where something can be platform agnostic, it should be. We use
+platform-specific tools to our advantage, but at every turn we strive for
+platform independence as a core value and intent. Platform-native systems
+may feed lessons back into repo-owned surfaces; they must not become the
+operational surface itself.
+
+### Metacognition / Handoff
+
+**Best next step: harvest before building.** The evidence threshold appears
+met, but the impact the owner asked for is better judgement, not automatic
+forward motion. The next constructive move is an owner-directed WS5 evidence
+harvest: read the shared communication log, claims, and napkin observations,
+then decide whether WS3's conversation/sidebar schema is still the right
+next implementation. Starting WS3 without that harvest would recreate the
+stale-status problem in a subtler form.
+
+**Operational constraint: finish repo-level handoff after the active claim
+clears.** Session-handoff wants `repo-continuity.md` updated, but Sharded
+Stroustrup owns that file right now. The honest bridge from action to impact
+is to leave the thread record precise, leave a log note, and make the
+repo-continuity reconciliation falsifiable once their claim closes.

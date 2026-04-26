@@ -37,7 +37,7 @@ The merge-blocking simplification preference also lives there now.
 
 The agent-to-agent working model lives in
 [`agent-collaboration.md`][agent-collaboration]. The discovery surface
-is the embryo log at `.agent/state/collaboration/log.md`. The
+is the shared communication log at `.agent/state/collaboration/log.md`. The
 structured claims registry (WS1) lives at
 `.agent/state/collaboration/active-claims.json`. Three foundational
 behavioural rules are loaded as session-open tripwires:
@@ -48,6 +48,12 @@ and
 Knowledge and communication, not mechanical refusals — locks would be
 routed around at the cost of architectural excellence.
 
+The protocol is platform independent by design. Platform-specific
+agent-team features may help build, inspect, or stress test the system,
+but the repo-owned markdown/JSON/rules/commands/skills/hooks surfaces are
+the operating substrate and must remain sufficient without platform-native
+collaboration features.
+
 ## Tripwire rules need observable artefacts
 
 A tripwire rule whose firing condition is "consult and decide X" is
@@ -56,8 +62,8 @@ Compare against rules that are mechanically observable post-hoc (e.g.
 build-breakage rule — the build is or is not green). When designing
 a tripwire rule with a "decide" branch, require an artefact-leaving
 step on every outcome (a logged decision, a `notes` field on a claim,
-an embryo-log entry). Without it, the rule is satisfiable by silent
-proceed and the audit trail at consolidation cannot tell consultation
+a shared-communication-log entry). Without it, the rule is satisfiable by
+silent proceed and the audit trail at consolidation cannot tell consultation
 from skip.
 
 Three observed instances on this branch (WS0
@@ -175,10 +181,9 @@ fires with "is assigned a value but only used as a type".
 
 That lint rule isn't opposing the pattern, it's catching the
 half-applied state. The fix is to complete the pattern, not to delete
-the constant. A future custom rule (`no-bare-discriminator-union`,
-queued at `plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md`)
-catches the symmetric failure mode (a bare union exists with no
-backing constant) at the source-of-truth level.
+the constant. A future custom rule (`no-bare-discriminator-union`, queued
+in the recurrence-prevention plan) catches the symmetric failure mode (a
+bare union exists with no backing constant) at the source-of-truth level.
 
 ## Config-load side effects must not require test-execution resources
 

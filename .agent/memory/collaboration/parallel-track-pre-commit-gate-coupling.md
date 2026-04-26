@@ -68,7 +68,7 @@ response is:
    - **Authorise `--no-verify` for this specific commit** (rare;
      fresh per-commit authorisation; never carry-forward).
 4. **Document the coordination event** in the relevant continuity
-   surfaces (next-session record, embryo log) so the parallel agent
+   surfaces (next-session record, shared communication log) so the parallel agent
    knows on resume what happened and the next agent has the trace.
 
 ## Structural fix
@@ -79,7 +79,7 @@ plan. The protocol's WS0 installed:
 
 - the [`agent-collaboration.md`](../../directives/agent-collaboration.md)
   directive naming the agent-to-agent working model;
-- the embryo discovery log at `.agent/state/collaboration/log.md` where
+- the shared communication log at `.agent/state/collaboration/log.md` where
   agents declare their intent before non-trivial edits;
 - the [`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md)
   rule operationalising cross-agent gate-recovery discipline;
@@ -110,7 +110,7 @@ When you observe an instance of this pattern in a session:
 - Capture as a structured surprise in
   [`napkin.md`](../active/napkin.md) with date + agent + gate + what
   broke + how it was resolved.
-- Record the coordination event in the embryo log
+- Record the coordination event in the shared communication log
   ([`state/collaboration/log.md`](../../state/collaboration/log.md)) so
   the parallel agent has the trace.
 - If the resolution required `--no-verify`, link the fresh

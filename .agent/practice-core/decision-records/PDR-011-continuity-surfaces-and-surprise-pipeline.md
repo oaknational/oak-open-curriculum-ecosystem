@@ -80,7 +80,7 @@ unit).
   artefact class to memory.** WS0 of the multi-agent collaboration
   protocol installed `.agent/state/` as the *live, ephemeral,
   signal-like* surface where multiple agents on the same repo
-  coordinate via the embryo discovery log (`state/collaboration/log.md`)
+  coordinate via the shared communication log (`state/collaboration/log.md`)
   and, from WS1, structured claims. The state-vs-memory boundary —
   *state is truth-of-now; memory is truth-across-time* — is named
   in [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md)
@@ -344,7 +344,7 @@ Memory and state are sibling artefact classes:
 | Class | Lifecycle | Truth scope | Examples |
 |---|---|---|---|
 | **`.agent/memory/`** | Durable; entries survive across sessions | Truth-across-time (lessons-learned) | Napkin, distilled, patterns, threads, executive cards |
-| **`.agent/state/`** | Ephemeral; entries archive or expire | Truth-of-now (signal-like) | Embryo discovery log, structured claims (WS1+), conversation files (WS3+) |
+| **`.agent/state/`** | Ephemeral; entries archive or expire | Truth-of-now (signal-like) | Shared communication log, structured claims (WS1+), conversation files (WS3+) |
 
 The state class is introduced for **cross-agent coordination signal**
 — what is happening *now* in the working tree across multiple
@@ -587,7 +587,7 @@ authored carries a **split-surface host**:
 - Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
 - Live coordination state: `.agent/state/` (introduced 2026-04-25 by
   WS0 of multi-agent collaboration protocol). Currently:
-  `state/collaboration/log.md` (embryo discovery log, schema-less,
+  `state/collaboration/log.md` (shared communication log, schema-less,
   append-only). WS1 adds `state/collaboration/active-claims.json`
   (structured claims registry); WS3 adds `state/collaboration/conversations/`
   (per-topic conversation files) and `state/collaboration/escalations/`

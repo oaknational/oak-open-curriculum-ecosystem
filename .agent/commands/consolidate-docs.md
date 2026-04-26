@@ -248,7 +248,7 @@ held over).
       preserving the entry verbatim and adding `archived_at` (today's ISO
       8601 date) at the top of the archived entry. Remove the entry from
       `active-claims.json`. Archive, do not delete — conversation files,
-      napkin observations, and embryo-log entries may cite archived
+      napkin observations, and shared-communication-log entries may cite archived
       `claim_id` values permanently.
    3. **Unclosed-but-fresh entries**: any claim whose agent has not
       registered a subsequent thread-record entry (no `last_session`

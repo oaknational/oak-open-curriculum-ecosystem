@@ -7,17 +7,17 @@ Discipline Across Agent Boundaries.
 ## Rule
 
 **Before operating in an area another agent has named in a recent
-embryo-log entry or in an active claim entry in
+shared-communication-log entry or in an active claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json),
 consult the surface and decide how to coordinate. Document your decision
-on your own claim entry or as an embryo-log note. Do not proceed until
-you have consulted, decided, and logged.**
+on your own claim entry or as a shared-communication-log note. Do not
+proceed until you have consulted, decided, and logged.**
 
 The substance of the decision is yours. Available options:
 
 - **proceed with caution** — register your own claim, document the
   overlap decision in `notes`, and proceed;
-- **ping the other agent via the embryo log** — append a directed note
+- **ping the other agent via the shared communication log** — append a directed note
   citing the other agent's `claim_id`;
 - **request a sidebar** — short-lived focused exchange by mutual
   agreement *(available from WS3)*;
@@ -35,10 +35,10 @@ and Communication, Not Mechanical Refusals.
 ## Definition of "area"
 
 Any file path, plan, ADR, or workspace currently named in another
-agent's recent embryo-log entry or in an active claim entry in
+agent's recent shared-communication-log entry or in an active claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json).
 
-For embryo-log entries, "recent" is bounded by the 24-hour
+For shared-communication-log entries, "recent" is bounded by the 24-hour
 concrete-now bridge — entries older than 24 hours are noise to be
 audited at consolidation, not blockers. For active claims, freshness is
 authoritative: the `freshness_seconds` field (default 14400 = 4 hours)
@@ -65,14 +65,14 @@ are archived by `consolidate-docs § 7e` to
 
 **WS3** introduces conversation files and the sidebar mechanism for
 structured peer exchange when overlap warrants it. Until WS3 lands,
-overlap discussion happens in the embryo log or via owner question.
+overlap discussion happens in the shared communication log or via owner question.
 
 ## Bootstrap fast-path
 
-If `active-claims.json` has no entries other than yours and the embryo
-log has no recent (≤ 24 hour) entries from other agents, log "no other
-agents present" to the embryo log and proceed without further
-coordination overhead.
+If `active-claims.json` has no entries other than yours and the shared
+communication log has no recent (≤ 24 hour) entries from other agents, log
+"no other agents present" to the shared communication log and proceed
+without further coordination overhead.
 
 ## Cross-references
 

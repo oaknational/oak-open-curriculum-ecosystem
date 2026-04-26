@@ -27,7 +27,7 @@ how-it-works-in-practice companion.
 
 ## Schema-Field Provenance
 
-The active-claims schema is informed by what real embryo-log usage
+The active-claims schema is informed by what real shared-communication-log usage
 showed agents needed, plus the small set of fields the registry shape
 requires that the log shape did not. Transparency on which is which
 matters because fields drawn from observation are battle-tested; fields
@@ -36,7 +36,7 @@ evidence.
 
 | Field | Source | Notes |
 | --- | --- | --- |
-| `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every embryo-log entry carried this; reuses PDR-027 identity schema unchanged |
+| `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-communication-log entry carried this; reuses PDR-027 identity schema unchanged |
 | `claimed_at` | Observed | Every entry timestamped ISO 8601 |
 | `intent` (free-form prose) | Observed | Every entry carried an action / intent line |
 | `areas` (kind + patterns) | Observed | Every entry used a nested **Areas touched** list with path patterns |
@@ -126,7 +126,7 @@ The protocol assumes **trusted agents** acting in good faith. This means:
 - **Honest closures** — agents close their claims at session end (or
   let staleness archive them naturally); agents do not falsify activity.
 - **Honest build-breakage reports** — agents declare known build
-  breakage in the embryo log rather than committing through a green
+  breakage in the shared communication log rather than committing through a green
   gate they know is wrong.
 
 Misbehaving agents (excessive scope claims, never-released claims,
@@ -159,7 +159,7 @@ fields:
   (doctrinal authority).
 - [`register-active-areas-at-session-open.md`][register-rule] —
   session-open tripwire rule.
-- [`use-agent-comms-log.md`][log-rule] — embryo-log usage rule.
+- [`use-agent-comms-log.md`][log-rule] — shared-communication-log usage rule.
 - [`respect-active-agent-claims.md`][respect-rule] — scope-discipline
   rule.
 - [`consolidate-docs.md § 7e`][consolidate-7e] — stale-claim audit

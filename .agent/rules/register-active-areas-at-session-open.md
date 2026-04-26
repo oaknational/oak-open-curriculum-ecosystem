@@ -10,23 +10,24 @@ consultation at all):
 
 - **(a-1) Registry empty (bootstrap fast-path)** — the registry has no
   entries other than your own. Append a single
-  `"no other agents present"` note to the embryo log and register your
-  claim. The embryo-log entry is the artefact.
+  `"no other agents present"` note to the shared communication log and
+  register your claim. The shared-communication-log entry is the artefact.
 - **(a-2) Registry populated but no overlap** — other agents have active
   claims, but none of their `areas` intersect yours. Register your own
   claim with a `notes` value summarising the scan, e.g.
   `"scanned registry: <N> active claims, no overlap with my areas"`.
   The `notes` value is the artefact.
-- **(b) Overlap with another agent's active claim** — consult the embryo
-  log at
+- **(b) Overlap with another agent's active claim** — consult the shared
+  communication log at
   [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
   and any open conversation files for context, then decide how to
-  coordinate: proceed with caution, ping the other agent via the embryo
-  log, open a sidebar (WS3), or ask the owner via `AskUserQuestion`.
+  coordinate: proceed with caution, ping the other agent via the shared
+  communication log, open a sidebar (WS3), or ask the owner via
+  `AskUserQuestion`.
   Record the decision in your own claim's `notes` field citing the other
-  agent's `claim_id` (and additionally append an embryo-log entry if the
-  decision requires response). The `notes` field plus optional embryo-log
-  entry are the artefacts.
+  agent's `claim_id` (and additionally append a shared-communication-log
+  entry if the decision requires response). The `notes` field plus optional
+  shared-communication-log entry are the artefacts.
 
 Consult the registry and decide how to coordinate before proceeding to any
 edit. The substance of the decision is **agent judgement**. This rule does
@@ -61,7 +62,7 @@ is now well-recorded but does not prevent recurrence.
 
 WS0 of the
 [multi-agent-collaboration-protocol](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
-plan installed the embryo discovery log — a schema-less append-only surface
+plan installed the shared communication log — a schema-less append-only surface
 that any agent can read for "what has been happening here recently?" WS1
 (this rule) crystallises the active-area signal into a queryable structured
 registry. The rule converts a discoverable convention into an active,
@@ -110,7 +111,7 @@ gradient as a refinement amendment.
 ## Bootstrap fast-path
 
 If `active-claims.json` contains no entries other than your own, append a
-single line to the embryo log noting *"no other agents present"* and proceed.
+single line to the shared communication log noting *"no other agents present"* and proceed.
 Solo sessions pay the protocol's minimum overhead — one read, one write —
 not the full coordination cycle.
 
@@ -132,7 +133,7 @@ end-to-end against itself.
   active registry.
 - [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json)
   — archival surface populated by consolidate-docs at staleness threshold.
-- [`use-agent-comms-log.md`](use-agent-comms-log.md) — embryo-log usage
+- [`use-agent-comms-log.md`](use-agent-comms-log.md) — shared-communication-log usage
   rule; sibling tripwire on intent declaration.
 - [`respect-active-agent-claims.md`](respect-active-agent-claims.md) —
   scope-discipline rule that this registration rule operationalises.

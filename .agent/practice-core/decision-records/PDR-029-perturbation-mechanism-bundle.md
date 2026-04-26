@@ -303,7 +303,7 @@ The artefact discipline:
     itself; "no overlap" is logged as `"scanned registry: <N>
     active claims, no overlap with my areas"`; "overlap"
     decisions cite the other agent's `claim_id`.
-  - `respect-active-agent-claims.md`: artefact is the embryo-log
+  - `respect-active-agent-claims.md`: artefact is the shared-communication-log
     entry naming the consultation, OR the claim's `notes`
     field with the decision recorded.
 - **Decide-X rules without an artefact clause** are deficient

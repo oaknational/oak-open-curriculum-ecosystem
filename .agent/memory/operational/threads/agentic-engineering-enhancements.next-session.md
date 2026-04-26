@@ -1,6 +1,20 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-25 (Fresh Prince / claude-code /
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff
+after collaboration terminology and platform-independence refresh. The
+former "embryo" vocabulary has been replaced on live surfaces with
+**shared communication log/system** language. Owner's platform-independence
+note is now integrated as a plan constraint and napkin principle:
+platform-specific agent-team features may help build or inspect the
+system, but the repo-owned markdown/JSON/rules/commands/skills/hooks
+surfaces must be sufficient to operate fully. Stale evidence-gate language
+updated: the 2026-04-25 shared-communication-log entries now appear to
+meet the 3+ coordination-event inspection threshold, but this does **not**
+auto-resume WS3+; next step is owner-directed WS5 evidence harvest /
+resumption review. Handoff note: repo-continuity was not updated because
+Sharded Stroustrup has an active claim on that file.)
+
+**Prior refresh**: 2026-04-25 (Fresh Prince / claude-code /
 claude-opus-4-7-1m — **WS1 of the multi-agent collaboration protocol
 landed as a single atomic commit `a5d33519`** on
 `feat/otel_sentry_enhancements`. 20 files, 881 insertions, 165
@@ -22,7 +36,7 @@ WS1 commit, archived as the founding entry in
 `closed-claims.archive.json`. **Coordination event**: parallel
 `Jiggly Pebble` (`claude-code` / `claude-opus-4-7-1m`,
 observability-sentry-otel thread, PR-87 quality-finding analysis)
-appended their own embryo-log entry mid-session declaring areas
+appended their own shared-communication-log entry mid-session declaring areas
 explicitly NOT including WS1 surfaces. Protocol functioning
 bidirectionally, again. **Next**: WS2 of the protocol is already
 landed (`293742cd`); WS3 (conversation file + sidebar mechanism) is the
@@ -35,15 +49,16 @@ claude-opus-4-7-1m — **WS0 of the multi-agent collaboration protocol
 landed as a single atomic commit `63c66c88`** on
 `feat/otel_sentry_enhancements`. **WS0 seed fired same-day**: parallel
 observability-thread agent (Codex / codex / GPT-5) appended their own
-signed entry to the embryo log `.agent/state/collaboration/log.md`
+signed entry to the shared communication log `.agent/state/collaboration/log.md`
 during my session-handoff, declaring their packaging boundary. Their
 commit `d9cb54e8` then landed preserving every Jiggly Pebble plan /
-thread / experience / napkin edit exactly as their embryo entry
-promised. The protocol is functioning bidirectionally on day one. 34 files, 760 insertions, 22 deletions.
+thread / experience / napkin edit exactly as their shared-communication-log
+entry promised. The protocol is functioning bidirectionally on day one.
+34 files, 760 insertions, 22 deletions.
 Directive rename (`collaboration.md` → `user-collaboration.md`), new
 sibling `agent-collaboration.md` directive, four canonical rules with
-12 platform-adapter mirrors, `.agent/state/` bootstrap with embryo
-discovery log + first signed entry, executive memory channel-card,
+12 platform-adapter mirrors, `.agent/state/` bootstrap with shared
+communication log + first signed entry, executive memory channel-card,
 13-surface cross-reference sweep (1 deferred — see Coordination event
 below), bidirectional citation between
 `dont-break-build-without-fix-plan.md` and
@@ -58,10 +73,10 @@ archival drift) and MINORs recorded for follow-up. All pre-commit
 gates green on first attempt. **Coordination event**: parallel
 Codex/GPT-5 agent on observability thread held in-flight edits to
 `observability-sentry-otel.next-session.md`; my two sweep edits on
-that file backed out and surfaced in the embryo log for parallel
+that file backed out and surfaced in the shared communication log for parallel
 agent integration. The protocol's first real coordination test —
-applied to itself — passed via the embryo log, not via mechanical
-refusal. **Next**: WS1 (promote embryo to structured claims registry
+applied to itself — passed via the shared communication log, not via mechanical
+refusal. **Next**: WS1 (promote shared signals to structured claims registry
 with `active-claims.json` + `register-active-areas-at-session-open`
 rule) is unblocked.)
 
@@ -85,8 +100,8 @@ Owner direction settled the central design commitment 2026-04-25 in
 discussion: **"knowledge and communication, not mechanical refusals"** —
 mechanical refusals would be routed around at the cost of
 architectural excellence. WS0 (directive rename `collaboration` →
-`user-collaboration` + new `agent-collaboration` directive + embryo
-discovery log + three foundational rules + state-vs-memory split +
+`user-collaboration` + new `agent-collaboration` directive + shared
+communication log + three foundational rules + state-vs-memory split +
 executive memory entry + platform-adapter audit) is the foundation,
 ready to start in a fresh session. No commits made this session for
 this plan — file is untracked in working tree; owner directed cold
@@ -126,7 +141,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule` | 2026-04-24 | 2026-04-25 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
@@ -140,6 +155,32 @@ new sessions add rows; matching platform/model/agent_name updates
 ---
 
 ## Landing Target (per PDR-026)
+
+**Latest session landed as uncommitted documentation/state edits
+(2026-04-26 Codex):**
+
+- renamed the live "embryo" terminology to **shared communication log/system**
+  across the plan, directive, rules, state docs, memory cards, and handoff
+  surfaces;
+- integrated owner direction on platform independence into the protocol plan,
+  `agent-collaboration.md`, `distilled.md`, and the napkin;
+- refreshed the collaboration plan, roadmap, current-plan index, and this
+  thread record from "evidence still accumulating" to "evidence threshold
+  appears met; owner-directed harvest required";
+- superseded the stale `temp-agent-collaboration-continuation.md` note;
+- validation: `jq empty .agent/state/collaboration/active-claims.json` passed;
+  `git diff --check` passed; `pnpm practice:fitness:informational` has only
+  the unrelated/claimed `repo-continuity.md` hard finding remaining;
+  `pnpm markdownlint-check:root` passed once, then a final rerun picked up
+  Sharded's claimed PR-87 plan MD018 issue and was left untouched.
+
+Deferral honesty: the repo-continuity session-handoff update was not written
+because Sharded Stroustrup's active claim
+`d3ac3f74-2110-4da8-a4d0-2e01fa213613` covers
+`.agent/memory/operational/repo-continuity.md`. Future falsifiability check:
+read `.agent/state/collaboration/active-claims.json`; once that claim closes,
+reconcile repo-continuity Active Threads / Deep Consolidation Status against
+this thread record and the shared communication log.
 
 **Prior session landed as artefacts, not a commit**:
 
@@ -237,19 +278,19 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-**Thread paused on owner direction (2026-04-25).** WS0 (`63c66c88`),
-WS1 (`a5d33519`), and WS2 (`293742cd`) have landed; WS3 / WS4 / WS5 are
-**paused-on-evidence** until enough real-world parallel-agent
-coordination data has accumulated to properly direct future effort.
+**Thread paused on owner direction (refreshed 2026-04-26).** WS0
+(`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed; WS3 /
+WS4 / WS5 remain paused for owner review.
 
 **Resumption gate**: at least three real parallel-session coordination
-events using the WS0 + WS1 surfaces. First data point captured 2026-04-25
-(Jiggly Pebble observability session declared explicit non-overlap with
-WS1 surfaces via the embryo log mid-session); two more comparable events
-are the proportionate threshold.
+events using the WS0 + WS1 surfaces. The later 2026-04-25
+shared-communication-log entries appear to satisfy this inspection
+threshold (Fresh Prince explicitly counted event 3; Keen Dahl's
+acknowledgement-with-scope-adjustment recorded event 4). Treat this as
+ready for owner-directed WS5 evidence harvest, not automatic WS3+ resumption.
 
 **While paused, evidence accumulates passively** — every session on this
-repo that uses the embryo log or active-claims registry produces evidence.
+repo that uses the shared communication log or active-claims registry produces evidence.
 No active session is required to "wait."
 
 **Inspection points** (where the evidence count is naturally surveyed):
@@ -264,7 +305,27 @@ owner re-evaluates when evidence threshold is visibly met.
 
 ### Current State
 
-- `pnpm practice:fitness:informational` reports SOFT, with no hard files.
+- `pnpm practice:fitness:informational` reports one hard file:
+  `repo-continuity.md` (lines + chars). That file is currently inside
+  Sharded Stroustrup's active claim, so this handoff did not edit it.
+- `agent-collaboration.md` and `distilled.md` are now soft only after the
+  platform-independence/terminology edits; no caused hard fitness findings
+  remain on the surfaces this session touched.
+- `pnpm markdownlint-check:root` passed after the collaboration edits, then a
+  final rerun failed on Sharded's claimed
+  `pr-87-quality-finding-resolution.plan.md` MD018 issue. Leave that to the
+  observability agent/session unless the owner redirects.
+- `jq empty .agent/state/collaboration/active-claims.json` and
+  `git diff --check` pass.
+- Multi-agent collaboration terminology has been refreshed from "embryo" to
+  "shared communication log/system" on live doctrine surfaces; historical
+  entries retain old terms with a terminology note in the log.
+- Platform independence is now a load-bearing protocol constraint:
+  platform-native agent-team features may help build/inspect, but the
+  repo-owned markdown/JSON/rules/commands/skills/hooks surfaces must operate
+  independently.
+- The WS5 evidence threshold appears met by 2026-04-25 coordination events;
+  WS3+ still does not auto-resume.
 - Grouped commits landed the search-cli smoke DI fix, reviewer metadata update,
   practice/testing doctrine homing, and continuity/plan handoff state.
 - `AGENT.md`, `principles.md`, and `testing-strategy.md` are healthy.
@@ -282,23 +343,32 @@ owner re-evaluates when evidence threshold is visibly met.
 
 ### Blockers / Low-Confidence Areas
 
+- `repo-continuity.md` was not updated by this handoff because it is actively
+  claimed by Sharded Stroustrup; reconcile it after their claim closes.
+- Sharded-owned observability surfaces are dirty in the working tree. Do not
+  absorb or rewrite them from this thread unless the owner explicitly redirects.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
 
 ### Next Safe Step
 
-**No active step on this thread until the resumption gate fires.**
+**No active step on this thread until the owner directs evidence harvest
+or resumption review.**
 
 The thread is paused. The next safe step is to do nothing on it
 proactively. Sessions on other threads that touch the WS0/WS1 surfaces
 will accumulate evidence passively; periodic consolidation passes will
 surface the count.
 
-When the owner directs resumption (after evidence threshold is met),
-the candidates in priority order are:
+Before any owner-directed resumption, reconcile `repo-continuity.md` once
+Sharded Stroustrup's claim on that file closes, because session-handoff could
+not safely update that repo-level surface during this pass.
 
-1. **WS5 evidence harvest** — read all embryo-log entries, claims, and
+When the owner directs resumption or evidence harvest, the candidates in
+priority order are:
+
+1. **WS5 evidence harvest** — read all shared-communication-log entries, claims, and
    napkin observations accumulated since WS1; map them against WS1's
    observation seed (*can simultaneous agents detect each other's claims
    and coordinate via registry, without mechanical refusal?*); document

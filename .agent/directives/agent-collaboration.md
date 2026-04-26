@@ -22,7 +22,7 @@ silently choosing one.
 ## What This Directive Installs
 
 This directive is grown by the [`multi-agent-collaboration-protocol`][p]
-plan. WS0 + WS1 (landed) install: vocabulary, the embryo discovery log,
+plan. WS0 + WS1 (landed) install: vocabulary, the shared communication log,
 the structured claims registry, the JSON Schema authority, the staleness
 archive, and three behavioural rules (`dont-break-build-without-fix-plan`,
 `respect-active-agent-claims`,
@@ -53,6 +53,15 @@ Every rule installed by this directive is a **tripwire**, not a refusal:
 This is the architectural-excellence frame applied to agent-to-agent work.
 Agents in this repo are **reasoning peers**, not constrained subjects.
 Locks are the wrong tool for reasoning peers.
+
+## Platform Independence
+
+Where a collaboration behaviour can be platform agnostic, make it platform
+agnostic. The protocol operates from repo-owned portable surfaces:
+markdown, JSON, rules, commands, skills, hooks, and thin platform adapters.
+Platform-specific agent-team features may help build, inspect, stress test,
+or feed lessons back, but they are optional accelerants, not fallbacks,
+replacements, or runtime dependencies.
 
 ## Working Model
 
@@ -97,7 +106,7 @@ rule operationalises this for cross-agent context.
 ### b. Don't Operate in Another Agent's Area Without Consulting the Surface
 
 "Area" is defined as: any file path, plan, ADR, or workspace currently
-named in another agent's recent embryo-log entry or in an active claim
+named in another agent's recent shared-communication-log entry or in an active claim
 entry in
 [`active-claims.json`](../state/collaboration/active-claims.json).
 
@@ -111,19 +120,19 @@ rule operationalises the consult-and-register half of the same tripwire.
 
 ## Communication Channels
 
-Five channels exist; they have different shapes. Pick the one that fits the
-shape of what you need to communicate.
+Five primary channels plus owner escalation exist; they have different
+shapes. Pick the one that fits what you need to communicate.
 
 | Channel | Shape | Primary use | Forward ref |
 | --- | --- | --- | --- |
 | Thread record `<slug>.next-session.md` | Durable async, narrative, per-thread, multi-session | Continuity across sessions on a single thread | PDR-027 |
-| **Embryo log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
-| Conversation file `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Live exchange between agents on overlap topics needing more structure than the embryo log | WS3 |
+| **Shared communication log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
+| Conversation file `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Live exchange between agents on overlap topics needing more structure than the shared communication log | WS3 |
 | Sidebar | Short-lived focused exchange by mutual agreement | Tighter coordination when async is too slow | WS3 |
 | Reviewer dispatch | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (docs-adr, assumptions, etc.) | already in use |
 | Owner question via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing-information that only the owner can supply | already in use |
 
-Channel-selection rules: the **embryo log is a discovery surface, not a
+Channel-selection rules: the **shared communication log is a discovery surface, not a
 synchronisation surface** — eventually-consistent interleaved appends are
 fine. **Reviewer dispatch is not peer collaboration** — reviewer
 sub-agents are fork-blocking-rejoin within one agent's session and do
@@ -158,8 +167,8 @@ identity concept is introduced.
 The single-agent case (no other agents present) pays the protocol's
 **minimum overhead — one read, one write**. The agent reads
 [`active-claims.json`](../state/collaboration/active-claims.json) and the
-[embryo log](../state/collaboration/log.md); finding no other claims, the
-agent logs *"no other agents present"* to the embryo log, registers its
+[shared communication log](../state/collaboration/log.md); finding no other claims, the
+agent logs *"no other agents present"* to the shared communication log, registers its
 own claim covering the session's intended areas, and proceeds. The single
 write is load-bearing: it is the discovery seed for whatever sequential
 agent comes next. The
@@ -172,7 +181,7 @@ parallel-session coordination overhead beyond the single-write seed.
 
 ## Conversations as Learning-Loop Inputs
 
-Embryo-log entries, claim entries, conversation files (WS3), and sidebar
+Shared-communication-log entries, claim entries, conversation files (WS3), and sidebar
 transcripts (WS3) are durable evidence alongside the napkin. Refinements
 to this directive or to the claim/conversation schemas cite entries from
 those surfaces directly. Lessons graduate via the standard learning-loop;
@@ -213,25 +222,10 @@ instances surface in [`napkin.md`][napkin] and feed
 
 ## Foundation Alignment
 
-This directive operationalises:
-
-- [PDR-026](../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
-  — claims become the per-session granularity for area-of-work commitment
-  (WS1).
-- [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
-  — identity rows in claims reuse the schema already in thread records.
-- [PDR-029](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
-  — Family-A Class-A.2 tripwire pattern: WS1's
-  `register-active-areas-at-session-open` rule is the parallel of the
-  existing `register-identity-on-thread-join` rule.
-- [PDR-011](../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)
-  — capture → distil → graduate → enforce pipeline; files first, code
-  only when files prove the design.
-- ADR-150 (continuity surfaces, session handoff, surprise pipeline) —
-  host-side companion to PDR-011; under
-  `docs/architecture/architectural-decisions/`.
-- [ADR-125][adr-125] — canonical content in `.agent/`; thin platform
-  adapters; platform entrypoints.
+This directive operationalises PDR-026 (per-session landing as claim
+granularity), PDR-027 (identity reuse), PDR-029 (tripwire pattern),
+PDR-011 / ADR-150 (capture → distil → graduate → enforce), and
+ADR-125 (canonical `.agent/` content with thin platform adapters).
 
 ## Cross-references
 
@@ -241,7 +235,7 @@ This directive operationalises:
 - [`.agent/state/README.md`](../state/README.md) — state-vs-memory
   distinction.
 - [`.agent/state/collaboration/log.md`](../state/collaboration/log.md) —
-  embryo discovery log (WS0).
+  shared communication log (WS0).
 - [`active-claims.json`][active-claims] — structured claims registry (WS1).
 - [`active-claims.schema.json`][active-claims-schema] — JSON Schema
   authority (WS1).
@@ -249,7 +243,7 @@ This directive operationalises:
 - [`collaboration-state-conventions.md`][state-conventions] — operational
   guide to lifecycle, schema-field provenance, and trusted-agents threat
   model.
-- [`agent-collaboration-channels.md`][channels-card] — five-channel
+- [`agent-collaboration-channels.md`][channels-card] — communication-channel
   reference card.
 - [`threads/README.md`][threads-readme] — thread convention and
   additive-identity rule.
@@ -263,4 +257,3 @@ This directive operationalises:
 [active-claims-schema]: ../state/collaboration/active-claims.schema.json
 [closed-claims]: ../state/collaboration/closed-claims.archive.json
 [state-conventions]: ../memory/operational/collaboration-state-conventions.md
-[adr-125]: ../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md

@@ -360,18 +360,24 @@ Adjacent:
     doing and *talking* about overlap when it matters
   - protocol is advisory not enforcing: knowledge and communication,
     not mechanical refusals
-- Status: ⏸️ PAUSED-ON-EVIDENCE (2026-04-25)
+  - protocol is platform independent by design: platform-native
+    agent-team features may help build it, but repo-owned markdown/JSON/
+    rules/commands/skills/hooks surfaces must remain sufficient to
+    operate it
+- Status: ⏸️ PAUSED-FOR-OWNER-REVIEW (refreshed 2026-04-26)
 - Landings:
-  - WS0 (vocabulary + embryo discovery log + foundational rules) —
+  - WS0 (vocabulary + shared communication log + foundational rules) —
     `63c66c88` 2026-04-25
   - WS1 (structured claims registry + tripwire rule + stale-claim
     audit + start-right wiring) — `a5d33519` 2026-04-25
   - WS2 (collaboration memory class + founding pattern graduation) —
     `293742cd` 2026-04-25
 - Resumption gate: ≥ 3 real parallel-session coordination events
-  using the WS0 + WS1 surfaces. First data point captured 2026-04-25
-  (Jiggly Pebble observability session declared explicit non-overlap
-  with WS1 surfaces via embryo log).
+  using the WS0 + WS1 surfaces. Later 2026-04-25
+  shared-communication-log entries appear to meet the inspection
+  threshold (Fresh Prince counted event 3; Keen Dahl recorded event
+  4 with scope adjustment). This is ready for owner-directed evidence
+  harvest; it does not auto-resume WS3+.
 - Notes:
   - intentionally outside the numbered phase sequence
   - paused workstreams: WS3 (conversation file + sidebar mechanism),
