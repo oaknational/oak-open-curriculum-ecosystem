@@ -1,6 +1,20 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implemented
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implemented the
+owner-approved deterministic agent identity pass after preserving the
+coordination consolidation as separate history. Added `agent-tools`
+core `deriveIdentity(seed, options?)`, built `agent-identity` CLI,
+workspace/root scripts, unit/E2E tests, docs, PDR-027 amendment,
+start-right and `register-identity-on-thread-join` guidance, and napkin
+archive/update. Personal-email fallback was removed; overrides are
+type-total; platform wrapper installation is deferred. Active claim
+`211f1f4f-7085-47d1-b7d3-09d309807b13` closed explicitly; active claims
+registry is empty. Open follow-up: Phase 8 asks a Claude Code agent to
+review Claude Code/update-config/statusline alignment and cross-platform
+wrapper status for Claude, Codex, Cursor, and any other active agent
+platform.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — implemented
 owner-approved coordination architecture consolidation. Conversation
 schema v1.1.0 now supports sidebars and joint decisions; escalation
 schema and `escalations/` directory exist; start-right, session-handoff,
@@ -229,7 +243,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim` | 2026-04-24 | 2026-04-26 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
 | `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff` | 2026-04-26 | 2026-04-26 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |

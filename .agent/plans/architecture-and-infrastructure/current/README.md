@@ -10,7 +10,7 @@ Current queued work for this collection.
 | P2 | [security-dependency-triage.plan.md](./security-dependency-triage.plan.md) | Dependabot, CodeQL, and outdated dependency triage | Queued |
 | P3 | [doc-architecture-phase-a-immediate.plan.md](./doc-architecture-phase-a-immediate.plan.md) | QA register, fitness function ADR, ADR index, C4 diagrams, layer contract | Queued |
 | P4 | [doc-architecture-phase-b-dependent.plan.md](./doc-architecture-phase-b-dependent.plan.md) | Deduplication, operability practice, trade-off guidance, Practice Core | Queued (blocked by Phase A) |
-| P5 | [agent-identity-derivation.plan.md](./agent-identity-derivation.plan.md) | Portable deterministic agent-identity CLI in `agent-tools/`; cross-platform (Claude Code/Codex/Cursor) | Queued — Phase 0 owner-approval gate on wordlists |
+| P5 | [agent-identity-derivation.plan.md](../active/agent-identity-derivation.plan.md) | Portable deterministic agent-identity CLI in `agent-tools/`; cross-platform (Claude Code/Codex/Cursor) | Active — repo-owned implementation complete; Claude/platform review pending |
 
 Active execution:
 

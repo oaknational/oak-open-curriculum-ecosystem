@@ -1,4 +1,25 @@
 {
   "schema_version": "1.2.0",
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "b6116a31-878e-4a1c-804e-f4fed2e90361",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        }
+      ],
+      "claimed_at": "2026-04-26T19:00:53Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit deterministic agent identity implementation.",
+      "notes": "Pathspecs: identity implementation, identity docs/workflows, napkin/thread records, and collaboration closeout files. Pre-existing staged set contained only the intended agent identity plan rename."
+    }
+  ]
 }

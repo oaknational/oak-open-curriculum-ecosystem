@@ -18,6 +18,26 @@ For each thread, open its next-session record at
 
 **Do not proceed to any other edit until the identity row is written.**
 
+## Derived identity default
+
+When no owner-assigned `agent_name` is already available, derive a
+descriptive default with the portable agent-tools CLI:
+
+```bash
+pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display
+```
+
+Use a real harness session id where the platform exposes one. If the
+platform does not expose a stable session seed, set `OAK_AGENT_SEED`
+explicitly for the session or ask the owner for an override. Do **not**
+fall back to `git config user.email`; personal-email fallback is intentionally
+not part of the identity contract.
+
+`OAK_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for
+memorable owner-assigned names. Derived names from session-id seeds are
+deterministic session display names; persistent PDR-027 identity across
+sessions requires a deliberately persistent seed or explicit override.
+
 ## Why this rule exists
 
 The additive-identity convention in
@@ -86,6 +106,9 @@ Per PDR-027 and
 | `first_session` | Date identity first touched the thread (YYYY-MM-DD). |
 | `last_session` | Date identity most recently touched the thread (YYYY-MM-DD). |
 
+Derived identity is a helper for choosing `agent_name`; it does not change
+the additive-identity rule, the identity key, or historical rows.
+
 ## Self-application
 
 The session that installs this rule MUST itself register an identity row on
@@ -98,6 +121,8 @@ is applicable at install time, not merely documented.
   — thread convention and identity schema (source doctrine).
 - [PDR-027 Threads, Sessions, and Agent Identity](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
   — portable ratification of the additive-identity rule.
+- [`agent-tools/docs/agent-identity.md`](../../agent-tools/docs/agent-identity.md)
+  — deterministic identity derivation CLI and platform wrapper status.
 - [PDR-029 Perturbation-Mechanism Bundle](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
   — Family-A Class-A.2 design; platform-parity requirement.
 - [Pattern: `passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)

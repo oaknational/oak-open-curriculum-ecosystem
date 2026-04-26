@@ -2481,3 +2481,64 @@ Commit hooks passed: Prettier format check, markdownlint, knip,
 depcruise, and cached turbo type-check/lint/test gates. Active claims
 registry is empty again; deterministic identity implementation starts
 after the required napkin update/archive step.
+
+### 2026-04-26T18:41:54Z — `Codex` — deterministic identity implementation claim
+
+No other agents present in the active-claims registry. Opened claim
+`211f1f4f-7085-47d1-b7d3-09d309807b13` for deterministic agent
+identity implementation.
+
+Scope: `agent-tools` identity core/CLI/tests, identity plan status,
+napkin archive/update, PDR-027 amendment, start-right identity
+guidance, `register-identity-on-thread-join`, and
+`agentic-engineering-enhancements` thread record. Reviewer corrections
+are binding for this pass: override semantics must be type-total,
+personal-email fallback is removed, and platform-specific wrapper
+installation is deferred to documented Claude/Codex/Cursor follow-up.
+
+### 2026-04-26T18:58:34Z — `Codex` — deterministic identity implementation closed
+
+Closed active claim `211f1f4f-7085-47d1-b7d3-09d309807b13` after
+implementing the repo-owned deterministic identity pass.
+
+Delivered: `agent-tools` core `deriveIdentity(seed, options?)`,
+`agent-identity` built CLI, unit/E2E tests, root/workspace scripts,
+README and tool docs, PDR-027 amendment, start-right and
+`register-identity-on-thread-join` guidance, napkin archive/update, and
+active plan promotion. Reviewer corrections applied: type-total
+override result, no personal-email fallback, built-artifact E2E proof,
+pure CLI parser/runner with injected environment, narrow public barrel,
+and explicit platform-wrapper deferral.
+
+Validation passed: `pnpm agent-tools:test`, `pnpm --filter
+@oaknational/agent-tools type-check`, `pnpm agent-tools:lint`, `pnpm
+agent-tools:build`, `pnpm agent-tools:test:e2e`, `pnpm doc-gen`,
+targeted `markdownlint`, targeted Prettier check, direct built CLI
+help/display checks, override smoke, and root script smoke. The stricter
+`--exactOptionalPropertyTypes` probe is clean for identity files and
+still reports the pre-existing `codex-reviewer-resolve.ts` optional
+typing issue.
+
+Open follow-up: Phase 8 now instructs a Claude Code agent to review the
+completed work for Claude Code/update-config/statusline alignment and
+cross-platform wrapper status across Claude, Codex, Cursor, and other
+active agent platforms.
+
+### 2026-04-26T19:00:53Z — `Codex` — commit-window for deterministic identity implementation
+
+Opened short-lived `git:index/head` claim
+`b6116a31-878e-4a1c-804e-f4fed2e90361` to stage and commit the
+deterministic agent identity implementation.
+
+Current staged set before opening contained only the intended plan
+rename path:
+`.agent/plans/architecture-and-infrastructure/active/agent-identity-derivation.plan.md`.
+Peer active-claim scan found no other fresh commit-window claim.
+
+Intended pathspecs: `agent-tools` identity source/tests/docs, root and
+workspace package scripts, identity plan move/index updates,
+PDR/start-right/register-identity docs, napkin archive/update, thread
+record, and collaboration closeout records. Gates already passed before
+opening: unit/type/lint/build/E2E/doc-gen, targeted markdownlint,
+targeted Prettier check, practice-fitness informational with napkin
+clean, collaboration JSON parse, and `git diff --check`.

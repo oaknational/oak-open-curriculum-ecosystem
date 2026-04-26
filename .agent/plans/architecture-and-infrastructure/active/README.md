@@ -13,6 +13,7 @@ immediate blocker for Open Public Alpha readiness.
 
 | Plan | Scope | Status |
 |---|---|---|
+| [agent-identity-derivation.plan.md](./agent-identity-derivation.plan.md) | Portable deterministic agent-identity CLI in `agent-tools/` | Repo-owned implementation complete; Phase 8 Claude/platform alignment review pending. |
 | [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | Foundation (steps 1–5 of "Road to Provably Working Sentry") **DONE** 2026-04-17. Maximisation lanes run on the same branch before PR. Branch: `feat/otel_sentry_enhancements`. Child lanes live in [`../../observability/`](../../observability/). |
 
 Build tooling:

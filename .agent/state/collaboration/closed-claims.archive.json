@@ -1938,6 +1938,73 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "211f1f4f-7085-47d1-b7d3-09d309807b13",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": ["agent-tools"]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/**",
+            ".agent/plans/architecture-and-infrastructure/active/agent-identity-derivation.plan.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T18:41:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement deterministic agent identity derivation CLI, docs, workflow guidance, and napkin update after preserving coordination consolidation.",
+      "notes": "Scanned active claims before mutation: registry empty. Reviewer corrections applied: type-total override semantics, no personal-email fallback, wrapper installation deferred to platform-specific follow-up.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T18:58:34Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Deterministic agent identity implementation completed for repo-owned surfaces: core derivation, built CLI, unit/E2E tests, docs, PDR amendment, start-right guidance, napkin rotation, and platform wrapper status. Claude/platform alignment review remains as an explicit follow-up phase.",
+        "evidence": [
+          {
+            "kind": "command_output",
+            "ref": "pnpm agent-tools:test; pnpm --filter @oaknational/agent-tools type-check; pnpm agent-tools:lint; pnpm agent-tools:build; pnpm agent-tools:test:e2e; pnpm doc-gen",
+            "summary": "Agent-tools unit tests, type-check, lint, build, E2E tests, and repo doc generation passed."
+          },
+          {
+            "kind": "command_output",
+            "ref": "node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format display",
+            "summary": "Built CLI emitted the same display identity twice: Gnarled Sprouting Fern."
+          },
+          {
+            "kind": "review",
+            "ref": "assumptions-reviewer, code-reviewer, type-reviewer, test-reviewer, architecture-reviewer-fred",
+            "summary": "Reviewer findings were applied or recorded as out-of-scope follow-up; public barrel was narrowed after architecture review."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t184154z--codex--deterministic-identity-implementation-claim",
+            "summary": "Session-open coordination entry for this implementation pass."
+          }
+        ]
+      }
     }
   ]
 }

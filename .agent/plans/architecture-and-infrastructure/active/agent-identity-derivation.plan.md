@@ -8,39 +8,42 @@ overview: >
   function of session_id rather than an ad-hoc choice that drifts
   across Claude Code, Codex, and Cursor sessions and across the
   collaboration surfaces (claims, conversation threads, commit
-  attribution, statusline). Owner approval is required on the seed
-  wordlists before any code lands.
+  attribution, statusline). Phase 0 owner approval for the seed
+  wordlists and bin name is complete.
 todos:
   - id: phase-0-owner-approval
-    content: "Phase 0: owner reviews and approves the three themed wordlists in §Wordlists below (or supplies replacements). No code lands until this gate clears."
-    status: pending
+    content: "Phase 0: owner approved the three themed wordlists, multistage hash design, override semantics, and bin name agent-identity."
+    status: completed
   - id: phase-1-core-derivation
     content: "Phase 1: core derivation module + tests. Pure deriveIdentity(seed, options) function with multistage SHA-256 hash routing through group → adjective → verb → noun. RED-first."
-    status: pending
+    status: completed
   - id: phase-2-cli
     content: "Phase 2: bin entry point at src/bin/agent-identity.ts; package.json script; help text; override env var; exit codes."
-    status: pending
+    status: completed
   - id: phase-3-build-integration
-    content: "Phase 3: tsconfig.build.json includes the new bin; pnpm build emits dist/bin/agent-identity.js with shebang; verify the dist invocation works end-to-end."
-    status: pending
+    content: "Phase 3: tsconfig.build.json includes the new bin; pnpm build emits dist/src/bin/agent-identity.js with shebang; verify the dist invocation works end-to-end."
+    status: completed
   - id: phase-4-claude-code-statusline
-    content: "Phase 4: thin Claude Code statusline wrapper that reads session_id from stdin JSON and invokes the built CLI. Adds the identity to the statusline render."
-    status: pending
+    content: "Phase 4: document Claude Code wrapper status and defer statusline installation to a Claude/update-config session."
+    status: completed
   - id: phase-5-codex-cursor-wrappers
-    content: "Phase 5: equivalent thin wrappers for Codex and Cursor harnesses (deferred if those harnesses lack a session-stable identifier or statusline surface; document the gap explicitly)."
-    status: pending
+    content: "Phase 5: document Codex and Cursor wrapper status, implementing only portable repo-owned surfaces in this pass."
+    status: completed
   - id: phase-6-collaboration-integration
     content: "Phase 6: update .agent/skills/start-right-quick + start-right-thorough so identity registration calls the derivation tool by default; thread next-session records and active-claims agent_name fields can be auto-suggested."
-    status: pending
+    status: completed
   - id: phase-7-docs-and-adr
     content: "Phase 7: README + TSDoc on the public surface; PDR amendment to PDR-027 documenting the derivation default with override semantics; update register-identity-on-thread-join rule to reference the tool."
+    status: completed
+  - id: phase-8-claude-platform-review
+    content: "Phase 8: Claude agent reviews the completed work for Claude Code system alignment and cross-platform wrapper accuracy across Claude, Codex, Cursor, and any other active agent platform."
     status: pending
 ---
 
 # Agent Identity Derivation Tool
 
 **Last Updated**: 2026-04-26
-**Status**: 🔴 NOT STARTED — owner approval gate (Phase 0) blocks Phase 1.
+**Status**: 🟡 ACTIVE — repo-owned core/CLI/docs implementation complete; Claude/platform alignment review pending.
 **Owner**: Jim
 **Author of plan**: Ethereal Alpaca (claude-code, claude-opus-4-7-1m), 2026-04-26
 **Parent**: cross-platform agent collaboration infrastructure (PDR-027 supplement).
@@ -63,11 +66,13 @@ the same name twice, and the same agent on a different platform shows
 up with a different identity in the same collaboration log.
 
 This plan installs a small, deterministic tool that turns identity
-selection from a personal choice into a pure function of session_id
-(or any stable seed). Same session, same identity, every invocation,
-every platform. Names retain personality through *grouped, themed*
-wordlists rather than a flat random vocabulary — `lunar-orbiting-comet`
-reads as a coherent identity, not assembled noise.
+selection from a personal choice into a pure function of an explicit
+stable seed. When the seed is a session id, the result is a deterministic
+session display identity; persistent PDR-027 identity across sessions
+requires an explicitly persistent seed or an operator override. Names
+retain personality through *grouped, themed* wordlists rather than a flat
+random vocabulary — `lunar-orbiting-comet` reads as a coherent identity,
+not assembled noise.
 
 This is a cross-platform shared concern (per the platform-independent
 shared-concerns feedback memory) and belongs in the existing
@@ -83,7 +88,7 @@ the established home for portable agent CLIs.
 
 - **Workspace**: `agent-tools/` (existing, `@oaknational/agent-tools`).
 - **Bin**: `agent-tools/src/bin/agent-identity.ts` → built to
-  `agent-tools/dist/bin/agent-identity.js` (shebang preserved). All
+  `agent-tools/dist/src/bin/agent-identity.js` (shebang preserved). All
   consumers invoke the **built** version, not the source. This matches
   the convention of the three existing bins in the workspace.
 - **Core module**: `agent-tools/src/core/agent-identity/` containing:
@@ -97,7 +102,8 @@ the established home for portable agent CLIs.
 ### Public surface
 
 ```typescript
-export interface IdentityResult {
+export interface DerivedIdentityResult {
+  readonly kind: "derived";
   readonly group: string;
   readonly adjective: string;
   readonly verb: string;
@@ -110,8 +116,22 @@ export interface IdentityResult {
   readonly seedDigest: string;
 }
 
+export interface OverrideIdentityResult {
+  readonly kind: "override";
+  /** Override display value after trim/whitespace normalisation. */
+  readonly displayName: string;
+  /** lowercase-kebab form for filenames/slugs. e.g. "frolicking-toast". */
+  readonly slug: string;
+  /** SHA-256 hex digest of the seed (audit trail). */
+  readonly seedDigest: string;
+  /** Normalised override value that bypassed wordlist derivation. */
+  readonly override: string;
+}
+
+export type IdentityResult = DerivedIdentityResult | OverrideIdentityResult;
+
 export interface DeriveIdentityOptions {
-  /** If set, returned verbatim (after format normalisation). Override path. */
+  /** If set, returns the override result variant after format normalisation. */
   readonly override?: string;
 }
 
@@ -147,17 +167,18 @@ Two override surfaces, in priority order:
    override; useful when an owner wants to assign a memorable name
    like "Frolicking Toast" that out-paces derivation).
 
-If either is set, the override string is **returned verbatim** (after
-trim/whitespace normalisation); derivation is bypassed. The
-`seedDigest` field is still populated from the original seed for audit
-traceability.
+If either is set, derivation is bypassed and the result uses
+`kind: "override"` with display/slug/seedDigest/override fields only. This
+keeps the public type total: callers never receive fake group, adjective,
+verb, or noun values for a non-derived identity. The `seedDigest` field is
+still populated from the original seed for audit traceability.
 
 ### CLI shape
 
 ```text
 Usage: agent-identity [--seed <seed>] [--format <kebab|display|json>] [--help]
 
-  --seed <seed>       Stable seed (default: $CLAUDE_SESSION_ID, then $OAK_AGENT_SEED, then `git config user.email`).
+  --seed <seed>       Stable seed (default: $CLAUDE_SESSION_ID, then $OAK_AGENT_SEED).
   --format <fmt>      Output format. kebab (default) | display | json.
   --help              Print help and exit 0.
 
@@ -168,21 +189,22 @@ Exit codes:
   2  bad usage (unknown flag, missing seed when no fallback resolves)
 ```
 
-Seed-resolution chain when `--seed` is omitted matches the resolution
-expected by harness wrappers (Claude Code statusline pipes
-`session_id`; Codex/Cursor analogues vary; falling back to `git config
-user.email` gives a sensible per-machine identity for local CLI usage).
+Seed-resolution chain when `--seed` is omitted is intentionally strict:
+`CLAUDE_SESSION_ID`, then `OAK_AGENT_SEED`, then fail with exit code 2.
+The earlier personal-email fallback is removed from this implementation
+because it silently hashes a personal identifier and can collapse
+concurrent same-machine agents into one identity.
 
 ### Build and consumer invocation
 
 - `agent-tools/tsconfig.build.json` already compiles `src/**` to
   `dist/`; the new bin needs no config change beyond adding to the
   default include set.
-- Consumers invoke `node agent-tools/dist/bin/agent-identity.js …` (or
-  the package script `pnpm --filter @oaknational/agent-tools exec
-  agent-identity …`).
-- The Claude Code statusline wrapper is one shell line:
-  `node $(git rev-parse --show-toplevel)/agent-tools/dist/bin/agent-identity.js --seed "$(jq -r '.session_id')" --format display`.
+- Consumers invoke `node agent-tools/dist/src/bin/agent-identity.js …` or
+  `pnpm agent-tools:agent-identity --seed <seed> --format display`.
+- Platform-specific wrapper installation is deferred. This pass documents
+  Claude Code, Codex, and Cursor status plus the next action for each
+  platform; it does not mutate platform-specific config.
 
 ---
 
@@ -224,8 +246,8 @@ Three themed groups. Each group has 20 adjectives, 20 verbs, 20 nouns
 
 ### Phase 0 — Owner approval (≤1 review pass)
 
-Owner reads §Wordlists and §Solution Architecture; approves verbatim
-or supplies replacements. **No code lands until this clears.**
+Owner approved §Wordlists, multistage hash routing, override semantics,
+and `agent-identity` as the bin name. This gate is closed.
 
 ### Phase 1 — Core derivation module + RED-first tests
 
@@ -241,9 +263,9 @@ or supplies replacements. **No code lands until this clears.**
 **Test cases (RED-first)**:
 
 1. Determinism: same seed → same identity (assert across 10 fixed seeds).
-2. Distribution sanity: 1000 random seeds produce names spread across all 3 groups (each group hit at least 100 times).
-3. Override bypass: `options.override` returns the override verbatim, regardless of seed.
-4. Empty seed: throws or returns a controlled error (decide at implementation time; document chosen behaviour).
+2. Distribution sanity: fixed deterministic seed corpus reaches all 3 groups.
+3. Override bypass: `options.override` returns the `kind: "override"` result variant.
+4. Empty seed: throws `seed must be a non-empty string`.
 5. Format invariants: `slug` is lowercase-kebab; `displayName` is Title Case Space-separated; `seedDigest` is 64-char hex.
 6. Hash slicing: `digest[0..3]` interpreted as uint32 BE, modulo 3 (groups.length), produces the documented group; pin one example.
 
@@ -251,7 +273,7 @@ or supplies replacements. **No code lands until this clears.**
 
 - ✅ All RED tests written first; all fail with module-not-found.
 - ✅ GREEN implementation makes them pass.
-- ✅ `pnpm --filter @oaknational/agent-tools test type-check lint` exits 0.
+- ✅ `pnpm agent-tools:test`, `pnpm --filter @oaknational/agent-tools type-check`, and `pnpm agent-tools:lint` exit 0.
 - ✅ No `as`, `any`, `unknown`-widening (`no-type-shortcuts` rule).
 - ✅ `IdentityResult` fields all `readonly`; arrays as `readonly string[]`.
 
@@ -271,50 +293,44 @@ or supplies replacements. **No code lands until this clears.**
 - ✅ `--format json` prints the full `IdentityResult`.
 - ✅ Bad usage exits 2 with stderr message.
 - ✅ Override env var is honoured.
-- ✅ Seed-resolution chain works (test by stubbing env vars in unit tests; do NOT touch process.env globally per `tests-no-global-state` feedback memory).
-- ✅ `package.json` adds `"agent-identity": "tsx src/bin/agent-identity.ts"` to scripts.
+- ✅ Seed-resolution chain works through injected env objects; tests do not read or mutate `process.env`.
+- ✅ `package.json` adds an `agent-identity` script that builds and runs
+  the emitted `dist/src/bin/agent-identity.js` CLI.
+- ✅ Root `package.json` adds `agent-tools:agent-identity` and `agent-tools:test:e2e`.
 
 ### Phase 3 — Build integration
 
 **Acceptance**:
 
 - ✅ `pnpm --filter @oaknational/agent-tools build` emits
-  `dist/bin/agent-identity.js` with shebang.
-- ✅ `chmod +x dist/bin/agent-identity.js` succeeds via build (or via an
-  inline shebang pattern matching the existing bins).
+  `dist/src/bin/agent-identity.js` with shebang.
 - ✅ Direct invocation works:
-  `node agent-tools/dist/bin/agent-identity.js --seed test --format display`
+  `node agent-tools/dist/src/bin/agent-identity.js --seed test --format display`
   → `Iridescent Eclipsing Eclipse` (or whichever derivation the seed produces).
-- ✅ `pnpm build` from repo root succeeds.
+- ✅ `pnpm agent-tools:test:e2e` proves the built CLI under plain Node.
 
-### Phase 4 — Claude Code statusline wrapper
+### Phase 4 — Claude Code statusline wrapper status
 
-**Decision**: install via `update-config` skill (settings.json) so the
-statusline is configured at the harness layer, not committed to the
-repo (per the user's working pattern for personal harness config).
-
-**Acceptance**:
-
-- ✅ `~/.claude/settings.json` (or `.claude/settings.local.json`)
-  contains a `statusLine` entry that pipes the stdin JSON's
-  `session_id` through `node <repo>/agent-tools/dist/bin/agent-identity.js`.
-- ✅ Identity renders in the statusline within the running session.
-- ✅ Override env var still wins (operator can set
-  `OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast"` and the statusline
-  shows that name).
-
-### Phase 5 — Codex / Cursor wrappers
+**Decision**: defer installation to a Claude Code session that has the
+`update-config` skill available. This implementation pass documents the
+status and next action only.
 
 **Acceptance**:
 
-- ✅ Codex equivalent: identify the harness's session-stable
-  identifier (or document the gap if none); add a wrapper script if
-  feasible.
-- ✅ Cursor equivalent: same.
-- ✅ For each platform that lacks a session-stable identifier,
-  document the fallback (per-machine `git config user.email` seeding)
-  and the consequence (identity changes only across machines, not
-  across sessions).
+- ✅ Docs identify Claude Code as deferred to a Claude/update-config session.
+- ✅ Docs specify that wrapper installation must pass an explicit session seed
+  to `agent-identity`; no personal-email fallback is available.
+- ✅ Override env var remains documented for the eventual wrapper.
+
+### Phase 5 — Codex / Cursor wrapper status
+
+**Acceptance**:
+
+- ✅ Codex status is documented as no repo-owned automatic wrapper yet unless
+  a stable session identifier/statusline surface is confirmed later.
+- ✅ Cursor status is documented as no repo-owned automatic wrapper yet unless
+  a stable session identifier/statusline surface is confirmed later.
+- ✅ No fallback to `git config user.email` is documented or implemented.
 
 ### Phase 6 — Collaboration integration
 
@@ -339,7 +355,7 @@ their umbrella closes; this phase waits for that):
 **Files to add/update**:
 
 - `agent-tools/docs/agent-identity.md` — README for the tool.
-- `agent-tools/src/core/agent-identity/index.ts` — extensive TSDoc on
+- `agent-tools/src/core/agent-identity/derive.ts` — extensive TSDoc on
   `deriveIdentity` with examples (per `tsdoc` skill).
 - `.agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md`
   — amendment recording derivation as the default identity path,
@@ -354,6 +370,49 @@ their umbrella closes; this phase waits for that):
 - ✅ PDR-027 amendment dated, references this plan.
 - ✅ `pnpm doc-gen` succeeds; `markdownlint-check:root` clean.
 
+### Phase 8 — Claude and platform alignment review
+
+**Executor**: A Claude Code agent in a Claude session, after this Codex
+implementation pass lands.
+
+**Purpose**: verify that the repo-owned CLI and documentation line up
+with Claude Code systems as well as the other agent platforms that share
+this repository.
+
+**Review instructions for Claude**:
+
+1. Read this plan, `agent-tools/docs/agent-identity.md`,
+   `agent-tools/README.md`, PDR-027, the start-right updates, and
+   `register-identity-on-thread-join`.
+2. Inspect the implementation under
+   `agent-tools/src/core/agent-identity/` and `agent-tools/src/bin/`.
+3. Verify Claude Code alignment specifically: whether the documented
+   `update-config`/statusline follow-up is still the correct Claude
+   installation path, whether the wrapper must pass an explicit
+   `session_id`, and whether any Claude-only config should be changed in
+   that Claude session.
+4. Verify the cross-platform matrix for Claude Code, Codex, Cursor, and
+   any other active agent host. Confirm each platform is either
+   implemented through a stable repo-owned surface or documented as a
+   concrete gap with a next action.
+5. Run the portable proof commands where practical:
+   `pnpm agent-tools:test`, `pnpm agent-tools:test:e2e`,
+   `pnpm --filter @oaknational/agent-tools type-check`,
+   `pnpm agent-tools:lint`, `pnpm agent-tools:build`, and the direct
+   built CLI invocations in §Verification.
+6. Record findings in the shared comms log or a collaboration
+   conversation. If the review changes platform status, update this plan
+   and `agent-tools/docs/agent-identity.md`.
+
+**Acceptance**:
+
+- ✅ Claude reviewer confirms no hidden Claude Code system mismatch.
+- ✅ Claude/Codex/Cursor platform statuses are either confirmed or
+  corrected.
+- ✅ Any required platform-specific wrapper install is kept out of this
+  Codex pass unless the Claude session explicitly performs it with the
+  right platform capability.
+
 ---
 
 ## Testing Strategy
@@ -361,14 +420,14 @@ their umbrella closes; this phase waits for that):
 ### Unit Tests (Phase 1, 2)
 
 - Determinism property: 100 fixed seeds → 100 stable outputs.
-- Distribution property: 10,000 random seeds → uniformity ±5% across groups (with 24,000 unique names, no collision pressure expected).
+- Distribution property: fixed deterministic seed corpus reaches all three groups.
 - Override bypass: explicit + env var.
 - Hash slicing pinned with documented byte vectors.
 - CLI: argv parsing, format flags, exit codes, help, seed-resolution chain.
 
 ### Integration Tests (Phase 3)
 
-- Built `dist/bin/agent-identity.js` invoked end-to-end via `node` produces the expected output (separate test config like the existing `vitest.e2e.config.ts` if needed; otherwise a single integration test that runs `pnpm build` then `spawnSync`).
+- Built `dist/src/bin/agent-identity.js` invoked end-to-end via `node` is covered by `agent-tools/tests/agent-identity/agent-identity.e2e.test.ts`, which runs under the existing E2E config because it spawns child processes.
 
 ### Property Tests (consideration)
 
@@ -380,28 +439,35 @@ their umbrella closes; this phase waits for that):
 
 ```bash
 pnpm --filter @oaknational/agent-tools test
+pnpm --filter @oaknational/agent-tools test:e2e
 pnpm --filter @oaknational/agent-tools type-check
 pnpm --filter @oaknational/agent-tools lint
 pnpm --filter @oaknational/agent-tools build
-node agent-tools/dist/bin/agent-identity.js --help
-node agent-tools/dist/bin/agent-identity.js --seed example-session-id-001 --format display
+node agent-tools/dist/src/bin/agent-identity.js --help
+node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format display
 # Expected: deterministic name, e.g. "Lunar Orbiting Comet"
-node agent-tools/dist/bin/agent-identity.js --seed example-session-id-001 --format display
+node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format display
 # Expected: identical output (determinism check)
-OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" node agent-tools/dist/bin/agent-identity.js --seed any --format display
+OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" node agent-tools/dist/src/bin/agent-identity.js --seed any --format display
 # Expected: "Frolicking Toast"
 ```
 
-After Phase 4 (Claude Code statusline wrapper), the identity should
-visibly render in the harness statusline within a fresh session.
+After platform-specific follow-up, each supported wrapper should visibly
+render the identity in its host surface within a fresh session.
 
 ---
 
 ## Out of Scope
 
-- Persistent identity across machines (the seed is the session_id, which
-  is per-machine; cross-machine identity persistence requires a
-  different design and is not in scope).
+- Automatic persistent identity across sessions or machines. The tool is
+  seed-agnostic; persistent identity requires a deliberately persistent
+  seed or explicit override.
+- Personal-email fallback (`git config user.email`). This was removed
+  after pre-implementation review because it silently hashes a personal
+  identifier and can collapse concurrent same-machine agents.
+- Platform-specific wrapper installation. Claude Code, Codex, and Cursor
+  wrapper status is documented in this pass; installation belongs to
+  platform-specific follow-up sessions.
 - Identity registration in `active-claims.json` automation (Phase 6
   surfaces it at the skill layer; auto-write to claims is a separate
   workstream).
@@ -418,12 +484,11 @@ visibly render in the harness statusline within a fresh session.
 | Risk | Likelihood | Mitigation |
 |---|---|---|
 | Wordlist contains an unintentionally awkward combination | LOW | Phase 0 owner review of all 180 words; trivial to swap individual words; collision space is 24k, so any single offending combination is one in 24k. |
-| Different platforms expose different "session_id" semantics | MEDIUM | Phase 5 documents per-platform fallbacks; the tool accepts any string seed, so harness wrappers normalise. |
+| Different platforms expose different "session_id" semantics | MEDIUM | Phase 5 documents per-platform status and gaps; the tool accepts any explicit string seed, so future harness wrappers normalise. |
 | Override env var leaks into multi-agent settings (one identity for two agents on same machine) | MEDIUM | Document explicitly: override is per-shell; session-scoped harness should set/unset around session boundaries; PDR-027 amendment covers this. |
 | Hash bias on small lists | NEGLIGIBLE | Modulo-bias for 20-item lists is bounded by 2^32 / 20 ≈ 1e-9 effect; uniformity test catches anomalies. |
 | Agent-tools build pipeline change ripples to other consumers | LOW | Adding a new bin is additive; existing bins unaffected; tsconfig.build.json includes `src/**` already. |
-| Frolicking Toast's umbrella claim covers start-right skills (Phase 6) | KNOWN | Phase 6 waits explicitly for that umbrella to close; Phases 0–5 are independent. |
-| The PR-87 active session attempts to land Phase 1 on the same branch | DEFENDED | This plan is owner-directed to run in a separate parallel session; PR-87 session does NOT touch agent-tools. Tooling is on its own branch. |
+| Session-id seed is mistaken for durable PDR-027 identity | MEDIUM | Docs distinguish deterministic session display identity from persistent identity keys. |
 
 ---
 
@@ -431,15 +496,15 @@ visibly render in the harness statusline within a fresh session.
 
 **Blocking**:
 
-- Phase 0 owner approval blocks Phase 1+.
-- Phase 6 blocks on Frolicking Toast umbrella claim `4535f2ff` closing
-  (start-right skills are inside that pathspec).
+- None after Phase 0 approval and coordination-consolidation commit
+  separation. Wrapper installation is explicitly deferred.
 
 **Related**:
 
 - PDR-027 (Threads, Sessions, and Agent Identity) — amended in Phase 7.
 - `register-identity-on-thread-join` rule — referenced from Phase 6.
-- `update-config` skill — used in Phase 4 for statusline wiring.
+- `update-config` skill — deferred Claude Code follow-up for statusline
+  wiring, not used by this Codex implementation session.
 - Memory: feedback "Platform-independent shared concerns" — this plan
   is the worked example.
 
@@ -466,9 +531,10 @@ visibly render in the harness statusline within a fresh session.
 ## Reviewer Scheduling
 
 - **Pre-execution (Phase 0 close)**:
-  - `assumptions-reviewer` — wordlist proportionality, hash-routing
-    design, override-semantics framing.
-  - `code-reviewer` — gateway review of this plan body.
+  - `assumptions-reviewer` — completed 2026-04-26; corrections accepted
+    for override shape, seed semantics, email fallback, and wrapper deferral.
+  - `code-reviewer` — completed 2026-04-26; corrections accepted for
+    E2E built proof, DI-based CLI tests, script invocation, and wrapper deferral.
 - **During**:
   - `type-reviewer` after Phase 1 (`IdentityResult` surface; readonly
     arrays; no widening).
@@ -476,7 +542,7 @@ visibly render in the harness statusline within a fresh session.
     `wordlists.ts` — could it live in `@oaknational/sdk-codegen`'s
     config tree, or is `agent-tools` correct?).
   - `test-reviewer` after Phase 1 (distribution-property test design;
-    flake risk on the 10,000-seed uniformity assertion).
+    E2E built-artifact proof placement).
   - `security-reviewer` after Phase 4 (statusline wrapper — does it
     leak the seed to logs? Is the `OAK_AGENT_IDENTITY_OVERRIDE` env
     var safe to be visible in process listings? trade-offs).

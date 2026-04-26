@@ -3,8 +3,9 @@
 This workspace is the TypeScript home for agent operational CLIs.
 AGENT.md links here for the CLI catalogue instead of repeating the commands.
 
-It provides three operator tools:
+It provides four operator tools:
 
+- `agent-identity`: derive deterministic agent display names from explicit stable seeds.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -26,10 +27,33 @@ From repo root:
 pnpm agent-tools:build
 pnpm agent-tools:lint
 pnpm agent-tools:test
+pnpm agent-tools:test:e2e
+pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
 pnpm agent-tools:codex-reviewer-resolve code-reviewer
+```
+
+## `agent-identity` quick reference
+
+- `--seed <seed>` — explicit stable seed. If omitted, the CLI reads
+  `CLAUDE_SESSION_ID`, then `OAK_AGENT_SEED`.
+- `--format kebab|display|json` — output slug, display name, or full result.
+- `OAK_AGENT_IDENTITY_OVERRIDE` — bypasses wordlist derivation with a
+  type-total override result.
+
+There is no `git config user.email` fallback. Platform wrappers must pass an
+explicit session seed, and current Claude/Codex/Cursor wrapper status is
+documented in [docs/agent-identity.md](docs/agent-identity.md).
+
+Examples:
+
+```bash
+pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
+pnpm agent-tools:build
+node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format json
+OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity --seed any --format display
 ```
 
 ## `claude-agent-ops` quick reference
@@ -95,3 +119,4 @@ pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json
 - `pnpm agent-tools:build`
 - `pnpm agent-tools:lint`
 - `pnpm agent-tools:test`
+- `pnpm agent-tools:test:e2e`

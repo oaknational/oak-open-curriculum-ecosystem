@@ -50,6 +50,8 @@
     "agent-tools:build": "pnpm --filter @oaknational/agent-tools build",
     "agent-tools:lint": "pnpm --filter @oaknational/agent-tools lint",
     "agent-tools:test": "pnpm --filter @oaknational/agent-tools test",
+    "agent-tools:test:e2e": "pnpm --filter @oaknational/agent-tools test:e2e",
+    "agent-tools:agent-identity": "pnpm --filter @oaknational/agent-tools agent-identity",
     "agent-tools:claude-agent-ops": "pnpm --filter @oaknational/agent-tools claude-agent-ops",
     "agent-tools:cursor-session-from-claude-session": "pnpm --filter @oaknational/agent-tools cursor-session-from-claude-session",
     "agent-tools:codex-reviewer-resolve": "pnpm --filter @oaknational/agent-tools codex-reviewer-resolve",

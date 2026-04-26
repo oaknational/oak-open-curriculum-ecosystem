@@ -27,6 +27,23 @@ rather than passive guidance).
 
 ## Amendment Log
 
+- **2026-04-26 — deterministic derived identity default.**
+  The repo now provides `pnpm agent-tools:agent-identity` as the
+  portable default for choosing an `agent_name` when no
+  owner-assigned name is already available. The tool derives a
+  deterministic display name from an explicit seed and keeps override
+  results type-total (`kind: "override"`, not fake derived word slots).
+
+  A session-id seed produces a deterministic **session display
+  identity**. It does not by itself prove persistent identity across
+  sessions; persistent identity requires a deliberately persistent
+  seed or explicit owner/operator override. Historical identity rows,
+  claims, commits, and conversation records remain as written. The
+  personal-email fallback originally considered for local convenience
+  is rejected: `git config user.email` is not a seed source because it
+  can expose or hash a personal identifier and can collapse concurrent
+  same-machine agents into one identity.
+
 - **2026-04-21 Session 5 — workstream layer retired as an
   operational-memory surface (Pippin / cursor-opus;
   owner-ratified TIER-2 simplification of the `memory-feedback`
@@ -204,6 +221,21 @@ Three corollaries:
    still satisfies the schema. Owner may assign a name at any
    time; once assigned, the name becomes part of the identity key
    for subsequent resumption matching.
+
+### Derived identity default
+
+When a session needs a descriptive default `agent_name`, use the
+portable agent-tools CLI with an explicit stable seed:
+
+```bash
+pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display
+```
+
+Seed precedence is explicit `--seed`, then `CLAUDE_SESSION_ID`,
+then `OAK_AGENT_SEED`; missing seed is a bad-usage error. There is
+no personal-email fallback. The derived value helps fill
+`agent_name`; it does not change the additive-identity rule, the
+identity key, or the historical record.
 
 ### Thread scope and the landing commitment
 

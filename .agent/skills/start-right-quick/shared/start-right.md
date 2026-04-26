@@ -88,6 +88,12 @@ open decision-thread and escalation files before deciding whether to
 proceed, ping, append a decision thread, request a sidebar, record a
 joint decision, open or close an escalation, or ask the owner.
 
+When registering your PDR-027 identity row, use an existing owner-assigned
+`agent_name` if one matches. Otherwise derive a session display name with
+`pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display`,
+or set `OAK_AGENT_SEED` explicitly when the platform does not expose a stable
+session id. Do not use personal-email fallback.
+
 Before staging or committing, use the always-active commit skill. It
 checks for a fresh `git:index/head` commit-window claim, opens one if the
 window is clear, and closes it after the commit attempt with the SHA or

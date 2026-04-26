@@ -40,6 +40,13 @@ append/open a decision thread, request a sidebar, record a joint
 decision, open or close an escalation, or ask the owner). Then register
 your own claim covering the areas you intend to touch.
 
+When writing the thread identity row, prefer an existing owner-assigned
+`agent_name` if it matches this identity. If no name is available, derive a
+session display name with
+`pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display`,
+or set `OAK_AGENT_SEED` explicitly when the platform does not expose a stable
+session id. Do not use personal-email fallback.
+
 Before staging or committing, use the always-active commit skill. It
 checks for a fresh `git:index/head` commit-window claim, opens one if the
 window is clear, and closes it after the commit attempt with the SHA or
