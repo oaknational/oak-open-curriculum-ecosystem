@@ -40,6 +40,60 @@ continuity unit).
 
 ## Amendment Log
 
+- **2026-04-26 amendment — owner-directed pause is a load-bearing
+  planning move (Frolicking Toast / claude-code / claude-opus-4-7-1m;
+  agentic-engineering-enhancements thread; consolidation graduation
+  pass).** When an owner pauses a multi-workstream plan partway
+  through to accumulate evidence rather than forcing forward motion,
+  the pause **is** the correct execution. The reflexive "next
+  workstream is next" assumption can suppress the simpler answer:
+  stop and let evidence accumulate. The pause captures the practice's
+  first question — *could it be simpler without compromising
+  quality?* — at the workstream-sequencing level, not just within a
+  single workstream.
+
+  An owner-directed pause is not a deferral and does not need to
+  satisfy the deferral-honesty discipline (Session 6 amendment); it
+  is a positive landing of the pause-decision artefact. The pause
+  itself is the landing target.
+
+  When pausing, touch five-to-six surfaces consistently:
+
+  1. The source plan's frontmatter `todos` and `## Status` section
+     — mark the paused workstream `status: paused` with the
+     pause-reason in `note:`.
+  2. The thread's next-session record — record the pause as the
+     session's landing in the latest refresh block.
+  3. `repo-continuity.md § Active Threads` and `§ Next Safe Step`
+     — the paused workstream is the next safe step's preface, not
+     its blocker.
+  4. The thread's roadmap — mark the workstream as adjacent /
+     paused so future agents see it as queued, not abandoned.
+  5. The current-plans README (if the plan was promoted to
+     `current/`) — reflect the pause in the README's status line.
+  6. (If applicable) The shared communication log — name the
+     pause for cross-agent visibility.
+
+  Five-to-six surfaces per pause is high enough to warrant a named
+  ritual if recurrent; if the pattern fires three times across the
+  Practice network, consider extracting a `workstream-pause` skill
+  or command. Until that threshold, the per-pause workflow is
+  documented here.
+
+  Empirical instances:
+  1. 2026-04-25 owner-directed WS1 pause on the multi-agent
+     collaboration protocol after Wilma's adversarial review
+     surfaced framing-level concerns. The pause produced a
+     better protocol than mechanical absorption of the findings
+     would have. Recorded in PDR-015's 2026-04-25 amendment as a
+     reviewer-discipline instance; the same evidence applies here
+     as a planning-discipline instance.
+
+  No semantic conflict with the per-thread-per-session commitment
+  (2026-04-21 amendment): the pause IS the session's landing for
+  that thread. The session committed to landing a workstream and
+  landed the decision-not-to-proceed instead.
+
 - **2026-04-21** (Accepted): landing commitment clarified as
   **per-thread-per-session**. A session with more than one active thread in scope
   still commits to landing ONE thread's target; the other

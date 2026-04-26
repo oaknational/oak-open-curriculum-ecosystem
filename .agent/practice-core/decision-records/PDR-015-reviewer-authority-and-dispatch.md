@@ -26,6 +26,67 @@ against each other).
 
 ## Amendment Log
 
+- **2026-04-26 amendment — parallel reviewer dispatch and structural-
+  then-pre-landing review phasing (Frolicking Toast / claude-code /
+  claude-opus-4-7-1m; agentic-engineering-enhancements thread;
+  consolidation graduation pass).** Two dispatch-discipline
+  refinements promoted from observed evidence:
+
+  1. **Parallel reviewer dispatch is the default for substantive
+     plans.** For plans introducing new architectural surfaces
+     (directories, schemas, lifecycle mechanisms) and for substantive
+     code-shaping commits, dispatch reviewers in parallel rather than
+     sequentially. Different reviewer roles see different things —
+     adversarial structural reviewers (Wilma family) catch boundary,
+     threat-model, and lifecycle gaps; pre-landing reviewers
+     (`docs-adr-reviewer`, `assumptions-reviewer`) catch substance-
+     level errors that survive structural review (broken paths
+     inherited from imprecise plan-body glosses; markdownlint
+     violations; unobservable tripwires); vendor-specialist reviewers
+     catch vendor-contract violations that in-house reviewers
+     structurally cannot.
+
+     Empirical evidence: WS1 of the multi-agent collaboration
+     protocol (2026-04-25) used four parallel lenses to produce four
+     orthogonal finding sets; sequential dispatch would have been
+     ~4× slower for the same outcome. The 2026-04-26 Tier 2
+     fingerprinting commit ran code-reviewer + sentry-reviewer +
+     test-reviewer in parallel; sentry-reviewer caught a MAJOR
+     vendor-contract violation that the other two passed with only
+     NIT/MINOR findings.
+
+  2. **Two-phase review for substantive plans: structural review
+     shapes the design; pre-landing review validates the
+     implementation faithfully embodies the design.** The existing
+     three-phase lifecycle alignment (plan-time / mid-cycle / close,
+     2026-04-21 amendment) layers on top of this two-phase review-
+     class distinction:
+     - Structural review (Wilma family, architecture-reviewer-*)
+       fires at plan-time and at major inflection points; its lens
+       is "is the boundary right?" / "is the threat model right?"
+     - Pre-landing review (`code-reviewer`, `test-reviewer`,
+       `docs-adr-reviewer`, `assumptions-reviewer`, vendor
+       specialists) fires at close; its lens is "does the
+       implementation faithfully embody the design that structural
+       review approved?" Pre-landing review can find substance-
+       level errors that survived structural review (broken
+       citations, vendor-contract violations, missing test
+       coverage) and that no other phase will catch.
+
+     Skipping either review class leaves a structural gap — running
+     pre-landing review without prior structural shaping invites
+     mechanical absorption of findings against an unsound design
+     (the very failure the 2026-04-25 assumption-challenge amendment
+     names); running structural review without later pre-landing
+     review ships designs whose implementation may diverge silently.
+
+  No semantic weakening of any existing rule. The amendments codify
+  what 2026-04-25 WS1 and 2026-04-26 Tier 2 evidence already
+  demonstrated. Cross-references added to PDR-033 (vendor-doc
+  review for unknown unknowns), which makes vendor-specialist
+  reviewers a routine member of the parallel dispatch set when
+  third-party platforms are involved.
+
 - **2026-04-25 amendment — assumption-challenge / discussion-before-
   absorption gate (Fresh Prince / claude-code / claude-opus-4-7-1m;
   agentic-engineering-enhancements thread; owner-ratified during

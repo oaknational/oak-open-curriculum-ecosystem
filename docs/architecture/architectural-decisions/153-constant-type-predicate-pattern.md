@@ -1,11 +1,30 @@
 # ADR-153: Constant-Type-Predicate Pattern
 
 **Status**: Accepted
-**Date**: 2026-04-03
+**Date**: 2026-04-03 (authored); **2026-04-26 amendment** (call-site
+uptake; see Amendment Log)
 **Related**: [ADR-031](031-generation-time-extraction.md),
 [ADR-034](034-system-boundaries-and-type-assertions.md) (boundary model;
 superseded by ADR-038 on the assertion question),
 [ADR-038](038-compilation-time-revolution.md)
+
+## Amendment Log
+
+- **2026-04-26 amendment — call-site uptake clause** (Frolicking Toast
+  / `claude-code` / `claude-opus-4-7-1m`; agentic-engineering-
+  enhancements thread; consolidation graduation pass). The original
+  pattern named four steps (constant, type, predicate, optional
+  `satisfies`) but did not require call-site uptake. The half-applied
+  state — constant exists, type exists, predicate exists, but call
+  sites still use magic-string literals — leaves the runtime constant
+  as dead code by `pnpm knip`'s standards and triggers
+  `@typescript-eslint/no-unused-vars` with "is assigned a value but
+  only used as a type". The lint rule is not opposing the pattern; it
+  is catching the half-applied state.
+
+  Step 5 added below: every call site MUST use the constant rather
+  than a magic-string literal. New §5 in the Decision area; existing
+  steps unchanged.
 
 ## Context
 
@@ -43,6 +62,17 @@ four steps:
 
 4. **Optional `satisfies`** — when the constant needs to prove it
    implements an interface without losing literal types.
+
+5. **Call-site uptake** — every call site MUST reference the
+   constant or its derived type, not a magic-string literal. Adding
+   steps 1-4 without step 5 leaves the constant as dead code by
+   `pnpm knip` standards and triggers `@typescript-eslint/no-unused-
+   vars` with "is assigned a value but only used as a type". The
+   correct response to that lint signal is to complete the pattern
+   at the call site, not to delete the constant. A future custom
+   ESLint rule (`no-bare-discriminator-union`) catches the symmetric
+   failure mode (a bare union exists with no backing constant) at
+   the source-of-truth level.
 
 The predicate's parameter type should be `unknown` at external
 boundaries (forcing the `typeof === 'string'` runtime check) and

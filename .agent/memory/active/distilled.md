@@ -3,7 +3,7 @@ fitness_line_target: 200
 fitness_line_limit: 275
 fitness_char_limit: 16500
 fitness_line_length: 100
-split_strategy: "Extract settled entries to permanent docs (ADRs, governance, READMEs); this is the specialist refinement layer"
+split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
 ---
 
 # Distilled Learnings
@@ -65,81 +65,20 @@ WS3A claim-history / decision-thread work was grounded in real harvest
 evidence; WS3B sidebar, timeout, and file-backed owner escalation remain
 promotion-gated until async decision threads prove insufficient.
 
-## Tripwire rules need observable artefacts
+Tripwire-observable-artefacts entries graduated 2026-04-25 to
+[PDR-029 v2 amendment][pdr-029].
 
-A tripwire rule whose firing condition is "consult and decide X" is
-unobservable post-hoc unless the decision is recorded as an artefact.
-Compare against rules that are mechanically observable post-hoc (e.g.
-build-breakage rule — the build is or is not green). When designing
-a tripwire rule with a "decide" branch, require an artefact-leaving
-step on every outcome (a logged decision, a `notes` field on a claim,
-a shared-communication-log entry). Without it, the rule is satisfiable by
-silent proceed and the audit trail at consolidation cannot tell consultation
-from skip.
+Owner-directed pause as a load-bearing planning move graduated
+2026-04-26 to [PDR-026 amendment][pdr-026].
 
-Three observed instances on this branch (WS0
-`respect-active-agent-claims`; WS1 own-rule self-catch; WS1
-absorption shape). PDR-029 amendment candidate awaiting owner
-decision.
+Parallel reviewer dispatch and structural-then-pre-landing review
+phasing graduated 2026-04-26 to [PDR-015 amendment][pdr-015].
 
-## Owner-directed pause is a load-bearing planning move
-
-When an owner pauses a multi-workstream plan partway through to
-accumulate evidence rather than forcing forward motion, the pause is
-itself the correct execution. The reflexive "next workstream is
-next" assumption can suppress the simpler answer: stop and let
-evidence accumulate. Captures the practice's first question — *could
-it be simpler without compromising quality?* — at the workstream-
-sequencing level, not just within a single workstream.
-
-When pausing: touch the source plan YAML todos + Status section, the
-thread next-session record, repo-continuity Active Threads, the
-roadmap Adjacent entry, and the current-plans README. Five-to-six
-surfaces per pause is high enough to warrant a named ritual if
-recurrent.
-
-## Parallel reviewer dispatch is the right shape for substantive plans
-
-For plans introducing new architectural surfaces (directories,
-schemas, lifecycle mechanisms), dispatch reviewers in parallel rather
-than sequentially. Different reviewer roles see different things:
-adversarial structural reviewers (Wilma) catch boundary, threat-
-model, and lifecycle gaps; pre-landing reviewers (`docs-adr-reviewer`,
-`assumptions-reviewer`) catch substance-level errors that survive
-structural review (broken paths inherited from imprecise plan-body
-glosses; markdownlint violations; unobservable tripwires). Sequence:
-structural review shapes the design; pre-landing review validates
-the implementation faithfully embodies the design. Four parallel
-lenses produced four orthogonal finding sets in WS1; sequential
-dispatch would have been ~4× slower and produced the same set.
-
-## Reviewer phasing
-
-Different reviewer roles see different things. Adversarial structural
-reviewers (Wilma) catch boundary, threat-model, and lifecycle gaps but
-are not designed to validate citation correctness. Pre-landing
-reviewers (`docs-adr-reviewer`, `assumptions-reviewer`) catch the
-substance-level errors that survive structural review (broken
-ADR/PDR paths inherited from imprecise plan-body glosses; markdownlint
-violations; unobservable tripwires). Sequence: structural review
-shapes the design; pre-landing review validates the implementation
-faithfully embodies the design.
-
-Specialist sub-agent review is standard and preferred evidence for
-substantive work when the platform supports it. Review itself is not
-automatically blocking; findings require explicit disposition. Blocking
-findings, hard gate failures, and rule failures block closure. Non-blocking
-findings still need implementation, rejection with rationale, or
-owner-visible deferral evidence.
-
-## ADR/PDR citation discipline
-
-When citing an ADR or PDR by number, verify the filename and the
-substance against the live decision-record file. Plan-body glosses are
-shorthand, not authoritative — they can name an ADR/PDR by topic
-without precisely matching the file's actual content. Inheriting a
-plan body's gloss without verification produces broken links and
-substantively misattributed citations.
+ADR/PDR citation discipline remains live-distilled until enough
+evidence accumulates to graduate to a PDR amendment or a rule:
+when citing an ADR or PDR by number, verify the filename and the
+substance against the live decision-record file rather than
+inheriting plan-body shorthand.
 
 ## Workspace-first before external tooling or new infrastructure
 
@@ -164,12 +103,11 @@ external tools or proposing new code, exhaust workspace inventory:
   schema-validate-then-narrow flow; `@oaknational/build-metadata`
   already has the constant-type-predicate pattern in place. Extending
   existing infrastructure beats parallel implementations every time.
-- **Vendor-platform plans**: periodically scan the vendor's official docs
-  for capabilities not yet represented in the plan. Internal review checks
-  reasoning inside the plan's worldview; vendor-doc review finds the
-  opportunity set the plan forgot to imagine. Record both newly adopted
-  capabilities and informed declines so future agents do not rediscover
-  the same surface.
+- **Vendor-platform plans**: see [PDR-033][pdr-033] and the pattern
+  instance at [`patterns/vendor-doc-review-for-unknown-unknowns.md`][vendor-pattern].
+  Vendor-doc review at plan time finds capability gaps;
+  vendor-specialist reviewer dispatch at implementation time catches
+  contract violations. Both review acts are routine, not exceptional.
 - **Cross-system observability claims**: before investigating one system's
   behaviour, align all relevant artefacts first. For Vercel / Sentry /
   GitHub validation, compare local HEAD, origin, PR head, latest Vercel
@@ -181,57 +119,14 @@ Captured in `feedback_workspace_first_for_diagnostics`,
 `feedback_check_workspace_packages_before_proposing` (2026-04-26
 session).
 
-## Test fixtures must encode the production shape, not the code's expectation
+Test-fixtures-encode-production-shape doctrine graduated 2026-04-26
+to [PDR-034][pdr-034].
 
-If a test fixture and the production code agree on the wrong contract,
-the tests pass and the bug ships. The `VERCEL_BRANCH_URL` bug
-(2026-04-26) sat in plain sight for ~5 commits because the test
-fixture was `https://feat-x-poc-oak.vercel.thenational.academy` and
-the production code called `new URL(branchUrl).hostname` — both wrong
-in the same direction. Real Vercel value is hostname only.
+Constant-type-predicate call-site uptake clause graduated 2026-04-26
+to [ADR-153 amendment][adr-153] as Step 5 of the pattern.
 
-Anchor critical fixtures to **captured real production values** with
-date-stamped citations to the source documentation. If the input
-shape is documented, the fixture should match the docs literally;
-if the input shape is captured from a real deployment, record the
-deployment ID and date alongside the fixture. This is principles.md
-§Test Data Anchoring made operational: *"Tests that agree with code
-on the wrong contract are worse than no tests."*
-
-## Constant-type-predicate pattern is half-applied without call-site uptake
-
-ADR-153 (Constant-Type-Predicate Pattern) requires three components:
-(1) `as const` runtime constant naming every value, (2) union type
-derived structurally via `(typeof X)[keyof typeof X]`, (3) every call
-site uses the constant rather than a magic-string literal. Adding (1)
-and (2) without (3) leaves the pattern half-applied — the runtime
-constant is dead code by knip's standards and `@typescript-eslint/no-unused-vars`
-fires with "is assigned a value but only used as a type".
-
-That lint rule isn't opposing the pattern, it's catching the
-half-applied state. The fix is to complete the pattern, not to delete
-the constant. A future custom rule (`no-bare-discriminator-union`, queued
-in the recurrence-prevention plan) catches the symmetric failure mode (a
-bare union exists with no backing constant) at the source-of-truth level.
-
-## Config-load side effects must not require test-execution resources
-
-Static analysis tools (knip, IDE indexing, depcruise) load config
-files to discover entry points but do NOT run the tests those configs
-describe. A vitest config that throws at module load when test-time
-credentials are missing breaks the static-analysis tools too — even
-when the tests it describes are correctly excluded from CI runs.
-
-Defer credential / env validation to `setupFiles`, which only run
-during actual test execution. The validation IS still required at
-test time; just not at config-load time. Pattern: propagate the
-validation error message via the config's `provide` block so the
-setup file can re-check and throw with a clear message.
-
-This applies symmetrically to ESLint configs, Prettier configs, and
-any other tool config that does work at module-evaluation time. The
-canonical instance: `apps/oak-search-cli/vitest.smoke.config.ts`
-fixed in commit `f4bf2fa1`.
+Config-load-side-effects discipline graduated 2026-04-26 to
+[ADR-164][adr-164].
 
 ## Process
 
@@ -305,3 +200,11 @@ Build-system entries graduated on 2026-04-24 to
 [user-collaboration]: ../../directives/user-collaboration.md
 [agent-collaboration]: ../../directives/agent-collaboration.md
 [build-system]: ../../../docs/engineering/build-system.md
+[adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
+[adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
+[pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
+[pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log
+[pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md#amendment-log
+[pdr-033]: ../../practice-core/decision-records/PDR-033-vendor-doc-review-for-unknown-unknowns.md
+[pdr-034]: ../../practice-core/decision-records/PDR-034-test-fixtures-encode-production-shape.md
+[vendor-pattern]: patterns/vendor-doc-review-for-unknown-unknowns.md
