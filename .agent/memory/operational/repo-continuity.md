@@ -8,14 +8,23 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — owner-approved
-WS4A lifecycle integration pass implemented on the
-`agentic-engineering-enhancements` thread. Start-right now surfaces
-active claims plus WS3A decision threads; session-handoff closes own
-claims and decision-thread participation; plan templates include
-lifecycle triggers and simple-plan work-shape tiers; Practice Core /
-ADR surfaces now recognise collaboration state. WS3B and hook-based
-automation remain paused/evidence-gated.)
+**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — commit-bundle
+evidence taxonomy reflected. The future intent-to-commit plan now treats
+substitution, disappearance, and accretion as distinct staged-bundle integrity
+failures.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — lock-wait nuance
+captured. Claude Monitor / Codex shell wait / Cursor shell wait are noted
+as physical lock guards, not substitutes for commit-window claims.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-window
+protocol pass. The git index/head transaction window is now represented as
+a short-lived active-claim area before staging or committing.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — learning-first
+fitness correction after WS4A closeout. Napkin rotated and distilled;
+consolidation / Practice / ADR-144 surfaces now say fitness limits are
+signals and must never suppress learning.)
 
 **Prior refresh**: 2026-04-26 (Sharded Stroustrup / claude-code /
 claude-opus-4-7-1m — observability-sentry-otel session close. Sentry
@@ -40,10 +49,11 @@ thread records and plans; old session narrative belongs in `archive/`.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `2f766fe4`, with a
+- Branch: `feat/otel_sentry_enhancements` at local HEAD `6c65e75d`, with a
   dirty working tree.
-- Current dirty work includes WS3A/WS4A collaboration docs/state plus
-  pre-existing MCP/SDK TypeScript work. Treat these as separate surfaces.
+- Current dirty work includes WS3A/WS4A collaboration docs/state, the
+  commit-window protocol refinement, and pre-existing MCP/SDK TypeScript
+  work. Treat these as separate surfaces.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -54,6 +64,20 @@ thread records and plans; old session narrative belongs in `archive/`.
 - WS4A lifecycle integration is complete: start-right / handoff /
   templates / Practice Core / ADR-facing surfaces now carry WS0-WS3A
   collaboration state.
+- Learning-first fitness correction is complete: `napkin.md` rotated to
+  [`napkin-2026-04-26.md`](../active/archive/napkin-2026-04-26.md), and
+  distilled learning was preserved even though it pushes `distilled.md`
+  over its hard line limit.
+- Commit-window protocol refinement is implemented in the working tree:
+  commit skill, start-right, collaboration rules, state schemas, and
+  consolidation audit surfaces now treat `git:index/head` as a short-lived
+  coordination claim.
+- Lock-file waits are documented as a final physical guard only: Claude can
+  use Monitor, while Codex/Cursor use bounded shell waits unless a custom
+  monitor exists. The claim/log protocol remains the coordination layer.
+- The future intent-to-commit plan has promotion-threshold evidence for
+  staged-bundle integrity failures: substitution, disappearance, and
+  accretion. Implementation remains owner-gated.
 - WS3B sidebar / timeout / owner-escalation work remains paused and
   evidence-gated.
 
@@ -64,8 +88,8 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identity: Sharded Stroustrup / `claude-code` / `claude-opus-4-7-1m` / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identity: Codex / `codex` / `GPT-5` / WS4A-lifecycle-integration / 2026-04-26. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identity: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identity: Codex / `codex` / `GPT-5` / commit-window-protocol / 2026-04-26. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -88,19 +112,30 @@ Current branch-primary facts:
 
 ## Current Session Focus
 
-This session implemented the owner-requested narrow WS4-style lifecycle
-integration pass:
+Two parallel sessions ran on `feat/otel_sentry_enhancements`
+2026-04-26 with non-overlapping scope. Both closed at session-end.
 
-- updated start-right quick/thorough to read active claims, the shared log,
-  and WS3A decision threads before edits;
-- updated session-handoff to explicitly close own claims and decision-thread
-  participation;
-- added a lifecycle-trigger plan component and wired template/simple-plan
-  guidance;
-- refreshed Practice Core, PDR-024, ADR-119, ADR-124, practice-index, and
-  agentic-engineering plan surfaces.
+**Frolicking Toast (this handoff) — observability-sentry-otel**:
+executed the L-IMM (operational hardening) lane to closure on 5/6
+sub-items. Five Sentry-node commits landed (one per sub-item):
+flush timeout 2s → 5s; maxBreadcrumbs / sendClientReports verify;
+ignoreErrors / denyUrls scaffold (RED-first); Vercel Marketplace
+PENDING surface; hybrid error fingerprinting (post-redaction).
+Sub-item 6 (Vercel Marketplace verify) is PENDING owner-touch.
+Three reviewers ran on Tier 2 fingerprinting; all findings absorbed.
+Lane status flipped to `✅ closed-pending-3d`; wrapper plan rotated
+to archive/completed/.
 
-No WS3B implementation, hook-based automation, or SDK/product work started.
+**Codex (separate session) — agentic-engineering-enhancements**:
+captured the commit-window coordination protocol design (intent-
+to-commit-and-session-counter plan), absorbed the lock-wait nuance,
+reflected the staged-bundle evidence taxonomy, and refreshed Practice
+surfaces. Three concurrent-commit race conditions plus staged-bundle
+substitution / disappearance / accretion evidence surfaced during
+co-tenancy; documented in shared log and Codex's plan.
+
+No WS3B implementation, SDK/product work outside the Sentry lane,
+or hook-based automation started in either session.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -132,30 +167,48 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **MCP / SDK dirty work** — run targeted type-checks for
+1. **Distilled-memory structural response** — because learning was correctly
+   preserved first, `distilled.md` now carries hard fitness pressure. The
+   next consolidation-memory move is an explicit remediation lane or
+   owner-approved deferral to bring `distilled.md` below hard by
+   graduating, pruning, or splitting without deleting signal.
+2. **MCP / SDK dirty work** — run targeted type-checks for
    `@oaknational/oak-curriculum-sdk` and the repo root, then resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt. Do not fold that work
    into the WS3A documentation closeout.
-2. **Observability branch-primary (split into two parallel plans 2026-04-26)** —
-   - [`current/sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md):
-     three-tier immediate Sentry hardening (flush timeout; verifications +
-     `ignoreErrors` scaffolding + Vercel-Sentry Marketplace audit;
-     fingerprinting). Each sub-item commits independently. Tier 1 is a
-     ~10-minute single-line constant change.
+3. **Observability branch-primary (L-IMM closed 2026-04-26 at 5/6;
+   PR-87 quality lane still active)** —
+   - L-IMM lane (operational hardening): closed at 5/6 with Sub-item 6
+     (Vercel Marketplace verify) PENDING owner-touch. The execution
+     wrapper rotated to
+     [`archive/completed/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md).
+     Pickup: owner inspects Vercel project settings → Integrations and
+     replaces the PENDING section in
+     `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+     with the verified-state paragraph, then lane status flips to
+     `✅ closed`.
    - [`current/pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md):
      CodeQL + SonarCloud quality remediation with a parallel-execution
      context section. Phase 0 owner gates open; Phases 1-6 are the fix
-     sequence.
-   - Both plans run in parallel on `feat/otel_sentry_enhancements`. The
-     prior substrate plan
+     sequence. Runs solo now that L-IMM has closed; the parallel-track
+     framing in the plan body remains accurate as historical context.
+   - Deployed-state validation of the new fingerprint on the next
+     preview deploy: hit `/test-error?mode=...` via the existing probe
+     script and confirm new Sentry issues carry the hybrid fingerprint
+     `['{{ default }}', 'TestError*']`. Note the issue-merge
+     discontinuity callout — existing OAK-OPEN-CURRICULUM-MCP-{7,8,9}
+     issues retain old grouping; new occurrences attach to NEW issue
+     IDs.
+   - The prior substrate plan
      [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
      closed 2026-04-26 with full Phase 1-5 findings tables; rotate to
      archive/completed/ on next consolidate-docs.
-3. **Lifecycle integration follow-up** — only if owner-directed, observe
+4. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders or WS3B sidebars/escalations
    without evidence.
-4. **Other agentic engineering work** — WS3A and WS4A are closed. Start WS3B
+5. **Other agentic engineering work** — WS3A, WS4A, and the commit-window
+   refinement are closed once the current claim is archived. Start WS3B
    only after owner promotion or real decision-thread evidence. Otherwise pick
    a queued plan from the current/roadmap surfaces.
 
@@ -174,21 +227,62 @@ These are visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-26 Sharded Stroustrup, observability close)**: napkin
-rotation **deferred** with deferral-honesty discipline (PDR-026). Napkin
-is at 577 lines (above the ~500 rotation threshold). **Constraint**:
-`distilled.md` is at 267 of 275 hard limit (zone soft, near hard); a
-napkin rotation that merged this session's three new entries would
-push distilled.md into the hard zone, blocking consolidation closure.
-**Trade-off**: rotating now would also reach into Codex's active WS4
-lifecycle claim coverage on `napkin.md`, which is undesirable mid-claim
-under `respect-active-agent-claims`. **Falsifiability**: a future
-agent runs `pnpm practice:fitness:informational` and sees napkin
-above 500 lines and distilled at or near limit; if both are true
-and Codex's claim has closed, rotation is overdue and should fire. **Owner-acknowledged**:
-implicit via the auto-mode "stop" directive after the commit groups.
+**Status (2026-04-26 Frolicking Toast, L-IMM closure handoff)**:
+not due — lightweight session handoff for L-IMM execution closure.
+No `consolidate-docs` trigger fired (no third-instance pattern; no
+napkin overflow; no register sweep due; no thread reorganisation).
+Five Sentry-node commits + closure surfaces landed; all gates green
+per scoped runs and pre-commit / pre-push hooks. Sub-item 6 PENDING
+owner-touch is recorded in the thread next-session record and the
+lane plan body, not as a deferred consolidation item here.
 
-`pnpm practice:fitness:strict-hard` passes; only soft warnings remain.
+**Prior status (2026-04-26 Codex, lock-wait note handoff/consolidation)**:
+completed this handoff for the owner-agreed lock-wait nuance. The commit
+skill now records Claude Monitor / Codex shell wait / Cursor shell wait as
+physical guards for `.git/index.lock`, while preserving `git:index/head`
+active claims as the coordination layer. The napkin, thread record, and this
+continuity file were refreshed. Capture buffers were scanned; the `.remember`
+entry about the git lock collision / Monitor wait is now homed in the commit
+skill and napkin. Entry points remain pointer-only; no tactical track cards
+needed action; decision-thread files remain examples only.
+
+Consolidation audit: active collaboration state contains the observability
+claim `c1a25f27-eacf-4a18-9528-f0b971c46f08` only after this closeout claim is
+archived. That claim is in the observability lane and its claimed paths overlap
+the staged observability files, so this handoff deliberately did not stage,
+unstage, commit, or touch them. No ADR/PDR candidate qualifies beyond the
+existing commit-window operational note.
+
+Validation status: targeted markdownlint, JSON parse, Ajv collaboration
+schema validation, `git diff --check`, `pnpm portability:check`,
+`pnpm practice:vocabulary`, and `pnpm practice:fitness:informational` pass
+with the known expected `distilled.md` hard pressure.
+
+**Prior status (2026-04-26 Codex, coordination closeout + learning-first
+correction)**: completed this handoff for coordination-plan and
+Practice-state surfaces. Parent plan, roadmap, documentation-sync log,
+thread record, repo-continuity, reviewer guidance, Practice Core, AGENT
+line width, and collaboration directive wording are refreshed.
+`docs-adr-reviewer` and `assumptions-reviewer` findings were absorbed.
+Collaboration state was audited: one fresh Codex claim was opened for
+this closeout and explicitly archived with `closure.kind: "explicit"`;
+decision-thread files remain examples only.
+
+Owner corrected the consolidation policy: learning preservation outranks
+fitness limits. The outgoing napkin was archived to
+[`archive/napkin-2026-04-26.md`](../active/archive/napkin-2026-04-26.md), the
+high-signal entries were distilled into `distilled.md`, and
+`consolidate-docs`, PDR-014, ADR-144, and Practice Core surfaces now say
+fitness limits are signals, never reasons to suppress capture, distillation,
+graduation, or useful writing.
+
+Validation status: JSON parse, Ajv schema validation for active/closed
+claims and decision-thread files, targeted markdownlint, `git diff --check`,
+`pnpm portability:check`, and `pnpm practice:vocabulary` pass. Practice
+fitness is expected to report hard pressure after the learning-first
+distillation because `distilled.md` intentionally crossed its hard line
+limit. That is the correct signal: the next structural response is to
+graduate/prune/split `distilled.md`, not to undo the preserved learning.
 
 **Prior status (2026-04-26 Codex)**: not due after completed consolidation. Earlier
 this handoff, deep consolidation completed because WS3A closed and
