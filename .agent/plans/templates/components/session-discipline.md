@@ -90,6 +90,13 @@ an arc, where inherited-framing risk is highest. Later sessions
 can rely on the accumulated ratifications if no new doctrine has
 landed since the last metacognition pass.
 
+## Relationship to Lifecycle Triggers
+
+This component governs how multi-session arcs stay coherent. Pair it with
+[`lifecycle-triggers.md`](lifecycle-triggers.md), which governs session
+entry, work-shape declaration, collaboration claims, handoff closure, and
+consolidation touch points.
+
 ## Usage in a plan
 
 Reference this component in the plan body:
@@ -99,6 +106,13 @@ Reference this component in the plan body:
 > The four disciplines (template-not-contract count, mid-arc
 > checkpoints, context-budget thresholds, metacognition at open)
 > apply to every session in this plan.
+
+Also reference:
+
+> **Lifecycle triggers**: see
+> [`../../templates/components/lifecycle-triggers.md`](../../templates/components/lifecycle-triggers.md).
+> Register active areas before edits, update coordination state when it
+> changes, close own claims at handoff, and run the consolidation gate.
 
 Plan-specific amendments (e.g. named context-budget thresholds
 different from the defaults, or specific checkpoint placements)

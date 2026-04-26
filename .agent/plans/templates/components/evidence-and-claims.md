@@ -20,6 +20,15 @@ For each non-trivial claim include:
 - `behaviour-change`
 - `api-compat`
 - `security-or-migration-safety`
+- `lifecycle`
+- `coordination`
+- `policy`
+- `validation`
+
+Use the protocol-oriented classes (`lifecycle`, `coordination`,
+`policy`, `validation`) when a claim concerns Practice machinery,
+collaboration state, rule activation, template governance, or workflow
+validation rather than product behaviour.
 
 ## Merge-Readiness Rule
 

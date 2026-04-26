@@ -108,6 +108,17 @@ sessions) live alongside the reference.
 
 ---
 
+## Lifecycle Triggers
+
+> See [Lifecycle Triggers component](../templates/components/lifecycle-triggers.md)
+
+Before the first non-planning edit, record the work shape: trivial
+landing target, bounded simple plan, or executable repo plan. For
+non-trivial work, name the start-right, active-claim, decision-thread,
+session-handoff, and consolidation touch points this plan will use.
+
+---
+
 ## Reviewer Scheduling (phase-aligned)
 
 Reviewers are scheduled in three phases, chosen by what they challenge:

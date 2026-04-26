@@ -155,15 +155,31 @@ Before beginning work and at the start of each phase:
 
 ---
 
+## Lifecycle Trigger Commitment
+
+Before the first non-planning edit:
+
+1. Record the work shape: trivial landing target, bounded simple plan,
+   or executable repo plan.
+2. Run start-right and consult active claims, recent collaboration log
+   entries, and relevant decision threads.
+3. Register active areas before edits and close own claims at
+   session-handoff.
+4. Apply
+   [`lifecycle-triggers.md`](components/lifecycle-triggers.md)
+   for any non-trivial or multi-file fix.
+
+---
+
 ## Documentation Propagation Commitment
 
 Before marking a phase complete:
 
 1. Update `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` if impacted
-2. Update `.agent/practice-core/practice.md` if impacted
-
-3. Update any additionally impacted ADRs, `/docs/` pages, or README files
-4. Apply `/jc-consolidate-docs` to ensure settled documentation is not trapped in plans
+2. Update `docs/architecture/architectural-decisions/124-practice-propagation-model.md` if impacted
+3. Update `.agent/practice-core/practice.md` if impacted
+4. Update any additionally impacted ADRs, `/docs/` pages, or README files
+5. Apply `/jc-consolidate-docs` to ensure settled documentation is not trapped in plans
 
 If no update is needed for a required surface, record an explicit no-change rationale.
 

@@ -82,6 +82,13 @@ todos:
 - Output: [files updated]
 - Validation: [template references present]
 
+### Task 2.3: Wire lifecycle triggers
+
+- Output: [start-right, collaboration-state, handoff, and consolidation
+  touch points named]
+- Validation: [lifecycle-triggers component referenced or explicit
+  no-change rationale recorded]
+
 ---
 
 ## Phase 3 — Pilot
@@ -124,6 +131,10 @@ todos:
 ## Foundation Alignment
 
 > See [foundation-alignment.md](components/foundation-alignment.md)
+
+## Lifecycle Triggers
+
+> See [lifecycle-triggers.md](components/lifecycle-triggers.md)
 
 ## Documentation Propagation
 

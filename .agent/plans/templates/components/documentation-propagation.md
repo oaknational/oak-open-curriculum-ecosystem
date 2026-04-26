@@ -9,7 +9,8 @@ guidance.
 Plans must include update handling for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
 
 Also include any additionally impacted ADRs, `/docs/` pages, and README files.
 
@@ -23,7 +24,7 @@ For each phase or major workstream:
 No phase is complete until one of those outcomes is documented.
 
 Also apply the
-[`jc-consolidate-docs` workflow](../../../../.cursor/commands/jc-consolidate-docs.md)
+[`jc-consolidate-docs` workflow](../../../commands/consolidate-docs.md)
 before closure to ensure settled documentation is extracted from plans.
 
 ## Recommended Tracking Pattern
