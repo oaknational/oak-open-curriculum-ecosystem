@@ -1,6 +1,21 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
+**Last refreshed**: 2026-04-26 (Frolicking Toast / claude-code /
+claude-opus-4-7-1m — session handoff after the owner-directed
+chunked landing closed cleanly. Two commit-window claims opened and
+closed today (`4535f2ff` umbrella for the 6-chunk landing, then
+`eecc4c6b` for the agent-comms-log file rename); active-claims
+registry now empty. Seven commits landed — `e37a5795`, `38472766`,
+`9925ad59`, `9bd91f81`, `564e284f`, `31564f24`, `f3e05afb` — covering
+the commit-window protocol foundation, plans, Practice Core
+learning-first correction, memory patterns, observability L-IMM full
+closure, cross-thread continuity record, and the rename. The session
+self-applied the commit-window protocol that chunk 1 implemented;
+two pre-commit footguns surfaced (commitlint subject-case rule on
+identifier-leading subjects; markdownlint MD004 on `+` bullets) and
+were caught inside the commit window before history rewrote.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
 owner correction that same-branch friction is the collaboration experiment.
 Frolicking Toast's commit-steward claim remains active; Codex had no open
 claim to close.)

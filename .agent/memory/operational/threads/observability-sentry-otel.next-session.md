@@ -49,11 +49,12 @@ Sentry status surfaces now record L-IMM as fully closed.)
   active and configured. The PENDING surface in observability.md was
   replaced with verified state; L-IMM status moved from
   `closed-pending-3d` to `closed`.
-- 2026-04-26 handoff note — branch work now runs under an explicit
-  same-branch collaboration experiment. Frolicking Toast currently holds the
-  commit-window umbrella claim while chunking Practice/collaboration files;
-  PR-87 remediation may proceed on the same branch only with visible
-  commit-window / path-ownership communication.
+- 2026-04-26 handoff note — Frolicking Toast's commit-window
+  umbrella claim closed cleanly at 17:00Z after the six-chunk
+  Practice/collaboration landing finished. The follow-up rename
+  claim (agent-comms log file → `shared-comms-log.md`) closed at
+  17:35Z. Active-claims registry now empty. PR-87 remediation may
+  proceed on the same branch under standard claim discipline.
 
 **Plan rotation**:
 [`current/sentry-immediate-next-steps.plan.md`](../../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md)
