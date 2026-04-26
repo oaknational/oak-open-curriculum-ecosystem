@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
-**Last Updated**: 2026-04-24
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-26
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -65,8 +65,9 @@ No phase can be marked complete until documentation updates have been handled
 for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
-3. any additionally impacted ADRs, `/docs/` pages, or README files
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
+4. any additionally impacted ADRs, `/docs/` pages, or README files
 
 Each phase must either:
 
@@ -75,7 +76,7 @@ Each phase must either:
   [documentation-sync-log.md](documentation-sync-log.md)
 
 Before phase closure, apply the
-[`jc-consolidate-docs` workflow](../../../.cursor/commands/jc-consolidate-docs.md)
+[`jc-consolidate-docs` workflow](../../commands/consolidate-docs.md)
 to ensure no settled documentation remains trapped in plans/prompts.
 
 ---
@@ -354,6 +355,14 @@ Adjacent:
 
 - Strategic plan:
   [multi-agent-collaboration-protocol.plan.md](current/multi-agent-collaboration-protocol.plan.md)
+- Split execution plans:
+  - [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+    — WS3A: evidence provision, protocol observability, durable
+    claim-closure history, and lightweight decision threads; complete
+    and archived 2026-04-26
+  - [multi-agent-collaboration-sidebar-and-escalation.plan.md](current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+    — WS3B: sidebar, timeout, and owner-escalation mechanics, paused
+    behind WS3A evidence and owner direction
 - Goal:
   - install structural infrastructure for parallel agents working on
     the same repo without clashing — by *seeing* what each other is
@@ -364,7 +373,8 @@ Adjacent:
     agent-team features may help build it, but repo-owned markdown/JSON/
     rules/commands/skills/hooks surfaces must remain sufficient to
     operate it
-- Status: ⏸️ PAUSED-FOR-OWNER-REVIEW (refreshed 2026-04-26)
+- Status: ✅ LIFECYCLE-INTEGRATION-COMPLETE; WS3B/WS5 paused on
+  evidence / owner direction (refreshed 2026-04-26)
 - Landings:
   - WS0 (vocabulary + shared communication log + foundational rules) —
     `63c66c88` 2026-04-25
@@ -372,18 +382,26 @@ Adjacent:
     audit + start-right wiring) — `a5d33519` 2026-04-25
   - WS2 (collaboration memory class + founding pattern graduation) —
     `293742cd` 2026-04-25
-- Resumption gate: ≥ 3 real parallel-session coordination events
-  using the WS0 + WS1 surfaces. Later 2026-04-25
-  shared-communication-log entries appear to meet the inspection
-  threshold (Fresh Prince counted event 3; Keen Dahl recorded event
-  4 with scope adjustment). This is ready for owner-directed evidence
-  harvest; it does not auto-resume WS3+.
+  - WS3A decision-thread / claim-history / observability slice —
+    uncommitted 2026-04-26; complete with WS3B still evidence-gated
+  - WS4A lifecycle integration —
+    uncommitted 2026-04-26; start-right, session-handoff,
+    consolidate-docs, plan templates, and Practice / ADR surfaces now
+    recognise WS0-WS3A collaboration state
+- Evidence gates:
+  - Original WS3 evidence inspection: ≥ 3 real parallel-session
+    coordination events using the WS0 + WS1 surfaces. Owner-directed
+    harvest completed on 2026-04-26 and split WS3. WS3A is now complete.
+  - WS4A was then owner-authorised and completed as a narrow
+    lifecycle-integration pass.
+  - Remaining WS5 scope is post-WS4A observation / seed harvest across
+    real sessions; WS3B does not auto-resume.
 - Notes:
   - intentionally outside the numbered phase sequence
-  - paused workstreams: WS3 (conversation file + sidebar mechanism),
-    WS4 (operational wiring polish — partially landed in WS1), WS5
-    (evidence-harvest workstream itself; this is the natural
-    resumption gate)
+  - split workstreams: WS3A (decision-thread / claim-history /
+    observability; complete), WS3B (sidebar / escalation,
+    evidence-gated), WS4A (lifecycle integration; complete), WS5
+    (harvest/refinement evidence; paused)
   - while paused, evidence accumulates passively from any session
     that uses the WS0/WS1 surfaces — no active session is required
   - inspection points: `consolidate-docs § 7e`, napkin rotation

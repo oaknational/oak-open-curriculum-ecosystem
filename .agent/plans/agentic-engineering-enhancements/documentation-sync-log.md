@@ -5,7 +5,8 @@ Use this log to prove each phase has handled required documentation updates.
 ## Required Canonical Documents
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
 
 Also update any additionally impacted ADRs, `/docs/` pages, and README files.
 
@@ -15,11 +16,37 @@ For each phase:
 
 - list what changed in each required canonical document, or
 - record a no-change rationale explaining why no update was needed
-- confirm consolidation review using `.cursor/commands/jc-consolidate-docs.md`
+- confirm consolidation review using `.agent/commands/consolidate-docs.md`
 
 Do not mark a phase complete without an entry.
 
 ---
+
+## Multi-Agent Collaboration WS4A — Lifecycle Integration
+
+- Status: complete (2026-04-26)
+- ADR-119 update or rationale: Updated the Practice boundary to include live
+  collaboration state, active claims, closed claim history, decision threads,
+  and repo-owned operational state read by start-right / handoff /
+  consolidate-docs.
+- ADR-124 update or rationale: Refreshed the propagation contract from the
+  older five-file wording to the current Practice Core package and added
+  live coordination state to the practice-index bridge responsibilities.
+- practice.md update or rationale: Added collaboration state to the Structure
+  layer, workflow, artefact map, and vital integration surface narrative.
+- Other ADR/docs/README updates: Updated PDR-024, practice-lineage,
+  practice-bootstrap, practice-verification, Practice Core changelog,
+  practice-index, lifecycle templates/components, roadmap, current index,
+  start-right, session-handoff, plan command, and reviewer invocation memory.
+- Consolidation review (`jc-consolidate-docs`): Closeout pass run after
+  owner direction on 2026-04-26. `docs-adr-reviewer` and
+  `assumptions-reviewer` findings were absorbed: WS5 status now separates
+  completed WS3 evidence harvest from remaining post-WS4A observation,
+  reviewer guidance now distinguishes preferred review evidence from
+  blocking findings, and stale WS3/WS4 wording was corrected.
+- Notes: WS3B sidebar, timeout, and owner-escalation work remains paused
+  behind owner promotion or real decision-thread evidence. Hook reminders
+  and dashboard expansion remain evidence-gated follow-up.
 
 ## Phase 0 — Planning System and Template Hardening
 
