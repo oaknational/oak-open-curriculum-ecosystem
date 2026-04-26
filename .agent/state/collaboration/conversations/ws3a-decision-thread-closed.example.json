@@ -34,7 +34,7 @@
       "evidence": [
         {
           "kind": "log_entry",
-          "ref": ".agent/state/collaboration/log.md#2026-04-26t112021z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread",
+          "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t112021z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread",
           "summary": "Log entry captures discovery context and the live claim opening."
         },
         {

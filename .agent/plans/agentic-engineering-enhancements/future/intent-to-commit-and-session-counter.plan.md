@@ -20,7 +20,7 @@ promote only when owner explicitly asks to implement the queue)
 [`register-active-areas-at-session-open.md`](../../../rules/register-active-areas-at-session-open.md);
 [`consolidate-docs.md § 7e`](../../../commands/consolidate-docs.md);
 [`napkin.md`](../../../memory/active/napkin.md);
-[`collaboration log`](../../../state/collaboration/log.md)
+[`collaboration log`](../../../state/collaboration/shared-comms-log.md)
 
 ---
 
@@ -74,7 +74,7 @@ Six concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
 6. **Incidental foreign-content bundle (clash type C — accretion)**: the
    agent's intended files landed correctly **plus** unrelated
    foreign-staged content from a parallel agent's WIP was swept into the
-   same commit (commit `9af63a84` bundled `.agent/state/collaboration/log.md`
+   same commit (commit `9af63a84` bundled `.agent/state/collaboration/shared-comms-log.md`
    alongside the intended plan files). The intended history label is at
    least partially honest (the intended files are there) but additional
    foreign work is now attributed to the same commit and authorial bundle.

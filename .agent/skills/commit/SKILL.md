@@ -100,7 +100,7 @@ edits do not overlap. Before staging or invoking `git commit`:
 1. Read
    [`.agent/state/collaboration/active-claims.json`](../../state/collaboration/active-claims.json)
    and recent
-   [`.agent/state/collaboration/log.md`](../../state/collaboration/log.md)
+   [`.agent/state/collaboration/shared-comms-log.md`](../../state/collaboration/shared-comms-log.md)
    entries for a fresh `git:index/head` claim.
 2. Inspect `git diff --staged --name-only`. If the staged set is non-empty
    and not wholly within your intended scope, pause and coordinate or ask the

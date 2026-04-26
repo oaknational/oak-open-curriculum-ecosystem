@@ -1,7 +1,7 @@
 # Use the Shared Communication Log
 
 Before starting work on any non-trivial edit, append a timestamped entry
-to [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
+to [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
 naming what you intend to touch and signing with your agent identity.
 Read recent entries first to discover what other agents have been
 working on.

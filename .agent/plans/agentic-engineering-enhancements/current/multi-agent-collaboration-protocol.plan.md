@@ -220,7 +220,7 @@ ownership, or conflict resolution. The proposal is to install one.
    deferred to WS3B and exists only if that sibling plan promotes:
    - **Thread record `next-session.md`**: durable async (already in
      use). Narrative, per-thread, multi-session continuity.
-   - **Shared communication log `state/collaboration/log.md`** (new at WS0): a
+   - **Shared communication log `state/collaboration/shared-comms-log.md`** (new at WS0): a
      schema-less append-only markdown surface. Discoverability primitive
      — agents leave notes for whoever reads next. Eventually consistent;
      not a synchronisation surface. Persists alongside structured
@@ -451,7 +451,7 @@ files-first / schema-later in its strictest form.
    with structured claims; landing the directory and its README in WS0
    means WS1 doesn't have to re-explain the boundary.
 10. **Create the shared communication surface** at
-    `.agent/state/collaboration/log.md`. Initial contents:
+    `.agent/state/collaboration/shared-comms-log.md`. Initial contents:
 
     ```markdown
     # Agent-to-Agent Shared Communication Log
@@ -491,7 +491,7 @@ files-first / schema-later in its strictest form.
 
 11. **Create the rule** at `.agent/rules/use-agent-comms-log.md` —
     atomic two-line content: "Before starting work on any non-trivial
-    edit, append a timestamped entry to `.agent/state/collaboration/log.md`
+    edit, append a timestamped entry to `.agent/state/collaboration/shared-comms-log.md`
     naming what you intend to touch and signing with your agent
     identity. Read recent entries first to discover what other agents
     have been working on." Loaded by all platform adapters per
@@ -536,7 +536,7 @@ files-first / schema-later in its strictest form.
   rule (verified during task 13 platform-adapter audit).
 - `.agent/state/` directory exists with a README naming the
   state-vs-memory distinction.
-- `.agent/state/collaboration/log.md` exists with the schema-less
+- `.agent/state/collaboration/shared-comms-log.md` exists with the schema-less
   introduction text. The file is empty of communication entries.
 - A pilot exercise: as part of WS0 landing, the executing agent appends
   one timestamped entry to the log announcing WS0's landing. This proves
@@ -614,7 +614,7 @@ between WS0 and WS1 — if agents have been writing entries into
 schema design, ahead of first-principles design choices.
 
 **Pre-WS1 input**: read every entry written to
-`.agent/state/collaboration/log.md` since WS0 landed. Extract the
+`.agent/state/collaboration/shared-comms-log.md` since WS0 landed. Extract the
 recurring fields agents actually used. The schema below is a starting
 point reflecting plausible fields; replace any field with what real
 usage shows agents need, and remove fields that no entry needed.
@@ -732,7 +732,7 @@ usage shows agents need, and remove fields that no entry needed.
    short guide naming where state lives, lifecycle, and the
    trusted-agents threat model. Operational entries describe how the
    system runs, not what it's learned.
-9. **Preserve the shared communication log**: `.agent/state/collaboration/log.md`
+9. **Preserve the shared communication log**: `.agent/state/collaboration/shared-comms-log.md`
    continues to exist alongside the new structured claims file. The
    log becomes the surface for free-form messages that don't fit the
    claim schema — discussion, questions, observations, things that
@@ -1013,7 +1013,7 @@ napkin already handles structured per-session observations, and
 introducing a sibling surface would create wiring without benefit.
 
 **Conversations are first-class learning-loop inputs alongside the
-napkin**. The shared communication log at `.agent/state/collaboration/log.md`,
+napkin**. The shared communication log at `.agent/state/collaboration/shared-comms-log.md`,
 structured claims in `active-claims.json`, decision-thread files, and
 any promoted sidebar transcripts are themselves durable evidence. When
 a refinement is drafted, it cites entries from those surfaces directly,
@@ -1030,7 +1030,7 @@ in 2026-04-24/25 pre-protocol).
 #### Tasks
 
 1. **Continuous capture from WS0 onwards**: agents writing to
-   `.agent/state/collaboration/log.md`, and from WS1
+   `.agent/state/collaboration/shared-comms-log.md`, and from WS1
    onwards `active-claims.json`, are themselves WS5 input. Every
    entry is observed for what fields it uses, what feels awkward,
    what's missing. WS1, WS3A, and any promoted WS3B schema decisions
@@ -1125,7 +1125,7 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/rules/use-agent-comms-log.md` — atomic rule pointing at the shared communication log (WS0; extended WS1)
 - `.agent/rules/register-active-areas-at-session-open.md` — atomic rule, parallel to register-identity-on-thread-join, including `git:index/head` commit-window claims (WS1 + commit-window refinement)
 - `.agent/state/README.md` — explains state-vs-memory distinction (WS0)
-- `.agent/state/collaboration/log.md` — schema-less shared communication log (WS0; preserved alongside structured surfaces in WS1, WS3A, and WS3B if promoted)
+- `.agent/state/collaboration/shared-comms-log.md` — schema-less shared communication log (WS0; preserved alongside structured surfaces in WS1, WS3A, and WS3B if promoted)
 - `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage; v1.2.0 also carries short-lived git transaction claims (WS1 + commit-window refinement)
 - `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims, including `areas.kind: "git"` in v1.2.0 (WS1 + commit-window refinement)
 - `.agent/state/collaboration/conversations/` — directory of per-topic decision-thread files (WS3A; extended by WS3B if promoted)

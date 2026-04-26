@@ -796,7 +796,7 @@ the owner-gate items called out below.
 | D. Task 0.1 real-finding conclusion correct; route-level attach is the right shape; no path-prefix middleware further up the stack | MINOR (positive) | Acknowledged; preserved as-is. |
 | E. Task 0.4 ACCEPT-with-rationale defensible; cite specific Vercel docs page snapshot with date-stamp rather than just "publicly documented" | MINOR | **Absorbed**. Phase 4 TSDoc now requires date-stamped citation. |
 | F. Phase 0 close-gate framing (`code-reviewer` + `assumptions-reviewer`) is right; adding `architecture-reviewer-fred` would be duplicative — Fred's scope is covered by post-Phase-1 invocation | POSITIVE | Acknowledged; preserved. |
-| G. Open questions for plan author — (1) reason for built-ins-only constraint, (2) owner reachability, (3) S7763 merge-conflict risk | — | (1) confirmed conflation per MAJOR-A absorption; (2) owner-async-only is the operating assumption — default-to-ACCEPT covers it; (3) `export … from` sweep is unlikely to merge-conflict with parallel work — single-line edits across 12 files; if conflicts surface, route via embryo log. |
+| G. Open questions for plan author — (1) reason for built-ins-only constraint, (2) owner reachability, (3) S7763 merge-conflict risk | — | (1) confirmed conflation per MAJOR-A absorption; (2) owner-async-only is the operating assumption — default-to-ACCEPT covers it; (3) `export … from` sweep is unlikely to merge-conflict with parallel work — single-line edits across 12 files; if conflicts surface, route via the shared communication log. |
 
 **Owner-gate items surfaced for Phase 1 entry**:
 
@@ -1508,7 +1508,7 @@ No E2E changes anticipated.
 | Cognitive-complexity refactor changes behaviour | MEDIUM | Behaviour-preserving refactor with existing tests as safety net; reviewer dispatch after. |
 | Phase 3 schema-cache validation guard adds unacceptable codegen cost | LOW | Option B (accept-with-rationale) is the fallback. |
 | OAuth rate-limit middleware adds CDN cache fragmentation | LOW | If Phase 3 Task 3.2 adds middleware, the path-prefix is OAuth-only (low traffic); CDN cache impact minimal. |
-| Push triggers parallel-track-pre-commit-gate-coupling pattern | MEDIUM | Coordinate via embryo log before push; align with Fresh Prince's WS1 work if still in flight. |
+| Push triggers parallel-track-pre-commit-gate-coupling pattern | MEDIUM | Coordinate via the shared communication log before push; align with Fresh Prince's WS1 work if still in flight. |
 
 ---
 
@@ -1523,7 +1523,7 @@ No E2E changes anticipated.
 **Related plans**:
 
 - `multi-agent-collaboration-protocol.plan.md` — Fresh Prince's WS1
-  is in flight on the same branch; coordinate via embryo log.
+  is in flight on the same branch; coordinate via the shared communication log.
 - `gate-recovery-cadence.plan.md` — the cross-agent build-recovery
   doctrine the new build-breakage rule cites.
 

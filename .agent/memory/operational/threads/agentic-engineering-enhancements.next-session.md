@@ -112,7 +112,7 @@ claude-opus-4-7-1m — **WS0 of the multi-agent collaboration protocol
 landed as a single atomic commit `63c66c88`** on
 `feat/otel_sentry_enhancements`. **WS0 seed fired same-day**: parallel
 observability-thread agent (Codex / codex / GPT-5) appended their own
-signed entry to the shared communication log `.agent/state/collaboration/log.md`
+signed entry to the shared communication log `.agent/state/collaboration/shared-comms-log.md`
 during my session-handoff, declaring their packaging boundary. Their
 commit `d9cb54e8` then landed preserving every Jiggly Pebble plan /
 thread / experience / napkin edit exactly as their shared-communication-log

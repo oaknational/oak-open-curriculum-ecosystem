@@ -86,7 +86,7 @@
             ".agent/commands/consolidate-docs.md",
             "scripts/validate-practice-fitness.mjs",
             ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -118,7 +118,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md",
+            "ref": ".agent/state/collaboration/shared-comms-log.md",
             "summary": "Shared communication log records the multi-turn coordination dance and claim close."
           }
         ]
@@ -142,7 +142,7 @@
             ".agent/state/collaboration/fixtures/claim-history/**",
             ".agent/state/collaboration/active-claims.schema.json",
             ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/log.md",
+            ".agent/state/collaboration/shared-comms-log.md",
             ".agent/directives/agent-collaboration.md",
             ".agent/rules/register-active-areas-at-session-open.md",
             ".agent/rules/respect-active-agent-claims.md",
@@ -176,7 +176,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t090809z--codex--codex--gpt-5--unknown--ws3a-green-claim-history-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t090809z--codex--codex--gpt-5--unknown--ws3a-green-claim-history-close",
             "summary": "Shared communication log records the explicit close."
           },
           {
@@ -209,7 +209,7 @@
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -241,7 +241,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t092345z--codex--codex--gpt-5--unknown--ws3a-session-handoff-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t092345z--codex--codex--gpt-5--unknown--ws3a-session-handoff-close",
             "summary": "Shared communication log records the handoff claim close."
           }
         ]
@@ -277,7 +277,7 @@
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -309,7 +309,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t112614z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t112614z--codex--codex--gpt-5--unknown--ws3a-green-decision-thread-close",
             "summary": "Shared communication log records the explicit close."
           }
         ]
@@ -342,7 +342,7 @@
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -374,7 +374,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t131347z--codex--codex--gpt-5--unknown--ws3a-observability-and-close-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t131347z--codex--codex--gpt-5--unknown--ws3a-observability-and-close-close",
             "summary": "Shared communication log records the explicit close."
           }
         ]
@@ -430,7 +430,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t132200z--codex--codex--gpt-5--unknown--stale-claim-archive",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t132200z--codex--codex--gpt-5--unknown--stale-claim-archive",
             "summary": "Shared communication log records the stale-claim archival performed during consolidation."
           }
         ]
@@ -462,7 +462,7 @@
             "GEMINI.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -499,7 +499,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t132403z--codex--codex--gpt-5--unknown--ws3a-handoff-and-consolidation-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t132403z--codex--codex--gpt-5--unknown--ws3a-handoff-and-consolidation-close",
             "summary": "Shared communication log records this explicit claim close."
           }
         ]
@@ -522,7 +522,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -554,7 +554,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t133013z--codex--codex--gpt-5--unknown--next-session-automation-exploration-capture-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t133013z--codex--codex--gpt-5--unknown--next-session-automation-exploration-capture-close",
             "summary": "Shared communication log records this explicit capture close."
           }
         ]
@@ -577,7 +577,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -614,7 +614,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t133312z--codex--codex--gpt-5--unknown--final-session-handoff-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t133312z--codex--codex--gpt-5--unknown--final-session-handoff-close",
             "summary": "Shared communication log records this explicit handoff close."
           }
         ]
@@ -706,7 +706,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t135216z--codex--codex--gpt-5--unknown--ws4-style-lifecycle-integration-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t135216z--codex--codex--gpt-5--unknown--ws4-style-lifecycle-integration-close",
             "summary": "Shared communication log records this explicit lifecycle pass close."
           }
         ]
@@ -741,7 +741,7 @@
             ".agent/practice-core/practice.md",
             ".agent/practice-core/CHANGELOG.md",
             ".agent/directives/agent-collaboration.md",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -783,7 +783,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t142012z--codex--codex--gpt-5--unknown--ws4a-coordination-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t142012z--codex--codex--gpt-5--unknown--ws4a-coordination-closeout",
             "summary": "Shared communication log records this explicit close."
           }
         ]
@@ -823,7 +823,7 @@
             ".agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -865,7 +865,7 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t144655z--codex--codex--gpt-5--unknown--learning-first-fitness-correction-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t144655z--codex--codex--gpt-5--unknown--learning-first-fitness-correction-closeout",
             "summary": "Shared communication log records explicit closeout, validation status, reviewer disposition, and the remaining parallel observability claim."
           }
         ]
@@ -894,7 +894,7 @@
             ".agent/state/collaboration/closed-claims.schema.json",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md",
+            ".agent/state/collaboration/shared-comms-log.md",
             ".agents/skills/commit/SKILL.md",
             ".claude/skills/commit/SKILL.md",
             ".cursor/skills/commit/SKILL.md",
@@ -931,7 +931,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t150603z--codex--codex--gpt-5--unknown--commit-window-protocol-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t150603z--codex--codex--gpt-5--unknown--commit-window-protocol-closeout",
             "summary": "Shared log records closeout scope, validation status, reviewer disposition, and remaining parallel observability claim."
           },
           {
@@ -976,7 +976,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -998,7 +998,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t151314z--codex--codex--gpt-5--unknown--lock-wait-nuance-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t151314z--codex--codex--gpt-5--unknown--lock-wait-nuance-closeout",
             "summary": "Shared log records closeout scope, validation status, and untouched observability staged files."
           },
           {
@@ -1122,7 +1122,7 @@
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -1144,7 +1144,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t152557z--codex--codex--gpt-5--unknown--wrong-intent-commit-incident-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t152557z--codex--codex--gpt-5--unknown--wrong-intent-commit-incident-closeout",
             "summary": "Shared log records closeout and validation status."
           },
           {
@@ -1175,7 +1175,7 @@
           "patterns": [
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -1197,7 +1197,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t152836z--codex--codex--gpt-5--unknown--closed-claim-archive-hygiene-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t152836z--codex--codex--gpt-5--unknown--closed-claim-archive-hygiene-closeout",
             "summary": "Shared log records the schema-hygiene repair and validation."
           },
           {
@@ -1227,7 +1227,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -1249,7 +1249,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t153300z--codex--codex--gpt-5--unknown--commit-bundle-evidence-taxonomy-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t153300z--codex--codex--gpt-5--unknown--commit-bundle-evidence-taxonomy-closeout",
             "summary": "Shared log records the reflected staged-bundle integrity taxonomy."
           },
           {
@@ -1286,7 +1286,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -1308,7 +1308,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t153705z--codex--codex--gpt-5--unknown--ws3b-and-joint-decision-status-reconciliation-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t153705z--codex--codex--gpt-5--unknown--ws3b-and-joint-decision-status-reconciliation-closeout",
             "summary": "Shared log records status reconciliation and validation."
           },
           {
@@ -1341,7 +1341,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/log.md"
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         }
       ],
@@ -1363,7 +1363,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t155902z--codex--codex--gpt-5--unknown--session-handoff-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t155902z--codex--codex--gpt-5--unknown--session-handoff-closeout",
             "summary": "Shared log records handoff closeout."
           },
           {
@@ -1417,7 +1417,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t160849z--codex--codex--gpt-5--unknown--vercel-sentry-marketplace-verification-closeout",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t160849z--codex--codex--gpt-5--unknown--vercel-sentry-marketplace-verification-closeout",
             "summary": "Shared log records owner verification closeout and validation."
           },
           {
@@ -1512,8 +1512,74 @@
           },
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md",
+            "ref": ".agent/state/collaboration/shared-comms-log.md",
             "summary": "Six per-chunk staging notes plus this closure capture the audit trail. Includes evidence notes on two commit-time footguns surfaced by self-applying the protocol (commitlint subject-case rule on 'L-IMM' subject-leading; markdownlint MD004 on '+' bullets in log entries)."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "eecc4c6b-0fbe-4b29-97be-5bf11783d09c",
+      "agent_id": {
+        "agent_name": "Frolicking Toast",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/**",
+            ".agent/skills/**",
+            ".agents/skills/**",
+            ".claude/skills/**",
+            ".cursor/skills/**",
+            ".agent/rules/**",
+            ".agent/directives/**",
+            ".agent/memory/**",
+            ".agent/practice-core/**",
+            ".agent/plans/**",
+            ".agent/commands/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T17:05:00Z",
+      "freshness_seconds": 1800,
+      "intent": "Owner-directed rename of the agent-comms file from log.md to shared-comms-log.md, plus cleanup of live 'embryo log' references on active surfaces. Archives and historical entries left intact.",
+      "notes": "Single-commit rename plus reference cleanup. git mv preserves history. Archives (.agent/memory/active/archive/, .agent/memory/operational/archive/, .agent/experience/, .agent/plans/*/archive/) NOT touched.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T17:35:00Z",
+        "closed_by": {
+          "agent_name": "Frolicking Toast",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "File renamed via git mv (history preserved). Live path references in 24 files updated via bulk sed. Live 'embryo log' / 'embryo-log' terminology updated in 3 plans / 1 continuity surface; remaining 'embryo' mentions are in historical narrative blocks (Prior refresh sections, resolved-issue markers, self-aware rename commentary, and the renamed file's own header) and were intentionally preserved as faithful historical record.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md",
+            "summary": "File header now carries the rename note plus the original WS3A doctrine-rename note. The file's substantial historical body retains 'embryo log' phrasing inside prior chronological entries by design."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm portability:check 2026-04-26T17:33Z",
+            "summary": "12 canonical commands, 36 canonical skills, 41 canonical rules, 22 reviewer adapters, 43 Cursor triggers, 41 Claude rules, 41 .agents rules, 40 command adapters across 4 platforms — all clean."
+          },
+          {
+            "kind": "command_output",
+            "ref": "grep -rln 'collaboration/log.md' (live paths only)",
+            "summary": "Empty result — no live surface still references the old path."
           }
         ]
       }

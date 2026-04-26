@@ -279,9 +279,9 @@ longer Frolicking-Toast-owned. Triggers that were `due` at the
 prior handoff (distilled.md hard fitness pressure; multiple fired
 pattern triggers; chunked-commit protocol evidence) remain unaddressed
 and are now ready for `jc-consolidate-docs` whenever the owner
-schedules it. Chunk 6 (embryo log → shared-comms-log rename) runs
-next under a separate brief commit-window claim and does not block
-consolidation.
+schedules it. Chunk 6 (the agent-comms-log file rename and live
+"embryo log" terminology cleanup) ran next under a separate brief
+commit-window claim and does not block consolidation.
 
 **Prior status (2026-04-26 Codex, same-branch collaboration handoff)**:
 due — `distilled.md` remains in hard fitness pressure after the

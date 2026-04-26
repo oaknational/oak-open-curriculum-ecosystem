@@ -19,7 +19,7 @@ consultation at all):
   The `notes` value is the artefact.
 - **(b) Overlap with another agent's active claim** — consult the shared
   communication log at
-  [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
+  [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
   and any open decision-thread files for context, then decide how to
   coordinate: proceed with caution, ping the other agent via the shared
   communication log, open or append a decision thread under

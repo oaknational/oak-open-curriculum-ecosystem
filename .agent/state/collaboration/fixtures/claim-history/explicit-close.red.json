@@ -16,7 +16,7 @@
           "patterns": [
             ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
             ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
-            ".agent/state/collaboration/log.md",
+            ".agent/state/collaboration/shared-comms-log.md",
             ".agent/state/collaboration/active-claims.json"
           ]
         }
@@ -39,7 +39,7 @@
         "evidence": [
           {
             "kind": "log_entry",
-            "ref": ".agent/state/collaboration/log.md#2026-04-26t075142z--codex--codex--gpt-5--unknown--ws3-plan-split-claim-close",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t075142z--codex--codex--gpt-5--unknown--ws3-plan-split-claim-close",
             "summary": "Shared communication log records the explicit close."
           },
           {

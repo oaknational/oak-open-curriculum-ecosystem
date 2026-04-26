@@ -34,7 +34,7 @@
       "evidence": [
         {
           "kind": "log_entry",
-          "ref": ".agent/state/collaboration/log.md#2026-04-25t0000z--fresh-prince--claude-code--claude-opus-4-7-1m--unknown--ws1-landing",
+          "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-25t0000z--fresh-prince--claude-code--claude-opus-4-7-1m--unknown--ws1-landing",
           "summary": "Shared communication log records WS1 structured-claims launch."
         },
         {

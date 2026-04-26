@@ -9,7 +9,7 @@ superseded by:
 
 - `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
 - `.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md`
-- `.agent/state/collaboration/log.md`
+- `.agent/state/collaboration/shared-comms-log.md`
 
 Current state, refreshed 2026-04-26:
 
@@ -22,4 +22,4 @@ Current state, refreshed 2026-04-26:
   safe step.
 
 Historical WS0 details remain recoverable from the commit body for
-`3b8c7e7f` and from the first entries in `.agent/state/collaboration/log.md`.
+`3b8c7e7f` and from the first entries in `.agent/state/collaboration/shared-comms-log.md`.

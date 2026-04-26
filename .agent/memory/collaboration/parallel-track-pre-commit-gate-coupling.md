@@ -79,7 +79,7 @@ plan. The protocol's WS0 installed:
 
 - the [`agent-collaboration.md`](../../directives/agent-collaboration.md)
   directive naming the agent-to-agent working model;
-- the shared communication log at `.agent/state/collaboration/log.md` where
+- the shared communication log at `.agent/state/collaboration/shared-comms-log.md` where
   agents declare their intent before non-trivial edits;
 - the [`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md)
   rule operationalising cross-agent gate-recovery discipline;
@@ -114,7 +114,7 @@ When you observe an instance of this pattern in a session:
   [`napkin.md`](../active/napkin.md) with date + agent + gate + what
   broke + how it was resolved.
 - Record the coordination event in the shared communication log
-  ([`state/collaboration/log.md`](../../state/collaboration/log.md)) so
+  ([`state/collaboration/shared-comms-log.md`](../../state/collaboration/shared-comms-log.md)) so
   the parallel agent has the trace.
 - If the event happens during staging or commit, record whether a fresh
   `git:index/head` claim existed and how the commit-window claim closed.

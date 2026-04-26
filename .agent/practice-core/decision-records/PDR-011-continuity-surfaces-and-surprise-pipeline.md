@@ -80,7 +80,7 @@ unit).
   artefact class to memory.** WS0 of the multi-agent collaboration
   protocol installed `.agent/state/` as the *live, ephemeral,
   signal-like* surface where multiple agents on the same repo
-  coordinate via the shared communication log (`state/collaboration/log.md`)
+  coordinate via the shared communication log (`state/collaboration/shared-comms-log.md`)
   and, from WS1, structured claims. The state-vs-memory boundary —
   *state is truth-of-now; memory is truth-across-time* — is named
   in [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md)
@@ -587,7 +587,7 @@ authored carries a **split-surface host**:
 - Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
 - Live coordination state: `.agent/state/` (introduced 2026-04-25 by
   WS0 of multi-agent collaboration protocol). Currently:
-  `state/collaboration/log.md` (shared communication log, schema-less,
+  `state/collaboration/shared-comms-log.md` (shared communication log, schema-less,
   append-only). WS1 adds `state/collaboration/active-claims.json`
   (structured claims registry); WS3 adds `state/collaboration/conversations/`
   (per-topic conversation files) and `state/collaboration/escalations/`

@@ -68,7 +68,7 @@ Read in order; stop at whichever answers your next-step question:
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
    registry
-5. `.agent/state/collaboration/log.md` — recent free-form
+5. `.agent/state/collaboration/shared-comms-log.md` — recent free-form
    collaboration context
 6. `.agent/state/collaboration/conversations/*.json` — open WS3A
    decision threads and unresolved decision requests for the touched
@@ -80,7 +80,7 @@ Apply the
 rule before any edit: enumerate the areas you intend to touch, register
 your own active claim, and leave an artefact proving the registry was
 consulted. If no entries other than your own exist, log "no other agents
-present" to `.agent/state/collaboration/log.md` and proceed (bootstrap
+present" to `.agent/state/collaboration/shared-comms-log.md` and proceed (bootstrap
 fast-path). On overlap, consult the shared communication log and any
 open decision-thread files before deciding whether to proceed, ping,
 append a decision thread, or ask the owner. Sidebar, timeout, and

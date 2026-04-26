@@ -37,7 +37,7 @@ The merge-blocking simplification preference also lives there now.
 
 The agent-to-agent working model lives in
 [`agent-collaboration.md`][agent-collaboration]. The discovery surface
-is the shared communication log at `.agent/state/collaboration/log.md`. The
+is the shared communication log at `.agent/state/collaboration/shared-comms-log.md`. The
 structured claims registry (WS1) lives at
 `.agent/state/collaboration/active-claims.json`. Three foundational
 behavioural rules are loaded as session-open tripwires:

@@ -203,7 +203,7 @@ fields:
   founding pattern that motivated the protocol.
 
 [directive]: ../../directives/agent-collaboration.md
-[log]: ../../state/collaboration/log.md
+[log]: ../../state/collaboration/shared-comms-log.md
 [active-claims]: ../../state/collaboration/active-claims.json
 [active-claims-schema]: ../../state/collaboration/active-claims.schema.json
 [closed-claims-schema]: ../../state/collaboration/closed-claims.schema.json

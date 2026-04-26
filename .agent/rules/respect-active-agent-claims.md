@@ -68,7 +68,7 @@ to avoid concurrent commit attempts.
   [`register-active-areas-at-session-open`](register-active-areas-at-session-open.md)
   rule installs the registration discipline.
 - **Free-form discussion** —
-  [`.agent/state/collaboration/log.md`](../state/collaboration/log.md)
+  [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
   remains the narrative surface for context, questions, and
   coordination notes that do not fit the claim schema. The
   [`use-agent-comms-log.md`](use-agent-comms-log.md) rule installs the

@@ -28,7 +28,7 @@ Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
-- [`log.md`](collaboration/log.md) — shared communication log
+- [`log.md`](collaboration/shared-comms-log.md) — shared communication log
   (schema-less, append-only, eventually-consistent). Discovery surface
   for sequential agents at session-open. Coexists with structured
   surfaces installed by later workstreams.

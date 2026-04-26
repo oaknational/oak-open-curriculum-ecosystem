@@ -338,7 +338,7 @@ Category A (Core → Repo):
   `.agent/skills/start-right-thorough/SKILL.md`, plus platform
   adapters.
 - Collaboration-state consultation:
-  `.agent/state/collaboration/log.md`,
+  `.agent/state/collaboration/shared-comms-log.md`,
   `.agent/state/collaboration/active-claims.json`,
   `.agent/state/collaboration/closed-claims.archive.json`, and
   `.agent/state/collaboration/conversations/`.

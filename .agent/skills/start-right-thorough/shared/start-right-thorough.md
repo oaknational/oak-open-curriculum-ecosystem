@@ -29,7 +29,7 @@ Read and internalise these documents:
 
 Before any edit, read `.agent/state/collaboration/active-claims.json` and
 apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
-rule. Also scan `.agent/state/collaboration/log.md` and any open
+rule. Also scan `.agent/state/collaboration/shared-comms-log.md` and any open
 `.agent/state/collaboration/conversations/*.json` files for the thread
 or areas you will touch. Bootstrap fast-path: if no entries other than
 your own exist, log "no other agents present" to the shared

@@ -1,8 +1,17 @@
 # Agent-to-Agent Shared Communication Log
 
-> Terminology note (2026-04-26): entries before the rename may call this
+> File rename (2026-04-26T17:05Z, owner-directed): this file was previously
+> at `.agent/state/collaboration/log.md`. The doctrine name has been
+> "shared communication log" since the WS3A rename; the file path now
+> matches.
+>
+> Terminology note: entries before the WS3A rename may call this surface
 > the "embryo log." The live doctrine name is **shared communication log**,
-> and the basic system it provides is the shared communication system.
+> and the basic system it provides is the shared communication system. Live
+> surfaces no longer reference the old terminology; archived and historical
+> entries (in `.agent/memory/*/archive/`, `.agent/experience/`, the log's
+> own historical body, and other archive surfaces) preserve the original
+> wording as part of the chronological record.
 
 Append-only chronological log. **This is a discovery surface, not a
 synchronisation surface.** Two agents writing simultaneously will produce
@@ -2041,3 +2050,76 @@ findings this hour, captured in napkin entries:
 
 Both findings should inform the commit skill's "validate before
 invoking git commit" expansion in a future iteration.
+
+### 2026-04-26T17:05Z — `Frolicking Toast` — chunk 6 staging note (embryo → shared-comms-log rename)
+
+Opening claim `eecc4c6b-0fbe-4b29-97be-5bf11783d09c` for the file
+rename and reference cleanup. Owner direction (2026-04-26 17:00Z):
+"why is the embryo log still called that, it was supposed get a more
+semantic name several sessions ago, please rename it".
+
+**Rename**: `git mv .agent/state/collaboration/log.md → shared-comms-log.md`.
+The rename matches the established doctrine name (the log header has
+read "shared communication log" since the WS3A rename) and the rule
+shorthand `use-agent-comms-log`.
+
+**Reference cleanup scope**: live "embryo log" / "embryo-log" mentions
+on the following surfaces only. Archives, historical narrative, and
+prior-session experience files are NOT modified — they are append-
+only chronological record.
+
+Live surfaces in scope:
+
+- `.agent/skills/commit/SKILL.md` and platform mirrors
+- `.agent/skills/start-right-quick/shared/start-right.md`
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
+- `.agent/rules/use-agent-comms-log.md`, `register-active-areas-at-session-open.md`, `respect-active-agent-claims.md`, `dont-break-build-without-fix-plan.md`
+- `.agent/directives/agent-collaboration.md`
+- `.agent/memory/operational/collaboration-state-conventions.md`
+- `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
+- `.agent/memory/executive/agent-collaboration-channels.md`
+- `.agent/memory/active/distilled.md`
+- `.agent/memory/active/temp-agent-collaboration-continuation.md`
+- `.agent/memory/collaboration/parallel-track-pre-commit-gate-coupling.md`
+- `.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md`, `PDR-024-vital-integration-surfaces.md`
+- `.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md`
+- `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md` (current/active plan)
+- `.agent/state/README.md`
+- `.agent/state/collaboration/conversations/ws3a-decision-thread-closed.example.json`, `ws3a-decision-thread-open.example.json`
+- `.agent/state/collaboration/fixtures/conversations/closed-decision-thread-with-evidence.red.json`
+- `.agent/state/collaboration/fixtures/claim-history/explicit-close.red.json`
+
+The new `shared-comms-log.md` retains its full historical content and
+the existing terminology note at the top, which now becomes a
+file-rename note as well.
+
+Empty staged set check: clean. Window clear.
+
+### 2026-04-26T17:35Z — `Frolicking Toast` — chunk 6 closeout (rename complete)
+
+Closing rename claim `eecc4c6b-0fbe-4b29-97be-5bf11783d09c` explicitly.
+
+Done:
+
+- `git mv .agent/state/collaboration/log.md → shared-comms-log.md`
+  (history preserved; 1659 lines of chronological record carry over).
+- Bulk sed across 24 live files updated `collaboration/log.md` →
+  `collaboration/shared-comms-log.md`. Archives and the renamed
+  file's own historical body NOT modified — historical narrative
+  preserved.
+- Targeted edits in 3 plan / 1 continuity files updated live
+  "embryo log" terminology to "shared communication log". Other
+  "embryo" mentions are inside Prior refresh blocks, resolved-
+  issue markers, self-aware rename commentary, or this file's own
+  header — intentionally preserved as faithful historical record.
+- File header now carries a 2026-04-26T17:05Z file-rename note
+  alongside the original WS3A doctrine-rename note.
+
+Validation: `pnpm portability:check` clean; `pnpm markdownlint-check:root`
+clean on the renamed file; `grep -rln 'collaboration/log.md'`
+returns empty for live surfaces.
+
+Active claims registry now empty. Next session opens with a clean
+collaboration-state slate.

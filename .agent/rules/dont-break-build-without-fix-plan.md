@@ -35,7 +35,7 @@ on the same gates passing on the same working tree.
 - A named workstream / TDD slice you are actively working through;
 - Recoverable in the current session — not a "I'll get to it" deferral;
 - Surfaced to other agents through the shared communication log
-  (`.agent/state/collaboration/log.md`) when the breakage will outlive
+  (`.agent/state/collaboration/shared-comms-log.md`) when the breakage will outlive
   the immediate edit;
 - Aligned with the gate-recovery-cadence plan's recovery sequence: typed
   seams that compile and fail behaviourally, not missing-symbol REDs.

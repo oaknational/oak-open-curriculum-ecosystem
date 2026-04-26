@@ -131,7 +131,7 @@ only if that evidence-gated sibling plan is promoted.
 | Channel | Shape | Primary use | Forward ref |
 | --- | --- | --- | --- |
 | Thread record `<slug>.next-session.md` | Durable async, narrative, per-thread, multi-session | Continuity across sessions on a single thread | PDR-027 |
-| **Shared communication log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
+| **Shared communication log** `state/collaboration/shared-comms-log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
 | Decision thread `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Concrete overlap discussion, decision requests, decisions, resolutions, and evidence | WS3A |
 | Sidebar | Short-lived focused exchange by mutual agreement | Deferred; only for tighter coordination if WS3B is explicitly promoted | WS3B paused |
 | Reviewer dispatch | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (docs-adr, assumptions, etc.) | already in use |
@@ -241,7 +241,7 @@ ADR-125 (canonical `.agent/` content with thin platform adapters).
 
 Core doctrine: [`user-collaboration.md`](user-collaboration.md),
 [`principles.md`](principles.md), and [`.agent/state/README.md`](../state/README.md).
-Core state: [log](../state/collaboration/log.md), [active claims][active-claims],
+Core state: [log](../state/collaboration/shared-comms-log.md), [active claims][active-claims],
 [closed claims][closed-claims], [conversation schema][conversation-schema], and
 [conversations][conversations-dir]. Operational companions:
 [`collaboration-state-conventions.md`][state-conventions],

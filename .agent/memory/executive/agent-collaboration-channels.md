@@ -12,7 +12,7 @@ this card is an index for at-a-glance routing.
 | # | Channel | Shape | When to use |
 | --- | --- | --- | --- |
 | 1 | **Thread record** `<slug>.next-session.md` | Durable async, narrative, multi-session | Continuity across sessions on a single thread; identity registration; landing target |
-| 2 | **Shared communication log** `state/collaboration/log.md` | Schema-less append-only markdown, eventually-consistent | Leave notes for whoever reads next; discover what other agents have been working on |
+| 2 | **Shared communication log** `state/collaboration/shared-comms-log.md` | Schema-less append-only markdown, eventually-consistent | Leave notes for whoever reads next; discover what other agents have been working on |
 | 2a | **Active claim** `state/collaboration/active-claims.json` | Structured JSON, live liveness signal | Register "I am touching this area now" or a short-lived `git:index/head` commit window |
 | 3 | **Decision thread** `state/collaboration/conversations/<id>.json` (WS3A) | Structured per-topic JSON, async | Concrete overlap discussion, decision requests, decisions, resolutions, and evidence |
 | 4 | **Sidebar** (WS3B paused) | Short-lived focused exchange by mutual agreement | Deferred; use only if owner direction or decision-thread evidence promotes WS3B |
