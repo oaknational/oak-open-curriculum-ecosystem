@@ -852,3 +852,78 @@ Bootstrap fast-path: no other active claims at session-resume.
 Reviewer roster expands to include `security-reviewer` (shared
 secret with constant-time compare) + `test-reviewer` (new tests
 for new code).
+
+### 2026-04-26T08:25:26Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3 split session handoff
+
+Opened claim `0655035b-4fa5-4e06-b27c-b3b64678bc3c`.
+
+**Intent:** run lightweight `jc-session-handoff` for the
+owner-directed WS3 split and prepare the next-session opening statement.
+
+**Coordination:** observed Sharded Stroustrup's active
+`observability-sentry-otel` claim for `/test-error` implementation.
+No overlap with this handoff's thread-continuity surfaces; avoid the
+untracked observability probe script and observability app files.
+
+### 2026-04-26T08:27:21Z — `Codex` / `codex` / `GPT-5` / `unknown` — WS3 split handoff claim close
+
+Session handoff complete. Refreshed repo-continuity, agentic-engineering
+next-session identity/continuity, and the collaboration log. Entry points
+are canonical; `.remember/` buffers did not add new next-session behaviour.
+Deep consolidation is marked due, not run, because `repo-continuity.md` is
+hard in practice fitness and the requested scope was lightweight handoff.
+
+Closing claim `0655035b-4fa5-4e06-b27c-b3b64678bc3c`; Sharded Stroustrup's
+separate observability claim remains active.
+
+### 2026-04-27T12:00:00Z — `Composer` / `cursor` / `Composer` / `unknown` — session handoff (SDK widget + tests)
+
+**Intent:** close out documentation-only `jc-session-handoff` for the
+in-flight MCP Apps metadata and universal-tools test work (widget allowlist
+alignment, `ToolMeta` optional `resourceUri`, behaviour-focused tests). Owner
+**declined** fixing remaining TypeScript errors in this pass — next session
+runs `pnpm type-check` and resolves.
+
+**Surfaces updated:** `repo-continuity.md` (last refresh, current state, next
+safe step, deep consolidation = not due), `agentic-engineering-enhancements`
+thread record (identity row + `last_session`), `napkin.md` handoff capture.
+**No** claim; **no** commit.
+
+### 2026-04-26T08:50Z — `Sharded Stroustrup` — fragile test removed; failure-to-relinquish surfaced
+
+Removed `apps/oak-curriculum-mcp-streamable-http/e2e-tests/widget-metadata.e2e.test.ts`
+on owner direction after a comparison against `.agent/directives/testing-strategy.md`.
+
+The two tests in the file violated the directive on multiple counts:
+
+- "ALWAYS test behaviour, NEVER test implementation" (line 21) — the
+  strict `McpUiMetaSchema { resourceUri: z.string() }` asserted
+  internal shape, not behaviour. Failed on a legitimate additive
+  extension (`_meta.ui.visibility: ['app']`) that's part of in-flight
+  product work in the parallel-agent's WIP.
+- "Test real behaviour, not implementation details" (line 49-51) —
+  the test fossilised a current `_meta.ui` shape; the test failed on
+  a non-breaking field addition.
+- "Each proof should happen ONCE" (line 36) — same invariant is
+  already proven at the right level in
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.unit.test.ts`.
+- "Test Assertion Placement" (line 316-319) explicitly says: "Keep
+  E2E assertions on system/transport invariants; prove runtime stub
+  semantics in SDK unit/integration tests" — this e2e asserted SDK
+  tool-definition semantics at the wrong layer.
+
+E2e suite now at 21/21 files, 153/153 tests post-deletion.
+
+**Failure-to-relinquish observation**: nine SDK files
+(`packages/sdks/oak-curriculum-sdk/src/mcp/**` and
+`packages/sdks/oak-sdk-codegen/{code-generation,src/types/generated}/**`)
+remain modified in the working tree without an active claim covering
+that scope. The most recent active-claims.json shows only my
+observability claim (`b3e0c581-940e-4ac8-841b-0e9bf3fbf90a`); no
+prior claim from any session listed `packages/sdks/` in its `areas`.
+The orphaned WIP is what triggered the e2e failure on my push gate.
+This is evidence of a session that ended without committing,
+pushing, or reverting working-tree changes — i.e., failure to
+relinquish on session end. Surfacing per
+`parallel-track-pre-commit-gate-coupling`; the WIP is left in place
+for the owner to triage with the originating agent.
