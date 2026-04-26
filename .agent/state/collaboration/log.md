@@ -401,7 +401,56 @@ correctly on my read of the modified `active-claims.json`. Decision
 substance was knowledge + judgement; the schema was the alerting
 mechanism, not the decision-maker.
 
-### 2026-04-25T19:05Z — `Keen Dahl` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — session close
+### 2026-04-25T20:50Z — `Keen Dahl` / `claude-code` / `claude-opus-4-7-1m` / `unknown` — session-handoff continuation re-claim
+
+Re-entering the `observability-sentry-otel` thread for owner-directed
+session-handoff + docs-consolidation work. Bootstrap fast-path applies
+(registry empty after Fresh Prince closed their claim); this entry is
+the registry-empty artefact.
+
+**Areas this session re-touches** (continuation surfaces only — no
+runtime code changes):
+
+- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md` — new Last Refreshed entry capturing the day's commits and the next-session brief
+- `.agent/memory/operational/repo-continuity.md` — Current Session Focus refresh
+- `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md` — status update reflecting today's commits
+- New plan: `.agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md` — next-session deliverables (Sentry validation against preview, MCP server validation, CodeQL/Sonar triage)
+- `.agent/memory/active/napkin.md` — append session-end observations
+- `.agent/memory/active/distilled.md` — graduate the day's hardened lessons
+
+**Coordination note**: this is a continuation of my earlier session
+today (Keen Dahl identity already on the thread per
+PDR-027 additive rule). No new identity row needed — same
+platform/model/agent_name as my earlier rows; updating last_session
+on the existing row is per the rule.
+
+**Areas I will NOT touch**: runtime code, build scripts (today's
+fixes have been pushed and are in CI), the multi-agent collaboration
+plan (paused on evidence). My session-end commit will stage by
+explicit pathspec.
+
+### 2026-04-25T20:50Z — `Keen Dahl` — end-of-day summary
+
+Day's commits on `feat/otel_sentry_enhancements`:
+
+- `6485773f` — `fix(build-metadata)`: VERCEL_BRANCH_URL hostname-not-URL
+  (the bug fix; Vercel preview now green)
+- `c2b1c1e5` — `refactor(build-metadata)`: lift bare unions to
+  constant-type-predicate pattern
+- `27a7ae78` — `refactor(sentry-node)`: consume constants from
+  build-metadata
+- `51e548e8` — `feat(env)`: add BuildEnvSchema with
+  vercel_branch_url hostname-not-URL refinement at the schema
+  boundary
+- `9bcc8ffc` — `docs(plans)`: future-enhancements plan for the
+  ESLint rule + diagnostic-rule amendment
+- `f4bf2fa1` — `fix(search-cli)`: defer smoke env validation so knip
+  can load the config in CI
+
+Plus four agents touched the registry today (Jiggly Pebble, Fresh
+Prince, Keen Dahl ×2 sessions including this re-claim). Coordination
+worked via the embryo log + structured registry. The protocol is
+operating under load.
 
 Phase 0 walk + assumptions-reviewer dispatch complete. Both close
 gates satisfied: code-reviewer (commit `0c04e7d5`) + assumptions-reviewer
