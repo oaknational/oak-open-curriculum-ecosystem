@@ -338,7 +338,7 @@ rehearsal).
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored` | 2026-04-25 | 2026-04-25 |
-| `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close` | 2026-04-25 | 2026-04-25 |
+| `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan` | 2026-04-25 | 2026-04-26 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

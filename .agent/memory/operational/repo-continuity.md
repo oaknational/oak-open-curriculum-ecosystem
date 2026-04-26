@@ -50,7 +50,7 @@ state live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25 |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / startup-boundary-phase2-partial-green / 2026-04-25; `claude-code` / `claude-sonnet-4-6` / Jazzy / release-identifier-WS3-drafting-paused / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Keen Dahl / pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan / 2026-04-25→2026-04-26 |
 | `agentic-engineering-enhancements` (**paused-on-evidence 2026-04-25**) | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation. Multi-agent collaboration protocol WS0+WS1+WS2 landed; WS3+WS4+WS5 paused until ≥ 3 real parallel-coordination events accumulate. | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation; markdown-code-block-rule / 2026-04-24→2026-04-25; `cursor` / `GPT-5.5` / Codex / grouped-commit-closeout / 2026-04-24; `claude-code` / `claude-sonnet-4-6` / Jazzy / multi-agent-collaboration-protocol-plan-author / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Jiggly Pebble / multi-agent-collaboration-protocol-WS0-landed-as-63c66c88 / 2026-04-25; `claude-code` / `claude-opus-4-7-1m` / Fresh Prince / multi-agent-collaboration-protocol-WS1-landed-as-a5d33519 / 2026-04-25 |
 
 The `memory-feedback` thread is archived as of 2026-04-22 Session 8.
@@ -167,25 +167,36 @@ Current branch non-goals:
 Expected next session, per owner direction:
 
 1. Read
-   [`observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
-2. Preserve unrelated/parallel working-tree changes if they reappear; do not
-   reset, restage broadly, or claim staged WS3 residue exists.
-3. Confirm the pushed branch produced the expected Vercel deployment, then
-   collect WS6 deployed-state evidence: release name, environment, deploy
-   linkage, `git.commit.sha`, source maps / Debug IDs, and event attribution
-   in Sentry for the pushed observability package.
-4. If the next session needs to claim aggregate repo health before or after
-   deployed-state validation, rerun full `pnpm check`. The latest package only
-   claims focused gates plus repo-level `type-check`, `lint`, `knip`, `test`,
-   `build`, root markdownlint, portability, and `git diff --check`.
-5. Keep `RuntimeConfig.buildIdentity`, `HttpObservability.release` public-surface
-   cleanup, and remaining smoke composition-root global mutation cleanup routed
-   to
+   [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
+   end-to-end. That plan IS the next-session brief in executable form;
+   both pre-execution gates (`code-reviewer` + `assumptions-reviewer`)
+   already ran and 12 findings are absorbed in the plan body's Reviewer
+   Dispositions table.
+2. Read [`observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md)
+   for thread-level context and the day's commit set.
+3. Walk Phase 1 (deployment baseline) before any Sentry / triage work.
+   Capture the expected release name at session-open from the Vercel
+   branch alias — do NOT use the literal in any prior plan body.
+4. Phase 2's passive evidence path (Phase 1 baseline-probe transactions
+   appearing in Sentry) is primary; the active test-error path is owner-
+   gated supplement.
+5. Phases 3 + 4 (CodeQL + Sonar triage) MUST use the paginated /
+   PR-scoped queries named in the plan body (absorbed code-reviewer
+   findings 1 + 2). If time-budget pressed, follow the absorbed
+   assumptions-reviewer MAJOR-A truncation rule: CRITICAL+MAJOR fully;
+   MINOR partial with the truncation rule recorded.
+6. Phase 5 routes findings into the PR-87 plan; net-new PR-87 Phase
+   1/2 tasks re-trigger `assumptions-reviewer` BEFORE PR-87 plan-body
+   edits land (absorbed code-reviewer NIT-6 + assumptions-reviewer
+   MAJOR-C).
+7. Keep `RuntimeConfig.buildIdentity`, `HttpObservability.release`
+   public-surface cleanup, and remaining smoke composition-root global
+   mutation cleanup routed to
    [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
    unless the owner explicitly broadens this slice.
-6. Do not continue into soft-fitness or deep-consolidation work by default.
-   Napkin rotation remains due, but the owner explicitly directed the next
-   session to be Sentry focused.
+8. Do not continue into soft-fitness or deep-consolidation work by
+   default. Napkin is at ~273 lines today (rotated 2026-04-25);
+   rotation is not due. Consolidation gate is `not due`.
 
 ## Open Owner-Decision Items
 
@@ -202,7 +213,23 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-25 Fresh Prince second handoff after promotion pass)**:
+**Status (2026-04-26 Keen Dahl session-handoff)**: **not due** — the
+2026-04-26 session landed seven commits (six product, one continuity),
+unblocked the Vercel preview gate, and queued an evidence-bound
+next-session plan. Napkin is at ~273 lines (rotated 2026-04-25 by
+Jiggly Pebble); well under the rotation threshold. Distilled.md gained
+four new sections graduated from today's observations (workspace-first
+across artefact classes; test fixtures must encode production shape;
+constant-type-predicate half-applied as lint-detectable state;
+config-load vs test-execution side effects). Pending-graduations
+register has two new candidates surfaced this session (workspace-first
+as a Practice rule; test-fixture-anchoring as an ADR amendment) but
+both at single-instance — `pending`, no trigger fired. No core surface
+edits required. Next session is Sentry preview validation + CodeQL/Sonar
+triage per the new plan; consolidation gate stays at `not due` unless
+that session surfaces a doctrinal candidate.
+
+**Prior status (2026-04-25 Fresh Prince second handoff after promotion pass)**:
 **not due** — the post-WS1 continuation arc closed cleanly. The arc
 delivered: WS1 landing (`a5d33519`); owner-directed pause of WS3+
 (`d56c4d38`); consolidate-docs run with ADR/PDR gap evaluation
@@ -519,6 +546,8 @@ step 7 uses this section as its primary queue.
 | 2026-04-25 | Fresh Prince napkin + WS1 pause execution | *workstream-pause-on-evidence discipline*. Owner-directed mid-plan pauses touch a 5–6-surface set (source plan YAML + body Status + thread record + repo-continuity Active Threads + roadmap + current-plans README); high enough to warrant a named ritual or skill. PDR-026 covers per-session landing; this is the per-workstream sibling. Candidate home: PDR-026 amendment, new small PDR, or `.agent/skills/pause-plan/`. | Second instance of an owner-directed mid-plan pause, or explicit owner direction. | pending |
 | 2026-04-25 | Fresh Prince napkin + fitness validator interaction (WS1) | Tooling: *prose-line-width validator treats `[label]: url` reference-link declarations as non-prose*. **Graduated 2026-04-25** — landed as a small classifier extension at [`scripts/validate-practice-fitness.mjs`](../../../scripts/validate-practice-fitness.mjs) (new `link-reference` kind matching `^\[[\w.-]+\]:\s`; treated identically to frontmatter, code-fence, code-block, and table for prose-line-width purposes). Per owner direction (instance-count is not the right measure): three instances in one session was sufficient to land a small dev-tools change rather than gate on a second session. | — | graduated |
 | 2026-04-25 | Consolidate-docs cross-experience scan (Fresh Prince) | *infrastructure-alive-at-install* — sibling/refinement to `the-frame-was-the-fix`. Five experience files in four days (2026-04-22 the-rule-tested-itself; 2026-04-22 the-plan-was-not-the-conversation; 2026-04-25 jazzy from-locks-to-knowledge; 2026-04-25 jiggly-pebble the-mailbox-i-am-also-building; 2026-04-25 fresh-prince the-protocol-applied-to-itself) name one shape: each new piece of Practice infrastructure is exercised by its own installation. More specific than the parent pattern. Owner-decision candidates: graduate as new sibling pattern, amend the parent pattern to name self-applied-infrastructure as a sub-case, or PDR-elevate. | Five instances all within the multi-agent collaboration protocol arc; cross-arc bar may not be met. Trigger: one further instance from a different lane, or owner direction. | pending |
+| 2026-04-26 | Napkin (Keen Dahl) + three-instance failure-mode cluster in one day (missed `vercel_logs/build-issues.log`, missed `gh pr checks 87` Vercel-fail discrepancy with brief, missed `@oaknational/env` schema infrastructure). Captured as three feedback memories: `feedback_workspace_first_for_diagnostics`, `feedback_gh_pr_checks_over_brief`, `feedback_check_workspace_packages_before_proposing` | Practice rule: *workspace-first before external tooling or new infrastructure*. The three feedback memories name specific failure modes; a single rule would name the general class (search workspace inventory before consulting external systems or proposing new code). Candidate home: new `.agent/rules/workspace-first-before-external.md` OR amendment to `read-diagnostic-artefacts-in-full.md` already queued in `.agent/plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md`. | Second cross-session instance of the failure mode (likelihood reduced by today's three feedback memories), OR explicit owner direction. | pending |
+| 2026-04-26 | Napkin (Keen Dahl) + VERCEL_BRANCH_URL bug shipped because test fixture and production code agreed on the wrong contract — both used `https://...` shape; real Vercel value is hostname-only | ADR amendment to `testing-strategy.md` §Test Data Anchoring (the principle is named there but not operationalised): *anchor critical fixtures to captured real production values with date-stamped citations to source documentation; if input shape is documented, fixture matches docs literally; if captured from real deployment, record deployment ID + date alongside fixture*. Candidate home: testing-strategy.md amendment OR new ADR if the rule generalises beyond fixtures (e.g., to schema validators encoding shape contracts). | Second cross-session instance of fixture/code agreement on wrong contract, OR explicit owner direction. | pending |
 
 Historical deep-consolidation findings and session-close summaries are
 preserved in git history and
