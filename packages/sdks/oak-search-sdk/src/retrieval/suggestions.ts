@@ -67,7 +67,7 @@ export async function suggest(
     const limit = clampLimit(params.limit);
     const scopeKind = resolveIndexKind(params.scope);
     const index = resolveIndex(scopeKind);
-    const suggestions = await runDualQuery(
+    const suggestions = await runDualQuery({
       prefix,
       limit,
       params,
@@ -76,7 +76,7 @@ export async function suggest(
       client,
       docSearch,
       logger,
-    );
+    });
 
     return ok({
       suggestions,
@@ -101,16 +101,19 @@ function resolveIndexKind(scope: SuggestParams['scope']): IndexKind {
   return 'lessons';
 }
 
-async function runDualQuery(
-  prefix: string,
-  limit: number,
-  params: SuggestParams,
-  index: string,
-  scopeKind: IndexKind,
-  client: SuggestClient,
-  docSearch: BoolPrefixSearchFn,
-  logger?: Logger,
-): Promise<readonly SearchSuggestionItem[]> {
+interface RunDualQueryDeps {
+  readonly prefix: string;
+  readonly limit: number;
+  readonly params: SuggestParams;
+  readonly index: string;
+  readonly scopeKind: IndexKind;
+  readonly client: SuggestClient;
+  readonly docSearch: BoolPrefixSearchFn;
+  readonly logger?: Logger;
+}
+
+async function runDualQuery(deps: RunDualQueryDeps): Promise<readonly SearchSuggestionItem[]> {
+  const { prefix, limit, params, index, scopeKind, client, docSearch, logger } = deps;
   const completion = buildCompletionClause(prefix, limit, params.subject, params.keyStage);
   const completionResponse = await client.search({
     index,
