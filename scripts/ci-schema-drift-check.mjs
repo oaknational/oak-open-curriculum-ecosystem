@@ -70,6 +70,8 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error) {
   console.log(`::notice::Schema drift check failed unexpectedly: ${String(error)}`);
-});
+}
