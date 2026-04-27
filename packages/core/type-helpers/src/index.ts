@@ -11,7 +11,7 @@ type ValueOf<T> = T[StringKeyOf<T>];
 type EntryOf<T> = [StringKeyOf<T>, ValueOf<T>];
 
 function isOwnStringKey<T>(obj: T, key: string): key is StringKeyOf<T> {
-  return Object.prototype.hasOwnProperty.call(obj, key);
+  return Object.hasOwn(Object(obj), key);
 }
 
 export function typeSafeKeys<T>(obj: T): StringKeyOf<T>[] {
@@ -66,5 +66,5 @@ export function typeSafeHas<T>(obj: T, key: PropertyKey): key is keyof T {
 
 /** Own-key check (typed) */
 export function typeSafeHasOwn<T>(obj: T, key: PropertyKey): key is keyof T {
-  return Object.prototype.hasOwnProperty.call(obj, key);
+  return Object.hasOwn(Object(obj), key);
 }
