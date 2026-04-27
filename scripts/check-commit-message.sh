@@ -49,6 +49,7 @@ Exit codes:
   0  conforms; 1  violates; 2  invalid usage.
 EOM
   exit 2
+  return 2
 }
 
 msgs=()
