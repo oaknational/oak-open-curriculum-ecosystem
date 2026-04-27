@@ -158,6 +158,92 @@ session.
 
 ---
 
+## 2026-04-27 — Opalescent Gliding Prism — verifying handoff state catches three stale assertions
+
+**Context:** picked up the PR-87 architectural cleanup thread from
+Pelagic Flowing Dock's handoff. Pelagic's session-close header
+(thread record + comms-log + plan §"Session 1") all asserted
+"branch is 6 ahead of origin, NOT pushed". Opalescent's session-open
+verification via `git rev-parse HEAD` and `git rev-parse
+origin/feat/otel_sentry_enhancements` showed both at `0b8af81f` —
+**already pushed**. The owner pushed between session-close and the
+next session opening. Plus two other stale claims surfaced:
+"7 OPEN CodeQL alerts" was actually 12 (5 new on
+`host-validation-error.unit.test.ts`); "8 unit tests on the dormant
+rule" was actually 15 cases.
+
+### Surprise
+
+- **Expected:** the handoff surfaces (plan §Session 1, thread record,
+  comms-log) would accurately describe the state at session-2 open,
+  modulo at most one or two minor drifts.
+- **Actual:** three load-bearing assertions were stale; a fourth
+  (rule-test count) had been wrong since Session 1 even before any
+  push happened. The Explore agent dispatched in planning phase
+  ALSO inherited the stale "NOT pushed" framing without
+  independently verifying via `git rev-parse origin`.
+- **Why expectation failed:** prior-session continuity text gets
+  read as ground truth even when it pre-dates the next session. The
+  owner's push between sessions is exactly the kind of state change
+  that handoff text can't anticipate. Combined with the assumption-
+  reviewer's cross-cutting verdict ("a plan that reads its own
+  status section as ground truth will inherit drift"), this names a
+  stronger discipline than just "verify state at session open" — it
+  names "verify state, AND if you dispatch agents, ensure they
+  verify too".
+
+### New trigger word for the disposition-drift list
+
+Pelagic's napkin entry (above) added five trigger-word classes:
+
+- "stylistic" / "false-positive" / "out of scope" / "owner direction
+  needed without analysis"
+- "convention" / "language idiom" / "well-known name" / "canonical TS idiom"
+- "all done" / "all pushed" / "all clean"
+
+Today's drift surfaces a sixth class:
+
+- **"per the brief" / "per the handoff" / "per the prior session"** —
+  citing inherited text as authority for state assertions. Treat
+  prior-session text as a STARTING HYPOTHESIS, never as ground
+  truth. Verify before re-asserting. The remediation pattern:
+  for every state assertion in the prior brief, the next session
+  open must have a verification command in the comms-log entry
+  before the assertion appears in any new artefact.
+
+### Sub-agent inheritance of stale framing
+
+The Explore agent I dispatched in the planning phase produced a
+detailed inventory report that included "Push status: NOT PUSHED — 6
+commits local, origin at 8cd49fe1" as a verbatim assertion. The
+agent had access to `git rev-parse` but did not run it; instead it
+quoted the active plan body. The lesson: **briefing a sub-agent
+against potentially-stale text inherits the staleness**.
+Mitigation: when briefing a sub-agent on prior-session state, name
+the verification commands explicitly in the brief, not just the
+text to be verified against.
+
+### Behaviour change
+
+- **Treat prior-session text as a STARTING HYPOTHESIS, not
+  authority.** Every state assertion in the brief gets a
+  verification command in the new session's comms-log entry before
+  the assertion appears in any new artefact.
+- **Brief sub-agents with verification commands, not text to
+  re-quote.** When asking an agent to inventory state, include the
+  exact `git`/`gh`/MCP commands it should run; do not provide just
+  the text to compare against.
+- **Replace, don't bridge in plan-body text.** When stale assertions
+  are found, REPLACE them in the plan body. Do not append a
+  correction next to the stale text — that is a textual bridge,
+  same shape the principle bans for code. (This was the
+  assumptions-reviewer's cross-cutting note; today named in
+  practice.)
+
+- **Source plane:** active
+
+---
+
 ## 2026-04-27 — Pelagic Flowing Dock — drift recurs while writing the rule that bans it
 
 **Context:** later the same day, working on the same PR-87 thread, I

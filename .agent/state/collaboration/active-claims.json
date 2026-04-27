@@ -1,49 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "6739211b-1446-4493-9ad0-5fc5c762de37",
-      "agent_id": {
-        "agent_name": "Opalescent Gliding Prism",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "radiant-pillow"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
-            ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
-            ".agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md",
-            "apps/oak-curriculum-mcp-streamable-http/src/host-validation-error.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/host-validation-error.unit.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
-            "packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.ts",
-            "packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.unit.test.ts",
-            "packages/core/oak-eslint/src/plugin.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        },
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-27T18:21:19Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "Execute the approved PR-87 architectural cleanup plan (1B+2A+3A): rewrite stale plan-body assertions, probe Cluster Q regex sink, delete dormant no-problem-hiding-patterns rule + write reinstate stub, then proceed through Clusters A/B/C/D/H/I/J/K/L/M/N/O.",
-      "notes": "Active claims and commit_queue were empty before opening (last claim was Prismatic Waxing Constellation, closed at 16:31:40Z). Branch verified pushed at HEAD=origin=0b8af81f. PR-87 fresh CI run currently in_progress."
-    }
-  ]
+  "claims": []
 }

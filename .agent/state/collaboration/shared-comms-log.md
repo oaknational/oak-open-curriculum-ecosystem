@@ -3465,3 +3465,84 @@ verdict):
   verdict).
 - State assertions in documentation MUST be preceded by the verification
   command that produced them.
+
+### 2026-04-27T18:47:08Z — `Opalescent Gliding Prism` / `claude-code` / `claude-opus-4-7-1m` / `radiant-pillow` — session close at context-budget threshold
+
+Closing claim `6739211b-1446-4493-9ad0-5fc5c762de37` explicitly with
+`closure.kind: "explicit"` after landing the approved plan's Phase 0,
+Phase 0.5, Phase 1, Cluster Q dispositions, and Cluster A sink-trace
+analysis.
+
+**Pushed this session** (HEAD = origin = `cadc26eb`):
+
+```text
+cadc26eb chore(eslint): delete drift-authored no-problem-hiding-patterns rule
+882d1f2c docs(observability): re-ground PR-87 plan to verified live state
+```
+
+**External-API dispositions** (no commits; live state changed):
+
+- 5 CodeQL alerts dismissed as `false_positive` via `gh api PATCH
+  /repos/.../code-scanning/alerts/{82,83,84,85,86}` — Cluster Q closure.
+  CodeQL OPEN alerts: 12 → 7.
+- 1 Sonar hotspot `AZ3PzDg2qR2lgcKGwtUx` REVIEWED → SAFE via Sonar MCP
+  `change_security_hotspot_status` — accept-with-rationale citing
+  legitimate ipv6-loopback test fixture. `new_security_hotspots_reviewed`:
+  expected to recover toward 100% on next Sonar scan.
+
+**Remaining PR-87 work** (handed off to fresh session):
+
+- **Cluster A** (5 CodeQL alerts on auth-routes / oauth-proxy / bootstrap):
+  sink-trace analysis landed in plan body §Cluster A "Sink-trace findings
+  (Session 2)". Multi-file structural cure requires narrowing
+  `RateLimiterFactory`'s return type from `RequestHandler` to
+  `RateLimitRequestHandler`, plus extending the test fake at
+  `test-helpers/rate-limiter-fakes.ts` with stub `getKey`/`resetKey`
+  methods, plus narrowing parameter types in 3 route-registration files.
+  This is multi-commit work needing CI-cycle CodeQL recognition probe.
+  Fallback per plan: dismiss-with-rationale citing existing TSDoc
+  attestations at `auth-routes.ts:18-32, 47-75, 124-138` + integration
+  tests at `rate-limiter-di.integration.test.ts`.
+- **Cluster B** (vercel-ignore generic command-runner): owner-flagged
+  hotspot `AZ3D3iflrIk5eL0ceU__`; TDD cycle for `gitShowFileAtSha` +
+  `gitFetchShallow`.
+- **Cluster C** (schema-cache write boundary, 2 CodeQL alerts): per-site
+  investigation; likely dismiss-with-rationale citing validate-then-cache
+  - ADR-029 if reviewers confirm.
+- **Clusters H/I/J/K/L/M/N/O/D** (16 Sonar issues + 5.7% duplication QG
+  per Path 2A): per-site investigation per existing plan.
+
+**Discipline carry-over for fresh session**:
+
+- Pelagic + Opalescent napkin entries are mandatory reading at
+  session-2-handoff. Today's drift recurrence happened in handoff
+  text inheritance — three load-bearing assertions stale, plus the
+  Explore agent inherited the staleness in its inventory report.
+- Trigger-word vocabulary now extended to include "per the brief /
+  per the handoff / per the prior session" — citing inherited text
+  as authority for state assertions. Prior-session text is a
+  STARTING HYPOTHESIS, never authority.
+- When briefing a sub-agent on prior-session state, name verification
+  commands explicitly in the brief, not just text to compare against.
+- "Replace, don't bridge" applies to plan-body text too. Stale
+  assertions get replaced; never appended-to with a correction.
+
+**Branch state at close**: HEAD = origin = `cadc26eb`. PR-87 mergeable
+but BLOCKED on remaining RED CodeQL (7 OPEN: Clusters A + C) and
+SonarCloud (27 violations + 5.7% duplication). 2 commits pushed this
+session. Active claims and `commit_queue` empty after close.
+
+**Co-tenant note at close**: Coastal Washing Rudder's queue-governance
+graduation pass left ~16 files uncommitted in working tree from
+~16:46Z. 15 of those files were not touched by my session and remain
+uncommitted (collaboration-state-conventions/lifecycle, repo-continuity
+sections I didn't touch, agentic-engineering-enhancements plans,
+PDR-029 amendments, etc.). The 16th — `closed-claims.archive.json` —
+overlapped: Coastal's uncommitted closure entry for claim
+`30a1db9a-893d-49dd-948e-c097b4f98af0` was inadvertently removed when
+I reverted my own additions to the file before re-adding only my
+Opalescent closure entry on a clean HEAD base. Coastal's structured
+closure entry needs to be re-added by Coastal in a future session;
+their session-close evidence remains durable in the comms-log entry
+at 2026-04-27T16:46:45Z (committed). Owner direction needed on
+whether to commit Coastal's remaining 15 uncommitted files.

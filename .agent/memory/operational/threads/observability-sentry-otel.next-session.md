@@ -1,6 +1,24 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Session-close 2026-04-27T~17:25Z (Pelagic Flowing Dock, claude-code, claude-opus-4-7-1m, session derived from `those-were-my-composed-key-2026-04-27` seed)** — 6 commits landed locally (`0e68aa87`, `3d4a0925`, `0d2d4dc8`, `d1f5226b`, `9da90650`, `3c6a3958`); **branch is 6 ahead of origin, NOT pushed**. Codegen sweep work was reverted at session-close per owner direction; the void/_ rule was retained as dormant code (no config tier activates it). Owner-directed metacognitive correction at session-close: I reproduced the same drift pattern I had named in this morning's napkin entry, three times in succession.
+**Session-close 2026-04-27T18:47Z (Opalescent Gliding Prism, claude-code, claude-opus-4-7-1m, session seed `radiant-pillow-2026-04-27`)** — 2 commits landed AND PUSHED (`882d1f2c`, `cadc26eb`); HEAD = origin = PR-87 head = `cadc26eb`. Phase 0 (plan-body re-grounding), Phase 1 (dormant rule deletion + reinstate stub), and Cluster Q dispositions (5 CodeQL dismissed + 1 Sonar hotspot accept) landed. Cluster A sink-trace analysis captured in plan body. Owner direction at planning: Decisions 1B + 2A + 3A. Session closed at context-budget threshold per owner direction.
+
+**Critical for next session**:
+
+1. **Read the [Opalescent Gliding Prism napkin entry](../../active/napkin.md) FIRST.** Today's drift recurrence happened in handoff text inheritance — three Pelagic-session assertions had become stale (push state, CodeQL count, hotspot count, rule-test count). The Explore agent dispatched in planning ALSO inherited the stale framing because it quoted the active plan body without independently verifying via `git rev-parse origin`. New trigger-word class: "per the brief / per the handoff / per the prior session". Verify before re-asserting.
+2. **Read the active plan** [`.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`](../../../plans/observability/active/pr-87-architectural-cleanup.plan.md). The §"Session 2" body, §"Live signal state", and §"Cluster A — Sink-trace findings (Session 2)" sub-section capture the verified live state and the Cluster A multi-file type-narrowing analysis.
+3. **Cluster A is next** — multi-file structural cure: narrow `RateLimiterFactory` return type from `RequestHandler` to `RateLimitRequestHandler`, extend the test fake with stub `getKey`/`resetKey` methods, narrow parameter types in `auth-routes.ts` / `oauth-proxy-routes.ts` / `bootstrap-helpers.ts`. Multi-commit; needs CI cycle for CodeQL recognition probe; reviewer dispatch (code/type/test/security/mcp/arch-fred/arch-wilma in parallel). Fallback per plan: dismiss-with-rationale citing TSDoc attestations at `auth-routes.ts:18-32, 47-75, 124-138` + integration tests at `rate-limiter-di.integration.test.ts`.
+4. **Discipline reminders** (per Pelagic + Opalescent napkin entries):
+   - "Replace, don't bridge" applies to plan-body text. Stale assertions get replaced, never appended-to with corrections.
+   - State assertions in documentation MUST be preceded by the verification command that produced them.
+   - When briefing a sub-agent on prior-session state, name verification commands explicitly in the brief.
+   - Serial-only for write-capable specialists. Read-only Explore + read-only reviewer dispatch in parallel is allowed.
+5. **Co-tenant note**: Coastal Washing Rudder left ~16 files uncommitted in working tree from queue-governance graduation pass at ~16:46Z. Not my scope. Owner direction needed on commit timing.
+
+**Remaining PR-87 work** (after Cluster A): Cluster B (vercel-ignore generic command-runner + hotspot), Cluster C (schema-cache 2 CodeQL alerts), Clusters H/I/J/K/L/M/N/O/D (16 Sonar issues + 5.7% duplication QG per Path 2A).
+
+---
+
+**Earlier session-close 2026-04-27T~17:25Z (Pelagic Flowing Dock, claude-code, claude-opus-4-7-1m, session derived from `those-were-my-composed-key-2026-04-27` seed)** — 6 commits landed locally (`0e68aa87`, `3d4a0925`, `0d2d4dc8`, `d1f5226b`, `9da90650`, `3c6a3958`); branch was 6 ahead of origin at session-close; **all 7 commits including Pelagic's `0b8af81f` were pushed by 2026-04-27T18:21Z when Opalescent opened** (verified via `git rev-parse origin/feat/otel_sentry_enhancements`). Codegen sweep work was reverted at session-close per owner direction; the void/_ rule was retained as dormant code (no config tier activates it). Owner-directed metacognitive correction at session-close: I reproduced the same drift pattern I had named in this morning's napkin entry, three times in succession. **Update at Opalescent's session-close**: the dormant rule was deleted cleanly per Decision 1B; reinstate stub plan opened at `observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md`.
 
 **Session shape**:
 

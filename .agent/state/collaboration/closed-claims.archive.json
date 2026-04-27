@@ -3544,6 +3544,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "6739211b-1446-4493-9ad0-5fc5c762de37",
+      "agent_id": {
+        "agent_name": "Opalescent Gliding Prism",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "radiant-pillow"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+            ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+            ".agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md",
+            "apps/oak-curriculum-mcp-streamable-http/src/host-validation-error.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/host-validation-error.unit.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.ts",
+            "packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.unit.test.ts",
+            "packages/core/oak-eslint/src/plugin.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T18:21:19Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Execute the approved PR-87 architectural cleanup plan (1B+2A+3A): rewrite stale plan-body assertions, probe Cluster Q regex sink, delete dormant no-problem-hiding-patterns rule + write reinstate stub, then proceed through Clusters A/B/C/D/H/I/J/K/L/M/N/O.",
+      "notes": "Active claims and commit_queue were empty before opening (last claim was Prismatic Waxing Constellation, closed at 16:31:40Z). Branch verified pushed at HEAD=origin=0b8af81f. PR-87 fresh CI run currently in_progress.",
+      "archived_at": "2026-04-27T18:47:08Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T18:47:08Z",
+        "closed_by": {
+          "agent_name": "Opalescent Gliding Prism",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "radiant-pillow"
+        },
+        "summary": "Phase 0 plan-body re-grounding (commit 882d1f2c), Phase 1 dormant rule deletion (commit cadc26eb, -226 lines), Cluster Q dispositions (5 CodeQL alerts dismissed as false_positive + 1 Sonar hotspot accept-as-SAFE), sentry-preview-validation re-scope, and Cluster A sink-trace analysis landed in plan body. Cluster A code changes deferred to fresh-session work.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "882d1f2c",
+            "summary": "docs(observability): re-ground PR-87 plan to verified live state"
+          },
+          {
+            "kind": "commit",
+            "ref": "cadc26eb",
+            "summary": "chore(eslint): delete drift-authored no-problem-hiding-patterns rule per Decision 1B"
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+            "summary": "Plan Sessions 1+2 history captures verified state and Session 2 outcomes; Cluster A Sink-trace findings documents the multi-file structural cure analysis."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md",
+            "summary": "Reinstate stub plan opened per Decision 1B follow-up."
+          },
+          {
+            "kind": "external_api",
+            "ref": "GitHub code-scanning alerts API PATCH /alerts/{82,83,84,85,86}",
+            "summary": "5 CodeQL alerts dismissed as false_positive citing production regex anchoring at host-header-validation.ts:6."
+          },
+          {
+            "kind": "external_api",
+            "ref": "Sonar MCP change_security_hotspot_status hotspotKey=AZ3PzDg2qR2lgcKGwtUx",
+            "summary": "Hotspot REVIEWED with resolution=SAFE citing legitimate ipv6-loopback test fixture."
+          }
+        ]
+      }
     }
   ]
 }

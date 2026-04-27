@@ -8,7 +8,15 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-27 (Vining Bending Root / claude-code /
+**Last refreshed**: 2026-04-27 (Coastal Washing Rudder / codex /
+gpt-5.5 / 019dcf — owner-directed queue governance graduation pass. Queue
+doctrine from evidence commit `5c39d1d4` is now graduated into PDR-029 Family A
+Class A.3, operational semantics live in collaboration-state conventions and
+lifecycle docs, and the completed queue execution plan is archived. Current
+HEAD was verified as `0b8af81f` during this edit pass; `5c39d1d4` is historical
+evidence, not a current-HEAD claim.)
+
+**Prior refresh**: 2026-04-27 (Vining Bending Root / claude-code /
 claude-opus-4-7-1m / 4e2cbc5c — PR-87 quality remediation Phases 3-5
 executed under metacognitive correction. 14 PR-87 commits pushed (HEAD
 `61c846b1`) closing CodeQL #5 and addressing S107/S2871/S3776/S5852/S6571/
@@ -32,12 +40,12 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `5c39d1d4`, ahead of
-  origin.
-- Current dirty work is session-handoff state from the just-landed queue
-  migration commit: active-claim closure, shared-log closeout, and continuity
-  refreshes. Active claims and `commit_queue` are empty after handoff; re-check
-  both plus `git diff --cached --name-status` before the next index action.
+- Branch: `feat/otel_sentry_enhancements`; current HEAD was verified as
+  `0b8af81f` during the 2026-04-27 queue-governance edit pass.
+- Current dirty work is the owner-directed queue governance graduation plus
+  preserved prior queue-handoff collaboration-state closeout. Active claims and
+  `commit_queue` are empty after this closeout; re-check both plus
+  `git diff --cached --name-status` before the next index action.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -75,9 +83,13 @@ in `archive/` or the per-thread next-session records.
 - Collaboration-doc fitness remediation landed with the queue work:
   directive detail moved to referenced operational docs, and lifecycle
   recipes live in `collaboration-state-lifecycle.md`.
-- The first successful self-application commit using the advisory queue has
-  fired the queue-doctrine graduation trigger; deep consolidation is due before
-  queue doctrine is treated as fully settled governance.
+- The first successful self-application commit using the advisory queue fired
+  the queue-doctrine graduation trigger. Queue doctrine is now settled in
+  [PDR-029 Family A Class A.3](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md);
+  operational semantics live in
+  [`collaboration-state-conventions.md`](collaboration-state-conventions.md)
+  and
+  [`collaboration-state-lifecycle.md`](collaboration-state-lifecycle.md).
 
 ## Active Threads
 
@@ -86,8 +98,8 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27; Riverine Navigating Hull / `claude-code` / `claude-opus-4-7-1m` / agent-identity-derivation-phase-8-claude-code-statusline-wiring / 2026-04-27. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -170,55 +182,54 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Deep consolidation for queue governance** — the queue self-application
-   trigger fired in `5c39d1d4`. Run `jc-consolidate-docs` or an
-   owner-directed governance amendment pass to graduate the queue doctrine into
-   the relevant PDR / collaboration-state governance surface.
-2. **Strict exact-optional cleanup** — the stricter
+1. **Strict exact-optional cleanup** — the stricter
    `--exactOptionalPropertyTypes` probe is clean for identity files but still
    reports the pre-existing `agent-tools/src/bin/codex-reviewer-resolve.ts`
    optional typing issue.
-3. **First real sidebar / joint-decision seed** — when a real overlap uses
+2. **First real sidebar / joint-decision seed** — when a real overlap uses
    the new entries, capture whether it reached resolution without becoming a
    permission gate or default owner escalation.
-4. **Observability branch-primary (L-IMM closed 2026-04-26 at 6/6;
-   PR-87 quality lane in flight under corrected disposition)** —
-   - L-IMM lane (operational hardening): closed at 6/6 after owner
-     verification that the Vercel Sentry Marketplace plugin is active
-     and configured. The execution wrapper rotated to
+3. **Observability branch-primary (PR-87 architectural cleanup in flight)** —
+   - L-IMM lane (operational hardening): closed at 6/6.
      [`archive/completed/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md).
-   - [`current/pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md):
-     **14 PR-87 commits pushed 2026-04-27 under Vining Bending Root**
-     (HEAD `61c846b1`). CI test, Vercel preview, CodeQL language analyses,
-     Cursor Bugbot all green. CodeQL combined and SonarCloud Code
-     Analysis remain RED. **Fresh thread MUST start by reverting commit
-     `03a58787`** (DISABLE block violating `principles.md` "NEVER disable
-     any quality gates"). Master plan now carries §"Phase 5 Metacognitive
-     Correction" at the head with the full corrected per-finding
-     disposition table; Phase 0 Task 0.2 + Phase 5 + Phase 6 Task 6.3
-     marked SUPERSEDED.
-   - Deployed-state validation of the new fingerprint on the next
-     preview deploy: hit `/test-error?mode=...` via the existing probe
-     script and confirm new Sentry issues carry the hybrid fingerprint
-     `['{{ default }}', 'TestError*']`. Note the issue-merge
-     discontinuity callout — existing OAK-OPEN-CURRICULUM-MCP-{7,8,9}
-     issues retain old grouping; new occurrences attach to NEW issue
-     IDs.
-   - The prior substrate plan
-     [`sentry-preview-validation-and-quality-triage.plan.md`](../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
-     closed 2026-04-26 with full Phase 1-5 findings tables; rotate to
-     archive/completed/ on next consolidate-docs.
-5. **Lifecycle integration follow-up** — only if owner-directed, observe
+   - [`active/pr-87-architectural-cleanup.plan.md`](../../plans/observability/active/pr-87-architectural-cleanup.plan.md)
+     supersedes the previous `pr-87-quality-finding-resolution.plan.md`
+     (now in `archive/superseded/`). HEAD = origin = PR-87 head =
+     `cadc26eb` (2 commits pushed by Opalescent Gliding Prism this
+     session: `882d1f2c` re-grounding + `cadc26eb` dormant-rule deletion).
+     CodeQL OPEN: 7 (was 12; 5 dismissed in Cluster Q). Sonar QG ERROR:
+     27 violations + 5.7% duplication + 2 TO_REVIEW hotspots (one
+     pending Cluster B refactor; the new one accepted as SAFE this
+     session).
+   - **Next safe step on this lane**: Cluster A (DI-opacity rate-limiting,
+     5 CodeQL alerts). Sink-trace analysis landed in plan body
+     §Cluster A "Sink-trace findings (Session 2)". Multi-file structural
+     cure: narrow `RateLimiterFactory` return type from `RequestHandler`
+     to `RateLimitRequestHandler`, extend test fake at
+     `test-helpers/rate-limiter-fakes.ts` with stub `getKey`/`resetKey`
+     methods, narrow parameter types in 3 route-registration files.
+     Multi-commit; needs CI cycle for CodeQL recognition probe; reviewer
+     dispatch (code/type/test/security/mcp/arch-fred/arch-wilma in
+     parallel). Fallback per plan: dismiss-with-rationale citing TSDoc
+     attestations at `auth-routes.ts:18-32, 47-75, 124-138` + integration
+     tests at `rate-limiter-di.integration.test.ts`.
+   - **Reinstate plan**: [`future/no-problem-hiding-patterns-rule-reinstatement.plan.md`](../../plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md)
+     opened per Decision 1B follow-up; queued for after PR-87 ships.
+   - **`current/sentry-preview-validation-and-quality-triage.plan.md`** —
+     re-scoped to Phases 1-2 only (Sentry preview validation + MCP server
+     preview probe); Phases 3-5 marked superseded (now owned by the
+     active PR-87 plan).
+4. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders without evidence. First real
    sidebar/joint-decision usage should feed WS5 observation.
-6. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
+5. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
    landed in `ff119d44`; CLI/TUI title/statusline surfaces exist, but a
    first-class IDE session-title/custom-name setting was not found. Cursor
    composer `session_id` is the stable seed via `sessionStart`; repo hook +
    mirror landed in working tree — **Composer tab title** still needs Cursor
    product support or manual rename from `suggestedComposerTabTitle`.
-7. **Other agentic engineering work** — WS3A, WS4A, commit-window,
+6. **Other agentic engineering work** — WS3A, WS4A, commit-window,
    WS3B, joint-decision, and Phase 8 Claude Code statusline wiring are all
    complete. Pick a queued owner-directed plan from the current/roadmap
    surfaces.
@@ -240,6 +251,17 @@ These are visible owner-appetite items, not blockers for the active lanes:
    removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
+
+**Status (2026-04-27 Opalescent Gliding Prism, PR-87 architectural cleanup
+Session 2 handoff)**: not due — owner-gated. The active lane is PR-87
+architectural cleanup; Cluster A multi-file structural cure is the next safe
+step and is fresh-session work. Pelagic Flowing Dock's "Drift recurs while
+authoring the enforcement of the principle it violates" graduation is already
+in `distilled.md` from Session 1; today's Opalescent napkin entry adds the
+sub-agent-inheritance-of-stale-framing observation but it doesn't yet meet a
+graduation trigger (single instance; need second cross-session occurrence
+before the PDR-029 family expands). Per the standing direction: do not run
+consolidation as a default option in session handoff.
 
 **Status (2026-04-27 Fragrant Sheltering Pollen, app-server rollback and
 queue-evidence closeout)**: completed this handoff — owner explicitly
@@ -375,10 +397,17 @@ snapshots.
 - 2026-04-26; parallel reviewer dispatch + structural-then-pre-landing
   review phasing; PDR-015 amendment; trigger: graduation pass; status:
   graduated 2026-04-26 to PDR-015 amendment (commit `cb358e8d`).
-- 2026-04-27; intent-to-commit queue v1.3.0 implementation; likely PDR-029 /
+- 2026-04-27; intent-to-commit queue v1.3.0 implementation; PDR-029 /
   collaboration-state governance amendment; trigger: first successful
   self-application commit using the queue helper or second real queue cleanup;
-  status: due — first successful self-application commit landed as `5c39d1d4`.
+  status: graduated 2026-04-27 to
+  [PDR-029 Family A Class A.3](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md).
+  Operational semantics live in
+  [`collaboration-state-conventions.md`](collaboration-state-conventions.md)
+  and
+  [`collaboration-state-lifecycle.md`](collaboration-state-lifecycle.md);
+  completed execution evidence lives in
+  [the archived queue plan](../../plans/agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md).
 - 2026-04-27; investigation-mode drifts into disposition-mode under context
   pressure (Vining Bending Root, PR-87 Phase 5); PDR candidate around
   master-plan ACCEPT/DISABLE tables as structural enablers of this drift,

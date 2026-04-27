@@ -138,6 +138,16 @@ The regex IS anchored (`^...$`). The other static regexes in the same file (line
 
 **Disposition for Cluster Q**: dismiss all 5 CodeQL alerts (#82–#86) via the alerts-dismissal API with category `false_positive` and rationale citing the production-regex anchoring at `host-header-validation.ts:6`. Plus the new TO_REVIEW Sonar hotspot at `host-validation-error.unit.test.ts:70` (S5332 "http protocol insecure" — the test asserts `value: 'http://[::1]:3333'` for the documented ipv6 loopback semantics) — `accept`-with-rationale via Sonar MCP. **No production code changes for Cluster Q.**
 
+### Session 2 outcomes (so far)
+
+- **Phase 0 plan-body re-grounding**: committed at `882d1f2c docs(observability): re-ground PR-87 plan to verified live state`. Stale §"Session 1" + §"Live signal state" sections replaced with verified data.
+- **Phase 1 dormant rule deletion**: committed at `cadc26eb chore(eslint): delete drift-authored no-problem-hiding-patterns rule`. -226 lines. Reinstate stub at `.agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md`.
+- **Cluster Q dispositions**: 5 CodeQL alerts (#82–#86) dismissed as `false_positive` via `gh api` PATCH; 1 Sonar hotspot `AZ3PzDg2qR2lgcKGwtUx` `accept`-ed as SAFE via Sonar MCP. CodeQL OPEN alert count: 12 → 7. No production code changes.
+- **Sentry-preview-validation re-scope**: `.agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md` frontmatter receiving-body updated to point at the active plan; Phases 3-5 marked superseded.
+- **Cluster A sink-trace**: completed analysis (see Cluster A's "Sink-trace findings (Session 2)" sub-section). The structural cure requires multi-file type narrowing across rate-limiter-factory + 3 route-registration files + the test fake. This is fresh-session work — not landed in Session 2.
+- **Push state at session-2 close**: HEAD = origin = `cadc26eb`; PR-87 head matches; 2 commits pushed this session (882d1f2c, cadc26eb).
+- **Remaining work**: Cluster A (5 CodeQL alerts, structural cure), Cluster B + hotspot (1 Sonar hotspot + S5843 + S6644), Cluster C (2 CodeQL alerts), Clusters H/I/J/K/L/M/N/O/D (16 Sonar issues + 5.7% duplication QG).
+
 ---
 
 ## Context
@@ -264,6 +274,16 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 **Findings**: CodeQL #69, #70, #71, #72, #81.
 
 **Architectural shape**: Express route handlers registered inside factory functions where the rate-limit middleware is passed as a structurally-typed `RequestHandler` parameter. CodeQL's static analysis can't trace the limiter's lineage through the DI seam, so it flags every route-registration site as missing rate-limit middleware. The dismissal-with-rationale path treats the symptom; the architectural cure is to make the limiter's presence *legible to static analysis* — either by surface shape (a `withRateLimit(limiter, handler)` wrapper at the registration site, where the relationship is structurally apparent) or by route-factory shape (a `createRateLimitedRoute({ limiter, method, path, handler })` helper that holds the contract internally).
+
+**Sink-trace findings (Session 2, Opalescent Gliding Prism)**:
+
+- The widening from `RateLimitRequestHandler` (the type `express-rate-limit`'s `rateLimit()` returns) to `RequestHandler` happens at `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts:73-80`: `createDefaultRateLimiterFactory` returns `(options) => RequestHandler`, dropping the rate-limiter type signal at the factory boundary. The widening is inherited by `RateLimiterFactory` (line 44).
+- The test fake at `test-helpers/rate-limiter-fakes.ts:33-39` returns a plain `(req, res, next) => next()` typed as `RequestHandler` — it does not satisfy the `RateLimitRequestHandler` interface (missing `getKey`, `resetKey`, etc.).
+- CodeQL's `js/missing-rate-limiting` rule recognises specific rate-limiter packages including `express-rate-limit`. Recognition would propagate IF the type chain preserves `RateLimitRequestHandler` from factory to registration site.
+- A simple curry wrapper (`withRateLimit(limiter, handler)` returning `[limiter, handler]`) does NOT change the dataflow; CodeQL would see the same `RequestHandler[]` shape. Curry alone is unlikely to be recognised.
+- The genuine structural cure requires narrowing the type chain end-to-end: factory return type → DI parameter types in auth-routes/oauth-proxy-routes/bootstrap-helpers, plus extending the test fake to satisfy the narrowed type (stub `getKey` / `resetKey` etc.). This is a multi-file change touching ~6 files, requiring TDD on the fake and reviewer dispatch on the parameter-type narrowing.
+
+**Owner lens applied**: lens 4 (DI must inject a capability, not raw structural shape). The current `RequestHandler` parameter is too generic — a route-factory caller can pass anything. The seam needs to be a *capability*: "register this handler under this rate-limit policy."
 
 **Owner lens applied**: lens 4 (DI must inject a capability, not raw structural shape). The current `RequestHandler` parameter is too generic — a route-factory caller can pass anything. The seam needs to be a *capability*: "register this handler under this rate-limit policy."
 
