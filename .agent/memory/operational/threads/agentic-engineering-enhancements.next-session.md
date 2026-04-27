@@ -1,14 +1,13 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
 **Last refreshed**: 2026-04-27 (Prismatic Waxing Constellation / codex /
-gpt-5.5 — owner-directed intent-to-commit queue implementation plus
-`jc-session-handoff` and `jc-consolidate-docs`. The future queue plan was
+gpt-5.5 — owner-directed intent-to-commit queue implementation landed as
+`5c39d1d4`, followed by `jc-session-handoff`. The future queue plan was
 promoted to current execution, `active-claims` schema v1.3.0 now has a root
-advisory `commit_queue`, and `pnpm agent-tools:commit-queue --` verifies FIFO position,
-exact staged files, staged fingerprint, and commit subject before durable
-history is written. The stale staged add for the deleted root queue script was
-removed under a short `git:index/head` claim; no commit was performed, and
-other staged dirty work remains outside this claim.)
+advisory `commit_queue`, and `pnpm agent-tools:commit-queue --` verifies FIFO
+position, exact staged files, staged fingerprint, and commit subject before
+durable history is written. The landing commit self-applied the queue
+protocol; queue-governance consolidation is now due.)
 
 **Prior refresh**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
 gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
@@ -341,14 +340,13 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session landed as uncommitted queue implementation and closeout
-(2026-04-27 Prismatic Waxing Constellation, intent-to-commit queue
-implementation):**
+**Latest session landed queue implementation and self-application
+(2026-04-27 Prismatic Waxing Constellation, commit `5c39d1d4`):**
 
-- owner-directed queue work is implemented in the working tree and not
-  committed. This session used a short `git:index/head` claim only to clear the
-  stale staged add for the deleted root script, leaving other staged entries
-  untouched;
+- owner-directed queue work landed as
+  `feat(agent-tools): add commit queue workflow`. The landing used a fresh
+  `git:index/head` claim, queued the exact staged file bundle, recorded the
+  staged fingerprint, verified it before commit, and completed the queue entry;
 - promoted
   [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md)
   as the executable current plan and updated the future source plan with the
@@ -364,13 +362,12 @@ implementation):**
   `pnpm agent-tools:lint`, `pnpm knip`, `pnpm test:root-scripts`,
   `pnpm portability:check`, `pnpm markdownlint-check:root`,
   `pnpm practice:vocabulary`, `pnpm practice:fitness:strict-hard`, and
-  `git diff --check`. Direct file-level ESLint on the superseded `.mjs` helper
-  is no longer the validation path because the queue lives in `agent-tools`
-  TypeScript;
+  `git diff --check`; the real commit hook also passed Prettier format check,
+  markdownlint, knip, depcruise, and turbo type-check/lint/test;
 - the root `scripts/commit-queue.mjs` file is absent from both the working tree
-  and staged index. Other staged entries remain, so the next landing must
-  re-check active claims, queue order, and `git diff --cached --name-status`
-  before touching the index.
+  and staged index. Active claims and `commit_queue` are empty after handoff;
+  the next index action must still re-check active claims, queue order, and
+  `git diff --cached --name-status`.
 
 **Prior latest session landed as closeout and next-session opener
 (2026-04-27 Fragrant Sheltering Pollen, Codex rollback and queue-evidence
@@ -787,21 +784,21 @@ validation.
   seeding landed in `ff119d44`. Cursor composer uses experimental project
   `sessionStart` hook wiring (`OAK_AGENT_SEED`, mirror file, docs); official
   Hooks output still lacks a programmatic Composer tab-title field.
-- Collaboration-doc fitness remediation is implemented in the working tree.
-  Later strict-hard checks should distinguish those target docs from any
-  unrelated concurrent WIP pressure.
-- Intent-to-commit queue v1.3.0 is implemented in the working tree:
+- Collaboration-doc fitness remediation landed in `5c39d1d4`. Later
+  strict-hard checks should distinguish those target docs from any unrelated
+  concurrent WIP pressure.
+- Intent-to-commit queue v1.3.0 landed as `5c39d1d4`:
   active-claims carries root `commit_queue`, `pnpm agent-tools:commit-queue --` can
   enqueue/phase/record/verify/complete intents, and commit/start-right/docs
-  surface advisory FIFO order plus exact staged-bundle verification. It is not
-  staged or committed yet.
+  surface advisory FIFO order plus exact staged-bundle verification.
 - Cross-vendor shared-log communication has a live proof point and a limit:
   Codex left Vining a repo-context-specific future-design note with no
   platform bridge, but the first heartbeat found no visible pickup. Treat the
   log as durable discovery; use sidebars, decision threads,
   acknowledgements, or queue mechanics for directed obligations.
-- `intent_to_commit` is now owner-directed work and implemented as a minimal
-  ordered advisory queue, not only claim metadata.
+- `intent_to_commit` is now implemented as a minimal ordered advisory queue,
+  not only claim metadata. The first self-application commit has fired the
+  queue-doctrine consolidation trigger.
 - Codex display-surface investigation is complete for this session:
   repo-owned identity derivation uses `CODEX_THREAD_ID`. The experimental
   app-server title-mutation adapter was dropped because stable session names
@@ -820,20 +817,20 @@ validation.
 
 ### Blockers / Low-Confidence Areas
 
-- Full branch gates are not claimed green; current repo state includes separate
-  MCP/SDK TypeScript debt outside the completed practice-thread passes.
-- Practice fitness for the collaboration directive/conventions was remediated
-  in the working tree. Re-run strict-hard before landing because other agents
-  are also editing the branch.
+- Full branch gates are not claimed green beyond the real pre-commit hook that
+  passed for `5c39d1d4`; current repo state may still include product-lane debt
+  outside the completed practice-thread passes.
+- Queue-governance consolidation is due because the first successful
+  self-application commit using `pnpm agent-tools:commit-queue --` has landed.
 - The strict `--exactOptionalPropertyTypes` probe is clean for identity files
   but still reports the pre-existing optional typing issue in
   `agent-tools/src/bin/codex-reviewer-resolve.ts`.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
-- The stale staged add for `scripts/commit-queue.mjs` is clear, but other
-  staged entries remain. The next session must treat staged-index state as
-  volatile and re-check it directly before any index work.
+- Active claims and `commit_queue` are empty after handoff. The next session
+  must still treat staged-index state as volatile and re-check it directly
+  before any index work.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
@@ -851,35 +848,31 @@ the proposed commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Intent-to-commit queue landing** — re-run start-right grounding and
-   active-claim checks, then open a fresh `git:index/head` claim and self-apply
-   the new queue helper before staging. Stage only the queue implementation
-   pathspecs, record and verify the exact staged bundle plus subject with
-   `pnpm agent-tools:commit-queue --`, commit, and clear the queue entry. Do not use
-   session-count TTL.
-2. **Collaboration-doc fitness remediation landing** — validate and land the
-   already-implemented split separately once the git index is clear.
-3. **Strict exact-optional cleanup** — fix the pre-existing
+1. **Deep consolidation for queue governance** — `5c39d1d4` fired the first
+   self-application trigger. Run `jc-consolidate-docs` or an owner-directed
+   PDR/collaboration-state governance pass before treating queue doctrine as
+   settled.
+2. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
-4. **First real sidebar / joint-decision seed** — when a real overlap uses
+3. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-5. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+4. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-6. **Observability branch-primary** — read the
+5. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-7. **Lifecycle integration follow-up** — only if owner-directed, observe
+6. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether the new start-right / handoff / template lifecycle triggers are
    actually used in the next few sessions. Do not add hooks without evidence;
    first real sidebar/joint-decision usage should feed WS5 observation.
-8. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
+7. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
    wired; CLI/TUI title/statusline surfaces exist, but no supported IDE
    custom-title setting was found. Cursor composer `session_id` seeds the repo
    hook; **tab title** still requires manual rename from mirror or a future
    Cursor API — track product requests separately from repo derivation.
-9. **Other agentic engineering work** — pick an owner-directed queued plan.
+8. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
@@ -897,6 +890,6 @@ Choose the lane deliberately:
 - Treat Codex-to-Vining pickup through the shared communication log as WS5
   collaboration evidence. If Vining replies or acts, record it in the parent
   multi-agent collaboration plan rather than creating a new surface.
-- Treat the first successful self-application commit using
-  `pnpm agent-tools:commit-queue --` as the trigger to graduate queue doctrine into
-  the relevant PDR/collaboration-state governance surface.
+- Queue self-application trigger fired in `5c39d1d4`; the pending-graduations
+  register now marks queue governance as due. Next consolidation should decide
+  the PDR / collaboration-state home.

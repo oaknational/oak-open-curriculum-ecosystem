@@ -29,7 +29,7 @@ isProject: false
 # Owner-Directed Intent-to-Commit Queue
 
 **Last Updated**: 2026-04-27
-**Status**: 🟢 WORKING-TREE COMPLETE
+**Status**: 🟢 LANDED (`5c39d1d4`)
 **Scope**: Ordered advisory commit queue plus exact staged-bundle verification,
 owned by the `agent-tools` TypeScript workspace.
 
@@ -256,7 +256,7 @@ failure and avoid broad fixes outside this claim.
 | Stale queue entries strand agents | Expiry is reporting only; consolidation and commit skill can mark abandoned or clear deliberately. |
 | Fingerprint false confidence | Verification checks both exact staged file set and SHA-256 over name-status plus binary patch. |
 | Registry write races | The helper is repo-owned and narrow, but still advisory; lost queue writes are recoverable by re-enqueue before staging. |
-| Dirty shared index | This session does not stage or commit, and the plan requires a fresh `git:index/head` claim later. |
+| Dirty shared index | The landing commit self-applied the queue protocol and verified the staged bundle before writing history. |
 
 ---
 
@@ -321,6 +321,9 @@ wrapper remains.
   working tree.
 - A short `git:index/head` claim removed the stale staged add for
   `scripts/commit-queue.mjs`; other staged entries were left untouched.
+- Commit `5c39d1d4` self-applied `pnpm agent-tools:commit-queue --`: enqueue,
+  staging phase, staged-bundle recording, exact verification, pre-commit phase,
+  commit, and completion cleanup.
 
 ---
 
@@ -348,20 +351,19 @@ explicitly requested both and this session changes collaboration doctrine.
 **Evidence**:
 
 - `repo-continuity.md` and this thread record now identify the queue
-  implementation as working-tree complete, with the root script absent and the
-  next landing still requiring a fresh `git:index/head` claim plus exact staged
-  bundle verification.
+  implementation as landed in `5c39d1d4`, with the first self-application
+  trigger marking queue-governance consolidation due.
 - Consolidation archived stale claim
   `9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10` with `closure.kind: "stale"`.
-- This session's active claim
-  `42ba7a66-1b4e-48fb-a81b-df9f78639571` was closed explicitly after final
-  validation. No commit was performed.
+- Workspace migration claim `42ba7a66-1b4e-48fb-a81b-df9f78639571` and commit
+  claim `4f4411f1-942f-4368-9481-0eadf53baf7d` were closed explicitly after
+  validation and landing.
 
 ---
 
 ## Dependencies
 
-**Blocking**: none for unstaged implementation.
+**Blocking**: none for landed implementation.
 
 **Related Plans**:
 

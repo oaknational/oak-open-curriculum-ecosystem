@@ -94,6 +94,147 @@ commit before starting the next.
 
 ---
 
+## 2026-04-27 Phase 5 Metacognitive Correction (Vining Bending Root)
+
+**Status of this section**: SUPERSEDES the Phase 5 ACCEPT/DISABLE table
+in Phase 0 Task 0.2 below and the Phase 6 dismissal list in Task 6.3.
+The supersession is a principles.md realignment, not a scope retreat.
+
+### What went wrong in Phase 5 (commit `03a58787`)
+
+The Phase 5 commit introduced a `sonar.issue.ignore.multicriteria` block
+suppressing `typescript:S6594`, `typescript:S6644`, and `typescript:S7748`
+across `**/*.ts`. The rationale claimed "stylistic, doesn't reflect Oak's
+style". **No per-site investigation was performed**. The commit:
+
+- Directly contradicts `principles.md` §Code Quality: "**NEVER disable
+  any quality gates**".
+- Directly contradicts `principles.md` §Code Quality: "**WE DON'T HEDGE —
+  It is worth doing or it doesn't exist**".
+- Directly contradicts the in-session feedback memory
+  `feedback_never_ignore_signals` written by Vining the same morning:
+  "never silence a signal without investigating the architectural tension
+  that produced it".
+
+The drift mechanism: under context pressure, this plan's Phase 0 Task 0.2
+ACCEPT/DISABLE table replaced first-principles investigation with table-
+clearing. Owner correction issued 2026-04-27.
+
+**Disposition**: revert `03a58787` in the fresh thread. Each rule needs
+per-site investigation.
+
+### Owner-stated holistic-quality posture (2026-04-27)
+
+Owner clarifications that change disposition:
+
+1. **Nothing is out of scope**. Repo quality is holistic. Findings
+   previously labelled "out of scope per master plan" (S2871 sentry-node,
+   etc.) are in scope.
+2. **Disabling checks contradicts the Practice**. Investigate the
+   architectural tension; never weaken the gate. This applies to
+   Sonar `multicriteria` ignores, CodeQL alert dismissals where the
+   underlying tension hasn't been investigated, and per-file ESLint
+   exemptions equally.
+3. **Schema-cache validate-then-skip-with-warning IS correct
+   defence-in-depth**. CodeQL #76/#77 should be dismissed-with-rationale,
+   NOT refactored to satisfy CodeQL's dataflow analyser. The
+   architectural shape was right at commit `3d80d8c6`.
+4. **`.ts` is preferred everywhere `pnpm exec tsx` works**. `.mjs` is
+   permitted only where there is no possible route to `.ts` (e.g.
+   pre-`pnpm install` execution context). Three of four `.mjs` scripts
+   in the touched scope can migrate to `.ts`.
+5. **Sonar's MCP tooling is available** for proper quality-gate
+   investigation; the QG-status `NONE` reading needs deeper digging,
+   not a label.
+
+### Per-finding architectural tensions (corrected dispositions)
+
+| Finding | Sites | Architectural tension | Corrected disposition |
+|---|---|---|---|
+| `typescript:S6594` `RegExp.exec` over `String.match` | 4 sites in build-output-contract.ts (×3), health-probe-continuity-state.ts (×1) | Per-site read needed: `match` and `exec` differ semantically only with `/g`. The rule may be correct OR irrelevant per site. | Per-site investigation; mechanical fix where rule applies, per-issue dismissal with concrete code-shape rationale where it doesn't. NOT a `multicriteria` ignore. |
+| `typescript:S6644` conditional default-assign | 3 sites in vercel-ignore.mjs (×1, retain), sentry-build-plugin.ts (×1), git-sha.ts (×1) | `??=` handles null + undefined; explicit `if (x === undefined)` distinguishes. Each site has its own decision. | Per-site investigation. Mechanical replacement where intent is null-or-undefined; preserve explicit form where it carries information. |
+| `typescript:S7748` zero-fraction | 2 sites in runtime-scope.unit.test.ts (lines 98, 236) | Both sites are `tracesSampleRate: 1.0` for Sentry SDK config. Sentry's API contract IS a float (0.0..1.0). The float form is more accurate to the contract. | Per-issue dismissal-with-rationale citing Sentry SDK API contract. NOT a `multicriteria` ignore. |
+| `typescript:S7763` `export … from` | ~12 sites | Re-exports that could use the shorter syntax. Mechanical sweep was correct intent. | Mechanical sweep, per-site. |
+| `typescript:S7780` `String.raw` for backslash | 7 sites (build-output-contract.ts ×4, semver-parity.test.ts:218, more) | Style improvement. Mechanical. | Mechanical sweep, per-site. |
+| `typescript:S6353` `\d` over `[0-9]` | 3 sites in agent-tools/health-probe | Style preference. Mechanical. | Mechanical sweep, per-site. |
+| `typescript:S6653` `Object.hasOwn` | 2 sites in type-helpers/index.ts | Real safety improvement over `Object.prototype.hasOwnProperty.call()`. | Mechanical fix. |
+| `typescript:S7786` `new TypeError` | 5 sites (runtime-sdk.unit.test.ts ×3, primitives.ts, middleware.integration.test.ts:45) | Real specificity improvement. | Mechanical fix. |
+| `typescript:S6606` `??=` | 1 site in deploy-entry-handler.ts:41-46 | Style improvement. Mechanical. | Mechanical fix. |
+| `typescript:S7735` negated condition | 4 sites (validate-practice-fitness ×2, runtime-sdk.ts ×2, server-harness.js) | Per-site judgement. | Per-site investigation. |
+| `typescript:S7781` `String.replaceAll` over `String.replace` (NEW) | 3 sites in derive.ts (lines 140, 174, 175) | All three use `/g` flag — Sonar prefers explicit `replaceAll`. Style improvement. | Mechanical fix. |
+| `typescript:S2871` Array.sort no comparator | 2 sites (×2 fires same line, runtime-redaction-barrier.unit.test.ts:626) | Default sort is locale-sensitive. The two `.sort()` calls compare same domain so test happens to pass. Real correctness improvement available. | Mechanical fix. **Was wrongly labelled "out of scope".** |
+| `typescript:S3735` void operator | 4 sites (test-config.ts:129 — already TSDoc-strengthened at f2d376a2, admin/index.ts:73 — fixed at f52d6ec2, eval/index.ts:87 — fixed at ea1a8d77, **NEW: test-error-route.integration.test.ts:79**) | The 4th site has the explicit comment "The 4-arg signature is load-bearing: Express recognises error middleware by arity". Same Express-shape interface conformance as test-config. | Strengthen TSDoc + dismiss the 4th site as FALSE_POSITIVE. Same shape as site 1. |
+| `javascript:S5843` regex complexity 32/20 | 4 sites (semver.ts:31, validate-root-application-version.mjs:21, semver-parity.test.ts:34, vercel-ignore.mjs:21) | The strict semver §2 grammar regex. The complexity is inherent to the spec. **But**: the 4-site spread is a copy-paste artefact, not a structural necessity. Only vercel-ignore has a hard pre-`pnpm install` constraint. | **Structural redesign**, not bulk dismissal. Migrate validate-root-application-version to `.ts`, importing the regex from semver.ts. Move the regex export to a focused `semver-pattern.ts` module so S5843 fires once at the canonical home + once at vercel-ignore (the genuinely-required inline copy). Each remaining site dismissed with concrete reason. |
+| `shelldre:S7677` redirect error to stderr (probe script) | 2 sites at probe-sentry-error-capture.sh:143, :168 | Sonar's heuristic pattern-matches "error" in the line text. Lines 143 (header) and 168 (endpoint URL) contain "error" descriptively, are NOT error messages. | Per-issue dismiss-with-rationale citing the heuristic's substring nature. |
+| CodeQL `js/missing-rate-limiting` (DI-opacity) | 5 alerts (#69, #70, #71, #72, #81) | The `RequestHandler`-typed parameter hides the rate-limiter from CodeQL's dataflow analyser. ADR-078 (DI for testability) and CodeQL's pattern-matching are in genuine tension. | **Investigation first**: is there a registration shape that preserves DI AND makes wiring legible to CodeQL? E.g. `withRateLimit(limiter, handler)` curry, or `createRateLimitedRoute(...)` helper. If no clean structural fix exists, dismiss-with-rationale citing in-code TSDoc evidence (Phase 3.4 commit `b1a4cd79`) + integration test (Phase 3.2.b commit `64c8ba5e`). |
+| CodeQL `js/http-to-file-access` (schema-cache) | 2 alerts (#76, #77) | CodeQL's dataflow can't see throw-on-failure validator as a sanitiser. The architectural shape (validate-then-skip-with-warning) is correct defence-in-depth per owner direction. | Dismiss-with-rationale. NO refactor. Cite Phase 3.1 commit `3d80d8c6` + the in-code TSDoc. |
+
+### `.mjs` → `.ts` migration audit
+
+Per owner policy point: only `.ts` and `.mjs`; `.mjs` only where `pnpm
+exec tsx` cannot run.
+
+| File | Constraint | Disposition |
+|---|---|---|
+| `scripts/validate-practice-fitness.mjs` | None — invoked after install | Migrate to `.ts` |
+| `scripts/validate-root-application-version.mjs` | None — build context, deps installed | Migrate to `.ts`. Once `.ts`, can import from `@oaknational/build-metadata` and the regex inline goes away (collapses S5843 by one site). |
+| `scripts/ci-schema-drift-check.mjs` | None — CI step, deps installed | Migrate to `.ts` |
+| `apps/.../vercel-ignore-production-non-release-build.mjs` | **Hard structural** — pre-`pnpm install`, no tsx | Stay `.mjs`. The S5843 dismissal-with-rationale lives here. |
+| Shell scripts (`check-commit-message.sh`, `dev-widget-in-host.sh`, `restart-dev-server.sh`, `probe-sentry-error-capture.sh`) | Separate question per "no possible route to .ts" criterion | Out of immediate scope — surface for later evaluation. |
+
+### Sonar QG investigation
+
+Earlier session reading of `mcp__sonarqube__get_project_quality_gate_status`
+returned `{"status":"NONE","conditions":[]}`. This was reported as
+"gate not configured" without further investigation. **Action**:
+fresh thread should query SonarCloud's QG definition directly via
+the Sonar MCP (or UI) to confirm what's actually blocking.
+
+### Direct violations to revert in fresh thread
+
+- **Commit `03a58787`** (`chore(sonar): suppress 3 stylistic MINOR rules`):
+  revert. The 24 lines of `multicriteria` ignores need to be removed.
+  Each of the three rules needs per-site investigation per the table
+  above.
+
+### Action items for fresh thread
+
+1. Revert `03a58787` (DISABLE block).
+2. Investigate each Sonar rule per-site, not per-rule.
+3. Restructure the strict-semver regex to narrow S5843 site count
+   (move regex export to focused module; migrate
+   validate-root-application-version to `.ts`).
+4. Migrate 3 of 4 `.mjs` scripts to `.ts`.
+5. Dismiss schema-cache CodeQL #76/#77 with rationale, no code refactor.
+6. Investigate CodeQL DI-opacity for a registration shape that's
+   legible to static analysis without weakening DI; dismiss-with-
+   rationale only if no structural fix exists.
+7. Fix S2871 sentry-node Array.sort (mechanical, was wrongly out-of-
+   scope).
+8. Strengthen TSDoc + dismiss S3735 in
+   test-error-route.integration.test.ts:79 (4th site, missed in
+   master plan).
+9. Fix S7781 ×3 in derive.ts (mechanical).
+10. Investigate Sonar QG definition properly via the Sonar MCP.
+
+### Self-critique to carry forward
+
+The drift from investigation-mode to disposition-mode under context
+pressure is a recurring pattern. Triggers to detect earlier:
+
+- I start labelling findings ("stylistic", "false-positive", "out of
+  scope") instead of describing their architectural tension.
+- I batch suppressions without per-site investigation.
+- I cite the master plan's table instead of re-deriving from
+  `principles.md`.
+- I write "owner decision needed" framing that abdicates investigation
+  responsibility back to the owner instead of doing the analysis first.
+
+**Mitigation**: re-read `principles.md` at the boundary between phases
+as a guard against label-mode drift, not just at session-open.
+
+---
+
 ## Context
 
 PR #87 (`feat/otel_sentry_enhancements`) currently fails three
@@ -480,6 +621,12 @@ rg -nE "app\.(get|post|use)" apps/oak-curriculum-mcp-streamable-http/src/auth-ro
 findings section below.
 
 #### Task 0.2: Decide stylistic-rule policy
+
+> **⚠ SUPERSEDED 2026-04-27**. The ACCEPT/DISABLE framing of this
+> task was the source of the Phase 5 disposition-mode drift. Owner
+> correction: each rule fires at distinct sites with distinct
+> contexts; per-site investigation, not per-rule categorisation. See
+> §"Phase 5 Metacognitive Correction" at the head of this plan.
 
 **Current Assumption**: 49 MINOR Sonar findings include rules Oak
 may not follow (e.g., `S7763` `export … from` convention, `S6594`
@@ -1270,6 +1417,15 @@ bash scripts/check-commit-message.sh -m "test(check): smoke" || echo OK
 
 ### Phase 5: MINOR Sonar Resolution per Phase 0 Policy (1 session)
 
+> **⚠ SUPERSEDED 2026-04-27 by §"Phase 5 Metacognitive Correction"
+> at the head of this plan.** The ACCEPT/DISABLE table below was
+> framed as a categorisation exercise; per owner correction it is
+> reframed as per-site investigation. The DISABLE block landed at
+> commit `03a58787` MUST be reverted. Each rule needs per-site
+> tension analysis, not bulk multicriteria suppression. See the
+> §"Per-finding architectural tensions" table at the head of the
+> plan for the corrected dispositions.
+
 **Note**: S6571 (`unknown` overrides union ×3) was reclassified to
 Phase 2 Task 2.5 per code-reviewer MAJOR-6.
 
@@ -1394,6 +1550,16 @@ gh pr checks 87
 5. ✅ All previously-failing PR checks now green.
 
 #### Task 6.3: Document accepted-with-rationale findings
+
+> **⚠ SUPERSEDED 2026-04-27 by the corrected disposition table**
+> at the head of this plan. The dismissal list expands to include
+> the schema-cache CodeQL #76/#77 (validate-then-skip is correct
+> defence-in-depth per owner; dismiss, do not refactor); the new
+> CodeQL #81 (DI-opacity, function-block flag); and the 4th S3735
+> site at test-error-route.integration.test.ts:79. The CodeQL
+> DI-opacity dismissals must be preceded by an investigation into
+> whether a more legible registration shape exists. The schema-cache
+> dismissal cites in-code TSDoc evidence (commit `3d80d8c6`).
 
 For each finding accepted-with-rationale (not fixed):
 
