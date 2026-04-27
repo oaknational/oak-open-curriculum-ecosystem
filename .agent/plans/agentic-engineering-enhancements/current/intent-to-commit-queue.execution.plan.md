@@ -20,14 +20,18 @@ todos:
   - id: ws5-handoff-consolidation
     content: "WS5: Run session handoff and requested consolidation, then close active claim without staging or committing."
     status: complete
+  - id: ws6-workspace-migration
+    content: "WS6: Apply owner correction by moving non-trivial queue logic/tests into agent-tools TypeScript, deleting the root commit-queue script, and invoking the built workspace CLI."
+    status: complete
 isProject: false
 ---
 
 # Owner-Directed Intent-to-Commit Queue
 
 **Last Updated**: 2026-04-27
-**Status**: 🔄 ACTIVE
-**Scope**: Ordered advisory commit queue plus exact staged-bundle verification.
+**Status**: 🟢 WORKING-TREE COMPLETE
+**Scope**: Ordered advisory commit queue plus exact staged-bundle verification,
+owned by the `agent-tools` TypeScript workspace.
 
 Source strategy:
 [`future/intent-to-commit-and-session-counter.plan.md`](../future/intent-to-commit-and-session-counter.plan.md)
@@ -53,6 +57,15 @@ Four clash types are now evidenced on this branch:
 
 The queue reduces turn-races by making FIFO order explicit. Exact staged-bundle
 verification catches any clash the advisory queue misses.
+
+### Owner Correction — Workspace Ownership
+
+The first parked implementation put the helper and tests directly under
+`scripts/`. The owner clarified the repository rule on 2026-04-27: if a script
+becomes complex enough to need quality gates, it moves into a workspace. For
+this lane, the owning workspace is `agent-tools`; the implementation must be
+TypeScript. No root `scripts/commit-queue.mjs` should exist; agents invoke the
+built workspace CLI through `pnpm agent-tools:commit-queue --`.
 
 ### Existing Capabilities
 
@@ -93,7 +106,8 @@ verification catches any clash the advisory queue misses.
   staged-index inspection ran before implementation edits.
 - Work shape: this executable plan is the active work-shape artefact.
 - Pre-edit coordination: active claim
-  `fa936690-133c-4d49-a6e0-06bac78c9834` covers queue/schema/doc/state edits.
+  `42ba7a66-1b4e-48fb-a81b-df9f78639571` covers workspace migration,
+  queue/doc/state edits, and closeout surfaces.
 - During work: shared-log updates record queue implementation and staged-index
   avoidance.
 - Session handoff: close this claim explicitly and update thread/continuity
@@ -105,24 +119,24 @@ verification catches any clash the advisory queue misses.
 
 ## WS1 — Queue Helper Tests (RED)
 
-### 1.1: Root Script Behaviour
+### 1.1: Initial Workspace Module Behaviour
 
 **Tests**:
 
-- `scripts/commit-queue.unit.test.ts` proves FIFO entries ahead, ignores
+- `agent-tools/tests/commit-queue.unit.test.ts` proves FIFO entries ahead, ignores
   expired entries, accepts exact staged bundles, rejects accretion,
   disappearance, and fingerprint mismatch, and removes successful entries.
 
 **Acceptance Criteria**:
 
-1. Targeted test command fails before `scripts/commit-queue.mjs` exists.
+1. Targeted test command fails before the workspace queue module exists.
 2. Failure reason is missing implementation, not unrelated gate noise.
 
 **Evidence**:
 
 ```bash
-pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts
-# Failed as expected: Cannot find module './commit-queue.mjs'
+pnpm agent-tools:test
+# Failed as expected before implementation: missing queue module.
 ```
 
 ---
@@ -147,7 +161,7 @@ pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts
 
 ### 2.2: Repo-Owned Queue Helper
 
-**File**: `scripts/commit-queue.mjs`
+**Workspace CLI**: `agent-tools/src/bin/commit-queue.ts`
 
 **Commands**:
 
@@ -164,7 +178,7 @@ pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts
 **Deterministic Validation**:
 
 ```bash
-pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts
+pnpm agent-tools:test
 node -e "JSON.parse(await import('node:fs/promises').then(fs => fs.readFile('.agent/state/collaboration/active-claims.json', 'utf8')))"
 ```
 
@@ -199,7 +213,7 @@ Acceptance criteria:
 Run one gate at a time:
 
 ```bash
-pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts
+pnpm agent-tools:test
 pnpm test:root-scripts
 node -e "JSON.parse(await import('node:fs/promises').then(fs => fs.readFile('.agent/state/collaboration/active-claims.json', 'utf8')))"
 node -e "JSON.parse(await import('node:fs/promises').then(fs => fs.readFile('.agent/state/collaboration/active-claims.schema.json', 'utf8')))"
@@ -216,19 +230,21 @@ failure and avoid broad fixes outside this claim.
 
 **Evidence**:
 
-- `pnpm exec vitest run scripts/commit-queue.unit.test.ts --config vitest.config.ts`
+- `pnpm agent-tools:test`
   passed.
-- `pnpm test:root-scripts` passed (12 files / 120 tests).
+- `pnpm test:root-scripts` passed after migration (10 files / 110 tests).
 - JSON parse checks passed for active-claims, active-claims schema, and
   closed-claims schema.
 - `pnpm markdownlint-check:root`, `pnpm practice:vocabulary`,
   `pnpm practice:fitness:informational`,
   `pnpm practice:fitness:strict-hard`, `git diff --check`, and targeted
   Prettier checks passed.
-- Direct `pnpm exec eslint scripts/commit-queue.mjs
-  scripts/commit-queue.unit.test.ts` failed on the repo's typed-rule
-  parser-services configuration for `.mjs`; `pnpm test:root-scripts` is the
-  recorded supported root-script validation path.
+- Direct root-script ESLint evidence is superseded by the owner correction:
+  non-trivial queue code now lives under `agent-tools` and is validated by
+  `pnpm agent-tools:lint`.
+- `pnpm knip` initially reported only unused exported TypeScript symbols from
+  the new `agent-tools` queue/cursor surfaces. The public barrel and internal
+  type exports were trimmed, and the follow-up `pnpm knip` run passed.
 
 ---
 
@@ -241,6 +257,70 @@ failure and avoid broad fixes outside this claim.
 | Fingerprint false confidence | Verification checks both exact staged file set and SHA-256 over name-status plus binary patch. |
 | Registry write races | The helper is repo-owned and narrow, but still advisory; lost queue writes are recoverable by re-enqueue before staging. |
 | Dirty shared index | This session does not stage or commit, and the plan requires a fresh `git:index/head` claim later. |
+
+---
+
+## WS6 — Workspace Migration (OWNER CORRECTION)
+
+### 6.1: TypeScript Workspace Ownership
+
+**Files**:
+
+- `agent-tools/src/commit-queue/*.ts`
+- `agent-tools/src/bin/commit-queue.ts`
+- `agent-tools/tests/commit-queue.unit.test.ts`
+
+**Changes**:
+
+- Move queue pure functions, registry IO, and CLI dispatch into
+  `agent-tools` TypeScript.
+- Delete `scripts/commit-queue.mjs`; the CLI lives in `agent-tools` only.
+- Remove `scripts/commit-queue.unit.test.ts` from root-script tests.
+- Keep command semantics unchanged: enqueue, phase, record-staged,
+  verify-staged, and complete.
+
+### 6.2: Cursor Hook Test Placement
+
+The owner also called out `scripts/cursor-oak-session-identity-hook.unit.test.ts`
+as another root-script quality-gated file. Inspect it in this pass and apply
+the same workspace-first rule if it is part of the parked agent-tools identity
+work rather than a deliberately root-owned smoke wrapper.
+
+### 6.3: Validation
+
+Run:
+
+```bash
+pnpm agent-tools:build
+pnpm agent-tools:test
+pnpm agent-tools:lint
+pnpm test:root-scripts
+pnpm portability:check
+pnpm markdownlint-check:root
+pnpm practice:vocabulary
+pnpm practice:fitness:strict-hard
+git diff --check
+```
+
+`pnpm agent-tools:commit-queue --` builds and runs
+`agent-tools/dist/src/bin/commit-queue.js`; no root `scripts/commit-queue.mjs`
+wrapper remains.
+
+**Evidence**:
+
+- `pnpm agent-tools:build`, `pnpm agent-tools:test`, and
+  `pnpm agent-tools:lint` passed after the TypeScript migration.
+- `pnpm knip` passed after trimming unused exports from the new workspace
+  surface.
+- `pnpm test:root-scripts`, `pnpm portability:check`,
+  `pnpm markdownlint-check:root`, `pnpm practice:vocabulary`,
+  `pnpm practice:fitness:strict-hard`, and `git diff --check` passed after the
+  migration docs and state updates.
+- `scripts/commit-queue.mjs`, `scripts/commit-queue.unit.test.ts`, and
+  `scripts/cursor-oak-session-identity-hook.unit.test.ts` are absent from the
+  working tree.
+- A short `git:index/head` claim removed the stale staged add for
+  `scripts/commit-queue.mjs`; other staged entries were left untouched.
 
 ---
 
@@ -268,13 +348,14 @@ explicitly requested both and this session changes collaboration doctrine.
 **Evidence**:
 
 - `repo-continuity.md` and this thread record now identify the queue
-  implementation as working-tree complete, unstaged, and awaiting
-  self-application under a fresh `git:index/head` claim.
+  implementation as working-tree complete, with the root script absent and the
+  next landing still requiring a fresh `git:index/head` claim plus exact staged
+  bundle verification.
 - Consolidation archived stale claim
   `9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10` with `closure.kind: "stale"`.
 - This session's active claim
-  `fa936690-133c-4d49-a6e0-06bac78c9834` was closed explicitly after
-  validation. No staging or commit was performed.
+  `42ba7a66-1b4e-48fb-a81b-df9f78639571` was closed explicitly after final
+  validation. No commit was performed.
 
 ---
 

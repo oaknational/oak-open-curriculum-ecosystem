@@ -3035,8 +3035,48 @@ Opened claim `42ba7a66-1b4e-48fb-a81b-df9f78639571` after the owner corrected
 the parked queue implementation: root `scripts/` code complex enough to need
 quality gates belongs in a workspace. For the commit queue, the owning
 workspace is `agent-tools`, the implementation should be TypeScript, and
-`scripts/commit-queue.mjs` should consume the built file only.
+no root `scripts/commit-queue.mjs` file should remain.
 
 Active claims were empty and the staged index was clear before this claim. I
 will update the executable plan before code migration and will not stage or
 commit without a fresh `git:index/head` claim.
+
+### 2026-04-27T08:08:28Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — short git-index claim to clear stale root script
+
+Opened short-lived claim `b7860018-ba9e-449b-a62c-fb81bd8e678b` for
+`git:index/head` after verifying `scripts/commit-queue.mjs` is absent from the
+working tree but still present as a stale staged addition from the earlier
+parked implementation.
+
+Scope is limited to `git restore --staged scripts/commit-queue.mjs`; all other
+staged entries are intentionally left untouched. No commit will be made.
+
+### 2026-04-27T08:09:01Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — stale root-script staged add cleared
+
+Closed short-lived claim `b7860018-ba9e-449b-a62c-fb81bd8e678b` after running
+`git restore --staged scripts/commit-queue.mjs`.
+
+`git diff --cached --name-status -- scripts/commit-queue.mjs` is now empty, and
+the file remains absent from the working tree. Other staged entries were left
+untouched.
+
+### 2026-04-27T08:12:29Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — workspace queue migration claim closed
+
+Closed claim `42ba7a66-1b4e-48fb-a81b-df9f78639571` explicitly.
+
+Delivered the owner correction: commit-queue logic now lives in
+`agent-tools` TypeScript, `pnpm agent-tools:commit-queue --` consumes the built
+workspace CLI, and the root queue script plus root queue/hook unit tests are
+absent from the working tree. `pnpm knip` initially found only unused exported
+symbols in the new workspace surface; trimming the barrel/internal exports made
+`pnpm knip` pass.
+
+Validation passed: `pnpm agent-tools:build`, `pnpm agent-tools:test`,
+`pnpm agent-tools:lint`, `pnpm knip`, `pnpm test:root-scripts`,
+`pnpm portability:check`, `pnpm markdownlint-check:root`,
+`pnpm practice:vocabulary`, `pnpm practice:fitness:strict-hard`, JSON parse
+checks for collaboration state, and `git diff --check`.
+
+No commit was made. The stale staged add for `scripts/commit-queue.mjs` was
+removed under a short git claim; other staged entries remain and must be
+re-verified under a fresh `git:index/head` claim before any landing.

@@ -11,10 +11,10 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 **Last refreshed**: 2026-04-27 (Prismatic Waxing Constellation / codex /
 gpt-5.5 — owner-directed intent-to-commit queue implementation. Promoted the
 future queue plan to a current executable plan, added active-claims schema
-v1.3.0 `commit_queue`, implemented `scripts/commit-queue.mjs` with exact
-staged-bundle verification, updated commit/start-right/consolidation docs,
-and ran the requested handoff + consolidation pass without staging or
-committing.)
+v1.3.0 `commit_queue`, implemented the `agent-tools` TypeScript commit-queue
+CLI with exact staged-bundle verification, removed the stale root script from
+the worktree and index, updated commit/start-right/consolidation docs, and ran
+the requested handoff + consolidation pass without committing.)
 
 Recent refresh detail lives in the touched thread records and git history.
 This file is the repo-level live-state index; old session narrative belongs
@@ -24,12 +24,12 @@ in `archive/` or the per-thread next-session records.
 
 - Branch: `feat/otel_sentry_enhancements` at local HEAD `f2d376a2`, ahead of
   origin. HEAD advanced during this session from parallel observability work.
-- Current dirty work includes this unstaged intent-to-commit queue
-  implementation, pre-existing agentic-engineering/Cursor identity edits, and
-  observability/search-cli WIP. The final observed staged index is clear, but
-  staged files were observed earlier under another active claim; do not touch
-  git/index without a fresh `git:index/head` claim, queue entry, and direct
-  staged-set ownership check.
+- Current dirty work includes this intent-to-commit queue implementation,
+  pre-existing agentic-engineering/Cursor identity edits, and
+  observability/search-cli WIP. The stale staged add for
+  `scripts/commit-queue.mjs` was removed under a short `git:index/head` claim,
+  but other staged entries remain; do not touch git/index again without a fresh
+  `git:index/head` claim, queue entry, and direct staged-set ownership check.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -52,11 +52,12 @@ in `archive/` or the per-thread next-session records.
   use Monitor, while Codex/Cursor use bounded shell waits unless a custom
   monitor exists. The claim/log protocol remains the coordination layer.
 - The owner-directed intent-to-commit queue implementation is in the working
-  tree: active-claims schema v1.3.0 has a root `commit_queue`, the repo-owned
-  helper verifies exact staged file set + staged fingerprint + commit subject,
-  and workflow docs surface queue order before staging. It remains unstaged and
-  uncommitted by owner direction; the next landing should self-apply the new
-  helper under a fresh commit-window claim.
+  tree: active-claims schema v1.3.0 has a root `commit_queue`, the
+  `agent-tools` TypeScript CLI verifies exact staged file set + staged
+  fingerprint + commit subject, and workflow docs surface queue order before
+  staging. The root `scripts/commit-queue.mjs` file is absent from the worktree
+  and index. The next landing should self-apply the new helper under a fresh
+  commit-window claim.
 - WS3B sidebar / timeout / owner-escalation and joint-agent decision
   workflow integration are implemented. First real sidebar/joint-decision
   usage should feed WS5 observation.

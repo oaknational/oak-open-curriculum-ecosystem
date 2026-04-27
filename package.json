@@ -53,6 +53,7 @@
     "agent-tools:test:e2e": "pnpm --filter @oaknational/agent-tools test:e2e",
     "agent-tools:agent-identity": "pnpm --filter @oaknational/agent-tools agent-identity",
     "agent-tools:claude-agent-ops": "pnpm --filter @oaknational/agent-tools claude-agent-ops",
+    "agent-tools:commit-queue": "pnpm --filter @oaknational/agent-tools commit-queue",
     "agent-tools:cursor-session-from-claude-session": "pnpm --filter @oaknational/agent-tools cursor-session-from-claude-session",
     "agent-tools:codex-reviewer-resolve": "pnpm --filter @oaknational/agent-tools codex-reviewer-resolve",
     "type-check": "turbo run --continue type-check",

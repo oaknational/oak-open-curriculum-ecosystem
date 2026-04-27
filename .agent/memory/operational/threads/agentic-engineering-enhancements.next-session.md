@@ -4,10 +4,11 @@
 gpt-5.5 — owner-directed intent-to-commit queue implementation plus
 `jc-session-handoff` and `jc-consolidate-docs`. The future queue plan was
 promoted to current execution, `active-claims` schema v1.3.0 now has a root
-advisory `commit_queue`, and `scripts/commit-queue.mjs` verifies FIFO position,
+advisory `commit_queue`, and `pnpm agent-tools:commit-queue --` verifies FIFO position,
 exact staged files, staged fingerprint, and commit subject before durable
-history is written. No staging or commit was performed. Final observed staged
-index is clear; unrelated dirty work remains outside this claim.)
+history is written. The stale staged add for the deleted root queue script was
+removed under a short `git:index/head` claim; no commit was performed, and
+other staged dirty work remains outside this claim.)
 
 **Prior refresh**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
 gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
@@ -344,29 +345,32 @@ new sessions add rows; matching platform/model/agent_name updates
 (2026-04-27 Prismatic Waxing Constellation, intent-to-commit queue
 implementation):**
 
-- owner-directed queue work is implemented in the working tree, but not staged
-  or committed. This session deliberately avoided the git index because it did
-  not hold a fresh `git:index/head` claim;
+- owner-directed queue work is implemented in the working tree and not
+  committed. This session used a short `git:index/head` claim only to clear the
+  stale staged add for the deleted root script, leaving other staged entries
+  untouched;
 - promoted
   [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md)
   as the executable current plan and updated the future source plan with the
   `2ccefad4` turn-race evidence;
 - added active-claims schema v1.3.0 with root `commit_queue`, optional claim
   `intent_to_commit` pointer, and repo-owned helper
-  `scripts/commit-queue.mjs` for enqueue, phase, staged-fingerprint capture,
+  `pnpm agent-tools:commit-queue --` for enqueue, phase, staged-fingerprint capture,
   exact staged-bundle verification, and completion cleanup;
 - updated commit, start-right, active-claim, collaboration, consolidation, and
   cross-vendor wrapper guidance. The queue is advisory FIFO discovery, not a
   lock or refusal mechanism, and session-count TTL remains future-only;
-- validation passed: targeted queue unit tests, `pnpm test:root-scripts`,
-  JSON parse checks, markdownlint, vocabulary, fitness strict-hard,
-  `git diff --check`, and targeted Prettier. Direct file-level ESLint on the
-  new `.mjs` helper hit the repo's typed-rule parser-services limitation; the
-  recorded root validation path is `pnpm test:root-scripts`;
-- final observed staged index is clear. A previous staged bundle was observed
-  during this session under another active claim, and unrelated dirty work
-  remains. The next landing must re-check active claims, queue order, and
-  `git diff --cached --name-status` before touching the index.
+- validation passed: `pnpm agent-tools:build`, `pnpm agent-tools:test`,
+  `pnpm agent-tools:lint`, `pnpm knip`, `pnpm test:root-scripts`,
+  `pnpm portability:check`, `pnpm markdownlint-check:root`,
+  `pnpm practice:vocabulary`, `pnpm practice:fitness:strict-hard`, and
+  `git diff --check`. Direct file-level ESLint on the superseded `.mjs` helper
+  is no longer the validation path because the queue lives in `agent-tools`
+  TypeScript;
+- the root `scripts/commit-queue.mjs` file is absent from both the working tree
+  and staged index. Other staged entries remain, so the next landing must
+  re-check active claims, queue order, and `git diff --cached --name-status`
+  before touching the index.
 
 **Prior latest session landed as closeout and next-session opener
 (2026-04-27 Fragrant Sheltering Pollen, Codex rollback and queue-evidence
@@ -787,7 +791,7 @@ validation.
   Later strict-hard checks should distinguish those target docs from any
   unrelated concurrent WIP pressure.
 - Intent-to-commit queue v1.3.0 is implemented in the working tree:
-  active-claims carries root `commit_queue`, `scripts/commit-queue.mjs` can
+  active-claims carries root `commit_queue`, `pnpm agent-tools:commit-queue --` can
   enqueue/phase/record/verify/complete intents, and commit/start-right/docs
   surface advisory FIFO order plus exact staged-bundle verification. It is not
   staged or committed yet.
@@ -827,9 +831,9 @@ validation.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
-- Final observed staged index in this closeout is clear. Earlier in the
-  session, staged files were observed under another active claim, so the next
-  session must treat staged-index state as volatile and re-check it directly.
+- The stale staged add for `scripts/commit-queue.mjs` is clear, but other
+  staged entries remain. The next session must treat staged-index state as
+  volatile and re-check it directly before any index work.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
@@ -851,7 +855,7 @@ Choose the lane deliberately:
    active-claim checks, then open a fresh `git:index/head` claim and self-apply
    the new queue helper before staging. Stage only the queue implementation
    pathspecs, record and verify the exact staged bundle plus subject with
-   `scripts/commit-queue.mjs`, commit, and clear the queue entry. Do not use
+   `pnpm agent-tools:commit-queue --`, commit, and clear the queue entry. Do not use
    session-count TTL.
 2. **Collaboration-doc fitness remediation landing** — validate and land the
    already-implemented split separately once the git index is clear.
@@ -894,5 +898,5 @@ Choose the lane deliberately:
   collaboration evidence. If Vining replies or acts, record it in the parent
   multi-agent collaboration plan rather than creating a new surface.
 - Treat the first successful self-application commit using
-  `scripts/commit-queue.mjs` as the trigger to graduate queue doctrine into
+  `pnpm agent-tools:commit-queue --` as the trigger to graduate queue doctrine into
   the relevant PDR/collaboration-state governance surface.

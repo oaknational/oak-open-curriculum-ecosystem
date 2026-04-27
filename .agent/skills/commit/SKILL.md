@@ -38,12 +38,13 @@ One active script makes this skill actionable end-to-end:
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates, 2 invalid usage. Catches
   `header-max-length`, `body-max-line-length`, and case violations in ~1s
   before the ~34s pre-commit cycle. **Use BEFORE every `git commit`.**
-- **`scripts/commit-queue.mjs`** — posts and maintains advisory
-  `commit_queue` entries in `active-claims.json` v1.3.0. Use it to enqueue
-  the intended file bundle before staging, record the staged-bundle
-  fingerprint after staging, verify the staged set immediately before
-  `git commit`, and clear the queue entry after success. It is repo-owned and
-  cross-vendor; no platform-native queue feature is required.
+- **`pnpm agent-tools:commit-queue --`** — runs the `agent-tools` TypeScript
+  commit-queue CLI for advisory `commit_queue` entries in
+  `active-claims.json` v1.3.0. Use it to enqueue the intended file bundle
+  before staging, record the staged-bundle fingerprint after staging, verify
+  the staged set immediately before `git commit`, and clear the queue entry
+  after success. It is repo-owned and cross-vendor; no platform-native queue
+  feature is required.
 
 `scripts/log-commit-attempt.sh` is retained in the repo but currently
 disabled. Do not call it unless the owner explicitly re-enables
@@ -150,7 +151,7 @@ the advisory queue and the short-lived git transaction claim:
    repo-relative path you intend to stage:
 
    ```bash
-   node scripts/commit-queue.mjs enqueue \
+   pnpm agent-tools:commit-queue -- enqueue \
      --claim-id "<active-claim-id>" \
      --agent-name "<name>" \
      --platform "<platform>" \
@@ -165,11 +166,11 @@ the advisory queue and the short-lived git transaction claim:
    record the staged-bundle fingerprint:
 
    ```bash
-   node scripts/commit-queue.mjs phase \
+   pnpm agent-tools:commit-queue -- phase \
      --intent-id "<intent-id>" \
      --phase staging
    git add -- path/one path/two
-   node scripts/commit-queue.mjs record-staged --intent-id "<intent-id>"
+   pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```
 
 8. Validate the message and verify the staged bundle immediately before
@@ -177,10 +178,10 @@ the advisory queue and the short-lived git transaction claim:
 
    ```bash
    ./scripts/check-commit-message.sh -F .git/COMMIT_EDITMSG
-   node scripts/commit-queue.mjs verify-staged \
+   pnpm agent-tools:commit-queue -- verify-staged \
      --intent-id "<intent-id>" \
      --commit-subject "<draft subject>"
-   node scripts/commit-queue.mjs phase \
+   pnpm agent-tools:commit-queue -- phase \
      --intent-id "<intent-id>" \
      --phase pre_commit
    ```
@@ -194,7 +195,7 @@ the advisory queue and the short-lived git transaction claim:
 
    ```bash
    git commit -F .git/COMMIT_EDITMSG
-   node scripts/commit-queue.mjs complete --intent-id "<intent-id>"
+   pnpm agent-tools:commit-queue -- complete --intent-id "<intent-id>"
    ```
 
 10. Close the commit-window claim after every exit once opened: success,
@@ -206,7 +207,7 @@ If the queue attempt is abandoned, move the entry to `abandoned` rather than
 leaving a fresh active phase:
 
 ```bash
-node scripts/commit-queue.mjs phase \
+pnpm agent-tools:commit-queue -- phase \
   --intent-id "<intent-id>" \
   --phase abandoned \
   --notes "<why the commit attempt stopped>"
@@ -254,7 +255,7 @@ The wait is not coordination. It complements, but never replaces, the
 7. **Validate the message via `scripts/check-commit-message.sh` BEFORE
    invoking `git commit`** (see below). If validation fails, rewrite and
    re-validate — do not let the `commit-msg` hook be your first check.
-8. **Verify the staged bundle** via `scripts/commit-queue.mjs verify-staged`.
+8. **Verify the staged bundle** via `pnpm agent-tools:commit-queue -- verify-staged`.
    Do not commit if verification fails.
 9. **Commit** using the HEREDOC template below so multi-line body formatting
    survives the shell. Cursor-Shell-tool users add the file-redirect

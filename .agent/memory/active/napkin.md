@@ -72,25 +72,24 @@ intent-to-commit queue.
 
 ---
 
-## 2026-04-27 — Prismatic Waxing Constellation — root script validation path
+## 2026-04-27 — Prismatic Waxing Constellation — quality-gated scripts belong in workspaces
 
-**Context:** implemented `scripts/commit-queue.mjs` and its root-script tests.
-The targeted Vitest command passed, but a direct file-level `pnpm exec eslint`
-against the new `.mjs` script failed before linting code because the repo's
-typed ESLint rules require parser services that the direct invocation does not
-provide for that file shape.
+**Context:** first parked the commit-queue helper under root `scripts/` and
+validated it with root-script tests. The owner corrected the rule: when script
+logic is complex enough to need quality gates, move it into a workspace. For
+the queue, that workspace is `agent-tools` TypeScript; no root queue script
+should remain.
 
 ### Surprise
 
-- **Expected:** direct `pnpm exec eslint scripts/commit-queue.mjs` would be a
-  useful narrow syntax/style check for a root helper.
-- **Actual:** direct ESLint hit a parser-services configuration error; the
-  supported root-script validation path is `pnpm test:root-scripts`, which ran
-  12 files / 120 tests and passed.
-- **Why expectation failed:** root script validation is routed through the
-  repo's configured Vitest and boundary-validator entrypoint, not arbitrary
-  direct ESLint invocations over standalone `.mjs` files.
-- **Behaviour change:** for root helper scripts, prefer
-  `pnpm test:root-scripts` plus targeted Vitest and Prettier checks unless the
-  lint config explicitly supports a direct file-level command.
+- **Expected:** a repo-owned helper could stay as a root script if root-script
+  tests covered it.
+- **Actual:** the need for TypeScript modules, lint, unit tests, and `knip`
+  means the logic has crossed the workspace threshold.
+- **Why expectation failed:** treated "repo-owned" as "root-owned"; the actual
+  rule is that complex repo-owned tooling belongs in an appropriate workspace
+  and root entrypoints should only be thin consumers when they are needed.
+- **Behaviour change:** put future non-trivial agent tooling into `agent-tools`
+  first, consume the built file where a wrapper is unavoidable, and keep
+  `pnpm test:root-scripts` for genuinely root-owned wrappers.
 - **Source plane:** operational

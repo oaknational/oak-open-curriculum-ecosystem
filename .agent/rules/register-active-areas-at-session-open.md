@@ -72,10 +72,11 @@ ahead of yours, coordinate rather than racing the index. If no fresh
 ```
 
 Append a shared-log entry when the claim opens, then use
-`scripts/commit-queue.mjs` to enqueue the intended file bundle before staging,
-record the staged-bundle fingerprint after staging, verify exact ownership
-before `git commit`, and clear the queue entry after success. If another fresh
-`git:index/head` claim exists, coordinate rather than racing the git lock.
+`pnpm agent-tools:commit-queue --` to enqueue the intended file bundle before
+staging, record the staged-bundle fingerprint after staging, verify exact
+ownership before `git commit`, and clear the queue entry after success. If
+another fresh `git:index/head` claim exists, coordinate rather than racing the
+git lock.
 
 ## At session close
 

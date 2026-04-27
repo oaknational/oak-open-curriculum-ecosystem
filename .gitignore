@@ -23,6 +23,8 @@ collaboration.txt
 # Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
 .cursor/settings.local.json
+# Cursor sessionStart hook: human-readable mirror (gitignored; not committed)
+.cursor/oak-composer-session.local.json
 .gemini/settings.local.json
 
 # Claude agent worktrees (transient, machine-local)

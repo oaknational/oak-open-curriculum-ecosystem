@@ -38,7 +38,7 @@ the doctrinal authority is
 FIFO and advisory: agents use it to decide whose commit turn is next, but it
 does not mechanically refuse work.
 
-Use `scripts/commit-queue.mjs` through the commit skill:
+Use `pnpm agent-tools:commit-queue --` through the commit skill:
 
 1. `enqueue` before staging with the active claim id, exact repo-relative
    files, and draft commit subject.

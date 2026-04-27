@@ -3147,6 +3147,131 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b7860018-ba9e-449b-a62c-fb81bd8e678b",
+      "agent_id": {
+        "agent_name": "Prismatic Waxing Constellation",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T08:08:28Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Remove the stale staged addition for deleted scripts/commit-queue.mjs while leaving all other staged entries untouched.",
+      "notes": "Working tree no longer contains scripts/commit-queue.mjs, but git diff --cached still showed it as an added index entry from the earlier parked implementation. This short claim was only for git restore --staged scripts/commit-queue.mjs; no commit was made.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T08:09:01Z",
+        "closed_by": {
+          "agent_name": "Prismatic Waxing Constellation",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Removed the stale staged addition for scripts/commit-queue.mjs from the index while leaving all other staged entries untouched.",
+        "evidence": [
+          {
+            "kind": "git-index",
+            "ref": "git diff --cached --name-status -- scripts/commit-queue.mjs",
+            "summary": "No staged entry remains for the deleted root commit-queue script."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "42ba7a66-1b4e-48fb-a81b-df9f78639571",
+      "agent_id": {
+        "agent_name": "Prismatic Waxing Constellation",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/**",
+            "agent-tools/tests/**",
+            "agent-tools/package.json",
+            "agent-tools/tsconfig*.json",
+            "agent-tools/vitest*.config.ts",
+            "agent-tools/docs/**",
+            "scripts/commit-queue.mjs",
+            "scripts/commit-queue.unit.test.ts",
+            "scripts/cursor-oak-session-identity-hook.unit.test.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T07:50:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply owner correction by moving parked commit queue logic/tests from root scripts into the agent-tools TypeScript workspace and deleting the root commit-queue script.",
+      "notes": "Active claims were empty and staged index was clear before opening. Owner clarified the root commit-queue script should not exist; the queue CLI now lives in agent-tools and is invoked through pnpm agent-tools:commit-queue. A short git:index/head claim removed the stale staged add for scripts/commit-queue.mjs; no commit was made.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T08:12:29Z",
+        "closed_by": {
+          "agent_name": "Prismatic Waxing Constellation",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Moved commit-queue logic and root-script-sized hook tests into the agent-tools TypeScript workspace, deleted the root queue script from the worktree and index, updated handoff/consolidation docs, and ran requested gates including pnpm knip.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
+            "summary": "WS6 workspace migration is marked complete with owner correction and validation evidence."
+          },
+          {
+            "kind": "workspace",
+            "ref": "agent-tools/src/commit-queue",
+            "summary": "Queue CLI logic now lives in TypeScript modules consumed by agent-tools/dist."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm agent-tools:build; pnpm agent-tools:test; pnpm agent-tools:lint; pnpm knip",
+            "summary": "Agent-tools build, tests, lint, and knip passed after export-surface cleanup."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm test:root-scripts; pnpm portability:check; pnpm markdownlint-check:root; pnpm practice:vocabulary; pnpm practice:fitness:strict-hard; git diff --check",
+            "summary": "Repo checks passed after docs/state consolidation; strict-hard reports soft pressure only."
+          },
+          {
+            "kind": "git-index",
+            "ref": "git diff --cached --name-status -- scripts/commit-queue.mjs",
+            "summary": "No staged entry remains for the deleted root commit-queue script; other staged entries were left untouched."
+          }
+        ]
+      }
     }
   ]
 }
