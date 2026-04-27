@@ -2547,6 +2547,411 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "9eb22ec4-e10b-4867-9b1f-67ba12978c9b",
+      "agent_id": {
+        "agent_name": "Pelagic Washing Sail",
+        "platform": "codex",
+        "model": "gpt-5",
+        "session_id_prefix": "019dca9c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/closed-claims.schema.json",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/skills/commit/SKILL.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:51:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement owner-directed intent_to_commit as an explicit advisory commit queue with minimal queue mechanics.",
+      "notes": "Scanned registry: Vining Bending Root claim 9c7f4e51 owns observability/product files plus a few scripts; no semantic overlap with the collaboration protocol docs/schemas. Vining has staged product work, so this pass will not stage or manipulate git/index without a later commit-window claim.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:53:18Z",
+        "closed_by": {
+          "agent_name": "Pelagic Washing Sail",
+          "platform": "codex",
+          "model": "gpt-5",
+          "session_id_prefix": "019dca9c"
+        },
+        "summary": "Intent-to-commit queue implementation was deliberately paused before schema/protocol edits so session handoff could weave the session insights into continuity surfaces.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record names the next safe step as queue-first intent-to-commit implementation."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Plan status updated to owner-directed and corrected to make the commit queue first-class."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ff62c13d-e256-4b9d-a72d-6024e13ecd43",
+      "agent_id": {
+        "agent_name": "Pelagic Washing Sail",
+        "platform": "codex",
+        "model": "gpt-5",
+        "session_id_prefix": "019dca9c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:15:05Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Capture owner observation that the Vining pickup check supports proper channels and protocols, not shared-log-only communication.",
+      "notes": "Scanned registry: Vining owns observability surfaces and Celestial owns agent-tools identity command files; this capture touches only napkin and collaboration bookkeeping.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T06:15:43Z",
+        "closed_by": {
+          "agent_name": "Pelagic Washing Sail",
+          "platform": "codex",
+          "model": "gpt-5",
+          "session_id_prefix": "019dca9c"
+        },
+        "summary": "Captured the owner observation that the missed vocabulary-note pickup supports directed channels and protocols beyond the shared log.",
+        "evidence": [
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-27--pelagic-washing-sail--shared-logs-are-not-enough-for-directed-communication",
+            "summary": "Napkin entry records shared-log durability versus directed communication as WS5-style evidence."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "87d28a6d-8251-4c7b-82f4-dac2d8062218",
+      "agent_id": {
+        "agent_name": "Celestial Waxing Eclipse",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcd65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/codex-thread-name*",
+            "agent-tools/src/codex/**",
+            "agent-tools/tests/codex/**",
+            "agent-tools/README.md",
+            "agent-tools/docs/agent-identity.md",
+            "agent-tools/package.json",
+            "package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:12:26Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement a repo-owned Codex thread-name adapter that derives the deterministic display name from CODEX_THREAD_ID and sets the Codex user-facing thread name through the documented app-server protocol instead of editing Codex datastores.",
+      "notes": "Owner clarified the desired shape: programmatic thread/session title update, not direct SQLite/session-index edits. Active alongside Vining on disjoint pathspecs.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-04-27T06:30:22Z",
+        "closed_by": {
+          "agent_name": "Fragrant Sheltering Pollen",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcda0"
+        },
+        "summary": "Owner reported the original Codex thread-name adapter session was stuck and asked this Codex session to pick up the work.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-27t063022z--fragrant-sheltering-pollen--taking-over-stuck-codex-thread-name-adapter",
+            "summary": "Shared communication log records the owner-directed takeover and replacement claim."
+          },
+          {
+            "kind": "claim",
+            "ref": "d48692d9-90ab-42a4-bbbd-5139bfa1ef17",
+            "summary": "Replacement active claim carries the same adapter pathscope under the current session identity."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "72b0e57c-4167-4407-b2ac-db1e4231619a",
+      "agent_id": {
+        "agent_name": "Pelagic Washing Sail",
+        "platform": "codex",
+        "model": "gpt-5",
+        "session_id_prefix": "019dca9c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:25:10Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Run the owner-requested jc-session-handoff plus jc-consolidate-docs closeout and prepare a short next-session opening statement for the intent-to-commit queue implementation.",
+      "notes": "Narrow closeout claim. Vining's observability claim and Celestial's Codex adapter claim are active and non-overlapping except shared collaboration bookkeeping; no staging or commit work.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T06:31:29Z",
+        "closed_by": {
+          "agent_name": "Pelagic Washing Sail",
+          "platform": "codex",
+          "model": "gpt-5",
+          "session_id_prefix": "019dca9c"
+        },
+        "summary": "Completed the requested session handoff and consolidation closeout before commit-queue implementation, clarified the queue-first plan surface, and prepared the next-session opening statement.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures the closeout, the missed shared-log pickup evidence, and the next safe commit-queue step."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Plan surface now states queue-first implementation and keeps session-count TTL separate unless its primitive lands deliberately."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-27t062510z--pelagic-washing-sail--handoffconsolidation-closeout-claim",
+            "summary": "Shared log records the closeout claim and non-overlap with active peers."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d48692d9-90ab-42a4-bbbd-5139bfa1ef17",
+      "agent_id": {
+        "agent_name": "Fragrant Sheltering Pollen",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcda0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/codex-thread-name*",
+            "agent-tools/src/codex/**",
+            "agent-tools/tests/codex/**",
+            "agent-tools/README.md",
+            "agent-tools/docs/agent-identity.md",
+            "agent-tools/package.json",
+            "package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:30:22Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Drop the stuck Codex app-server thread-name adapter and restore agent-tools gates while preserving stable CODEX_THREAD_ID identity naming.",
+      "notes": "Owner reported session 019dcd65-4f59-73d3-9ac5-d988b40e6696 stuck, then clarified that stable names for Codex sessions provide 99% of the value. Consulted active claims: Vining claim 9c7f4e51 is disjoint product/observability work; Pelagic claim 72b0e57c overlaps collaboration bookkeeping only; Celestial claim 87d28a6d was closed owner_forced and replaced by this cleanup claim.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T06:46:08Z",
+        "closed_by": {
+          "agent_name": "Fragrant Sheltering Pollen",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcda0"
+        },
+        "summary": "Dropped the experimental Codex app-server thread-title adapter, removed its CLI/docs/scripts/tests, kept CODEX_THREAD_ID-based stable name derivation, and restored the @oaknational/agent-tools gates.",
+        "evidence": [
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools build",
+            "summary": "Passed after removing the app-server adapter scope."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools type-check",
+            "summary": "Passed after removing the app-server adapter scope."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools lint",
+            "summary": "Passed after removing the app-server adapter scope."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools lint:fix",
+            "summary": "Passed after removing the app-server adapter scope."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools test",
+            "summary": "Passed: 13 files, 72 tests."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm --filter @oaknational/agent-tools test:e2e",
+            "summary": "Passed: 2 files, 13 tests."
+          },
+          {
+            "kind": "smoke",
+            "ref": "CODEX_THREAD_ID=019dcda0-0e5f-7de1-84d1-2ca15db75f89 pnpm agent-tools:agent-identity --format display",
+            "summary": "Printed Fragrant Sheltering Pollen."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a980a5e8-5b5a-4bb0-84d5-99358bfd7014",
+      "agent_id": {
+        "agent_name": "Fragrant Sheltering Pollen",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcda0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:49:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the Codex stable-name scope decision before session handoff and consolidation.",
+      "notes": "Pathspec: agent-tools/docs/agent-identity.md staged as a narrow index patch for the Codex row. Current staged set before opening contained scripts/check-commit-message.sh from Vining's pathscope; I restored that staged state after the collision. Gates passed for @oaknational/agent-tools: build, type-check, lint, lint:fix, test, test:e2e.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T06:52:50Z",
+        "closed_by": {
+          "agent_name": "Fragrant Sheltering Pollen",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcda0"
+        },
+        "summary": "Commit window encountered a live shared-index collision: commit 2ccefad4 landed while this window was open and contains the Codex stable-name documentation row, but with another commit message. I did not amend or rewrite shared history. I restored the pre-existing staged scripts/check-commit-message.sh state and left the collision recorded for handoff.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "2ccefad4",
+            "summary": "Contains the Codex stable-name documentation row in agent-tools/docs/agent-identity.md."
+          },
+          {
+            "kind": "reflog",
+            "ref": "git reflog -5 --date=iso",
+            "summary": "HEAD advanced to 2ccefad4 and then 21abd2d4 during the commit window."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e6f1e8bb-33fd-4a24-8218-245ab0b1cdee",
+      "agent_id": {
+        "agent_name": "Fragrant Sheltering Pollen",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcda0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T06:54:06Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Run owner-requested jc-session-handoff and jc-consolidate-docs after the Codex app-server rollback, recording the commit-window collision as intent-to-commit queue evidence.",
+      "notes": "Owner explicitly asked to record the live shared-index collision as evidence for an intent-to-commit queue. Vining's active claim is disjoint except shared collaboration state; staged files belonged to Vining's pathscope during this claim, so this claim did not stage or commit without a separate commit-window claim.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T07:00:45Z",
+        "closed_by": {
+          "agent_name": "Fragrant Sheltering Pollen",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcda0"
+        },
+        "summary": "Completed the owner-requested session handoff and scoped consolidation. Recorded the 2ccefad4 commit-window collision as explicit queue evidence, refreshed repo/thread continuity, archived older napkin entries to resolve hard fitness pressure, and verified strict-hard fitness now passes with soft pressure only.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Plan now lists the 2026-04-27 turn-race collision as clash type D evidence for queue order."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record carries the app-server rollback, gate evidence, and next safe queue implementation step."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm practice:fitness --strict-hard",
+            "summary": "Passed after archiving older napkin entries; only soft pressure remains."
+          },
+          {
+            "kind": "json-parse",
+            "ref": ".agent/state/collaboration/*.json",
+            "summary": "Active claims, closed claims, conversations, and escalations parsed successfully."
+          }
+        ]
+      }
     }
   ]
 }

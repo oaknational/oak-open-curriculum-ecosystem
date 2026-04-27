@@ -8,83 +8,26 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implementation of
-owner-approved coordination architecture consolidation. WS3B
-sidebar/escalation and joint-agent decision workflow integration now live
-in schema, fixtures, directives, rules, start-right, session-handoff,
-consolidate-docs, and state indexes. Active claim
-`e3ea9c06-f985-4fd4-b920-aa0c8e4f0e71` closed explicitly; active claims
-registry is empty.)
+**Last refreshed**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
+gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
+experimental Codex app-server thread-title adapter. `@oaknational/agent-tools`
+gates passed. A live commit-window collision landed the Codex stable-name row
+inside commit `2ccefad4` under another message; owner directed this to be
+recorded as concrete evidence for the intent-to-commit queue.)
 
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff after
-same-branch collaboration correction. The owner clarified that avoiding the
-shared branch would remove the signal the collaboration work is meant to study;
-friction should be made observable through communication. No Codex claim was
-open to close; Frolicking Toast's commit-window umbrella claim remains active.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — owner verification
-closeout for L-IMM Sub-item 6. The owner confirmed the Vercel Sentry
-Marketplace plugin is active and configured; L-IMM is now fully closed.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — session handoff for
-WS3B/joint-decision status reconciliation. No active claims remain; WS3B gate
-is satisfied but implementation is not started; deep consolidation is due for
-known hard fitness and pattern-candidate convergence.)
-
-**Prior refresh**: 2026-04-26 (Sturdy Otter / claude-code / claude-opus-4-7-1m
-— WS3A/WS4A 13-commit backlog cleanup landed under 3-agent contention;
-intent-to-commit and joint-agent-decision-protocol future plans authored;
-WS3B sidebar promotion gate satisfied; phase-transition evidence recorded;
-clash taxonomy A/B/C named. PR-87 quality remediation moves to a separate
-thread.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-bundle
-evidence taxonomy reflected. The future intent-to-commit plan now treats
-substitution, disappearance, and accretion as distinct staged-bundle integrity
-failures.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — lock-wait nuance
-captured. Claude Monitor / Codex shell wait / Cursor shell wait are noted
-as physical lock guards, not substitutes for commit-window claims.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — commit-window
-protocol pass. The git index/head transaction window is now represented as
-a short-lived active-claim area before staging or committing.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — learning-first
-fitness correction after WS4A closeout. Napkin rotated and distilled;
-consolidation / Practice / ADR-144 surfaces now say fitness limits are
-signals and must never suppress learning.)
-
-**Prior refresh**: 2026-04-26 (Sharded Stroustrup / claude-code /
-claude-opus-4-7-1m — observability-sentry-otel session close. Sentry
-preview validation closed empirically; `/test-error` route landed;
-correlation_id Sentry tag wired; fragile widget-metadata e2e tests
-removed; 18-plan observability landscape inventoried in a new
-consolidation memo. Eight commits pushed at session close; HEAD
-`2f766fe4`. Next observability work is split across two parallel
-plans on this branch:
-[`current/sentry-immediate-next-steps.plan.md`](../../plans/observability/current/sentry-immediate-next-steps.plan.md)
-and
-[`current/pr-87-quality-finding-resolution.plan.md`](../../plans/observability/current/pr-87-quality-finding-resolution.plan.md).
-Doc-driven gap-finding lesson captured in `napkin.md` for vendor-doc
-review symmetry.)
-
-**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — WS3A complete;
-session-handoff plus consolidate-docs; final next-session exploration prompt
-captured.)
-
-This file is the repo-level live-state index. Durable lane detail belongs in
-thread records and plans; old session narrative belongs in `archive/`.
+Recent refresh detail lives in the touched thread records and git history.
+This file is the repo-level live-state index; old session narrative belongs
+in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `cec08441`, ahead of
-  origin `5a39592a` at this refresh.
-- Current dirty work is this Codex coordination-architecture implementation:
-  sidebars, escalation, and joint-decision schema/docs/fixture/workflow
-  surfaces. No unrelated MCP/SDK WIP appears in `git status --short` at this
-  refresh.
+- Branch: `feat/otel_sentry_enhancements` at local HEAD `21abd2d4`, ahead of
+  origin by 21 commits at this refresh.
+- Current dirty work includes agentic-engineering documentation/state edits,
+  untracked collaboration-doc files, and Vining Bending Root's active
+  observability/product/schema-cache WIP. Preserve pathspec discipline and do
+  not touch git/index without a fresh commit-window claim and staged-set
+  ownership check.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -112,6 +55,19 @@ thread records and plans; old session narrative belongs in `archive/`.
 - WS3B sidebar / timeout / owner-escalation and joint-agent decision
   workflow integration are implemented. First real sidebar/joint-decision
   usage should feed WS5 observation.
+- Deterministic identity is complete for repo-owned CLI docs plus Claude Code
+  statusline and Codex `CODEX_THREAD_ID` seed discovery. Cursor has an
+  **experimental** project `sessionStart` hook (`OAK_AGENT_SEED`,
+  `additional_context`, gitignored local mirror); Composer **tab title** still
+  has no hook/API rename field in the official Cursor Hooks reference.
+- Collaboration-doc fitness remediation is implemented in the working tree:
+  directive detail moved to referenced operational docs, and lifecycle
+  recipes live in `collaboration-state-lifecycle.md`.
+- The owner has explicitly directed `intent_to_commit` implementation. The
+  next implementation must make it an ordered advisory commit queue, not only
+  optional claim metadata. The 2026-04-27 commit-window collision proves
+  `git:index/head` claims make conflicts visible but do not serialize commit
+  turns; queue order is now the next load-bearing primitive.
 
 ## Active Threads
 
@@ -121,7 +77,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26; Codex / `codex` / `GPT-5` / marketplace-verification-closeout-and-handoff / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Sturdy Otter / `claude-code` / `claude-opus-4-7-1m` / phase-transition-evidence-and-future-plans / 2026-04-26; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / chunked-commit-stewardship / 2026-04-26; Codex / `codex` / `GPT-5` / same-branch-friction-metacognition-and-handoff / 2026-04-26. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27; Riverine Navigating Hull / `claude-code` / `claude-opus-4-7-1m` / agent-identity-derivation-phase-8-claude-code-statusline-wiring / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -145,38 +101,35 @@ Current branch-primary facts:
 ## Current Session Focus
 
 Multiple overlapping sessions ran on
-`feat/otel_sentry_enhancements` 2026-04-26. Frolicking Toast's
-commit-window umbrella claim closed cleanly at 17:00Z after the
-six-chunk landing finished — that session was the first
-self-application of the commit-window protocol Codex landed earlier
-the same day. The umbrella claim's full lifecycle (open → 6 chunks
-→ explicit close with evidence) is observable in the shared
-communication log between 16:35Z and 17:00Z.
+`feat/otel_sentry_enhancements` 2026-04-26. Current practice-thread
+state is now:
 
-**Frolicking Toast + owner verification — observability-sentry-otel**:
-executed the L-IMM (operational hardening) lane to closure on 6/6
-sub-items. Five Sentry-node commits landed:
-flush timeout 2s → 5s; maxBreadcrumbs / sendClientReports verify;
-ignoreErrors / denyUrls scaffold (RED-first); Vercel Marketplace
-PENDING surface; hybrid error fingerprinting (post-redaction). The
-owner then confirmed the Vercel Sentry Marketplace plugin is active
-and configured, closing Sub-item 6. Three reviewers ran on Tier 2
-fingerprinting; all findings absorbed. Lane status flipped to
-`✅ closed`; wrapper plan rotated to archive/completed/.
-
-**Codex (separate session) — agentic-engineering-enhancements**:
-captured the commit-window coordination protocol design (intent-
-to-commit-and-session-counter plan), absorbed the lock-wait nuance,
-reflected the staged-bundle evidence taxonomy, and refreshed Practice
-surfaces. Three concurrent-commit race conditions plus staged-bundle
-substitution / disappearance / accretion evidence surfaced during
-co-tenancy; documented in shared log and Codex's plan.
-
-**Codex (this handoff) — agentic-engineering-enhancements**:
-implemented the approved coordination architecture consolidation: sidebars,
-owner escalation, and joint-agent decisions. Intent-to-commit/session-counter
-remains separate future work. No hook automation, staging, commit, or PR-87
-remediation work was performed by this implementation pass.
+- Coordination consolidation, WS3B sidebars/escalation, joint decisions,
+  deterministic identity, Claude Code statusline wiring, and Codex
+  `CODEX_THREAD_ID` identity seeding are all landed.
+- Collaboration-doc fitness remediation is implemented but not staged by
+  this handoff. It split high-frequency doctrine from detailed lifecycle
+  recipes without weakening "knowledge and communication, not mechanical
+  refusals."
+- A correct `practice:vocabulary` failure in the shared communication log
+  was fixed from the retired ADR-144 wording to the three-zone vocabulary.
+  The owner surfaced a follow-up idea: retired-vocabulary checks should
+  eventually carry transition metadata and review dates.
+- Pelagic Washing Sail left Vining Bending Root a shared-log note about that
+  vocabulary-transition idea. A 15-minute heartbeat in this Codex thread
+  checks whether Vining picks it up; no pickup evidence existed at the first
+  read-only poll.
+- Owner direction now promotes `intent_to_commit` from future design to the
+  next implementation lane, with an explicit correction: implement a minimal
+  ordered commit queue, not just a claim field.
+- Codex display-surface investigation found repo-owned identity can be derived
+  from `CODEX_THREAD_ID`. Owner then dropped the experimental app-server
+  title-mutation path: stable names are the useful value, and gates matter
+  more than UI chrome mutation for now.
+- Cursor **Composer** gained repo-owned `sessionStart` wiring (2026-04-27):
+  deterministic name from composer `session_id`, hook-scoped `OAK_AGENT_SEED`,
+  and human mitigations for the missing tab-rename API (mirror file +
+  `user_message`). Land when index allows.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -196,8 +149,8 @@ these branch-relevant constraints:
 
 Current branch non-goals:
 
-- do not implement intent-to-commit/session-counter without explicit owner
-  direction;
+- do not implement intent-to-commit as claim metadata only; owner direction
+  requires an explicit minimal queue mechanic;
 - do not reopen broader canonicalisation opportunistically;
 - do not treat monitor setup or owner-handled preview validation as in-repo
   acceptance work;
@@ -208,23 +161,22 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Same-branch collaboration experiment is live** — other agents may
-   continue on the same branch, but should make overlap explicit before
-   staging or committing: announce commit windows, preserve visible path
-   ownership, and turn shared surfaces into handshakes rather than silent
-   sequencing.
-2. **First real sidebar / joint-decision seed** — when a real overlap uses
+1. **Intent-to-commit queue implementation** — promote/update
+   `intent-to-commit-and-session-counter.plan.md` and implement schema v1.3
+   around an ordered advisory `commit_queue` plus exact staged-bundle
+   verification. Use the 2026-04-27 `2ccefad4` collision as evidence that
+   active commit-window claims alone are observable but not ordering. Keep the
+   queue advisory; do not create a mechanical lock.
+2. **Collaboration-doc fitness remediation landing** — the split is
+   implemented in the working tree; validate/commit it separately from the
+   queue work when the git index is clear.
+3. **Strict exact-optional cleanup** — the stricter
+   `--exactOptionalPropertyTypes` probe is clean for identity files but still
+   reports the pre-existing `agent-tools/src/bin/codex-reviewer-resolve.ts`
+   optional typing issue.
+4. **First real sidebar / joint-decision seed** — when a real overlap uses
    the new entries, capture whether it reached resolution without becoming a
    permission gate or default owner escalation.
-3. **Distilled-memory structural response** — because learning was correctly
-   preserved first, `distilled.md` now carries hard fitness pressure. The
-   next consolidation-memory move is an explicit remediation lane or
-   owner-approved deferral to bring `distilled.md` below hard by
-   graduating, pruning, or splitting without deleting signal.
-4. **MCP / SDK dirty work** — run targeted type-checks for
-   `@oaknational/oak-curriculum-sdk` and the repo root, then resolve the
-   `ToolMeta` / `listUniversalTools` TypeScript debt. Do not fold that work
-   into the coordination-architecture implementation.
 5. **Observability branch-primary (L-IMM closed 2026-04-26 at 6/6;
    PR-87 quality lane still active)** —
    - L-IMM lane (operational hardening): closed at 6/6 after owner
@@ -251,9 +203,16 @@ Choose the lane deliberately:
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders without evidence. First real
    sidebar/joint-decision usage should feed WS5 observation.
-7. **Other agentic engineering work** — WS3A, WS4A, commit-window,
-   WS3B, and joint-decision implementation are complete. Pick a queued
-   owner-directed plan from the current/roadmap surfaces.
+7. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
+   landed in `ff119d44`; CLI/TUI title/statusline surfaces exist, but a
+   first-class IDE session-title/custom-name setting was not found. Cursor
+   composer `session_id` is the stable seed via `sessionStart`; repo hook +
+   mirror landed in working tree — **Composer tab title** still needs Cursor
+   product support or manual rename from `suggestedComposerTabTitle`.
+8. **Other agentic engineering work** — WS3A, WS4A, commit-window,
+   WS3B, joint-decision, and Phase 8 Claude Code statusline wiring are all
+   complete. Pick a queued owner-directed plan from the current/roadmap
+   surfaces.
 
 ## Open Owner-Decision Items
 
@@ -265,139 +224,32 @@ These are visible owner-appetite items, not blockers for the active lanes:
    `.agent/reference/README.md` and the archived reference/notes plan.
 3. `boundary-enforcement-with-eslint.md` promotion proposal under PDR-032,
    same destination set as above.
-4. Whether to implement WS3B sidebar/escalation now that the promotion gate
-   is satisfied.
+4. *Resolved 2026-04-27*: Claude Code identity wrapper installed via
+   `.claude/scripts/statusline-identity.mjs` + `.claude/settings.json`
+   `statusLine.command`. No `update-config` skill required; the existing
+   `statusLine` schema field accepted a direct edit. Owner can opt out by
+   removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
 
-**Status (2026-04-26 Frolicking Toast, post-graduation-pass)**:
-not due — owner-directed `/jc-consolidate-docs` ran and graduated 7
-doctrine entries from distilled.md to permanent homes:
+**Status (2026-04-27 Fragrant Sheltering Pollen, app-server rollback and
+queue-evidence closeout)**: completed this handoff — owner explicitly
+requested `jc-session-handoff`, `jc-consolidate-docs`, and a follow-up commit
+after the agent-tools gate recovery. This pass verified entry points, capture
+buffers, active claims, open conversations, escalation state, JSON state
+parsing, and fitness pressure. No new ADR/PDR candidate qualifies: the
+app-server rollback is local implementation scope, and the queue requirement
+already has a future plan that now carries the `2ccefad4` collision evidence.
 
-- New ADR-164 (config-load side effects)
-- ADR-153 amendment (call-site uptake clause)
-- New PDR-033 (vendor-doc-review-for-unknown-unknowns)
-- New PDR-034 (test fixtures encode production shape)
-- PDR-015 amendment (parallel reviewer dispatch + phasing)
-- PDR-026 amendment (owner-directed pause as load-bearing)
-- New pattern instance vendor-doc-review-for-unknown-unknowns.md
+Fitness disposition: strict-hard initially reported hard pressure in
+`napkin.md` after the new captures. This closeout preserved learning by moving
+older 2026-04-27 napkin entries to a dated archive and keeping the two current
+Fragrant corrections active. A follow-up strict-hard run passed with soft
+pressure only; soft pressure remains informational.
 
-Distilled.md fitness: 301 → 204 lines (HARD → SOFT). All landed
-locally as commit `cb358e8d`; push deferred on
-parallel-track-pre-commit-gate-coupling per shared-comms-log
-2026-04-26T18:25Z entry. Pending-graduations register update
-deferred until push clears.
-
-**Prior status (2026-04-26 Frolicking Toast, post-chunked-landing)**:
-due. Chunked-commit umbrella claim
-`4535f2ff-0420-4bde-bfb8-af0db656e359` closed at 17:00Z after six
-chunks landed (`e37a5795`, `38472766`, `9925ad59`, `9bd91f81`,
-`564e284f`, plus this continuity record). The shared index is no
-longer Frolicking-Toast-owned. Triggers that were `due` at the
-prior handoff (distilled.md hard fitness pressure; multiple fired
-pattern triggers; chunked-commit protocol evidence) remain unaddressed
-and are now ready for `jc-consolidate-docs` whenever the owner
-schedules it. Chunk 6 (the agent-comms-log file rename and live
-"embryo log" terminology cleanup) ran next under a separate brief
-commit-window claim and does not block consolidation.
-
-**Prior status (2026-04-26 Codex, same-branch collaboration handoff)**:
-due — `distilled.md` remains in hard fitness pressure after the
-learning-first preservation correction, the napkin contains fired or sharpened
-coordination-pattern evidence (`vendor-doc-review-for-unknown-unknowns`,
-three-agent phase transition, same-branch friction as signal), and the active
-Frolicking Toast chunked-commit claim is producing real protocol evidence.
-This is not run inside this lightweight handoff because the triggered work is
-thread-scoped convergence and the commit-steward claim is still active.
-Falsifiability: run `pnpm practice:fitness:informational`, inspect
-`napkin.md` promotion triggers, inspect active/closed collaboration state,
-and then run `jc-consolidate-docs` deliberately once the chunked commit pass is
-no longer the immediate shared-index owner.
-
-**Prior status (2026-04-26 Codex, WS3B/joint-decision status handoff)**:
-due — `distilled.md` remains in hard fitness pressure after the
-learning-first preservation correction, and the napkin now contains at least
-one fired pattern-promotion trigger (`vendor-doc-review-for-unknown-unknowns`)
-plus the three-agent phase-transition evidence now captured in future plans.
-This is not run inside this lightweight handoff because the triggered work is
-thread-scoped convergence: pattern graduation, fitness management, and
-possible Practice/ADR/PDR routing. Falsifiability: run
-`pnpm practice:fitness:informational`, inspect `napkin.md` promotion triggers,
-and then run `jc-consolidate-docs` deliberately.
-
-**Prior status (2026-04-26 Frolicking Toast, L-IMM closure handoff)**:
-not due — lightweight session handoff for L-IMM execution closure.
-No `consolidate-docs` trigger fired (no third-instance pattern; no
-napkin overflow; no register sweep due; no thread reorganisation).
-Five Sentry-node commits + closure surfaces landed; all gates green
-per scoped runs and pre-commit / pre-push hooks. Sub-item 6 owner-touch
-closed after the owner confirmed the Vercel Sentry Marketplace plugin is
-active and configured.
-
-**Prior status (2026-04-26 Codex, lock-wait note handoff/consolidation)**:
-completed this handoff for the owner-agreed lock-wait nuance. The commit
-skill now records Claude Monitor / Codex shell wait / Cursor shell wait as
-physical guards for `.git/index.lock`, while preserving `git:index/head`
-active claims as the coordination layer. The napkin, thread record, and this
-continuity file were refreshed. Capture buffers were scanned; the `.remember`
-entry about the git lock collision / Monitor wait is now homed in the commit
-skill and napkin. Entry points remain pointer-only; no tactical track cards
-needed action; decision-thread files remain examples only.
-
-Consolidation audit: active collaboration state contains the observability
-claim `c1a25f27-eacf-4a18-9528-f0b971c46f08` only after this closeout claim is
-archived. That claim is in the observability lane and its claimed paths overlap
-the staged observability files, so this handoff deliberately did not stage,
-unstage, commit, or touch them. No ADR/PDR candidate qualifies beyond the
-existing commit-window operational note.
-
-Validation status: targeted markdownlint, JSON parse, Ajv collaboration
-schema validation, `git diff --check`, `pnpm portability:check`,
-`pnpm practice:vocabulary`, and `pnpm practice:fitness:informational` pass
-with the known expected `distilled.md` hard pressure.
-
-**Prior status (2026-04-26 Codex, coordination closeout + learning-first
-correction)**: completed this handoff for coordination-plan and
-Practice-state surfaces. Parent plan, roadmap, documentation-sync log,
-thread record, repo-continuity, reviewer guidance, Practice Core, AGENT
-line width, and collaboration directive wording are refreshed.
-`docs-adr-reviewer` and `assumptions-reviewer` findings were absorbed.
-Collaboration state was audited: one fresh Codex claim was opened for
-this closeout and explicitly archived with `closure.kind: "explicit"`;
-decision-thread files remain examples only.
-
-Owner corrected the consolidation policy: learning preservation outranks
-fitness limits. The outgoing napkin was archived to
-[`archive/napkin-2026-04-26.md`](../active/archive/napkin-2026-04-26.md), the
-high-signal entries were distilled into `distilled.md`, and
-`consolidate-docs`, PDR-014, ADR-144, and Practice Core surfaces now say
-fitness limits are signals, never reasons to suppress capture, distillation,
-graduation, or useful writing.
-
-Validation status: JSON parse, Ajv schema validation for active/closed
-claims and decision-thread files, targeted markdownlint, `git diff --check`,
-`pnpm portability:check`, and `pnpm practice:vocabulary` pass. Practice
-fitness is expected to report hard pressure after the learning-first
-distillation because `distilled.md` intentionally crossed its hard line
-limit. That is the correct signal: the next structural response is to
-graduate/prune/split `distilled.md`, not to undo the preserved learning.
-
-**Prior status (2026-04-26 Codex)**: not due after completed consolidation. Earlier
-this handoff, deep consolidation completed because WS3A closed and
-`repo-continuity.md` was hard in practice fitness. Final handoff added only the
-next-session exploration prompt; no new deep-consolidation trigger fired.
-Earlier response:
-
-- pre-compaction body preserved at
-  [`archive/repo-continuity-session-history-2026-04-26.md`](archive/repo-continuity-session-history-2026-04-26.md);
-- live repo state compacted here;
-- completed WS3A split plan moved to `archive/completed/`;
-- current-plan README, roadmap, parent plan, sibling plan, and thread record
-  refreshed;
-- collaboration state audited for stale claims, decision threads, evidence
-  bundle gaps, and schema validation.
-- `pnpm practice:fitness --strict-hard` passes; informational mode reports
-  only existing soft findings.
+Recent historical consolidation summaries are preserved in git history, the
+thread records, and
+[`archive/repo-continuity-session-history-2026-04-26.md`](archive/repo-continuity-session-history-2026-04-26.md).
 
 ### Pending-Graduations Register
 

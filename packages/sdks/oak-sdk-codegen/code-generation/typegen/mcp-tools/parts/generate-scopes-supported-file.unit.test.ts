@@ -10,7 +10,8 @@ describe('generateScopesSupportedFile', () => {
 
   it('includes the correct scopes from security policy', () => {
     const result = generateScopesSupportedFile();
-    const expectedScopesLiteral = `[${[...SCOPES_SUPPORTED].map((scope) => `'${scope}'`).join(', ')}]`;
+    const quotedScopes = [...SCOPES_SUPPORTED].map((scope) => `'${scope}'`).join(', ');
+    const expectedScopesLiteral = `[${quotedScopes}]`;
     expect(result).toContain(expectedScopesLiteral);
   });
 

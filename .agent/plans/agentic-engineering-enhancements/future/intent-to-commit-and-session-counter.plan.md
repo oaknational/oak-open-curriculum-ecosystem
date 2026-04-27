@@ -1,15 +1,17 @@
 ---
 name: "Intent to Commit + Session Counter"
-overview: "Add advisory intent_to_commit / commit-queue signalling to the active-claims registry, gated by a session-count TTL, with the commit skill writing intent before staging and verifying staged ownership before commit."
+overview: "Add advisory intent_to_commit / commit-queue signalling to the active-claims registry, with the commit skill writing intent before staging and verifying staged ownership before commit. Queue order is first-class; session-count TTL is a follow-up unless a session-counter primitive lands in the same pass."
 isProject: false
 ---
 
 # Intent to Commit + Session Counter — Strategic Plan
 
-**Status**: 🟡 NOT STARTED (future / strategic intent)
+**Status**: 🟠 OWNER-DIRECTED; QUEUE-FIRST PROMOTION BEFORE IMPLEMENTATION (2026-04-27)
 **Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 staged-bundle
 integrity failures now include substitution, disappearance, and accretion;
-promote only when owner explicitly asks to implement the queue)
+owner explicitly asked to implement the queue on 2026-04-27; a same-day
+commit-window claim still collided because no ordered queue serialized the
+turn)
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:
@@ -24,6 +26,40 @@ promote only when owner explicitly asks to implement the queue)
 
 ---
 
+## Implementation Boundary
+
+This plan is **not** the already-landed commit-window claim refinement.
+That completed refinement lets an agent claim the shared git transaction
+surface with `areas.kind: "git"` and `patterns: ["index/head"]` before
+staging or committing.
+
+This future plan adds a second, more specific layer that does not exist yet.
+Owner clarification on 2026-04-27: implementation must be a **minimal
+ordered commit queue**, not just an `intent_to_commit` field on a claim.
+Claims say who is active; the queue says whose intended staged bundle owns
+the next advisory turn.
+
+Closeout correction on 2026-04-27: the first implementation slice should not
+make session-count TTL load-bearing unless it also lands a real session-counter
+primitive. Prefer explicit wall-clock fields for queue freshness in v1.3, or
+split `session_counter` into a separate follow-up. The queue and staged-bundle
+verification are the high-impact part.
+
+- `commit_queue` on the active-claims registry root, carrying ordered
+  `intent_to_commit` entries with the intended file bundle, commit subject,
+  phase, and staged-set fingerprint.
+- optional `intent_to_commit` pointers on active claims, if useful, but the
+  queue owns ordering and lifecycle.
+- `session_counter` only if the pass deliberately implements that primitive;
+  otherwise leave TTL as explicit timestamps and record session-count expiry as
+  a later slice.
+- commit-skill queue and ownership checks that compare `git diff --cached`
+  exactly against the declared intent before durable history is written.
+
+In short: **commit-window claim is done; queue-backed intent bundle
+declaration is not done; session-counter TTL is separate unless explicitly
+implemented as a real primitive**.
+
 ## Problem and Intent
 
 The WS3A protocol gives parallel agents three coordination surfaces: the
@@ -35,8 +71,8 @@ hook is running, and `.git/index.lock` is held. They also do not ensure that
 the files in the index still belong to the agent whose commit message and
 intent are about to become durable history.
 
-Six concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
-2026-04-26:
+Seven concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
+2026-04-26 through 2026-04-27:
 
 1. **Three observed lock-contention events**: 15:36, 15:43, 15:59. Each was
    a parallel agent committing while another agent was staging or about to
@@ -82,19 +118,32 @@ Six concrete pieces of evidence accumulated on `feat/otel_sentry_enhancements`
    over-inclusion. Defended by: `staged_fingerprint` field plus the
    strict-equality VERIFY OWNERSHIP step (§ 2.6) — the staged set must
    equal `intent.files` exactly, not just contain them.
+7. **Commit-window claim without queue still collided (clash type D —
+   turn-race)**: on 2026-04-27 Fragrant Sheltering Pollen opened an
+   `index/head` commit-window claim and shared-log entry before trying to
+   land the narrow Codex stable-name documentation row. While that claim was
+   open, commit `2ccefad4` landed with another agent's scripts-fix message
+   but also contained the Codex documentation row; `HEAD` then advanced again
+   to `21abd2d4` before the collision was fully inspected. The claim/log made
+   the risk visible after the fact, but no FIFO queue told agents whose
+   commit turn owned the index/head transaction before staging and hook
+   execution. Defended by: WAIT / QUEUE (§ 2.4) plus VERIFY OWNERSHIP (§ 2.6)
+   — the queued head owns the next advisory commit turn, and the staged set
+   must still match the declared intent exactly before history is written.
 
-The three clash types (A substitution, B disappearance, C accretion) form a
-small taxonomy the queue and verify-ownership steps must defend against
-together. The queue (§ 2.4 WAIT/QUEUE) reduces the probability of any
-clash by serialising commit windows; the verify step (§ 2.6 VERIFY
-OWNERSHIP) is the strict last-line defence that catches any clash the
-queue missed.
+The four clash types (A substitution, B disappearance, C accretion, D
+turn-race) form a small taxonomy the queue and verify-ownership steps must
+defend against together. The queue (§ 2.4 WAIT/QUEUE) reduces the probability
+of any clash by serialising commit windows; the verify step (§ 2.6 VERIFY
+OWNERSHIP) is the strict last-line defence that catches any clash the queue
+missed.
 
 The intent of this plan is to install a **non-binding, advisory** intent
 signal and lightweight commit queue on the active-claims registry, written by
 the commit skill before staging, verified against the staged set immediately
-before commit, and cleared after the commit lands, gated by a
-**session-count TTL** that tracks agent activity rather than wall-clock time.
+before commit, and cleared after the commit lands. Freshness should use
+explicit timestamps in the first queue slice unless a real session-counter
+primitive lands in the same pass.
 
 The signal is advisory because the WS3A doctrine is "knowledge and
 communication, not mechanical refusals" — the lock itself remains the
@@ -108,10 +157,18 @@ commit window, and it forces a self-check before making history durable.
 
 ### 1. Schema bump — `active-claims.schema.json` v1.2.0 → v1.3.0
 
-Two additive changes (compatible with v1.x readers per the
+Queue-first additive changes (compatible with v1.x readers per the
 `$comment_compatibility` discipline):
 
-**1a. New top-level `session_counter`** field on the registry root:
+**1a. New top-level `commit_queue`** field on the registry root. Array
+order is FIFO; the head of queue is the first fresh non-terminal entry
+(`queued`, `staging`, or `pre_commit`). Completed entries are removed in
+the same write that records success; abandoned/stale entries are reported
+and cleared by the commit skill or consolidation.
+
+**1b. Optional later top-level `session_counter`** field on the registry root.
+Do not include this in the first queue slice unless the pass also implements
+session-open increment semantics and validation. A possible later shape:
 
 ```json
 "session_counter": {
@@ -121,23 +178,34 @@ Two additive changes (compatible with v1.x readers per the
 }
 ```
 
-**1b. New optional `intent_to_commit` field** on each claim entry, plus a
-matching `$defs/intent_to_commit`:
+**1c. Queue entry shape** in `$defs/intent_to_commit`:
 
 ```json
-"intent_to_commit": {
+"commit_queue": {
+  "type": "array",
+  "items": { "$ref": "#/$defs/intent_to_commit" },
+  "description": "Advisory FIFO queue for commit-window ownership. Array order is the queue order; this is not a mechanical lock."
+},
+"$defs": {
+  "intent_to_commit": {
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "intent_id",
+    "claim_id",
+    "agent_id",
     "files",
     "commit_subject",
-    "started_at",
-    "session_counter_started",
-    "session_counter_last_seen",
-    "ttl_sessions",
+    "queued_at",
+    "updated_at",
+    "expires_at",
     "phase"
   ],
   "properties": {
+    "intent_id":                 { "type": "string", "format": "uuid" },
+    "claim_id":                  { "type": "string", "format": "uuid",
+                                   "description": "Active claim this queue entry belongs to." },
+    "agent_id":                  { "$ref": "#/$defs/agent_id" },
     "files":                     { "type": "array", "minItems": 1,
                                    "items": { "type": "string", "minLength": 1 },
                                    "description": "Repository-relative file paths the agent intends to stage." },
@@ -145,21 +213,26 @@ matching `$defs/intent_to_commit`:
                                    "description": "Optional stable summary of git diff --cached --name-status after staging; used to detect foreign staged content before commit." },
     "commit_subject":            { "type": "string", "minLength": 1,
                                    "description": "Draft commit subject so peers can see the intended durable history label before it lands." },
-    "started_at":                { "type": "string", "format": "date-time" },
-    "session_counter_started":   { "type": "integer", "minimum": 0 },
-    "session_counter_last_seen": { "type": "integer", "minimum": 0,
-                                   "description": "Refreshed by the owning agent only, at every session-open and on every commit-skill invocation. Stale = (registry.session_counter - this) > ttl_sessions." },
-    "ttl_sessions":              { "type": "integer", "minimum": 1, "default": 3 },
+    "queued_at":                 { "type": "string", "format": "date-time" },
+    "updated_at":                { "type": "string", "format": "date-time",
+                                   "description": "Refreshed by the owning agent on commit-skill phase changes." },
+    "expires_at":                { "type": "string", "format": "date-time",
+                                   "description": "Explicit wall-clock stale-reporting timestamp for handoff/consolidation; expiry does not auto-remove or auto-resolve the queue entry." },
     "phase":                     { "type": "string", "enum": ["queued","staging","pre_commit","complete","abandoned"] },
     "completed_at":              { "type": "string", "format": "date-time" },
     "completed_commit":          { "type": "string", "minLength": 7,
                                    "description": "Commit SHA when phase=complete." },
     "notes":                     { "type": "string" }
   }
+  }
 }
 ```
 
-**1c. `closed-claims.schema.json`** reuses
+**1d. Optional claim pointer**: claims may carry
+`"intent_to_commit": "<intent_id>"` as a convenience pointer for discovery,
+but the queue remains authoritative for ordering and lifecycle.
+
+**1e. `closed-claims.schema.json`** reuses
 `active-claims.schema.json#/$defs/claim` via `allOf`, so closed claims
 naturally carry `intent_to_commit` if it was set at close time. Bump
 `closed-claims.schema.json` to v1.3.0 in lockstep so the version line
@@ -175,18 +248,22 @@ commit window." Extend that coordination to write and clear the intent:
 2. Read .agent/state/collaboration/active-claims.json. Find or register a
    claim for this agent identity covering the staging area.
 3. POST INTENT — atomic update to active-claims.json:
-     claim.intent_to_commit = {
+     registry.commit_queue.push({
+       intent_id: <uuid>,
+       claim_id: <this claim>,
+       agent_id: <this agent>,
        files: <about-to-stage list>,
        commit_subject: <draft subject>,
-       started_at: now(),
-       session_counter_started: registry.session_counter,
-       session_counter_last_seen: registry.session_counter,
-       ttl_sessions: 3,
+       queued_at: now(),
+       updated_at: now(),
+       expires_at: now() + <short explicit commit-window TTL>,
        phase: "queued"
-     }
+     })
+     claim.intent_to_commit = <intent_id>  # optional pointer
 4. WAIT / QUEUE — if another fresh intent is phase=queued/staging/pre_commit,
-   wait or coordinate before staging. This is advisory, not refusal, but
-   default discipline is one commit owner at a time.
+   and appears ahead of this intent in commit_queue, wait or coordinate
+   before staging. This is advisory, not refusal, but default discipline is
+   one commit owner at a time.
 5. UPDATE PHASE — phase: "staging"; git add <files>.
 6. VERIFY OWNERSHIP — compute git diff --cached --name-status. If the staged
    set is not exactly this intent's files, abort before commit and coordinate.
@@ -201,16 +278,18 @@ commit window." Extend that coordination to write and clear the intent:
     (the commit landing IS the durable record; clearing keeps the
     registry small).
 9b. ON FAILURE — leave phase at "staging" or "pre_commit" and decide:
-       - Retry: refresh started_at + session_counter_last_seen, keep going.
+       - Retry: refresh updated_at + expires_at, keep going.
        - Abandon: set phase: "abandoned" so other agents see the dead intent
-         until TTL clears it.
+         until cleanup explicitly clears it.
 ```
 
-### 3. Session-counter increment — start-right skills
+### 3. Optional later session-counter increment — start-right skills
 
-`.agent/skills/start-right-quick/shared/start-right.md` and
-`.agent/skills/start-right-thorough/shared/start-right-thorough.md` add
-two short steps in the live-state reading order:
+Do not implement this section in the queue-first pass unless the owner and
+reviewers explicitly keep the session-counter primitive in scope.
+If kept, `.agent/skills/start-right-quick/shared/start-right.md` and
+`.agent/skills/start-right-thorough/shared/start-right-thorough.md` add two
+short steps in the live-state reading order:
 
 1. **Atomic increment**: `registry.session_counter += 1` (atomic
    read-modify-write under `.git/index.lock` would over-couple; better
@@ -231,14 +310,11 @@ claims, recent closures, decision-thread state, and schema validation.
 Extend it with a fifth report:
 
 > **Intent-to-commit snapshot**: for each claim with
-> `intent_to_commit`, compute
-> `staleness = registry.session_counter - intent.session_counter_last_seen`.
-> Report `[intent] <claim_id> <files> phase=<phase> staleness=<n>`.
-> Items with `staleness > ttl_sessions` surface as
-> `[intent-stale]`. Action: clear the `intent_to_commit` field if the
-> parent claim is still active; archive the whole claim if it is also
-> stale (existing § 7e archival path); never block another agent on a
-> stale intent.
+> `intent_to_commit` or each `commit_queue` entry, compare `expires_at` to
+> now. Report `[intent] <claim_id> <files> phase=<phase> fresh|stale`.
+> Stale entries are owner-review and cleanup signals, not automatic blocks.
+> Action: clear or mark abandoned only through the owning commit-skill or
+> explicit consolidation cleanup; never block another agent on a stale intent.
 
 ### 5. Discovery contract for other agents
 
@@ -250,8 +326,8 @@ e.g.:
 [discovery] Codex (codex / GPT-5) intent_to_commit:
     files: [src/foo.ts, src/bar.ts]
     phase: staging
-    started_at: 2026-04-26T15:36:00Z
-    staleness: 0 sessions (fresh)
+    queued_at: 2026-04-26T15:36:00Z
+    expires_at: 2026-04-26T16:06:00Z (fresh)
 ```
 
 Pre-commit overlap (an agent about to stage a file in another agent's
@@ -346,7 +422,7 @@ When promoted, follow the standard three-phase reviewer rhythm:
 ### Plan-phase (PRE-ExitPlanMode in `current/`) — challenges solution-class
 
 - `assumptions-reviewer` — race-condition assumptions (lossy counter
-  increment, last-write-wins on registry); TTL-semantics assumptions;
+  increment if retained, last-write-wins on registry); TTL-semantics assumptions;
   proportionality (do we genuinely need a fifth structured surface, or
   is shared-log free-form sufficient?).
 - `architecture-reviewer-fred` — boundary discipline: does the
@@ -378,6 +454,7 @@ When promoted, follow the standard three-phase reviewer rhythm:
 | Risk | Mitigation |
 |---|---|
 | **Race condition on session-counter increment**: two agents read N, both write N+1, lost update. | Accept lossy increment as advisory: the only consequence is TTL fires one session later than ideal, which is benign. Mitigation if observed in practice: read-modify-write under a `session-counter.lock` advisory file. |
+| **Premature session-counter coupling**: queue semantics depend on a session primitive that is not yet proven. | Queue-first pass uses explicit timestamps. Session counter remains a separate follow-up unless deliberately implemented with start-right semantics and validation. |
 | **Race on intent write**: two agents update `active-claims.json` concurrently, last writer wins. | Each agent only writes their own claim's intent, so collision is rare. When it happens, the lost intent post is recoverable on the next commit-skill invocation. |
 | **Surface proliferation**: now five structured collaboration surfaces (shared log, active claims, closed claims, decision threads, intents) — cognitive load for new agents. | Intent reuses the existing claims file and `$ref`s existing definitions. The discovery contract is taught once at start-right; specific intent semantics are taught only at the commit skill. |
 | **Premature optimisation**: only 3 contention events observed; could be a 2026-04-26 anomaly rather than a recurring pattern. | Promotion trigger is explicit: a fourth incident or owner-direct promotion. If the contention rate stays at three forever, the plan stays in `future/`. |
@@ -394,9 +471,8 @@ When promoted, follow the standard three-phase reviewer rhythm:
 - **principles.md §First Question** — could it be simpler? Yes: shared-log
   free-form entries instead. But the structured surface is justified by
   (a) the commit skill needing to read it programmatically, (b)
-  consolidate-docs needing to validate it, (c) the session-count TTL
-  needing schema-grounded fields. Free-form would not satisfy any of the
-  three.
+  consolidate-docs needing to validate it, and (c) the queue needing exact
+  staged-bundle ownership checks. Free-form would not satisfy these.
 - **principles.md §Strict and Complete** — additive schema bump (1.2.0 →
   1.3.0), explicit phase enum, no optional/permissive fallback.
 - **principles.md §Owner Direction Beats Plan** — owner already flagged
@@ -427,11 +503,12 @@ When promoted, update propagation surfaces:
    extend the row or add a sibling row depending on outcome of Fred's
    boundary review.
 6. `.agent/memory/operational/collaboration-state-conventions.md` — add
-   the intent-to-commit lifecycle and the session-counter increment
-   ritual.
+   the intent-to-commit lifecycle; add session-counter details only if that
+   primitive lands.
 7. `.agent/skills/start-right-quick/shared/start-right.md` and
    `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
-   — register the counter-increment + intent-refresh steps.
+   — surface open queue entries; register counter-increment steps only if
+   that primitive lands.
 8. `.agent/skills/commit/SKILL.md` — add the post-intent / clear-intent
    protocol.
 9. `.agent/commands/consolidate-docs.md` — extend § 7e with the
@@ -444,20 +521,20 @@ When promoted, update propagation surfaces:
 These are deliberately deferred to plan-phase reviewer dispatch when the
 plan is promoted, not resolved in this strategic intent:
 
-1. **Counter location**: top-level field on `active-claims.json` (cohesive
+1. **Counter location (if retained)**: top-level field on `active-claims.json` (cohesive
    with claims, fewer files) vs dedicated `session-counter.json` (atomic
    increment scope is trivial). Default in this plan: embedded.
    Architecture reviewer (Fred) decides at promotion.
-2. **Default `ttl_sessions`**: 3 or 5? 3 means "if I miss 3+ sessions in
-   a row, my intent is stale"; 5 is more lag-tolerant. Default in this
-   plan: 3.
+2. **Default `expires_at` duration**: choose the explicit wall-clock stale
+   reporting window for a commit queue entry. Default should be short and
+   advisory; expiry is a reporting signal, not an auto-clear.
 3. **Areas vs files in `intent_to_commit`**: pure files (matches `git add`
    argument list) vs globs/areas (matches active-claim shape). Default:
    files only for v1.3.0; revisit if commit batches grow large.
 4. **Audit trail of completed intents**: discard on commit (current
    design — git log + closed claims are the durable record) vs preserve
    in `closed-claims.archive.json`. Default: discard.
-5. **Counter increment semantics**: every session-open vs only sessions
+5. **Counter increment semantics (if retained)**: every session-open vs only sessions
    that touch claims. Default: every session-open (semantically
    correct, slightly more writes).
 6. **Cross-platform increment idempotency**: if the same agent runs
@@ -524,8 +601,9 @@ landing commit.
 When promoted to `current/`:
 
 - [ ] Move file from `future/` to `current/`; rename if scope tightens.
-- [ ] Add Phase 0 owner gates (counter location, default `ttl_sessions`,
-      areas vs files) — resolve via `assumptions-reviewer` +
+- [ ] Add Phase 0 owner gates (queue file/root location, default explicit
+      expiry, areas vs files, and whether session counter is in or out) —
+      resolve via `assumptions-reviewer` +
       `architecture-reviewer-fred` dispatch before WS1.
 - [ ] Add WS1 RED fixtures for the schema bump and intent lifecycle.
 - [ ] Update parent

@@ -2872,3 +2872,135 @@ update rate-limiter-fakes JSDoc). Then Phase 4 MAJOR Sonar fixes.
 
 Push remains deferred to Phase 6 per master plan; pre-authorised
 auto-push when Phase 6 reviewers green.
+
+### 2026-04-27T06:12:26Z — `Celestial Waxing Eclipse` — opening Codex thread-name adapter claim
+
+Owner clarified that deterministic Codex names should be set through a
+programmatic surface, not by editing Codex SQLite/session-index stores directly.
+I found and smoke-tested the documented app-server route:
+`thread/name/set` with `{ threadId, name }`, followed by `thread/read`, against
+this session's `CODEX_THREAD_ID`.
+
+Claim `87d28a6d` covers `agent-tools` Codex title adapter files and root/package
+script wiring. Vining's active PR-87 claim is disjoint; I will avoid their
+observability/codegen pathspecs.
+
+### 2026-04-27T12:30:00Z — `Composer` — Cursor sessionStart identity hook handoff
+
+Completed `jc-session-handoff` for practice-thread work on Cursor composer
+deterministic identity: `.cursor/hooks.json`, `.cursor/hooks/oak-session-identity.mjs`,
+gitignored `.cursor/oak-composer-session.local.json`, root Vitest
+`scripts/cursor-oak-session-identity-hook.unit.test.ts`, plus
+`agent-tools/docs/agent-identity.md`, `register-identity-on-thread-join.md`,
+and `start-right` Cursor bullet updates. Stable seed: composer `session_id`
+per Cursor Hooks; **no** documented hook field for automatic tab rename —
+mirror + suggested `Oak · {name}` for humans.
+
+No matching `active-claims.json` entry for this Composer session (Vining +
+Celestial claims remain on observability / Codex adapter lanes). Thread
+`agentic-engineering-enhancements` identity row + `repo-continuity.md`
+refreshed for 2026-04-27.
+
+### 2026-04-27T06:25:10Z — `Pelagic Washing Sail` — handoff/consolidation closeout claim
+
+Opened narrow claim `72b0e57c-4167-4407-b2ac-db1e4231619a` to run the
+owner-requested `jc-session-handoff` plus `jc-consolidate-docs` closeout and
+prepare the next-session opener for intent-to-commit queue implementation.
+
+Observed active peers: Vining Bending Root on observability/codegen paths and
+Celestial Waxing Eclipse on Codex thread-name adapter paths. This closeout is
+non-overlapping except shared collaboration bookkeeping files. No staging or
+commit window work.
+
+### 2026-04-27T06:31:29Z — `Pelagic Washing Sail` — handoff/consolidation claim closed
+
+Closed claim `72b0e57c-4167-4407-b2ac-db1e4231619a` explicitly after the
+owner-requested `jc-session-handoff` + `jc-consolidate-docs` closeout. The
+closeout clarified the intent-to-commit plan as queue-first, left
+session-count TTL as follow-up unless its primitive lands deliberately, and
+recorded the missed Vining pickup as WS5 evidence for directed channels.
+
+No staging, commit, schema, or queue implementation work was performed.
+
+### 2026-04-27T06:30:22Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — taking over stuck Codex thread-name adapter
+
+Owner reported Codex session `019dcd65-4f59-73d3-9ac5-d988b40e6696` was stuck
+and asked this session to pick up the work.
+
+I closed Celestial Waxing Eclipse's active claim
+`87d28a6d-8251-4c7b-82f4-dac2d8062218` with `closure.kind:
+"owner_forced"` and opened replacement claim
+`d48692d9-90ab-42a4-bbbd-5139bfa1ef17` for the same Codex thread-name adapter
+pathscope. Vining's PR-87 claim remains disjoint. Pelagic's closeout claim
+overlaps only collaboration bookkeeping; I will keep adapter edits inside the
+agent-tools/package pathscope and will not stage or commit without a fresh
+`git:index/head` claim.
+
+### 2026-04-27T06:43:00Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — dropping Codex app-server adapter scope
+
+Owner clarified that stable names for Codex sessions provide 99% of the value,
+so this session is dropping the experimental app-server thread-title mutation
+work instead of completing it.
+
+I am removing the `codex-thread-name` implementation, docs, and package scripts,
+keeping the existing `CODEX_THREAD_ID` -> `agent-identity` stable-name wiring,
+and re-running the `@oaknational/agent-tools` gates to unblock the shared
+workspace.
+
+### 2026-04-27T06:46:08Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — Codex app-server adapter cleanup closed
+
+Closed claim `d48692d9-90ab-42a4-bbbd-5139bfa1ef17` explicitly after dropping
+the experimental app-server thread-title adapter and restoring the
+`@oaknational/agent-tools` gates.
+
+Passed: build, type-check, lint, lint:fix, unit tests, e2e tests, and a
+`CODEX_THREAD_ID` identity smoke test that printed `Fragrant Sheltering Pollen`.
+No staging or commit window work was performed.
+
+### 2026-04-27T06:49:30Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — commit window opened for Codex stable-name docs
+
+Opened commit-window claim `a980a5e8-5b5a-4bb0-84d5-99358bfd7014` to stage and
+commit the narrow Codex stable-name documentation decision before running
+`jc-session-handoff` and `jc-consolidate-docs`.
+
+Pre-existing staged set: `scripts/check-commit-message.sh`, which is within
+Vining Bending Root's active pathscope. I will temporarily clear and restore
+that staged state around my commit rather than include it.
+
+### 2026-04-27T06:52:50Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — commit-window collision recorded
+
+Closed commit-window claim `a980a5e8-5b5a-4bb0-84d5-99358bfd7014` after a live
+shared-index collision. Commit `2ccefad4` landed while the window was open and
+contains the Codex stable-name documentation row, but its message belongs to a
+different scripts fix. `HEAD` then advanced again to `21abd2d4`.
+
+I did not amend or rewrite shared history. I restored the pre-existing staged
+`scripts/check-commit-message.sh` state, left the collision in the archive, and
+will continue with the requested session handoff + consolidation commit.
+
+### 2026-04-27T06:54:06Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — handoff/consolidation claim opened
+
+Opened claim `e6f1e8bb-33fd-4a24-8218-245ab0b1cdee` to run the owner-requested
+`jc-session-handoff` and `jc-consolidate-docs` pass.
+
+Owner explicitly directed that the live shared-index collision be recorded as
+evidence for the intent-to-commit queue. The key observation: a commit-window
+claim and log entry made the risk visible, but without a first-class queue they
+did not serialize whose commit turn owned the index/head transaction.
+
+### 2026-04-27T07:00:45Z — `Fragrant Sheltering Pollen` / `codex` / `gpt-5.5` / `019dcda0` — handoff/consolidation claim closed
+
+Closed claim `e6f1e8bb-33fd-4a24-8218-245ab0b1cdee` explicitly after the
+owner-requested `jc-session-handoff` + `jc-consolidate-docs` pass.
+
+The future intent-to-commit plan now records the `2ccefad4` collision as
+clash type D: a turn-race where commit-window visibility existed but queue
+order did not. `repo-continuity.md` and the agentic-engineering thread record
+now point the next safe implementation step at an ordered advisory
+`commit_queue` plus exact staged-bundle verification.
+
+Fitness disposition: `pnpm practice:fitness --strict-hard` initially failed on
+`napkin.md`; older 2026-04-27 entries were moved to a dated active-napkin
+archive, and the follow-up strict-hard run passed with soft pressure only.
+JSON collaboration state parsed cleanly. No open conversation or escalation
+needed a state transition from this session.

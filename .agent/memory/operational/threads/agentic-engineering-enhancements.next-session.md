@@ -1,6 +1,46 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-27 (Riverine Navigating Hull / claude-code /
+**Last refreshed**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
+gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
+experimental Codex app-server thread-title adapter. `@oaknational/agent-tools`
+gates passed after preserving stable `CODEX_THREAD_ID` naming as the
+load-bearing value. A live commit-window collision landed the Codex
+stable-name row inside commit `2ccefad4` under another message, then `HEAD`
+advanced again to `21abd2d4`; owner directed this to be recorded as concrete
+evidence that the next implementation needs a first-class advisory
+intent-to-commit queue.)
+
+**Prior refresh**: 2026-04-27 (Composer / cursor — `jc-session-handoff` after
+Cursor composer identity: `.cursor/hooks.json` + `oak-session-identity.mjs`
+(`session_id` → `OAK_AGENT_SEED`, derived display name, `user_message`,
+gitignored `.cursor/oak-composer-session.local.json` with
+`suggestedComposerTabTitle`). Docs/rules/tests updated. Official
+[Hooks](https://cursor.com/docs/hooks) `sessionStart` output has no tab-title
+field — human rename or future Cursor API. Working tree; commit
+owner-gated.)
+
+**Prior refresh**: 2026-04-27 (Celestial Waxing Eclipse / codex / GPT-5 —
+lightweight handoff after answering whether deterministic Codex names can be
+shown in a title/status surface. The session confirmed `CODEX_THREAD_ID`
+remains the stable seed, this thread title is now set to
+`Celestial Waxing Eclipse`, and official CLI/TUI surfaces support `/title`
+and `/statusline`. Owner asked to use the CLI/TUI surfaces, so
+`~/.codex/config.toml` now sets `terminal_title` and `status_line` entries
+that include `thread-title` / `session-id`. Prefer a first-class
+rename/title API when Codex exposes one in the IDE host.)
+
+**Prior refresh**: 2026-04-27 (Pelagic Washing Sail / codex / gpt-5 —
+lightweight session handoff before serious intent-to-commit queue work.
+This session completed the collaboration-doc fitness split, fixed the live
+ADR-144 vocabulary failure, left Vining Bending Root a cross-vendor
+shared-log note about vocabulary-transition TTLs/examples, and created a
+15-minute heartbeat to check for pickup. Owner then promoted
+`intent_to_commit` implementation with a correction: the next slice must
+make queue order first-class, not just add claim metadata. Claim
+`9eb22ec4-e10b-4867-9b1f-67ba12978c9b` was opened for queue work but
+closed as an explicit handoff before schema/protocol implementation.)
+
+**Prior refresh**: 2026-04-27 (Riverine Navigating Hull / claude-code /
 claude-opus-4-7-1m — executed Phase 8 (Claude Code platform alignment
 review) of `agent-identity-derivation.plan.md`. Reviewed the deterministic
 identity implementation, PDR-027 amendment, start-right updates, and platform
@@ -270,14 +310,16 @@ and
 | --- | --- | --- | --- | --- | --- | --- |
 | `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation; identity-session-handoff-consolidation` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
-| `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff` | 2026-04-26 | 2026-04-26 |
+| `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff; cursor-sessionstart-hook-identity-mirror-docs-tests` | 2026-04-26 | 2026-04-27 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
 | `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
 | `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `chunked-commit-stewardship-under-active-claim-4535f2ff; commit-window-protocol-self-application; consolidation-graduation-pass-7be10d3b-7-doctrine-entries-graduated-cb358e8d-local-push-deferred-on-parallel-track-lint-coupling` | 2026-04-26 | 2026-04-26 |
 | `Riverine Navigating Hull` | `claude-code` | `claude-opus-4-7-1m` | `c32a7d1d` | `agent-identity-derivation-phase-8-claude-code-platform-alignment-review-and-statusline-wiring` | 2026-04-27 | 2026-04-27 |
-| `Celestial Waxing Eclipse` | `codex` | `GPT-5` | `019dcd` | `codex-thread-id-discovery-and-agent-identity-seed-wiring` | 2026-04-27 | 2026-04-27 |
+| `Celestial Waxing Eclipse` | `codex` | `GPT-5` | `019dcd` | `codex-thread-id-discovery-and-agent-identity-seed-wiring; codex-title-statusline-display-surface-investigation` | 2026-04-27 | 2026-04-27 |
+| `Pelagic Washing Sail` | `codex` | `gpt-5` | `019dca9c` | `collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout` | 2026-04-27 | 2026-04-27 |
+| `Fragrant Sheltering Pollen` | `codex` | `gpt-5.5` | `019dcda0` | `owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -287,6 +329,83 @@ new sessions add rows; matching platform/model/agent_name updates
 ---
 
 ## Landing Target (per PDR-026)
+
+**Latest session landed as closeout and next-session opener
+(2026-04-27 Fragrant Sheltering Pollen, Codex rollback and queue-evidence
+handoff):**
+
+- owner corrected the previous direction: drop the experimental Codex
+  app-server title-mutation approach because stable names from
+  `CODEX_THREAD_ID` provide the load-bearing value;
+- removed the app-server implementation scope from the working tree and kept
+  the stable identity documentation row. `@oaknational/agent-tools` gates
+  passed: build, type-check, lint, lint:fix, unit tests, e2e tests, plus an
+  identity smoke test printing `Fragrant Sheltering Pollen`;
+- a short-lived `index/head` commit-window claim still collided with live
+  shared-index activity. Commit `2ccefad4` contains the Codex stable-name doc
+  row under another agent's scripts-fix message, and `HEAD` advanced again to
+  `21abd2d4` during inspection. The session did not amend or rewrite shared
+  history;
+- owner directed this collision to be recorded as evidence for the
+  intent-to-commit queue. Next implementation re-attempts by adding ordered
+  `commit_queue` mechanics plus exact staged-bundle verification. Falsifiability:
+  inspect `intent-to-commit-and-session-counter.plan.md`, the shared log entry
+  for claim `a980a5e8-5b5a-4bb0-84d5-99358bfd7014`, and `git show 2ccefad4`.
+
+**Prior latest session landed as closeout and next-session opener
+(2026-04-27 Pelagic Washing Sail, Codex handoff/consolidation):**
+
+- `jc-session-handoff` and `jc-consolidate-docs` ran before serious
+  commit-queue implementation, per owner direction;
+- active claim `72b0e57c-4167-4407-b2ac-db1e4231619a` was opened for
+  closeout surfaces and closed explicitly in collaboration state;
+- strict-hard fitness pressure in `napkin.md` and `repo-continuity.md` was
+  remediated without deleting live learning;
+- Vining did not visibly pick up the shared-log vocabulary TTL/examples note
+  at the first heartbeat check, which is now recorded as WS5 evidence that
+  broadcast logs need directed channel/ack protocols for targeted requests;
+- no queue schema, API, workflow, staging, or commit work was started.
+  Next session re-attempts by promoting/updating the intent-to-commit plan
+  around a first-class ordered advisory queue, then implementing schema and
+  workflow v1.3. Falsifiability: inspect active/closed claims, the shared log,
+  this thread record, and the future plan before touching schemas.
+
+**Latest session landed as committed identity support plus handoff evidence
+(2026-04-27 Celestial Waxing Eclipse, Codex display-surface handoff):**
+
+- deterministic Codex identity seeding from `CODEX_THREAD_ID` already landed
+  in `ff119d44` and collaboration claim closeouts landed in `701c3185`;
+- this handoff set the current Codex thread title to
+  `Celestial Waxing Eclipse`, and `~/.codex/session_index.jsonl` carries the
+  same thread name;
+- official CLI/TUI title/statusline configuration exists, but no supported
+  IDE-extension setting for a deterministic custom session name was found in
+  local extension settings;
+- owner asked to use the CLI/TUI surfaces anyway. `~/.codex/config.toml` now
+  sets `terminal_title = ["spinner", "project-name", "thread-title",
+  "git-branch"]` and `status_line = ["model-with-reasoning", "git-branch",
+  "thread-title", "session-id", "context-remaining", "five-hour-limit",
+  "weekly-limit"]`. Falsifiability: inspect `~/.codex/config.toml`, the
+  Codex IDE extension package configuration, and official Codex CLI/TUI
+  slash-command docs before wiring any display adapter.
+
+**Latest session landed as uncommitted documentation/state edits
+(2026-04-27 Pelagic Washing Sail, pre-commit-queue handoff):**
+
+- collaboration-doc fitness remediation is implemented in the working tree:
+  high-frequency doctrine stays in the directive/conventions files while
+  detailed lifecycle recipes live in `collaboration-state-lifecycle.md`;
+- `practice:vocabulary` was fixed by translating the shared-log ADR-144
+  phrase from retired wording to the current three-zone vocabulary;
+- a cross-vendor shared-log note to Vining Bending Root records the
+  vocabulary-transition TTL/examples idea; a thread heartbeat checks
+  periodically for pickup evidence;
+- serious `intent_to_commit` implementation was deliberately paused for this
+  handoff. Next session re-attempts by amending/promoting the existing plan
+  around an explicit ordered commit queue, then implementing schema/workflow
+  v1.3. Falsifiability: inspect `active-claims.json` for no remaining
+  Pelagic queue-work claim, inspect this thread record's Next Safe Step, and
+  check the future plan's owner-direction note before editing schemas.
 
 **Latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, same-branch friction handoff):**
@@ -553,8 +672,11 @@ nl -ba .agent/directives/AGENT.md
   Claude Code statusline wiring landed in this session; archived 2026-04-27.
 - Fitness remediation:
   [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md)
-  — queued strict-hard remediation for collaboration directive/state
-  conventions.
+  — implemented in the working tree; validate/land separately from queue
+  work.
+- Owner-directed next slice:
+  [`intent-to-commit-and-session-counter.plan.md`](../../../plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md)
+  — promote/update before implementation; queue order is first-class.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -565,8 +687,9 @@ nl -ba .agent/directives/AGENT.md
 ### Current Objective
 
 **WS4A lifecycle integration, coordination consolidation, deterministic
-identity, and closeout/consolidation state refresh are complete in the working
-tree (refreshed 2026-04-26).**
+identity, collaboration-doc fitness remediation, and cross-vendor shared-log
+handoff evidence are complete or captured in the working tree (refreshed
+2026-04-27).**
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -613,11 +736,27 @@ validation.
   review is complete: `.claude/settings.json` →
   `.claude/scripts/statusline-identity.mjs` →
   `agent-tools/dist/src/claude/statusline-identity.js` is live; the platform
-  status table marks Claude Code as **Wired**; Codex/Cursor remain
-  documented gaps awaiting stable platform session-id surfaces.
-- The requested `jc-session-handoff` plus `jc-consolidate-docs` pass opened
-  an explicit collaboration-doc fitness remediation lane for the remaining
-  hard practice-fitness findings.
+  status table marks Claude Code as **Wired**. Codex `CODEX_THREAD_ID`
+  seeding landed in `ff119d44`. Cursor composer uses experimental project
+  `sessionStart` hook wiring (`OAK_AGENT_SEED`, mirror file, docs); official
+  Hooks output still lacks a programmatic Composer tab-title field.
+- Collaboration-doc fitness remediation is implemented in the working tree.
+  Later strict-hard checks should distinguish those target docs from any
+  unrelated concurrent WIP pressure.
+- Cross-vendor shared-log communication has a live proof point and a limit:
+  Codex left Vining a repo-context-specific future-design note with no
+  platform bridge, but the first heartbeat found no visible pickup. Treat the
+  log as durable discovery; use sidebars, decision threads,
+  acknowledgements, or queue mechanics for directed obligations.
+- `intent_to_commit` is now owner-directed work. The next implementation must
+  install a minimal ordered advisory commit queue, not only claim metadata.
+- Codex display-surface investigation is complete for this session:
+  repo-owned identity derivation uses `CODEX_THREAD_ID`. The experimental
+  app-server title-mutation adapter was dropped because stable session names
+  already provide the useful identity value.
+- A live commit-window collision on 2026-04-27 proved the current
+  `git:index/head` claim protocol is observable but not ordering. The next
+  queue slice must serialize the advisory commit turn before staging/hooks.
 - The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - `repo-continuity.md` has been compacted from an overgrown historical surface
@@ -631,9 +770,9 @@ validation.
 
 - Full branch gates are not claimed green; current repo state includes separate
   MCP/SDK TypeScript debt outside the completed practice-thread passes.
-- Practice fitness still reports hard pressure in `agent-collaboration.md`
-  and `collaboration-state-conventions.md`; the remediation lane above is the
-  concrete disposition.
+- Practice fitness for the collaboration directive/conventions was remediated
+  in the working tree. Re-run strict-hard before landing because other agents
+  are also editing the branch.
 - The strict `--exactOptionalPropertyTypes` probe is clean for identity files
   but still reports the pre-existing optional typing issue in
   `agent-tools/src/bin/codex-reviewer-resolve.ts`.
@@ -650,36 +789,45 @@ validation.
 ### Next Safe Step
 
 **No WS3A, WS4A, commit-window, WS3B sidebar/escalation, joint-decision,
-deterministic-identity core, or Phase 8 Claude Code statusline wiring
-remains open. Continue to treat same-branch coordination as the live
-experiment: claims, sidebars, joint decisions, and escalations should make
-friction visible rather than hiding it.**
+deterministic-identity core, Claude Code statusline wiring, or Codex
+thread-id seeding remains open. Continue to treat same-branch coordination as
+the live experiment: claims, sidebars, joint decisions, escalations, and now
+the proposed commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Collaboration-doc fitness remediation** — execute
-   `collaboration-doc-fitness-remediation.plan.md` to clear strict-hard
-   pressure without deleting protocol signal.
-2. **Strict exact-optional cleanup** — fix the pre-existing
+1. **Intent-to-commit queue implementation** — promote/update
+   `intent-to-commit-and-session-counter.plan.md`, replacing claim-only
+   intent details with an ordered advisory `commit_queue` as the first-class
+   mechanic. Use the 2026-04-27 `2ccefad4` collision as the fourth clash type:
+   a turn-race where visibility existed but queue order did not. Then implement
+   schema/workflow v1.3 and exact staged-bundle verification. Do not use
+   session-count TTL until the session primitive is actually landed; prefer
+   explicit timestamps or a separate follow-up if the plan still carries old
+   TTL wording.
+2. **Collaboration-doc fitness remediation landing** — validate and land the
+   already-implemented split separately once the git index is clear.
+3. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
-3. **First real sidebar / joint-decision seed** — when a real overlap uses
+4. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-4. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+5. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-5. **Observability branch-primary** — read the
+6. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-6. **Lifecycle integration follow-up** — only if owner-directed, observe
+7. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether the new start-right / handoff / template lifecycle triggers are
    actually used in the next few sessions. Do not add hooks without evidence;
    first real sidebar/joint-decision usage should feed WS5 observation.
-7. **Codex/Cursor identity wrapper follow-up** — when a stable Codex or
-   Cursor session-id surface is identified (or owner approves a substitute
-   seed), wire the analogous statusline/identity adapters and update the
-   platform-status table.
-8. **Other agentic engineering work** — pick an owner-directed queued plan.
+8. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
+   wired; CLI/TUI title/statusline surfaces exist, but no supported IDE
+   custom-title setting was found. Cursor composer `session_id` seeds the repo
+   hook; **tab title** still requires manual rename from mirror or a future
+   Cursor API — track product requests separately from repo derivation.
+9. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
@@ -694,3 +842,6 @@ Choose the lane deliberately:
 - If hard-fitness remediation uncovers a general compression discipline
   beyond the existing pending item, route it through ADR-144,
   practice-verification, or `consolidate-docs` step 9 as appropriate.
+- Treat Codex-to-Vining pickup through the shared communication log as WS5
+  collaboration evidence. If Vining replies or acts, record it in the parent
+  multi-agent collaboration plan rather than creating a new surface.
