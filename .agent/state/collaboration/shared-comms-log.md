@@ -3004,3 +3004,39 @@ Fitness disposition: `pnpm practice:fitness --strict-hard` initially failed on
 archive, and the follow-up strict-hard run passed with soft pressure only.
 JSON collaboration state parsed cleanly. No open conversation or escalation
 needed a state transition from this session.
+
+### 2026-04-27T07:20:56Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — owner-directed intent-to-commit queue implementation opened
+
+Opened claim `fa936690-133c-4d49-a6e0-06bac78c9834` to implement the
+owner-directed ordered advisory `commit_queue` plus exact staged-bundle
+verification.
+
+I re-read active claims before touching files. Vining Bending Root has an
+active observability/product claim and a staged
+`apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts`
+bundle. My pathscope is the agentic-engineering queue schema, root queue
+helper script/tests, commit/start-right/consolidation docs, and handoff
+surfaces. I will not stage or commit without a fresh `git:index/head` claim,
+and I will leave the current staged bundle untouched.
+
+### 2026-04-27T07:36:43Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — owner-directed intent-to-commit queue implementation closed
+
+Closed claim `fa936690-133c-4d49-a6e0-06bac78c9834` explicitly after implementing the owner-directed advisory `commit_queue` plus exact staged-bundle verification in the working tree.
+
+Delivered: active-claims schema v1.3.0 with root `commit_queue`, repo-owned `scripts/commit-queue.mjs`, queue unit tests, commit/start-right/rule/directive/consolidation updates, promoted current plan, refreshed future source plan, repo-continuity, and this thread record. Consolidation archived stale observability claim `9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10`.
+
+Validation passed: `pnpm test:root-scripts`, `pnpm markdownlint-check:root`, `pnpm practice:vocabulary`, `pnpm practice:fitness:strict-hard`, JSON parse checks, and `git diff --check`. Direct file-level ESLint on the new `.mjs` helper hit the repo's typed-rule parser-services limitation; `pnpm test:root-scripts` is the recorded validation path.
+
+No staging or commit was performed. Final observed staged index is clear, but unrelated dirty work remains; the next landing must re-check active claims, enqueue intent, hold a fresh `git:index/head` claim, record and verify the exact staged bundle, then clear the queue entry after commit.
+
+### 2026-04-27T07:50:41Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — owner correction: move queue logic into agent-tools
+
+Opened claim `42ba7a66-1b4e-48fb-a81b-df9f78639571` after the owner corrected
+the parked queue implementation: root `scripts/` code complex enough to need
+quality gates belongs in a workspace. For the commit queue, the owning
+workspace is `agent-tools`, the implementation should be TypeScript, and
+`scripts/commit-queue.mjs` should consume the built file only.
+
+Active claims were empty and the staged index was clear before this claim. I
+will update the executable plan before code migration and will not stage or
+commit without a fresh `git:index/head` claim.

@@ -95,11 +95,22 @@ plan templates, Practice Core, and ADR-facing surfaces made WS0-WS3A
 collaboration state part of the ordinary lifecycle. WS3B is now a later
 completed implementation pass.
 
-The 2026-04-26 owner-directed commit-window refinement is complete in the
-working tree: `git:index/head` is now a short-lived active-claim area before
-staging or committing, and the commit skill closes the claim on success,
-failure, or abort. This extends WS1's advisory claim model; it does not add
-hooks or locks.
+The 2026-04-26 owner-directed commit-window refinement is complete:
+`git:index/head` is now a short-lived active-claim area before staging or
+committing, and the commit skill closes the claim on success, failure, or
+abort. The 2026-04-27 `2ccefad4` turn-race then showed that visibility is not
+ordering. Queue-first follow-up is now active in
+[`intent-to-commit-queue.execution.plan.md`](intent-to-commit-queue.execution.plan.md):
+schema v1.3.0 adds an ordered advisory `commit_queue`, and the repo-owned
+helper verifies staged file equality, staged fingerprint, and commit subject
+before a commit is allowed to make history durable. `session_counter` remains
+future-only unless a real primitive lands in the same pass.
+
+The collaboration substrate is cross-vendor by design. Its authoritative
+surfaces are repo-owned markdown, JSON state, rules, commands, skills, and
+schemas readable by Claude Code, Codex, Cursor, and other capable agents.
+Platform-specific wrappers may improve ergonomics, but they are adapters
+around the portable substrate, not the collaboration authority.
 
 WS5 remains **paused on owner direction**. The evidence surface has moved on
 since the original 2026-04-25 pause: later shared-communication-log entries
@@ -118,6 +129,15 @@ integration pass, and then supplied enough evidence for WS3B promotion.
 **While paused, evidence accumulates passively** — every session on this
 repo that uses the WS0/WS1 surfaces produces evidence. No active session
 is needed to "wait."
+
+**2026-04-27 WS5 evidence update**: Pelagic Washing Sail left Vining
+Bending Root a targeted shared-log note about vocabulary-transition
+TTL/examples. A later heartbeat found Vining had posted a waypoint and
+acknowledged Pelagic's gate fixes, but had not visibly picked up that
+targeted note. Treat this as evidence that the shared log is a durable
+broadcast/discovery surface, not a delivery or acknowledgement protocol;
+directed obligations belong in sidebars, decision threads,
+acknowledgements, or queue mechanics.
 
 **What resumes the plan**: owner direction after inspecting the evidence
 threshold (3+ shared-communication-log entries OR claims OR documented
@@ -1129,8 +1149,8 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/rules/register-active-areas-at-session-open.md` — atomic rule, parallel to register-identity-on-thread-join, including `git:index/head` commit-window claims (WS1 + commit-window refinement)
 - `.agent/state/README.md` — explains state-vs-memory distinction (WS0)
 - `.agent/state/collaboration/shared-comms-log.md` — schema-less shared communication log (WS0; preserved alongside structured surfaces in WS1, WS3A, and WS3B if promoted)
-- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage; v1.2.0 also carries short-lived git transaction claims (WS1 + commit-window refinement)
-- `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims, including `areas.kind: "git"` in v1.2.0 (WS1 + commit-window refinement)
+- `.agent/state/collaboration/active-claims.json` — structured claims registry, schema informed by observed shared-communication-log usage; v1.2.0 carries short-lived git transaction claims and v1.3.0 adds the advisory `commit_queue` (WS1 + commit-window + queue refinements)
+- `.agent/state/collaboration/active-claims.schema.json` — JSON schema for claims, including `areas.kind: "git"` in v1.2.0 and `commit_queue` in v1.3.0 (WS1 + commit-window + queue refinements)
 - `.agent/state/collaboration/conversations/` — directory of per-topic decision-thread files (WS3A; extended by WS3B if promoted)
 - `.agent/state/collaboration/conversation.schema.json` — JSON schema for decision threads (WS3A; extended by WS3B if promoted)
 - `.agent/memory/collaboration/README.md` — explains the new memory class (WS2)

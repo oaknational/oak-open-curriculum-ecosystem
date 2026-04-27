@@ -4,7 +4,8 @@ description: >
   active-claims.json for overlap. On overlap, consult the shared
   communication log and decide how to coordinate before proceeding.
   Then register the session's own claim. Before staging or committing,
-  use a short-lived git:index/head claim. Advisory, not refusal.
+  use the advisory commit queue and a short-lived git:index/head claim.
+  Advisory, not refusal.
 alwaysApply: true
 ---
 

@@ -23,9 +23,11 @@ This directive is grown by the [`multi-agent-collaboration-protocol`][p].
 WS0 + WS1 landed vocabulary, the shared log, claims, schemas, staleness
 archive, and tripwire rules. WS3A adds decision threads and durable closure
 history. The commit-window refinement adds short-lived `git` claims for the
-shared index / HEAD surface. WS3B installs agent sidebars and owner
-escalations; the joint-decision layer records bilateral commitments and role
-follow-through. WS5 harvests evidence. Details live in
+shared index / HEAD surface. The intent-to-commit queue adds advisory FIFO
+ordering plus exact staged-bundle verification before history is written.
+WS3B installs agent sidebars and owner escalations; the joint-decision layer
+records bilateral commitments and role follow-through. WS5 harvests evidence.
+Details live in
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Knowledge and Communication, Not Mechanical Refusals
@@ -118,48 +120,27 @@ rule operationalises the consult-and-register half of the same tripwire.
 ### c. Treat Commit as a Short-Lived Shared Transaction Surface
 
 The git lock prevents repository corruption, but it does not communicate
-intent before agents race the shared index and `HEAD`. Before staging or
-committing, use the commit skill to check, open, and close a short-lived
-`git:index/head` claim. This is awareness and auditability, not a second
-mechanical lock.
+intent or queue order before agents race the shared index and `HEAD`. Before
+staging or committing, use the commit skill to enqueue the intended bundle,
+open and close a short-lived `git:index/head` claim, and verify the exact
+staged bundle immediately before `git commit`. This is awareness, ordering,
+and auditability, not a mechanical lock.
 
 ## Communication Channels
 
-Primary communication channels plus active claims and owner questions exist;
-they have different shapes. Pick the one that fits what you need. These
-surfaces create visible obligations and owner-review signals; they do not
-create mechanical refusal gates.
+Pick the channel that fits the shape of the coordination need. The
+at-a-glance routing card is
+[`agent-collaboration-channels.md`](../memory/executive/agent-collaboration-channels.md);
+the operational state index is
+[`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
-| Channel | Shape | Primary use | Forward ref |
-| --- | --- | --- | --- |
-| Thread record `<slug>.next-session.md` | Durable async, narrative, per-thread, multi-session | Continuity across sessions on a single thread | PDR-027 |
-| **Shared communication log** `state/collaboration/shared-comms-log.md` | Schema-less append-only markdown, eventually-consistent | Discovery surface — leave notes for whoever reads next | WS0 (this) |
-| Decision thread `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Concrete overlap discussion, sidebars, joint decisions, decisions, resolutions, and evidence | WS3A/WS3B/joint decisions |
-| Sidebar entries in `conversations/<id>.json` | Short-lived focused exchange by mutual agreement | Tighter coordination inside an existing conversation; timeout is advisory reporting only | WS3B |
-| Escalation file `state/collaboration/escalations/<id>.json` | Live owner-facing unresolved case record | Owner tiebreaker for blocked decisions; closes by writing the durable resolution back to the conversation | WS3B |
-| Reviewer dispatch | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (docs-adr, assumptions, etc.) | already in use |
-| Owner question via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing-information that only the owner can supply | already in use |
-
-Channel-selection rules: the **shared communication log is a discovery
-surface, not a synchronisation surface** — use it for discovery notes,
-lightweight narrative context, and signed "I noticed X" updates.
-**Active claims are live liveness signals** — use them for "I am
-touching this area now" and for short-lived `git:index/head` commit
-windows. **Decision threads are structured async coordination** — use
-them for overlap discussions that need concrete decision requests,
-sidebars, joint decisions, decisions, resolutions, or evidence refs.
-**Sidebars are advisory focused exchanges** — request one inside a
-conversation when a short peer/owner exchange is needed; expiry makes the
-sidebar stale for reporting but does not resolve it. **Escalations are
-live owner-facing case files** — when the owner resolves the case, write
-the durable result back to the conversation and close the escalation by
-reference. **The napkin is session learning and surprises**, not the live
-coordination surface. **Thread records are durable cross-session
-continuity and lane state**, not the place to copy decision-thread bodies.
-**Reviewer dispatch is not peer collaboration** — reviewer sub-agents are
-fork-blocking-rejoin within one agent's session and do not register
-claims. **Owner is the final tiebreaker**, surfaced through an owner
-question such as `AskUserQuestion`; peer agreement is the default.
+The high-frequency rule is: use active claims for live "I am touching
+this area now" signals, `commit_queue` for advisory commit turn order and
+staged-bundle verification, the shared communication log for discovery notes,
+decision threads for structured async coordination, sidebars for focused short
+exchanges inside a conversation, escalations for owner-facing unresolved
+cases, and owner questions for final tiebreakers. Reviewer dispatch is draft
+review inside one agent's session, not peer collaboration.
 
 ## Identity vs Liveness
 
@@ -198,11 +179,11 @@ parallel-session coordination overhead beyond the single-write seed.
 ## Conversations as Learning-Loop Inputs
 
 Shared-communication-log entries, active and closed claim entries,
-decision-thread files, sidebar entries, joint-decision entries, and
-escalation case files are durable evidence alongside the napkin.
-Refinements to this directive or to the claim/conversation/escalation
-schemas cite entries from those surfaces directly. Lessons graduate via
-the standard learning-loop; WS5's seed harvest reads across all of them.
+commit-queue entries, decision-thread files, sidebar entries, joint-decision
+entries, and escalation case files are durable evidence alongside the napkin.
+Refinements to this directive or to the collaboration-state schemas cite
+entries from those surfaces directly. Lessons graduate via the standard
+learning-loop; WS5's seed harvest reads across all of them.
 
 ## Schema Evolution
 
@@ -235,7 +216,8 @@ motivated this directive. The pattern is captured at
 [`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
 instances surface in [`napkin.md`][napkin] and feed
 [WS5's seed harvest][p]. Commit-window claims apply the same lesson to the
-narrower git transaction surface: expose intent before staging or commit.
+narrower git transaction surface: expose intent and queue order before staging
+or commit.
 
 ## Foundation Alignment
 

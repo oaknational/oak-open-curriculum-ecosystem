@@ -1,58 +1,50 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
+  "commit_queue": [],
   "claims": [
     {
-      "claim_id": "9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10",
+      "claim_id": "42ba7a66-1b4e-48fb-a81b-df9f78639571",
       "agent_id": {
-        "agent_name": "Vining Bending Root",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "4e2cbc5c"
+        "agent_name": "Prismatic Waxing Constellation",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcd"
       },
-      "thread": "observability-sentry-otel",
+      "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/orchestration.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/application.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/**",
-            "apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh",
-            "apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
-            "apps/oak-search-cli/src/cli/admin/index.ts",
-            "apps/oak-search-cli/src/cli/eval/index.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.unit.test.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-scopes-supported-file.unit.test.ts",
-            "packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts",
-            "scripts/check-commit-message.sh",
-            "scripts/validate-practice-fitness.mjs",
-            "scripts/ci-schema-drift-check.mjs",
-            "sonar-project.properties",
-            ".agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json",
-            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md",
-            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+            "agent-tools/src/**",
+            "agent-tools/tests/**",
+            "agent-tools/package.json",
+            "agent-tools/tsconfig*.json",
+            "agent-tools/vitest*.config.ts",
+            "agent-tools/docs/**",
+            "scripts/commit-queue.mjs",
+            "scripts/commit-queue.unit.test.ts",
+            "scripts/cursor-oak-session-identity-hook.unit.test.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
           ]
         },
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+            ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-04-27T00:00:00Z",
+      "claimed_at": "2026-04-27T07:50:41Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Execute Phases 3-6 of the PR-87 quality finding resolution plan. Phase 3: introduce METADATA_RATE_LIMIT profile (owner-confirmed) + apply to four /.well-known/* handlers (auth-routes.ts) + add integration test + schema-cache validate-then-skip-with-warning + TSDoc evidence on registration functions. Phase 4: ~16 MAJOR Sonar fixes. Phase 5: ~47 MINOR Sonar findings + S3735 metacognitive resolution (TSDoc strengthening on test-config.ts mock; remove unused observability params from admin/eval CLI commands). Phase 6: full local gates + push + observe SonarCloud + CodeQL re-runs + release-readiness-reviewer.",
-      "notes": "Co-tenant with Riverine Navigating Hull (claim 6078ec9e) on the same branch but structurally disjoint pathspec. Pre-Phase-3 reviewers (assumptions, security, architecture-betty) all ran; owner approved METADATA_RATE_LIMIT new profile and validate-then-skip schema-cache shape. Coordination thread at conversations/pr-87-phases-3-6-vining-bending-root.json."
+      "intent": "Apply owner correction by moving parked commit queue logic/tests from root scripts into the agent-tools TypeScript workspace, leaving scripts/commit-queue.mjs as a thin built-file consumer.",
+      "notes": "Active claims were empty and staged index was clear before opening. This session will not stage or commit without a fresh git:index/head claim."
     }
   ]
 }

@@ -5,7 +5,8 @@ description: >-
   format. Always active, every commit, every session, no trigger required.
   Enumerates live commitlint constraints inline before drafting, validates the
   drafted message via scripts/check-commit-message.sh BEFORE invoking
-  git commit, and coordinates the short-lived git index/head commit window.
+  git commit, and coordinates the advisory commit queue plus the short-lived
+  git index/head commit window.
 ---
 
 # Commit (Codex)

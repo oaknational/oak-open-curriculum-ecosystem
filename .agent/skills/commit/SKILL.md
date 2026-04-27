@@ -38,6 +38,12 @@ One active script makes this skill actionable end-to-end:
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates, 2 invalid usage. Catches
   `header-max-length`, `body-max-line-length`, and case violations in ~1s
   before the ~34s pre-commit cycle. **Use BEFORE every `git commit`.**
+- **`scripts/commit-queue.mjs`** — posts and maintains advisory
+  `commit_queue` entries in `active-claims.json` v1.3.0. Use it to enqueue
+  the intended file bundle before staging, record the staged-bundle
+  fingerprint after staging, verify the staged set immediately before
+  `git commit`, and clear the queue entry after success. It is repo-owned and
+  cross-vendor; no platform-native queue feature is required.
 
 `scripts/log-commit-attempt.sh` is retained in the repo but currently
 disabled. Do not call it unless the owner explicitly re-enables
@@ -92,21 +98,26 @@ Run these steps **before** formulating the commit message.
    commit headers — factor that into the message draft if the change touches
    version-bearing files.
 
-## Commit Window Protocol
+## Commit Queue And Window Protocol
 
 Staging and committing touch the shared git index and `HEAD`, even when file
-edits do not overlap. Before staging or invoking `git commit`:
+edits do not overlap. Before staging or invoking `git commit`, coordinate both
+the advisory queue and the short-lived git transaction claim:
 
 1. Read
    [`.agent/state/collaboration/active-claims.json`](../../state/collaboration/active-claims.json)
    and recent
    [`.agent/state/collaboration/shared-comms-log.md`](../../state/collaboration/shared-comms-log.md)
-   entries for a fresh `git:index/head` claim.
+   entries for fresh `commit_queue` entries and a fresh `git:index/head`
+   claim.
 2. Inspect `git diff --staged --name-only`. If the staged set is non-empty
    and not wholly within your intended scope, pause and coordinate or ask the
    owner before opening or continuing the commit window.
-3. If another fresh commit-window claim exists, coordinate through the shared
-   log, decision thread, or owner question instead of racing the git lock.
+3. If another fresh queue entry is ahead of yours, or another fresh
+   commit-window claim exists, coordinate through the shared log, decision
+   thread, or owner question instead of racing the git lock. The queue is
+   advisory, not a mechanical refusal; default discipline is still one commit
+   owner at a time.
 4. If the window is clear, open a short-lived active claim entry under
    `claims[]`:
 
@@ -135,16 +146,76 @@ edits do not overlap. Before staging or invoking `git commit`:
 
 5. Append a shared-log entry naming the intended pathspecs, current staged set,
    gate state, and peer-claim scan.
-6. Stage only explicit pathspecs, validate the message, and commit.
-7. Close the commit-window claim after every exit once opened: success,
+6. Enqueue the intended bundle before staging. Use one `--file` argument per
+   repo-relative path you intend to stage:
+
+   ```bash
+   node scripts/commit-queue.mjs enqueue \
+     --claim-id "<active-claim-id>" \
+     --agent-name "<name>" \
+     --platform "<platform>" \
+     --model "<model>" \
+     --session-id-prefix "<prefix>" \
+     --commit-subject "<draft subject>" \
+     --file "path/one" \
+     --file "path/two"
+   ```
+
+7. Move the queue entry to `staging`, stage only explicit pathspecs, then
+   record the staged-bundle fingerprint:
+
+   ```bash
+   node scripts/commit-queue.mjs phase \
+     --intent-id "<intent-id>" \
+     --phase staging
+   git add -- path/one path/two
+   node scripts/commit-queue.mjs record-staged --intent-id "<intent-id>"
+   ```
+
+8. Validate the message and verify the staged bundle immediately before
+   committing:
+
+   ```bash
+   ./scripts/check-commit-message.sh -F .git/COMMIT_EDITMSG
+   node scripts/commit-queue.mjs verify-staged \
+     --intent-id "<intent-id>" \
+     --commit-subject "<draft subject>"
+   node scripts/commit-queue.mjs phase \
+     --intent-id "<intent-id>" \
+     --phase pre_commit
+   ```
+
+   Verification checks all three authorial-bundle invariants: staged files
+   equal queued files exactly, the staged fingerprint has not changed, and the
+   subject equals the queued subject. A mismatch aborts before history is
+   written.
+
+9. Commit, then clear the queue entry on success:
+
+   ```bash
+   git commit -F .git/COMMIT_EDITMSG
+   node scripts/commit-queue.mjs complete --intent-id "<intent-id>"
+   ```
+
+10. Close the commit-window claim after every exit once opened: success,
    staging failure, message-validation failure, hook failure, or deliberate
    abort. Archive the claim with the resulting SHA, failure reason, or abort
    reason and next action in `closure.summary`.
 
-This protocol is awareness and auditability, not a second mechanical lock.
+If the queue attempt is abandoned, move the entry to `abandoned` rather than
+leaving a fresh active phase:
+
+```bash
+node scripts/commit-queue.mjs phase \
+  --intent-id "<intent-id>" \
+  --phase abandoned \
+  --notes "<why the commit attempt stopped>"
+```
+
+This protocol is awareness, ordering, and auditability, not a mechanical lock.
 If git reports an index lock, treat it as a commit-window collision: inspect
-active claims and the log. Do not delete `.git/index.lock` unless the owner
-authorises it after you have proved no git process is active.
+the queue, active claims, and the log. Do not delete `.git/index.lock` unless
+the owner authorises it after you have proved no git process is active.
 
 ### Physical lock wait
 
@@ -165,7 +236,7 @@ done
 ```
 
 The wait is not coordination. It complements, but never replaces, the
-`git:index/head` active claim and shared-log entry.
+`commit_queue`, `git:index/head` active claim, and shared-log entry.
 
 ## Process
 
@@ -176,19 +247,22 @@ The wait is not coordination. It complements, but never replaces, the
    the turbo cache by running `bash .husky/pre-commit` separately — the real
    commit will warm it; the pre-prime is wasted ~30s and confuses symptom
    for cause.
-4. **Open the commit-window claim** using the protocol above.
+4. **Open the commit-window claim and queue entry** using the protocol above.
 5. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
-   `bulk-downloads/`. Review each file staged.
+   `bulk-downloads/`. Review each file staged and record its fingerprint.
 6. **Draft the message** against the enumerated constraints.
 7. **Validate the message via `scripts/check-commit-message.sh` BEFORE
    invoking `git commit`** (see below). If validation fails, rewrite and
    re-validate — do not let the `commit-msg` hook be your first check.
-8. **Commit** using the HEREDOC template below so multi-line body formatting
+8. **Verify the staged bundle** via `scripts/commit-queue.mjs verify-staged`.
+   Do not commit if verification fails.
+9. **Commit** using the HEREDOC template below so multi-line body formatting
    survives the shell. Cursor-Shell-tool users add the file-redirect
    workaround documented under "Cursor Shell tool — stream truncation
    workaround" below.
-9. **Verify and close**: `git status` — confirm the commit succeeded, then
-   close the commit-window claim with the SHA or failure reason.
+10. **Verify and close**: `git status` — confirm the commit succeeded, clear
+   the queue entry, then close the commit-window claim with the SHA or failure
+   reason.
 
 ## Pre-Commit Validation (replaces the manual format-check)
 

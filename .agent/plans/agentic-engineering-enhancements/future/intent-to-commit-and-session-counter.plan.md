@@ -6,7 +6,7 @@ isProject: false
 
 # Intent to Commit + Session Counter — Strategic Plan
 
-**Status**: 🟠 OWNER-DIRECTED; QUEUE-FIRST PROMOTION BEFORE IMPLEMENTATION (2026-04-27)
+**Status**: 🔄 PROMOTED TO CURRENT; QUEUE-FIRST IMPLEMENTATION ACTIVE (2026-04-27)
 **Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 staged-bundle
 integrity failures now include substitution, disappearance, and accretion;
 owner explicitly asked to implement the queue on 2026-04-27; a same-day
@@ -15,6 +15,7 @@ turn)
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:
+[`current/intent-to-commit-queue.execution.plan.md`](../current/intent-to-commit-queue.execution.plan.md);
 [`agent-collaboration.md`](../../../directives/agent-collaboration.md);
 [`active-claims.schema.json`](../../../state/collaboration/active-claims.schema.json);
 [`closed-claims.schema.json`](../../../state/collaboration/closed-claims.schema.json);
@@ -167,8 +168,9 @@ the same write that records success; abandoned/stale entries are reported
 and cleared by the commit skill or consolidation.
 
 **1b. Optional later top-level `session_counter`** field on the registry root.
-Do not include this in the first queue slice unless the pass also implements
-session-open increment semantics and validation. A possible later shape:
+Do **not** include this in the first queue slice. Session-count TTL only becomes
+load-bearing if a future pass implements session-open increment semantics and
+validation. A possible later shape:
 
 ```json
 "session_counter": {
@@ -209,8 +211,10 @@ session-open increment semantics and validation. A possible later shape:
     "files":                     { "type": "array", "minItems": 1,
                                    "items": { "type": "string", "minLength": 1 },
                                    "description": "Repository-relative file paths the agent intends to stage." },
-    "staged_fingerprint":        { "type": "string",
-                                   "description": "Optional stable summary of git diff --cached --name-status after staging; used to detect foreign staged content before commit." },
+    "staged_bundle_fingerprint": { "type": "string",
+                                   "description": "Optional SHA-256 over git diff --cached --name-status plus git diff --cached --full-index --binary." },
+    "staged_name_status":        { "type": "string",
+                                   "description": "Recorded git diff --cached --name-status output for staged-bundle inspection." },
     "commit_subject":            { "type": "string", "minLength": 1,
                                    "description": "Draft commit subject so peers can see the intended durable history label before it lands." },
     "queued_at":                 { "type": "string", "format": "date-time" },
@@ -218,15 +222,16 @@ session-open increment semantics and validation. A possible later shape:
                                    "description": "Refreshed by the owning agent on commit-skill phase changes." },
     "expires_at":                { "type": "string", "format": "date-time",
                                    "description": "Explicit wall-clock stale-reporting timestamp for handoff/consolidation; expiry does not auto-remove or auto-resolve the queue entry." },
-    "phase":                     { "type": "string", "enum": ["queued","staging","pre_commit","complete","abandoned"] },
-    "completed_at":              { "type": "string", "format": "date-time" },
-    "completed_commit":          { "type": "string", "minLength": 7,
-                                   "description": "Commit SHA when phase=complete." },
+    "phase":                     { "type": "string", "enum": ["queued","staging","pre_commit","abandoned"] },
     "notes":                     { "type": "string" }
   }
   }
 }
 ```
+
+Successful commits remove the queue entry in the same write that clears the
+claim pointer. The durable commit is the completion record; v1.3.0 does not
+preserve `phase=complete`.
 
 **1d. Optional claim pointer**: claims may carry
 `"intent_to_commit": "<intent_id>"` as a convenience pointer for discovery,
@@ -265,18 +270,18 @@ commit window." Extend that coordination to write and clear the intent:
    before staging. This is advisory, not refusal, but default discipline is
    one commit owner at a time.
 5. UPDATE PHASE — phase: "staging"; git add <files>.
-6. VERIFY OWNERSHIP — compute git diff --cached --name-status. If the staged
-   set is not exactly this intent's files, abort before commit and coordinate.
+6. VERIFY OWNERSHIP — compute git diff --cached --name-only,
+   git diff --cached --name-status, and git diff --cached --full-index
+   --binary. If the staged file set is not exactly this intent's files, the
+   staged-bundle fingerprint changed, or the commit subject differs from
+   `commit_subject`, abort before commit and coordinate.
    This prevents wrong-intent commits.
 7. UPDATE PHASE — phase: "pre_commit" (advisory: "hooks running, expect lock soon").
 8. git commit (pre-commit hooks fire, lock held).
 9a. ON SUCCESS — atomic update:
-       phase: "complete"
-       completed_at: now()
-       completed_commit: <new HEAD SHA>
-    Then, in the same atomic write, REMOVE the intent_to_commit field
-    (the commit landing IS the durable record; clearing keeps the
-    registry small).
+       remove this entry from registry.commit_queue
+       remove claim.intent_to_commit
+    The commit landing IS the durable record; clearing keeps the registry small.
 9b. ON FAILURE — leave phase at "staging" or "pre_commit" and decide:
        - Retry: refresh updated_at + expires_at, keep going.
        - Abandon: set phase: "abandoned" so other agents see the dead intent
@@ -566,13 +571,13 @@ plan is promoted, not resolved in this strategic intent:
 
 ## Self-Application Test
 
-When implemented, the very commit landing the protocol MUST itself post
-and clear an `intent_to_commit` per the new commit skill — exercising
-the schema, the commit-skill flow, and the registry write path against
-the implementation that creates them. The commit message MUST cite the
-intent_id (or at least state "intent posted via the new commit skill,
-cleared on success") so a future audit can verify the self-application
-landed.
+When the implementation is eventually staged and committed, that commit MUST
+post and clear an `intent_to_commit` per the new commit skill — exercising the
+schema, the commit-skill flow, and the registry write path against the
+implementation that creates them. This owner-directed session deliberately
+does **not** stage or commit because the current index contains another
+agent's staged bundle; self-application belongs to the later landing window
+under a fresh `git:index/head` claim.
 
 This mirrors the WS1 self-application pilot
 ([`a5d33519`](.agent/state/collaboration/closed-claims.archive.json#claim-fbde22cf))
@@ -600,7 +605,8 @@ landing commit.
 
 When promoted to `current/`:
 
-- [ ] Move file from `future/` to `current/`; rename if scope tightens.
+- [x] Promote into `current/` as
+      [`intent-to-commit-queue.execution.plan.md`](../current/intent-to-commit-queue.execution.plan.md).
 - [ ] Add Phase 0 owner gates (queue file/root location, default explicit
       expiry, areas vs files, and whether session counter is in or out) —
       resolve via `assumptions-reviewer` +

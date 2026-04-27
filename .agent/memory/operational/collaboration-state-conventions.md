@@ -12,14 +12,15 @@ Operational guide to the live state in `.agent/state/collaboration/`:
 where it lives, how it evolves, and how stale entries are cleaned up. The
 doctrinal authority is
 [`agent-collaboration.md`][directive]; this file is the
-how-it-works-in-practice companion.
+how-it-works-in-practice companion. Detailed lifecycle recipes live in
+[`collaboration-state-lifecycle.md`][lifecycle].
 
 ## Surfaces
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
 | [`shared-comms-log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
-| [`active-claims.json`][active-claims] | Structured JSON; queryable registry | Append-on-claim; remove after durable close; stale-archive by consolidation | WS1 |
+| [`active-claims.json`][active-claims] | Structured JSON; queryable registry plus `commit_queue` | Append-on-claim and append-on-queue; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
 | [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
 | [`closed-claims.archive.json`][closed-claims] | JSON archive preserving claim body plus closure metadata | Append-on-explicit-close, stale archive, or owner-forced close; never deleted; permanent reference for `claim_id` citations | WS1/WS3A |
@@ -49,6 +50,8 @@ evidence.
 | `freshness_seconds` (default 14400) | First-principles | Liveness signal for stale-audit; 4 hours is the starting default (rationale below) |
 | `heartbeat_at` (optional) | First-principles | Long-session freshness refresh |
 | `sidebar_open` (boolean default false) | First-principles | Whether a sidebar is currently open against this claim |
+| `commit_queue` (root array) | Observed + owner-directed | Owner-directed response to staged-bundle clash evidence; FIFO advisory commit turn order |
+| `intent_to_commit` (claim pointer) | First-principles | Convenience pointer from a claim to its active queue entry; queue remains authoritative |
 | `closure.kind` | Observed + first-principles | Explicit close and stale archival are observed; owner-forced close is reserved for owner intervention |
 | `closure.closed_at` / `closed_by` | First-principles | Claim history needs time and actor for durable closure provenance |
 | `closure.evidence[]` | Observed | WS5 showed claim outcomes need durable refs to logs, claims, plans, napkin, and thread records |
@@ -72,137 +75,30 @@ during live edits. WS5 evidence is the planned re-evaluation gate.
 Commit-window claims intentionally override this to 900 seconds because
 staging/commit should be brief.
 
-## Lifecycle
+## Lifecycle Summary
 
-### Open a claim
+Detailed recipes live in [`collaboration-state-lifecycle.md`][lifecycle].
+This file keeps the operational index compact.
 
-1. Apply the
-   [`register-active-areas-at-session-open`][register-rule] rule:
-   list intended areas, scan `active-claims.json` for overlap, decide
-   how to coordinate.
-2. Append a new entry under `claims[]` with a fresh `claim_id` (UUID v4
-   recommended), the agent's PDR-027 identity block, the thread slug,
-   the area list, `claimed_at` (now), and a brief `intent` line. Leave
-   `heartbeat_at` and `notes` unset unless useful.
-3. The default `freshness_seconds` (14400 = 4 hours) is appropriate for
-   most slices. Long sessions either set a larger value at open time or
-   refresh `heartbeat_at` periodically.
-4. Before staging or committing, open a short-lived `git:index/head` claim
-   with `freshness_seconds: 900`, append a shared-log note, and close it
-   immediately after success, failure, or abort with the SHA or reason.
-
-### Refresh during work
-
-`heartbeat_at` is set to `now()` to extend a claim's freshness. Use this
-for long sessions where the original 4-hour budget would expire mid-work.
-The refreshed window is `heartbeat_at + freshness_seconds`, not
-`claimed_at + freshness_seconds`.
-
-### Close at session end
-
-Copy the active claim into `closed-claims.archive.json`, add
-`archived_at` plus `closure.kind: "explicit"`, `closure.closed_at`,
-`closure.closed_by`, `closure.summary`, and one or more
-`closure.evidence[]` references, then remove the active entry. Removal
-without a closed-claim record silently erases lifecycle history.
-
-### Stale entries — automatic archival
-
-`consolidate-docs § 7e` walks `active-claims.json`, computes
-`claimed_at + freshness_seconds` (or `heartbeat_at + freshness_seconds`
-if newer), and archives any expired entry to `closed-claims.archive.json`
-with `archived_at` and `closure.kind: "stale"`. Stale claims are
-*noise*, not *blockers*. The system does not strand agents waiting on a
-peer's forgotten claim.
-
-### Unclosed-but-fresh entries
-
-If a claim is fresh (within `freshness_seconds`) but its agent has not
-registered any subsequent thread-record activity, this is an
-informational signal — possibly a crashed session. The owner reviews at
-consolidation. The next staleness threshold archives the entry
-automatically; no special intervention is required.
-
-### Open a decision thread
-
-Open `.agent/state/collaboration/conversations/<id>.json` when an
-overlap or protocol question needs more structure than the shared
-communication log. Good reasons include a concrete `decision_request`, a
-claim scope change that needs peer acknowledgement, or evidence that
-should stay attached to a resolution. Keep ordinary discovery notes in
-`shared-comms-log.md`; keep live area ownership in `active-claims.json`.
-
-### Close a decision thread
-
-Append a `decision` entry when the route is chosen, then a `resolution`
-entry with `outcome` and `body`, set `status: "closed"`, and add
-`closed_at`. Cite the decision thread from related claim closures or log
-entries when it explains the route taken. Do not copy the body into the
-thread record; thread records carry cross-session lane state and may cite
-the decision-thread file by path.
-
-### Use a sidebar
-
-Append `sidebar_request` when a short focused exchange is needed inside
-an existing conversation. It requires `sidebar_id`, `author`,
-`target_participants`, `body`, `response_due_at`, and `expires_at`.
-Default workflow timing is wall-clock: `expires_at = created_at + 30
-minutes`. The 10 turn-pair limit is advisory; a turn-pair is one
-requester sidebar message followed by at least one target reply before
-the next requester message. Timeout never auto-resolves; append
-`sidebar_resolution` deliberately with `outcome: "expired"` if the
-expired sidebar should be closed as expired.
-
-### Record a joint decision
-
-Append `joint_decision` when agents need a shared commitment rather than
-a one-way signal. Roles are `discusser`, `decider`, `recorder`, and
-`actor`; at least one decider is required, and the owner may be the
-decider. Proposed joint decisions use explicit `ack_due_at` timestamps
-(workflow default: `created_at + 24 hours`). Unacknowledged proposals are
-not settled commitments. Completion requires evidence. Role handoff uses
-`joint_decision_state: "role_handoff"`, `handoff_to`, and either
-`evidence` or `next_action`.
-
-### Open and close an escalation
-
-Open `.agent/state/collaboration/escalations/<id>.json` only after a
-conversation exists. The escalation must cite `conversation_id` and
-`originating_entry_id`; it is a live owner-facing unresolved case record,
-not the durable decision. When the owner resolves the case, write the
-durable result back into the conversation as a `decision`,
-`joint_decision`, or `resolution` entry, then close the escalation with
-`resolution_conversation_entry_id`.
-
-### Protocol observability and evidence bundles
-
-`consolidate-docs § 7e` reports active/stale claims, recent closures,
-open/stale decision threads, unresolved decision requests, open/stale
-sidebars, unacknowledged or evidence-missing joint decisions, active
-escalations, and malformed state. Non-trivial protocol claims should
-carry a small evidence bundle:
-claim statement, claim class (`lifecycle`, `coordination`, `policy`, or
-`validation`), evidence refs using the shared enum, verification status
-(`verified`, `partial`, or `needs-owner`), and next action / owner.
+| Action | State surface | Durable outcome |
+| --- | --- | --- |
+| Open / refresh active work | `active-claims.json` | Fresh claim with `claimed_at`, optional `heartbeat_at`, and visible areas |
+| Queue commit intent | `active-claims.json` root `commit_queue` | FIFO advisory entry with files, subject, phase, expiry, and staged-bundle fingerprint |
+| Close active work | `closed-claims.archive.json` | Claim copied with `closure.kind: "explicit"` and evidence refs |
+| Archive stale work | `closed-claims.archive.json` | Expired claim preserved with `closure.kind: "stale"` |
+| Open structured coordination | `conversations/<id>.json` | Decision-thread event list with concrete entries and evidence |
+| Request sidebar | `conversations/<id>.json` | `sidebar_*` entries grouped by `sidebar_id`; timeout is reporting only |
+| Record joint commitment | `conversations/<id>.json` | `joint_decision*` entries with decider, recorder, actor, ack, and evidence |
+| Escalate to owner | `escalations/<id>.json` + conversation | Live case closes only after owner resolution is written back to conversation |
+| Consolidate observability | `consolidate-docs § 7e` | Active/stale claims, queue entries, threads, sidebars, decisions, escalations, and malformed state reported |
 
 ## Trusted-Agents Threat Model
 
-The protocol assumes **trusted agents** acting in good faith. This means:
-
-- **Honest claims** — claims describe real intent and real areas of
-  work; agents do not over-claim to lock peers out.
-- **Honest closures** — agents close their claims at session end (or
-  let staleness archive them naturally) with closure evidence; agents do
-  not falsify activity.
-- **Honest build-breakage reports** — agents declare known build
-  breakage in the shared communication log rather than committing through a green
-  gate they know is wrong.
-
-Misbehaving agents (excessive scope claims, never-released claims,
-fabricated entries, cooperative deceit) are **out of scope**. The owner
-detects and resolves these cases at consolidation. A hostile-agent
-threat model — claim integrity, signed entries, tamper detection — is
-a future PDR if the trust assumption breaks down.
+The protocol assumes trusted agents acting in good faith: honest claims,
+honest closures, and honest build-breakage reports. Misbehaving or
+hostile agents are out of scope and become an owner / future-PDR issue if
+that trust assumption breaks. The doctrinal framing lives in
+[`agent-collaboration.md`][directive].
 
 ## Refinement Discipline
 
@@ -227,6 +123,9 @@ fields:
 
 - [`agent-collaboration.md`][directive] — agent-to-agent working model
   (doctrinal authority).
+- [`collaboration-state-lifecycle.md`][lifecycle] — detailed lifecycle
+  recipes for claims, conversations, sidebars, joint decisions, and
+  escalations.
 - [`register-active-areas-at-session-open.md`][register-rule] —
   session-open tripwire rule.
 - [`use-agent-comms-log.md`][log-rule] — shared-communication-log usage rule.
@@ -244,6 +143,7 @@ fields:
   founding pattern that motivated the protocol.
 
 [directive]: ../../directives/agent-collaboration.md
+[lifecycle]: collaboration-state-lifecycle.md
 [log]: ../../state/collaboration/shared-comms-log.md
 [active-claims]: ../../state/collaboration/active-claims.json
 [active-claims-schema]: ../../state/collaboration/active-claims.schema.json

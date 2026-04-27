@@ -69,3 +69,28 @@ intent-to-commit queue.
   `commit_queue` plus exact staged-bundle verification. Treat claim-only
   commit intent as insufficient under active same-branch concurrency.
 - **Source plane:** active
+
+---
+
+## 2026-04-27 — Prismatic Waxing Constellation — root script validation path
+
+**Context:** implemented `scripts/commit-queue.mjs` and its root-script tests.
+The targeted Vitest command passed, but a direct file-level `pnpm exec eslint`
+against the new `.mjs` script failed before linting code because the repo's
+typed ESLint rules require parser services that the direct invocation does not
+provide for that file shape.
+
+### Surprise
+
+- **Expected:** direct `pnpm exec eslint scripts/commit-queue.mjs` would be a
+  useful narrow syntax/style check for a root helper.
+- **Actual:** direct ESLint hit a parser-services configuration error; the
+  supported root-script validation path is `pnpm test:root-scripts`, which ran
+  12 files / 120 tests and passed.
+- **Why expectation failed:** root script validation is routed through the
+  repo's configured Vitest and boundary-validator entrypoint, not arbitrary
+  direct ESLint invocations over standalone `.mjs` files.
+- **Behaviour change:** for root helper scripts, prefer
+  `pnpm test:root-scripts` plus targeted Vitest and Prettier checks unless the
+  lint config explicitly supports a direct file-level command.
+- **Source plane:** operational

@@ -270,7 +270,15 @@ to preserve a green fitness report by starving the learning loop.
       in place of `claimed_at` if present and more recent. Report
       `[active] <claim_id> <thread> <agent_name>: fresh|stale; areas=<n>`.
       If any area is `git:index/head`, mark it as a commit-window claim.
-   2. **Stale entries**: any claim where `staleness_threshold < now()`.
+   2. **Intent-to-commit snapshot**: read the root `commit_queue` array. For
+      every entry, compare `expires_at` with now and report
+      `[intent] <intent_id> <claim_id> <phase> fresh|stale; files=<n>`.
+      If a fresh entry is in `queued`, `staging`, or `pre_commit`, mark it as
+      an active advisory commit-turn signal; array order is FIFO. Stale or
+      `abandoned` entries are cleanup signals, not blockers. Do not auto-clear
+      them unless this consolidation deliberately records the cleanup and
+      cites evidence.
+   3. **Stale entries**: any claim where `staleness_threshold < now()`.
       Move each stale entry to
       [`closed-claims.archive.json`](../state/collaboration/closed-claims.archive.json),
       preserving the entry verbatim and adding `archived_at` plus
@@ -281,7 +289,7 @@ to preserve a green fitness report by starving the learning loop.
       shared-communication-log entries may cite archived `claim_id` values
       permanently. A stale commit-window claim is a high-signal interrupted
       staging/commit attempt; archive it as stale and surface the summary.
-   3. **Unclosed-but-fresh entries**: any claim whose agent has not
+   4. **Unclosed-but-fresh entries**: any claim whose agent has not
       registered a subsequent thread-record entry (no `last_session`
       update in the matching `<thread>.next-session.md` since
       `claimed_at`). This is *informational only* — possible crash, not a
@@ -291,26 +299,26 @@ to preserve a green fitness report by starving the learning loop.
       stale-archive pass cleans up at the next staleness threshold. Fresh
       commit-window claims are stronger liveness signals than normal area
       claims and should be surfaced before any consolidation commit.
-   4. **Explicit and owner-forced closes**: ordinary session close should
+   5. **Explicit and owner-forced closes**: ordinary session close should
       already have archived the claim with `closure.kind: "explicit"`.
       Owner-directed cleanup uses `closure.kind: "owner_forced"` and
       cites the owner direction as evidence. Report recent closures as
       `[closed] <claim_id> <kind> <closed_at>: <summary>`.
-   5. **Decision-thread snapshot**: scan
+   6. **Decision-thread snapshot**: scan
       `.agent/state/collaboration/conversations/*.json`. Report
       `[decision-thread] <conversation_id> <status> <thread>: <title>`.
       Open threads whose latest entry is more than 7 days old are stale
       unresolved threads; surface them as owner-review noise, not blockers.
       Open threads with a `decision_request` and no later `decision` or
       `resolution` are unresolved decisions.
-   6. **Sidebar snapshot**: within each open conversation, group
+   7. **Sidebar snapshot**: within each open conversation, group
       `sidebar_request`, `sidebar_message`, and `sidebar_resolution`
       entries by `sidebar_id`. Report
       `[sidebar] <conversation_id>#<sidebar_id>: open|resolved|declined|expired|escalated|stale`.
       A sidebar is stale when the latest entry for that `sidebar_id` is not
       a `sidebar_resolution` and the latest request's `expires_at < now()`.
       Stale sidebars are owner-review signals, not automatic closures.
-   7. **Joint-decision snapshot**: within each open conversation, group
+   8. **Joint-decision snapshot**: within each open conversation, group
       `joint_decision` and `joint_decision_acknowledgement` entries by
       `joint_decision_id`. Report
       `[joint-decision] <conversation_id>#<joint_decision_id>: <latest-state>; ack=<complete|missing|declined|overdue>; evidence=<present|missing>`.
@@ -318,7 +326,7 @@ to preserve a green fitness report by starving the learning loop.
       is overdue. A `complete` joint decision without evidence is malformed.
       A `role_handoff` without `handoff_to` and evidence or `next_action`
       is malformed. Unacknowledged proposals are not settled commitments.
-   8. **Escalation snapshot**: scan
+   9. **Escalation snapshot**: scan
       `.agent/state/collaboration/escalations/*.json`. Report
       `[escalation] <escalation_id> <status> <thread>: <title>`.
       Every escalation must reference `conversation_id` and
@@ -326,12 +334,12 @@ to preserve a green fitness report by starving the learning loop.
       `resolution_conversation_entry_id`; that entry is the durable
       decision authority. Escalation files are live unresolved case
       records, not report mirrors and not final decision records.
-   9. **Evidence-bundle check**: for non-trivial protocol claims in plans,
+   10. **Evidence-bundle check**: for non-trivial protocol claims in plans,
       claims, or decision threads, confirm the artefact names a claim
       statement, claim class, evidence references, verification status, and
       next action / owner. Missing fields surface as
       `[evidence-bundle] <path-or-id>: <missing field>`.
-   10. **Schema validation**: confirm `active-claims.json` parses as JSON
+   11. **Schema validation**: confirm `active-claims.json` parses as JSON
       and conforms to
       [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
       Confirm `closed-claims.archive.json` parses as JSON and conforms to

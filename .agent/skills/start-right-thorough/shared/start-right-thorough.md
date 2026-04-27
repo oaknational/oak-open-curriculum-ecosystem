@@ -40,6 +40,11 @@ append/open a decision thread, request a sidebar, record a joint
 decision, open or close an escalation, or ask the owner). Then register
 your own claim covering the areas you intend to touch.
 
+When reading `active-claims.json`, surface any fresh root `commit_queue`
+entries as advisory commit-ordering signals: `intent_id`, `agent_id`, files,
+subject, phase, and expiry. Queue entries are discovery and ordering signals,
+not mechanical refusals.
+
 When writing the thread identity row, prefer an existing owner-assigned
 `agent_name` if it matches this identity. If no name is available, derive a
 session display name with
@@ -49,9 +54,9 @@ session display name with
 does not. Do not use personal-email fallback.
 
 Before staging or committing, use the always-active commit skill. It
-checks for a fresh `git:index/head` commit-window claim, opens one if the
-window is clear, and closes it after the commit attempt with the SHA or
-failure reason.
+checks for fresh `commit_queue` entries and `git:index/head` commit-window
+claims, enqueues your intended bundle before staging, verifies the staged
+bundle exactly before `git commit`, and clears the queue entry after success.
 
 ## Learning-Loop Surfaces
 

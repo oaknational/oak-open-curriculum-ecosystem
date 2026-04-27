@@ -52,11 +52,26 @@ not invent derived word slots.
 
 ## Platform Wrapper Status
 
-| Platform    | Status         | Wiring / next action                                                                                                                                                                                                                                          |
-| ----------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Wired          | `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs`, which delegates to the built adapter `agent-tools/dist/src/claude/statusline-identity.js`. The adapter parses the harness's stdin JSON `session_id` and prints the display name. |
-| Codex       | Thread id wired | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it automatically when `--seed` and `CLAUDE_SESSION_ID` are absent. User-facing thread-title mutation is deliberately deferred; the stable thread id already provides deterministic names without adding a separate title-mutation tool. |
-| Cursor      | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed. Use `--seed` or `OAK_AGENT_SEED` manually until a Cursor wrapper surface is designed.                                                                                                    |
+| Platform    | Status          | Wiring / next action                                                                                                                                                                                                                                                                                                                                            |
+| ----------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired           | `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs`, which delegates to the built adapter `agent-tools/dist/src/claude/statusline-identity.js`. The adapter parses the harness's stdin JSON `session_id` and prints the display name.                                                                                                   |
+| Codex       | Thread id wired | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it automatically when `--seed` and `CLAUDE_SESSION_ID` are absent. User-facing thread-title mutation is deliberately deferred; the stable thread id already provides deterministic names without adding a separate title-mutation tool.                                               |
+| Cursor      | Experimental    | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.OAK_AGENT_SEED` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. |
+
+### Cursor `sessionStart` wiring
+
+Authoritative behaviour and JSON shapes are defined in Cursor’s **[Hooks](https://cursor.com/docs/hooks)** documentation (`sessionStart`: stdin fields include `session_id`; stdout may include `env` and `additional_context`; session-scoped `env` is documented as available to later hook executions in the same session). Project registration: `.cursor/hooks.json` runs `node .cursor/hooks/oak-session-identity.mjs`. The hook uses `CURSOR_PROJECT_DIR` from [Hook environment variables](https://cursor.com/docs/hooks#environment-variables) to resolve `agent-tools/dist/...`. Injected `additional_context` includes the derived display name (when the CLI is built) and **PDR-027 `session_id_prefix`** (first six characters of `session_id`); it does not echo the full `session_id`.
+
+#### Stable id, derived name, and Composer tab title (human-visible)
+
+- **Stable session id:** the composer `session_id` on `sessionStart` stdin (same as conversation id per the [sessionStart reference](https://cursor.com/docs/hooks)). This is the seed for derivation and `OAK_AGENT_SEED`.
+- **Derived name:** `agent-identity` display format from that seed (same word list as other platforms).
+- **Identity surfaces:** hook `env` (`OAK_AGENT_SEED`), `additional_context` (agent/system context), PDR-027 registration via [register-identity-on-thread-join](../../.agent/rules/register-identity-on-thread-join.md), and the optional **`user_message`** field (schema allows it; Cursor may surface it to the user — behaviour is not guaranteed).
+- **Composer tab title:** the official `sessionStart` output schema documents **`env`** and **`additional_context`** only for machine-driven behaviour; there is **no documented `conversation_title` / tab-rename field**. So the repo cannot set the tab label purely from hooks today. Mitigations implemented in-tree:
+  1. **`user_message`** — one-line hint with the suggested title `Oak · {displayName}` (best-effort).
+  2. **`.cursor/oak-composer-session.local.json`** — gitignored mirror with `suggestedComposerTabTitle`, `displayName`, `composerSessionId`, and `sessionIdPrefix` for copy/paste rename or tooling. Written when the derived name is available; set `OAK_SKIP_COMPOSER_SESSION_MIRROR=1` to skip (e.g. tests).
+
+For OS-level or editor-level title surfaces, parity with Codex’s `terminal_title` / `status_line` in `~/.codex/config.toml` is a **different product** integration; Cursor would need a future hook field or API for true automatic tab rename.
 
 ### Claude Code statusline wiring
 

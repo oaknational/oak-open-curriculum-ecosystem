@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "claims": [
     {
       "claim_id": "fbde22cf-3bea-4c22-83ba-dd17e09d4508",
@@ -1440,7 +1440,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         },
         {
           "kind": "files",
@@ -1530,7 +1532,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         },
         {
           "kind": "files",
@@ -1596,7 +1600,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-26T17:58:00Z",
@@ -1640,7 +1646,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         },
         {
           "kind": "files",
@@ -1698,7 +1706,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-26T18:25:00Z",
@@ -1907,7 +1917,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-26T18:38:29Z",
@@ -1951,7 +1963,9 @@
       "areas": [
         {
           "kind": "workspace",
-          "patterns": ["agent-tools"]
+          "patterns": [
+            "agent-tools"
+          ]
         },
         {
           "kind": "files",
@@ -2018,7 +2032,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-26T19:00:53Z",
@@ -2261,7 +2277,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-27T05:20:09Z",
@@ -2427,7 +2445,9 @@
       "areas": [
         {
           "kind": "git",
-          "patterns": ["index/head"]
+          "patterns": [
+            "index/head"
+          ]
         }
       ],
       "claimed_at": "2026-04-27T05:39:21Z",
@@ -2949,6 +2969,181 @@
             "kind": "json-parse",
             "ref": ".agent/state/collaboration/*.json",
             "summary": "Active claims, closed claims, conversations, and escalations parsed successfully."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10",
+      "agent_id": {
+        "agent_name": "Vining Bending Root",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4e2cbc5c"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/orchestration.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/application.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/**",
+            "apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh",
+            "apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
+            "apps/oak-search-cli/src/cli/admin/index.ts",
+            "apps/oak-search-cli/src/cli/eval/index.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-scopes-supported-file.unit.test.ts",
+            "packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts",
+            "scripts/check-commit-message.sh",
+            "scripts/validate-practice-fitness.mjs",
+            "scripts/ci-schema-drift-check.mjs",
+            "sonar-project.properties",
+            ".agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json",
+            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T00:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Execute Phases 3-6 of the PR-87 quality finding resolution plan. Phase 3: introduce METADATA_RATE_LIMIT profile (owner-confirmed) + apply to four /.well-known/* handlers (auth-routes.ts) + add integration test + schema-cache validate-then-skip-with-warning + TSDoc evidence on registration functions. Phase 4: ~16 MAJOR Sonar fixes. Phase 5: ~47 MINOR Sonar findings + S3735 metacognitive resolution (TSDoc strengthening on test-config.ts mock; remove unused observability params from admin/eval CLI commands). Phase 6: full local gates + push + observe SonarCloud + CodeQL re-runs + release-readiness-reviewer.",
+      "notes": "Co-tenant with Riverine Navigating Hull (claim 6078ec9e) on the same branch but structurally disjoint pathspec. Pre-Phase-3 reviewers (assumptions, security, architecture-betty) all ran; owner approved METADATA_RATE_LIMIT new profile and validate-then-skip schema-cache shape. Coordination thread at conversations/pr-87-phases-3-6-vining-bending-root.json.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-04-27T07:34:48Z",
+        "closed_by": {
+          "agent_name": "Prismatic Waxing Constellation",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Consolidation stale-claim audit archived this observability claim after its four-hour freshness threshold elapsed. The claim is no longer a live coordination blocker, but unrelated dirty search-cli WIP remains and must not be treated as queue-owned work.",
+        "evidence": [
+          {
+            "kind": "active_claim_snapshot",
+            "ref": ".agent/state/collaboration/active-claims.json",
+            "summary": "Claim was opened at 2026-04-27T00:00:00Z with freshness_seconds 14400; threshold elapsed before this consolidation pass."
+          },
+          {
+            "kind": "git-status",
+            "ref": "git status --short",
+            "summary": "Final observed staged index is clear; unrelated dirty search-cli WIP remains in the working tree."
+          },
+          {
+            "kind": "conversation",
+            "ref": ".agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json",
+            "summary": "Conversation file remains the durable context for the archived PR-87 work claim."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fa936690-133c-4d49-a6e0-06bac78c9834",
+      "agent_id": {
+        "agent_name": "Prismatic Waxing Constellation",
+        "platform": "codex",
+        "model": "gpt-5.5",
+        "session_id_prefix": "019dcd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/closed-claims.schema.json",
+            ".agent/skills/commit/SKILL.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/plans/agentic-engineering-enhancements/**",
+            ".agents/skills/commit/SKILL.md",
+            ".claude/skills/commit/SKILL.md",
+            ".cursor/skills/commit/SKILL.md",
+            ".cursor/rules/register-active-areas-at-session-open.mdc",
+            ".cursor/rules/respect-active-agent-claims.mdc",
+            "scripts/commit-queue.mjs",
+            "scripts/commit-queue.unit.test.ts"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T07:20:56Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement owner-directed ordered advisory commit_queue and exact staged-bundle verification, then run session handoff and consolidation without staging or committing.",
+      "notes": "Scanned registry: one active claim from Vining Bending Root on observability/product/script paths. No overlap with this queue/doc/state pathscope except the shared repo/index context; current staged bundle is Vining's test-config.ts and will not be touched. Shared-log entry 2026-04-27T07:20:56Z records the consultation. Pathscope expanded to thin platform metadata wrappers so cross-vendor discovery text names the queue. Napkin added for session-handoff capture after direct ESLint validation-path surprise.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T07:36:43Z",
+        "closed_by": {
+          "agent_name": "Prismatic Waxing Constellation",
+          "platform": "codex",
+          "model": "gpt-5.5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Implemented the owner-directed advisory commit_queue and exact staged-bundle verification in the working tree, ran session handoff plus consolidation, archived stale peer state, and ended without staging or committing.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
+            "summary": "Executable plan is complete for queue implementation, validation, handoff, and consolidation."
+          },
+          {
+            "kind": "script",
+            "ref": "scripts/commit-queue.mjs",
+            "summary": "Repo-owned helper implements enqueue, phase, staged fingerprint capture, exact staged verification, and completion cleanup."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm test:root-scripts",
+            "summary": "Passed after queue helper implementation."
+          },
+          {
+            "kind": "gate",
+            "ref": "pnpm markdownlint-check:root; pnpm practice:vocabulary; pnpm practice:fitness:strict-hard; git diff --check",
+            "summary": "Passed after handoff and consolidation edits; strict-hard reports soft pressure only."
+          },
+          {
+            "kind": "git-index",
+            "ref": "git diff --cached --name-status",
+            "summary": "Final observed staged index is clear; this session performed no staging or commit."
           }
         ]
       }

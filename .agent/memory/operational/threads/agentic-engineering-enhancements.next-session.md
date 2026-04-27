@@ -1,6 +1,15 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
+**Last refreshed**: 2026-04-27 (Prismatic Waxing Constellation / codex /
+gpt-5.5 — owner-directed intent-to-commit queue implementation plus
+`jc-session-handoff` and `jc-consolidate-docs`. The future queue plan was
+promoted to current execution, `active-claims` schema v1.3.0 now has a root
+advisory `commit_queue`, and `scripts/commit-queue.mjs` verifies FIFO position,
+exact staged files, staged fingerprint, and commit subject before durable
+history is written. No staging or commit was performed. Final observed staged
+index is clear; unrelated dirty work remains outside this claim.)
+
+**Prior refresh**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
 gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
 experimental Codex app-server thread-title adapter. `@oaknational/agent-tools`
 gates passed after preserving stable `CODEX_THREAD_ID` naming as the
@@ -320,6 +329,7 @@ and
 | `Celestial Waxing Eclipse` | `codex` | `GPT-5` | `019dcd` | `codex-thread-id-discovery-and-agent-identity-seed-wiring; codex-title-statusline-display-surface-investigation` | 2026-04-27 | 2026-04-27 |
 | `Pelagic Washing Sail` | `codex` | `gpt-5` | `019dca9c` | `collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout` | 2026-04-27 | 2026-04-27 |
 | `Fragrant Sheltering Pollen` | `codex` | `gpt-5.5` | `019dcda0` | `owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence` | 2026-04-27 | 2026-04-27 |
+| `Prismatic Waxing Constellation` | `codex` | `gpt-5.5` | `019dcd` | `owner-directed-intent-to-commit-queue-implementation` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -330,7 +340,35 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session landed as closeout and next-session opener
+**Latest session landed as uncommitted queue implementation and closeout
+(2026-04-27 Prismatic Waxing Constellation, intent-to-commit queue
+implementation):**
+
+- owner-directed queue work is implemented in the working tree, but not staged
+  or committed. This session deliberately avoided the git index because it did
+  not hold a fresh `git:index/head` claim;
+- promoted
+  [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md)
+  as the executable current plan and updated the future source plan with the
+  `2ccefad4` turn-race evidence;
+- added active-claims schema v1.3.0 with root `commit_queue`, optional claim
+  `intent_to_commit` pointer, and repo-owned helper
+  `scripts/commit-queue.mjs` for enqueue, phase, staged-fingerprint capture,
+  exact staged-bundle verification, and completion cleanup;
+- updated commit, start-right, active-claim, collaboration, consolidation, and
+  cross-vendor wrapper guidance. The queue is advisory FIFO discovery, not a
+  lock or refusal mechanism, and session-count TTL remains future-only;
+- validation passed: targeted queue unit tests, `pnpm test:root-scripts`,
+  JSON parse checks, markdownlint, vocabulary, fitness strict-hard,
+  `git diff --check`, and targeted Prettier. Direct file-level ESLint on the
+  new `.mjs` helper hit the repo's typed-rule parser-services limitation; the
+  recorded root validation path is `pnpm test:root-scripts`;
+- final observed staged index is clear. A previous staged bundle was observed
+  during this session under another active claim, and unrelated dirty work
+  remains. The next landing must re-check active claims, queue order, and
+  `git diff --cached --name-status` before touching the index.
+
+**Prior latest session landed as closeout and next-session opener
 (2026-04-27 Fragrant Sheltering Pollen, Codex rollback and queue-evidence
 handoff):**
 
@@ -674,9 +712,14 @@ nl -ba .agent/directives/AGENT.md
   [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md)
   — implemented in the working tree; validate/land separately from queue
   work.
-- Owner-directed next slice:
+- Active queue implementation plan:
+  [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md)
+  — implemented in the working tree; land only after a fresh active-claim,
+  queue, and staged-bundle check.
+- Strategic source / follow-up:
   [`intent-to-commit-and-session-counter.plan.md`](../../../plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md)
-  — promote/update before implementation; queue order is first-class.
+  — promoted for queue implementation; `session_counter` remains future-only
+  unless a real primitive lands in the same pass.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -687,9 +730,9 @@ nl -ba .agent/directives/AGENT.md
 ### Current Objective
 
 **WS4A lifecycle integration, coordination consolidation, deterministic
-identity, collaboration-doc fitness remediation, and cross-vendor shared-log
-handoff evidence are complete or captured in the working tree (refreshed
-2026-04-27).**
+identity, collaboration-doc fitness remediation, cross-vendor shared-log
+handoff evidence, and the owner-directed intent-to-commit queue are complete
+or captured in the working tree (refreshed 2026-04-27).**
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -743,20 +786,25 @@ validation.
 - Collaboration-doc fitness remediation is implemented in the working tree.
   Later strict-hard checks should distinguish those target docs from any
   unrelated concurrent WIP pressure.
+- Intent-to-commit queue v1.3.0 is implemented in the working tree:
+  active-claims carries root `commit_queue`, `scripts/commit-queue.mjs` can
+  enqueue/phase/record/verify/complete intents, and commit/start-right/docs
+  surface advisory FIFO order plus exact staged-bundle verification. It is not
+  staged or committed yet.
 - Cross-vendor shared-log communication has a live proof point and a limit:
   Codex left Vining a repo-context-specific future-design note with no
   platform bridge, but the first heartbeat found no visible pickup. Treat the
   log as durable discovery; use sidebars, decision threads,
   acknowledgements, or queue mechanics for directed obligations.
-- `intent_to_commit` is now owner-directed work. The next implementation must
-  install a minimal ordered advisory commit queue, not only claim metadata.
+- `intent_to_commit` is now owner-directed work and implemented as a minimal
+  ordered advisory queue, not only claim metadata.
 - Codex display-surface investigation is complete for this session:
   repo-owned identity derivation uses `CODEX_THREAD_ID`. The experimental
   app-server title-mutation adapter was dropped because stable session names
   already provide the useful identity value.
 - A live commit-window collision on 2026-04-27 proved the current
-  `git:index/head` claim protocol is observable but not ordering. The next
-  queue slice must serialize the advisory commit turn before staging/hooks.
+  `git:index/head` claim protocol is observable but not ordering. The queue
+  implementation adds advisory turn order before staging/hooks.
 - The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - `repo-continuity.md` has been compacted from an overgrown historical surface
@@ -779,6 +827,9 @@ validation.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
+- Final observed staged index in this closeout is clear. Earlier in the
+  session, staged files were observed under another active claim, so the next
+  session must treat staged-index state as volatile and re-check it directly.
 - Do not continue into soft-fitness work unless the owner asks for it.
 - Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
@@ -796,15 +847,12 @@ the proposed commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Intent-to-commit queue implementation** — promote/update
-   `intent-to-commit-and-session-counter.plan.md`, replacing claim-only
-   intent details with an ordered advisory `commit_queue` as the first-class
-   mechanic. Use the 2026-04-27 `2ccefad4` collision as the fourth clash type:
-   a turn-race where visibility existed but queue order did not. Then implement
-   schema/workflow v1.3 and exact staged-bundle verification. Do not use
-   session-count TTL until the session primitive is actually landed; prefer
-   explicit timestamps or a separate follow-up if the plan still carries old
-   TTL wording.
+1. **Intent-to-commit queue landing** — re-run start-right grounding and
+   active-claim checks, then open a fresh `git:index/head` claim and self-apply
+   the new queue helper before staging. Stage only the queue implementation
+   pathspecs, record and verify the exact staged bundle plus subject with
+   `scripts/commit-queue.mjs`, commit, and clear the queue entry. Do not use
+   session-count TTL.
 2. **Collaboration-doc fitness remediation landing** — validate and land the
    already-implemented split separately once the git index is clear.
 3. **Strict exact-optional cleanup** — fix the pre-existing
@@ -845,3 +893,6 @@ Choose the lane deliberately:
 - Treat Codex-to-Vining pickup through the shared communication log as WS5
   collaboration evidence. If Vining replies or acts, record it in the parent
   multi-agent collaboration plan rather than creating a new surface.
+- Treat the first successful self-application commit using
+  `scripts/commit-queue.mjs` as the trigger to graduate queue doctrine into
+  the relevant PDR/collaboration-state governance surface.

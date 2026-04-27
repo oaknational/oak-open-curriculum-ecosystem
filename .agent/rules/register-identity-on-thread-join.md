@@ -28,9 +28,23 @@ pnpm agent-tools:agent-identity --format display
 ```
 
 Use the platform-provided seed when available (`CLAUDE_SESSION_ID` or
-`CODEX_THREAD_ID`). If the platform does not expose a stable session seed,
-pass `--seed`, set `OAK_AGENT_SEED` explicitly for the session, or ask the
-owner for an override. Do **not** fall back to `git config user.email`;
+`CODEX_THREAD_ID`). **Cursor (Composer)** sets `OAK_AGENT_SEED` from the
+composer `session_id` via the project `sessionStart` hook
+(`.cursor/hooks/oak-session-identity.mjs`; see
+[`agent-tools/docs/agent-identity.md`](../../agent-tools/docs/agent-identity.md)
+and [Cursor Hooks](https://cursor.com/docs/hooks)). The same hook injects the
+derived display name and `session_id_prefix` (first six characters of
+`session_id`) into `additional_context` for thread registration when the
+integrated terminal does not see `OAK_AGENT_SEED`. A gitignored
+`.cursor/oak-composer-session.local.json` mirror (when agent-tools is built)
+carries the same derived name and a suggested Composer tab title for
+copy/paste — Cursor hooks cannot set the tab label programmatically per
+[Hooks](https://cursor.com/docs/hooks). If the hook is disabled or
+the name line is missing, run `pnpm agent-tools:agent-identity --format display`
+with `--seed` or `OAK_AGENT_SEED`, or ask the owner for an override. If the
+platform does not expose a stable session seed and no Cursor hook context is
+present, pass `--seed`, set `OAK_AGENT_SEED` explicitly for the session, or ask
+the owner for an override. Do **not** fall back to `git config user.email`;
 personal-email fallback is intentionally not part of the identity contract.
 
 `OAK_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for

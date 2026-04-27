@@ -8,12 +8,13 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-27 (Fragrant Sheltering Pollen / codex /
-gpt-5.5 — `jc-session-handoff` + `jc-consolidate-docs` after dropping the
-experimental Codex app-server thread-title adapter. `@oaknational/agent-tools`
-gates passed. A live commit-window collision landed the Codex stable-name row
-inside commit `2ccefad4` under another message; owner directed this to be
-recorded as concrete evidence for the intent-to-commit queue.)
+**Last refreshed**: 2026-04-27 (Prismatic Waxing Constellation / codex /
+gpt-5.5 — owner-directed intent-to-commit queue implementation. Promoted the
+future queue plan to a current executable plan, added active-claims schema
+v1.3.0 `commit_queue`, implemented `scripts/commit-queue.mjs` with exact
+staged-bundle verification, updated commit/start-right/consolidation docs,
+and ran the requested handoff + consolidation pass without staging or
+committing.)
 
 Recent refresh detail lives in the touched thread records and git history.
 This file is the repo-level live-state index; old session narrative belongs
@@ -21,13 +22,14 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements` at local HEAD `21abd2d4`, ahead of
-  origin by 21 commits at this refresh.
-- Current dirty work includes agentic-engineering documentation/state edits,
-  untracked collaboration-doc files, and Vining Bending Root's active
-  observability/product/schema-cache WIP. Preserve pathspec discipline and do
-  not touch git/index without a fresh commit-window claim and staged-set
-  ownership check.
+- Branch: `feat/otel_sentry_enhancements` at local HEAD `f2d376a2`, ahead of
+  origin. HEAD advanced during this session from parallel observability work.
+- Current dirty work includes this unstaged intent-to-commit queue
+  implementation, pre-existing agentic-engineering/Cursor identity edits, and
+  observability/search-cli WIP. The final observed staged index is clear, but
+  staged files were observed earlier under another active claim; do not touch
+  git/index without a fresh `git:index/head` claim, queue entry, and direct
+  staged-set ownership check.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -49,9 +51,12 @@ in `archive/` or the per-thread next-session records.
 - Lock-file waits are documented as a final physical guard only: Claude can
   use Monitor, while Codex/Cursor use bounded shell waits unless a custom
   monitor exists. The claim/log protocol remains the coordination layer.
-- The future intent-to-commit plan has promotion-threshold evidence for
-  staged-bundle integrity failures: substitution, disappearance, and
-  accretion. Implementation remains owner-gated.
+- The owner-directed intent-to-commit queue implementation is in the working
+  tree: active-claims schema v1.3.0 has a root `commit_queue`, the repo-owned
+  helper verifies exact staged file set + staged fingerprint + commit subject,
+  and workflow docs surface queue order before staging. It remains unstaged and
+  uncommitted by owner direction; the next landing should self-apply the new
+  helper under a fresh commit-window claim.
 - WS3B sidebar / timeout / owner-escalation and joint-agent decision
   workflow integration are implemented. First real sidebar/joint-decision
   usage should feed WS5 observation.
@@ -77,7 +82,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26; Codex / `codex` / `GPT-5` / marketplace-verification-closeout-and-handoff / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27; Riverine Navigating Hull / `claude-code` / `claude-opus-4-7-1m` / agent-identity-derivation-phase-8-claude-code-statusline-wiring / 2026-04-27. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27; Riverine Navigating Hull / `claude-code` / `claude-opus-4-7-1m` / agent-identity-derivation-phase-8-claude-code-statusline-wiring / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -119,9 +124,9 @@ state is now:
   vocabulary-transition idea. A 15-minute heartbeat in this Codex thread
   checks whether Vining picks it up; no pickup evidence existed at the first
   read-only poll.
-- Owner direction now promotes `intent_to_commit` from future design to the
-  next implementation lane, with an explicit correction: implement a minimal
-  ordered commit queue, not just a claim field.
+- Owner direction promoted `intent_to_commit` from future design into the
+  current implementation lane. The queue-first pass is implemented in the
+  working tree and waits for a safe landing window.
 - Codex display-surface investigation found repo-owned identity can be derived
   from `CODEX_THREAD_ID`. Owner then dropped the experimental app-server
   title-mutation path: stable names are the useful value, and gates matter
@@ -161,12 +166,11 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Intent-to-commit queue implementation** — promote/update
-   `intent-to-commit-and-session-counter.plan.md` and implement schema v1.3
-   around an ordered advisory `commit_queue` plus exact staged-bundle
-   verification. Use the 2026-04-27 `2ccefad4` collision as evidence that
-   active commit-window claims alone are observable but not ordering. Keep the
-   queue advisory; do not create a mechanical lock.
+1. **Intent-to-commit queue landing** — re-check active claims and the staged
+   index, open a fresh `git:index/head` claim, self-apply the new queue helper,
+   stage only the queue implementation pathspecs, verify exact staged-bundle
+   ownership plus subject, then commit and clear the queue entry. Do not use
+   `session_counter` TTL.
 2. **Collaboration-doc fitness remediation landing** — the split is
    implemented in the working tree; validate/commit it separately from the
    queue work when the git index is clear.
@@ -251,6 +255,21 @@ Recent historical consolidation summaries are preserved in git history, the
 thread records, and
 [`archive/repo-continuity-session-history-2026-04-26.md`](archive/repo-continuity-session-history-2026-04-26.md).
 
+**Status (2026-04-27 Prismatic Waxing Constellation, queue implementation
+handoff)**: completed this handoff — owner explicitly requested queue
+implementation, session handoff, and consolidation. Targeted root-script tests
+passed (12 files / 120 tests via `pnpm test:root-scripts`), markdownlint,
+practice vocabulary, `git diff --check`, strict-hard fitness, JSON parse, and
+targeted Prettier checks passed. Direct file-level ESLint on the new `.mjs`
+helper hit the repo's typed-rule parser-services limitation, so
+`pnpm test:root-scripts` is the recorded validation path.
+
+Consolidation disposition: no entrypoint drift, no incoming Practice Box
+files, no escalation files, and no decision-thread state transition required.
+Open example decision thread remains example state. The queue mechanism is
+PDR-shaped Practice governance, but not graduated in this session because the
+implementation is unstaged and has not yet self-applied in a commit window.
+
 ### Pending-Graduations Register
 
 Schema: `captured-date`, `source-surface`, `graduation-target`,
@@ -311,3 +330,7 @@ snapshots.
 - 2026-04-26; parallel reviewer dispatch + structural-then-pre-landing
   review phasing; PDR-015 amendment; trigger: graduation pass; status:
   graduated 2026-04-26 to PDR-015 amendment (commit `cb358e8d`).
+- 2026-04-27; intent-to-commit queue v1.3.0 implementation; likely PDR-029 /
+  collaboration-state governance amendment; trigger: first successful
+  self-application commit using the queue helper or second real queue cleanup;
+  status: pending.

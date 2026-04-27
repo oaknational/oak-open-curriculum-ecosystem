@@ -43,8 +43,10 @@ Mechanical Refusals](../directives/agent-collaboration.md)).
 ## Commit-window claims
 
 Before staging or committing, repeat the consultation step for the shared git
-transaction surface. If no fresh `git:index/head` claim exists, register a
-short-lived claim entry under `claims[]`:
+transaction surface and the root `commit_queue`. If a fresh queue entry is
+ahead of yours, coordinate rather than racing the index. If no fresh
+`git:index/head` claim exists, register a short-lived claim entry under
+`claims[]`:
 
 ```json
 {
@@ -69,10 +71,11 @@ short-lived claim entry under `claims[]`:
 }
 ```
 
-Append a shared-log entry when the claim opens, then close it after the commit
-attempt or abort with the resulting SHA, failure reason, or abort reason. If
-another fresh `git:index/head` claim exists, coordinate rather than racing the
-git lock.
+Append a shared-log entry when the claim opens, then use
+`scripts/commit-queue.mjs` to enqueue the intended file bundle before staging,
+record the staged-bundle fingerprint after staging, verify exact ownership
+before `git commit`, and clear the queue entry after success. If another fresh
+`git:index/head` claim exists, coordinate rather than racing the git lock.
 
 ## At session close
 
@@ -141,7 +144,7 @@ The authoritative schema is
 Every entry carries: `claim_id`, `agent_id` block (PDR-027 identity), `thread`
 slug, `areas` array, `claimed_at`, `freshness_seconds` (default 14400 = 4
 hours), optional `heartbeat_at`, `sidebar_open` (whether a sidebar is
-open against the claim),
+open against the claim), optional `intent_to_commit` pointer to the root queue,
 `intent` prose, and optional `notes`. Commit-window claims normally use
 `areas.kind: "git"` with `patterns: ["index/head"]` and
 `freshness_seconds: 900`.

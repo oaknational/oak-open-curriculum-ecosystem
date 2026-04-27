@@ -9,8 +9,8 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.1.0", "1.2.0"],
-      "description": "Semantic version of the closed-claims archive schema. Version 1.1.0 adds required closure metadata while preserving the original claim body. Version 1.2.0 accepts closed claims with git area entries for commit-window history."
+      "enum": ["1.1.0", "1.2.0", "1.3.0"],
+      "description": "Semantic version of the closed-claims archive schema. Version 1.1.0 adds required closure metadata while preserving the original claim body. Version 1.2.0 accepts closed claims with git area entries for commit-window history. Version 1.3.0 accepts claims that carry an intent_to_commit pointer from the ordered commit queue."
     },
     "claims": {
       "type": "array",

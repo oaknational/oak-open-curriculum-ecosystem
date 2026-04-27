@@ -6,12 +6,19 @@
   "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; v1.2.0 also treats area.kind enum expansion as additive, so older runtime readers preserve unknown area kinds as opaque claimed areas rather than rejecting the registry. major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step. The maintained latest schema validates supported v1.x files and narrows v1.1.0 validation where enum shape changed; do not validate v1.2.0 files with an older v1.1.0 schema. It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields and opaque enum values rather than rejecting the file. The runtime contract is preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "claims"],
+  "required": ["schema_version", "commit_queue", "claims"],
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.1.0", "1.2.0"],
-      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims."
+      "enum": ["1.1.0", "1.2.0", "1.3.0"],
+      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims. Version 1.3.0 adds the ordered advisory commit_queue for staged-bundle ownership."
+    },
+    "commit_queue": {
+      "type": "array",
+      "description": "Ordered advisory FIFO queue for commit-window ownership. Array order is the queue order; this is not a mechanical lock. Successful commits remove their queue entry.",
+      "items": {
+        "$ref": "#/$defs/intent_to_commit"
+      }
     },
     "claims": {
       "type": "array",
@@ -113,6 +120,11 @@
           "type": "string",
           "description": "Optional free-form coordination note for whoever reads this entry."
         },
+        "intent_to_commit": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Optional pointer to this claim's current entry in the root commit_queue. The queue owns ordering and lifecycle."
+        },
         "archived_at": {
           "type": "string",
           "format": "date",
@@ -121,6 +133,81 @@
         "closure": {
           "$ref": "#/$defs/closure",
           "description": "Structured closure metadata required in closed-claims.archive.json. Presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        }
+      }
+    },
+    "intent_to_commit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent_id",
+        "claim_id",
+        "agent_id",
+        "files",
+        "commit_subject",
+        "queued_at",
+        "updated_at",
+        "expires_at",
+        "phase"
+      ],
+      "properties": {
+        "intent_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this queued commit intent."
+        },
+        "claim_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Active claim this queue entry belongs to."
+        },
+        "agent_id": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Repository-relative file paths the agent intends to stage."
+        },
+        "commit_subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Draft commit subject so peers can see the intended durable history label before it lands."
+        },
+        "queued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Refreshed by the owning agent on commit-queue phase changes."
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Explicit wall-clock stale-reporting timestamp. Expiry does not auto-remove or auto-resolve the queue entry."
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["queued", "staging", "pre_commit", "abandoned"],
+          "description": "Advisory lifecycle phase. Successful commits remove their queue entry rather than preserving phase=complete."
+        },
+        "staged_bundle_fingerprint": {
+          "type": "string",
+          "description": "SHA-256 fingerprint over git diff --cached --name-status and git diff --cached --full-index --binary."
+        },
+        "staged_name_status": {
+          "type": "string",
+          "description": "Recorded git diff --cached --name-status output for staged-bundle inspection."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional free-form coordination note for this queued commit intent."
         }
       }
     },

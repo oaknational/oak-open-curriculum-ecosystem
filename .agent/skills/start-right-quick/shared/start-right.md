@@ -50,7 +50,7 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
 - Your own platform's per-user memory and session logs. Scan the
   surface for the platform you are running on:
   - Claude Code: `~/.claude/projects/<project>/memory/`
-  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`
+  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`; Composer may inject deterministic identity from `.cursor/hooks/oak-session-identity.mjs` (`sessionStart`; see `agent-tools/docs/agent-identity.md` and [Cursor Hooks](https://cursor.com/docs/hooks))
   - Codex: `~/.codex/memories/`, `~/.codex/history.jsonl`
 
   Read only the surface that matches your current platform at
@@ -67,7 +67,7 @@ Read in order; stop at whichever answers your next-step question:
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
-   registry
+   registry and ordered advisory `commit_queue`
 5. `.agent/state/collaboration/shared-comms-log.md` — recent free-form
    collaboration context
 6. `.agent/state/collaboration/conversations/*.json` — open decision
@@ -76,6 +76,11 @@ Read in order; stop at whichever answers your next-step question:
 7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
    escalation cases for the touched thread or area
 8. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+
+When reading `active-claims.json`, surface any fresh `commit_queue` entries
+alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
+`phase`, and `expires_at`. Queue entries are discovery and ordering signals,
+not mechanical refusals.
 
 Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
@@ -96,9 +101,9 @@ When registering your PDR-027 identity row, use an existing owner-assigned
 does not. Do not use personal-email fallback.
 
 Before staging or committing, use the always-active commit skill. It
-checks for a fresh `git:index/head` commit-window claim, opens one if the
-window is clear, and closes it after the commit attempt with the SHA or
-failure reason.
+checks for fresh `commit_queue` entries and `git:index/head` commit-window
+claims, enqueues your intended bundle before staging, verifies the staged
+bundle exactly before `git commit`, and clears the queue entry after success.
 
 ### 5. Active plans
 
