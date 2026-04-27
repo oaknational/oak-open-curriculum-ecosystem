@@ -38,12 +38,10 @@ export function createDeployEntryHandler<TRequest, TResponse>(
   let handlerPromise: Promise<DeployEntryHandler<TRequest, TResponse>> | undefined;
 
   return async (request: TRequest, response: TResponse): Promise<unknown> => {
-    if (handlerPromise === undefined) {
-      handlerPromise = deps.loadHandler().catch((error: unknown) => {
-        handlerPromise = undefined;
-        throw error;
-      });
-    }
+    handlerPromise ??= deps.loadHandler().catch((error: unknown) => {
+      handlerPromise = undefined;
+      throw error;
+    });
 
     const handler = await handlerPromise;
     return await handler(request, response);
