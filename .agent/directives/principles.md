@@ -286,6 +286,41 @@ paths, setup files) don't apply.
   optionality or prefix unused variables with an underscore.
   We fix it, or we delete it, or we never create it in the
   first place.
+- **Don't hide problems — fix them or delete them** - Two
+  patterns that look like solutions but are actually
+  problem-hiding mechanisms are forbidden:
+  - **`void <expr>` to silence unused-variable lint** is banned.
+    `void` does not erase the binding; it just discards a value
+    in expression position to silence one specific linter rule.
+    The unused binding remains a code smell — it is dead state
+    in a destructure or assignment. If a destructure produces
+    a value you don't need, restructure the code so the value
+    isn't produced. If a function parameter isn't used, remove
+    it from the signature. If a returned value isn't used,
+    don't bind it.
+  - **Underscore-prefixing unused identifiers** (e.g. renaming
+    `foo` to `_foo`) is banned. The leading underscore is **not
+    a language feature** — it is a default pattern for one
+    specific ESLint rule (`@typescript-eslint/no-unused-vars`)
+    that suppresses the warning by convention. The variable
+    is still bound, the dead state is still there, the only
+    thing that has changed is that the linter no longer warns.
+    That is hiding the problem, not fixing it.
+
+  Both patterns are instances of the broader rule: _fix it or
+  delete it; never silence the warning that names it_. When a
+  destructure-rest produces an unused capture, that signals a
+  test pattern (build a fixture by runtime omission) that
+  itself needs reconsideration — build the fixture positively,
+  refactor the validator to accept `unknown` and validate at
+  the boundary, or move the proof to a different test layer.
+  When a function parameter is unused, remove it from the
+  signature; if a third-party signature forces the position,
+  refactor through a typed adapter that erases the unused
+  parameter, not through a per-call silencer. When a sweep
+  finds existing `void <unused>` or `_foo` usages in the
+  codebase, they are remediation candidates, not licence to
+  add new ones.
 - **Quality gates** - Run ALL gates after changes. The gate
   taxonomy has complementary layers, each catching a different
   class of defect:
