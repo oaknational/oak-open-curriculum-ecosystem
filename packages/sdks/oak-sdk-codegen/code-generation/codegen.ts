@@ -91,7 +91,7 @@ async function loadSchema(): Promise<LoadedSchema> {
 
   const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
   const live = await fetchValidatedSchema(apiSchemaUrl);
-  await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
+  await writeSchemaCacheIfChanged(schemaCacheFilePath, live, logger);
   logger.info('Schema fetched successfully');
   return createOpenCurriculumSchema(live);
 }
