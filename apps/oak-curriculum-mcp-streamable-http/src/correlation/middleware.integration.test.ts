@@ -23,6 +23,32 @@ function createTestApp(logger: Logger): ReturnType<typeof express> {
   return app;
 }
 
+function makeFakeObservability(): {
+  readonly setTag: (key: string, value: string) => void;
+  readonly calls: readonly (readonly [string, string])[];
+} {
+  const calls: (readonly [string, string])[] = [];
+  const setTag = (key: string, value: string): void => {
+    calls.push([key, value]);
+  };
+  return { setTag, calls };
+}
+
+function createTaggingApp(
+  logger: Logger,
+  observability: { readonly setTag: (key: string, value: string) => void },
+): ReturnType<typeof express> {
+  const app = express();
+  app.use(createCorrelationMiddleware(logger, { observability }));
+  app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
+    if (typeof res.locals.correlationId !== 'string') {
+      throw new Error('Expected correlationId in res.locals');
+    }
+    res.json({ correlationId: res.locals.correlationId });
+  });
+  return app;
+}
+
 function isObjectWithStringField(value: unknown, field: string): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && field in value;
 }
@@ -164,32 +190,6 @@ describe('createCorrelationMiddleware', () => {
   });
 
   describe('Sentry scope tagging', () => {
-    function makeFakeObservability(): {
-      readonly setTag: (key: string, value: string) => void;
-      readonly calls: readonly (readonly [string, string])[];
-    } {
-      const calls: (readonly [string, string])[] = [];
-      const setTag = (key: string, value: string): void => {
-        calls.push([key, value]);
-      };
-      return { setTag, calls };
-    }
-
-    function createTaggingApp(
-      logger: Logger,
-      observability: { readonly setTag: (key: string, value: string) => void },
-    ): ReturnType<typeof express> {
-      const app = express();
-      app.use(createCorrelationMiddleware(logger, { observability }));
-      app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
-        if (typeof res.locals.correlationId !== 'string') {
-          throw new Error('Expected correlationId in res.locals');
-        }
-        res.json({ correlationId: res.locals.correlationId });
-      });
-      return app;
-    }
-
     it('tags the Sentry scope with correlation_id when observability is provided', async () => {
       const logger = createFakeLogger();
       const obs = makeFakeObservability();
