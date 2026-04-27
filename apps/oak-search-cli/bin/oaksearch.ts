@@ -80,8 +80,8 @@ const program = new Command()
   .version(ROOT_PACKAGE_VERSION);
 
 program.addCommand(searchCommand(cliEnvLoader, cliObservability));
-program.addCommand(adminCommand(cliEnvLoader, cliObservability));
-program.addCommand(evalCommand(cliEnvLoader, cliObservability));
+program.addCommand(adminCommand(cliEnvLoader));
+program.addCommand(evalCommand(cliEnvLoader));
 program.addCommand(observeCommand(cliEnvLoader, cliObservability));
 
 /* ------------------------------------------------------------------ */
