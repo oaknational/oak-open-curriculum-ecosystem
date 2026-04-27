@@ -888,6 +888,7 @@ rehearsal).
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `L-IMM-execution-tier-1-flush-timeout-tier-3a-3b-verifications-tier-3c-ignore-errors-scaffold-tier-3d-marketplace-pending-tier-2-fingerprinting-with-reviewer-dispatch` | 2026-04-26 | 2026-04-26 |
 | `Ethereal Alpaca` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-1-1a-2-execution-semver-dry-noise-redos-critical-sonar; agent-identity-derivation-plan-author; co-tenant-with-frolicking-toast-graduation-pass` | 2026-04-26 | 2026-04-26 |
 | `Pelagic Flowing Dock` | `claude-code` | `claude-opus-4-7-1m` | `compose` | `pr-87-architectural-cluster-plan-author-and-executor; closed-briny-ebbing-lagoon-claim-on-owner-direction; cluster-by-architectural-root-cause-resolution-replaces-per-rule-disposition` | 2026-04-27 | 2026-04-27 |
+| `Opalescent Gliding Prism` | `claude-code` | `claude-opus-4-7-1m` | `radiant-pillow` | `pr-87-architectural-cleanup-session-2-phase-0-plan-body-regrounding-phase-0-5-cluster-q-sink-probe-phase-1-dormant-rule-deletion-and-reinstate-stub-cluster-q-dispositions-via-codeql-and-sonar-mcp-cluster-a-sink-trace-analysis-handoff-at-context-budget-threshold` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
