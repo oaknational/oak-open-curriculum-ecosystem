@@ -29,7 +29,6 @@ plans when scheduled.
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
 | [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; WS4A lifecycle integration implemented; WS3B sidebar/escalation and joint-decision integration implemented; WS5 remains observation-gated | WS3B-IMPLEMENTED |
 | [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: sidebar, timeout, and owner-escalation design implemented with conversation-schema and escalation-state support | IMPLEMENTED |
-| [intent-to-commit-queue.execution.plan.md](intent-to-commit-queue.execution.plan.md) | Owner-directed queue-first extension to the collaboration protocol: ordered advisory `commit_queue` plus exact staged-bundle verification; no session-counter TTL in this pass | ACTIVE |
 
 Recently completed:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
@@ -39,6 +38,12 @@ recognise WS0-WS3A collaboration state. Additional three-agent phase-transition
 evidence then satisfied the WS3B promotion gate; the owner-approved
 implementation pass installed sidebars, owner escalation, and
 joint-decision integration on 2026-04-26.
+
+[intent-to-commit-queue.execution.plan.md](../archive/completed/intent-to-commit-queue.execution.plan.md)
+closed on 2026-04-27. The queue implementation landed in `5c39d1d4`, then the
+owner-directed governance pass graduated the shared git transaction /
+authorial-bundle tripwire to PDR-029 Family A Class A.3 and archived the
+execution plan.
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)

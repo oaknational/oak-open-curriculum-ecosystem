@@ -4,6 +4,24 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-27 — queue governance graduated into PDR-029
+
+Owner-directed queue graduation pass after commit `5c39d1d4` successfully
+self-applied the advisory commit queue and exact staged-bundle verification.
+Practice-Core changes:
+
+- **PDR-029 (AMENDED)** — Perturbation-Mechanism Bundle gains Family A Class
+  A.3: shared git transaction / authorial-bundle discipline. The class
+  requires commit-window discovery, an observable advisory FIFO queue artefact,
+  and exact staged-bundle verification before durable history is written.
+- **No session-counter primitive** — the amendment explicitly keeps
+  session-count TTL out of the queue doctrine unless a real session-counter
+  primitive lands in the same pass. Wall-clock expiry remains a stale-reporting
+  signal only.
+
+Adjacent host-repo work archives the completed execution plan and leaves
+operational command details in the collaboration-state lifecycle docs.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-26 — graduation pass landing four PDR additions plus two amendments
 
 Owner-directed `/jc-consolidate-docs` graduation pass routed seven

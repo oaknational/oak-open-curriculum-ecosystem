@@ -25,19 +25,19 @@ todos:
     status: complete
   - id: ws7-governance-consolidation
     content: "WS7: Finish queue governance by running deep consolidation, choosing the permanent PDR/collaboration-state home, and archiving this completed execution plan."
-    status: pending
+    status: complete
 isProject: false
 ---
 
 # Owner-Directed Intent-to-Commit Queue
 
 **Last Updated**: 2026-04-27
-**Status**: 🟡 LANDED (`5c39d1d4`) — GOVERNANCE CONSOLIDATION DUE
+**Status**: ✅ COMPLETE — ARCHIVED AFTER GOVERNANCE GRADUATION
 **Scope**: Ordered advisory commit queue plus exact staged-bundle verification,
 owned by the `agent-tools` TypeScript workspace.
 
 Source strategy:
-[`future/intent-to-commit-and-session-counter.plan.md`](../future/intent-to-commit-and-session-counter.plan.md)
+[`future/intent-to-commit-and-session-counter.plan.md`](../../future/intent-to-commit-and-session-counter.plan.md)
 
 ---
 
@@ -104,7 +104,7 @@ built workspace CLI through `pnpm agent-tools:commit-queue --`.
 
 ## Lifecycle Triggers
 
-> See [Lifecycle Triggers component](../../templates/components/lifecycle-triggers.md)
+> See [Lifecycle Triggers component](../../../templates/components/lifecycle-triggers.md)
 
 - Session entry: start-right thorough, active-claims scan, shared-log scan, and
   staged-index inspection ran before implementation edits.
@@ -116,9 +116,10 @@ built workspace CLI through `pnpm agent-tools:commit-queue --`.
   avoidance.
 - Session handoff: close this claim explicitly and update thread/continuity
   records.
-- Deep consolidation: the first self-application commit landed, so queue
-  governance is due for a deliberate `jc-consolidate-docs` / PDR pass before
-  this plan is archived.
+- Deep consolidation: the first self-application commit landed, and queue
+  governance graduated to
+  [PDR-029 Family A Class A.3](../../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
+  before this plan was archived.
 
 ---
 
@@ -332,33 +333,30 @@ wrapper remains.
 
 ---
 
-## WS7 — Remaining Work To Finish Queue Governance
+## WS7 — Queue Governance Graduation (COMPLETE)
 
-The code lane is done. The remaining work is to move the now-proven queue
-doctrine out of the execution plan and into the permanent governance layer.
+The code lane is done. This closeout moved the now-proven queue doctrine out
+of the execution plan and into the permanent governance layer.
 
 ### 7.1: Deep Consolidation
 
-Run `jc-consolidate-docs` or an owner-directed equivalent governance pass. The
-trigger is already fired: commit `5c39d1d4` was the first successful
-self-application of `pnpm agent-tools:commit-queue --`.
+Ran an owner-directed governance pass modelled on `jc-consolidate-docs`. The
+trigger was commit `5c39d1d4`, the first successful self-application of
+`pnpm agent-tools:commit-queue --`.
 
 Acceptance criteria:
 
-1. `repo-continuity.md` pending-graduations entry for queue governance is no
-   longer merely `due`; it is either graduated with a destination reference or
-   explicitly deferred with a falsifiable constraint.
+1. `repo-continuity.md` pending-graduations entry for queue governance now
+   points to PDR-029 instead of remaining `due`.
 2. The thread record's Next Safe Step no longer points at generic queue
-   consolidation once the permanent destination exists.
+   consolidation.
 
 ### 7.2: Permanent Doctrine Home
 
-Decide and write the durable home for the queue protocol. Candidate homes:
-
-- PDR-029 amendment for the perturbation / tripwire mechanism bundle.
-- Collaboration-state governance docs for operational semantics.
-- Commit skill and lifecycle docs only as usage surfaces, not the permanent
-  rationale home.
+Durable home:
+[PDR-029 Family A Class A.3](../../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md).
+Collaboration-state governance docs remain the operational home. Commit skill
+and lifecycle docs remain usage surfaces, not the permanent rationale home.
 
 Acceptance criteria:
 
@@ -371,7 +369,7 @@ Acceptance criteria:
 
 ### 7.3: Archive The Execution Plan
 
-After permanent documentation exists, archive this plan.
+Permanent documentation exists, and this plan is archived.
 
 Acceptance criteria:
 
@@ -394,7 +392,7 @@ Keep observation separate from implementation. Useful future evidence includes:
 
 ## Foundation Alignment
 
-> See [Foundation Alignment component](../../templates/components/foundation-alignment.md)
+> See [Foundation Alignment component](../../../templates/components/foundation-alignment.md)
 
 - **principles.md §Strict and Complete** — exact file-set and fingerprint
   equality before commit.
@@ -405,24 +403,29 @@ Keep observation separate from implementation. Useful future evidence includes:
   the repo-owned protocol contract.
 - **agent-collaboration.md** — knowledge and communication remain the
   mechanism; the queue does not become a refusal gate.
+- **PDR-029** — queue governance now lives as Family A Class A.3, the shared
+  git transaction / authorial-bundle tripwire.
 
 ---
 
 ## Consolidation
 
-Run `jc-session-handoff` and `jc-consolidate-docs` at close because the owner
-explicitly requested both and this session changes collaboration doctrine.
+Owner-directed governance graduation completed after the implementation
+session changed collaboration doctrine.
 
 **Evidence**:
 
 - `repo-continuity.md` and this thread record now identify the queue
   implementation as landed in `5c39d1d4`, with the first self-application
-  trigger marking queue-governance consolidation due.
+  trigger resolved by PDR-029 Family A Class A.3.
 - Consolidation archived stale claim
   `9c7f4e51-bd1a-4dba-9f2e-3c6e8a4d2f10` with `closure.kind: "stale"`.
 - Workspace migration claim `42ba7a66-1b4e-48fb-a81b-df9f78639571` and commit
   claim `4f4411f1-942f-4368-9481-0eadf53baf7d` were closed explicitly after
   validation and landing.
+- Governance graduation claim
+  `30a1db9a-893d-49dd-948e-c097b4f98af0` archived this execution plan and
+  promoted the queue doctrine to PDR-029.
 
 ---
 
@@ -432,7 +435,7 @@ explicitly requested both and this session changes collaboration doctrine.
 
 **Related Plans**:
 
-- [Multi-Agent Collaboration Protocol](multi-agent-collaboration-protocol.plan.md)
+- [Multi-Agent Collaboration Protocol](../../current/multi-agent-collaboration-protocol.plan.md)
   — parent collaboration plan.
-- [Future source plan](../future/intent-to-commit-and-session-counter.plan.md)
+- [Future source plan](../../future/intent-to-commit-and-session-counter.plan.md)
   — strategic evidence and wider session-counter follow-up.

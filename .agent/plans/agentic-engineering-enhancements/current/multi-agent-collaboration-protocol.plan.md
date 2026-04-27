@@ -99,12 +99,15 @@ The 2026-04-26 owner-directed commit-window refinement is complete:
 `git:index/head` is now a short-lived active-claim area before staging or
 committing, and the commit skill closes the claim on success, failure, or
 abort. The 2026-04-27 `2ccefad4` turn-race then showed that visibility is not
-ordering. Queue-first follow-up is now active in
-[`intent-to-commit-queue.execution.plan.md`](intent-to-commit-queue.execution.plan.md):
+ordering. Queue-first follow-up completed in
+[`intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md):
 schema v1.3.0 adds an ordered advisory `commit_queue`, and the repo-owned
 helper verifies staged file equality, staged fingerprint, and commit subject
-before a commit is allowed to make history durable. `session_counter` remains
-future-only unless a real primitive lands in the same pass.
+before a commit is allowed to make history durable. The durable governance home
+is now
+[PDR-029 Family A Class A.3](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md);
+`session_counter` remains future-only unless a real primitive lands in a later
+owner-directed pass.
 
 The collaboration substrate is cross-vendor by design. Its authoritative
 surfaces are repo-owned markdown, JSON state, rules, commands, skills, and

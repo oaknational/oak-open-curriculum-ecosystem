@@ -11,8 +11,10 @@ split_strategy: "Extract per-surface lifecycle detail to companion docs as new s
 Operational guide to the live state in `.agent/state/collaboration/`:
 where it lives, how it evolves, and how stale entries are cleaned up. The
 doctrinal authority is
-[`agent-collaboration.md`][directive]; this file is the
-how-it-works-in-practice companion. Detailed lifecycle recipes live in
+[`agent-collaboration.md`][directive] plus
+[PDR-029 Family A Class A.3][pdr-029] for the shared git transaction /
+authorial-bundle tripwire; this file is the how-it-works-in-practice
+companion. Detailed lifecycle recipes live in
 [`collaboration-state-lifecycle.md`][lifecycle].
 
 ## Surfaces
@@ -50,7 +52,7 @@ evidence.
 | `freshness_seconds` (default 14400) | First-principles | Liveness signal for stale-audit; 4 hours is the starting default (rationale below) |
 | `heartbeat_at` (optional) | First-principles | Long-session freshness refresh |
 | `sidebar_open` (boolean default false) | First-principles | Whether a sidebar is currently open against this claim |
-| `commit_queue` (root array) | Observed + owner-directed | Owner-directed response to staged-bundle clash evidence; FIFO advisory commit turn order |
+| `commit_queue` (root array) | Observed + owner-directed | PDR-029 Class A.3 queue artefact; FIFO advisory commit turn order plus staged-bundle verification |
 | `intent_to_commit` (claim pointer) | First-principles | Convenience pointer from a claim to its active queue entry; queue remains authoritative |
 | `closure.kind` | Observed + first-principles | Explicit close and stale archival are observed; owner-forced close is reserved for owner intervention |
 | `closure.closed_at` / `closed_by` | First-principles | Claim history needs time and actor for durable closure provenance |
@@ -143,6 +145,7 @@ fields:
   founding pattern that motivated the protocol.
 
 [directive]: ../../directives/agent-collaboration.md
+[pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md
 [lifecycle]: collaboration-state-lifecycle.md
 [log]: ../../state/collaboration/shared-comms-log.md
 [active-claims]: ../../state/collaboration/active-claims.json

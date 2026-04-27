@@ -29,13 +29,37 @@ scanners; probes named in this PDR are scanners by another
 name);
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
 (threads and identity — the Class A.2 tripwires protect
-thread-identity discipline);
+thread-identity discipline and provide the agent identity shape
+reused by shared git transaction entries);
 [PDR-030](PDR-030-plane-tag-vocabulary.md)
 (plane-tag vocabulary — fixes the canonical form of the
 `cross_plane: true` span tag consumed by the Family B Layer 2
 accumulation signal).
 
 ## Amendment Log
+
+- **2026-04-27 v3 amendment — shared git transaction and
+  authorial-bundle tripwire (Coastal Washing Rudder / codex /
+  gpt-5.5; owner-directed queue governance graduation after
+  commit `5c39d1d4` self-applied the advisory queue protocol).**
+  Family A gains Class A.3: a shared git transaction / authorial
+  bundle tripwire. The amendment graduates the already-landed
+  commit queue doctrine from an execution plan into portable
+  Practice governance. Evidence: parallel same-branch commits
+  produced substitution, disappearance, accretion, and turn-race
+  failures around the shared index / HEAD surface; commit
+  `5c39d1d4` then successfully used an advisory FIFO queue plus
+  exact staged-bundle verification before writing history.
+
+  The doctrine remains advisory, not mechanical. The queue tells
+  agents whose intended bundle owns the next commit turn, leaves
+  an observable artefact before staging, and requires staged file
+  equality, staged fingerprint stability, and subject equality
+  immediately before durable history is written. It does not
+  install a global lock, does not refuse work mechanically, and
+  does not make session-count TTL load-bearing. Session-count
+  freshness remains future work unless a real session-counter
+  primitive lands in the same pass.
 
 - **2026-04-25 v2 amendment — tripwire-observability +
   advisory-firing (Fresh Prince / claude-code / claude-opus-4-7-1m;
@@ -213,15 +237,17 @@ system to remain self-applying.
 
 **A Practice-bearing repo that has accepted the perturbation-
 mechanism doctrine MUST install active tripwires in two
-families. Family A installs tripwires against the artefact-
-gravity failure mode across two classes; Class A.1 installs one
-layer (acknowledged exception to the two-complementary-layers
-default), Class A.2 installs three layers. Family B installs
-meta-tripwires against taxonomy drift (at least two layers).
-All Family A tripwires operate under load-bearing platform-
-parity constraints. All tripwire layers are satisfied by
-markdown-ritual steps that name authoritative sources to read;
-code is one possible implementation, not the default.**
+families. Family A installs tripwires against artefact-gravity
+and coordination-failure modes across three classes; Class A.1
+installs one layer (acknowledged exception to the
+two-complementary-layers default), Class A.2 installs three
+layers, and Class A.3 installs shared git transaction /
+authorial-bundle tripwires. Family B installs meta-tripwires
+against taxonomy drift (at least two layers). All Family A
+tripwires operate under load-bearing platform-parity
+constraints. All tripwire layers are satisfied by markdown-
+ritual steps that name authoritative sources to read; code is
+one possible implementation, not the default.**
 
 ### The tripwire concept (Heath-brothers framing)
 
@@ -462,6 +488,48 @@ Layers 1 and 2 must both install — rule plus gate is the
 two-complementary-layers minimum for Class A.2. Layer 3
 (probe) is additional coverage for state that slips past both;
 its install is required for compliance with this PDR.
+
+#### Class A.3 — Shared git transaction / authorial-bundle discipline
+
+Fires when an agent is about to stage or commit on a shared
+branch. Protects the shared index / HEAD surface from turning
+another agent's work into misleading durable history.
+
+**Required layers (default installs; host may override):**
+
+1. **Commit-window discovery rule** — before staging or
+   committing, read the shared collaboration registry and log
+   for fresh commit intents, fresh `git:index/head` claims, and
+   any non-empty staged set. The rule fires as consult-and-
+   decide, not refuse-or-allow.
+2. **Observable queue artefact** — before staging, the committing
+   agent records an advisory FIFO queue entry naming the owning
+   claim, agent identity, exact intended repo-relative file set,
+   draft commit subject, phase, and freshness window. Array
+   order is the advisory turn order. The entry is the tripwire
+   artefact: without it, the later commit cannot prove the
+   agent consulted the shared transaction surface before
+   touching the index.
+3. **Exact staged-bundle verification** — immediately before
+   commit, verify that the staged file set equals the queued
+   file set exactly, the staged bundle fingerprint has not
+   changed since recording, and the commit subject still equals
+   the queued subject. Mismatch aborts before durable history is
+   written and routes the agent back to peer coordination or
+   owner decision.
+
+The class is intentionally **advisory**. Queue entries and
+`git:index/head` claims inform judgement and make turn order
+auditable; the system does not install a global commit lock.
+Git's physical lock remains the last guard against repository
+corruption, while the tripwire protects authorial correctness:
+which files and which intent become a commit.
+
+Session-count freshness is not part of Class A.3 unless a host
+also installs a real session-counter primitive with its own
+start-of-session increment and validation semantics. Wall-clock
+expiry is sufficient for v1: expiry reports stale queue state
+and never auto-removes or blocks another agent by itself.
 
 ### Platform parity (load-bearing)
 
@@ -757,6 +825,10 @@ Practice.
 - **Family B** installs at least two meta-tripwire layers
   (per-consolidation meta-check + accumulation-triggered seam
   review, by default; orphan-item signal is optional).
+- **Family A Class A.3** installs commit-window discovery,
+  advisory FIFO queue artefacts, and exact staged-bundle
+  verification before durable history is written. Queue entries
+  are observable signals, not locks.
 - **All tripwire layers** default to markdown-ritual form;
   code form is reserved for layers an agent cannot reasonably
   perform by reading markdown.
@@ -794,6 +866,14 @@ Practice.
   host whose memory organisation this PDR applies to.
 - **Scaffolding unclassified-decision misc buckets** (e.g. a
   "standing-decisions" surface) to satisfy a coverage target.
+- **Commit queue as mechanical lock** — a queue entry may inform
+  default discipline and exact verification, but it must not
+  become a refusal gate that prevents agents from exercising
+  judgement under owner direction.
+- **Session-count TTL without a real primitive** — do not make a
+  session counter load-bearing for queue freshness unless the
+  host also installs, documents, and validates the incrementing
+  primitive in the same pass.
 
 ### Accepted costs
 
@@ -821,6 +901,11 @@ Practice.
   materialising, this PDR is amendable to add a complementary
   layer. The cost is preferable to scaffolding a contrived
   second layer.
+- **Shared transaction ceremony.** Class A.3 adds visible
+  queue and verification steps to every commit. The overhead is
+  accepted because wrong-intent commits are durable and costly:
+  the commit can pass all hooks while recording the wrong authorial
+  bundle.
 
 ## Notes
 

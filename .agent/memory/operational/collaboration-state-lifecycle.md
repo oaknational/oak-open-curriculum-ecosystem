@@ -11,7 +11,8 @@ split_strategy: "Split by state surface if lifecycle recipes grow beyond a singl
 Detailed lifecycle recipes for `.agent/state/collaboration/`. The compact
 state index is [`collaboration-state-conventions.md`](collaboration-state-conventions.md);
 the doctrinal authority is
-[`agent-collaboration.md`](../../directives/agent-collaboration.md).
+[`agent-collaboration.md`](../../directives/agent-collaboration.md) and
+[PDR-029 Family A Class A.3][pdr-029].
 
 ## Claims
 
@@ -36,7 +37,9 @@ the doctrinal authority is
 
 `active-claims.json` v1.3.0 carries a root `commit_queue` array. The array is
 FIFO and advisory: agents use it to decide whose commit turn is next, but it
-does not mechanically refuse work.
+does not mechanically refuse work. PDR-029 defines the queue as the
+observable artefact for the shared git transaction / authorial-bundle
+tripwire; this file records the operational recipe.
 
 Use `pnpm agent-tools:commit-queue --` through the commit skill:
 
@@ -152,3 +155,4 @@ Non-trivial protocol claims should carry a small evidence bundle:
 - next action or owner.
 
 [register-rule]: ../../rules/register-active-areas-at-session-open.md
+[pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md

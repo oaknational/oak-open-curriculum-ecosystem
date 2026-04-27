@@ -6,16 +6,17 @@ isProject: false
 
 # Intent to Commit + Session Counter — Strategic Plan
 
-**Status**: 🔄 PROMOTED TO CURRENT; QUEUE-FIRST IMPLEMENTATION ACTIVE (2026-04-27)
-**Promotion signal**: 🟠 EVIDENCE THRESHOLD MET (2026-04-26 staged-bundle
-integrity failures now include substitution, disappearance, and accretion;
-owner explicitly asked to implement the queue on 2026-04-27; a same-day
-commit-window claim still collided because no ordered queue serialized the
-turn)
+**Status**: ✅ QUEUE SLICE COMPLETE; `session_counter` FUTURE-ONLY
+(2026-04-27)
+**Promotion signal**: queue signal satisfied and implemented in `5c39d1d4`;
+queue governance graduated to PDR-029 Family A Class A.3 on 2026-04-27.
+Remaining promotion signal is explicit owner direction for a real
+`session_counter` primitive; do not make session-count TTL load-bearing without
+that primitive.
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:
-[`current/intent-to-commit-queue.execution.plan.md`](../current/intent-to-commit-queue.execution.plan.md);
+[`archive/completed/intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md);
 [`agent-collaboration.md`](../../../directives/agent-collaboration.md);
 [`active-claims.schema.json`](../../../state/collaboration/active-claims.schema.json);
 [`closed-claims.schema.json`](../../../state/collaboration/closed-claims.schema.json);
@@ -34,11 +35,10 @@ That completed refinement lets an agent claim the shared git transaction
 surface with `areas.kind: "git"` and `patterns: ["index/head"]` before
 staging or committing.
 
-This future plan adds a second, more specific layer that does not exist yet.
-Owner clarification on 2026-04-27: implementation must be a **minimal
-ordered commit queue**, not just an `intent_to_commit` field on a claim.
-Claims say who is active; the queue says whose intended staged bundle owns
-the next advisory turn.
+The queue-backed intent bundle layer is now complete. Owner clarification on
+2026-04-27 was implemented as a **minimal ordered commit queue**, not just an
+`intent_to_commit` field on a claim. Claims say who is active; the queue says
+whose intended staged bundle owns the next advisory turn.
 
 Closeout correction on 2026-04-27: the first implementation slice should not
 make session-count TTL load-bearing unless it also lands a real session-counter
@@ -46,20 +46,20 @@ primitive. Prefer explicit wall-clock fields for queue freshness in v1.3, or
 split `session_counter` into a separate follow-up. The queue and staged-bundle
 verification are the high-impact part.
 
-- `commit_queue` on the active-claims registry root, carrying ordered
+- Complete: `commit_queue` on the active-claims registry root, carrying ordered
   `intent_to_commit` entries with the intended file bundle, commit subject,
   phase, and staged-set fingerprint.
-- optional `intent_to_commit` pointers on active claims, if useful, but the
-  queue owns ordering and lifecycle.
-- `session_counter` only if the pass deliberately implements that primitive;
-  otherwise leave TTL as explicit timestamps and record session-count expiry as
-  a later slice.
-- commit-skill queue and ownership checks that compare `git diff --cached`
-  exactly against the declared intent before durable history is written.
+- Complete: optional `intent_to_commit` pointers on active claims, with the
+  queue owning ordering and lifecycle.
+- Future-only: `session_counter`. Do not add session-count expiry until a real
+  session-counter primitive is deliberately designed and implemented.
+- Complete: commit-skill queue and ownership checks compare
+  `git diff --cached` exactly against the declared intent before durable
+  history is written.
 
-In short: **commit-window claim is done; queue-backed intent bundle
-declaration is not done; session-counter TTL is separate unless explicitly
-implemented as a real primitive**.
+In short: **commit-window claim is done; queue-backed intent bundle declaration
+is done; session-counter TTL is separate unless explicitly implemented as a
+real primitive**.
 
 ## Problem and Intent
 
@@ -571,13 +571,14 @@ plan is promoted, not resolved in this strategic intent:
 
 ## Self-Application Test
 
-When the implementation is eventually staged and committed, that commit MUST
-post and clear an `intent_to_commit` per the new commit skill — exercising the
-schema, the commit-skill flow, and the registry write path against the
-implementation that creates them. This owner-directed session deliberately
-does **not** stage or commit because the current index contains another
-agent's staged bundle; self-application belongs to the later landing window
-under a fresh `git:index/head` claim.
+The queue implementation self-application test completed in commit `5c39d1d4`.
+That commit posted and cleared an `intent_to_commit` per the new commit skill,
+exercising the schema, the commit-skill flow, and the registry write path
+against the implementation that created them.
+
+The remaining `session_counter` idea has no self-application evidence and no
+real primitive. Keep it future-only unless the owner deliberately promotes that
+slice.
 
 This mirrors the WS1 self-application pilot
 ([`a5d33519`](.agent/state/collaboration/closed-claims.archive.json#claim-fbde22cf))
@@ -603,21 +604,27 @@ landing commit.
 
 ## Promotion Checklist
 
-When promoted to `current/`:
+Queue slice outcome:
 
-- [x] Promote into `current/` as
-      [`intent-to-commit-queue.execution.plan.md`](../current/intent-to-commit-queue.execution.plan.md).
-- [ ] Add Phase 0 owner gates (queue file/root location, default explicit
-      expiry, areas vs files, and whether session counter is in or out) —
-      resolve via `assumptions-reviewer` +
-      `architecture-reviewer-fred` dispatch before WS1.
-- [ ] Add WS1 RED fixtures for the schema bump and intent lifecycle.
-- [ ] Update parent
+- [x] Promoted into `current/`, implemented, and archived as
+      [`intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md).
+- [x] Resolved Phase 0 owner gates for queue file/root location, default
+      explicit expiry, areas vs files, and session-counter exclusion.
+- [x] Added RED/GREEN coverage for the schema bump and queue lifecycle in the
+      completed execution plan.
+- [x] Updated parent
       [`multi-agent-collaboration-protocol.plan.md`](../current/multi-agent-collaboration-protocol.plan.md)
-      to reference this child as the WS1 extension.
-- [ ] Update collection
+      to reference the archived child as the completed WS1 extension.
+- [x] Updated collection
       [`README.md`](../current/README.md) and
       [`roadmap.md`](../roadmap.md) with the lane entry.
-- [ ] Move this plan's listing in the [`future/README.md`](README.md)
-      to "Promoted to `current/` <date>" form (matching the convention
-      already used for `planning-specialist-capability.plan.md`).
+- [x] Updated this plan's listing in the [`future/README.md`](README.md)
+      to identify the queue slice as archived and the residual
+      `session_counter` slice as future-only.
+
+Future `session_counter` promotion checklist:
+
+- [ ] Owner explicitly confirms a real session-counter primitive is wanted.
+- [ ] Define the primitive's source of truth, freshness semantics, and failure
+      mode before making TTL depend on it.
+- [ ] Keep queue freshness timestamp-based until the primitive exists.

@@ -121,7 +121,7 @@ marked as host-local context and not carrying decision substance.
 | [PDR-026](PDR-026-per-session-landing-commitment.md) | Per-Session Landing Commitment | Accepted (amended 2026-04-21, 2026-04-22, 2026-04-26) |
 | [PDR-027](PDR-027-threads-sessions-and-agent-identity.md) | Threads, Sessions, and Agent Identity | Accepted |
 | [PDR-028](PDR-028-executive-memory-feedback-loop.md) | Executive-Memory Feedback Loop | Accepted |
-| [PDR-029](PDR-029-perturbation-mechanism-bundle.md) | Perturbation-Mechanism Bundle | Accepted |
+| [PDR-029](PDR-029-perturbation-mechanism-bundle.md) | Perturbation-Mechanism Bundle | Accepted (amended 2026-04-25, 2026-04-27) |
 | [PDR-030](PDR-030-plane-tag-vocabulary.md) | Plane-Tag Vocabulary | Accepted |
 | [PDR-031](PDR-031-build-vs-buy-attestation.md) | Build-vs-Buy Attestation Pre-ExitPlanMode | Accepted |
 | [PDR-032](PDR-032-reference-tier-as-curated-library.md) | Reference Tier as Curated Library | Accepted |
