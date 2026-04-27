@@ -15,8 +15,6 @@ import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oa
 import type { HttpObservability } from './observability/http-observability.js';
 import { deriveSelfOrigin, hostValidationErrorMessage } from './host-validation-error.js';
 
-export { deriveSelfOrigin };
-
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).
  * Rate limiting is still applied — abuse is possible even without auth.

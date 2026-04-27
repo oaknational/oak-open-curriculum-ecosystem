@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deriveSelfOrigin } from './auth-routes.js';
+import { deriveSelfOrigin } from './host-validation-error.js';
 
 function createRequestWithHost(host: string | undefined): {
   get(name: string): string | undefined;
