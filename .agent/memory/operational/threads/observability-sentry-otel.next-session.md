@@ -1,5 +1,19 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+**Mid-session waypoint**: 2026-04-27T06:55Z (Vining Bending Root /
+claude-code / claude-opus-4-7-1m / 4e2cbc5c — PR-87 Phase 3
+substantive work complete locally; commits `fc253664`, `3beaf039`,
+`64c8ba5e`, `3d80d8c6`, `b1a4cd79` landed on
+`feat/otel_sentry_enhancements`, not yet pushed. Phase 3 mid-phase
+reviewer batch in flight: code-reviewer + test-reviewer returned
+findings to absorb (test-reviewer BLOCKING: rename
+`schema-cache.unit.test.ts` → `.integration.test.ts` since it uses
+real fs IO; test-reviewer MAJOR: DI-chain proof gap; code-reviewer
+MAJOR: test type-annotation should be `SchemaCacheLogger` not
+`Pick<Logger, 'warn'>`); security-reviewer still running. Once
+absorbed, Phase 4 MAJOR Sonar fixes start. Push deferred to Phase 6
+per the master plan and pre-authorised auto-push direction.)
+
 **Last refreshed**: 2026-04-26 (Ethereal Alpaca / claude-code /
 claude-opus-4-7-1m — PR-87 Phase 1 + 1A + 2 execution closeout.
 Three commits landed locally on `feat/otel_sentry_enhancements`

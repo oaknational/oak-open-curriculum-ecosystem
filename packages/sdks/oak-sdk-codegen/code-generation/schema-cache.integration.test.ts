@@ -3,9 +3,12 @@ import { mkdtempSync, rmSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
-import type { Logger } from '@oaknational/logger';
 
-import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
+import {
+  readSchemaCacheOrNull,
+  writeSchemaCacheIfChanged,
+  type SchemaCacheLogger,
+} from './schema-cache.js';
 
 interface CapturedWarning {
   readonly message: string;
@@ -13,11 +16,11 @@ interface CapturedWarning {
 }
 
 function createCapturingLogger(): {
-  readonly logger: Pick<Logger, 'warn'>;
+  readonly logger: SchemaCacheLogger;
   readonly warnings: CapturedWarning[];
 } {
   const warnings: CapturedWarning[] = [];
-  const logger: Pick<Logger, 'warn'> = {
+  const logger: SchemaCacheLogger = {
     warn(message, context) {
       warnings.push({ message, context });
     },
@@ -28,7 +31,7 @@ function createCapturingLogger(): {
 describe('schema cache helpers', () => {
   let cacheDirectory: string;
   let cachePath: string;
-  let logger: Pick<Logger, 'warn'>;
+  let logger: SchemaCacheLogger;
   let warnings: CapturedWarning[];
 
   const baseSchema: OpenAPIObject = {

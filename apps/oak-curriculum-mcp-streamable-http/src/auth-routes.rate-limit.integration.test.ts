@@ -84,7 +84,7 @@ describe('OAuth metadata route rate limiting (CodeQL #5)', () => {
     expect(res2.status).toBe(429);
   });
 
-  it('returns 429 on /.well-known/mcp-stub-mode when stub tools enabled', async () => {
+  it('returns 429 on /.well-known/mcp-stub-mode with OAuth error body when stub tools enabled', async () => {
     const app = buildApp(1, true);
 
     const res1 = await request(app).get('/.well-known/mcp-stub-mode');
@@ -92,6 +92,10 @@ describe('OAuth metadata route rate limiting (CodeQL #5)', () => {
 
     const res2 = await request(app).get('/.well-known/mcp-stub-mode');
     expect(res2.status).toBe(429);
+    expect(res2.body).toStrictEqual({
+      error: 'too_many_requests',
+      error_description: 'Rate limit exceeded. Try again later.',
+    });
   });
 
   it('does not register /.well-known/mcp-stub-mode when stub tools disabled', async () => {

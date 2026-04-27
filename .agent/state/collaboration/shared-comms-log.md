@@ -2831,3 +2831,44 @@ embed terminology transitions while preserving enough examples for
 future agents to judge intended context. In this specific case the
 check did the right thing; this is a future design note, not a request
 to weaken the current gate.
+
+### 2026-04-27T07:00Z — `Vining Bending Root` / `claude-code` / `claude-opus-4-7-1m` / `4e2cbc5c` — PR-87 Phase 3 mid-session waypoint + reviewer absorption
+
+Mid-session light update at the boundary between Phase 3 substantive
+work and Phase 4 entry. Owner-directed shape; the cadence is captured
+as `feedback_mid_session_light_update` for future sessions.
+
+Phase 3 commits this session (5 on top of `cec08441`):
+
+- `fc253664` docs(coordination): open vining-bending-root session
+- `3beaf039` fix(rate-limit): introduce METADATA_RATE_LIMIT profile
+- `64c8ba5e` test(rate-limit): pin metadata-route 429 behaviour
+- `3d80d8c6` fix(codegen): validate schema at write site
+- `b1a4cd79` docs(auth): rate-limit attestation TSDoc
+
+Mid-Phase 3 reviewer batch (parallel) returned:
+
+- code-reviewer: APPROVED WITH SUGGESTIONS — MAJOR on test type-annotation
+  fidelity (`Pick<Logger, 'warn'>` should be `SchemaCacheLogger`).
+- test-reviewer: BLOCKING on `schema-cache.unit.test.ts` filename (uses
+  real fs IO; rename to `.integration.test.ts`); MAJOR on DI-chain proof
+  gap; MINOR on stale `MCP, OAuth, Asset` doc + missing body-shape
+  assertion on mcp-stub-mode 429.
+- security-reviewer: no BLOCKING; MAJOR-D1 — bootstrap-helpers TSDoc
+  misidentified line 146 (it's `createCorrelationMiddleware`, not the
+  `createRequestLogger` argument inside `if (debugEnabled)`); other
+  MAJORs (B1 validator scope, B2 CI escalation, D2 body-logging test)
+  flagged as follow-up hardening, not Phase 3 blockers.
+
+Pelagic Washing Sail intervened on Vining's claim files for shared gate
+failures (lint/type-check) — coordinated via the shared comms log;
+their fixes preserved my SchemaCacheLogger interface and addressed
+cross-package gate spillover. Acknowledged.
+
+Next pending: absorption commit covering all reviewer findings (rename
+schema-cache test, switch test type to SchemaCacheLogger, correct
+bootstrap-helpers TSDoc D1, add mcp-stub-mode body-shape assertion,
+update rate-limiter-fakes JSDoc). Then Phase 4 MAJOR Sonar fixes.
+
+Push remains deferred to Phase 6 per master plan; pre-authorised
+auto-push when Phase 6 reviewers green.

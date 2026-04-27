@@ -5,7 +5,7 @@
  * ```typescript
  * const { factory, calls } = createFakeRateLimiterFactory();
  * const app = await createApp({ ...options, rateLimiterFactory: factory });
- * expect(calls).toHaveLength(3); // MCP, OAuth, Asset
+ * expect(calls).toHaveLength(4); // MCP, OAuth, Metadata, Asset
  * ```
  */
 import type { RequestHandler } from 'express';
