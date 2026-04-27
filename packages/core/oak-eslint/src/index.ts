@@ -1,7 +1,7 @@
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver } from 'eslint-plugin-import-x';
-import { oakPlugin, oakRuleModules } from './plugin.js';
+import { oakPlugin } from './plugin.js';
 import type { Linter } from 'eslint';
 
 /**
@@ -20,7 +20,7 @@ export {
   appArchitectureRules,
 } from './rules/boundary.js';
 
-export const rules = oakRuleModules;
+export { oakRuleModules as rules } from './plugin.js';
 
 import { recommended } from './configs/recommended.js';
 import { strict } from './configs/strict.js';

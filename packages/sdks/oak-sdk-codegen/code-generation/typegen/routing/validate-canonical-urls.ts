@@ -19,7 +19,7 @@ import { ok, type Result } from '@oaknational/result';
 import { loadSitemapReference, type SitemapRefError } from './sitemap-reference.js';
 import { binarySearchSortedPaths } from './teacher-path-lookups.js';
 
-export { loadSitemapReference, type SitemapRefError };
+export { loadSitemapReference, type SitemapRefError } from './sitemap-reference.js';
 
 /** Result of validating a single URL against the reference map. */
 export type UrlValidationResult =

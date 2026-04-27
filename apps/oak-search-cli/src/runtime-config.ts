@@ -21,7 +21,11 @@ import {
   type SearchCliRuntimeConfig,
 } from './runtime-config-support.js';
 
-export type { ConfigError, LoadRuntimeConfigOptions, SearchCliRuntimeConfig };
+export type {
+  ConfigError,
+  LoadRuntimeConfigOptions,
+  SearchCliRuntimeConfig,
+} from './runtime-config-support.js';
 
 /**
  * Cached loader for validated CLI environment configuration.

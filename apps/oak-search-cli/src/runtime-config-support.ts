@@ -1,9 +1,4 @@
-import {
-  resolveApplicationVersion,
-  resolveGitSha,
-  type ApplicationVersionSource,
-  type GitShaSource,
-} from '@oaknational/build-metadata';
+import type { ApplicationVersionSource, GitShaSource } from '@oaknational/build-metadata';
 import type { EnvResolutionError } from '@oaknational/env-resolution';
 import type { SearchCliEnv } from './env.js';
 
@@ -50,4 +45,4 @@ export {
   resolveGitSha,
   type ApplicationVersionSource,
   type GitShaSource,
-};
+} from '@oaknational/build-metadata';
