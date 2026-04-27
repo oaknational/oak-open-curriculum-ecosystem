@@ -2,19 +2,95 @@
 
 **Session-close 2026-04-27T18:47Z (Opalescent Gliding Prism, claude-code, claude-opus-4-7-1m, session seed `radiant-pillow-2026-04-27`)** — 2 commits landed AND PUSHED (`882d1f2c`, `cadc26eb`); HEAD = origin = PR-87 head = `cadc26eb`. Phase 0 (plan-body re-grounding), Phase 1 (dormant rule deletion + reinstate stub), and Cluster Q dispositions (5 CodeQL dismissed + 1 Sonar hotspot accept) landed. Cluster A sink-trace analysis captured in plan body. Owner direction at planning: Decisions 1B + 2A + 3A. Session closed at context-budget threshold per owner direction.
 
-**Critical for next session**:
+## Opening statement for next session
 
-1. **Read the [Opalescent Gliding Prism napkin entry](../../active/napkin.md) FIRST.** Today's drift recurrence happened in handoff text inheritance — three Pelagic-session assertions had become stale (push state, CodeQL count, hotspot count, rule-test count). The Explore agent dispatched in planning ALSO inherited the stale framing because it quoted the active plan body without independently verifying via `git rev-parse origin`. New trigger-word class: "per the brief / per the handoff / per the prior session". Verify before re-asserting.
-2. **Read the active plan** [`.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`](../../../plans/observability/active/pr-87-architectural-cleanup.plan.md). The §"Session 2" body, §"Live signal state", and §"Cluster A — Sink-trace findings (Session 2)" sub-section capture the verified live state and the Cluster A multi-file type-narrowing analysis.
-3. **Cluster A is next** — multi-file structural cure: narrow `RateLimiterFactory` return type from `RequestHandler` to `RateLimitRequestHandler`, extend the test fake with stub `getKey`/`resetKey` methods, narrow parameter types in `auth-routes.ts` / `oauth-proxy-routes.ts` / `bootstrap-helpers.ts`. Multi-commit; needs CI cycle for CodeQL recognition probe; reviewer dispatch (code/type/test/security/mcp/arch-fred/arch-wilma in parallel). Fallback per plan: dismiss-with-rationale citing TSDoc attestations at `auth-routes.ts:18-32, 47-75, 124-138` + integration tests at `rate-limiter-di.integration.test.ts`.
-4. **Discipline reminders** (per Pelagic + Opalescent napkin entries):
-   - "Replace, don't bridge" applies to plan-body text. Stale assertions get replaced, never appended-to with corrections.
-   - State assertions in documentation MUST be preceded by the verification command that produced them.
-   - When briefing a sub-agent on prior-session state, name verification commands explicitly in the brief.
-   - Serial-only for write-capable specialists. Read-only Explore + read-only reviewer dispatch in parallel is allowed.
-5. **Co-tenant note**: Coastal Washing Rudder left ~16 files uncommitted in working tree from queue-governance graduation pass at ~16:46Z. Not my scope. Owner direction needed on commit timing.
+**Stop and run session handoff at 350k tokens.** When the conversation
+context reaches ~350k tokens, pause whatever cluster work is in flight,
+update plans + continuity surfaces with current verified state, and run
+`/jc-session-handoff`. This is owner-directed standing practice; the
+context budget is a hard constraint, not a soft suggestion.
 
-**Remaining PR-87 work** (after Cluster A): Cluster B (vercel-ignore generic command-runner + hotspot), Cluster C (schema-cache 2 CodeQL alerts), Clusters H/I/J/K/L/M/N/O/D (16 Sonar issues + 5.7% duplication QG per Path 2A).
+**First action at session-open**: independently verify state, do not inherit
+text from this thread record or the active plan body. Run, in order:
+
+1. `git rev-parse HEAD && git rev-parse origin/feat/otel_sentry_enhancements && gh pr view 87 --json headRefOid,mergeable,mergeStateStatus,statusCheckRollup -q .` — confirm push state and gate states.
+2. `mcp__sonarqube__get_project_quality_gate_status pullRequest=87` — confirm QG conditions.
+3. `gh api '/repos/oaknational/oak-open-curriculum-ecosystem/code-scanning/alerts?ref=refs/pull/87/head&state=open&per_page=100'` — confirm CodeQL OPEN alerts.
+4. `mcp__sonarqube__search_security_hotspots pullRequest=87 status=TO_REVIEW` — confirm hotspot review state.
+
+**Expected state at session-3 open** (last verified at 2026-04-27 18:47Z by
+Opalescent Gliding Prism; treat this list as a STARTING HYPOTHESIS, not
+authority):
+
+- HEAD = origin = PR-87 head = `7de65f84` or later. **Do not take this on
+  faith** — the owner may push between sessions.
+- Sonar QG: ERROR. `new_violations=27` (matches Cluster table); the new
+  TO_REVIEW S5332 hotspot at `host-validation-error.unit.test.ts:70` was
+  accepted-as-SAFE this session, so `new_security_hotspots_reviewed`
+  should recover toward 100% on next Sonar scan.
+- CodeQL: 7 OPEN alerts (Cluster A: #69, #70, #71, #72, #81 + Cluster C:
+  #76, #77). Cluster Q (#82–#86) was dismissed-as-false-positive this
+  session.
+
+**Discipline reminders** (per the [Vining Bending Root + Pelagic Flowing
+Dock + Opalescent Gliding Prism napkin triple](../../active/napkin.md)):
+
+- "Replace, don't bridge" applies to plan-body text. Stale assertions get
+  replaced wholesale, never appended-to with corrections.
+- State assertions in documentation MUST be preceded by the verification
+  command that produced them.
+- When briefing a sub-agent on prior-session state, name verification
+  commands explicitly in the brief — not just text to compare against.
+  Sub-agents inherit dispatcher framing.
+- Serial-only for write-capable specialists. Read-only Explore + read-only
+  reviewer dispatch in parallel is allowed.
+- Trigger-word vocabulary to detect drift early: "stylistic" /
+  "false-positive" / "out of scope" / "owner direction needed without
+  analysis" / "convention" / "language idiom" / "well-known name" /
+  "canonical TS idiom" / "all done" / "all pushed" / "all clean" / "per
+  the brief" / "per the handoff" / "per the prior session". If those
+  appear in own output, stop, re-derive at the site.
+
+**Cluster A is the next safe step**. Multi-file structural cure (analysis
+captured in plan body §"Cluster A — Sink-trace findings (Session 2)"):
+
+1. Narrow `RateLimiterFactory` return type at
+   `apps/.../rate-limiting/rate-limiter-factory.ts:44,73` from
+   `RequestHandler` → `RateLimitRequestHandler` (from `express-rate-limit`).
+2. Extend test fake at `apps/.../test-helpers/rate-limiter-fakes.ts` with
+   stub `getKey` / `resetKey` methods so the fake satisfies the narrowed
+   type.
+3. Narrow parameter types in `auth-routes.ts`, `oauth-proxy-routes.ts`,
+   `app/bootstrap-helpers.ts` from `RequestHandler` → `RateLimitRequestHandler`.
+4. Push, wait for CI, check whether CodeQL `js/missing-rate-limiting`
+   recognises the narrowed type. If yes: 5 alerts close in one cluster.
+   If no: fall back to dismiss-with-rationale citing TSDoc attestations
+   at `auth-routes.ts:18-32, 47-75, 124-138` + integration tests at
+   `rate-limiter-di.integration.test.ts`.
+5. Reviewer dispatch (code / type / test / security / mcp / arch-fred /
+   arch-wilma) in parallel — read-only specialists, post-cluster review.
+
+**Remaining PR-87 work after Cluster A**: Cluster B (vercel-ignore generic
+command-runner + hotspot `AZ3D3iflrIk5eL0ceU__`), Cluster C (schema-cache
+2 CodeQL alerts), Clusters H/I/J/K/L/M/N/O/D (16 Sonar issues + 5.7%
+duplication QG per Path 2A — owner chose "execute full plan", not split).
+
+**Co-tenant carry-over**: Coastal Washing Rudder's queue-governance
+graduation pass left ~15 files committed by Opalescent in commit
+`5cb-or-later` if the owner authorised, OR still uncommitted if not.
+Verify with `git log --since='2026-04-27 17:00' --oneline | grep -i
+queue` or by inspecting working tree at session open. Coastal's
+structured `closed-claims.archive.json` entry for claim
+`30a1db9a-893d-49dd-948e-c097b4f98af0` was inadvertently lost during
+Opalescent's session; Coastal's session-close evidence remains durable
+in the comms-log entry at 2026-04-27T16:46:45Z. If Coastal resumes,
+they can re-add the structured archive entry.
+
+**Plan files to load**:
+
+- [`.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`](../../../plans/observability/active/pr-87-architectural-cleanup.plan.md) — primary; §"Session 2 outcomes" lists what landed; §"Cluster A — Sink-trace findings" has the structural cure analysis.
+- [`.agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md`](../../../plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md) — Decision 1B follow-up; queued for after PR-87 ships.
+- [`.agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md) — re-scoped to Phases 1-2 only (Sentry preview validation + MCP server preview probe); Phases 3-5 superseded by the active plan.
 
 ---
 
