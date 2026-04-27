@@ -21,7 +21,7 @@ const INVALID_VERCEL_EXPORT_MESSAGE =
   'dist/server.js must default-export a function that satisfies the verified @vercel/node import contract.';
 
 function escapeForRegExp(value: string): string {
-  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
 function hasInlineDefaultFunctionExport(bundleSource: string): boolean {
@@ -56,15 +56,15 @@ function isFunctionBinding(
   const escapedIdentifier = escapeForRegExp(identifier);
   const declarationPatterns = [
     new RegExp(
-      `(?:^|\\n)\\s*(?:export\\s+)?(?:async\\s+)?function\\s+${escapedIdentifier}\\b`,
+      String.raw`(?:^|\n)\s*(?:export\s+)?(?:async\s+)?function\s+${escapedIdentifier}\b`,
       'm',
     ),
     new RegExp(
-      `(?:^|\\n)\\s*(?:const|let|var)\\s+${escapedIdentifier}\\s*=\\s*(?:async\\s+)?function\\b`,
+      String.raw`(?:^|\n)\s*(?:const|let|var)\s+${escapedIdentifier}\s*=\s*(?:async\s+)?function\b`,
       'm',
     ),
     new RegExp(
-      `(?:^|\\n)\\s*(?:const|let|var)\\s+${escapedIdentifier}\\s*=\\s*(?:async\\s*)?(?:\\([^)]*\\)|[A-Za-z_$][\\w$]*)\\s*=>`,
+      String.raw`(?:^|\n)\s*(?:const|let|var)\s+${escapedIdentifier}\s*=\s*(?:async\s*)?(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*=>`,
       'm',
     ),
   ] satisfies readonly RegExp[];
@@ -74,7 +74,7 @@ function isFunctionBinding(
   }
 
   const aliasPattern = new RegExp(
-    `(?:^|\\n)\\s*(?:const|let|var)\\s+${escapedIdentifier}\\s*=\\s*([A-Za-z_$][\\w$]*)\\s*;`,
+    String.raw`(?:^|\n)\s*(?:const|let|var)\s+${escapedIdentifier}\s*=\s*([A-Za-z_$][\w$]*)\s*;`,
     'm',
   );
   const aliasMatch = bundleSource.match(aliasPattern);

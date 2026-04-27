@@ -214,8 +214,7 @@ describe('semver parity (canonical npm-backed vs inline regex copies)', () => {
       // script omits it (Node accepts both for this pattern, and the
       // script avoids any flag the runtime might not recognise). Strip
       // the flag from the canonical, then assert source equality.
-      const canonicalSource =
-        '/^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$/';
+      const canonicalSource = String.raw`/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/`;
       expect(`/${INLINE_SEMVER_PATTERN.source}/`).toBe(canonicalSource);
     });
   });
