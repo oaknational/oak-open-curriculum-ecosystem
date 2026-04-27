@@ -66,6 +66,7 @@
     "Scheffer",
     "semh",
     "Signaling",
+    "sonarqube",
     "spld",
     "strapline",
     "sucrase",
@@ -135,7 +136,7 @@
   },
   "cSpell.language": "en-GB",
   "sonarlint.connectedMode.project": {
-    "connectionId": "oaknational",
+    "connectionId": "oaknational-cloud",
     "projectKey": "oaknational_oak-open-curriculum-ecosystem"
   }
 }

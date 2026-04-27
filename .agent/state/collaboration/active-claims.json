@@ -1,5 +1,49 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "331bce87-8d02-4c9b-83ed-e824c17148bb",
+      "agent_id": "Briny Ebbing Lagoon",
+      "agent_platform": "claude-code",
+      "agent_model": "claude-opus-4-7-1m",
+      "session_id": "d1911d0a-1e9d-45aa-a867-24dae4920920",
+      "thread": "observability-sentry-otel",
+      "started_at": "2026-04-27T10:18:00Z",
+      "expires_at": "2026-04-27T18:00:00Z",
+      "intent": "PR-87 quality remediation under corrected disposition table — revert 03a58787; per-site Sonar work; Sonar Hotspot review; CodeQL #62/#63 polynomial-redos fix in remove-noise-phrases.ts",
+      "pathspecs": [
+        "sonar-project.properties",
+        "packages/core/build-metadata/src/**",
+        "packages/core/build-metadata/tests/**",
+        "packages/sdks/oak-search-sdk/src/retrieval/query-processing/**",
+        "packages/libs/sentry-node/src/**",
+        "packages/core/type-helpers/src/**",
+        "packages/core/observability/src/**",
+        "packages/core/oak-eslint/src/**",
+        "packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/**",
+        "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/server-harness.js",
+        "apps/oak-curriculum-mcp-streamable-http/src/test-error/**",
+        "apps/oak-curriculum-mcp-streamable-http/src/correlation/**",
+        "apps/oak-curriculum-mcp-streamable-http/src/runtime-config-support.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
+        "apps/oak-search-cli/src/runtime-config-support.ts",
+        "apps/oak-search-cli/src/runtime-config.ts",
+        "scripts/validate-root-application-version.mjs",
+        "scripts/validate-practice-fitness.mjs",
+        ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+      ],
+      "co_tenant_pathspecs": [
+        "agent-tools/src/core/agent-identity/derive.ts",
+        "agent-tools/src/core/health-probe-continuity-state.ts",
+        "agent-tools/src/commit-queue/**",
+        "agent-tools/src/bin/commit-queue.ts",
+        "agent-tools/tests/agent-identity/**"
+      ],
+      "co_tenant_note": "Will edit files in agent-tools to address Sonar findings on Riverine's/Prismatic's recently-closed claim territory. Active claims registry was empty at session-open. Will check shared-comms-log before each edit; will not block parallel agents who pick up agent-tools work — in that case I drop those files from scope and surface for coordination."
+    }
+  ]
 }

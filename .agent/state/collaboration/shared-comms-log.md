@@ -3160,3 +3160,64 @@ changes; staged for owner direction on push timing.
 observability-sentry-otel thread). Closes at session-end. The fresh
 thread will open its own claim when it picks up PR-87 quality
 remediation under the corrected disposition table.
+
+### 2026-04-27T10:18:00Z — `Briny Ebbing Lagoon` / `claude-code` / `claude-opus-4-7-1m` / `d1911d0a` — PR-87 quality remediation resume
+
+Resuming PR-87 quality remediation from Vining Bending Root's session-close handoff.
+Active claims registry was empty at open; opened claim `331bce87-8d02-4c9b-83ed-e824c17148bb`
+covering the per-finding site files plus `sonar-project.properties` and the master plan.
+
+**Live state via Sonar/Sentry MCP + gh** (PR-87 head `e05d3ec7`):
+
+- Sonar QG ERROR. Failing on `new_violations=67`, `new_duplicated_lines_density=5.4%`,
+  `new_security_hotspots_reviewed=0%` (10 hotspots TO_REVIEW). Quality gate is "Sonar way for AI Code".
+- CodeQL combined RED but only 2 OPEN alerts: #62, #63 polynomial-redos in
+  `oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`. The briefing's
+  list (#69-72, #76, #77, #81) all show `dismissed` — that work is already complete.
+- CI test currently IN_PROGRESS at HEAD `e05d3ec7`.
+
+**Plan divergence from briefing**: dropped DI-opacity investigation (no live alerts),
+dropped schema-cache dismiss-prep (already dismissed). Added: (a) fix CodeQL #62/#63
+in remove-noise-phrases.ts, (b) per-hotspot review via Sonar MCP for the 10 hotspots.
+
+**Single most important first action remains**: revert `03a58787` (Phase 5 violation).
+Discipline this session: one finding/site = one commit; re-derive from principles.md
+at each site before consulting the master plan's table.
+
+**Co-tenant note**: agent-tools is technically Riverine's recently-closed territory.
+Will only touch when registry remains clear of competing claims; will check before
+each edit and back off if a parallel agent picks up that scope.
+
+### 2026-04-27T~10:50Z — `Briny Ebbing Lagoon` / `claude-code` / `claude-opus-4-7-1m` / `d1911d0a` — PR-87 mid-session checkpoint
+
+8 substantive commits landed locally (`dba01e7c..2a2f435c`), all on top
+of the pushed PR-87 head `e05d3ec7`. Branch is now 8 ahead of origin.
+
+**Per-rule progress** (Sonar 67 → reductions tracked, pending re-scan):
+
+- S6653 ×2 → mechanical fix (Object.hasOwn).
+- S6606 ×1 → mechanical fix (??=).
+- S7786 ×6 + 3 bonus → mechanical fix (TypeError for type-check throws).
+- S7780 ×6 → mechanical fix (String.raw for backslash escapes).
+- S7763 ×15 → mechanical fix (export-from consolidation).
+- S2871 ×3 → mechanical fix (localeCompare comparator).
+- S3735 ×2 → strengthened TSDoc + `accept` via Sonar MCP.
+- S7677 ×2 → `falsepositive` via Sonar MCP (substring match in non-error lines).
+- S7748 ×2 → `accept` via Sonar MCP (Sentry SDK float contract).
+
+**Hotspot reviews via Sonar MCP**:
+
+- 9 of 10 SAFE-with-rationale: S5852 derive.ts (linear-time regex, not
+  ReDoS), S1313 ×2 (test fixtures, not IPs), S4036 ×6 (PATH-trust-root
+  in dev/CI/build context).
+- 1 of 10 denied (vercel-ignore PATH hotspot `AZ3D3iflrIk5eL0ceU__`);
+  surfaced for owner authorisation.
+
+**Remaining substantive work**:
+
+- CodeQL #62/#63 polynomial-redos in `remove-noise-phrases.ts` — fix.
+- S5843 ×4 structural redesign (semver-pattern.ts + `.mjs` → `.ts`).
+- Mechanical sweeps remaining: S6594 ×4, S6644 ×3, S7735 ×4, S7781 ×6,
+  S6353 ×3, S7785 ×1, S2310 ×1.
+
+Mid-session re-grounding done; reviewers about to be dispatched.

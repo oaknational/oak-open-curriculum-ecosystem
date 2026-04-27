@@ -94,6 +94,72 @@ commit before starting the next.
 
 ---
 
+## 2026-04-27 Phase 5 Resume Progress (Briny Ebbing Lagoon)
+
+**Session**: Briny Ebbing Lagoon (claude-code, claude-opus-4-7-1m,
+session `d1911d0a`). Resumed under the corrected disposition table.
+
+**Live state at resume open** (PR-87 head `e05d3ec7`):
+
+- Sonar QG ERROR: `new_violations=67`, `new_duplicated_lines_density=5.4%`,
+  `new_security_hotspots_reviewed=0%`.
+- CodeQL OPEN alerts: 2 (#62, #63 polynomial-redos in
+  `oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`).
+- Briefing's CodeQL list (#69-72, #76, #77, #81) all already DISMISSED;
+  DI-opacity investigation and schema-cache dismiss-prep tasks were
+  no-ops at resume time.
+
+**Commits landed this session (9, on top of `e05d3ec7`)**:
+
+1. `dba01e7c` chore(sonar): revert 03a58787 multicriteria rule suppression
+2. `e34c455c` refactor(type-helpers): use Object.hasOwn over .call (S6653 ×2)
+3. `cef624a7` refactor(deploy-entry-handler): use ??= for memoised promise (S6606 ×1)
+4. `493f46a1` refactor(types): TypeError for type-check throws (S7786 ×6 + 3 bonus)
+5. `8c2847be` refactor(regex): String.raw for backslash escapes (S7780 ×6)
+6. `01beb925` refactor(re-exports): export-from for pure re-exports (S7763 ×15)
+7. `aa6efdc0` refactor(sort): localeCompare comparator for Array.sort (S2871 ×3)
+8. `2a2f435c` docs(test-error-route): strengthen S3735 dismissal rationale
+
+**Sonar state-changes via MCP** (no code edits needed):
+
+- 9 of 10 Security Hotspots marked REVIEWED → SAFE with per-hotspot rationale
+  - 1 S5852 (regex DoS in derive.ts — not actually ReDoS, linear-time match)
+  - 2 S1313 (hardcoded IP `1.0.0.0` in semver-parser test fixtures — not IPs)
+  - 6 S4036 (PATH variable in dev-tool invocations — PATH IS the trust root)
+  - 1 S4036 denied for `AZ3D3iflrIk5eL0ceU__` (vercel-ignore PATH) —
+    surfaced for owner authorisation
+- 6 issues dismissed via `change_sonar_issue_status`:
+  - S3735 ×2 (void operator load-bearing for Express middleware arity) — accept
+  - S7677 ×2 (substring "error" in non-error lines) — falsepositive
+  - S7748 ×2 (`tracesSampleRate: 1.0` per Sentry SDK float contract) — accept
+
+**Sonar QG conditions impact (estimated, pending Sonar re-scan)**:
+
+- `new_violations=67` → mechanical/per-site reductions of ~33: S6653 ×2,
+  S6606 ×1, S7786 ×6, S7780 ×6, S7763 ×15, S2871 ×3 + 6 dismissals = 39
+  reductions. Remaining ~28 violations: S6594 ×4, S6644 ×3, S7735 ×4,
+  S7781 ×6, S6353 ×3, S7785 ×1, S2310 ×1, S5843 ×4, plus the 6 already-
+  dismissed. Some of these will land in subsequent commits.
+- `new_duplicated_lines_density=5.4%` → addressed by S5843 structural
+  redesign (semver-pattern.ts module + `.mjs` → `.ts` migration of
+  validate-root-application-version) — pending.
+- `new_security_hotspots_reviewed=0%` → 9 of 10 reviewed → 90%; the
+  remaining 10% blocks the QG condition until either the owner
+  authorises the 10th hotspot or it's reviewed via Sonar UI.
+
+**CodeQL state (pending)**:
+
+- #62 + #63 in `remove-noise-phrases.ts:36, :38` — js/polynomial-redos
+  HIGH — pending fix.
+
+**Drift-detection check at this midpoint**: each finding read at the
+site, disposition derived from principles.md not from the master plan
+table, commit cardinality respects per-finding (or per-rule when all
+sites within a rule share disposition). No `multicriteria.ignore` block
+introduced. The reviewed commit `dba01e7c` removed 03a58787's violation.
+
+---
+
 ## 2026-04-27 Phase 5 Metacognitive Correction (Vining Bending Root)
 
 **Status of this section**: SUPERSEDES the Phase 5 ACCEPT/DISABLE table
