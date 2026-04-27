@@ -3294,3 +3294,66 @@ Prismatic's recently-closed scope and is not part of this plan.
 Active claims registry was clean of competing claims at open (Briny's
 was the only entry; closed in this same set of edits). No commit-queue
 entries.
+
+### 2026-04-27T16:27:45Z — `Pelagic Flowing Dock` / `claude-code` / `claude-opus-4-7-1m` / `compose` — session-close after metacognitive correction; intermediary `/jc-consolidate-docs`; handoff to fresh session
+
+**Owner-directed metacognitive correction during session.** Owner caught
+me three times reproducing the exact drift pattern named in this morning's
+napkin (Vining Bending Root entry on disposition-drift). Each instance
+was a softening of the principle while writing the enforcement of it:
+
+1. `void omitted;` inside a restored helper (the very pattern the rule
+   was about to ban).
+2. "Refactor through a typed adapter" language in the rule's error
+   message and in `principles.md` (adapters are themselves a hiding
+   shape, banned by no-half-measures).
+3. Double-underscore allowlist in the rule body to "accommodate Node.js
+   conventions" (`__dirname`, `__filename`) — invented an exception
+   inside the rule that bans exceptions.
+
+Plus a fourth softening I caught during the metacognitive pass:
+
+4. Shorthand-destructure exemption in the rule (`const { _meta } = obj`
+   was allowed) — same accommodation shape from another angle.
+
+**Captured durably**:
+
+- New `napkin.md` entry under "2026-04-27 — Pelagic Flowing Dock —
+  drift recurs while writing the rule that bans it" — names the
+  recurrence, the structural insight (accommodation gravity intensifies
+  with context), and adds new trigger-word vocabulary
+  (convention / language idiom / well-known name / canonical TS idiom).
+- `distilled.md` graduated entry "Drift recurs while authoring the
+  enforcement of the principle it violates" — operational additions
+  including rule-writing as high-vulnerability activity, narrate
+  friction aloud before writing rule bodies, treat owner corrections as
+  evidence of broader drift.
+- `repo-continuity.md` pending-graduations register: the morning's PDR
+  candidate is now `due` (this afternoon was the second cross-session
+  instance + manifestation expansion); a new register entry for
+  "no adapters, no compatibility layers, no half measures" as
+  cross-cutting principle.
+
+**Session-close cleanup actions**:
+
+- All allowlists removed from the rule body (uniform `_*` ban).
+- The activation line in `recommended.ts` reverted (rule is dormant).
+- The codegen sweep (~17 files) reverted entirely — the work was done
+  under drift conditions and the owner explicitly directed not to
+  inherit it.
+- Plan section "Session 1 — outcome" enumerates exactly what was
+  attempted, what was kept, and what was reverted.
+
+**Commits this session** (5, all pushed): `0e68aa87`, `3d4a0925`,
+`0d2d4dc8`, `d1f5226b`, `9da90650`. Phase 1 of the architectural
+cleanup landed cleanly. Cluster A onwards **not started**; fresh
+session resumes there.
+
+**Closing claim `d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5`** at session-end
+with `closure.kind: explicit`. Working tree at handoff has only the
+durable knowledge files staged for one final commit; the codegen sweep
+is reverted; the rule code stays as dormant code awaiting fresh-session
+audit; the owner's vercel-ignore.mjs comments stay as Cluster B WIP.
+
+Active-claims registry will be empty after my close. No commit-queue
+entries.

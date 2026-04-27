@@ -308,19 +308,33 @@ paths, setup files) don't apply.
     That is hiding the problem, not fixing it.
 
   Both patterns are instances of the broader rule: _fix it or
-  delete it; never silence the warning that names it_. When a
-  destructure-rest produces an unused capture, that signals a
-  test pattern (build a fixture by runtime omission) that
-  itself needs reconsideration — build the fixture positively,
-  refactor the validator to accept `unknown` and validate at
-  the boundary, or move the proof to a different test layer.
-  When a function parameter is unused, remove it from the
-  signature; if a third-party signature forces the position,
-  refactor through a typed adapter that erases the unused
-  parameter, not through a per-call silencer. When a sweep
-  finds existing `void <unused>` or `_foo` usages in the
-  codebase, they are remediation candidates, not licence to
-  add new ones.
+  delete it; never silence the warning that names it_. No
+  adapters, no compatibility layers, no half measures — those
+  are themselves problem-hiding patterns dressed differently.
+  Concretely:
+
+  - When a destructure-rest produces an unused capture: the
+    runtime-omission test pattern itself is the problem. Build
+    the fixture positively (set the omitted field to
+    `undefined` if the type permits, or construct a minimal
+    valid fixture by hand). Do not introduce an `omitProperty`
+    helper or any other wrapper around the destructure.
+  - When a function parameter is unused: use it for its
+    intended purpose, or delete it from the signature. If a
+    framework signature forces a position (e.g. Express
+    error-middleware arity), the unused position usually
+    indicates the function is at the wrong abstraction
+    layer — fix the layer, not the silencer. Do not introduce
+    a wrapper, a typed adapter, or a "thin shim" to erase the
+    parameter; that is bridging.
+  - When a value-bind exists only to satisfy a type checker:
+    use `satisfies` directly on the value instead of binding
+    it. `const x = ... satisfies T;` and then never reading
+    `x` is the same antipattern as `void x;` in disguise.
+
+  When a sweep finds existing `void <unused>` or `_foo`
+  usages in the codebase, they are remediation candidates,
+  not licence to add new ones.
 - **Quality gates** - Run ALL gates after changes. The gate
   taxonomy has complementary layers, each catching a different
   class of defect:

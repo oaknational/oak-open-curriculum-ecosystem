@@ -1,44 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5",
-      "agent_id": {
-        "agent_name": "Pelagic Flowing Dock",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "compose"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
-            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
-          ]
-        },
-        {
-          "kind": "files",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
-            "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.integration.test.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
-            "scripts/check-commit-message.sh",
-            "sonar-project.properties",
-            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-27T14:05:00Z",
-      "freshness_seconds": 14400,
-      "intent": "PR-87 architectural cleanup per /Users/jim/.claude/plans/1-those-were-my-composed-key.md — cluster-by-architectural-root-cause resolution. Phase 0 live re-harvest, Phase 1 owner exemplar edits, then Clusters A (DI-opacity rate-limiting), B (generic command runner → capabilities), C (schema-cache boundary), E (throw-non-Error per-site), F (bash hygiene), D (generated-code duplication). No suppressions; no per-rule sweeps.",
-      "notes": "Approved plan supersedes the Briny Ebbing Lagoon claim 331bce87 which is being closed in this session per owner direction. Pathspecs broaden as clusters open; will re-narrow at session-handoff. Plan file approved at /Users/jim/.claude/plans/1-those-were-my-composed-key.md."
-    }
-  ]
+  "claims": []
 }

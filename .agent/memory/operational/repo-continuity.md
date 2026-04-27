@@ -86,7 +86,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26; Codex / `codex` / `GPT-5` / marketplace-verification-closeout-and-handoff / 2026-04-26. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27; Riverine Navigating Hull / `claude-code` / `claude-opus-4-7-1m` / agent-identity-derivation-phase-8-claude-code-statusline-wiring / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
@@ -293,6 +293,28 @@ Captured in `napkin.md`. Worth a PDR-shaped consolidation once a second
 instance is observed, OR owner direction. See pending-graduations register
 below for entry.
 
+**Status (2026-04-27 Pelagic Flowing Dock, void/_ rule authorship and
+metacognitive recurrence handoff)**: intermediary `/jc-consolidate-docs`
+ran during session-close per owner direction. The drift register entry
+above is now **due** — the morning session's pattern recurred the same
+day in a new manifestation (authoring enforcement rules). Owner caught
+the recurrence three times in succession; full analysis captured in the
+napkin and distilled. The session also reinforced "no adapters, no
+compatibility layers, no half measures" as a cross-cutting principle
+(new register entry above). PR-87 cluster work is **not started**;
+Phase 1 landed (5 commits); Cluster P0 (void/_ remediation) opened
+under drift and is suspect (~35 modified files in working tree).
+Active plan §"Session 1 — outcome and suspect work" enumerates the
+suspect work with audit instructions for the fresh session. Fitness
+disposition: principles.md is HARD on characters (25231 / 24000) due
+to the new §"Don't hide problems" addition; the elaborated bullets are
+candidates for extraction to a referenced governance doc per the
+file's `split_strategy`. Owner-approved deferral: structural fix to
+fresh session, learning preserved. Strict-hard fitness was not run at
+closeout — the working tree contains the suspect WIP and additional
+fitness pressure changes would conflate with the suspect surface;
+fresh session re-runs strict-hard after the WIP is audited.
+
 ### Pending-Graduations Register
 
 Schema: `captured-date`, `source-surface`, `graduation-target`,
@@ -362,5 +384,25 @@ snapshots.
   master-plan ACCEPT/DISABLE tables as structural enablers of this drift,
   triggers for re-reading principles.md at phase boundaries, and detection
   language for the drift; trigger: second cross-session instance OR owner
-  direction; status: pending. Source surface: `napkin.md` 2026-04-27 entry +
-  master plan §"Phase 5 Metacognitive Correction".
+  direction; status: **due** — second cross-session instance landed
+  2026-04-27 afternoon (Pelagic Flowing Dock, while authoring the
+  `no-problem-hiding-patterns` ESLint rule and its principles.md entry).
+  The afternoon drift expanded the observed manifestation set: not only
+  master-plan ACCEPT/DISABLE tables, but also **authoring enforcement
+  rules** (where friction the rule causes induces softening), and added
+  trigger-word vocabulary ("convention" / "language idiom" /
+  "well-known name" / "canonical TS idiom"). Source surfaces:
+  `napkin.md` 2026-04-27 Vining Bending Root entry, `napkin.md`
+  2026-04-27 Pelagic Flowing Dock entry, `distilled.md` "Drift recurs
+  while authoring the enforcement of the principle it violates"
+  entry, master plan §"Phase 5 Metacognitive Correction", active plan
+  §"Session 1 (Pelagic Flowing Dock) — outcome and suspect work".
+- 2026-04-27; "no adapters, no compatibility layers, no half measures"
+  reinforced cross-cuttingly through Pelagic Flowing Dock session;
+  ADR or principles.md amendment to elevate this to a top-level rule
+  alongside "WE DON'T HEDGE" and "Strict and complete"; trigger:
+  graduation pass with owner approval (already cited multiple times
+  today as a load-bearing cross-cutting principle); status: pending.
+  Source surfaces: napkin Pelagic entry; principles.md §"Don't hide
+  problems"; rule body of `no-problem-hiding-patterns` (uncommitted,
+  suspect).

@@ -134,6 +134,51 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
+### Drift recurs while authoring the enforcement of the principle it violates
+
+Observing a drift pattern in a napkin is not immunity from it.
+The accommodation gravity intensifies as session context grows;
+the protective practice must intensify in step, not relax.
+Documented across two same-day napkin entries (Vining Bending
+Root morning, Pelagic Flowing Dock afternoon, both
+[`napkin.md`](napkin.md) under 2026-04-27): the morning entry
+named a "disposition-drift" pattern with four trigger words; the
+afternoon entry IS the pattern, recurring three times in the
+same session, this time while authoring the rule that bans it.
+
+Trigger-word vocabulary expanded:
+
+- Original four (stylistic, false-positive, out of scope, owner
+  direction needed without analysis).
+- New addition: **convention / language idiom / well-known name
+  / canonical TS idiom** — common-pattern justifications are
+  accommodations dressed as principles. The fix is to rename the
+  variable or restructure the code, never to exempt the rule.
+
+Operational additions:
+
+- **Rule-writing is a high-vulnerability activity.** When
+  authoring an enforcement rule, the friction the rule causes IS
+  the rule's value. Resist softening. Inconvenient downstream
+  work is the principle paying back; that's the contract.
+- **Narrate the downstream cures aloud BEFORE writing the rule
+  body.** Naming each inconvenient archetype-cure inoculates
+  against silently softening the rule body.
+- **Owner corrections are evidence of broader drift.** A catch on
+  one line implies the surrounding work is drifting. After a
+  correction, audit recent work for the same shape; don't just
+  patch the named site.
+- **Phase-boundary re-read of `principles.md` must be triggered,
+  not remembered.** State aloud "phase boundary — re-reading
+  principles.md," and DO it. Aspirational discipline failed today.
+- **Parallel-agent dispatch under drift multiplies drift.** Agents
+  inherit the dispatcher's framing. Hold work serially when own
+  drift is active.
+
+Pending graduation to a PDR amendment or new doctrine line at
+next consolidation pass; this distilled entry is the live
+description until then.
+
 - **Learning before fitness**: capture, distil, graduate, and write the
   signal fully even when the destination file is near or over a fitness
   limit. Fitness limits are health signals. They route structural follow-up

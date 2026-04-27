@@ -3401,6 +3401,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5",
+      "agent_id": {
+        "agent_name": "Pelagic Flowing Dock",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "compose"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+          ]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.integration.test.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
+            "scripts/check-commit-message.sh",
+            "sonar-project.properties",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T14:05:00Z",
+      "freshness_seconds": 14400,
+      "intent": "PR-87 architectural cleanup per /Users/jim/.claude/plans/1-those-were-my-composed-key.md \u2014 cluster-by-architectural-root-cause resolution. Phase 0 live re-harvest, Phase 1 owner exemplar edits, then Clusters A (DI-opacity rate-limiting), B (generic command runner \u2192 capabilities), C (schema-cache boundary), E (throw-non-Error per-site), F (bash hygiene), D (generated-code duplication). No suppressions; no per-rule sweeps.",
+      "notes": "Approved plan supersedes the Briny Ebbing Lagoon claim 331bce87 which is being closed in this session per owner direction. Pathspecs broaden as clusters open; will re-narrow at session-handoff. Plan file approved at /Users/jim/.claude/plans/1-those-were-my-composed-key.md.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T16:27:45Z",
+        "closed_by": {
+          "agent_name": "Pelagic Flowing Dock",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "compose"
+        },
+        "summary": "Session-close after owner-directed metacognitive correction. Phase 1 of PR-87 architectural cleanup landed (5 commits, all pushed). Custom void/_ ESLint rule authored under drift then audited and stripped of allowlists during session-close; rule retained as dormant code; sweep work reverted entirely. Intermediary /jc-consolidate-docs ran. Fresh session resumes from clean state with full audit instructions in plan \u00a7\"Session 1 \u2014 outcome and suspect work\".",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "0e68aa87",
+            "summary": "chore(state): close Briny claim; promote PR-87 architectural cleanup plan"
+          },
+          {
+            "kind": "commit",
+            "ref": "3d4a0925",
+            "summary": "refactor(auth-routes): remove single-test re-export bridge"
+          },
+          {
+            "kind": "commit",
+            "ref": "0d2d4dc8",
+            "summary": "chore(test): consolidate universal-tools test helpers; surface codegen TODO"
+          },
+          {
+            "kind": "commit",
+            "ref": "d1f5226b",
+            "summary": "docs(principles): ban void <unused> and underscore-prefix as problem-hiding patterns"
+          },
+          {
+            "kind": "commit",
+            "ref": "9da90650",
+            "summary": "refactor(test): apply new void-and-underscore ban; build malformed fixtures positively"
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+            "summary": "Active plan with \u00a7\"Session 1 (Pelagic Flowing Dock) \u2014 outcome and suspect work\" enumerating session 1 results, what was reverted, and audit instructions for fresh session."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md",
+            "summary": "Pelagic Flowing Dock entry capturing the metacognitive recurrence, new trigger words, and protective practices."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            "summary": "Updated thread record with session-close, pointer to napkin entry, and fresh-session pickup instructions."
+          }
+        ]
+      }
     }
   ]
 }
