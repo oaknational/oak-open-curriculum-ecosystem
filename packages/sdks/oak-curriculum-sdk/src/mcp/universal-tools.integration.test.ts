@@ -10,6 +10,28 @@ import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './universal-tools/types.js';
 
+function createRegistryWithDescriptor(
+  toolName: ToolName,
+  descriptor: ToolRegistryDescriptor,
+): GeneratedToolRegistry {
+  return {
+    toolNames: [toolName],
+    getToolFromToolName: () => descriptor,
+    isToolName: (value): value is ToolName => value === toolName,
+  };
+}
+
+/**
+ * Returns a copy of `object` with `key` removed, preserving the static
+ * type by narrowing to `Omit<T, K>`. JavaScript has no value-level `Omit`,
+ * so this captures the destructure-rest idiom in a type-safe helper.
+ */
+function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
+  const { [key]: omitted, ...rest } = object;
+  void omitted;
+  return rest;
+}
+
 /**
  * Integration tests verifying universal tools have proper MCP annotations
  * and MCP Apps standard _meta fields (ADR-141).
@@ -73,7 +95,7 @@ describe('listUniversalTools annotations', () => {
 
   it('search tool has correct annotations', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const searchTool = tools.find(findToolByName('search'));
+    const searchTool = tools.find((t) => t.name === 'search');
 
     expect(searchTool).toBeDefined();
     const annotations = searchTool?.annotations;
@@ -85,7 +107,11 @@ describe('listUniversalTools annotations', () => {
 
   it('fetch tool has correct annotations', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const fetchTool = tools.find(findToolByName('fetch'));
+    // Architectural note: tools.find((t) => t.name === ...) duplicates a
+    // lookup the generated registry already exposes for descriptors via
+    // getToolFromToolName. An analogous accessor for listed-tool entries
+    // belongs at sdk-codegen time, emitted ONCE. Follow-up beyond this PR.
+    const fetchTool = tools.find((t) => t.name === 'fetch');
 
     expect(fetchTool).toBeDefined();
     const annotations = fetchTool?.annotations;
@@ -97,7 +123,7 @@ describe('listUniversalTools annotations', () => {
 
   it('get-curriculum-model tool has correct annotations', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const modelTool = tools.find(findToolByName('get-curriculum-model'));
+    const modelTool = tools.find((t) => t.name === 'get-curriculum-model');
 
     expect(modelTool).toBeDefined();
     const annotations = modelTool?.annotations;
@@ -260,25 +286,3 @@ describe('generated tools _meta integration', () => {
     );
   });
 });
-
-/** Helper to find a tool by name, reducing complexity in test functions */
-function findToolByName(name: string) {
-  return (t: { name: string }) => t.name === name;
-}
-
-function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
-  const { [key]: omitted, ...rest } = object;
-  void omitted;
-  return rest;
-}
-
-function createRegistryWithDescriptor(
-  toolName: ToolName,
-  descriptor: ToolRegistryDescriptor,
-): GeneratedToolRegistry {
-  return {
-    toolNames: [toolName],
-    getToolFromToolName: () => descriptor,
-    isToolName: (value): value is ToolName => value === toolName,
-  };
-}
