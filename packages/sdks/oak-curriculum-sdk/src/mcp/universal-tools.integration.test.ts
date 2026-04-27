@@ -22,17 +22,6 @@ function createRegistryWithDescriptor(
 }
 
 /**
- * Returns a copy of `object` with `key` removed, preserving the static
- * type by narrowing to `Omit<T, K>`. JavaScript has no value-level `Omit`,
- * so this captures the destructure-rest idiom in a type-safe helper.
- */
-function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
-  const { [key]: omitted, ...rest } = object;
-  void omitted;
-  return rest;
-}
-
-/**
  * Integration tests verifying universal tools have proper MCP annotations
  * and MCP Apps standard _meta fields (ADR-141).
  *
@@ -227,17 +216,18 @@ describe('generated tools _meta integration', () => {
       throw new Error('Expected generated tool descriptor to include annotations');
     }
 
-    const annotationsWithoutTitle = omitProperty(annotations, 'title');
-    const descriptorWithoutDescription = omitProperty(descriptor, 'description');
-
+    // Construct malformed descriptors positively. `title` and `description`
+    // are optional in `ToolRegistryDescriptor` (the validator catches their
+    // absence at runtime); setting them to `undefined` via spread expresses
+    // the missing-metadata fixture without a runtime omit-helper.
     const missingTitleRegistry = createRegistryWithDescriptor(toolName, {
       ...descriptor,
-      annotations: annotationsWithoutTitle,
+      annotations: { ...annotations, title: undefined },
     });
-    const missingDescriptionRegistry = createRegistryWithDescriptor(
-      toolName,
-      descriptorWithoutDescription,
-    );
+    const missingDescriptionRegistry = createRegistryWithDescriptor(toolName, {
+      ...descriptor,
+      description: undefined,
+    });
 
     expect(() => listUniversalTools(missingTitleRegistry)).toThrow(
       `Generated tool "${toolName}" missing required metadata`,
@@ -257,12 +247,11 @@ describe('generated tools _meta integration', () => {
       throw new Error('Expected generated tool descriptor to include annotations');
     }
 
-    const annotationsWithoutTitle = omitProperty(annotations, 'title');
     const topLevelTitle = 'Spec-aligned top-level title';
     const registry = createRegistryWithDescriptor(toolName, {
       ...descriptor,
       title: topLevelTitle,
-      annotations: annotationsWithoutTitle,
+      annotations: { ...annotations, title: undefined },
     });
 
     const tool = listUniversalTools(registry).find((entry) => entry.name === toolName);
