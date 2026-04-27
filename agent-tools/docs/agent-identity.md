@@ -52,15 +52,35 @@ not invent derived word slots.
 
 ## Platform Wrapper Status
 
-| Platform    | Status         | Next action                                                                                                                                                             |
-| ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Deferred       | Use a Claude session with the `update-config` skill to install statusline wiring that passes the harness `session_id` to the built CLI.                                 |
-| Codex       | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed in this pass. Use `--seed` or `OAK_AGENT_SEED` manually until a Codex wrapper surface is designed.  |
-| Cursor      | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed in this pass. Use `--seed` or `OAK_AGENT_SEED` manually until a Cursor wrapper surface is designed. |
+| Platform    | Status         | Wiring / next action                                                                                                                                                                                                                                          |
+| ----------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired          | `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs`, which delegates to the built adapter `agent-tools/dist/src/claude/statusline-identity.js`. The adapter parses the harness's stdin JSON `session_id` and prints the display name. |
+| Codex       | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed. Use `--seed` or `OAK_AGENT_SEED` manually until a Codex wrapper surface is designed.                                                                                                     |
+| Cursor      | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed. Use `--seed` or `OAK_AGENT_SEED` manually until a Cursor wrapper surface is designed.                                                                                                    |
 
-A follow-up Claude Code agent review must verify the Claude
-`update-config`/statusline path and confirm the Codex/Cursor rows still
-match the available host surfaces before platform wrapper installation.
+### Claude Code statusline wiring
+
+The Claude Code statusline runs once per session at startup and on subsequent
+prompt-submit events. The harness pipes a JSON object on stdin containing
+`session_id` (and other fields the adapter ignores). The wiring is:
+
+1. `.claude/settings.json` declares
+   `"statusLine": { "type": "command", "command": "node .claude/scripts/statusline-identity.mjs" }`.
+2. `.claude/scripts/statusline-identity.mjs` is a thin shim that resolves the
+   built adapter path under `agent-tools/dist/src/claude/`. If the build
+   artefact is missing it exits 0 silently rather than disrupting the session.
+3. `agent-tools/dist/src/claude/statusline-identity.js` (built from
+   `agent-tools/src/claude/statusline-identity.ts`) parses the stdin JSON,
+   extracts `session_id`, and synchronously invokes the built
+   `agent-identity` CLI (via `spawnSync`) with
+   `--seed <session_id> --format display`.
+4. The CLI prints the deterministic name to stdout, which Claude Code renders
+   in the statusline.
+
+The adapter is a soft surface: missing input, missing build artefact,
+unparseable JSON, or any spawn failure exits 0 with empty stdout. The
+`OAK_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when the
+operator sets it.
 
 Session-id seeds produce deterministic session display identities. Persistent
 PDR-027 identity across sessions requires a deliberately persistent seed or an

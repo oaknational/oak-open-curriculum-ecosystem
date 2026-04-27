@@ -1,6 +1,31 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-26 (Codex / codex / GPT-5 — implemented the
+**Last refreshed**: 2026-04-27 (Riverine Navigating Hull / claude-code /
+claude-opus-4-7-1m — executed Phase 8 (Claude Code platform alignment
+review) of `agent-identity-derivation.plan.md`. Reviewed the deterministic
+identity implementation, PDR-027 amendment, start-right updates, and platform
+status table; verified Claude Code's statusline contract via the official
+docs; wired the Claude statusline through `.claude/settings.json` →
+`.claude/scripts/statusline-identity.mjs` → built
+`agent-tools/dist/src/claude/statusline-identity.js` adapter (the adapter
+itself plus its unit-tested input parser landed in `3a5e3d81`).
+End-to-end smoke test confirmed: real session-id JSON on stdin produces the
+deterministic display name; missing/invalid input exits 0 silently.
+Plan Phase 8 marked complete; agent-identity plan moved to status
+🟢 COMPLETE; Codex/Cursor wrapper rows remain documented gaps. Active
+claim `6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df` covers this work and will be
+closed before the commit window closes.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — completed
+requested `jc-session-handoff` plus `jc-consolidate-docs` after the
+deterministic identity pass. Identity implementation landed as
+`3a5e3d81` with commit-window closeout `ed256e6f`; this handoff opened
+an explicit collaboration-doc fitness remediation lane for the remaining
+hard practice-fitness findings. Active claim
+`dd837ddf-d373-40a3-ad6b-450f7becf91d` covers this closeout and will be
+closed before handoff completes.)
+
+**Prior refresh**: 2026-04-26 (Codex / codex / GPT-5 — implemented the
 owner-approved deterministic agent identity pass after preserving the
 coordination consolidation as separate history. Added `agent-tools`
 core `deriveIdentity(seed, options?)`, built `agent-identity` CLI,
@@ -243,7 +268,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation` | 2026-04-24 | 2026-04-26 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation; identity-session-handoff-consolidation` | 2026-04-24 | 2026-04-26 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
 | `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff` | 2026-04-26 | 2026-04-26 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
@@ -251,6 +276,7 @@ and
 | `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
 | `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `chunked-commit-stewardship-under-active-claim-4535f2ff; commit-window-protocol-self-application; consolidation-graduation-pass-7be10d3b-7-doctrine-entries-graduated-cb358e8d-local-push-deferred-on-parallel-track-lint-coupling` | 2026-04-26 | 2026-04-26 |
+| `Riverine Navigating Hull` | `claude-code` | `claude-opus-4-7-1m` | `c32a7d1d` | `agent-identity-derivation-phase-8-claude-code-platform-alignment-review-and-statusline-wiring` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -511,16 +537,23 @@ nl -ba .agent/directives/AGENT.md
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
   `293742cd`. WS3 is split: WS3A is complete and archived, WS3B sidebar /
-  escalation gate is satisfied, WS4A lifecycle integration is complete, and
-  WS5 remains owner-gated.
+  escalation is implemented, WS4A lifecycle integration is complete, and WS5
+  remains observation/harvest work.
 - Completed split plan:
   [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   — WS3A evidence provision, protocol observability, durable claim-closure
   history, and lightweight decision threads.
-- Gate-satisfied sibling plan:
+- Implemented sibling plan:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
-  — WS3B sidebar, timeout, and owner-escalation mechanics; promotion gate
-  satisfied, implementation not started.
+  — WS3B sidebar, timeout, owner-escalation, and joint-decision mechanics.
+- Completed identity plan:
+  [`agent-identity-derivation.plan.md`](../../../plans/architecture-and-infrastructure/archive/completed/agent-identity-derivation.plan.md)
+  — repo-owned core/CLI/docs landed in `3a5e3d81`+`ed256e6f`; Phase 8
+  Claude Code statusline wiring landed in this session; archived 2026-04-27.
+- Fitness remediation:
+  [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md)
+  — queued strict-hard remediation for collaboration directive/state
+  conventions.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -530,9 +563,9 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-**WS4A lifecycle integration, plan-state cleanup, commit-window refinement,
-and same-branch friction capture are complete in the working tree (refreshed
-2026-04-26).**
+**WS4A lifecycle integration, coordination consolidation, deterministic
+identity, and closeout/consolidation state refresh are complete in the working
+tree (refreshed 2026-04-26).**
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -573,33 +606,36 @@ validation.
   fixtures, start-right, session-handoff, consolidate-docs,
   collaboration rules, directives, channel card, state README, and state
   conventions.
+- Deterministic identity is implemented in `agent-tools` with a built
+  `agent-identity` CLI, tests, docs, PDR-027 amendment, start-right guidance,
+  and platform-wrapper status table. Phase 8 Claude Code platform alignment
+  review is complete: `.claude/settings.json` →
+  `.claude/scripts/statusline-identity.mjs` →
+  `agent-tools/dist/src/claude/statusline-identity.js` is live; the platform
+  status table marks Claude Code as **Wired**; Codex/Cursor remain
+  documented gaps awaiting stable platform session-id surfaces.
+- The requested `jc-session-handoff` plus `jc-consolidate-docs` pass opened
+  an explicit collaboration-doc fitness remediation lane for the remaining
+  hard practice-fitness findings.
 - The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - `repo-continuity.md` has been compacted from an overgrown historical surface
   into a live-state index; the pre-compaction body is archived at
   `../archive/repo-continuity-session-history-2026-04-26.md`.
-- `distilled.md` intentionally exceeds its hard line limit after the
-  learning-first distillation. This is the correct fitness signal; do not
-  undo the learning. The next structural response is an explicit lane or
-  owner-approved deferral to bring `distilled.md` below hard by graduating,
-  pruning, or splitting without deleting signal.
-- Active claim `e3ea9c06-f985-4fd4-b920-aa0c8e4f0e71` closed explicitly
-  into the closed-claims archive.
 - The owner-requested Practice-integration / lifecycle-automation
   exploration has been implemented as the narrow WS4A lifecycle pass; no
   automation hooks were started.
-- Reviewer closeout for this cleanup used `docs-adr-reviewer` and
-  `assumptions-reviewer`; actionable findings were absorbed into the parent
-  plan, roadmap, reviewer guidance, Practice Core, and agent-collaboration
-  directive.
 
 ### Blockers / Low-Confidence Areas
 
 - Full branch gates are not claimed green; current repo state includes separate
-  MCP/SDK TypeScript debt outside WS3A.
-- Deep consolidation is due: hard `distilled.md` fitness pressure remains, and
-  the napkin contains fired / sharpened promotion triggers that need
-  deliberate convergence.
+  MCP/SDK TypeScript debt outside the completed practice-thread passes.
+- Practice fitness still reports hard pressure in `agent-collaboration.md`
+  and `collaboration-state-conventions.md`; the remediation lane above is the
+  concrete disposition.
+- The strict `--exactOptionalPropertyTypes` probe is clean for identity files
+  but still reports the pre-existing optional typing issue in
+  `agent-tools/src/bin/codex-reviewer-resolve.ts`.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
@@ -612,31 +648,37 @@ validation.
 
 ### Next Safe Step
 
-**No WS3A, WS4A, commit-window, WS3B sidebar/escalation, or
-joint-decision implementation remains open for Codex. Continue to treat
-same-branch coordination as the live experiment: claims, sidebars, joint
-decisions, and escalations should make friction visible rather than hiding
-it.**
+**No WS3A, WS4A, commit-window, WS3B sidebar/escalation, joint-decision,
+deterministic-identity core, or Phase 8 Claude Code statusline wiring
+remains open. Continue to treat same-branch coordination as the live
+experiment: claims, sidebars, joint decisions, and escalations should make
+friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **First real sidebar / joint-decision seed** — when a real overlap uses
+1. **Collaboration-doc fitness remediation** — execute
+   `collaboration-doc-fitness-remediation.plan.md` to clear strict-hard
+   pressure without deleting protocol signal.
+2. **Strict exact-optional cleanup** — fix the pre-existing
+   `codex-reviewer-resolve.ts` optional typing issue.
+3. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-2. **Consolidation pass** — run `jc-consolidate-docs` deliberately for the
-   due hard-fitness / pattern-promotion / phase-transition convergence work.
-   Do this as thread-scoped convergence, not as a hidden handoff add-on.
-3. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+4. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-4. **Observability branch-primary** — read the
+5. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-5. **Lifecycle integration follow-up** — only if owner-directed, observe
+6. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether the new start-right / handoff / template lifecycle triggers are
    actually used in the next few sessions. Do not add hooks without evidence;
    first real sidebar/joint-decision usage should feed WS5 observation.
-6. **Other agentic engineering work** — pick an owner-directed queued plan.
+7. **Codex/Cursor identity wrapper follow-up** — when a stable Codex or
+   Cursor session-id surface is identified (or owner approves a substitute
+   seed), wire the analogous statusline/identity adapters and update the
+   platform-status table.
+8. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links

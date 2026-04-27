@@ -56,6 +56,7 @@ Roadmap:
 
 | Plan | Status | Description |
 |------|--------|-------------|
+| [`agent-identity-derivation.plan.md`](archive/completed/agent-identity-derivation.plan.md) | ✅ Complete | Portable deterministic agent-identity CLI in `agent-tools/`; Claude Code statusline wiring landed Phase 8. Archived 2026-04-27. |
 | [`merge-main-pr76-into-otel-enhancements.plan.md`](archive/completed/merge-main-pr76-into-otel-enhancements.plan.md) | ✅ Complete | Merge main (PR #76, #78, releases 1.3.0-1.5.0) into otel branch. ADR-158 renumbering. Archived 2026-04-11. |
 | [`ci-consolidation-and-gate-parity.plan.md`](archive/completed/ci-consolidation-and-gate-parity.plan.md) | ✅ Complete | CI consolidation, ESLint rule, widget deletion, documentation. Archived after completion. |
 

@@ -5,7 +5,7 @@
   "type": "module",
   "description": "TypeScript tooling workspace for agent operational CLIs",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && chmod +x dist/src/bin/*.js",
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/src/bin/*.js dist/src/claude/statusline-identity.js",
     "clean": "rm -rf dist .turbo",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

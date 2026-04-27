@@ -42,7 +42,11 @@ const config: KnipConfig = {
       project: ['scripts/**/*.{ts,mjs}'],
     },
     'agent-tools': {
-      entry: ['src/bin/**/*.ts'],
+      // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
+      // entry points: the built JS is invoked via spawn from the platform's
+      // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
+      // knip cannot trace as a TS import.
+      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts'],
       project: ['src/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {

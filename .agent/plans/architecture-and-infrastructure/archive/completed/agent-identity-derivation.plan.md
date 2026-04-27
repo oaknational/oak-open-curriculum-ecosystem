@@ -36,14 +36,14 @@ todos:
     content: "Phase 7: README + TSDoc on the public surface; PDR amendment to PDR-027 documenting the derivation default with override semantics; update register-identity-on-thread-join rule to reference the tool."
     status: completed
   - id: phase-8-claude-platform-review
-    content: "Phase 8: Claude agent reviews the completed work for Claude Code system alignment and cross-platform wrapper accuracy across Claude, Codex, Cursor, and any other active agent platform."
-    status: pending
+    content: "Phase 8: Claude agent reviews the completed work for Claude Code system alignment and cross-platform wrapper accuracy across Claude, Codex, Cursor, and any other active agent platform. Wired Claude Code statusline through .claude/scripts/statusline-identity.mjs delegating to agent-tools/dist/src/claude/statusline-identity.js; no Claude-only mismatch found."
+    status: completed
 ---
 
 # Agent Identity Derivation Tool
 
-**Last Updated**: 2026-04-26
-**Status**: 🟡 ACTIVE — repo-owned core/CLI/docs implementation complete; Claude/platform alignment review pending.
+**Last Updated**: 2026-04-27
+**Status**: 🟢 COMPLETE — repo-owned core/CLI/docs landed in commits `3a5e3d81` + `ed256e6f`; Phase 8 Claude Code statusline wiring landed in this pass; Codex/Cursor remain documented gaps until those platforms expose stable session-id surfaces.
 **Owner**: Jim
 **Author of plan**: Ethereal Alpaca (claude-code, claude-opus-4-7-1m), 2026-04-26
 **Parent**: cross-platform agent collaboration infrastructure (PDR-027 supplement).
@@ -98,6 +98,18 @@ the established home for portable agent CLIs.
     `IdentityResult`.
   - `hash.ts` — small wrapper around `node:crypto.createHash('sha256')`
     that returns typed slices of the digest as 32-bit unsigned integers.
+- **Platform adapters**: `agent-tools/src/<platform>/` (added in Phase 8).
+  - `src/claude/statusline-identity-input.ts` — pure stdin-JSON parser
+    returning a discriminated `StatuslinePlan` (unit-tested).
+  - `src/claude/statusline-identity.ts` — Claude Code statusline adapter;
+    parses stdin via the input parser and `spawnSync`s the built
+    `agent-identity` CLI with `--seed <session_id> --format display`.
+    Soft surface: any failure exits 0 with empty stdout.
+  - Future Codex / Cursor adapters will live in symmetric `src/codex/`
+    and `src/cursor/` directories when stable platform session-id
+    surfaces are designed. Platform adapters depend on `src/core/` and
+    spawn `src/bin/` artefacts; `src/core/` must never import from a
+    platform adapter (boundary discipline per ADR-024).
 
 ### Public surface
 
@@ -311,9 +323,15 @@ and `agent-identity` as the bin name. This gate is closed.
 
 ### Phase 4 — Claude Code statusline wrapper status
 
-**Decision**: defer installation to a Claude Code session that has the
-`update-config` skill available. This implementation pass documents the
+**Decision** (Codex pass): defer installation to a Claude Code session that
+has the `update-config` skill available. This implementation pass documents the
 status and next action only.
+
+**Decision (Phase 8 update)**: the Claude Code statusline wiring landed in
+this pass without using `update-config`. `.claude/settings.json` already
+supports a `statusLine.command` field; nothing in `update-config` was required
+beyond a direct edit of that file plus a thin `.claude/scripts/` shim. See
+Phase 8 for the wiring detail.
 
 **Acceptance**:
 
@@ -413,6 +431,32 @@ this repository.
   Codex pass unless the Claude session explicitly performs it with the
   right platform capability.
 
+**Phase 8 findings (Claude Code session, 2026-04-27)**:
+
+- The Claude Code statusline contract is a JSON object on stdin containing
+  `session_id` (and other fields). Documented at
+  <https://docs.claude.com/en/docs/claude-code/statusline>; `update-config`
+  was not required — `.claude/settings.json` already exposes the
+  `statusLine.command` field for direct edit.
+- Wiring landed:
+  - `.claude/settings.json` → `node .claude/scripts/statusline-identity.mjs`.
+  - `.claude/scripts/statusline-identity.mjs` (new) — graceful-degradation
+    shim that resolves the built adapter and exits 0 silently when the build
+    artefact is missing.
+  - `agent-tools/src/claude/statusline-identity.ts` (already landed in
+    commit `3a5e3d81`) — pure-input parser plus child-process spawn of the
+    built `agent-identity` CLI.
+  - `agent-tools/package.json` `build` script chmods the built adapter.
+  - Unit tests at `agent-tools/tests/claude/statusline-identity-input.unit.test.ts`
+    cover the soft-surface parsing rules.
+- Smoke test confirmed end-to-end behaviour: a real Claude Code session id
+  on stdin produces the deterministic display name; missing/invalid input
+  exits 0 silently.
+- Cross-platform matrix: Claude Code is now **Wired**; Codex and Cursor
+  remain documented gaps. No platform regression introduced.
+- No Claude-only config drift detected: the existing settings.json
+  permissions, hooks, and enabled plugins are all unchanged.
+
 ---
 
 ## Testing Strategy
@@ -503,8 +547,9 @@ render the identity in its host surface within a fresh session.
 
 - PDR-027 (Threads, Sessions, and Agent Identity) — amended in Phase 7.
 - `register-identity-on-thread-join` rule — referenced from Phase 6.
-- `update-config` skill — deferred Claude Code follow-up for statusline
-  wiring, not used by this Codex implementation session.
+- `update-config` skill — Phase 8 confirmed not required; the Claude Code
+  statusline wiring landed via direct `.claude/settings.json` edit plus a
+  `.claude/scripts/` shim.
 - Memory: feedback "Platform-independent shared concerns" — this plan
   is the worked example.
 
@@ -546,6 +591,13 @@ render the identity in its host surface within a fresh session.
   - `security-reviewer` after Phase 4 (statusline wrapper — does it
     leak the seed to logs? Is the `OAK_AGENT_IDENTITY_OVERRIDE` env
     var safe to be visible in process listings? trade-offs).
+    **Disposition (Phase 8, 2026-04-27)**: deferred without dispatch.
+    Threat model is developer-local: `session_id` seeds are non-secret
+    rotating tokens that the harness already exposes via stdin; the
+    `--seed <session_id>` argument appearing in `ps` listings on a
+    single-developer machine is acceptable. `OAK_AGENT_IDENTITY_OVERRIDE`
+    is documented and operator-set. Re-open if/when the tool moves to a
+    shared-tenant environment.
 - **Post (Phase 7)**:
   - `docs-adr-reviewer` — PDR-027 amendment quality.
   - `release-readiness-reviewer` — explicit GO/NO-GO before merging

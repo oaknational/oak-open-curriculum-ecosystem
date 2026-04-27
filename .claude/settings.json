@@ -156,5 +156,9 @@
     "sonarqube@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node .claude/scripts/statusline-identity.mjs"
   }
 }
