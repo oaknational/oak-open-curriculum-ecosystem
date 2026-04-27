@@ -34,8 +34,8 @@ require_command() {
     return 0
   fi
 
-  echo "Error: required command '${command_name}' is not installed."
-  echo "Install instructions: ${install_url}"
+  echo "Error: required command '${command_name}' is not installed." >&2
+  echo "Install instructions: ${install_url}" >&2
   exit 1
 }
 
@@ -50,13 +50,15 @@ require_command "npm" "https://docs.npmjs.com/downloading-and-installing-node-js
 HEALTHZ_URL="http://localhost:${MCP_SERVER_PORT}/healthz"
 echo "Checking MCP server at ${HEALTHZ_URL}..."
 if ! curl -sf --max-time 3 "${HEALTHZ_URL}" >/dev/null 2>&1; then
-  echo ""
-  echo "Error: No MCP server responding on port ${MCP_SERVER_PORT}."
-  echo ""
-  echo "Start the server first in a separate terminal:"
-  echo "  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth"
-  echo ""
-  echo "Then re-run this script."
+  {
+    echo ""
+    echo "Error: No MCP server responding on port ${MCP_SERVER_PORT}."
+    echo ""
+    echo "Start the server first in a separate terminal:"
+    echo "  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth"
+    echo ""
+    echo "Then re-run this script."
+  } >&2
   exit 1
 fi
 echo "MCP server is running."

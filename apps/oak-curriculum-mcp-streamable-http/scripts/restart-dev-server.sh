@@ -19,10 +19,10 @@ PORT=${PORT:-3333}
 MODE=${1:-dev}
 
 if ! command -v lsof >/dev/null 2>&1; then
-  echo "❌ ERROR: required command 'lsof' is not installed."
-  echo "   macOS: lsof is usually pre-installed."
-  echo "   Linux (Debian/Ubuntu): sudo apt install lsof"
-  echo "   Source/build instructions: https://github.com/lsof-org/lsof"
+  echo "❌ ERROR: required command 'lsof' is not installed." >&2
+  echo "   macOS: lsof is usually pre-installed." >&2
+  echo "   Linux (Debian/Ubuntu): sudo apt install lsof" >&2
+  echo "   Source/build instructions: https://github.com/lsof-org/lsof" >&2
   exit 1
 fi
 
@@ -39,9 +39,9 @@ fi
 
 # Verify port is free
 if lsof -i:"$PORT" >/dev/null 2>&1; then
-  echo "❌ ERROR: Failed to free port $PORT"
-  echo "   Please manually kill the process and try again:"
-  echo "   lsof -i:$PORT"
+  echo "❌ ERROR: Failed to free port $PORT" >&2
+  echo "   Please manually kill the process and try again:" >&2
+  echo "   lsof -i:$PORT" >&2
   exit 1
 fi
 
@@ -60,8 +60,8 @@ case "$MODE" in
     pnpm dev:observe:noauth
     ;;
   *)
-    echo "❌ ERROR: Invalid mode '$MODE'"
-    echo "   Usage: $0 [dev|observe|noauth]"
+    echo "❌ ERROR: Invalid mode '$MODE'" >&2
+    echo "   Usage: $0 [dev|observe|noauth]" >&2
     exit 1
     ;;
 esac
