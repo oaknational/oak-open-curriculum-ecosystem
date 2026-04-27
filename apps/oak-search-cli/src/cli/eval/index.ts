@@ -18,7 +18,6 @@
  */
 
 import { Command } from 'commander';
-import type { CliObservability } from '../../observability/index.js';
 import { registerPassThrough, type SearchCliEnvLoader } from '../shared/index.js';
 
 /**
@@ -79,12 +78,7 @@ function createBenchmarkCmd(cliEnvLoader: SearchCliEnvLoader): Command {
  * program.addCommand(evalCommand(cliEnv));
  * ```
  */
-export function evalCommand(
-  cliEnvLoader: SearchCliEnvLoader,
-  observability?: CliObservability,
-): Command {
-  // TODO(observability): thread observability to eval sub-registrations
-  void observability;
+export function evalCommand(cliEnvLoader: SearchCliEnvLoader): Command {
   const cmd = new Command('eval').description(
     'Benchmarks, ground truth validation, and type generation',
   );
