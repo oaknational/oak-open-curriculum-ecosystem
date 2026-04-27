@@ -851,6 +851,7 @@ rehearsal).
 | `Sharded Stroustrup` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `sentry-preview-validation-end-to-end-empirical-closure; test-error-route-shipped; correlation-id-sentry-tag; widget-metadata-fragile-tests-removed; doc-driven-gap-finding-on-sentry-docs; L-IMM-and-L-OPS-lanes-into-maximisation; sentry-immediate-and-pr-87-parallel-execution-split; consolidation-rationalisation-memo` | 2026-04-26 | 2026-04-26 |
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `L-IMM-execution-tier-1-flush-timeout-tier-3a-3b-verifications-tier-3c-ignore-errors-scaffold-tier-3d-marketplace-pending-tier-2-fingerprinting-with-reviewer-dispatch` | 2026-04-26 | 2026-04-26 |
 | `Ethereal Alpaca` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-1-1a-2-execution-semver-dry-noise-redos-critical-sonar; agent-identity-derivation-plan-author; co-tenant-with-frolicking-toast-graduation-pass` | 2026-04-26 | 2026-04-26 |
+| `Pelagic Flowing Dock` | `claude-code` | `claude-opus-4-7-1m` | `compose` | `pr-87-architectural-cluster-plan-author-and-executor; closed-briny-ebbing-lagoon-claim-on-owner-direction; cluster-by-architectural-root-cause-resolution-replaces-per-rule-disposition` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

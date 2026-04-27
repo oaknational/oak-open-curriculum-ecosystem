@@ -1,14 +1,14 @@
 ---
-name: PR #87 Quality Finding Resolution
+name: PR #87 Quality Finding Resolution (SUPERSEDED)
 overview: >
-  Resolve all CodeQL alerts, SonarCloud issues, and Security Hotspots
-  flagged on PR #87 (`feat/otel_sentry_enhancements`) so the
-  SonarCloud Quality Gate, CodeQL combined check, and the CI test
-  job pass. Highest leverage first: a single semver DRY consolidation
-  closes 3 CodeQL alerts plus 2 Sonar hotspots; CRITICAL Sonar
-  correctness bugs land before stylistic batches; rule-policy
-  decisions are surfaced before mechanical sweeps to avoid wasted
-  fixes.
+  SUPERSEDED on 2026-04-27 by
+  `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`.
+  Previous body kept for evidence and history; the per-rule-disposition
+  framing it embedded (ACCEPT/DISABLE table, severity-batch sequencing,
+  "rule-policy decisions surfaced before mechanical sweeps") is rejected
+  by owner direction in favour of cluster-by-architectural-root-cause
+  resolution. The 14 commits dba01e7c..077a3a4c that landed under this
+  plan stay in PR-87 history; only the framing is superseded.
 todos:
   - id: phase-0-foundation
     content: "Phase 0: Foundation + scope decisions (verify rate-limit coverage on OAuth metadata routes; decide on stylistic-rule policy; confirm semver-DRY home; record decisions in plan body)."

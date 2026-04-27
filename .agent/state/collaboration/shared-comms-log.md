@@ -3221,3 +3221,76 @@ of the pushed PR-87 head `e05d3ec7`. Branch is now 8 ahead of origin.
   S6353 ×3, S7785 ×1, S2310 ×1.
 
 Mid-session re-grounding done; reviewers about to be dispatched.
+
+### 2026-04-27T14:05:00Z — `Pelagic Flowing Dock` / `claude-code` / `claude-opus-4-7-1m` / `compose` — PR-87 architectural cluster plan opened; Briny claim closed
+
+Opened claim `d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5` on the
+`observability-sentry-otel` thread to execute the approved plan at
+`/Users/jim/.claude/plans/1-those-were-my-composed-key.md` —
+**PR-87 architectural cleanup by cluster-by-architectural-root-cause
+resolution**, explicitly replacing the previous per-rule-disposition
+framing.
+
+**Owner direction at session-open**:
+
+1. The two unstaged working-tree edits at session-open (auth-routes.ts
+   `export deriveSelfOrigin` removal; universal-tools.integration.test.ts
+   helper consolidation with codegen-emit TODO) and two unstaged comments
+   in `vercel-ignore-production-non-release-build.mjs` at lines 150
+   ("This is too generic, what commands do we use in this script") and
+   188 ("Are we really taking an external runnable command and just
+   running it?") are owner-authored architectural exemplars. They are
+   the lens through which every Sonar/CodeQL signal must be evaluated:
+   *does this finding reveal a missing architectural constraint, or a
+   structural bridge that shouldn't exist?*
+2. Briny Ebbing Lagoon's notes in this thread record are not inherited
+   as guidance. They may be consulted as raw data on which sites are
+   flagged; their framings (ACCEPT/DISABLE tables, per-rule disposition,
+   "out of scope per master plan" labelling) are explicitly rejected.
+3. PR-87 is to be driven green via disciplined architectural fixes that
+   drive holistic quality up. No suppressions, no `multicriteria.ignore`,
+   no per-rule batch sweeps.
+
+**Closed claim**: `331bce87-8d02-4c9b-83ed-e824c17148bb` (Briny Ebbing
+Lagoon) — owner-forced closure recorded in
+`closed-claims.archive.json` with the original claim body normalised
+to the v1.3.0 schema. Briny's 12 commits (`dba01e7c..077a3a4c`) are
+already pushed and remain in PR-87 history; the work product stays.
+Only the framing inheritance is rejected.
+
+**Plan structure**:
+
+- Phase 0 — live re-harvest (Sonar MCP + gh CodeQL alerts + PR
+  comments) to confirm the captured state is still current.
+- Phase 1 — convert the four owner exemplar edits into commits with
+  the right semantic boundary.
+- Cluster A — DI-opacity on route registration (5 CodeQL OPEN
+  `js/missing-rate-limiting`); structural cure via `withRateLimit`
+  curry or `createRateLimitedRoute` factory.
+- Cluster B — generic command-runners (vercel-ignore.mjs `runGitCommand`
+  plus sweep for similar shapes); replace with purpose-specific
+  capabilities (`gitShowFileAtSha`, `gitFetchShallow`).
+- Cluster C — codegen schema-cache write boundary (CodeQL #76, #77);
+  per-site investigation, likely dismiss-with-rationale citing
+  validate-then-cache + ADR-029.
+- Cluster E — throw-non-Error sites (S7763 ×15); per-site classification
+  into Error subclass, Result<T, E> refactor, or third-party contract.
+- Cluster F — `scripts/check-commit-message.sh` hygiene.
+- Cluster D — generated-code duplication (5.4% QG); per-template
+  inefficiency-vs-semantic analysis; owner-authorisation gate for
+  `cpd.exclusions` if generator semantics confirmed.
+
+**Cluster discipline**: re-read `principles.md` at every cluster
+boundary. Trigger words to detect drift (per the napkin's
+`feedback_never_ignore_signals` and the drift-pattern lesson):
+"stylistic", "false-positive", "out of scope", "owner direction needed
+without analysis". If those appear in own output, stop, re-derive at
+the site.
+
+**Co-tenant note**: Briny's claim listed `agent-tools/...` as co-tenant
+pathspecs; my new claim does not. That territory is Riverine's /
+Prismatic's recently-closed scope and is not part of this plan.
+
+Active claims registry was clean of competing claims at open (Briny's
+was the only entry; closed in this same set of edits). No commit-queue
+entries.

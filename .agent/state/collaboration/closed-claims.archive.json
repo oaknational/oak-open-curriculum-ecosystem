@@ -39,7 +39,7 @@
       "claimed_at": "2026-04-25T16:23:27Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan — claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
+      "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan \u2014 claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
       "notes": "Closed at landing commit time. Archived as the founding entry in closed-claims.archive.json so future agents can see what a complete claim lifecycle looks like in real data, not just the schema definition. archived_at recorded below.",
       "archived_at": "2026-04-25",
       "closure": {
@@ -93,7 +93,7 @@
       "claimed_at": "2026-04-25T18:46:15Z",
       "freshness_seconds": 14400,
       "intent": "Pending-graduations promotion pass per owner direction: PDR-029 v2 amendment (tripwire-observability + advisory-not-enforcing); PDR-015 amendment (assumption-challenge / discussion-before-absorption); PDR-018 amendment (plan placement follows ownership); register hygiene; evaluate owner-correction cluster on substance not instance-count.",
-      "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength — three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
+      "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength \u2014 three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
       "archived_at": "2026-04-25",
       "closure": {
         "kind": "explicit",
@@ -1490,27 +1490,27 @@
           {
             "kind": "commit",
             "ref": "e37a5795",
-            "summary": "Chunk 1 — commit-window protocol with git:index/head claims (schemas v1.2.0). 16 files, +275/-74."
+            "summary": "Chunk 1 \u2014 commit-window protocol with git:index/head claims (schemas v1.2.0). 16 files, +275/-74."
           },
           {
             "kind": "commit",
             "ref": "38472766",
-            "summary": "Chunk 2 — commit-window protocol + joint-decision protocol plan updates. 5 files, +58/-44."
+            "summary": "Chunk 2 \u2014 commit-window protocol + joint-decision protocol plan updates. 5 files, +58/-44."
           },
           {
             "kind": "commit",
             "ref": "9925ad59",
-            "summary": "Chunk 3 — learning-first fitness correction across Practice Core + ADR-144. 7 files, +22/-19."
+            "summary": "Chunk 3 \u2014 learning-first fitness correction across Practice Core + ADR-144. 7 files, +22/-19."
           },
           {
             "kind": "commit",
             "ref": "9bd91f81",
-            "summary": "Chunk 4 — pattern-library refresh for commit-window + learning-first. 6 files, +64/-37."
+            "summary": "Chunk 4 \u2014 pattern-library refresh for commit-window + learning-first. 6 files, +64/-37."
           },
           {
             "kind": "commit",
             "ref": "564e284f",
-            "summary": "Chunk 5a — close L-IMM lane fully after owner Marketplace verification. 3 files, +78/-91."
+            "summary": "Chunk 5a \u2014 close L-IMM lane fully after owner Marketplace verification. 3 files, +78/-91."
           },
           {
             "kind": "log_entry",
@@ -1578,12 +1578,12 @@
           {
             "kind": "command_output",
             "ref": "pnpm portability:check 2026-04-26T17:33Z",
-            "summary": "12 canonical commands, 36 canonical skills, 41 canonical rules, 22 reviewer adapters, 43 Cursor triggers, 41 Claude rules, 41 .agents rules, 40 command adapters across 4 platforms — all clean."
+            "summary": "12 canonical commands, 36 canonical skills, 41 canonical rules, 22 reviewer adapters, 43 Cursor triggers, 41 Claude rules, 41 .agents rules, 40 command adapters across 4 platforms \u2014 all clean."
           },
           {
             "kind": "command_output",
             "ref": "grep -rln 'collaboration/log.md' (live paths only)",
-            "summary": "Empty result — no live surface still references the old path."
+            "summary": "Empty result \u2014 no live surface still references the old path."
           }
         ]
       }
@@ -1624,7 +1624,7 @@
           {
             "kind": "commit",
             "ref": "a85b903c",
-            "summary": "docs(plans): add agent-identity-derivation plan and open ethereal-alpaca session — landed on feat/otel_sentry_enhancements."
+            "summary": "docs(plans): add agent-identity-derivation plan and open ethereal-alpaca session \u2014 landed on feat/otel_sentry_enhancements."
           },
           {
             "kind": "log_entry",
@@ -1725,7 +1725,7 @@
           "model": "claude-opus-4-7-1m",
           "session_id_prefix": "unknown"
         },
-        "summary": "Commit 80d9c2c0 landed on second attempt. First attempt blocked by markdownlint MD040 on a fenced code block in Frolicking Toast's earlier shared-comms-log entry; fixed by adding the `text` language tag (small additive edit on a co-tenant additive-append surface). Pre-commit chain (format-check, markdownlint, knip, depcruise, turbo type-check + lint + test across 19 packages) passed cleanly with full turbo cache hit on the second attempt. 19 files changed; 807 insertions; 92 deletions. Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 ×3 + S2871 ×5 + S6571 ×3 + S3776 ×2 on next push.",
+        "summary": "Commit 80d9c2c0 landed on second attempt. First attempt blocked by markdownlint MD040 on a fenced code block in Frolicking Toast's earlier shared-comms-log entry; fixed by adding the `text` language tag (small additive edit on a co-tenant additive-append surface). Pre-commit chain (format-check, markdownlint, knip, depcruise, turbo type-check + lint + test across 19 packages) passed cleanly with full turbo cache hit on the second attempt. 19 files changed; 807 insertions; 92 deletions. Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 \u00d73 + S2871 \u00d75 + S6571 \u00d73 + S3776 \u00d72 on next push.",
         "evidence": [
           {
             "kind": "commit",
@@ -1796,7 +1796,7 @@
           "model": "claude-opus-4-7-1m",
           "session_id_prefix": "unknown"
         },
-        "summary": "Session-end closure. PR-87 Phase 1 + 1A + 2 landed in commits 80d9c2c0 (substantive) + a85b903c (plan) + 7eb8a546 (commit-window record); session execution plan at ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md complete for in-scope phases. Phase 3-6 deferred to a follow-up session per the master plan. Three local commits NOT pushed — owner decides timing. Decision thread closed at conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Active claims registry empty at session close.",
+        "summary": "Session-end closure. PR-87 Phase 1 + 1A + 2 landed in commits 80d9c2c0 (substantive) + a85b903c (plan) + 7eb8a546 (commit-window record); session execution plan at ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md complete for in-scope phases. Phase 3-6 deferred to a follow-up session per the master plan. Three local commits NOT pushed \u2014 owner decides timing. Decision thread closed at conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Active claims registry empty at session close.",
         "evidence": [
           {
             "kind": "commit",
@@ -2260,7 +2260,7 @@
           {
             "kind": "command_output",
             "ref": "code-reviewer; docs-adr-reviewer; architecture-reviewer-fred",
-            "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan §Solution Architecture; update-config wording retired in §Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
+            "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan \u00a7Solution Architecture; update-config wording retired in \u00a7Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
           }
         ]
       }
@@ -2286,7 +2286,7 @@
       "freshness_seconds": 900,
       "sidebar_open": false,
       "intent": "Stage and commit the Phase 8 substantive bundle for agent-identity-derivation: Claude Code statusline shim, agent-tools src/claude/ adapter pair (untracked from prior Codex pass), package.json chmod, .claude/settings.json statusLine, agent-identity.md platform-status update, plan archive move + active/parent README updates, and thread next-session record refresh. State-file closeout (active-claims.json + closed-claims.archive.json + shared-comms-log.md) follows in a separate close-the-window commit per the 3a5e3d81 + ed256e6f pattern.",
-      "notes": "Pathspecs: .claude/scripts/statusline-identity.mjs, .claude/settings.json, agent-tools/src/claude/**, agent-tools/tests/claude/**, agent-tools/package.json, agent-tools/docs/agent-identity.md, plan move, parent + active READMEs, thread next-session record, plus knip.config.ts (added during commit-window iteration after pre-commit hook surfaced unused-export findings). Gates green: agent-tools build/type-check/lint/test/test:e2e, root format, markdownlint, knip, portability:check, full pre-commit pipeline. Peer claim: Vining Bending Root (9c7f4e51) on observability-sentry-otel — disjoint pathspec, mutually acknowledged.",
+      "notes": "Pathspecs: .claude/scripts/statusline-identity.mjs, .claude/settings.json, agent-tools/src/claude/**, agent-tools/tests/claude/**, agent-tools/package.json, agent-tools/docs/agent-identity.md, plan move, parent + active READMEs, thread next-session record, plus knip.config.ts (added during commit-window iteration after pre-commit hook surfaced unused-export findings). Gates green: agent-tools build/type-check/lint/test/test:e2e, root format, markdownlint, knip, portability:check, full pre-commit pipeline. Peer claim: Vining Bending Root (9c7f4e51) on observability-sentry-otel \u2014 disjoint pathspec, mutually acknowledged.",
       "archived_at": "2026-04-27",
       "closure": {
         "kind": "explicit",
@@ -2307,7 +2307,7 @@
           {
             "kind": "command_output",
             "ref": "git log --oneline -3",
-            "summary": "25d7c271, ed256e6f, 3a5e3d81 — substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
+            "summary": "25d7c271, ed256e6f, 3a5e3d81 \u2014 substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
           }
         ]
       }
@@ -3321,6 +3321,83 @@
             "kind": "queue",
             "ref": "26eca1a9-6725-4dff-a307-f66a51089ce2",
             "summary": "Queue entry reached pre_commit, verified staged bundle fingerprint 6ef3c9fc6bd6a5a76c8dda5274fd53858ed9985f1ccbd33fbd2ce1586c3e5fd1, and was completed after commit."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "331bce87-8d02-4c9b-83ed-e824c17148bb",
+      "agent_id": {
+        "agent_name": "Briny Ebbing Lagoon",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d1911d"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "sonar-project.properties",
+            "packages/core/build-metadata/src/**",
+            "packages/core/build-metadata/tests/**",
+            "packages/sdks/oak-search-sdk/src/retrieval/query-processing/**",
+            "packages/libs/sentry-node/src/**",
+            "packages/core/type-helpers/src/**",
+            "packages/core/observability/src/**",
+            "packages/core/oak-eslint/src/**",
+            "packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/**",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
+            "apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh",
+            "apps/oak-curriculum-mcp-streamable-http/scripts/server-harness.js",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-error/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/correlation/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/runtime-config-support.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
+            "apps/oak-search-cli/src/runtime-config-support.ts",
+            "apps/oak-search-cli/src/runtime-config.ts",
+            "scripts/validate-root-application-version.mjs",
+            "scripts/validate-practice-fitness.mjs",
+            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T10:18:00Z",
+      "freshness_seconds": 27720,
+      "intent": "PR-87 quality remediation under corrected disposition table \u2014 revert 03a58787; per-site Sonar work; Sonar Hotspot review; CodeQL #62/#63 polynomial-redos fix in remove-noise-phrases.ts",
+      "notes": "Claim restored to active-claims by owner commit 8cd49fe1 after the previous session's close attempt left the registry empty. Owner has now directed (2026-04-27T~14:00Z, plan approval session) that this claim be closed: the previous-session disposition framework is being superseded by a cluster-by-architectural-root-cause approach in /Users/jim/.claude/plans/1-those-were-my-composed-key.md. Co-tenant pathspecs (agent-tools/...) are not migrated to the closure record; that territory is not in the new claim's scope.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-04-27T14:05:00Z",
+        "closed_by": {
+          "agent_name": "Pelagic Flowing Dock",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "compose"
+        },
+        "summary": "Owner-directed close at plan-approval session: previous session's per-rule disposition framework superseded by architectural cluster plan. Briny's 12 commits (dba01e7c..077a3a4c) are pushed and remain in PR-87 history; the work product stays. Only the framing inheritance is rejected.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": "/Users/jim/.claude/plans/1-those-were-my-composed-key.md",
+            "summary": "Approved replacement plan: cluster-by-architectural-root-cause resolution of PR-87."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            "summary": "Briny's full session-close record at the head of the file documents the 12 commits and the metacognitive correction that the cluster plan addresses."
+          },
+          {
+            "kind": "commit",
+            "ref": "dba01e7c",
+            "summary": "Revert of 03a58787 multicriteria suppression \u2014 the named principle violation that prompted the metacognitive correction."
+          },
+          {
+            "kind": "commit",
+            "ref": "8cd49fe1",
+            "summary": "Owner commit that restored Briny's claim to active-claims so this closure could be performed against the live record."
           }
         ]
       }

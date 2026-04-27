@@ -3,47 +3,42 @@
   "commit_queue": [],
   "claims": [
     {
-      "claim_id": "331bce87-8d02-4c9b-83ed-e824c17148bb",
-      "agent_id": "Briny Ebbing Lagoon",
-      "agent_platform": "claude-code",
-      "agent_model": "claude-opus-4-7-1m",
-      "session_id": "d1911d0a-1e9d-45aa-a867-24dae4920920",
+      "claim_id": "d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5",
+      "agent_id": {
+        "agent_name": "Pelagic Flowing Dock",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "compose"
+      },
       "thread": "observability-sentry-otel",
-      "started_at": "2026-04-27T10:18:00Z",
-      "expires_at": "2026-04-27T18:00:00Z",
-      "intent": "PR-87 quality remediation under corrected disposition table — revert 03a58787; per-site Sonar work; Sonar Hotspot review; CodeQL #62/#63 polynomial-redos fix in remove-noise-phrases.ts",
-      "pathspecs": [
-        "sonar-project.properties",
-        "packages/core/build-metadata/src/**",
-        "packages/core/build-metadata/tests/**",
-        "packages/sdks/oak-search-sdk/src/retrieval/query-processing/**",
-        "packages/libs/sentry-node/src/**",
-        "packages/core/type-helpers/src/**",
-        "packages/core/observability/src/**",
-        "packages/core/oak-eslint/src/**",
-        "packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/**",
-        "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/probe-sentry-error-capture.sh",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/server-harness.js",
-        "apps/oak-curriculum-mcp-streamable-http/src/test-error/**",
-        "apps/oak-curriculum-mcp-streamable-http/src/correlation/**",
-        "apps/oak-curriculum-mcp-streamable-http/src/runtime-config-support.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts",
-        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
-        "apps/oak-search-cli/src/runtime-config-support.ts",
-        "apps/oak-search-cli/src/runtime-config.ts",
-        "scripts/validate-root-application-version.mjs",
-        "scripts/validate-practice-fitness.mjs",
-        ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+            ".agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md"
+          ]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/**",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.integration.test.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts",
+            "scripts/check-commit-message.sh",
+            "sonar-project.properties",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
       ],
-      "co_tenant_pathspecs": [
-        "agent-tools/src/core/agent-identity/derive.ts",
-        "agent-tools/src/core/health-probe-continuity-state.ts",
-        "agent-tools/src/commit-queue/**",
-        "agent-tools/src/bin/commit-queue.ts",
-        "agent-tools/tests/agent-identity/**"
-      ],
-      "co_tenant_note": "Will edit files in agent-tools to address Sonar findings on Riverine's/Prismatic's recently-closed claim territory. Active claims registry was empty at session-open. Will check shared-comms-log before each edit; will not block parallel agents who pick up agent-tools work — in that case I drop those files from scope and surface for coordination."
+      "claimed_at": "2026-04-27T14:05:00Z",
+      "freshness_seconds": 14400,
+      "intent": "PR-87 architectural cleanup per /Users/jim/.claude/plans/1-those-were-my-composed-key.md — cluster-by-architectural-root-cause resolution. Phase 0 live re-harvest, Phase 1 owner exemplar edits, then Clusters A (DI-opacity rate-limiting), B (generic command runner → capabilities), C (schema-cache boundary), E (throw-non-Error per-site), F (bash hygiene), D (generated-code duplication). No suppressions; no per-rule sweeps.",
+      "notes": "Approved plan supersedes the Briny Ebbing Lagoon claim 331bce87 which is being closed in this session per owner direction. Pathspecs broaden as clusters open; will re-narrow at session-handoff. Plan file approved at /Users/jim/.claude/plans/1-those-were-my-composed-key.md."
     }
   ]
 }
