@@ -17,6 +17,8 @@ export type { AgentIdentityFormat } from './agent-identity-cli-parser.js';
 export interface AgentIdentityCliEnvironment {
   /** Claude Code session id, when exposed by the harness. */
   readonly CLAUDE_SESSION_ID?: string;
+  /** Codex thread id, when exposed by the harness. */
+  readonly CODEX_THREAD_ID?: string;
   /** Cross-platform explicit agent seed override. */
   readonly OAK_AGENT_SEED?: string;
   /** Operator-provided display-name override. */
@@ -50,7 +52,7 @@ export interface AgentIdentityCliResult {
  */
 export const HELP_TEXT = `Usage: agent-identity [--seed <seed>] [--format <kebab|display|json>] [--help]
 
-  --seed <seed>       Stable seed. If omitted, uses $CLAUDE_SESSION_ID, then $OAK_AGENT_SEED.
+  --seed <seed>       Stable seed. If omitted, uses $CLAUDE_SESSION_ID, $CODEX_THREAD_ID, then $OAK_AGENT_SEED.
   --format <fmt>      Output format. kebab (default) | display | json.
   --help              Print help and exit 0.
 
@@ -104,12 +106,14 @@ function resolveSeed(seed: string | undefined, env: AgentIdentityCliEnvironment)
   const resolvedSeed =
     nonEmptyEnvironmentValue(seed) ??
     nonEmptyEnvironmentValue(env.CLAUDE_SESSION_ID) ??
+    nonEmptyEnvironmentValue(env.CODEX_THREAD_ID) ??
     nonEmptyEnvironmentValue(env.OAK_AGENT_SEED);
 
   if (resolvedSeed === undefined) {
     return {
       kind: 'error',
-      message: 'missing seed; pass --seed or set CLAUDE_SESSION_ID or OAK_AGENT_SEED',
+      message:
+        'missing seed; pass --seed or set CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED',
     };
   }
 

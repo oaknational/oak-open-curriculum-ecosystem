@@ -52,15 +52,29 @@ describe('agent-identity built CLI', () => {
   });
 
   it('reports bad usage through the built bin', () => {
-    const result = spawnSync(builtCliPath, [], {
+    const result = spawnSync(process.execPath, [builtCliPath], {
       cwd: repoRoot,
       encoding: 'utf8',
+      env: {},
     });
 
     expect(result.status).toBe(2);
     expect(result.stderr).toBe(
-      'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID or OAK_AGENT_SEED\n',
+      'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED\n',
     );
+  });
+
+  it('uses CODEX_THREAD_ID through the built bin', () => {
+    const result = spawnSync(process.execPath, [builtCliPath, '--format', 'display'], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      env: {
+        CODEX_THREAD_ID: '019dcd65-4f59-73d3-9ac5-d988b40e6696',
+      },
+    });
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toBe('Celestial Waxing Eclipse\n');
   });
 
   it('honours override through plain Node', () => {

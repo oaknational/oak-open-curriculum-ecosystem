@@ -23,10 +23,10 @@ node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --
 ```
 
 If `--seed` is omitted, the CLI reads `CLAUDE_SESSION_ID`, then
-`OAK_AGENT_SEED`. If neither is set, it exits with code `2`. There is no
-personal-email fallback; hashing `git config user.email` would silently use a
-personal identifier and could collapse concurrent same-machine agents into one
-identity.
+`CODEX_THREAD_ID`, then `OAK_AGENT_SEED`. If none is set, it exits with code
+`2`. There is no personal-email fallback; hashing `git config user.email` would
+silently use a personal identifier and could collapse concurrent same-machine
+agents into one identity.
 
 ## Output
 
@@ -55,7 +55,7 @@ not invent derived word slots.
 | Platform    | Status         | Wiring / next action                                                                                                                                                                                                                                          |
 | ----------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Claude Code | Wired          | `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs`, which delegates to the built adapter `agent-tools/dist/src/claude/statusline-identity.js`. The adapter parses the harness's stdin JSON `session_id` and prints the display name. |
-| Codex       | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed. Use `--seed` or `OAK_AGENT_SEED` manually until a Codex wrapper surface is designed.                                                                                                     |
+| Codex       | Seed wired     | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it automatically when `--seed` and `CLAUDE_SESSION_ID` are absent.                                                                                                                  |
 | Cursor      | Gap documented | No repo-owned automatic session-stable wrapper surface is confirmed. Use `--seed` or `OAK_AGENT_SEED` manually until a Cursor wrapper surface is designed.                                                                                                    |
 
 ### Claude Code statusline wiring
@@ -85,3 +85,17 @@ operator sets it.
 Session-id seeds produce deterministic session display identities. Persistent
 PDR-027 identity across sessions requires a deliberately persistent seed or an
 explicit owner/operator override.
+
+### Codex thread-id wiring
+
+Codex exposes the active thread id to shell commands as `CODEX_THREAD_ID`.
+For this platform, running the built CLI without `--seed` is sufficient when
+that environment variable is present:
+
+```bash
+node agent-tools/dist/src/bin/agent-identity.js --format display
+```
+
+The current seed precedence keeps explicit and platform-specific sources
+predictable: `--seed`, then `CLAUDE_SESSION_ID`, then `CODEX_THREAD_ID`, then
+`OAK_AGENT_SEED`.

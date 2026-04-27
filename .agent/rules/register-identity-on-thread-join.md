@@ -24,14 +24,14 @@ When no owner-assigned `agent_name` is already available, derive a
 descriptive default with the portable agent-tools CLI:
 
 ```bash
-pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display
+pnpm agent-tools:agent-identity --format display
 ```
 
-Use a real harness session id where the platform exposes one. If the
-platform does not expose a stable session seed, set `OAK_AGENT_SEED`
-explicitly for the session or ask the owner for an override. Do **not**
-fall back to `git config user.email`; personal-email fallback is intentionally
-not part of the identity contract.
+Use the platform-provided seed when available (`CLAUDE_SESSION_ID` or
+`CODEX_THREAD_ID`). If the platform does not expose a stable session seed,
+pass `--seed`, set `OAK_AGENT_SEED` explicitly for the session, or ask the
+owner for an override. Do **not** fall back to `git config user.email`;
+personal-email fallback is intentionally not part of the identity contract.
 
 `OAK_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for
 memorable owner-assigned names. Derived names from session-id seeds are

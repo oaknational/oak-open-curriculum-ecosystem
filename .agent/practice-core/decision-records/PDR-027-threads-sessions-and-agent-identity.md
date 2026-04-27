@@ -27,6 +27,13 @@ rather than passive guidance).
 
 ## Amendment Log
 
+- **2026-04-27 — Codex thread id accepted as a seed source.**
+  Codex shell commands expose the active thread id as `CODEX_THREAD_ID`.
+  The deterministic identity CLI now reads that value after
+  `CLAUDE_SESSION_ID` and before `OAK_AGENT_SEED`, allowing Codex sessions
+  to derive their session display name without owner-supplied manual seed
+  entry.
+
 - **2026-04-26 — deterministic derived identity default.**
   The repo now provides `pnpm agent-tools:agent-identity` as the
   portable default for choosing an `agent_name` when no
@@ -232,8 +239,8 @@ pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display
 ```
 
 Seed precedence is explicit `--seed`, then `CLAUDE_SESSION_ID`,
-then `OAK_AGENT_SEED`; missing seed is a bad-usage error. There is
-no personal-email fallback. The derived value helps fill
+then `CODEX_THREAD_ID`, then `OAK_AGENT_SEED`; missing seed is a
+bad-usage error. There is no personal-email fallback. The derived value helps fill
 `agent_name`; it does not change the additive-identity rule, the
 identity key, or the historical record.
 

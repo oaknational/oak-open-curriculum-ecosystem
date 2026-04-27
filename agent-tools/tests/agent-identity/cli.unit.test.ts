@@ -26,7 +26,22 @@ describe('agent identity CLI planning', () => {
     });
   });
 
-  it('falls back from CLAUDE_SESSION_ID to OAK_AGENT_SEED only', () => {
+  it('falls back from CLAUDE_SESSION_ID to CODEX_THREAD_ID to OAK_AGENT_SEED', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        CODEX_THREAD_ID: 'codex-thread-seed',
+        OAK_AGENT_SEED: 'oak-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('codex-thread-seed').digest('hex'),
+    });
+  });
+
+  it('falls back from CODEX_THREAD_ID to OAK_AGENT_SEED', () => {
     const result = runAgentIdentityCli({
       argv: ['--format', 'json'],
       env: {
@@ -40,11 +55,12 @@ describe('agent identity CLI planning', () => {
     });
   });
 
-  it('uses CLAUDE_SESSION_ID before OAK_AGENT_SEED', () => {
+  it('uses CLAUDE_SESSION_ID before CODEX_THREAD_ID', () => {
     const result = runAgentIdentityCli({
       argv: ['--format', 'json'],
       env: {
         CLAUDE_SESSION_ID: 'claude-seed',
+        CODEX_THREAD_ID: 'codex-thread-seed',
         OAK_AGENT_SEED: 'oak-seed',
       },
     });
@@ -89,7 +105,8 @@ describe('agent identity CLI planning', () => {
     expect(runAgentIdentityCli({ argv: [], env: {} })).toEqual({
       exitCode: 2,
       stdout: '',
-      stderr: 'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID or OAK_AGENT_SEED\n',
+      stderr:
+        'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED\n',
     });
   });
 

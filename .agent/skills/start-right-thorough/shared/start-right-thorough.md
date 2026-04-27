@@ -43,9 +43,10 @@ your own claim covering the areas you intend to touch.
 When writing the thread identity row, prefer an existing owner-assigned
 `agent_name` if it matches this identity. If no name is available, derive a
 session display name with
-`pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display`,
-or set `OAK_AGENT_SEED` explicitly when the platform does not expose a stable
-session id. Do not use personal-email fallback.
+`pnpm agent-tools:agent-identity --format display` when the platform exposes
+`CLAUDE_SESSION_ID` or `CODEX_THREAD_ID`; pass
+`--seed "<stable-session-seed>"` or set `OAK_AGENT_SEED` explicitly when it
+does not. Do not use personal-email fallback.
 
 Before staging or committing, use the always-active commit skill. It
 checks for a fresh `git:index/head` commit-window claim, opens one if the

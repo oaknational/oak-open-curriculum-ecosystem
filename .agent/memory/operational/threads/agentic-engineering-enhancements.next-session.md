@@ -277,6 +277,7 @@ and
 | `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
 | `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `chunked-commit-stewardship-under-active-claim-4535f2ff; commit-window-protocol-self-application; consolidation-graduation-pass-7be10d3b-7-doctrine-entries-graduated-cb358e8d-local-push-deferred-on-parallel-track-lint-coupling` | 2026-04-26 | 2026-04-26 |
 | `Riverine Navigating Hull` | `claude-code` | `claude-opus-4-7-1m` | `c32a7d1d` | `agent-identity-derivation-phase-8-claude-code-platform-alignment-review-and-statusline-wiring` | 2026-04-27 | 2026-04-27 |
+| `Celestial Waxing Eclipse` | `codex` | `GPT-5` | `019dcd` | `codex-thread-id-discovery-and-agent-identity-seed-wiring` | 2026-04-27 | 2026-04-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

@@ -18,6 +18,9 @@ function processEnvironment(): AgentIdentityCliEnvironment {
     ...(process.env.CLAUDE_SESSION_ID === undefined
       ? {}
       : { CLAUDE_SESSION_ID: process.env.CLAUDE_SESSION_ID }),
+    ...(process.env.CODEX_THREAD_ID === undefined
+      ? {}
+      : { CODEX_THREAD_ID: process.env.CODEX_THREAD_ID }),
     ...(process.env.OAK_AGENT_SEED === undefined
       ? {}
       : { OAK_AGENT_SEED: process.env.OAK_AGENT_SEED }),

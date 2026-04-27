@@ -38,14 +38,15 @@ pnpm agent-tools:codex-reviewer-resolve code-reviewer
 ## `agent-identity` quick reference
 
 - `--seed <seed>` — explicit stable seed. If omitted, the CLI reads
-  `CLAUDE_SESSION_ID`, then `OAK_AGENT_SEED`.
+  `CLAUDE_SESSION_ID`, then `CODEX_THREAD_ID`, then `OAK_AGENT_SEED`.
 - `--format kebab|display|json` — output slug, display name, or full result.
 - `OAK_AGENT_IDENTITY_OVERRIDE` — bypasses wordlist derivation with a
   type-total override result.
 
-There is no `git config user.email` fallback. Platform wrappers must pass an
-explicit session seed, and current Claude/Codex/Cursor wrapper status is
-documented in [docs/agent-identity.md](docs/agent-identity.md).
+There is no `git config user.email` fallback. Platform wrappers or harness
+environments must pass an explicit session seed, and current
+Claude/Codex/Cursor wrapper status is documented in
+[docs/agent-identity.md](docs/agent-identity.md).
 
 Examples:
 
