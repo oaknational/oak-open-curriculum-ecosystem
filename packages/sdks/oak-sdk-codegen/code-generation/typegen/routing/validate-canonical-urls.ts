@@ -16,7 +16,8 @@
  */
 
 import { ok, type Result } from '@oaknational/result';
-import { loadSitemapReference, type SitemapRefError } from './sitemap-reference.js';
+import { loadSitemapReference } from './sitemap-reference.js';
+import type { SitemapRefError } from './sitemap-reference.js';
 import { binarySearchSortedPaths } from './teacher-path-lookups.js';
 
 export { loadSitemapReference, type SitemapRefError } from './sitemap-reference.js';
