@@ -31,6 +31,7 @@ interface RunOAuthAndAuthContextDeps {
   readonly appId: number;
   readonly allowedHosts: readonly string[];
   readonly oauthRateLimiter: RequestHandler;
+  readonly metadataRateLimiter: RequestHandler;
 }
 
 /**
@@ -56,6 +57,7 @@ export async function runOAuthAndAuthContextPhases(
     deps.observability,
     deps.upstreamMetadata,
     deps.oauthRateLimiter,
+    deps.metadataRateLimiter,
   );
 
   runBootstrapPhase(

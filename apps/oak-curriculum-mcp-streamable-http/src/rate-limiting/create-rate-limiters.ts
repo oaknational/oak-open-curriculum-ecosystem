@@ -14,22 +14,25 @@ import {
   createDefaultRateLimiterFactory,
   MCP_RATE_LIMIT,
   OAUTH_RATE_LIMIT,
+  METADATA_RATE_LIMIT,
   ASSET_RATE_LIMIT,
 } from './index.js';
 
-/** Rate limiter middleware instances for all three route profiles. */
+/** Rate limiter middleware instances for all four route profiles. */
 interface RateLimiters {
   readonly mcpRateLimiter: RequestHandler;
   readonly oauthRateLimiter: RequestHandler;
+  readonly metadataRateLimiter: RequestHandler;
   readonly assetRateLimiter: RequestHandler;
 }
 
 /**
- * Creates rate limiter middleware for MCP, OAuth, and asset download routes.
+ * Creates rate limiter middleware for MCP, OAuth flow, OAuth metadata
+ * discovery, and asset download routes.
  *
  * @param factoryOverride - Optional factory for test injection. Defaults to
  *   {@link createDefaultRateLimiterFactory} (production `express-rate-limit`).
- * @returns An object containing all three rate limiter middleware instances.
+ * @returns An object containing all four rate limiter middleware instances.
  *
  * @example
  * ```typescript
@@ -46,6 +49,7 @@ export function createRateLimiters(factoryOverride?: RateLimiterFactory): RateLi
   return {
     mcpRateLimiter: factory(MCP_RATE_LIMIT),
     oauthRateLimiter: factory(OAUTH_RATE_LIMIT),
+    metadataRateLimiter: factory(METADATA_RATE_LIMIT),
     assetRateLimiter: factory(ASSET_RATE_LIMIT),
   };
 }

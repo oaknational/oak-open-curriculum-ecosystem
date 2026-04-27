@@ -44,9 +44,25 @@ function registerUnauthenticatedRoutes(
  * (`/.well-known/oauth-protected-resource/mcp`) per RFC 9728 Section 3.1.
  * Both serve identical responses.
  *
+ * Each registered route attaches the injected `metadataRateLimiter`
+ * before its handler. The limiter is constructed in
+ * `rate-limiting/create-rate-limiters.ts` from the
+ * `METADATA_RATE_LIMIT` profile (60 req/min/IP, OAuth error shape) —
+ * not the OAuth-flow `OAUTH_RATE_LIMIT` profile, because protocol
+ * discovery and OAuth flow are semantically distinct traffic
+ * categories. Closes CodeQL `js/missing-rate-limiting` alert #5.
+ *
+ * **Convention for new `/.well-known/*` routes**: any new metadata
+ * route registered in this function MUST receive `metadataRateLimiter`
+ * as its first middleware, otherwise CodeQL will (correctly) flag the
+ * registration as missing rate limiting.
+ *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
  *   injected by the caller. Endpoint URLs are rewritten per-request to
  *   point to this server's origin; capability fields are passed through.
+ * @param metadataRateLimiter - Per-IP rate-limiter for OAuth metadata
+ *   discovery routes. Constructed from `METADATA_RATE_LIMIT`; injected
+ *   via the same DI chain as `oauthRateLimiter` (ADR-078).
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -54,6 +70,7 @@ export function registerPublicOAuthMetadataEndpoints(
   upstreamMetadata: UpstreamAuthServerMetadata,
   log: Logger,
   allowedHosts: readonly string[],
+  metadataRateLimiter: RequestHandler,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
@@ -74,10 +91,10 @@ export function registerPublicOAuthMetadataEndpoints(
     });
   };
 
-  app.get('/.well-known/oauth-protected-resource', servePrm);
-  app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
+  app.get('/.well-known/oauth-protected-resource', metadataRateLimiter, servePrm);
+  app.get('/.well-known/oauth-protected-resource/mcp', metadataRateLimiter, servePrm);
 
-  app.get('/.well-known/oauth-authorization-server', (req, res) => {
+  app.get('/.well-known/oauth-authorization-server', metadataRateLimiter, (req, res) => {
     const originResult = deriveSelfOrigin(req, allowedHosts);
     if (!originResult.ok) {
       const msg = hostValidationErrorMessage(originResult.error);
@@ -89,7 +106,7 @@ export function registerPublicOAuthMetadataEndpoints(
   });
 
   if (runtimeConfig.useStubTools) {
-    app.get('/.well-known/mcp-stub-mode', (_req, res) => {
+    app.get('/.well-known/mcp-stub-mode', metadataRateLimiter, (_req, res) => {
       res.json({ stubMode: true });
     });
   }

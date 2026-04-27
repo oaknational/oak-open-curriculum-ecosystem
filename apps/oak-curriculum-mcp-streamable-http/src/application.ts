@@ -154,9 +154,8 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
 
-  const { mcpRateLimiter, oauthRateLimiter, assetRateLimiter } = createRateLimiters(
-    options.rateLimiterFactory,
-  );
+  const { mcpRateLimiter, oauthRateLimiter, metadataRateLimiter, assetRateLimiter } =
+    createRateLimiters(options.rateLimiterFactory);
 
   const { dnsRebindingMiddleware, allowedHosts } = setupPreAuthPhases(
     app,
@@ -177,6 +176,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
     allowedHosts,
     oauthRateLimiter,
+    metadataRateLimiter,
   });
 
   setupPostAuthPhases(

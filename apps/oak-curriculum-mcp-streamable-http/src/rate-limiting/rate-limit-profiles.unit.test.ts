@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 
-import { MCP_RATE_LIMIT, OAUTH_RATE_LIMIT, ASSET_RATE_LIMIT } from './rate-limit-profiles.js';
+import {
+  MCP_RATE_LIMIT,
+  OAUTH_RATE_LIMIT,
+  METADATA_RATE_LIMIT,
+  ASSET_RATE_LIMIT,
+} from './rate-limit-profiles.js';
 
 describe('rate limit profiles', () => {
   describe('MCP_RATE_LIMIT', () => {
@@ -25,6 +30,20 @@ describe('rate limit profiles', () => {
 
     it('returns OAuth error shape', () => {
       expect(OAUTH_RATE_LIMIT.message).toStrictEqual({
+        error: 'too_many_requests',
+        error_description: 'Rate limit exceeded. Try again later.',
+      });
+    });
+  });
+
+  describe('METADATA_RATE_LIMIT', () => {
+    it('allows 60 requests per minute', () => {
+      expect(METADATA_RATE_LIMIT.windowMs).toBe(60_000);
+      expect(METADATA_RATE_LIMIT.limit).toBe(60);
+    });
+
+    it('returns OAuth error shape', () => {
+      expect(METADATA_RATE_LIMIT.message).toStrictEqual({
         error: 'too_many_requests',
         error_description: 'Rate limit exceeded. Try again later.',
       });
