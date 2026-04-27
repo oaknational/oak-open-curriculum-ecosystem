@@ -1,14 +1,13 @@
 ---
-name: Sentry Preview Validation + CodeQL/Sonar Triage
+name: Sentry Preview Validation
 overview: >
   Next-session deliverables on the observability-sentry-otel thread after the
   2026-04-25 VERCEL_BRANCH_URL bug fix (commit 6485773f) restored the Vercel
-  preview deployment. Three deliverables, in order: validate Sentry
-  observability is actually working against the new preview; validate the
-  preview MCP server itself responds; fetch CodeQL and SonarCloud results for
-  the PR head and triage them for blockers. Owner-directed scope; PR-87 plan
-  (the broader Sonar/CodeQL fix sequence) is the receiving body for any
-  triage findings that warrant code changes.
+  preview deployment. Two deliverables: validate Sentry observability is
+  actually working against the new preview, and validate the preview MCP
+  server itself responds. The CodeQL/Sonar triage Phases (3–5) have been
+  superseded by the dedicated `pr-87-architectural-cleanup.plan.md` which
+  owns triage and disposition of all PR-87 findings.
 todos:
   - id: phase-1-preview-baseline
     content: "Phase 1: confirm preview deployment is reachable and the MCP server responds correctly to baseline endpoints (/healthz, /.well-known/oauth-protected-resource, /mcp HTTP method probe)."
@@ -17,27 +16,30 @@ todos:
     content: "Phase 2: validate Sentry observability against the preview deployment. Confirm release name appears, source maps / Debug IDs are uploaded, deploy event is registered, and a deliberate test error reaches Sentry with the expected release attribution."
     status: pending
   - id: phase-3-codeql-triage
-    content: "Phase 3: fetch all CodeQL alerts for the PR-87 head; classify each by severity, file, and category; cross-reference against the existing PR-87 plan's already-named alerts (#70, #71, #75, #76, #77, #79, #80); identify any new alerts not yet in the plan; produce a blocker / non-blocker disposition table."
-    status: pending
+    content: "Phase 3: SUPERSEDED by `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` §\"Live signal state\" + Clusters A/C/Q. CodeQL triage and dispositions are owned there."
+    status: completed
   - id: phase-4-sonar-triage
-    content: "Phase 4: fetch SonarCloud Quality Gate breakdown for the PR-87 head; classify all OPEN issues by severity (CRITICAL / MAJOR / MINOR) and category (correctness / stylistic); cross-reference against the PR-87 plan's existing per-rule disposition table; identify any drift since the plan was authored; update the disposition table with current evidence."
-    status: pending
+    content: "Phase 4: SUPERSEDED by `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` §\"Sonar PR-scoped issue inventory\" + Clusters B/H/I/J/K/L/M/N/O. Sonar triage and dispositions are owned there."
+    status: completed
   - id: phase-5-blocker-routing
-    content: "Phase 5: route triage outputs back into the PR-87 plan body. Real correctness blockers (Phase 1/2 of PR-87) get prioritised; stylistic findings stay in Phase 5 of PR-87 per the existing per-rule decisions; any net-new findings get an explicit owner gate call-out before action."
-    status: pending
+    content: "Phase 5: SUPERSEDED. Routing is owned inside the PR-87 plan body itself; the receiving-body reference is now `pr-87-architectural-cleanup.plan.md`, not the superseded `pr-87-quality-finding-resolution.plan.md`."
+    status: completed
   - id: phase-6-handoff
     content: "Phase 6: refresh continuity surfaces with the validation outcomes; close session claim; commit + push."
     status: pending
 ---
 
-# Sentry Preview Validation + CodeQL/Sonar Triage
+# Sentry Preview Validation
 
-**Last Updated**: 2026-04-25 (Keen Dahl handoff)
-**Status**: 🔴 NOT STARTED — queued for next observability-thread session
-**Scope**: Sentry observability validation against the new preview deployment +
-CodeQL/Sonar triage for PR #87. NOT a fix-everything plan — the broader fix
-sequence is in `pr-87-quality-finding-resolution.plan.md`; this plan's
-Phases 3–5 feed evidence and updated dispositions back into that plan.
+**Last Updated**: 2026-04-27 (Opalescent Gliding Prism re-scope)
+**Status**: 🔴 PARTIAL — Phases 1-2 pending; Phases 3-5 superseded
+**Scope**: Sentry observability validation against the new preview deployment
+
++ MCP server preview probe. NOT a CodeQL/Sonar triage plan — that scope
+moved to `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`
+when the PR-87 architectural cleanup plan replaced the superseded
+`pr-87-quality-finding-resolution.plan.md`. The receiving-body reference for
+PR-87 quality findings is now the active plan, not the superseded one.
 
 ---
 
@@ -80,70 +82,70 @@ gates apply per `.agent/commands/gates.md` after any commits.
 
 ### Principles applied
 
-- **`read-diagnostic-artefacts-in-full`** (`.agent/rules/`) — fetch the
++ **`read-diagnostic-artefacts-in-full`** (`.agent/rules/`) — fetch the
   complete CodeQL + SonarCloud result set, not the first page. Workspace-
   first when the owner has downloaded a copy locally; otherwise via MCP /
   GitHub API.
-- **"All gate failures are blocking at all times, regardless of cause or
++ **"All gate failures are blocking at all times, regardless of cause or
   location"** (principles.md §Code Quality) — Phase 1 confirms gate state;
   Phases 3–4 produce evidence so blocker / non-blocker dispositions are
   evidence-based.
-- **`gh pr checks` overrides any brief enumeration** (captured 2026-04-25
++ **`gh pr checks` overrides any brief enumeration** (captured 2026-04-25
   in `feedback_gh_pr_checks_over_brief.md`) — at session-open, run
   `gh pr checks 87` first; cross-check against any prior findings list.
 
 ### Strategy
 
-- **Phase 1**: confirm deployment reachable + MCP baseline responses. Read-
++ **Phase 1**: confirm deployment reachable + MCP baseline responses. Read-
   only HTTP probes via standard tools. No state changes.
-- **Phase 2**: Sentry validation via the project-scoped Sentry MCP. Look for
++ **Phase 2**: Sentry validation via the project-scoped Sentry MCP. Look for
   the release event under the expected release name, confirm Debug IDs
   uploaded, confirm deploy event present. If a test error is required to
   prove the wiring, choose a reversible, owner-authorised mechanism.
-- **Phase 3**: CodeQL triage via `gh api repos/.../code-scanning/alerts`
++ **Phase 3**: CodeQL triage via `gh api repos/.../code-scanning/alerts`
   scoped to the PR's commit SHA, OR via the GitHub MCP if available.
   Output: a markdown table with one row per alert, sorted by severity.
-- **Phase 4**: Sonar triage via the project-scoped SonarQube MCP
++ **Phase 4**: Sonar triage via the project-scoped SonarQube MCP
   (`mcp__sonarqube__search_sonar_issues_in_projects`). Output: same
   shape as Phase 3 but for Sonar.
-- **Phase 5**: route findings into PR-87 plan. Real correctness ⇒ Phase 1/2
++ **Phase 5**: route findings into PR-87 plan. Real correctness ⇒ Phase 1/2
   of PR-87. Stylistic ⇒ Phase 5 of PR-87 per the existing decisions.
   New / drifted findings ⇒ surface for owner gate.
-- **Phase 6**: continuity refresh + commit + push.
++ **Phase 6**: continuity refresh + commit + push.
 
 ### Non-Goals (YAGNI)
 
-- ❌ Implementing any of the PR-87 fixes (those have their own plan).
-- ❌ Running Sentry-side configuration (not in repo scope).
-- ❌ Provisioning new Sentry projects, environments, or tokens.
-- ❌ Modifying CodeQL or Sonar rule configuration (Phase 0 of PR-87 owns
++ ❌ Implementing any of the PR-87 fixes (those have their own plan).
++ ❌ Running Sentry-side configuration (not in repo scope).
++ ❌ Provisioning new Sentry projects, environments, or tokens.
++ ❌ Modifying CodeQL or Sonar rule configuration (Phase 0 of PR-87 owns
   that decision; rule tuning is downstream of triage findings).
-- ❌ Adding new test infrastructure (the smoke-config fix landed
++ ❌ Adding new test infrastructure (the smoke-config fix landed
   separately as `f4bf2fa1`).
 
 ---
 
 ## Reviewer Scheduling
 
-- **Pre-execution (already completed 2026-04-25)**:
-  - `code-reviewer` ran on the plan body; 3 MAJOR + 2 MINOR + 1 NIT
++ **Pre-execution (already completed 2026-04-25)**:
+  + `code-reviewer` ran on the plan body; 3 MAJOR + 2 MINOR + 1 NIT
     absorbed into the Reviewer Dispositions table below.
-  - `assumptions-reviewer` ran on the plan body (retry after credit
+  + `assumptions-reviewer` ran on the plan body (retry after credit
     exhaustion); 3 MAJOR + 2 MINOR + 2 POSITIVE absorbed into the same
     table.
-- **During**:
-  - `sentry-reviewer` after Phase 2 if the validation surfaces a wiring
++ **During**:
+  + `sentry-reviewer` after Phase 2 if the validation surfaces a wiring
     concern (release attribution wrong, source maps missing, deploy event
     absent).
-  - `security-reviewer` after Phase 3 if any CodeQL alert is reclassified
+  + `security-reviewer` after Phase 3 if any CodeQL alert is reclassified
     as a real correctness risk.
-  - `assumptions-reviewer` re-dispatch after Phase 5 if any net-new
+  + `assumptions-reviewer` re-dispatch after Phase 5 if any net-new
     finding introduces a new task to PR-87 Phase 1/2 (per the absorbed
     cross-finding from both reviewers — the assumption-challenge gate
     PDR-015 names assumptions-reviewer as Phase 0 close on PR-87, so
     PR-87 Phase 0 effectively re-opens for any added scope).
-- **Post**:
-  - none until PR-87 fixes land.
++ **Post**:
+  + none until PR-87 fixes land.
 
 ---
 
@@ -179,11 +181,11 @@ phase confirms the deployment fact-set, no inferences.
 Find the latest deployment for `feat/otel_sentry_enhancements` via the
 Vercel MCP. Confirm `state: READY`. Capture:
 
-- Deployment ID and URL alias
-- Created-at timestamp
-- Git commit SHA matches `git rev-parse origin/feat/otel_sentry_enhancements`
-- Build logs end with the expected success markers
-- **Expected release name** (computed at session-open, not hard-coded)
++ Deployment ID and URL alias
++ Created-at timestamp
++ Git commit SHA matches `git rev-parse origin/feat/otel_sentry_enhancements`
++ Build logs end with the expected success markers
++ **Expected release name** (computed at session-open, not hard-coded)
   per the BuildEnvSchema's hostname-not-URL rule: derive from the
   Vercel branch alias as the leftmost label, e.g.
   `<vercel-project-slug>-git-<sanitised-branch>`. Capture once and
@@ -220,10 +222,10 @@ expected-release-name literal captured.
 Probe the preview deployment URL (`<branch-alias>.vercel.thenational.academy`)
 for the four baseline responses:
 
-- `GET /healthz` → 200
-- `GET /.well-known/oauth-protected-resource` → 200 with PRM JSON
-- `GET /.well-known/oauth-authorization-server` → 200 with AS metadata
-- `POST /mcp` (unauthenticated) → 401 with WWW-Authenticate
++ `GET /healthz` → 200
++ `GET /.well-known/oauth-protected-resource` → 200 with PRM JSON
++ `GET /.well-known/oauth-authorization-server` → 200 with AS metadata
++ `POST /mcp` (unauthenticated) → 401 with WWW-Authenticate
 
 **Tool**: `curl` or `gh api` for unauthenticated probes; the MCP HTTP server
 intentionally returns 401 for `/mcp` without auth — that IS the baseline
@@ -253,10 +255,10 @@ otherwise leave the literal stale silently).
 
 Verify:
 
-- Release exists in Sentry under the captured release name
-- Release has the correct environment (`preview`)
-- Release has Debug ID assets attached (source maps uploaded)
-- Deploy event present + linked to this release
++ Release exists in Sentry under the captured release name
++ Release has the correct environment (`preview`)
++ Release has Debug ID assets attached (source maps uploaded)
++ Deploy event present + linked to this release
 
 **Dependency degradation**: if the Sentry MCP is unavailable, fall back
 to the Sentry web UI evidence for the same four facts. Capture
@@ -277,8 +279,8 @@ Phase 1 baseline probes (`/healthz`, `/.well-known/oauth-protected-resource`,
 real request transactions Sentry SHOULD capture if the runtime pipe is
 wired correctly. Look for:
 
-- Transactions in Sentry tagged with the captured release name
-- At least one auth-failure event from the unauthenticated `POST /mcp`
++ Transactions in Sentry tagged with the captured release name
++ At least one auth-failure event from the unauthenticated `POST /mcp`
   probe (auth failures ARE useful telemetry per the absorbed
   assumptions-reviewer POSITIVE finding)
 
@@ -288,9 +290,9 @@ not needed.
 **Active evidence path (only if passive shows nothing AND owner
 authorises)** — generate a deliberate test error. Mechanisms:
 
-- A deliberate `/test-error` route already in the MCP server (preferred)
-- A controlled curl against an authenticated-required path
-- Skip if owner does not want test events polluting the release
++ A deliberate `/test-error` route already in the MCP server (preferred)
++ A controlled curl against an authenticated-required path
++ Skip if owner does not want test events polluting the release
 
 This addresses the absorbed code-reviewer MAJOR-3 finding (no fallback
 evidence path if owner is absent) without compromising the absorbed
@@ -401,10 +403,10 @@ ACCEPT, DISABLE list = S6594, S6644, S7748).
 
 Look for:
 
-- Drift since the plan was authored (commit `d318b8bd`; current head several
++ Drift since the plan was authored (commit `d318b8bd`; current head several
   commits later).
-- New rule families not yet in the plan.
-- Issues that closed since the plan was authored (e.g., the semver-DoS
++ New rule families not yet in the plan.
++ Issues that closed since the plan was authored (e.g., the semver-DoS
   hotspots if the bug-fix commits closed them on the next scan).
 
 **Acceptance**: drift table populated; net-new rules surfaced.
@@ -415,24 +417,24 @@ Look for:
 
 For each Phase 3 / Phase 4 finding:
 
-- Real correctness issue ⇒ ensure it has a Phase 1/2 task in PR-87
-- Stylistic / accepted ⇒ ensure it's in PR-87 Phase 5 with a recorded
++ Real correctness issue ⇒ ensure it has a Phase 1/2 task in PR-87
++ Stylistic / accepted ⇒ ensure it's in PR-87 Phase 5 with a recorded
   outcome
-- New / drifted ⇒ add to PR-87 with an owner-gate call-out
++ New / drifted ⇒ add to PR-87 with an owner-gate call-out
 
 **Override gate (absorbed code-reviewer MINOR-5 + assumptions-reviewer
 MAJOR-C)** — surface to owner for review BEFORE editing the PR-87 plan
 body when ANY of the following apply:
 
-- A finding currently dispositioned as `ACCEPT`, `DEFERRED`, or
++ A finding currently dispositioned as `ACCEPT`, `DEFERRED`, or
   `dismissed-with-rationale` in PR-87 appears on the new scan as a
   higher-severity or new-category finding
-- A net-new finding introduces a new task to PR-87 Phase 1 or Phase 2
++ A net-new finding introduces a new task to PR-87 Phase 1 or Phase 2
   (correctness phases) — these warrant a fresh `assumptions-reviewer`
   dispatch on the PR-87 plan delta before commit, since PR-87's Phase 0
   close-gate effectively reopens for any added scope (PDR-015
   assumption-challenge gate)
-- The drift count exceeds 10 net-new findings in any one severity tier
++ The drift count exceeds 10 net-new findings in any one severity tier
   (signals scope change beyond a routine re-scan)
 
 Net-new Phase 5 (stylistic) findings without an existing disposition
@@ -484,12 +486,12 @@ different workspace (`oak-search-sdk`) than PR-87's current scope
 (`oak-curriculum-mcp-streamable-http` + `build-metadata` +
 `oak-sdk-codegen`). Adding these would:
 
-- Introduce a new Phase 1 task to PR-87 (or a new Phase 1A) to fix
++ Introduce a new Phase 1 task to PR-87 (or a new Phase 1A) to fix
   the regex backtracking
-- Possibly require a parity check across other oak-search-sdk regex
++ Possibly require a parity check across other oak-search-sdk regex
   patterns (the file uses 8 patterns; only 2 flagged but the
   approach has structural weakness)
-- Re-trigger `assumptions-reviewer` per the substrate plan's
++ Re-trigger `assumptions-reviewer` per the substrate plan's
   override-gate rule (PR-87 Phase 0 close-gate effectively reopens)
 
 **Reachability check (verified 2026-04-26 after `code-reviewer`
@@ -512,19 +514,19 @@ search-SDK is reachable on PR-87's release scope.
 
 **Owner direction needed (revised)**:
 
-- **Option A**: Add as new Phase 1A task in PR-87 with a fix path
++ **Option A**: Add as new Phase 1A task in PR-87 with a fix path
   (e.g., bound the noise-pattern matches with possessive
   quantifiers, anchor with `\b…\b` boundaries that prevent
   overlap, or migrate to a non-regex token-based approach). Run
   `assumptions-reviewer` on the PR-87 delta. **Higher-coherence
   answer given the verified reachability — single PR ships a
   user-input-DoS-safe MCP server.**
-- **Option B**: Add as a separate, scoped follow-up plan (e.g.,
++ **Option B**: Add as a separate, scoped follow-up plan (e.g.,
   `oak-search-sdk-regex-dos.plan.md`) tracked as a release
   blocker for the same target version, dismiss in PR-87 with a
   cross-reference, and ship the fix in a parallel PR before
   release. Decouples timing but keeps the dependency explicit.
-- ~~Option C~~ **Disqualified** — search-SDK is reachable.
++ ~~Option C~~ **Disqualified** — search-SDK is reachable.
 
 **Revised default if no owner direction**: Option A. Rationale:
 the regex DoS sits on user-supplied input; PR-87 ships the MCP
@@ -539,10 +541,10 @@ DoS vector.
 
 ### Phase 6: Continuity refresh + handoff (~15 min)
 
-- Refresh `observability-sentry-otel.next-session.md` Last Refreshed entry
-- Refresh `repo-continuity.md` Current Session Focus
-- Close session claim
-- Commit + push as a single docs commit
++ Refresh `observability-sentry-otel.next-session.md` Last Refreshed entry
++ Refresh `repo-continuity.md` Current Session Focus
++ Close session claim
++ Commit + push as a single docs commit
 
 **Hook discipline (absorbed assumptions-reviewer MINOR-E)**: if any
 pre-commit hook fails, fix the underlying issue and create a NEW
@@ -565,35 +567,35 @@ PR-87 (which owns the fix sequence + test additions).
 
 ### Phase 1
 
-- ✅ Vercel preview is reachable and the MCP server responds.
++ ✅ Vercel preview is reachable and the MCP server responds.
 
 ### Phase 2
 
-- ✅ Sentry observability is end-to-end functional under the new release
++ ✅ Sentry observability is end-to-end functional under the new release
   attribution.
 
 ### Phase 3
 
-- ✅ Full CodeQL triage table; net-new alerts surfaced.
++ ✅ Full CodeQL triage table; net-new alerts surfaced.
 
 ### Phase 4
 
-- ✅ Full Sonar triage table; drift table; net-new rules surfaced.
++ ✅ Full Sonar triage table; drift table; net-new rules surfaced.
 
 ### Phase 5
 
-- ✅ Every finding routed into PR-87 OR explicit owner-gate item.
++ ✅ Every finding routed into PR-87 OR explicit owner-gate item.
 
 ### Phase 6
 
-- ✅ Continuity surfaces refreshed; commit + push.
++ ✅ Continuity surfaces refreshed; commit + push.
 
 ### Overall
 
-- ✅ Sentry observability is provably working against the new preview.
-- ✅ PR-87 plan reflects current CodeQL + Sonar evidence (not the snapshot
++ ✅ Sentry observability is provably working against the new preview.
++ ✅ PR-87 plan reflects current CodeQL + Sonar evidence (not the snapshot
   from `d318b8bd`).
-- ✅ Owner has visibility on any new blockers vs the plan's existing scope.
++ ✅ Owner has visibility on any new blockers vs the plan's existing scope.
 
 ---
 
@@ -614,25 +616,25 @@ PR-87 (which owns the fix sequence + test additions).
 
 **Blocking**:
 
-- The Vercel preview must be `READY` for the current PR head (confirmed
++ The Vercel preview must be `READY` for the current PR head (confirmed
   green at `dpl_FtjdEbwRN2qwM1m78hzoQoEDG95R` for commit `f4bf2fa1`'s
   predecessor; re-confirm at session start).
 
 **Prerequisites**:
 
-- Project-scoped Sentry MCP available (`mcp__sentry-ooc-mcp__*`).
-- Project-scoped SonarQube MCP available (`mcp__sonarqube__*`).
-- GitHub MCP or `gh` CLI for CodeQL alerts.
++ Project-scoped Sentry MCP available (`mcp__sentry-ooc-mcp__*`).
++ Project-scoped SonarQube MCP available (`mcp__sonarqube__*`).
++ GitHub MCP or `gh` CLI for CodeQL alerts.
 
 ---
 
 ## Foundation Alignment
 
-- **principles.md §Code Quality**: every gate failure is blocking; this
++ **principles.md §Code Quality**: every gate failure is blocking; this
   plan produces evidence so dispositions are evidence-based.
-- **principles.md §Strict and Complete**: triage tables are exhaustive,
++ **principles.md §Strict and Complete**: triage tables are exhaustive,
   not sampled.
-- **`read-diagnostic-artefacts-in-full`**: workspace-first; cross-check
++ **`read-diagnostic-artefacts-in-full`**: workspace-first; cross-check
   the live PR check list against any prior plan enumeration.
 
 ---
@@ -721,13 +723,13 @@ capture.**
 
 **Observability headers observed on response**:
 
-- `x-app-version: 1.5.0` — build-time version marker present
-- `x-correlation-id: req_<epoch>_<hex>` — request-correlation
++ `x-app-version: 1.5.0` — build-time version marker present
++ `x-correlation-id: req_<epoch>_<hex>` — request-correlation
   middleware running
-- `x-vercel-id: lhr1::lhr1::<id>` — region marker present (London)
-- `x-clerk-auth-reason: dev-browser-missing`,
++ `x-vercel-id: lhr1::lhr1::<id>` — region marker present (London)
++ `x-clerk-auth-reason: dev-browser-missing`,
   `x-clerk-auth-status: signed-out` — Clerk middleware engaged
-- HSTS, X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
++ HSTS, X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
   present — security headers wired
 
 These headers indirectly confirm the request reached the application,
@@ -779,10 +781,10 @@ benign" in initial Phase 2 finding; owner directed re-validation):
 The four commits between Sentry's `last_commit` (`9bcc8ffc`) and
 the current head (`66de47a2`) are:
 
-- `f4bf2fa1` `fix(search-cli): defer smoke env validation` (Vitest config only)
-- `325605a4` `docs(plans): add next-session sentry-validation + triage plan`
-- `c666b845` `docs(continuity): keen dahl session-handoff and consolidation pass`
-- `66de47a2` `docs(continuity): session-handoff close for keen dahl 2026-04-26 session`
++ `f4bf2fa1` `fix(search-cli): defer smoke env validation` (Vitest config only)
++ `325605a4` `docs(plans): add next-session sentry-validation + triage plan`
++ `c666b845` `docs(continuity): keen dahl session-handoff and consolidation pass`
++ `66de47a2` `docs(continuity): session-handoff close for keen dahl 2026-04-26 session`
 
 None of these touch production code shipped by the Vercel build of
 `apps/oak-curriculum-mcp-streamable-http`. Vercel created a deployment
@@ -848,15 +850,15 @@ Phase 1 baseline probes I just executed:
 
 **Instrumentation depth confirmed end-to-end**:
 
-- HTTP server spans (`http.server`) on every probed endpoint
-- Outbound HTTP client spans (`http.client`) to Clerk's
++ HTTP server spans (`http.server`) on every probed endpoint
++ Outbound HTTP client spans (`http.client`) to Clerk's
   `oauth_applications/access_tokens/verify` — proving the auth path
   IS invoked even on a 401 response (Clerk verifies the `null` token
   before refusing it)
-- MCP server spans (`mcp.server`) for the streamable-http transport
-- Cold-start bootstrap spans (`oak.http.bootstrap.*`) — confirms
++ MCP server spans (`mcp.server`) for the streamable-http transport
++ Cold-start bootstrap spans (`oak.http.bootstrap.*`) — confirms
   the WS3 startup-boundary instrumentation lands in production
-- Custom domain spans (`oak.http.request.mcp`) — confirms the Oak
++ Custom domain spans (`oak.http.request.mcp`) — confirms the Oak
   observability layer is wired
 
 **Verdict**: passive evidence path is conclusive — runtime →
@@ -929,17 +931,17 @@ frames yet.
 [`POST /test-error`](../../../../apps/oak-curriculum-mcp-streamable-http/src/test-error/test-error-route.ts)
 diagnostic route with:
 
-- Shared-secret authentication (`X-Test-Error-Secret`,
++ Shared-secret authentication (`X-Test-Error-Secret`,
   constant-time compare, min 16 chars)
-- Rate-limited via existing `oauthRateLimiter` (30 req / 15 min /
++ Rate-limited via existing `oauthRateLimiter` (30 req / 15 min /
   IP)
-- Three modes — `handled` (captureHandledError 4xx-equivalent),
++ Three modes — `handled` (captureHandledError 4xx-equivalent),
   `unhandled` (5xx via Express error chain), `rejected` (5xx via
   async rejection)
-- Production-forbidden by `HttpEnvSchema` super-refine
++ Production-forbidden by `HttpEnvSchema` super-refine
   (`TEST_ERROR_SECRET` must NOT be set when `VERCEL_ENV ===
   production`)
-- Probe script extended with `--target=test-error --mode=unhandled
++ Probe script extended with `--target=test-error --mode=unhandled
   --secret=<value>`
 
 **Owner action required to close the gap**: set
@@ -968,15 +970,15 @@ source-code-upload pipeline works for the current preview release.
 
 All three events tagged with:
 
-- `release: poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`
-- `git.commit.sha: 71397d470a5fab556d5dd96b0793e5068cbb7c93` (the deployed HEAD)
-- `environment: preview`
-- `cloud.provider: vercel`, `cloud.region: lhr1`
-- `service: oak-curriculum-mcp-streamable-http`
-- Trace IDs + span IDs, `sampled: true`, `client_sample_rate: 1`
-- Mechanism distinguishes the paths: `auto.middleware.express`
++ `release: poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`
++ `git.commit.sha: 71397d470a5fab556d5dd96b0793e5068cbb7c93` (the deployed HEAD)
++ `environment: preview`
++ `cloud.provider: vercel`, `cloud.region: lhr1`
++ `service: oak-curriculum-mcp-streamable-http`
++ Trace IDs + span IDs, `sampled: true`, `client_sample_rate: 1`
++ Mechanism distinguishes the paths: `auto.middleware.express`
   (unhandled) vs `generic` (handled, rejected via captureHandledError-equivalent)
-- `handled: no` for unhandled mode; `handled: yes` for the two
++ `handled: no` for unhandled mode; `handled: yes` for the two
   caught paths
 
 Note: rate-limited via the existing `oauthRateLimiter` (30 req /
@@ -993,26 +995,26 @@ to keep the unresolved-issues view clean.
 
 The captures meet every quality bar a debugging session needs:
 
-- ✅ **First-party file path** — `src/test-error/test-error-route.ts`
-- ✅ **Line + column resolution** — accurate to the exact statement
-- ✅ **Rendered source-line context** — Sentry shows lines around
++ ✅ **First-party file path** — `src/test-error/test-error-route.ts`
++ ✅ **Line + column resolution** — accurate to the exact statement
++ ✅ **Rendered source-line context** — Sentry shows lines around
   the throw, NOT just file:line position. This requires source
   files to be uploaded to Sentry alongside the source maps.
-- ✅ **Function name preserved** — `dispatchMode` resolved from
++ ✅ **Function name preserved** — `dispatchMode` resolved from
   the minified bundle frame.
-- ✅ **First-party vs third-party distinction** — Sentry highlights
++ ✅ **First-party vs third-party distinction** — Sentry highlights
   the application frame as "Most Relevant" while still capturing
   the express-rate-limit / router stack for context.
-- ✅ **Mechanism tagging** — `auto.middleware.express` for
++ ✅ **Mechanism tagging** — `auto.middleware.express` for
   Express-chain captures, `generic` for explicit
   `captureHandledError` calls; agents can filter by capture path.
-- ✅ **Trace correlation** — every error has trace + span IDs
++ ✅ **Trace correlation** — every error has trace + span IDs
   linking back to transactions; cross-system trace works.
-- ✅ **Per-event git provenance** — `git.commit.sha` tag is the
++ ✅ **Per-event git provenance** — `git.commit.sha` tag is the
   deployed HEAD, not the release's `last_commit`; this is what
   agents and humans need to identify the exact commit that shipped
   the bug.
-- ✅ **Rich operational context** — Vercel region, Lambda app
++ ✅ **Rich operational context** — Vercel region, Lambda app
   memory, runtime version, request method/URL/body, user, locale,
   timezone all attached as tags / context.
 
@@ -1030,20 +1032,20 @@ The captures meet every quality bar a debugging session needs:
 Owner-directed deeper investigation after the source-code-upload gap
 closed:
 
-- **Breadcrumbs ✅** — issue `OAK-OPEN-CURRICULUM-MCP-7` shows three
++ **Breadcrumbs ✅** — issue `OAK-OPEN-CURRICULUM-MCP-7` shows three
   breadcrumbs (`http` GET, `console` deprecation warning, `http` POST)
   with `url=[Filtered]` confirming redaction applies. The default
   `httpIntegration` and `consoleIntegration` are wired and active.
-- **Trace propagation (internal) ✅** — four-span trace
++ **Trace propagation (internal) ✅** — four-span trace
   `9e24ca64ea33d92dbd91f9931a7a389b` from the 2026-04-26 07:01 probe
   proves http.server → mcp.server → http.client (Clerk verify) →
   oak.http.request.mcp all share one trace ID locally.
-- **Trace propagation (external) ⚠️ deliberately disabled** —
++ **Trace propagation (external) ⚠️ deliberately disabled** —
   `DEFAULT_TRACE_PROPAGATION_TARGETS = []` in `runtime-sdk.ts`. Owner
   direction (2026-04-26): extend the targets list when the Search
   service joins the same Sentry org; do not propagate to external
   third parties (Clerk etc.) on compliance / cost grounds.
-- **PII redaction ✅** — already proven at the right level by 178
++ **PII redaction ✅** — already proven at the right level by 178
   lines of unit tests (`redaction.unit.test.ts`) + 628 lines of
   barrier-composition tests (`runtime-redaction-barrier.unit.test.ts`,
   including bypass-validation suite) + ADR-160 structural closure.
@@ -1052,14 +1054,14 @@ closed:
   probe constructed `token=${token}` — the barrier matched the
   `token` key in `FULLY_REDACTED_KEYS` and substituted before send.
   No additional probe needed.
-- **Local variables in stack frames ⚠️ Lambda-runtime constraint** —
++ **Local variables in stack frames ⚠️ Lambda-runtime constraint** —
   Sentry's `localVariablesIntegration` requires V8 inspector access
   via `--inspect`; Vercel Firecracker microVMs don't expose this. The
   integration silently no-ops in Lambda. **Constraint documented in**
   [`packages/libs/sentry-node/README.md` § Runtime-constraint notes](../../../../packages/libs/sentry-node/README.md#runtime-constraint-notes)
   with the trade-off framing and the empirical-evidence pointer
   (issues #7/8/9 show no variables, matching the prediction).
-- **Custom-header capture as event tags 🟡 → ✅** — fix landed:
++ **Custom-header capture as event tags 🟡 → ✅** — fix landed:
   `createCorrelationMiddleware` now takes an optional
   `observability` injection and tags
   `correlation_id=<value>` on the per-request Sentry scope so every
@@ -1186,9 +1188,9 @@ status: ERROR
 
 **Drift since PR-87 plan was authored** (commit `d318b8bd`):
 
-- Issues: 76 → **77** (+1: net-new S5843 below)
-- Hotspots: 4 → **4** (no change)
-- Duplication: 5.2% → **5.1%** (slight improvement, still over threshold)
++ Issues: 76 → **77** (+1: net-new S5843 below)
++ Hotspots: 4 → **4** (no change)
++ Duplication: 5.2% → **5.1%** (slight improvement, still over threshold)
 
 ### Task 4.1 — Issues classification
 
@@ -1239,15 +1241,15 @@ trio).
 
 ## References
 
-- Bug-fix commits: `6485773f`, `c2b1c1e5`, `27a7ae78`, `51e548e8`,
++ Bug-fix commits: `6485773f`, `c2b1c1e5`, `27a7ae78`, `51e548e8`,
   `9bcc8ffc`, `f4bf2fa1` (today, 2026-04-25)
-- PR #87: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/87>
-- ADR-163: <docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md>
-- Receiving plan for fixes: `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`
-- Memory: `feedback_workspace_first_for_diagnostics`,
++ PR #87: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/87>
++ ADR-163: <docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md>
++ Receiving plan for fixes: `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`
++ Memory: `feedback_workspace_first_for_diagnostics`,
   `feedback_gh_pr_checks_over_brief`,
   `feedback_check_workspace_packages_before_proposing`
-- Future enhancements: `.agent/plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md`
++ Future enhancements: `.agent/plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md`
 
 ---
 
@@ -1277,12 +1279,12 @@ gates satisfied; findings absorbed into the plan revisions above.
 **Open questions from assumptions-reviewer** (recorded for next-session
 agent rather than blocking):
 
-- Q1: Phase 4 truncation rule specifics — answered by absorbed item 7
++ Q1: Phase 4 truncation rule specifics — answered by absorbed item 7
   (CRITICAL+MAJOR fully; MINOR partial with rule).
-- Q2: Phase 5 PR-87 plan-body edit triggers reviewer cycle? — answered
++ Q2: Phase 5 PR-87 plan-body edit triggers reviewer cycle? — answered
   by absorbed item 9 (assumptions-reviewer re-dispatch for PR-87 Phase
   1/2 net-new tasks; Phase 5 stylistic additions don't trigger).
-- Q3: Derive expected release name at runtime? — answered by absorbed
++ Q3: Derive expected release name at runtime? — answered by absorbed
   item 10 (yes, at session-open in Task 1.1).
 
 ---
@@ -1291,10 +1293,10 @@ agent rather than blocking):
 
 After Phase 6 completes:
 
-- Run `/jc-consolidate-docs` if any net-new pattern surfaced (e.g., a
++ Run `/jc-consolidate-docs` if any net-new pattern surfaced (e.g., a
   triage shape that should be reused for future PRs).
-- Update the pending-graduations register with any candidates.
-- If the validation reveals that the BuildEnvSchema's hostname-not-URL
++ Update the pending-graduations register with any candidates.
++ If the validation reveals that the BuildEnvSchema's hostname-not-URL
   refinement caught a misconfiguration in the wild (i.e., the fix is
   load-bearing in production), graduate that as a pattern instance for
   the schema-anchored-bug-fix concept.

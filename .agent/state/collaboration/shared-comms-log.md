@@ -3121,6 +3121,39 @@ usage observation.
 Active claims and `commit_queue` were empty before opening. This is a
 plan/state-only edit; no staging or commit.
 
+### 2026-04-27T16:31:40Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — commit-queue plan finish statement update closed
+
+Closed claim `ee9dc93d-239d-40f6-bb31-c507aa591a2b` explicitly after updating
+the landed commit-queue execution plan.
+
+The plan now identifies WS7 as the remaining work: deep consolidation for
+queue governance, permanent doctrine placement, archive hygiene, and real
+usage observation. No staging or commit was performed.
+
+### 2026-04-27T16:39:58Z — `Coastal Washing Rudder` / `codex` / `gpt-5.5` / `019dcf` — queue governance graduation pass started
+
+Opening claim `30a1db9a-893d-49dd-948e-c097b4f98af0` for the owner-directed
+queue governance graduation pass.
+
+Scope: amend PDR-029 as the durable governance home for the already-landed
+advisory `commit_queue` protocol, keep operational details in collaboration
+state docs, archive the completed queue execution plan, and update current /
+completed indexes plus continuity/thread links. Active claims and
+`commit_queue` were empty before opening. Preserving the existing uncommitted
+Prismatic closeout diffs. Explicit non-scope: no queue implementation code, no
+schema bump, no `agent-tools` changes, and no `session_counter` primitive.
+
+### 2026-04-27T16:46:45Z — `Coastal Washing Rudder` / `codex` / `gpt-5.5` / `019dcf` — queue governance graduation pass complete
+
+Closed claim `30a1db9a-893d-49dd-948e-c097b4f98af0` explicitly after
+graduating queue doctrine to PDR-029 Family A Class A.3, keeping operational
+details in collaboration-state conventions/lifecycle docs, archiving the
+completed execution plan, and updating live continuity/index links.
+
+No queue implementation code, schema change, `agent-tools` edit, or
+`session_counter` primitive was added. `session_counter` remains future-only
+unless a real primitive is deliberately implemented later.
+
 ### 2026-04-27 — `Vining Bending Root` / `claude-code` / `claude-opus-4-7-1m` / `4e2cbc5c` — PR-87 session close + metacognitive correction
 
 **Session close after owner-directed metacognitive correction.** PR-87 has
@@ -3370,3 +3403,65 @@ audit; the owner's vercel-ignore.mjs comments stay as Cluster B WIP.
 
 Active-claims registry will be empty after my close. No commit-queue
 entries.
+
+### 2026-04-27T18:21:19Z — `Opalescent Gliding Prism` / `claude-code` / `claude-opus-4-7-1m` / `radiant-pillow` — PR-87 architectural cleanup execution opens
+
+Opened claim `6739211b-1446-4493-9ad0-5fc5c762de37` on the
+`observability-sentry-otel` thread to execute the approved plan at
+`/Users/jim/.claude/plans/jc-plan-jc-metacognition-identify-and-radiant-pillow.md`
+— **PR-87 architectural cleanup, decisions 1B + 2A + 3A**.
+
+**Verified live state at session open** (independently confirmed via
+`git rev-parse`, `gh pr view`, Sonar MCP, GitHub Code-scanning API; not
+inherited from prior brief):
+
+- Branch: `feat/otel_sentry_enhancements` HEAD = origin = PR-87 head =
+  `0b8af81f`. **Already pushed.** Pelagic Flowing Dock's session-close
+  claim "branch 6 ahead, NOT pushed" was stale by the time this session
+  opened. Plan §"Session 1" body and thread-record session-close header
+  inherit that stale claim and will be rewritten in Phase 0.
+- Sonar QG: ERROR. `new_violations=27` (matches plan), but
+  `new_duplicated_lines_density=5.7%` (plan said 5.4%) and
+  `new_security_hotspots_reviewed=81.8%` (plan said 90% / 1 TO_REVIEW).
+  Live shows 11 hotspots, 2 TO_REVIEW; the new TO_REVIEW is a
+  re-surfaced legacy S5332 at `host-validation-error.unit.test.ts:70`.
+- CodeQL: **12 OPEN alerts**, not 7 as plan claims. 5 NEW alerts
+  surfaced on `apps/.../host-validation-error.unit.test.ts` (#82–#86):
+  4× `js/regex/missing-regexp-anchor`, 1× `js/incomplete-hostname-regexp`.
+- Dormant ESLint rule `@oaknational/no-problem-hiding-patterns`:
+  registered in `plugin.ts` but absent from all four config tiers
+  (recommended / strict / next / react). Confirmed dormant. 15 unit
+  test cases (8 valid + 7 invalid), not 8 as Explore reported and not
+  120 as today-buffer claims.
+
+**Owner direction at planning time**:
+
+1. **Decision 1B** — delete the dormant rule cleanly; open a follow-up
+   plan to reinstate under clean-conditions authorship later.
+2. **Decision 2A** — execute full 11-cluster plan on PR-87 (Q + A + B +
+   C + D + H + I + J + K + L + M + N + O).
+3. **Decision 3A** — Cluster Q first via Phase 0.5 sink probe; the
+   actual regex sink may be in production code despite the alert
+   locations being in the test file.
+
+**Claims registry baseline**: empty at open (Coastal Washing Rudder's
+queue-governance claim closed at 16:46:45Z). No `commit_queue` entries.
+This session's claim covers plan files, host-validation-error files,
+auth-routes / oauth-proxy / bootstrap-helpers (Cluster A), vercel-ignore
+script (Cluster B), schema-cache (Cluster C), and the dormant rule's
+files.
+
+**Discipline reminders for this session** (per Pelagic Flowing Dock
+napkin, distilled.md "Drift recurs while authoring the enforcement of
+the principle it violates", and the assumptions-reviewer's cross-cutting
+verdict):
+
+- Replace, don't bridge — including in plan-body text. Phase 0 rewrites
+  stale §"Session 1" + §"Live signal state" sections wholesale.
+- Re-read `principles.md` at every cluster boundary, triggered not
+  remembered.
+- Serial-only for write-capable specialists. Read-only Explore + read-only
+  reviewer dispatch in parallel is allowed (per assumptions-reviewer Q6
+  verdict).
+- State assertions in documentation MUST be preceded by the verification
+  command that produced them.

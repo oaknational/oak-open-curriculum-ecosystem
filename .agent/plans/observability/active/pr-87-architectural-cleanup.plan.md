@@ -14,7 +14,16 @@ todos:
     status: completed
   - id: phase-1-owner-exemplars
     content: "Phase 1: Land owner's working-tree edits as architectural exemplars (auth-routes re-export removal, universal-tools test consolidation, vercel-ignore.mjs comments)."
+    status: completed
+  - id: phase-2-session-2-reground
+    content: "Phase 2 (Session 2 18:21Z): Re-derive verified live state, replace stale plan-body assertions, probe Cluster Q sink. Decisions 1B+2A+3A confirmed."
     status: in_progress
+  - id: cluster-q-host-validation
+    content: "Cluster Q (NEW): host-validation-error regex anchoring (5 CodeQL alerts #82-86 + 1 Sonar hotspot). Phase 0.5 sink probe complete: production regex IS anchored. Disposition: dismiss-with-rationale all 5 + Sonar `accept` on hotspot. No code changes."
+    status: pending
+  - id: phase-1b-delete-dormant-rule
+    content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
+    status: pending
   - id: cluster-a-rate-limiting
     content: "Cluster A: DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Sketch withRateLimit curry; verify CodeQL recognises; if so, apply at all 5 sites."
     status: pending
@@ -66,13 +75,16 @@ todos:
 
 ---
 
-## Session 1 (Pelagic Flowing Dock, 2026-04-27) — outcome and suspect work
+## Session history (verified live state)
 
-**Status**: Phase 1 complete (5 commits + 1 session-close docs commit, **all local, not pushed**). Cluster P0 (void/_ remediation, inserted as P0+ during session) **opened, suspect work reverted**. Clusters A onwards **not started**. Session closed under owner-directed metacognitive correction.
+### Session 1 (Pelagic Flowing Dock, 2026-04-27 ~14:05Z–17:25Z)
 
-### Commits landed this session (LOCAL ONLY — branch is 6 ahead of origin)
+Phase 1 of this plan landed and pushed. Closed under owner-directed metacognitive correction after reproducing the morning's named drift pattern three times during enforcement-rule authoring.
+
+**Commits pushed** (verified `git rev-parse HEAD == origin/feat/otel_sentry_enhancements == 0b8af81f`):
 
 ```text
+0b8af81f docs(continuity): correct false 'all pushed' assertion; capture late-session drift
 3c6a3958 docs(practice): record metacognitive lesson; new dormant void/_ rule; close session
 9da90650 refactor(test): apply new void-and-underscore ban; build malformed fixtures positively
 d1f5226b docs(principles): ban void <unused> and underscore-prefix as problem-hiding patterns
@@ -81,61 +93,50 @@ d1f5226b docs(principles): ban void <unused> and underscore-prefix as problem-hi
 0e68aa87 chore(state): close Briny claim; promote PR-87 architectural cleanup plan
 ```
 
-**Push status**: NOT pushed. Origin is at `8cd49fe1` (owner's pre-session discard commit). Fresh session decides push timing — recommended to push after re-audit confirms the dormant rule and the state-of-knowledge updates are sound.
+**Push status (verified Session 2 open)**: PUSHED. Branch is 0/0 ahead/behind origin; PR-87 head matches local HEAD. The Pelagic session-close header asserted "branch 6 ahead, NOT pushed"; the owner pushed between session-close and Session 2 opening. Replacing that stale assertion is the first job of this plan body.
 
-### Session-close action: codegen sweep REVERTED to clean state
+### Session-1 outputs that survived close
 
-Owner directive at session-close (2026-04-27T~17:25Z) explicitly removed all allowlists and other rule-disabling, then directed re-audit at fresh-session start. The metacognitive correction made it clear that work produced under drift should not be inherited as framing. Therefore:
+- `.agent/directives/principles.md` — §"Don't hide problems — fix them or delete them" added (final strict form, no exemptions).
+- `.agent/memory/active/napkin.md`, `distilled.md`, `repo-continuity.md` — drift-pattern lessons captured.
+- `packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.{ts,unit.test.ts}` + `plugin.ts` registration — **dormant rule**, **15 unit test cases** (8 valid + 7 invalid; verified by direct file read). Not enabled in any config tier (`recommended.ts`, `strict.ts`, `next.ts`, `react.ts`).
+- The codegen sweep (~17 files) was reverted at session-close per owner direction.
 
-- **All ~17 codegen sweep files were reverted** to their pre-session state via `git checkout HEAD -- <files>`. The fresh session starts the void/_ remediation from clean state if it chooses to.
-- **The rule activation in `recommended.ts` was reverted.** The rule code remains in the plugin (dormant) so its design can be audited; it is not enforced anywhere.
-- **The principles.md addition was kept**, after final audit removed the last softening (the shorthand-destructure exemption that was hiding the same problem the principle bans).
-- **The rule definition + tests + plugin export were kept** but as dormant code only. 120 unit tests pass on the rule. **Audit instruction for fresh session**: the rule body has been re-audited at session-close and is currently in a strict form with no allowlists, no shorthand exemption, and no `__` Node.js convention exemption — but the audit was done by the same agent who introduced the drift. Owner's no-half-measures direction means: the fresh session should treat the rule as a candidate-for-acceptance, not as established. If kept, activation + sweep is the next session's first cluster of work. If rejected, delete the rule files cleanly.
+### Session 2 (Opalescent Gliding Prism, 2026-04-27 18:21Z) — re-grounded execution
 
-### Files committed at session-close (one commit, durable knowledge only)
+Independent verification at session-open found that several Session-1 status assertions had become stale by handoff time. **Verified live state catalogue** (with verification commands):
 
-**Kept and committable**:
+| Stale assertion | Source | Verified live (this session) |
+| --- | --- | --- |
+| "branch is 6 ahead of origin, NOT pushed" | Session-1 `§"Session 1"` body, thread record session-close header, comms-log session-close, Explore-agent inventory | **0/0 ahead/behind. Pushed.** `git rev-parse HEAD == origin == 0b8af81f`; PR head matches |
+| "origin at `8cd49fe1` (owner pre-session discard)" | Session-1 `§"Session 1"` body | origin at `0b8af81f` |
+| "7 OPEN CodeQL alerts on PR scope" | Session-1 `§"Live signal state"`, Explore report | **12 OPEN alerts** (5 new on `host-validation-error.unit.test.ts`) |
+| "5.4% new_duplicated_lines_density" | Session-1 `§"Sonar QG conditions"` | **5.7%** |
+| "1 TO_REVIEW hotspot, 90% reviewed" | Session-1 `§"Hotspots"` | **2 TO_REVIEW, 81.8% reviewed** (11 hotspots total) |
+| "8 unit tests on the dormant rule" | Session-1 `§"Files committed at session-close"`, Explore report | **15 cases** (8 valid + 7 invalid) |
+| "120 unit tests pass on the rule" | `.remember/today-2026-04-27.md` buffer | **15 cases** |
+| auth-routes.ts alert 70 line 155, alert 81 line 108 | Session-1 `§"CodeQL alerts table"` | alert 70 at line **151**; alert 81 at line **106** (file changed via `3d4a0925`) |
 
-- `.agent/directives/principles.md` — adds §"Don't hide problems — fix them or delete them" with explicit no-adapter / no-half-measure language (final strict form).
-- `.agent/memory/active/napkin.md` — Pelagic Flowing Dock metacognitive entry naming the recurrence and new trigger words.
-- `.agent/memory/active/distilled.md` — graduated cross-session insight about drift recurrence during enforcement-rule authoring.
-- `.agent/memory/operational/repo-continuity.md` — pending-graduations register updated; `due` status on the disposition-drift PDR candidate; new register entry for the no-half-measures principle.
-- `.agent/memory/operational/threads/observability-sentry-otel.next-session.md` — thread record updated with full session-close.
-- `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` — this plan, with this "Session 1" section.
-- `.agent/state/collaboration/active-claims.json` — Pelagic claim closed at session-end.
-- `.agent/state/collaboration/closed-claims.archive.json` — Briny closure record + Pelagic closure record.
-- `.agent/state/collaboration/shared-comms-log.md` — session-open + session-close entries.
-- `packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.ts` (new) — dormant rule code.
-- `packages/core/oak-eslint/src/rules/no-problem-hiding-patterns.unit.test.ts` (new) — dormant rule tests, 8 cases.
-- `packages/core/oak-eslint/src/plugin.ts` — adds the rule to `oakRuleModules` (registration only; no config tier activates it).
+### Owner direction at planning time (2026-04-27 18:00Z)
 
-**Kept uncommitted (owner WIP, deferred to Cluster B)**:
+Decisions on the three forks named by the assumptions-reviewer:
 
-- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs` — owner-authored architectural critique comments at lines 150 and 188. Will be absorbed into Cluster B's refactor when that cluster runs.
+1. **Decision 1B** — delete the dormant `no-problem-hiding-patterns` rule cleanly. Open a follow-up plan at `.agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md` to re-author enforcement under clean-conditions authorship later. The principle in `principles.md` stays; the violations remain in the codebase as a known remediation backlog addressed by the follow-up plan.
+2. **Decision 2A** — execute the full 11-cluster plan on PR-87 (Q + A + B + C + D + H + I + J + K + L + M + N + O). Holistic cleanup; PR-87 ships with `new_violations=0`, `new_security_hotspots_reviewed=100%`, and 0 OPEN CodeQL alerts (or each remaining alert dismissed-with-rationale).
+3. **Decision 3A** — Cluster Q first via Phase 0.5 sink probe.
 
-**Source-unknown working-tree change**:
+### Phase 0.5 sink-probe outcome — Cluster Q is fixture-level dismiss-with-rationale
 
-- `.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md` — appeared in working tree during the session; I did not author it. Owner had this file open in their IDE. **Action**: kept uncommitted; fresh session should ask owner about its disposition.
+The regex sink behind CodeQL alerts #82–#86 is at `apps/.../src/host-header-validation.ts:6`:
 
-### Metacognitive correction at session-close (load-bearing for next session)
+```typescript
+const regexPattern = '^' + pattern.replace(/\./g, '\\.').replace(/\*/g, '[a-z0-9.-]*') + '$';
+return new RegExp(regexPattern);
+```
 
-The owner caught me three times reproducing the exact drift pattern I had named in this morning's napkin — softening principles while writing the enforcement of them. The metacognitive analysis is captured in the [Pelagic Flowing Dock napkin entry](../../../memory/active/napkin.md) including new trigger words and intensified protective practices. The next session opens with the napkin entry as primary grounding for any work that touches the rule, the principle, or the sweep.
+The regex IS anchored (`^...$`). The other static regexes in the same file (lines 44, 48, 60) are also anchored. The CodeQL dataflow source at `host-validation-error.unit.test.ts:30/40/75/89` flows into a properly-anchored production regex; the alert message "may match anywhere" doesn't apply. Furthermore, several of the test-file source lines pass inputs that are rejected by `hasForbiddenHostCharacters` *before* reaching any regex (e.g. line 89's `'example.com:443@evil.com'` contains `@`, immediately rejected by `isValidHostHeader`).
 
-**Owner direction at handoff**:
-
-1. Allowlist + any other rule-disabling has been removed (rule is now strict — uniform `_*` ban including double-underscore and shorthand-destructure).
-2. Plan + continuity surfaces deeply updated to mark suspect work.
-3. Intermediary `/jc-consolidate-docs` to graduate today's lessons.
-4. `/jc-session-handoff` to close cleanly.
-5. Continue in fresh session — **do not extend the suspect work in this session**.
-
-### Assumptions surfaced (worth challenging in fresh session)
-
-- **Assumption: the void/_ rule should be in the `recommended` config tier.** Alternative: it could be in `strict` only, which would let workspaces opt in. The recommended-tier choice was made early in drift; reconsider per the principle of "minimum surface that delivers the value."
-- **Assumption: the codegen template fix `toolMcpFlatInputSchema.parse(flatArgs)` is the right cure for `void flatArgs;`.** Alternative: emit a no-arg function for no-param tools and widen the contract type to allow zero-arg implementations. Re-audit; the parse adds runtime cost.
-- **Assumption: dropping `_schema` from 11 generators uniformly is correct.** Alternative: per-generator analysis of why `_schema` was originally added — it might have been intended for future use. Re-derive per-file.
-- **Assumption: `omitProperty(annotations, 'title')` style helpers are universally banned.** This is actually correct per the principle, BUT the substitute pattern (positive construction with `undefined` overrides) requires `title?` and `description?` to be optional in the type. If a future test needs to omit a REQUIRED field, the substitute pattern fails. Either the type should always make removable-for-test-purposes fields optional, OR there's a missing infrastructure piece (e.g. a typed `Partial<>`-with-explicit-required helper).
-- **Assumption: parallel-agent dispatch was a viable acceleration strategy.** The owner stopped this dispatch. The correct read is: parallel agents under drift multiply drift. The principled rule: serial-only when drift is active.
+**Disposition for Cluster Q**: dismiss all 5 CodeQL alerts (#82–#86) via the alerts-dismissal API with category `false_positive` and rationale citing the production-regex anchoring at `host-header-validation.ts:6`. Plus the new TO_REVIEW Sonar hotspot at `host-validation-error.unit.test.ts:70` (S5332 "http protocol insecure" — the test asserts `value: 'http://[::1]:3333'` for the documented ipv6 loopback semantics) — `accept`-with-rationale via Sonar MCP. **No production code changes for Cluster Q.**
 
 ---
 
@@ -163,37 +164,42 @@ Four unstaged edits on the working tree at session open, each one a structural e
 
 Every cluster in this plan is evaluated against these four lenses before any code changes.
 
-## Live signal state (gathered 2026-04-27T14:05Z, re-harvested at session open)
+## Live signal state (verified Session 2 open, 2026-04-27T18:21Z)
 
-> Captured via Sonar MCP, GitHub CodeQL alerts API, and `gh pr view`/`gh api` against PR-87 head `8cd49fe1`. **Phase-0 live re-harvest correction**: the project-wide search in the planning pass (100 issues) was not PR-scoped and overcounted. The PR-scoped Sonar search returns exactly 27 issues, matching the QG `new_violations=27`. Clusters E (S7763 ×15) and F (S7688 ×10) from the planning pass **do not exist on PR-87** and have been removed.
+> Captured via Sonar MCP, GitHub CodeQL alerts API, and `gh pr view`/`gh api` against PR-87 head `0b8af81f`. The Session-1 snapshot was at head `8cd49fe1`; deltas in §"Session 2" verified-state catalogue above. The PR-scoped Sonar search returns exactly 27 issues, matching the QG `new_violations=27`.
 
 ### CI / quality gates
 
 | Check | State | Notes |
-|---|---|---|
-| `test` | SUCCESS | 1001 tests pass |
+| --- | --- | --- |
+| `test` | IN_PROGRESS at session 2 open | Fresh run started 16:34:16Z (triggered by Session 1's pushes) |
 | `Analyze (javascript-typescript)` ×2 | SUCCESS | Per-language CodeQL analyses pass |
 | `Analyze (actions)` | SUCCESS | |
 | `Cursor Bugbot` | SUCCESS | |
 | Vercel preview | SUCCESS | |
-| **`CodeQL` (combined)** | **FAILURE** | 7 OPEN alerts on PR scope |
+| **`CodeQL` (combined)** | **FAILURE** | **12 OPEN alerts** on PR scope (was 7 in Session 1; 5 new on host-validation-error.unit.test.ts) |
 | **`SonarCloud Code Analysis`** | **FAILURE** | QG ERROR on three conditions |
 
 ### Sonar QG conditions failing
 
 | Metric | Threshold | Actual | Driver |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `new_violations` | ≤0 | 27 | New-feature workstream code (commit-queue, agent-identity, build-metadata, observability, sentry-node, shell scripts) |
-| `new_duplicated_lines_density` | ≤3% | 5.4% | Generated SDK artefacts (api-schema-base.ts, response-map.ts, path-parameters.ts, curriculumZodSchemas.ts, etc.) — ADR-029 cardinal rule territory |
-| `new_security_hotspots_reviewed` | ≥100% | 90% | One TO_REVIEW hotspot: `vercel-ignore-production-non-release-build.mjs:151` (S4036 PATH env access in build script) |
+| `new_duplicated_lines_density` | ≤3% | **5.7%** | Generated SDK artefacts (api-schema-base.ts, response-map.ts, path-parameters.ts, curriculumZodSchemas.ts, etc.) — ADR-029 cardinal rule territory |
+| `new_security_hotspots_reviewed` | ≥100% | **81.8%** | **2 TO_REVIEW hotspots**: `vercel-ignore-production-non-release-build.mjs:152` (S4036 PATH; Cluster B owner-flagged) and `host-validation-error.unit.test.ts:70` (S5332 http protocol; legacy hotspot re-surfaced by latest scan, fixture-level cure via Sonar MCP `accept`) |
 
-### CodeQL OPEN alerts (7)
+### CodeQL OPEN alerts (12)
 
 | # | Rule | Path | Line | Architectural shape |
-|---|---|---|---|---|
-| 81 | js/missing-rate-limiting | `apps/.../auth-routes.ts` | 108 | Function-block flag on `registerAuthenticatedRoutes` factory |
+| --- | --- | --- | --- | --- |
+| 86 | js/regex/missing-regexp-anchor | `apps/.../host-validation-error.unit.test.ts` | 89 | **Cluster Q** — dataflow source; sink is anchored regex at `host-header-validation.ts:6` |
+| 85 | js/regex/missing-regexp-anchor | `apps/.../host-validation-error.unit.test.ts` | 75 | **Cluster Q** — same |
+| 84 | js/regex/missing-regexp-anchor | `apps/.../host-validation-error.unit.test.ts` | 40 | **Cluster Q** — same |
+| 83 | js/regex/missing-regexp-anchor | `apps/.../host-validation-error.unit.test.ts` | 30 | **Cluster Q** — same |
+| 82 | js/incomplete-hostname-regexp | `apps/.../host-validation-error.unit.test.ts` | 75 | **Cluster Q** — same |
+| 81 | js/missing-rate-limiting | `apps/.../auth-routes.ts` | 106 | Function-block flag on `registerAuthenticatedRoutes` factory |
 | 71 | js/missing-rate-limiting | `apps/.../auth-routes.ts` | 153 | `app.post(...)` inside the factory; CodeQL can't trace `RequestHandler`-typed limiter through DI |
-| 70 | js/missing-rate-limiting | `apps/.../auth-routes.ts` | 155 | `app.get(...)` inside the factory; same shape |
+| 70 | js/missing-rate-limiting | `apps/.../auth-routes.ts` | 151 | `app.get(...)` inside the factory; same shape |
 | 72 | js/missing-rate-limiting | `apps/.../oauth-proxy/oauth-proxy-routes.ts` | 87 | `createOAuthProxyRoutes` factory with options-object DI |
 | 69 | js/missing-rate-limiting | `apps/.../app/bootstrap-helpers.ts` | 151 | DI-shaped helper; bootstrap factory line, not a route registration |
 | 76 | js/http-to-file-access | `packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts` | 99 | Codegen schema-cache write |
@@ -225,10 +231,11 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 > **Cluster size discipline**: a cluster groups findings only when one architectural shape resolves them all. K, L, M, N each have an in-file repeat. O is *not* a cluster — it's four unrelated singletons grouped only for tracking; each is a per-site investigation. Cluster H spans three files because the pattern is the *same byte sequence* — the canonical at `semver.ts` plus the parity-tested copy in `validate-root-application-version.mjs` plus the parity test itself.
 
-### Hotspots (10; 1 TO_REVIEW)
+### Hotspots (11; 2 TO_REVIEW)
 
-- `vercel-ignore-production-non-release-build.mjs:151` (S4036 PATH) — TO_REVIEW. **Owner's two comments at lines 150 and 188 are the architectural cure direction**: replace generic `runGitCommand` with purpose-specific helpers; DI should inject `getPackageJsonAtSha`, not `executeGitCommand`.
-- 9 others REVIEWED → SAFE in the previous session; do not re-touch.
+- `vercel-ignore-production-non-release-build.mjs:152` (S4036 PATH) — TO_REVIEW. **Owner's two comments at lines 150 and 188 are the architectural cure direction**: replace generic `runGitCommand` with purpose-specific helpers; DI should inject `getPackageJsonAtSha`, not `executeGitCommand`. Cluster B target.
+- `host-validation-error.unit.test.ts:70` (S5332 "http protocol insecure") — TO_REVIEW. NEW since Session 1 — re-surfaced legacy hotspot (created 2026-03-02, updated 2026-04-27T16:34:19Z). Test asserts `value: 'http://[::1]:3333'` for documented ipv6 loopback semantics; legitimate test fixture. **Disposition: `accept`-with-rationale via Sonar MCP. Single MCP call.**
+- 9 others REVIEWED → SAFE in Session 1; do not re-touch.
 
 ### Review comments
 
@@ -237,6 +244,20 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 ## Architectural clusters
 
 > Clusters are *root-cause groupings*, not rule groupings. A cluster spans multiple Sonar/CodeQL findings if and only if they share an architectural shape that one structural change resolves. Per-site investigation precedes cluster assignment; if a single rule-key fires for two different architectural reasons, it spans two clusters.
+
+### Cluster Q: host-validation-error regex anchoring (5 CodeQL alerts + 1 Sonar hotspot — fixture-level)
+
+**Findings**: CodeQL #82, #83, #84, #85, #86 + Sonar hotspot `AZ3PzDg2qR2lgcKGwtUx`.
+
+**Architectural shape (from Phase 0.5 sink-probe)**: the actual regex sink is at `apps/oak-curriculum-mcp-streamable-http/src/host-header-validation.ts:6`, which builds an anchored (`^...$`) regex from a wildcard-host pattern. The static regexes at lines 44, 48, 60 are also anchored. CodeQL is locating the alerts at the dataflow source (the test file lines that pass strings into `deriveSelfOrigin`), but the sink the alerts are actually about is properly anchored. Furthermore, several of the test-file source lines pass inputs that are rejected by `hasForbiddenHostCharacters` *before* reaching any regex.
+
+**Owner lens applied**: lens 1 (replace, don't bridge — no compatibility shim around the regex; the production code is correct).
+
+**Resolution path**: dismiss-with-rationale on all 5 CodeQL alerts via the alerts-dismissal API with category `false_positive`; rationale cites the production-regex anchoring at `host-header-validation.ts:6`. Plus `accept`-with-rationale on Sonar hotspot `AZ3PzDg2qR2lgcKGwtUx` via Sonar MCP citing legitimate ipv6-loopback test-fixture context. **No production code changes.** All 6 dispositions land in one batch.
+
+**Reviewers**: `code-reviewer` (gateway), `security-reviewer` (host-validation boundary), `test-reviewer` (the test fixtures themselves).
+
+**ADR alignment**: `replace-dont-bridge` rule.
 
 ### Cluster A: DI-opacity on route registration (5 CodeQL alerts)
 
