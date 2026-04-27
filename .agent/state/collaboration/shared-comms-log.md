@@ -2556,3 +2556,190 @@ the public result types visibly consumed by tests. The successful commit
 passed Prettier format check, markdownlint, knip, depcruise, and turbo
 type-check/lint/test gates. Active claims registry is empty again after
 this closeout.
+
+### 2026-04-26T19:12:55Z — `Codex` — session handoff and consolidation claim
+
+Opened active claim `dd837ddf-d373-40a3-ad6b-450f7becf91d` for the
+owner-requested `jc-session-handoff` plus `jc-consolidate-docs` pass
+after deterministic identity implementation.
+
+Pre-claim status: working tree clean; active claims registry empty.
+Scope: repo-continuity, the `agentic-engineering-enhancements`
+thread record, and collaboration lifecycle records only. No product
+code or platform wrapper implementation is part of this closeout.
+
+### 2026-04-26T19:17:16Z — `Codex` — session handoff and consolidation closeout
+
+Closed active claim `dd837ddf-d373-40a3-ad6b-450f7becf91d` after the
+requested `jc-session-handoff` plus `jc-consolidate-docs` pass.
+
+Updated repo continuity and the `agentic-engineering-enhancements`
+thread handoff to reflect the landed coordination consolidation commits,
+the landed deterministic identity implementation and closeout commits,
+and the next safe step: Claude/platform review for Phase 8 identity
+alignment. The active coordination registry is empty after this closeout.
+
+Consolidation findings: `CLAUDE.md`, `AGENTS.md`, and `GEMINI.md` remain
+pointer-only entry points to `.agent/directives/AGENT.md`; `.remember/`
+and `.agent/experience/` did not contain new unique current-session
+signal needing extraction; no real escalation JSON files are open; the
+only open conversation is the example fixture
+`ws3a-decision-thread-open.example.json`.
+
+Practice-fitness disposition: `pnpm practice:fitness:informational`
+still reports hard findings in `.agent/directives/agent-collaboration.md`
+and `.agent/memory/operational/collaboration-state-conventions.md`.
+Those are routed to the new queued plan
+`.agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md`
+instead of being silently carried as drift.
+
+### 2026-04-26T19:30:04Z — `Riverine Navigating Hull` — agent-identity Phase 8 Claude alignment review
+
+Joined the `agentic-engineering-enhancements` thread for Phase 8 of
+the agent-identity-derivation plan. Active-claims registry was empty
+at session open; bootstrap fast-path applies — no other agents
+present. Opened active claim
+`6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df`.
+
+Identity derived through the new repo-owned tool itself:
+`pnpm agent-tools:agent-identity --seed
+c32a7d1d-a40b-4864-b4cd-bc4332a3e362 --format display` →
+`Riverine Navigating Hull`. Platform: `claude-code`; model:
+`claude-opus-4-7-1m`; session id prefix: `c32a7d1d`. This is the
+first session whose identity is generated rather than chosen.
+
+Scope: review the deterministic identity implementation
+(`agent-tools/src/core/agent-identity/**`, `src/bin/agent-identity*`,
+tests, docs, PDR-027 amendment, start-right updates,
+`register-identity-on-thread-join`, platform status table),
+re-run the quality gates including the documented prior pressure
+points (`practice:fitness:informational` against
+`agent-collaboration.md` and `collaboration-state-conventions.md`,
+plus the `--exactOptionalPropertyTypes` probe on
+`codex-reviewer-resolve.ts`), then either wire Claude Code
+statusline/update-config to call the built CLI or document a clear
+owner-required action for user-global config. Reviewer dispatch and
+commit-window claim follow once the work is ready to land.
+
+Out of scope: backfilling historical identities, reintroducing the
+removed `git config user.email` fallback, mutating user-global
+Claude config silently, or starting platform wrappers for Codex or
+Cursor in this pass.
+
+### 2026-04-27T00:00Z — `Riverine Navigating Hull` — Phase 8 statusline wiring landed
+
+Phase 8 of the agent-identity-derivation plan is implemented in the
+working tree, ready to commit under active claim
+`6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df`.
+
+Scope landed in this pass:
+
+- `.claude/scripts/statusline-identity.mjs` (new) — graceful-degradation
+  shim that resolves the built adapter at
+  `agent-tools/dist/src/claude/statusline-identity.js` and exits 0
+  silently if the build artefact is missing.
+- `.claude/settings.json` — `statusLine.command` already references the
+  shim (this part landed in the pre-Phase-8 working tree alongside the
+  Codex pass that built `agent-tools/src/claude/statusline-identity.ts`
+  and its unit-tested input parser; the shim itself was the missing
+  piece).
+- `agent-tools/docs/agent-identity.md` — platform status table flips
+  Claude Code from "Deferred" to "Wired"; new "Claude Code statusline
+  wiring" section documents the four-step flow.
+- `agent-identity-derivation.plan.md` — Phase 8 marked complete with
+  findings; plan status moved to 🟢 COMPLETE; Phase 4 amended with the
+  Phase 8 update.
+- This thread's next-session record updated with a fresh refresh entry,
+  identity table row, completed-plan reclassification, current-state
+  refresh, and renumbered Next Safe Step list.
+
+Smoke test: `echo '{"session_id":"c32a7d1d-..."}' | node
+.claude/scripts/statusline-identity.mjs` prints
+`Riverine Navigating Hull`; empty/invalid stdin exits 0 silently.
+
+Findings: no Claude Code system mismatch; `update-config` was not
+required since `.claude/settings.json` already exposes
+`statusLine.command` for direct edit. Codex and Cursor remain
+documented gaps awaiting stable platform session-id surfaces.
+
+### 2026-04-27T00:00Z — `Vining Bending Root` / `claude-code` / `claude-opus-4-7-1m` / `4e2cbc5c` — PR-87 Phases 3-6 session open
+
+Resuming PR-87 quality remediation on `feat/otel_sentry_enhancements`.
+Master plan: `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`.
+Session plan: `~/.claude/plans/jc-plan-jc-metacognition-jc-start-right-mutable-torvalds.md`.
+Phases 0-2 already landed (Ethereal Alpaca, 2026-04-26); this session executes Phases 3-6.
+
+**Co-tenant**: Riverine Navigating Hull is committing Phase 8 of `agent-identity-derivation` under claim `6078ec9e`. Their pathspec covers `agent-tools/**`, `.agent/state/collaboration/**`, `.agent/skills/start-right-{quick,thorough}/**`, the agentic-engineering thread record, and PDR-027. **My pathspec is structurally disjoint** — Phase 3-6 touches app code, generator code, scripts, test files, and SonarCloud config; not their files. I will append-only to the registry surfaces; their not-yet-committed registry entries will land in whichever of our commits stages them first.
+
+**Pre-Phase-3 reviewers**: assumptions-reviewer, security-reviewer, architecture-reviewer-betty all returned with substantive findings absorbed into the session plan. Owner approved two architectural decisions: introduce a new `METADATA_RATE_LIMIT` profile (separate from `OAUTH_RATE_LIMIT`) for the four `/.well-known/*` routes; use validate-then-skip-with-warning at the schema-cache write site.
+
+**Coordination thread**: `pr-87-phases-3-6-vining-bending-root` opened in `.agent/state/collaboration/conversations/`. v1.1.0 schema; sidebar/joint-decision entries available if Riverine's surface needs coordination.
+
+**Commit cadence**: per-task commits per the master plan; commit-window protocol on each (open `git:index/head` claim → stage → validate via `scripts/check-commit-message.sh` → commit → close claim).
+
+No push until Phase 6 explicitly authorises it. Owner already pre-authorised auto-push once gates green AND mid-Phase reviewer batch returns no MAJOR/BLOCKING.
+
+### 2026-04-27T05:20:09Z — `Riverine Navigating Hull` — Phase 8 commit-window opened
+
+Opened commit-window claim `8aa09e2a-47cf-4da4-8f12-27f211e2b324`
+(`git:index/head`) for the Phase 8 substantive landing. Acknowledged
+peer claim `9c7f4e51` (Vining Bending Root, observability-sentry-otel,
+PR-87 Phases 3-6) — pathspecs structurally disjoint, mutually noted.
+
+Intended pathspecs for the substantive commit:
+`.claude/scripts/statusline-identity.mjs`,
+`.claude/settings.json`, `agent-tools/src/claude/**`,
+`agent-tools/tests/claude/**`, `agent-tools/package.json`,
+`agent-tools/docs/agent-identity.md`, the agent-identity-derivation
+plan move from `architecture-and-infrastructure/active/` to
+`archive/completed/`, the parent + active READMEs, and the thread
+next-session record. State-file closeout (`active-claims.json`,
+`closed-claims.archive.json`, this log) lands in a separate
+closeout commit immediately after, matching the
+`3a5e3d81` + `ed256e6f` pattern Codex used for Phase 1-7.
+
+Pre-stage scan: index lock clear; staged set empty; gates green
+(agent-tools build/type-check/lint/test 71/71/test:e2e 12/12,
+root format, markdownlint, portability:check passed).
+
+Three reviewers returned: `code-reviewer` GO-WITH-CONDITIONS,
+`docs-adr-reviewer` COMPLIANT, `architecture-reviewer-fred`
+GO-WITH-CONDITIONS. Substantive conditions absorbed before
+commit-window open: shim path resolution prefers
+`CLAUDE_PROJECT_DIR` with positional fallback (Fred); plan
+§Solution Architecture documents `src/claude/` (Fred); plan
+§Dependencies retires `update-config` deferral wording (docs-adr);
+plan §Reviewer Scheduling records `security-reviewer` deferral
+disposition with developer-local threat-model rationale
+(code-reviewer); doc accuracy "spawns" → "synchronously invokes
+(spawnSync)" (code-reviewer); plan moved to `archive/completed/`
+per repo convention with parent README updated (docs-adr).
+
+### 2026-04-27T05:30:00Z — `Riverine Navigating Hull` — Phase 8 commit-window closed
+
+Closed both active claims:
+
+- Phase 8 area claim `6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df`
+  (`closure.kind: "explicit"`).
+- Commit-window claim `8aa09e2a-47cf-4da4-8f12-27f211e2b324`
+  (`closure.kind: "explicit"`).
+
+The substantive Phase 8 bundle landed as commit `25d7c271`:
+`feat(agent-tools): wire Claude Code statusline to deterministic
+identity` (12 files, 398 insertions, 58 deletions; plan rename plus
+4 new files).
+
+The first commit attempt was blocked by `knip` on the new
+`agent-tools/src/claude/` entry-point pattern (the adapter file
+appeared "unused" because nothing in the TS import graph reaches it
+— it is spawned from outside the workspace) and the unused
+`StatuslinePlan` exported type (TypeScript inference made the
+explicit named import unnecessary). Resolved within the open
+commit-window by extending `knip.config.ts` `agent-tools` entry to
+include `src/claude/**/*.ts` and adding an explicit `StatuslinePlan`
+type import in the adapter. Second attempt landed cleanly through
+the full pre-commit pipeline (74 turbo tasks, all gates green).
+
+Active claims registry now contains only Vining Bending Root's
+PR-87 claim `9c7f4e51`. Phase 8 lane is complete; the
+agent-identity-derivation plan is archived.

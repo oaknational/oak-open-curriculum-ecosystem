@@ -1994,7 +1994,7 @@
             "summary": "Built CLI emitted the same display identity twice: Gnarled Sprouting Fern."
           },
           {
-            "kind": "review",
+            "kind": "command_output",
             "ref": "assumptions-reviewer, code-reviewer, type-reviewer, test-reviewer, architecture-reviewer-fred",
             "summary": "Reviewer findings were applied or recorded as out-of-scope follow-up; public barrel was narrowed after architecture review."
           },
@@ -2046,6 +2046,250 @@
             "kind": "log_entry",
             "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t190053z--codex--commit-window-for-deterministic-identity-implementation",
             "summary": "Commit-window opening entry for the deterministic identity implementation bundle."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "dd837ddf-d373-40a3-ad6b-450f7becf91d",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T19:12:55Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run requested jc-session-handoff and jc-consolidate-docs closeout after deterministic identity implementation.",
+      "notes": "Pre-claim status clean; active claims registry empty. Scope is continuity/consolidation state only; no product code edits.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T19:17:16Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Requested session handoff and consolidation completed. Repo continuity and thread records now point to the deterministic identity closeout, pending Claude/platform review, and an explicit remediation lane for collaboration-document practice-fitness hard findings. Active claims registry is empty after this closeout.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-26t191255z--codex--session-handoff-and-consolidation-claim",
+            "summary": "Open coordination entry for the handoff and consolidation pass."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Operational continuity refreshed with current branch state, next safe steps, and consolidation status."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread handoff refreshed for agentic engineering enhancements."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            "summary": "Queued remediation plan created for hard practice-fitness findings in collaboration documentation."
+          },
+          {
+            "kind": "command_output",
+            "ref": "collaboration JSON AJV validation; targeted markdownlint; targeted Prettier check; pnpm practice:fitness:informational",
+            "summary": "Collaboration records validated, changed markdown/JSON hygiene checked, and remaining hard fitness findings identified and routed."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2242437b-a398-4b08-a5ef-f2c42e563c93",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T19:59:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify plan surfaces after owner questions about intent-to-commit status and cross-vendor sidecar scope.",
+      "notes": "Scanned registry: 1 active claim, 6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df, for Claude/platform identity review. No overlap with target plan surfaces; active-claims registry edit is protocol bookkeeping only. Avoiding identity plan/docs/PDR/start-right surfaces.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-26T20:00:11Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Clarified the plan surfaces for the completed commit-window claim versus the future intent-to-commit/session-counter layer, and clarified that cross-vendor session sidecars are a future metadata layer rather than the first cross-vendor collaboration substrate.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "summary": "Added an implementation-boundary section distinguishing completed git:index/head commit-window claims from future intent_to_commit/session_counter work."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            "summary": "Added portability clarification that baseline collaboration infrastructure must remain cross-vendor and sidecars are a narrower future metadata layer."
+          },
+          {
+            "kind": "command_output",
+            "ref": "targeted markdownlint; targeted Prettier check; active-claims schema validation",
+            "summary": "Changed plan surfaces and collaboration active-claim state validated cleanly."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6078ec9e-3f26-4a73-ba9d-7cb5fb6bb9df",
+      "agent_id": {
+        "agent_name": "Riverine Navigating Hull",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c32a7d1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/core/agent-identity/**",
+            "agent-tools/src/bin/agent-identity*.ts",
+            "agent-tools/tests/agent-identity/**",
+            "agent-tools/docs/agent-identity.md",
+            "agent-tools/README.md",
+            ".agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/architecture-and-infrastructure/active/agent-identity-derivation.plan.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/architecture-and-infrastructure/active/agent-identity-derivation.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T19:30:04Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Phase 8 of agent-identity-derivation: Claude Code platform alignment review. Verify the deterministic identity implementation, docs, PDR-027 amendment, start-right updates, and platform status table. Investigate the Claude Code statusline/update-config surface and decide whether to wire repo-owned platform integration or surface a clear owner action for user-global config.",
+      "notes": "Bootstrap fast-path: active-claims registry was empty at session open; appended 'no other agents present' note to shared-comms-log. Session identity 'Riverine Navigating Hull' derived from Claude Code session id c32a7d1d-a40b-4864-b4cd-bc4332a3e362 via the new agent-identity CLI.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:30:00Z",
+        "closed_by": {
+          "agent_name": "Riverine Navigating Hull",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "c32a7d1d"
+        },
+        "summary": "Phase 8 completed: Claude Code platform alignment review confirmed no system mismatch and update-config was not required; statusline wired through .claude/scripts/statusline-identity.mjs delegating to the built agent-tools/dist/src/claude/statusline-identity.js adapter. Plan moved to archive/completed/ with status COMPLETE; platform-status table flips Claude Code from Deferred to Wired; Codex/Cursor remain documented gaps. Substantive bundle landed as 25d7c271.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "25d7c271",
+            "summary": "feat(agent-tools): wire Claude Code statusline to deterministic identity. 12 files; 398 insertions, 58 deletions; plan rename + 4 new files."
+          },
+          {
+            "kind": "command_output",
+            "ref": "echo '{\"session_id\":\"c32a7d1d-a40b-4864-b4cd-bc4332a3e362\"}' | node .claude/scripts/statusline-identity.mjs",
+            "summary": "End-to-end smoke test: real Claude Code session_id JSON on stdin produced 'Riverine Navigating Hull'; empty/invalid input exited 0 silently."
+          },
+          {
+            "kind": "command_output",
+            "ref": "agent-tools build/type-check/lint/test (71/71)/test:e2e (12/12); root format; markdownlint; knip; portability:check; pre-commit (turbo type-check/lint/test 74 successful)",
+            "summary": "All gates green at commit time after absorbing knip findings on the new src/claude/ entry-point pattern and the StatuslinePlan type-import."
+          },
+          {
+            "kind": "review",
+            "ref": "code-reviewer; docs-adr-reviewer; architecture-reviewer-fred",
+            "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan §Solution Architecture; update-config wording retired in §Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8aa09e2a-47cf-4da4-8f12-27f211e2b324",
+      "agent_id": {
+        "agent_name": "Riverine Navigating Hull",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c32a7d1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:20:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the Phase 8 substantive bundle for agent-identity-derivation: Claude Code statusline shim, agent-tools src/claude/ adapter pair (untracked from prior Codex pass), package.json chmod, .claude/settings.json statusLine, agent-identity.md platform-status update, plan archive move + active/parent README updates, and thread next-session record refresh. State-file closeout (active-claims.json + closed-claims.archive.json + shared-comms-log.md) follows in a separate close-the-window commit per the 3a5e3d81 + ed256e6f pattern.",
+      "notes": "Pathspecs: .claude/scripts/statusline-identity.mjs, .claude/settings.json, agent-tools/src/claude/**, agent-tools/tests/claude/**, agent-tools/package.json, agent-tools/docs/agent-identity.md, plan move, parent + active READMEs, thread next-session record, plus knip.config.ts (added during commit-window iteration after pre-commit hook surfaced unused-export findings). Gates green: agent-tools build/type-check/lint/test/test:e2e, root format, markdownlint, knip, portability:check, full pre-commit pipeline. Peer claim: Vining Bending Root (9c7f4e51) on observability-sentry-otel — disjoint pathspec, mutually acknowledged.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:30:00Z",
+        "closed_by": {
+          "agent_name": "Riverine Navigating Hull",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "c32a7d1d"
+        },
+        "summary": "Substantive Phase 8 bundle landed as 25d7c271 on feat/otel_sentry_enhancements. First commit attempt blocked by knip on the new agent-tools/src/claude/ entry-point pattern; resolved by extending knip.config.ts agent-tools entry to include src/claude/**/*.ts and adding an explicit StatuslinePlan type import in the adapter. Second attempt landed cleanly through full pre-commit pipeline (74 turbo tasks). Window closed.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "25d7c271",
+            "summary": "feat(agent-tools): wire Claude Code statusline to deterministic identity"
+          },
+          {
+            "kind": "command_output",
+            "ref": "git log --oneline -3",
+            "summary": "25d7c271, ed256e6f, 3a5e3d81 — substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
           }
         ]
       }
