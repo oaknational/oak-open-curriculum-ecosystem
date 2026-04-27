@@ -85,17 +85,22 @@ function mountAppVersionHeader(app: ExpressWithAppId, appVersion: string): void 
   });
 }
 
-function setupPostAuthPhases(
-  app: ExpressWithAppId,
-  options: CreateAppOptions,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appId: number,
-  allowedHosts: readonly string[],
-  dnsRebindingMiddleware: RequestHandler,
-  mcpRateLimiter: RequestHandler,
-  assetRateLimiter: RequestHandler,
-): void {
+interface SetupPostAuthPhasesDeps {
+  readonly app: ExpressWithAppId;
+  readonly options: CreateAppOptions;
+  readonly log: Logger;
+  readonly bootstrapTimer: PhasedTimer;
+  readonly appId: number;
+  readonly allowedHosts: readonly string[];
+  readonly dnsRebindingMiddleware: RequestHandler;
+  readonly mcpRateLimiter: RequestHandler;
+  readonly assetRateLimiter: RequestHandler;
+}
+
+function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
+  const { app, options, log, bootstrapTimer, appId, allowedHosts } = deps;
+  const { dnsRebindingMiddleware, mcpRateLimiter, assetRateLimiter } = deps;
+
   const { mcpFactory, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
@@ -179,7 +184,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     metadataRateLimiter,
   });
 
-  setupPostAuthPhases(
+  setupPostAuthPhases({
     app,
     options,
     log,
@@ -189,7 +194,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     dnsRebindingMiddleware,
     mcpRateLimiter,
     assetRateLimiter,
-  );
+  });
 
   registerDiagnosticRoutesIfEnabled({
     app,
