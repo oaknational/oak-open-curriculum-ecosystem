@@ -20,6 +20,17 @@ export { deriveSelfOrigin };
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).
  * Rate limiting is still applied — abuse is possible even without auth.
+ *
+ * Both `/mcp` registrations attach the injected `mcpRateLimiter` as the
+ * first middleware. The limiter is constructed in
+ * `rate-limiting/create-rate-limiters.ts` from the `MCP_RATE_LIMIT`
+ * profile (120 req/min/IP) and reaches this function via DI per
+ * ADR-078. CodeQL's `js/missing-rate-limiting` static analysis cannot
+ * trace the limiter through the `RequestHandler`-typed parameter (it
+ * looks structurally identical to any other middleware); dismissals of
+ * its alerts on these registrations cite this attestation.
+ *
+ * @param mcpRateLimiter - Per-IP limiter; see create-rate-limiters.ts.
  */
 function registerUnauthenticatedRoutes(
   app: Express,
@@ -114,6 +125,18 @@ export function registerPublicOAuthMetadataEndpoints(
 
 /**
  * Registers /mcp routes with HTTP-level auth (HTTP 401 for unauthenticated).
+ * Both `/mcp` registrations attach the injected `mcpRateLimiter` as the
+ * first middleware (before `mcpRouter` and `createMcpHandler`). The
+ * limiter is constructed in `rate-limiting/create-rate-limiters.ts`
+ * from the `MCP_RATE_LIMIT` profile and reaches this function via DI
+ * per ADR-078. Closes — at the source-of-truth level — the architectural
+ * concern CodeQL alerts #70 (line 113) and #71 (line 115) raise: the
+ * static analyser cannot trace the limiter through the
+ * `RequestHandler`-typed parameter, but the wiring is in fact present
+ * and tested via `rate-limiter-di.integration.test.ts`. Dismissals of
+ * those alerts cite this attestation.
+ *
+ * @param mcpRateLimiter - Per-IP limiter; see create-rate-limiters.ts.
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  */
 function registerAuthenticatedRoutes(

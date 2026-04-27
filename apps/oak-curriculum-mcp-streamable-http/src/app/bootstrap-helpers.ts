@@ -131,7 +131,12 @@ export async function runAsyncBootstrapPhase<T>(
   }
 }
 
-/** Sets up base Express middleware (JSON parsing, correlation, request logging). Error handlers register separately via {@link setupErrorHandlers} after all routes (Sentry requirement). */
+/**
+ * Sets up base Express middleware: JSON, correlation, and debug request
+ * logging. Error handlers register later for Sentry compatibility.
+ * Not a route handler: rate limiting belongs on route registrations.
+ * CodeQL #69 is an `app.use(complex-expression)` misclassification.
+ */
 export function setupBaseMiddleware(
   app: Express,
   log: Logger,
