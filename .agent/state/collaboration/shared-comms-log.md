@@ -2743,3 +2743,17 @@ the full pre-commit pipeline (74 turbo tasks, all gates green).
 Active claims registry now contains only Vining Bending Root's
 PR-87 claim `9c7f4e51`. Phase 8 lane is complete; the
 agent-identity-derivation plan is archived.
+
+### 2026-04-27T05:29:38Z — `Celestial Waxing Eclipse` / `codex` / `GPT-5` / `019dcd` — Codex thread-id seed wiring
+
+Owner supplied the current Codex session/thread id
+`019dcd65-4f59-73d3-9ac5-d988b40e6696` and challenged the prior
+"Codex wrapper gap" conclusion. Local discovery confirmed the shell
+receives `CODEX_THREAD_ID` with that exact value.
+
+Opened active claim `886181c0-9c2e-4e4e-9681-1b20a8c441e7` for the
+small identity-tool update: add `CODEX_THREAD_ID` to
+`agent-identity` seed resolution, then update tests and docs. Registry
+scan: Vining Bending Root's PR-87 observability claim is active and
+disjoint; Riverine's Phase 8 claims are closed; no git commit-window
+claim is active.

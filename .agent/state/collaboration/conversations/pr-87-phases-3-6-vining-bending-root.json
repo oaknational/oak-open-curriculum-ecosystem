@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "pr-87-phases-3-6-vining-bending-root",
+  "thread": "observability-sentry-otel",
+  "status": "open",
+  "opened_at": "2026-04-27T00:00:00Z",
+  "title": "PR-87 quality remediation Phases 3-6",
+  "participants": [
+    {
+      "agent_name": "Vining Bending Root",
+      "platform": "claude-code",
+      "model": "claude-opus-4-7-1m",
+      "session_id_prefix": "4e2cbc5c"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "message",
+      "created_at": "2026-04-27T00:00:00Z",
+      "author": {
+        "agent_name": "Vining Bending Root",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4e2cbc5c"
+      },
+      "body": "Session-open coordination signal. Owner-directed scope: PR-87 quality remediation Phases 3-6 on feat/otel_sentry_enhancements. Working from master plan at .agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md and session plan at ~/.claude/plans/jc-plan-jc-metacognition-jc-start-right-mutable-torvalds.md. Co-tenant Riverine Navigating Hull on agent-identity-derivation Phase 8 (claim 6078ec9e); structurally disjoint pathspec. Pre-Phase-3 reviewer batch (assumptions-reviewer, security-reviewer, architecture-reviewer-betty) all ran; substantive findings absorbed into session plan body."
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "decision",
+      "created_at": "2026-04-27T00:00:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Phase 3.2 rate-limit shape: introduce a new METADATA_RATE_LIMIT profile in rate-limit-profiles.ts (separate from OAUTH_RATE_LIMIT). Per architecture-reviewer-betty MAJOR-A: OAUTH_RATE_LIMIT was named and documented for OAuth flow endpoints; reusing it on /.well-known/* metadata routes conflates traffic categories and risks CDN cache-miss bursts producing 429s. Separate profile preserves cohesion; widens PR by ~20-30 lines (profile + factory wiring + DI bag + tests)."
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "decision",
+      "created_at": "2026-04-27T00:00:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Phase 3.1 schema-cache CodeQL #76/#77: validate-then-skip-with-warning at write site. Validator already runs upstream at codegen.ts:83 (fetch path) AND on read at codegen.ts:61, so the write-site call is defence-in-depth + adjacent attestation, not a real trust gap closure. On validation failure: log warning + skip cache write (cache stays stale; downstream codegen still throws with better diagnostics). Closes CodeQL #76/#77 via adjacent attestation; preserves the existing throw-on-bad-schema behaviour at the actual upstream/read trust boundaries."
+    },
+    {
+      "entry_id": "entry-004",
+      "kind": "decision",
+      "created_at": "2026-04-27T00:00:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Phase 5 S3735 void-operator x3 metacognitive resolution. Site 1 (test-config.ts:120, mock factory interface conformance): strengthen existing TSDoc + dismiss as FALSE_POSITIVE; no code change to runtime. Sites 2 & 3 (admin/index.ts:73, eval/index.ts:87, half-finished observability threading): remove the unused `observability?: CliObservability` parameter, the void line, and the TODO comment. The threading is re-introduced when the work is actually scoped. Underscore-rename to _observability is forbidden per the never-ignore-signals rule."
+    },
+    {
+      "entry_id": "entry-005",
+      "kind": "decision",
+      "created_at": "2026-04-27T00:00:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Phase 6 push timing pre-authorisation: auto-push once local gates exit 0 AND mid-Phase reviewer dispatch returns no MAJOR/BLOCKING. No further owner confirmation required at the push boundary."
+    }
+  ]
+}
