@@ -68,17 +68,20 @@ todos:
 
 ## Session 1 (Pelagic Flowing Dock, 2026-04-27) — outcome and suspect work
 
-**Status**: Phase 1 complete (5 commits). Cluster P0 (void/_ remediation, inserted as P0+ during session) **opened, suspect**. Clusters A onwards **not started**. Session closed under owner-directed metacognitive correction.
+**Status**: Phase 1 complete (5 commits + 1 session-close docs commit, **all local, not pushed**). Cluster P0 (void/_ remediation, inserted as P0+ during session) **opened, suspect work reverted**. Clusters A onwards **not started**. Session closed under owner-directed metacognitive correction.
 
-### Commits landed this session (all pushed to `origin/feat/otel_sentry_enhancements`)
+### Commits landed this session (LOCAL ONLY — branch is 6 ahead of origin)
 
 ```text
-0e68aa87 chore(state): close Briny claim; promote PR-87 architectural cleanup plan
-3d4a0925 refactor(auth-routes): remove single-test re-export bridge
-0d2d4dc8 chore(test): consolidate universal-tools test helpers; surface codegen TODO
-d1f5226b docs(principles): ban void <unused> and underscore-prefix as problem-hiding patterns
+3c6a3958 docs(practice): record metacognitive lesson; new dormant void/_ rule; close session
 9da90650 refactor(test): apply new void-and-underscore ban; build malformed fixtures positively
+d1f5226b docs(principles): ban void <unused> and underscore-prefix as problem-hiding patterns
+0d2d4dc8 chore(test): consolidate universal-tools test helpers; surface codegen TODO
+3d4a0925 refactor(auth-routes): remove single-test re-export bridge
+0e68aa87 chore(state): close Briny claim; promote PR-87 architectural cleanup plan
 ```
+
+**Push status**: NOT pushed. Origin is at `8cd49fe1` (owner's pre-session discard commit). Fresh session decides push timing — recommended to push after re-audit confirms the dormant rule and the state-of-knowledge updates are sound.
 
 ### Session-close action: codegen sweep REVERTED to clean state
 

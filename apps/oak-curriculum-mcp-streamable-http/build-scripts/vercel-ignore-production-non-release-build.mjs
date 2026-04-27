@@ -147,6 +147,7 @@ function safeReadPreviousVersion(executeGitCommand, repositoryRoot, previousSha)
   }
 }
 
+// This is too generic, what commands do we use in this script, we need to lock this down.
 function runGitCommand(args, cwd) {
   return execFileSync('git', args, {
     cwd,
@@ -184,6 +185,7 @@ export function runVercelIgnoreCommand(options) {
   const stdout = options.stdout ?? process.stdout;
   const stderr = options.stderr ?? process.stderr;
   const readFile = options.readFile ?? readFileSync;
+  // Are we really taking an external runnable command and just running it?
   const executeGitCommand = options.executeGitCommand ?? runGitCommand;
   const env = options.env;
   const repositoryRoot = options.repositoryRoot;

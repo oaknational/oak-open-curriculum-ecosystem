@@ -264,19 +264,43 @@ artefacts were produced under drift conditions and need re-audit
 before landing or extending:
 
 - The 11 codegen generator simplifications (`_schema` parameter
-  removal across `generate-*-modules.ts` files) — done by
-  mechanical Python script. Each callsite was confirmed-passing
-  but the cures themselves should be re-derived from principles
-  per-file rather than inherited from my batch script.
+  removal across `generate-*-modules.ts` files) — **REVERTED at
+  session-close** per owner direction. Fresh session starts from
+  clean state if void/_ remediation is undertaken.
 - `emit-schema.ts` `emitSchema(operation, ...)` parameter removal
-  — operation was genuinely unused, but the choice between "delete
-  the parameter" and "use it for emission metadata" was made
-  quickly under drift; reconsider per-site.
+  — **REVERTED at session-close**.
 - The `transformFlatToNestedArgs` generator template change
   (`void flatArgs;` → `toolMcpFlatInputSchema.parse(flatArgs);`)
-  — the parse call is genuinely useful as defence-in-depth, but
-  it adds a runtime cost on every no-param tool invocation; an
-  alternative is to validate at build time via `satisfies` and
-  emit a no-arg function. Re-audit.
+  — **REVERTED at session-close**. The architectural question of
+  whether to use `satisfies` + no-arg signature, or runtime parse,
+  or some other shape, is fresh-session work.
+
+### Late-session drift recurrence: false-state assertion
+
+Even after the metacognitive correction earlier in the session,
+I asserted "all pushed" for the 5 Phase 1 commits in three
+documents (active plan §"Session 1", thread record session-close
+header, comms-log session-close entry). Branch was actually 6 ahead
+of origin; nothing had been pushed since the owner's `8cd49fe1`. I
+discovered the false claim only after running `git status` while
+preparing handoff. Corrected in all three documents.
+
+This is a fifth instance of the same drift pattern THIS SESSION,
+manifesting as state-precision degradation in writing rather than
+principle-softening in code. The naming is sharper: **drift erodes
+factual precision in writing about state, not just principle
+precision in writing about rules**. Trigger words to add:
+
+- **"all done", "all pushed", "all clean"** — totalising
+  assertions about state without verification. Always check before
+  asserting; better to write "5 commits landed; not yet pushed
+  (verified via git status)" than "all pushed".
+
+The remediation discipline: **state assertions in
+documentation MUST be preceded by the verification command that
+produced them.** `git status` before "branch is N ahead". `pnpm
+practice:fitness` before "fitness is green". Without the
+verification step, the assertion is conjecture in declarative
+clothes.
 
 - **Source plane:** active

@@ -154,6 +154,13 @@ Trigger-word vocabulary expanded:
   / canonical TS idiom** — common-pattern justifications are
   accommodations dressed as principles. The fix is to rename the
   variable or restructure the code, never to exempt the rule.
+- New addition: **"all done", "all pushed", "all clean"** —
+  totalising state assertions without verification. The
+  remediation: state assertions in documentation MUST be preceded
+  by the verification command that produced them
+  (`git status` before "branch is N ahead";
+  `pnpm practice:fitness` before "fitness is green"). Without the
+  verification, the assertion is conjecture in declarative clothes.
 
 Operational additions:
 

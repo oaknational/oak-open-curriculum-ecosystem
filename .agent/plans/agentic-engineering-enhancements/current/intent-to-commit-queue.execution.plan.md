@@ -23,13 +23,16 @@ todos:
   - id: ws6-workspace-migration
     content: "WS6: Apply owner correction by moving non-trivial queue logic/tests into agent-tools TypeScript, deleting the root commit-queue script, and invoking the built workspace CLI."
     status: complete
+  - id: ws7-governance-consolidation
+    content: "WS7: Finish queue governance by running deep consolidation, choosing the permanent PDR/collaboration-state home, and archiving this completed execution plan."
+    status: pending
 isProject: false
 ---
 
 # Owner-Directed Intent-to-Commit Queue
 
 **Last Updated**: 2026-04-27
-**Status**: 🟢 LANDED (`5c39d1d4`)
+**Status**: 🟡 LANDED (`5c39d1d4`) — GOVERNANCE CONSOLIDATION DUE
 **Scope**: Ordered advisory commit queue plus exact staged-bundle verification,
 owned by the `agent-tools` TypeScript workspace.
 
@@ -94,7 +97,8 @@ built workspace CLI through `pnpm agent-tools:commit-queue --`.
 - No global mechanical commit lock.
 - No compatibility layer for v1.2.0 authoring.
 - No `session_counter` field or session-count TTL semantics.
-- No staging, committing, or history rewrite in this implementation session.
+- No further queue implementation in this plan; remaining work is governance,
+  consolidation, and archive hygiene.
 
 ---
 
@@ -112,8 +116,9 @@ built workspace CLI through `pnpm agent-tools:commit-queue --`.
   avoidance.
 - Session handoff: close this claim explicitly and update thread/continuity
   records.
-- Deep consolidation: owner explicitly requested `jc-consolidate-docs`; run it
-  before closing the session.
+- Deep consolidation: the first self-application commit landed, so queue
+  governance is due for a deliberate `jc-consolidate-docs` / PDR pass before
+  this plan is archived.
 
 ---
 
@@ -324,6 +329,66 @@ wrapper remains.
 - Commit `5c39d1d4` self-applied `pnpm agent-tools:commit-queue --`: enqueue,
   staging phase, staged-bundle recording, exact verification, pre-commit phase,
   commit, and completion cleanup.
+
+---
+
+## WS7 — Remaining Work To Finish Queue Governance
+
+The code lane is done. The remaining work is to move the now-proven queue
+doctrine out of the execution plan and into the permanent governance layer.
+
+### 7.1: Deep Consolidation
+
+Run `jc-consolidate-docs` or an owner-directed equivalent governance pass. The
+trigger is already fired: commit `5c39d1d4` was the first successful
+self-application of `pnpm agent-tools:commit-queue --`.
+
+Acceptance criteria:
+
+1. `repo-continuity.md` pending-graduations entry for queue governance is no
+   longer merely `due`; it is either graduated with a destination reference or
+   explicitly deferred with a falsifiable constraint.
+2. The thread record's Next Safe Step no longer points at generic queue
+   consolidation once the permanent destination exists.
+
+### 7.2: Permanent Doctrine Home
+
+Decide and write the durable home for the queue protocol. Candidate homes:
+
+- PDR-029 amendment for the perturbation / tripwire mechanism bundle.
+- Collaboration-state governance docs for operational semantics.
+- Commit skill and lifecycle docs only as usage surfaces, not the permanent
+  rationale home.
+
+Acceptance criteria:
+
+1. The durable home states that the queue is advisory, ordered, cross-vendor,
+   repo-owned, and paired with exact staged-bundle verification.
+2. The durable home preserves the no-session-counter rule: session-count TTL is
+   not load-bearing unless a real session-counter primitive lands in the same
+   pass.
+3. The plan links to the durable home before archival.
+
+### 7.3: Archive The Execution Plan
+
+After permanent documentation exists, archive this plan.
+
+Acceptance criteria:
+
+1. Move this file from `current/` to `archive/completed/`.
+2. Update the current-plan index, completed-plan index, and any direct links in
+   continuity/thread records.
+3. Run markdownlint and the practice vocabulary/fitness checks relevant to the
+   touched docs.
+
+### 7.4: Observe Real Queue Usage
+
+Keep observation separate from implementation. Useful future evidence includes:
+
+- a second real queue cleanup;
+- stale/abandoned queue entry handling;
+- hidden coupling or deadlock risks;
+- whether agents understand the queue as advisory ordering rather than a lock.
 
 ---
 

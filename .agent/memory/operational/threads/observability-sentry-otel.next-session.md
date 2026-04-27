@@ -1,6 +1,6 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Session-close 2026-04-27T~17:25Z (Pelagic Flowing Dock, claude-code, claude-opus-4-7-1m, session derived from `those-were-my-composed-key-2026-04-27` seed)** — 5 commits landed and pushed (`0e68aa87`, `3d4a0925`, `0d2d4dc8`, `d1f5226b`, `9da90650`). Substantial uncommitted work-in-progress on a custom ESLint rule + partial codegen sweep, **all flagged as suspect** for fresh-session re-audit. Owner-directed metacognitive correction at session-close: I reproduced the same drift pattern I had named in this morning's napkin entry, three times in succession.
+**Session-close 2026-04-27T~17:25Z (Pelagic Flowing Dock, claude-code, claude-opus-4-7-1m, session derived from `those-were-my-composed-key-2026-04-27` seed)** — 6 commits landed locally (`0e68aa87`, `3d4a0925`, `0d2d4dc8`, `d1f5226b`, `9da90650`, `3c6a3958`); **branch is 6 ahead of origin, NOT pushed**. Codegen sweep work was reverted at session-close per owner direction; the void/_ rule was retained as dormant code (no config tier activates it). Owner-directed metacognitive correction at session-close: I reproduced the same drift pattern I had named in this morning's napkin entry, three times in succession.
 
 **Session shape**:
 

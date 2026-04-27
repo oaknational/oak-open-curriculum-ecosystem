@@ -1,515 +1,381 @@
-# Oak Open Curriculum API — Issue Report (2026-04-23; **Issue 1 revised 2026-04-26**)
+# Oak Open Curriculum API — Issue Report
 
-A consolidated set of issues observed against the Oak Open Curriculum
-public REST API at `https://open-api.thenational.academy/api/v0`.
-Findings are presented strictly at the API level. Each issue includes
-observed behaviour, expected behaviour, why the observed behaviour is
-a problem, why the expected behaviour is a benefit, and concrete `curl`
-reproduction steps that run independently of any client tooling.
+**History:** First drafted 2026-04-23; Issue 1 revised 2026-04-26.  
+**Refreshed:** 2026-04-27 against the **live** OpenAPI document
+[`https://open-api.thenational.academy/api/v0/swagger.json`](https://open-api.thenational.academy/api/v0/swagger.json)
+(baseline build id at validation: `0.6.0-00e72e8d3260acea8a6b5177272f2d523c8f69f5`).
 
-All examples assume an environment variable `OAK_API_KEY` containing a
-valid bearer token.
+Findings are from **HTTP** calls to `https://open-api.thenational.academy/api/v0`
+only. Each issue includes observed behaviour, expected behaviour, impact, benefit,
+and `curl` reproduction steps.
+
+All examples assume `OAK_API_KEY` is a valid bearer token for that host.
+
+**Optional — implementation source:** The HTTP service is implemented in the
+**`oak-openapi`** repository. File paths in **Implementation notes** are
+relative to that repository’s root. This repository does not vend that
+application.
+The notes below summarise behaviour seen in that code; they are **not** a
+substitute for the live contract (`swagger.json` + HTTP repro).
 
 ---
 
-## Issue 1 — Thread units (and related) return HTTP 500 with a raw GraphQL schema error
+## Baseline — canonical paths (live spec)
 
-### Endpoints (per published OpenAPI in `oak-sdk-codegen` 0.6.0+)
+Use the live `swagger.json` as the contract. Earlier drafts of this report
+used paths that **do not** match the server.
 
-- `GET /api/v0/threads` — list all threads
-- `GET /api/v0/threads/{threadSlug}/units` — units belonging to a thread
+| Wrong (404 `NOT_FOUND`) | Canonical in live spec |
+| --- | --- |
+| `.../key-stages/{ks}/subjects/{subject}/...` | `.../key-stages/{keyStage}/subject/{subject}/...` (**singular** `subject`) |
+| `GET /search?scope=lessons&query=...` | `GET /search/lessons` with query param **`q`** (required) |
 
-**Spec alignment note (2026-04-26):** The public OpenAPI snapshot in this
-monorepo names only the two paths above under `/threads*`. An earlier draft
-of this report also referenced `GET /threads/{slug}` and
-`GET /threads/{slug}/progressions`; those paths are **not** present in that
-spec snapshot. Tools such as `get-thread-progressions` in the MCP may use
-SDK-baked or generated graph data and are not guaranteed to be thin wrappers
-over a specific HTTP route.
+**Pagination:** `GET .../lessons` returns one page of **units**, each with a
+`lessons` array (`lessonSlug`, `lessonTitle`). Follow `Link: <...>; rel="next"`
+until absent. Counting lessons requires **flattening** all pages:
+`[.[] | .lessons[]?.lessonSlug]`.
+
+---
+
+## Issue 1 — Thread units return HTTP 500 with a raw GraphQL schema error
+
+### Endpoints (live OpenAPI)
+
+- `GET /threads` — list threads  
+- `GET /threads/{threadSlug}/units` — units for a thread  
+
+The published spec does not define `GET /threads/{slug}` for a single thread
+resource (list + units only).
 
 ### Observed behaviour
 
-- `GET /api/v0/threads/{threadSlug}/units` can return **HTTP 500** with a body
-  that includes a **raw GraphQL schema validation error** (Hasura-style),
-  for example:
-  - `"Upstream server error (500): field 'threads' not found in type: 'query_root'"`
-- The same project may return **200** for `GET /api/v0/threads` (thread list)
-  for a valid token, so "threads" as a *curriculum* concept and slug can still
-  be discoverable even when the units-by-slug call fails.
-- The failure is **repeatable** (not transient-only); retries are unlikely to
-  help if the server-side query is invalid against the current GraphQL schema.
+- `GET /threads/{threadSlug}/units` can return **HTTP 500** with a body that
+  includes a **raw GraphQL schema validation error**, e.g.  
+  `field 'threads' not found in type: 'query_root'`.
+- `GET /threads` may still return **200** for the same token, so thread
+  slugs remain discoverable while units-by-slug fails.
+- Failure is **repeatable** (not transient-only).
 
 ### Expected behaviour
 
-1. `GET /api/v0/threads/{threadSlug}/units` returns **200** with a response
-   matching the published schema when the `threadSlug` exists and is
-   published, or a **4xx** with a stable, documented error code when it does
-   not.
-2. **5xx** responses are reserved for genuine service or dependency failures,
-   and ideally do not echo internal schema field names to API consumers.
-3. Behaviour is **consistent** with other thread-related public operations
-   when the same identifier is used.
+1. `GET /threads/{threadSlug}/units` returns **200** with a schema-shaped body
+   when the slug exists and is published, or **4xx** with a stable, documented
+   code when it does not.
+2. **5xx** for genuine outages; responses should not echo internal schema
+   field names to API clients.
+3. Consistent behaviour with other thread operations for the same identifier.
 
-### Why the observed behaviour is a problem (impact)
+### Why it matters
 
-- A primary consumer path for curriculum threads — **ordered units in a
-  thread** — is unreliable or broken for API clients.
-- **500** responses train operators and integrators to treat the failure as
-  "outage" or "retry", which is a poor match for a **schema-level** error that
-  will not self-heal without a service or contract change.
-- Leaked GraphQL/Hasura phrasing in the error body is **not actionable** for
-  most API users and can expose internal integration detail.
-
-### Why the expected behaviour is a benefit
-
-- Restores a predictable, testable **HTTP contract** for thread navigation.
-- Clear **4xx vs 5xx** separation supports correct client and monitoring
-  behaviour.
-- Keeps the public error surface decoupled from storage technology.
+- Ordered units in a thread are a primary navigation path for integrators.
+- **500** implies “retry” though a schema/config mismatch will not self-heal.
+- Leaked Hasura-style messages are not actionable and expose integration detail.
 
 ### Steps to reproduce
 
 ```bash
-# List threads (will typically succeed with a valid token)
 curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
   "https://open-api.thenational.academy/api/v0/threads" | head -c 500
 
-# Units for a known thread slug (observed: may return 500 with query_root error)
 curl -i -H "Authorization: Bearer $OAK_API_KEY" \
   "https://open-api.thenational.academy/api/v0/threads/number-multiplication-and-division/units"
 ```
 
-Replace the slug with any thread slug returned from the list if needed.
+Use any `slug` from the first response if the example thread is absent.
 
-### Root cause analysis (potentially useful context — not a work order)
+### Root cause (context only)
 
-A code review of **`oak-openapi`** (`src/lib/handlers/threads/threads.ts`, as
-of 2026-04-26) shows **two different GraphQL entry points** in the same
-module:
+In **`oak-openapi`** (`src/lib/handlers/threads/threads.ts`), list vs
+units-by-slug can target different GraphQL root fields; if `query_root.threads`
+is absent in the schema the resolver uses, the observed error matches.
+Internal to the API service, not a consumer workaround.
 
-- **List** (`getAllThreads`) issues a query against the root field
-  **`published_mv_threads_1`** (see `threadView` in `src/lib/owaClient.ts`).
-- **Units by slug** (`getThreadUnits`) issues a query against a root field
-  named **`threads`**, with nested `thread_units` / `unit` selections.
+### Implementation notes (`oak-openapi`)
 
-If the Hasura (or equivalent) **GraphQL schema** exposed to that service no
-longer defines **`query_root.threads`**, schema validation fails with exactly
-the observed message, while the list path can still work. That is **internal
-to the public API service** (how it maps REST to its configured GraphQL
-schema); it does not change what API consumers are allowed to do — **this
-ecosystem still consumes data only via the public HTTP API** (see
-`docs/architecture/openapi-pipeline.md`).
+- `getAllThreads` issues a query against the view exported as `threadView`
+  from `src/lib/owaClient.ts` (value `published_mv_threads_1`), not the
+  `threads` root field.
+- `getThreadUnits` embeds a separate document that selects GraphQL root
+  **`threads`** with `thread_units` / `unit` (see `src/lib/handlers/threads/threads.ts`).
+  That is exactly the name that appears in the schema validation error when
+  the field is missing from `query_root`.
 
 ---
 
-## Issue 2 — KS4 lessons listing has repeated `lesson_slug` rows with no discriminator
+## Issue 2 — KS4 (and other stages) lessons: repeated `lessonSlug` with no programme / tier / exam-board discriminator
 
-### Endpoint
+### Endpoint (live OpenAPI)
 
-- `GET /key-stages/{keyStage}/subjects/{subject}/lessons`
+- `GET /key-stages/{keyStage}/subject/{subject}/lessons`
+
+Response shape: **array of units**, each with `unitSlug`, `unitTitle`, and
+`lessons: [{ lessonSlug, lessonTitle }, ...]`. There is no `tier`,
+`exam_board`, or `programme_slug` on each lesson row in this listing.
 
 ### Observed behaviour
 
-For `keyStage = ks4` on subjects with tier and/or exam-board variation
-(clearly observable on `science`), the same `lesson_slug` appears in
-multiple rows. The repeated rows look identical or near-identical in
-the visible fields (title, unit, summary metadata). Nothing in the
-payload distinguishes the rows: there is no `tier` field, no
-`exam_board` field, no `programme_slug` field.
+For **ks4** + **science**, the same `lessonSlug` can appear in **many** unit
+rows (programme variants), so a flat list of `lessonSlug` over-counts “how many
+lessons” and hides which programme each row belongs to.
 
-For comparison, the same query against a key stage without tier /
-exam-board variation (e.g. `ks2 + science`) returns zero duplicates.
+**2026-04-27 check (paginated sample):** following `Link: rel="next"` for
+`key-stages/ks4/subject/science/lessons` (first **80** pages) found **many**
+`lessonSlug` values with count **> 1** (e.g. top multiplicity **31** for one
+slug in that sample). The listing remains **undiscriminated** at the lesson
+row.
+
+**KS2 + science (full pagination in the same run):** flattening
+`lessonSlug` across all pages also showed **non-zero** duplicate groups (**27**),
+so “no duplicates outside KS4” is **not** true for a naive flat count — the
+**KS4 + tier / exam board** case remains the main product example for missing
+**programme** context on the wire.
 
 ### Expected behaviour
 
-Choose one of the following — the property the API team picks should
-hold uniformly across the key-stage/subject listing family (lessons,
-units, questions, assets):
+Same three options as before (dedupe with `available_in`, explicit
+discriminators, or require programme/tier query params for ambiguous KS4
+subjects). The API team should apply one approach consistently across
+lessons, units, questions, and assets in this family.
 
-1. **Deduplicate at source.** Return one row per `lesson_slug`, with
-   a nested `available_in` array describing the tier / exam-board
-   permutations the lesson appears in.
-2. **One row per permutation, with explicit discriminator.** Add
-   `tier` and `exam_board` (or `programme_slug`) fields to every row
-   so that `(lesson_slug, tier, exam_board)` is unique and consumers
-   can group by themselves.
-3. **Programme-aware listing only.** Require `tier` and/or
-   `exam_board` query parameters for KS4 subjects that have them, and
-   reject ambiguous calls explicitly.
+### Why it matters
 
-Option 2 most closely matches the curriculum model that other
-endpoints already expose (programmes already encode tier and exam
-board).
+- Distinct lesson counts, exports, and displays are wrong without a clear rule.
+- Sibling `GET /subjects/{subject}/sequences` exposes programme slugs; this
+  listing does not connect lessons to that dimension.
 
-### Why the observed behaviour is a problem
-
-- Consumers cannot reliably count "lessons in KS4 science" — the same
-  lesson is silently double- or triple-counted.
-- Naïve client-side deduplication over-collapses the data and
-  silently drops the tier / exam-board variants the API is presumably
-  trying to surface.
-- Any indexing, aggregation, exporting, or display use case produces
-  duplicate-looking output that confuses end users.
-- The shape is inconsistent with sibling sequence-listing endpoints,
-  which correctly enumerate the three KS4 science programmes
-  (`science-secondary-aqa`, `science-secondary-edexcel`,
-  `science-secondary-ocr`); the discriminating context exists in the
-  system, it just is not surfaced on this listing.
-
-### Why the expected behaviour is a benefit
-
-- Consumers can answer real product questions ("how many distinct
-  lessons does KS4 science have?", "which lessons are exclusive to
-  AQA?") without out-of-band knowledge.
-- The contract becomes uniform across key stages, removing a
-  KS4-specific edge case from every consumer.
-- Makes the relationship between lessons and programmes explicit on
-  the wire, which reduces the volume of secondary lookups consumers
-  need to make.
-
-### Reproduce
+### Reproduce (aligned with live spec + nested + pagination)
 
 ```bash
-# KS4 + science: duplicates exist
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/key-stages/ks4/subjects/science/lessons" \
-  | jq '[.[].lesson_slug] | group_by(.) | map(select(length > 1)) | map({slug: .[0], count: length})'
+# One page: duplicate lessonSlug groups (fast signal)
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/key-stages/ks4/subject/science/lessons" \
+  | jq '[.[] | .lessons[]?.lessonSlug] | group_by(.) | map(select(length > 1)) | map({slug: .[0], count: length})'
 
-# KS2 + science: no duplicates expected
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/key-stages/ks2/subjects/science/lessons" \
-  | jq '[.[].lesson_slug] | group_by(.) | map(select(length > 1)) | length'
+# All pages: follow Link: rel="next" until absent (use a small script or
+# curl in a loop), flatten [.[] | .lessons[]?.lessonSlug], then group/count.
+# Validate duplicate groups and max multiplicity for KS4 science vs KS2 science.
 ```
 
-The first command prints the slugs that appear more than once together
-with their multiplicity. The second prints `0` (or close to it),
-demonstrating the issue is specific to key stages with tier /
-exam-board variation.
+### Implementation notes (`oak-openapi`)
+
+- `getKeyStageSubjectLessons` (`src/lib/handlers/keyStageSubjectLessons/keyStageSubjectLessons.ts`)
+  filters `unitVariantLessonsView` by `programme_fields` (JSON) for the given
+  key stage and subject. For **ks4** + **science** it **drops**
+  `subject_slug` and sets **`subject_parent: "Science"`** so the view returns
+  rows across **all** KS4 science programmes. The handler then groups rows
+  by `unit_slug` only; the response schema does not attach
+  `examboard_slug` / `programme_slug` to each lesson, so the same
+  `lessonSlug` can legitimately appear under more than one unit (programme
+  variant) in one response.
+- Pagination uses `offset` / `limit` and sets a `Link` header via
+  `src/lib/pagination` when another page may exist.
 
 ---
 
-## Issue 3 — Subject questions listing returns empty array with no signal for unsupported combinations
+## Issue 3 — Subject questions listing: no typed signal when bulk export is empty or partial
 
-### Endpoint
+### Endpoint (live OpenAPI)
 
-- `GET /key-stages/{keyStage}/subjects/{subject}/questions`
+- `GET /key-stages/{keyStage}/subject/{subject}/questions`
 
-### Observed behaviour
+### Observed behaviour (2026-04-27)
 
-Returns `HTTP 200 []` for combinations where many lessons exist and
-many of those lessons have quiz content reachable via
-`GET /lessons/{lesson}/quiz`. Most clearly observable for
-`keyStage = ks3, subject = science`.
+- The response is a **raw JSON array** (no `status` / `reason` envelope).
+- For **ks3** + **science**, the bulk list was **not** empty in our check
+  (length **6**), so the “always `200 []` for this pair” report from
+  2026-04-23 is **not** reproduced as-stated on today’s service.
+- **Per-lesson** `GET /lessons/{lesson}/quiz` can still return bodies **without**
+  a `questions` array (e.g. copyright messaging) while the bulk questions
+  endpoint returns some entries — the relationship between bulk and per-lesson
+  quiz is not self-describing in the **bulk** array shape.
 
-There is no body field, header, or other signal that distinguishes
-"this listing is supported but happens to be empty" from "this
-listing is not produced for this combination". Both states return
-the same bytes.
+The **design** concern remains: without a discriminated envelope, clients
+cannot tell “supported, zero rows”, “not populated for this pair”, and
+“populated but incomplete vs per-lesson” apart from convention or sampling.
 
 ### Expected behaviour
 
-Make the underlying state machine visible to clients. Either:
-
-1. **Return data when it exists.** If question content is reachable
-   via `GET /lessons/{slug}/quiz` for lessons in this combination,
-   the bulk listing should aggregate it.
-
-   *Or*
-
-2. **Return a typed envelope when the listing is genuinely
-   unsupported.** Replace `200 []` with a discriminated response,
-   for example:
-
-   ```json
-   {
-     "status": "no-bulk-export-available",
-     "reason": "Bulk question export is not produced for ks3 / science.",
-     "items": []
-   }
-   ```
-
-   distinguishable on the wire from the supported-but-empty case:
-
-   ```json
-   {
-     "status": "ok",
-     "items": []
-   }
-   ```
-
-### Why the observed behaviour is a problem
-
-- Consumers cannot tell "no data here" from "this endpoint is not
-  populated for this combination". They must either give up or
-  assume one of the two states without evidence.
-- Because the per-lesson `/quiz` endpoint clearly does have data for
-  the same lessons, consumers fall back to N×lesson lookups when a
-  bulk endpoint is advertised — a needless cost both to consumers
-  and to the API.
-- The same ambiguity likely affects sibling bulk endpoints in the
-  family (`/key-stages/{ks}/subjects/{subj}/assets`,
-  `/key-stages/{ks}/subjects/{subj}/units`, etc.), so the doctrine
-  question generalises.
-
-### Why the expected behaviour is a benefit
-
-- Eliminates the ambiguity at the contract level: consumers can act
-  on the discriminator instead of guessing.
-- Removes the silent N×fallback pattern, reducing API load.
-- A typed "not available" envelope also gives the API team a place
-  to communicate *why* a listing is missing (data not yet produced,
-  combination not supported, etc.) without coupling it to error
-  semantics.
+Unchanged: either bulk aggregate where per-lesson quiz has questions, and/or
+a **typed** empty / unsupported response (as in the 2026-04-23 sketch).
 
 ### Reproduce
 
 ```bash
-# Empty listing — no discriminator
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subjects/science/questions" \
-  | jq 'length'
+# Bulk
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subject/science/questions" \
+  | jq 'length, .[0]'
 
-# Many lessons exist for the same combination
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subjects/science/lessons" \
-  | jq 'length'
+# Nested lessons (sum pages if you need a full count)
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subject/science/lessons" \
+  | jq 'map(.lessons | length) | add'
 
-# A representative lesson from that combination has quiz content via the per-lesson endpoint
-LESSON_SLUG=$(curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subjects/science/lessons" \
-  | jq -r '.[0].lesson_slug')
+# Per-lesson quiz (pick a lessonSlug from the nested structure)
+SLUG=$(curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/key-stages/ks3/subject/science/lessons" \
+  | jq -r '.[0].lessons[0].lessonSlug')
 
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/lessons/${LESSON_SLUG}/quiz" \
-  | jq '{has_quiz: (.questions != null and (.questions | length > 0))}'
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/lessons/${SLUG}/quiz" \
+  | jq '{message, hasQuestions: (.questions != null), questionCount: (.questions | length?)}'
 ```
 
-The first call returns `0`. The second returns a non-zero count. The
-third returns `{"has_quiz": true}` for typical KS3 science lessons.
+### Implementation notes (`oak-openapi`)
+
+- `getQuestionsForKeyStageAndSubject` (`src/lib/handlers/questions/questions.ts`)
+  loads lessons from `lessonView` for the key stage and subject, then filters
+  out entries without quiz JSON, **quiz-blocked** lessons, and assets blocked
+  by the gate. The **OpenAPI** response is still a **plain array** of
+  `{ lessonTitle, lessonSlug, … }` with no `status` / `items` wrapper.
+- There is a **special branch** for subjects in `blockedSubjects` (narrow
+  `unitSlug` allow-list and inline comment in source); behaviour for those
+  subjects differs from the default query even though the path is the same.
+- `getQuestionsForLessons` (`/lessons/{lesson}/quiz`) is a different procedure
+  with different gating and shaping; parity between the two is not expressed in
+  the wire format of the bulk route.
 
 ---
 
-## Issue 4 — Aggregate sequence slugs are not discoverable via `/sequences`
+## Issue 4 — Aggregate `science-secondary` routable on `/sequences/...` but not listed on `GET /subjects/.../sequences`
 
-### Endpoints
+### Endpoints (live OpenAPI)
 
-- `GET /subjects/{subject}/sequences`
-- `GET /curriculum/browse?subject={subject}&keyStage={keyStage}`
+- `GET /subjects/{subject}/sequences`  
+- `GET /sequences/{sequence}/units`  
+- `GET /sequences/{sequence}/questions`  
+- `GET /sequences/{sequence}/assets`  
 
-(The second path is the public REST shape backing the curriculum
-browse / overview view; substitute the canonical path if it differs.)
+### Observed behaviour (2026-04-27)
 
-### Observed behaviour
+- `GET /subjects/science/sequences` returns slugs such as
+  `science-primary`, `science-secondary-aqa`, `science-secondary-edexcel`,
+  `science-secondary-ocr` — it does **not** include an aggregate slug
+  **`science-secondary`** in the array we received.
+- `GET /sequences/science-secondary/units` (and `.../questions`, `.../assets`)
+  returned **200** — the **aggregate** slug is accepted on sequence
+  sub-routes but **omitted** from the subject sequence listing.
 
-For `subject = science`:
-
-- `GET /subjects/science/sequences` returns three sequence slugs:
-  `science-secondary-aqa`, `science-secondary-edexcel`,
-  `science-secondary-ocr`.
-- `GET /curriculum/browse?subject=science&keyStage=ks4` returns a
-  single aggregate sequence with `sequenceSlug = science-secondary`,
-  containing 54 units and 400 lessons.
-
-The aggregate slug `science-secondary` is **not** present in the
-canonical `/sequences` listing for the subject, and is not accepted
-by follow-up sequence-shaped endpoints (`/sequences/{slug}/units`
-etc.).
+**Impact:** a client that only uses `GET /subjects/{subject}/sequences` to
+learn which sequence slugs exist may not discover that `science-secondary` is
+valid for `GET /sequences/{sequence}/...`.
 
 ### Expected behaviour
 
-The two endpoints should agree on the universe of valid sequence
-slugs. Either approach is acceptable:
-
-1. **Surface aggregates as first-class sequences.** Add the aggregate
-   to the canonical listing with an explicit type discriminator and
-   constituent membership, for example:
-
-   ```json
-   {
-     "sequenceSlug": "science-secondary",
-     "type": "aggregate",
-     "members": [
-       "science-secondary-aqa",
-       "science-secondary-edexcel",
-       "science-secondary-ocr"
-     ]
-   }
-   ```
-
-   and ensure follow-up calls (`/sequences/{slug}/units`, etc.)
-   accept it.
-
-2. **Stop returning aggregate slugs from the browse endpoint.** Return
-   the constituent programme slugs together with a `members`-shaped
-   payload, and let the client compose the aggregate view itself.
-
-### Why the observed behaviour is a problem
-
-- A consumer that begins on `/sequences` cannot discover the
-  aggregate view at all.
-- A consumer that begins on `/curriculum/browse` is given a slug
-  (`science-secondary`) that fails when used against the rest of the
-  sequence API, with no way to know in advance whether a slug is real
-  or aggregate.
-- The two endpoints encode different definitions of "sequence" while
-  using identical-shaped slugs, which silently breaks slug-based
-  navigation, caching, and validation.
-
-### Why the expected behaviour is a benefit
-
-- A single, consistent universe of sequence slugs across the API.
-- Slug → URL stability assumptions made by indexers, exporters, and
-  consumers hold uniformly, instead of breaking only on KS4 subjects
-  that have aggregates.
-- The curriculum browse experience is preserved (whichever option is
-  chosen), but the underlying contract becomes honest about what is
-  a real navigable sequence and what is a synthesised view.
+Align listing and routability: either include the aggregate (with a field that
+distinguishes it from programme entries), or do not accept aggregate slugs on
+`/sequences/{sequence}/...` without documenting how clients should obtain them.
 
 ### Reproduce
 
 ```bash
-# Canonical sequence listing — no "science-secondary" entry
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
   "https://open-api.thenational.academy/api/v0/subjects/science/sequences" \
-  | jq '[.[].sequenceSlug] | sort'
+  | jq 'map(.sequenceSlug) | sort'
 
-# Curriculum browse advertising the aggregate "science-secondary" slug
-curl -s -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/curriculum/browse?subject=science&keyStage=ks4" \
-  | jq '.facets.sequences[].sequenceSlug'
+curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/sequences/science-secondary/units"
 ```
 
-(Curriculum browse path is the public REST shape consumed by API
-clients; substitute the project's canonical path if it differs.)
+### Implementation notes (`oak-openapi`)
+
+- `GET /subjects/{subject}/sequences` is built by `phaseToSequences` in
+  `src/lib/handlers/subjects/helpers.ts`. When a subject has **ks4_options**
+  (exam boards), the function **only** pushes one entry per board
+  (`${subject}-${phase}-${examBoard.slug}`). It does **not** add a separate
+  row for a phase-level slug with no board suffix, so
+  `science-secondary-aqa` / `edexcel` / `ocr` can appear while
+  `science-secondary` does not.
+- `GET /sequences/{sequence}/…` uses `parseSubjectPhaseSlug` in
+  `src/lib/sequenceSlugParser.ts`, which allows a **two-part** slug
+  (e.g. `science-secondary`) with `ks4OptionSlug: null` — consistent with
+  accepting the aggregate on sequence routes.
+- `getSequenceUnits` (`src/lib/handlers/sequences/sequences.ts`) already
+  contains logic for the **un-pinned** aggregate case: when the path slug has
+  no exam-board segment, the implementation dedupes across exam boards and
+  can attach which boards a unit appears in. That is **sequence** response
+  shaping, not something `phaseToSequences` reuses for the **subject
+  sequence list**.
 
 ---
 
-## Issue 5 — No consistent response doctrine for empty / no-match / unsupported / failure
+## Issue 5 — No single response doctrine for empty / no-match / unsupported / failure
 
 ### Scope
 
-Cross-cutting. The shapes the API uses to communicate "I have no data
-for you" or "something went wrong" are inconsistent across endpoints.
-This is filed last because it generalises, and partially supersedes,
-the per-endpoint asks above.
+Cross-cutting. Shapes for “no data” vs “error” still vary by endpoint, all
+observable on the public routes below.
 
-### Observed behaviour
+### Observed behaviour (2026-04-27)
 
-Worked examples drawn directly from the API, all observable today:
-
-| Conceptual condition                                       | Endpoint                                                | Current response                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------ |
-| Empty input rejected                                       | `GET /search?scope=lessons&query=`                      | Typed error with explicit hint about which fields are required.    |
-| No semantic / lexical match                                | `GET /search?scope=lessons&query=asdfqwerzxcv-no-such-topic` | Returns top-N loosely-matching results with no "weak match" flag. |
-| Endpoint not populated for the combination                 | `GET /key-stages/ks3/subjects/science/questions`        | `200 []` with no discriminator (see Issue 3).                       |
-| Identifier valid but resolver missing                      | `GET /threads/{slug}/units`                             | `500` with raw GraphQL error string forwarded (see Issue 1).        |
-| Identifier syntactically invalid                           | `GET /lessons/<malformed-id>` (and equivalent)          | Typed error: e.g. "Unsupported id prefix in <id>".                 |
-| Identifier syntactically valid but unknown                 | `GET /lessons/does-not-exist-xyz-12345`                 | Typed `NOT_FOUND` error.                                            |
-
-The good cases (typed input errors, typed not-found) live alongside
-the problematic cases (silent empties, raw upstream-error leaks),
-which means consumers cannot rely on any single contract holding
-across the API.
+| Condition | Example (live paths) | Notes (2026-04-27) |
+| --- | --- | --- |
+| Missing required search input | `GET /search/lessons` (omit **`q`**) | **400** with validation issues (typed). |
+| Search with weak lexical matches | `GET /search/lessons?q=asdfqwerzxcv-no-such-topic` | **200** array; `similarity` on items — weak matches without a top-level `match_quality`. |
+| Bulk questions ambiguous | `GET /key-stages/.../subject/.../questions` | Raw **array**; see Issue 3. |
+| Resolver / upstream bug | `GET /threads/{slug}/units` | **500** with internal-style message (see Issue 1). |
+| Unknown lesson | `GET /lessons/does-not-exist-xyz-12345/...` | **404** `NOT_FOUND` style. |
 
 ### Expected behaviour
 
-A uniform response doctrine across all endpoints, published in the
-OpenAPI spec and the developer docs:
-
-1. **Empty / invalid input** → `4xx` with a typed error envelope and
-   a hint naming the missing or invalid field. (Already done well by
-   `/search` — generalise across the API.)
-2. **Valid input, no matches** → `200` with a discriminated envelope:
-
-   ```json
-   {
-     "status": "ok",
-     "items": [],
-     "match_quality": "exact" | "weak" | "none"
-   }
-   ```
-
-   Rather than synthesising weak results and presenting them with the
-   same shape as confident hits, return `"items": []` with
-   `"match_quality": "none"`, or expose a confidence threshold the
-   consumer can tune.
-3. **Valid input, endpoint genuinely not populated** → `200` with a
-   discriminated envelope that says so (see Issue 3 for the concrete
-   example):
-
-   ```json
-   {
-     "status": "no-bulk-export-available",
-     "reason": "Bulk question export is not produced for ks3 / science.",
-     "items": []
-   }
-   ```
-
-   Distinguishable on the wire from the "supported, no matches" case.
-4. **Identifier syntactically invalid** → `400` with typed error.
-   (Already done — generalise.)
-5. **Identifier syntactically valid but unknown** → `404 NOT_FOUND`
-   with typed error. (Already done — generalise.)
-6. **Upstream / resolver failure** → `5xx` with a stable error code
-   and a generic, opaque message. No internal implementation strings
-   may be forwarded (see Issue 1). The detail belongs in server logs,
-   not in the client response.
-
-### Why the observed behaviour is a problem
-
-- Consumers cannot apply uniform retry / fallback / "no result"
-  handling without per-endpoint special-casing.
-- The most damaging case is "valid input, no matches" being returned
-  as confident irrelevant hits — consumers then misrepresent results
-  to end users.
-- Internal error string leaks (see Issue 1) compound this: a
-  consumer that wants to distinguish "real outage" from "known
-  limitation" must currently scrape error strings, which is brittle
-  and an information-leak smell.
-- The good cases (typed input errors, typed `NOT_FOUND`) lose their
-  value when the rest of the surface does not match them — a partial
-  contract is, in practice, no contract.
-
-### Why the expected behaviour is a benefit
-
-- One consistent contract across the API surface.
-- Consumers — including aggregators, indexers, and downstream agents
-  — can write generic handling code instead of per-endpoint shims.
-- Eliminates an entire class of "is this empty intentional?"
-  ambiguity at the contract level, not at the consumer side.
-- Removes internal-state leaks from production responses, which is
-  good both for security and for being able to evolve the storage
-  layer without consumer breakage.
+Uniform doctrine: invalid input **4xx** with typed body; “no matches” and
+“unsupported / empty resource” as discriminated **200** where appropriate; upstream
+**5xx** with stable codes and no opaque implementation strings. (See 2026-04-23
+sketches in the original thread for the full set.)
 
 ### Reproduce
 
-The reproductions for the four worked examples that are themselves
-defects appear in the corresponding issue sections above (Issue 1
-for the 5xx leak, Issue 3 for the silent `[]`). The two well-behaved
-contrasts are:
-
 ```bash
-# Typed input error (good — generalise this shape):
+# Validation error — missing required q
 curl -i -H "Authorization: Bearer $OAK_API_KEY" \
-  "https://open-api.thenational.academy/api/v0/search?scope=lessons&query="
+  "https://open-api.thenational.academy/api/v0/search/lessons"
 
-# Typed not-found (good — generalise this shape):
+# Search with a low-signal query (observe similarity field)
+curl -sS -H "Authorization: Bearer $OAK_API_KEY" \
+  "https://open-api.thenational.academy/api/v0/search/lessons?q=asdfqwerzxcv-no-such-topic" \
+  | jq '.[0] | {lessonSlug, similarity}'
+
+# Not-found
 curl -i -H "Authorization: Bearer $OAK_API_KEY" \
   "https://open-api.thenational.academy/api/v0/lessons/does-not-exist-xyz-12345"
 ```
+
+Defects that anchor this theme are in Issues **1** and **3**; Issue **2** is
+a data-shape / discrimination gap rather than a pure status-code problem.
+
+### Implementation notes (`oak-openapi`)
+
+- `GET /search/lessons` is implemented as `searchByTextSimilarity` in
+  `src/lib/handlers/lesson/lesson.ts`: it calls a `lessonSearchView` with
+  `search_term` and optional filters, then hydrates matches. The OpenAPI
+  **output** is an array of lessons with a **`similarity`** field (see the
+  GraphQL selection and follow-up mapping in that file) — not a
+  `match_quality` envelope at the top level.
+- Mixing that shape with the raw arrays from the key-stage questions route
+  illustrates **handler-specific** response patterns across the tRPC/OpenAPI
+  surface, not a single shared error/empty DTO.
 
 ---
 
 ## Summary
 
-| # | Endpoint family                                  | Class of issue                                                    |
-| - | ------------------------------------------------ | ----------------------------------------------------------------- |
-| 1 | `/threads/{slug}` and `/threads/{slug}/units`    | Deterministic 5xx with raw upstream GraphQL error leak.           |
-| 2 | `/key-stages/{ks}/subjects/{subj}/lessons`       | Repeated rows on KS4 with no discriminator (tier / exam board).   |
-| 3 | `/key-stages/{ks}/subjects/{subj}/questions`     | `200 []` indistinguishable from "endpoint not populated".         |
-| 4 | `/subjects/{subj}/sequences` vs curriculum browse | Aggregate sequence slugs not discoverable via canonical listing. |
-| 5 | Cross-cutting                                    | No uniform doctrine for empty / no-match / unsupported / failure. |
+| # | Area | Class of issue |
+| - | ---- | -------------- |
+| 1 | `/threads`, `/threads/{threadSlug}/units` | **500** with raw GraphQL / schema string in body. |
+| 2 | `/key-stages/{ks}/subject/{subj}/lessons` | Duplicate **`lessonSlug`** when flattened; no tier / programme on rows; paginate. |
+| 3 | `/key-stages/{ks}/subject/{subj}/questions` | No envelope; bulk vs per-lesson unclear from contract alone. |
+| 4 | `/subjects/.../sequences` vs `/sequences/...` | Aggregate **`science-secondary`** returned by sequence routes but **unlisted** on subject index. |
+| 5 | Cross-cutting | Response doctrine still inconsistent; **`/search/lessons?q=`** in repro examples. |
 
-Issues 1–4 are concrete; Issue 5 is the doctrine that, if adopted,
-naturally closes Issues 1 and 3 and is consistent with how Issues 2
-and 4 should land.
+---
+
+## Changelog in this file
+
+- **2026-04-27:** Re-baselined on live `swagger.json`; fixed `/subject/` path
+  segment; search repros use `/search/lessons` + `q`; documented pagination and
+  nested lesson model; re-ran checks (thread 500, KS4 duplicate sample, KS3
+  questions non-empty, `science-secondary` list vs `GET /sequences/...`).
+- **2026-04-27:** Added **Implementation notes** from `oak-openapi` (repo-relative
+  paths only): thread list vs `threads` query; KS4 science lessons filter;
+  questions procedures; subject `phaseToSequences` vs sequence routes; search
+  handler shape.

@@ -3111,6 +3111,16 @@ found canonical pointer-only `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md`; the
 remember buffers did not add a new queue-specific capture. Deep consolidation
 is marked due because the first queue self-application trigger fired.
 
+### 2026-04-27T16:31:01Z — `Prismatic Waxing Constellation` / `codex` / `gpt-5.5` / `019dcd` — commit-queue plan finish statement update opened
+
+Opened claim `ee9dc93d-239d-40f6-bb31-c507aa591a2b` to update the landed
+commit-queue plan with the remaining work: governance consolidation, permanent
+doctrine home, plan archival, future-only session-counter semantics, and real
+usage observation.
+
+Active claims and `commit_queue` were empty before opening. This is a
+plan/state-only edit; no staging or commit.
+
 ### 2026-04-27 — `Vining Bending Root` / `claude-code` / `claude-opus-4-7-1m` / `4e2cbc5c` — PR-87 session close + metacognitive correction
 
 **Session close after owner-directed metacognitive correction.** PR-87 has
@@ -3344,10 +3354,13 @@ Plus a fourth softening I caught during the metacognitive pass:
 - Plan section "Session 1 — outcome" enumerates exactly what was
   attempted, what was kept, and what was reverted.
 
-**Commits this session** (5, all pushed): `0e68aa87`, `3d4a0925`,
-`0d2d4dc8`, `d1f5226b`, `9da90650`. Phase 1 of the architectural
-cleanup landed cleanly. Cluster A onwards **not started**; fresh
-session resumes there.
+**Commits this session** (6 total, **LOCAL ONLY — not pushed**):
+`0e68aa87`, `3d4a0925`, `0d2d4dc8`, `d1f5226b`, `9da90650`, plus
+`3c6a3958` (this session-close docs commit). Branch is 6 ahead of
+origin `feat/otel_sentry_enhancements` (origin at `8cd49fe1`). I
+incorrectly asserted "all pushed" in an earlier draft of this entry
+and in the active plan; both have been corrected. Push is fresh-
+session work after re-audit.
 
 **Closing claim `d14c0fbe-3fc4-4e7a-84ac-5abd2ef7cbb5`** at session-end
 with `closure.kind: explicit`. Working tree at handoff has only the
