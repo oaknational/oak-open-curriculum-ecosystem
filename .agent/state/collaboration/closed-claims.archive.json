@@ -3626,8 +3626,8 @@
           },
           {
             "kind": "external_api",
-            "ref": "Sonar MCP change_security_hotspot_status hotspotKey=AZ3PzDg2qR2lgcKGwtUx",
-            "summary": "Hotspot REVIEWED with resolution=SAFE citing legitimate ipv6-loopback test fixture."
+            "ref": "Sonar MCP change_security_hotspot_status (hotspot AZ3PzDg2qR2lgcKGwtUx)",
+            "summary": "Hotspot REVIEWED with resolution SAFE citing legitimate ipv6-loopback test fixture."
           }
         ]
       }
