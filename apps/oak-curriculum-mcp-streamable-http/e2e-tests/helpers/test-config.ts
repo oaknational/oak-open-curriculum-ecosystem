@@ -106,15 +106,24 @@ export function createMockRuntimeConfig(
 /**
  * Returns a plain fake {@link HttpObservability} for tests.
  *
- * @remarks The `runtimeConfig` parameter is kept for call-site compatibility
- * with the previous factory-delegating signature, but is intentionally
- * ignored — the fake is independent of runtime config. Tests do not exercise
+ * @remarks **Interface-conformance retention.** The `runtimeConfig`
+ * parameter is intentionally retained to mirror the production factory's
+ * call signature so tests can swap factories without changing call sites,
+ * even though the fake is independent of runtime config. The
+ * `void runtimeConfig;` statement signals "I see this parameter, the fake
+ * intentionally does not use it" rather than introducing a leading-
+ * underscore rename (which would silence the unused-parameter signal
+ * without carrying the rationale forward). Tests do not exercise
  * observability behaviour via this helper; if a test needs to assert on
  * observability interactions it should import {@link createFakeHttpObservability}
  * directly and spy on the returned object. The production factory
- * `createHttpObservabilityOrThrow` is deliberately NOT imported here because
- * tests must not pull in production observability wiring as incidental
+ * `createHttpObservabilityOrThrow` is deliberately NOT imported here so
+ * tests do not pull in production observability wiring as incidental
  * infrastructure.
+ *
+ * Sonar `typescript:S3735` (Remove this use of the "void" operator) is
+ * dismissed-with-rationale on this site: the void here is the intentional
+ * unused-parameter signal pinned by this comment, not a Promise discard.
  */
 export function createMockObservability(runtimeConfig?: RuntimeConfig): HttpObservability {
   void runtimeConfig;
