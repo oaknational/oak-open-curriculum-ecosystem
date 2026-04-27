@@ -610,6 +610,16 @@ function summariseResults(results) {
   return counts;
 }
 
+function pickResultLabel(counts) {
+  if (counts.critical > 0) {
+    return '\x1b[35mResult: CRITICAL';
+  }
+  if (counts.hard > 0) {
+    return '\x1b[31mResult: HARD';
+  }
+  return '\x1b[33mResult: SOFT';
+}
+
 function formatSummary(mode, counts) {
   const nonHealthy = counts.soft + counts.hard + counts.critical;
   if (nonHealthy === 0) {
@@ -617,12 +627,7 @@ function formatSummary(mode, counts) {
   }
 
   const suffix = mode === FITNESS_MODE_INFORMATIONAL ? ' — informational mode' : '';
-  const label =
-    counts.critical > 0
-      ? '\x1b[35mResult: CRITICAL'
-      : counts.hard > 0
-        ? '\x1b[31mResult: HARD'
-        : '\x1b[33mResult: SOFT';
+  const label = pickResultLabel(counts);
 
   const parts = [];
   if (counts.critical > 0) parts.push(`${counts.critical} critical`);
