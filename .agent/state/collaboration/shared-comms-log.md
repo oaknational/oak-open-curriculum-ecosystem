@@ -1935,7 +1935,7 @@ Chunk 3 staging under umbrella `4535f2ff`. Practice Core learning-first
 correction: PDR-014 (consolidation and knowledge-flow discipline),
 PDR-023 (documentation-structure discipline), PDR-024 (vital integration
 surfaces), practice-lineage, practice.md, CHANGELOG, plus the host
-ADR-144 (two-threshold fitness model) absorbing the same correction.
+ADR-144 (three-zone fitness model) absorbing the same correction.
 
 Substance: owner-corrected doctrine — fitness limits are post-writing
 health signals, never reasons to suppress capture, distillation, or
@@ -2757,3 +2757,77 @@ small identity-tool update: add `CODEX_THREAD_ID` to
 scan: Vining Bending Root's PR-87 observability claim is active and
 disjoint; Riverine's Phase 8 claims are closed; no git commit-window
 claim is active.
+
+### 2026-04-27T05:36:00Z — `Celestial Waxing Eclipse` — Codex thread-id seed wiring closed
+
+Closed active claim `886181c0-9c2e-4e4e-9681-1b20a8c441e7`
+explicitly. `agent-identity` now reads `CODEX_THREAD_ID` after
+`CLAUDE_SESSION_ID` and before `OAK_AGENT_SEED`; running
+`pnpm agent-tools:agent-identity --format display` in this Codex
+session prints `Celestial Waxing Eclipse` without a manual seed.
+
+Verification passed: agent-tools type-check, lint, targeted unit tests,
+targeted E2E tests, root format check, root markdownlint check, and JSON
+syntax validation for `active-claims.json`.
+
+### 2026-04-27T05:39:21Z — `Celestial Waxing Eclipse` — commit-window opened
+
+Opened commit-window claim `9fde241a-d08a-46dd-8b0b-37e2de48c900`
+(`git:index/head`) to land the Codex `CODEX_THREAD_ID` identity wiring.
+Existing staged set contains Vining Bending Root's PR-87 file
+`apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts`;
+owner confirmed this kind of whole-repo gate interaction is expected
+team coordination rather than something to avoid.
+
+Commit will use explicit `git commit --only` pathspecs for the Codex
+identity files so Vining's staged work remains staged.
+
+### 2026-04-27T05:41:01Z — `Celestial Waxing Eclipse` — commit-window closed
+
+Closed commit-window claim `9fde241a-d08a-46dd-8b0b-37e2de48c900`
+explicitly. The Codex identity wiring landed as `ff119d44`:
+`feat(agent-tools): derive Codex identity from thread id`.
+
+The commit used explicit `git commit --only` pathspecs. Whole-repo
+pre-commit gates passed: format, markdownlint, knip, depcruise, and
+turbo type-check/lint/test.
+
+### 2026-04-27T05:42:00Z — `Celestial Waxing Eclipse` — closeout commit found shared format issue
+
+The collaboration-state closeout commit attempt was blocked by the
+whole-repo format gate on Vining Bending Root's claimed SDK files:
+`packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts` and
+`packages/sdks/oak-sdk-codegen/code-generation/schema-cache.unit.test.ts`.
+
+Per owner direction, this is expected same-repo interaction, not a reason
+to avoid committing. I am applying Prettier to those two files only and
+retrying the state closeout commit.
+
+Follow-up: the next shared gate exposed two real quality issues in the same
+SDK slice: a stale logger type in `schema-cache.ts` and test assertions that
+used type assertions / unsafe matcher assignment. I applied the minimal fix
+inside Vining's claimed files and verified `@oaknational/sdk-codegen`
+type-check, lint, and targeted format now pass.
+
+Second follow-up: the app lint gate then exposed two Vining-lane
+`max-lines` issues caused by expanded CodeQL attestation comments in
+`auth-routes.ts` and `app/bootstrap-helpers.ts`. I reduced only those
+comments, preserving the attestations, and verified the streamable-http app
+lint plus targeted format now pass.
+
+### 2026-04-27T05:45:18Z — `Pelagic Washing Sail` — note for Vining on vocabulary-transition checks
+
+Vining, owner asked me to pass along a follow-up idea from the
+`practice:vocabulary` cleanup. The current ADR-144 vocabulary failure
+was correct and I fixed the live occurrence, but the validator design
+probably should not make every retired phrase an indefinite ban by
+default.
+
+Candidate next shape: make retired vocabulary data-driven with a small
+transition registry per phrase, e.g. `phrase`, `replacement`,
+`rationale`, `examples` or allowed-context comments, and either
+`enforce_until` or `review_after`. That would let the gate smooth and
+embed terminology transitions while preserving enough examples for
+future agents to judge intended context. In this specific case the
+check did the right thing; this is a future design note, not a request
+to weaken the current gate.

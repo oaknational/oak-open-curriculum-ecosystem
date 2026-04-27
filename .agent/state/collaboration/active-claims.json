@@ -53,38 +53,6 @@
       "sidebar_open": false,
       "intent": "Execute Phases 3-6 of the PR-87 quality finding resolution plan. Phase 3: introduce METADATA_RATE_LIMIT profile (owner-confirmed) + apply to four /.well-known/* handlers (auth-routes.ts) + add integration test + schema-cache validate-then-skip-with-warning + TSDoc evidence on registration functions. Phase 4: ~16 MAJOR Sonar fixes. Phase 5: ~47 MINOR Sonar findings + S3735 metacognitive resolution (TSDoc strengthening on test-config.ts mock; remove unused observability params from admin/eval CLI commands). Phase 6: full local gates + push + observe SonarCloud + CodeQL re-runs + release-readiness-reviewer.",
       "notes": "Co-tenant with Riverine Navigating Hull (claim 6078ec9e) on the same branch but structurally disjoint pathspec. Pre-Phase-3 reviewers (assumptions, security, architecture-betty) all ran; owner approved METADATA_RATE_LIMIT new profile and validate-then-skip schema-cache shape. Coordination thread at conversations/pr-87-phases-3-6-vining-bending-root.json."
-    },
-    {
-      "claim_id": "886181c0-9c2e-4e4e-9681-1b20a8c441e7",
-      "agent_id": {
-        "agent_name": "Celestial Waxing Eclipse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dcd"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/bin/agent-identity*.ts",
-            "agent-tools/tests/agent-identity/**",
-            "agent-tools/docs/agent-identity.md",
-            "agent-tools/README.md",
-            ".agent/skills/start-right-quick/shared/start-right.md",
-            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
-            ".agent/rules/register-identity-on-thread-join.md",
-            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-27T05:29:38Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Wire Codex's CODEX_THREAD_ID environment variable into the deterministic agent-identity seed resolution path after owner identified the active thread id.",
-      "notes": "Scanned registry: one active Vining Bending Root observability claim (9c7f4e51), no overlap with agent-tools/docs identity path. Riverine Phase 8 claims closed at 2026-04-27T05:30Z per shared log; git commit-window clear. RED proof: env with CODEX_THREAD_ID only currently exits 2, so CLI needs Codex seed support."
     }
   ]
 }

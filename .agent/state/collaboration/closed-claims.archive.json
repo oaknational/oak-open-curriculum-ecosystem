@@ -2242,7 +2242,7 @@
             "summary": "All gates green at commit time after absorbing knip findings on the new src/claude/ entry-point pattern and the StatuslinePlan type-import."
           },
           {
-            "kind": "review",
+            "kind": "command_output",
             "ref": "code-reviewer; docs-adr-reviewer; architecture-reviewer-fred",
             "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan §Solution Architecture; update-config wording retired in §Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
           }
@@ -2290,6 +2290,260 @@
             "kind": "command_output",
             "ref": "git log --oneline -3",
             "summary": "25d7c271, ed256e6f, 3a5e3d81 — substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fa7a46e4-8f7c-46b3-9fce-8f097cfb742e",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/operational/README.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:32:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement collaboration document fitness remediation by splitting detailed lifecycle recipes into a companion reference while preserving protocol semantics.",
+      "notes": "Scanned registry: Vining Bending Root claim 9c7f4e51 covers observability/product and scripts/validate-practice-fitness.mjs only; no file-edit overlap. Celestial Waxing Eclipse claim 886181c0 covers identity surfaces and active-claims/shared-log bookkeeping; no semantic overlap with collaboration-doc remediation. This claim touches active/closed claims only for protocol bookkeeping and avoids identity files plus shared-comms-log.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:35:15Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Collaboration document fitness remediation completed. The directive now stays focused on doctrine and channel selection, the conventions file is a compact operational index, and detailed lifecycle recipes live in collaboration-state-lifecycle.md. Strict-hard fitness is clear for the targeted files.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            "summary": "Plan todos completed with validation caveat recorded for the out-of-scope shared-log vocabulary finding."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm practice:fitness:strict-hard",
+            "summary": "Strict-hard now exits 0; agent-collaboration.md and collaboration-state-conventions.md are soft, not hard."
+          },
+          {
+            "kind": "command_output",
+            "ref": "targeted markdownlint; targeted Prettier check; link discoverability search",
+            "summary": "Changed collaboration docs passed targeted markdown and format checks; moved detail is reachable from directive and operational surfaces."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "886181c0-9c2e-4e4e-9681-1b20a8c441e7",
+      "agent_id": {
+        "agent_name": "Celestial Waxing Eclipse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dcd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/agent-identity*.ts",
+            "agent-tools/tests/agent-identity/**",
+            "agent-tools/docs/agent-identity.md",
+            "agent-tools/README.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:29:38Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Wire Codex's CODEX_THREAD_ID environment variable into the deterministic agent-identity seed resolution path after owner identified the active thread id.",
+      "notes": "Scanned registry: one active Vining Bending Root observability claim (9c7f4e51), no overlap with agent-tools/docs identity path. Riverine Phase 8 claims closed at 2026-04-27T05:30Z per shared log; git commit-window clear. RED proof: env with CODEX_THREAD_ID only exited 2 before the implementation.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:36:00Z",
+        "closed_by": {
+          "agent_name": "Celestial Waxing Eclipse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Codex thread-id discovery completed. agent-identity now consumes CODEX_THREAD_ID automatically, docs and PDR-027/start-right guidance were updated, and verification passed.",
+        "evidence": [
+          {
+            "kind": "command_output",
+            "ref": "env | rg CODEX_THREAD_ID",
+            "summary": "Confirmed the shell exposes CODEX_THREAD_ID=019dcd65-4f59-73d3-9ac5-d988b40e6696."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm agent-tools:agent-identity --format display",
+            "summary": "Printed Celestial Waxing Eclipse using CODEX_THREAD_ID without a manual --seed."
+          },
+          {
+            "kind": "command_output",
+            "ref": "agent-tools type-check/lint/unit/e2e plus root format and markdownlint checks",
+            "summary": "Targeted agent-tools verification and root documentation checks passed."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9fde241a-d08a-46dd-8b0b-37e2de48c900",
+      "agent_id": {
+        "agent_name": "Celestial Waxing Eclipse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dcd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": ["index/head"]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:39:21Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit the Codex CODEX_THREAD_ID deterministic identity wiring with explicit pathspecs.",
+      "notes": "Existing staged set belonged to Vining Bending Root's PR-87 work when the window opened. Owner explicitly confirmed whole-repo gate interaction and same-repo coordination are expected. The substantive commit used git commit --only with Codex identity pathspecs.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:41:01Z",
+        "closed_by": {
+          "agent_name": "Celestial Waxing Eclipse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dcd"
+        },
+        "summary": "Commit-window closed after substantive Codex identity wiring landed as ff119d44. Whole-repo pre-commit gates passed.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "ff119d44",
+            "summary": "feat(agent-tools): derive Codex identity from thread id"
+          },
+          {
+            "kind": "command_output",
+            "ref": "git commit --only ... -m \"feat(agent-tools): derive Codex identity from thread id\"",
+            "summary": "Pre-commit passed format, markdownlint, knip, depcruise, and turbo type-check/lint/test; commit created ff119d44."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6267bca7-fac0-4f85-8cb0-572a55f02c65",
+      "agent_id": {
+        "agent_name": "Pelagic Washing Sail",
+        "platform": "codex",
+        "model": "gpt-5",
+        "session_id_prefix": "019dca9c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:43:23Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Fix the single retired ADR-144 vocabulary occurrence reported by pnpm practice:vocabulary.",
+      "notes": "Narrow owner-directed vocabulary cleanup. Vining Bending Root owns unrelated observability script/code surfaces; no overlap beyond shared collaboration bookkeeping.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:44:10Z",
+        "closed_by": {
+          "agent_name": "Pelagic Washing Sail",
+          "platform": "codex",
+          "model": "gpt-5",
+          "session_id_prefix": "019dca9c"
+        },
+        "summary": "Retired ADR-144 vocabulary in the shared communication log was translated to the current three-zone wording.",
+        "evidence": [
+          {
+            "kind": "command_output",
+            "ref": "pnpm practice:vocabulary",
+            "summary": "Vocabulary consistency check passed after replacing the shared-log occurrence."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "41703b72-2ec5-41e6-b65d-dff14d294c66",
+      "agent_id": {
+        "agent_name": "Pelagic Washing Sail",
+        "platform": "codex",
+        "model": "gpt-5",
+        "session_id_prefix": "019dca9c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-27T05:45:18Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Leave Vining Bending Root an owner-requested coordination note about vocabulary-transition TTLs and examples.",
+      "notes": "Message-only collaboration update. No validator, SDK, observability, or identity implementation files are in scope.",
+      "archived_at": "2026-04-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-27T05:45:38Z",
+        "closed_by": {
+          "agent_name": "Pelagic Washing Sail",
+          "platform": "codex",
+          "model": "gpt-5",
+          "session_id_prefix": "019dca9c"
+        },
+        "summary": "Owner-requested note to Vining about vocabulary-transition TTLs and examples was added to the shared communication log.",
+        "evidence": [
+          {
+            "kind": "decision_thread",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-27t054518z--pelagic-washing-sail--note-for-vining-on-vocabulary-transition-checks",
+            "summary": "Shared-log note records the future vocabulary-gate design idea."
           }
         ]
       }
