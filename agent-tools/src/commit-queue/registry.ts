@@ -32,16 +32,16 @@ export async function writeRegistry(
 
 function parseRegistry(value: unknown, registryPath: string): CommitQueueRegistry {
   if (!isRecord(value)) {
-    throw new Error(`${registryPath} must contain a JSON object`);
+    throw new TypeError(`${registryPath} must contain a JSON object`);
   }
   if (value.schema_version !== '1.3.0') {
     throw new Error(`${registryPath} must use schema_version 1.3.0 before commit queue writes`);
   }
   if (!Array.isArray(value.commit_queue)) {
-    throw new Error(`${registryPath} must contain a top-level commit_queue array`);
+    throw new TypeError(`${registryPath} must contain a top-level commit_queue array`);
   }
   if (!Array.isArray(value.claims)) {
-    throw new Error(`${registryPath} must contain a top-level claims array`);
+    throw new TypeError(`${registryPath} must contain a top-level claims array`);
   }
 
   return {

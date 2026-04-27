@@ -37,7 +37,7 @@ export function redactText(value: string, key?: string): string {
   const redacted = redactTelemetryValue(value, key);
 
   if (typeof redacted !== 'string') {
-    throw new Error('Expected telemetry redaction to preserve string values');
+    throw new TypeError('Expected telemetry redaction to preserve string values');
   }
 
   return redacted;

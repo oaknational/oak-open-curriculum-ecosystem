@@ -87,7 +87,7 @@ describe('createSentryInitOptions — fingerprint runs AFTER redaction (L-IMM Su
     const initOptions = createSentryInitOptions(liveConfig(), { serviceName: 'oak-http' });
     const beforeSend = initOptions.beforeSend;
     if (typeof beforeSend !== 'function') {
-      throw new Error('beforeSend must be wired by createSentryInitOptions');
+      throw new TypeError('beforeSend must be wired by createSentryInitOptions');
     }
 
     const inputEvent = {
@@ -107,7 +107,7 @@ describe('createSentryInitOptions — fingerprint runs AFTER redaction (L-IMM Su
     const result = beforeSend(inputEvent, {});
 
     if (result === null || typeof result !== 'object' || 'then' in result) {
-      throw new Error('beforeSend must return the post-redaction event synchronously');
+      throw new TypeError('beforeSend must return the post-redaction event synchronously');
     }
     expect(result.fingerprint).toEqual(['{{ default }}', 'TestErrorHandled']);
 
@@ -119,7 +119,7 @@ describe('createSentryInitOptions — fingerprint runs AFTER redaction (L-IMM Su
     const initOptions = createSentryInitOptions(liveConfig(), { serviceName: 'oak-http' });
     const beforeSend = initOptions.beforeSend;
     if (typeof beforeSend !== 'function') {
-      throw new Error('beforeSend must be wired by createSentryInitOptions');
+      throw new TypeError('beforeSend must be wired by createSentryInitOptions');
     }
 
     const inputEvent = {
@@ -155,7 +155,7 @@ describe('createSentryInitOptions — fingerprint runs AFTER redaction (L-IMM Su
     });
     const beforeSend = initOptions.beforeSend;
     if (typeof beforeSend !== 'function') {
-      throw new Error('beforeSend must be wired by createSentryInitOptions');
+      throw new TypeError('beforeSend must be wired by createSentryInitOptions');
     }
 
     const inputEvent: SentryErrorEvent = {

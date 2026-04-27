@@ -15,7 +15,7 @@ function createTestApp(logger: Logger): ReturnType<typeof express> {
 
   app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
     if (typeof res.locals.correlationId !== 'string') {
-      throw new Error('Expected correlationId in res.locals');
+      throw new TypeError('Expected correlationId in res.locals');
     }
     res.json({ correlationId: res.locals.correlationId });
   });
@@ -42,7 +42,7 @@ function createTaggingApp(
   app.use(createCorrelationMiddleware(logger, { observability }));
   app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
     if (typeof res.locals.correlationId !== 'string') {
-      throw new Error('Expected correlationId in res.locals');
+      throw new TypeError('Expected correlationId in res.locals');
     }
     res.json({ correlationId: res.locals.correlationId });
   });
