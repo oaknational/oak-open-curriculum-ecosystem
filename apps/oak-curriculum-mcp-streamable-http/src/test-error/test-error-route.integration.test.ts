@@ -71,8 +71,17 @@ function buildApp(
   // response so we can assert on its name (mirrors the real
   // setupExpressErrorHandler chain's effect: 5xx + Sentry capture).
   // The 4-arg signature is load-bearing: Express recognises error
-  // middleware by arity, not by ErrorRequestHandler typing — `next`
-  // must remain a parameter even though it is not invoked.
+  // middleware by arity at registration time, not by the
+  // `ErrorRequestHandler` typing on the function reference. `next`
+  // must remain a parameter even though it is not invoked, otherwise
+  // Express demotes the handler to a regular middleware and the
+  // error path bypasses it entirely.
+  //
+  // Sonar `typescript:S3735` (Remove this use of the "void" operator)
+  // is dismissed-with-rationale on this site: `void next` is the
+  // intentional unused-parameter signal pinned by this comment, not
+  // a Promise discard. Same architectural shape as the test-config
+  // helper site fixed at commit f2d376a2.
   const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
     const e = err instanceof Error ? err : new Error(String(err));
     res.status(500).json({ error: e.name, message: e.message });
