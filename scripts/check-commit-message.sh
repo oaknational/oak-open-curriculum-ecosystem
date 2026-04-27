@@ -54,15 +54,15 @@ EOM
 msgs=()
 file=""
 
-while [ $# -gt 0 ]; do
+while [[ $# -gt 0 ]]; do
   case "$1" in
     -m)
-      [ $# -ge 2 ] || usage
+      [[ $# -ge 2 ]] || usage
       msgs+=("$2")
       shift 2
       ;;
     -F)
-      [ $# -ge 2 ] || usage
+      [[ $# -ge 2 ]] || usage
       file="$2"
       shift 2
       ;;
@@ -76,7 +76,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-if [ -n "$file" ] && [ ${#msgs[@]} -gt 0 ]; then
+if [[ -n "$file" && ${#msgs[@]} -gt 0 ]]; then
   echo "check-commit-message: -m and -F are mutually exclusive (matches git commit)." >&2
   exit 2
 fi
@@ -84,24 +84,24 @@ fi
 tmp="$(mktemp -t commitlint-check.XXXXXX)"
 trap 'rm -f "$tmp"' EXIT INT TERM HUP
 
-if [ ${#msgs[@]} -gt 0 ]; then
+if [[ ${#msgs[@]} -gt 0 ]]; then
   printf '%s' "${msgs[0]}" >"$tmp"
   for ((i = 1; i < ${#msgs[@]}; i++)); do
     printf '\n\n%s' "${msgs[i]}" >>"$tmp"
   done
   printf '\n' >>"$tmp"
-elif [ -n "$file" ]; then
-  if [ "$file" = "-" ]; then
+elif [[ -n "$file" ]]; then
+  if [[ "$file" = "-" ]]; then
     cat >"$tmp"
   else
-    [ -r "$file" ] || {
+    [[ -r "$file" ]] || {
       printf 'check-commit-message: cannot read file: %s\n' "$file" >&2
       exit 2
     }
     cat "$file" >"$tmp"
   fi
 else
-  if [ -t 0 ]; then
+  if [[ -t 0 ]]; then
     echo "check-commit-message: no message provided (no -m, no -F, stdin is a TTY)." >&2
     usage
   fi
