@@ -623,6 +623,9 @@ describe('ADR-160 bypass validation: omitting a redactor leaves PII visible', ()
     type KeysOfSentryRedactionHooks = keyof SentryRedactionHooks;
     const registryMatchesHookType = (hookName: BarrierHookName): KeysOfSentryRedactionHooks =>
       hookName;
-    expect(BARRIER_HOOKS.map(registryMatchesHookType).sort()).toEqual([...BARRIER_HOOKS].sort());
+    const byLocale = (a: string, b: string): number => a.localeCompare(b);
+    expect(BARRIER_HOOKS.map(registryMatchesHookType).toSorted(byLocale)).toEqual(
+      [...BARRIER_HOOKS].toSorted(byLocale),
+    );
   });
 });

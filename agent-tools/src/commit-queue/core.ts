@@ -210,7 +210,7 @@ function normalizeFileList(text: string): readonly string[] {
     .map((line) => normalizeRepoPath(line.trim()))
     .filter(Boolean);
 
-  return [...new Set(files)].toSorted();
+  return [...new Set(files)].toSorted((a, b) => a.localeCompare(b));
 }
 
 function formatList(files: readonly string[]): string {
