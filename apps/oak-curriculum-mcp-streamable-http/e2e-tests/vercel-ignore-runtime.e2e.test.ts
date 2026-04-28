@@ -3,15 +3,16 @@
  * capability.
  *
  * Per the PR-87 architectural cleanup plan §"Phase 1 — Cluster B" the
- * scrubbed git environment (`scrubbedGitEnv()`) intentionally omits
- * `HOME`, pins `GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` to
- * `/dev/null`, and disables `GIT_TERMINAL_PROMPT`. This test exercises
- * the production capability against the actual repository to prove that
- * the scrubbed env does not break `git show` on the runtime that
- * Vercel's `ignoreCommand` executes on. If a future runtime change
- * makes HOME-absence break git, this test fails first; the env scrub
- * is tightened or HOME is added back deliberately, with the failure
- * evidence documented in the production module's TSDoc.
+ * production module invokes `git` via the absolute `/usr/bin/git` path
+ * (`GIT_BINARY`) so `PATH` never participates in the binary lookup, and
+ * `scrubbedGitEnv()` returns only `GIT_CONFIG_GLOBAL=/dev/null`,
+ * `GIT_CONFIG_SYSTEM=/dev/null`, and `GIT_TERMINAL_PROMPT=0`. This test
+ * exercises the production capability against the actual repository to
+ * prove that posture does not break `git show` on the runtime that
+ * Vercel's `ignoreCommand` executes on. If a future runtime moves `git`
+ * away from `/usr/bin/git`, this test fails first; `GIT_BINARY` is
+ * updated deliberately with the failure evidence recorded in the
+ * production module's TSDoc.
  *
  * Network-fetching capabilities (`gitFetchShallow`) are not exercised
  * here — the unit test asserts argv shape and SHA validation; runtime
@@ -35,8 +36,13 @@ import { gitShowFileAtSha } from '../build-scripts/vercel-ignore-production-non-
 const thisDir = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(thisDir, '../../..');
 
+// Mirror the production module's binary-location posture (no PATH lookup)
+// so this test helper does not re-introduce the S4036 surface that the
+// production capabilities deliberately close.
+const GIT_BINARY = '/usr/bin/git';
+
 function resolveHeadSha(): string {
-  return execFileSync('git', ['rev-parse', 'HEAD'], {
+  return execFileSync(GIT_BINARY, ['rev-parse', 'HEAD'], {
     cwd: repositoryRoot,
     encoding: 'utf8',
   }).trim();

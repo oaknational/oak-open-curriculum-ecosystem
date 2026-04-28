@@ -186,8 +186,22 @@ function describeShaValidationFailure(value) {
 }
 
 // ---------------------------------------------------------------------------
-// Defence-in-depth environment construction for `git` subprocess execution.
+// Defence-in-depth environment + binary location for `git` subprocess execution.
 // ---------------------------------------------------------------------------
+
+/**
+ * Absolute path to the `git` binary. The script invokes `git` via this
+ * absolute path so the subprocess never consults `PATH`, removing the
+ * S4036-class binary-substitution attack surface entirely (an attacker
+ * who could manipulate `PATH` cannot redirect to a hostile binary because
+ * the lookup never happens). On Vercel's Linux runtime and on standard
+ * Linux/macOS dev machines, `git` lives at `/usr/bin/git`. If a future
+ * runtime ships `git` elsewhere, the e2e contract test
+ * (`e2e-tests/vercel-ignore-runtime.e2e.test.ts`) fails first, and
+ * `GIT_BINARY` is updated deliberately with the failure evidence
+ * recorded in this TSDoc.
+ */
+const GIT_BINARY = '/usr/bin/git';
 
 /**
  * Build a deliberately scrubbed environment object for `git` subprocess
@@ -195,9 +209,9 @@ function describeShaValidationFailure(value) {
  * spawn `git` via `execFileSync`.
  *
  * Posture:
- * - **PATH preserved** — required for `git` to be located on the runtime.
- *   PATH-absence is treated as a build-environment defect (the function
- *   throws), not a fall-through condition.
+ * - **No PATH** — the capabilities invoke `git` via the absolute
+ *   {@link GIT_BINARY} path, so `PATH` is never consulted by the
+ *   subprocess. Closes the S4036 binary-substitution surface entirely.
  * - **`GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` pinned to `/dev/null`** —
  *   neutralises any hostile global or system gitconfig that might be
  *   present on the runtime. This is the single highest-leverage hardening
@@ -205,9 +219,8 @@ function describeShaValidationFailure(value) {
  * - **`GIT_TERMINAL_PROMPT=0`** — prevents `git` from blocking the
  *   non-interactive build on a credential prompt.
  * - **`HOME` deliberately omitted** — `git` consults `~/.gitconfig` when
- *   `HOME` is set; omitting it removes that surface entirely. The
- *   integration test
- *   (`vercel-ignore-production-non-release-build.integration.test.mjs`)
+ *   `HOME` is set; omitting it removes that surface entirely. The e2e
+ *   contract test (`e2e-tests/vercel-ignore-runtime.e2e.test.ts`)
  *   asserts `git show` succeeds against the actual repository under this
  *   env so the omission does not break Vercel-equivalent runtimes.
  * - **All other inherited env keys dropped** — `GIT_SSH_COMMAND`,
@@ -215,18 +228,10 @@ function describeShaValidationFailure(value) {
  *
  * Cites ADR-158.
  *
- * @param sourceEnv - the environment to read PATH from (typed as `NodeJS.ProcessEnv`). Defaults to `process.env`.
  * @returns the scrubbed environment object as a `Record\<string, string\>`.
  */
-export function scrubbedGitEnv(sourceEnv = process.env) {
-  const sourcePath = sourceEnv.PATH;
-  if (typeof sourcePath !== 'string' || sourcePath.length === 0) {
-    throw new Error(
-      'PATH must be set in the build environment. PATH-absence is a build-environment defect, not a fall-through condition.',
-    );
-  }
+export function scrubbedGitEnv() {
   return {
-    PATH: sourcePath,
     GIT_CONFIG_GLOBAL: '/dev/null',
     GIT_CONFIG_SYSTEM: '/dev/null',
     GIT_TERMINAL_PROMPT: '0',
@@ -284,7 +289,7 @@ function assertSafeFilePath(filePath) {
 export function gitShowFileAtSha(sha, filePath, cwd) {
   assertValidatedSha(sha);
   assertSafeFilePath(filePath);
-  return execFileSync('git', ['show', `${sha}:${filePath}`], {
+  return execFileSync(GIT_BINARY, ['show', `${sha}:${filePath}`], {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -307,7 +312,7 @@ export function gitShowFileAtSha(sha, filePath, cwd) {
  */
 export function gitFetchShallow(sha, cwd) {
   assertValidatedSha(sha);
-  return execFileSync('git', ['fetch', '--depth=1', 'origin', sha], {
+  return execFileSync(GIT_BINARY, ['fetch', '--depth=1', 'origin', sha], {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -344,47 +349,55 @@ function safeReadCurrentVersion(readFile, packageJsonPath, stderr) {
   return version && isValidSemver(version) ? version : undefined;
 }
 
-function safeReadPreviousVersion(
-  { gitShowFileAtSha, gitFetchShallow, stderr },
-  repositoryRoot,
-  validatedSha,
-) {
-  if (!validatedSha) {
+function attemptShowAfterShallowFetch(deps, repositoryRoot, validatedSha) {
+  const { gitShowFileAtSha, gitFetchShallow, stderr } = deps;
+  try {
+    gitFetchShallow(validatedSha, repositoryRoot);
+  } catch (fetchError) {
+    const fetchMessage = fetchError instanceof Error ? fetchError.message : String(fetchError);
+    stderr.write(
+      `Previous-version probe: shallow fetch failed (${fetchMessage}); treating previous as unset.\n`,
+    );
     return undefined;
   }
-  let text;
   try {
-    text = gitShowFileAtSha(validatedSha, 'package.json', repositoryRoot);
+    return gitShowFileAtSha(validatedSha, 'package.json', repositoryRoot);
+  } catch (retryError) {
+    const retryMessage = retryError instanceof Error ? retryError.message : String(retryError);
+    stderr.write(
+      `Previous-version probe: post-fetch show failed (${retryMessage}); treating previous as unset.\n`,
+    );
+    return undefined;
+  }
+}
+
+function readPackageJsonText(deps, repositoryRoot, validatedSha) {
+  const { gitShowFileAtSha, stderr } = deps;
+  try {
+    return gitShowFileAtSha(validatedSha, 'package.json', repositoryRoot);
   } catch (showError) {
     const showMessage = showError instanceof Error ? showError.message : String(showError);
     stderr.write(
       `Previous-version probe: initial show failed (${showMessage}); attempting shallow fetch fallback.\n`,
     );
-    try {
-      gitFetchShallow(validatedSha, repositoryRoot);
-    } catch (fetchError) {
-      const fetchMessage = fetchError instanceof Error ? fetchError.message : String(fetchError);
-      stderr.write(
-        `Previous-version probe: shallow fetch failed (${fetchMessage}); treating previous as unset.\n`,
-      );
-      return undefined;
-    }
-    try {
-      text = gitShowFileAtSha(validatedSha, 'package.json', repositoryRoot);
-    } catch (retryError) {
-      const retryMessage = retryError instanceof Error ? retryError.message : String(retryError);
-      stderr.write(
-        `Previous-version probe: post-fetch show failed (${retryMessage}); treating previous as unset.\n`,
-      );
-      return undefined;
-    }
+    return attemptShowAfterShallowFetch(deps, repositoryRoot, validatedSha);
+  }
+}
+
+function safeReadPreviousVersion(deps, repositoryRoot, validatedSha) {
+  if (!validatedSha) {
+    return undefined;
+  }
+  const text = readPackageJsonText(deps, repositoryRoot, validatedSha);
+  if (text === undefined) {
+    return undefined;
   }
   let parsed;
   try {
     parsed = JSON.parse(text);
   } catch (parseError) {
     const parseMessage = parseError instanceof Error ? parseError.message : String(parseError);
-    stderr.write(
+    deps.stderr.write(
       `Previous-version probe: package.json parse failed (${parseMessage}); treating previous as unset.\n`,
     );
     return undefined;
@@ -423,14 +436,13 @@ function safeReadPreviousVersion(
  * naming the offending value's length only — attacker-controlled
  * values are never logged raw.
  *
- * Build-environment precondition: when the branch is `main`, the
- * function eagerly invokes `scrubbedGitEnv(env)` so PATH-absence
- * surfaces with a precise "build-environment defect" diagnostic before
- * any `safeReadCurrentVersion` or git-capability work runs. This
- * catches the otherwise-silent case where `validatedSha` is undefined
- * and the git capabilities are never reached. The script still returns
- * exit 1 (continue with build) so the defect manifests downstream
- * rather than silently cancelling a deploy.
+ * Binary-location posture: the git capabilities invoke `git` via the
+ * absolute {@link GIT_BINARY} path, so `PATH` is never read by this
+ * script and is not part of the data flow into `execFileSync`. The
+ * earlier eager PATH-absence precondition (Phase 1 first cut) was
+ * removed when {@link scrubbedGitEnv} stopped consulting `PATH` —
+ * there is no longer a runtime defect to surface eagerly because the
+ * binary location is fixed at module scope.
  *
  * Dependency posture: this script runs as Vercel's `ignoreCommand`,
  * which executes BEFORE `pnpm install`. It MUST therefore depend only
@@ -462,25 +474,6 @@ export function runVercelIgnoreCommand(options) {
     const branchLabel = env.VERCEL_GIT_COMMIT_REF ?? '(unset)';
     stdout.write(
       `Branch is "${branchLabel}", not main; production cancellation gate skipped, build will continue.\n`,
-    );
-    return { exitCode: 1 };
-  }
-
-  // Eagerly assert the build-environment precondition for any later
-  // `scrubbedGitEnv()` invocation so an absent or empty PATH surfaces
-  // here with a precise "build-environment defect" diagnostic rather
-  // than nested inside a downstream git-failure message — and so it
-  // surfaces even on first-ever deploys where `validatedSha` is
-  // undefined and the git capabilities are never reached. The script
-  // still returns exit 1 (continue with build) so the defect manifests
-  // in the build itself, where it is easier to diagnose than a
-  // silently-cancelled deploy. Absorbed from `architecture-reviewer-wilma`.
-  try {
-    scrubbedGitEnv(env);
-  } catch (envError) {
-    const envMessage = envError instanceof Error ? envError.message : String(envError);
-    stderr.write(
-      `Build-environment defect: ${envMessage} Continuing with build (fail-soft) so the defect surfaces downstream.\n`,
     );
     return { exitCode: 1 };
   }
