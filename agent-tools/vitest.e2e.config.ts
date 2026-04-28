@@ -5,10 +5,10 @@ import { defineConfig } from 'vitest/config';
  *
  * Does not extend `vitest.e2e.config.base.ts` because:
  * - E2E tests live under `tests/` (not `e2e-tests/`), requiring different include paths
- * - CLI smoke tests spawn child processes (`pnpm tsx`), not network IO — the base
- *   `test.setup.no-network.ts` guard is unnecessary
+ * - agent-tools currently has no E2E tests; CLI process and filesystem checks
+ *   belong to smoke/manual validation, not regular CI E2E gates
  *
- * Uses 60s timeout for CI headroom (child process startup is slow under resource pressure).
+ * Keeps the standard E2E timeout for any future no-IO system-level tests.
  */
 export default defineConfig({
   test: {

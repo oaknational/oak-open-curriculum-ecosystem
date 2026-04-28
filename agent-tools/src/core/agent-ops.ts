@@ -51,3 +51,7 @@ export function resolveDiffCwd(input: ResolveDiffCwdInput): string {
   }
   return input.repoRoot;
 }
+
+export function isValidAgentId(agentId: string): boolean {
+  return /^[0-9a-z]{1,64}$/u.test(agentId);
+}

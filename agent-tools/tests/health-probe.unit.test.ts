@@ -1,58 +1,118 @@
 import { describe, expect, it } from 'vitest';
 
+import { formatAgentInfrastructureHealthReport } from '../src/core/health-probe';
 import {
-  evaluateAgentInfrastructureHealth,
-  formatAgentInfrastructureHealthReport,
-} from '../src/core/health-probe';
-import { createHealthyRepo } from './health-probe.fixtures';
+  evaluateHookPolicySpineCoherenceFromInputs,
+  evaluatePracticeBoxState,
+} from '../src/core/health-probe-hook-state';
+import type { AgentInfrastructureHealthReport } from '../src/core/health-probe-types';
 
-describe('health probe', () => {
-  it('reports a healthy repo when the core infrastructure surfaces align', () => {
-    const repoRoot = createHealthyRepo({ continuityLastRefreshed: '2026-04-03' });
+const wiredClaudeSettingsText = JSON.stringify({
+  hooks: {
+    PreToolUse: [
+      {
+        matcher: 'Bash',
+        hooks: [
+          {
+            type: 'command',
+            command: 'node scripts/check-blocked-patterns.mjs',
+          },
+        ],
+      },
+    ],
+  },
+});
 
-    const report = evaluateAgentInfrastructureHealth(repoRoot, new Date('2026-04-03T12:00:00Z'));
+const documentedSurfaceMatrix = [
+  '.agent/hooks/policy.json',
+  'scripts/check-blocked-patterns.mjs',
+  'Policy Spine',
+  'override prune block',
+].join('\n');
 
-    expect(report.overallStatus).toBe('pass');
-    expect(report.checks.every((check) => check.status === 'pass')).toBe(true);
+describe('hook policy spine health', () => {
+  it('passes when policy, tracked activation, and surface matrix align', () => {
+    expect(
+      evaluateHookPolicySpineCoherenceFromInputs({
+        hookPolicyExists: true,
+        claudeSupportStatus: 'supported',
+        surfaceMatrixText: documentedSurfaceMatrix,
+        claudeSettingsText: wiredClaudeSettingsText,
+      }),
+    ).toMatchObject({
+      key: 'hook-policy-spine',
+      status: 'pass',
+    });
   });
 
-  it('fails when command adapter parity drifts across supported platforms', () => {
-    const repoRoot = createHealthyRepo({
-      omitCommandAdapters: ['.claude/commands/jc-review.md'],
-      continuityLastRefreshed: '2026-04-03',
+  it('fails when supported Claude hook policy has no tracked settings file', () => {
+    const result = evaluateHookPolicySpineCoherenceFromInputs({
+      hookPolicyExists: true,
+      claudeSupportStatus: 'supported',
+      surfaceMatrixText: documentedSurfaceMatrix,
+      claudeSettingsText: null,
     });
 
-    const report = evaluateAgentInfrastructureHealth(repoRoot, new Date('2026-04-03T12:00:00Z'));
-    const commandParityCheck = report.checks.find(
-      (check) => check.key === 'command-adapter-parity',
+    expect(result.status).toBe('fail');
+    expect(result.details).toContain(
+      '.agent/hooks/policy.json marks Claude Code as supported, but tracked project .claude/settings.json is missing.',
     );
-
-    expect(commandParityCheck?.status).toBe('fail');
-    expect(commandParityCheck?.details).toContain('Claude Code: missing adapters for review');
   });
 
-  it('warns when the continuity contract is older than the freshness window', () => {
-    const repoRoot = createHealthyRepo({
-      continuityLastRefreshed: '2026-03-01',
+  it('fails when the surface matrix omits the hook policy spine', () => {
+    const result = evaluateHookPolicySpineCoherenceFromInputs({
+      hookPolicyExists: true,
+      claudeSupportStatus: 'supported',
+      surfaceMatrixText: null,
+      claudeSettingsText: wiredClaudeSettingsText,
     });
 
-    const report = evaluateAgentInfrastructureHealth(repoRoot, new Date('2026-04-03T12:00:00Z'));
-    const continuityCheck = report.checks.find(
-      (check) => check.key === 'continuity-contract-freshness',
+    expect(result.status).toBe('fail');
+    expect(result.details).toContain(
+      '.agent/memory/executive/cross-platform-agent-surface-matrix.md is missing.',
     );
-
-    expect(continuityCheck?.status).toBe('warn');
   });
+});
 
-  it('formats a summary-first health report when a warning is present', () => {
-    const repoRoot = createHealthyRepo({ continuityLastRefreshed: '2026-03-01' });
+describe('practice box health', () => {
+  it('is pure over the incoming file count', () => {
+    expect(evaluatePracticeBoxState(0).status).toBe('pass');
+    expect(evaluatePracticeBoxState(2)).toMatchObject({
+      status: 'warn',
+      summary: '2 incoming Practice artefacts are waiting for integration.',
+    });
+  });
+});
 
-    const report = evaluateAgentInfrastructureHealth(repoRoot, new Date('2026-04-03T12:00:00Z'));
+describe('health report formatting', () => {
+  it('formats a summary-first report with details for non-passing checks', () => {
+    const report: AgentInfrastructureHealthReport = {
+      overallStatus: 'warn',
+      stats: { pass: 1, warn: 1, fail: 0 },
+      checks: [
+        {
+          key: 'hook-policy-spine',
+          label: 'Hook Policy Spine coherence',
+          status: 'pass',
+          summary: 'Hook policy aligned.',
+          details: [],
+        },
+        {
+          key: 'practice-box-state',
+          label: 'Practice box state',
+          status: 'warn',
+          summary: 'Incoming artefacts are waiting.',
+          details: ['Use jc-consolidate-docs.'],
+        },
+      ],
+    };
+
     const output = formatAgentInfrastructureHealthReport(report);
 
     expect(output).toContain('Agent Infrastructure Health');
     expect(output).toContain('Summary');
-    expect(output).toContain('Continuity contract freshness');
+    expect(output).toContain('Practice box state');
     expect(output).toContain('Details');
+    expect(output).toContain('Use jc-consolidate-docs.');
   });
 });

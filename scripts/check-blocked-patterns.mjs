@@ -132,15 +132,12 @@ export function buildPreToolUseDenyResponse(blockedPattern) {
 }
 
 /**
- * Load blocked command patterns from the canonical hook policy.
+ * Parse blocked command patterns from already-loaded policy data.
  *
- * @param {URL} policyUrl
- * @returns {Promise<string[]>}
+ * @param {unknown} policy
+ * @returns {string[]}
  */
-export async function loadBlockedPatterns(policyUrl = POLICY_URL) {
-  const policyText = await fs.readFile(policyUrl, 'utf8');
-  const policy = JSON.parse(policyText);
-
+export function parseBlockedPatternPolicy(policy) {
   if (
     policy === null ||
     typeof policy !== 'object' ||
@@ -158,6 +155,18 @@ export async function loadBlockedPatterns(policyUrl = POLICY_URL) {
   }
 
   return policy.hooks.preToolUse.blocked_patterns;
+}
+
+/**
+ * Load blocked command patterns from the canonical hook policy.
+ *
+ * @param {URL} policyUrl
+ * @returns {Promise<string[]>}
+ */
+export async function loadBlockedPatterns(policyUrl = POLICY_URL) {
+  const policyText = await fs.readFile(policyUrl, 'utf8');
+  const policy = JSON.parse(policyText);
+  return parseBlockedPatternPolicy(policy);
 }
 
 /**
@@ -188,6 +197,7 @@ export async function readStreamText(stdin) {
  *   stdout?: { write: (text: string) => void },
  *   stderr?: { write: (text: string) => void },
  *   policyUrl?: URL,
+ *   blockedPatterns?: readonly string[],
  * }} options
  * @returns {Promise<{ exitCode: number }>}
  */
@@ -197,14 +207,15 @@ export async function runPreToolUseGuard(options = {}) {
     stdout = process.stdout,
     stderr = process.stderr,
     policyUrl = POLICY_URL,
+    blockedPatterns,
   } = options;
 
   try {
     const inputText = await readStreamText(stdin);
     const hookInput = parseHookInput(inputText);
     const command = extractBashCommand(hookInput);
-    const blockedPatterns = await loadBlockedPatterns(policyUrl);
-    const blockedPattern = findBlockedPattern(command, blockedPatterns);
+    const patterns = blockedPatterns ?? (await loadBlockedPatterns(policyUrl));
+    const blockedPattern = findBlockedPattern(command, patterns);
 
     if (blockedPattern !== null) {
       stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedPattern))}\n`);

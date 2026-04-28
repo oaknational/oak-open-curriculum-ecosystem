@@ -4,6 +4,7 @@ import {
   buildPreToolUseDenyResponse,
   extractBashCommand,
   findBlockedPattern,
+  parseBlockedPatternPolicy,
   parseHookInput,
 } from './check-blocked-patterns.mjs';
 
@@ -64,6 +65,26 @@ describe('extractBashCommand', () => {
 describe('parseHookInput', () => {
   it('throws a helpful error for invalid JSON', () => {
     expect(() => parseHookInput('{')).toThrow('Claude PreToolUse hook input was not valid JSON:');
+  });
+});
+
+describe('parseBlockedPatternPolicy', () => {
+  it('extracts blocked command patterns from policy data', () => {
+    expect(
+      parseBlockedPatternPolicy({
+        hooks: {
+          preToolUse: {
+            blocked_patterns: ['git push --force', 'git --no-verify'],
+          },
+        },
+      }),
+    ).toStrictEqual(['git push --force', 'git --no-verify']);
+  });
+
+  it('throws when policy data has no blocked_patterns array', () => {
+    expect(() => parseBlockedPatternPolicy({ hooks: {} })).toThrow(
+      'The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.',
+    );
   });
 });
 

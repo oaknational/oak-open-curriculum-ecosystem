@@ -13,8 +13,25 @@ import {
 } from './health-probe-shared';
 import type { HealthCheckResult } from './health-probe-types';
 
+interface HookPolicySpineInputs {
+  readonly hookPolicyExists: boolean;
+  readonly claudeSupportStatus: string | null;
+  readonly surfaceMatrixText: string | null;
+  readonly claudeSettingsText: string | null;
+}
+
 export function evaluateHookPolicySpineCoherence(repoRoot: string): HealthCheckResult {
-  if (!existsSync(join(repoRoot, HOOK_POLICY_PATH))) {
+  const hookPolicyExists = existsSync(join(repoRoot, HOOK_POLICY_PATH));
+  return evaluateHookPolicySpineCoherenceFromInputs({
+    hookPolicyExists,
+    ...readHookPolicyInputs(repoRoot, hookPolicyExists),
+  });
+}
+
+export function evaluateHookPolicySpineCoherenceFromInputs(
+  inputs: HookPolicySpineInputs,
+): HealthCheckResult {
+  if (!inputs.hookPolicyExists) {
     return {
       key: 'hook-policy-spine',
       label: 'Hook Policy Spine coherence',
@@ -24,8 +41,12 @@ export function evaluateHookPolicySpineCoherence(repoRoot: string): HealthCheckR
     };
   }
 
-  const hookInputs = readHookPolicyInputs(repoRoot);
-  const failureDetails = collectHookPolicyFailureDetails(hookInputs);
+  const failureDetails = collectHookPolicyFailureDetails({
+    claudeSupportStatus: inputs.claudeSupportStatus,
+    surfaceMatrixText: inputs.surfaceMatrixText,
+    claudeSettingsExists: inputs.claudeSettingsText !== null,
+    claudeHookIsWired: isClaudeHookWired(inputs.claudeSettingsText),
+  });
   if (failureDetails.length > 0) {
     return {
       key: 'hook-policy-spine',
@@ -70,8 +91,8 @@ export function evaluatePracticeBoxState(practiceBoxFileCount: number): HealthCh
   };
 }
 
-function readHookPolicyInputs(repoRoot: string) {
-  const hookPolicy = readJson(repoRoot, HOOK_POLICY_PATH);
+function readHookPolicyInputs(repoRoot: string, hookPolicyExists: boolean) {
+  const hookPolicy = hookPolicyExists ? readJson(repoRoot, HOOK_POLICY_PATH) : {};
   const claudeSupportStatus = readNestedString(hookPolicy, [
     'platform_support',
     'claude_code',
@@ -83,17 +104,21 @@ function readHookPolicyInputs(repoRoot: string) {
   return {
     claudeSupportStatus,
     surfaceMatrixText,
-    claudeSettingsExists: claudeSettingsText !== null,
-    claudeHookIsWired: isClaudeHookWired(claudeSettingsText),
+    claudeSettingsText,
   };
 }
 
 function isClaudeHookWired(claudeSettingsText: string | null): boolean {
+  const commandPattern = new RegExp(
+    `"command"\\s*:\\s*"${CLAUDE_HOOK_COMMAND.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}"`,
+    'u',
+  );
+
   return (
     claudeSettingsText !== null &&
     claudeSettingsText.includes('"PreToolUse"') &&
-    claudeSettingsText.includes('"matcher": "Bash"') &&
-    claudeSettingsText.includes(`"command": "${CLAUDE_HOOK_COMMAND}"`)
+    /"matcher"\s*:\s*"Bash"/u.test(claudeSettingsText) &&
+    commandPattern.test(claudeSettingsText)
   );
 }
 
