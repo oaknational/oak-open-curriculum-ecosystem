@@ -1,6 +1,20 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Mossy Creeping Branch / codex / GPT-5 /
+**Last refreshed**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
+019dd3 — lightweight session handoff after the Codex identity plan archive.
+The completed archive claim is closed, entrypoints remain pointer-only, the
+thread identity row is refreshed, and Mossy Creeping Branch's napkin overflow
+rotation restored strict-hard fitness to soft-only.)
+
+**Prior refresh**: 2026-04-28 (Glassy Ebbing Reef / codex / GPT-5 /
+019dd3 — final owner-requested session handoff after commit `7c589a0a` landed
+the strengthened commit-gate doctrine. The handoff confirms `.agent` is
+commit-safe shared coordination state, whole-repo gates remain authoritative,
+minor hook failures are repaired immediately, and larger failures become the
+highest-priority next planned item. No new ADR/PDR candidate surfaced beyond
+the doctrine already landed.)
+
+**Prior refresh**: 2026-04-28 (Mossy Creeping Branch / codex / GPT-5 /
 019dd3 — Codex session identity plumbing implemented and doctrine propagated.
 The current plan now covers Codex `SessionStart` identity context, canonical
 collaboration-state identity preflight, report-only anonymous identity audit,
@@ -408,6 +422,9 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Estuarine Washing Beacon` | `codex` | `GPT-5` | `019dd3` | `codex-agent-config-path-and-skill-discovery-repair` | 2026-04-28 | 2026-04-28 |
+| `Coastal Mooring Atoll` | `codex` | `GPT-5` | `019dd3` | `session-handoff-codex-identity-archive-claim-closeout` | 2026-04-28 | 2026-04-28 |
+| `Glassy Ebbing Reef` | `codex` | `GPT-5` | `019dd3` | `cloudflare-planning-and-commit-gate-doctrine-handoff` | 2026-04-28 | 2026-04-28 |
 | `Mossy Creeping Branch` | `codex` | `GPT-5` | `019dd3` | `codex-session-identity-plumbing-current-slice-and-doctrine-propagation` | 2026-04-28 | 2026-04-28 |
 | `Verdant Flowering Blossom` | `codex` | `GPT-5` | `019dd3` | `hook-test-io-remediation-and-shared-state-sweep-policy-closeout` | 2026-04-28 | 2026-04-28 |
 | `Woodland Creeping Petal` | `codex` | `GPT-5` | `019dd3` | `collaboration-state-write-safety-current-plan-implementation` | 2026-04-28 | 2026-04-28 |
@@ -437,11 +454,40 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session implemented Codex identity plumbing (2026-04-28 Mossy
+**Latest session landed commit-gate doctrine correction (2026-04-28 Glassy
+Ebbing Reef):**
+
+- owner clarified that `.agent/` is shared Practice/coordination state and is
+  always safe to include in commits when it belongs to the live bundle;
+- owner clarified that the commit queue protects the staged authorial bundle,
+  while the commit hooks protect whole-repo integrity;
+- minor whole-repo hook failures are repaired immediately, including in
+  peer-owned WIP when the repair is mechanical and gate-honest;
+- larger whole-repo failures are planned as the highest-priority next item,
+  without narrowing hooks, bypassing verification, or introducing compatibility
+  layers;
+- commit `7c589a0a` landed this doctrine plus the Cloudflare MCP handoff state
+  after the full pre-commit chain passed.
+
+**Latest handoff verified Codex identity archive state (2026-04-28 Coastal
+Mooring Atoll):**
+
+- the completed
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md)
+  remains archived, and the old `current/` path is deleted;
+- the leftover archive claim is closed with evidence in collaboration state
+  (`ac0fe90f-e773-4415-940b-6c8c9e074a7a`, closed by Mossy Creeping Branch);
+- entrypoints remain pointer-only, `.remember/` added no new next-session
+  behaviour, and real conversations/escalations required no handoff action;
+- the brief consolidation trigger from active napkin hard pressure was handled
+  by Mossy Creeping Branch's overflow rotation; current
+  `pnpm practice:fitness:strict-hard` is soft-only.
+
+**Prior session implemented Codex identity plumbing (2026-04-28 Mossy
 Creeping Branch):**
 
 - promoted the future Codex identity brief into
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md);
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md);
 - added a soft Codex `SessionStart` hook adapter that emits the full PDR-027
   identity block as additional context when Codex supplies `session_id`;
 - added report-only identity audit over active claims, closed claims, thread
@@ -918,7 +964,7 @@ nl -ba .agent/directives/AGENT.md
   JSON state writes, Codex identity preflight, and TTL archival baseline.
   Closure remains pending the documented hard-fitness disposition.
 - Implemented current slice:
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md)
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md)
   — Codex `SessionStart` identity context, canonical identity preflight,
   report-only anonymous identity audit, and coordination/platform-tooling
   doctrine propagation. Historical `Codex` / `unknown` rows remain
@@ -1051,7 +1097,7 @@ validation.
   live markdown log is generated from event files.
 - Codex-wide identity parity beyond shared-state writes is now implemented for
   the high-impact path in
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
   New Codex sessions get identity context when `SessionStart` supplies
   `session_id`; legacy `Codex` / `unknown` rows are audit findings, not
   automatic rewrites.
@@ -1094,10 +1140,11 @@ validation.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
-- `pnpm practice:fitness --strict-hard` currently fails on structural pressure
-  in `principles.md`, `collaboration-state-conventions.md`, and
-  `repo-continuity.md`. The write-safety plan now carries the closure rule:
-  remediate or owner-route those hard findings before marking that plan done.
+- `pnpm practice:fitness:strict-hard` currently passes with soft findings only.
+  The earlier hard findings in `principles.md`,
+  `collaboration-state-conventions.md`, `repo-continuity.md`, and the active
+  napkin have been structurally routed; do not reopen them as write-safety
+  blockers without fresh evidence.
 - The owner corrected the live participant set to Codex, Estuarine, and
   Prismatic. Treat `Luminous Dancing Quasar` as a stale/phantom claim or
   identity mismatch unless a sub-agent registration is found; claim existence
@@ -1131,12 +1178,11 @@ Choose the lane deliberately:
 
 1. **Collaboration-state write safety closure** — continue
    [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md).
-   The implementation is landed. Next safe step is to route the strict-hard
-   fitness findings named in the plan (`principles.md`,
-   `collaboration-state-conventions.md`, and `repo-continuity.md`) to
-   structural extraction/splitting or an owner-approved remediation lane; only
-   then mark the plan complete/archive it. Treat hooks/session-exit cleanup as
-   a later refinement.
+   The implementation is landed, and the named docs fitness blockers have been
+   structurally routed by the deep consolidation pass. The brief active-napkin
+   hard pressure from final handoff was also rotated, so the next safe step is
+   to close/archive the write-safety plan with the current soft-only evidence.
+   Treat hooks/session-exit cleanup as a later refinement.
 
 2. **Workspace layer separation audit** — architecture-and-infrastructure now
    has a queued executable plan:
@@ -1163,7 +1209,7 @@ Choose the lane deliberately:
    real sidebar/joint-decision usage should feed WS5 observation.
 8. **Codex session identity plumbing follow-up** — the high-impact current
    slice is implemented in
-   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
    Only perform manual repair of historical anonymous rows when there is
    stronger evidence than the row itself; keep title/statusline as optional
    display.

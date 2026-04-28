@@ -22,7 +22,7 @@ todos:
 # Collaboration-State Write Safety
 
 **Last Updated**: 2026-04-28
-**Status**: 🟡 IMPLEMENTED / CLOSURE PENDING FITNESS DISPOSITION
+**Status**: 🟡 IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS
 **Scope**: Make the hot shared inter-agent state write paths safe without
 waiting for hook polish.
 
@@ -86,8 +86,10 @@ Identity preflight must reject anonymous Codex writes when `CODEX_THREAD_ID`
 exists. New Codex shared-state writes must carry a deterministic
 `agent_name`, `platform`, `model`, and `session_id_prefix`.
 
-Follow-up for Codex-wide identity parity is tracked separately in
-[`../future/codex-session-identity-plumbing.plan.md`](../future/codex-session-identity-plumbing.plan.md).
+The high-impact Codex-wide identity parity slice is complete in
+[`../archive/completed/codex-session-identity-plumbing.plan.md`](../archive/completed/codex-session-identity-plumbing.plan.md).
+Residual broader collaboration-state domain modelling remains in
+[`../future/collaboration-state-domain-model-and-comms-reliability.plan.md`](../future/collaboration-state-domain-model-and-comms-reliability.plan.md).
 This write-safety plan fixes the safe shared-state write path; the follow-up
 owns thread-row defaults, legacy `Codex` / `unknown` reporting, and any
 verified Codex title/statusline or hook integration.
@@ -165,13 +167,13 @@ has been preserved at
 `.agent/state/collaboration/comms/archive/shared-comms-log-pre-events-2026-04-28.md`,
 satisfying the migration-preservation requirement in acceptance criterion 3.
 
-`pnpm practice:fitness --strict-hard` still reports hard pressure in
-`principles.md`, `collaboration-state-conventions.md`, and
-`repo-continuity.md`. The first two now need structural extraction after this
-write-safety slice lands; `repo-continuity.md` needs the archive pass already
-named by its `split_strategy`. Do not mark this plan complete until those
-findings are either remediated or routed to an explicit owner-approved
-fitness-remediation lane with acceptance criteria.
+The later owner-requested deep consolidation pass routed the named hard
+pressure in `principles.md`, `collaboration-state-conventions.md`, and
+`repo-continuity.md` to structural homes. A brief final-handoff hard spike in
+the active napkin was then rotated into
+`.agent/memory/active/archive/napkin-2026-04-28-current-overflow.md`.
+Fresh strict-hard evidence is soft-only; do not mark this plan complete until
+the archive pass records that current evidence.
 
 ### Closeout Evidence — 2026-04-28
 
@@ -188,9 +190,11 @@ Owner-requested handoff and consolidation ran after those commits. Evidence:
 - `pnpm practice:vocabulary` passes;
 - `git diff --check` passes;
 - the real pre-commit hook passed for `ddcfa19e`;
-- `pnpm practice:fitness:strict-hard` still fails on the known hard findings
-  in `principles.md`, `collaboration-state-conventions.md`, and
-  `repo-continuity.md`.
+- the named hard findings in `principles.md`,
+  `collaboration-state-conventions.md`, and `repo-continuity.md` were later
+  structurally routed by the deep consolidation pass;
+- current `pnpm practice:fitness:strict-hard` is soft-only after the active
+  napkin overflow rotation.
 
 Consolidation did not surface a new ADR/PDR promotion candidate. The Practice
 governance remains homed in PDR-029 / PDR-035, while this repo's phenotype

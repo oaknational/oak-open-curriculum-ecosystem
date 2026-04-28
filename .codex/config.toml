@@ -1,94 +1,104 @@
 sandbox_mode = "workspace-write"
 [features]
+codex_hooks = true
 multi_agent = true
+
+[[hooks.SessionStart]]
+matcher = "startup|resume"
+
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/practice-session-identity.mjs"'
+timeout = 10
+statusMessage = "Loading Practice agent identity"
 
 [agents."code-reviewer"]
 description = "Gateway reviewer for non-trivial changes."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 
 [agents."test-reviewer"]
 description = "Test quality and TDD compliance reviewer."
-config_file = ".codex/agents/test-reviewer.toml"
+config_file = "agents/test-reviewer.toml"
 
 [agents."type-reviewer"]
 description = "TypeScript type-safety reviewer."
-config_file = ".codex/agents/type-reviewer.toml"
+config_file = "agents/type-reviewer.toml"
 
 [agents."config-reviewer"]
 description = "Tooling configuration reviewer (ESLint, TypeScript, Vitest, Prettier, Turbo)."
-config_file = ".codex/agents/config-reviewer.toml"
+config_file = "agents/config-reviewer.toml"
 
 [agents."security-reviewer"]
 description = "Security and privacy reviewer for auth, secrets, PII, and injection risks."
-config_file = ".codex/agents/security-reviewer.toml"
+config_file = "agents/security-reviewer.toml"
 
 [agents."docs-adr-reviewer"]
 description = "Documentation and ADR quality reviewer."
-config_file = ".codex/agents/docs-adr-reviewer.toml"
+config_file = "agents/docs-adr-reviewer.toml"
 
 [agents."elasticsearch-reviewer"]
 description = "Elasticsearch specialist reviewer for mappings, queries, ELSER, RRF, and Elastic Serverless."
-config_file = ".codex/agents/elasticsearch-reviewer.toml"
+config_file = "agents/elasticsearch-reviewer.toml"
 
 [agents."clerk-reviewer"]
 description = "Clerk specialist reviewer for middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
-config_file = ".codex/agents/clerk-reviewer.toml"
+config_file = "agents/clerk-reviewer.toml"
 
 [agents."sentry-reviewer"]
 description = "Sentry and OpenTelemetry specialist reviewer for SDK init, logging, tracing, MCP Insights, and telemetry redaction."
-config_file = ".codex/agents/sentry-reviewer.toml"
+config_file = "agents/sentry-reviewer.toml"
 
 [agents."mcp-reviewer"]
 description = "MCP protocol specification and implementation reviewer."
-config_file = ".codex/agents/mcp-reviewer.toml"
+config_file = "agents/mcp-reviewer.toml"
 
 [agents."onboarding-reviewer"]
 description = "Onboarding documentation quality reviewer."
-config_file = ".codex/agents/onboarding-reviewer.toml"
+config_file = "agents/onboarding-reviewer.toml"
 
 [agents."release-readiness-reviewer"]
 description = "Release go/no-go readiness reviewer."
-config_file = ".codex/agents/release-readiness-reviewer.toml"
+config_file = "agents/release-readiness-reviewer.toml"
 
 [agents."ground-truth-designer"]
 description = "Ground truth query designer for semantic search evaluation."
-config_file = ".codex/agents/ground-truth-designer.toml"
+config_file = "agents/ground-truth-designer.toml"
 
 [agents."subagent-architect"]
 description = "Sub-agent creation, review, and optimisation specialist."
-config_file = ".codex/agents/subagent-architect.toml"
+config_file = "agents/subagent-architect.toml"
 
 [agents."architecture-reviewer-fred"]
 description = "Principles-first architecture reviewer — ADR compliance and boundary discipline."
-config_file = ".codex/agents/architecture-reviewer-fred.toml"
+config_file = "agents/architecture-reviewer-fred.toml"
 
 [agents."architecture-reviewer-barney"]
 description = "Simplification-first architecture reviewer — boundary and dependency mapping."
-config_file = ".codex/agents/architecture-reviewer-barney.toml"
+config_file = "agents/architecture-reviewer-barney.toml"
 
 [agents."architecture-reviewer-betty"]
 description = "Systems-thinking architecture reviewer — cohesion, coupling, and change-cost trade-offs."
-config_file = ".codex/agents/architecture-reviewer-betty.toml"
+config_file = "agents/architecture-reviewer-betty.toml"
 
 [agents."architecture-reviewer-wilma"]
 description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
-config_file = ".codex/agents/architecture-reviewer-wilma.toml"
+config_file = "agents/architecture-reviewer-wilma.toml"
 
 [agents."assumptions-reviewer"]
 description = "Meta-level plan reviewer for proportionality, assumption validity, and blocking legitimacy."
-config_file = ".codex/agents/assumptions-reviewer.toml"
+config_file = "agents/assumptions-reviewer.toml"
 
 [agents."accessibility-reviewer"]
 description = "WCAG 2.2 AA compliance reviewer for rendered HTML, ARIA, keyboard interaction, colour contrast, and focus management."
-config_file = ".codex/agents/accessibility-reviewer.toml"
+config_file = "agents/accessibility-reviewer.toml"
 
 [agents."design-system-reviewer"]
 description = "Design token and visual consistency reviewer for DTCG JSON, CSS custom properties, and theming."
-config_file = ".codex/agents/design-system-reviewer.toml"
+config_file = "agents/design-system-reviewer.toml"
 
 [agents."react-component-reviewer"]
 description = "React component architecture reviewer for hooks, render performance, prop API design, and composition patterns."
-config_file = ".codex/agents/react-component-reviewer.toml"
+config_file = "agents/react-component-reviewer.toml"
 
 [sandbox_workspace_write]
 network_access = true

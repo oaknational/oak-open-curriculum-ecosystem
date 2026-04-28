@@ -61,11 +61,11 @@ not invent derived word slots.
 
 ## Platform Wrapper Status
 
-| Platform    | Status                                         | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ----------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Wired (statusline + SessionStart)              | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
-| Cursor      | Wired (code-renamed; live re-test pending)     | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. **Future work:** live-test in a Cursor composer session after the env-var rename to confirm the renamed surface still flows end-to-end; once verified, optionally rename the file from `oak-session-identity.mjs` to `practice-session-identity.mjs` for naming consistency.                                                                                                                                                                      |
-| Codex       | Thread id wired (Practice wrapper future work) | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. User-facing thread-title mutation is deliberately deferred; the stable thread id already provides deterministic names without adding a separate title-mutation tool. **Future work:** decide whether to add an in-repo wrapper that aliases `CODEX_THREAD_ID` → `PRACTICE_AGENT_SESSION_ID_CODEX` for naming consistency, or keep the harness-native variable as the canonical Codex surface.                                                                                                                                                                                                                                                                                              |
+| Platform    | Status                                            | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired (statusline + SessionStart)                 | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
+| Cursor      | Wired (code-renamed; live re-test pending)        | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. **Future work:** live-test in a Cursor composer session after the env-var rename to confirm the renamed surface still flows end-to-end; once verified, optionally rename the file from `oak-session-identity.mjs` to `practice-session-identity.mjs` for naming consistency.                                                                                                                                                                      |
+| Codex       | Wired (SessionStart context + thread id fallback) | Project `SessionStart` hook `.codex/hooks/practice-session-identity.mjs` delegates to `agent-tools/dist/src/bin/codex-session-identity-hook.js`. The adapter parses Codex stdin `session_id` and emits `hookSpecificOutput.additionalContext` with the PDR-027 identity block plus the canonical preflight command. Codex shell commands also receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. Title/statusline text remains optional display convenience, not identity correctness.                                                                                                                                                                                                                                                                             |
 
 ### Cursor `sessionStart` wiring
 
@@ -153,3 +153,36 @@ The current seed precedence keeps explicit and platform-specific sources
 predictable: `--seed`, then `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
 `PRACTICE_AGENT_SESSION_ID_CURSOR`, then `PRACTICE_AGENT_SESSION_ID_CODEX`,
 then the harness-native `CODEX_THREAD_ID`.
+
+### Codex `SessionStart` wiring
+
+Codex project hooks are enabled in `.codex/config.toml` with
+`features.codex_hooks = true` and a `SessionStart` matcher for
+`startup|resume`. The hook shape follows the official
+[Codex Hooks](https://developers.openai.com/codex/hooks) contract:
+command hooks receive JSON on stdin, including `session_id`, and
+`SessionStart` supports `hookSpecificOutput.additionalContext`.
+
+The wiring is:
+
+1. `.codex/config.toml` runs `.codex/hooks/practice-session-identity.mjs`.
+2. The shim resolves the built adapter at
+   `agent-tools/dist/src/bin/codex-session-identity-hook.js`. If the build
+   artefact is missing, it prints `{}` and exits 0.
+3. The adapter parses stdin, derives the deterministic display name from
+   `session_id`, and prints a `hookSpecificOutput` JSON object whose
+   `additionalContext` carries:
+   - the PDR-027 block (`agent_name`, `platform`, `model`,
+     `session_id_prefix`, `seed_source`);
+   - the exact command to verify the same block before thread registration or
+     shared-state writes.
+
+Use the full preflight for Codex thread rows and shared-state writes:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+```
+
+The hook is a soft surface: missing input, missing build artefact, unparseable
+JSON, or adapter failure exits 0 with `{}` on stdout. Title/statusline text is
+not treated as correctness; the PDR-027 identity block is.

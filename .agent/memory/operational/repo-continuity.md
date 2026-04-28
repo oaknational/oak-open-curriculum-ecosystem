@@ -21,6 +21,17 @@ propagated into the plan, thread record, repo-continuity, ADR-125, ADR-165,
 PDR-024, PDR-027, PDR-029, and PDR-035. This was a narrow follow-on to the
 Coastal consolidation pass, not a replacement for it.)
 
+**Incremental refresh**: 2026-04-28 (Glassy Ebbing Reef / codex / GPT-5 /
+`019dd3` — Cloudflare MCP public-beta security and token-economy planning was
+preserved, commit-gate doctrine was strengthened per owner correction, and the
+final handoff confirms no new deep-consolidation trigger beyond the committed
+doctrine.)
+
+**Incremental refresh**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
+`019dd3` — lightweight handoff after the Codex identity plan archive. The
+remaining archive claim is closed, the handoff-time napkin overflow was rotated
+by Mossy Creeping Branch, and current strict-hard fitness is soft-only again.)
+
 Recent historical refresh summaries are preserved in git history, the touched
 thread records, and
 [`archive/repo-continuity-session-history-2026-04-28.md`](archive/repo-continuity-session-history-2026-04-28.md).
@@ -31,11 +42,9 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`; current HEAD is `0da6c351`.
-- Current consolidation bundle is documentation/state only: this archive split,
-  PR-87 plan homing, PDR-018 graduation, principles / governance-doc
-  extraction, collaboration-state conventions / lifecycle extraction, and
-  generated collaboration-state comms evidence. Re-check active claims,
+- Branch: `feat/otel_sentry_enhancements`; current HEAD is `7c589a0a`.
+- Latest landed docs/state bundle is `7c589a0a`: Cloudflare MCP handoff state
+  plus strengthened commit-gate doctrine. Re-check active claims,
   `commit_queue`, and `git diff --cached --name-status` before the next index
   action.
 - Fresh Mossy Codex identity-plumbing WIP is present in the worktree under
@@ -95,7 +104,7 @@ in `archive/` or the per-thread next-session records.
   for claims / queue / conversations / escalations / closed claims, and
   type-specific TTL cleanup. Hooks stay later polish.
 - Codex-wide session identity parity has an implemented current slice:
-  [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+  [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
   The slice wires Codex `SessionStart` identity context, keeps the
   collaboration-state preflight command as the canonical full interface, and
   adds report-only anonymous identity audit. Historical `Codex` / `unknown`
@@ -114,8 +123,8 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
-| `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning / 2026-04-28. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Mooring Atoll / `codex` / `GPT-5` / session-handoff-codex-identity-archive-claim-closeout / 2026-04-28; Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-planning-and-commit-gate-doctrine-handoff / 2026-04-28; Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
+| `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning-final-handoff / 2026-04-28. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -148,6 +157,16 @@ Incremental practice focus (2026-04-28 Mossy Creeping Branch): Codex session
 identity plumbing is implemented and validated, with follow-on propagation into
 the current plan, continuation surfaces, ADR-125, ADR-165, PDR-024, PDR-027,
 PDR-029, and PDR-035.
+
+Final handoff focus (2026-04-28 Glassy Ebbing Reef): Cloudflare MCP planning
+and owner-corrected commit-gate doctrine are landed in `7c589a0a`; no commit
+is requested for this final handoff. Live Mossy identity/consolidation WIP
+remains separate under its own claims.
+
+Latest handoff focus (2026-04-28 Coastal Mooring Atoll): verify the completed
+Codex identity plan archive claim is closed, keep the current-path deletion
+plus archive path as the plan state, and verify the napkin overflow rotation
+restored strict-hard fitness to soft-only.
 
 Multiple overlapping sessions ran on
 `feat/otel_sentry_enhancements` 2026-04-26. Current practice-thread
@@ -241,10 +260,12 @@ New planning lane from this session:
 
 1. **Practice collaboration-state write safety** — the first executable slice
    landed in `11f0320f`, with the generated comms/state sweep in `da21284d`.
-   The named hard fitness pressure has been routed to structural homes in this
-   consolidation pass. Next safe step is to rerun strict-hard fitness and, if
-   green, archive/close the current write-safety plan with evidence. If any hard
-   pressure remains, address the named surface before closure.
+   The named hard fitness pressure in `principles.md`,
+   `collaboration-state-conventions.md`, and `repo-continuity.md` has been
+   routed to structural homes. Current strict-hard fitness passes with active
+   soft findings only, not hard pressure in those write-safety surfaces. Next safe step is a
+   deliberate closeout/archive pass for the write-safety plan with the current
+   soft-only evidence recorded.
 2. **Workspace layer separation audit** — owner clarified that most code is
    still not properly separated into layers and distinct layers MUST live in
    distinct workspaces. Current executable plan:
@@ -287,7 +308,9 @@ New planning lane from this session:
    sidebar/joint-decision usage should feed WS5 observation.
 6. **Codex session identity plumbing** — the high-impact current slice is
    implemented and validated in
-   [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+   [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
+   Follow-up is manual repair only for historical anonymous rows with stronger
+   evidence; title/statusline remains optional display.
    Remaining work is only follow-up policy: decide whether any audited
    historical `Codex` / `unknown` rows have enough evidence for manual repair,
    and keep title/statusline as optional display rather than correctness.
@@ -335,6 +358,18 @@ not a historical log. The breach was a symptom of delayed archival, not missing
 product architecture documentation. The falsifiability check is
 `pnpm practice:fitness:informational`: this file should no longer report hard
 or critical pressure after archive and status refresh.
+
+Incremental status (2026-04-28 Glassy Ebbing Reef final handoff): not due —
+the owner correction about `.agent` shared state and whole-repo commit gates
+has already landed in doctrine via `7c589a0a`; no additional ADR/PDR candidate,
+entrypoint drift, or repeated surprise surfaced during this final handoff.
+
+Incremental status (2026-04-28 Coastal Mooring Atoll lightweight handoff): not
+due — a handoff-time active napkin hard-fitness spike was immediately rotated
+by Mossy Creeping Branch into
+[`napkin-2026-04-28-current-overflow.md`](../active/archive/napkin-2026-04-28-current-overflow.md).
+`pnpm practice:fitness:strict-hard` is soft-only again, and no new ADR/PDR,
+entrypoint-drift, or pattern trigger surfaced in this handoff.
 
 ### Pending-Graduations Register
 

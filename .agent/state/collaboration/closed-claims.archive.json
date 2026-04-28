@@ -5425,6 +5425,437 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b88c7bbf-c16b-4b66-921d-ea3f4f13d13b",
+      "agent_id": {
+        "agent_name": "Glassy Ebbing Reef",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:28:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit shared .agent state and strengthened commit-gate doctrine.",
+      "notes": "Owner clarified .agent is shared commit-safe state. Staged .agent snapshot was prepared while active claims/queue were empty to avoid committing this transient git claim. Whole hook chain passed before opening this commit window.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:32:16Z",
+        "closed_by": {
+          "agent_name": "Glassy Ebbing Reef",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Committed shared .agent state and strengthened commit gate doctrine as 7c589a0a.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b88c7bbf-c16b-4b66-921d-ea3f4f13d13b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e0680af5-e23b-4847-b9fe-1a10bc176a2d",
+      "agent_id": {
+        "agent_name": "Mossy Creeping Branch",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:29:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Supplement consolidation claim for Codex identity plan archival and index/link updates.",
+      "notes": "Opened after consolidate-docs found completed current plan should move to archive/completed and indexes need link reconciliation.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:32:47Z",
+        "closed_by": {
+          "agent_name": "Mossy Creeping Branch",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Completed supplemental plan-index reconciliation for the consolidation pass; plan archival deferred because a fresh peer commit window had staged the current path.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e0680af5-e23b-4847-b9fe-1a10bc176a2d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "eb8bb08d-dd72-4051-8b35-fd44b20be42e",
+      "agent_id": {
+        "agent_name": "Mossy Creeping Branch",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            ".agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md",
+            ".agent/practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md",
+            ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:28:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run owner-requested consolidate-docs pass and light docs consolidation after Codex identity doctrine propagation.",
+      "notes": "Docs/state consolidation only; use transaction helpers and avoid repo-functionality surfaces.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:32:47Z",
+        "closed_by": {
+          "agent_name": "Mossy Creeping Branch",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Ran consolidate-docs and light docs-only consolidation after Codex identity doctrine propagation; validations passed and no new ADR/PDR candidate remained unhomed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eb8bb08d-dd72-4051-8b35-fd44b20be42e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ac0fe90f-e773-4415-940b-6c8c9e074a7a",
+      "agent_id": {
+        "agent_name": "Mossy Creeping Branch",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:34:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive completed Codex identity plan after peer commit window cleared.",
+      "notes": "Glassy commit 7c589a0a landed and active commit queue is empty, satisfying the consolidation deferral condition.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:36:11Z",
+        "closed_by": {
+          "agent_name": "Mossy Creeping Branch",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Completed consolidation closeout: archived the Codex identity plan after Glassy's commit window cleared, updated plan index links, reran document and collaboration checks, and left unrelated live claims untouched.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ac0fe90f-e773-4415-940b-6c8c9e074a7a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1d11be1d-8cfc-4aa4-9879-111cbd6905d4",
+      "agent_id": {
+        "agent_name": "Glassy Ebbing Reef",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "cloudflare-mcp-security-and-token-economy-plans",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:35:32Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Run final owner-requested session handoff after Cloudflare planning and commit-gate doctrine commit.",
+      "notes": "Shared .agent continuity update only; no commit requested; live peer .agent claims are coordination signals, not blockers.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:37:31Z",
+        "closed_by": {
+          "agent_name": "Glassy Ebbing Reef",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Final owner-requested session handoff complete after commit 7c589a0a; updated continuity, thread, napkin, and comms surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1d11be1d-8cfc-4aa4-9879-111cbd6905d4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d51c4195-25aa-41a1-9725-c4ed66a78f19",
+      "agent_id": {
+        "agent_name": "Mossy Creeping Branch",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/archive/napkin-2026-04-28-current-overflow.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:37:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Rotate active napkin overflow created during final handoff/consolidation so practice fitness returns below the hard line limit.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:37:45Z",
+        "closed_by": {
+          "agent_name": "Mossy Creeping Branch",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Rotated active napkin overflow into .agent/memory/active/archive/napkin-2026-04-28-current-overflow.md and restored practice fitness to soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d51c4195-25aa-41a1-9725-c4ed66a78f19",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "514129a4-bf77-48b2-83b6-56ac1707cd77",
+      "agent_id": {
+        "agent_name": "Choppy Lapping Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d73d0b"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:57:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Three sequential commits: chore(state) coord state; docs(plans) new future plan; docs(napkin) γ-execution notes. Then push to origin.",
+      "notes": "Pathspec-clean: only files this session authored. Leftover prior-Codex files (identity-plumbing, codex hooks, repo-continuity, threads) deliberately excluded; will surface to owner separately.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T12:01:44Z",
+        "closed_by": {
+          "agent_name": "Choppy Lapping Rudder",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "d73d0b"
+        },
+        "summary": "Three sequential commits landed: c1677d84 (coord state), ca7e6e4b (new future plan), 6a2b4e54 (napkin γ-execution observations). All gates green via pre-commit hook. Push pending.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "514129a4-bf77-48b2-83b6-56ac1707cd77",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5dd2aa79-33a9-45ff-b335-2f3a26e5022b",
+      "agent_id": {
+        "agent_name": "Estuarine Washing Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".codex/config.toml",
+            ".codex/README.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:58:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair Codex platform adapter config: fix project-agent config_file paths and clarify Codex skill/command discovery semantics.",
+      "notes": "Scanned registry: 2 active claims. No overlap on .codex or ADR-125; overlap with Choppy Lapping Rudder claim 441366cd on napkin.md only. .agent shared state is a coordination surface, so I will keep any napkin capture narrow and current.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T12:06:36Z",
+        "closed_by": {
+          "agent_name": "Estuarine Washing Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Fixed Codex registry paths and documented Codex skill invocation semantics.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5dd2aa79-33a9-45ff-b335-2f3a26e5022b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "37eb7f09-2e22-4046-b795-a5d7371dd4da",
+      "agent_id": {
+        "agent_name": "Estuarine Washing Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/core/codex-project-agent-registry.ts",
+            "agent-tools/src/core/codex-project-agents.ts",
+            "agent-tools/src/bin/codex-reviewer-resolve.ts",
+            "agent-tools/tests/codex-project-agents.integration.test.ts",
+            "agent-tools/tests/codex-reviewer-resolve.integration.test.ts",
+            "scripts/validate-subagents-helpers.mjs",
+            "scripts/validate-subagents.mjs",
+            "scripts/validate-subagents.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T12:03:20Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair Codex adapter path enforcement in resolver and validation tooling so config_file remains relative to .codex/config.toml.",
+      "notes": "Supplement to claim 5dd2aa79 after owner identified recurrence vector. Scanned registry: active overlaps remain only on shared .agent state/napkin; no active claim covers agent-tools Codex resolver or subagent validation scripts.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T12:06:36Z",
+        "closed_by": {
+          "agent_name": "Estuarine Washing Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Updated Codex resolver and subagent validators to resolve config_file relative to .codex/config.toml, with regression tests.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "37eb7f09-2e22-4046-b795-a5d7371dd4da",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

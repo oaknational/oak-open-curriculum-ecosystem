@@ -1,6 +1,7 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
 import { appendComms, renderComms } from './cli-comms-commands.js';
 import { resolveIdentity } from './cli-identity.js';
+import { auditIdentity } from './cli-identity-audit.js';
 import { parseOptions, type Options } from './cli-options.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
 import { type CollaborationStateEnvironment } from './types.js';
@@ -24,6 +25,7 @@ type CliHandler = (
 const handlers: Readonly<Record<string, CliHandler>> = {
   'identity:preflight': (options, env) =>
     `${JSON.stringify(resolveIdentity(options, env), null, 2)}\n`,
+  'identity:audit': (options) => auditIdentity(options),
   'comms:append': appendComms,
   'comms:render': (options) => renderComms(options),
   'claims:open': openClaim,

@@ -38,15 +38,15 @@ capabilities. This ADR records only this repository's phenotype:
 where those Practice capabilities appear locally and how local
 implementation surfaces relate to the portable memotype.
 
-| Local surface                                                                                     | Classification                                                           |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `.agent/practice-core/`                                                                           | Portable Practice Core and PDR memotype.                                 |
-| `.agent/directives/`, `.agent/rules/`, `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/` | Hydrated canonical Practice content for this repo.                       |
-| `.agent/state/collaboration/`                                                                     | Local operational state instance for Practice collaboration protocols.   |
-| `.agent/memory/operational/` and `.agent/memory/executive/`                                       | Local continuity, routing, and evidence surfaces.                        |
-| `agent-tools/`                                                                                    | Optional TypeScript implementation of Practice-operational tooling.      |
-| `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/`                                         | Platform adapters, activation metadata, and local project configuration. |
-| `.agent/plans/`                                                                                   | Execution tracking and plan state, not permanent doctrine.               |
+| Local surface                                                                                     | Classification                                                                  |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `.agent/practice-core/`                                                                           | Portable Practice Core and PDR memotype.                                        |
+| `.agent/directives/`, `.agent/rules/`, `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/` | Hydrated canonical Practice content for this repo.                              |
+| `.agent/state/collaboration/`                                                                     | Local operational state instance for Practice collaboration protocols.          |
+| `.agent/memory/operational/` and `.agent/memory/executive/`                                       | Local continuity, routing, and evidence surfaces.                               |
+| `agent-tools/`                                                                                    | Optional TypeScript implementation of Practice-operational tooling.             |
+| `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/`                                         | Platform adapters, activation metadata, hooks, and local project configuration. |
+| `.agent/plans/`                                                                                   | Execution tracking and plan state, not permanent doctrine.                      |
 
 When an agent-work behaviour changes, route the change by substance:
 
@@ -59,10 +59,18 @@ When an agent-work behaviour changes, route the change by substance:
 3. Plans and live state may preserve evidence while work is underway,
    but they must not remain the only home for settled doctrine.
 
+Codex session identity plumbing is a worked example of this boundary. The
+Practice owns the identity, thread-registration, audit, claim, and shared-state
+semantics through PDR-027, PDR-029, PDR-035, and canonical rules. This repo's
+phenotype implements them through `agent-tools`, `.agent/state/collaboration/`,
+`.agent/memory/operational/threads/`, and a thin `.codex/hooks/` adapter.
+
 ## Consequences
 
 - `agent-tools` remains an optional TypeScript implementation surface,
   not the source of Practice doctrine.
+- Platform hooks may improve session ergonomics, but they do not become the
+  source of truth for Practice identity or coordination semantics.
 - Collaboration-state JSON and markdown files are local operational
   instances of Practice-owned coordination concepts.
 - Future non-TypeScript or non-Oak repos can implement equivalent

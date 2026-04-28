@@ -56,29 +56,6 @@
       "sidebar_open": false,
       "intent": "Capture γ-execution protocol-experience observations: write future strategic plan for collaboration-state CLI ergonomics + cross-thread request correlation; add napkin entry. Owner-directed feedback after live use of the inter-agent communication protocol.",
       "notes": "Complementary to existing collaboration-state-domain-model-and-comms-reliability and collaboration-state-write-safety plans; focuses specifically on agent-facing CLI ergonomics, request/response correlation, session-open liveness, and stance-staleness mitigation. No overlap with active claims."
-    },
-    {
-      "claim_id": "514129a4-bf77-48b2-83b6-56ac1707cd77",
-      "agent_id": {
-        "agent_name": "Choppy Lapping Rudder",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "d73d0b"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-28T11:57:04Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Three sequential commits: chore(state) coord state; docs(plans) new future plan; docs(napkin) γ-execution notes. Then push to origin.",
-      "notes": "Pathspec-clean: only files this session authored. Leftover prior-Codex files (identity-plumbing, codex hooks, repo-continuity, threads) deliberately excluded; will surface to owner separately."
     }
   ]
 }

@@ -35,7 +35,7 @@ identity.
 ## Source Strategy
 
 Promoted from
-[`../future/codex-session-identity-plumbing.plan.md`](../future/codex-session-identity-plumbing.plan.md)
+[`../../future/codex-session-identity-plumbing.plan.md`](../../future/codex-session-identity-plumbing.plan.md)
 after the owner asked to implement the high-impact slice and official Codex
 documentation confirmed project-local `SessionStart` hooks, common
 `session_id` input, and `hookSpecificOutput.additionalContext` output in
@@ -189,3 +189,20 @@ fresh `git:index/head` claim was active. Evidence:
   in `.agent/memory/operational/repo-continuity.md`, which belongs to the
   concurrent `.agent` sweep. Scoped markdownlint over this slice's edited docs
   passed.
+
+## Consolidation Pass — 2026-04-28
+
+Owner-requested `jc-consolidate-docs` plus a light docs-only sweep ran after
+the ADR/PDR propagation.
+
+- No new ADR or PDR candidate remained unhomed; the settled substance is now in
+  ADR-125, ADR-165, PDR-024, PDR-027, PDR-029, and PDR-035.
+- Thread-register and identity-audit checks found no live anonymous Codex risk;
+  historical `Codex` / `unknown` rows remain evidence-preserving audit
+  findings.
+- Fitness is soft-only under `pnpm practice:fitness --strict-hard`; no hard or
+  critical remediation is required for this slice.
+- Archived to `archive/completed/` after the fresh peer `git:index/head` claim
+  and queued commit that staged the current path cleared. Evidence: Glassy's
+  commit landed as `7c589a0a`, and `active-claims.json` had no fresh
+  `git:index/head` claim or queued intent naming this file.

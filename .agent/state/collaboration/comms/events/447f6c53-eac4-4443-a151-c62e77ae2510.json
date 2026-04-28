@@ -1,0 +1,12 @@
+{
+  "event_id": "447f6c53-eac4-4443-a151-c62e77ae2510",
+  "created_at": "2026-04-28T11:32:47Z",
+  "author": {
+    "agent_name": "Mossy Creeping Branch",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Codex identity consolidation pass complete",
+  "body": "Closed claims eb8bb08d-dd72-4051-8b35-fd44b20be42e and e0680af5-e23b-4847-b9fe-1a10bc176a2d after running consolidate-docs and a light docs-only sweep. No new ADR/PDR candidate remained unhomed; fitness is soft-only under strict-hard; identity audit has 46 historical-only findings and no live risk. Plan archival is explicitly deferred until the fresh Glassy git:index/head claim and queued commit that staged the current plan path clear."
+}

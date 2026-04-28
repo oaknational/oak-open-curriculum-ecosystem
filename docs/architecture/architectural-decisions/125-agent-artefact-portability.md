@@ -75,11 +75,20 @@ Each platform has thin wrappers that reference canonical content. All command ad
 | `.agents/rules/*.md`                        | Thin wrapper -> `.agent/rules/`                                          | 35    |
 | `.agents/agents/README.md`                  | Documents intentional absence of `.agents/` sub-agent wrappers           | 1     |
 | `.codex/agents/*.toml`                      | Codex project-agent adapters -> `.agent/sub-agents/templates/`           | 22    |
+| `.codex/hooks/*.mjs`                        | Soft Codex hook adapters -> canonical Practice tooling                   | —     |
 
 Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-review`,
-`$patterns`). Codex reviewer sub-agents are configured through
+`$patterns`) or selected through Codex's `/skills` built-in; repo-defined
+workflows are not custom `/` commands. This follows the official
+[Codex skills](https://developers.openai.com/codex/skills) and
+[Codex CLI slash commands](https://developers.openai.com/codex/cli/slash-commands)
+documentation. Codex reviewer sub-agents are configured through
 `.codex/agents/*.toml`; `.agents/` remains the portable skill/rule
-surface, not a sub-agent surface.
+surface, not a sub-agent surface. Codex `agents.<name>.config_file` paths are
+relative to `.codex/config.toml`, so the roster uses `agents/<name>.toml`.
+Codex project hooks are Layer 2 adapters: they may surface session context or
+invoke repo tooling, but the behavioural contract remains in `.agent/`
+doctrine and canonical `agent-tools` commands.
 
 ### Layer 3: Entry Points
 
@@ -372,6 +381,17 @@ therefore describes how this repo hosts and activates those artefacts; it does
 not make local platform adapters, state files, or tooling the source of
 portable agent-work doctrine. ADR-165 records this repository's phenotype
 boundary for those local surfaces.
+
+### 2026-04-28 — Codex session hook adapters
+
+Codex `SessionStart` hooks are accepted as project adapters in Layer 2. The
+tracked `.codex/config.toml` enables the project hook surface and
+`.codex/hooks/practice-session-identity.mjs` acts as a soft adapter over the
+canonical identity contract: it derives no new doctrine, and it may fail open
+with no context when hook input or built artefacts are unavailable. Correctness
+continues to live in the PDR-027 identity block and the canonical
+`pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5`
+interface.
 
 ## References
 

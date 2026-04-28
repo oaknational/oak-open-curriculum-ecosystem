@@ -1,9 +1,9 @@
 # Next-Session Record — `cloudflare-mcp-security-and-token-economy-plans` thread
 
 **Last refreshed**: 2026-04-28 (Glassy Ebbing Reef / codex / GPT-5 /
-`019dd3` — owner-requested session handoff and light docs consolidation after
-Cloudflare MCP security and token-economy planning. The planning artefacts are
-ready for the closeout commit.)
+`019dd3` — final owner-requested session handoff after Cloudflare MCP security
+and token-economy planning. Closeout landed in commit `7c589a0a`; no new
+deep-consolidation trigger fired.)
 
 ---
 
@@ -19,7 +19,7 @@ ready for the closeout commit.)
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Glassy Ebbing Reef` | `codex` | `GPT-5` | `019dd3` | `cloudflare-mcp-security-token-economy-planning` | 2026-04-28 | 2026-04-28 |
+| `Glassy Ebbing Reef` | `codex` | `GPT-5` | `019dd3` | `cloudflare-mcp-security-token-economy-planning-final-handoff` | 2026-04-28 | 2026-04-28 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -30,8 +30,8 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session landed Cloudflare MCP planning capture (2026-04-28 Glassy
-Ebbing Reef):**
+**Latest session landed Cloudflare MCP planning capture and closeout
+(2026-04-28 Glassy Ebbing Reef):**
 
 - added
   [`cloudflare-mcp-public-beta-security-gate.plan.md`](../../../plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md)
@@ -49,11 +49,14 @@ Ebbing Reef):**
   engineering surface;
 - updated the high-level, security-and-privacy, and SDK/MCP enhancement indexes
   so the new future briefs are discoverable.
+- landed commit `7c589a0a`, which preserves the Cloudflare MCP handoff state
+  and strengthens the commit-gate doctrine around `.agent` shared state and
+  whole-repo gates.
 
-**Evidence before closeout commit**: targeted markdownlint, Prettier,
-`git diff --check`, and collaboration-state checks passed before the
-owner-requested handoff. The closeout commit should preserve those artefacts
-plus this thread record.
+**Evidence**: targeted markdownlint, Prettier, `git diff --check`, and
+collaboration-state checks passed before the closeout path. The final commit
+hook for `7c589a0a` also passed formatting, markdownlint, knip, depcruise, and
+the turbo type-check/lint/test chain.
 
 ---
 

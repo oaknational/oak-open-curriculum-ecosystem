@@ -6,6 +6,7 @@ import {
   parseCodexRegistrations,
   readCodexDeveloperInstructions,
   readTomlBasicStringValue,
+  resolveCodexConfigFilePath,
 } from './validate-subagents-helpers.mjs';
 
 describe('parseCodexRegistrations', () => {
@@ -13,26 +14,64 @@ describe('parseCodexRegistrations', () => {
     expect(
       parseCodexRegistrations(`[agents."code-reviewer"]
 description = "Gateway reviewer."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 `),
     ).toStrictEqual([
       {
         name: 'code-reviewer',
         description: 'Gateway reviewer.',
-        configFile: '.codex/agents/code-reviewer.toml',
+        configFile: 'agents/code-reviewer.toml',
       },
     ]);
   });
 });
 
 describe('Codex subagent helper coverage', () => {
-  it('reports missing adapter files from Codex registrations', () => {
+  it('resolves config_file relative to .codex/config.toml', () => {
+    expect(resolveCodexConfigFilePath('agents/code-reviewer.toml')).toBe(
+      '.codex/agents/code-reviewer.toml',
+    );
+  });
+
+  it('accepts Codex-native relative adapter paths in registrations', () => {
+    const { issues } = getCodexRegistrationValidation({
+      registrations: [
+        {
+          name: 'code-reviewer',
+          description: 'Gateway reviewer.',
+          configFile: 'agents/code-reviewer.toml',
+        },
+      ],
+      fileExists: (filePath) => filePath === '.codex/agents/code-reviewer.toml',
+    });
+
+    expect(issues).toStrictEqual([]);
+  });
+
+  it('rejects repo-root adapter paths that repeat .codex inside config_file', () => {
     const { issues } = getCodexRegistrationValidation({
       registrations: [
         {
           name: 'code-reviewer',
           description: 'Gateway reviewer.',
           configFile: '.codex/agents/code-reviewer.toml',
+        },
+      ],
+      fileExists: (filePath) => filePath === '.codex/agents/code-reviewer.toml',
+    });
+
+    expect(issues).toContain(
+      '.codex/config.toml: agent "code-reviewer" references missing adapter .codex/.codex/agents/code-reviewer.toml',
+    );
+  });
+
+  it('reports missing adapter files from Codex registrations', () => {
+    const { issues } = getCodexRegistrationValidation({
+      registrations: [
+        {
+          name: 'code-reviewer',
+          description: 'Gateway reviewer.',
+          configFile: 'agents/code-reviewer.toml',
         },
       ],
       fileExists: () => false,
@@ -49,7 +88,7 @@ describe('Codex subagent helper coverage', () => {
       registeredAgent: {
         name: 'code-reviewer',
         description: 'Gateway reviewer.',
-        configFile: '.codex/agents/code-reviewer.toml',
+        configFile: 'agents/code-reviewer.toml',
       },
       content: 'sandbox_mode = "read-only"\napproval_policy = "never"\n',
     });
@@ -72,7 +111,7 @@ describe('Codex subagent helper coverage', () => {
       registeredAgent: {
         name: 'code-reviewer',
         description: 'Gateway reviewer.',
-        configFile: '.codex/agents/code-reviewer.toml',
+        configFile: 'agents/code-reviewer.toml',
       },
       content: `name = "different-reviewer"
 description = "Different description."

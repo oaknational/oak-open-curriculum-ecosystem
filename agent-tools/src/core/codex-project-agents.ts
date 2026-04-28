@@ -4,6 +4,7 @@ import {
   CODEX_CONFIG_PATH,
   readCodexAgentRegistrations,
   readRequiredTomlValue,
+  resolveCodexAgentConfigFilePath,
 } from './codex-project-agent-registry';
 import type { CodexAgentRegistration } from './codex-project-agent-registry';
 
@@ -39,20 +40,21 @@ export function listCodexProjectAgentNames(repoRoot: string): string[] {
 export function resolveCodexProjectAgent(repoRoot: string, agentName: string): CodexProjectAgent {
   const registrations = readCodexAgentRegistrations(repoRoot);
   const registration = findRegistrationOrThrow(registrations, agentName);
-  const adapterContent = readAdapterContent(repoRoot, registration, agentName);
-  const adapterMetadata = readAdapterMetadata(registration, adapterContent, agentName);
-  const developerInstructions = readDeveloperInstructions(adapterContent, registration.configFile);
+  const adapterPath = resolveCodexAgentConfigFilePath(registration.configFile);
+  const adapterContent = readAdapterContent(repoRoot, adapterPath, agentName);
+  const adapterMetadata = readAdapterMetadata(registration, adapterPath, adapterContent, agentName);
+  const developerInstructions = readDeveloperInstructions(adapterContent, adapterPath);
   const referencedCanonicalFiles = readReferencedCanonicalFiles(
     repoRoot,
     agentName,
     developerInstructions,
-    registration.configFile,
+    adapterPath,
   );
 
   return {
     ...adapterMetadata,
     configPath: CODEX_CONFIG_PATH,
-    adapterPath: registration.configFile,
+    adapterPath,
     developerInstructions,
     referencedCanonicalFiles,
   };
@@ -73,16 +75,10 @@ function findRegistrationOrThrow(
   );
 }
 
-function readAdapterContent(
-  repoRoot: string,
-  registration: CodexAgentRegistration,
-  agentName: string,
-): string {
-  const adapterAbsolutePath = join(repoRoot, registration.configFile);
+function readAdapterContent(repoRoot: string, adapterPath: string, agentName: string): string {
+  const adapterAbsolutePath = join(repoRoot, adapterPath);
   if (!existsSync(adapterAbsolutePath)) {
-    throw new Error(
-      `Codex project agent '${agentName}' points at missing adapter ${registration.configFile}.`,
-    );
+    throw new Error(`Codex project agent '${agentName}' points at missing adapter ${adapterPath}.`);
   }
 
   return readFileSync(adapterAbsolutePath, 'utf8');
@@ -90,11 +86,12 @@ function readAdapterContent(
 
 function readAdapterMetadata(
   registration: CodexAgentRegistration,
+  adapterPath: string,
   adapterContent: string,
   agentName: string,
 ): AdapterMetadata {
-  const name = readRequiredTomlValue(adapterContent, 'name', registration.configFile);
-  const description = readRequiredTomlValue(adapterContent, 'description', registration.configFile);
+  const name = readRequiredTomlValue(adapterContent, 'name', adapterPath);
+  const description = readRequiredTomlValue(adapterContent, 'description', adapterPath);
 
   validateAdapterValue('name', name, registration.name, registration, agentName);
   validateAdapterValue(
@@ -111,14 +108,10 @@ function readAdapterMetadata(
     modelReasoningEffort: readRequiredTomlValue(
       adapterContent,
       'model_reasoning_effort',
-      registration.configFile,
+      adapterPath,
     ),
-    sandboxMode: readRequiredTomlValue(adapterContent, 'sandbox_mode', registration.configFile),
-    approvalPolicy: readRequiredTomlValue(
-      adapterContent,
-      'approval_policy',
-      registration.configFile,
-    ),
+    sandboxMode: readRequiredTomlValue(adapterContent, 'sandbox_mode', adapterPath),
+    approvalPolicy: readRequiredTomlValue(adapterContent, 'approval_policy', adapterPath),
   };
 }
 

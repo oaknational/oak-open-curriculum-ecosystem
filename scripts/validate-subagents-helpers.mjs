@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const REQUIRED_CODEX_SETTINGS = {
   model_reasoning_effort: 'high',
   sandbox_mode: 'read-only',
@@ -8,6 +10,7 @@ const TOML_BASIC_STRING_REGEX = /^([a-z_]+)\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"$/u;
 const CODEX_DEVELOPER_INSTRUCTIONS_REGEX =
   /^developer_instructions\s*=\s*"""\r?\n([\s\S]*?)\r?\n"""/mu;
 const CANONICAL_PATH_REGEX = /`(\.agent\/[^`]+)`/gu;
+const CODEX_CONFIG_PATH = '.codex/config.toml';
 
 export function parseTomlBasicString(rawValue) {
   return JSON.parse(`"${rawValue}"`);
@@ -69,6 +72,14 @@ export function parseCodexRegistrations(content) {
   return registrations;
 }
 
+export function resolveCodexConfigFilePath(configFile, configPath = CODEX_CONFIG_PATH) {
+  if (path.isAbsolute(configFile)) {
+    return configFile;
+  }
+
+  return path.posix.normalize(path.posix.join(path.posix.dirname(configPath), configFile));
+}
+
 export function readCodexDeveloperInstructions(content) {
   return content.match(CODEX_DEVELOPER_INSTRUCTIONS_REGEX)?.[1]?.trim() ?? '';
 }
@@ -85,7 +96,7 @@ export function extractCanonicalPaths(developerInstructions) {
 
 export function getCodexRegistrationValidation({
   registrations,
-  configPath = '.codex/config.toml',
+  configPath = CODEX_CONFIG_PATH,
   fileExists = () => true,
 }) {
   const issues = [];
@@ -102,9 +113,10 @@ export function getCodexRegistrationValidation({
 
     registrationsByName.set(registration.name, registration);
 
-    if (!fileExists(registration.configFile)) {
+    const adapterPath = resolveCodexConfigFilePath(registration.configFile, configPath);
+    if (!fileExists(adapterPath)) {
       issues.push(
-        `${configPath}: agent "${registration.name}" references missing adapter ${registration.configFile}`,
+        `${configPath}: agent "${registration.name}" references missing adapter ${adapterPath}`,
       );
     }
   }
@@ -118,6 +130,7 @@ export function getCodexAdapterValidation({
   registeredAgent = null,
   templateDir = '.agent/sub-agents/templates',
   requiredSettings = REQUIRED_CODEX_SETTINGS,
+  configPath = CODEX_CONFIG_PATH,
 }) {
   const issues = [];
   const adapterBasename = codexAdapterFile.replace(/^.*\/|\.toml$/gu, '');
@@ -140,20 +153,26 @@ export function getCodexAdapterValidation({
     issues.push(
       `${codexAdapterFile}: no matching agent registration exists in .codex/config.toml for "${adapterBasename}"`,
     );
-  } else if (registeredAgent.configFile !== codexAdapterFile) {
-    issues.push(
-      `${codexAdapterFile}: .codex/config.toml points "${adapterBasename}" at ${registeredAgent.configFile}, expected ${codexAdapterFile}`,
-    );
   } else {
-    if (declaredName && declaredName !== registeredAgent.name) {
+    const registeredAdapterPath = resolveCodexConfigFilePath(
+      registeredAgent.configFile,
+      configPath,
+    );
+    if (registeredAdapterPath !== codexAdapterFile) {
       issues.push(
-        `${codexAdapterFile}: name "${declaredName}" must match .codex/config.toml registration "${registeredAgent.name}"`,
+        `${codexAdapterFile}: .codex/config.toml resolves "${adapterBasename}" to ${registeredAdapterPath}, expected ${codexAdapterFile}`,
       );
-    }
-    if (declaredDescription && declaredDescription !== registeredAgent.description) {
-      issues.push(
-        `${codexAdapterFile}: description must match .codex/config.toml registration for "${registeredAgent.name}"`,
-      );
+    } else {
+      if (declaredName && declaredName !== registeredAgent.name) {
+        issues.push(
+          `${codexAdapterFile}: name "${declaredName}" must match .codex/config.toml registration "${registeredAgent.name}"`,
+        );
+      }
+      if (declaredDescription && declaredDescription !== registeredAgent.description) {
+        issues.push(
+          `${codexAdapterFile}: description must match .codex/config.toml registration for "${registeredAgent.name}"`,
+        );
+      }
     }
   }
 

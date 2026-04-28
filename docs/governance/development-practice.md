@@ -39,6 +39,12 @@ acceptable failure, ever.
 
 NEVER disable any quality gates or Git hooks.
 
+## Problem-Hiding Patterns
+
+Fix the problem named by a gate; do not silence the signal that names it.
+The expanded examples and cures live in
+[Problem-Hiding Patterns](./problem-hiding-patterns.md).
+
 ## Design Principles
 
 ### Code Level

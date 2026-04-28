@@ -1,4 +1,5 @@
 export { deriveCollaborationIdentity, validateSharedStateAgentId } from './identity.js';
+export { auditCodexIdentityRecords } from './identity-audit.js';
 export { createCommsEvent, renderSharedCommsLog } from './comms.js';
 export { archiveStaleClaims } from './claims.js';
 export { runCollaborationStateCli } from './cli.js';
