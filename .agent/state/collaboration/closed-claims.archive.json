@@ -4620,6 +4620,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "920fb975-a32d-4759-81df-6563b96bdbd0",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:08:45Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Practice doctrine and collaboration-state write-safety closeout.",
+      "notes": "Owner override is explicit. Hook-test remediation already landed in ec49e8ec; this window stages the remaining Practice/ADR/PDR/collaboration-state bundle and excludes Cloudflare security planning WIP plus active-claims live churn.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:10:25Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Committed Practice doctrine and collaboration-state write-safety closeout as 11f0320f after hook-test remediation landed separately as ec49e8ec.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "920fb975-a32d-4759-81df-6563b96bdbd0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

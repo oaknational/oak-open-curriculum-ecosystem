@@ -30,3 +30,15 @@ Opened short-lived git:index/head claim bf9ff320-f1c1-4d92-90e2-048fbed335b9 for
 ## 2026-04-28T10:08:45Z — `Pelagic Drifting Sail` / `codex` / `GPT-5` / `019dd3` — Commit window for Practice and collaboration-state closeout
 
 Opened git:index/head claim 920fb975-a32d-4759-81df-6563b96bdbd0 under explicit owner override. Hook-test IO remediation has already landed as ec49e8ec, so this commit window stages the remaining Practice doctrine, ADR/PDR, workspace-layer plan, collaboration-state write-safety tooling, generated comms migration, and handoff/consolidation surfaces. Exclusions: active-claims live churn and the separate Cloudflare/security planning WIP.
+
+---
+
+## 2026-04-28T10:13:26Z — `Woodland Creeping Petal` / `codex` / `GPT-5` / `019dd3` — Codex identity plumbing follow-up plan
+
+Owner asked that the remaining Codex-wide session-name follow-up not stay implicit. I am adding a future strategic plan for global Codex identity plumbing: thread identity rows, wrappers/start-right defaults, existing Codex/unknown cleanup, and any title/statusline or hook integration that can be verified later. This stays separate from the completed collaboration-state write-safety path, which already derives identity for safe state writes.
+
+---
+
+## 2026-04-28T10:17:47Z — `Verdant Flowering Blossom` / `codex` / `GPT-5` / `unknown` — Commit window for shared-state sweep
+
+Owner corrected the commit boundary: shared state files can be swept up in commits precisely because they are high-traffic across agents and otherwise never land. Opened short-lived git:index/head claim 1f024c61-8b98-43cf-9757-fe0de862f9b0 for a small follow-up commit of collaboration-state files and the agentic-engineering thread record, avoiding unrelated source/package WIP.

@@ -1,5 +1,247 @@
 {
   "schema_version": "1.3.0",
-  "commit_queue": [],
-  "claims": []
+  "commit_queue": [
+    {
+      "intent_id": "223d1e60-7b64-4f35-bedd-dc38dcea763f",
+      "claim_id": "c4ffa696-61cb-49df-8d82-d4209706426f",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "files": [
+        ".agent/directives/agent-collaboration.md",
+        ".agent/directives/principles.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/archive/napkin-2026-04-28.md",
+        ".agent/memory/executive/artefact-inventory.md",
+        ".agent/memory/operational/collaboration-state-conventions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+        ".agent/plans/architecture-and-infrastructure/README.md",
+        ".agent/plans/architecture-and-infrastructure/current/README.md",
+        ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+        ".agent/plans/architecture-and-infrastructure/future/README.md",
+        ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md",
+        ".agent/plans/architecture-and-infrastructure/roadmap.md",
+        ".agent/practice-core/CHANGELOG.md",
+        ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+        ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+        ".agent/practice-core/decision-records/README.md",
+        ".agent/practice-core/practice-verification.md",
+        ".agent/practice-core/practice.md",
+        ".agent/practice-index.md",
+        ".agent/rules/capture-practice-tool-feedback.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        "agent-tools/README.md",
+        "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+        "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+        "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
+        "docs/architecture/architectural-decisions/README.md"
+      ],
+      "commit_subject": "docs(practice): capture agent-work layer doctrine",
+      "queued_at": "2026-04-28T09:44:38.989Z",
+      "updated_at": "2026-04-28T09:47:27.050Z",
+      "expires_at": "2026-04-28T09:59:38.989Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "ebcc525d28ae69f3b47e22826d39eec509343c5600422382ef77dc1fe97143cd",
+      "staged_name_status": "M\t.agent/directives/agent-collaboration.md\nM\t.agent/directives/principles.md\nA\t.agent/memory/active/archive/napkin-2026-04-28.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/executive/artefact-inventory.md\nM\t.agent/memory/operational/collaboration-state-conventions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/roadmap.md\nM\t.agent/plans/architecture-and-infrastructure/README.md\nM\t.agent/plans/architecture-and-infrastructure/current/README.md\nA\t.agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md\nM\t.agent/plans/architecture-and-infrastructure/future/README.md\nM\t.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md\nM\t.agent/plans/architecture-and-infrastructure/roadmap.md\nM\t.agent/practice-core/CHANGELOG.md\nM\t.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md\nA\t.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/practice-core/practice-verification.md\nM\t.agent/practice-core/practice.md\nM\t.agent/practice-index.md\nM\t.agent/rules/capture-practice-tool-feedback.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/README.md\nM\tdocs/architecture/architectural-decisions/125-agent-artefact-portability.md\nM\tdocs/architecture/architectural-decisions/154-separate-framework-from-consumer.md\nA\tdocs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md\nM\tdocs/architecture/architectural-decisions/README.md\n",
+      "notes": "Requeued without active-claims.json to avoid self-referential staged-fingerprint churn."
+    },
+    {
+      "intent_id": "78880112-2ad2-46cf-b9eb-e113329f1d26",
+      "claim_id": "c4ffa696-61cb-49df-8d82-d4209706426f",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "files": [
+        ".agent/directives/agent-collaboration.md",
+        ".agent/directives/principles.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/archive/napkin-2026-04-28.md",
+        ".agent/memory/executive/artefact-inventory.md",
+        ".agent/memory/operational/collaboration-state-conventions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+        ".agent/plans/architecture-and-infrastructure/README.md",
+        ".agent/plans/architecture-and-infrastructure/current/README.md",
+        ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+        ".agent/plans/architecture-and-infrastructure/future/README.md",
+        ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md",
+        ".agent/plans/architecture-and-infrastructure/roadmap.md",
+        ".agent/practice-core/CHANGELOG.md",
+        ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+        ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+        ".agent/practice-core/decision-records/README.md",
+        ".agent/practice-core/practice-verification.md",
+        ".agent/practice-core/practice.md",
+        ".agent/practice-index.md",
+        ".agent/rules/capture-practice-tool-feedback.md",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        "agent-tools/README.md",
+        "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+        "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+        "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
+        "docs/architecture/architectural-decisions/README.md"
+      ],
+      "commit_subject": "docs(practice): capture agent-work layer doctrine",
+      "queued_at": "2026-04-28T09:46:11.386Z",
+      "updated_at": "2026-04-28T09:47:27.051Z",
+      "expires_at": "2026-04-28T10:01:11.386Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "4d78668b7f224c00c8c35f18d5c3c403570f0d0796cf875bf535fbeac4ac6120",
+      "staged_name_status": "M\t.agent/directives/agent-collaboration.md\nM\t.agent/directives/principles.md\nA\t.agent/memory/active/archive/napkin-2026-04-28.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/executive/artefact-inventory.md\nM\t.agent/memory/operational/collaboration-state-conventions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/roadmap.md\nM\t.agent/plans/architecture-and-infrastructure/README.md\nM\t.agent/plans/architecture-and-infrastructure/current/README.md\nA\t.agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md\nM\t.agent/plans/architecture-and-infrastructure/future/README.md\nM\t.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md\nM\t.agent/plans/architecture-and-infrastructure/roadmap.md\nM\t.agent/practice-core/CHANGELOG.md\nM\t.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md\nA\t.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/practice-core/practice-verification.md\nM\t.agent/practice-core/practice.md\nM\t.agent/practice-index.md\nM\t.agent/rules/capture-practice-tool-feedback.md\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/README.md\nM\tdocs/architecture/architectural-decisions/125-agent-artefact-portability.md\nM\tdocs/architecture/architectural-decisions/154-separate-framework-from-consumer.md\nA\tdocs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md\nM\tdocs/architecture/architectural-decisions/README.md\n",
+      "notes": "Commit attempt paused because commit-queue verification rebuilds agent-tools, and concurrent write-safety WIP currently breaks TypeScript build."
+    },
+    {
+      "intent_id": "94ae95ae-c545-4c0a-9b1e-d6b14a7e2955",
+      "claim_id": "bf9ff320-f1c1-4d92-90e2-048fbed335b9",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "files": [
+        "scripts/check-blocked-content.mjs",
+        "scripts/check-blocked-content.unit.test.ts",
+        "scripts/check-blocked-content.integration.test.ts",
+        "scripts/check-blocked-patterns.mjs",
+        "scripts/check-blocked-patterns.unit.test.ts",
+        "scripts/check-blocked-patterns.integration.test.ts",
+        "agent-tools/src/bin/claude-agent-ops.ts",
+        "agent-tools/src/core/agent-ops.ts",
+        "agent-tools/src/core/health-probe-hook-state.ts",
+        "agent-tools/tests/agent-identity/agent-identity.e2e.test.ts",
+        "agent-tools/tests/agent-ops.unit.test.ts",
+        "agent-tools/tests/cli-smoke.e2e.test.ts",
+        "agent-tools/tests/health-probe.fixtures.ts",
+        "agent-tools/tests/health-probe.unit.test.ts",
+        "agent-tools/vitest.e2e.config.ts",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+      ],
+      "commit_subject": "test(hooks): remove IO from hook tests",
+      "queued_at": "2026-04-28T10:05:15.881Z",
+      "updated_at": "2026-04-28T10:06:35.121Z",
+      "expires_at": "2026-04-28T10:20:15.881Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "c1fa13722a6f3ab85536c4e03d224aebd6c8d9b62d5dff69c46f8ed3848e7187",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\tagent-tools/src/bin/claude-agent-ops.ts\nM\tagent-tools/src/core/agent-ops.ts\nM\tagent-tools/src/core/health-probe-hook-state.ts\nD\tagent-tools/tests/agent-identity/agent-identity.e2e.test.ts\nM\tagent-tools/tests/agent-ops.unit.test.ts\nD\tagent-tools/tests/cli-smoke.e2e.test.ts\nD\tagent-tools/tests/health-probe.fixtures.ts\nM\tagent-tools/tests/health-probe.unit.test.ts\nM\tagent-tools/vitest.e2e.config.ts\nM\tscripts/check-blocked-content.integration.test.ts\nM\tscripts/check-blocked-content.mjs\nM\tscripts/check-blocked-content.unit.test.ts\nM\tscripts/check-blocked-patterns.integration.test.ts\nM\tscripts/check-blocked-patterns.mjs\nM\tscripts/check-blocked-patterns.unit.test.ts\n"
+    },
+    {
+      "intent_id": "7d3a5b33-5a59-4969-8ddb-7baf203ca2ac",
+      "claim_id": "1f024c61-8b98-43cf-9757-fe0de862f9b0",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "files": [
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms/events/4ab152b3-bedd-406d-bc7e-ce2a012bb689.json",
+        ".agent/state/collaboration/comms/events/f1dd98e1-fe9a-4212-abda-70ac6793cfa9.json",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+      ],
+      "commit_subject": "chore(state): sweep collaboration state",
+      "queued_at": "2026-04-28T10:18:55.320Z",
+      "updated_at": "2026-04-28T10:19:00.349Z",
+      "expires_at": "2026-04-28T10:33:55.320Z",
+      "phase": "staging"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b",
+      "agent_id": {
+        "agent_name": "Woodland Creeping Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/rules/use-agent-comms-log.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/state/README.md",
+            ".agent/state/collaboration/**",
+            "agent-tools/src/bin/agent-identity-cli.ts",
+            "agent-tools/src/bin/collaboration-state.ts",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/registry.ts",
+            "agent-tools/tests/collaboration-state/**",
+            "agent-tools/package.json",
+            "package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:37:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Promote and implement the collaboration-state write-safety slice: derived identity preflight, immutable comms events, transaction-safe JSON state writes, TTL cleanup baseline, and current-plan/docs discoverability.",
+      "notes": "Scanned registry before opening: one active Codex/unknown hook-test claim on scripts and health-probe/CLI hook surfaces; no path overlap with this implementation except shared collaboration-state bookkeeping. This claim uses CODEX_THREAD_ID-derived identity Woodland Creeping Petal / 019dd3."
+    },
+    {
+      "claim_id": "1f024c61-8b98-43cf-9757-fe0de862f9b0",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:17:47Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit a shared collaboration-state sweep.",
+      "notes": "Owner corrected policy: shared state may be swept up in commits because otherwise high-traffic files never land. Pathspecs: active/closed collaboration state, generated comms log, new comms event, and agentic-engineering thread record. Current staged set was empty; no fresh git index/head claim observed.",
+      "intent_to_commit": "7d3a5b33-5a59-4969-8ddb-7baf203ca2ac"
+    }
+  ]
 }

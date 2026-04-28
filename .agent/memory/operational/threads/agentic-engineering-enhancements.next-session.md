@@ -1041,7 +1041,8 @@ validation.
   alone does not prove a reachable participant.
 - Codex still appeared as `agent_name: Codex` with `session_id_prefix:
   unknown` in this session. That is a continuity-system defect to close in the
-  identity-preflight follow-up, not a harmless display issue.
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md)
+  follow-up, not a harmless display issue.
 - Codex upstream hooks are supported, but no Codex session-exit hook is
   documented. Do not rely on turn-scoped `Stop` for post-session claim cleanup;
   use explicit handoff or TTL janitor semantics.
@@ -1097,11 +1098,11 @@ Choose the lane deliberately:
    template lifecycle triggers are actually used in real sessions. Do not add
    hook refinements before the shared-state write path is made safer; first
    real sidebar/joint-decision usage should feed WS5 observation.
-8. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
-   wired; CLI/TUI title/statusline surfaces exist, but no supported IDE
-   custom-title setting was found. Cursor composer `session_id` seeds the repo
-   hook; **tab title** still requires manual rename from mirror or a future
-   Cursor API — track product requests separately from repo derivation.
+8. **Codex session identity plumbing** — follow
+   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md).
+   The write-safety helper derives Codex identity from `CODEX_THREAD_ID`, but
+   thread-row defaults, existing `Codex` / `unknown` reporting, and any
+   verified title/statusline or hook integration remain strategic follow-up.
 9. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
