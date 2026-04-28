@@ -12,7 +12,7 @@ platform support, this file is the authoritative local source.
 | **Commands**   | `.cursor/commands/` | `.claude/commands/`                                              | `.gemini/commands/` | unsupported       | unsupported       | `.agents/skills/jc-*/` |
 | **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                                 | entry-point chain   | entry-point chain | entry-point chain | `.agents/rules/`       |
 | **Sub-agents** | `.cursor/agents/`   | `.claude/agents/`                                                | unsupported         | unsupported       | `.codex/`         | unsupported            |
-| **Hooks**      | unsupported         | `.claude/settings.json` (tracked project `PreToolUse`)           | unsupported         | unsupported       | unsupported       | unsupported            |
+| **Hooks**      | unsupported         | `.claude/settings.json` (tracked project `PreToolUse`)           | unsupported         | unsupported       | supported upstream; no project-local hook wired | unsupported            |
 
 ## Hook Support
 
@@ -29,7 +29,13 @@ Status by platform:
 - **Cursor**: no native agent hook surface at time of writing
 - **Gemini CLI**: no native agent hook surface at time of writing
 - **GitHub Copilot**: no native agent hook surface at time of writing
-- **Codex**: no native agent hook surface at time of writing
+- **Codex**: upstream Codex hooks are available behind `codex_hooks`, and this
+  local Codex install reports the feature enabled. This repository has no
+  project-local `.codex/` hook configuration wired. Current Codex docs show
+  `SessionStart`, `PreToolUse`, `PermissionRequest`, `PostToolUse`,
+  `UserPromptSubmit`, and turn-scoped `Stop`; no `SessionEnd` equivalent is
+  documented, so session-close cleanup must rely on explicit handoff and
+  standard TTL/stale-archive cleanup until that surface exists.
 
 ## Policy Spine
 

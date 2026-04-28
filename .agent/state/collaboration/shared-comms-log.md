@@ -3760,3 +3760,27 @@ Feature commit `bb08a99b feat(agent-identity)` already landed. Now closing gover
 Napkin updated with four entries: (1) the owner doctrine that shared-state files should not block other agents' commits — sweep-up is OK; (2) the parallel-edit clash on `active-claims.json` during cleanup and surgical-Edit-vs-Write friction; (3) the SessionStart hook in-session verification plan for the next session opener; (4) the orphaned-claim resolution lesson — let the next governance pass archive, do not delete unilaterally.
 
 This cleanup commit sweeps up Codex's `2026-04-28T07:38:39Z` comms-log entry per the new sweep-up doctrine.
+
+---
+
+### 2026-04-28T08:21:19Z — `Ethereal Threading Supernova` / `codex` / `GPT-5` / `019dd2` — final handoff: Codex hooks correction + session-close claim semantics preserved
+
+Owner asked to stop this session after a final `jc-session-handoff` and commit. Handoff surfaces now preserve the current settlement:
+
+- Codex hooks exist upstream, but current docs expose turn-scoped `Stop`, not a documented `SessionEnd`.
+- Terminal-session close closes live claims; resumed terminal sessions open fresh claims rather than reclaiming old ones.
+- Missed claim closes become stale/orphan cleanup after type-specific TTL.
+- Shared communications need hot-plus-rolling-archive retention.
+- The reliable-write mechanism must apply to all shared inter-agent state records once domain boundaries are defined, not only the shared log.
+
+Active-claim scan before this handoff found `claims: []` and `commit_queue: []`. Live escalation scan found no active escalation files. Live conversation scan found only the existing open example file; real conversations were closed.
+
+---
+
+### 2026-04-28T08:24:10Z — `Ethereal Threading Supernova` / `codex` / `GPT-5` / `019dd2` — commit window opened for final collaboration-state handoff
+
+Opening short-lived `git:index/head` claim `0586a784-89e2-41ce-9fd5-75c6b8725ca9` for subject `docs(practice): preserve collaboration-state handoff`.
+
+Intended pathspecs: `.agent/memory/active/napkin.md`, `.agent/memory/executive/cross-platform-agent-surface-matrix.md`, `.agent/memory/operational/collaboration-state-conventions.md`, `.agent/memory/operational/collaboration-state-lifecycle.md`, `.agent/memory/operational/repo-continuity.md`, `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`, `.agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md`, `.agent/plans/agentic-engineering-enhancements/future/hooks-portability.plan.md`, `.agent/state/README.md`, and `.agent/state/collaboration/shared-comms-log.md`.
+
+Current staged set before opening: empty. Peer-claim scan before opening: `claims: []`, `commit_queue: []`. Gates already run before this window: `git diff --check`, targeted Prettier, and `pnpm markdownlint-check:root`.

@@ -70,8 +70,10 @@ This directory is governed by:
   entries, conversations, escalations, and archives. The owner is currently
   in Europe/London; mention owner-local time in prose only when it helps
   human coordination. Freshness and stale calculations use UTC.
-- **Append-only on the shared communication log** — chronological appending; no
-  rotation, no archive at WS0; no schema other than "use this."
+- **Shared communication log history is hot-plus-archive** — the current
+  surface is still a chronological append-only hot log, but owner direction on
+  2026-04-28 requires a rolling archive design so the hot file stays usable
+  without abruptly losing past context.
 - **Sign every entry with the PDR-027 agent identity** — `agent_name`,
   `platform`, `model`, `session_id_prefix` (or `unknown`).
 - **Stale entries become noise to be audited at consolidation**, not
@@ -81,6 +83,11 @@ This directory is governed by:
   open/stale decision threads, open/stale sidebars, unresolved decision
   requests, unacknowledged or evidence-missing joint decisions, active
   escalations, and evidence-bundle gaps.
+- **Session-close ends live claims by default** — old live claims are not
+  currently reclaimed on resume. Agents should explicitly close their own
+  claims at session end; missed closes are archived later as stale/orphaned
+  after the appropriate type-specific TTL rather than treated as successful
+  work.
 - **Decision threads own structured coordination** — use them for concrete
   async decisions, sidebars, joint commitments, resolutions, and evidence.
   Use the shared log for lightweight discovery, active claims for live

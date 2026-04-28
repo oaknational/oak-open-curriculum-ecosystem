@@ -90,6 +90,23 @@ owner, or capturing learning for later distillation.
 - All collaboration-state timestamps should be UTC ISO 8601 with trailing `Z`.
   The owner is currently in Europe/London; owner-local time is useful prose
   context but must not become the state clock.
+- Owner direction on 2026-04-28: resumed terminal sessions do not currently
+  reclaim old live claims. A session close means the session's claims should
+  close; the preferred path is semantic pre-session-end cleanup by the agent
+  that owns the claim. Post-session-end janitor behaviour is a fallback that
+  marks missed claims as stale/orphaned after a short session-close grace
+  window; it must not pretend the work completed successfully.
+- Owner direction on 2026-04-28: a future SDK-style one-turn invocation model
+  could make external shared session state useful across resumes, but that is
+  not the present terminal-session operating model. The current default is
+  fresh claim per live session.
+- Owner direction on 2026-04-28: shared communication history should gain a
+  rolling archive model so the hot narrative surface stays readable without
+  abruptly losing past context.
+- Codex-specific note: current Codex supports hooks, including turn-scoped
+  `Stop`, but no documented `SessionEnd` equivalent has been verified. Codex
+  should therefore rely on standard freshness/TTL cleanup for missed
+  session-close handling until a true session-end hook is documented and wired.
 - `agent-tools` is a TypeScript-specific implementation surface in this repo.
   The capabilities it implements are Practice capabilities and should have a
   portable conceptual contract that can be reimplemented in non-TypeScript
@@ -122,6 +139,16 @@ In scope:
   protocol.
 - Define what `agent-tools` should provide as this repo's TypeScript
   implementation and what remains portable Practice doctrine.
+- Define session-close lifecycle semantics: own claims close at session end,
+  old claims are not resumed by default, post-session janitors mark missed
+  claims as stale/orphaned rather than successful, and any future resume-reclaim
+  feature needs an explicit new state transition.
+- Define TTLs per state type, including a short grace TTL for claims left open
+  after a known session close, separate from normal active-work freshness and
+  commit-window expiry.
+- Define a rolling archive model for shared communication history that preserves
+  searchable context while keeping the hot file small enough for frequent
+  multi-agent reads and writes.
 - Preserve UTC timestamp discipline and owner-local prose guidance.
 - Define sidebar attention mechanics: polling cadence, attention-needed flags,
   owner/peer notification semantics, and which surfaces are pull-only versus
@@ -156,6 +183,10 @@ The leading candidate is an event-log-backed communication surface:
   complete event or creates nothing.
 - Materialise `shared-comms-log.md` as a generated chronological read model for
   humans and simple agents.
+- Add a rolling archive policy for rendered communication history. The hot log
+  should carry enough recent context for session-open discovery; older rendered
+  history should move to dated archive files or be reproducible from immutable
+  events, so agents do not lose context during rotation.
 - Add an `agent-tools` command for append, render, and health checks in this
   repo, while documenting the behaviour in Practice terms so other repos can
   implement it in their local stack.
@@ -172,6 +203,11 @@ The leading candidate is an event-log-backed communication surface:
   conversation. Candidate push mechanisms must be proven per platform; until
   then, the portable baseline should assume pull/poll plus clear session-start
   and pre-edit checks.
+- Treat session-close as a first-class lifecycle event where supported. Claude
+  Code, Gemini, Cursor, and GitHub Copilot can be evaluated for native
+  session-end cleanup hooks during promotion. Codex currently has hooks but no
+  documented session-end hook; use turn-scoped `Stop` only for best-effort
+  reminders and standard TTL/janitor cleanup for missed closes.
 
 SQLite or another database remains a later option if event files prove
 insufficient. It should not be the first tracked source of truth because binary
@@ -213,6 +249,12 @@ diffs and merge behaviour are poor for repo-owned Practice state.
 - Claims, queue entries, conversations, sidebars, escalations, and napkin
   feedback keep distinct responsibilities.
 - UTC timestamp discipline is enforced by docs and validation.
+- Session-close semantics are explicit: old claims do not silently revive on
+  resume, missed closures become stale/orphaned after their type-specific TTL,
+  and a resumed agent opens a fresh claim unless a future explicit reclaim
+  transition is implemented.
+- Shared communication history rotates predictably, with archived history still
+  discoverable during consolidation and incident reconstruction.
 - The TypeScript implementation in `agent-tools` is clearly described as a
   host-local implementation of portable Practice behaviour.
 
@@ -236,6 +278,9 @@ diffs and merge behaviour are poor for repo-owned Practice state.
 - Push-style attention may not exist uniformly across Codex, Claude Code,
   Cursor, and future platforms. If the design assumes push without proving it,
   targeted sidebars become invisible to the very agents they are meant to reach.
+- Session-end hooks are not uniform. If cleanup relies on native exit hooks
+  without TTL fallback, Codex and any other platform without verified
+  `SessionEnd` support can leave live claims stranded.
 - Too-frequent polling creates noise and wasted attention; too-infrequent
   polling makes sidebars ineffective for live coordination. The polling cadence
   must be tied to workflow moments, not a vague "check regularly" instruction.

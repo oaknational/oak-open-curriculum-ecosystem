@@ -1,6 +1,19 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Codex / codex / GPT-5 / unknown —
+**Last refreshed**: 2026-04-28 (Ethereal Threading Supernova / codex /
+GPT-5 / 019dd2 — final session handoff before owner-directed stop.
+Preserved the Codex hooks correction and session-close state semantics:
+Codex hooks exist upstream, but current official events show turn-scoped
+`Stop`, not a documented `SessionEnd`; terminal-session close closes live
+claims; resumed terminal sessions open fresh claims; missed claim closes
+become stale/orphaned after type-specific TTL; shared communications need a
+hot-plus-rolling-archive lifecycle. Updated the strategic future plan,
+lifecycle/conventions docs, state README, cross-platform matrix, hooks
+portability plan, napkin, repo-continuity, and this thread record. Validation
+before this handoff: `git diff --check`, targeted Prettier, and
+`pnpm markdownlint-check:root`.)
+
+**Prior refresh**: 2026-04-28 (Codex / codex / GPT-5 / unknown —
 owner-directed Practice/tooling feedback and collaboration-state domain-model
 preservation. Added portable Practice/tool feedback capture guidance and
 platform adapters, surfaced the communication-channel register, refreshed UTC
@@ -352,6 +365,7 @@ and
 | `Fragrant Sheltering Pollen` | `codex` | `gpt-5.5` | `019dcda0` | `owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence` | 2026-04-27 | 2026-04-27 |
 | `Prismatic Waxing Constellation` | `codex` | `gpt-5.5` | `019dcd` | `owner-directed-intent-to-commit-queue-implementation` | 2026-04-27 | 2026-04-27 |
 | `Coastal Washing Rudder` | `codex` | `gpt-5.5` | `019dcf` | `owner-directed-queue-governance-graduation-pdr-029-and-plan-archive` | 2026-04-27 | 2026-04-27 |
+| `Ethereal Threading Supernova` | `codex` | `GPT-5` | `019dd2` | `codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff` | 2026-04-28 | 2026-04-28 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -361,6 +375,24 @@ new sessions add rows; matching platform/model/agent_name updates
 ---
 
 ## Landing Target (per PDR-026)
+
+**Latest session preserved collaboration-state session-close semantics
+(2026-04-28 Ethereal Threading Supernova):**
+
+- corrected the Codex platform classification after owner supplied the
+  official hooks docs: Codex hooks are supported, but no `SessionEnd` event is
+  documented; `Stop` is turn-scoped and should not be treated as full
+  session-exit cleanup;
+- captured owner decisions that old claims are not picked up on terminal
+  resume, session close should close claims, and missed claim closes are
+  handled by stale/orphan TTL cleanup rather than success-marking;
+- expanded the shared-state reliability plan from shared comms only to every
+  shared inter-agent state record once the domain boundaries are defined;
+- added the rolling archive requirement for shared comms history so the live
+  log stays usable without losing past context;
+- updated the future plan, lifecycle/conventions docs, state README,
+  cross-platform matrix, hooks portability plan, napkin, repo-continuity, and
+  this thread record.
 
 **Latest session graduated queue governance (2026-04-27 Coastal Washing
 Rudder):**
@@ -792,6 +824,10 @@ captured. The remaining work is strategic domain modelling, not an immediate
 hotfix: decide whether shared communications need an event-file/queue write
 path, how claims/logs/conversations differ, how agents discover targeted
 sidebars, and how identity/liveness preflight prevents phantom participants.
+Owner-settled follow-up semantics are preserved: session close closes claims;
+resume opens fresh claims; stale/orphan TTL cleanup handles missed closes;
+shared comms needs hot-plus-archive retention; Codex has hooks but no
+documented session-exit hook yet.
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -867,6 +903,17 @@ validation.
   is the durable holding point for shared-log collision analysis, sidebar
   polling/attention/push questions, identity preflight, and stale/phantom
   active-participant reconciliation.
+- Session-close semantics are owner-settled for current terminal-based
+  agents: do not reclaim old claims on resume; close claims when the agent
+  closes the session; if cleanup is missed, mark stale/orphaned after the
+  type-specific TTL. A future SDK one-turn invocation model may reopen the
+  external shared-session-state design space.
+- Shared communication history now needs hot-plus-archive retention: keep the
+  live file small enough for scan/start-right use, and roll older context into
+  a durable archive rather than deleting it.
+- Codex hook support is no longer unknown: upstream hooks exist, but no
+  documented `SessionEnd` parity exists yet. Use standard TTL cleanup for
+  Codex missed exits unless a future Codex session-exit event appears.
 - Cross-vendor shared-log communication has a live proof point and a limit:
   Codex left Vining a repo-context-specific future-design note with no
   platform bridge, but the first heartbeat found no visible pickup. Treat the
@@ -909,6 +956,9 @@ validation.
 - Codex still appeared as `agent_name: Codex` with `session_id_prefix:
   unknown` in this session. That is a continuity-system defect to close in the
   identity-preflight follow-up, not a harmless display issue.
+- Codex upstream hooks are supported, but no Codex session-exit hook is
+  documented. Do not rely on turn-scoped `Stop` for post-session claim cleanup;
+  use explicit handoff or TTL janitor semantics.
 - Active claims and `commit_queue` are not trustworthy from memory; re-check
   them directly before any index work. At this handoff, Prismatic had a fresh
   agent-identity queue entry, while the `Luminous` claim was owner-corrected as
@@ -934,9 +984,10 @@ Choose the lane deliberately:
    [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
    First safe step: reconcile active participant registry vs the real active
    agents (Codex, Estuarine, Prismatic), especially the `Luminous` phantom
-   claim and missing Estuarine claim; then choose write-safety mechanisms for
-   every shared inter-agent state record, plus sidebar attention cadence, UTC
-   validation, and identity preflight.
+   claim and missing Estuarine claim; then define state-domain boundaries and
+   choose write-safety mechanisms for every shared inter-agent state record,
+   plus session-close TTL cleanup, shared-comms rolling archive, sidebar
+   attention cadence, UTC validation, and identity preflight.
 
 2. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
@@ -983,6 +1034,9 @@ Choose the lane deliberately:
 - If another shared-log collision, missed sidebar, future-dated timestamp,
   or anonymous/unknown identity mutation occurs, promote the
   collaboration-state domain-model plan from `future/` to `current/`.
+- If Codex documents a true session-exit event, update the hooks portability
+  plan and the collaboration-state lifecycle doc before wiring claim cleanup
+  to it.
 - If agent-tools communication primitives resume, keep the implementation
   TypeScript-specific but document the capability contract as portable
   Practice behaviour.

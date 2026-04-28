@@ -8,7 +8,20 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28 late evening (Luminous Dancing Quasar /
+**Last refreshed**: 2026-04-28 (Ethereal Threading Supernova / codex /
+GPT-5 / `019dd2` — final owner-directed handoff for the collaboration-state
+domain-model thread before session stop. Preserved the Codex hooks correction:
+upstream Codex hooks are supported behind `codex_hooks`, but current official
+events expose turn-scoped `Stop`, not a documented `SessionEnd`. Preserved
+owner decisions: terminal-session close closes claims; resumed terminal
+sessions open fresh claims rather than reclaiming old ones; missed closes are
+stale/orphan cleanup after type-specific TTL; shared comms history needs a
+hot-plus-rolling-archive lifecycle. Updated future plan, lifecycle/conventions,
+state README, cross-platform matrix, hooks portability plan, napkin, this repo
+index, and the thread handoff. Validation before this final handoff:
+`git diff --check`, targeted Prettier, and `pnpm markdownlint-check:root`.)
+
+**Prior refresh**: 2026-04-28 late evening (Luminous Dancing Quasar /
 claude-code / claude-opus-4-7-1m / `pr87ph` — PR-87 Phase 1 + Phase 1.1
 landed and pushed. HEAD = origin = PR-87 head = `84571ccf`. Three commits
 pushed: `9b2b2ed7` `refactor(vercel-ignore): lock down git capabilities;
@@ -84,12 +97,14 @@ in `archive/` or the per-thread next-session records.
 ## Current State
 
 - Branch: `feat/otel_sentry_enhancements`; current HEAD verified as
-  `fe2c18f5` during the 2026-04-28 PR-87 re-grounding edit pass (matches
-  origin and PR head).
-- Current dirty work is the owner-directed queue governance graduation plus
-  preserved prior queue-handoff collaboration-state closeout. Active claims and
-  `commit_queue` are empty after this closeout; re-check both plus
-  `git diff --cached --name-status` before the next index action.
+  `71d103b8` during the 2026-04-28 final collaboration-state handoff
+  (matches origin at the time of this handoff).
+- Current dirty work is the owner-directed collaboration-state documentation
+  handoff: session-close claim semantics, Codex hook correction, shared comms
+  rolling archive requirement, state-boundary planning, and final continuity
+  refresh. Active claims and `commit_queue` were empty before this handoff;
+  re-check both plus `git diff --cached --name-status` before the next index
+  action.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -143,7 +158,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -203,6 +218,11 @@ state is now:
   Owner corrected the live agent set to Codex, Estuarine, and Prismatic;
   a `Luminous Dancing Quasar` claim is not by itself evidence of a reachable
   participant.
+- Follow-up owner decisions are now preserved in that future plan and
+  operational docs: terminal-session resume does not reclaim old claims;
+  session close closes claims; missed closes become stale/orphaned by
+  type-specific TTL; shared communications need a rolling archive; Codex hooks
+  exist upstream but no Codex `SessionEnd` event is documented yet.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -239,8 +259,9 @@ Choose the lane deliberately:
    (Codex, Estuarine, Prismatic), especially the stale/phantom `Luminous`
    claim and missing Estuarine claim. Then promote
    [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
-   when the owner wants implementation of reliable comms writes, sidebar
-   attention cadence, UTC validation, or identity preflight.
+   when the owner wants implementation of reliable writes for every shared
+   inter-agent state record, session-close TTL cleanup, shared-comms rolling
+   archive, sidebar attention cadence, UTC validation, or identity preflight.
 2. **Strict exact-optional cleanup** — the stricter
    `--exactOptionalPropertyTypes` probe is clean for identity files but still
    reports the pre-existing `agent-tools/src/bin/codex-reviewer-resolve.ts`
@@ -319,6 +340,15 @@ These are visible owner-appetite items, not blockers for the active lanes:
    removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
+
+**Status (2026-04-28 Ethereal Threading Supernova, final
+collaboration-state handoff)**: due, not run — owner asked to stop this
+session after final handoff and commit. Durable capture is complete for the
+Codex hooks correction, session-close claim semantics, type-specific TTL
+cleanup direction, shared-comms rolling archive, and "all shared state records"
+write-safety scope. `repo-continuity.md` remains in the documented hard zone
+and still needs the structural archive pass named by its `split_strategy`;
+this handoff does not perform that deeper consolidation.
 
 **Status (2026-04-28 late evening, Luminous Dancing Quasar, Phase 1
 and Phase 1.1 close handoff with fairly-light consolidation per owner

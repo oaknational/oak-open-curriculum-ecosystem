@@ -25,7 +25,7 @@ canonical value for stale/fresh calculations and durable state.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
-| [`shared-comms-log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
+| [`shared-comms-log.md`][log] | Schema-less append-only markdown | Current hot log is append-only; future domain-model work must add rolling archive without losing older context | WS0 + 2026-04-28 owner direction |
 | [`active-claims.json`][active-claims] | Structured JSON; queryable registry plus `commit_queue` | Append-on-claim and append-on-queue; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
 | [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
@@ -80,6 +80,21 @@ staleness is worse than delayed staleness because it creates false noise
 during live edits. WS5 evidence is the planned re-evaluation gate.
 Commit-window claims intentionally override this to 900 seconds because
 staging/commit should be brief.
+
+## Session-Close and Resume Semantics
+
+Live claims belong to the live session that opened or inherited them. The
+current terminal-session model does not support reclaiming old live claims on
+resume. When a session closes, its claims should close explicitly into
+`closed-claims.archive.json`; if the agent misses that closeout, a later
+janitor archives the claim as stale/orphaned rather than successful.
+
+TTL is type-specific. Normal active-work claims use the heartbeat freshness
+window above; commit-window claims use a short expiry; attention pings and
+sidebar response windows may use minutes-scale expiries; known session-close
+misses should use a short grace TTL before orphaning. A future SDK-driven
+one-turn invocation model may add external shared session-state reclaim, but
+that would be a new lifecycle transition, not the default today.
 
 ## Lifecycle Summary
 

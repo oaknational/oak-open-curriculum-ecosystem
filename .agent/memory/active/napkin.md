@@ -32,6 +32,34 @@ through handoff text and sub-agent briefing.
 
 ---
 
+## 2026-04-28 — Codex hooks correction and session-close claim semantics
+
+**Context:** while discussing claim cleanup, I initially answered that Codex
+had no native hook surface. The owner pointed at the official Codex hooks page.
+The corrected model is: Codex hooks exist behind `codex_hooks`, but current docs
+show turn-scoped `Stop` rather than a documented `SessionEnd`.
+
+### Surprise
+
+- **Expected:** local `codex --help` plus `~/.codex/config.toml` search was
+  enough to classify Codex as no-hook for this decision.
+- **Actual:** the official Codex docs carry a hooks page that local help did
+  not surface directly; the local feature list reports `codex_hooks` stable and
+  enabled.
+- **Why expectation failed:** I treated absence in CLI help/config as a strong
+  product-capability signal instead of checking the exact docs URL once the
+  owner supplied it. For OpenAI product questions, official docs outrank local
+  discoverability.
+- **Behaviour change:** classify Codex as "hooks supported, no documented
+  `SessionEnd` yet" until proven otherwise. Use Codex `Stop` only for
+  turn-end reminders, not session-exit cleanup. For claims, the settled current
+  model is: session close closes live claims; resumed terminal sessions open
+  fresh claims; post-session cleanup marks missed claims stale/orphaned after a
+  type-specific TTL rather than successful.
+- **Source plane:** executive
+
+---
+
 ## 2026-04-27 — Vining Bending Root — investigation-mode drifts into disposition-mode
 
 **Context:** in PR-87 Phase 5, the master plan carried an ACCEPT/DISABLE

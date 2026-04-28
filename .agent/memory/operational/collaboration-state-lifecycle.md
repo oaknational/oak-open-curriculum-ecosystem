@@ -79,6 +79,25 @@ Copy the active claim into `closed-claims.archive.json`, add
 `closure.evidence[]` references, then remove the active entry. Removal
 without a closed-claim record silently erases lifecycle history.
 
+Terminal-session resume does not currently reclaim old live claims. If a
+session closes, its claims close. A later resumed or reopened session opens a
+fresh claim and cites the previous closure if useful. A future SDK-style
+one-turn invocation model may add an explicit reclaim transition, but that is
+not part of the current protocol.
+
+Where a platform exposes a real session-end hook, use it as a best-effort
+pre-close cleanup prompt or closure script. Codex currently has hooks but no
+documented `SessionEnd` event; its turn-scoped `Stop` hook can remind the agent
+before a turn ends, but normal freshness and stale/orphan cleanup remain the
+fallback for missed Codex session closes.
+
+Post-session janitors must not mark work as successful. If a known-ended
+session leaves a claim open past the session-close grace TTL, archive it as
+stale/orphaned with evidence of the missed close. Keep the per-type freshness
+window separate from this grace TTL: `git:index/head` and attention pings can
+expire in minutes, while normal active-work claims use the longer heartbeat
+window unless a session-end signal proves the owner session is gone.
+
 ### Archive Stale Claims
 
 `consolidate-docs § 7e` walks `active-claims.json`, computes
