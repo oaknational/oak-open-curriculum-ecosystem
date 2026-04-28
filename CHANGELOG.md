@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.5.0...v1.6.0) (2026-04-28)
+
+
+### Features
+
+* **observability:** Sentry/OTel public-alpha foundations — esbuild-native build, rate limiting, Search CLI adoption, agent-memory taxonomy ([#87](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/87)) ([05f994c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/05f994c09c582afa7dac09550db8a34dc13efa27)), closes [hi#level-](https://github.com/hi/issues/level-) [hi#level](https://github.com/hi/issues/level)
+
 # [1.5.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.4.0...v1.5.0) (2026-04-11)
 
 
