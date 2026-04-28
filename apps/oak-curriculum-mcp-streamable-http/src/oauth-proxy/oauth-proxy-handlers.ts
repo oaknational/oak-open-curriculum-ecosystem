@@ -14,6 +14,7 @@ import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
 
 import { buildAuthorizeRedirectUrl, formatProxyErrorResponse } from './oauth-proxy-upstream.js';
+import { applyParsedResponse, readUpstreamBody } from './oauth-proxy-response.js';
 import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
 
 /** Minimal structured logger interface for the proxy. */
@@ -136,37 +137,27 @@ export async function handleRegister(
   const route = '/oauth/register';
 
   const runRegister = async (span: HttpSpanHandle): Promise<void> => {
-    const result = await fetchUpstream(
-      upstreamUrl,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body),
-      },
-      timeout,
-      fetchFn,
-    );
-
+    const init = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    };
+    const result = await fetchUpstream(upstreamUrl, init, timeout, fetchFn);
     if (!result.ok) {
       span.setAttribute('oak.upstream.status', result.error.kind === 'timeout' ? 504 : 502);
-      respondProxyError(
-        result.error,
-        res,
-        config.logger,
-        { route, upstreamUrl, duration: Date.now() - start },
-        config.observability,
-      );
+      const ctx = { route, upstreamUrl, duration: Date.now() - start };
+      respondProxyError(result.error, res, config.logger, ctx, config.observability);
       return;
     }
-
     span.setAttribute('oak.upstream.status', result.value.status);
-    const body: unknown = await result.value.json();
+    const parsed = await readUpstreamBody(result.value, config.logger, { route, upstreamUrl });
     config.logger.info('oauth-proxy.register.complete', {
       upstreamUrl,
-      status: result.value.status,
+      status: parsed.status,
+      upstreamStatus: result.value.status,
       duration: Date.now() - start,
     });
-    res.status(result.value.status).json(body);
+    applyParsedResponse(parsed, res);
   };
 
   await runWithOptionalSpan(
@@ -228,13 +219,14 @@ export async function handleToken(
       return;
     }
     span.setAttribute('oak.upstream.status', result.value.status);
-    const responseBody: unknown = await result.value.json();
+    const parsed = await readUpstreamBody(result.value, config.logger, { route, upstreamUrl });
     config.logger.info('oauth-proxy.token.complete', {
       upstreamUrl,
-      status: result.value.status,
+      status: parsed.status,
+      upstreamStatus: result.value.status,
       duration: Date.now() - start,
     });
-    res.status(result.value.status).json(responseBody);
+    applyParsedResponse(parsed, res);
   };
 
   await runWithOptionalSpan(

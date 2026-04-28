@@ -253,3 +253,21 @@ consolidation pass to
   values relative to `.codex/config.toml` (`agents/<name>.toml`), and document
   `$jc-*` as the Codex workflow invocation shape anywhere platform command
   examples are listed.
+
+## 2026-04-28 — Cursor Composer: Sentry + Curriculum MCP readout (Luminous Waning Aurora)
+
+Investigation-only; no repo edits. Evidence: Sentry MCP aggregates + `oauth-proxy-handlers.ts` read path.
+
+### Surprise 1 — Legacy release rows without parallel ingest
+
+- **Expected**: **`find_releases`** `preview-feat-{branch}-{sha}` names imply events might still dual-tag alongside **`VERCEL_BRANCH_URL`** host labels.
+- **Actual**: Preview **error** events in the last **7–14d** group under **`poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`** only (**28** hits); **`release:*preview-feat*`** query returned **zero** errors. ADR-163 historical split explains stale **Release** artefacts; ingest is not duplicating identifiers on current errors for this branch.
+- **Behaviour change**: Operational triage prioritises **`release:`** tags on Discover over **`find_releases`** naming alone.
+
+### Surprise 2 — `429` surfaced as `SyntaxError` not as explicit rate-limit handling
+
+- **Expected**: Upstream Clerk rate-limit would map to typed handling before Observability captured a parsing exception.
+- **Actual**: **`handleToken`** awaits **`response.json()`** unconditionally after fetch returns; Clerk **`429`** + plain **`Rate exceeded.`** body → **`SyntaxError`** → **`OAK-OPEN-CURRICULUM-MCP-A`** despite **`handled: yes`**.
+- **Behaviour change**: Teach token/register paths to branch on **`response.ok`** / **429** / **Content-Type** before **`json()`**; align integration tests.
+
+**candidate:tactical-fix** OAuth proxy upstream non-JSON error bodies (`apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-handlers.ts`). No ADR; fix is handler contract, not doctrine.

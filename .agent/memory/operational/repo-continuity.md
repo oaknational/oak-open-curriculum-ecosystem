@@ -44,6 +44,12 @@ doctrine.)
 remaining archive claim is closed, the handoff-time napkin overflow was rotated
 by Mossy Creeping Branch, and current strict-hard fitness is soft-only again.)
 
+**Incremental refresh**: 2026-04-28 (Luminous Waning Aurora / cursor / composer /
+`dde6be` — `/jc-session-handoff` after investigation-only work: oak-preview MCP
+curriculum probes, Sentry MCP preview/error correlation, ADR-163 release-id
+story confirmed against live aggregates, OAuth proxy **`429` + unconditional
+`.json()`** root cause captured for **`handleToken`**. No working-tree edits.)
+
 Recent historical refresh summaries are preserved in git history, the touched
 thread records, and
 [`archive/repo-continuity-session-history-2026-04-28.md`](archive/repo-continuity-session-history-2026-04-28.md).
@@ -141,7 +147,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5-keygenerator-cure-doc-alignment-and-plan-reset-to-codeql-only / 2026-04-28; Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2 / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-void-underscore-rule-author / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5 / 2026-04-27. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage-readout / 2026-04-28; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5-keygenerator-cure-doc-alignment-and-plan-reset-to-codeql-only / 2026-04-28; Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2 / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-void-underscore-rule-author / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5 / 2026-04-27. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Mooring Atoll / `codex` / `GPT-5` / session-handoff-codex-identity-archive-claim-closeout / 2026-04-28; Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-planning-and-commit-gate-doctrine-handoff / 2026-04-28; Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning-final-handoff / 2026-04-28. |
 
@@ -166,7 +172,13 @@ Current branch-primary facts:
 
 ## Current Session Focus
 
-**Latest focus (2026-04-28T~15:30Z, Abyssal Cresting Compass)**: PR-87
+**Latest focus (2026-04-28, Luminous Waning Aurora, Cursor Composer)**: Read-only
+Sentry MCP + Curriculum MCP probes on preview: confirmed single active **`release`
+tag on preview errors**, no parallel legacy **`preview-feat-*`** strings on ingest;
+documented **`handleToken`** gap for Clerk **`429`** non-JSON bodies (tactical fix
+candidate, not landed here).
+
+**Prior focus (2026-04-28T~15:30Z, Abyssal Cresting Compass)**: PR-87
 Phase 2.0.5 keyGenerator cure landed and reframed mid-session as defence-
 in-depth (not exploit closure) after Vercel-docs verification contradicted
 the security review's premise. Doc alignment landed (ADR-158 amended;
@@ -424,6 +436,10 @@ by Mossy Creeping Branch into
 [`napkin-2026-04-28-current-overflow.md`](../active/archive/napkin-2026-04-28-current-overflow.md).
 `pnpm practice:fitness:strict-hard` is soft-only again, and no new ADR/PDR,
 entrypoint-drift, or pattern trigger surfaced in this handoff.
+
+Incremental status (2026-04-28 Luminous Waning Aurora handoff): **not due —
+investigation-only session** (no plan closure, napkin Surprise capture only,
+no consolidate-docs hygiene gap beyond thread + continuity refresh).
 
 Incremental status (2026-04-28T~12:50Z Choppy Lapping Rudder, owner-directed):
 **due — owner-directed move to fresh session.** Owner explicitly invoked

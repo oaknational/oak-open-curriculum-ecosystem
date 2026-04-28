@@ -5,8 +5,13 @@
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 |---|---|---|---|---|---|---|
 | Abyssal Cresting Compass | claude-code | claude-opus-4-7-1m | `6efc47` | PR-87 Phase 2.0.5 keyGenerator cure + doc alignment + plan-reset | 2026-04-28 | 2026-04-28 |
+| Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code (no repo edit) | 2026-04-28 | 2026-04-28 |
 
 (Identity rows for prior agents are recoverable from git history; this table is the additive-identity register going forward.)
+
+---
+
+**Session-close 2026-04-28 (Luminous Waning Aurora, cursor, composer, session seed prefix `dde6be`)** — Investigation-only. Used Sentry MCP (`oak-national-academy/oak-open-curriculum-mcp`) to correlate preview deploy release rows vs **`release`** tags on errors: ingest shows **`poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`** only in the last 7–14d for preview errors (**28** errors); **`preview-feat-*` legacy-shaped ids** have **zero** error hits in that window (ADR-163 split-history is historical, not parallel on events). **`find_releases`** can still list older **`preview-{branch}-{sha}`** artefacts from pre-unification registrations. **`OAK-OPEN-CURRICULUM-MCP-A`** (**SyntaxError** on **`POST /oauth/token`**) traced to **`handleToken`** calling **`response.json()`** without checking upstream status — Clerk **`429`** with plain-text **`Rate exceeded.`** is not JSON.**OAK-OPEN-CURRICULUM-MCP-B** remains the explicit timeout path. **Next safe step for code**: branch on **`response.ok`** / status (esp. **429**) and body shape before **`json()`**; mirror pattern on **`handleRegister`** if aligning. Branch/PR untouched this session.
 
 ---
 

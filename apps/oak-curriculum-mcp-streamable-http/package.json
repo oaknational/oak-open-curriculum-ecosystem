@@ -58,6 +58,7 @@
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sentry-node": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
     "@opentelemetry/api": "^1.9.0",
     "@sentry/node": "^10.48.0",
     "cors": "^2.8.6",
