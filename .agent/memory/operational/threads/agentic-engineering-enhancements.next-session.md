@@ -1,6 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
+**Last refreshed**: 2026-04-28 (Woodland Creeping Petal / codex / GPT-5 /
+019dd3 — collaboration-state write-safety closeout. Implementation landed as
+`11f0320f`; shared-state sweep landed as `da21284d`; Codex-wide identity
+follow-up plan landed as `ddcfa19e`. Main claim
+`a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b` closed explicitly. Consolidation
+completed for this slice with no new ADR/PDR candidate; strict-hard fitness
+still blocks plan closure until structural extraction/splitting or
+owner-approved remediation is recorded for `principles.md`,
+`collaboration-state-conventions.md`, and `repo-continuity.md`.)
+
+**Prior refresh**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
 unknown — owner-requested hook test IO remediation closeout. Session handoff
 and consolidation rechecked entry points, capture buffers, collaboration state,
 fitness, and gates; hook/root-script tests now use pure helpers and injected
@@ -872,6 +882,15 @@ nl -ba .agent/directives/AGENT.md
   verification gap, and identity-preflight requirement. Owner priority update
   2026-04-28: promotion trigger is satisfied; clashing writes to shared state
   are pressing, while hooks/session-exit cleanup are refinements.
+- Implemented current slice:
+  [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
+  — landed as `11f0320f` with immutable comms events, transaction-guarded
+  JSON state writes, Codex identity preflight, and TTL archival baseline.
+  Closure remains pending the documented hard-fitness disposition.
+- Strategic follow-up:
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md)
+  — landed as `ddcfa19e`; owns Codex-wide identity parity beyond the
+  collaboration-state write path.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -887,17 +906,16 @@ handoff evidence, and the owner-directed intent-to-commit queue are complete
 or captured in the working tree (refreshed 2026-04-27).**
 
 **2026-04-28 update:** the communication-channel register, Practice/tooling
-feedback capture rule, UTC convention, and ADR/PDR drift refresh are now
-captured. Owner has now clarified priority: resolving clashing writes to shared
-state is pressing. The next session should promote
-`collaboration-state-domain-model-and-comms-reliability.plan.md` into a current
-executable plan and start with write-safety for shared state records, defining
-only enough domain model to choose the right mechanism per record type.
-Owner-settled follow-up semantics are preserved: session close closes claims;
-resume opens fresh claims; stale/orphan TTL cleanup handles missed closes;
-shared comms needs hot-plus-archive retention. Codex has hooks but no
-documented session-exit hook yet; treat that as refinement, not a blocker for
-the shared-state write-safety slice.
+feedback capture rule, UTC convention, and ADR/PDR drift refresh are captured.
+Owner clarified priority: resolving clashing writes to shared state was
+pressing. The write-safety slice is now implemented and landed as `11f0320f`;
+it uses Codex identity preflight, immutable comms events, transaction-guarded
+JSON state writes, commit-queue transaction reuse, and TTL archival as the
+portable baseline. Owner-settled follow-up semantics are preserved: session
+close closes claims; resume opens fresh claims; stale/orphan TTL cleanup
+handles missed closes; shared comms uses hot-plus-archive retention. Codex has
+hooks but no documented session-exit hook yet; treat that as refinement, not a
+blocker for the shared-state write-safety slice.
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -992,6 +1010,16 @@ validation.
   documented `SessionEnd` parity exists yet. This is secondary to the pressing
   shared-state write-collision work; use standard TTL cleanup for Codex missed
   exits unless a future Codex session-exit event appears.
+- Collaboration-state write safety is implemented and landed in `11f0320f`.
+  `pnpm agent-tools:collaboration-state -- ...` now provides identity
+  preflight, immutable comms append/render, transaction-safe claims and
+  archive operations, conversation/escalation writes, TTL archival, and a
+  validation check. The old rendered shared-comms history is archived and the
+  live markdown log is generated from event files.
+- Codex-wide identity parity beyond shared-state writes is captured in
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md).
+  Do not treat the write-safety helper as having fixed thread-row defaults or
+  legacy `Codex` / `unknown` rows globally.
 - Owner override on 2026-04-28 allowed crossing claim boundaries to fix the
   closeout blocker. The live blocker was resolved by current WIP before a new
   source edit: `pnpm --filter @oaknational/agent-tools build` passes. Future
@@ -1067,13 +1095,14 @@ the advisory commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Collaboration-state write safety** — continue
+1. **Collaboration-state write safety closure** — continue
    [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md).
-   The plan is now promoted and implementation is underway. Next safe step is
-   validation and doc consolidation: keep the first slice focused on
-   deterministic identity preflight, immutable comms events,
-   transaction-guarded shared JSON writes, and TTL cleanup. Treat
-   hooks/session-exit cleanup as a later refinement.
+   The implementation is landed. Next safe step is to route the strict-hard
+   fitness findings named in the plan (`principles.md`,
+   `collaboration-state-conventions.md`, and `repo-continuity.md`) to
+   structural extraction/splitting or an owner-approved remediation lane; only
+   then mark the plan complete/archive it. Treat hooks/session-exit cleanup as
+   a later refinement.
 
 2. **Workspace layer separation audit** — architecture-and-infrastructure now
    has a queued executable plan:

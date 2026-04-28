@@ -16,13 +16,13 @@ todos:
     status: completed
   - id: phase-4-validation
     content: "Phase 4: Run targeted gates, record residual parallel-agent risks, and apply /jc-consolidate-docs before closure."
-    status: in_progress
+    status: completed
 ---
 
 # Collaboration-State Write Safety
 
 **Last Updated**: 2026-04-28
-**Status**: 🟢 IN PROGRESS
+**Status**: 🟡 IMPLEMENTED / CLOSURE PENDING FITNESS DISPOSITION
 **Scope**: Make the hot shared inter-agent state write paths safe without
 waiting for hook polish.
 
@@ -172,6 +172,29 @@ write-safety slice lands; `repo-continuity.md` needs the archive pass already
 named by its `split_strategy`. Do not mark this plan complete until those
 findings are either remediated or routed to an explicit owner-approved
 fitness-remediation lane with acceptance criteria.
+
+### Closeout Evidence — 2026-04-28
+
+Implementation landed as `11f0320f`. A generated collaboration-state sweep
+landed as `da21284d`. The Codex-wide identity follow-up plan landed as
+`ddcfa19e`.
+
+Owner-requested handoff and consolidation ran after those commits. Evidence:
+
+- entry points are pointer-only (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`);
+- no tactical track cards are active;
+- `.remember/` scan did not add a thread-changing action;
+- `pnpm agent-tools:collaboration-state -- check` passes;
+- `pnpm practice:vocabulary` passes;
+- `git diff --check` passes;
+- the real pre-commit hook passed for `ddcfa19e`;
+- `pnpm practice:fitness:strict-hard` still fails on the known hard findings
+  in `principles.md`, `collaboration-state-conventions.md`, and
+  `repo-continuity.md`.
+
+Consolidation did not surface a new ADR/PDR promotion candidate. The Practice
+governance remains homed in PDR-029 / PDR-035, while this repo's phenotype
+boundary remains homed in ADR-165.
 
 ## Reviewer Scheduling
 

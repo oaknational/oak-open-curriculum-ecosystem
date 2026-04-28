@@ -54,3 +54,16 @@ consolidation pass at
 - **Behaviour change**: Rerun the exact failing gate before touching claimed
   WIP, then make the smallest gate-honest repair and leave a breadcrumb for
   the owning agent.
+
+### Surprise
+
+- **Expected**: After the write-safety implementation landed, the follow-up
+  plan commit could proceed immediately.
+- **Actual**: A fresh peer `git:index/head` claim opened first, then landed a
+  shared-state sweep commit that changed the closeout baseline.
+- **Why expectation failed**: Same-branch collaboration state is genuinely hot
+  and live; even closeout-only commits can overlap on generated state and
+  thread records.
+- **Behaviour change**: Poll active git claims and `HEAD` before staging, wait
+  for fresh peer commit windows to clear, then re-evaluate the pathspecs from
+  the new tree instead of committing against stale assumptions.

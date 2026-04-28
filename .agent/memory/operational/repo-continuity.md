@@ -8,7 +8,18 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
+**Last refreshed**: 2026-04-28 (Woodland Creeping Petal / codex / GPT-5 /
+`019dd3` — owner-requested commit, session handoff, consolidation, and final
+commit closeout for collaboration-state write safety. The implementation
+landed as `11f0320f`, shared-state sweep as `da21284d`, and Codex-wide
+identity follow-up plan as `ddcfa19e`. Main claim
+`a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b` is closed explicitly. Consolidation
+checks passed for collaboration-state JSON, vocabulary, whitespace, and the
+real pre-commit hook; strict-hard fitness still reports known structural
+pressure in `principles.md`, `collaboration-state-conventions.md`, and this
+file.)
+
+**Prior refresh**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
 unknown — owner requested session handoff, document consolidation, and commit
 after hook test IO remediation. Hook/root-script tests now prove pure behaviour
 with injected fakes instead of filesystem/process IO, and agent-tools CLI E2E
@@ -121,13 +132,13 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`; current HEAD was `71d103b8` when
-  this handoff refreshed, with dirty closeout and agent-tools WIP to commit
-  after consolidation.
-- Current dirty work combines the owner-directed Practice/docs closeout, the
-  collaboration-state write-safety implementation, and the hook-test IO
-  remediation. Re-check active claims, `commit_queue`, and
-  `git diff --cached --name-status` before the next index action.
+- Branch: `feat/otel_sentry_enhancements`; current HEAD is `ddcfa19e` after
+  the Codex identity follow-up commit. A final closeout commit is still
+  expected for handoff/consolidation state.
+- Current dirty work combines this closeout's collaboration-state lifecycle
+  edits with separate security-and-privacy planning WIP from another agent.
+  Re-check active claims, `commit_queue`, and `git diff --cached --name-status`
+  before the next index action.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -172,14 +183,19 @@ in `archive/` or the per-thread next-session records.
   [`collaboration-state-conventions.md`](collaboration-state-conventions.md)
   and
   [`collaboration-state-lifecycle.md`](collaboration-state-lifecycle.md).
-- Collaboration-state write safety is the active slice:
+- Collaboration-state write safety has landed as `11f0320f`:
   [`collaboration-state-write-safety.plan.md`](../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
-  promotes the strategic brief into executable work. The implementation adds
+  promoted the strategic brief into executable work. The implementation adds
   `pnpm agent-tools:collaboration-state -- ...`, deterministic Codex
   identity preflight from `CODEX_THREAD_ID`, immutable comms event files under
   `.agent/state/collaboration/comms/events/`, transaction-guarded JSON writes
   for claims / queue / conversations / escalations / closed claims, and
   type-specific TTL cleanup. Hooks stay later polish.
+- Codex-wide session identity parity is now a separate strategic follow-up:
+  [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md)
+  landed in `ddcfa19e`. The write-safety helper is correct for shared-state
+  writes; thread-row defaults, legacy `Codex` / `unknown` reporting, and any
+  verified title/statusline or hook integration belong to that future plan.
 - The closeout commit blocker was rechecked after owner override. The previous
   `agent-tools` TypeScript error no longer reproduced; build passed before any
   additional source edit. Treat current gate evidence as stronger than stale
@@ -297,18 +313,13 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Practice collaboration-state write safety** — owner clarified this is
-   pressing: resolve clashing writes to shared state before refining hooks or
-   session-exit automation. First safe step is to promote
-   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
-   into a current executable plan for multi-agent-safe writes across shared
-   state records. PDR-035 and ADR-165 now settle the ownership boundary:
-   collaboration-state concepts are Practice substance; the local files and
-   `agent-tools` commands are phenotype implementation. Keep the first slice
-   focused on the collision problem:
-   choose safe write mechanisms for the hot shared files, define only the
-   state-domain boundaries needed for that, and keep TTL cleanup as the
-   portable baseline while hooks remain a later refinement.
+1. **Practice collaboration-state write safety** — the first executable slice
+   landed in `11f0320f`, with the generated comms/state sweep in `da21284d`.
+   Next safe step is not hook polish: first route the remaining hard fitness
+   pressure named in the plan (`principles.md`,
+   `collaboration-state-conventions.md`, and this file) to structural
+   extraction/splitting or an owner-approved remediation lane, then archive the
+   current plan when its closure criteria are satisfied.
 2. **Workspace layer separation audit** — owner clarified that most code is
    still not properly separated into layers and distinct layers MUST live in
    distinct workspaces. Current executable plan:
@@ -366,12 +377,12 @@ Choose the lane deliberately:
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders without evidence. First real
    sidebar/joint-decision usage should feed WS5 observation.
-6. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
-   landed in `ff119d44`; CLI/TUI title/statusline surfaces exist, but a
-   first-class IDE session-title/custom-name setting was not found. Cursor
-   composer `session_id` is the stable seed via `sessionStart`; repo hook +
-   mirror landed in working tree — **Composer tab title** still needs Cursor
-   product support or manual rename from `suggestedComposerTabTitle`.
+6. **Codex session identity plumbing** — follow
+   [`codex-session-identity-plumbing.plan.md`](../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md).
+   The collaboration-state helper derives the right name from
+   `CODEX_THREAD_ID`; Codex thread-row defaults, existing `Codex` / `unknown`
+   cleanup, and any verified title/statusline or hook adapter remain future
+   work.
 7. **Other agentic engineering work** — WS3A, WS4A, commit-window,
    WS3B, joint-decision, and Phase 8 Claude Code statusline wiring are all
    complete. Pick a queued owner-directed plan from the current/roadmap
@@ -394,6 +405,24 @@ These are visible owner-appetite items, not blockers for the active lanes:
    removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
+
+**Status (2026-04-28 Woodland Creeping Petal, collaboration-state write
+safety closeout)**: completed this requested consolidation pass — owner
+explicitly instructed: commit current changes, run session handoff, run
+consolidate docs, commit again, then describe next steps. Landed evidence:
+`11f0320f` implements the write-safety helper and docs, `da21284d` sweeps the
+generated collaboration state, and `ddcfa19e` records the Codex-wide identity
+follow-up plan. Entry points are pointer-only; `.remember/` did not add a
+thread-changing action; no tactical track cards are active; collaboration
+state validates via `pnpm agent-tools:collaboration-state -- check`;
+vocabulary and whitespace checks pass. ADR/PDR scan found no new promotion
+candidate: the Practice governance is already homed in PDR-029 / PDR-035 and
+the host phenotype in ADR-165. `pnpm practice:fitness:strict-hard` still
+fails on hard structural pressure in `principles.md`,
+`collaboration-state-conventions.md`, and `repo-continuity.md`. Disposition:
+preserve the landed learning and keep plan closure pending structural
+extraction/splitting or an owner-approved remediation lane; do not answer the
+hard signal by trimming current closeout evidence.
 
 **Status (2026-04-28 Pelagic Drifting Sail, owner-forced closeout retry)**:
 completed this requested consolidation pass — owner explicitly instructed:
