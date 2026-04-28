@@ -41,7 +41,161 @@
 
 **Session-close 2026-04-27T18:47Z (Opalescent Gliding Prism, claude-code, claude-opus-4-7-1m, session seed `radiant-pillow-2026-04-27`)** — 2 commits landed AND PUSHED (`882d1f2c`, `cadc26eb`); HEAD = origin = PR-87 head = `cadc26eb`. Phase 0 (plan-body re-grounding), Phase 1 (dormant rule deletion + reinstate stub), and Cluster Q dispositions (5 CodeQL dismissed + 1 Sonar hotspot accept) landed. Cluster A sink-trace analysis captured in plan body. Owner direction at planning: Decisions 1B + 2A + 3A. Session closed at context-budget threshold per owner direction.
 
-## Opening statement for next session
+## Opening brief for next session — Phase 2 (Cluster A: rate-limit type narrowing)
+
+Phase 1 (Cluster B `runGitCommand` lockdown) is complete. PR-87 head is
+`48fe86cb`. The Sonar QG hotspot panel flipped 90.9% → 100% OK; the
+MUST-FIX argv-injection class is closed at the trust boundary; new
+violations are back to baseline 27. CodeQL 7 OPEN unchanged (5 ×
+Cluster A + 2 × Cluster C).
+
+### Verify state first — do not inherit text
+
+1. `git status --porcelain` — likely shows files in the working tree
+   from the parallel `Prismatic Glowing Sun` session
+   (`agent-identity-platform-surfaces` thread on `agent-tools/**` +
+   `.claude/hooks/practice-session-identity.mjs` +
+   `.claude/settings.json` +
+   `.agent/skills/start-right-quick/shared/start-right.md`); those are
+   theirs, not yours.
+2. `git rev-parse HEAD && git rev-parse origin/feat/otel_sentry_enhancements && gh pr view 87 --json headRefOid,mergeable,mergeStateStatus -q .`
+   — expected: HEAD = origin = PR-87 head = `48fe86cb`,
+   `mergeStateStatus=BLOCKED`. Treat as a starting hypothesis; the
+   owner or the parallel session may have pushed since.
+3. `mcp__sonarqube__get_project_quality_gate_status pullRequest=87` —
+   expected: ERROR with `new_security_hotspots_reviewed: OK 100%`,
+   `new_violations: ERROR 27`, `new_duplicated_lines_density: ERROR
+   5.7%`. The hotspot-panel flip is the load-bearing evidence that
+   Phase 1 closed its target; do not roll it back if it somehow
+   regressed — investigate first.
+4. `mcp__sonarqube__search_security_hotspots pullRequest=87 status=TO_REVIEW`
+   — expected: 0 hotspots.
+5. `gh api '/repos/oaknational/oak-open-curriculum-ecosystem/code-scanning/alerts?ref=refs/pull/87/head&state=open'`
+   — expected: 7 OPEN alerts (5 × `js/missing-rate-limiting` +
+   2 × `js/http-to-file-access`).
+6. Read `.agent/state/collaboration/active-claims.json` for the
+   parallel session's claim `f1e0b2a8` (different thread; coordinate
+   via shared-comms-log if their work overlaps yours). My claim
+   `6395ea9c` is archived in `closed-claims.archive.json`.
+
+### Register identity (PDR-027 additive)
+
+Open a fresh claim on the `observability-sentry-otel` thread for the
+Cluster A files (listed below) before any edit. Add a new identity row
+to the `Participating agent identities` table in this file. Append a
+session-open entry to `.agent/state/collaboration/shared-comms-log.md`
+with the verification commands you ran above and what you intend to do.
+
+### Phase 2 contract (no fallback dispositions)
+
+Architectural intent: type system preserves `RateLimitRequestHandler`
+end-to-end so CodeQL's `express-rate-limit` recogniser sees the limiter
+brand at every authorising route's `app.post(...)` registration site.
+No widening to `RequestHandler` anywhere on the path from
+`rateLimit()` to the route registration.
+
+**Pre-phase**: dispatch `security-reviewer` BEFORE implementation, with
+a brief that enumerates rate-limit *bypass* paths a malicious actor
+could exploit at the existing routes (key extraction, key collision, IP
+spoofing under `trust proxy = 1`, header bypass, OAuth-proxy
+double-counting). Findings shape the type narrowing's contract; the
+brief is in `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`
+§"Phase 2".
+
+**Critical files (5)**:
+
+- `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts`
+  — narrow `RateLimiterFactory` return from `RequestHandler` →
+  `RateLimitRequestHandler` (lines 44, 73).
+- `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`
+  — narrow `mcpRateLimiter` and `metadataRateLimiter` parameter types
+  (lines 38, 82, 146, 223).
+- `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts`
+  — narrow `oauthRateLimiter: RequestHandler` field at line 32.
+- `apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts`
+  — narrow rate-limit parameter types.
+- `apps/oak-curriculum-mcp-streamable-http/src/test-helpers/rate-limiter-fakes.ts`
+  — extend the fake to satisfy `RateLimitRequestHandler`: add stub
+  `getKey(key)` returning `Promise<ClientRateLimitInfo | undefined>`
+  and `resetKey(key): void`, with semantically observable
+  side-effects (NOT no-ops — `getKey` returns the key it would
+  record; `resetKey` is observable).
+
+**Sequence**:
+
+1. Pre-phase `security-reviewer` adversarial dispatch + absorb findings
+   into the contract.
+2. RED: TypeScript compile-time test that route registration only
+   typechecks when the limiter satisfies `RateLimitRequestHandler` at
+   every site; runtime test that the fake satisfies the brand without
+   `as` assertions.
+3. Narrow factory return type.
+4. Narrow DI parameter types in the 3 consumer routes.
+5. Extend test fake.
+6. Push. CodeQL must close all 5 alerts on the next CI run. If
+   recognition does not propagate after every widening site is closed,
+   the alerts stay OPEN and the blocker is escalated to the owner with
+   file:line evidence — brand preservation without CodeQL recognition
+   is NOT a substitute for closing the alerts.
+7. Post-substantive parallel reviewer dispatch: `code-reviewer`,
+   `architecture-reviewer-fred`, `architecture-reviewer-wilma`,
+   `security-reviewer` (re-verify), `mcp-reviewer`, `test-reviewer`,
+   `type-reviewer`. Cluster commit absorbs findings inline.
+
+### Discipline carried forward
+
+Re-read at every phase boundary, not just session-open:
+
+- `.agent/directives/principles.md` — the authoritative rules.
+- §Stance section of
+  `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` — no
+  fallback dispositions; no `accept` / `false_positive` /
+  `cpd.exclusions`; generated code is fully our responsibility.
+- Drift-trigger vocabulary (Vining → Pelagic → Opalescent → Tidal →
+  Luminous): "stylistic" / "false-positive" / "out of scope" /
+  "owner direction needed without analysis" / "convention" / "language
+  idiom" / "well-known name" / "canonical TS idiom" / "all done" /
+  "all pushed" / "all clean" / "per the brief" / "per the handoff" /
+  "per the prior session" / "fall back to" / "if recognition does not
+  propagate". If those appear in your own output, stop, re-derive at
+  the site.
+- New trigger from the 2026-04-28 Luminous session: treating a hotspot
+  KEY change as evidence of progress without re-running the data-flow
+  trace at the new site. Cure: validate dispositions by re-tracing the
+  rule's data flow, not by reading the hotspot key list.
+
+### Plan files to load
+
+- `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`
+  — architectural map, cluster table, reviewer matrix.
+- `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` — 12-phase
+  re-grounded execution plan, §Stance, per-phase verification gates.
+
+### Deferred housekeeping (deep consolidation)
+
+- `.agent/memory/operational/repo-continuity.md` is in HARD zone
+  (553/500 lines, 35540/35000 chars) primarily from accumulating
+  session-close summaries that the file's `split_strategy`
+  frontmatter says to archive.
+- `.agent/memory/active/napkin.md` is at 490/500 — at risk of HARD
+  breach if extended; rotation is appropriate next session.
+- The "absolute binary path closes the S4036 PATH-substitution rule's
+  data flow" pattern from the 2026-04-28 Luminous session is a
+  candidate for graduation (pattern entry in
+  `.agent/memory/active/patterns/`, or paragraph extension to
+  ADR-158, depending on whether ≥2 instances accumulate).
+
+### Owner-level item
+
+A `2026-04-28T07:21:58Z` Codex entry in shared-comms-log declares
+"Luminous Dancing Quasar" not a live peer. The owner was actively
+engaged with that session and direct-confirmed two coordination
+decisions; the four pushed commits (`9b2b2ed7`, `5d6622d0`,
+`84571ccf`, `48fe86cb`) are real and verifiable via `git log` +
+PR-87 CI. Reconciliation between the Codex registry entry and the
+actual session record is owner-directed work.
+
+### Standing practice
 
 **Stop and run session handoff at 350k tokens.** When the conversation
 context reaches ~350k tokens, pause whatever cluster work is in flight,
