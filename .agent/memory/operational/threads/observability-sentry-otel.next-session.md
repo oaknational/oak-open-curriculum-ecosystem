@@ -1,5 +1,38 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+**Session-close 2026-04-28T~12:50Z (Choppy Lapping Rudder, claude-code, claude-opus-4-7-1m, session seed `d73d0b...`)** — Phase 2 PRE-PHASE complete, scope EXPANDED. PR-87 head at session-close = origin = `c601d515`. Four commits landed and pushed in this session:
+
+- `c1677d84` — `chore(state): open Cluster A claim and post cross-thread S5443 request`. Coordination state for the Cluster A claim (87fb2797) plus two comms events (S5443 cross-thread regression request to agentic-engineering-enhancements + arrival liveness on this thread).
+- `ca7e6e4b` — `docs(plans): add future plan for agent coordination CLI ergonomics and request correlation`. Strategic future brief at `.agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md` capturing live evidence from this session's protocol use.
+- `6a2b4e54` — `docs(napkin): capture γ-execution coordination-protocol observations`. Four structured surprise/learning entries.
+- `c601d515` — `chore(sweep): land prior-session codex identity, adapter repair, coord state, docs`. Owner-staged sweep landing in-flight working tree from prior closed Codex sessions (Mossy identity plumbing, Estuarine adapter repair, coordination state churn, docs).
+
+**Phase 2 verification result**: Coastal Mooring Atoll's deep-consolidation pass (commit `7c589a0a`, claim 1271c798 closed 11:26:31Z) substantively landed all eight Edits the Phase 2 brief required — §Stance, 12-phase sequencing, brand-preservation Cluster A contract, Cluster C/H/D §Stance alignment, Cluster B-COMPLETE marker, frontmatter todos, Lifecycle "in-repo plan is single source of truth". Phase 2.0 collapsed to verification only.
+
+**Phase 2.1 pre-phase adversarial security review COMPLETE (2026-04-28T11:54Z, security-reviewer claude-opus)**. Findings landed at `.agent/plans/observability/active/pr-87-cluster-a-security-review.md`:
+
+- **2 MUST-FIX**: FIND-001/002 — `app.set('trust proxy', 1)` (`bootstrap-helpers.ts:246`) plus default `keyGenerator` (no override at `rate-limiter-factory.ts:71-80`) means a single attacker can rotate `X-Forwarded-For` to bypass *every* rate limiter. Vercel appends client IP to incoming XFF; Express trusts the right-most-but-one entry; attacker controls it. **Brand preservation alone does NOT fix this. The CodeQL `js/missing-rate-limiting` alerts point at a real exploitable problem.**
+- **2 SHOULD-FIX**: FIND-003 OAuth proxy single-bucket sharing (cross-endpoint amplification + legitimate self-DoS); FIND-004 `/healthz` unlimited at app layer.
+- **4 HARDENING**: FIND-005 cold-start counter reset; FIND-006 multi-instance counter divergence; FIND-007 cosmetic Clerk skip-path for non-existent route; FIND-008 forward-looking `getKey`/`resetKey` exposure guard; FIND-009 `expressJson` runs before per-route limiters.
+
+**Phase 2 sequencing REVISED**: Phase 2.0.5 (FIND-001/002 keyGenerator cure) lands BEFORE the brand-preservation type narrowing (now Phase 2.1). The spoofing bypass is exploitable today; the brand work is structural. RED tests for the keyGenerator do not depend on the brand chain. See plan body §"Phase 2.0.5" for the specific cure design.
+
+**Cross-thread coordination state**: comms event `a45d68a4-12ee-4a5c-b7d5-00617e6f85ff` posted to `agentic-engineering-enhancements` requesting that the regressed S5443 hotspots in `scripts/check-blocked-content.unit.test.ts:54,61` (from commit `ec49e8ec`) be cured at source rather than dismissed. PR-87's QG `new_security_hotspots_reviewed` is at 85.7% ERROR pending that resolution. Continued Phase 2 in parallel per cross-thread Recommendation A; the cluster commit body will document the cross-thread state so closure does not improperly block on it. **No response yet from agentic-engineering-enhancements thread**; fresh session should re-check the comms log and consolidate-docs open-requests view (when available) at session-open.
+
+**What next session does (REVISED for Phase 2.0.5 first)**:
+
+1. Verify state per the §"Verify state first" block below.
+2. Open a fresh claim on the `observability-sentry-otel` thread covering at minimum `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts` and the new `rate-limiter-factory.unit.test.ts`. (Choppy Lapping Rudder's claim 87fb2797 is closing at session-handoff.)
+3. **Phase 2.0.5 (NEW, MUST-FIX, FIND-001/002)**: TDD the Vercel-aware `keyGenerator` cure per plan §"Phase 2.0.5". RED test: rotating `X-Forwarded-For` does NOT bypass the limiter; key extraction comes from `x-vercel-forwarded-for`. GREEN: extend `createDefaultRateLimiterFactory` to pass a centralised `keyGenerator`; export it for testability. REFACTOR: TSDoc + ADR-178 (or ADR-158 amendment) recording the trust discipline.
+4. **Phase 2.1 (Cluster A original — brand-preservation type narrowing)**: only after 2.0.5 lands. Brief unchanged from prior session-close below, but include FIND-008's static check (no `.resetKey/.resetAll/.getKey` outside `rate-limiting/`) as part of the Phase 2.1 invariant set.
+5. **Phase 2.2/2.3 (FIND-003/004 SHOULD-FIX)**: separate cure, separate commits. OAuth bucket split + `HEALTH_RATE_LIMIT` profile.
+6. **Phase 2.4 (HARDENING)**: ADR-158 amendment recording cold-start, multi-instance, cosmetic skip-path, optional `GLOBAL_BASELINE_RATE_LIMIT` decisions.
+7. Re-check the agentic-engineering-enhancements thread for any response on the S5443 cross-thread coordination request before pushing the Phase 2 cluster commit.
+
+**Discipline carried forward**: no fallback dispositions (no `accept` / `false_positive` / `cpd.exclusions` in any phase); generated code is fully our responsibility; the §Stance section of the plan is operational at every phase boundary. New: stance-staleness mitigation — any owner-facing stance that proposes side-effecting work re-fetches state in the same response (recurring observation; see napkin entry "γ-Execution Coordination-Protocol Observations").
+
+---
+
 **Session-close 2026-04-28 late evening (Luminous Dancing Quasar, claude-code, claude-opus-4-7-1m, session seed `pr87-phase1-cluster-b-2026-04-28-second-wave`)** — Phase 1 + Phase 1.1 **complete**, all three commits pushed to PR-87. HEAD = origin = PR-87 head = `84571ccf`. The Cluster B (`runGitCommand` lockdown) work is fully landed; the original TO_REVIEW Sonar hotspot `AZ3D3iflrIk5eL0ceU__` is closed; `new_security_hotspots_reviewed` flipped from 90.9% → **100% OK** on the QG. The next thread step is Phase 2 (Cluster A — rate-limit type narrowing).
 
 **Phase 1 outcome (commits on PR-87)**:
@@ -1154,6 +1187,7 @@ rehearsal).
 | `Opalescent Gliding Prism` | `claude-code` | `claude-opus-4-7-1m` | `radiant-pillow` | `pr-87-architectural-cleanup-session-2-phase-0-plan-body-regrounding-phase-0-5-cluster-q-sink-probe-phase-1-dormant-rule-deletion-and-reinstate-stub-cluster-q-dispositions-via-codeql-and-sonar-mcp-cluster-a-sink-trace-analysis-handoff-at-context-budget-threshold` | 2026-04-27 | 2026-04-27 |
 | `Tidal Rolling Lighthouse` | `claude-code` | `claude-opus-4-7-1m` | `composed-petting` | `pr-87-quality-remediation-replan-12-phase-execution-plan-then-phase-1-cluster-b-runGitCommand-lockdown-implementation-with-32-unit-tests-1-e2e-runtime-test-and-4-of-5-reviewer-absorption-WIP-uncommitted-wilma-deferred-to-next-session` | 2026-04-28 | 2026-04-28 |
 | `Luminous Dancing Quasar` | `claude-code` | `claude-opus-4-7-1m` | `pr87ph` | `pr-87-phase-1-cluster-b-second-wave-wilma-dispatch-and-absorption-cluster-commit-and-push-then-phase-1.1-finish-env-scrub-via-absolute-git-binary-cognitive-complexity-refactor-fixture-cleanup-three-commits-pushed-9b2b2ed7-and-5d6622d0-and-84571ccf-sonar-hotspot-panel-flipped-to-100-percent-OK` | 2026-04-28 | 2026-04-28 |
+| `Choppy Lapping Rudder` | `claude-code` | `claude-opus-4-7-1m` | `d73d0b` | `pr-87-phase-2-pre-phase-security-review-with-2-must-fix-x-forwarded-for-spoofing-bypass-2-should-fix-and-4-hardening-findings-phase-2.0.5-keygenerator-cure-inserted-before-brand-narrowing-cluster-a-claim-87fb2797-opened-and-closed-at-handoff-cross-thread-s5443-coordination-request-posted-four-commits-pushed-c1677d84-ca7e6e4b-6a2b4e54-c601d515-new-strategic-future-plan-for-coordination-cli-ergonomics` | 2026-04-28 | 2026-04-28 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

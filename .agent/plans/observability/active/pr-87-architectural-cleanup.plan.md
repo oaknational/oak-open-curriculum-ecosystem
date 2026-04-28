@@ -11,7 +11,7 @@ overview: >
   allowed dismissal / accept / false_positive / cpd-exclusion language as a
   fallback disposition.
 status: active
-last_updated: 2026-04-28
+last_updated: 2026-04-28T12:35Z
 todos:
   - id: phase-0-re-harvest
     content: "Phase 0: Live re-harvest of PR-87 signals (Sonar MCP, CodeQL alerts API, PR comments). Cluster table refresh."
@@ -28,8 +28,26 @@ todos:
   - id: phase-1b-delete-dormant-rule
     content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
     status: pending
+  - id: cluster-a-security-review
+    content: "Phase 2.1 pre-phase adversarial security review: COMPLETE 2026-04-28T11:54Z. Findings: 2 MUST-FIX (FIND-001/002 X-Forwarded-For spoofing on Vercel bypasses every rate limiter), 2 SHOULD-FIX (FIND-003 OAuth single-bucket sharing, FIND-004 /healthz unlimited), 4 HARDENING (FIND-005..009). Evidence at .agent/plans/observability/active/pr-87-cluster-a-security-review.md. Reviewer recommendation: keyGenerator cure BEFORE brand narrowing."
+    status: completed
+  - id: cluster-a-keygenerator-cure
+    content: "Phase 2.0.5 (FIND-001/002, MUST-FIX): centralise Vercel-aware keyGenerator in rate-limiter-factory.ts — read x-vercel-forwarded-for first (split on comma, take first), fall back to req.ip only when absent, pass through ipKeyGenerator(ip, 56). RED+GREEN+REFACTOR with rotating-XFF integration test. Lands BEFORE Phase 2.1 brand work; spoofing bypass is exploitable today."
+    status: pending
   - id: cluster-a-rate-limiting
-    content: "Cluster A: DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Re-grounded plan §Phase 2: type narrowing through RateLimitRequestHandler end-to-end (factory return, DI param types, registration sites, test fake). Pre-phase security review of bypass paths. No fallback dispositions."
+    content: "Phase 2.1 (Cluster A): DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Type narrowing through RateLimitRequestHandler end-to-end (factory return, DI param types, registration sites, test fake). Closes 4 of 5 alerts; #69 disposition follows the (A)/(B)/(C) ladder in the cluster section. No fallback dispositions."
+    status: pending
+  - id: cluster-a-oauth-bucket-split
+    content: "Phase 2.2 (FIND-003, SHOULD-FIX): split OAuth proxy single-bucket sharing across /oauth/register + /oauth/authorize + /oauth/token + /test-error. Either four independent limiter instances from OAUTH_RATE_LIMIT or a separate /test-error profile."
+    status: pending
+  - id: cluster-a-healthz-limiter
+    content: "Phase 2.3 (FIND-004, SHOULD-FIX): add HEALTH_RATE_LIMIT profile (e.g. 600/min/IP) and apply in addHealthEndpoints so /healthz is no longer unbounded at the application layer."
+    status: pending
+  - id: cluster-a-hardening-adr-158
+    content: "Phase 2.4 (FIND-005/006/007/009, HARDENING): ADR-158 amendment recording (a) cold-start counter reset acceptance OR shared-store decision; (b) per-instance counter divergence and explicit profile-units restatement; (c) removal of cosmetic /.well-known/openid-configuration Clerk skip-path; (d) optional GLOBAL_BASELINE_RATE_LIMIT decision."
+    status: pending
+  - id: cluster-a-getkey-resetkey-guard
+    content: "Phase 2.5 (FIND-008, HARDENING): repo-wide static check (lint rule or unit test) asserting .resetKey, .resetAll, .getKey symbols never appear outside rate-limiting/. Lands with brand-preservation work since the brand expansion is what motivates it."
     status: pending
   - id: cluster-b-runGitCommand-lockdown
     content: "Cluster B (Phase 1, TOP PRIORITY): runGitCommand chain lockdown. **COMPLETE** as of 2026-04-28 (Luminous Dancing Quasar, claude-code, claude-opus-4-7-1m, two commits on PR-87). 9b2b2ed7 landed the architectural cure (validateGitSha at trust boundary, named gitShowFileAtSha+gitFetchShallow capabilities, scrubbedGitEnv, defence-in-depth on filePath, symmetric stderr diagnostics). 84571ccf finished the env-scrub (absolute /usr/bin/git, scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive-complexity refactor via attemptShowAfterShallowFetch + readPackageJsonText helpers, removed /tmp/evil S5443 fixtures). All 5 reviewers absorbed (code/security/fred/test/wilma). Sonar hotspot AZ3D3iflrIk5eL0ceU__ closed; new_security_hotspots_reviewed flipped 90.9% → 100% OK; 0 TO_REVIEW. MUST-FIX argv-injection class closed. The cluster's two file-scoped Sonar issues (S5843 + S6644) carry forward to Phase 4 per plan."
@@ -355,12 +373,69 @@ brand-preservation cure, observe post-push, and if #69 remains open, escalate
 to the owner with file:line evidence. Do not dismiss it and do not preserve the
 existing "misclassification" TSDoc as a substitute for the cure.
 
-**Pre-phase adversarial security review**: before implementation, dispatch
-`security-reviewer` to enumerate bypass paths: key extraction defaults under
-`trust proxy = 1`, X-Forwarded-For spoofing on Vercel's edge, header-bypass
-paths, OAuth-proxy double-counting, cold-start counter reset windows, in-memory
-store atomicity, skip-path interactions with `createConditionalClerkMiddleware`,
-and accidental `getKey` / `resetKey` exposure after narrowing.
+**Pre-phase adversarial security review**: completed 2026-04-28T11:54Z by
+`security-reviewer` (claude-opus). Findings landed at
+[`pr-87-cluster-a-security-review.md`](pr-87-cluster-a-security-review.md):
+**2 MUST-FIX, 2 SHOULD-FIX, 4 HARDENING**. The headline (FIND-001/FIND-002):
+`app.set('trust proxy', 1)` (`bootstrap-helpers.ts:246`) plus default
+`keyGenerator` (no override at `rate-limiter-factory.ts:71-80`) means a single
+attacker can rotate `X-Forwarded-For` to bypass *every* rate limiter. The
+CodeQL `js/missing-rate-limiting` alerts point at a real exploitable problem,
+not a recogniser limitation. **Brand preservation alone does not fix this.**
+
+**Phase 2 sequencing (revised post-review)**: Phase 2.0.5 (FIND-001/002
+keyGenerator cure) lands BEFORE the brand-preservation type narrowing. The
+spoofing bypass is exploitable today; the brand work is structural. RED tests
+for the keyGenerator do not depend on the brand chain.
+
+### Phase 2.0.5 — Custom keyGenerator (FIND-001 / FIND-002 cure, MUST-FIX, BEFORE brand work)
+
+Centralise a Vercel-aware `keyGenerator` in
+`apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts`
+so every limiter created by `createDefaultRateLimiterFactory` uses the same
+key extraction:
+
+- Read `req.headers['x-vercel-forwarded-for']` first (single value, set by
+  Vercel's edge from the TCP connection; not client-injectable through
+  `x-forwarded-for` because Vercel writes it server-side). Split on comma,
+  take the first entry (real client).
+- Fall back to `req.ip` only when `x-vercel-forwarded-for` is absent (e.g.
+  non-Vercel local development / smoke tests).
+- Pass the chosen IP through `ipKeyGenerator(ip, 56)` (imported from
+  `express-rate-limit`) for IPv6 subnet collapsing — `express-rate-limit`
+  warns at `node_modules/express-rate-limit/dist/index.mjs:612-616` if a
+  custom `keyGenerator` references `request.ip` without it.
+
+Trust **only** `x-vercel-forwarded-for`. Do **not** consult `X-Real-IP`,
+`Forwarded`, `True-Client-IP`, or `CF-Connecting-IP` — see FIND-003 in the
+review evidence.
+
+Sequence:
+
+1. **RED**: in `rate-limiter-factory.unit.test.ts`, add tests asserting the
+   keyGenerator returns the first comma-split entry of
+   `x-vercel-forwarded-for` and falls back to `req.ip` only when the header
+   is absent. Add an integration-level RED test (one limiter, mock
+   `getKey`-equivalent observation) sending 200 requests with rotating
+   `X-Forwarded-For` and asserting 429 after the configured limit.
+2. **GREEN**: extend `RateLimiterOptions` -> the `rateLimit()` call in
+   `createDefaultRateLimiterFactory` to pass `keyGenerator`. The
+   keyGenerator is exported separately for testability (pure function on
+   `Request -> string`).
+3. **REFACTOR**: update TSDoc on `rate-limiter-factory.ts` to name the
+   Vercel-aware key strategy as the architectural contract; cite
+   ADR-078 + ADR-126 (HMAC pattern for asset routes shows the same trust
+   discipline at boundaries) + the security-review findings file.
+4. **Push and observe**: CodeQL alerts may not change immediately (recogniser
+   is brand-shape-based, see Phase 2.1 below); the closure depends on Phase
+   2.1 brand preservation. The keyGenerator cure is independent and is its
+   own commit.
+
+This phase is a **Cluster A scope expansion** because FIND-001/002 surfaced
+during the pre-phase review and are MUST-FIX. The original Phase 2 brand
+narrowing (now Phase 2.1 below) is structurally unchanged.
+
+### Phase 2.1 — Brand-preservation type narrowing (original Cluster A plan)
 
 **Sequence**:
 

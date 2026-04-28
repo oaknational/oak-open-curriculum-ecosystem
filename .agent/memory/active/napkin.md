@@ -73,8 +73,9 @@ consolidation pass to
   `agentic-engineering-enhancements`; arrival/Cluster A liveness on
   `observability-sentry-otel`); rendered the shared log; opened two claims
   (Cluster A implementation files; future-plan + napkin file set).
-- Findings captured in new strategic plan
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+- Findings captured in new strategic plan at
+  agentic-engineering-enhancements/future/
+  agent-coordination-cli-ergonomics-and-request-correlation.plan.md.
 
 ### Surprise 1 — State moved during stance formation
 
@@ -124,9 +125,9 @@ consolidation pass to
   Decision threads (sidebars/escalations) cover *structured async decisions*
   but feel heavy for a routine cross-thread request.
 - **Why expectation failed**: I conflated the comms-log discovery surface
-  with a routing surface. Per the existing
-  [collaboration-state-domain-model brief](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md),
-  the log is intentionally discovery narrative. The gap is that nothing
+  with a routing surface. Per the existing collaboration-state-domain-model
+  brief at `.agent/plans/agentic-engineering-enhancements/future/`, the log
+  is intentionally discovery narrative. The gap is that nothing
   *between* the lightweight log entry and the heavyweight decision-thread
   exists for "request that needs a response".
 - **Behaviour change**: Captured as the *recommended first promotion slice*
@@ -152,8 +153,9 @@ consolidation pass to
 
 ### Cross-references
 
-- New strategic brief:
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+- New strategic brief at
+  agentic-engineering-enhancements/future/
+  agent-coordination-cli-ergonomics-and-request-correlation.plan.md.
 - Live evidence: comms events `a45d68a4-12ee-4a5c-b7d5-00617e6f85ff`
   (S5443 request) and the arrival liveness event in the same window.
 - Active claims opened by this session: `87fb2797` (Cluster A on

@@ -8,7 +8,17 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
+**Last refreshed**: 2026-04-28T~12:50Z (Choppy Lapping Rudder / claude-code /
+claude-opus-4-7-1m / `d73d0b` — PR-87 Phase 2 pre-phase complete; security
+review found 2 MUST-FIX bypass paths (FIND-001/002 X-Forwarded-For spoofing
+on Vercel); Phase 2 sequencing revised so Phase 2.0.5 keyGenerator cure
+lands BEFORE the brand-preservation type narrowing. Four commits pushed:
+c1677d84, ca7e6e4b, 6a2b4e54, c601d515. Cluster A claim 87fb2797 closes
+at handoff; new strategic future plan added for agent coordination CLI
+ergonomics. Owner direction: move Phase 2 implementation to a fresh
+session.)
+
+**Incremental refresh**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
 `019dd3` — owner-requested deep consolidation pass. Historical continuity
 summaries are archived, PR-87 is homed in-repo, disposition-drift doctrine is
 graduated to PDR-018, and principles / collaboration-state fitness pressure is
@@ -42,15 +52,22 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`; current HEAD is `7c589a0a`.
-- Latest landed docs/state bundle is `7c589a0a`: Cloudflare MCP handoff state
-  plus strengthened commit-gate doctrine. Re-check active claims,
-  `commit_queue`, and `git diff --cached --name-status` before the next index
-  action.
-- Fresh Mossy Codex identity-plumbing WIP is present in the worktree under
-  separate claims. It implements `.codex` SessionStart identity context,
-  report-only anonymous identity audit, and doctrine/continuation propagation;
-  preserve it as its own bundle, not part of the Coastal consolidation bundle.
+- Branch: `feat/otel_sentry_enhancements`; current HEAD is `c601d515`
+  (= origin = PR-87 head). Four Choppy Lapping Rudder commits landed and
+  pushed this session: `c1677d84` (Cluster A claim + cross-thread S5443
+  request), `ca7e6e4b` (new agent-coordination-CLI-ergonomics future plan),
+  `6a2b4e54` (γ-execution napkin observations), `c601d515` (owner-staged
+  sweep landing prior-session Codex identity plumbing + adapter repair +
+  coordination state + docs).
+- PR-87 Phase 2 pre-phase security review COMPLETE; findings homed at
+  [`plans/observability/active/pr-87-cluster-a-security-review.md`](../../plans/observability/active/pr-87-cluster-a-security-review.md).
+  2 MUST-FIX (X-Forwarded-For spoofing bypasses every limiter on Vercel),
+  2 SHOULD-FIX (OAuth bucket sharing, /healthz unlimited), 4 HARDENING.
+  Plan §"Phase 2.0.5" inserts the keyGenerator cure BEFORE the brand
+  narrowing per reviewer recommendation.
+- Prior-session Codex identity-plumbing (Mossy) and adapter-repair
+  (Estuarine) work landed via the owner-staged sweep at `c601d515`. No
+  outstanding peer WIP in working tree.
 - Branch-level success criterion remains the full repo-root gate sequence in
   [`.agent/commands/gates.md`](../../commands/gates.md).
 - Branch-primary product thread: `observability-sentry-otel`.
@@ -122,7 +139,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Mooring Atoll / `codex` / `GPT-5` / session-handoff-codex-identity-archive-claim-closeout / 2026-04-28; Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-planning-and-commit-gate-doctrine-handoff / 2026-04-28; Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning-final-handoff / 2026-04-28. |
 
@@ -249,7 +266,19 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-New planning lane from this session:
+**Branch-primary lane (PR-87 Phase 2.0.5, owner-directed move to fresh
+session)**: Open a fresh `observability-sentry-otel` claim covering at
+minimum `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts`
+plus the new `rate-limiter-factory.unit.test.ts`. Then TDD the Vercel-aware
+`keyGenerator` cure per
+[`plans/observability/active/pr-87-architectural-cleanup.plan.md`](../../plans/observability/active/pr-87-architectural-cleanup.plan.md)
+§"Phase 2.0.5". Evidence + bypass-path enumeration at
+[`plans/observability/active/pr-87-cluster-a-security-review.md`](../../plans/observability/active/pr-87-cluster-a-security-review.md).
+The keyGenerator cure lands BEFORE Phase 2.1 (brand-preservation type
+narrowing) per reviewer recommendation; the spoofing bypass is exploitable
+today.
+
+Other lanes:
 
 - **Cloudflare MCP public-beta gate / token economy** — do not start
   implementation from the borrowed Code Mode pattern. First either promote the
@@ -371,6 +400,46 @@ by Mossy Creeping Branch into
 `pnpm practice:fitness:strict-hard` is soft-only again, and no new ADR/PDR,
 entrypoint-drift, or pattern trigger surfaced in this handoff.
 
+Incremental status (2026-04-28T~12:50Z Choppy Lapping Rudder, owner-directed):
+**due — owner-directed move to fresh session.** Owner explicitly invoked
+`/jc-consolidate-docs` after `/jc-session-handoff` so this session's
+graduation candidates and convergence work happen now before the fresh
+session opens. New pending-graduations candidates from this session: see
+register additions below (CLI ergonomics + cross-thread request/response
+correlation + stance-staleness mitigation + protocol-experience pattern).
+
+**Fitness deferral (recorded honestly, not skipped)**: this file is at
+521 lines vs hard limit 500 (4% over hard, well under critical 750)
+after this consolidation's preservation of new pending-graduation entries
+and the Choppy refresh block. Constraint: owner directed move to fresh
+session before further Phase 2 implementation; structural refinement of
+older session-close summaries (top of file, now mostly historical) is
+explicitly deferred to the next consolidate-docs run. Falsifiability: at
+next consolidation, if this file is still ≥hard limit AND no new
+high-value pending-graduations have arrived, the deferral was wrong and
+the older session-close history should archive per `split_strategy`.
+
+**ADR/PDR candidate scan** (per consolidate-docs step 7a): scanned this
+session's content for ADR-shaped or PDR-shaped doctrine. Two candidates
+surfaced and were recorded in the register below rather than promoted:
+
+- **stance-staleness mitigation** — doctrine candidate for
+  `agent-collaboration.md` and the start-right skills. Single-instance
+  evidence; promotion bar is second instance OR owner direction. Not
+  proposed for promotion in this pass.
+- **pre-phase-adversarial-review-expands-cluster-scope** — pattern
+  candidate. Possible second-instance evidence (Wilma's PATH-defence
+  expansion of Phase 1 was structurally similar). Not proposed for
+  promotion in this pass; needs deliberate review of Wilma's expansion
+  as a fellow instance at the next consolidation.
+
+Practice Core review (step 8): no qualifying candidate this pass. The
+two candidates above belong in `agent-collaboration.md` (host directive)
+or as ADR-150 amendments rather than the portable Practice Core. The
+collaboration-state CLI ergonomics candidate is repo-specific tooling,
+not Core-shaped. Practice exchange box (step 10) checked: empty incoming;
+no outgoing substance to home.
+
 ### Pending-Graduations Register
 
 Schema: `captured-date`, `source-surface`, `graduation-target`,
@@ -460,3 +529,31 @@ snapshots.
   2026-04-28. Existing `principles.md` code-design doctrine already owns
   "no adapters, no compatibility layers, no half measures" and "WE DON'T
   HEDGE"; no new ADR/principles amendment is proposed in this pass.
+- 2026-04-28; CLI first-touch friction on the collaboration-state CLI
+  (`--help` self-rejects; dispatch keys undiscoverable; `--platform`
+  redundant when env-derived; claim file-list verbose; no `whoami`); future
+  strategic plan candidate for promotion to `current/` when a second session
+  reports the same friction; trigger: second instance OR owner direction;
+  status: pending. Evidence + plan:
+  agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md.
+- 2026-04-28; cross-thread comms event request/response correlation gap (no
+  `audience`, no `in_response_to`, no TTL/escalation timer; routine
+  cross-thread requests rot silently between the lightweight log and the
+  heavyweight decision-thread); minimal correlation primitive on the comms
+  event schema as the recommended first promotion slice; trigger: second
+  silently-rotted cross-thread request OR owner direction; status: pending.
+  Same plan as above.
+- 2026-04-28; stance-staleness within a single conversation (parallel-agent
+  state moves between forming a stance and reporting it; re-fetch needs to
+  happen at *each commitment*, not only at session-open); doctrine candidate
+  for `agent-collaboration.md` and the start-right skills; trigger: second
+  instance OR owner direction; status: pending. Captured as napkin entry
+  "γ-Execution Coordination-Protocol Observations" Surprise 1.
+- 2026-04-28; PR-87 Phase 2 pre-phase security review surfaced
+  X-Forwarded-For spoofing on Vercel as a MUST-FIX (FIND-001/002) that
+  brand-preservation alone does not fix; pattern candidate
+  `pre-phase-adversarial-review-expands-cluster-scope` (the brand work was
+  the original cure; review surfaced an exploitable bypass requiring a
+  separate keyGenerator cure that lands FIRST); trigger: second cross-session
+  instance OR owner direction; status: pending. Evidence:
+  observability/active/pr-87-cluster-a-security-review.md.
