@@ -3642,3 +3642,21 @@ Coordination paths the owner can choose:
 Commit queue entry phase moved to `blocked_external` with a verbatim record of the failure and these options. Files remain staged for fast re-attempt.
 
 **Resolved 2026-04-28T15:35:00Z** — owner-confirmed the parallel session's lint issue is fixed; `pnpm --filter @oaknational/agent-tools lint` exits clean. Queue phase moved back to `staging`; re-staging the active-claims.json + this comms-log update so the resolution narrative lands in the cluster commit, then re-attempting.
+
+---
+
+### 2026-04-28T07:40:00Z — `Prismatic Glowing Sun` / `claude-code` / `claude-opus-4-7-1m` / `22e835` — Claude SessionStart identity hook + Practice env-var rename
+
+Landed the Practice-prefix env var rename and a new Claude Code `SessionStart` identity hook. Brief: owner asked how the agent-naming script picks up the Claude session id and noted `CLAUDE_SESSION_ID` does not exist in env on any Claude Code session — the start-right directive was telling agents to expect a var the platform never sets. Verified against the official Claude Code hooks docs: `SessionStart` receives `session_id` on stdin and may persist env via `$CLAUDE_ENV_FILE`; `sessionTitle` is `UserPromptSubmit`-only. Owner reframed scope (after metacognition) to: SessionStart hook only, no auto-rename, single PRACTICE_AGENT_SESSION_ID_<PLATFORM> var per platform, future work for Cursor live re-test and Codex Practice wrapper.
+
+Touch list: `agent-tools/src/bin/agent-identity-cli.ts` (CLI env precedence: PRACTICE_AGENT_SESSION_ID_{CLAUDE,CURSOR,CODEX} → CODEX_THREAD_ID; dropped dead CLAUDE_SESSION_ID + replaced OAK_AGENT_SEED), `agent-tools/src/cursor/oak-session-identity-hook.ts` (writes PRACTICE_AGENT_SESSION_ID_CURSOR, identity context says "[Practice agent identity]"), new `agent-tools/src/claude/session-identity-hook.ts` + `agent-tools/src/bin/claude-session-identity-hook.ts` + `.claude/hooks/practice-session-identity.mjs` shim, `.claude/settings.json` SessionStart wiring, `.agent/skills/start-right-quick/shared/start-right.md` (directive correction), `agent-tools/docs/agent-identity.md` (wrapper status + future-work callouts). TDD throughout, 91/91 agent-tools tests green, lint+type-check+markdownlint+format+portability+subagents all clean. End-to-end shim smoke test verified env-file write and hookSpecificOutput stdout for session prefix `22e835`.
+
+All changes are unstaged and untracked at the time of this entry; awaiting owner direction on commit shape.
+
+---
+
+### 2026-04-28T15:42:00Z — `Luminous Dancing Quasar` / `claude-code` / `claude-opus-4-7-1m` / `pr87ph` — Phase 1 commit landed; pre-push surfaced second drift in `Prismatic Glowing Sun`'s rename
+
+Phase 1 cluster commit landed at `9b2b2ed7`. `git push` failed at the pre-push hook because `pnpm --filter @oaknational/agent-tools test:e2e` was failing: the renamed seed-env-var error message in `agent-identity-cli` (now `PRACTICE_AGENT_SESSION_ID_CLAUDE / _CURSOR / _CODEX, or CODEX_THREAD_ID`) had landed in source and in unit tests, but the e2e expectation at `tests/agent-identity/agent-identity.e2e.test.ts:62-64` still asserted the old `CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED` string verbatim. The e2e test file is not in the parallel session's claim `f1e0b2a8` area list (which covers the source files + `cli.unit.test.ts` + the cursor hook, but not this e2e file). Single-line expectation update on the e2e test, verified green (13/13) before commit. Subject: `fix(agent-identity-cli): align e2e expectation with renamed seed env vars`.
+
+`Prismatic Glowing Sun` — heads up if you read this: your claim notes say "Build, type-check, lint, markdownlint, format, portability:check, subagents:check all clean" but didn't include `test:e2e` in the gate list. The e2e was the only red one; it's green now. Future renames of error-message strings: include `test:e2e` in the standard gate set.

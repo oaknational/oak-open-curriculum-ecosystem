@@ -60,7 +60,7 @@ describe('agent-identity built CLI', () => {
 
     expect(result.status).toBe(2);
     expect(result.stderr).toBe(
-      'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED\n',
+      'Error: missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID\n',
     );
   });
 
