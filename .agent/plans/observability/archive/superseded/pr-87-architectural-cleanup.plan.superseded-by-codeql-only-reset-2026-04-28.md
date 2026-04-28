@@ -1,4 +1,54 @@
 ---
+name: PR-87 Architectural Cleanup (SUPERSEDED 2026-04-28)
+overview: >
+  SUPERSEDED 2026-04-28 by `.agent/plans/observability/current/pr-87-codeql-alerts.plan.md`.
+  Retained here as evidence of approach; do not execute against this body.
+status: superseded
+last_updated: 2026-04-28T15:25Z
+superseded_by: .agent/plans/observability/current/pr-87-codeql-alerts.plan.md
+superseded_at: 2026-04-28T15:25Z
+superseded_reason: >
+  Plan accumulated re-grounding meta-content (Session 1, 2, 2.0, 2.0.5
+  histories; verification tables of stale assertions; re-classification
+  notices) faster than it delivered closures. 12-phase scope mixed CodeQL
+  alerts (binary close/open) with Sonar hotspots, violations, duplications,
+  and 16 micro-clusters — different mechanics, mixed velocity, recurring
+  re-grounding overhead per session. Phase 1 (vercel-ignore) and Phase 2.0.5
+  (keyGenerator) committed but did not move CI gates. Owner direction:
+  archive, restart with one-page CodeQL-only plan, defer Sonar to a
+  separate plan after CodeQL closes.
+lesson: >
+  When a remediation plan grows multiple session-history sections,
+  re-grounding tables, and re-classification amendments while gates remain
+  red, the plan body has become an artefact rather than an execution
+  document. Cure: scope-locked one-page table, one signal class per plan,
+  no inline session histories. See distilled.md "Plan-as-artefact gravity"
+  for the graduated form of this lesson.
+ported_evidence:
+  - .agent/plans/observability/active/pr-87-cluster-a-security-review.md
+    (security re-review of FIND-001..009; methodology lesson on verifying
+    load-bearing platform claims). Retained in active/.
+  - Phase 1 vercel-ignore commits (9b2b2ed7, 84571ccf, 5d6622d0) — landed.
+  - Phase 2.0.5 keyGenerator commits (a7ce1a39, d3e86fd1) — landed; cure is
+    HARDENING (configuration-drift insurance) not exploit closure.
+ported_state:
+  CodeQL_open_alerts_at_supersession: 7
+  Sonar_QG_at_supersession: ERROR (mixed conditions; out of scope for new plan)
+---
+
+# Note (2026-04-28T15:25Z)
+
+This file is **superseded**. Do not execute against this body. Use the
+replacement plan at
+[`.agent/plans/observability/current/pr-87-codeql-alerts.plan.md`](../../current/pr-87-codeql-alerts.plan.md).
+
+The original plan body follows verbatim for audit-trail purposes only.
+
+---
+
+## Original frontmatter (preserved verbatim)
+
+```yaml
 name: PR-87 Architectural Cleanup
 overview: >
   Drive PR-87 to green via cluster-by-architectural-root-cause resolution
@@ -12,6 +62,7 @@ overview: >
   fallback disposition.
 status: active
 last_updated: 2026-04-28T14:20Z
+```
 todos:
   - id: phase-0-re-harvest
     content: "Phase 0: Live re-harvest of PR-87 signals (Sonar MCP, CodeQL alerts API, PR comments). Cluster table refresh."

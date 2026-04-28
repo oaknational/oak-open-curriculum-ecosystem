@@ -191,6 +191,21 @@ Disposition-drift doctrine graduated 2026-04-28 to
   Shared preview infra ≠ shared plan ownership.
 - **Dry-run multi-step workflows against accumulated state** before
   committing to the recipe; produces *proceed* or *stage differently*.
+- **Plan-as-artefact gravity**: when a remediation plan grows multiple
+  session-history sections, re-grounding tables, and re-classification
+  amendments while the gates it targets remain red, the plan body has
+  become an artefact rather than an execution document. Symptoms:
+  inline "Session 1 / Session 2 / Session 2.0.5" prose; verification
+  tables of stale assertions; a 12-phase scope mixing different signal
+  classes (e.g. CodeQL + Sonar + duplications + micro-clusters);
+  per-session re-grounding cost exceeding per-session closure rate.
+  Cure: archive the plan body (preserve as `*.superseded-by-*.md`),
+  port load-bearing evidence files (security reviews, sink-trace
+  findings) but not prose, write a one-page replacement scoped to a
+  single signal class with one row per finding and a structural cure
+  (or owner-authorised dismissal-with-evidence) per row, no inline
+  history. Witnessed on `pr-87-architectural-cleanup.plan.md` →
+  superseded 2026-04-28 by `pr-87-codeql-alerts.plan.md`.
 
 Non-planning process entries graduated on 2026-04-24 to:
 `validate-full-target-estate`, `read-diagnostic-artefacts-in-full`,

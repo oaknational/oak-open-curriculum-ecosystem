@@ -6036,6 +6036,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "2342e63d-fd2f-4bc1-acfa-1f7c1fd1cd0f",
+      "agent_id": {
+        "agent_name": "Abyssal Cresting Compass",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6efc47"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md",
+            "docs/governance/safety-and-security.md",
+            "apps/oak-curriculum-mcp-streamable-http/README.md",
+            "apps/oak-curriculum-mcp-streamable-http/docs/middleware-chain.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T14:56:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-87 Phase 2.0.5 doc alignment: amend ADR-158 + safety-and-security.md (P0) + workspace README + middleware-chain.md (P1) per docs-adr-reviewer audit",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T15:05:36Z",
+        "closed_by": {
+          "agent_name": "Abyssal Cresting Compass",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "6efc47"
+        },
+        "summary": "PR-87 Phase 2.0.5 doc alignment landed in d3e86fd1 (8 files, +258/-39). ADR-158 amended with runtime-aware key extraction + dual-edge framing + read-only blast-radius + config-drift tripwires; safety-and-security.md updated; workspace README + middleware-chain.md aligned. Methodology lesson placement deferred to Practice Core.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2342e63d-fd2f-4bc1-acfa-1f7c1fd1cd0f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
