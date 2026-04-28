@@ -60,3 +60,39 @@ Closed main claim a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b after the write-safety im
 ## 2026-04-28T10:27:32Z — `Woodland Creeping Petal` / `codex` / `GPT-5` / `019dd3` — Final commit for write-safety handoff state
 
 Preparing final handoff/consolidation commit for collaboration-state write safety. This lands repo-continuity, thread record, plan closeout evidence, napkin capture, active/closed claim lifecycle state, and generated comms read model while leaving unrelated security planning WIP unstaged.
+
+---
+
+## 2026-04-28T10:28:49Z — `Glassy Ebbing Reef` / `codex` / `GPT-5` / `019dd3` — Cloudflare MCP security and token-economy planning
+
+Opened claim c78e6407-49b5-478b-9f42-19b41d62b7d2 to add a security-focused Cloudflare MCP future plan and map Cloudflare Code Mode token-reduction patterns onto Oak's generated MCP tool surface. Planned edits are limited to security-and-privacy and sdk-and-mcp-enhancements planning/index docs plus the high-level plan reference.
+
+---
+
+## 2026-04-28T10:32:43Z — `Glassy Ebbing Reef` / `codex` / `GPT-5` / `019dd3` — Cloudflare MCP planning closeout
+
+Closed claim c78e6407-49b5-478b-9f42-19b41d62b7d2 after adding the Cloudflare MCP public-beta security gate future brief and the MCP tool token-economy/progressive-discovery future brief. Edited docs passed markdownlint, Prettier, git diff --check, and collaboration-state check.
+
+---
+
+## 2026-04-28T10:58:36Z — `Glassy Ebbing Reef` / `codex` / `GPT-5` / `019dd3` — MCP use-case hierarchy planning closeout
+
+Closed claim d8adedf0-5337-4cca-a28e-dae0fead7711 after adding the owner-clarified use-case hierarchy: Oak MCP server primarily supports teachers/end users exploring and using curriculum; engineering/product-builder workflows are important but secondary, with the SDK as the more direct surface. Edited docs passed markdownlint, Prettier, and git diff --check.
+
+---
+
+## 2026-04-28T11:00:00Z — `Verdant Flowering Blossom` / `codex` / `GPT-5` / `019dd3` — Lightweight handoff for shared-state policy correction
+
+Opened claim 27dd70a6-9803-4953-9983-419f94a5db1b to run a lightweight session handoff after the owner clarified that shared-state files may be swept into commits. Scope is limited to stale continuity wording and generated collaboration state; Glassy planning WIP remains untouched.
+
+---
+
+## 2026-04-28T11:01:50Z — `Verdant Flowering Blossom` / `codex` / `GPT-5` / `019dd3` — Lightweight handoff complete
+
+Closed claim 27dd70a6-9803-4953-9983-419f94a5db1b after correcting stale continuity HEAD/closeout wording, refreshing the thread identity row, confirming entry points and collaboration-state checks, and marking deep consolidation not due for this micro-handoff.
+
+---
+
+## 2026-04-28T11:04:27Z — `Verdant Flowering Blossom` / `codex` / `GPT-5` / `019dd3` — Commit window for .agent sweep
+
+Owner clarified that anything under .agent may be swept into commits because these high-traffic shared-state and planning surfaces otherwise get out of hand. Opened short-lived git:index/head claim 062a7b5e-9373-47eb-98e1-e63149e5a149 to commit the current .agent residue while leaving non-.agent files untouched.

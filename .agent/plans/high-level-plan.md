@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-04-16
+last_updated: 2026-04-28
 ---
 
 # High-Level Plan
@@ -42,6 +42,7 @@ Milestone 2: Open Public Alpha                   🔄 NEXT
 
 
 Milestone 3: Public Beta                         📋 PLANNED
+  → BLOCKED: Cloudflare MCP security gate must be satisfied first
   → Production Clerk integration (social providers, public sign-up)
   → Operational hardening on top of the observability foundation
   → KG alignment (if not completed in M2)
@@ -57,7 +58,7 @@ Milestone 3: Public Beta                         📋 PLANNED
 | Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
 | Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
 | Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment, Sentry+OTel foundation |
-| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Prod Clerk, alerting/ops hardening, KG alignment, exemplar UI |
+| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Cloudflare MCP security gate, Prod Clerk, alerting/ops hardening, KG alignment, exemplar UI |
 
 ---
 
@@ -224,14 +225,35 @@ Graph-augmented curriculum navigation begins to surface.
 debt. Strengthen reliability, observability, and developer experience so
 the service is ready for sustained daily use.
 
-**User impact**: More reliable and maintainable platform. Quality
-improvements compound: architectural enforcement prevents regression,
-observability enables rapid diagnosis, and extension surfaces broaden
-platform reach.
+**User impact**: The primary MCP-server impact is for end users such as
+teachers: safer, more reliable curriculum exploration and use inside AI
+assistant hosts. Supporting engineers who build ed-tech products is also
+important, but secondary for the MCP server; the SDK remains the surface that
+speaks most directly to direct API integration and product-development
+workflows. Quality improvements compound: architectural enforcement prevents
+regression, observability enables rapid diagnosis, and extension surfaces
+broaden platform reach.
 
 **Blocking work**:
 
-1. **Production Clerk integration**
+1. **Cloudflare MCP security gate**
+   - Public beta of the Oak MCP server is blocked until appropriate
+     Cloudflare-side security features for remote/public MCP servers are
+     available to Oak, evaluated against our threat model, and either enabled
+     or explicitly declined with owner-visible evidence.
+   - Source: Cloudflare's 2026-04-14 enterprise MCP reference architecture:
+     <https://blog.cloudflare.com/enterprise-mcp/>
+   - Candidate control families to evaluate before opening public beta:
+     Cloudflare WAF + AI Security for Apps for inbound MCP traffic inspection;
+     Cloudflare Gateway / DLP for shadow MCP detection and policy enforcement;
+     Cloudflare Access and MCP server portals where authenticated employee or
+     partner access paths require centralised discovery, logging, DLP, and
+     tool-exposure policy.
+   - The security-and-privacy collection owns the executable gate:
+     [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
+   - Strategic gate brief:
+     [cloudflare-mcp-public-beta-security-gate.plan.md](security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md)
+2. **Production Clerk integration**
    - Research complete:
      [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
    - Blocking decision: shared vs independent Clerk instance
@@ -242,7 +264,7 @@ platform reach.
    - Edge rate limiting on OAuth proxy endpoints
      (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) —
      [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
-2. **Operational hardening on top of the observability foundation**
+3. **Operational hardening on top of the observability foundation**
    - Strategic umbrella:
      [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
    - Covers: alerting, quality metrics dashboards, operational verification,
@@ -250,9 +272,9 @@ platform reach.
    - Collection entry point:
      [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
    - Reference implementation patterns exist in `starter-app-spike`
-3. **Knowledge graph alignment** (if not completed in M2)
+4. **Knowledge graph alignment** (if not completed in M2)
    - [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
-4. **Exemplar MCP App UI experience (`user_search` tool)**
+5. **Exemplar MCP App UI experience (`user_search` tool)**
    - New user-facing search tool (`user_search`/`userSearch`) with the same
      capabilities as the existing `search` tool but designed for interactive
      use within Claude Desktop, ChatGPT, and other MCP App hosts
@@ -340,6 +362,11 @@ Strategic architecture remains anchored in:
 - Incorporate EEF Evidence as a user facing feature (JR's demo)
 - Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
 - International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+- Token-efficient MCP tool use: evaluate Cloudflare/Anthropic Code Mode
+  patterns, progressive tool discovery, and result filtering against Oak's
+  teacher-facing curriculum workflows first, with engineering/API workflows as
+  the secondary comparison before the product grows into a much larger tool set —
+  see [mcp-tool-token-economy-and-progressive-discovery.plan.md](sdk-and-mcp-enhancements/future/mcp-tool-token-economy-and-progressive-discovery.plan.md)
 
 ### Practice Capabilities
 

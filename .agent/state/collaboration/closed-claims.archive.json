@@ -4812,6 +4812,187 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "2ba0497f-819c-4b54-a5ed-69a23e16c6bc",
+      "agent_id": {
+        "agent_name": "Woodland Creeping Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:27:32Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit the collaboration-state write-safety handoff and consolidation state.",
+      "notes": "Final lifecycle-state snapshot was staged before opening this git claim to avoid committing this claim/queue into active-claims.json. Unrelated security planning WIP is excluded.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:28:24Z",
+        "closed_by": {
+          "agent_name": "Woodland Creeping Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Committed write-safety handoff and consolidation state as 8d69b8e2.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ba0497f-819c-4b54-a5ed-69a23e16c6bc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c78e6407-49b5-478b-9f42-19b41d62b7d2",
+      "agent_id": {
+        "agent_name": "Glassy Ebbing Reef",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "cloudflare-mcp-security-and-token-economy-plans",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+            ".agent/plans/security-and-privacy/README.md",
+            ".agent/plans/security-and-privacy/roadmap.md",
+            ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md",
+            ".agent/plans/sdk-and-mcp-enhancements/future/mcp-tool-token-economy-and-progressive-discovery.plan.md",
+            ".agent/plans/sdk-and-mcp-enhancements/future/README.md",
+            ".agent/plans/sdk-and-mcp-enhancements/README.md",
+            ".agent/plans/sdk-and-mcp-enhancements/roadmap.md",
+            ".agent/plans/high-level-plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:28:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add Cloudflare MCP security future plan and token-economy research mapped to Oak MCP surfaces.",
+      "notes": "Owner asked for Cloudflare-linked security findings to become a future security plan, plus research on Code Mode-style token reduction patterns.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:32:43Z",
+        "closed_by": {
+          "agent_name": "Glassy Ebbing Reef",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Added Cloudflare MCP public-beta security future brief, token-economy progressive-discovery future brief, and collection/high-level links; validation passed for edited docs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c78e6407-49b5-478b-9f42-19b41d62b7d2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d8adedf0-5337-4cca-a28e-dae0fead7711",
+      "agent_id": {
+        "agent_name": "Glassy Ebbing Reef",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "cloudflare-mcp-security-and-token-economy-plans",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/future/mcp-tool-token-economy-and-progressive-discovery.plan.md",
+            ".agent/plans/high-level-plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:58:01Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify Oak MCP primary teacher/end-user use case and secondary engineering/SDK use case in planning docs.",
+      "notes": "Owner clarified the product hierarchy after the Code Mode token-economy brief.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:58:36Z",
+        "closed_by": {
+          "agent_name": "Glassy Ebbing Reef",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Clarified the MCP server primary teacher/end-user use case and secondary engineering/SDK use case in the token-economy future brief and high-level plan; validation passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d8adedf0-5337-4cca-a28e-dae0fead7711",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "27dd70a6-9803-4953-9983-419f94a5db1b",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:00:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Run lightweight session handoff for Verdant shared-state policy correction and update stale closeout continuity.",
+      "notes": "Active claims empty at open; Glassy planning WIP remains dirty but unclaimed. This handoff will avoid plan files and only touch continuity/shared-state surfaces.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T11:01:50Z",
+        "closed_by": {
+          "agent_name": "Verdant Flowering Blossom",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Lightweight session handoff complete: corrected stale continuity HEAD/closeout wording, refreshed thread identity row, confirmed entry points and collaboration-state checks, and marked deep consolidation not due.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "27dd70a6-9803-4953-9983-419f94a5db1b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

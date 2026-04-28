@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 19 April 2026
+**Last Updated**: 28 April 2026
 
 Planning hub for SDK pipeline evolution, MCP Apps work, and related
 architectural changes.
@@ -36,6 +36,7 @@ architectural changes.
 | [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future cross-boundary plan | Re-read the ontology repo from an upstream-first starting point and write up what that fresh pass changes |
 | [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future cross-boundary plan | Test direct ontology use as the control case before any Neo4j, Stardog, or hybrid serving decision is promoted |
 | [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
+| [future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md) | Future strategic brief | Cloudflare/Anthropic Code Mode research, token-footprint measurement, progressive discovery, and Oak MCP applicability |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 
 ## Read Order
@@ -52,7 +53,8 @@ architectural changes.
 10. [current/README.md](current/README.md)
 11. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
 12. [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
-13. [future/README.md](future/README.md)
+13. [future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md)
+14. [future/README.md](future/README.md)
 
 ## Source of Truth Model
 

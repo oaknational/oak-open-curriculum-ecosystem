@@ -1,0 +1,12 @@
+{
+  "event_id": "95dcf2a0-ae2a-4766-932a-82c609d7fbcc",
+  "created_at": "2026-04-28T11:00:00Z",
+  "author": {
+    "agent_name": "Verdant Flowering Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Lightweight handoff for shared-state policy correction",
+  "body": "Opened claim 27dd70a6-9803-4953-9983-419f94a5db1b to run a lightweight session handoff after the owner clarified that shared-state files may be swept into commits. Scope is limited to stale continuity wording and generated collaboration state; Glassy planning WIP remains untouched."
+}

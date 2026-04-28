@@ -1,7 +1,7 @@
 # Security and Privacy Roadmap
 
 **Status**: 📋 Phase 0 ready to start
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-04-28
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -27,7 +27,8 @@ Authoritative phase artefacts:
 2. [phase-1-security-claim-contract.md](future/phase-1-security-claim-contract.md)
 3. [phase-2-evidence-merge-readiness-rules.md](future/phase-2-evidence-merge-readiness-rules.md)
 4. [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
-5. [deferred-controls-register.md](deferred-controls-register.md)
+5. [cloudflare-mcp-public-beta-security-gate.plan.md](future/cloudflare-mcp-public-beta-security-gate.plan.md)
+6. [deferred-controls-register.md](deferred-controls-register.md)
 
 ---
 
@@ -57,6 +58,7 @@ This roadmap aligns to:
 
 - **Milestone 1**: establish security confidence for public-alpha operations.
 - **Milestone 2**: harden and extend controls based on observed risks.
+- **Milestone 3**: public beta is blocked on a Cloudflare MCP security gate.
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -82,6 +84,11 @@ competing global policy layer.
 - Collection scaffolding now present (roadmap, active plans, evidence template,
   documentation sync log).
 - No non-planning security hardening implementation has started yet.
+- Public beta is not releasable until appropriate Cloudflare security features
+  for public/remote MCP operation are available, evaluated, and either enabled
+  or explicitly declined with owner-visible evidence. This gate was added after
+  reviewing Cloudflare's 2026-04-14 enterprise MCP architecture post:
+  <https://blog.cloudflare.com/enterprise-mcp/>
 
 ---
 
@@ -92,6 +99,7 @@ Phase 0: Foundation and baseline alignment          📋 PLANNED
 Phase 1: Hallucination guarding rollout             📋 PLANNED
 Phase 2: Evidence-based claims rollout              📋 PLANNED
 Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
+Cloudflare MCP public-beta security gate            ⛔ M3 BLOCKER
 ```
 
 ---
@@ -145,6 +153,28 @@ Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
   - deterministic validation commands are mapped per control class
   - implementation cut list is ready for non-planning execution work
 - Dependencies: Phase 2 complete
+
+### Public-Beta Gate — Cloudflare MCP Security Features
+
+- Active planning surface:
+  [cloudflare-mcp-public-beta-security-gate.plan.md](future/cloudflare-mcp-public-beta-security-gate.plan.md)
+- Baseline-control cross-reference:
+  [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
+- Done when:
+  - Cloudflare WAF + AI Security for Apps have been evaluated for inbound MCP
+    traffic inspection, including prompt-injection and sensitive-data handling
+  - Cloudflare Gateway / DLP have been evaluated for shadow MCP detection and
+    policy enforcement
+  - Cloudflare Access and MCP server portals have been evaluated for any Oak
+    employee, partner, or authenticated portal access paths that need centralised
+    discovery, logging, DLP, and tool-exposure policy
+  - each Cloudflare control is recorded as enabled, not yet available, not
+    applicable, or explicitly declined with evidence and owner-visible risk
+    classification
+  - Practice deltas for vendor-control disposition, governed MCP capability
+    platforms, shadow MCP, and MCP setup supply-chain rules have an owner
+- Dependencies: Cloudflare feature availability, Phase 2 evidence contract, and
+  Phase 3 baseline-control mapping
 
 ---
 
