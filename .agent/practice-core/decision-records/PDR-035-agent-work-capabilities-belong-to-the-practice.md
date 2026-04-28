@@ -36,6 +36,11 @@ rediscover. Treating the implementation as the owner of the concept
 would make the Practice less portable and would strand reusable
 governance in phenotype surfaces.
 
+The Codex session-identity slice is a concrete example: a repo may implement
+session-start context through Codex hooks, derive names in TypeScript, and
+store claims in host-local JSON, but the reusable capability is still Practice
+identity and coordination doctrine.
+
 ## Decision
 
 Agent-work capabilities are Practice substance by default.
@@ -64,6 +69,13 @@ Default classification:
 3. If the boundary is uncertain, preserve the concept as a Practice
    candidate and narrow only the implementation detail to the host.
 
+For session identity, the portable capability is the full identity block and
+its lifecycle: derive or obtain it at session start, use the same block for
+thread registration and shared-state writes, preserve additive history, and
+audit anonymous or stale records before repair. Hook files, title/statusline
+text, CLI binaries, and state-file schemas are host phenotype unless and until
+their concepts are deliberately promoted.
+
 ## Rationale
 
 The reusable unit is the agent-work behaviour, not the language or
@@ -91,6 +103,9 @@ adapter over a portable behavioural contract.
   portable concept.
 - Local tools and schemas should cite or clearly reflect the Practice
   decision they implement.
+- Platform-specific hooks are acceptable implementation aids, but they should
+  stay thin and fail soft unless the Practice has separately accepted a hard
+  enforcement point.
 - Local plans and state records remain execution and evidence
   surfaces. Settled doctrine in them must be graduated into Practice
   homes or host phenotype ADRs, depending on scope.

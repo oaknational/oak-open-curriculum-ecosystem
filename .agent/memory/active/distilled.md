@@ -80,13 +80,18 @@ when citing an ADR or PDR by number, verify the filename and the
 substance against the live decision-record file rather than
 inheriting plan-body shorthand.
 
-Shared-state files are sweep-up surfaces, not commit blockers. Changes to
-`active-claims.json`, closed-claim archives, shared communication logs,
-conversation files, napkin, and distilled memory may be included in another
-agent's governance/docs commit when that avoids blocking useful work. Keep
-repo-functionality commits pathspec-clean; allow shared state to travel with
-the closeout that made it current. When editing hot shared JSON manually,
-prefer surgical, parser-backed edits over full-file rewrites.
+Shared-state files are read/write collaboration surfaces, not commit blockers
+and not read-only under active overlap. Changes to `active-claims.json`,
+closed-claim archives, shared communication logs, conversation files, napkin,
+distilled memory, and thread records may be included in another agent's
+governance/docs commit when that avoids blocking useful work. When a handoff or
+coordination update needs these files, read the current state and write the
+update; use the commit queue / `git:index/head` window to serialize the commit
+and make the overlap visible. Active claims on shared-state docs are
+coordination signals, not no-write locks. Keep repo-functionality commits
+pathspec-clean; allow shared state to travel with the closeout that made it
+current. When editing hot shared JSON manually, prefer surgical, parser-backed
+edits or transaction helpers over full-file rewrites.
 
 When an apparently orphaned active claim is found, archive it only through a
 deliberate governance pass or owner-forced close. If another session is
@@ -147,57 +152,8 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
-### Drift recurs while authoring the enforcement of the principle it violates
-
-Observing a drift pattern in a napkin is not immunity from it.
-The accommodation gravity intensifies as session context grows;
-the protective practice must intensify in step, not relax.
-Documented across two same-day napkin entries (Vining Bending
-Root morning, Pelagic Flowing Dock afternoon, both
-[`napkin.md`](napkin.md) under 2026-04-27): the morning entry
-named a "disposition-drift" pattern with four trigger words; the
-afternoon entry IS the pattern, recurring three times in the
-same session, this time while authoring the rule that bans it.
-
-Trigger-word vocabulary expanded:
-
-- Original four (stylistic, false-positive, out of scope, owner
-  direction needed without analysis).
-- New addition: **convention / language idiom / well-known name
-  / canonical TS idiom** — common-pattern justifications are
-  accommodations dressed as principles. The fix is to rename the
-  variable or restructure the code, never to exempt the rule.
-- New addition: **"all done", "all pushed", "all clean"** —
-  totalising state assertions without verification. The
-  remediation: state assertions in documentation MUST be preceded
-  by the verification command that produced them
-  (`git status` before "branch is N ahead";
-  `pnpm practice:fitness` before "fitness is green"). Without the
-  verification, the assertion is conjecture in declarative clothes.
-
-Operational additions:
-
-- **Rule-writing is a high-vulnerability activity.** When
-  authoring an enforcement rule, the friction the rule causes IS
-  the rule's value. Resist softening. Inconvenient downstream
-  work is the principle paying back; that's the contract.
-- **Narrate the downstream cures aloud BEFORE writing the rule
-  body.** Naming each inconvenient archetype-cure inoculates
-  against silently softening the rule body.
-- **Owner corrections are evidence of broader drift.** A catch on
-  one line implies the surrounding work is drifting. After a
-  correction, audit recent work for the same shape; don't just
-  patch the named site.
-- **Phase-boundary re-read of `principles.md` must be triggered,
-  not remembered.** State aloud "phase boundary — re-reading
-  principles.md," and DO it. Aspirational discipline failed today.
-- **Parallel-agent dispatch under drift multiplies drift.** Agents
-  inherit the dispatcher's framing. Hold work serially when own
-  drift is active.
-
-Pending graduation to a PDR amendment or new doctrine line at
-next consolidation pass; this distilled entry is the live
-description until then.
+Disposition-drift doctrine graduated 2026-04-28 to
+[PDR-018 §Disposition drift at phase boundaries][pdr-018].
 
 - **Learning before fitness**: capture, distil, graduate, and write the
   signal fully even when the destination file is near or over a fitness
@@ -268,6 +224,7 @@ Build-system entries graduated on 2026-04-24 to
 [adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
 [adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
 [pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
+[pdr-018]: ../../practice-core/decision-records/PDR-018-planning-discipline.md#disposition-drift-at-phase-boundaries-2026-04-28-amendment
 [pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log
 [pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md#amendment-log
 [pdr-033]: ../../practice-core/decision-records/PDR-033-vendor-doc-review-for-unknown-unknowns.md

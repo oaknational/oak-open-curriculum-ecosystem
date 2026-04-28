@@ -6,11 +6,10 @@ overview: >
   not work items. Every cluster is evaluated against four owner-authored
   architectural lenses; each disposition re-derives from principles.md at
   the site. Supersedes pr-87-quality-finding-resolution.plan.md. Re-grounded
-  execution scheduling lives at /Users/jim/.claude/plans/composed-petting-hejlsberg.md
-  (Tidal Rolling Lighthouse, 2026-04-28); that plan owns 12-phase
-  sequencing, fresh-evidence verification, and the absolute prohibition on
-  check disables / `accept` / `false_positive` dispositions across all
-  remaining clusters.
+  12-phase execution sequencing, §Stance non-negotiables, and per-phase
+  verification gates are inlined below. Supersedes any prior plan body that
+  allowed dismissal / accept / false_positive / cpd-exclusion language as a
+  fallback disposition.
 status: active
 last_updated: 2026-04-28
 todos:
@@ -24,8 +23,8 @@ todos:
     content: "Phase 2 (Session 2 18:21Z): Re-derive verified live state, replace stale plan-body assertions, probe Cluster Q sink. Decisions 1B+2A+3A confirmed."
     status: in_progress
   - id: cluster-q-host-validation
-    content: "Cluster Q (NEW): host-validation-error regex anchoring (5 CodeQL alerts #82-86 + 1 Sonar hotspot). Phase 0.5 sink probe complete: production regex IS anchored. Disposition: dismiss-with-rationale all 5 + Sonar `accept` on hotspot. No code changes."
-    status: pending
+    content: "Cluster Q (complete): host-validation-error regex anchoring (5 CodeQL alerts #82-86 + 1 Sonar hotspot). Phase 0.5 sink probe proved the production regex is anchored; fixture-level true-non-issue dispositions landed with no production code changes."
+    status: completed
   - id: phase-1b-delete-dormant-rule
     content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
     status: pending
@@ -39,10 +38,10 @@ todos:
     content: "Cluster B (legacy id, kept for cross-reference): scope is fully captured under cluster-b-runGitCommand-lockdown above. Treat the WIP id as authoritative."
     status: completed
   - id: cluster-c-schema-cache
-    content: "Cluster C: Schema-cache write boundary (CodeQL #76, #77). Per-site investigation; likely dismiss-with-rationale citing validate-then-cache + ADR-029."
+    content: "Cluster C: Schema-cache write boundary (CodeQL #76, #77). Introduce SchemaCache typed capability so validated OpenAPIObject, path, size, symlink, tempfile, and rename constraints are encoded at the capability boundary. No dismiss-with-rationale fallback."
     status: pending
   - id: cluster-h-semver
-    content: "Cluster H: Semver pattern complexity (S5843 ×3). Decompose into named sub-patterns OR accept-with-rationale per-site citing semver.org §2 + parity test."
+    content: "Cluster H: Semver pattern complexity (S5843 ×3). Decompose canonical semver pattern into named sub-patterns, remove the unnecessary validate-root-application-version copy, and preserve only the Vercel ignore-command inline exception through parity tests. No accept-with-rationale fallback."
     status: pending
   - id: cluster-i-health-probe
     content: "Cluster I: Health-probe regex modernisation (one regex, 4 findings on line 101)."
@@ -66,10 +65,10 @@ todos:
     content: "Cluster O: Singleton micro-findings (4 isolated, per-site investigation)."
     status: pending
   - id: cluster-d-generated
-    content: "Cluster D: Generated-code duplication (5.4% QG). Per-template generator-inefficiency vs generator-semantic analysis. Owner-authorised cpd.exclusions if generator-semantic."
+    content: "Cluster D: Generated-code duplication (5.4% QG). Read templates, group duplication by source template, and refactor generator templates to emit shared shapes once. No cpd.exclusions, path exclusions, threshold renegotiation, or accept dispositions."
     status: pending
   - id: phase-9-verify
-    content: "Phase 9: Push; re-fetch QG, hotspots, CodeQL alerts; update PR description with cluster resolutions and rationale citations."
+    content: "Phase 12: Push; re-fetch QG, hotspots, CodeQL alerts; update PR description with cluster resolutions and evidence citations."
     status: pending
 ---
 
@@ -130,7 +129,7 @@ Independent verification at session-open found that several Session-1 status ass
 Decisions on the three forks named by the assumptions-reviewer:
 
 1. **Decision 1B** — delete the dormant `no-problem-hiding-patterns` rule cleanly. Open a follow-up plan at `.agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md` to re-author enforcement under clean-conditions authorship later. The principle in `principles.md` stays; the violations remain in the codebase as a known remediation backlog addressed by the follow-up plan.
-2. **Decision 2A** — execute the full 11-cluster plan on PR-87 (Q + A + B + C + D + H + I + J + K + L + M + N + O). Holistic cleanup; PR-87 ships with `new_violations=0`, `new_security_hotspots_reviewed=100%`, and 0 OPEN CodeQL alerts (or each remaining alert dismissed-with-rationale).
+2. **Decision 2A** — execute the full 12-phase plan on PR-87 (Q + A + B + C + D + H + I + J + K + L + M + N + O). Holistic cleanup; PR-87 ships with `new_violations=0`, `new_security_hotspots_reviewed=100%`, and 0 OPEN CodeQL alerts unless a true non-issue has reproducible evidence or an owner-escalated blocker remains open with file:line evidence.
 3. **Decision 3A** — Cluster Q first via Phase 0.5 sink probe.
 
 ### Phase 0.5 sink-probe outcome — Cluster Q is fixture-level dismiss-with-rationale
@@ -170,6 +169,38 @@ The previous session attempted to drive these gates green via per-rule dispositi
 The new direction, demonstrated through four unstaged owner edits on the working tree, is that **findings are diagnostic signals, not work items**. Every signal is to be evaluated as *does this reveal a missing architectural constraint, or a structural bridge that shouldn't exist?*. Resolution must be a structural change that drops the finding count holistically and improves the codebase irrespective of the gate. Suppression, multicriteria-ignore, and per-rule disposition tables are forbidden (`principles.md` "NEVER disable any quality gates"; `feedback_never_ignore_signals` memory; `replace-dont-bridge` rule).
 
 **Outcome target**: PR-87 green via disciplined architectural fixes that drive holistic quality up.
+
+## Stance: long-term architectural excellence, no check disables
+
+This plan is anchored on three non-negotiables:
+
+1. **We are fully responsible for every line of code in this repository,
+   including generated code.** Generated artefacts are not exempt from
+   architectural standards; if a generator emits duplicated or non-compliant
+   code, the generator is the work item.
+2. **We do not disable checks.** Not at config level (`sonar-project.properties`
+   exclusions, `eslint-disable`, ignore-files, `cpd.exclusions`, multicriteria
+   blocks), and not at issue level via Sonar `accept` or CodeQL
+   `false_positive` / `won't fix` dismissals that exist to make a finding go
+   away. The only legitimate dismissal is one that records a true non-issue
+   with reproducible evidence; Cluster Q met that bar because the production
+   regex sink is anchored. That bar does not generalise to the remaining work.
+3. **For every cluster, ask what long-term architectural excellence looks like
+   at this site, and what, if anything, is stopping us achieving it.** If
+   something blocks the cure, the blocker is the work item and is surfaced to
+   the owner with evidence. We never present disable / accept / dismiss as a
+   fallback option.
+
+If a phase appears to offer optionality between an architectural cure and a
+check-side disposition, that is a drafting failure to correct, not a design
+choice.
+
+Drift-trigger vocabulary that forces re-derivation at the site: "stylistic",
+"false-positive", "out of scope", "convention", "language idiom",
+"well-known name", "canonical TS idiom", "all done", "all pushed",
+"all clean", "per the brief", "per the handoff", "per the prior session",
+"fall back to", "if recognition does not propagate", "the TSDoc already
+explains it", and "post-PR consolidation".
 
 ## The owner's architectural lens (load-bearing)
 
@@ -277,34 +308,88 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **ADR alignment**: `replace-dont-bridge` rule.
 
-### Cluster A: DI-opacity on route registration (5 CodeQL alerts)
+### Cluster A: rate-limit type narrowing through RateLimitRequestHandler (5 CodeQL alerts)
 
-**Findings**: CodeQL #69, #70, #71, #72, #81.
+**Findings**: CodeQL #69, #70, #71, #72, #81 (all rule
+`js/missing-rate-limiting`).
 
-**Architectural shape**: Express route handlers registered inside factory functions where the rate-limit middleware is passed as a structurally-typed `RequestHandler` parameter. CodeQL's static analysis can't trace the limiter's lineage through the DI seam, so it flags every route-registration site as missing rate-limit middleware. The dismissal-with-rationale path treats the symptom; the architectural cure is to make the limiter's presence *legible to static analysis* — either by surface shape (a `withRateLimit(limiter, handler)` wrapper at the registration site, where the relationship is structurally apparent) or by route-factory shape (a `createRateLimitedRoute({ limiter, method, path, handler })` helper that holds the contract internally).
+**Architectural intent**: the type system preserves `RateLimitRequestHandler`
+(the brand from `express-rate-limit`'s public API: `RequestHandler & { resetKey,
+getKey, resetAll? }`) end-to-end: factory return type, DI parameter types, and
+registration-site argument types. No widening to `RequestHandler` anywhere on
+the path from `rateLimit()` to `app.post(...)`.
 
-**Sink-trace findings (Session 2, Opalescent Gliding Prism)**:
+This is the cure for the owner-named problem: making rate limiting visible to
+analysis. A future route-registration registry may be valuable, but it is a
+different architectural question; PR-87's current cure is brand preservation.
 
-- The widening from `RateLimitRequestHandler` (the type `express-rate-limit`'s `rateLimit()` returns) to `RequestHandler` happens at `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts:73-80`: `createDefaultRateLimiterFactory` returns `(options) => RequestHandler`, dropping the rate-limiter type signal at the factory boundary. The widening is inherited by `RateLimiterFactory` (line 44).
-- The test fake at `test-helpers/rate-limiter-fakes.ts:33-39` returns a plain `(req, res, next) => next()` typed as `RequestHandler` — it does not satisfy the `RateLimitRequestHandler` interface (missing `getKey`, `resetKey`, etc.).
-- CodeQL's `js/missing-rate-limiting` rule recognises specific rate-limiter packages including `express-rate-limit`. Recognition would propagate IF the type chain preserves `RateLimitRequestHandler` from factory to registration site.
-- A simple curry wrapper (`withRateLimit(limiter, handler)` returning `[limiter, handler]`) does NOT change the dataflow; CodeQL would see the same `RequestHandler[]` shape. Curry alone is unlikely to be recognised.
-- The genuine structural cure requires narrowing the type chain end-to-end: factory return type → DI parameter types in auth-routes/oauth-proxy-routes/bootstrap-helpers, plus extending the test fake to satisfy the narrowed type (stub `getKey` / `resetKey` etc.). This is a multi-file change touching ~6 files, requiring TDD on the fake and reviewer dispatch on the parameter-type narrowing.
+**Architectural debt to remove**: three production TSDoc blocks currently
+attest that CodeQL cannot trace the limiter through `RequestHandler`-typed
+parameters and that dismissals cite this attestation. Those blocks are
+dismissal-with-rationale architecture and must be replaced by
+brand-preservation TSDoc:
 
-**Owner lens applied**: lens 4 (DI must inject a capability, not raw structural shape). The current `RequestHandler` parameter is too generic — a route-factory caller can pass anything. The seam needs to be a *capability*: "register this handler under this rate-limit policy."
+- `auth-routes.ts:23-29`;
+- `auth-routes.ts:124-135`;
+- `oauth-proxy-routes.ts:41-49`.
 
-**Owner lens applied**: lens 4 (DI must inject a capability, not raw structural shape). The current `RequestHandler` parameter is too generic — a route-factory caller can pass anything. The seam needs to be a *capability*: "register this handler under this rate-limit policy."
+**What is stopping us today** (from Session-2 sink trace, preserved):
 
-**Resolution path** (to be confirmed per-site before code changes):
+- `createDefaultRateLimiterFactory` returns `(options) => RequestHandler` at
+  `rate-limiter-factory.ts:73-80`, dropping the `RateLimitRequestHandler` brand
+  at the factory boundary. The widening is inherited by `RateLimiterFactory`.
+- The widening propagates through `create-rate-limiters.ts`, `auth-routes.ts`,
+  `oauth-proxy-routes.ts`, and into `app/bootstrap-helpers.ts` indirectly via
+  the cross-cutting middleware chain.
+- The test fake at `test-helpers/rate-limiter-fakes.ts:33-39` returns a plain
+  handler and does not satisfy `RateLimitRequestHandler` (`getKey`, `resetKey`,
+  etc.).
+- CodeQL recognises specific rate-limiter packages including
+  `express-rate-limit`; recognition propagates only if the type chain preserves
+  the library type from factory to registration site.
 
-1. Read each flagged site at the file:line. Note the actual signature, the limiter source, and the route's handler.
-2. Sketch a `withRateLimit(limiter, handler)` curry. Verify CodeQL recognises it (CodeQL has a known set of rate-limiter recognisers; check `gh api /repos/.../code-scanning/alerts/N` for what the rule expects).
-3. If `withRateLimit` is recognised, apply at all five sites in one commit (TDD: existing E2E rate-limit tests are the safety net; add an integration test if a site lacks coverage). One commit, one cluster.
-4. If `withRateLimit` is NOT recognised, fall back to a `createRateLimitedRoute` helper or to dismissal-with-rationale citing `b1a4cd79`'s in-code TSDoc evidence — but only after the structural option has been ruled out, not before.
+**Alert #69 is structurally different**: `bootstrap-helpers.ts:151` is
+`app.use(createRequestLogger(...))` inside `setupBaseMiddleware`, not an
+authorising route registration. Default route: proceed with the
+brand-preservation cure, observe post-push, and if #69 remains open, escalate
+to the owner with file:line evidence. Do not dismiss it and do not preserve the
+existing "misclassification" TSDoc as a substitute for the cure.
 
-**Reviewers to dispatch**: `code-reviewer` (gateway), `architecture-reviewer-fred` (DI rule compliance), `architecture-reviewer-wilma` (rate-limit failure modes), `security-reviewer` (auth/limiter boundary), `mcp-reviewer` (MCP route shape), `test-reviewer` (rate-limit test coverage). Run in parallel.
+**Pre-phase adversarial security review**: before implementation, dispatch
+`security-reviewer` to enumerate bypass paths: key extraction defaults under
+`trust proxy = 1`, X-Forwarded-For spoofing on Vercel's edge, header-bypass
+paths, OAuth-proxy double-counting, cold-start counter reset windows, in-memory
+store atomicity, skip-path interactions with `createConditionalClerkMiddleware`,
+and accidental `getKey` / `resetKey` exposure after narrowing.
 
-**ADR alignment**: ADR-024 (DI), ADR-078 (DI for testability), ADR-158 (rate limiting), ADR-154 (separate framework from consumer).
+**Sequence**:
+
+1. RED: add a compile-time brand test with `@ts-expect-error` proving a
+   deliberately widened `(opts) => RequestHandler` factory cannot satisfy
+   `RateLimiterFactory`; add negative tests for each registration callsite that
+   must reject a plain `RequestHandler`.
+2. RED: add or extend fake tests proving the test fake satisfies the brand with
+   observable `getKey` and `resetKey` behaviour.
+3. GREEN: narrow `RateLimiterFactory`, all `RateLimiters` fields, route DI
+   parameters, OAuth proxy options, and any composition-root widening site to
+   `RateLimitRequestHandler`.
+4. GREEN: extend `test-helpers/rate-limiter-fakes.ts` to satisfy the upstream
+   interface. Any brand-construction cast is confined to that test helper and
+   documented inline.
+5. REFACTOR: replace stale TSDoc attestation blocks and grep for obsolete
+   phrasing: `dismissals cite this attestation`, `cannot trace the limiter`,
+   and `static analysis cannot trace`.
+6. Push and verify. CodeQL must close the four route-registration alerts. If
+   #69 remains open, escalate with evidence; alerts stay open until the
+   architectural answer is found.
+
+**Reviewers to dispatch**: `code-reviewer`, `type-reviewer`,
+`architecture-reviewer-fred`, `architecture-reviewer-wilma`, `security-reviewer`
+(pre- and post-implementation), `mcp-reviewer`, and `test-reviewer`.
+
+**ADR alignment**: ADR-024 (DI), ADR-038 (compile-time types), ADR-078 (DI for
+testability), ADR-158 (rate limiting), ADR-154 (separate framework from
+consumer).
 
 ### Cluster B: Generic command-runners with no consumer-visible capability surface
 
@@ -314,14 +399,27 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **Owner lens applied**: lens 3 + lens 4.
 
-**Resolution path** (TDD):
+**Status**: COMPLETE as of 2026-04-28. Phase 1 and Phase 1.1 landed as:
 
-1. RED: write integration tests for `gitShowFileAtSha(sha, path)` and `gitFetchShallow(sha)` in the build-scripts module. Tests inject a fake executor and assert the exact args passed.
-2. GREEN: replace `runGitCommand(args, cwd)` with the two purpose-specific helpers. Update `runVercelIgnoreCommand` DI surface from `executeGitCommand` to `gitShowFileAtSha` + `gitFetchShallow`. Verify the two consumers in `safeReadPreviousVersion` migrate cleanly.
-3. REFACTOR: TSDoc the new capabilities; cite ADR-024 (DI as capability); link the parity test (`semver-parity.test.ts`) for the pre-install constraint.
-4. After the refactor, the hotspot at line 151 may no longer apply (PATH access is no longer in a generic-runner; it's in a purpose-specific helper, evaluated on its own merits). If it still fires, REVIEW with rationale citing the new shape — no suppression.
+- `9b2b2ed7` — architectural cure: `validateGitSha` at the trust boundary,
+  named `gitShowFileAtSha` + `gitFetchShallow` capabilities, scrubbed git env,
+  file-path defence-in-depth, and symmetric stderr diagnostics;
+- `5d6622d0` — surgical fix for parallel-session seed-env rename drift;
+- `84571ccf` — absolute `/usr/bin/git`, no PATH inheritance from scrubbed env,
+  cognitive-complexity refactor, and removal of `/tmp/evil` fixtures.
 
-**Sweep**: search the repo for other generic command-runners with the same shape (`execFileSync`, `execSync`, `spawn` with args-array DI). Each instance is a candidate for the same cure.
+**Outcome on PR-87 head `84571ccf`**: `new_security_hotspots_reviewed` flipped
+90.9% → 100% OK; Sonar hotspot `AZ3D3iflrIk5eL0ceU__` closed via data-flow
+change; 0 TO_REVIEW hotspots; MUST-FIX argv-injection class closed. CodeQL's 7
+open alerts are unchanged and remain Cluster A + Cluster C targets. The script's
+remaining S5843 semver-regex inline copy and S6644 conditional default carry to
+Phase 4 / Phase 10 under the 12-phase sequence.
+
+**Sweep finding**: the owner-mandated sibling generic-runner sweep found
+`agent-tools/src/core/runtime.ts:130` and
+`agent-tools/src/commit-queue/git.ts:16` as architectural-alignment candidates
+with different threat models. They are follow-up candidates, not PR-87 security
+fixes.
 
 **Reviewers**: `code-reviewer`, `architecture-reviewer-fred`, `security-reviewer` (subprocess boundary), `test-reviewer`.
 
@@ -331,11 +429,25 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **Findings**: CodeQL #76, #77 in `packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts:99,106`.
 
-**Architectural shape**: `writeSchemaCacheIfChanged` writes upstream OpenAPI schema bytes to disk during sdk-codegen. CodeQL flags this as `js/http-to-file-access` (network data → file), conservatively assuming the upstream is untrusted. The build-time context is genuinely defence-in-depth — the schema is fetched, validated, then cached — so the architectural answer may be "this is correctly modelled; the static rule's assumption doesn't apply at build time." The owner has reaffirmed (per Briny-session notes, taken here only as data) that the defence-in-depth shape is correct: validate-then-cache.
+**Architectural shape**: `writeSchemaCacheIfChanged` writes upstream OpenAPI
+schema bytes to disk during sdk-codegen. CodeQL flags this as
+`js/http-to-file-access` because network-origin data flows to a file write. The
+right cure is not to explain the existing runtime validation; it is to encode
+the constraints in a capability interface so the write boundary itself is
+architecturally narrow.
 
 **Owner lens applied**: lens 1 (replace, don't bridge — no compatibility shim around the cache; if the validation is the cure, it's already there).
 
-**Resolution path**: this is the cluster most likely to resolve via dismiss-with-rationale rather than refactor — but only after per-site investigation confirms the architectural answer. The dismissal MUST cite (a) the validate-then-cache flow with file:line evidence, (b) the build-time-not-runtime context, (c) ADR-029 (schema is the source of truth; cache is build-time materialisation).
+**Resolution path**: introduce a `SchemaCache` capability that exposes only
+`read(): Promise<OpenAPIObject | null>` and `write(validated:
+OpenAPIObject): Promise<boolean>`. The implementation owns path resolution,
+symlink rejection, size budget, JSON serialisation, tempfile-and-rename
+atomicity, and changed/unchanged detection. Codegen consumes the interface; it
+does not see `cachePath` or `writeFile`. Pre-phase `security-reviewer` probes
+upstream-bytes-to-disk attack scenarios before RED tests fix the contract.
+
+**No dismiss-with-rationale fallback**: if CodeQL remains open, the dataflow is
+still too wide and the remaining widening site is the next work item.
 
 **Reviewers**: `code-reviewer`, `architecture-reviewer-fred`, `security-reviewer`, `type-reviewer`.
 
@@ -345,16 +457,29 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **Findings**: any Sonar issue or duplication block whose path matches `packages/sdks/oak-sdk-codegen/src/types/generated/**` or `packages/sdks/oak-curriculum-sdk/src/types/generated/**`. The 5.4% new-code duplication in the QG is dominated by these files.
 
-**Architectural shape**: generated code; fix MUST be in the generator template, not in the generated output. Per ADR-029 cardinal rule. The 84.7% duplication density on `api-schema-base.ts` and similar files is structural to the codegen — different OpenAPI paths produce similar TypeScript shapes. The duplication is *real* in the file but is *intent* of the generator, not accident of authoring.
+**Architectural shape**: generated code; fix MUST be in the generator template,
+not in the generated output. Per ADR-029, generated artefacts are still our
+responsibility. If the generator emits duplication, the generator is the work
+item.
 
 **Owner lens applied**: lens 2 (single source of truth at codegen time).
 
 **Resolution path**:
 
-1. Per-file: identify the generator that produced it (`code-generation/typegen/...`).
-2. For each duplication block, ask: is this a generator inefficiency (could template emit a shared utility once?) or generator semantics (each path genuinely needs its own shape)?
-3. For generator inefficiency: refactor the template to emit a shared module + per-path re-references. Re-run `pnpm sdk-codegen`. Verify the duplication density drops.
-4. For generator semantics: cluster D becomes a *Sonar exclusion* candidate (Sonar's CPD applied to generated code is a category error). Use Sonar UI / `sonar-project.properties` `sonar.cpd.exclusions` for the generated paths. **This is NOT a "disable a rule" suppression** — it's "tell Sonar that generated code paths are not authored code, which is true." Owner authorisation required before applying any Sonar config change.
+1. Read the `code-generation/typegen/...` templates in full and confirm which
+   template emits each duplicated block.
+2. Pull Sonar duplication blocks and group by source template, not destination
+   file.
+3. Refactor templates to emit shared shapes into one canonical generated module;
+   per-path emissions import or reference that shape instead of re-emitting it.
+4. Re-run `pnpm sdk-codegen`; measure duplication density against the generated
+   output.
+5. If templates prove the shapes are not extractable for structural reasons,
+   update the plan and escalate to the owner with per-block divergence evidence
+   before any commit lands.
+
+**No `cpd.exclusions`, path exclusions, QG-threshold renegotiation, or
+issue-side accept dispositions.** Generated code is our code.
 
 **Reviewers**: `architecture-reviewer-fred` (cardinal rule compliance), `architecture-reviewer-betty` (generator/consumer cohesion), `code-reviewer`.
 
@@ -364,16 +489,30 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **Findings**: `semver.ts:31`, `semver-parity.test.ts:34`, `validate-root-application-version.mjs:21` (and the same pattern at `vercel-ignore.mjs:21` is in Cluster B). Complexity score 32 vs threshold 20.
 
-**Architectural shape**: this is the canonical npm-semver regex from semver.org §2 — its complexity is *intrinsic* to the spec it implements. The pattern is referenced by parity tests; rewriting it to lower the complexity score risks losing semver-spec fidelity. The legitimate options are: (a) decompose the pattern into smaller named sub-patterns composed at use-time (preserves spec fidelity, lowers per-pattern complexity score), (b) accept-with-rationale citing semver.org §2 + the parity test as the genuine source-of-truth gate (a *Sonar exclusion at a single line* is a category-error claim that the pattern is mis-modelled — Sonar's complexity heuristic doesn't model "this is a literal external spec").
+**Architectural shape**: this is the canonical npm-semver regex from
+semver.org §2. The cure is to preserve spec fidelity while decomposing the
+canonical recogniser into named sub-patterns whose composition is parity-tested.
+Only one inline copy has a legitimate reason to remain:
+`vercel-ignore-production-non-release-build.mjs` runs as Vercel's
+`ignoreCommand` before `pnpm install`.
 
 **Owner lens applied**: lens 2 (single source of truth at codegen time — but here the source is the semver spec). Decomposing into sub-patterns is the structural cure if it doesn't introduce drift between the pieces.
 
 **Resolution path**:
 
-1. Read `semver.ts:31` and the parity test. Sketch a decomposition: `MAJOR_MINOR_PATCH = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)/`, `PRERELEASE_SEGMENT = /[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*/`, etc. Compose at use-time. Verify Sonar's complexity drops below 20 per sub-pattern.
-2. If decomposition is clean: apply at canonical (`semver.ts`) AND at the parity test (which must mirror canonical, not the components). The parity test continues to assert byte-equivalence between the composed result and the inline copies — this preserves the anti-drift gate.
-3. If decomposition causes drift risk or readability loss: accept-with-rationale via Sonar MCP, citing semver.org §2 + the parity test as the architectural gate. **Each site individually**, not a multicriteria block. The `accept` action in Sonar MCP is per-issue, with rationale text.
-4. The inlined copies at `validate-root-application-version.mjs` and `vercel-ignore.mjs` follow the canonical's disposition; they're parity-tested.
+1. Read `semver.ts:31`, the parity test, and both inline copies.
+2. Decompose the canonical pattern into named sub-patterns such as
+   `MAJOR_MINOR_PATCH`, `PRERELEASE_SEGMENT`, and `BUILD_METADATA`; verify each
+   named sub-pattern stays below the complexity threshold.
+3. Replace `scripts/validate-root-application-version.mjs`'s inline regex and
+   parse helper with imports from `@oaknational/build-metadata`.
+4. Apply the same decomposition at the only legitimate inline site
+   (`vercel-ignore-production-non-release-build.mjs`).
+5. Update the parity test so it preserves byte-equivalence for the Vercel inline
+   exception only.
+
+**No accept-with-rationale fallback**: if clean decomposition is impossible,
+escalate the specific blocker to the owner with drift evidence.
 
 **Reviewers**: `code-reviewer`, `type-reviewer`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `security-reviewer` (regex security context).
 
@@ -421,7 +560,11 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 **Findings**: `sentry-node/runtime-sdk.ts:140,141`. Adjacent lines.
 
-**Architectural shape**: per-site read; if the negation reads less clearly than the positive form, refactor. If the negation is genuinely more idiomatic (e.g. early-return guard), document the intent and accept. One commit either way.
+**Architectural shape**: per-site read; if the negation reads less clearly than
+the positive form, refactor. If the negation is genuinely more idiomatic (e.g.
+early-return guard), document the intent and escalate the residual signal to the
+owner; do not silence it in Sonar and do not cosmetically refactor only for the
+rule key.
 
 **Reviewers**: `code-reviewer`, `sentry-reviewer` (since this is the Sentry runtime SDK).
 
@@ -445,73 +588,106 @@ Every cluster in this plan is evaluated against these four lenses before any cod
 
 ## Execution sequencing
 
-> **Discipline**: At every cluster boundary, re-read `principles.md` (per the napkin's `feedback_never_ignore_signals` and the drift-pattern lesson). Re-derive disposition from first principles, not from this plan's table — this plan is a *map*, not a disposition table.
+> **Discipline**: at every phase boundary, re-read `principles.md` §"Don't hide
+> problems" and this plan's §Stance. Record the re-derivation in the plan,
+> commit body, or reviewer dispositions. This plan is a map, not a disposition
+> table.
+>
+> **Per-phase verification gate**: every phase ends with the relevant focused
+> tests plus the repo-root gate sequence where the phase touches broad code:
+> `pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`, `pnpm lint:fix`,
+> `pnpm test`, `pnpm test:root-scripts`, `pnpm markdownlint:root`,
+> `pnpm format:root`, one at a time.
+>
+> **Reviewer stop-rule**: launch reviewers after substantive work and before
+> the cluster commit. Every finding is absorbed inline or deferred with written
+> rationale and owner-visible follow-up. Phases 1, 2, and 3 also open with a
+> pre-phase adversarial `security-reviewer` pass.
 
-### Phase 0: Re-grounding and live re-harvest (no code changes)
+### Phase 0: Re-grounding and live re-harvest
 
-Re-pull the live signals (gates may have shifted) and confirm the cluster table:
+Re-pull PR-87 live signals before code changes: GitHub check rollup, human
+review comments, Sonar QG, Sonar issues and hotspots, and CodeQL open alerts.
+Update the cluster table if reality has shifted.
 
-1. `gh pr view 87 --json statusCheckRollup,reviewDecision` — confirm RED gates unchanged.
-2. `gh pr view 87 --comments` and `gh api .../pulls/87/comments --paginate` — capture any new human review comments since 12:45Z.
-3. `mcp__sonarqube__get_project_quality_gate_status` for PR 87 — confirm conditions and values.
-4. `mcp__sonarqube__search_sonar_issues_in_projects` paginated to exhaustion (the 100-issue cap in the prior pull is suspicious).
-5. `mcp__sonarqube__search_security_hotspots` — confirm the one TO_REVIEW.
-6. `gh api /repos/.../code-scanning/alerts?ref=refs/pull/87/head&state=open --paginate` — confirm 7 OPEN.
+### Phase 1: Cluster B — git capability lockdown (DONE)
 
-Update Cluster table if the live state differs. Surface any divergence in chat before continuing.
+Cluster B is complete via `9b2b2ed7`, `5d6622d0`, and `84571ccf`. The remaining
+work in the Vercel script flows into Phase 4 (semver inline copy) and Phase 10
+(conditional default).
 
-### Phase 1: Owner's working-tree edits
+### Phase 2: Cluster A — rate-limit type narrowing
 
-The four unstaged edits are the architectural exemplars. Convert them to commits with the right semantic boundary:
+Run the pre-phase security review, add the negative compile-time brand tests,
+narrow `RateLimiterFactory` and all route DI surfaces to
+`RateLimitRequestHandler`, replace dismissal-style TSDoc, and push to observe
+CodeQL recognition. Alert #69 follows the evidence ladder in Cluster A.
 
-1. `auth-routes.ts` `export deriveSelfOrigin` removal: find the consumer that depends on the bridge; either fix the consumer's import (preferred) or confirm the export is genuinely orphaned. One commit per file with a TSDoc note explaining the lens.
-2. `universal-tools.integration.test.ts` consolidation: keep the consolidation; the TODO comment about `getToolFromToolName` at codegen time becomes a separate work-item linked to the SDK codegen plan (do not solve in this PR — surface the lens, defer the implementation).
-3. `vercel-ignore.mjs` comments: these become the design spec for Cluster B. The comments themselves should land as TSDoc once the refactor is in (or be deleted if the refactor renders them obvious).
+### Phase 3: Cluster C — SchemaCache typed capability
 
-### Phase 2: Cluster A (DI-opacity / rate-limiting) — highest CI value
+Run the pre-phase security review, then replace cache-path / unknown-value
+write calls with a `SchemaCache` capability whose type signature encodes the
+validated `OpenAPIObject` boundary and whose implementation owns file-system
+constraints.
 
-5 of 7 CodeQL OPEN alerts close together via one structural change. Highest gate impact per unit of work, and the most architecturally interesting cluster. Reviewer dispatch in parallel; absorb findings; one cluster commit.
+### Phase 4: Cluster H — semver decomposition and inline-copy removal
 
-### Phase 3: Cluster B (generic command-runner) — owner's named direction
+Decompose the canonical semver recogniser into named sub-patterns, remove the
+unnecessary `validate-root-application-version.mjs` copy, preserve only the
+Vercel pre-install inline exception, and prove parity.
 
-The hotspot resolves and the script gains capability-shaped DI. One TDD cycle: tests for the two helpers first, then the refactor.
+### Phase 5: Clusters I + J — regex modernisations
 
-### Phase 4: Cluster C (schema-cache write) — likely dismiss-with-rationale
+Apply the health-probe and build-output-contract regex migrations with existing
+tests or new focused tests where coverage is missing.
 
-After Cluster A and B's work is in, reviewer dispatch on the cache write site. If reviewers confirm the validate-then-cache shape is the correct architectural answer, dismiss-with-rationale citing the flow. If reviewers identify a cleaner structural shape, refactor.
+### Phase 6: Cluster K — commit-queue micro-sites
 
-### Phase 5: Cluster H (semver pattern complexity) — design decision
+Treat K as three investigations, not a rule sweep: lifecycle shape at
+`commit-queue.ts`, loop mutation correctness in `commit-queue/args.ts`, and
+string transformation semantics in `commit-queue/core.ts`.
 
-Read the canonical `semver.ts:31`. Sketch decomposition. If it preserves spec fidelity and lowers the score, apply at canonical + parity test + inlined copies. If not, accept-with-rationale per-site via Sonar MCP citing semver.org §2 + parity test gate. No multicriteria.
+### Phase 7: Cluster L — agent-identity replaceAll sites
 
-### Phase 6: Clusters I + J (regex modernisations) — mechanical with TDD safety net
+Read the adjacent transformations and either name the composed operation or
+apply `.replaceAll()` only where it is the semantic match.
 
-Health-probe one-line fix; build-output-contract three-site migration. Each is a small commit; tests are the safety net.
+### Phase 8: Cluster M — sentry-node negated conditions
 
-### Phase 7: Clusters K + L + M + N + O (per-site investigations)
+Read each Sentry runtime condition in context. Refactor only if the positive
+form is actually clearer; otherwise escalate the residual signal to the owner
+without issue-side suppression.
 
-Per-site investigation, per-site disposition. No per-rule sweeps. Commit messages name architectural shape, not rule key.
+### Phase 9: Cluster N — practice-fitness negated conditions
 
-### Phase 8: Cluster D (generated-code duplication) — the 5.4% question
+Apply the same per-site investigation discipline to `validate-practice-fitness`
+without inheriting Phase 8's outcome.
 
-After the new_violations gate is closing in on 0 (clusters A–F applied), evaluate whether the 5.4% new-duplication is dominantly generated-code structural duplication. If yes, owner-authorisation conversation: do we (a) refactor templates to emit shared utilities, (b) add Sonar `cpd.exclusions` for generated paths citing ADR-029 (with rationale, not as suppression), or (c) accept that this PR's duplication threshold doesn't reflect authored-code quality and discuss the threshold itself?
+### Phase 10: Cluster O — singletons
 
-This phase is intentionally last because it requires the cleaner authored-code state from prior phases to make the generated-code signal legible.
+Four unrelated sites, four investigations. `validate-root-application-version`
+drops out if Phase 4 removes its inline semver parser.
 
-### Phase 9: Re-verify on live state
+### Phase 11: Cluster D — generated-code duplication
 
-1. Push.
-2. Wait for fresh CI run.
-3. Re-fetch QG status, hotspot states, CodeQL alerts.
-4. PR description: enumerate the cluster resolutions, per-cluster commit refs, dismissed-with-rationale citations (if any) so reviewers see the architecture without a Sonar/Sonar-MCP login.
-5. If any gate remains RED: open a fresh metacognition pass before deciding the next move. Do NOT dispose by suppression.
+Read templates first, group duplication by source template, refactor generator
+templates to emit shared shapes once, regenerate, and measure. If templates are
+not extractable for structural reasons, escalate with per-block evidence.
+
+### Phase 12: Push, re-verify, and update PR description
+
+Push, wait for CI, re-fetch QG/hotspot/CodeQL state, and update the PR
+description with per-cluster commit refs and evidence. If any gate remains red,
+run a fresh metacognition pass before choosing the next architectural move.
 
 ## Files likely to be modified
 
 - `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts` (Cluster A + Phase 1)
 - `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts` (Cluster A)
 - `apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts` (Cluster A)
-- New: a `withRateLimit` curry or `createRateLimitedRoute` helper, location TBD per the architectural reviewer's verdict. Candidate workspace: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes/` (app-local) or `packages/libs/...` (if cross-app).
+- `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/create-rate-limiters.ts`
+- `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/test-helpers/rate-limiter-fakes.ts`
+- New compile-time brand test for `RateLimitRequestHandler` propagation.
 - `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs` (Cluster B + Phase 1)
 - New tests for the two purpose-specific git helpers.
 - `packages/sdks/oak-sdk-codegen/code-generation/schema-cache.ts` (Cluster C — read-and-decide before any change)
@@ -519,7 +695,8 @@ This phase is intentionally last because it requires the cleaner authored-code s
 - 15+ sites for Cluster E across `agent-tools/`, `packages/core/build-metadata/`, `packages/core/oak-eslint/`, `packages/libs/sentry-node/`, `packages/core/observability/` — to be enumerated at session-open re-harvest.
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.integration.test.ts` (Phase 1 — keep owner's consolidation; defer the TODO).
 - Possibly `code-generation/typegen/...` templates for Cluster D if owner authorises.
-- Possibly `sonar-project.properties` for Cluster D `cpd.exclusions` if owner authorises (with explicit rationale comment, not as a suppression).
+- Codegen templates under `packages/sdks/oak-sdk-codegen/code-generation/typegen/...`
+  for Cluster D; generated artefacts update only through `pnpm sdk-codegen`.
 
 ## Existing infrastructure to reuse (non-exhaustive)
 
@@ -557,8 +734,8 @@ Findings are action items by default (`principles.md` §Compiler Time Types). Ab
 
 | Risk | Mitigation |
 |---|---|
-| Cluster A's `withRateLimit` curry is not recognised by CodeQL → 5 alerts remain OPEN | Sketch and probe in a small commit first; if not recognised, fall back to dismiss-with-rationale citing in-code TSDoc evidence (commit `b1a4cd79`). Decide the fallback path before sinking effort. |
-| Cluster D requires owner-authorisation for Sonar config changes; owner pause may stall the QG green | Sequence Cluster D last; have clusters A, B, C, E, F drive `new_violations` to 0 first so that Cluster D is the only remaining QG condition to negotiate. |
+| Cluster A brand preservation does not close all 5 CodeQL alerts | Locate the remaining widening site. If #69 remains structurally different, escalate with file:line evidence; do not dismiss. |
+| Cluster D template refactor is materially larger than expected | Split by source template. If templates are not extractable for structural reasons, escalate with per-block evidence; do not add path exclusions. |
 | Live re-harvest reveals the picture has shifted significantly (new commits, new alerts) | Phase 0 captures the divergence and the plan re-clusters before code changes. Surface in chat. |
 | Drift from investigation-mode to disposition-mode under context pressure (the named recurring risk) | Re-read `principles.md` at every cluster boundary. Trigger words: "stylistic", "false-positive", "out of scope", "owner direction needed without analysis". If those words appear in my own output, stop, re-derive at the site. |
 | Per-rule sweeps creep back in | Each commit must name an architectural shape, not a rule key, in its message. If a commit message reads `refactor(sort): apply localeCompare comparator`, the cluster discipline has slipped. |
@@ -579,23 +756,33 @@ Findings are action items by default (`principles.md` §Compiler Time Types). Ab
 
 - Local: `pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm test:root-scripts && pnpm markdownlint:root` after each cluster (one gate at a time per `start-right-thorough`).
 - CI re-run after push at Phase 9.
-- Sonar QG status via MCP; confirm `new_violations=0` (or owner-accepted explanation), `new_security_hotspots_reviewed=100%`, `new_duplicated_lines_density≤3%` (or owner-authorised generated-path treatment).
-- CodeQL combined check via `gh pr checks 87`; confirm GREEN or all remaining alerts have explicit dismiss-with-rationale citing architectural evidence.
+- Sonar QG status via MCP; confirm `new_violations=0`,
+  `new_security_hotspots_reviewed=100%`, and
+  `new_duplicated_lines_density≤3%` or record the owner-escalated blocker with
+  per-block evidence.
+- CodeQL combined check via `gh pr checks 87`; confirm GREEN or record the
+  owner-escalated blocker with file:line evidence.
 
 ## Lifecycle
 
-- This plan body lives at `/Users/jim/.claude/plans/1-those-were-my-composed-key.md` during planning.
-- On promotion (post-approval), copy to `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` with a YAML frontmatter for executable plans (id, status, todos), and supersede the previous `pr-87-quality-finding-resolution.plan.md`.
-- Close the previous Briny Ebbing Lagoon claim (`331bce87`) at session start before opening a new claim covering this plan's pathspecs.
+- This in-repo plan is the single source of truth for PR-87 architectural
+  cleanup. Personal platform plans are evidence only; do not consult them for
+  execution guidance unless this file explicitly links to an extracted section.
+- New evidence, owner direction, or phase deltas land here with `last_updated`
+  refreshed and a session-history entry.
 - At session close, run `/jc-session-handoff` and update the `observability-sentry-otel.next-session.md` thread record with cluster-by-cluster outcome.
 
 ## Open questions for the owner
 
 (Not blocking the plan — flagged for the execution session.)
 
-1. For Cluster D, is owner-authorisation pre-conditional to *any* Sonar config change, or are we authorised to add `sonar.cpd.exclusions` for `**/types/generated/**` paths if the architectural reviewer confirms the duplication is generator-semantic rather than generator-inefficiency?
-2. For Cluster A, do we have a preference between the `withRateLimit(limiter, handler)` curry shape and the `createRateLimitedRoute({ ... })` factory shape if both are recognised by CodeQL?
-3. For the `getToolFromToolName`-at-codegen-time TODO, is there an existing plan for codegen tool-registry decomposition we should link to, or does this need to be a new strategic plan in `.agent/plans/.../future/`?
+1. If Cluster A closes the four route-registration alerts but #69 remains open,
+   does the owner want a global baseline limiter in `setupBaseMiddleware`, or a
+   separate follow-up that treats cross-cutting middleware as a different
+   architectural problem?
+2. For the `getToolFromToolName`-at-codegen-time TODO, is there an existing plan
+   for codegen tool-registry decomposition we should link to, or does this need
+   a new strategic plan?
 
 ---
 

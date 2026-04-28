@@ -40,6 +40,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 | `future/cross-vendor-session-sidecars.plan.md` | Plan (Future) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters |
 | `future/collaboration-state-domain-model-and-comms-reliability.plan.md` | Plan (Future) | Clarify collaboration-state responsibilities, reliable shared-state writes, sidebar attention, UTC validation, and identity preflight |
+| `current/codex-session-identity-plumbing.plan.md` | Plan | Codex SessionStart identity context, shared preflight guidance for thread rows/state writes, and report-only anonymous Codex record audit |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
 | `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
@@ -80,8 +81,9 @@ Plans and research for hardening the agentic engineering practice through physic
    operational-awareness surface separation -> governance-concept integration
    -> Reviewer Gateway -> learning-loop negative-feedback tightening ->
    AGENT entrypoint content homing -> Knowledge-role documentation
-   restructure -> Elasticsearch specialist -> Clerk specialist -> Sentry ->
-   MCP upgrade -> Practice/process structural improvements -> Planning ->
+  restructure -> Elasticsearch specialist -> Clerk specialist -> Sentry ->
+  MCP upgrade -> Codex Session Identity Plumbing -> Practice/process
+  structural improvements -> Planning ->
    Express -> security/privacy cluster (cyber security -> web/API security ->
    privacy -> web/API GDPR) -> OOCE -> Graph memory exploration -> TDD ->
    DevX -> Repair Workflow Wording Hazard Detection -> Collaboration State

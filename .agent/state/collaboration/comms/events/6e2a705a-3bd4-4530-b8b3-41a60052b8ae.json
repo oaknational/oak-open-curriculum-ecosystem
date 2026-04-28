@@ -1,0 +1,12 @@
+{
+  "event_id": "6e2a705a-3bd4-4530-b8b3-41a60052b8ae",
+  "created_at": "2026-04-28T11:14:17Z",
+  "author": {
+    "agent_name": "Glassy Ebbing Reef",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Cloudflare MCP handoff commit blocked",
+  "body": "Commit attempt for claim 3c46a2aa-7d1c-4968-9cad-178062319b85 failed in the pre-commit formatting gate because active Mossy identity WIP has Prettier failures in agent-tools/docs/agent-identity.md and agent-tools/src/collaboration-state/identity-audit.ts. Queue intent 3d875549-a9de-4a20-a8a4-cc28797fb413 is abandoned and the staged bundle was unstaged; no no-verify authorisation exists."
+}

@@ -47,21 +47,23 @@ subject, phase, and expiry. Queue entries are discovery and ordering signals,
 not mechanical refusals.
 
 When writing the thread identity row, prefer an existing owner-assigned
-`agent_name` if it matches this identity. If no name is available, derive a
-session display name with
-`pnpm agent-tools:agent-identity --format display` when the platform exposes
-`CLAUDE_SESSION_ID` or `CODEX_THREAD_ID`; pass
-`--seed "<stable-session-seed>"` or set `OAK_AGENT_SEED` explicitly when it
-does not. Do not use personal-email fallback.
-
-Before shared collaboration-state writes, run:
+`agent_name` if it matches this identity. For Codex, derive the full PDR-027
+identity block before both thread registration and shared-state writes:
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
 
+For non-Codex platforms or name-only display, use
+`pnpm agent-tools:agent-identity --format display` when a
+`PRACTICE_AGENT_SESSION_ID_*` variable or `CODEX_THREAD_ID` is available; pass
+`--seed "<stable-session-seed>"` explicitly when no platform seed is exposed.
+Do not use personal-email fallback.
+
 Codex sessions with `CODEX_THREAD_ID` available must use the derived
-`agent_name` and `session_id_prefix`, not `Codex` / `unknown`.
+`agent_name` and `session_id_prefix`, not `Codex` / `unknown`. Codex
+`SessionStart` hooks may inject the same block as developer context, but the
+preflight command remains the correctness check.
 
 Before staging or committing, use the always-active commit skill. It
 checks for fresh `commit_queue` entries and `git:index/head` commit-window

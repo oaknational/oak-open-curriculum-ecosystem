@@ -20,6 +20,9 @@ Currently active threads (2026-04-24):
   alpha integration on branch `feat/otel_sentry_enhancements`.
 - `agentic-engineering-enhancements` — Practice thread; documentation
   roles, continuity surfaces, and fitness-pressure remediation.
+- `cloudflare-mcp-security-and-token-economy-plans` — product/security
+  planning thread; Cloudflare MCP public-beta gate and token-efficient MCP
+  tool-use strategy.
 
 Archived threads:
 

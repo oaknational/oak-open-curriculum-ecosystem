@@ -4,6 +4,16 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-28 — disposition drift graduated into PDR-018
+
+Owner-directed deep consolidation after repeated PR-87 planning drift. Practice
+Core changes:
+
+- **PDR-018 (AMENDED)** — Planning Discipline now forbids presenting check-side
+  disposition as a fallback when the governing principle says the finding is an
+  architectural signal. Phase-boundary principle re-reads must leave an
+  artefact, with PDR-029 as the tripwire authority.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-28 — agent-work capabilities assigned to the Practice
 
 Owner-directed consolidation after the repo/tooling/Practice boundary was

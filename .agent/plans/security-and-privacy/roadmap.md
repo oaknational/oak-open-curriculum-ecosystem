@@ -161,16 +161,9 @@ Cloudflare MCP public-beta security gate            ⛔ M3 BLOCKER
 - Baseline-control cross-reference:
   [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
 - Done when:
-  - Cloudflare WAF + AI Security for Apps have been evaluated for inbound MCP
-    traffic inspection, including prompt-injection and sensitive-data handling
-  - Cloudflare Gateway / DLP have been evaluated for shadow MCP detection and
-    policy enforcement
-  - Cloudflare Access and MCP server portals have been evaluated for any Oak
-    employee, partner, or authenticated portal access paths that need centralised
-    discovery, logging, DLP, and tool-exposure policy
-  - each Cloudflare control is recorded as enabled, not yet available, not
-    applicable, or explicitly declined with evidence and owner-visible risk
-    classification
+  - the active planning surface records owner-visible evidence and risk
+    classification for each Cloudflare control-family disposition named in the
+    strategic gate brief
   - Practice deltas for vendor-control disposition, governed MCP capability
     platforms, shadow MCP, and MCP setup supply-chain rules have an owner
 - Dependencies: Cloudflare feature availability, Phase 2 evidence contract, and

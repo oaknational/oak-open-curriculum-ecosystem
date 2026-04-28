@@ -243,15 +243,10 @@ broaden platform reach.
      or explicitly declined with owner-visible evidence.
    - Source: Cloudflare's 2026-04-14 enterprise MCP reference architecture:
      <https://blog.cloudflare.com/enterprise-mcp/>
-   - Candidate control families to evaluate before opening public beta:
-     Cloudflare WAF + AI Security for Apps for inbound MCP traffic inspection;
-     Cloudflare Gateway / DLP for shadow MCP detection and policy enforcement;
-     Cloudflare Access and MCP server portals where authenticated employee or
-     partner access paths require centralised discovery, logging, DLP, and
-     tool-exposure policy.
    - The security-and-privacy collection owns the executable gate:
      [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
-   - Strategic gate brief:
+   - The detailed control-family matrix and required dispositions live in the
+     strategic gate brief:
      [cloudflare-mcp-public-beta-security-gate.plan.md](security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md)
 2. **Production Clerk integration**
    - Research complete:

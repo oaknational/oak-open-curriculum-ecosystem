@@ -19,15 +19,10 @@ silently choosing one.
 
 ## What This Directive Installs
 
-This directive is grown by the [`multi-agent-collaboration-protocol`][p].
-WS0 + WS1 landed vocabulary, the shared log, claims, schemas, staleness
-archive, and tripwire rules. WS3A adds decision threads and durable closure
-history. The commit-window refinement adds short-lived `git` claims for the
-shared index / HEAD surface. The intent-to-commit queue adds advisory FIFO
-ordering plus exact staged-bundle verification before history is written.
-WS3B installs agent sidebars and owner escalations; the joint-decision layer
-records bilateral commitments and role follow-through. WS5 harvests evidence.
-Details live in
+This directive is grown by the [`multi-agent-collaboration-protocol`][p]. It
+installs vocabulary, the shared log, claims, schemas, durable closure history,
+short-lived `git` claims, advisory `commit_queue` order, sidebars, owner
+escalations, joint decisions, and WS5 evidence harvest. Details live in
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Knowledge and Communication, Not Mechanical Refusals
@@ -125,6 +120,21 @@ staging or committing, use the commit skill to enqueue the intended bundle,
 open and close a short-lived `git:index/head` claim, and verify the exact
 staged bundle immediately before `git commit`. This is awareness, ordering,
 and auditability, not a mechanical lock.
+
+The queue protects authorial-bundle integrity; it does not make whole-repo
+hooks local to the staged files. Commit hooks are intentionally whole-tree
+checks because the only useful repository state is one where the whole repo
+passes. If a hook fails on a minor issue such as formatting or markdown style,
+fix it immediately, even when the file belongs to another active slice, and
+record the repair. If the failure is substantial, make it the highest-priority
+next item with a named plan or owner-visible route. Do not narrow quality-gate
+scope, bypass hooks, introduce compatibility layers, or leave the repo broken
+as a coordination tactic.
+
+Files under `.agent/` are shared Practice and coordination state. Active claims
+there are visibility signals, not commit blockers. Commit `.agent` updates when
+they belong to the current bundle or are needed to keep handoff / claim /
+queue / thread state durable; otherwise shared-state residue never lands.
 
 ## Communication Channels
 

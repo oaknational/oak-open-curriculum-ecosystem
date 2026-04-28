@@ -19,18 +19,10 @@ The strategic source for this vendor-control gate is
 [cloudflare-mcp-public-beta-security-gate.plan.md](cloudflare-mcp-public-beta-security-gate.plan.md).
 This baseline cut list keeps only the Phase 3 implementation tranche pointer.
 
-The current candidate control families are:
-
-| Control Family | Cloudflare Surface | Required Disposition Before Public Beta |
-|---|---|---|
-| Inbound MCP traffic inspection | WAF + AI Security for Apps | Enabled, unavailable, not applicable, or explicitly declined with evidence |
-| Shadow MCP detection and policy enforcement | Cloudflare Gateway + DLP | Enabled, unavailable, not applicable, or explicitly declined with evidence |
-| Authenticated portal governance | Cloudflare Access + MCP server portals | Enabled, unavailable, not applicable, or explicitly declined with evidence |
-
-The gate is intentionally stricter than the current baseline tranche. Public
-beta can proceed only after these Cloudflare controls have owner-visible
-evidence and risk classification; a missing vendor feature is still a release
-blocker unless the owner explicitly accepts the residual risk.
+The detailed Cloudflare control-family matrix lives only in the strategic gate
+brief. This cut list records the dependency: Phase 3 baseline controls are not
+enough for public beta until the gate brief has owner-visible evidence and risk
+classification for each required vendor-control disposition.
 
 ## Implementation Tranche 1 (Baseline)
 

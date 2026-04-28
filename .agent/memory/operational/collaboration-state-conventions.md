@@ -34,41 +34,11 @@ canonical value for stale/fresh calculations and durable state.
 | [`escalation.schema.json`][escalation-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; escalation files close by referencing the conversation entry that resolved them | WS3B |
 | [`escalations/`][escalations-dir] | One file per active owner escalation | Created after a conversation entry exists; closed after owner resolution is written back to that conversation | WS3B |
 
-## Schema-Field Provenance
+## Schema Provenance
 
-The active-claims schema is informed by what real shared-communication-log usage
-showed agents needed, plus the small set of fields the registry shape
-requires that the log shape did not. Transparency on which is which
-matters because fields drawn from observation are battle-tested; fields
-drawn from first principles are more likely to be reshaped by WS5
-evidence.
-
-| Field | Source | Notes |
-| --- | --- | --- |
-| `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-communication-log entry carried this; reuses PDR-027 identity schema unchanged |
-| `claimed_at` | Observed | Every entry timestamped UTC ISO 8601 with trailing `Z` |
-| `intent` (free-form prose) | Observed | Every entry carried an action / intent line |
-| `areas` (kind + patterns) | Observed | Every entry used a nested **Areas touched** list with path patterns; v1.2.0 adds `git:index/head` for commit windows |
-| `notes` (optional prose) | Observed | Every entry carried a *Coordination note* paragraph |
-| `claim_id` (uuid) | First-principles | Registry needs entry identity; the log was append-only and did not need this |
-| `thread` (slug) | First-principles | Cross-thread visibility requires explicit thread reference; log entries were implicitly within their working session |
-| `freshness_seconds` (default 14400) | First-principles | Liveness signal for stale-audit; 4 hours is the starting default (rationale below) |
-| `heartbeat_at` (optional) | First-principles | Long-session freshness refresh |
-| `sidebar_open` (boolean default false) | First-principles | Whether a sidebar is currently open against this claim |
-| `commit_queue` (root array) | Observed + owner-directed | PDR-029 Class A.3 queue artefact; FIFO advisory commit turn order plus staged-bundle verification |
-| `intent_to_commit` (claim pointer) | First-principles | Convenience pointer from a claim to its active queue entry; queue remains authoritative |
-| `closure.kind` | Observed + first-principles | Explicit close and stale archival are observed; owner-forced close is reserved for owner intervention |
-| `closure.closed_at` / `closed_by` | First-principles | Claim history needs time and actor for durable closure provenance |
-| `closure.evidence[]` | Observed | WS5 showed claim outcomes need durable refs to logs, claims, plans, napkin, and thread records |
-
-Conversation fields reuse the same PDR-027 `agent_id` shape and
-`evidence_ref` enum from `active-claims.schema.json`. The v1.0.0
-conversation schema keeps its surface deliberately narrow: `message`,
-`claim_update`, `decision_request`, `decision`, `resolution`, and
-`evidence` entries only. The v1.1.0 schema adds sidebar entries and
-joint-decision entries while preserving the same append-only event-list
-model. Escalations are separate live case files and must write owner
-resolution back into the referenced conversation.
+Field-level provenance and lifecycle rationale live in
+[`collaboration-state-lifecycle.md`][lifecycle]. This conventions file keeps
+the state-surface index compact.
 
 ## Default `freshness_seconds = 14400` (rationale)
 
@@ -81,6 +51,12 @@ Commit-window claims intentionally override this to 900 seconds because
 staging/commit should be brief.
 
 ## Write-Safety Contract
+
+Shared state is intentionally read/write, even when multiple agents touch it.
+An active claim on shared-state docs is a coordination signal, not a read-only
+lock. Agents should read the current surface, write the needed lifecycle or
+handoff update, and use the transaction helpers plus commit queue to make
+overlap visible and serializable.
 
 New shared-state writes use the
 [`collaboration-state-write-safety`][csw-plan] contract:

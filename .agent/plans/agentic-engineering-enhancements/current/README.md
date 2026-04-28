@@ -30,6 +30,7 @@ plans when scheduled.
 | [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; WS4A lifecycle integration implemented; WS3B sidebar/escalation and joint-decision integration implemented; WS5 remains observation-gated | WS3B-IMPLEMENTED |
 | [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: sidebar, timeout, and owner-escalation design implemented with conversation-schema and escalation-state support | IMPLEMENTED |
 | [collaboration-state-write-safety.plan.md](collaboration-state-write-safety.plan.md) | Promoted first slice from the collaboration-state domain-model brief: deterministic identity preflight, immutable comms events, transaction-safe shared JSON writes, TTL cleanup baseline, and hook deferral | IN PROGRESS |
+| [codex-session-identity-plumbing.plan.md](codex-session-identity-plumbing.plan.md) | Promoted high-impact slice from the Codex identity follow-up: SessionStart context, full preflight guidance for thread rows, and report-only anonymous-record audit | IMPLEMENTED |
 
 Recently completed:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)

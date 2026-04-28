@@ -14,9 +14,24 @@ pdr_kind: governance
 PDR-012);
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (plans that promote to `current/` follow both-readiness-criteria
-discipline from PDR-014).
+discipline from PDR-014);
+[PDR-029](PDR-029-perturbation-mechanism-bundle.md)
+(tripwire doctrine for making phase-boundary checks fire as artefacts, not
+aspirations).
 
 ## Amendment Log
+
+- **2026-04-28 amendment — disposition drift under context pressure
+  (Coastal Mooring Atoll / codex / GPT-5; owner-directed deep
+  consolidation after PR-87 planning drift recurred across Vining,
+  Pelagic, Tidal, and Luminous sessions).** Planning discipline now
+  forbids presenting check-side dispositions as fallback options once
+  the plan's governing principle says the work item is the architecture.
+  The amendment graduates the distilled "investigation-mode drifts into
+  disposition-mode" entry into portable Practice doctrine. New
+  §Disposition drift at phase boundaries names the trigger vocabulary,
+  the required phase-boundary re-read, and the artefact requirement that
+  makes the check observable under PDR-029.
 
 - **2026-04-25 amendment — plan placement follows ownership and
   actionability, not numerical density caps (Fresh Prince /
@@ -131,6 +146,40 @@ the misrouting as evidence the lane has shifted. The corrective
 direction is owner-led re-placement; the prevention is to choose
 ownership first and density-not-at-all.
 
+### Disposition drift at phase boundaries (2026-04-28 amendment)
+
+When a plan is under quality-gate, security-review, or static-analysis
+pressure, it must not offer issue-side disposition as a fallback for
+architecture work. If the governing principle says the finding is a
+diagnostic signal, the plan asks: **what does long-term architectural
+excellence look like at this site, and what is stopping us achieving it?**
+
+Forbidden fallback shapes include:
+
+- "if the cure is not recognised, dismiss with rationale";
+- "accept the issue if refactoring is hard";
+- "add an exclusion if the generated output is awkward";
+- "resolve in the vendor UI" where the evidence says code, docs, or
+  architecture must change.
+
+The legitimate outcomes are narrower:
+
+1. implement the architectural cure;
+2. prove the finding is a true non-issue with reproducible evidence;
+3. escalate a named blocker to the owner with file:line evidence while
+   leaving the finding open.
+
+At every phase boundary in a plan that touches gate dispositions, the
+runner re-reads the governing principle and records the re-derivation in
+the plan, commit body, or review disposition. The artefact is load-bearing:
+"I remembered the principle" is not evidence.
+
+Trigger vocabulary that forces re-derivation includes: "stylistic",
+"false-positive", "out of scope", "convention", "language idiom",
+"well-known name", "canonical TS idiom", "all done", "all pushed",
+"all clean", "fall back to", "if recognition does not propagate", and
+"the TSDoc already explains it".
+
 ### Workflow contract clarity
 
 A workflow that repairs, transforms, or propagates content across
@@ -195,6 +244,9 @@ Alternatives rejected:
   disambiguate.
 - Findings about missing end goals or ambiguous verbs route per
   PDR-012.
+- Plans under gate-disposition pressure record a phase-boundary
+  principle re-read and must not present check-side disposition as a
+  fallback for architectural work.
 
 ### Forbidden
 
@@ -202,6 +254,9 @@ Alternatives rejected:
   without any outcome measure.
 - Workflows that use ambiguous verbs against multiple artefacts
   without explicit disambiguation.
+- Fallback dispositions that make a finding disappear when the plan has
+  not either implemented the architectural cure or proved the finding is
+  a true non-issue.
 
 ### Accepted cost
 
@@ -210,6 +265,10 @@ Alternatives rejected:
   cancelled when the mechanism doesn't hold up.
 - Replacing ambiguous verbs in workflows takes more drafting
   effort. Justified by consistent outcomes across N applications.
+- Re-reading principles and recording the re-derivation at phase
+  boundaries adds ceremony. Justified because the repeated PR-87
+  evidence showed passive memory did not stop drift once context
+  pressure rose.
 
 ## Notes
 
@@ -224,3 +283,6 @@ Proven instances retained with `related_pdr: PDR-018`:
 - `.agent/memory/active/patterns/repair-workflow-contract-clarity.md` —
   originated from repair workflows using ambiguous verbs that
   produced divergent outcomes across artefacts.
+- `distilled.md` entry "Drift recurs while authoring the enforcement of
+  the principle it violates" — graduated 2026-04-28 into this PDR as
+  §Disposition drift at phase boundaries.

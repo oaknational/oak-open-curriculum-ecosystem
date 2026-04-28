@@ -1,6 +1,15 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
+**Last refreshed**: 2026-04-28 (Mossy Creeping Branch / codex / GPT-5 /
+019dd3 — Codex session identity plumbing implemented and doctrine propagated.
+The current plan now covers Codex `SessionStart` identity context, canonical
+collaboration-state identity preflight, report-only anonymous identity audit,
+and ADR/PDR updates around coordination and platform-agnostic tooling. Gates
+passed for targeted tests, agent-tools type/lint/test, build, preflight, audit
+smoke, portability, scoped markdownlint, and `git diff --check`; root
+markdownlint remained blocked by unrelated concurrent continuity WIP.)
+
+**Prior refresh**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
 019dd3 — lightweight session handoff after the shared-state sweep policy
 correction. Verified `8d69b8e2` has landed the write-safety handoff state,
 entry points remain pointer-only, active claim registry is otherwise empty,
@@ -399,6 +408,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Mossy Creeping Branch` | `codex` | `GPT-5` | `019dd3` | `codex-session-identity-plumbing-current-slice-and-doctrine-propagation` | 2026-04-28 | 2026-04-28 |
 | `Verdant Flowering Blossom` | `codex` | `GPT-5` | `019dd3` | `hook-test-io-remediation-and-shared-state-sweep-policy-closeout` | 2026-04-28 | 2026-04-28 |
 | `Woodland Creeping Petal` | `codex` | `GPT-5` | `019dd3` | `collaboration-state-write-safety-current-plan-implementation` | 2026-04-28 | 2026-04-28 |
 | `Pelagic Drifting Sail` | `codex` | `GPT-5` | *`unknown`* | `agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout` | 2026-04-28 | 2026-04-28 |
@@ -427,7 +437,20 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session landed hook test IO remediation (2026-04-28 Verdant
+**Latest session implemented Codex identity plumbing (2026-04-28 Mossy
+Creeping Branch):**
+
+- promoted the future Codex identity brief into
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md);
+- added a soft Codex `SessionStart` hook adapter that emits the full PDR-027
+  identity block as additional context when Codex supplies `session_id`;
+- added report-only identity audit over active claims, closed claims, thread
+  records, and the rendered shared comms log;
+- updated start-right, identity, plan, continuation, ADR, and PDR surfaces so
+  thread registration and shared-state writes use the same identity preflight
+  path.
+
+**Prior session landed hook test IO remediation (2026-04-28 Verdant
 Flowering Blossom):**
 
 - retained hook tests now prove policy parsing, content extraction,
@@ -894,10 +917,13 @@ nl -ba .agent/directives/AGENT.md
   — landed as `11f0320f` with immutable comms events, transaction-guarded
   JSON state writes, Codex identity preflight, and TTL archival baseline.
   Closure remains pending the documented hard-fitness disposition.
-- Strategic follow-up:
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md)
-  — landed as `ddcfa19e`; owns Codex-wide identity parity beyond the
-  collaboration-state write path.
+- Implemented current slice:
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md)
+  — Codex `SessionStart` identity context, canonical identity preflight,
+  report-only anonymous identity audit, and coordination/platform-tooling
+  doctrine propagation. Historical `Codex` / `unknown` rows remain
+  evidence-preserving audit findings unless a later manual repair has stronger
+  evidence.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -1023,10 +1049,12 @@ validation.
   archive operations, conversation/escalation writes, TTL archival, and a
   validation check. The old rendered shared-comms history is archived and the
   live markdown log is generated from event files.
-- Codex-wide identity parity beyond shared-state writes is captured in
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md).
-  Do not treat the write-safety helper as having fixed thread-row defaults or
-  legacy `Codex` / `unknown` rows globally.
+- Codex-wide identity parity beyond shared-state writes is now implemented for
+  the high-impact path in
+  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+  New Codex sessions get identity context when `SessionStart` supplies
+  `session_id`; legacy `Codex` / `unknown` rows are audit findings, not
+  automatic rewrites.
 - Owner override on 2026-04-28 allowed crossing claim boundaries to fix the
   closeout blocker. The live blocker was resolved by current WIP before a new
   source edit: `pnpm --filter @oaknational/agent-tools build` passes. Future
@@ -1074,10 +1102,9 @@ validation.
   Prismatic. Treat `Luminous Dancing Quasar` as a stale/phantom claim or
   identity mismatch unless a sub-agent registration is found; claim existence
   alone does not prove a reachable participant.
-- Codex still appeared as `agent_name: Codex` with `session_id_prefix:
-  unknown` in this session. That is a continuity-system defect to close in the
-  [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md)
-  follow-up, not a harmless display issue.
+- Anonymous `Codex` / `unknown` records are now report-only audit findings.
+  Treat fresh active entries as live risk; treat historical entries as evidence
+  unless a later repair has stronger source evidence.
 - Codex upstream hooks are supported, but no Codex session-exit hook is
   documented. Do not rely on turn-scoped `Stop` for post-session claim cleanup;
   use explicit handoff or TTL janitor semantics.
@@ -1134,11 +1161,12 @@ Choose the lane deliberately:
    template lifecycle triggers are actually used in real sessions. Do not add
    hook refinements before the shared-state write path is made safer; first
    real sidebar/joint-decision usage should feed WS5 observation.
-8. **Codex session identity plumbing** — follow
-   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md).
-   The write-safety helper derives Codex identity from `CODEX_THREAD_ID`, but
-   thread-row defaults, existing `Codex` / `unknown` reporting, and any
-   verified title/statusline or hook integration remain strategic follow-up.
+8. **Codex session identity plumbing follow-up** — the high-impact current
+   slice is implemented in
+   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md).
+   Only perform manual repair of historical anonymous rows when there is
+   stronger evidence than the row itself; keep title/statusline as optional
+   display.
 9. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
@@ -1162,8 +1190,10 @@ Choose the lane deliberately:
   docs as the operational home. Future queue evidence should feed WS5
   refinement, not reopen the completed execution plan.
 - If another shared-log collision, missed sidebar, future-dated timestamp,
-  or anonymous/unknown identity mutation occurs, promote the
-  collaboration-state domain-model plan from `future/` to `current/`.
+  or anonymous/unknown identity mutation occurs, run the identity audit and
+  preserve evidence first. Promote the collaboration-state domain-model plan
+  only if the incident reveals a new design gap beyond the current
+  write-safety and Codex identity slices.
 - If Codex documents a true session-exit event, update the hooks portability
   plan and the collaboration-state lifecycle doc before wiring claim cleanup
   to it.

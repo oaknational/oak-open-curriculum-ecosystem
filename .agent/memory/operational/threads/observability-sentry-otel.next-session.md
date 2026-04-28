@@ -21,7 +21,7 @@
 
 ---
 
-**Earlier session-close 2026-04-28 evening (Tidal Rolling Lighthouse, claude-code, claude-opus-4-7-1m, session seed `composed-petting-hejlsberg-2026-04-28`)** — Planning + Phase 1 implementation **in flight, not committed**. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open). Owner-approved 12-phase re-grounded execution plan landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. **Top-priority elevation**: Cluster B (`runGitCommand` lockdown) is now Phase 1.
+**Earlier session-close 2026-04-28 evening (Tidal Rolling Lighthouse, claude-code, claude-opus-4-7-1m, session seed `composed-petting-hejlsberg-2026-04-28`)** — Planning + Phase 1 implementation **in flight, not committed**. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open). The owner-approved 12-phase re-grounded execution plan is now homed in `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`. **Top-priority elevation**: Cluster B (`runGitCommand` lockdown) is now Phase 1.
 
 **Phase 1 progress (working tree, uncommitted)**:
 
@@ -99,7 +99,7 @@ a brief that enumerates rate-limit *bypass* paths a malicious actor
 could exploit at the existing routes (key extraction, key collision, IP
 spoofing under `trust proxy = 1`, header bypass, OAuth-proxy
 double-counting). Findings shape the type narrowing's contract; the
-brief is in `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`
+brief is in `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`
 §"Phase 2".
 
 **Critical files (5)**:
@@ -148,8 +148,8 @@ Re-read at every phase boundary, not just session-open:
 
 - `.agent/directives/principles.md` — the authoritative rules.
 - §Stance section of
-  `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` — no
-  fallback dispositions; no `accept` / `false_positive` /
+  `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` —
+  no fallback dispositions; no `accept` / `false_positive` /
   `cpd.exclusions`; generated code is fully our responsibility.
 - Drift-trigger vocabulary (Vining → Pelagic → Opalescent → Tidal →
   Luminous): "stylistic" / "false-positive" / "out of scope" /
@@ -168,8 +168,8 @@ Re-read at every phase boundary, not just session-open:
 
 - `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`
   — architectural map, cluster table, reviewer matrix.
-- `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` — 12-phase
-  re-grounded execution plan, §Stance, per-phase verification gates.
+- `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md` —
+  12-phase re-grounded execution plan, §Stance, per-phase verification gates.
 
 ### Deferred housekeeping (deep consolidation)
 
@@ -257,9 +257,8 @@ captured in plan body §"Cluster A — Sink-trace findings (Session 2)"):
    `app/bootstrap-helpers.ts` from `RequestHandler` → `RateLimitRequestHandler`.
 4. Push, wait for CI, check whether CodeQL `js/missing-rate-limiting`
    recognises the narrowed type. If yes: 5 alerts close in one cluster.
-   If no: fall back to dismiss-with-rationale citing TSDoc attestations
-   at `auth-routes.ts:18-32, 47-75, 124-138` + integration tests at
-   `rate-limiter-di.integration.test.ts`.
+   If no: locate the remaining widening site or detection gap and keep the
+   finding open with file:line evidence until the structural cause is resolved.
 5. Reviewer dispatch (code / type / test / security / mcp / arch-fred /
    arch-wilma) in parallel — read-only specialists, post-cluster review.
 
@@ -525,7 +524,7 @@ parallel-agent state changes; staged for owner direction on push timing.
 - #70 auth-routes.ts:153 (registerAuthenticatedRoutes app.post) — DI-opacity FP.
 - #71 auth-routes.ts:155 (registerAuthenticatedRoutes app.get) — DI-opacity FP.
 - #72 oauth-proxy-routes.ts:87-89 (createOAuthProxyRoutes) — DI-opacity FP.
-- #76, #77 schema-cache.ts:99, :106 — owner reaffirmed defence-in-depth shape; dismiss-with-rationale, NO refactor.
+- #76, #77 schema-cache.ts:99, :106 — owner reaffirmed the defence-in-depth intent, but the current plan resolves this through a typed `SchemaCache` capability interface rather than dismissal.
 - #81 (NEW) auth-routes.ts:108-117 (registerAuthenticatedRoutes function block) — same DI-opacity pattern, function-block flag.
 
 **Sonar findings on PR-87 (60 open at HEAD)**:
@@ -544,21 +543,16 @@ Metacognitive Correction" table. Highlights:
 2. Per-site investigation of every Sonar rule that landed in the DISABLE
    block (S6594, S6644, S7748) plus every finding labelled "out of scope"
    in the prior session report.
-3. Structural redesign for S5843 ×4: narrow the strict-semver regex
-   sites by migrating validate-root-application-version.mjs to .ts and
-   moving the regex export to a focused module. The 4 sites collapse
-   to 1 (or 2) with honest dismissal-with-rationale at the genuinely-
-   inline location (vercel-ignore — the only hard structural inline
-   constraint).
+3. Structural redesign for S5843 ×4: decompose the semver pattern into named
+   sub-patterns, remove the unnecessary validate-root-application-version copy,
+   and preserve the Vercel ignore-command inline constraint with parity tests.
 4. Migrate 3 of 4 .mjs scripts to .ts (validate-practice-fitness,
    validate-root-application-version, ci-schema-drift-check).
-5. Investigate CodeQL DI-opacity registration shape — could a
-   `withRateLimit(limiter, handler)` curry or `createRateLimitedRoute`
-   helper preserve DI while making wiring legible to CodeQL? If yes,
-   apply structurally; if no, dismiss-with-rationale citing in-code
-   TSDoc evidence (commit `b1a4cd79`).
-6. Dismiss schema-cache CodeQL #76/#77 — no refactor, owner-confirmed
-   defence-in-depth shape stands.
+5. Resolve CodeQL DI-opacity registration shape through Phase 2 type narrowing;
+   if recognition does not propagate, keep tracing the widened type path rather
+   than disposing at the check level.
+6. Resolve schema-cache CodeQL #76/#77 through the Phase 3 typed capability
+   interface so defence-in-depth remains explicit in code.
 7. Fix S2871 sentry-node Array.sort sites (mechanical; was wrongly
    labelled out-of-scope).
 8. Strengthen TSDoc + dismiss the 4th S3735 site at

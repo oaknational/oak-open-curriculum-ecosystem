@@ -24,6 +24,11 @@ failures with typed minimal seams that compile and fail behaviourally.
 build/type-check/lint/format/markdownlint/depcruise/knip without a named,
 in-flight fix plan owned by you in the current session.**
 
+The gate scope is the whole repository. Do not narrow hooks or quality gates to
+the staged bundle to make a commit land: the only result that matters is that
+the whole repo passes. The commit queue verifies staged-bundle integrity; it
+does not excuse whole-tree breakage.
+
 In a single-agent context this is a personal-discipline rule. In the
 multi-agent context introduced by `agent-collaboration.md`, breaking the
 build couples a local quality issue into a *coupling failure across
@@ -33,10 +38,15 @@ on the same gates passing on the same working tree.
 ## What "fix plan" means
 
 - A named workstream / TDD slice you are actively working through;
-- Recoverable in the current session — not a "I'll get to it" deferral;
+- Recoverable in the current session for small issues — formatting,
+  markdownlint, lint autofix, generated read-model refresh, and similarly
+  mechanical repairs are fixed immediately;
 - Surfaced to other agents through the shared communication log
   (`.agent/state/collaboration/shared-comms-log.md`) when the breakage will outlive
   the immediate edit;
+- Highest-priority next work when the issue is too large to repair
+  immediately, with an owner-visible plan or escalation before unrelated work
+  continues;
 - Aligned with the gate-recovery-cadence plan's recovery sequence: typed
   seams that compile and fail behaviourally, not missing-symbol REDs.
 
@@ -50,6 +60,8 @@ on the same gates passing on the same working tree.
   [`no-warning-toleration.md`](no-warning-toleration.md));
 - Leaving a partial-state intermediate where two parallel agents'
   pre-commit hooks both fail because of one agent's WIP.
+- Introducing compatibility layers, shims, or fallback paths as the fastest
+  way to make a gate pass. Fix the boundary instead.
 
 ## Cross-references
 

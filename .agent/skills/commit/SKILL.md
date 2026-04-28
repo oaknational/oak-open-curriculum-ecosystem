@@ -119,6 +119,10 @@ the advisory queue and the short-lived git transaction claim:
    thread, or owner question instead of racing the git lock. The queue is
    advisory, not a mechanical refusal; default discipline is still one commit
    owner at a time.
+   Active claims on `.agent/` paths are visibility signals, not commit
+   blockers: `.agent` is shared Practice and coordination state, and it may be
+   swept into commits when the bundle needs current handoff, plan, claim,
+   queue, thread, or generated communication state to become durable.
 4. If the window is clear, open a short-lived active claim entry under
    `claims[]`:
 
@@ -191,6 +195,9 @@ the advisory queue and the short-lived git transaction claim:
    subject equals the queued subject. A mismatch aborts before history is
    written.
 
+   This verification is deliberately narrow: it protects the authorial bundle.
+   It does not replace the repository's whole-tree quality gates.
+
 9. Commit, then clear the queue entry on success:
 
    ```bash
@@ -202,6 +209,16 @@ the advisory queue and the short-lived git transaction claim:
    staging failure, message-validation failure, hook failure, or deliberate
    abort. Archive the claim with the resulting SHA, failure reason, or abort
    reason and next action in `closure.summary`.
+
+If a whole-repo hook fails on a minor issue such as formatting, markdown style,
+lint autofix, or generated shared-state read-model drift, fix the issue
+immediately and retry the commit protocol. This includes minor breakage in
+peer-owned files: log the repair, but do not leave the repo uncommittable. If
+the hook failure is larger than a mechanical repair, abandon the queue entry,
+close the commit-window claim, and make the failing gate the highest-priority
+next item with a named plan or owner-visible escalation. Do not narrow hook
+scope, use `--no-verify` without fresh owner authorisation, or introduce
+compatibility layers to make the gate pass.
 
 If the queue attempt is abandoned, move the entry to `abandoned` rather than
 leaving a fresh active phase:

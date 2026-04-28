@@ -45,6 +45,17 @@ edit. The substance of the decision is **agent judgement**. This rule does
 of scope (see [`agent-collaboration.md` § Knowledge and Communication, Not
 Mechanical Refusals](../directives/agent-collaboration.md)).
 
+`.agent/` paths are shared Practice and coordination state. Active claims on
+`.agent` files require visible consultation, but they are not commit blockers:
+agents may sweep `.agent` updates into commits so handoff, plan, claim, queue,
+thread, and generated communication state does not stay permanently dirty.
+
+If the whole-repo gate is broken by a minor issue, fix the minor issue
+immediately and record the repair, even when another active claim owns the
+file. If the issue is larger than a mechanical repair, surface it as the
+highest-priority next item. Never narrow gate scope to staged files as the
+answer.
+
 ## Commit-window claims
 
 Before staging or committing, repeat the consultation step for the shared git
@@ -82,6 +93,11 @@ staging, record the staged-bundle fingerprint after staging, verify exact
 ownership before `git commit`, and clear the queue entry after success. If
 another fresh `git:index/head` claim exists, coordinate rather than racing the
 git lock.
+
+The queue verifies the staged bundle. The real pre-commit hook still checks the
+whole working tree; if it fails, fix small whole-tree issues immediately or
+abandon the queue with a named highest-priority recovery plan for larger
+breakage.
 
 Claim, heartbeat, close, stale-archive, and commit-queue mutations should use
 the collaboration-state transaction helper, directly or through the commit

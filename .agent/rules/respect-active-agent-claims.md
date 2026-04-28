@@ -39,6 +39,18 @@ This rule **does not refuse entry** to claimed areas. It fires as a
 tripwire — *consult, decide, log* — not as a refusal — *do not enter*.
 The logged decision is the artefact that proves consultation.
 
+`.agent/` is the shared Practice/coordination surface. Claims on `.agent`
+paths make overlap visible, but they do not block committing current `.agent`
+state. Handoff records, claim/queue lifecycle state, thread records, napkin
+entries, generated comms logs, plans, rules, and skills may be swept into a
+commit when they belong to the live bundle or keep shared state durable.
+
+Whole-repo gate failures are different from ordinary overlap. If a fresh
+peer-owned file breaks a minor hook such as formatting or markdown style,
+repair the minor issue immediately and log it; the repo must stay gateable.
+For larger failures, coordinate and promote the fix as the highest-priority
+next item. Do not answer whole-repo hook pressure by narrowing hook scope.
+
 Mechanical refusal is explicitly out of scope per
 [`agent-collaboration.md`](../directives/agent-collaboration.md) §Knowledge
 and Communication, Not Mechanical Refusals.

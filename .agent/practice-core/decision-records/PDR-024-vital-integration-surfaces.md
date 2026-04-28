@@ -338,14 +338,19 @@ Category A (Core → Repo):
 - Practice-index bridge: `.agent/practice-index.md`.
 - Start-flow skills: `.agent/skills/start-right-quick/SKILL.md`,
   `.agent/skills/start-right-thorough/SKILL.md`, plus platform
-  adapters.
+  adapters. Codex additionally has a soft `SessionStart` hook adapter that
+  injects the canonical PDR-027 identity context when hook input is available;
+  the start-flow skill and identity preflight command remain authoritative.
 - Collaboration-state consultation:
   `.agent/state/collaboration/shared-comms-log.md`,
   `.agent/state/collaboration/active-claims.json`,
   `.agent/state/collaboration/closed-claims.archive.json`, and
   `.agent/state/collaboration/conversations/` plus
   `.agent/state/collaboration/escalations/`; the active-claims registry
-  carries the advisory `commit_queue`.
+  carries the advisory `commit_queue`. The host-local tooling also exposes
+  `collaboration-state identity preflight` and report-only
+  `collaboration-state identity audit` commands for deterministic identity
+  registration and anonymous-identity review.
 - Pattern discovery skill: `.agent/skills/patterns/SKILL.md` (updated
   this session to point at both Core and memory pattern surfaces).
 - Rule activation: `.agent/rules/*` canonical + `.cursor/rules/*.mdc`,

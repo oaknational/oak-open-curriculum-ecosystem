@@ -27,36 +27,46 @@ descriptive default with the portable agent-tools CLI:
 pnpm agent-tools:agent-identity --format display
 ```
 
-For collaboration-state writes, prefer the stricter preflight format because
-it emits the full PDR-027 block plus seed source:
+For Codex thread registration and collaboration-state writes, prefer the
+stricter preflight format because it emits the full PDR-027 block plus seed
+source:
 
 ```bash
 pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
 
 When `CODEX_THREAD_ID` is present, new Codex shared-state writes must not use
-`Codex` / `unknown`; the thread id is the deterministic seed for both the
-display name and the six-character session prefix.
+`Codex` / `unknown`; new Codex thread rows must use the same derived
+`agent_name` and six-character `session_id_prefix`.
 
-Use the platform-provided seed when available (`CLAUDE_SESSION_ID` or
-`CODEX_THREAD_ID`). **Cursor (Composer)** sets `OAK_AGENT_SEED` from the
+Use the platform-provided seed when available
+(`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`). **Cursor
+(Composer)** sets `PRACTICE_AGENT_SESSION_ID_CURSOR` from the
 composer `session_id` via the project `sessionStart` hook
 (`.cursor/hooks/oak-session-identity.mjs`; see
 [`agent-tools/docs/agent-identity.md`](../../agent-tools/docs/agent-identity.md)
 and [Cursor Hooks](https://cursor.com/docs/hooks)). The same hook injects the
 derived display name and `session_id_prefix` (first six characters of
 `session_id`) into `additional_context` for thread registration when the
-integrated terminal does not see `OAK_AGENT_SEED`. A gitignored
+integrated terminal does not see the Practice variable. A gitignored
 `.cursor/oak-composer-session.local.json` mirror (when agent-tools is built)
 carries the same derived name and a suggested Composer tab title for
 copy/paste — Cursor hooks cannot set the tab label programmatically per
 [Hooks](https://cursor.com/docs/hooks). If the hook is disabled or
 the name line is missing, run `pnpm agent-tools:agent-identity --format display`
-with `--seed` or `OAK_AGENT_SEED`, or ask the owner for an override. If the
-platform does not expose a stable session seed and no Cursor hook context is
-present, pass `--seed`, set `OAK_AGENT_SEED` explicitly for the session, or ask
-the owner for an override. Do **not** fall back to `git config user.email`;
-personal-email fallback is intentionally not part of the identity contract.
+with `--seed` or a Practice session variable, or ask the owner for an override.
+If the platform does not expose a stable session seed and no hook context is
+present, pass `--seed` explicitly or ask the owner for an override. Do **not**
+fall back to `git config user.email`; personal-email fallback is intentionally
+not part of the identity contract.
+
+Codex project config wires a soft `SessionStart` hook via
+`.codex/hooks/practice-session-identity.mjs`. It injects the same PDR-027 block
+as context when Codex provides `session_id`. Missing build artefacts or
+malformed input intentionally produce no context and do not block startup.
+Treat title/statusline text as an optional display convenience, not the
+identity source of truth.
 
 `OAK_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for
 memorable owner-assigned names. Derived names from session-id seeds are

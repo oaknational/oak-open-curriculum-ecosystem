@@ -108,14 +108,17 @@ Platform hooks set the platform-suffixed Practice variable: the Claude Code
 `--seed "<stable-session-seed>"` explicitly. Do not use personal-email
 fallback.
 
-Before any shared collaboration-state write, prefer:
+Before any Codex thread registration or shared collaboration-state write,
+prefer the full PDR-027 identity preflight:
 
 ```bash
 pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
 ```
 
-Codex sessions with `CODEX_THREAD_ID` available must not write new state as
-`Codex` / `unknown`; use the derived name and prefix.
+Codex sessions with `CODEX_THREAD_ID` available must not write new thread rows
+or collaboration state as `Codex` / `unknown`; use the derived `agent_name` and
+`session_id_prefix`. Codex `SessionStart` hooks may inject the same block as
+developer context, but the preflight command remains the correctness check.
 
 Before staging or committing, use the always-active commit skill. It
 checks for fresh `commit_queue` entries and `git:index/head` commit-window

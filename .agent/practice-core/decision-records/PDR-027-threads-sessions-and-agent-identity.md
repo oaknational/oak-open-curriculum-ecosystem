@@ -27,6 +27,15 @@ rather than passive guidance).
 
 ## Amendment Log
 
+- **2026-04-28 — full identity block is the shared thread and state
+  contract.** Codex identity plumbing now uses the same PDR-027 identity block
+  for thread registration guidance and shared-state writes:
+  `agent_name`, `platform`, `model`, `session_id_prefix`, and `seed_source`.
+  Host hooks may surface that block at session start, but they do not become
+  the source of truth. The canonical interface is the platform-appropriate
+  identity preflight command; historical `Codex` / `unknown` rows are audited
+  and classified before any repair rather than rewritten blindly.
+
 - **2026-04-27 — Codex thread id accepted as a seed source.**
   Codex shell commands expose the active thread id as `CODEX_THREAD_ID`.
   The deterministic identity CLI now reads that value after
@@ -243,6 +252,30 @@ then `CODEX_THREAD_ID`, then `OAK_AGENT_SEED`; missing seed is a
 bad-usage error. There is no personal-email fallback. The derived value helps fill
 `agent_name`; it does not change the additive-identity rule, the
 identity key, or the historical record.
+
+### Full identity block for coordination state
+
+When a session registers on a thread or writes Practice collaboration state,
+it uses a full identity block, not a display name alone:
+
+| Field | Meaning |
+| --- | --- |
+| `agent_name` | Deterministic or owner-assigned session display identity |
+| `platform` | Agent harness / host |
+| `model` | Canonical model identifier used by the session |
+| `session_id_prefix` | First 6 characters of the harness session id if available; `unknown` otherwise |
+| `seed_source` | The source used to derive the session identity seed |
+
+For Codex in this repo, the canonical full-interface command is:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+```
+
+`pnpm agent-tools:agent-identity` remains a name-only convenience. Platform
+display surfaces, status lines, and hooks may repeat or inject the full block,
+but correctness rests on the canonical identity block and the additive-identity
+rule above.
 
 ### Thread scope and the landing commitment
 

@@ -38,6 +38,16 @@ accumulation signal).
 
 ## Amendment Log
 
+- **2026-04-28 v4 amendment — identity preflight, hook context, and audit
+  coverage.** Class A.2 now treats a canonical identity preflight command as
+  the preferred way to obtain the full PDR-027 identity block for
+  thread-registration and shared-state writes. Platform hooks that inject the
+  same block at session start are supplemental convenience adapters, not
+  replacements for the canonical session-open rule or session-close handoff
+  gate. A report-only identity audit over thread records, active claims, closed
+  claims, and shared communication logs is valid Layer 3 coverage when it
+  classifies anonymous records without mutating history.
+
 - **2026-04-27 v3 amendment — shared git transaction and
   authorial-bundle tripwire (Coastal Washing Rudder / codex /
   gpt-5.5; owner-directed queue governance graduation after
@@ -461,7 +471,10 @@ passive guidance.
    rule (`.agent/rules/register-identity-on-thread-join.md` or
    host equivalent) that fires before any edits and requires
    the agent to update `last_session` on a matching identity
-   row or add a new row, per PDR-027.
+   row or add a new row, per PDR-027. The rule should point to a
+   canonical identity preflight command when the host has one so
+   thread rows and shared-state writes use the same full identity
+   block.
 2. **Session-close identity-update gate** — a hard gate inside
    `/session-handoff` (or host equivalent) that blocks session
    close if any thread the session touched has an un-updated
@@ -474,15 +487,17 @@ passive guidance.
    by the agent; naming the authoritative file prevents
    self-reporting because any agent can read it. A code scanner
    is one valid implementation.
-3. **Platform-neutral stale-identity health probe** — a ritual
-   step (default) or scanner (optional) that reads thread
-   identity tables and reports identities whose `last_session`
-   is older than a threshold (or whose thread has been archived
-   but the identity remains), so stale state surfaces as a
-   diagnostic rather than drifting silently. Per §"Active",
-   the default is a named ritual step in a consolidation
-   workflow walking the agent through the check; CLI form is
-   optional.
+3. **Platform-neutral stale/anonymous-identity health probe** — a
+   ritual step (default) or scanner (optional) that reads thread
+   identity tables and collaboration-state records and reports
+   identities whose `last_session` is older than a threshold (or
+   whose thread has been archived but the identity remains), plus
+   anonymous records such as `Codex` / `unknown`. The probe is a
+   diagnostic rather than a mutator: it classifies live risk,
+   historical evidence, and records needing evidence instead of
+   rewriting identity history. Per §"Active", the default is a
+   named ritual step in a consolidation workflow walking the agent
+   through the check; CLI form is optional.
 
 Layers 1 and 2 must both install — rule plus gate is the
 two-complementary-layers minimum for Class A.2. Layer 3
