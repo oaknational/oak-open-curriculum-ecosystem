@@ -86,6 +86,12 @@ Identity preflight must reject anonymous Codex writes when `CODEX_THREAD_ID`
 exists. New Codex shared-state writes must carry a deterministic
 `agent_name`, `platform`, `model`, and `session_id_prefix`.
 
+Follow-up for Codex-wide identity parity is tracked separately in
+[`../future/codex-session-identity-plumbing.plan.md`](../future/codex-session-identity-plumbing.plan.md).
+This write-safety plan fixes the safe shared-state write path; the follow-up
+owns thread-row defaults, legacy `Codex` / `unknown` reporting, and any
+verified Codex title/statusline or hook integration.
+
 ## TTL Baseline
 
 Use TTL cleanup as the portable default:
