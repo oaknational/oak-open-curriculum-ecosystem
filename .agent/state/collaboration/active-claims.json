@@ -66,82 +66,9 @@
       "phase": "abandoned",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.claude/hooks/practice-session-identity.mjs\nM\t.claude/settings.json\nM\tagent-tools/docs/agent-identity.md\nM\tagent-tools/src/bin/agent-identity-cli.ts\nA\tagent-tools/src/bin/claude-session-identity-hook.ts\nA\tagent-tools/src/claude/session-identity-hook.ts\nM\tagent-tools/src/cursor/oak-session-identity-hook.ts\nM\tagent-tools/tests/agent-identity/cli.unit.test.ts\nA\tagent-tools/tests/claude/session-identity-hook.unit.test.ts\nM\tagent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts\n",
       "staged_bundle_fingerprint": "f9149aae1078dc2a8fcedb6cce08ad5d23ef1ad6afe46eaf7ed7a15af7c2adc8"
-    },
-    {
-      "intent_id": "09e9c7e5-15d8-400a-ac91-a96398b8b7d4",
-      "claim_id": "f1e0b2a8-4c6e-4a3a-9b2e-d3a8b9c1f2e7",
-      "agent_id": {
-        "agent_name": "Prismatic Glowing Sun",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "22e835"
-      },
-      "files": [
-        "agent-tools/src/bin/agent-identity-cli.ts",
-        "agent-tools/src/bin/claude-session-identity-hook.ts",
-        "agent-tools/src/claude/session-identity-hook.ts",
-        "agent-tools/src/cursor/oak-session-identity-hook.ts",
-        "agent-tools/tests/agent-identity/cli.unit.test.ts",
-        "agent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts",
-        "agent-tools/tests/claude/session-identity-hook.unit.test.ts",
-        "agent-tools/docs/agent-identity.md",
-        ".claude/hooks/practice-session-identity.mjs",
-        ".claude/settings.json",
-        ".agent/skills/start-right-quick/shared/start-right.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/memory/active/napkin.md"
-      ],
-      "commit_subject": "feat(agent-identity): claude SessionStart hook + practice env-var rename",
-      "queued_at": "2026-04-28T07:25:56.909Z",
-      "updated_at": "2026-04-28T07:26:15.044Z",
-      "expires_at": "2026-04-28T07:40:56.909Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.claude/hooks/practice-session-identity.mjs\nM\t.claude/settings.json\nM\tagent-tools/docs/agent-identity.md\nM\tagent-tools/src/bin/agent-identity-cli.ts\nA\tagent-tools/src/bin/claude-session-identity-hook.ts\nA\tagent-tools/src/claude/session-identity-hook.ts\nM\tagent-tools/src/cursor/oak-session-identity-hook.ts\nM\tagent-tools/tests/agent-identity/cli.unit.test.ts\nA\tagent-tools/tests/claude/session-identity-hook.unit.test.ts\nM\tagent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts\n",
-      "staged_bundle_fingerprint": "f9149aae1078dc2a8fcedb6cce08ad5d23ef1ad6afe46eaf7ed7a15af7c2adc8"
     }
   ],
   "claims": [
-    {
-      "claim_id": "6395ea9c-bd44-417e-8b17-c3f9c5dc3f65",
-      "agent_id": {
-        "agent_name": "Luminous Dancing Quasar",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "pr87ph"
-      },
-      "lineage": [
-        {
-          "agent_name": "Tidal Rolling Lighthouse",
-          "platform": "claude-code",
-          "model": "claude-opus-4-7-1m",
-          "session_id_prefix": "compose",
-          "claimed_at": "2026-04-28T05:26:51Z",
-          "handed_over_at": "2026-04-28T15:00:00Z"
-        }
-      ],
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts"
-          ]
-        },
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-28T05:26:51Z",
-      "heartbeat_at": "2026-04-28T15:00:00Z",
-      "freshness_seconds": 14400,
-      "intent": "Phase 1 of PR-87 quality remediation: lock down runGitCommand chain. Replace generic executeGitCommand DI seam with two narrow capabilities (gitShowFileAtSha, gitFetchShallow); validate VERCEL_GIT_PREVIOUS_SHA at trust boundary against /^[0-9a-f]{40}$/; scrub git env to neutralise hostile global/system config. Closes MUST-FIX argv-injection class surfaced by adversarial security review and the last TO_REVIEW Sonar hotspot.",
-      "notes": "Inherited 2026-04-28T15:00:00Z by Luminous Dancing Quasar (additive identity per PDR-027). Working tree carries refactor + 32 unit tests + 1 e2e test (uncommitted). 4-of-5 reviewers absorbed (code/security/fred/test) under Tidal; this session dispatches deferred architecture-reviewer-wilma (fail-open + shallow-clone reachability under ADR-163 §10), absorbs findings, re-runs gates one-at-a-time, cluster-commits naming the architectural shape, pushes, observes hotspot AZ3D3iflrIk5eL0ceU__ drop, then proceeds to Phase 2 (Cluster A rate-limit type narrowing). Stance: no fallback dispositions."
-    },
     {
       "claim_id": "f1e0b2a8-4c6e-4a3a-9b2e-d3a8b9c1f2e7",
       "agent_id": {
@@ -174,8 +101,7 @@
       "heartbeat_at": "2026-04-28T07:39:00Z",
       "freshness_seconds": 7200,
       "intent": "Practice-prefix env var rename (OAK_AGENT_SEED + dead CLAUDE_SESSION_ID → PRACTICE_AGENT_SESSION_ID_{CLAUDE,CURSOR,CODEX}); add Claude Code SessionStart hook that writes PRACTICE_AGENT_SESSION_ID_CLAUDE to $CLAUDE_ENV_FILE and injects identity additionalContext + non-binding /rename suggestion; correct the start-right directive that incorrectly told Claude Code agents to expect CLAUDE_SESSION_ID from env. Cursor live-test and Codex Practice wrapper called out as future work in agent-identity.md.",
-      "notes": "TDD throughout — CLI tests, Cursor hook tests, new Claude hook tests all green (91/91 in agent-tools). Build, type-check, lint, markdownlint, format, portability:check, subagents:check all clean. End-to-end smoke test of the .mjs shim verified env-file write and hookSpecificOutput stdout for session 22e835. SessionStart hook fires on next Claude Code session start; in-session verification of the env reaching Bash tool calls is deferred to next session open.",
-      "intent_to_commit": "09e9c7e5-15d8-400a-ac91-a96398b8b7d4"
+      "notes": "TDD throughout — CLI tests, Cursor hook tests, new Claude hook tests all green (91/91 in agent-tools). Build, type-check, lint, markdownlint, format, portability:check, subagents:check all clean. End-to-end smoke test of the .mjs shim verified env-file write and hookSpecificOutput stdout for session 22e835. SessionStart hook fires on next Claude Code session start; in-session verification of the env reaching Bash tool calls is deferred to next session open."
     }
   ]
 }

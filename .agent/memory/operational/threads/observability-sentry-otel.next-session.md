@@ -1,6 +1,27 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Session-close 2026-04-28 evening (Tidal Rolling Lighthouse, claude-code, claude-opus-4-7-1m, session seed `composed-petting-hejlsberg-2026-04-28`)** — Planning + Phase 1 implementation **in flight, not committed**. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open). Owner-approved 12-phase re-grounded execution plan landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. **Top-priority elevation**: Cluster B (`runGitCommand` lockdown) is now Phase 1.
+**Session-close 2026-04-28 late evening (Luminous Dancing Quasar, claude-code, claude-opus-4-7-1m, session seed `pr87-phase1-cluster-b-2026-04-28-second-wave`)** — Phase 1 + Phase 1.1 **complete**, all three commits pushed to PR-87. HEAD = origin = PR-87 head = `84571ccf`. The Cluster B (`runGitCommand` lockdown) work is fully landed; the original TO_REVIEW Sonar hotspot `AZ3D3iflrIk5eL0ceU__` is closed; `new_security_hotspots_reviewed` flipped from 90.9% → **100% OK** on the QG. The next thread step is Phase 2 (Cluster A — rate-limit type narrowing).
+
+**Phase 1 outcome (commits on PR-87)**:
+
+- `9b2b2ed7` — `refactor(vercel-ignore): lock down git capabilities; add boundary sha validation; scrub git env`. Architectural cure: `validateGitSha` at trust boundary, named `gitShowFileAtSha` + `gitFetchShallow` capabilities (replacing the generic `runGitCommand` runner), `scrubbedGitEnv` (HOME omitted, GIT_CONFIG_* pinned to `/dev/null`, GIT_TERMINAL_PROMPT=0), defence-in-depth filePath validation, symmetric stderr diagnostics on current/previous-version probes. Reviewers absorbed: `code-reviewer`, `security-reviewer`, `architecture-reviewer-fred`, `test-reviewer` inline; `architecture-reviewer-wilma` flagged a non-trivial PATH-detection finding (eager check at `runVercelIgnoreCommand` entry) which was absorbed in this commit and then unwound in `84571ccf`. MUST-FIX argv-injection class via `VERCEL_GIT_PREVIOUS_SHA` closed at trust boundary.
+- `5d6622d0` — `fix(agent-identity-cli): align e2e expectation with renamed seed env vars`. Surgical 1-line fix unblocking pre-push. The parallel session's `Prismatic Glowing Sun` rename of seed env vars (`CLAUDE_SESSION_ID`/`OAK_AGENT_SEED` → `PRACTICE_AGENT_SESSION_ID_{CLAUDE,CURSOR,CODEX}`) updated source + unit tests but missed the e2e expectation; the file was outside both active claims so this was a clean cross-claim fix with comms-log notification.
+- `84571ccf` — `refactor(vercel-ignore): use absolute git binary; drop path inheritance from scrubbed env`. Phase 1.1 followup after CI showed S4036 had moved (not dropped) and 5 new TO_REVIEW hotspots had appeared on my new code. Cure: `GIT_BINARY = '/usr/bin/git'` constant, capabilities call `execFileSync(GIT_BINARY, ...)`, `scrubbedGitEnv` no longer reads PATH, eager PATH check unwound, `safeReadPreviousVersion` decomposed via `attemptShowAfterShallowFetch` + `readPackageJsonText` (S3776 cognitive complexity 19 → <15), `/tmp/evil` test fixtures removed (S5443 ×3 closed). E2E test uses `/usr/bin/git` directly to mirror the production posture.
+
+**Phase 1 outcome (Sonar QG, head `84571ccf`)**:
+
+- `new_security_hotspots_reviewed`: 90.9% → **100% OK** (TO_REVIEW count 1 → 6 → 0)
+- `new_violations`: 27 → baseline 27 (the S3776 I introduced was closed via helper extraction)
+- `new_duplicated_lines_density`: 5.6% → 5.7% (residual from the new `.d.mts` declaration file; addressed at Cluster D / Phase 11)
+- CodeQL OPEN: 7 unchanged (5 × Cluster A rate-limit + 2 × Cluster C schema-cache; explicit Phase 2 + Phase 3 targets)
+
+**What next session does**: open Phase 2 (Cluster A) per the plan-of-record §"Phase 2". First action is the pre-phase `security-reviewer` adversarial dispatch on rate-limit bypass paths (key extraction, key collision, IP spoofing under `trust proxy = 1`, header bypass, OAuth-proxy double-counting). Then narrow `RateLimiterFactory` return type from `RequestHandler` → `RateLimitRequestHandler` and propagate the brand through `auth-routes.ts`, `oauth-proxy/oauth-proxy-routes.ts`, `app/bootstrap-helpers.ts`, and the test fake at `test-helpers/rate-limiter-fakes.ts` (which needs stub `getKey` and `resetKey` methods to satisfy the brand). CodeQL `js/missing-rate-limiting` should close all 5 alerts when the brand reaches the `app.post(...)` registration sites; if not, locate the remaining widening site and close it (no fallback dispositions). Active claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` is being archived as part of this session-close (Phase 1 closure evidence: the three commits above).
+
+**Discipline carried forward**: no fallback dispositions; no `accept` / `false_positive` / `cpd.exclusions` in any phase; generated code is fully our responsibility. The Stance section of the plan is operational at every phase boundary. The drift-pattern register (Vining → Pelagic → Opalescent → Tidal) gains a fifth instance below.
+
+---
+
+**Earlier session-close 2026-04-28 evening (Tidal Rolling Lighthouse, claude-code, claude-opus-4-7-1m, session seed `composed-petting-hejlsberg-2026-04-28`)** — Planning + Phase 1 implementation **in flight, not committed**. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open). Owner-approved 12-phase re-grounded execution plan landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. **Top-priority elevation**: Cluster B (`runGitCommand` lockdown) is now Phase 1.
 
 **Phase 1 progress (working tree, uncommitted)**:
 
@@ -984,6 +1005,7 @@ rehearsal).
 | `Pelagic Flowing Dock` | `claude-code` | `claude-opus-4-7-1m` | `compose` | `pr-87-architectural-cluster-plan-author-and-executor; closed-briny-ebbing-lagoon-claim-on-owner-direction; cluster-by-architectural-root-cause-resolution-replaces-per-rule-disposition` | 2026-04-27 | 2026-04-27 |
 | `Opalescent Gliding Prism` | `claude-code` | `claude-opus-4-7-1m` | `radiant-pillow` | `pr-87-architectural-cleanup-session-2-phase-0-plan-body-regrounding-phase-0-5-cluster-q-sink-probe-phase-1-dormant-rule-deletion-and-reinstate-stub-cluster-q-dispositions-via-codeql-and-sonar-mcp-cluster-a-sink-trace-analysis-handoff-at-context-budget-threshold` | 2026-04-27 | 2026-04-27 |
 | `Tidal Rolling Lighthouse` | `claude-code` | `claude-opus-4-7-1m` | `composed-petting` | `pr-87-quality-remediation-replan-12-phase-execution-plan-then-phase-1-cluster-b-runGitCommand-lockdown-implementation-with-32-unit-tests-1-e2e-runtime-test-and-4-of-5-reviewer-absorption-WIP-uncommitted-wilma-deferred-to-next-session` | 2026-04-28 | 2026-04-28 |
+| `Luminous Dancing Quasar` | `claude-code` | `claude-opus-4-7-1m` | `pr87ph` | `pr-87-phase-1-cluster-b-second-wave-wilma-dispatch-and-absorption-cluster-commit-and-push-then-phase-1.1-finish-env-scrub-via-absolute-git-binary-cognitive-complexity-refactor-fixture-cleanup-three-commits-pushed-9b2b2ed7-and-5d6622d0-and-84571ccf-sonar-hotspot-panel-flipped-to-100-percent-OK` | 2026-04-28 | 2026-04-28 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

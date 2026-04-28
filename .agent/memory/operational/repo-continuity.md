@@ -8,7 +8,33 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28 (Tidal Rolling Lighthouse / claude-code /
+**Last refreshed**: 2026-04-28 late evening (Luminous Dancing Quasar /
+claude-code / claude-opus-4-7-1m / `pr87ph` — PR-87 Phase 1 + Phase 1.1
+landed and pushed. HEAD = origin = PR-87 head = `84571ccf`. Three commits
+pushed: `9b2b2ed7` `refactor(vercel-ignore): lock down git capabilities;
+add boundary sha validation; scrub git env` (architectural cure, 4-of-5
+reviewers absorbed inline including Wilma's PATH-detection finding via an
+eager check), `5d6622d0` `fix(agent-identity-cli): align e2e expectation
+with renamed seed env vars` (small surgical unblock for the parallel
+session's PRACTICE_AGENT_SESSION_ID rename drift), and `84571ccf`
+`refactor(vercel-ignore): use absolute git binary; drop path inheritance
+from scrubbed env` (Phase 1.1 finish: `GIT_BINARY = '/usr/bin/git'`,
+scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive
+complexity refactor via helper extraction, `/tmp/evil` S5443 fixtures
+removed). Sonar QG outcome on PR-87: `new_security_hotspots_reviewed`
+flipped 90.9% → **100% OK**; `new_violations` back to baseline 27;
+`new_duplicated_lines_density` 5.6% → 5.7% (residual `.d.mts` boilerplate;
+addressed at Cluster D / Phase 11). MUST-FIX argv-injection class closed.
+CodeQL 7 OPEN unchanged (Cluster A 5 + Cluster C 2; explicit Phase 2 +
+Phase 3 targets). Concurrent-session coordination: parallel session
+`Prismatic Glowing Sun` on `agent-identity-platform-surfaces` thread
+blocked my path twice (lint at pre-commit, e2e at pre-push); both
+resolved via owner-confirmed wait + a one-line cross-claim fix
+respectively. Both my Phase 1 cluster commits used `git commit --
+<pathspec>` partial-commit to avoid contention with their staged bundle
+in the shared index.)
+
+**Prior refresh**: 2026-04-28 (Tidal Rolling Lighthouse / claude-code /
 claude-opus-4-7-1m — PR-87 quality remediation re-grounding pass. Fresh
 state harvested: PR-87 head `fe2c18f5`, mergeable=blocked, CodeQL 7 OPEN
 (5 Cluster A + 2 Cluster C), Sonar QG ERROR with `new_violations=27`,
@@ -116,8 +142,8 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
 resumes, start a fresh thread or revive that record deliberately.
@@ -169,6 +195,14 @@ state is now:
   deterministic name from composer `session_id`, hook-scoped `OAK_AGENT_SEED`,
   and human mitigations for the missing tab-rename API (mirror file +
   `user_message`). Land when index allows.
+- Practice/tooling feedback and collaboration-state domain modelling now have
+  durable capture (2026-04-28): portable feedback rule/adapters, surfaced
+  communication-channel register, UTC timestamp convention, refreshed
+  ADR/PDR references, and future plan
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
+  Owner corrected the live agent set to Codex, Estuarine, and Prismatic;
+  a `Luminous Dancing Quasar` claim is not by itself evidence of a reachable
+  participant.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -200,14 +234,21 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-1. **Strict exact-optional cleanup** — the stricter
+1. **Practice collaboration-state domain model** — first safe step is
+   reconcile the active participant registry against the real active agents
+   (Codex, Estuarine, Prismatic), especially the stale/phantom `Luminous`
+   claim and missing Estuarine claim. Then promote
+   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+   when the owner wants implementation of reliable comms writes, sidebar
+   attention cadence, UTC validation, or identity preflight.
+2. **Strict exact-optional cleanup** — the stricter
    `--exactOptionalPropertyTypes` probe is clean for identity files but still
    reports the pre-existing `agent-tools/src/bin/codex-reviewer-resolve.ts`
    optional typing issue.
-2. **First real sidebar / joint-decision seed** — when a real overlap uses
+3. **First real sidebar / joint-decision seed** — when a real overlap uses
    the new entries, capture whether it reached resolution without becoming a
    permission gate or default owner escalation.
-3. **Observability branch-primary (PR-87 architectural cleanup in flight)** —
+4. **Observability branch-primary (PR-87 architectural cleanup in flight)** —
    - L-IMM lane (operational hardening): closed at 6/6.
      [`archive/completed/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md).
    - [`active/pr-87-architectural-cleanup.plan.md`](../../plans/observability/active/pr-87-architectural-cleanup.plan.md)
@@ -246,17 +287,17 @@ Choose the lane deliberately:
      re-scoped to Phases 1-2 only (Sentry preview validation + MCP server
      preview probe); Phases 3-5 marked superseded (now owned by the
      active PR-87 plan).
-4. **Lifecycle integration follow-up** — only if owner-directed, observe
+5. **Lifecycle integration follow-up** — only if owner-directed, observe
    whether start-right / handoff / template lifecycle triggers are used in
    real sessions. Do not add hook reminders without evidence. First real
    sidebar/joint-decision usage should feed WS5 observation.
-5. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
+6. **Codex/Cursor identity display follow-up** — Codex thread-id wiring
    landed in `ff119d44`; CLI/TUI title/statusline surfaces exist, but a
    first-class IDE session-title/custom-name setting was not found. Cursor
    composer `session_id` is the stable seed via `sessionStart`; repo hook +
    mirror landed in working tree — **Composer tab title** still needs Cursor
    product support or manual rename from `suggestedComposerTabTitle`.
-6. **Other agentic engineering work** — WS3A, WS4A, commit-window,
+7. **Other agentic engineering work** — WS3A, WS4A, commit-window,
    WS3B, joint-decision, and Phase 8 Claude Code statusline wiring are all
    complete. Pick a queued owner-directed plan from the current/roadmap
    surfaces.
@@ -279,18 +320,39 @@ These are visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-28 Tidal Rolling Lighthouse, Phase 1 WIP handoff with
-light consolidation)**: light consolidation pass completed during
-session-handoff per owner direction. Entry-point sweep clean (CLAUDE.md,
-AGENTS.md both at canonical pointer-only shape). Napkin over line limit
-(391 / 300) — preserved deliberately; the four-instance disposition-drift
-narrative (Vining → Pelagic → Opalescent → Tidal) is the load-bearing
-evidence for the "due" graduation entry below. Rotation of settled
-sub-entries deferred to next deep consolidation; rotating now would lose
-cross-session evidence still building toward graduation. Distilled.md
-already carries Vining's settled lesson at §"Drift recurs while authoring
-the enforcement of the principle it violates"; the new Tidal entry
-extends the manifestation set to "fall back to" optionality in plan
+**Status (2026-04-28 late evening, Luminous Dancing Quasar, Phase 1
+and Phase 1.1 close handoff with fairly-light consolidation per owner
+direction)**: Phase 1 of PR-87 (Cluster B `runGitCommand` lockdown)
+fully landed and pushed (3 commits on PR-87 head `84571ccf`); Sonar
+QG hotspot panel flipped 90.9% → 100% OK; MUST-FIX argv-injection
+class closed. Light consolidation pass: entry-point sweep clean
+(CLAUDE.md, AGENTS.md, GEMINI.md all at canonical pointer shape);
+napkin extended with two new entries (hotspot-key-vs-data-flow lesson;
+partial-commit unblocks shared-index contention) — napkin now at 490
+lines, **within hard limit 500 but at risk** of breach next session if
+extended; distilled.md at 262 lines (carrying disposition-drift
+register among others). **`repo-continuity.md` itself is now in HARD
+zone** (553/500 lines, 35540/35000 chars) primarily from the
+accumulating session-close summaries that the file's `split_strategy`
+frontmatter explicitly says to archive — *"Archive historical
+session-close summaries to a companion archive file; keep only live
+operational state and most recent session summary here"*. **Deferred
+to next session's deep consolidation**: the summary-archive pass per
+the documented split_strategy. Reason: the user requested fairly-
+light consolidation and the HARD breach predates this session's
+specific contribution (the fix is structural archive work, not a
+per-line trim of my own additive content). Falsifiability: a future
+agent can confirm by counting session-close summary blocks in this
+file and checking whether the oldest blocks have moved to a
+companion archive file. The four-instance disposition-drift
+narrative (Vining → Pelagic → Opalescent → Tidal) gains a fifth
+manifestation in Luminous's first entry below — the *"hotspot site
+relocation ≠ data-flow closure"* drift, where my Phase 1 first cut
+made the QG worse on the very metric the cluster was meant to
+improve. Distilled.md already carries Vining's settled lesson at
+§"Drift recurs while authoring the enforcement of the principle it
+violates"; the Tidal entry extends the manifestation set to "fall
+back to" optionality in plan
 drafting even after explicit denial. Phase 1 Cluster B work is WIP in
 working tree (not committed); see thread record for full state.
 
@@ -390,6 +452,21 @@ fresh session, learning preserved. Strict-hard fitness was not run at
 closeout — the working tree contains the suspect WIP and additional
 fitness pressure changes would conflate with the suspect surface;
 fresh session re-runs strict-hard after the WIP is audited.
+
+**Status (2026-04-28 Codex, collaboration-state domain-model handoff)**:
+completed this handoff — owner explicitly requested session handoff, light
+consolidation, plan discoverability, and commit. The Practice/tool feedback
+rule and adapters, UTC timestamp convention, communication-channel discovery
+links, ADR/PDR refreshes, and strategic future plan are now in durable
+surfaces. Light consolidation found no new immediately promoted ADR/PDR:
+identity preflight and collaboration-state domain modelling are preserved as
+future-plan scope until owner promotion or another concrete collision. Fitness
+is not green: `pnpm practice:fitness:informational` reports critical pressure
+in `napkin.md` and `principles.md`; the named trade-off is to preserve the
+current learning and avoid rotating/pruning while Prismatic owns staged napkin
+and agent-identity work. Falsifiability: rerun that command after Prismatic's
+bundle lands or clears, then perform a deliberate napkin/principles fitness
+pass.
 
 ### Pending-Graduations Register
 

@@ -329,6 +329,50 @@ clothes.
 
 ---
 
+## 2026-04-28 — Luminous Dancing Quasar — fixing a hotspot's site is not the same as closing its data flow
+
+**Context:** Phase 1 of PR-87 on the `vercel-ignore-production-non-release-build.mjs` script. The original Sonar S4036 hotspot fired at line 152 (`execFileSync('git', …)` reading PATH from process env). My first cut (commit `9b2b2ed7`) replaced the generic `runGitCommand` runner with two narrow named capabilities (`gitShowFileAtSha`, `gitFetchShallow`) that internally called `execFileSync('git', …)` with `scrubbedGitEnv()`. `scrubbedGitEnv` preserved PATH from `process.env`. Tests green; cluster commit landed; pushed.
+
+### Surprise
+
+- **Expected:** the original hotspot `AZ3D3iflrIk5eL0ceU__` would drop out of the data flow because the call site was relocated and the env was now "scrubbed".
+- **Actual:** the original hotspot key did drop, but Sonar re-fired the same S4036 rule at the *new* call sites (`execFileSync('git', …)` at lines 287 and 310 inside the new capabilities, and at line 39 of the e2e test). Plus three new S5443 hotspots fired on `/tmp/evil` test fixtures, and a new S3776 critical violation appeared because my reviewer-absorption layered fetch-then-retry-show inside an already-nested catch block. Net change: `new_security_hotspots_reviewed` went 90.9% → 62.5%; `new_violations` went 27 → 28. The cluster commit made the QG worse, not better, despite the original hotspot being closed.
+- **Why expectation failed:** I conflated "the hotspot at line 152 is closed" with "the data flow underlying the rule is closed". The S4036 rule is about PATH inheritance to a child process; relocating the call site preserves the data flow as long as `scrubbedGitEnv` still reads `process.env.PATH`. The plan's check was specifically: *"If Sonar still attaches the rule, the env scrub is incomplete — finish it."* I read that sentence at planning time, but at execution time I treated "different hotspot key" as evidence of progress and did not re-derive "is the data flow actually closed?" at the site.
+
+### Triggers to detect this earlier next time
+
+- I see a hotspot key change on push and treat it as success without re-running the data-flow trace at the new site.
+- I have an env-scrub function that *preserves* PATH from `process.env` and call it "scrubbed". The semantic mismatch (preserved ≠ scrubbed) is itself a yellow flag.
+- I cite the plan's "If Sonar still attaches the rule, the env scrub is incomplete — finish it" wording in the commit body but my actual change keeps the inheritance the rule fires on.
+- A reviewer (Wilma in this case) wraps a finding around PATH-detection clarity that I absorb cleanly, but the reviewer's underlying intuition — "PATH is the wrong thing to be propagating here" — gets implemented as "make PATH-detection eager" rather than "make PATH unnecessary".
+
+### Behaviour change
+
+- **Validate hotspot dispositions by re-running the data-flow trace at the new call sites, not by reading the hotspot key list.** Sonar's hotspot keys are addresses, not closures. If the rule is "PATH from environment", the cure is "PATH not from environment" — at every site.
+- **Treat "this scrubbedGitEnv preserves X" as a contradiction-of-name to investigate, not a footnote.** A scrub that preserves the very value the rule fires on is a partial scrub at best.
+- **When a reviewer's framing surfaces a deeper architectural concern than the cure shape they recommend, follow the underlying concern, not the surface fix.** Wilma was right that PATH-handling was hiding a defect; the eager-detection cure addressed the symptom (defect-invisibility) not the cause (PATH being a runtime concern at all). The deeper cure (absolute `/usr/bin/git`, no PATH consultation) closes both.
+- **Source plane:** active
+
+---
+
+## 2026-04-28 — Luminous Dancing Quasar — partial-commit unblocks shared-index contention
+
+**Context:** mid-session, the parallel `Prismatic Glowing Sun` session staged a 12+-file bundle into the shared git index without committing. My next cluster commit needed to land but committing would also commit their bundle. The naive options (waiting for them, asking owner, intruding on their files) all had cost.
+
+### Surprise
+
+- **Expected:** when another session stages files in the shared index, my own commit either has to wait or has to coordinate explicitly.
+- **Actual:** `git commit -F <message-file> -- <my-pathspec-list>` (partial commit) takes the working-tree content of the named paths and commits ONLY those, leaving the existing index entries for unrelated paths untouched. The parallel session's staged bundle remained intact and unmodified after my commit landed.
+- **Why expectation failed:** I had been thinking of `git commit` as "commit whatever is staged"; the partial-commit mode (with explicit `--` pathspec) is a separate code path that bypasses the index for the named paths. Once I named only my own files, the parallel session's bundle was structurally untouchable from my commit.
+
+### Behaviour change
+
+- **In multi-agent contention on the shared index, partial-commit is the safe path.** It is not "force a commit anyway" — it is a structurally narrower operation that respects the rest of the index by ignoring it.
+- **State the pathspec list explicitly in the commit invocation, not via `git add` first.** Adding to the index would still risk including the other agent's bundle on `git commit` if I forgot the partial-commit form.
+- **Source plane:** active
+
+---
+
 ## 2026-04-28 — Tidal Rolling Lighthouse — disposition-drift in plan drafting, even after explicit denial
 
 **Context:** authoring the PR-87 re-grounded execution plan at
@@ -399,3 +443,58 @@ self-review caught zero of the four.
 **Backstop discovery channel:** an agent that needs to find its own `session_id` from inside a turn can read `~/.claude/projects/<project-slug>/<session-id>.jsonl` — the most-recently-modified transcript matches the live session. Heuristic, not contractual: it can fail when two sessions are open simultaneously on the same project. Not currently used as a primary mechanism but worth keeping in mind for future tooling that runs before the SessionStart env-file is populated.
 
 **`/rename` is user-typed only.** `sessionTitle` is exclusively a `UserPromptSubmit` hook output field. The model cannot self-invoke `/rename`. We deliberately did not add a `UserPromptSubmit` hook for the title — running on every prompt for a one-shot effect is architectural noise; the SessionStart hook injects an `additionalContext` row asking the agent to suggest the rename to the user when intent crystallises.
+
+## 2026-04-28 — Codex — Practice/tooling feedback and collaboration-state documentation gaps
+
+### Practice/tooling feedback
+
+- **Surface**: `Practice` + `agent-tools`
+- **Signal**: insight
+- **Observation**: `agent-tools` is this repo's TypeScript-specific
+  implementation surface for capabilities that should exist in every
+  hydrated Practice. The capability contract needs to stay portable, while
+  implementation details stay host-local.
+- **Behaviour change / candidate follow-up**: when a Practice or
+  `agent-tools` command creates friction, capture the behaviour-level signal in
+  the napkin immediately so consolidation can separate portable Practice
+  substance from local TypeScript implementation.
+- **Source plane**: active
+
+### Missing documentation / deeper-analysis notes
+
+- The shared communication log is carrying enough write pressure that a flat
+  append-only markdown file may no longer be the right hot write surface. Need
+  deeper domain-model work around discovery narrative vs live ownership vs
+  commit intent vs structured decision records.
+- A future plan now preserves the analysis:
+  `.agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md`.
+- The communication-channel register exists at
+  `.agent/memory/executive/agent-collaboration-channels.md`; the gap was
+  surfacing it from common entry points. This session wired the executive
+  README, state README, and practice index, but start-right should be checked
+  once the active agent-tools/start-right claim clears.
+- ADR/PDR drift found and partially repaired: collaboration-state references
+  needed to name the commit queue, sidebars, joint decisions, escalations, and
+  UTC timestamp convention; ADR-163 needed a `9b2b2ed7` enforcement-hardening
+  note.
+- Agent-tools README/docs should eventually say explicitly that the workspace
+  is a host-local implementation of portable Practice capabilities, not the
+  Practice itself. Avoided today because another agent owns those files.
+
+### Owner correction
+
+- Owner clarified the actual active agents are Codex, Estuarine, and
+  Prismatic. There is no live Luminous agent unless a sub-agent registered that
+  claim. Treat the `Luminous Dancing Quasar` active claim as a stale/phantom
+  registry signal or identity mismatch until reconciled; do not infer a
+  reachable peer from the claim alone.
+
+### Owner amendment
+
+- The write-reliability question is not just "fix shared-comms-log". Once the
+  collaboration-state domain model names the right boundaries, every shared
+  inter-agent state record needs a multi-agent-safe write path: claims, queue
+  entries, conversations, sidebars, escalations, closure archives, generated
+  read models, and any future event files. The owner is not currently seeing
+  the same clash pattern in the claim registry, but the design must prevent
+  moving log jams from one state file to another.

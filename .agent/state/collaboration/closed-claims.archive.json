@@ -3631,6 +3631,349 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "44161a85-3ca5-42d8-94ff-9610ed61e8ef",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/capture-practice-tool-feedback.md",
+            ".agent/rules/use-agent-comms-log.md",
+            ".agents/rules/capture-practice-tool-feedback.md",
+            ".claude/rules/capture-practice-tool-feedback.md",
+            ".cursor/rules/capture-practice-tool-feedback.mdc",
+            ".agent/skills/napkin/SKILL.md",
+            ".agent/practice-index.md",
+            ".agent/state/README.md",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/memory/executive/README.md",
+            ".agent/memory/executive/agent-collaboration-channels.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/practice-core/practice-verification.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/practice-core/provenance.yml",
+            ".agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            "docs/architecture/architectural-decisions/119-agentic-engineering-practice.md",
+            "docs/architecture/architectural-decisions/124-practice-propagation-model.md",
+            "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            "agentic-engineering-enhancements:collaboration-state-domain-model-and-comms-reliability"
+          ]
+        },
+        {
+          "kind": "adr",
+          "patterns": [
+            "ADR-119",
+            "ADR-124",
+            "ADR-163"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:04:47Z",
+      "freshness_seconds": 14400,
+      "intent": "Document Practice/tooling feedback capture, refresh collaboration-channel discoverability, and amend ADR/PDR drift without touching active agent-tools or Vercel-ignore implementation files.",
+      "notes": "Scanned active claims: Luminous owns Vercel-ignore implementation files; Prismatic owns agent-tools identity files and start-right. No edits to those claimed implementation/start-right files. ADR-163 amendment documents committed 9b2b2ed7 behaviour only, not uncommitted Vercel-ignore WIP.",
+      "archived_at": "2026-04-28T07:13:54Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T07:13:54Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Practice/tooling feedback capture rule, UTC collaboration timestamp convention, communication-channel discoverability refresh, Practice/PDR/ADR drift fixes, ADR-163 9b2b2ed7 note, and future collaboration-state domain-model plan written. Open-sidebar scan found no formal live sidebar_request entries, but one open conversation is being used as a sidebar-like attention request with a future-dated Z timestamp.",
+        "evidence": [
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-28t070447z--codex--codex--gpt-5--unknown--practice-tool-feedback--collaboration-docs-refresh",
+            "summary": "Session-open coordination note and scope declaration."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "summary": "Strategic preservation plan for shared-log reliability, domain responsibilities, sidebar attention mechanics, push/poll questions, and UTC validation."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#2026-04-28--codex--practice-tooling-feedback-and-collaboration-state-documentation-gaps",
+            "summary": "Napkin entry records remaining documentation gaps and future analysis needs."
+          },
+          {
+            "kind": "adr",
+            "ref": "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md",
+            "summary": "ADR-163 now records the committed 9b2b2ed7 enforcement-hardening behaviour."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1a362159-f4cd-4a3d-a876-c04ceaf074f3",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            "agentic-engineering-enhancements:collaboration-state-domain-model-and-comms-reliability"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:17:41Z",
+      "freshness_seconds": 900,
+      "intent": "Append owner-raised identity and sidebar-attention findings to the preserved collaboration-state domain-model plan, then close immediately.",
+      "notes": "No implementation edits; active agent-tools identity implementation remains Prismatic's claim.",
+      "archived_at": "2026-04-28T07:18:25Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T07:18:25Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Appended liveness ambiguity, ad hoc sidebar usage, and unknown-agent-identity prevention requirements to the future collaboration-state domain-model plan.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "summary": "Plan now includes Luminous/Prismatic sidebar evidence and identity-preflight requirements."
+          },
+          {
+            "kind": "log_entry",
+            "ref": ".agent/state/collaboration/shared-comms-log.md#2026-04-28t071741z--codex--codex--gpt-5--unknown--identity--sidebar-attention-findings-append",
+            "summary": "Short-lived claim opening and finding summary."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "73978119-8ae7-4042-8be5-fc09ca882141",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            "agentic-engineering-enhancements:collaboration-state-domain-model-and-comms-reliability"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:20:59Z",
+      "freshness_seconds": 900,
+      "intent": "Preserve owner correction that actual active agents are Codex, Estuarine, and Prismatic; Luminous is not a live peer unless a sub-agent registered the claim.",
+      "notes": "No implementation edits; documenting the live-state correction and the phantom-claim failure mode only.",
+      "archived_at": "2026-04-28T07:21:58Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T07:21:58Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Captured owner correction that Luminous is not a live peer, making the active Luminous claim a stale/phantom or identity-mismatch signal unless a sub-agent registered it.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "summary": "Plan now distinguishes claim existence from reachable participant existence."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#owner-correction",
+            "summary": "Napkin records owner correction for future consolidation."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6395ea9c-bd44-417e-8b17-c3f9c5dc3f65",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Quasar",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "pr87ph"
+      },
+      "lineage": [
+        {
+          "agent_name": "Tidal Rolling Lighthouse",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "compose",
+          "claimed_at": "2026-04-28T05:26:51Z",
+          "handed_over_at": "2026-04-28T15:00:00Z"
+        }
+      ],
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.d.mts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T05:26:51Z",
+      "heartbeat_at": "2026-04-28T15:00:00Z",
+      "freshness_seconds": 14400,
+      "intent": "Phase 1 of PR-87 quality remediation: lock down runGitCommand chain. Replace generic executeGitCommand DI seam with two narrow capabilities (gitShowFileAtSha, gitFetchShallow); validate VERCEL_GIT_PREVIOUS_SHA at trust boundary against /^[0-9a-f]{40}$/; scrub git env to neutralise hostile global/system config. Closes MUST-FIX argv-injection class surfaced by adversarial security review and the last TO_REVIEW Sonar hotspot.",
+      "notes": "Inherited 2026-04-28T15:00:00Z by Luminous Dancing Quasar from Tidal Rolling Lighthouse (additive identity per PDR-027). Phase 1 + Phase 1.1 landed across three commits (9b2b2ed7, 5d6622d0, 84571ccf) on PR-87 head feat/otel_sentry_enhancements.",
+      "archived_at": "2026-04-28T16:30:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T16:30:00Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Quasar",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "pr87ph"
+        },
+        "summary": "Phase 1 + Phase 1.1 of PR-87 Cluster B (runGitCommand lockdown) landed and pushed across three commits. Sonar new_security_hotspots_reviewed flipped from 90.9% to 100% OK; original TO_REVIEW hotspot AZ3D3iflrIk5eL0ceU__ closed; MUST-FIX argv-injection class closed; new_violations back to baseline 27. Phase 2 (Cluster A rate-limit type narrowing) is the next thread step but opens a fresh claim under whoever picks it up next session.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "9b2b2ed7",
+            "summary": "refactor(vercel-ignore): lock down git capabilities; add boundary sha validation; scrub git env — architectural cure with 4-of-5 reviewers absorbed inline (code/security/architecture-reviewer-fred/test) and architecture-reviewer-wilma's PATH-detection finding absorbed via an eager check."
+          },
+          {
+            "kind": "commit",
+            "ref": "5d6622d0",
+            "summary": "fix(agent-identity-cli): align e2e expectation with renamed seed env vars — surgical 1-line cross-claim fix unblocking pre-push for the parallel session's PRACTICE_AGENT_SESSION_ID rename drift."
+          },
+          {
+            "kind": "commit",
+            "ref": "84571ccf",
+            "summary": "refactor(vercel-ignore): use absolute git binary; drop path inheritance from scrubbed env — Phase 1.1 finish: GIT_BINARY = '/usr/bin/git', scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive-complexity refactor via attemptShowAfterShallowFetch + readPackageJsonText helpers, /tmp/evil S5443 fixtures removed."
+          },
+          {
+            "kind": "thread-record",
+            "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            "summary": "Top session-close block records full Phase 1 + Phase 1.1 outcome with QG metric deltas and reviewer-absorption disposition; identity row added per PDR-027."
+          },
+          {
+            "kind": "shared-comms-log",
+            "ref": ".agent/state/collaboration/shared-comms-log.md",
+            "summary": "Entries at 2026-04-28T15:00:00Z (open), T15:25:00Z (concurrent-agent detection), T15:32:00Z (commit blocked by parallel session lint), T15:35:00Z (resolved), T15:42:00Z (Phase 1 commit + e2e fix), and a closing entry at session-handoff capture the full coordination + landing narrative."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6d7b8094-c32b-4229-96dc-8b259537f0d8",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "lineage": [],
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md"
+          ]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:30:52Z",
+      "freshness_seconds": 900,
+      "intent": "Amend the collaboration-state future plan so write-reliability covers all shared inter-agent state files, not only the shared communication log.",
+      "notes": "Owner correction: once state domain boundaries are defined, every shared state record needs a multi-agent-safe write path so state files do not create log jams.",
+      "archived_at": "2026-04-28T07:33:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T07:33:00Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Captured owner amendment that reliable write mechanisms must apply to all shared inter-agent state records after domain boundaries are defined, not only the shared communication log.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "summary": "Plan now states the write-safety requirement across claims, queue entries, conversations, sidebars, escalations, closures, generated read models, and future event files."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#owner-amendment",
+            "summary": "Napkin records the owner amendment for consolidation."
+          }
+        ]
+      }
     }
   ]
 }

@@ -33,11 +33,11 @@ todos:
     content: "Cluster A: DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Re-grounded plan §Phase 2: type narrowing through RateLimitRequestHandler end-to-end (factory return, DI param types, registration sites, test fake). Pre-phase security review of bypass paths. No fallback dispositions."
     status: pending
   - id: cluster-b-runGitCommand-lockdown
-    content: "Cluster B (Phase 1, TOP PRIORITY): runGitCommand chain lockdown. WIP in working tree (Tidal Rolling Lighthouse, 2026-04-28). Refactor + 32 unit tests + 1 e2e runtime test landed; reviewer findings absorbed (filePath validation, diagnostic reason, current-version stderr parity, integration→e2e reclassification, unified naming). Wilma dispatch + final gates + cluster commit + push pending in next session. See /Users/jim/.claude/plans/composed-petting-hejlsberg.md §'Execution status' for full state."
-    status: in_progress
+    content: "Cluster B (Phase 1, TOP PRIORITY): runGitCommand chain lockdown. **COMPLETE** as of 2026-04-28 (Luminous Dancing Quasar, claude-code, claude-opus-4-7-1m, two commits on PR-87). 9b2b2ed7 landed the architectural cure (validateGitSha at trust boundary, named gitShowFileAtSha+gitFetchShallow capabilities, scrubbedGitEnv, defence-in-depth on filePath, symmetric stderr diagnostics). 84571ccf finished the env-scrub (absolute /usr/bin/git, scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive-complexity refactor via attemptShowAfterShallowFetch + readPackageJsonText helpers, removed /tmp/evil S5443 fixtures). All 5 reviewers absorbed (code/security/fred/test/wilma). Sonar hotspot AZ3D3iflrIk5eL0ceU__ closed; new_security_hotspots_reviewed flipped 90.9% → 100% OK; 0 TO_REVIEW. MUST-FIX argv-injection class closed. The cluster's two file-scoped Sonar issues (S5843 + S6644) carry forward to Phase 4 per plan."
+    status: completed
   - id: cluster-b-vercel-runner
     content: "Cluster B (legacy id, kept for cross-reference): scope is fully captured under cluster-b-runGitCommand-lockdown above. Treat the WIP id as authoritative."
-    status: in_progress
+    status: completed
   - id: cluster-c-schema-cache
     content: "Cluster C: Schema-cache write boundary (CodeQL #76, #77). Per-site investigation; likely dismiss-with-rationale citing validate-then-cache + ADR-029."
     status: pending
