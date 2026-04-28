@@ -95,10 +95,17 @@ joint decision, open or close an escalation, or ask the owner.
 
 When registering your PDR-027 identity row, use an existing owner-assigned
 `agent_name` if one matches. Otherwise derive a session display name with
-`pnpm agent-tools:agent-identity --format display` when the platform exposes
-`CLAUDE_SESSION_ID` or `CODEX_THREAD_ID`; pass
-`--seed "<stable-session-seed>"` or set `OAK_AGENT_SEED` explicitly when it
-does not. Do not use personal-email fallback.
+`pnpm agent-tools:agent-identity --format display`. The CLI reads (in order)
+`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_CODEX`, then the harness-native `CODEX_THREAD_ID`.
+Platform hooks set the platform-suffixed Practice variable: the Claude Code
+`SessionStart` hook (`.claude/hooks/practice-session-identity.mjs`) appends
+`PRACTICE_AGENT_SESSION_ID_CLAUDE` to `$CLAUDE_ENV_FILE`, and the Cursor
+`sessionStart` hook (`.cursor/hooks/oak-session-identity.mjs`) injects
+`PRACTICE_AGENT_SESSION_ID_CURSOR`. If none of these is set in your shell
+(e.g. the hook artefact has not been built yet), pass
+`--seed "<stable-session-seed>"` explicitly. Do not use personal-email
+fallback.
 
 Before staging or committing, use the always-active commit skill. It
 checks for fresh `commit_queue` entries and `git:index/head` commit-window

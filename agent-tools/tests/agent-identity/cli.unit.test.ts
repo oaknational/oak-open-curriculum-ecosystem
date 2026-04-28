@@ -15,8 +15,8 @@ describe('agent identity CLI planning', () => {
     const result = runAgentIdentityCli({
       argv: ['--seed', 'explicit-seed', '--format', 'json'],
       env: {
-        CLAUDE_SESSION_ID: 'claude-seed',
-        OAK_AGENT_SEED: 'oak-seed',
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-seed',
       },
     });
 
@@ -26,48 +26,65 @@ describe('agent identity CLI planning', () => {
     });
   });
 
-  it('falls back from CLAUDE_SESSION_ID to CODEX_THREAD_ID to OAK_AGENT_SEED', () => {
+  it('prefers PRACTICE_AGENT_SESSION_ID_CLAUDE over the other Practice and harness vars', () => {
     const result = runAgentIdentityCli({
       argv: ['--format', 'json'],
       env: {
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-seed',
+        PRACTICE_AGENT_SESSION_ID_CODEX: 'codex-practice-seed',
         CODEX_THREAD_ID: 'codex-thread-seed',
-        OAK_AGENT_SEED: 'oak-seed',
-      },
-    });
-
-    expect(result.exitCode).toBe(0);
-    expect(JSON.parse(result.stdout)).toMatchObject({
-      seedDigest: createHash('sha256').update('codex-thread-seed').digest('hex'),
-    });
-  });
-
-  it('falls back from CODEX_THREAD_ID to OAK_AGENT_SEED', () => {
-    const result = runAgentIdentityCli({
-      argv: ['--format', 'json'],
-      env: {
-        OAK_AGENT_SEED: 'oak-seed',
-      },
-    });
-
-    expect(result.exitCode).toBe(0);
-    expect(JSON.parse(result.stdout)).toMatchObject({
-      seedDigest: createHash('sha256').update('oak-seed').digest('hex'),
-    });
-  });
-
-  it('uses CLAUDE_SESSION_ID before CODEX_THREAD_ID', () => {
-    const result = runAgentIdentityCli({
-      argv: ['--format', 'json'],
-      env: {
-        CLAUDE_SESSION_ID: 'claude-seed',
-        CODEX_THREAD_ID: 'codex-thread-seed',
-        OAK_AGENT_SEED: 'oak-seed',
       },
     });
 
     expect(result.exitCode).toBe(0);
     expect(JSON.parse(result.stdout)).toMatchObject({
       seedDigest: createHash('sha256').update('claude-seed').digest('hex'),
+    });
+  });
+
+  it('falls back to PRACTICE_AGENT_SESSION_ID_CURSOR when CLAUDE is unset', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-seed',
+        PRACTICE_AGENT_SESSION_ID_CODEX: 'codex-practice-seed',
+        CODEX_THREAD_ID: 'codex-thread-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('cursor-seed').digest('hex'),
+    });
+  });
+
+  it('falls back to PRACTICE_AGENT_SESSION_ID_CODEX before the harness CODEX_THREAD_ID', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CODEX: 'codex-practice-seed',
+        CODEX_THREAD_ID: 'codex-thread-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('codex-practice-seed').digest('hex'),
+    });
+  });
+
+  it('falls back to harness CODEX_THREAD_ID when no Practice var is set', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        CODEX_THREAD_ID: 'codex-thread-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('codex-thread-seed').digest('hex'),
     });
   });
 
@@ -101,12 +118,12 @@ describe('agent identity CLI planning', () => {
     );
   });
 
-  it('reports missing seed as bad usage', () => {
+  it('reports missing seed naming the Practice vars and harness fallback', () => {
     expect(runAgentIdentityCli({ argv: [], env: {} })).toEqual({
       exitCode: 2,
       stdout: '',
       stderr:
-        'Error: missing seed; pass --seed or set CLAUDE_SESSION_ID, CODEX_THREAD_ID, or OAK_AGENT_SEED\n',
+        'Error: missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID\n',
     });
   });
 

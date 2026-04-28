@@ -72,7 +72,7 @@ export function planCursorSessionIdentityHook(
   const displayName = deriveIdentity(sessionId).displayName;
   const tabHint = `Oak · ${displayName}`;
   const output = {
-    env: { OAK_AGENT_SEED: sessionId },
+    env: { PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId },
     additional_context: identityContext({ displayName, tabHint, prefix }),
     user_message: `${tabHint} — suggested Composer tab title; details in .cursor/${COMPOSER_MIRROR_FILE}`,
   };
@@ -135,12 +135,12 @@ function identityContext(input: {
   readonly prefix: string;
 }): string {
   return [
-    '[Oak agent identity]',
+    '[Practice agent identity]',
     `Deterministic display name for this composer session: ${input.displayName}`,
     `Suggested Composer tab title (Cursor has no hook API to set it automatically): ${input.tabHint}`,
     `PDR-027 session_id_prefix (first 6 of composer session_id): ${input.prefix}`,
-    'OAK_AGENT_SEED is set from the composer session_id for hook subprocesses in this session.',
-    'From repo root, `pnpm agent-tools:agent-identity --format display` also resolves when OAK_AGENT_SEED is set in your shell (if Cursor forwards session env to the terminal, it matches).',
+    'PRACTICE_AGENT_SESSION_ID_CURSOR is set from the composer session_id for hook subprocesses in this session.',
+    'From repo root, `pnpm agent-tools:agent-identity --format display` also resolves when PRACTICE_AGENT_SESSION_ID_CURSOR is set in your shell (if Cursor forwards session env to the terminal, it matches).',
   ].join('\n');
 }
 

@@ -389,3 +389,13 @@ owner caught one instance, the reviewer caught three more, and a
 self-review caught zero of the four.
 
 - **Source plane:** active
+
+## 2026-04-28 — Claude session id is stdin-only; transcript file is a discoverable backstop
+
+**Discovery during the SessionStart hook design.** `CLAUDE_SESSION_ID` does *not* exist in the env on any Claude Code session — verified empirically and confirmed against `https://code.claude.com/docs/en/hooks`. The harness exposes `session_id` only on stdin to hooks (statusline, SessionStart, etc.). Any directive that tells an agent to "expect `CLAUDE_SESSION_ID` from env" was wrong — the start-right directive carried this for some time before today.
+
+**The real shell-tool surface is `$CLAUDE_ENV_FILE`.** `SessionStart`, `CwdChanged`, and `FileChanged` hooks may append `export FOO=bar` lines to the path Claude Code provides in `$CLAUDE_ENV_FILE`; values persist for subsequent Bash tool calls in the same session. This is *the* mechanism for surfacing identity to shell tools without an env-shim.
+
+**Backstop discovery channel:** an agent that needs to find its own `session_id` from inside a turn can read `~/.claude/projects/<project-slug>/<session-id>.jsonl` — the most-recently-modified transcript matches the live session. Heuristic, not contractual: it can fail when two sessions are open simultaneously on the same project. Not currently used as a primary mechanism but worth keeping in mind for future tooling that runs before the SessionStart env-file is populated.
+
+**`/rename` is user-typed only.** `sessionTitle` is exclusively a `UserPromptSubmit` hook output field. The model cannot self-invoke `/rename`. We deliberately did not add a `UserPromptSubmit` hook for the title — running on every prompt for a one-shot effect is architectural noise; the SessionStart hook injects an `additionalContext` row asking the agent to suggest the rename to the user when intent crystallises.

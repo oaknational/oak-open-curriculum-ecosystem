@@ -29,7 +29,7 @@ describe('planCursorSessionIdentityHook', () => {
     ).toStrictEqual({ env: {}, additional_context: '' });
   });
 
-  it('sets OAK_AGENT_SEED and includes session identity context', () => {
+  it('sets PRACTICE_AGENT_SESSION_ID_CURSOR and includes session identity context', () => {
     const sessionId = 'unit-test-hook-seed-xyz';
     const expectedDisplayName = deriveIdentity(sessionId).displayName;
     const plan = planCursorSessionIdentityHook({
@@ -43,8 +43,8 @@ describe('planCursorSessionIdentityHook', () => {
       nowIso,
     });
 
-    expect(plan.output.env).toStrictEqual({ OAK_AGENT_SEED: sessionId });
-    expect(plan.output.additional_context).toContain('[Oak agent identity]');
+    expect(plan.output.env).toStrictEqual({ PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId });
+    expect(plan.output.additional_context).toContain('[Practice agent identity]');
     expect(plan.output.additional_context).toContain(
       'PDR-027 session_id_prefix (first 6 of composer session_id): unit-t',
     );
@@ -79,7 +79,9 @@ describe('planCursorSessionIdentityHook', () => {
       nowIso,
     });
 
-    expect(plan.output.env).toStrictEqual({ OAK_AGENT_SEED: 'unit-test-hook-seed-xyz' });
+    expect(plan.output.env).toStrictEqual({
+      PRACTICE_AGENT_SESSION_ID_CURSOR: 'unit-test-hook-seed-xyz',
+    });
     expect(plan.mirror).toBeUndefined();
   });
 });

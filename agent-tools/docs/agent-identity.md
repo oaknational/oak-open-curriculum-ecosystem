@@ -22,11 +22,20 @@ pnpm agent-tools:build
 node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format display
 ```
 
-If `--seed` is omitted, the CLI reads `CLAUDE_SESSION_ID`, then
-`CODEX_THREAD_ID`, then `OAK_AGENT_SEED`. If none is set, it exits with code
+If `--seed` is omitted, the CLI reads (in order)
+`PRACTICE_AGENT_SESSION_ID_CLAUDE`,
+`PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_CODEX`,
+then the harness-native `CODEX_THREAD_ID`. If none is set, it exits with code
 `2`. There is no personal-email fallback; hashing `git config user.email` would
 silently use a personal identifier and could collapse concurrent same-machine
 agents into one identity.
+
+The `PRACTICE_AGENT_SESSION_ID_*` variables are written into the platform's
+session-scoped environment by the corresponding platform hook (see
+**Platform Wrapper Status** below). The platform suffix matches the platform
+that set the variable; the CLI does not care which one is present, only that
+exactly one of them resolves to a non-empty seed.
 
 ## Output
 
@@ -52,11 +61,11 @@ not invent derived word slots.
 
 ## Platform Wrapper Status
 
-| Platform    | Status          | Wiring / next action                                                                                                                                                                                                                                                                                                                                            |
-| ----------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Wired           | `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs`, which delegates to the built adapter `agent-tools/dist/src/claude/statusline-identity.js`. The adapter parses the harness's stdin JSON `session_id` and prints the display name.                                                                                                   |
-| Codex       | Thread id wired | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it automatically when `--seed` and `CLAUDE_SESSION_ID` are absent. User-facing thread-title mutation is deliberately deferred; the stable thread id already provides deterministic names without adding a separate title-mutation tool.                                               |
-| Cursor      | Experimental    | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.OAK_AGENT_SEED` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. |
+| Platform    | Status                                         | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired (statusline + SessionStart)              | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
+| Cursor      | Wired (code-renamed; live re-test pending)     | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. **Future work:** live-test in a Cursor composer session after the env-var rename to confirm the renamed surface still flows end-to-end; once verified, optionally rename the file from `oak-session-identity.mjs` to `practice-session-identity.mjs` for naming consistency.                                                                                                                                                                      |
+| Codex       | Thread id wired (Practice wrapper future work) | Codex shell commands receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. User-facing thread-title mutation is deliberately deferred; the stable thread id already provides deterministic names without adding a separate title-mutation tool. **Future work:** decide whether to add an in-repo wrapper that aliases `CODEX_THREAD_ID` → `PRACTICE_AGENT_SESSION_ID_CODEX` for naming consistency, or keep the harness-native variable as the canonical Codex surface.                                                                                                                                                                                                                                                                                              |
 
 ### Cursor `sessionStart` wiring
 
@@ -64,9 +73,9 @@ Authoritative behaviour and JSON shapes are defined in Cursor’s **[Hooks](http
 
 #### Stable id, derived name, and Composer tab title (human-visible)
 
-- **Stable session id:** the composer `session_id` on `sessionStart` stdin (same as conversation id per the [sessionStart reference](https://cursor.com/docs/hooks)). This is the seed for derivation and `OAK_AGENT_SEED`.
+- **Stable session id:** the composer `session_id` on `sessionStart` stdin (same as conversation id per the [sessionStart reference](https://cursor.com/docs/hooks)). This is the seed for derivation and `PRACTICE_AGENT_SESSION_ID_CURSOR`.
 - **Derived name:** `agent-identity` display format from that seed (same word list as other platforms).
-- **Identity surfaces:** hook `env` (`OAK_AGENT_SEED`), `additional_context` (agent/system context), PDR-027 registration via [register-identity-on-thread-join](../../.agent/rules/register-identity-on-thread-join.md), and the optional **`user_message`** field (schema allows it; Cursor may surface it to the user — behaviour is not guaranteed).
+- **Identity surfaces:** hook `env` (`PRACTICE_AGENT_SESSION_ID_CURSOR`), `additional_context` (agent/system context), PDR-027 registration via [register-identity-on-thread-join](../../.agent/rules/register-identity-on-thread-join.md), and the optional **`user_message`** field (schema allows it; Cursor may surface it to the user — behaviour is not guaranteed).
 - **Composer tab title:** the official `sessionStart` output schema documents **`env`** and **`additional_context`** only for machine-driven behaviour; there is **no documented `conversation_title` / tab-rename field**. So the repo cannot set the tab label purely from hooks today. Mitigations implemented in-tree:
   1. **`user_message`** — one-line hint with the suggested title `Oak · {displayName}` (best-effort).
   2. **`.cursor/oak-composer-session.local.json`** — gitignored mirror with `suggestedComposerTabTitle`, `displayName`, `composerSessionId`, and `sessionIdPrefix` for copy/paste rename or tooling. Written when the derived name is available; set `OAK_SKIP_COMPOSER_SESSION_MIRROR=1` to skip (e.g. tests).
@@ -101,6 +110,35 @@ Session-id seeds produce deterministic session display identities. Persistent
 PDR-027 identity across sessions requires a deliberately persistent seed or an
 explicit owner/operator override.
 
+### Claude Code `SessionStart` wiring
+
+The Claude Code `SessionStart` hook fires when the harness starts a new
+session or resumes one. The harness pipes a JSON object on stdin containing
+`session_id`, `transcript_path`, `cwd`, `hook_event_name`, `source`, and
+`model`. The wiring is:
+
+1. `.claude/settings.json` declares a `SessionStart` hook entry running
+   `.claude/hooks/practice-session-identity.mjs`.
+2. The shim resolves the built adapter at
+   `agent-tools/dist/src/bin/claude-session-identity-hook.js`. If the build
+   artefact is missing it prints `{}` and exits 0 — the harness sees no
+   `additionalContext` and the session continues normally.
+3. The adapter parses stdin, derives the deterministic display name, appends
+   `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<session_id>` to the file path
+   given in `$CLAUDE_ENV_FILE` (per the
+   [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)), and
+   prints a `hookSpecificOutput` JSON object whose `additionalContext`
+   carries the agent identity row and a non-binding `/rename` suggestion.
+4. Subsequent Bash tool calls in the session see
+   `$PRACTICE_AGENT_SESSION_ID_CLAUDE`, so any tool that relies on the seed
+   (e.g. `pnpm agent-tools:agent-identity --format display`) resolves the
+   same identity without `--seed`.
+
+The hook is a soft surface: missing input, missing build artefact,
+unparseable JSON, or any spawn failure exits 0 with `{}` on stdout. The
+`OAK_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when the
+operator sets it.
+
 ### Codex thread-id wiring
 
 Codex exposes the active thread id to shell commands as `CODEX_THREAD_ID`.
@@ -112,5 +150,6 @@ node agent-tools/dist/src/bin/agent-identity.js --format display
 ```
 
 The current seed precedence keeps explicit and platform-specific sources
-predictable: `--seed`, then `CLAUDE_SESSION_ID`, then `CODEX_THREAD_ID`, then
-`OAK_AGENT_SEED`.
+predictable: `--seed`, then `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
+`PRACTICE_AGENT_SESSION_ID_CURSOR`, then `PRACTICE_AGENT_SESSION_ID_CODEX`,
+then the harness-native `CODEX_THREAD_ID`.
