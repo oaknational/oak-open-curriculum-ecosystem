@@ -5,6 +5,7 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getRulesIndexPortabilityIssues,
   getSkillPermissionIssues,
   HOOK_POLICY_PATH,
   isClaudeHookWired,
@@ -258,6 +259,53 @@ describe('getReviewerAdapterParityIssues', () => {
         codexAgentFiles: ['.codex/agents/code-reviewer.toml'],
       }),
     ).toStrictEqual([]);
+  });
+});
+
+describe('getRulesIndexPortabilityIssues', () => {
+  const canonicalRuleFiles = [
+    '.agent/rules/apply-architectural-principles.md',
+    '.agent/rules/lint-after-edit.md',
+  ];
+
+  it('returns no issues when the index lists every canonical rule and stays within budget', () => {
+    expect(
+      getRulesIndexPortabilityIssues({
+        canonicalRuleFiles,
+        rulesIndexContent: `# Rules Index
+
+- \`.agent/rules/apply-architectural-principles.md\`
+- \`.agent/rules/lint-after-edit.md\`
+`,
+        maxBytes: 200,
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('reports missing, extra, missing-file, and byte-budget issues', () => {
+    expect(
+      getRulesIndexPortabilityIssues({
+        canonicalRuleFiles,
+        rulesIndexContent: `# Rules Index
+
+- \`.agent/rules/lint-after-edit.md\`
+- \`.agent/rules/not-canonical.md\`
+`,
+        maxBytes: 20,
+      }),
+    ).toStrictEqual([
+      'RULES_INDEX.md: missing canonical rule entry .agent/rules/apply-architectural-principles.md',
+      'RULES_INDEX.md: references non-canonical rule .agent/rules/not-canonical.md',
+      'RULES_INDEX.md: 85 bytes exceeds Codex project-doc budget 20',
+    ]);
+
+    expect(
+      getRulesIndexPortabilityIssues({
+        canonicalRuleFiles,
+        rulesIndexContent: '',
+        rulesIndexExists: false,
+      }),
+    ).toStrictEqual(['RULES_INDEX.md: missing Codex fallback rules index']);
   });
 });
 

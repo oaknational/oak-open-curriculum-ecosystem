@@ -2,6 +2,8 @@ export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';
 export const SURFACE_MATRIX_PATH = '.agent/memory/executive/cross-platform-agent-surface-matrix.md';
 export const CLAUDE_HOOK_COMMAND = 'node scripts/check-blocked-patterns.mjs';
+export const RULES_INDEX_PATH = 'RULES_INDEX.md';
+export const DEFAULT_CODEX_PROJECT_DOC_MAX_BYTES = 32 * 1024;
 
 function isObject(value) {
   return value !== null && typeof value === 'object';
@@ -197,4 +199,48 @@ export function getReviewerAdapterParityIssues({
   }
 
   return issues;
+}
+
+export function getRulesIndexPortabilityIssues({
+  canonicalRuleFiles,
+  rulesIndexContent,
+  rulesIndexExists = true,
+  rulesIndexPath = RULES_INDEX_PATH,
+  maxBytes = DEFAULT_CODEX_PROJECT_DOC_MAX_BYTES,
+}) {
+  const issues = [];
+
+  if (!rulesIndexExists) {
+    return [`${rulesIndexPath}: missing Codex fallback rules index`];
+  }
+
+  const canonicalRuleSet = new Set(canonicalRuleFiles);
+  const indexedRuleSet = new Set(extractCanonicalRulePaths(rulesIndexContent));
+
+  for (const ruleFile of [...canonicalRuleSet].sort()) {
+    if (!indexedRuleSet.has(ruleFile)) {
+      issues.push(`${rulesIndexPath}: missing canonical rule entry ${ruleFile}`);
+    }
+  }
+
+  for (const indexedRuleFile of [...indexedRuleSet].sort()) {
+    if (!canonicalRuleSet.has(indexedRuleFile)) {
+      issues.push(`${rulesIndexPath}: references non-canonical rule ${indexedRuleFile}`);
+    }
+  }
+
+  const byteSize = Buffer.byteLength(rulesIndexContent, 'utf8');
+  if (byteSize > maxBytes) {
+    issues.push(
+      `${rulesIndexPath}: ${byteSize} bytes exceeds Codex project-doc budget ${maxBytes}`,
+    );
+  }
+
+  return issues;
+}
+
+function extractCanonicalRulePaths(content) {
+  return [...content.matchAll(/`(\.agent\/rules\/[^`]+\.md)`/gu)]
+    .map((match) => match[1])
+    .filter((value) => typeof value === 'string' && value.length > 0);
 }

@@ -8,8 +8,10 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getRulesIndexPortabilityIssues,
   getSkillPermissionIssues,
   HOOK_POLICY_PATH,
+  RULES_INDEX_PATH,
   SURFACE_MATRIX_PATH,
 } from './validate-portability-helpers.mjs';
 
@@ -453,7 +455,18 @@ if (await exists(SKILLS_LOCK_PATH)) {
   }
 }
 
-// --- Check 10: Hook portability parity ---
+// --- Check 10: Codex fallback rules index parity ---
+
+const rulesIndexState = await readOptionalText(RULES_INDEX_PATH);
+for (const issue of getRulesIndexPortabilityIssues({
+  canonicalRuleFiles: canonicalRules,
+  rulesIndexContent: rulesIndexState.value ?? '',
+  rulesIndexExists: rulesIndexState.isPresent,
+})) {
+  addIssue(issue);
+}
+
+// --- Check 11: Hook portability parity ---
 
 if (await exists(HOOK_POLICY_PATH)) {
   try {
@@ -475,7 +488,7 @@ if (await exists(HOOK_POLICY_PATH)) {
   }
 }
 
-// --- Check 11: Skill permission parity (Claude commands → settings.json) ---
+// --- Check 12: Skill permission parity (Claude commands → settings.json) ---
 
 if (await exists(CLAUDE_SETTINGS_PATH)) {
   try {

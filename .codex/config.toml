@@ -1,4 +1,7 @@
 sandbox_mode = "workspace-write"
+
+project_doc_fallback_filenames = ["RULES_INDEX.md"]
+
 [features]
 codex_hooks = true
 multi_agent = true
