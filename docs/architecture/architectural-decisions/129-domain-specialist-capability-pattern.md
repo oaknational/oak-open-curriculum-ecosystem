@@ -113,5 +113,5 @@ The triplet pattern is deliberately lightweight — three artefacts with clear r
 - `.agent/sub-agents/templates/` — existing reviewer templates (13)
 - `.agent/skills/` — existing skills (16)
 - `.agent/rules/` — existing situational rules
-- `.agent/directives/invoke-code-reviewers.md` — reviewer invocation guidance
+- `.agent/memory/executive/invoke-code-reviewers.md` — reviewer invocation guidance
 - `.agent/plans/agentic-engineering-enhancements/elasticsearch-specialist-capability.plan.md` — first explicit consumer of this pattern

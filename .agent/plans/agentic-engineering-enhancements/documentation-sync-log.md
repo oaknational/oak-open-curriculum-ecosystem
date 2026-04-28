@@ -5,7 +5,8 @@ Use this log to prove each phase has handled required documentation updates.
 ## Required Canonical Documents
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
 
 Also update any additionally impacted ADRs, `/docs/` pages, and README files.
 
@@ -15,11 +16,37 @@ For each phase:
 
 - list what changed in each required canonical document, or
 - record a no-change rationale explaining why no update was needed
-- confirm consolidation review using `.cursor/commands/jc-consolidate-docs.md`
+- confirm consolidation review using `.agent/commands/consolidate-docs.md`
 
 Do not mark a phase complete without an entry.
 
 ---
+
+## Multi-Agent Collaboration WS4A — Lifecycle Integration
+
+- Status: complete (2026-04-26)
+- ADR-119 update or rationale: Updated the Practice boundary to include live
+  collaboration state, active claims, closed claim history, decision threads,
+  and repo-owned operational state read by start-right / handoff /
+  consolidate-docs.
+- ADR-124 update or rationale: Refreshed the propagation contract from the
+  older five-file wording to the current Practice Core package and added
+  live coordination state to the practice-index bridge responsibilities.
+- practice.md update or rationale: Added collaboration state to the Structure
+  layer, workflow, artefact map, and vital integration surface narrative.
+- Other ADR/docs/README updates: Updated PDR-024, practice-lineage,
+  practice-bootstrap, practice-verification, Practice Core changelog,
+  practice-index, lifecycle templates/components, roadmap, current index,
+  start-right, session-handoff, plan command, and reviewer invocation memory.
+- Consolidation review (`jc-consolidate-docs`): Closeout pass run after
+  owner direction on 2026-04-26. `docs-adr-reviewer` and
+  `assumptions-reviewer` findings were absorbed: WS5 status now separates
+  completed WS3 evidence harvest from remaining post-WS4A observation,
+  reviewer guidance now distinguishes preferred review evidence from
+  blocking findings, and stale WS3/WS4 wording was corrected.
+- Notes: WS3B sidebar, timeout, and owner-escalation work remains paused
+  behind owner promotion or real decision-thread evidence. Hook reminders
+  and dashboard expansion remain evidence-gated follow-up.
 
 ## Phase 0 — Planning System and Template Hardening
 
@@ -95,8 +122,8 @@ Do not mark a phase complete without an entry.
     - Created `.cursor/skills/mcp-expert/SKILL.md` (Cursor wrapper)
     - Created `.agents/skills/mcp-expert/SKILL.md` (Codex wrapper)
     - Wrapper parity audit complete — all reviewer, rule, and skill wrappers exist across Cursor/Claude/Codex
-    - Added MCP quick-triage question (#9) to `.agent/directives/invoke-code-reviewers.md`
-    - Added MCP worked example to `.agent/directives/invoke-code-reviewers.md`
+    - Added MCP quick-triage question (#9) to `.agent/memory/executive/invoke-code-reviewers.md`
+    - Added MCP worked example to `.agent/memory/executive/invoke-code-reviewers.md`
   - Validation evidence:
     - `pnpm subagents:check` passed (17 wrappers, 14 templates)
     - `pnpm portability:check` passed (21 skills, 28 rules, 30 Cursor triggers)
@@ -118,8 +145,8 @@ Do not mark a phase complete without an entry.
     index, roadmap, and session continuation prompt during execution, then
     archived it after the closeout pass
   - Added the local process pattern
-    `.agent/memory/patterns/shared-strictness-requires-workspace-adoption.md`
-    and indexed it in `.agent/memory/patterns/README.md`
+    `.agent/memory/active/patterns/shared-strictness-requires-workspace-adoption.md`
+    and indexed it in `.agent/memory/active/patterns/README.md`
   - Updated `docs/engineering/build-system.md` with the aggregate-gate
     doctrine (`pnpm check` as executable truth, one package-graph run as the
     design target, and workspace-task-export bounded claims)
@@ -139,7 +166,114 @@ Do not mark a phase complete without an entry.
   (`~/.claude/plans/flickering-pondering-simon.md` and
   `~/.claude/plans/rippling-meandering-canyon.md`) were reviewed during
   consolidation and did not contain additional uncaptured doctrine for this
-  round. The plan now lives in `archive/completed/`.
+round. The plan now lives in `archive/completed/`.
+
+## Agentic Corpus Discoverability Hub (Adjacent Work)
+
+- Status: complete (2026-04-19)
+- ADR-119 update or rationale: No-change — the new hub, deep dives, and lane
+  READMEs are discoverability/index surfaces only. They route back to existing
+  canon and do not change the practice's name, boundary, or three-layer model.
+- practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
+  remains the canonical operational map. This lane indexes it more clearly but
+  does not change its mechanics or doctrine.
+- prog-frame update or rationale: No-change — progression framing and the
+  internal progression document set were not changed by this discoverability
+  restructure.
+- Other ADR/docs/README updates:
+  - Added `.agent/reference/agentic-engineering/README.md`, the deep-dives
+    index, and five seed deep-dive extracts
+  - Added `.agent/research/agentic-engineering/README.md` plus five named lane
+    READMEs
+  - Added `.agent/reports/README.md` and the formal
+    `.agent/reports/agentic-engineering/` report lane READMEs
+  - Updated `.agent/reference/README.md`, `.agent/research/README.md`,
+    `.agent/analysis/README.md`, `.agent/practice-index.md`, and the
+    `agentic-engineering-enhancements` collection indexes/roadmap for
+    reciprocal routing
+  - Updated `docs/README.md`, `docs/foundation/README.md`, and
+    `docs/foundation/agentic-engineering-system.md` so human-facing entry
+    points can reach the hub without going through `AGENT.md`
+  - No lane-owned change required in `docs/governance/README.md` or
+    `docs/architecture/architectural-decisions/README.md`; the docs-facing
+    route is sufficient without additional hub links there, and unrelated
+    concurrent edits were already in progress on both files
+- Consolidation review (`jc-consolidate-docs`): complete — no additional
+  graduation required because the settled outcomes of this lane are already
+  captured directly in the new hub, deep dives, lane READMEs, plan files, and
+  docs entry points.
+- Notes: `.agent/analysis/` remains the authoritative investigation/evidence
+  lane. `.agent/reports/` now exists as the promotion-only lane for formal
+  audits and syntheses. Experience files were left untouched and are only
+  referenced as source material for concept extraction. Final docs review
+  findings were absorbed. `pnpm check` reached `knip` and then failed on an
+  unrelated concurrent code change in
+  `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
+  (unlisted `estree` dependency), so the documentation lane closes with a
+  recorded workspace-gate caveat rather than a local content defect.
+
+## Governance Concepts and Agentic Mechanism Integration (Adjacent Work)
+
+- Status: complete (2026-04-19)
+- ADR-119 update or rationale: No-change — this lane closed repo-local
+  routing, evidence-shape, and future-slice boundaries. It did not settle a
+  new practice boundary or canon-level governance decision.
+- practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
+  remains the canonical operational map. This lane extracted value by changing
+  adjacent planning and evidence surfaces rather than altering the core map.
+- prog-frame update or rationale: No-change — the human-facing explanation in
+  `docs/foundation/agentic-engineering-system.md` was reviewed and left
+  untouched because the governance-plane vocabulary remains repo-local and not
+  yet ready for doctrine promotion.
+- Other ADR/docs/README updates:
+  - Added the active execution plan and closed the source-plan lifecycle in
+    `active/README.md`, `current/README.md`, the collection `README.md`, and
+    `roadmap.md`
+  - Updated the evidence source plan, the Phase 2 active evidence plan, and
+    the shared evidence bundle template so the evidence lane now distinguishes
+    `attempt`, `observed outcome`, and `proven result`
+  - Updated the operational-awareness plan so it explicitly carries the
+    supervised-execution framing for the bounded work-plane pilot
+  - Updated the reviewer-gateway plan so it explicitly frames the gateway as
+    one layer in the layered-safeguard stack and names review-signal inputs,
+    including relationship-confidence signals
+  - Updated the future mechanism-taxonomy plan and `future/README.md` so the
+    remaining abstraction debt now has one future home:
+    `action-governance boundary`, `boundary model`, `signal ecology`,
+    `residual-risk surface`, and `governance-plane vocabulary`
+  - Explicit defer retained in the future taxonomy lane for `graduated
+    authority` and `adoption ladder`
+  - No further change needed in `.agent/analysis/README.md`,
+    `.agent/reference/agentic-engineering/README.md`,
+    `.agent/reference/agentic-engineering/deep-dives/README.md`,
+    `.agent/reports/README.md`, `.agent/reports/agentic-engineering/README.md`,
+    or `.agent/reports/agentic-engineering/deep-dive-syntheses/README.md`
+  - Inspected and intentionally left unchanged:
+    `docs/foundation/agentic-engineering-system.md`,
+    `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
+- Consolidation review (`jc-consolidate-docs`): complete — manual equivalent
+  review performed; no additional graduation beyond the updated lane-local
+  plans, execution surface, and evidence template was justified.
+- Validation record:
+  - `pnpm markdownlint-check:root` passed. The root markdownlint surface
+    intentionally excludes `.agent/**` per repo configuration.
+  - `pnpm practice:fitness:informational` exited `0` and reported the same
+    pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
+    mode` posture outside this lane's scope.
+  - Reviewer/manual verification for the touched `.agent/**` lane docs is
+    recorded in the active execution plan alongside the repo-defined gate
+    results.
+  - Reviewer history recorded in the active execution plan: prior planning
+    findings were absorbed before editing, the execution rounds absorbed
+    findings from `assumptions-reviewer`, `docs-adr-reviewer`, and
+    `architecture-reviewer-fred`, and a final rerun of all three reviewers
+    returned clean.
+- Notes: Value extraction was treated as a hard constraint in this closeout.
+  Concepts only counted when they changed a local contract, evidence shape,
+  routing rule, future-slice boundary, or explicit defer decision. Net-new
+  concepts and reflective synthesis concepts also counted when they were given
+  a bounded local home rather than being dropped for lacking a prior
+  equivalent. Pure wording relocation did not count as completion.
 
 ## Phase 5 — Mutation Testing
 
@@ -150,3 +284,215 @@ Do not mark a phase complete without an entry.
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
+
+## Memory taxonomy restructure + prompt full dissolution (2026-04-20 evening)
+
+Follow-up to OAC Phase 4.3 below. Three structural moves landed in
+this pass:
+
+1. Memory taxonomy: `.agent/memory/` now splits into `active/`
+   (learning loop), `operational/` (continuity — absorbed prior
+   `.agent/state/` and `.agent/runtime/tracks/`), and `executive/`
+   (contracts — absorbed `artefact-inventory.md`,
+   `invoke-code-reviewers.md`, and `cross-platform-agent-surface-matrix.md`).
+   New READMEs at each layer plus updated memory/README.md.
+   Reference sweep via sed + manual edits across ~200 files.
+2. Prompt dissolution: `.agent/prompts/session-continuation.prompt.md`
+   deleted. Doctrine graduated to new
+   `PDR-026-per-session-landing-commitment.md` (Practice Core);
+   layering contract graduated to new
+   `.agent/directives/orientation.md`; rituals graduated to
+   `start-right-quick` (session-open) and `session-handoff`
+   (session-close landing report).
+3. Agent-tools health probe simplified from configuration-assertion
+   (specific field names) to behaviour-level (presence +
+   freshness). Testing-strategy alignment: tests prove product
+   behaviour, not configuration.
+
+Propagation (active surfaces only; archives and historical capture
+intentionally preserved):
+
+- `docs/architecture/architectural-decisions/150-…md` — ADR §3
+  amendment log already present from OAC 4.3; no additional
+  edits needed for this pass.
+- `docs/architecture/architectural-decisions/125-agent-artefact-portability.md`
+  — example citation updated (prior prompt reference replaced).
+- `docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md`
+  — vocabulary-citation surface list updated to name operational
+  memory instead of the retired prompt.
+- `.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md`
+  — §Host-local context updated to name `start-right-quick` +
+  `session-handoff` + PDR-026; prompt listed as retired.
+- `.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md`
+  — continuity-surfaces Category B entry updated to point at
+  `repo-continuity.md` and record the dissolution.
+- `docs/governance/continuity-practice.md` §Continuity Contract
+  rewritten to describe post-dissolution shape.
+- `.agent/practice-index.md` — reviewer catalogue row moved to
+  Executive Memory framing; `.agent/memory/` row names the
+  three-mode split; session-prompts row updated.
+- `.agent/directives/AGENT.md` — §The Practice cross-links
+  `orientation.md`; pointer to artefact-inventory + reviewer
+  catalogue updated to executive-memory paths.
+- `.agent/skills/go/shared/go.md` — stale behavioural-entry-surface
+  sentence removed.
+- `.agent/commands/consolidate-docs.md` — scope-signal note
+  re-pointed from the retired prompt to the napkin.
+- `.agent/plans/observability/*` — Phase 3a/3b split + deferral
+  propagation (previous commits already covered this).
+- `.agent/plans/architecture-and-infrastructure/roadmap.md` +
+  `observability-strategy-restructure.plan.md` — Session Entry
+  pointers updated.
+- `.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`
+  — Task 2.1 marked historical with pointer to PDR-026 + orientation;
+  authority-order table surface #5 removed (read-order doctrine
+  now lives in orientation.md).
+- `.agent/README.md` + `.gitignore` — memory-taxonomy-aware
+  comments and row descriptions.
+- `agent-tools/` — health-probe + tests rewritten to behaviour-level;
+  `REQUIRED_CONTINUITY_FIELDS` + `readPromptPracticeBoxCount`
+  removed; 44/44 tests pass after rewrite.
+
+Reviewer closeout: `docs-adr-reviewer` (independent wiring review).
+Returned ACCEPT WITH NOTES. All blocker + important findings
+applied in-session.
+
+Consolidation gate: triggered by this pass. Graduations recorded:
+PDR-026 (landing commitment doctrine), orientation directive
+(layering contract), docs-as-DoD invariant, testing-strategy
+invariant made explicit in repo-continuity.md, three-mode memory
+taxonomy as structural doctrine. Outstanding: the
+inherited-framing-without-first-principles-check pattern has three
+instances this session — graduate to
+`.agent/memory/active/patterns/` at the next consolidation pass
+(already captured in the napkin close entry).
+
+## OAC Phase 4.3 — Continuity surface retirement & doc propagation (2026-04-20)
+
+Plan: [operational-awareness-and-continuity-surface-separation.plan.md](archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
+Driver: retire `.agent/prompts/session-continuation.prompt.md`'s `Live
+continuity contract` section in favour of the three repo-local state
+surfaces (`.agent/memory/operational/repo-continuity.md` +
+`.agent/memory/operational/workstreams/<slug>.md` + `.agent/memory/operational/tracks/*.md`).
+
+- Status: completed (substantive moves 2026-04-20; bookkeeping closure 2026-04-21 Session 5 OAC Phase 4 closeout, Pippin/cursor-opus). Plan archived to `archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`.
+- ADR update: `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
+  §3 rewritten — "The continuity contract lives in a canonical repo-local
+  surface" (was: "in the MCP App continuation prompt"). Contract field list
+  updated to match the state-surface split. No supersession needed; the
+  doctrine is unchanged, only the hosting location is abstracted.
+- Governance update:
+  `docs/governance/continuity-practice.md` §Three Continuity Surfaces §1
+  and §Continuity Contract and §GO all updated to reference the three
+  state surfaces as the primary operational continuity surfaces.
+- Practice Core update:
+  `.agent/practice-core/practice-bootstrap.md` §Continuity Contract
+  abstracted: canonical host is now generic ("dedicated state file or
+  section of a continuation prompt"), with explicit acknowledgement that
+  split-surface hosts remain compliant when authority order is explicit,
+  single-writer discipline holds, and fields are covered in aggregate.
+  Minimum contract field set reduced to the portable core; epistemic-
+  continuity fields (surprises, open questions) moved to optional /
+  per-lane placement.
+- Reference / deep-dive updates:
+  `.agent/reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md`
+  §Tactical track-card surface corrected from "gitignored" to "git-tracked"
+  with the `<workstream>--<agent>--<branch>.md` filename convention for
+  collaborative tracks. `continuity-and-knowledge-flow.md` no-change
+  rationale: content was already abstracted above the hosting-location
+  layer.
+- Workflow doc updates: `.agent/skills/go/shared/go.md` and
+  `.agent/commands/session-handoff.md` retired OAC-pilot framing and now
+  read/write the state surfaces directly, not the prompt section.
+  `.agent/memory/operational/README.md` corrected: line about track cards being
+  "gitignored single-writer surfaces" replaced with git-tracked model;
+  authority order re-described as a same-scope tiebreaker (refinement b).
+  `.agent/memory/operational/repo-continuity.md` field renamed "Primary workstream
+  brief" → "Branch-primary workstream brief" + added "Current session
+  focus" (refinement a).
+- Prompt retirement: `.agent/prompts/session-continuation.prompt.md`
+  shrank from 1628 lines to ~140 — all state-hosting sections removed;
+  remaining content is the behavioural entry surface only (Ground First,
+  This Prompt's Role, Per-Session Landing Commitment, Reviewer
+  Discipline, Core Invariants, Durable Guidance). Prompts README
+  description updated to match.
+- Portability decision: **No promotion to Practice Core. Remain portable
+  candidate, repo-local.** Only one of four criteria met (markdown-first
+  vs sidecar boundary explained). Other three require evidence from
+  distinct workstream shapes and real parallel use that single-session
+  dogfooding cannot generate. Recorded in OAC plan Task 4.2. Re-evaluate
+  on concrete follow-up triggers.
+- Optional helpers (c expiry-check, d napkin-promotion): marked as
+  future-work; built on trigger, not pre-built.
+- Consolidation review (`jc-consolidate-docs`): pending — this
+  documentation propagation IS the natural deep-consolidation carrier
+  flagged in the 2026-04-20 session close. Deferred to a dedicated pass
+  after plan-time reviewers land; a handoff node here keeps the boundary
+  clean.
+- Reviewers: `docs-adr-reviewer` + `assumptions-reviewer` dispatched as
+  the closeout of this phase. Both returned ACCEPT WITH NOTES. Findings
+  applied in-session:
+  - ADR-150 Rationale §"Why keep the continuity contract in the prompt"
+    rewritten to "Why a canonical repo-local surface for the contract";
+    §4 "active MCP App plan set" → "active plan set for the current
+    lane"; §Positive consequence "MCP App lane gains a durable
+    operational contract" → "repo gains a durable operational continuity
+    contract decoupled from any single workflow prompt"; amendment log
+    added to the ADR header.
+  - ADR-150 §3 specific repo paths reframed as explicitly
+    non-normative/illustrative.
+  - OAC plan §Goal (L105) and §Task 2.2 Expected surfaces (L328-340)
+    "gitignored" vestige corrected to git-tracked with
+    filename-disambiguation note.
+  - `memory/operational/repo-continuity.md` stale Status line, Option-A/B
+    next-safe-step menu, and fitness-pressure note on the retired
+    1545-line prompt all cleared.
+  - `memory/operational/workstreams/operational-awareness-continuity.md` Phase 2
+    bullet updated to reflect retired pilot-phase framing.
+  - Track card handoff note rewritten to remove
+    "Phase 4 unblocks plugin WS0" overstatement. Plugin-migration plan's
+    actual dependency is OAC Phase 2 scaffolding (landed at `ffcad2aa`).
+  - `PDR-011` amended: host language abstracted to "canonical repo-local
+    surface" that may split across canonical contract + per-workstream
+    briefs + single-writer track cards; contract field set restructured
+    into a portable minimum plus optional host-local epistemic fields;
+    §Host-local context updated to reflect this repo's split-surface
+    implementation. Doctrine unchanged. Amendment logged at PDR header.
+
+### No-change rationale (mandated Task 4.3 surfaces and required canonicals)
+
+- **`.agent/practice-core/practice.md`** — no edit. §Continuity host
+  (L242-248) already defers field specification and host options to
+  `practice-bootstrap.md §Continuity Contract` (which WAS updated this
+  pass). The deferral inherits the new doctrine automatically; editing
+  `practice.md` would duplicate the bootstrap's content and create a
+  second source of truth.
+- **`.agent/reference/agentic-engineering/README.md`** — no edit.
+  Hub-level index routes readers to ADR-150 and
+  `continuity-practice.md` by topic; both anchors were updated in this
+  pass and the hub's routing statements remain accurate. No content
+  changes at the hub layer.
+- **`.agent/reference/agentic-engineering/deep-dives/continuity-and-knowledge-flow.md`**
+  — no edit (stated above). Deep-dive content is framed at the
+  operational/epistemic/institutional layer; it never asserted a
+  specific host for the contract, so the amendment does not touch it.
+- **ADR-119 (`docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`)**
+  — no edit. This required canonical describes the three-layer Practice
+  model (Philosophy / Structure / Tooling). Continuity-surface
+  separation does not change the Practice name, layer boundaries, or
+  the three-layer model itself. ADR-150 is the ADR that carries the
+  continuity doctrine; ADR-119 inherits no update responsibility from
+  this phase.
+
+### Follow-up flagged during closeout (not completed this session)
+
+- A deliberate deep consolidation pass is still due (governance change
+  guardrails `4bccba71` graduation assessment; L-7 sunk-cost + tracks-
+  gitignored + menu-ification surprise graduation). Recorded in
+  `memory/operational/repo-continuity.md §Deep consolidation status`. Scheduled for
+  explicit session rather than smuggled into the next commit.
+- Independent assumption reviewer noted that the PDR-011 amendment
+  itself would benefit from a second-pass read once settled, to verify
+  no unstated assumptions about multi-agent coordination or
+  git-as-coordination-bus were introduced. Logged here so the next
+  consolidation pass picks it up.

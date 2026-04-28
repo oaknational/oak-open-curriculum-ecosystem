@@ -7,6 +7,7 @@ import { z } from 'zod';
 import type { Client } from '@elastic/elasticsearch';
 import type { BulkOperations, BulkOperationEntry } from '../indexing/bulk-operation-types';
 import { createNdjson } from '../indexing/bulk-chunk-utils';
+import { ingestLogger } from '../logger';
 import type {
   DocumentFailure,
   DocumentSuccess,
@@ -168,6 +169,10 @@ export async function processChunk(
   const startTime = new Date();
   const ndjson = createNdjson(chunk);
   const documentCount = Math.floor(chunk.length / 2);
+  ingestLogger.debug('Processing diagnostic bulk chunk', {
+    chunkIndex,
+    documentCount,
+  });
 
   const rawResponse = await esClient.transport.request(
     { method: 'POST', path: '/_bulk', body: ndjson },

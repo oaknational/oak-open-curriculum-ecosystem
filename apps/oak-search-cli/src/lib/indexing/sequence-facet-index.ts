@@ -10,6 +10,7 @@ import {
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { BulkOperations } from './bulk-operation-types';
 import { createBulkAction } from './bulk-action-factory';
+import { ingestLogger } from '../logger';
 
 type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
 
@@ -34,6 +35,9 @@ export async function buildSequenceFacetSources(
   sequences: readonly SubjectSequenceEntry[],
   options?: BuildSequenceFacetSourcesOptions,
 ): Promise<Map<string, SequenceFacetSource>> {
+  ingestLogger.debug('Building sequence facet sources', {
+    sequenceCount: sequences.length,
+  });
   const sources = new Map<string, SequenceFacetSource>();
 
   for (const sequence of sequences) {

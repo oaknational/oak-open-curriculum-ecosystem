@@ -132,4 +132,19 @@ describe('validateGeneratedUrls', () => {
     expect(summary.invalidCount).toBe(0);
     expect(summary.invalidUrls).toHaveLength(0);
   });
+
+  it('treats EYFS programme listings as invalid when only deep programme content exists', () => {
+    const eyfsPaths = [
+      '/teachers/eyfs/maths',
+      '/teachers/programmes/maths-foundation-early-years-foundation-stage-l/units/counting/lessons',
+    ];
+    const urls = ['/teachers/programmes/maths-foundation-early-years-foundation-stage-l/units'];
+
+    const summary = validateGeneratedUrls(urls, eyfsPaths);
+
+    expect(summary.invalidCount).toBe(1);
+    expect(summary.invalidUrls).toEqual([
+      '/teachers/programmes/maths-foundation-early-years-foundation-stage-l/units',
+    ]);
+  });
 });

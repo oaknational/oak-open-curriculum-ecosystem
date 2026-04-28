@@ -22,13 +22,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: pnpm/action-setup@71c92474e7e4f5bca283fb17ef80fba9cdb2b4b1 # v6.0.2
         name: Install pnpm
         with:
           run_install: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -62,14 +62,11 @@ jobs:
       - name: Validate portability
         run: pnpm portability:check
 
-      - name: Run knip (unused code detection)
-        run: pnpm knip
-
-      - name: Run depcruise (circular deps, orphans, layer violations)
-        run: pnpm depcruise
-
       - name: Run root-level script tests
         run: pnpm test:root-scripts
+
+      - name: Lint shell scripts
+        run: pnpm lint:shell
 
       - name: Install Playwright browsers for test:ui
         run: pnpm exec playwright install --with-deps chromium
@@ -81,6 +78,17 @@ jobs:
           pnpm exec turbo run sdk-codegen build type-check lint test test:e2e
           test:ui smoke:dev:stub --summarize --log-order=grouped --continue
 
+      # Run after build (knip + depcruise both resolve through built dist/ outputs)
+      - name: Run knip (unused code detection)
+        run: pnpm knip
+
+      - name: Run depcruise (circular deps, orphans, layer violations)
+        run: pnpm depcruise
+
       - name: Report Turbo summary
         if: always()
         run: node scripts/ci-turbo-report.mjs >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check schema cache drift (advisory)
+        if: always()
+        run: node scripts/ci-schema-drift-check.mjs

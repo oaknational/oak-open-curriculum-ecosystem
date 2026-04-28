@@ -1,12 +1,28 @@
 # Phase 3 Baseline Control Cut List
 
 **Status**: 📋 Planned
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-04-28
 
 ## Purpose
 
 Define the first executable implementation tranche for baseline security
 controls.
+
+## Public-Beta Blocking Gate
+
+Public beta of the Oak MCP server is blocked until appropriate Cloudflare-side
+security features for public/remote MCP operation are evaluated and resolved.
+This gate was added after reviewing Cloudflare's 2026-04-14 enterprise MCP
+reference architecture: <https://blog.cloudflare.com/enterprise-mcp/>
+
+The strategic source for this vendor-control gate is
+[cloudflare-mcp-public-beta-security-gate.plan.md](cloudflare-mcp-public-beta-security-gate.plan.md).
+This baseline cut list keeps only the Phase 3 implementation tranche pointer.
+
+The detailed Cloudflare control-family matrix lives only in the strategic gate
+brief. This cut list records the dependency: Phase 3 baseline controls are not
+enough for public beta until the gate brief has owner-visible evidence and risk
+classification for each required vendor-control disposition.
 
 ## Implementation Tranche 1 (Baseline)
 

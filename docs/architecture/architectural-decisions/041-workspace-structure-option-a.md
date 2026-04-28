@@ -17,7 +17,7 @@ Adopt Option A (conventional) with clear directories:
   (result types, ESLint config, env, OpenAPI adapter, observability helpers)
 - `packages/libs/` – shared runtime libraries, split into:
   - foundation libs (`env-resolution`, `logger`, `search-contracts`)
-  - adapter libs (`sentry-node`, `sentry-mcp`)
+  - adapter libs (`sentry-node`)
 - `packages/sdks/` – SDK packages (curriculum-sdk, oak-search-sdk)
 - `packages/design/` – design token workspaces producing CSS artefacts
   (design-tokens-core, oak-design-tokens). See ADR-148.

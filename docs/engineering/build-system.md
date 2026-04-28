@@ -22,6 +22,17 @@ Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
 `package.json` (`workspace:*` or `workspace:^`). Do not point them at the public
 registry by semver alone.
 
+Source-executed TypeScript entrypoints are part of the workspace contract. When
+a script runs `.ts` or source-first `.js` directly, invoke it through
+`node scripts/run-tsx-development.mjs <entrypoint>` (or the package-relative
+equivalent) so Node enables the workspace `development` export condition while
+loading `tsx`. Packages that are expected to participate in that clean-state
+source execution path must publish matching `development` export entries for
+their supported subpaths instead of assuming `dist/` already exists. `clean`
+must remove build artefacts only; if generated files are committed source, keep
+them in `clean` and reserve destructive regeneration steps for explicit
+package-local commands such as `generate:clean`.
+
 `onlyBuiltDependencies` in `pnpm-workspace.yaml` is an **intentional** allowlist:
 only those packages may run install lifecycle scripts.
 
@@ -80,6 +91,11 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
 > downstream type-check. Verify overrides with
 > `turbo run <task> --filter=@package --dry=json` and inspect
 > `resolvedTaskDefinition`.
+>
+> **Corollary**: if a workspace has any `@package#task` override,
+> it needs overrides for every task type it uses (build, test,
+> type-check, lint, lint:fix). Missing overrides fall through to
+> generic tasks with wrong inputs, causing stale cache hits.
 
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 
@@ -122,6 +138,10 @@ tests, a11y tests, and fix-mode commands. See ADR-121 for the full rationale.
 
 ## Quality Gate Commands
 
+This document is the command source of truth that AGENT.md links to. Root
+`package.json` remains the executable source of truth for script names; update
+this file in the same change whenever command names or gate membership change.
+
 ### `pnpm make` - Build and fix
 
 Prepares the codebase by building, checking, and auto-fixing issues:
@@ -141,7 +161,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 3. Root-only fixes:
    - `subagents:check` - validate sub-agent wrapper/template standards
    - `portability:check` - validate canonical/adaptor and hook parity
-   - `practice:fitness:informational` - soft-ceiling report (not a blocking gate)
+   - `practice:fitness:informational` — four-zone report (ADR-144), always exits 0
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 
@@ -150,7 +170,9 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan && pnpm clean && pnpm test:root-scripts && turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm knip && pnpm markdownlint:root && pnpm format:root
+# The authoritative expansion lives in package.json "scripts.check".
+# Reproduce from there if you ever need to run the stages manually.
+pnpm check
 ```
 
 `pnpm check` is the only canonical aggregate verification command. The former
@@ -170,13 +192,35 @@ stories.
 - Repo-wide claims must stay within the workspace task exports that back them.
   A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
   `test` story if it actually exports that task.
+- Package-local green is navigation, not acceptance. It helps locate a
+  problem, but it does not replace the last full repo-root gate when
+  making a repo-wide claim.
 
 ### `pnpm test:all` - All test suites
 
-Runs all test types sequentially:
+Runs all test surfaces declared in the root `package.json` script. The script
+currently covers `test`, `test:widget`, `test:e2e`, `test:ui`, `test:a11y`,
+`test:widget:ui`, `test:widget:a11y`, and `smoke:dev:stub`.
 
 ```bash
-pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
+pnpm test:all
+```
+
+### `pnpm test:field-integrity` - Field integrity checks
+
+Runs the root field-integrity harness:
+
+```bash
+pnpm test:field-integrity
+```
+
+### Practice health commands
+
+```bash
+pnpm practice:fitness              # Three-zone, exits 1 on critical
+pnpm practice:fitness:strict-hard  # Consolidation closure: exits 1 on hard
+pnpm practice:fitness:informational # Four-zone report, always exits 0
+pnpm practice:vocabulary           # Vocabulary consistency check
 ```
 
 ### `pnpm fix` - Auto-fix only
@@ -346,7 +390,8 @@ After renaming or adding commands in `package.json`:
 2. Update every non-archive match to the new name
 3. Run `pnpm markdownlint:root` to verify markdown integrity
 4. Verify onboarding-path docs specifically:
-   - `docs/foundation/quick-start.md`
+   - `README.md` (root, especially the Quick Start section)
+   - `CONTRIBUTING.md`
    - `docs/governance/development-practice.md`
    - `.agent/directives/AGENT.md`
    - `.claude/commands/jc-quality-gates.md`
@@ -383,11 +428,44 @@ The documentation follows a progressive disclosure pattern. Verify this
 chain is intact after structural changes:
 
 ```text
-README.md
-  → docs/foundation/quick-start.md
+README.md (root, including the Quick Start section)
+  → CONTRIBUTING.md
     → workspace READMEs (packages/*, apps/*)
       → deep docs, ADRs, architecture docs
 ```
+
+## Knip Configuration Gotchas
+
+- **Standalone scripts need `entry`, not just `project`**: knip
+  only traces dependency trees from `entry` points. Scripts
+  invoked via `tsx` (not imported by the main entry) must be
+  listed as entries. `project` defines the file set; `entry`
+  defines the dependency graph roots.
+- **Root workspace requires `workspaces["."]`**: top-level
+  `entry`/`project` fields are ignored when `workspaces` is
+  defined. Must use `workspaces["."]` for root entries.
+
+## File Cleanup After Deletion
+
+- Empty directories persist after file deletion — always rmdir
+  after deleting the last file. The portability validator checks
+  for `SKILL.md` presence, so empty skill directories without
+  `SKILL.md` cause false positives.
+
+## Linting and Auto-Fix Safety
+
+- **`lint:fix` can silently revert manual edits**: `pnpm check`
+  runs `lint:fix` internally. If an edit introduces code that
+  the linter "fixes" back, the edit is lost mid-pipeline. Always
+  verify the edited file AFTER the full `pnpm check`, not just
+  after a single gate.
+- **Reviewer fixes must exist on disk**: a disposition recorded in a
+  napkin, summary, or review thread is not evidence. Open or search the
+  target file after applying the fix, especially after auto-fix gates.
+- **Never edit generated files** — edit the generators instead.
+  Hand-trimming generated output causes regeneration footguns.
+  When knip or depcruise flags a generated file, fix the
+  generator that produced it.
 
 ## Related Documentation
 

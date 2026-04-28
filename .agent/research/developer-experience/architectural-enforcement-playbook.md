@@ -21,9 +21,8 @@ The system requires an interconnected suite of 4 tools alongside custom AI agent
 | :--- | :--- | :--- |
 | **Custom ESLint (`max-files-per-dir`)** | **The Driver:** Enforces physical modularization. | Prevents "God Folders". Forces logical subdivision when a directory grows past ~10 source files. |
 | **`eslint-plugin-boundaries`** | **The Director:** Enforces unidirectional data flow. | Prevents architectural cycles (e.g. Writers importing Parsers). It ensures the high-level layers of the application communicate in only one designated direction. |
-| **`dependency-cruiser`** | **The Guardrail:** Enforces strict domain dependencies and barrel file boundaries. | Once folders are split by the ESLint rule, this prevents them from importing each other's internals haphazardly. |
+| **`dependency-cruiser`** | **The Guardrail:** Enforces strict domain dependencies and barrel file boundaries. | Once folders are split by the ESLint rule, this prevents them from importing each other's internals haphazardly. For human inspection when untangling cycles, emit a graph with `pnpm depcruise:report` (DOT) and render with Graphviz or your editor. |
 | **`knip`** | **The Optimizer:** Detects dead code, unused exports, and unlisted dependencies. | Refactoring heavily leaves dead code behind. With strict barrel-file boundaries, `knip` proves internal functions are actually used. |
-| **`madge`** | **The Assessor:** Visualizes graphs and warns on circular dependencies/orphans. | Essential fallback visualization when dependency-cruiser rejects a circular dependency and you need to untangle it. |
 
 ---
 
@@ -35,7 +34,6 @@ To set up the tools, install the following packages in your project:
 pnpm add -D eslint @eslint/js typescript-eslint eslint-plugin-boundaries
 pnpm add -D dependency-cruiser
 pnpm add -D knip
-pnpm add -D madge
 ```
 
 ---
@@ -244,7 +242,7 @@ module.exports = {
 
 _Result:_ The build will fail if any domain imports an internal file (`foo.ts`) of another domain instead of its public `index.ts`. All inter-domain traffic must formally traverse barrel files.
 
-### Phase 4: The Cleanup (Knip & Madge)
+### Phase 4: The Cleanup (Knip)
 
 After massive restructuring, the codebase will be littered with abandoned implementations and over-exported functions. Because `dependency-cruiser` forced all inter-domain traffic through barrels, any function not exported by a barrel, and not used by a sibling inside the same folder, is easily identifiable as dead code.
 
@@ -255,7 +253,7 @@ After massive restructuring, the codebase will be littered with abandoned implem
 const config = {
   entry: ['src/index.ts', 'src/cli.ts', 'tests/**/*.test.ts'],
   project: ['src/**/*.ts'],
-  ignoreBinaries: ['eslint', 'madge', 'dependency-cruiser'],
+  ignoreBinaries: ['eslint', 'dependency-cruiser'],
 };
 
 export default config;
@@ -272,9 +270,7 @@ Bring the entire suite together into a Definition of Done script block:
   "test": "vitest run",
   "knip": "knip",
   "depcruise": "depcruise src --config .dependency-cruiser.cjs",
-  "madge:circular": "madge --circular --warning --extensions ts src/**/*",
-  "madge:orphans": "madge --orphans --warning --extensions ts src/**/*",
-  "qg": "pnpm type-check && pnpm lint && pnpm test && pnpm depcruise && pnpm knip && pnpm madge:circular"
+  "qg": "pnpm type-check && pnpm lint && pnpm test && pnpm depcruise && pnpm knip"
 }
 ```
 

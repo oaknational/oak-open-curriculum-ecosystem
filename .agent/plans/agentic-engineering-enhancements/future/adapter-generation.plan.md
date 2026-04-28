@@ -120,6 +120,14 @@ fresh?" — comparing the manifest + templates against the generated output.
   for the taxonomy rename. If adapters are generated, WS3 goes from "manually
   rename 100 files" to "update manifest, regenerate". Strongly recommended to
   execute this BEFORE the taxonomy plan.
+- **Agent Infrastructure Portability Remediation**: the current remediation
+  plan hardens the manual three-layer model first (vendor skill
+  canonicalisation, reverse validation, thin-wrapper checks). This plan should
+  build on that validated contract rather than replacing it prematurely.
+- **Practice and Process Structural Improvements**: portability PDR/ADR work
+  in that plan records the doctrine this generator would automate. Generator
+  design should wait until the doctrine and ADR-125 amendments agree on the
+  adapter target set.
 - **Every future specialist plan**: Every new specialist benefits from manifest-
   driven generation. Reduces each specialist's "platform adapters" deliverable
   from "create 4–6 files" to "add manifest entry".

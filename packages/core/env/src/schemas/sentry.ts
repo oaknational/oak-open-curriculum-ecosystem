@@ -16,8 +16,8 @@ const SENTRY_BOOLEAN_FLAGS = z.union([z.literal('true'), z.literal('false')]);
 export const SentryEnvSchema = z.object({
   SENTRY_MODE: z.enum(SENTRY_MODES).default('off'),
   SENTRY_DSN: z.string().optional(),
-  SENTRY_ENVIRONMENT: z.string().optional(),
-  SENTRY_RELEASE: z.string().optional(),
+  SENTRY_ENVIRONMENT_OVERRIDE: z.string().optional(),
+  SENTRY_RELEASE_OVERRIDE: z.string().optional(),
   SENTRY_TRACES_SAMPLE_RATE: z.string().optional(),
   SENTRY_ENABLE_LOGS: SENTRY_BOOLEAN_FLAGS.optional(),
   SENTRY_SEND_DEFAULT_PII: SENTRY_BOOLEAN_FLAGS.optional(),

@@ -1,29 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
-import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
-import { loadRuntimeConfig } from './runtime-config.js';
+import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
+import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
+import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
   const createTestApp = async (
     allowedHosts = 'localhost,127.0.0.1,example.com,api.example.com',
   ) => {
-    const result = loadRuntimeConfig({
-      processEnv: {
-        NODE_ENV: 'test',
-        OAK_API_KEY: 'test-api-key',
-        CLERK_PUBLISHABLE_KEY: 'pk_test_dGVzdC1pbnN0YW5jZS5jbGVyay5hY2NvdW50cy5kZXYk',
-        CLERK_SECRET_KEY: 'sk_test_123',
-        ELASTICSEARCH_URL: 'http://fake-es:9200',
-        ELASTICSEARCH_API_KEY: 'fake-api-key',
-        ALLOWED_HOSTS: allowedHosts,
-      },
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(result);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const runtimeConfig = createMockRuntimeConfig({ env: { ALLOWED_HOSTS: allowedHosts } });
+    const observability = createFakeHttpObservability();
     return await createApp({
       runtimeConfig,
       observability,
@@ -134,7 +122,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
   });
 
   describe('scopes_supported field', () => {
-    it('returns scopes_supported without openid (Clerk dynamic clients reject it)', async () => {
+    it('returns the generated advertised scopes_supported contract', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -142,9 +130,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
         .set('Host', 'example.com');
 
       expect(res.status).toBe(200);
-
-      expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['email']));
-      expect(res.body).not.toHaveProperty('scopes_supported', expect.arrayContaining(['openid']));
+      expect(Array.isArray(res.body.scopes_supported)).toBe(true);
+      expect(res.body).toHaveProperty('scopes_supported', [...SCOPES_SUPPORTED]);
     });
   });
 

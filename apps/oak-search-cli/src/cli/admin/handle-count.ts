@@ -13,6 +13,7 @@
 
 import type { AdminService, AdminError, IndexDocCount } from '@oaknational/oak-search-sdk/admin';
 import type { Result } from '@oaknational/result';
+import { adminLogger } from '../../lib/logger';
 
 export type { IndexDocCount } from '@oaknational/oak-search-sdk/admin';
 
@@ -38,5 +39,6 @@ export type { IndexDocCount } from '@oaknational/oak-search-sdk/admin';
 export async function handleCount(
   admin: Pick<AdminService, 'countDocs'>,
 ): Promise<Result<readonly IndexDocCount[], AdminError>> {
+  adminLogger.debug('Handling admin count command', { capability: 'admin_count_docs' });
   return admin.countDocs();
 }

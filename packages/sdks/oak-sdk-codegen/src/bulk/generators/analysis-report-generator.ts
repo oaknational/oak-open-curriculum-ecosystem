@@ -10,6 +10,7 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 
+import type { Logger } from '@oaknational/logger';
 import { typeSafeEntries } from '../../types/helpers/type-helpers.js';
 import type { ExtractedData } from '../processing.js';
 
@@ -452,7 +453,12 @@ export function serializeAnalysisReport(report: AnalysisReport): string {
 export async function writeAnalysisReportFile(
   report: AnalysisReport,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
+  logger?.info('bulk.writer.write_analysis_report', {
+    generatedAt: report.generatedAt,
+    outputDir,
+  });
   const reportsDir = join(outputDir, 'reports');
   await mkdir(reportsDir, { recursive: true });
 

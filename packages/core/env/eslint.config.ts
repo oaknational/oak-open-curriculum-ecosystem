@@ -4,11 +4,11 @@
  * Pure environment schema definitions — zero I/O, zero runtime deps beyond Zod.
  */
 
-import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
   createImportResolverSettings,
+  defineConfigArray,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -20,11 +20,11 @@ import { dirname } from 'node:path';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
-const config = defineConfig(
+const config = defineConfigArray(
   {
     ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
   },
-  ...configs.strict,
+  configs.strict,
   {
     files: ['src/**/*.ts'],
     languageOptions: {

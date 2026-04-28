@@ -61,6 +61,7 @@ export async function validateVersionDeletion(
   version: string,
   force: boolean,
 ): Promise<DeletionValidation> {
+  deps.logger?.debug('Validating version deletion', { version, force });
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return { blocked: true, message: `Cannot resolve alias targets: ${aliasResult.error.message}` };
@@ -124,6 +125,7 @@ export type OrphanResolution =
  * @returns Orphaned versions, or an error if alias resolution fails
  */
 export async function resolveOrphanedVersions(deps: AliasLifecycleDeps): Promise<OrphanResolution> {
+  deps.logger?.debug('Resolving orphaned search index versions', { target: deps.target });
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return { ok: false, error: aliasResult.error };

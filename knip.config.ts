@@ -6,8 +6,6 @@ const config: KnipConfig = {
     '@stryker-mutator/core',
     '@stryker-mutator/typescript-checker',
     '@stryker-mutator/vitest-runner',
-    // Used in CI or scripts, not directly imported
-    'cloc',
     // Commitlint is wired via husky hooks, not direct import
     '@commitlint/cli',
     // ESLint ecosystem: consumed transitively via typescript-eslint flat config
@@ -15,9 +13,11 @@ const config: KnipConfig = {
     '@typescript-eslint/parser',
     'eslint-config-prettier',
     'eslint-plugin-prettier',
-    // supertest and ts-morph used in scripts/
+    // supertest used in scripts/
     'supertest',
-    'ts-morph',
+    // tsup at root provides type resolution for tsup.config.base.ts
+    // (workspace configs import factory functions from the base config)
+    'tsup',
   ],
   ignoreBinaries: [
     // External tools not installed via npm
@@ -26,6 +26,11 @@ const config: KnipConfig = {
     'lsof',
     'ps',
   ],
+  ignoreIssues: {
+    // Deploy boundary intentionally exposes the same handler as both a named
+    // export and the Vercel-required default export.
+    'apps/oak-curriculum-mcp-streamable-http/src/server.ts': ['duplicates'],
+  },
 
   eslint: true,
   vitest: true,
@@ -37,14 +42,34 @@ const config: KnipConfig = {
       project: ['scripts/**/*.{ts,mjs}'],
     },
     'agent-tools': {
-      entry: ['src/bin/**/*.ts'],
+      // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
+      // entry points: the built JS is invoked via spawn from the platform's
+      // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
+      // knip cannot trace as a TS import.
+      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts'],
       project: ['src/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
-      entry: ['widget/src/main.tsx', 'smoke-tests/**/*.ts', 'e2e-tests/**/*.ts'],
+      entry: [
+        'esbuild.config.ts',
+        'src/index.ts',
+        'src/application.ts',
+        'src/server.ts',
+        'build-scripts/**/*.ts',
+        'build-scripts/**/*.mjs',
+        'operations/**/*.ts',
+        'scripts/**/*.js',
+        'widget/src/main.tsx',
+        'smoke-tests/**/*.ts',
+        'e2e-tests/**/*.ts',
+      ],
       project: [
         'src/**/*.ts',
+        'build-scripts/**/*.ts',
+        'build-scripts/**/*.mjs',
         'e2e-tests/**/*.ts',
+        'operations/**/*.ts',
+        'scripts/**/*.js',
         'tests/**/*.ts',
         'smoke-tests/**/*.ts',
         'widget/src/**/*.{ts,tsx,css}',
@@ -63,6 +88,8 @@ const config: KnipConfig = {
     },
     'apps/oak-search-cli': {
       entry: [
+        'bin/**/*.ts',
+        'operations/**/*.ts',
         'scripts/**/*.ts',
         'evaluation/**/*.ts',
         'ground-truths/generation/**/*.ts',
@@ -72,12 +99,22 @@ const config: KnipConfig = {
         'src/adapters/oak-adapter-types.ts',
         'src/adapters/sdk-guards.ts',
       ],
-      project: ['src/**/*.ts', 'ground-truths/**/*.ts', 'scripts/**/*.ts', 'evaluation/**/*.ts'],
+      project: [
+        'bin/**/*.ts',
+        'src/**/*.ts',
+        'ground-truths/**/*.ts',
+        'operations/**/*.ts',
+        'scripts/**/*.ts',
+        'evaluation/**/*.ts',
+      ],
       ignoreDependencies: [
         // Used via CLI tooling, not direct imports
         '@asteasolutions/zod-to-openapi',
         'typedoc-plugin-markdown',
         'vite-tsconfig-paths',
+        // Used via `pnpm exec tsx` pass-through execution and tsx shebangs.
+        // Knip does not detect binary/shebang usage as dependency usage.
+        'tsx',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
       ],
@@ -87,11 +124,13 @@ const config: KnipConfig = {
       ignoreDependencies: [
         // ESLint plugins are peer dependencies used at runtime
         'eslint-plugin-prettier',
-        'eslint-plugin-sonarjs',
         'globals',
       ],
     },
     'packages/core/openapi-zod-client-adapter': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/core/observability': {
       project: ['src/**/*.ts'],
     },
     'packages/core/env': {
@@ -103,6 +142,10 @@ const config: KnipConfig = {
     'packages/core/type-helpers': {
       project: ['src/**/*.ts'],
     },
+    'packages/design/oak-design-tokens': {
+      entry: ['src/build.ts'],
+      project: ['src/**/*.ts'],
+    },
     'packages/libs/env-resolution': {
       project: ['src/**/*.ts'],
     },
@@ -112,7 +155,28 @@ const config: KnipConfig = {
     'packages/libs/search-contracts': {
       project: ['src/**/*.ts'],
     },
+    'packages/libs/sentry-node': {
+      project: ['src/**/*.ts'],
+      ignoreDependencies: [
+        // Readiness-only devDep: `@sentry/cli` lets maintainers run
+        // `pnpm exec sentry-cli` inside this package without touching
+        // user-global state. Not imported at runtime. See
+        // docs/operations/sentry-cli-usage.md.
+        '@sentry/cli',
+      ],
+    },
     'packages/sdks/oak-curriculum-sdk': {
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      // Explicit entries match the tsup.config.ts entry patterns.
+      entry: [
+        'src/*.ts',
+        'src/client/**/*.ts',
+        'src/config/**/*.ts',
+        'src/types/**/*.ts',
+        'src/public/**/*.ts',
+        'src/mcp/**/*.ts',
+        'src/validation/**/*.ts',
+      ],
       project: ['src/**/*.ts'],
       ignoreDependencies: [
         // @zod/core is a transitive dep of zod, required at runtime
@@ -120,15 +184,22 @@ const config: KnipConfig = {
       ],
     },
     'packages/sdks/oak-sdk-codegen': {
-      entry: ['code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      entry: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       project: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       ignoreDependencies: ['@zod/core'],
     },
-    'packages/libs/sentry-mcp': {
-      entry: ['tests/**/*.typecheck.ts'],
-      project: ['src/**/*.ts', 'tests/**/*.ts'],
-    },
     'packages/sdks/oak-search-sdk': {
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      entry: [
+        'src/create-search-sdk.ts',
+        'src/create-search-retrieval.ts',
+        'src/types/**/*.ts',
+        'src/retrieval/**/*.ts',
+        'src/admin/**/*.ts',
+        'src/observability/**/*.ts',
+        'src/internal/**/*.ts',
+      ],
       project: ['src/**/*.ts'],
     },
   },

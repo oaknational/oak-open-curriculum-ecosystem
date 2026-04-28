@@ -27,7 +27,7 @@ describe('formatResolutionFailure', () => {
       join(repoRoot, '.codex', 'config.toml'),
       `[agents."code-reviewer"]
 description = "Gateway reviewer."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 `,
       'utf8',
     );
@@ -43,7 +43,7 @@ config_file = ".codex/agents/code-reviewer.toml"
     writeFileSync(
       join(repoRoot, '.codex', 'config.toml'),
       `[agents."code-reviewer"]
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 `,
       'utf8',
     );

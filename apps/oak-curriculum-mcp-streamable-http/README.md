@@ -3,6 +3,12 @@
 Status: private alpha
 Next status: public alpha
 
+> **New here?** Start at the
+> [repo root README](../../README.md) and the
+> [contributor guide](../../CONTRIBUTING.md)
+> before diving into this workspace. AI agents should also read
+> [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md).
+
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
 > **Canonical MCP server workspace**. This is the sole MCP server workspace.
@@ -130,6 +136,16 @@ constant `WIDGET_HTML_CONTENT` (in `src/generated/widget-html-content.ts`),
 injected via DI. The dev orchestrator regenerates this constant from widget
 sources automatically before booting the server.
 
+**Production runtime serves the same constant, not a file from `dist/`.**
+The pipeline is: `pnpm build:widget` invokes Vite (which writes the
+single-file widget to `.widget-build/`), then `scripts/embed-widget-html.js`
+generates the committed `src/generated/widget-html-content.ts` constant.
+At runtime, `src/index.ts` wraps `createApp` with
+`getWidgetHtml: () => WIDGET_HTML_CONTENT` — no filesystem read happens.
+The `dist/` artefacts contain the bundled JS only; the widget HTML is
+embedded in the JS bundle via the imported constant. This keeps the
+serverless cold path filesystem-free.
+
 `dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
 `$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete
 that directory to refresh: `rm -rf /tmp/mcp-ext-apps`. Requires `bun`.
@@ -167,50 +183,24 @@ server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
 
 ## Observability
 
-The HTTP server now uses a single app-level observability bundle created at
-process start. In every mode, stdout JSON remains the canonical local log
-surface.
+See [`docs/observability.md`](./docs/observability.md) for the authoritative
+guide to Sentry instrumentation, the per-request `oak.http.request.mcp` span,
+scope enrichment (`mcp.method`, `mcp.tool_name`), the Express error handler
+DI wiring, the redaction barrier entry points (ADR-143 + ADR-160), release
+metadata resolution, and source-map upload.
 
-`SENTRY_MODE` controls the runtime behaviour:
+Summary:
 
-- `off` — default kill switch. No Sentry init, no Sentry sink, no outbound
-  delivery, and no in-memory MCP recorder.
-- `fixture` — no-network local verification mode. Stdout JSON is retained, and
-  MCP observations plus handled-error captures are recorded only in local
-  fixture stores used by tests and local validation.
-- `sentry` — live Sentry mode. Stdout JSON is still retained, and the app adds
-  the Sentry sink, live error capture, and tracing.
-
-The HTTP telemetry boundary is metadata-only:
-
-- generic `/mcp` request capture is reduced to safe method and route metadata
-- raw JSON-RPC envelopes, request bodies, query strings, cookies, and
-  authorisation headers are stripped before Sentry capture
-- MCP tool, resource, and prompt observations retain only kind, name, status,
-  duration, and trace identifiers
-- the shared redaction policy also treats raw
-  `application/x-www-form-urlencoded` OAuth payloads as sensitive input,
-  rather than relying on query-only redaction
-
-The app also adds targeted manual spans for:
-
-- bootstrap phases, including upstream OAuth metadata fetch
-- OAuth proxy upstream `register` and `token` calls
-- asset-download upstream fetch and stream lifecycle
-
-Handled-error capture is reserved for unexpected terminal boundaries such as
-bootstrap failure, server listen failure, Express error middleware, MCP cleanup
-failure, OAuth upstream timeout/network failure, and asset-download proxy
-failure. Expected validation, auth, and upstream-status branches remain logs
-plus span status only.
-
-Successful auth logs retain client/scoping context only (`clientId`,
-`scopeCount`, `hasUserContext`); `userId` is excluded from structured
-observability payloads.
-
-On shutdown and startup failure paths, the app performs bounded Sentry flushes
-at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
-`SIGTERM`. Per-request MCP teardown never initialises or flushes Sentry.
+- `SENTRY_MODE=off` (default) / `SENTRY_MODE=fixture` / `SENTRY_MODE=sentry`
+  select runtime behaviour. Stdout JSON via `@oaknational/logger` is the
+  canonical local log surface in every mode.
+- MCP auto-instrumentation is wired via `wrapMcpServerWithSentry` at
+  [`src/app/core-endpoints.ts:98`](./src/app/core-endpoints.ts); inert under
+  `off` because `@sentry/node` is not initialised.
+- The Sentry Express error handler is DI-injected from `src/index.ts` when
+  `SENTRY_MODE=sentry`.
+- Every outbound payload passes through the non-bypassable redaction barrier
+  in [`@oaknational/sentry-node`](../../packages/libs/sentry-node/README.md).
 
 ## Vercel deployment
 
@@ -227,11 +217,36 @@ at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `SENTRY_MODE` — `off` (default), `fixture`, or `sentry`
   - `SENTRY_DSN` — required when `SENTRY_MODE=sentry`
-  - `SENTRY_RELEASE` — required when `SENTRY_MODE=sentry`
-  - `SENTRY_TRACES_SAMPLE_RATE` — optional numeric trace sample rate for live Sentry mode
+  - `SENTRY_TRACES_SAMPLE_RATE` — required numeric trace sample rate for live Sentry mode
+  - `SENTRY_ENVIRONMENT_OVERRIDE` — explicit environment override only
+  - `SENTRY_RELEASE_OVERRIDE` — explicit release override only
+  - `APP_VERSION_OVERRIDE` — explicit application-version override only
+  - `GIT_SHA_OVERRIDE` — explicit git-SHA override only
   - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
 
 Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
+
+Runtime metadata is resolved fail-fast where the selected mode needs it:
+
+- application version comes from the root repo `package.json` unless
+  `APP_VERSION_OVERRIDE` is set
+- Sentry release comes from `SENTRY_RELEASE_OVERRIDE` or the ADR-163
+  environment row: production-on-`main` app version, preview /
+  production-from-non-main branch URL host, or development `dev-<shortSha>`
+- git SHA metadata comes from `GIT_SHA_OVERRIDE` or `VERCEL_GIT_COMMIT_SHA`
+- invalid override values and missing application version are startup errors
+- the build also fails early if the root package version is missing or invalid
+- `SENTRY_MODE=off` does not require Sentry release metadata
+
+Vercel production builds have an additional repo-owned gate:
+
+- previews and development builds always continue
+- production continues only when the root repo `package.json` version is greater
+  than the previous successful production deployment version
+- production builds that would reuse the previous semantic-release version are
+  cancelled via `vercel.json` `ignoreCommand`, rather than failing during build
+- the gate reads the previous deployed root `package.json` via
+  `VERCEL_GIT_PREVIOUS_SHA`
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 
@@ -295,8 +310,8 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - **Server fails to start (OAuth metadata fetch timeout)**: If the server hangs or fails during startup when auth is enabled, ensure Clerk's `/.well-known/oauth-authorization-server` endpoint is reachable from the server's network. The auth bootstrap fetches upstream OAuth metadata at startup and will retry with exponential backoff (added in F10), but if the endpoint is unreachable the server will eventually fail. Check DNS resolution, firewall rules, and Clerk service status.
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
   - Ensure Vercel framework is Express and the deployed build is using
-    `dist/index.js`. This repo does not rely on a separate Vercel-only default
-    export path.
+    `dist/server.js` via `package.json` `main`. The local listener entry remains
+    `dist/index.js`, but that is not the deployed artefact.
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If auth is enabled, verify `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set and that Clerk metadata discovery succeeds at startup.
 - 401 without `Authorization`: the client must either follow the OAuth discovery flow or send a valid Clerk-issued Bearer token. For local smoke tests, either use a real Clerk token or set `DANGEROUSLY_DISABLE_AUTH=true` and retry without the `Authorization` header.
@@ -311,6 +326,40 @@ Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide Elas
 - MCP handlers are attached via `@oaknational/mcp-server-kit` `attachMcpHandlers`, using a registry of tools generated in the SDK.
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec; invalid inputs return a formatted error body (200 status, `isError: true`).
 - Successful results are SSE-wrapped JSON-RPC responses formatted with `formatStandardContent`.
+
+## Architecture Notes
+
+### Aggregated tools
+
+Aggregated tools currently return `Promise<CallToolResult>`
+directly, bypassing `ToolExecutionResult`. This is
+**architectural debt** — they miss the error handling,
+logging, and type safety that `ToolExecutionResult` provides
+to generated tools. Remediation tracked in the Practice
+improvements plan. The `AggregatedToolName` type derives from
+`keyof typeof AGGREGATED_TOOL_DEFS`.
+
+### MCP App host compatibility
+
+Tools with `_meta.ui` work in non-MCP-Apps hosts (Claude Code,
+CLI). The host ignores `_meta.ui` and the tool returns text
+content normally. No fallback code is needed — the protocol
+handles degradation.
+
+### Testing the MCP SDK
+
+`McpServer.registerTool` uses unexported generics that make
+it difficult to type-check handler functions through the
+registration surface. Test handler functions directly, not
+through `registerHandlers` → `McpServer`. When a test needs
+to reach into SDK internals, the architectural boundary is
+wrong — test at the handler level instead.
+
+### Type extraction from composition root
+
+When extracting types from this composition root, the root
+module may still need a local `import type` for its own usage
+even after the type is exported.
 
 ## Testing
 
@@ -330,9 +379,6 @@ This application has comprehensive test coverage across three testing layers:
 
 - **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
 - **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
-- **Built-artifact startup proof** (`e2e-tests/built-artifact-import.e2e.test.ts`):
-  imports `dist/application.js` under plain Node to catch dev-loader versus
-  production-runtime resolver drift without making network requests
 
 ### Widget Tests (Playwright)
 
@@ -372,16 +418,32 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ## Detailed Documentation
 
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource/prompt boundaries, control model, and UAT expectations
+- [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 
 ## Deployment Preconditions
 
-**Rate limiting**: Edge/WAF rate limiting must be configured before
-production deployment. The OAuth proxy endpoints (`/register`, `/token`)
-are publicly reachable and require rate limiting to prevent abuse. See
-[ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
-for details.
+**Rate limiting**: Application-layer per-IP rate limiting is built in via
+`express-rate-limit` on all MCP routes (120/min), OAuth routes (30/15min),
+and asset download routes (60/min). This is the **fourth** edge layer
+after Cloudflare → Vercel-edge → app-auth, and is deliberately
+probabilistic (per-instance in-memory store, resets on cold start). The
+authoritative volumetric defence is the Cloudflare + Vercel edge stack;
+the application-layer limiter exists to catch low-rate abuse and
+upstream-amplification patterns that slip through the edges. The
+read-only blast radius (all MCP tools are read-only) means a successful
+bypass cannot mutate state — only exhaust upstream Oak API quota or
+Vercel compute budget. See
+[ADR-158](../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
+for the full multi-layer security architecture.
+
+Key extraction is runtime-aware: on Vercel (`VERCEL_ENV` set), the limiter
+keys on `x-vercel-forwarded-for`; otherwise it falls back to `req.ip`. If
+this app is deployed on a non-Vercel host, configure your own trust-proxy
+chain so `req.ip` reflects the real client IP — `x-vercel-forwarded-for`
+is intentionally ignored off-Vercel because clients can spoof it. See
+[ADR-158 §Runtime-Aware Key Extraction](../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md#runtime-aware-key-extraction).
 
 **Documentation Status**: Last verified 2026-04-09 against `src/application.ts`,
 the built-artifact E2E coverage, and the current workspace-level transport

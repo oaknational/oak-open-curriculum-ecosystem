@@ -14,6 +14,12 @@
     },
     "create-plugin": {
       "enabled": true
+    },
+    "posthog": {
+      "enabled": true
+    },
+    "linear": {
+      "enabled": true
     }
   }
 }

@@ -1,13 +1,56 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted
-**Date**: 2026-04-02
+**Status**: Accepted (amended 2026-04-20, 2026-04-21)
+**Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
+prompt-host to canonical repo-local surface; §4 generalised; Rationale
+and Consequences language aligned to the amendment per OAC Phase 4.3;
+amended 2026-04-21 Session 5 — host-local surface set re-shaped:
+workstream-brief surface retired, lane state absorbed into per-thread
+next-session records with a `Lane state` substructure; portable
+doctrine carried forward in the parallel PDR-011 amendment)
 **Related**: [ADR-117](117-plan-templates-and-components.md),
 [ADR-119](119-agentic-engineering-practice.md),
 [ADR-124](124-practice-propagation-model.md),
 [ADR-125](125-agent-artefact-portability.md),
 [ADR-131](131-self-reinforcing-improvement-loop.md),
 [ADR-144](144-two-threshold-fitness-model.md)
+
+## Amendment Log
+
+- **2026-04-20** (OAC Phase 4.3): §3 rewritten to abstract the continuity
+  contract from the session-continuation prompt to a canonical repo-local
+  surface whose exact path is host-local. §4 generalised from "the active
+  MCP App plan set" to "the active plan set for the current lane".
+  Rationale and Consequences language aligned. Doctrine unchanged (three
+  continuity types, split-loop model, contract field set, surprise
+  pipeline all preserved). See
+  [operational-awareness-and-continuity-surface-separation.plan.md](../../../.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
+- **2026-04-21 Session 5** (memory-feedback thread; Pippin / cursor-opus;
+  owner-ratified TIER-2 simplification): the host-local surface set
+  realising this ADR has been re-shaped. The per-workstream brief
+  surface (`.agent/memory/operational/workstreams/<slug>.md`) has been
+  retired as a continuity artefact and its lane-level short-horizon
+  state (current objective, blockers, promotion watchlist) absorbed
+  into per-thread next-session records under a new `Lane state`
+  substructure (`.agent/memory/operational/threads/<thread>.next-session.md`).
+  Portable minimum fields renamed accordingly: `Active workstreams`
+  → `Active threads`; `Branch-primary workstream brief` →
+  `Branch-primary thread next-session record`. Tactical track-card
+  filename convention updated to `<thread>--<agent>--<branch>.md`.
+  Doctrine unchanged (three continuity types, split-loop model,
+  field set in aggregate, surprise pipeline all preserved); only
+  the host-local surface decomposition changed. The conceptual term
+  "workstream" remains valid as a within-thread scope descriptor; only
+  the dedicated artefact home is retired. The portable PDR-011
+  amendment ([PDR-011 §Amendment Log 2026-04-21 Session 5](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log))
+  carries the same substantive change for adopting repos. Cross-PDR
+  rationale at
+  [PDR-027 §Amendment Log 2026-04-21 Session 5](../../../.agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log).
+  Body §3 of this ADR retains the original portable-minimum field
+  list verbatim as the historical decision record; the Session-5
+  re-naming is recorded here in the Amendment Log per ADR convention
+  and reflected in the realising surface paths and field names in
+  the actual operational memory tree.
 
 ## Context
 
@@ -72,31 +115,38 @@ or reached through the `session-handoff` consolidation gate:
   governance change
 - documentation drift or stale cross-references need graduation
 
-### 3. The continuity contract lives in the MCP App continuation prompt
+### 3. The continuity contract lives in a canonical repo-local surface
 
-The operational continuity surface is a fixed `Live continuity contract`
-section in `.agent/prompts/session-continuation.prompt.md`.
+The operational continuity surface is a canonical, compact repo-local
+file that every workflow reads first. Its required fields are:
 
-Its fields are:
-
-- `Workstream`
-- `Active plans`
-- `Current state`
-- `Current objective`
-- `Hard invariants / non-goals`
-- `Recent surprises / corrections`
-- `Open questions / low-confidence areas`
+- `Active workstreams`
+- `Branch-primary workstream brief`
+- `Current session focus` (optional; only when distinct from the
+  branch-primary lane)
+- `Repo-wide invariants / non-goals`
 - `Next safe step`
 - `Deep consolidation status`
 
-The prompt remains operational only. Active plans remain authoritative for
-scope, sequencing, acceptance criteria, and validation.
+Per-lane short-horizon state (current objective, blockers, promotion
+watchlist) is carried in a per-workstream brief surface, and tactical
+coordination in single-writer track cards. The exact file paths are a
+host-local implementation detail. _(Illustrative only, non-normative:_
+_this repository implements the surface set under `.agent/memory/operational/` and_
+_`.agent/memory/operational/tracks/`; see the state scaffolding docs for the_
+_realising paths.)_
+
+The continuity surface set is operational only. Active plans remain
+authoritative for scope, sequencing, acceptance criteria, and validation.
+The continuation prompt is a behavioural entry surface; it does not host
+continuity state.
 
 ### 4. `GO` is a mid-session execution cadence
 
 Retain `GO` as a complementary execution workflow. It starts from
-`start-right-quick`, the latest continuity contract, and the active MCP App
-plan set.
+`start-right-quick`, the canonical continuity surface (plus the relevant
+workstream brief it links to), and the active plan set for the current
+lane.
 
 It is not a handoff surface. Ordinary closeout goes through `session-handoff`.
 Deep convergence goes through `consolidate-docs` when the trigger checklist
@@ -133,11 +183,17 @@ lightweight until the trigger is clear, but the workflow can still continue
 into deep convergence when the session has genuinely reached a natural
 consolidation boundary.
 
-### Why keep the continuity contract in the prompt
+### Why a canonical repo-local surface for the contract
 
-The continuation prompt is already the live operational entry point for the MCP
-App lane. Adding a compact contract there makes recovery fast while leaving
-plans authoritative for everything that should not be duplicated.
+A canonical repo-local surface (separate from any behavioural entry
+prompt) keeps resumption fast while keeping each surface single-purpose.
+Co-hosting the contract inside an operational prompt conflates two jobs:
+grounding the session (behavioural) and describing its live state
+(content that changes every session). Separating them makes each
+surface easier to reason about, easier to multi-write safely via
+per-workstream briefs and single-writer track cards, and easier to
+discover on a fresh checkout. Active plans remain authoritative for
+everything that should not be duplicated.
 
 ### Why revive `GO`
 
@@ -157,7 +213,9 @@ practice instead of disappearing into chat history.
 - Ordinary session handoff becomes lighter and more likely to be used.
 - Deep consolidation keeps its full role, but no longer blocks everyday
   continuity.
-- The MCP App lane gains a durable operational contract for resumptions.
+- The repo gains a durable operational continuity contract decoupled
+  from any single workflow prompt, so resumption, handoff, and
+  multi-agent coordination share the same surface set.
 - Surprise and correction gain a clearer path into institutional memory.
 - The practice stays portable by design while remaining repo-local first.
 

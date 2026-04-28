@@ -1,0 +1,6 @@
+---
+description: Before authoring tests, implementations, or doctrine prescribed by a plan body, run the three-clause first-principles check (shape, landing-path, vendor-literal) and surface any failure to the owner before writing.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/plan-body-first-principles-check.md`.

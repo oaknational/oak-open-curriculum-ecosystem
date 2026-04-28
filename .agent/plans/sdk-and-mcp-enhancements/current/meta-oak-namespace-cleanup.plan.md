@@ -356,8 +356,8 @@ Update the ADR-141 comment block in `definitions.ts` to document the new `_meta`
 
 ### Existing Tests (to update, not delete)
 
-- `graph-resource-factory.unit.test.ts` — rename "includes securitySchemes in _meta" → "includes oak-www and oak-guidance in _meta"
-- `universal-tools.integration.test.ts` — rename "generated tools have _meta.securitySchemes" → "generated tools have _meta oak-www and oak-guidance"
+- `graph-resource-factory.unit.test.ts` — rename "includes securitySchemes in _meta" → "includes oak-www and oak-guidance in_meta"
+- `universal-tools.integration.test.ts` — rename "generated tools have _meta.securitySchemes" → "generated tools have_meta oak-www and oak-guidance"
 - Contract test in `tool-descriptor.contract.ts` — update shape assertion
 
 ### No New Tests Required

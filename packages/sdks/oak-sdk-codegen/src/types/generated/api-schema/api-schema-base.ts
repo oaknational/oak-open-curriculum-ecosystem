@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-2b4abb0b767449f82949accbdb168c7fcb98e00f"
+    "version": "0.6.0-00e72e8d3260acea8a6b5177272f2d523c8f69f5"
   },
   "servers": [
     {
@@ -1291,6 +1291,21 @@ export const schemaBase = {
             },
             "required": true,
             "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)"
+          },
+          {
+            "in": "query",
+            "name": "examBoard",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "aqa",
+                "edexcel",
+                "eduqas",
+                "ocr",
+                "wjec",
+                "edexcelb"
+              ]
+            }
           }
         ],
         "responses": {
@@ -2528,6 +2543,28 @@ export const schemaBase = {
                               ],
                               "additionalProperties": false
                             }
+                          },
+                          "examBoards": {
+                            "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "type": "string",
+                                  "description": "The title of the exam board"
+                                },
+                                "slug": {
+                                  "type": "string",
+                                  "description": "The slug of the exam board"
+                                }
+                              },
+                              "required": [
+                                "title",
+                                "slug"
+                              ],
+                              "additionalProperties": false
+                            }
                           }
                         },
                         "required": [
@@ -2592,6 +2629,28 @@ export const schemaBase = {
                                 "threadTitle",
                                 "threadSlug",
                                 "order"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "examBoards": {
+                            "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "type": "string",
+                                  "description": "The title of the exam board"
+                                },
+                                "slug": {
+                                  "type": "string",
+                                  "description": "The slug of the exam board"
+                                }
+                              },
+                              "required": [
+                                "title",
+                                "slug"
                               ],
                               "additionalProperties": false
                             }
@@ -2738,6 +2797,28 @@ export const schemaBase = {
                                               ],
                                               "additionalProperties": false
                                             }
+                                          },
+                                          "examBoards": {
+                                            "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "title": {
+                                                  "type": "string",
+                                                  "description": "The title of the exam board"
+                                                },
+                                                "slug": {
+                                                  "type": "string",
+                                                  "description": "The slug of the exam board"
+                                                }
+                                              },
+                                              "required": [
+                                                "title",
+                                                "slug"
+                                              ],
+                                              "additionalProperties": false
+                                            }
                                           }
                                         },
                                         "required": [
@@ -2802,6 +2883,28 @@ export const schemaBase = {
                                                 "threadTitle",
                                                 "threadSlug",
                                                 "order"
+                                              ],
+                                              "additionalProperties": false
+                                            }
+                                          },
+                                          "examBoards": {
+                                            "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "title": {
+                                                  "type": "string",
+                                                  "description": "The title of the exam board"
+                                                },
+                                                "slug": {
+                                                  "type": "string",
+                                                  "description": "The slug of the exam board"
+                                                }
+                                              },
+                                              "required": [
+                                                "title",
+                                                "slug"
                                               ],
                                               "additionalProperties": false
                                             }
@@ -2924,6 +3027,28 @@ export const schemaBase = {
                                         ],
                                         "additionalProperties": false
                                       }
+                                    },
+                                    "examBoards": {
+                                      "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string",
+                                            "description": "The title of the exam board"
+                                          },
+                                          "slug": {
+                                            "type": "string",
+                                            "description": "The slug of the exam board"
+                                          }
+                                        },
+                                        "required": [
+                                          "title",
+                                          "slug"
+                                        ],
+                                        "additionalProperties": false
+                                      }
                                     }
                                   },
                                   "required": [
@@ -2988,6 +3113,28 @@ export const schemaBase = {
                                           "threadTitle",
                                           "threadSlug",
                                           "order"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "examBoards": {
+                                      "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string",
+                                            "description": "The title of the exam board"
+                                          },
+                                          "slug": {
+                                            "type": "string",
+                                            "description": "The slug of the exam board"
+                                          }
+                                        },
+                                        "required": [
+                                          "title",
+                                          "slug"
                                         ],
                                         "additionalProperties": false
                                       }
@@ -3131,6 +3278,28 @@ export const schemaBase = {
                                     ],
                                     "additionalProperties": false
                                   }
+                                },
+                                "examBoards": {
+                                  "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "title": {
+                                        "type": "string",
+                                        "description": "The title of the exam board"
+                                      },
+                                      "slug": {
+                                        "type": "string",
+                                        "description": "The slug of the exam board"
+                                      }
+                                    },
+                                    "required": [
+                                      "title",
+                                      "slug"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "required": [
@@ -3195,6 +3364,28 @@ export const schemaBase = {
                                       "threadTitle",
                                       "threadSlug",
                                       "order"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "examBoards": {
+                                  "description": "The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`).",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "title": {
+                                        "type": "string",
+                                        "description": "The title of the exam board"
+                                      },
+                                      "slug": {
+                                        "type": "string",
+                                        "description": "The slug of the exam board"
+                                      }
+                                    },
+                                    "required": [
+                                      "title",
+                                      "slug"
                                     ],
                                     "additionalProperties": false
                                   }
@@ -4552,6 +4743,28 @@ export const schemaBase = {
                   "unitTitle": {
                     "type": "string",
                     "description": "The unit title"
+                  },
+                  "examBoards": {
+                    "description": "The exam boards the unit appears in. Only populated for KS4 subjects when the request does not supply an `examBoard` filter.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the exam board"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "description": "The slug of the exam board"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "slug"
+                      ],
+                      "additionalProperties": false
+                    }
                   }
                 },
                 "required": [
@@ -7926,6 +8139,10 @@ export const schemaBase = {
               "type": "string",
               "description": "The thread slug identifier"
             },
+            "unitCount": {
+              "type": "number",
+              "description": "The number of published units in the thread"
+            },
             "oakUrl": {
               "type": "null",
               "description": "Threads are data concepts without Oak URLs on the website. Always null for thread resources."
@@ -7933,14 +8150,16 @@ export const schemaBase = {
           },
           "required": [
             "title",
-            "slug"
+            "slug",
+            "unitCount"
           ],
           "additionalProperties": false
         },
         "example": [
           {
             "title": "Number: Multiplication and division",
-            "slug": "number-multiplication-and-division"
+            "slug": "number-multiplication-and-division",
+            "unitCount": 78
           }
         ]
       },

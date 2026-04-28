@@ -6,22 +6,25 @@ The Practice is not a single file. It is the entire system of principles, struct
 
 Follow `.agent/directives/AGENT.md` and `.agent/directives/principles.md`. That is all you need for normal operations.
 
-## The Practice Core Files
+## The Practice Core Package
 
-The Practice Core travels between repos as a package of eight required files. The three **plasmid trinity** files encode the blueprint; the **verification companion** proves the build is operational; the **entry points** provide orientation; the **changelog** records what changed; the **provenance file** tracks evolution history. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core.
+The Practice Core is a **bounded package of files plus required directories** that travels between repos as a whole. The contract is the set of surfaces and their roles, not a file count (the count grows by explicit decision, per PDR-007).
 
-| File                                           | Role                                                                     |
-| ---------------------------------------------- | ------------------------------------------------------------------------ |
-| [practice.md](practice.md)                     | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
-| [practice-lineage.md](practice-lineage.md)     | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
-| [practice-bootstrap.md](practice-bootstrap.md)         | Blueprint: annotated templates for every artefact type (the **how**)            |
-| [practice-verification.md](practice-verification.md)   | Verification: checklist, health check, operational estate, acceptance criteria  |
-| [README.md](README.md)                                 | Entry point for humans: context and hydration how-to                           |
-| [index.md](index.md)                           | Entry point for agents: operational orientation (this file)              |
-| [CHANGELOG.md](CHANGELOG.md)                   | What changed: repo-tagged summaries for plasmid integration              |
-| [provenance.yml](provenance.yml)               | Per-file evolution chains for the plasmid trinity                        |
+| Surface                                              | Role                                                                     |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| [practice.md](practice.md)                           | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
+| [practice-lineage.md](practice-lineage.md)           | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
+| [practice-bootstrap.md](practice-bootstrap.md)       | Blueprint: annotated templates for every artefact type (the **how**)     |
+| [practice-verification.md](practice-verification.md) | Verification: checklist, health check, operational estate                |
+| [README.md](README.md)                               | Entry point for humans: context and hydration how-to                     |
+| [index.md](index.md)                                 | Entry point for agents: operational orientation (this file)              |
+| [CHANGELOG.md](CHANGELOG.md)                         | What changed: repo-tagged summaries for plasmid integration              |
+| [provenance.yml](provenance.yml)                     | Per-file evolution chains for the plasmid trinity                        |
+| [decision-records/](decision-records/)               | **Directory** — Practice Decision Records (PDRs): portable governance decisions about the Practice |
+| [patterns/](patterns/)                               | **Directory** — General ecosystem-agnostic abstract patterns synthesised from specific instances |
+| [incoming/](incoming/)                               | **Directory** — Practice Box: transient receiver for inbound Core packages |
 
-The trinity files point to `provenance.yml` for their evolution history and evolve between repos. For day-to-day work you do not need to read any of these — they are the blueprint, not the building.
+The trinity files point to `provenance.yml` for their evolution history and evolve between repos. For day-to-day work you do not need to read any of these — they are the blueprint, not the building. The `.agent/practice-context/` peer directory (sender-maintained ephemeral exchange material) may accompany the Core but is not part of it.
 
 ## Boundary Contract
 
@@ -49,11 +52,23 @@ practice-index bridges portable concepts to each host's local artefacts.
 The `incoming/` directory is the Practice Box. When Practice Core files arrive from another repo, they land here. Check it at session start (via `start-right`) and during consolidation. See the Integration Flow in `practice-lineage.md` for details.
 
 If `.agent/practice-context/` exists, read `README.md` and `incoming/` as
-received support during hydration or integration. `incoming/` is transient and
-should be cleared after integration. Local `outgoing/` may persist.
+received ephemeral support during hydration or integration. `incoming/` is
+transient and should be cleared after integration. Local `outgoing/` is
+sharpened under PDR-007 to ephemeral exchange only (no substance found
+nowhere else).
+
+Read `decision-records/README.md` and every PDR file. PDRs are
+authoritative governance decisions about the Practice itself; they are
+first-class Core content under the PDR-007 contract and travel with the
+Core package.
+
+Read `patterns/README.md` and any general abstract patterns present.
+These are ecosystem-agnostic patterns synthesised from specific instances;
+they travel with the Core. Specific instances remain in `.agent/memory/active/patterns/`
+in each host repo.
 
 If the local repo spans multiple agent platforms, maintain an explicit local
-surface contract in `.agent/reference/cross-platform-agent-surface-matrix.md`
+surface contract in `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 and expose it from `../practice-index.md`. Supported and unsupported states
 should be written down explicitly rather than inferred from missing files.
 
@@ -69,3 +84,9 @@ Then follow the Growing a Practice section in [practice-lineage.md](practice-lin
 
 If `.agent/practice-context/` exists, read `incoming/` before adapting the
 Practice. It may contain useful framing from the sending repo.
+
+Read every PDR in `decision-records/` before adapting the Practice. PDRs
+carry portable governance decisions that constrain how the Practice
+behaves in any repo, not just the sending one. Read any general patterns
+in `patterns/` — these are ecosystem-agnostic abstractions that travel
+with the Core.

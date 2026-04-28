@@ -13,14 +13,18 @@ export {
   BulkDataEnvSchema,
   LoggingEnvSchema,
   SentryEnvSchema,
+  BuildEnvSchema,
   LOG_LEVELS,
   NODE_ENVS,
   SENTRY_MODES,
+  VERCEL_ENVS,
 } from './schemas/index.js';
+export { ROOT_PACKAGE_VERSION } from './root-package-version.js';
 export type {
   OakApiKeyEnv,
   ElasticsearchEnv,
   BulkDataEnv,
   LoggingEnv,
   SentryEnv,
+  BuildEnv,
 } from './schemas/index.js';

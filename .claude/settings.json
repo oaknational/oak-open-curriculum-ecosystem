@@ -3,9 +3,7 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:www.elastic.co)",
-      "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:playwright.dev)",
-      "WebFetch(domain:modelcontextprotocol.github.io)",
       "WebFetch(domain:zod.dev)",
       "Bash(git status:*)",
       "Bash(git mv:*)",
@@ -22,8 +20,8 @@
       "Skill(jc-start-right-quick:*)",
       "Skill(jc-consolidate-docs)",
       "Skill(jc-consolidate-docs:*)",
-      "Skill(jc-commit)",
-      "Skill(jc-commit:*)",
+      "Skill(commit)",
+      "Skill(commit:*)",
       "Skill(jc-session-handoff)",
       "Skill(jc-session-handoff:*)",
       "Skill(jc-go)",
@@ -38,21 +36,6 @@
       "Skill(jc-chatgpt-report-normalisation:*)",
       "Skill(patterns)",
       "Skill(patterns:*)",
-      "mcp__claude_ai_Oak_National_Academy__get-curriculum-model",
-      "mcp__claude_ai_Oak_National_Academy__get-threads-units",
-      "mcp__claude_ai_Oak_National_Academy__get-sequences-units",
-      "mcp__claude_ai_Oak_National_Academy__get-lessons-transcript",
-      "mcp__claude_ai_Oak_National_Academy__search",
-      "mcp__claude_ai_Oak_National_Academy__get-lessons-summary",
-      "mcp__oak-preview__get-subjects-sequences",
-      "mcp__oak-preview__get-sequences-units",
-      "Edit(/.claude/skills/clerk/**)",
-      "Edit(/.claude/skills/clerk-custom-ui/**)",
-      "Edit(/.claude/skills/clerk-nextjs-patterns/**)",
-      "Edit(/.claude/skills/clerk-orgs/**)",
-      "Edit(/.claude/skills/clerk-setup/**)",
-      "Edit(/.claude/skills/clerk-testing/**)",
-      "Edit(/.claude/skills/clerk-webhooks/**)",
       "WebFetch(domain:www.w3.org)",
       "WebFetch(domain:www.designtokens.org)",
       "WebFetch(domain:www.thenational.academy)",
@@ -60,10 +43,68 @@
       "Bash(git check-ignore:*)",
       "Bash(echo \"exit: $?\")",
       "Bash(npm view:*)",
-      "Bash(git clone:*)"
+      "Bash(git clone:*)",
+      "WebFetch(domain:docs.sentry.io)",
+      "WebFetch(domain:support.claude.com)",
+      "WebFetch(domain:developers.openai.com)",
+      "WebFetch(domain:sentry.io)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(echo \"type-check exit: $?\")",
+      "Bash(chmod +x /Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/scripts/start-server.sh)",
+      "WebFetch(domain:open-api.thenational.academy)",
+      "WebFetch(domain:educationendowmentfoundation.org.uk)",
+      "WebFetch(domain:eef.dev)",
+      "WebFetch(domain:d2tic4wvo1iusb.cloudfront.net)",
+      "WebFetch(domain:www.nationalarchives.gov.uk)",
+      "Skill(accessibility-expert)",
+      "Skill(assumptions-expert)",
+      "Skill(chatgpt-report-normalisation)",
+      "Skill(clerk)",
+      "Skill(clerk-backend-api)",
+      "Skill(clerk-custom-ui)",
+      "Skill(clerk-expert)",
+      "Skill(clerk-nextjs-patterns)",
+      "Skill(clerk-orgs)",
+      "Skill(clerk-setup)",
+      "Skill(clerk-testing)",
+      "Skill(clerk-webhooks)",
+      "Skill(complex-merge)",
+      "Skill(design-system-expert)",
+      "Skill(elasticsearch-expert)",
+      "Skill(finishing-branch)",
+      "Skill(go)",
+      "Skill(ground-truth-design)",
+      "Skill(ground-truth-evaluation)",
+      "Skill(mcp-expert)",
+      "Skill(napkin)",
+      "Skill(parallel-agents)",
+      "Skill(react-component-expert)",
+      "Skill(receiving-code-review)",
+      "Skill(sentry-expert)",
+      "Skill(start-right-quick)",
+      "Skill(start-right-thorough)",
+      "Skill(systematic-debugging)",
+      "Skill(tsdoc)",
+      "Skill(worktrees)",
+      "Skill(add-app-to-server)",
+      "Skill(convert-web-app)",
+      "Skill(create-mcp-app)",
+      "Skill(migrate-oai-app)"
     ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/practice-session-identity.mjs",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -94,15 +135,42 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
+            "timeout": 60
+          }
+        ]
       }
     ]
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": false,
-    "code-simplifier@claude-plugins-official": false,
-    "claude-md-management@claude-plugins-official": false,
-    "skill-creator@claude-plugins-official": false,
-    "claude-code-setup@claude-plugins-official": false,
-    "mcp-apps@mcp-apps": true
+    "mcp-apps@mcp-apps": true,
+    "sentry@claude-plugins-official": true,
+    "remember@claude-plugins-official": true,
+    "mcp-server-dev@claude-plugins-official": true,
+    "sonarqube@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node .claude/scripts/statusline-identity.mjs"
   }
 }

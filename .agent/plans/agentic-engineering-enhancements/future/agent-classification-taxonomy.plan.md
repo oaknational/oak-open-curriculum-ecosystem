@@ -24,6 +24,24 @@ But one important dimension still remains mostly implicit in surrounding docs:
 conflated with review depth. A narrow-remit specialist may still need a deep
 review.
 
+## Coordination With Current Expert-Expansion Plans
+
+This taxonomy work should execute after the current coordination lanes have
+settled enough to avoid renaming unstable surfaces:
+
+- [practice-and-process-structural-improvements.plan.md](../current/practice-and-process-structural-improvements.plan.md)
+  decides where collaboration, planning discipline, and portability doctrine
+  live permanently.
+- [planning-specialist-capability.plan.md](../current/planning-specialist-capability.plan.md)
+  owns the Planning expert triplet; the taxonomy rename must treat it as an
+  existing capability, not recreate it.
+- [agent-infrastructure-portability-remediation.plan.md](../current/agent-infrastructure-portability-remediation.plan.md)
+  hardens adapter parity and validation before the taxonomy plan rewrites
+  names across platforms.
+- [adapter-generation.plan.md](adapter-generation.plan.md) remains the preferred
+  optimisation before any large rename, because generated adapters turn the
+  multi-platform rename into a manifest update plus regeneration.
+
 ## Platform Sub-Agent Invocation Capabilities
 
 Critical constraint for the tier model and orchestration design:
@@ -219,7 +237,7 @@ Update automated checks to enforce the new model.
 Update all references to old agent names across the entire repo.
 
 - [ ] Update `.agent/directives/AGENT.md` — agent roster, sub-agent section
-- [ ] Update `.agent/directives/invoke-code-reviewers.md` — rename to `invoke-agents.md` or equivalent, update all agent references
+- [ ] Update `.agent/memory/executive/invoke-code-reviewers.md` — rename to `invoke-agents.md` or equivalent, update all agent references
 - [ ] Update all `.agent/rules/*.md` that reference agent names (e.g. `invoke-code-reviewers.md`, `invoke-elasticsearch-reviewer.md`, `invoke-clerk-reviewer.md`, `invoke-sentry-reviewer.md`)
 - [ ] Update all `.claude/rules/*.md` and `.cursor/rules/*.mdc` that reference agent names
 - [ ] Update ADRs that reference agent names by old names (ADR-114, ADR-119, ADR-125, ADR-129, ADR-131, ADR-137)

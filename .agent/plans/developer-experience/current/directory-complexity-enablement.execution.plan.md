@@ -206,7 +206,7 @@ GREEN (minimal implementation):
 2. Add `dependency-cruiser` configuration enforcing barrel/public-API access patterns for the selected scopes.
 3. Add `knip` configuration for dead-code and unused-export cleanup after refactors.
 4. Integrate the chosen structural checks into the repo `pnpm check` path.
-5. Decide whether a supplemental graph check such as `madge` adds unique value or should remain out of scope, and record the rationale here.
+5. **Supplemental graph-only tooling is out of scope.** `dependency-cruiser` already enforces cycles, orphans, and boundaries; for visual inspection when untangling cycles, `pnpm depcruise:report` emits DOT suitable for Graphviz or editor plugins—no second graph tool is required.
 
 REFACTOR (cleanup/documentation):
 

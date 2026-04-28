@@ -53,10 +53,11 @@ describe('categoriseTeacherPaths', () => {
     expect(result.totals.programmes).toBe(1);
   });
 
-  it('extracts programme slugs from programme root paths', () => {
+  it('does not treat programme root paths as canonical programme listings', () => {
     const result = categoriseTeacherPaths(['/teachers/programmes/maths-primary-year-1']);
 
-    expect(result.programmeSlugs).toContain('maths-primary-year-1');
+    expect(result.programmeSlugs).toHaveLength(0);
+    expect(result.teacherPaths).toContain('/teachers/programmes/maths-primary-year-1');
   });
 
   it('maps units to parent programme from unit-lesson-listing paths', () => {
@@ -64,6 +65,7 @@ describe('categoriseTeacherPaths', () => {
       '/teachers/programmes/maths-primary-year-1/units/addition-and-subtraction/lessons',
     ]);
 
+    expect(result.programmeSlugs).toHaveLength(0);
     expect(result.unitToProgramme['addition-and-subtraction']).toBe('maths-primary-year-1');
     expect(result.totals.units).toBe(1);
   });
@@ -77,6 +79,7 @@ describe('categoriseTeacherPaths', () => {
       programmeSlug: 'maths-primary-year-1',
       unitSlug: 'addition-and-subtraction',
     });
+    expect(result.programmeSlugs).toHaveLength(0);
     expect(result.lessonSlugs).toContain('adding-fractions');
   });
 

@@ -172,7 +172,7 @@ export function getResponseCodesForPathAndMethod(path: string, method: string): 
   if (!isValidPath(path)) {
     throw new TypeError('Invalid path: ' + String(path));
   }
-  if (!isAllowedMethod(method)) {
+  if (!isApiHttpMethod(method)) {
     throw new TypeError('Invalid method: ' + String(method));
   }
   const operation = PATH_OPERATIONS.find((op) => op.path === path && op.method === method);
@@ -186,23 +186,6 @@ export function getResponseCodesForPathAndMethod(path: string, method: string): 
   }
   return codes;
 }
-`;
-}
-
-/**
- * Generate TypeScript code for ALLOWED_METHODS constant
- * Note: This doesn't generate isAllowedMethod as it's already generated
- * by the runtime schema checks
- */
-export function generateAllowedMethodsConstant(methods: string[]): string {
-  const methodsJson = JSON.stringify(methods, null, 2);
-
-  return `
-/**
- * All HTTP methods used in the API (from PATH_OPERATIONS)
- * Generated at build time for runtime use
- */
-export const ALLOWED_METHODS = ${methodsJson} as const;
 `;
 }
 

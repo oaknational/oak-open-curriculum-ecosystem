@@ -28,11 +28,11 @@ function writeFixtureRepo(repoRoot: string): void {
     join(repoRoot, '.codex', 'config.toml'),
     `[agents."code-reviewer"]
 description = "Gateway reviewer."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 
 [agents."architecture-reviewer-fred"]
 description = "Principles-first architecture reviewer."
-config_file = ".codex/agents/architecture-reviewer-fred.toml"
+config_file = "agents/architecture-reviewer-fred.toml"
 `,
     'utf8',
   );
@@ -102,13 +102,13 @@ describe('parseCodexAgentRegistrations', () => {
     expect(
       parseCodexAgentRegistrations(`[agents."code-reviewer"]
 description = "Gateway reviewer."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = "agents/code-reviewer.toml"
 `),
     ).toStrictEqual([
       {
         name: 'code-reviewer',
         description: 'Gateway reviewer.',
-        configFile: '.codex/agents/code-reviewer.toml',
+        configFile: 'agents/code-reviewer.toml',
       },
     ]);
   });
@@ -130,6 +130,23 @@ describe('resolveCodexProjectAgent', () => {
       '.agent/sub-agents/components/personas/fred.md',
       '.agent/sub-agents/templates/architecture-reviewer.md',
     ]);
+  });
+
+  it('rejects registry config_file values that repeat the repo-root .codex directory', () => {
+    const repoRoot = createTempRepoRoot();
+    writeFixtureRepo(repoRoot);
+    writeFileSync(
+      join(repoRoot, '.codex', 'config.toml'),
+      `[agents."code-reviewer"]
+description = "Gateway reviewer."
+config_file = ".codex/agents/code-reviewer.toml"
+`,
+      'utf8',
+    );
+
+    expect(() => resolveCodexProjectAgent(repoRoot, 'code-reviewer')).toThrow(
+      /missing adapter \.codex\/\.codex\/agents\/code-reviewer\.toml/u,
+    );
   });
 
   it('fails when adapter metadata drifts from the central registry', () => {

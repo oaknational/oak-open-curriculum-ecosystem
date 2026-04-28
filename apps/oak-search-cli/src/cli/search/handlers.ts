@@ -24,6 +24,7 @@ import type {
   SuggestionResponse,
 } from '@oaknational/oak-search-sdk/read';
 import type { SearchFacets } from '@oaknational/sdk-codegen/search';
+import { searchLogger } from '../../lib/logger';
 
 /**
  * Search lessons via the SDK retrieval service.
@@ -36,6 +37,7 @@ export async function handleSearchLessons(
   retrieval: RetrievalService,
   params: SearchLessonsParams,
 ): Promise<Result<LessonsSearchResult, RetrievalError>> {
+  searchLogger.debug('Handling lesson search command', { capability: 'search_lessons' });
   return retrieval.searchLessons(params);
 }
 
@@ -50,6 +52,7 @@ export async function handleSearchUnits(
   retrieval: RetrievalService,
   params: SearchUnitsParams,
 ): Promise<Result<UnitsSearchResult, RetrievalError>> {
+  searchLogger.debug('Handling unit search command', { capability: 'search_units' });
   return retrieval.searchUnits(params);
 }
 
@@ -64,6 +67,7 @@ export async function handleSearchSequences(
   retrieval: RetrievalService,
   params: SearchSequencesParams,
 ): Promise<Result<SequencesSearchResult, RetrievalError>> {
+  searchLogger.debug('Handling sequence search command', { capability: 'search_sequences' });
   return retrieval.searchSequences(params);
 }
 
@@ -81,6 +85,7 @@ export async function handleSearchThreads(
   retrieval: RetrievalService,
   params: SearchParamsBase,
 ): Promise<Result<ThreadsSearchResult, RetrievalError>> {
+  searchLogger.debug('Handling thread search command', { capability: 'search_threads' });
   return retrieval.searchThreads(params);
 }
 
@@ -95,6 +100,7 @@ export async function handleSuggest(
   retrieval: RetrievalService,
   params: SuggestParams,
 ): Promise<Result<SuggestionResponse, RetrievalError>> {
+  searchLogger.debug('Handling suggestion command', { capability: 'suggest' });
   return retrieval.suggest(params);
 }
 
@@ -109,5 +115,6 @@ export async function handleFetchFacets(
   retrieval: RetrievalService,
   params: FacetParams,
 ): Promise<Result<SearchFacets, RetrievalError>> {
+  searchLogger.debug('Handling sequence facets command', { capability: 'fetch_sequence_facets' });
   return retrieval.fetchSequenceFacets(params);
 }

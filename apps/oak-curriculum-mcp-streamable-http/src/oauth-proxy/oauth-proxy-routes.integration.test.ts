@@ -78,7 +78,10 @@ function createProxyApp(
     observability,
   };
 
-  app.use(createOAuthProxyRoutes(config));
+  const noopRateLimiter: express.RequestHandler = (_req, _res, next) => {
+    next();
+  };
+  app.use(createOAuthProxyRoutes({ config, oauthRateLimiter: noopRateLimiter }));
   return app;
 }
 
@@ -106,6 +109,43 @@ function createSimpleFakeFetch(
     });
   };
   return { fetch: fakeFetch, captured };
+}
+
+/**
+ * Creates a fake fetch that returns a non-JSON (plaintext or HTML) response.
+ *
+ * Mirrors observed Clerk behaviour where 429 throttling responds with
+ * `Content-Type: text/plain; charset=utf-8` and body `Rate exceeded.`
+ * (Sentry issue OAK-OPEN-CURRICULUM-MCP-A surfaced this as a SyntaxError
+ * inside the proxy handler before the readUpstreamBody helper landed).
+ */
+function createPlaintextFakeFetch(
+  status: number,
+  responseText: string,
+  extraHeaders?: Record<string, string>,
+): NonNullable<OAuthProxyConfig['fetch']> {
+  return async () => {
+    return new Response(responseText, {
+      status,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', ...extraHeaders },
+    });
+  };
+}
+
+/**
+ * Creates a fake fetch that returns a malformed-JSON body with a JSON
+ * Content-Type header (the boundary case where parsing itself fails).
+ */
+function createMalformedJsonFakeFetch(
+  status: number,
+  malformedBody: string,
+): NonNullable<OAuthProxyConfig['fetch']> {
+  return async () => {
+    return new Response(malformedBody, {
+      status,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
 }
 
 describe('POST /oauth/register', () => {
@@ -156,6 +196,38 @@ describe('POST /oauth/register', () => {
       ]),
     );
     expect(observability.setAttribute).toHaveBeenCalledWith('oak.upstream.status', 200);
+  });
+
+  it('maps a 429 plaintext upstream response to a 429 OAuth temporarily_unavailable error without throwing', async () => {
+    // Sentry OAK-OPEN-CURRICULUM-MCP-A: Clerk responds 429 with body
+    // `Rate exceeded.` and Content-Type text/plain. Before the cure, the
+    // proxy called .json() unconditionally and threw SyntaxError, which
+    // surfaced as a 500 to the client and a Sentry exception.
+    const fakeFetch = createPlaintextFakeFetch(429, 'Rate exceeded.', {
+      'Retry-After': '12',
+    });
+    const app = createProxyApp(fakeFetch);
+
+    const res = await request(app)
+      .post('/oauth/register')
+      .send({ client_name: 'Cursor', redirect_uris: ['cursor://callback'] })
+      .expect(429);
+
+    expect(res.body.error).toBe('temporarily_unavailable');
+    expect(res.body.error_description).toContain('Rate exceeded.');
+    expect(res.headers['retry-after']).toBe('12');
+  });
+
+  it('maps a malformed-JSON upstream response to a 502 OAuth server_error without throwing', async () => {
+    const fakeFetch = createMalformedJsonFakeFetch(200, 'not really json {');
+    const app = createProxyApp(fakeFetch);
+
+    const res = await request(app)
+      .post('/oauth/register')
+      .send({ client_name: 'Cursor' })
+      .expect(502);
+
+    expect(res.body.error).toBe('server_error');
   });
 });
 
@@ -299,6 +371,39 @@ describe('POST /oauth/token', () => {
       ]),
     );
     expect(observability.setAttribute).toHaveBeenCalledWith('oak.upstream.status', 200);
+  });
+
+  it('maps a 429 plaintext upstream response to a 429 OAuth temporarily_unavailable error without throwing', async () => {
+    // Sentry OAK-OPEN-CURRICULUM-MCP-A: Clerk responds 429 with body
+    // `Rate exceeded.` and Content-Type text/plain. Before the cure, the
+    // proxy called .json() unconditionally and threw SyntaxError.
+    const fakeFetch = createPlaintextFakeFetch(429, 'Rate exceeded.', {
+      'Retry-After': '5',
+    });
+    const app = createProxyApp(fakeFetch);
+
+    const res = await request(app)
+      .post('/oauth/token')
+      .type('form')
+      .send('grant_type=authorization_code&code=auth-code-123&client_id=test-client')
+      .expect(429);
+
+    expect(res.body.error).toBe('temporarily_unavailable');
+    expect(res.body.error_description).toContain('Rate exceeded.');
+    expect(res.headers['retry-after']).toBe('5');
+  });
+
+  it('maps a malformed-JSON upstream response to a 502 OAuth server_error without throwing', async () => {
+    const fakeFetch = createMalformedJsonFakeFetch(200, '<html>oops</html>');
+    const app = createProxyApp(fakeFetch);
+
+    const res = await request(app)
+      .post('/oauth/token')
+      .type('form')
+      .send('grant_type=authorization_code&code=auth-code-123&client_id=test-client')
+      .expect(502);
+
+    expect(res.body.error).toBe('server_error');
   });
 });
 

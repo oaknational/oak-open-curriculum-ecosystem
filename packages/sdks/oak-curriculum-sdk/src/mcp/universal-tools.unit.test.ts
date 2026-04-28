@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { z } from 'zod';
 import { listUniversalTools } from './universal-tools/list-tools.js';
-import { isUniversalToolName } from './universal-tools/type-guards.js';
+import { isAppToolEntry, isUniversalToolName } from './universal-tools/type-guards.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
+import { ontologyData } from './ontology-data.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type {
   GeneratedToolRegistry,
@@ -13,9 +13,6 @@ import type {
 } from './universal-tools/types.js';
 
 const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
-
-/** Convert the canonical WIDGET_TOOL_NAMES set to an array for it.each(). */
-const widgetToolNamesArray = [...WIDGET_TOOL_NAMES];
 
 describe('AGGREGATED_TOOL_DEFS contains expected tools', () => {
   it('contains get-curriculum-model as the sole orientation tool', () => {
@@ -128,11 +125,29 @@ describe('isUniversalToolName', () => {
   });
 });
 
-describe('aggregated tool _meta fields (widget tools)', () => {
-  it.each(widgetToolNamesArray)('%s has _meta.ui.resourceUri pointing to widget', (toolName) => {
+describe('listUniversalTools embedded-app registration hints', () => {
+  it('get-curriculum-model and user-search are app-tool entries; agent search is not', () => {
     const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+    const orientation = tools.find((t) => t.name === 'get-curriculum-model');
+    const userSearch = tools.find((t) => t.name === 'user-search');
+    const search = tools.find((t) => t.name === 'search');
+
+    expect(orientation).toBeDefined();
+    expect(userSearch).toBeDefined();
+    expect(search).toBeDefined();
+    if (orientation && isAppToolEntry(orientation)) {
+      expect(orientation._meta.ui.resourceUri).toMatch(/^ui:\/\/widget\//);
+    } else {
+      expect.fail('get-curriculum-model should be an app-tool entry with a widget URI');
+    }
+    if (userSearch && isAppToolEntry(userSearch)) {
+      expect(userSearch._meta.ui.resourceUri).toMatch(/^ui:\/\/widget\//);
+    } else {
+      expect.fail('user-search should be an app-tool entry with a widget URI');
+    }
+    if (search) {
+      expect(isAppToolEntry(search)).toBe(false);
+    }
   });
 });
 
@@ -153,8 +168,7 @@ describe('search and fetch descriptions', () => {
 });
 
 describe('ontologyData', () => {
-  it('fits context budget (<70KB) for LLM tool-calling', async () => {
-    const { ontologyData } = await import('./ontology-data.js');
+  it('fits context budget (<70KB) for LLM tool-calling', () => {
     const ontologySize = JSON.stringify(ontologyData).length;
     expect(ontologySize).toBeLessThan(70000);
   });

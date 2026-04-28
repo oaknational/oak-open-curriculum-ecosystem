@@ -2,14 +2,23 @@
 name: patterns
 classification: passive
 description: >-
-  Check .agent/memory/patterns/ for known solutions to recurring design
-  problems before inventing a new approach. Triggered when facing code,
-  architecture, process, testing, or agent infrastructure decisions.
+  Check .agent/practice-core/patterns/ (general abstractions) and
+  .agent/memory/active/patterns/ (repo-local instances) for known solutions
+  to recurring design problems before inventing a new approach.
+  Triggered when facing code, architecture, process, testing, or
+  agent infrastructure decisions.
 ---
 
 # Patterns
 
-When you identify a design problem -- whether it involves type-safety, system boundaries, engineering workflows, test design, or agent infrastructure -- check `.agent/memory/patterns/` for known solutions before inventing a new approach.
+When you identify a design problem -- whether it involves type-safety, system boundaries, engineering workflows, test design, or agent infrastructure -- check the pattern surfaces for known solutions before inventing a new approach.
+
+**Two surfaces, distinct roles** (per PDR-007):
+
+- **`.agent/practice-core/patterns/`** — general, ecosystem-agnostic abstract patterns that travel with the Practice Core. Read here first: if a general pattern already names your class of problem, it prevents re-inventing the abstraction.
+- **`.agent/memory/active/patterns/`** — specific, ecosystem-grounded pattern instances proven in this repo (TypeScript, Zod, Vitest, MCP, etc.). Read here second: instances show how the general pattern is expressed concretely in this stack.
+
+**Not here**: Practice-governance patterns (review discipline, planning discipline, reviewer authority, etc.) live as PDRs in `.agent/practice-core/decision-records/`, not in either patterns directory. If your question is about how the Practice itself operates, consult the PDR index.
 
 ## When to Use
 
@@ -26,10 +35,12 @@ When you identify a design problem -- whether it involves type-safety, system bo
 
 ## Steps
 
-1. Read `.agent/memory/patterns/README.md` to discover available patterns.
-2. Match the current problem against each pattern's `use_this_when` field.
-3. If a pattern matches, read its full file and apply the approach.
-4. If no pattern matches, proceed normally -- do not force a fit.
+1. Read `.agent/practice-core/patterns/README.md` first for general abstractions that travel with the Core.
+2. Read `.agent/memory/active/patterns/README.md` for repo-local instances.
+3. Match the current problem against each pattern's `use_this_when` field.
+4. If a pattern matches, read its full file and apply the approach. When a specific instance matches but the general form also exists, the general pattern names the principle; the instance shows one concrete expression.
+5. If the question is about how the Practice itself operates (review, planning, reviewer authority, etc.), consult `.agent/practice-core/decision-records/README.md` instead — Practice-governance substance is PDR-shaped, not pattern-shaped.
+6. If nothing matches, proceed normally -- do not force a fit.
 
 ## Important
 

@@ -8,6 +8,7 @@
  */
 
 import type { SearchSuggestionItem } from '@oaknational/sdk-codegen/search';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 
 import type { SuggestParams } from '../types/retrieval-params.js';
@@ -41,8 +42,14 @@ export async function suggest(
   docSearch: BoolPrefixSearchFn,
   resolveIndex: IndexResolverFn,
   config: SearchSdkConfig,
+  logger?: Logger,
 ): Promise<Result<SuggestionResponse, RetrievalError>> {
   const prefix = params.prefix.trim();
+  logger?.debug('Fetching suggestions', {
+    scope: params.scope,
+    limit: params.limit,
+    prefixLength: prefix.length,
+  });
   if (prefix.length === 0) {
     return err({ type: 'validation_error', message: 'suggest: prefix must not be empty' });
   }
@@ -60,7 +67,7 @@ export async function suggest(
     const limit = clampLimit(params.limit);
     const scopeKind = resolveIndexKind(params.scope);
     const index = resolveIndex(scopeKind);
-    const suggestions = await runDualQuery(
+    const suggestions = await runDualQuery({
       prefix,
       limit,
       params,
@@ -68,7 +75,8 @@ export async function suggest(
       scopeKind,
       client,
       docSearch,
-    );
+      logger,
+    });
 
     return ok({
       suggestions,
@@ -93,15 +101,19 @@ function resolveIndexKind(scope: SuggestParams['scope']): IndexKind {
   return 'lessons';
 }
 
-async function runDualQuery(
-  prefix: string,
-  limit: number,
-  params: SuggestParams,
-  index: string,
-  scopeKind: IndexKind,
-  client: SuggestClient,
-  docSearch: BoolPrefixSearchFn,
-): Promise<readonly SearchSuggestionItem[]> {
+interface RunDualQueryDeps {
+  readonly prefix: string;
+  readonly limit: number;
+  readonly params: SuggestParams;
+  readonly index: string;
+  readonly scopeKind: IndexKind;
+  readonly client: SuggestClient;
+  readonly docSearch: BoolPrefixSearchFn;
+  readonly logger?: Logger;
+}
+
+async function runDualQuery(deps: RunDualQueryDeps): Promise<readonly SearchSuggestionItem[]> {
+  const { prefix, limit, params, index, scopeKind, client, docSearch, logger } = deps;
   const completion = buildCompletionClause(prefix, limit, params.subject, params.keyStage);
   const completionResponse = await client.search({
     index,
@@ -122,6 +134,7 @@ async function runDualQuery(
     index,
     scopeKind,
     docSearch,
+    logger,
   );
   return mergeAndDedup(completionItems, boolPrefixItems, limit);
 }

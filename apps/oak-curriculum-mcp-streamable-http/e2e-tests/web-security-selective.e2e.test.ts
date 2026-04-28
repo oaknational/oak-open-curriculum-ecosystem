@@ -2,7 +2,7 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
-import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
+import { createFakeHttpObservability } from '../src/test-helpers/observability-fakes.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
@@ -21,11 +21,12 @@ const mockRuntimeConfig: RuntimeConfig = {
   dangerouslyDisableAuth: false,
   useStubTools: false,
   version: '0.0.0-test',
+  versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],
 };
 
 async function createTestApp() {
-  const observability = createHttpObservabilityOrThrow(mockRuntimeConfig);
+  const observability = createFakeHttpObservability();
   return await createApp({
     runtimeConfig: mockRuntimeConfig,
     observability,

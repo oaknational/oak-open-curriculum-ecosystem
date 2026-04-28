@@ -134,9 +134,9 @@ describe('generateRuntimeSchemaChecks', () => {
     expect(result).toContain('type RawPaths = Schema["paths"]');
     expect(result).toContain('export function isValidPath(value: string): value is ValidPath');
     expect(result).toContain('export const apiPaths: RawPaths = schema.paths');
-    expect(result).toContain('type AllowedMethods = keyof (RawPaths[keyof RawPaths])');
-    expect(result).toContain('export const allowedMethods: AllowedMethods[]');
-    expect(result).toContain('export function isAllowedMethod');
+    expect(result).toContain('POSSIBLE_HTTP_METHODS');
+    expect(result).toContain('API_HTTP_METHODS');
+    expect(result).toContain('export function isApiHttpMethod');
     expect(result).toContain('export type JsonBody200');
   });
 

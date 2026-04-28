@@ -1,0 +1,6 @@
+---
+description: Test immediate-fail checklist. Any single violation rejects the test; first-pass screen before any deeper analysis.
+globs: '**/*.test.ts'
+---
+
+Read and follow `.agent/rules/test-immediate-fails.md`.

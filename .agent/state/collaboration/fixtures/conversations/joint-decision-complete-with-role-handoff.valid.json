@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "joint-decision-complete-with-role-handoff-valid",
+  "thread": "agentic-engineering-enhancements",
+  "status": "closed",
+  "title": "Joint decision completed after actor handoff",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Ethereal Alpaca",
+      "platform": "claude-code",
+      "model": "claude-opus-4-7-1m",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:20:00Z",
+  "closed_at": "2026-04-26T18:55:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:20:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Proposal: Codex records the schema decision and Ethereal Alpaca applies the equivalent adapter docs update.",
+      "joint_decision_id": "adapter-docs-handoff",
+      "joint_decision_state": "proposed",
+      "roles": [
+        {
+          "role": "decider",
+          "agent": {
+            "agent_name": "Owner",
+            "platform": "human",
+            "model": "human",
+            "session_id_prefix": "unknown"
+          },
+          "responsibility": "Approve the split of recorder and actor work."
+        },
+        {
+          "role": "recorder",
+          "agent": {
+            "agent_name": "Codex",
+            "platform": "codex",
+            "model": "GPT-5",
+            "session_id_prefix": "unknown"
+          },
+          "responsibility": "Record the durable decision in the conversation."
+        },
+        {
+          "role": "actor",
+          "agent": {
+            "agent_name": "Ethereal Alpaca",
+            "platform": "claude-code",
+            "model": "claude-opus-4-7-1m",
+            "session_id_prefix": "unknown"
+          },
+          "responsibility": "Apply the adapter docs update."
+        }
+      ],
+      "ack_due_at": "2026-04-27T18:20:00Z"
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "joint_decision_acknowledgement",
+      "created_at": "2026-04-26T18:25:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Approved.",
+      "joint_decision_id": "adapter-docs-handoff",
+      "acknowledgement": "owner_decided"
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:30:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Decision accepted. Recorder work is complete; actor work is pending.",
+      "joint_decision_id": "adapter-docs-handoff",
+      "joint_decision_state": "actor_pending",
+      "roles": [
+        {
+          "role": "decider",
+          "agent": {
+            "agent_name": "Owner",
+            "platform": "human",
+            "model": "human",
+            "session_id_prefix": "unknown"
+          }
+        },
+        {
+          "role": "actor",
+          "agent": {
+            "agent_name": "Ethereal Alpaca",
+            "platform": "claude-code",
+            "model": "claude-opus-4-7-1m",
+            "session_id_prefix": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "entry_id": "entry-004",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:40:00Z",
+      "author": {
+        "agent_name": "Ethereal Alpaca",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Actor responsibility handed to Codex because the adapter docs change belongs in the same landing slice.",
+      "joint_decision_id": "adapter-docs-handoff",
+      "joint_decision_state": "role_handoff",
+      "roles": [
+        {
+          "role": "decider",
+          "agent": {
+            "agent_name": "Owner",
+            "platform": "human",
+            "model": "human",
+            "session_id_prefix": "unknown"
+          }
+        },
+        {
+          "role": "actor",
+          "agent": {
+            "agent_name": "Codex",
+            "platform": "codex",
+            "model": "GPT-5",
+            "session_id_prefix": "unknown"
+          }
+        }
+      ],
+      "handoff_to": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "next_action": {
+        "kind": "thread_record",
+        "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md#next-safe-step",
+        "summary": "Thread record carries the actor handoff as the next safe step."
+      }
+    },
+    {
+      "entry_id": "entry-005",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:55:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Actor work completed and evidenced.",
+      "joint_decision_id": "adapter-docs-handoff",
+      "joint_decision_state": "complete",
+      "roles": [
+        {
+          "role": "decider",
+          "agent": {
+            "agent_name": "Owner",
+            "platform": "human",
+            "model": "human",
+            "session_id_prefix": "unknown"
+          }
+        },
+        {
+          "role": "actor",
+          "agent": {
+            "agent_name": "Codex",
+            "platform": "codex",
+            "model": "GPT-5",
+            "session_id_prefix": "unknown"
+          }
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "commit",
+          "ref": "example-sha",
+          "summary": "Example commit representing completed actor work."
+        }
+      ]
+    }
+  ]
+}

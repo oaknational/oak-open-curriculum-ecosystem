@@ -1,0 +1,6 @@
+---
+description: Validate ignored or excluded estates with commands that actually include them.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/validate-full-target-estate.md`.

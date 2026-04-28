@@ -2,9 +2,9 @@
 
 ## Status
 
-Accepted (2026-03-27)
+Accepted (2026-03-27) — **Superseded in part by [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) (§6 only; 2026-04-17)**. The rest of ADR-143 (sink model, `OtelLogRecord` currency, workspace scope, other out-of-scope clauses) remains in force.
 
-**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md)
+**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md)
 
 ## Context
 
@@ -141,6 +141,15 @@ If no active span exists, the logger falls back to correlation-id hashing for
 
 ### 6. Shared redaction barrier
 
+> **Note (2026-04-17)**: the enumerated list in this section is
+> **superseded in part** by
+> [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md).
+> The principle — one shared redactor, applied before any sink
+> receives data — remains in force; the enumeration below is retained
+> for historical context but is no longer canonical. For the
+> authoritative closure property, hook contract non-uniformity, and
+> test gate, read ADR-160.
+
 The logger must apply one shared telemetry redaction policy before any sink
 receives data.
 
@@ -267,3 +276,23 @@ The implementation is expected to:
 6. treat the HTTP server and Search CLI as the adoption targets,
 7. leave the deprecated standalone stdio workspace untouched except for any
    unavoidable compile-preserving compatibility edits.
+
+## Related Documentation
+
+- [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked
+  Configuration](159-per-workspace-vendor-cli-ownership.md) —
+  formalises how the source map upload decision in this ADR (and any
+  future vendor CLI in the observability/auth pipeline) is realised:
+  pnpm-installed devDep, per-workspace `.sentryclirc`, shared-library
+  "no default project" rule, and fail-fast preflights.
+- [Sentry Deployment Runbook](../../operations/sentry-deployment-runbook.md)
+  — live runbook for release correlation, source map uploads, and
+  production verification.
+- [Sentry CLI Usage](../../operations/sentry-cli-usage.md) — canonical
+  documentation for the `sentry-cli` vs dev `sentry` split,
+  `.sentryclirc` composition, per-workspace ownership, and the
+  two-step `sourcemaps inject` → `sourcemaps upload` flow that this
+  ADR's source map decision assumes.
+- [Sentry + OpenTelemetry Integration Execution Plan](../../../.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+  — the execution plan under which the observability adoption,
+  per-workspace CLI scoping, and alerting baseline were landed.

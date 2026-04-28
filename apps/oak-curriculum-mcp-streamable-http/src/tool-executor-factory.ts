@@ -8,6 +8,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { Logger } from '@oaknational/logger';
 import type {
   UniversalToolName,
   ToolName,
@@ -26,6 +27,8 @@ import { generatedToolRegistry } from '@oaknational/curriculum-sdk/public/mcp-to
 interface RequestExecutorConfig<TClient> {
   /** API key for the Oak Curriculum API. */
   readonly apiKey: string;
+  /** Request-scoped logger for SDK tool execution. */
+  readonly logger?: Logger;
   /** Search retrieval service (shared across requests). */
   readonly searchRetrieval: SearchRetrievalService;
   /** Factory for signed asset download URLs (HTTP transport only). */
@@ -39,12 +42,14 @@ interface RequestExecutorConfig<TClient> {
     name: unknown,
     args: unknown,
     client: TClient,
+    logger?: Logger,
   ) => Promise<ToolExecutionResult>;
   /** Creates a universal tool executor from dependencies. */
   readonly createExecutor: (deps: {
     readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
     readonly searchRetrieval: SearchRetrievalService;
     readonly generatedTools: typeof generatedToolRegistry;
+    readonly logger?: Logger;
     readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
   }) => (name: UniversalToolName, args: unknown) => Promise<CallToolResult>;
 
@@ -60,6 +65,7 @@ interface RequestExecutorConfig<TClient> {
 /** Per-request config passed by the tool handler. */
 export interface ToolExecutorFactoryConfig {
   readonly apiKey: string;
+  readonly logger?: Logger;
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
   /** Optional callback invoked after each tool execution (ADR-054 auth capture). */
   readonly onToolExecution?: (name: unknown, result: ToolExecutionResult) => void;
@@ -97,7 +103,7 @@ export function createDefaultRequestExecutor<TClient>(
 
   const executor = config.createExecutor({
     executeMcpTool: async (name, args) => {
-      const execution = await config.executeToolCall(name, args, client);
+      const execution = await config.executeToolCall(name, args, client, config.logger);
       // Callback must not throw — exceptions here bypass auth error capture
       // in tool-handler-with-auth.ts. Callers are responsible for defensive
       // code in the onToolExecution callback (null coalescing, type guards).
@@ -106,6 +112,7 @@ export function createDefaultRequestExecutor<TClient>(
     },
     searchRetrieval: config.searchRetrieval,
     generatedTools: generatedToolRegistry,
+    logger: config.logger,
     createAssetDownloadUrl: config.createAssetDownloadUrl,
   });
 
@@ -150,6 +157,7 @@ export function createStubRequestExecutor(
     },
     searchRetrieval: factoryConfig.searchRetrieval,
     generatedTools: generatedToolRegistry,
+    logger: factoryConfig.logger,
     createAssetDownloadUrl: factoryConfig.createAssetDownloadUrl,
   });
 

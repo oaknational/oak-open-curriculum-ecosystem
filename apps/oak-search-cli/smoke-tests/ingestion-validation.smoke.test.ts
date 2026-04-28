@@ -9,7 +9,7 @@
  * **Classification**: SMOKE TEST
  * - Queries Elasticsearch directly (network IO)
  * - Per testing-strategy.md: "Smoke tests CAN trigger all IO types"
- * - Requires ES_NODE env var pointing to Elasticsearch instance
+ * - Receives validated Elasticsearch config from the smoke runner
  * - Requires data to be ingested (run `pnpm es:ingest` or `pnpm es:ingest -- --api --subject maths --key-stage ks4`)
  *
  * **Acceptance Criteria**:
@@ -20,23 +20,15 @@
  * @see `.agent/evaluations/baselines/curriculum-fetching-discrepancy-log.md`
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, inject } from 'vitest';
 import { Client } from '@elastic/elasticsearch';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 
-const configResult = loadRuntimeConfig({
-  processEnv: process.env,
-  startDir: import.meta.dirname,
-});
-if (!configResult.ok) {
-  throw new Error(`Environment validation failed: ${configResult.error.message}`);
-}
-const config = configResult.value.env;
+const smokeEnv = inject('searchCliSmokeEnv');
 
 // Initialize ES client
 const client = new Client({
-  node: config.ELASTICSEARCH_URL,
-  auth: { apiKey: config.ELASTICSEARCH_API_KEY },
+  node: smokeEnv.ELASTICSEARCH_URL,
+  auth: { apiKey: smokeEnv.ELASTICSEARCH_API_KEY },
 });
 
 interface UnitDoc {

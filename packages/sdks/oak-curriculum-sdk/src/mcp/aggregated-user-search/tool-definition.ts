@@ -1,13 +1,15 @@
 /**
  * Tool definitions for user-facing MCP App search tools.
  *
- * These tools provide the UI-first search experience inside the MCP App:
- * - `user-search`: interactive search entry point visible to both model and app
- * - `user-search-query`: app-only helper for executing search queries from the UI
+ * **Product surface:** `user-search` is the user-facing interactive search
+ * tool (model + app; MCP App widget). **`user-search-query` is not a second
+ * product search** — it shares the same handler and argument shape, but
+ * uses `_meta.ui.visibility: ['app']` so the embedded app can call
+ * `app.callServerTool` without a widget `resourceUri` and without exposing the
+ * tool to the model.
  *
- * Both delegate to the same underlying Search SDK retrieval service as the
- * agent-facing `search` tool. Phases 4-5 will differentiate their execution
- * and presentation logic.
+ * Both delegate to the same Search SDK path as the agent-facing `search` tool
+ * (`runSearchSdkTool` via `runUserSearchTool`).
  *
  * @see aggregated-search/tool-definition.ts — agent-facing search tool
  */
@@ -87,7 +89,7 @@ with search controls directly.`,
     openWorldHint: false,
   },
   _meta: {
-    ui: { resourceUri: WIDGET_URI, visibility: ['app'] satisfies ('model' | 'app')[] },
+    ui: { visibility: ['app'] satisfies ('model' | 'app')[] },
     securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
   },
 } as const;

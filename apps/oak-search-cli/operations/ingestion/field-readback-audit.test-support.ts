@@ -57,6 +57,7 @@ const TEST_RUNTIME_CONFIG: SearchCliRuntimeConfig = {
   }),
   logLevel: 'info',
   version: '0.0.0',
+  versionSource: 'APP_VERSION_OVERRIDE',
 };
 
 export interface FieldReadbackAuditCommandCallLog {

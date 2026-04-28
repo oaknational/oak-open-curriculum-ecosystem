@@ -1,40 +1,32 @@
+import {
+  BUILD_IDENTITY_BRANCHES,
+  RELEASE_ENVIRONMENTS,
+  RELEASE_ERROR_KINDS,
+  resolveRelease,
+  type ReleaseError,
+  type ResolvedRelease,
+} from '@oaknational/build-metadata';
 import { err, ok, type Result } from '@oaknational/result';
 import { trimToUndefined } from './config-parsing.js';
 import type {
+  GitShaSource,
   ObservabilityConfigError,
   ResolvedSentryEnvironment,
+  ResolvedSentryRegistrationPolicy,
   ResolvedSentryRelease,
   SentryConfigEnvironment,
   SentryEnvironmentSource,
-  SentryMode,
-  SentryReleaseSource,
+  SentryEnvironmentWarning,
 } from './types.js';
 
 const ENVIRONMENT_PRECEDENCE = [
-  'SENTRY_ENVIRONMENT',
+  'SENTRY_ENVIRONMENT_OVERRIDE',
   'VERCEL_ENV',
-  'NODE_ENV',
 ] as const satisfies readonly SentryEnvironmentSource[];
 
-const RELEASE_PRECEDENCE = [
-  'SENTRY_RELEASE',
-  'VERCEL_GIT_COMMIT_SHA',
-  'GITHUB_SHA',
-  'COMMIT_SHA',
-  'SOURCE_VERSION',
-  'npm_package_version',
-] as const satisfies readonly Exclude<SentryReleaseSource, 'local-dev'>[];
+const GIT_SHA_PRECEDENCE = ['GIT_SHA', 'VERCEL_GIT_COMMIT_SHA'] as const;
 
-function getReleaseValue(
-  input: SentryConfigEnvironment,
-  source: (typeof RELEASE_PRECEDENCE)[number],
-): string | undefined {
-  if (source === 'npm_package_version') {
-    return trimToUndefined(input.npm_package_version);
-  }
-
-  return trimToUndefined(input[source]);
-}
+const REGISTRATION_OVERRIDE_ENABLED = '1';
 
 function getEnvironmentValue(
   input: SentryConfigEnvironment,
@@ -43,49 +35,197 @@ function getEnvironmentValue(
   return trimToUndefined(input[source]);
 }
 
+/**
+ * Resolve the Sentry environment identity (ADR-163 §3).
+ *
+ * @remarks Narrow contract: environment identity only. Registration
+ * policy and branch-shape warnings are the responsibility of
+ * {@link resolveSentryRegistrationPolicy}. When `VERCEL_ENV=production`
+ * and the commit ref is NOT `main`, the environment is downgraded to
+ * `preview` so non-main branches cannot pollute the production
+ * environment bucket in Sentry.
+ */
 export function resolveSentryEnvironment(
   input: SentryConfigEnvironment,
 ): ResolvedSentryEnvironment {
   for (const source of ENVIRONMENT_PRECEDENCE) {
     const value = getEnvironmentValue(input, source);
 
-    if (value) {
-      return {
-        value,
-        source,
-      };
+    if (!value) {
+      continue;
     }
+
+    if (
+      source === 'VERCEL_ENV' &&
+      value === RELEASE_ENVIRONMENTS.production &&
+      !isOnMainBranch(input)
+    ) {
+      return { value: RELEASE_ENVIRONMENTS.preview, source };
+    }
+
+    return { value, source };
   }
 
+  return { value: RELEASE_ENVIRONMENTS.development, source: 'development' };
+}
+
+function isOnMainBranch(input: SentryConfigEnvironment): boolean {
+  return trimToUndefined(input.VERCEL_GIT_COMMIT_REF) === BUILD_IDENTITY_BRANCHES.main;
+}
+
+function isRegistrationOverrideEnabled(input: SentryConfigEnvironment): boolean {
+  return (
+    trimToUndefined(input.SENTRY_RELEASE_REGISTRATION_OVERRIDE) === REGISTRATION_OVERRIDE_ENABLED
+  );
+}
+
+function hasReleaseOverrideValue(input: SentryConfigEnvironment): boolean {
+  return trimToUndefined(input.SENTRY_RELEASE_OVERRIDE) !== undefined;
+}
+
+function derivePolicyFromEnv(input: SentryConfigEnvironment): ResolvedSentryRegistrationPolicy {
+  const vercelEnv = trimToUndefined(input.VERCEL_ENV);
+  const ref = trimToUndefined(input.VERCEL_GIT_COMMIT_REF);
+
+  if (vercelEnv === RELEASE_ENVIRONMENTS.production) {
+    if (ref === BUILD_IDENTITY_BRANCHES.main) {
+      return { registerRelease: true };
+    }
+
+    const warning: SentryEnvironmentWarning = ref
+      ? 'production_env_with_non_main_branch'
+      : 'production_env_with_missing_branch';
+    return { registerRelease: true, warning };
+  }
+
+  if (vercelEnv === RELEASE_ENVIRONMENTS.preview) {
+    return { registerRelease: true };
+  }
+
+  return { registerRelease: false };
+}
+
+/**
+ * Resolve the Sentry release-registration policy (ADR-163 §3 + §4).
+ *
+ * @remarks Sibling of {@link resolveSentryEnvironment} with a narrow
+ * single responsibility: "should this build register a release with
+ * Sentry?" plus an optional branch-shape warning. The local-dev
+ * override pair (`SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` with
+ * `SENTRY_RELEASE_OVERRIDE=<version>`) is validated at parse time —
+ * setting one without the other is a configuration error. The pair
+ * only enables registration in environments where it would otherwise
+ * be skipped (development / unset); in production / preview the
+ * policy is unchanged because registration is already enabled.
+ */
+export function resolveSentryRegistrationPolicy(
+  input: SentryConfigEnvironment,
+): Result<ResolvedSentryRegistrationPolicy, ObservabilityConfigError> {
+  const overrideEnabled = isRegistrationOverrideEnabled(input);
+  const overrideValuePresent = hasReleaseOverrideValue(input);
+  const basePolicy = derivePolicyFromEnv(input);
+
+  if (overrideEnabled && !overrideValuePresent) {
+    return err({ kind: 'invalid_release_registration_override' });
+  }
+
+  if (!overrideEnabled && overrideValuePresent && !basePolicy.registerRelease) {
+    return err({ kind: 'invalid_release_registration_override' });
+  }
+
+  if (overrideEnabled && !basePolicy.registerRelease) {
+    return ok({ registerRelease: true });
+  }
+
+  return ok(basePolicy);
+}
+
+/**
+ * Resolve the Sentry release identifier by delegating to the canonical
+ * {@link resolveRelease} in `@oaknational/build-metadata`.
+ *
+ * @remarks Thin adapter. The collapsed `resolveRelease` is the single
+ * source of truth for release resolution across build-time and runtime;
+ * this function adapts its {@link ResolvedRelease} / {@link ReleaseError}
+ * shape to the sentry-node-local
+ * {@link ResolvedSentryRelease} / {@link ObservabilityConfigError}
+ * shape. Since `SentryConfigEnvironment extends ReleaseInput`, no
+ * runtime re-projection of fields is needed.
+ */
+export function resolveSentryRelease(
+  input: SentryConfigEnvironment,
+): Result<ResolvedSentryRelease, ObservabilityConfigError> {
+  const result = resolveRelease(input);
+
+  if (!result.ok) {
+    return err(toObservabilityConfigError(result.error));
+  }
+
+  return ok(toResolvedSentryRelease(result.value));
+}
+
+function toResolvedSentryRelease(release: ResolvedRelease): ResolvedSentryRelease {
   return {
-    value: 'development',
-    source: 'development',
+    value: release.value,
+    source: release.source,
   };
 }
 
-export function resolveSentryRelease(
-  mode: SentryMode,
-  input: SentryConfigEnvironment,
-): Result<ResolvedSentryRelease, ObservabilityConfigError> {
-  for (const source of RELEASE_PRECEDENCE) {
-    const value = getReleaseValue(input, source);
-
-    if (value) {
-      return ok({
-        value,
-        source,
-      });
+function toObservabilityConfigError(error: ReleaseError): ObservabilityConfigError {
+  switch (error.kind) {
+    case RELEASE_ERROR_KINDS.invalid_release_override:
+      return { kind: 'invalid_release_override', value: error.message };
+    case RELEASE_ERROR_KINDS.missing_application_version:
+      return { kind: 'missing_app_version' };
+    case RELEASE_ERROR_KINDS.invalid_application_version:
+      return { kind: 'invalid_app_version', value: error.message };
+    case RELEASE_ERROR_KINDS.missing_branch_url_in_preview:
+      return { kind: 'missing_branch_url_in_preview' };
+    case RELEASE_ERROR_KINDS.missing_git_sha:
+      return { kind: 'missing_git_sha' };
+    case RELEASE_ERROR_KINDS.invalid_build_identity:
+      return { kind: 'invalid_build_identity', value: error.message };
+    default: {
+      const exhaustive: never = error.kind;
+      throw new Error(`Unhandled ReleaseError kind: ${String(exhaustive)}`);
     }
   }
+}
 
-  if (mode === 'sentry') {
-    return err({
-      kind: 'missing_release_for_live_mode',
+function isValidGitSha(value: string): boolean {
+  return /^[0-9a-f]{7,40}$/iu.test(value);
+}
+
+export function resolveGitSha(
+  input: SentryConfigEnvironment,
+): Result<
+  { readonly value: string; readonly source: GitShaSource } | undefined,
+  ObservabilityConfigError
+> {
+  for (const source of GIT_SHA_PRECEDENCE) {
+    const value = trimToUndefined(
+      source === 'GIT_SHA' ? input.GIT_SHA : input.VERCEL_GIT_COMMIT_SHA,
+    );
+
+    if (!value) {
+      continue;
+    }
+
+    if (!isValidGitSha(value)) {
+      return err({
+        kind: 'invalid_git_sha',
+        value,
+      });
+    }
+
+    return ok({
+      value,
+      source:
+        source === 'GIT_SHA'
+          ? (input.GIT_SHA_SOURCE ?? 'GIT_SHA_OVERRIDE')
+          : 'VERCEL_GIT_COMMIT_SHA',
     });
   }
 
-  return ok({
-    value: 'local-dev',
-    source: 'local-dev',
-  });
+  return ok(undefined);
 }

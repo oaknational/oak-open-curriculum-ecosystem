@@ -1,5 +1,7 @@
 # Invoke Clerk Reviewer
 
+Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md), [ADR-053 (Clerk as Identity Provider)](../../docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md), and [ADR-142 (`@clerk/mcp-tools` Adopt-or-Explain)](../../docs/architecture/architectural-decisions/142-clerk-mcp-tools-adopt-or-explain.md).
+
 When changes touch Clerk-specific concerns, invoke the `clerk-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions
@@ -35,4 +37,4 @@ Do not invoke `clerk-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `clerk-reviewer` canonical template is at `.agent/sub-agents/templates/clerk-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `clerk-reviewer` canonical template is at `.agent/sub-agents/templates/clerk-reviewer.md`.

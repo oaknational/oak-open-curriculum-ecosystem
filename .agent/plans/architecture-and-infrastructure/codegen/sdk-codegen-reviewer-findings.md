@@ -98,6 +98,7 @@ All four reviewers missed a fundamental structural problem:
 The workspace conflates two distinct data lineages:
 
 **Lineage A — OpenAPI API Schema**:
+
 - Source: `https://open-api.thenational.academy/api/v0/swagger.json`
 - Pipeline: `code-generation/codegen.ts`, `zodgen.ts`, `bulkgen.ts`
 - Produces: TypeScript types, Zod schemas, MCP tool descriptors, path
@@ -106,6 +107,7 @@ The workspace conflates two distinct data lineages:
   `admin`, `query-parser`, `widget-constants`, parts of `.` (main)
 
 **Lineage B — Bulk Curriculum Data**:
+
 - Source: Bulk download JSON files (`apps/oak-search-cli/bulk-downloads/`)
 - Pipeline: `vocab-gen/` (to be `graph-gen/`)
 - Produces: Curriculum knowledge graphs (prerequisite, misconception,

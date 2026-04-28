@@ -14,6 +14,7 @@ import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import { IndexMetaDocSchema } from '@oaknational/sdk-codegen/search';
 import { ensureIndexMetaMappingContract } from './index-meta-mapping-contract.js';
 import type { IndexMetaError } from './index-meta-types.js';
+import { adminLogger } from '../logger';
 
 export const INDEX_META_INDEX = 'oak_meta';
 export const INDEX_VERSION_DOC_ID = 'index_version';
@@ -117,6 +118,7 @@ function isNotFoundError(error: unknown): boolean {
 export async function readIndexMeta(
   client: Client,
 ): Promise<Result<IndexMetaDoc | null, IndexMetaError>> {
+  adminLogger.debug('Reading index metadata document', { index: INDEX_META_INDEX });
   try {
     const response = await client.get<IndexMetaDoc>({
       index: INDEX_META_INDEX,
@@ -156,6 +158,7 @@ export async function writeIndexMeta(
   client: Client,
   meta: unknown,
 ): Promise<Result<void, IndexMetaError>> {
+  adminLogger.debug('Writing index metadata document', { index: INDEX_META_INDEX });
   // Validate before writing
   const parseResult = IndexMetaDocSchema.safeParse(meta);
   if (!parseResult.success) {

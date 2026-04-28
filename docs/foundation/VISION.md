@@ -1,16 +1,10 @@
 ---
 title: Vision
 status: active
-last_reviewed: 2026-03-12
+last_reviewed: 2026-04-20
 ---
 
 # Vision
-
-> **Last updated**: 12 March 2026
->
-> **Reading context**: This document is part of a reading path. For the
-> strategic overview and reading guide, start with
-> [Strategic Overview](strategic-overview.md).
 
 [Oak National Academy](https://www.thenational.academy/about-us/who-we-are) is an
 independent UK public body whose mission is to _"improve pupil outcomes and close
@@ -21,15 +15,24 @@ AI."_
 
 Oak publishes a deeply resourced, fully sequenced curriculum through a
 well-specified API: [open-api.thenational.academy](https://open-api.thenational.academy/).
-At the time of writing, curriculum content served via that API is made available
-under upstream Open Government Licence (OGL) terms (except where otherwise
-stated). This repository exists to amplify the impact of that public asset.
+Curriculum content served via that API is made available under upstream
+licence terms — currently Open Government Licence (OGL) v3.0 except where
+otherwise stated; see [LICENCE-DATA.md](../../LICENCE-DATA.md) for current
+authority. This repository exists to amplify the impact of that public asset.
+
+This document is the timeless statement of what the repository is for and why
+it matters. For the current delivery roadmap, see the
+[high-level plan](../../.agent/plans/high-level-plan.md). For a dated snapshot
+of where the work has reached, see the
+[reports surface](../../.agent/reports/). For an engineering-lens explanation
+of how the work is delivered, see
+[How the Agentic Engineering System Works](agentic-engineering-system.md).
 
 ## Two Audiences, One Vision
 
 This document is written for two audiences with different questions.
 
-### For External Developers And Edtech Teams
+### For External Developers And EdTech Teams
 
 Primary question: what can we build with this?
 
@@ -52,15 +55,15 @@ safety through the agentic engineering practice.
 
 ## What This Repository Is For
 
-The oak-open-curriculum-ecosystem turns Oak's open curriculum data into AI-native
-infrastructure that is easy to build on.
+The Oak Open Curriculum Ecosystem turns Oak's open curriculum data into
+AI-native infrastructure that is easy to build on.
 
 It serves three groups:
 
 - developers building education tools and services
 - AI agents needing reliable, structured curriculum access
-- products for teachers that require strong search and retrieval over curriculum
-  content
+- products for teachers that require strong search and retrieval over
+  curriculum content
 
 > **For a plain-language introduction** to Oak's curriculum structure, KS4
 > complexity, and user personas, see the
@@ -68,6 +71,24 @@ It serves three groups:
 
 The central objective is leverage: reduce the cost, time, and risk of building
 high-quality curriculum tooling.
+
+## What We Deliver
+
+The repository delivers a small, composable pipeline for working with Oak's
+open curriculum data: a strict, type-safe **Curriculum SDK** generated end-to-end
+from Oak's OpenAPI schema; **MCP servers** that expose the curriculum to AI
+clients (ChatGPT, Claude, Cursor, and any other MCP-capable host); and a
+**semantic search service** with its own SDK and MCP tools so the corpus is
+fully discoverable from natural-language requests. Downstream teams can run
+their own search infrastructure (for example Elasticsearch Serverless) using
+this repository as the implementation baseline.
+
+Alongside this product infrastructure, the repository develops the operating
+system for delivery itself: Oak's
+[agentic engineering practice](agentic-engineering-system.md) and associated
+guardrails, including architectural enforcement and human-AI collaboration
+improvements
+([ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
 ## Non-Goals
 
@@ -79,76 +100,26 @@ To keep scope clear, this repository is not:
 - the owner of upstream curriculum licensing policy or legal interpretation
 - a promise that every experimental AI capability is exposed publicly before it
   meets quality, safety, and pedagogical standards
-
-## What We Deliver Today
-
-Today, this repository delivers a pipeline for working with Oak's open
-curriculum data:
-
-- **Curriculum SDK** — typed, validated API access generated from the OpenAPI
-  schema
-- **MCP servers** — curriculum access via Model Context Protocol for desktop and
-  web AI clients
-- **Semantic search** — hybrid retrieval for discovery across lessons, units,
-  threads, and broader curriculum structures
-
-It is intentionally feasible for downstream teams to populate and run their own
-search infrastructure (for example Elasticsearch Serverless) using this
-repository as the implementation baseline.
-
-Alongside product infrastructure, this repository also develops the operating
-system for delivery itself: Oak's
-[agentic engineering practice](agentic-engineering-system.md) and associated
-guardrails, including architectural enforcement and human-AI collaboration
-improvements ([ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md)).
-
-## Capability Status (Current / Next / Later)
-
-For the delivery roadmap with milestones and user-impact summaries, see the
-[high-level plan](../../.agent/plans/high-level-plan.md). For plain-language
-summaries of each milestone (audience, value, progression gates), see
-[milestones](../../.agent/milestones/).
-
-| Capability                                   | Status | What this means for users                                                                                                                                                         | Evidence                                                                                                                                  |
-| -------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Curriculum SDK (schema-first)                | Live   | Developers get typed, validated access to Oak's curriculum data without writing type definitions by hand. Build on Oak's curriculum in TypeScript with full type safety.          | SDK generation pipeline operational; all types, validators, and MCP tool metadata generated from OpenAPI schema. v1.0.0 released.         |
-| MCP servers (desktop and web)                | Live   | AI assistants like Claude, ChatGPT, and Cursor can access Oak's curriculum directly — teachers can ask questions about lessons and get structured, accurate answers.              | HTTP server deployed at `curriculum-mcp-alpha.oaknational.dev`; OAuth-compliant authentication; 31 tools, resources, and prompts          |
-| Semantic search pipeline                     | Live   | When a teacher searches for a lesson, the system finds the right one with high accuracy across 7 different curriculum structures (lessons, units, threads, sequences).            | MRR (Mean Reciprocal Rank) 0.983 on lessons (finds the right lesson in the top result 98% of the time); 41 ground truths across 4 indices |
-| Agentic engineering practice                 | Live   | A self-reinforcing system of quality gates, AI reviewers, and architectural constraints that maintains code quality as the team and codebase grow.                                | 130+ ADRs; 21 specialist sub-agent reviewers; 11 blocking quality gates; self-improving learning loop                                     |
-| MCP Apps infrastructure + branding           | M2     | Public alpha will make curriculum interaction native inside platforms like ChatGPT, Claude, and Gemini — teachers can discover and use Oak content without leaving their AI tool. | Execution plan in place; M2 blocker                                                                                                       |
-| Knowledge graph alignment                    | M2     | Initial graph-enablement: richer understanding of how curriculum concepts connect, informing the integration path for smarter lesson composition and cross-subject pathways.      | KG alignment audit promoted to active plan; M2 blocker                                                                                    |
-| Exemplar interactive UI (`user_search` tool) | M3     | A polished, interactive curriculum search experience rendered via React components inside Claude Desktop, ChatGPT, and other MCP App hosts.                                       | Requires design input; M3 blocker                                                                                                         |
-| Sentry + OTel foundation                     | M2     | Public alpha will open with supportable observability on the canonical runtimes: structured log forwarding, handled-error capture, trace correlation, and MCP Insights evidence.  | Execution plan exists; M2 blocker                                                                                                         |
-| Production auth + operational hardening      | M3     | Public sign-up via production Clerk with social providers, plus alerting and operational hardening on top of the observability foundation.                                        | Research complete (Clerk); execution plans exist; M3 blockers                                                                             |
-| Pedagogical rigour assessment APIs           | Later  | Planned: AI-assisted quality checks to ensure generated or adapted resources meet high pedagogical standards.                                                                     | Pre-development                                                                                                                           |
-
-## What Changes At Public Alpha (M2)
-
-When the MCP Apps extension work reaches public alpha, this repository moves
-beyond "developer infrastructure only". It becomes a direct interaction surface
-for curriculum resources inside AI platforms such as ChatGPT, Claude, and
-Gemini.
-
-That shift matters: the same underlying curriculum can be discovered, explored,
-and reused through the interfaces where many educators and developers already
-work. The [high-level plan](../../.agent/plans/high-level-plan.md) defines M2's
-blocking work: reliable search (ES re-index), unified MCP Apps infrastructure
-with branding, and initial knowledge graph alignment.
+- a surface that learners (including children) interact with directly — that
+  work would require a separately governed safeguarding, moderation, and
+  pedagogical-framing programme first, and is deliberately held out of scope
+  until that programme exists
 
 ## Strategic Integrations Ahead
 
-This repository is designed to integrate forthcoming Oak capabilities, including:
+This repository is designed to integrate forthcoming Oak capabilities,
+including:
 
 - a true curriculum knowledge graph
 - a conceptual framework that defines curriculum resources as minimal building
   blocks
-- APIs for AI-assisted assessment of generated curriculum resources against high
-  standards of pedagogical rigour
+- APIs for AI-assisted assessment of generated curriculum resources against
+  high standards of pedagogical rigour
 - additional AI-driven curriculum services developed across Oak
 
 These capabilities are not separate tracks in competition with the SDK/MCP
-ecosystem. They are intended to feed into it directly, expanding what developers
-and AI systems can do with Oak curriculum data.
+ecosystem. They are intended to feed into it directly, expanding what
+developers and AI systems can do with Oak curriculum data.
 
 ## Relationship With Aila
 
@@ -162,31 +133,32 @@ strengthen each other across the wider Oak ecosystem.
 
 Concrete examples of how the two tracks reinforce each other:
 
-1. **Shared curriculum retrieval** — Aila's lesson planning needs fast, accurate
-   curriculum search. The semantic search pipeline developed here (MRR 0.983 on
-   lessons) provides that capability as reusable infrastructure rather than
-   duplicated per-product.
+1. **Shared curriculum retrieval** — Aila's lesson planning needs fast,
+   accurate curriculum search. The semantic search pipeline developed here
+   provides that capability as reusable infrastructure rather than duplicated
+   per-product.
 2. **Knowledge graph synergy** — As Oak develops a curriculum knowledge graph,
    this repository will expose it through the SDK and MCP servers. Aila and
    external tools alike can traverse concept relationships, enabling richer
    lesson composition and cross-subject pathways.
 3. **Quality and safety patterns** — The agentic engineering practice's quality
    gates and type safety discipline are transferable patterns. Lessons learned
-   here about safe human-AI collaboration inform how Aila and other Oak products
-   manage AI-assisted content generation.
+   here about safe human-AI collaboration inform how Aila and other Oak
+   products manage AI-assisted content generation.
 
 ## Investment Value For Oak
 
-Investment in this repository creates value through several reinforcing channels:
+Investment in this repository creates value through several reinforcing
+channels:
 
 1. **Mission leverage**: one infrastructure investment can support many teacher
    and pupil outcomes via multiple downstream tools and services.
 2. **Delivery quality and speed**: the combination of shared infrastructure and
    the agentic engineering practice increases delivery throughput while
    maintaining rigour.
-3. **Ecosystem amplification**: external developers and edtech organisations can
-   build on Oak's open curriculum data, increasing reach beyond what Oak can
-   deliver alone.
+3. **Ecosystem amplification**: external developers and EdTech organisations
+   can build on Oak's open curriculum data, increasing reach beyond what Oak
+   can deliver alone.
 4. **Strategic integration point**: emerging Oak capabilities (knowledge graph,
    pedagogical rigour APIs, additional AI services) can be integrated once and
    then exposed consistently through SDK and MCP surfaces.
@@ -197,37 +169,25 @@ Investment in this repository creates value through several reinforcing channels
 ## How We Measure Impact
 
 To ensure investment stays outcome-focused, impact should be tracked through
-leading and outcome indicators.
+both leading and outcome indicators. The values themselves move over time and
+live in the [reports surface](../../.agent/reports/) and the
+[high-level plan](../../.agent/plans/high-level-plan.md); the framing below is
+the timeless definition of what success looks like.
 
 ### Leading Indicators (Near-Term)
 
 - external adoption of SDK and MCP packages (downloads, active integrations,
   retained users)
-- internal delivery throughput and quality (cycle time, escaped defects, quality
-  gate pass rates)
+- internal delivery throughput and quality (cycle time, escaped defects,
+  quality gate pass rates)
 - speed of integrating new Oak curriculum capabilities into shared SDK/MCP
   surfaces
-
-**Current baselines** (March 2026, invite-only alpha live):
-
-| Metric               | Current value | Context                                                                                                     |
-| -------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
-| Search MRR (lessons) | 0.983         | Finds the correct lesson in the top result 98% of the time                                                  |
-| Search MRR (units)   | 1.000         | 2 ground truths — mechanism check                                                                           |
-| Search MRR (threads) | 0.938         | 8 ground truths across curriculum threads                                                                   |
-| Ground truths        | 41            | Across 4 search indices                                                                                     |
-| ADRs                 | 130+          | Architectural decisions documenting every significant design choice                                         |
-| Quality gate suite   | 11 gates      | sdk-codegen, build, type-check, lint, format, markdownlint, test, test:ui, test:e2e, smoke, subagents:check |
-
-These baselines will evolve as external adoption begins. External adoption
-metrics (downloads, active integrations) become meaningful at M2 (open public
-alpha). For the full delivery roadmap, see the
-[high-level plan](../../.agent/plans/high-level-plan.md).
 
 ### Outcome Indicators (Medium-Term)
 
 - evidence that downstream tools reduce teacher lesson-planning workload
-- evidence that generated or adapted resources maintain high pedagogical quality
+- evidence that generated or adapted resources maintain high pedagogical
+  quality
 - growth in high-quality external ecosystem reuse of Oak curriculum data
 
 ## Impact Through Three Orders Of Effect
@@ -237,8 +197,9 @@ The impact compounds through three orders, each magnifying the next:
 1. **First order — safe delivery**: Oak can deliver SDK, MCP, and search
    infrastructure safely and quickly using the agentic engineering practice.
 2. **Second order — enablement**: Oak teams and external developers can build
-   faster with typed APIs, search primitives, and MCP access to curriculum data.
-3. **Third order — outcomes at scale**: those builders create new tools and
+   faster with typed APIs, search primitives, and MCP access to curriculum
+   data.
+3. **Third order — outcomes at scale**: those builders can create new tools and
    workflows that reduce planning workload and improve teaching quality for
    teachers and pupils.
 
@@ -247,8 +208,8 @@ discovery, curriculum APIs, and knowledge-graph traversal combined, it becomes
 far easier to assemble coherent, pedagogically rigorous new resource sequences,
 including cross-subject pathways where appropriate.
 
-This third-order effect is where the repository aligns most strongly with Oak's
-mission.
+This third-order effect is where the repository aligns most strongly with
+Oak's mission.
 
 ## Positioning
 
@@ -260,20 +221,19 @@ capabilities, and curriculum intelligence made usable by the wider world.
 
 The repository code is released under the MIT licence. Curriculum content
 licensing remains governed by upstream API/data terms (including OGL conditions
-where applicable), with attribution and third-party rights obligations preserved.
+where applicable), with attribution and third-party rights obligations
+preserved.
 
-For practical guidance on code/data boundaries and attribution requirements, see
-[LICENCE-DATA.md](../../LICENCE-DATA.md).
+For practical guidance on code/data boundaries and attribution requirements,
+see [LICENCE-DATA.md](../../LICENCE-DATA.md).
 
-Open code + open curriculum access is a deliberate strategy: maximise educational
-impact by making high-quality infrastructure and practice reusable.
+Open code + open curriculum access is a deliberate strategy: maximise
+educational impact by making high-quality infrastructure and practice reusable.
 
 ## Historical Positioning
 
 [ADR-008](../architecture/architectural-decisions/008-ecosystem-architecture-vision.md)
-is retained for historical context but is conceptually deprecated.
-
-This vision document, together with
+is retained for historical context but is conceptually deprecated. This vision
+document, together with
 [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md),
-is the current framing for why this repository exists and how its impact is
-expected to compound.
+is the current framing for why this repository exists.

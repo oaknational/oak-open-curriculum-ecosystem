@@ -7,6 +7,13 @@
 attribution: 'created by Jim Cresswell (https://www.jimcresswell.net/), evolved by many people and agents in many repos'
 
 practice.md:
+  - id: f8d9f57f-9604-4326-b430-fd9adf89bc78
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-28
+    purpose: >-
+      Practice/tool feedback capture and current collaboration-state
+      surfaces: commit queue, sidebars, joint decisions, escalations,
+      and UTC timestamp convention
   - id: 084f1543-fdab-4904-8af4-0727b47cefd2
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
@@ -195,6 +202,13 @@ practice-lineage.md:
       incoming from agent-collaboration
 
 practice-bootstrap.md:
+  - id: 2ce9d09e-99c8-4823-9a04-0ef2a0943351
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-28
+    purpose: >-
+      Napkin bootstrap now captures Practice/tooling friction, insights,
+      ideas, wishlist items, and implementation-vs-portable-Practice
+      signals
   - id: cb8ca9b8-248c-40f9-a0fb-791923f8a918
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26

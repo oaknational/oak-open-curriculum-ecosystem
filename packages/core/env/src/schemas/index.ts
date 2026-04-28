@@ -12,3 +12,6 @@ export type { LoggingEnv } from './logging';
 
 export { SentryEnvSchema, SENTRY_MODES } from './sentry';
 export type { SentryEnv } from './sentry';
+
+export { BuildEnvSchema, VERCEL_ENVS } from './build-env';
+export type { BuildEnv } from './build-env';

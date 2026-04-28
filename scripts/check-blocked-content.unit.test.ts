@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildPreToolUseDenyResponse,
-  extractContentPair,
+  extractContentChange,
   findAddedBlockedContent,
+  parseBlockedContentPolicy,
   parseHookInput,
   readStreamText,
 } from './check-blocked-content.mjs';
@@ -18,7 +19,7 @@ describe('parseHookInput', () => {
   });
 });
 
-describe('extractContentPair', () => {
+describe('extractContentChange', () => {
   it('extracts new_string and old_string from an Edit payload', () => {
     const hookInput = {
       tool_input: {
@@ -27,7 +28,7 @@ describe('extractContentPair', () => {
       },
     };
 
-    expect(extractContentPair(hookInput)).toStrictEqual({
+    expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'const updated = true;',
       priorContent: 'const original = true;',
     });
@@ -40,23 +41,24 @@ describe('extractContentPair', () => {
       },
     };
 
-    expect(extractContentPair(hookInput)).toStrictEqual({
+    expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'new content',
       priorContent: '',
     });
   });
 
-  it('extracts content from a Write payload with a non-existent file_path', () => {
+  it('extracts content and prior file path from a Write payload', () => {
     const hookInput = {
       tool_input: {
         content: 'file content here',
-        file_path: '/tmp/does-not-exist-check-blocked-content-test.ts',
+        file_path: '/tmp/check-blocked-content-test.ts',
       },
     };
 
-    expect(extractContentPair(hookInput)).toStrictEqual({
+    expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'file content here',
       priorContent: '',
+      priorFilePath: '/tmp/check-blocked-content-test.ts',
     });
   });
 
@@ -66,7 +68,7 @@ describe('extractContentPair', () => {
       old_string: 'flat old',
     };
 
-    expect(extractContentPair(hookInput)).toStrictEqual({
+    expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'flat new',
       priorContent: 'flat old',
     });
@@ -80,7 +82,7 @@ describe('extractContentPair', () => {
       },
     };
 
-    expect(extractContentPair(hookInput)).toStrictEqual({
+    expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'camel new',
       priorContent: 'camel old',
     });
@@ -91,13 +93,13 @@ describe('extractContentPair', () => {
       tool_input: { command: 'echo hello' },
     };
 
-    expect(() => extractContentPair(hookInput)).toThrow(
+    expect(() => extractContentChange(hookInput)).toThrow(
       'Claude PreToolUse hook input did not include writable content.',
     );
   });
 
   it('throws when input is not an object', () => {
-    expect(() => extractContentPair('not an object')).toThrow(
+    expect(() => extractContentChange('not an object')).toThrow(
       'Claude PreToolUse hook input was not an object.',
     );
   });
@@ -143,6 +145,26 @@ describe('buildPreToolUseDenyResponse', () => {
           'Blocked by repo hook policy: content contains forbidden pattern "some-pattern". Only the project owner can use this pattern.',
       },
     });
+  });
+});
+
+describe('parseBlockedContentPolicy', () => {
+  it('extracts blocked content patterns from policy data', () => {
+    expect(
+      parseBlockedContentPolicy({
+        hooks: {
+          preToolUseContent: {
+            blocked_patterns: ['pattern-a', 'pattern-b'],
+          },
+        },
+      }),
+    ).toStrictEqual(['pattern-a', 'pattern-b']);
+  });
+
+  it('throws when policy data has no blocked_patterns array', () => {
+    expect(() => parseBlockedContentPolicy({ hooks: {} })).toThrow(
+      'The canonical hook policy did not contain hooks.preToolUseContent.blocked_patterns.',
+    );
   });
 });
 

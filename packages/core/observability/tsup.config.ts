@@ -1,20 +1,3 @@
-import { defineConfig } from 'tsup';
+import { createLibConfig } from '../../../tsup.config.base.js';
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-  },
-  format: ['esm'],
-  dts: false,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  target: 'es2022',
-  minify: false,
-  bundle: true,
-  tsconfig: './tsconfig.build.json',
-  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
-  outDir: 'dist',
-  treeshake: true,
-  external: ['@opentelemetry/api'],
-});
+export default createLibConfig({ external: ['@opentelemetry/api'] });

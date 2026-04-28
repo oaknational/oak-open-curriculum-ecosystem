@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.1.0",
+  "claims": [
+    {
+      "claim_id": "fbde22cf-3bea-4c22-83ba-dd17e09d4508",
+      "agent_id": {
+        "agent_name": "Fresh Prince",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/**",
+            ".agent/rules/register-active-areas-at-session-open.md",
+            ".agent/rules/use-agent-comms-log.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/commands/consolidate-docs.md"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-25T16:23:27Z",
+      "freshness_seconds": 14400,
+      "intent": "WS1 implementation: promote the shared communication log into a structured claims registry and install the session-open tripwire rule.",
+      "notes": "RED fixture: the live closed-claims archive preserves this stale/self-application entry with archived_at only; GREEN should preserve the original claim and add structured closure metadata.",
+      "archived_at": "2026-04-25",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-04-25T16:36:12Z",
+        "closed_by": {
+          "agent_name": "Fresh Prince",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Claim archived to closed-claims.archive.json after the WS1 self-application lifecycle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": ".agent/state/collaboration/closed-claims.archive.json#fbde22cf-3bea-4c22-83ba-dd17e09d4508",
+            "summary": "Live archive contains the founding entry without structured closure metadata."
+          },
+          {
+            "kind": "commit",
+            "ref": "a5d33519",
+            "summary": "WS1 claims registry landed."
+          }
+        ]
+      }
+    }
+  ]
+}

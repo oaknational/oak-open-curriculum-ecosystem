@@ -6,10 +6,12 @@ import {
   redactHeaderRecord,
   redactTelemetryObject,
   redactTelemetryValue,
+  sanitiseForJson,
+  type JsonObject,
+  type JsonValue,
 } from '@oaknational/observability';
-import type { Logger, JsonObject, JsonValue } from './types.js';
-import { sanitiseForJson } from './json-sanitisation.js';
 import { normalizeError } from './error-normalisation.js';
+import type { Logger } from './types.js';
 
 /** Type guard to check if a JsonValue is a JsonObject. */
 function isJsonObject(value: JsonValue): value is JsonObject {
@@ -90,13 +92,7 @@ export function extractRequestMetadata(
     throw new Error('Unexpected sanitisation result: expected object');
   }
 
-  const redactedMetadata = redactTelemetryObject(result);
-
-  if (!isJsonObject(redactedMetadata)) {
-    throw new Error('Unexpected redaction result: expected object');
-  }
-
-  return redactedMetadata;
+  return redactTelemetryObject(result);
 }
 
 /**

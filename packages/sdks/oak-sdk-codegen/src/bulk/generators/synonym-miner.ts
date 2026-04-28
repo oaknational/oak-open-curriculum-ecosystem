@@ -10,6 +10,7 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 
+import type { Logger } from '@oaknational/logger';
 import type { ExtractedKeyword } from '../extractors/index.js';
 
 /**
@@ -263,7 +264,12 @@ export function serializeMinedSynonyms(data: MinedSynonymsData): string {
 export async function writeMinedSynonymsFile(
   data: MinedSynonymsData,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
+  logger?.info('bulk.writer.write_mined_synonyms', {
+    outputDir,
+    generatedAt: data.generatedAt,
+  });
   await mkdir(outputDir, { recursive: true });
 
   const fileName = 'definition-synonyms.ts';

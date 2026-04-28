@@ -6,6 +6,7 @@
  * This graph provides a curated glossary for students and teachers,
  * with cross-subject term identification and first-year tracking.
  */
+import type { Logger } from '@oaknational/logger';
 import type { ExtractedKeyword } from '../extractors/index.js';
 import {
   serializeDatasetToJson,
@@ -228,6 +229,11 @@ export function serializeVocabularyGraph(graph: VocabularyGraph): string {
 export async function writeVocabularyGraphAsJson(
   graph: VocabularyGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
-  return writeJsonDataset(vocabularyGraphDescriptor, graph, outputDir);
+  logger?.info('bulk.writer.write_vocabulary_graph', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
+  return writeJsonDataset(vocabularyGraphDescriptor, graph, outputDir, logger);
 }

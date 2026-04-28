@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { isAbsolute, join, posix } from 'node:path';
 
 export const CODEX_CONFIG_PATH = '.codex/config.toml';
+const CODEX_CONFIG_DIR = posix.dirname(CODEX_CONFIG_PATH);
 
 const AGENT_SECTION_PATTERN = /^\[agents\."([^"]+)"\]$/u;
 const TOML_BASIC_STRING_PATTERN = /^([a-z_]+)\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"$/u;
@@ -49,6 +50,14 @@ export function readCodexAgentRegistrations(repoRoot: string): CodexAgentRegistr
   }
 
   return parseCodexAgentRegistrations(readFileSync(configAbsolutePath, 'utf8'));
+}
+
+export function resolveCodexAgentConfigFilePath(configFile: string): string {
+  if (isAbsolute(configFile)) {
+    return configFile;
+  }
+
+  return posix.normalize(posix.join(CODEX_CONFIG_DIR, configFile));
 }
 
 export function readRequiredTomlValue(content: string, key: string, adapterPath: string): string {

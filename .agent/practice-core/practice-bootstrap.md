@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 590
-fitness_line_limit: 750
-fitness_char_limit: 31000
+fitness_line_target: 680
+fitness_line_limit: 830
+fitness_char_limit: 40500
 fitness_line_length: 100
 ---
 
@@ -76,20 +76,30 @@ Two types need no adapters — consumed directly by all platforms:
   context present). Plans can be decision-ready without being
   session-entry-ready; the gap matters because a session starting from a
   plan that lacks entry scaffolding will waste time re-deriving context.
-- **Reference** (`.agent/reference/`) — stable operational material:
-  doctrine references, setup guidance, contracts, example artefacts.
-  Content here should not age quickly.
+- **Reference** (`.agent/reference/`) — curated library tier:
+  owner-vetted, evergreen, deliberately-promoted read-to-learn
+  material. Promotion-gated per
+  [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md)
+  (substantiate / justify / owner-vet). The default disposition for
+  fresh material is NOT `reference/` — material is promoted INTO
+  the tier from `research/`, `analysis/`, `reports/`, or active
+  memory. Content here should not age quickly; an aging gate
+  reviews retained material at each holistic-fitness pass.
 - **Research** (`.agent/research/`) — synthesis-heavy notes, surveys,
-  rationale trails, and disposition ledgers. These age differently from
-  reference material and benefit from thematic grouping. The split
-  criterion is stable contracts versus exploratory synthesis.
+  rationale trails, and disposition ledgers. The default landing
+  tier for fresh exploratory material. May contain a transient
+  `notes/` holding bay for material in transit between tiers (see
+  [`research/notes/README.md`](../research/notes/README.md) when
+  the bay exists). The split criterion vs `reference/` is curation:
+  research is exploratory synthesis; reference is owner-vetted
+  evergreen library.
 
 A thin wrapper MUST NOT contain substantive instructions or logic not in
 the canonical source. Add a portability validation script to the quality
 gates to enforce this.
 
 Where a repo supports multiple agent platforms, keep a local surface matrix
-(e.g. `.agent/reference/cross-platform-agent-surface-matrix.md`) recording
+(e.g. `.agent/memory/executive/cross-platform-agent-surface-matrix.md`) recording
 supported and unsupported mappings explicitly.
 
 **Cross-platform integration order** — never reverse this sequence:
@@ -326,12 +336,12 @@ rules are enforced via the entry-point chain. Same body
 Platform-specific notes (e.g. "In Cursor, use `ReadLints`") may appear in
 the trigger — they are activation metadata, not policy.
 
-Codex note: this repo does not use a parallel `.agents/rules/` layer. Codex
-picks up always-on behaviour through the entry-point chain (`AGENTS.md` →
-`.agent/directives/AGENT.md` → canonical rules). When a rule activates a
-command or skill, add the corresponding `.agents/skills/` wrapper. Reviewer
-roles should be configured through Codex project-agent support in `.codex/`,
-not modelled as skills.
+`.agents/` note: this repo keeps portable rule adapters in `.agents/rules/`
+alongside `.agents/skills/` wrappers. Codex still picks up always-on
+behaviour through the entry-point chain (`AGENTS.md` →
+`.agent/directives/AGENT.md` → canonical rules). Reviewer roles should be
+configured through Codex project-agent support in `.codex/`, not modelled as
+skills.
 
 ## Sub-agents: Templates and Platform Adapters
 
@@ -388,7 +398,7 @@ surface matrix.
 | Command          | File                     | Core logic                                                                                                                                                                                                                             |
 | ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | start-right      | `jc-start-right.md`      | Read and follow the start-right-quick skill.                                                                                                                                                                                           |
-| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, sync next-action surfaces, capture surprises, and escalate into `jc-consolidate-docs` only when due.                                                        |
+| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, close own collaboration claims, update decision threads, capture surprises, and escalate into `jc-consolidate-docs` only when due.                          |
 | gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test`. All blocking; restart after any fix.                                                                                                                            |
 | commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, and use a conventional commit. Never force push, amend pushed commits, or use `--no-verify`.                                                                     |
 | consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract patterns. Rotate napkin. Manage fitness. Integrate incoming Practice Box. Broadcast outgoing context. See §Consolidation Workflow. |
@@ -430,11 +440,11 @@ Session workflows live as canonical skills. Commands and platform adapters
 are thin wrappers.
 
 - **start-right-quick** — the default session entry point. Read directives,
-  memory, guiding questions, practice box, then apply session priority:
+  memory, collaboration state, guiding questions, practice box, then apply session priority:
   (1) bugs first, (2) unfinished planned work second, (3) new work last.
 - **start-right-thorough** — extends quick with domain context reading,
-  metacognition, testing-strategy review, practice orientation, and an
-  execution outline.
+  metacognition, testing-strategy review, practice orientation,
+  collaboration-overlap checks, and an execution outline.
 - **go** — mid-session re-grounding. Read directives, identify intent,
   structure the todo list with ACTION/REVIEW/GROUNDING cadence.
 
@@ -443,18 +453,25 @@ are thin wrappers.
 Session-entry skills depend on a live continuity surface. The following
 contract defines what that surface must provide.
 
-One explicit host surface must carry the live continuity contract. Prompts
-(`.agent/prompts/session-continuation.prompt.md`) are a strong default; other
-hosts are valid if `go`, `session-handoff`, and start-right all point to the
-chosen surface. The key rule: **if any workflow references a continuity
-surface, that surface must exist on a fresh checkout.** Hydration is
-incomplete until the host surface exists and the workflows that reference it
-resolve.
+One explicit canonical host surface must carry the live continuity
+contract. Typical hosts include a dedicated state file (e.g.
+`.agent/memory/operational/repo-continuity.md`) or a section of a continuation prompt
+— the choice is host-local. Whatever the host is, `go`, `session-handoff`,
+and start-right must all point to it. The key rule: **if any workflow
+references a continuity surface, that surface must exist on a fresh
+checkout.** Hydration is incomplete until the host surface exists and
+the workflows that reference it resolve.
 
-The contract stays operational-only and carries these fields: Workstream,
-Active plans, Current state, Current objective, Hard invariants / non-goals,
-Recent surprises / corrections, Open questions / low-confidence areas, Next
-safe step, and Deep consolidation status.
+Hosts that split the contract across multiple surfaces — canonical
+contract, per-thread next-session record, tactical track cards — remain compliant
+provided the authority order between them is explicit, each surface has a
+single documented writer, and the contract fields are covered in aggregate.
+
+The contract stays operational-only. The minimum field set is: active
+threads, branch-primary thread next-session record, repo-wide invariants /
+non-goals, next safe step, and deep-consolidation status. Hosts may add
+epistemic-continuity fields (recent surprises, open questions) either
+on the canonical contract or on a per-thread next-session record.
 
 Keep ordinary continuity and deep convergence separate:
 
@@ -471,14 +488,20 @@ usual graduation bar.
 
 The napkin is the capture stage of the learning loop. It is always active.
 
-**Session start**: Read `.agent/memory/distilled.md` (if exists), then
-`.agent/memory/napkin.md` (if exists; create if not).
+**Session start**: Read `.agent/memory/active/distilled.md` (if exists), then
+`.agent/memory/active/napkin.md` (if exists; create if not).
 
 **Continuous updates**: Write whenever you learn something worth
 recording -- errors you figure out, user corrections, your own mistakes,
-tool surprises, approaches that work or fail. Be specific: "Assumed API
-returns list but it returns paginated object with `.items`" not "Made an
-error."
+tool surprises, Practice/tooling friction, insights, ideas, wishlist
+items, general impressions, or approaches that work or fail. Practice-tool
+feedback includes host-local tools that implement Practice capabilities:
+in this repo `agent-tools` is the TypeScript-specific implementation
+surface, while other repos may supply a shell, Python, editor, CI, or
+other equivalent. Capture the behaviour-level signal so consolidation can
+separate portable Practice substance from local implementation detail. Be
+specific: "Assumed API returns list but it returns a paginated object with
+`.items`" not "Made an error."
 
 **Structure**:
 
@@ -507,16 +530,37 @@ content (add, skip duplicates, update refinements, investigate
 contradictions), prune graduated entries, archive, start fresh. See
 §Consolidation Workflow step 4.
 
-### Reusable Patterns (.agent/memory/patterns/)
+### Reusable Patterns — Two Homes
 
-Reusable patterns proven by real work — code, process, architecture,
-structural, behavioural, agent operational, and domain-specific. More
-concrete than rules, more portable than source code.
+Patterns live in one of two homes depending on their level of
+abstraction:
 
-**Barrier to entry**: a pattern belongs here only when it is (a) broadly
-applicable or clearly reusable, (b) proven by implementation,
-(c) protective against a recurring mistake, and (d) stable enough to teach
-without immediate churn.
+**`.agent/memory/active/patterns/`** — **Specific instances**. Concrete,
+ecosystem-grounded patterns proven in this repo (TypeScript, Zod,
+Vitest, MCP, or whichever ecosystem applies locally). Instance files
+may carry a `related_pdr: PDR-NNN` or `related_pattern: <name>`
+frontmatter pointer linking them to their general form (if one has
+been authored).
+
+**`.agent/practice-core/patterns/`** — **General abstract patterns**
+(portable; travels with Core). Ecosystem-agnostic abstractions
+synthesised from multiple specific instances. Authored fresh when
+instance accumulation makes the general form legible across
+multiple contexts. Specific instances remain in
+`memory/active/patterns/`; they are not moved or copied.
+
+**Barrier to entry for either home**: a pattern belongs as a
+persisted entry only when it is (a) broadly applicable or clearly
+reusable, (b) proven by implementation, (c) protective against a
+recurring mistake, and (d) stable enough to teach without immediate
+churn.
+
+**Additional criteria for `practice-core/patterns/`**:
+(e) ecosystem-agnostic — stated without dependence on any specific
+language, framework, or toolchain; (f) engineering-substance, not
+Practice-governance (Practice-governance patterns take PDR shape in
+`practice-core/decision-records/`); (g) synthesised from ≥2 specific
+instances.
 
 **File format**: one `.md` per pattern with YAML frontmatter:
 
@@ -539,13 +583,134 @@ Body sections: **Principle** (one-paragraph statement), **Pattern**
 (steps), **Anti-pattern** (what not to do), **When to Apply**
 (trigger).
 
-**Index**: maintain a `README.md` in `.agent/memory/patterns/` with a
+**Index**: maintain a `README.md` in `.agent/memory/active/patterns/` with a
 short description for each pattern.
 
-**Cross-repo exchange**: copy Practice-relevant patterns to
-`.agent/practice-context/outgoing/patterns/` for exchange. Receiving
-repos apply the same three-part bar; adopted patterns move to local
-`.agent/memory/patterns/`.
+**Cross-repo exchange**: portable patterns travel as Core content.
+General, ecosystem-agnostic abstractions that apply across the
+network are authored in `.agent/practice-core/patterns/` via
+synthesis and travel with the Core package. Specific instances
+remain in `.agent/memory/active/patterns/` as proof; they do not travel.
+Under PDR-007, the previous `outgoing/patterns/` transport route is
+retired — there is no separate exchange surface for patterns.
+
+### Design-Space Explorations (docs/explorations/ or host equivalent)
+
+Explorations are durable option-weighing documents that sit between
+session observations (napkin) and committed decisions (ADRs). They are
+not refinement of napkin entries; they are research-shaped design-space
+analyses that inform which ADR to write or which plan to promote. An
+exploration may remain `active` indefinitely if the question is not yet
+ripe — that is acceptable. An exploration that has reached a
+conclusion but has not graduated to ADR or plan is not.
+
+**Home**: host-repo convention is `docs/explorations/` at the top of
+the documentation tree, with a README defining the shape. Alternative
+locations are valid provided the tier is named explicitly in the host
+repo's practice-index.
+
+**Filename convention**: `YYYY-MM-DD-<kebab-slug>.md`. The date prefix
+preserves chronological order without requiring metadata reads.
+
+**Required frontmatter**:
+
+```yaml
+---
+title: {Title}
+date: YYYY-MM-DD
+status: active                       # or informed-adr-<N> / informed-plan-<name> /
+                                     # superseded-by-<ref> / undecided-pending-<trigger>
+---
+```
+
+**Document shape**:
+
+1. **Frontmatter** as above.
+2. **Problem statement** — what's under exploration and why now.
+3. **Options considered** — each with pros, cons, evidence, failure modes.
+4. **Research questions still open** — what we don't yet know.
+5. **Informs** — the ADR / plan / decision this feeds into if known.
+6. **References** — external sources cited.
+
+**Relationship to other tiers**: napkin captures observations;
+explorations weigh options; ADRs commit decisions; plans execute. The
+exploration survives as the evidence trail the ADR or plan cites; it
+does not substitute for either. A single session may produce multiple
+explorations as different research questions surface; each gets its
+own timestamped file.
+
+**When to create one**: whenever design-space work requires more
+durability than a napkin entry but is not yet ready to commit to a
+decision. Trigger examples: "should we dual-export to a second
+telemetry backend?"; "what's the event schema shape data scientists
+actually need?"; "how far does vendor X take us across these axes
+before we hit a gap?"
+
+**When NOT to create one**: routine implementation decisions with
+obvious right answers; session-internal observations (use the napkin);
+committed decisions (use an ADR); execution instructions (use a plan).
+
+**Cross-repo exchange**: explorations are typically too host-specific
+to travel verbatim, but the _shape_ of explorations is portable — an
+outgoing broadcast describing the explorations tier (problem, home,
+frontmatter, document shape, relationship to other tiers) is a
+legitimate Practice Context contribution.
+
+### Transplant Manifest (exploration variant)
+
+Wholesale Practice transplantation (PDR-005) uses a specialised
+exploration: the **transplant manifest**. It is authored in the
+destination repo's `docs/explorations/` before any file is copied
+from the source repo.
+
+Filename: `YYYY-MM-DD-transplant-from-<source-repo>.md`.
+
+Additional frontmatter field:
+
+```yaml
+status: transplant-in-progress
+                            # or transplant-completed / transplant-aborted
+```
+
+Body sections:
+
+1. **Problem statement** — which source repo; why transplant rather
+   than cold-start; what the destination expects to inherit.
+2. **Gradient classification** — a table with one row per source
+   file or file-group:
+
+   | Source path | Gradient | Destination path | Adaptation note |
+   |---|---|---|---|
+   | `.agent/directives/principles.md` | portable-with-adaptation | same | rewrite test-framework references; keep universal rules verbatim |
+   | `.agent/practice-index.md` | local | create-from-scratch | bridge file is host-specific by design |
+   | `.agent/memory/active/distilled.md` | hybrid | same | preserve universal entries; drop source-repo-domain entries |
+   | `docs/architecture/ADR-XXX-*.md` | hybrid | rewrite | decision shape portable; decision substance host-specific |
+   | ... | ... | ... | ... |
+
+   Gradient values: **fully-portable** / **portable-with-adaptation**
+   / **hybrid** / **local** / **rejected** (with rationale).
+3. **Research questions** — ambiguous rows where classification
+   requires owner input.
+4. **Execution plan** — the order in which rows are processed;
+   typically fully-portable first, then portable-with-adaptation,
+   then hybrid, then local.
+5. **Four-audit close** — a checklist recording that each audit has
+   been performed and passed:
+   - Foreign-antigen audit (grep for source-repo names, paths, ADR
+     numbers; all hits resolved or documented).
+   - Completeness audit (every source concept has a destination
+     representative or is recorded as intentionally omitted).
+   - Cohesion audit (no self-contradictions in the destination
+     Practice).
+   - Manifest-closure audit (every row reached a completed or
+     explicitly-rejected state).
+6. **Informs** — the destination's practice-index, the destination's
+   `CHANGELOG.md` entry, any new PDRs the transplantation surfaced.
+
+The manifest is retained permanently in the destination's
+`docs/explorations/` — it is the reasoning trail for the
+destination's initial Practice shape and the record future agents
+use to understand why certain adaptations were made.
 
 ### Consolidation Workflow
 
@@ -572,18 +737,18 @@ implement a consolidation command with this abstract workflow:
    raise with the user (the gap in documentation structure is the
    signal); not yet stable — leave for further validation. Fitness
    limits are a signal to action (step 6), never a reason to defer.
-6. **Manage fitness thresholds** (two-threshold model). **Important**:
-   fitness is a post-writing editorial concern, never a writing
-   constraint. Always write concepts at the weight they deserve first,
-   then deal with limits holistically in this step. Constraining a
-   concept during writing to stay within a count artificially
-   underweights vital understanding.
-   - _Target exceeded_ (warning): **refine** (compress, deduplicate),
-     **split** (follow `split_strategy`), or **extend target** (agents
-     may raise `fitness_line_target` modestly with rationale).
-   - _Limit exceeded_ (blocking): **refine** or **split** to get below
-     the limit. Only the user may raise `fitness_line_limit`,
-     `fitness_char_limit`, or `fitness_line_length`.
+6. **Manage fitness thresholds** (three-zone model, ADR-144). Fitness
+   is a post-writing health signal, never a learning constraint.
+   Write, capture, distil, and graduate at the weight the signal deserves,
+   then deal with zones here. Each metric lands in `healthy` → `soft` →
+   `hard` → `critical`, where critical is `hard limit × 1.5`.
+   - `soft`: refine, split, or extend target (modestly, with rationale).
+     Never blocks.
+   - `hard`: refine, split, graduate, or raise with owner approval.
+     Treat the validator failure as a signal to route structural work;
+     do not roll back or suppress preserved learning.
+   - `critical`: loop failure. Preserve the learning, open a remediation
+     lane, and run the three-question post-mortem from ADR-144 §Loop Health.
 7. **Manage the practice exchange.** Two directions:
    - _Incoming_: integrate files from `.agent/practice-core/incoming/`
      following the provenance chain and three-part bar. Practice evolution

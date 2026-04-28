@@ -1,0 +1,6 @@
+---
+description: Replace old code in place; never introduce compatibility bridges, pass-through adapters, legacy coexistence, or fallback paths to keep superseded contracts alive.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/replace-dont-bridge.md`.

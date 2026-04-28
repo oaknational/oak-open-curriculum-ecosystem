@@ -524,6 +524,6 @@ First question: Could it be simpler without compromising quality?
 | [bulk-metadata-opportunities.research.md](03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md) | Research input — signal inventory |
 | [vocabulary-glossary-and-mining-surfaces.research.md](03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | Research input — asset model |
 | [curriculum-asset-opportunity-map.research.md](../curriculum-asset-opportunity-map.research.md) | Research input — opportunity tiers |
-| [open-education-knowledge-surfaces.plan.md](../../sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md) | Parent coordination — outputs feed MCP surfaces |
-| [evidence-integration-strategy.md](../../kgs-and-pedagogy/future/evidence-integration-strategy.md) | Sibling — `PEDAGOGICAL_PATTERN` entities link to EEF strands |
+| [open-education-knowledge-surfaces.plan.md](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | Parent coordination — outputs feed MCP surfaces |
+| [evidence-integration-strategy.md](../../knowledge-graph-integration/future/evidence-integration-strategy.md) | Sibling — `PEDAGOGICAL_PATTERN` entities link to EEF strands |
 | [kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md) | Sibling — ontology alignment informs relationship extraction |

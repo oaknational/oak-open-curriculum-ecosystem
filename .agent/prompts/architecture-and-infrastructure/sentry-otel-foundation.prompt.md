@@ -3,136 +3,78 @@ prompt_id: architecture-sentry-otel-foundation
 title: "Sentry + OpenTelemetry Foundation Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-29
+last_updated: 2026-04-16
 ---
 
 # Sentry + OpenTelemetry Foundation — Session Entry Point
 
-## What this branch does
+## Role
 
-Branch `feat/full-sentry-otel-support` adds a production observability
-foundation so the HTTP MCP server and Search CLI are diagnosable during
-open public alpha. It is a **Milestone 2 blocker**.
+This prompt is an operational entry point only. The active plans are
+authoritative for scope, status, sequencing, acceptance criteria, and
+evidence requirements.
 
-The branch rewrites the logger around a coherent `LogSink[]` fan-out
-model, adds three shared packages (`@oaknational/sentry-node`,
-`@oaknational/sentry-mcp`, `@oaknational/observability`), and wires the
-HTTP MCP server for Sentry-backed error capture, structured logging via
-the `Sentry.logger.*` API, metadata-only MCP observations, targeted
-manual spans, and a three-mode kill switch (`off`/`fixture`/`sentry`).
-All telemetry passes through a shared redaction barrier before leaving
-the process.
+## Workstream
 
-See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
-for the architectural decision.
-
-## Current State (2026-03-30)
-
-Branch head: `fd34516b`. 27 commits ahead of main (merged with origin/main).
-PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, merged with main (PR #70 MCP Apps adoption), awaiting human review.
-
-**What was done** (summary of the 19 resolved remediation findings):
-
-- **Type safety**: Sentry hook parameter type aliases, `typeSafeEntries`
-  / `typeSafeKeys` migrations, `ServerHarness` + `FakeLogger` rewrites
-  with proper Logger overloads, narrow `SentryErrorEvent` /
-  `SentryBreadcrumb` / `SentryTransactionEvent` re-exports (no
-  `NodeOptions` leakage through the lib boundary)
-- **File splitting**: `http-observability.ts` split from 504 to 207
-  lines across 4 modules; 8 other oversized files split
-- **Sentry logger API**: replaced `captureMessage` with
-  `Sentry.logger.*`; OTel attributes flattened with `otel.attributes.*`
-  / `otel.resource.*` dot-prefixed keys for Sentry queryability
-- **Safety guards**: shutdown once-guard for duplicate SIGINT/SIGTERM,
-  `safeRecord` in MCP wrappers, `safeSpanOp` for span lifecycle — all
-  ensure infrastructure failures never mask business logic
-- **DI and test hygiene**: `stdoutSink` injected (removed
-  `vi.spyOn(process.stdout)`), per-test `createTestRuntime()` factory
-  (removed module-level mocks), scoped `fakeSpanCounter` closure
-- **Security**: DSN removed from error messages, `Object.assign`
-  metadata copy removed, `dsn` added to `FULLY_REDACTED_KEYS`
-- **Smoke tests**: `UnifiedLogger` constructor updated from old
-  `stdoutSink`/`fileSink` shape to new `sinks[]`/`getActiveSpanContext`;
-  `createApp` now receives required `observability` option
-
-**Gate status**: `pnpm check` green — 81/81 tasks (secrets scan, clean
-rebuild, sdk-codegen, build, type-check, doc-gen, lint, test, test:e2e,
-test:ui, smoke:dev:stub, subagents:check, portability:check,
-markdownlint, format).
-
-**What remains on this branch**:
-
-- **Human PR review** of [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73)
-- **Push** to update PR #73 with merge result
-
-**Completed since last update**:
-
-- **C1/C2**: CodeQL regex backtracking — fixed (unrolled-loop pattern)
-- **Merge with main (PR #70)**: 22 content conflicts + ~14 clerk dirs resolved
-  per [merge plan](../../plans/architecture-and-infrastructure/active/sentry-otel-merge-main.plan.md)
-- **ADR-141 → ADR-143**: Renumbered to avoid collision with main's MCP Apps ADR
-- **`request-context.ts` removed**: Adopted main's `extra.authInfo` DI pattern
-- **`handlers.ts` split**: Registration (handlers.ts) + per-request (mcp-handler.ts)
-
-**Deferred (track separately, not on this branch)**:
-
-- **C3/C4**: Rate limiting on `/mcp` routes (pre-existing, infrastructure)
-- **F18**: Span helper DRY opportunity (YAGNI)
-
-**Operational documentation added**:
-
-- Per-app `.env.example` files with Sentry variables (HTTP app + search
-  CLI each have their own DSN placeholder)
-- Vercel environment config doc updated with Sentry optional variables
-- Deployment runbook at `docs/operations/sentry-deployment-runbook.md`
-  covering per-app DSN provisioning, source maps, alerting, rollback,
-  and a note on Vercel Log Drains as a future alternative
-
-**What comes after merge**:
-
-- Search CLI adoption (`apps/oak-search-cli`)
-- Deployment evidence bundle (release/source maps, alerting, MCP
-  Insights) — the runbook describes the steps; CI automation is not
-  yet wired
+Branch `feat/otel_sentry_enhancements` carries the remaining Milestone 2
+observability closure work after PR #73 merged to `main` on 2026-03-31.
 
 ## Read First
 
-1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — main execution plan (phases, contracts, scope)
-2. [sentry-otel-remediation.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-remediation.plan.md) — 21 findings, resolution status
-3. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — architectural decision
+1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+2. [sentry-canonical-alignment.plan.md](../../plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md)
+   (archived 2026-04-17 — read for historical context on the child-plan scope)
+3. [sentry-observability-maximisation-mcp.plan.md](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+   (executable) and [future/sentry-observability-maximisation.plan.md](../../plans/observability/future/sentry-observability-maximisation.plan.md)
+   (strategic parent) — replaces the archived `sentry-observability-expansion.plan.md` from 2026-04-17
+4. [search-observability.plan.md](../../plans/observability/current/search-observability.plan.md)
+5. [sentry-observability-translation-crosswalk.plan.md](../../plans/observability/active/sentry-observability-translation-crosswalk.plan.md)
+6. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
+7. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
 
-Primary code surfaces:
+## Current State (2026-04-16)
 
-- `packages/libs/sentry-node/src/` — Sentry config, runtime, sinks,
-  redaction, fixture, types
-- `packages/libs/sentry-mcp/src/` — MCP observation wrappers
-- `packages/core/observability/src/` — shared redaction, span context
-- `apps/oak-curriculum-mcp-streamable-http/src/observability/` — 4
-  modules (http-observability, span-helpers, sanitise-mcp-events,
-  http-observability-error)
-- `apps/oak-curriculum-mcp-streamable-http/src/server-runtime.ts` —
-  server lifecycle with shutdown guard
-- `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts` —
-  HTTP logger factory with injectable `stdoutSink`
-- `apps/oak-curriculum-mcp-streamable-http/smoke-tests/` — recently
-  fixed; fragile to constructor changes in logger or observability
+- Shared observability foundation is implemented for the HTTP MCP server
+  and Search CLI.
+- Native MCP wrapping is adopted on the HTTP live path.
+- `@oaknational/sentry-mcp` has been deleted after the migration.
+- Local `.env.local` provisioning is complete for both runtimes.
+- The remaining branch-critical work is human-operated:
+  Vercel credential provisioning plus the deployment evidence bundle.
+- Follow-on capability work is intentionally split into companion plans:
+  MCP-server expansion, search observability, and translation maintenance.
+- The supporting continuity surfaces have been swept so the collection README,
+  roadmap, architecture prompt, and session prompt all tell the same
+  validation-first sequence.
+- Current user-directed sequence is: validate what exists, then continue with
+  the MCP-server-confined expansion plan, and defer broader search work to a
+  later session and PR.
 
-## Restart Sequence
+## Next Safe Step
 
-1. Verify `pnpm check` still passes (confirms no drift since last session).
-2. Fix C1/C2 regex backtracking findings (see
-   [PR73 remediation plan](../../plans/architecture-and-infrastructure/active/sentry-otel-pr73-codeql-remediation.plan.md)).
-3. Push fix, confirm CodeQL annotations clear on PR #73.
-4. Await human PR review and merge.
-5. After merge, resume Search CLI adoption (see `search-cli-adoption`
-   todo in the execution plan).
-6. Track C3/C4, F10, and F18 as separate work items outside this branch.
+1. Set `SENTRY_MODE`, `SENTRY_DSN`, and `SENTRY_TRACES_SAMPLE_RATE` on
+   the Vercel project for the HTTP MCP server.
+2. Deploy with live Sentry enabled and gather the evidence bundle
+   required by the parent plan.
+3. After validation is complete, continue with
+   `sentry-observability-maximisation-mcp.plan.md` (supersedes the archived
+   `sentry-observability-expansion.plan.md`). Treat
+   `search-observability.plan.md` as the next-branch workstream.
+
+## Hard Invariants
+
+- `sendDefaultPii: false`
+- `SENTRY_MODE=off` remains the kill switch default
+- DI/testability and redaction boundaries remain intact
+- No duplicate custom MCP tracing system on the authoritative live path
+- Scope moves must update the translation crosswalk in the same change set
 
 ## Authority Rule
 
-1. The execution plan is authoritative for implementation facts,
-   contracts, and phase definitions.
-2. The remediation plan is authoritative for the 21 findings and their
-   resolution status.
-3. This prompt is an entry point — it summarises for orientation but
-   must not contradict the plans.
+1. The parent execution plan is authoritative for foundation facts,
+   remaining branch closure work, and deployment evidence.
+2. The child plan is authoritative for HTTP live-path alignment history
+   and its acceptance boundary.
+3. The companion plans are authoritative for post-baseline expansion and
+   search follow-on work.
+4. If this prompt conflicts with the active plans, the active plans win.

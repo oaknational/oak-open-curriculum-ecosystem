@@ -21,7 +21,6 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import {
-  wrapResourceHandler,
   type ResourceRegistrar,
   type ResourceRegistrationOptions,
 } from './register-resource-helpers.js';
@@ -39,60 +38,36 @@ import { registerWidgetResource } from './register-widget-resource.js';
  * @param server - MCP server instance
  * @param observability - Observability for resource handler tracing
  */
-export function registerDocumentationResources(
-  server: ResourceRegistrar,
-  observability: ResourceRegistrationOptions['observability'],
-): void {
+export function registerDocumentationResources(server: ResourceRegistrar): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
     const { name, uri, ...metadata } = resource;
-    server.registerResource(
-      name,
-      uri,
-      metadata,
-      wrapResourceHandler(
-        name,
-        () => {
-          const content = getDocumentationContent(uri);
-          return {
-            contents: [
-              {
-                uri,
-                mimeType: resource.mimeType,
-                text: content ?? `# ${resource.title}\n\nContent not found.`,
-              },
-            ],
-          };
-        },
-        observability,
-      ),
-    );
+    server.registerResource(name, uri, metadata, () => {
+      const content = getDocumentationContent(uri);
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: resource.mimeType,
+            text: content ?? `# ${resource.title}\n\nContent not found.`,
+          },
+        ],
+      };
+    });
   }
 }
 
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
-export function registerCurriculumModelResource(
-  server: ResourceRegistrar,
-  observability: ResourceRegistrationOptions['observability'],
-): void {
+export function registerCurriculumModelResource(server: ResourceRegistrar): void {
   const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
-  server.registerResource(
-    name,
-    uri,
-    metadata,
-    wrapResourceHandler(
-      name,
-      () => ({
-        contents: [
-          {
-            uri,
-            mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
-            text: getCurriculumModelJson(),
-          },
-        ],
-      }),
-      observability,
-    ),
-  );
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+        text: getCurriculumModelJson(),
+      },
+    ],
+  }));
 }
 
 /**
@@ -122,27 +97,17 @@ function registerGraphResource(
     };
   },
   getJson: () => string,
-  observability: ResourceRegistrationOptions['observability'],
 ): void {
   const { name, uri, ...metadata } = resource;
-  server.registerResource(
-    name,
-    uri,
-    metadata,
-    wrapResourceHandler(
-      name,
-      () => ({
-        contents: [
-          {
-            uri,
-            mimeType: resource.mimeType,
-            text: getJson(),
-          },
-        ],
-      }),
-      observability,
-    ),
-  );
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: resource.mimeType,
+        text: getJson(),
+      },
+    ],
+  }));
 }
 
 /**
@@ -158,27 +123,12 @@ export function registerAllResources(
   server: ResourceRegistrar,
   options: ResourceRegistrationOptions,
 ): void {
-  registerDocumentationResources(server, options.observability);
-  registerCurriculumModelResource(server, options.observability);
-  registerGraphResource(
-    server,
-    PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
-    getPriorKnowledgeGraphJson,
-    options.observability,
-  );
-  registerGraphResource(
-    server,
-    THREAD_PROGRESSIONS_RESOURCE,
-    getThreadProgressionsJson,
-    options.observability,
-  );
-  registerGraphResource(
-    server,
-    MISCONCEPTION_GRAPH_RESOURCE,
-    getMisconceptionGraphJson,
-    options.observability,
-  );
-  registerWidgetResource(server, options.getWidgetHtml, options.observability);
+  registerDocumentationResources(server);
+  registerCurriculumModelResource(server);
+  registerGraphResource(server, PRIOR_KNOWLEDGE_GRAPH_RESOURCE, getPriorKnowledgeGraphJson);
+  registerGraphResource(server, THREAD_PROGRESSIONS_RESOURCE, getThreadProgressionsJson);
+  registerGraphResource(server, MISCONCEPTION_GRAPH_RESOURCE, getMisconceptionGraphJson);
+  registerWidgetResource(server, options.getWidgetHtml);
 }
 
 export { registerPrompts } from './register-prompts.js';

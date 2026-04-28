@@ -16,7 +16,7 @@ const ALLOWLIST = [
   'Subjects',
   'ThreadSlugs',
   'Units',
-  'AllowedMethods',
+  'ApiHttpMethod',
   'RawPaths',
   'PathParameters',
   'ValidPathGroupings',

@@ -1,8 +1,8 @@
 # Architecture and Infrastructure Roadmap
 
 **Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
-**Last Updated**: 2026-04-09
-**Session Entry**: [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
+**Last Updated**: 2026-04-17
+**Session Entry**: [`start-right-quick`](../../skills/start-right-quick/SKILL.md) + [`memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md)
 
 ---
 
@@ -27,13 +27,32 @@ Lane indexes:
 ## Current State
 
 - The Sentry + OpenTelemetry foundation remains the immediate M2 blocker in
-  [active/sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md).
+  [active/sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md),
+  but implementation is now complete in both in-scope runtimes. Remaining
+  closure work is live validation: Vercel credential provisioning plus the
+  deployment evidence bundle.
+- Foundation closure is done (2026-04-17). The next in-branch implementation
+  lane is the MCP-server-confined executable plan
+  [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../observability/active/sentry-observability-maximisation-mcp.plan.md)
+  (strategic parent: [`observability/future/sentry-observability-maximisation.plan.md`](../observability/future/sentry-observability-maximisation.plan.md)),
+  which supersedes the archived `sentry-observability-expansion.plan.md`.
+  Observability plans moved to [`../observability/`](../observability/) on 2026-04-18
+  per the
+  [observability strategy restructure](current/observability-strategy-restructure.plan.md).
+- Broader search observability work is tracked in
+  [`observability/current/search-observability.plan.md`](../observability/current/search-observability.plan.md)
+  and is deferred to the next branch — the Search CLI maximisation mirror
+  opens on that branch after the MCP branch merges.
 - Cross-app config standardisation and security dependency triage remain the
   next queued executable items in [current/README.md](current/README.md).
+- Workspace layer separation audit is now queued in
+  [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md)
+  to turn ADR-154's strengthened rule into an authoritative
+  layer/workspace matrix and migration tranche map.
 - A new strategic umbrella,
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md),
-  now defines the later programme for separating generic foundations from Oak
-  leaves across all affected workspaces.
+  now defines the later programme for separating layers into workspaces and
+  generic foundations from Oak leaves across all affected workspaces.
 - [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md)
   has been promoted to `current/` (2026-04-11) and is the explicit first
   candidate once the current improvement tranche is complete.
@@ -62,7 +81,8 @@ The quality gate hardening plan has been promoted to current (2026-04-11):
 ```text
 Phase 1: Sentry + OTel foundation                     🔄 active
 Phase 2: Config + dependency standardisation          ⏳ current
-Phase 3: Oak surface isolation programme              📋 future
+Phase 3: Workspace layer separation programme         ⏳ current/future
+  Audit: repo-wide layer/workspace matrix             ⏳ current
   Tranche 1: platform/runtime foundations             📋 future
   Tranche 2: design system                            📋 future
   Tranche 3: tooling/governance                       📋 future
@@ -82,9 +102,16 @@ Phase 4: Quality/operations hardening                 📋 future
   [active/sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md)
 - Companion prompt:
   [../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
+- Immediate next lane (same branch):
+  [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../observability/active/sentry-observability-maximisation-mcp.plan.md)
+  — closes every Sentry product loop for the MCP app before PR.
+- Strategic envelope parent:
+  [`observability/future/sentry-observability-maximisation.plan.md`](../observability/future/sentry-observability-maximisation.plan.md)
 - Done when:
-  the HTTP MCP server and Search CLI have the shared observability foundation,
-  evidence is recorded, and the active child plan can close
+  the HTTP MCP server has the full maximised observability surface (Phase 1–4
+  of the MCP plan closed), the Search CLI maximisation mirror opens on its
+  own branch, Vercel credential provisioning remains in place, and the
+  active foundation lane closes cleanly
 
 ### Phase 2 — Cross-App Standardisation
 
@@ -95,16 +122,18 @@ Phase 4: Quality/operations hardening                 📋 future
 - Done when:
   config and dependency hygiene no longer block later structural work
 
-### Phase 3 — Oak Surface Isolation and Generic Foundations
+### Phase 3 — Workspace Layer Separation and Generic Foundations
 
+- Executable audit:
+  [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md)
 - Strategic umbrella:
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md)
 - Companion strategic plan:
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md)
 - Done when:
-  the mixed foundations have been split or neutralised by tranche, Oak
-  workspaces are visibly thin leaves, and one-way dependency direction is
-  enforceable
+  every workspace owns one coherent layer, mixed foundations have been split
+  or neutralised by tranche, Oak workspaces are visibly thin leaves, and
+  one-way dependency direction is enforceable
 
 ### Phase 4 — Quality and Operational Hardening
 
@@ -127,4 +156,4 @@ Phase 4: Quality/operations hardening                 📋 future
 2. [future/README.md](future/README.md)
 3. [active/README.md](active/README.md)
 4. [current/README.md](current/README.md)
-5. [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
+5. [`../../memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md) — live continuity contract

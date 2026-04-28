@@ -8,10 +8,11 @@
  * the max-lines limit. Follows the same pattern as `search-threads.ts`.
  */
 
-import type { JsonObject, Logger } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import type { JsonObject } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
-import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 
 import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
 import type { SearchSequencesParams } from '../types/retrieval-params.js';
@@ -120,15 +121,19 @@ function toLoggedStringRecord(value: unknown): JsonObject | undefined {
     return undefined;
   }
 
-  const entries = typeSafeEntries(value).flatMap(([key, candidate]) => {
-    return typeof candidate === 'string' ? [[key, candidate] as const] : [];
-  });
+  const loggedRecord: Record<string, string> = {};
+  let hasLoggedEntries = false;
 
-  if (entries.length === 0) {
-    return undefined;
+  for (const [key, candidate] of typeSafeEntries(value)) {
+    if (typeof candidate !== 'string') {
+      continue;
+    }
+
+    loggedRecord[key] = candidate;
+    hasLoggedEntries = true;
   }
 
-  return typeSafeFromEntries<string, string>(entries);
+  return hasLoggedEntries ? loggedRecord : undefined;
 }
 
 function isPlainObject(value: unknown): value is JsonObject {

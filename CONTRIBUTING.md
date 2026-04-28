@@ -20,14 +20,67 @@ please follow our [security policy](SECURITY.md).
 By participating in this project, you agree to abide by our
 [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## Working with AI Coding Agents
+
+This repository is designed to be worked on with AI coding agents
+alongside humans. The agent-facing rules, sub-agent reviewers, skills,
+and the wider system that governs how the codebase is built and
+reviewed — **the Practice**, a self-reinforcing system of principles,
+structures, specialist reviewers, and tooling — are all rooted in
+[`.agent/directives/AGENT.md`](.agent/directives/AGENT.md). AGENT.md is
+auto-loaded by every supported agent surface:
+
+- [`AGENTS.md`](AGENTS.md) — Codex and the generic AGENTS.md contract
+- [`CLAUDE.md`](CLAUDE.md) — Claude Code
+- [`GEMINI.md`](GEMINI.md) — Gemini CLI
+- [`.github/copilot-instructions.md`](.github/copilot-instructions.md) — GitHub Copilot
+- [`.windsurf/rules/generalrules.md`](.windsurf/rules/generalrules.md) — Windsurf
+- [`.cursor/rules/read-agent-md.mdc`](.cursor/rules/read-agent-md.mdc) — Cursor
+
+If you are collaborating with an agent on a contribution — or want to
+understand the constraints they operate under — read AGENT.md first; it
+indexes the principles, sub-agent reviewers, ADRs, and quality gates
+that apply equally to humans and agents. For the wider Practice, see
+[Practice Core](.agent/practice-core/index.md) (portable definition)
+and [Practice Index](.agent/practice-index.md) (this repository's
+local bridge).
+
+## Where the documentation lives
+
+Most of what you need as a contributor is grouped by section under
+[`docs/`](docs/README.md):
+
+- [Foundation](docs/foundation/README.md) — mission and how the
+  agentic engineering system works
+- [Governance](docs/governance/README.md) —
+  [Development Practice](docs/governance/development-practice.md),
+  TypeScript, testing, accessibility, and security standards
+- [Architecture](docs/architecture/README.md) — the OpenAPI
+  pipeline, provider system, and the
+  [ADR index](docs/architecture/architectural-decisions/README.md)
+  (the architectural source of truth)
+- [Engineering](docs/engineering/README.md) — workflow, tooling,
+  extension points
+- [Operations](docs/operations/README.md) — environment variables,
+  troubleshooting
+- [Domain](docs/domain/README.md) — curriculum data structure and
+  variances
+
 ## Architecture Guidelines
 
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. These foundational ADRs define the constraints you must follow when contributing — all code generation, types, and validation flow from the OpenAPI schema:
+Architectural Decision Records (ADRs) define how the system should
+work and are the architectural source of truth. These foundational
+ADRs define the constraints you must follow when contributing — all
+code generation, types, and validation flow from the OpenAPI schema:
 
-- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
-- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
-- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
-- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)
+  — No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
+  — SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md)
+  — Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md)
+  — Shared parsing helper pattern
 
 See the [ADR index](docs/architecture/architectural-decisions/) for the full list.
 
@@ -54,7 +107,11 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 - Re-validate or re-parse in runtime code (use generated helpers)
 - Widen types or add fallbacks for "missing" descriptors
 
-> **Critical**: Read [Schema-First Execution Directive](.agent/directives/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behaviour must flow from generated artefacts.
+> **Critical**: Read [Schema-First Execution
+> Directive](.agent/directives/schema-first-execution.md) before
+> working on MCP tool execution, argument validation, or response
+> handling. All runtime behaviour must flow from generated
+> artefacts.
 
 ### Layer Boundaries
 
@@ -67,12 +124,14 @@ The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 5. **Core Infrastructure** (`packages/core/`)
 6. **Infrastructure Libraries** (`packages/libs/`)
 
-For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/engineering/extending.md).
+For practical guidance on adding new MCP tools, search indices, SDK
+helpers, and core packages, see the
+[Extension Points Guide](docs/engineering/extending.md).
 
 ---
 
-Before making changes, start with the quick start guide:
-[docs/foundation/quick-start.md](docs/foundation/quick-start.md)
+Before making changes, follow the install and verify steps in the
+[root README Quick Start](README.md#quick-start).
 
 ### Prerequisites
 
@@ -80,6 +139,10 @@ Before making changes, start with the quick start guide:
 2. **pnpm**
 3. Service credentials for the areas you are touching (Oak Curriculum API keys,
    Elasticsearch Serverless API keys). See workspace READMEs for details.
+4. Some scripts require additional external tools (`bun`, `jq`, `lsof`) that are
+   not managed via `package.json`. See [README prerequisites](README.md#prerequisites).
+   Scripts that require these commands emit installation instructions when they
+   are missing.
 
 ### Setup
 
@@ -180,7 +243,9 @@ workspace READMEs for detailed setup instructions.
 
 ## Development Process
 
-For the complete development lifecycle — branching, TDD, quality gates, CI, AI review, human review, merge, and release — see the [Development Workflow](docs/engineering/workflow.md).
+For the complete development lifecycle — branching, TDD, quality
+gates, CI, AI review, human review, merge, and release — see the
+[Development Workflow](docs/engineering/workflow.md).
 
 ### 1. Create a Feature Branch
 
@@ -299,6 +364,11 @@ Include:
 
 For full TypeScript, ESM, testing, and error handling standards, see:
 
+- [Practice Core](.agent/practice-core/index.md) — portable practice system
+  (principles, patterns, propagation) that governs how the rules below are
+  authored and reviewed
+- [Practice Index (this repo)](.agent/practice-index.md) — local bridge from
+  Practice Core into this repository's live surfaces
 - [TypeScript Practice](docs/governance/typescript-practice.md) — type safety,
   no `any`, no assertions, validation at boundaries
 - [Development Practice](docs/governance/development-practice.md) — functions,

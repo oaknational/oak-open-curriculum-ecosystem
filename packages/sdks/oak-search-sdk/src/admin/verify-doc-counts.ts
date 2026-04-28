@@ -8,6 +8,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 
 import type {
@@ -34,6 +35,46 @@ export type { DocCountExpectations, DocCountVerification, IndexDocCountStatus };
 function formatStatusLine(status: IndexDocCountStatus): string {
   const icon = status.passed ? 'PASS' : 'FAIL';
   return `  ${icon} ${status.kind}: ${status.actual}/${status.expected} docs`;
+}
+
+async function countIndexDocs(
+  client: Client,
+  resolveIndex: IndexResolverFn,
+  expectations: DocCountExpectations,
+): Promise<IndexDocCountStatus[]> {
+  return Promise.all(
+    SEARCH_INDEX_KINDS.map(async (kind) => {
+      const indexName = resolveIndex(kind);
+      let actual = 0;
+      try {
+        const response = await client.count({ index: indexName, ignore_unavailable: true });
+        actual = response.count;
+      } catch (error: unknown) {
+        if (!isMissingIndexError(error)) {
+          throw error;
+        }
+      }
+      const expected = expectations[kind];
+      return { kind, indexName, passed: actual >= expected, actual, expected };
+    }),
+  );
+}
+
+function createFailedVerificationResult(
+  results: readonly IndexDocCountStatus[],
+): Result<DocCountVerification, AdminError> {
+  const failures = results.filter((status) => !status.passed);
+  const failureSummary = failures.map(
+    (status) => `${status.kind} (${status.actual}/${status.expected})`,
+  );
+
+  return err({
+    type: 'validation_error',
+    message:
+      `${failures.length} of ${results.length} indexes failed doc count verification: ` +
+      failureSummary.join(', '),
+    details: results.map(formatStatusLine).join('\n'),
+  });
 }
 
 /**
@@ -69,40 +110,23 @@ export async function verifyDocCounts(
   client: Client,
   resolveIndex: IndexResolverFn,
   expectations: DocCountExpectations,
+  logger?: Logger,
 ): Promise<Result<DocCountVerification, AdminError>> {
+  logger?.info('Verifying search index document counts', {
+    indexKinds: SEARCH_INDEX_KINDS.length,
+  });
   try {
-    const results: IndexDocCountStatus[] = await Promise.all(
-      SEARCH_INDEX_KINDS.map(async (kind) => {
-        const indexName = resolveIndex(kind);
-        let actual = 0;
-        try {
-          const response = await client.count({ index: indexName, ignore_unavailable: true });
-          actual = response.count;
-        } catch (error: unknown) {
-          if (!isMissingIndexError(error)) {
-            throw error;
-          }
-        }
-        const expected = expectations[kind];
-        return { kind, indexName, passed: actual >= expected, actual, expected };
-      }),
-    );
+    const results = await countIndexDocs(client, resolveIndex, expectations);
     const allPassed = results.every((status) => status.passed);
 
     if (allPassed) {
       return ok({ allPassed, results });
     }
 
-    const failures = results.filter((status) => !status.passed);
-    const failureSummary = failures.map((s) => `${s.kind} (${s.actual}/${s.expected})`).join(', ');
-
-    return err({
-      type: 'validation_error',
-      message: `${failures.length} of ${results.length} indexes failed doc count verification: ${failureSummary}`,
-      details: results.map(formatStatusLine).join('\n'),
-    });
+    return createFailedVerificationResult(results);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
+    logger?.error('Search index document count verification failed', { message });
     return err({
       type: 'es_error',
       message,

@@ -101,6 +101,9 @@ pnpm test:smoke
 pnpm benchmark
 ```
 
+Smoke tests require only `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY`.
+Ingestion and admin commands require the full CLI environment.
+
 ---
 
 ## 7. Quality Gates (Run After Changes)

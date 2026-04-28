@@ -5,7 +5,12 @@
  * Supports dual-sink logging (stdout + file) for CLI ingestion runs.
  */
 
-import { logLevelToSeverityNumber } from '@oaknational/logger';
+import {
+  logLevelToSeverityNumber,
+  parseLogLevel,
+  type LogLevel,
+  type LogSink,
+} from '@oaknational/logger';
 import {
   UnifiedLogger,
   buildResourceAttributes,
@@ -17,11 +22,8 @@ import {
 import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 
-/** Valid log levels for the semantic search logger. */
-type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
 /** Current minimum log level. Defaults to INFO. */
-const currentLevel: LogLevel = 'INFO';
+let currentLevel = parseLogLevel('INFO');
 
 /** Current file sink path. Null means no file logging. */
 let currentFilePath: string | null = null;
@@ -29,7 +31,10 @@ let currentFilePath: string | null = null;
 /** Active file sink instance. */
 let activeFileSink: FileSinkInterface | null = null;
 
-/** Cached logger instances. Recreated when level or file sink changes. */
+/** Additional sinks registered at runtime (e.g. Sentry log sink). */
+let additionalSinks: readonly LogSink[] = [];
+
+/** Cached logger instances. Recreated when level, file sink, or additional sinks change. */
 type LoggerKey = 'search' | 'ingest' | 'cache' | 'admin' | 'observe';
 type LoggerCache = { base: UnifiedLogger } & Record<LoggerKey, Logger>;
 let loggerCache: LoggerCache | null = null;
@@ -59,8 +64,8 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   }
 
   const sinks = activeFileSink
-    ? [createNodeStdoutSink(), activeFileSink]
-    : [createNodeStdoutSink()];
+    ? [createNodeStdoutSink(), activeFileSink, ...additionalSinks]
+    : [createNodeStdoutSink(), ...additionalSinks];
 
   const base = new UnifiedLogger({
     minSeverity: logLevelToSeverityNumber(currentLevel),
@@ -89,22 +94,13 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   return loggerCache;
 }
 
-/**
- * Sets the minimum log level for all loggers.
- * Calling this invalidates cached loggers, which are recreated on next access.
- */
-
 /** Error from closing the file sink. */
 interface FileSinkCloseError {
   readonly type: 'file_sink_close_failed';
   readonly message: string;
 }
 
-/**
- * Disables file logging and closes the file sink.
- *
- * @returns `ok(undefined)` on success, or `err(FileSinkCloseError)` if `end()` throws
- */
+/** Disables file logging and closes the file sink. */
 export function disableFileSink(): Result<void, FileSinkCloseError> {
   let closeError: FileSinkCloseError | null = null;
   if (activeFileSink !== null) {
@@ -121,6 +117,45 @@ export function disableFileSink(): Result<void, FileSinkCloseError> {
   currentFilePath = null;
   loggerCache = null;
   return closeError ? err(closeError) : ok(undefined);
+}
+
+/**
+ * Register an additional log sink (e.g. Sentry structured log sink).
+ *
+ * Invalidates the logger cache so subsequent log calls include the new sink.
+ */
+export function registerAdditionalSink(sink: LogSink): void {
+  additionalSinks = [...additionalSinks, sink];
+  loggerCache = null;
+}
+
+/**
+ * Remove all additional sinks and invalidate the logger cache.
+ *
+ * Called during shutdown to ensure clean teardown.
+ */
+export function clearAdditionalSinks(): void {
+  if (additionalSinks.length > 0) {
+    additionalSinks = [];
+    loggerCache = null;
+  }
+}
+
+/**
+ * Set the minimum log level for the search CLI logger.
+ *
+ * @remarks Invalidates the logger cache so existing lazy-bound proxies
+ * pick up the new level on their next call. Called once from the
+ * composition root (`oaksearch.ts`) after runtime config is loaded.
+ * Multiple calls are safe (matches the `registerAdditionalSink` /
+ * `clearAdditionalSinks` pattern).
+ *
+ * @param level - Validated log level (use `parseLogLevel` at the call
+ *   site to convert from env strings)
+ */
+export function configureLogLevel(level: LogLevel): void {
+  currentLevel = level;
+  loggerCache = null;
 }
 
 /** Creates a lazy-bound logger proxy for a given logger key. */

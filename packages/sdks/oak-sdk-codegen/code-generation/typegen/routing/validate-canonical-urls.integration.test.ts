@@ -359,4 +359,31 @@ describe('runSitemapValidation', () => {
       expect(result.error.kind).toBe('file_not_found');
     }
   });
+
+  it('does not validate programme listings when the reference contains no programme listing slugs', () => {
+    const eyfsProgrammeSlug = 'maths-foundation-early-years-foundation-stage-l';
+    const { refPath, cleanup } = createReferenceFixture({
+      teacherPaths: [
+        '/teachers/curriculum/english-secondary-ks4-foundation-l/units',
+        '/teachers/eyfs/maths',
+        `/teachers/programmes/${eyfsProgrammeSlug}/units/counting-and-cardinality/lessons`,
+      ],
+      programmeSlugs: [],
+      sequenceSlugs: ['english-secondary-ks4-foundation-l'],
+    });
+
+    try {
+      const result = runSitemapValidation(refPath);
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+
+      expect(result.value.programmeValidation.total).toBe(0);
+      expect(result.value.programmeValidation.invalidCount).toBe(0);
+      expect(result.value.programmeValidation.validCount).toBe(0);
+    } finally {
+      cleanup();
+    }
+  });
 });

@@ -122,7 +122,8 @@ for a newcomer. It must surface early, not deep in the architecture fold:
 - Add as item 0 in the governance README's "5-minute reading path" (before
   Development Practice) with framing: "What this project values and how it
   enforces those values."
-- Add to the quick-start guide's "ADR Start Here" section as a preamble.
+- Surface it from the root `README.md` Architecture section as a one-line
+  pointer, alongside the existing schema-first ADRs (029/030/031).
 - Do NOT add to `AGENT.md` directly — let agents discover it through
   progressive disclosure via governance or architecture.
 
@@ -134,7 +135,8 @@ for a newcomer. It must surface early, not deep in the architecture fold:
 4. Document references principles.md and links to relevant ADRs
 5. Architecture README links to the register
 6. Governance README 5-minute reading path links to the register as item 0
-7. Quick-start guide links to the register in the "ADR Start Here" section
+7. Root `README.md` Architecture section surfaces the register alongside the
+   schema-first ADRs (029/030/031)
 8. markdownlint passes
 
 **Deterministic Validation**:
@@ -303,8 +305,8 @@ only — this distinction is architecturally significant per Betty review).
 the single highest-value artefact for a newcomer's first 5 minutes. Placing it
 only in the architecture section means it is not reached until minute 15-20.
 
-- Embed or inline the C4 Level 1 context diagram in `docs/foundation/quick-start.md`
-  "Architecture TL;DR" section — this is the first visual a newcomer sees.
+- Embed or inline the C4 Level 1 context diagram in the root `README.md`
+  Architecture section — this is the first visual a newcomer sees.
 - Keep the Level 2 container diagram in `docs/architecture/README.md` for
   deeper exploration.
 
@@ -313,7 +315,7 @@ only in the architecture section means it is not reached until minute 15-20.
 1. Context diagram present in Mermaid format
 2. Container diagram present in Mermaid format
 3. Dependency arrows match the layer topology in AGENT.md §Structure
-4. Level 1 context diagram embedded in `docs/foundation/quick-start.md`
+4. Level 1 context diagram embedded in the root `README.md` Architecture section
 5. Level 2 container diagram in architecture README "Start Here" section
 5. markdownlint passes
 

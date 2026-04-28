@@ -1,5 +1,7 @@
 # Invoke Sentry Reviewer
 
+Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md) and [ADR-143 (Coherent Structured Fan-Out for Sentry and OpenTelemetry)](../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md).
+
 When changes touch Sentry-specific or OpenTelemetry-observability-specific
 concerns, invoke the `sentry-reviewer` specialist in addition to the standard
 `code-reviewer` gateway.
@@ -16,8 +18,7 @@ Invoke `sentry-reviewer` when the change involves:
 - shared telemetry redaction used for forwarded events or transactions
 - Sentry MCP wrapping, MCP Insights, or capture-policy changes
 - release resolution, source-map wiring, or Sentry alerting/evidence flows
-- `@oaknational/observability`, `@oaknational/sentry-node`, or
-  `@oaknational/sentry-mcp`
+- `@oaknational/observability` or `@oaknational/sentry-node`
 
 ## Non-Goals
 
@@ -41,6 +42,6 @@ Do not invoke `sentry-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer
 catalogue and invocation policy. The `sentry-reviewer` canonical template is
 at `.agent/sub-agents/templates/sentry-reviewer.md`.

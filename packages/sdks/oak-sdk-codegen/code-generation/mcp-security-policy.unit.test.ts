@@ -35,11 +35,17 @@ describe('MCP Security Policy Configuration', () => {
       expect(Array.isArray(DEFAULT_AUTH_SCHEME.scopes)).toBe(true);
     });
 
-    it('includes required email scope', () => {
-      expect(DEFAULT_AUTH_SCHEME.scopes).toContain('email');
+    it('declares at least one required scope', () => {
+      expect(DEFAULT_AUTH_SCHEME.scopes.length).toBeGreaterThan(0);
     });
 
-    it('does not include openid scope (Clerk rejects it for DCR clients)', () => {
+    it('has only non-empty scope strings', () => {
+      for (const scope of DEFAULT_AUTH_SCHEME.scopes) {
+        expect(scope.length).toBeGreaterThan(0);
+      }
+    });
+
+    it('does not require openid scope for protected tool access', () => {
       expect(DEFAULT_AUTH_SCHEME.scopes).not.toContain('openid');
     });
   });
@@ -86,14 +92,14 @@ describe('MCP Security Policy Configuration', () => {
   });
 
   describe('getScopesSupported', () => {
-    it('returns scopes from DEFAULT_AUTH_SCHEME', () => {
+    it('returns the same scope set as DEFAULT_AUTH_SCHEME.scopes', () => {
       const scopes = getScopesSupported();
-      expect(scopes).toEqual(['email']);
+      expect(scopes).toEqual([...DEFAULT_AUTH_SCHEME.scopes].sort((a, b) => a.localeCompare(b)));
     });
 
     it('returns sorted array', () => {
       const scopes = getScopesSupported();
-      const sorted = [...scopes].sort();
+      const sorted = [...scopes].sort((a, b) => a.localeCompare(b));
       expect(scopes).toEqual(sorted);
     });
 

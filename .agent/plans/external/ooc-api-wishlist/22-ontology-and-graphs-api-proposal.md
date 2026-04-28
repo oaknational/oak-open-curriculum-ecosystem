@@ -38,7 +38,7 @@ Move ontology, property graph, and derived graph data upstream to the Open Curri
 
 ### Query Parameters (All Graphs)
 
-```
+```text
 ?subject={subjectSlug}      — Filter by subject
 ?key_stage={ks1|ks2|ks3|ks4} — Filter by key stage
 ?version={semver}           — Request specific version
@@ -100,7 +100,7 @@ The `synonyms` section in `ontology-data.ts` conflates two different purposes:
 - **Official terminology** — What's the canonical name for this concept?
 - **Aliases** — What are alternative names humans might use?
 
-**Recommendation**: 
+**Recommendation**:
 
 - Remove synonyms from ontology (search app handles its own expansion)
 - Replace with a **glossary** structure:

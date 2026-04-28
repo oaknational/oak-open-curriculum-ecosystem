@@ -1,73 +1,70 @@
-/* eslint-disable no-restricted-properties, @typescript-eslint/no-restricted-types -- JC: vetted for these helpers */
-
 /**
- * Typed Object.* wrappers — the ONE place where Object method type-widening
- * is centralised. TypeScript deliberately returns broad types from Object.keys
- * (string[]), Object.values (any[]), Object.entries ([string, any][]) etc.
- * These wrappers restore the specific key and value types via a single, audited
- * assertion per method. The rest of the codebase MUST use these helpers instead
- * of calling Object.keys/values/entries/fromEntries/getOwnPropertyNames/
- * getOwnPropertySymbols directly.
+ * Typed own-key helpers.
+ *
+ * TypeScript intentionally widens `Object.keys`, `Object.values`, and
+ * `Object.entries`. These wrappers recover the caller's specific string-key
+ * and value types without relying on type assertions.
  */
 
-export function typeSafeKeys<T extends object>(obj: T): Extract<keyof T, string>[] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  return Object.keys(obj) as Extract<keyof T, string>[];
+type StringKeyOf<T> = Extract<keyof T, string>;
+type ValueOf<T> = T[StringKeyOf<T>];
+type EntryOf<T> = [StringKeyOf<T>, ValueOf<T>];
+
+function isOwnStringKey<T>(obj: T, key: string): key is StringKeyOf<T> {
+  return Object.hasOwn(Object(obj), key);
 }
 
-/** Typed values (Object.values) */
-export function typeSafeValues<T extends object>(obj: T): T[keyof T][] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  return Object.values(obj) as T[keyof T][];
+export function typeSafeKeys<T>(obj: T): StringKeyOf<T>[] {
+  const keys: StringKeyOf<T>[] = [];
+
+  for (const key in Object(obj)) {
+    if (isOwnStringKey(obj, key)) {
+      keys.push(key);
+    }
+  }
+
+  return keys;
 }
 
-/** Typed entries (Object.entries) */
-export function typeSafeEntries<T extends object>(
-  obj: T,
-): [Extract<keyof T, string>, T[Extract<keyof T, string>]][] {
-  type K = Extract<keyof T, string>;
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  return Object.entries(obj) as [K, T[K]][];
+/** Typed values for own enumerable string keys. */
+export function typeSafeValues<T>(obj: T): ValueOf<T>[] {
+  const values: ValueOf<T>[] = [];
+
+  for (const key of typeSafeKeys(obj)) {
+    values.push(obj[key]);
+  }
+
+  return values;
 }
 
-/** Typed fromEntries (Object.fromEntries) */
-export function typeSafeFromEntries<K extends PropertyKey, V>(
-  iter: Iterable<readonly [K, V]>,
-): Record<K, V> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  return Object.fromEntries(iter) as Record<K, V>;
+/** Typed entries for own enumerable string keys. */
+export function typeSafeEntries<T>(obj: T): EntryOf<T>[] {
+  const entries: EntryOf<T>[] = [];
+
+  for (const key of typeSafeKeys(obj)) {
+    const entry: EntryOf<T> = [key, obj[key]];
+    entries.push(entry);
+  }
+
+  return entries;
 }
 
 /** Typed value access (instead of Reflect.get) */
-export function typeSafeGet<T extends object, K extends keyof T>(obj: T, key: K): T[K] {
+export function typeSafeGet<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
 
 /** Typed set (instead of Reflect.set) */
-export function typeSafeSet<T extends object, K extends keyof T>(
-  obj: T,
-  key: K,
-  value: T[K],
-): void {
+export function typeSafeSet<T, K extends keyof T>(obj: T, key: K, value: T[K]): void {
   obj[key] = value;
 }
 
 /** Membership check (instead of Reflect.has) */
-export function typeSafeHas<T extends object>(obj: T, key: PropertyKey): key is keyof T {
-  return key in obj;
+export function typeSafeHas<T>(obj: T, key: PropertyKey): key is keyof T {
+  return key in Object(obj);
 }
 
 /** Own-key check (typed) */
-export function typeSafeHasOwn<T extends object>(obj: T, key: PropertyKey): key is keyof T {
-  return Object.hasOwn(obj, key);
-}
-
-/** All own keys (instead of Reflect.ownKeys) */
-export function typeSafeOwnKeys<T extends object>(obj: T): (keyof T)[] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  const names = Object.getOwnPropertyNames(obj) as Extract<keyof T, string>[];
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  const symbols = Object.getOwnPropertySymbols(obj) as Extract<keyof T, symbol>[];
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
-  return [...names, ...symbols] as (keyof T)[];
+export function typeSafeHasOwn<T>(obj: T, key: PropertyKey): key is keyof T {
+  return Object.hasOwn(Object(obj), key);
 }

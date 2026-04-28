@@ -1,0 +1,12 @@
+{
+  "event_id": "279e59fe-6206-4bb5-a81b-2ed3cf28906f",
+  "created_at": "2026-04-28T11:17:43Z",
+  "author": {
+    "agent_name": "Verdant Flowering Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Shared-state docs require queued writes",
+  "body": "Owner clarified that shared-state docs are read/write collaboration surfaces: agents should read current state, write needed handoff or lifecycle updates, and use transaction helpers plus the commit queue/git:index-head window to make overlap safe and visible. Active claims on shared-state docs are coordination signals, not no-write locks. Captured in distilled memory, napkin, and collaboration-state lifecycle docs."
+}

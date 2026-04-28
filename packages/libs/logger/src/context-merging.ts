@@ -2,8 +2,8 @@
  * Context merging utilities for logger metadata
  */
 
+import { sanitiseObject, sanitiseForJson } from '@oaknational/observability';
 import type { LogContext, LogContextInputValue } from './types.js';
-import { sanitiseObject, sanitiseForJson } from './json-sanitisation.js';
 
 /**
  * Merges base context with additional context

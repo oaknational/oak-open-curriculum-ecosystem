@@ -1,5 +1,7 @@
 # Invoke Design System Reviewer
 
+Operationalises [ADR-149 (Frontend Specialist Reviewer Gateway Cluster)](../../docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md), [ADR-148 (Design Token Architecture)](../../docs/architecture/architectural-decisions/148-design-token-architecture.md), and [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md).
+
 When changes touch design tokens, CSS custom properties, theming, or visual consistency patterns, invoke the `design-system-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions
@@ -37,4 +39,4 @@ Do not invoke `design-system-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `design-system-reviewer` canonical template is at `.agent/sub-agents/templates/design-system-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `design-system-reviewer` canonical template is at `.agent/sub-agents/templates/design-system-reviewer.md`.

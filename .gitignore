@@ -23,6 +23,8 @@ collaboration.txt
 # Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
 .cursor/settings.local.json
+# Cursor sessionStart hook: human-readable mirror (gitignored; not committed)
+.cursor/oak-composer-session.local.json
 .gemini/settings.local.json
 
 # Claude agent worktrees (transient, machine-local)
@@ -38,6 +40,9 @@ collaboration.txt
 **/*.d.ts
 **/*.d.ts.map
 
+# Hand-authored Vitest provided-context augmentation.
+!apps/oak-search-cli/vitest-provided-context.d.ts
+
 # File system artifacts
 .DS_Store
 
@@ -49,11 +54,22 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 .agent/reference-local/**/*
 !.agent/reference-local/.gitignore
 
+# Runtime tactical track cards are *tracked*, not gitignored: multi-agent
+# and multi-location collaboration on a track happens via git, the same
+# coordination channel the rest of the repo uses. Single-writer-per-card
+# still holds; multiple cards disambiguate multiple writers via the
+# <workstream>--<agent>--<branch>.md naming convention.
+# See .agent/memory/operational/tracks/README.md.
+
 # Logs
 *.log
 .logs/*
 !.logs/.gitignore
 logs/
+# Operational diagnostic traces (see
+# .agent/memory/operational/diagnostics/README.md) — tracked so
+# patterns are visible across sessions and machines.
+!.agent/memory/operational/diagnostics/*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

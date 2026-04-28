@@ -2,7 +2,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
-import { sanitiseForJson } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 import {
   withLifecycleLease,
   type AdminError,

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "escalation_id": "escalation-without-conversation-reference-red",
+  "status": "open",
+  "thread": "agentic-engineering-enhancements",
+  "originating_entry_id": "entry-001",
+  "title": "Escalation missing conversation reference",
+  "opened_at": "2026-04-26T18:25:00Z",
+  "opened_by": {
+    "agent_name": "Codex",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "unknown"
+  },
+  "owner_action_requested": "This fixture should fail schema validation.",
+  "reason": "Escalations must reference the conversation that will receive the durable decision."
+}

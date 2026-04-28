@@ -35,22 +35,27 @@ Real-world propagation between repositories revealed three problems:
 
 ## Decision
 
-### Five-File Package
+### Practice Core Package
 
-The Practice travels as a package of five files in
-`.agent/practice-core/`:
+The Practice travels as a package in `.agent/practice-core/`:
 
-| File                    | Audience | Role                                                                     |
-| ----------------------- | -------- | ------------------------------------------------------------------------ |
-| `practice.md`           | Agents   | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
-| `practice-lineage.md`   | Agents   | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
-| `practice-bootstrap.md` | Agents   | Blueprint: annotated templates for every artefact type (the **how**)     |
-| `README.md`             | Humans   | Entry point: context and 3-step hydration how-to                         |
-| `index.md`              | Agents   | Entry point: operational orientation, cold-start instructions            |
+| File                       | Audience | Role                                                                     |
+| -------------------------- | -------- | ------------------------------------------------------------------------ |
+| `practice.md`              | Agents   | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
+| `practice-lineage.md`      | Agents   | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
+| `practice-bootstrap.md`    | Agents   | Blueprint: annotated templates for every artefact type (the **how**)     |
+| `practice-verification.md` | Agents   | Verification checklist for hydration and operational fitness             |
+| `README.md`                | Humans   | Entry point: context and hydration how-to                                |
+| `index.md`                 | Agents   | Operational orientation and cold-start instructions                      |
+| `CHANGELOG.md`             | Both     | Evolution log for Practice Core changes                                  |
+| `provenance.yml`           | Both     | Per-file provenance chain                                                |
 
-The three trinity files carry YAML provenance frontmatter and evolve
-between repos. The two entry points provide orientation for the two
-audiences receiving the Practice. All five travel together.
+The package also requires `decision-records/`, `patterns/`, and
+`incoming/`. The three trinity files carry YAML provenance frontmatter
+and evolve between repos. Entry points orient the two audiences
+receiving the Practice; verification, changelog, provenance, and
+required directories make the package operational rather than merely
+descriptive.
 
 ### Self-Containment Rule
 
@@ -75,6 +80,9 @@ The practice-index carries navigable links to the local repo's:
 - **Architectural decisions** — ADRs referenced by `practice.md`
 - **Tools and workflows** — commands, skills, rules
 - **Artefact directories** — `.agent/`, `.cursor/`, `docs/`
+- **Live coordination state** — collaboration-state directories such as
+  shared logs, active claims, advisory commit queue, closed claim history,
+  decision threads, sidebars, joint decisions, and escalations
 
 The format is specified by `practice-bootstrap.md` with a template
 and required sections. The practice-index is NOT part of the
@@ -85,7 +93,7 @@ carries links to that repo's actual files.
 
 |                | Portable (travels)               | Local (stays)                  |
 | -------------- | -------------------------------- | ------------------------------ |
-| **Files**      | Five practice-core files         | `.agent/practice-index.md`     |
+| **Files**      | Practice Core package            | `.agent/practice-index.md`     |
 | **Links**      | Only to each other + the bridge  | To the repo's actual artefacts |
 | **Created by** | Origin repo or prior propagation | Hydration step 8               |
 
@@ -110,7 +118,7 @@ carries links to that repo's actual files.
 
 ### Negative
 
-- The travelling package is now five files instead of three,
+- The travelling package is larger than the original trinity,
   increasing the surface area for propagation
 - The practice-index is an additional file that must be created
   during hydration and kept in sync as the repo evolves
@@ -122,8 +130,8 @@ carries links to that repo's actual files.
 ### Neutral
 
 - The "plasmid trinity" name is preserved for the three core
-  blueprint files. The five-file package is called
-  "practice-core files."
+  blueprint files. The broader travelling package is called the
+  "Practice Core package."
 - Existing repos that adopted the trinity need to create a
   practice-index and may need to update practice-core links
   on their next consolidation pass

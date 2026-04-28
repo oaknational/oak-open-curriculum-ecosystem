@@ -1,0 +1,6 @@
+---
+description: Consolidate duplicated shapes when the third consumer appears.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/consolidate-at-third-consumer.md`.

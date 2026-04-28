@@ -18,10 +18,11 @@ function addRootLandingPage(
   dnsRebindingMw: RequestHandler,
   log: Logger,
   vercelHostname?: string,
+  appVersion?: string,
 ): void {
   app.get('/', dnsRebindingMw, (req, res) => {
     log.debug('landing.get', { path: req.path, method: req.method });
-    res.type('text/html').send(renderLandingPageHtml(vercelHostname));
+    res.type('text/html').send(renderLandingPageHtml(vercelHostname, appVersion));
   });
 }
 
@@ -41,7 +42,8 @@ export function mountStaticContentRoutes(
   dnsRebindingMw: RequestHandler,
   log: Logger,
   vercelHostname?: string,
+  appVersion?: string,
 ): void {
-  addRootLandingPage(app, dnsRebindingMw, log, vercelHostname);
+  addRootLandingPage(app, dnsRebindingMw, log, vercelHostname, appVersion);
   mountStaticAssets(app);
 }

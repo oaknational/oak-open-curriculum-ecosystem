@@ -76,11 +76,13 @@ await esClient.inference.put({
 ```
 
 **Pros**:
+
 - Handles multilingual content natively
 - Works well with paraphrase-heavy queries
 - Elastic-native (no external services)
 
 **Cons**:
+
 - Additional index storage
 - Inference latency
 
@@ -115,7 +117,7 @@ const mflBoosts = {
 
 Translate user queries to target language before search:
 
-```
+```text
 User: "French numbers 1-10"
 → LLM: "nombres français un à dix"
 → Search both English and French versions

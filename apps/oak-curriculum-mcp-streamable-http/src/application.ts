@@ -1,18 +1,10 @@
-import type { Express, RequestHandler } from 'express';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import type { RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
-
-import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import {
-  SERVER_INSTRUCTIONS,
-  createStubSearchRetrieval,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { mountAssetDownloadProxy } from './asset-download/asset-download-route.js';
+import type { ToolHandlerOverrides } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
-import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
+import { setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
@@ -23,49 +15,37 @@ import {
   initializeAppInstance,
   type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
+import {
+  setupErrorHandlers,
+  type SentryExpressErrorHandlerSetup,
+} from './app/bootstrap-error-handlers.js';
+import { createAppVersionHeaders } from './app/app-version-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
-import { addHealthEndpoints } from './app/health-endpoints.js';
-import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
-import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
-import type { McpServerFactory } from './mcp-request-context.js';
-import { OAK_SERVER_BRANDING } from './server-branding.js';
+import { createRateLimiters } from './rate-limiting/create-rate-limiters.js';
+import type { RateLimiterFactory } from './rate-limiting/index.js';
+import { initializeCoreEndpoints } from './app/core-endpoints.js';
+import { runOAuthAndAuthContextPhases } from './app/orchestration.js';
+import { registerDiagnosticRoutesIfEnabled } from './test-error/register-diagnostic-routes.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 export { loadRuntimeConfig } from './runtime-config.js';
-
 export interface CreateAppOptions {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
-  /**
-   * Returns the built widget HTML content for the MCP App resource.
-   *
-   * Production callers provide `() => WIDGET_HTML_CONTENT` using the committed
-   * codegen constant. Tests inject a trivial fake: `() => '<html>test</html>'`.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   * @see src/generated/widget-html-content.ts — Committed codegen constant
-   */
+  /** Returns built widget HTML for the MCP App resource. Prod: codegen constant; tests: trivial fake. (ADR-078) */
   readonly getWidgetHtml: () => string;
-  /**
-   * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
-   * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
-   * and uses this value directly. Required for tests; production callers
-   * omit this so the metadata is fetched at startup.
-   */
+  /** Upstream AS metadata for OAuth proxy; provided by tests, fetched at startup in prod. */
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
-  /**
-   * Factory for creating the global Clerk authentication middleware.
-   * When provided, replaces the hard import of `clerkMiddleware` from
-   * `@clerk/express`, enabling tests to inject a no-op middleware
-   * without `vi.mock`. Production callers omit this.
-   *
-   * @see ADR-078 for the dependency injection rationale
-   */
+  /** Factory for global Clerk middleware (tests inject no-op; prod omits). (ADR-078) */
   readonly clerkMiddlewareFactory?: () => RequestHandler;
+  /** Factory for per-IP rate-limit middleware (tests inject fake; prod omits). (ADR-078, ADR-158) */
+  readonly rateLimiterFactory?: RateLimiterFactory;
+  /** Sentry Express error-handler registration; live mode only, not fixture/off. (ADR-078) */
+  readonly setupSentryErrorHandler?: SentryExpressErrorHandlerSetup;
 }
 
 let appCounter = 0;
@@ -98,25 +78,46 @@ function setupPreAuthPhases(
   );
 }
 
-function setupPostAuthPhases(
-  app: ExpressWithAppId,
-  options: CreateAppOptions,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appId: number,
-  allowedHosts: readonly string[],
-  dnsRebindingMiddleware: RequestHandler,
-): void {
+function mountAppVersionHeader(app: ExpressWithAppId, appVersion: string): void {
+  app.use((_req, res, next) => {
+    res.set(createAppVersionHeaders(appVersion));
+    next();
+  });
+}
+
+interface SetupPostAuthPhasesDeps {
+  readonly app: ExpressWithAppId;
+  readonly options: CreateAppOptions;
+  readonly log: Logger;
+  readonly bootstrapTimer: PhasedTimer;
+  readonly appId: number;
+  readonly allowedHosts: readonly string[];
+  readonly dnsRebindingMiddleware: RequestHandler;
+  readonly mcpRateLimiter: RequestHandler;
+  readonly assetRateLimiter: RequestHandler;
+}
+
+function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
+  const { app, options, log, bootstrapTimer, appId, allowedHosts } = deps;
+  const { dnsRebindingMiddleware, mcpRateLimiter, assetRateLimiter } = deps;
+
   const { mcpFactory, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
     appId,
-    () => initializeCoreEndpoints(app, options, options.runtimeConfig, log, options.observability),
+    () => initializeCoreEndpoints(app, options, log, assetRateLimiter),
     options.observability,
   );
 
-  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, options.runtimeConfig.displayHostname);
+  mountAppVersionHeader(app, options.runtimeConfig.version);
+  mountStaticContentRoutes(
+    app,
+    dnsRebindingMiddleware,
+    log,
+    options.runtimeConfig.displayHostname,
+    options.runtimeConfig.version,
+  );
   app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
   runBootstrapPhase(
@@ -132,21 +133,38 @@ function setupPostAuthPhases(
         log,
         allowedHosts,
         options.observability,
+        mcpRateLimiter,
       );
     },
     options.observability,
   );
 }
 
-/**
- * Creates and configures an Express application instance for MCP over HTTP.
- * Middleware order: base → security → OAuth metadata → auth context → core → static → /mcp → auth routes.
- */
+function logBootstrapSummary(
+  app: ExpressWithAppId,
+  log: Logger,
+  appId: number,
+  bootstrapTimer: PhasedTimer,
+): void {
+  const routes = listRoutes(app);
+  logBootstrapComplete(log, appId, bootstrapTimer, routes.length);
+  logRegisteredRoutes(log, appId, routes);
+}
+
+/** Creates an Express MCP-over-HTTP app. See ADR-143 / ADR-160 for middleware order. */
+// observability-emission-exempt: orchestration wrapper; emissions live in nested helpers.
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
+
+  // VERCEL_ENV is set on Vercel (production|preview|development), absent
+  // elsewhere — see rate-limiter-factory.ts module TSDoc for why this
+  // gates trust of x-vercel-forwarded-for.
+  const isVercelRuntime = options.runtimeConfig.env.VERCEL_ENV !== undefined;
+  const { mcpRateLimiter, oauthRateLimiter, metadataRateLimiter, assetRateLimiter } =
+    createRateLimiters({ isVercelRuntime }, options.rateLimiterFactory);
 
   const { dnsRebindingMiddleware, allowedHosts } = setupPreAuthPhases(
     app,
@@ -156,29 +174,21 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
   );
 
-  await setupOAuthAndCaching(
+  await runOAuthAndAuthContextPhases({
     app,
-    options.runtimeConfig,
+    runtimeConfig: options.runtimeConfig,
+    observability: options.observability,
+    clerkMiddlewareFactory: options.clerkMiddlewareFactory,
+    upstreamMetadata: options.upstreamMetadata,
     log,
     bootstrapTimer,
     appId,
     allowedHosts,
-    options.observability,
-    options.upstreamMetadata,
-  );
+    oauthRateLimiter,
+    metadataRateLimiter,
+  });
 
-  runBootstrapPhase(
-    log,
-    bootstrapTimer,
-    'setupGlobalAuthContext',
-    appId,
-    () => {
-      setupGlobalAuthContext(app, options.runtimeConfig, log, options.clerkMiddlewareFactory);
-    },
-    options.observability,
-  );
-
-  setupPostAuthPhases(
+  setupPostAuthPhases({
     app,
     options,
     log,
@@ -186,64 +196,21 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
     allowedHosts,
     dnsRebindingMiddleware,
-  );
+    mcpRateLimiter,
+    assetRateLimiter,
+  });
 
-  const routes = listRoutes(app);
-  logBootstrapComplete(log, appId, bootstrapTimer, routes.length);
-  logRegisteredRoutes(log, appId, routes);
-
-  return app;
-}
-
-/** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
-function initializeCoreEndpoints(
-  app: Express,
-  options: CreateAppOptions,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  observability: HttpObservability,
-): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  const searchRetrieval = runtimeConfig.useStubTools
-    ? createStubSearchRetrieval()
-    : createSearchRetrieval(runtimeConfig.env, log);
-  const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
-  const assetBaseUrl = runtimeConfig.displayHostname
-    ? `https://${runtimeConfig.displayHostname}`
-    : new URL(resourceUrl).origin;
-  const createAssetDownloadUrl = mountAssetDownloadProxy(
+  registerDiagnosticRoutesIfEnabled({
     app,
-    assetBaseUrl,
-    runtimeConfig.env.OAK_API_KEY,
+    env: options.runtimeConfig.env,
+    oauthRateLimiter,
+    observability: options.observability,
     log,
-    runtimeConfig.env.OAK_API_BASE_URL ?? 'https://open-api.thenational.academy/api/v0',
-    observability,
-  );
+  });
 
-  const handlerOptions = {
-    overrides: options?.toolHandlerOverrides,
-    runtimeConfig,
-    logger: log,
-    observability,
-    resourceUrl,
-    searchRetrieval,
-    createAssetDownloadUrl,
-    getWidgetHtml: options.getWidgetHtml,
-  };
+  // Error handlers registered AFTER all routes (Sentry docs).
+  setupErrorHandlers(app, log, options.observability, options.setupSentryErrorHandler);
 
-  log.debug('bootstrap.mcp.factory.created');
-
-  // Factory creates a fresh McpServer + transport per request
-  const mcpFactory: McpServerFactory = () => {
-    const server = new McpServer(
-      { name: 'oak-curriculum-http', version: '0.1.0', ...OAK_SERVER_BRANDING },
-      { instructions: SERVER_INSTRUCTIONS },
-    );
-    registerHandlers(server, handlerOptions);
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-    return { server, transport };
-  };
-
-  addHealthEndpoints(app, log);
-
-  return { mcpFactory, ready: Promise.resolve() };
+  logBootstrapSummary(app, log, appId, bootstrapTimer);
+  return app;
 }

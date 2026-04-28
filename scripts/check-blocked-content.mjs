@@ -49,20 +49,21 @@ function resolveInput(hookInput) {
 }
 
 /**
- * Extract new and prior content from a Claude Edit or Write tool payload.
+ * Extract incoming content and prior-content references from a Claude Edit or
+ * Write tool payload.
  *
  * For Edit: `new_string` is the incoming content; `old_string` is the prior.
- * For Write: `content` is the incoming content; the existing file is the prior
- * (read via `file_path`).
+ * For Write: `content` is the incoming content; `file_path` is returned as an
+ * optional prior-content reference. The extraction step never reads the file.
  *
  * The hook blocks patterns that are being ADDED — present in the new content
  * but absent from the prior content. This allows edits that preserve an
  * already-present pattern without blocking.
  *
  * @param {unknown} hookInput
- * @returns {{ newContent: string, priorContent: string }}
+ * @returns {{ newContent: string, priorContent: string, priorFilePath?: string }}
  */
-export function extractContentPair(hookInput) {
+export function extractContentChange(hookInput) {
   const input = resolveInput(hookInput);
 
   // Edit tool: new_string vs old_string
@@ -74,19 +75,31 @@ export function extractContentPair(hookInput) {
 
   // Write tool: content vs existing file
   if ('content' in input && typeof input.content === 'string') {
-    let prior = '';
     if ('file_path' in input && typeof input.file_path === 'string') {
-      try {
-        prior = readFileSync(input.file_path, 'utf8');
-      } catch {
-        // File does not exist yet — prior is empty, so any pattern in content is new
-        prior = '';
-      }
+      return { newContent: input.content, priorContent: '', priorFilePath: input.file_path };
     }
-    return { newContent: input.content, priorContent: prior };
+    return { newContent: input.content, priorContent: '' };
   }
 
   throw new Error('Claude PreToolUse hook input did not include writable content.');
+}
+
+/**
+ * Resolve final new/prior content using an injected prior-content reader.
+ *
+ * @param {{ newContent: string, priorContent: string, priorFilePath?: string }} change
+ * @param {(path: string) => string | null} readPriorContent
+ * @returns {{ newContent: string, priorContent: string }}
+ */
+export function resolveContentPair(change, readPriorContent) {
+  if (change.priorFilePath === undefined) {
+    return { newContent: change.newContent, priorContent: change.priorContent };
+  }
+
+  return {
+    newContent: change.newContent,
+    priorContent: readPriorContent(change.priorFilePath) ?? '',
+  };
 }
 
 /**
@@ -135,15 +148,12 @@ export function buildPreToolUseDenyResponse(blockedPattern) {
 }
 
 /**
- * Load blocked content patterns from the canonical hook policy.
+ * Parse blocked content patterns from already-loaded policy data.
  *
- * @param {URL} policyUrl
- * @returns {Promise<string[]>}
+ * @param {unknown} policy
+ * @returns {string[]}
  */
-export async function loadBlockedContentPatterns(policyUrl = POLICY_URL) {
-  const policyText = await fs.readFile(policyUrl, 'utf8');
-  const policy = JSON.parse(policyText);
-
+export function parseBlockedContentPolicy(policy) {
   if (
     policy === null ||
     typeof policy !== 'object' ||
@@ -163,6 +173,32 @@ export async function loadBlockedContentPatterns(policyUrl = POLICY_URL) {
   }
 
   return policy.hooks.preToolUseContent.blocked_patterns;
+}
+
+/**
+ * Load blocked content patterns from the canonical hook policy.
+ *
+ * @param {URL} policyUrl
+ * @returns {Promise<string[]>}
+ */
+export async function loadBlockedContentPatterns(policyUrl = POLICY_URL) {
+  const policyText = await fs.readFile(policyUrl, 'utf8');
+  const policy = JSON.parse(policyText);
+  return parseBlockedContentPolicy(policy);
+}
+
+/**
+ * Read prior file content for the real hook adapter.
+ *
+ * @param {string} path
+ * @returns {string | null}
+ */
+function readPriorFileContent(path) {
+  try {
+    return readFileSync(path, 'utf8');
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -189,6 +225,8 @@ export async function readStreamText(stdin) {
  *   stdout?: { write: (text: string) => void },
  *   stderr?: { write: (text: string) => void },
  *   policyUrl?: URL,
+ *   blockedPatterns?: readonly string[],
+ *   readPriorContent?: (path: string) => string | null,
  * }} options
  * @returns {Promise<{ exitCode: number }>}
  */
@@ -198,14 +236,19 @@ export async function runPreToolUseContentGuard(options = {}) {
     stdout = process.stdout,
     stderr = process.stderr,
     policyUrl = POLICY_URL,
+    blockedPatterns,
+    readPriorContent = readPriorFileContent,
   } = options;
 
   try {
     const inputText = await readStreamText(stdin);
     const hookInput = parseHookInput(inputText);
-    const { newContent, priorContent } = extractContentPair(hookInput);
-    const blockedPatterns = await loadBlockedContentPatterns(policyUrl);
-    const blockedPattern = findAddedBlockedContent(newContent, priorContent, blockedPatterns);
+    const { newContent, priorContent } = resolveContentPair(
+      extractContentChange(hookInput),
+      readPriorContent,
+    );
+    const patterns = blockedPatterns ?? (await loadBlockedContentPatterns(policyUrl));
+    const blockedPattern = findAddedBlockedContent(newContent, priorContent, patterns);
 
     if (blockedPattern !== null) {
       stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedPattern))}\n`);

@@ -69,7 +69,7 @@ It represented not just technical correctness, but the alignment of multiple per
 
 1. **Generation-time vs Runtime**: The clear separation between what happens at build time (extraction, generation) and runtime (validation, execution) is crucial for type safety and performance.
 
-2. **Collaboration Through Documentation**: The collaboration.md file enabled asynchronous, multi-agent coordination that would be impossible through traditional means.
+2. **Collaboration Through Documentation**: The user-collaboration.md file (then named collaboration.md, renamed in WS0 of the multi-agent collaboration protocol) enabled asynchronous, multi-agent coordination that would be impossible through traditional means.
 
 3. **Incremental Perfection**: Each phase built upon the previous, with continuous quality gates ensuring we never regressed.
 

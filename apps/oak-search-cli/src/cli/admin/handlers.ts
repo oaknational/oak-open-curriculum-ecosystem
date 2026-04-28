@@ -19,6 +19,7 @@ import type {
   IndexInfo,
   SynonymsResult,
 } from '@oaknational/oak-search-sdk/admin';
+import { adminLogger } from '../../lib/logger';
 
 /**
  * Combined status result for the `admin status` command.
@@ -40,6 +41,7 @@ interface StatusResult {
  * @returns `ok` with setup result, or `err` with an `AdminError`
  */
 export async function handleSetup(admin: AdminService): Promise<Result<SetupResult, AdminError>> {
+  adminLogger.debug('Handling admin setup command', { capability: 'admin_setup' });
   return admin.setup();
 }
 
@@ -50,6 +52,7 @@ export async function handleSetup(admin: AdminService): Promise<Result<SetupResu
  * @returns `ok` with setup result, or `err` with an `AdminError`
  */
 export async function handleReset(admin: AdminService): Promise<Result<SetupResult, AdminError>> {
+  adminLogger.debug('Handling admin reset command', { capability: 'admin_reset' });
   return admin.reset();
 }
 
@@ -62,6 +65,7 @@ export async function handleReset(admin: AdminService): Promise<Result<SetupResu
  * @returns `ok` with connection status and index list, or `err` with an `AdminError`
  */
 export async function handleStatus(admin: AdminService): Promise<Result<StatusResult, AdminError>> {
+  adminLogger.debug('Handling admin status command', { capability: 'admin_status' });
   const [connectionResult, indexesResult] = await Promise.all([
     admin.verifyConnection(),
     admin.listIndexes(),
@@ -84,6 +88,7 @@ export async function handleStatus(admin: AdminService): Promise<Result<StatusRe
 export async function handleSynonyms(
   admin: AdminService,
 ): Promise<Result<SynonymsResult, AdminError>> {
+  adminLogger.debug('Handling admin synonyms command', { capability: 'admin_synonyms' });
   return admin.updateSynonyms();
 }
 
@@ -96,6 +101,7 @@ export async function handleSynonyms(
 export async function handleGetMeta(
   admin: AdminService,
 ): Promise<Result<IndexMetaDoc | null, AdminError>> {
+  adminLogger.debug('Handling admin get-meta command', { capability: 'admin_get_meta' });
   return admin.getIndexMeta();
 }
 
@@ -110,5 +116,6 @@ export async function handleSetMeta(
   admin: AdminService,
   meta: IndexMetaDoc,
 ): Promise<Result<void, AdminError>> {
+  adminLogger.debug('Handling admin set-meta command', { capability: 'admin_set_meta' });
   return admin.setIndexMeta(meta);
 }

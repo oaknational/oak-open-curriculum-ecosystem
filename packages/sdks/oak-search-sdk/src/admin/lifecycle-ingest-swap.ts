@@ -30,6 +30,10 @@ export async function swapAndCommit(
   subjectFilter: readonly string[] | undefined,
   startTime: number,
 ): Promise<Result<void, AdminError>> {
+  deps.logger?.info('Starting ingest alias swap and metadata commit', {
+    version,
+    previousVersion,
+  });
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return aliasResult;

@@ -2,7 +2,7 @@
 name: napkin
 classification: passive
 description: >-
-  Maintain a per-repo napkin file at .agent/memory/napkin.md that tracks
+  Maintain a per-repo napkin file at .agent/memory/active/napkin.md that tracks
   mistakes, corrections, surprises, and what works. Always active, every
   session, unconditionally. Read distilled.md and napkin.md before doing
   anything. Write to the napkin continuously as you work. Log your own
@@ -21,14 +21,14 @@ update it continuously as you work.
 
 First thing, every session — read both files before doing anything:
 
-1. **`.agent/memory/distilled.md`** — Curated rules, patterns,
+1. **`.agent/memory/active/distilled.md`** — Curated rules, patterns,
    and troubleshooting. This is the high-signal reference.
    Internalise and apply silently.
-2. **`.agent/memory/napkin.md`** — Recent session log. Scan for
+2. **`.agent/memory/active/napkin.md`** — Recent session log. Scan for
    context from the most recent sessions.
 
 If neither file exists, create `napkin.md` at
-`.agent/memory/napkin.md` with a session heading and start
+`.agent/memory/active/napkin.md` with a session heading and start
 logging. The distillation rotation in the
 [consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.
@@ -61,6 +61,11 @@ next session:
   differently.
 - **Tool/environment surprises**: things about this repo, its
   tooling, or its patterns that you did not expect.
+- **Practice/tooling feedback**: frustrations, friction, surprises,
+  insights, ideas, wishlist items, or general impressions from using the
+  Practice or a host-local tool that implements a Practice capability. In
+  this repo that includes `agent-tools`; in other repos it includes the
+  equivalent local implementation surface.
 - **Positive surprises**: cases where a simpler or stronger approach
   worked better than expected.
 - **Preferences**: how the user likes things done.
@@ -82,11 +87,39 @@ When something surprises you, capture it with this shape:
 - **Actual**: what actually happened
 - **Why expectation failed**: what was wrong or incomplete in the mental model
 - **Behaviour change**: what you should do differently next time
+- **Source plane**: `active` | `operational` | `executive` (optional — see
+  Cross-Plane Origin Tag below)
 ```
 
 Use this for both negative and positive surprise. If a surprise keeps
 reappearing, it is a candidate for `distilled.md`, a reusable pattern, a
 governance update, or an ADR.
+
+### Cross-Plane Origin Tag (optional)
+
+`Source plane: <plane>` is an optional origin tag naming the memory plane
+whose content the observation is *about* (per the three-plane taxonomy in
+[`.agent/directives/orientation.md`](../../../directives/orientation.md#layers)
+and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md)).
+
+- **`Source plane: executive`** — the observation is about an
+  executive-memory surface (artefact inventory, reviewer catalogue, adapter
+  matrix, surface matrix, stable canonical paths). Routes through the
+  executive-memory feedback loop defined in
+  [PDR-028](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md).
+  See [`.agent/rules/executive-memory-drift-capture.md`](../../../rules/executive-memory-drift-capture.md)
+  for when the tag is required.
+- **`Source plane: operational`** — the observation is about continuity
+  state (thread next-session records, track cards, repo-continuity
+  contract). Routes through `/session-handoff` refresh of the affected
+  surface.
+- **`Source plane: active`** — default when the observation is about
+  learning-loop content (other napkin entries, distilled, patterns). Can be
+  omitted as the napkin is itself an active-plane surface.
+
+The origin tag is consumed at `/jc-consolidate-docs` step 5 cross-plane
+scan; it does not mutate anything at capture time. Omit the field when the
+observation is purely active-plane.
 
 ## Napkin Structure
 

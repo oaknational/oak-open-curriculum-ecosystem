@@ -1,0 +1,6 @@
+---
+description: Every fenced markdown code block must declare a language; default to `text`.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/markdown-code-blocks-must-have-language.md`.

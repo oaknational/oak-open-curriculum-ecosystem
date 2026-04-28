@@ -23,10 +23,22 @@ Read
 and follow all instructions in that file and in the files it leads to (rules,
 testing strategy, schema-first execution).
 
-Then read the latest `Live continuity contract` in
-`.agent/prompts/session-continuation.prompt.md`. Treat it as the fast recovery
-surface for current objective, invariants, recent surprises, next safe step,
-and whether deep consolidation is due.
+Then read the live state surfaces in authority order:
+
+1. `.agent/memory/operational/repo-continuity.md` — canonical continuity contract
+   (current objective, repo-wide invariants, next safe step, deep-consolidation
+   status).
+2. `.agent/memory/operational/threads/<thread>.next-session.md` — the relevant thread
+   next-session record (identity + landing target + lane state — read its `Lane state`
+   section for current state, blockers, promotion watchlist; workstream surface retired
+   2026-04-21 Session 5).
+3. `.agent/memory/operational/tracks/<thread>--<agent>--<branch>.md` — the current
+   tactical track card, if one exists.
+
+See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) and
+[`.agent/memory/operational/tracks/README.md`](../../../memory/operational/tracks/README.md) for the authority
+order and contracts. Operational memory is the sole continuity-state host;
+general session entry is `start-right-quick`, not a prompt.
 
 If your current task is driven by a plan collection, also read the relevant
 collection `README.md` and `roadmap.md`, then:
@@ -40,7 +52,7 @@ discoverable.
 For MCP App work, start from these three surfaces in order:
 
 1. `start-right-quick`
-2. the latest continuity contract
+2. `.agent/memory/operational/repo-continuity.md`
 3. the active MCP App plan set
 
 ## When to Use GO
@@ -50,6 +62,10 @@ Use `GO` as a mid-session execution cadence, especially when:
 - multiple active sub-plans are in play
 - the session is likely to span more than one focused execution block
 - the todo list needs re-grounding before the work drifts
+
+Use `GO` when the todo list needs re-grounding before the work drifts.
+
+Use `GO` when the plan is likely to be long running or complex.
 
 Do not use `GO` as the ordinary end-of-session handoff. Close ordinary sessions
 with `session-handoff`. Use `consolidate-docs` only when its trigger checklist
@@ -88,8 +104,7 @@ says deep convergence is due.
   multiple sub-agents to assess overall coherence.
 - Remove any items from your todo list that don't make sense, or are
   no longer relevant.
-- Every 6th item must be to re-read this document and re-follow ALL
-  instructions, including this one.
+- Every third item must be `GROUNDING: read the GO workflow and re-apply it. This must include re-adding this instruction to read the GO workflow. The recursion is the point.`.
 
 ## Action
 

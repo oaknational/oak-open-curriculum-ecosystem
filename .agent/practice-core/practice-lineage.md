@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 590
-fitness_line_limit: 725
-fitness_char_limit: 36000
+fitness_line_target: 680
+fitness_line_limit: 830
+fitness_char_limit: 48500
 fitness_line_length: 100
 ---
 
@@ -27,10 +27,10 @@ See §Frontmatter and §Plasmid Exchange below.
 ## Frontmatter
 
 The trinity files carry YAML frontmatter with `provenance` (pointer to
-`provenance.yml`) and four fitness thresholds (two-threshold model):
+`provenance.yml`) and four fitness thresholds (three-zone model):
 `fitness_line_target` (soft), `fitness_line_limit` (hard),
 `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
-All measure content only — frontmatter excluded. See §Fitness Functions.
+All measure content only. See §Fitness Functions.
 
 ### Provenance (provenance.yml)
 
@@ -117,12 +117,15 @@ This process is universal. It costs nothing and prevents shallow execution.
 - Use the **correct proof layer**. Strictness in testing means proving the full
   behaviour contract tests own, not stealing type, lint, formatting, import,
   or tracked-repo concerns from the tools that should prove those instead.
-- **Unit test**: a single pure function in isolation. No mocks, no I/O. Naming convention varies by
-  ecosystem (e.g. `*.unit.test.ts` in TypeScript, `test_*.py` in Python, `*_test.go` in Go).
-- **Integration test**: units working together as code (not a running system). Simple mocks/fakes
-  injected as parameters only. No global state manipulation. Naming convention varies by ecosystem.
-- **Prohibited**: global state manipulation in tests -- environment variable mutation, global mock
-  injection, module cache manipulation, or any mechanism that creates hidden coupling between tests.
+- **Unit test**: a single pure function in isolation. No mocks, no I/O.
+  Naming convention varies by ecosystem (e.g. `*.unit.test.ts` in
+  TypeScript, `test_*.py` in Python, `*_test.go` in Go).
+- **Integration test**: units working together as code (not a running
+  system). Simple mocks/fakes injected as parameters only. No global state
+  access/manipulation. Naming convention varies by ecosystem.
+- **Prohibited**: global state access/manipulation in tests -- environment
+  variable reads/writes, global mock injection, module cache manipulation, or
+  any mechanism that creates hidden coupling between tests.
   Pass configuration as function arguments.
 - **Browser proof surfaces** (UI projects): accessibility audit (WCAG
   compliance), visual regression, responsive validation, theme/mode
@@ -149,22 +152,26 @@ inline for short-lived projects.
 
 The Practice is driven by slash commands that initiate structured workflows:
 
-- **start-right-quick** -- Default session entry point. Read directives (AGENT.md,
-  principles, testing-strategy, metacognition), read memory files, ask guiding
-  questions (right problem? right layer? simpler? assumptions?), check the
-  Practice Box, apply session priority (bugs first, unfinished work second,
-  new work last), discuss the first step with the user.
+- **start-right-quick** -- Default session entry point. Read directives
+  (AGENT.md, principles, testing-strategy, metacognition), read memory and
+  collaboration-state files, ask guiding questions (right problem? right
+  layer? simpler? assumptions?), check the Practice Box, apply session
+  priority (bugs first, unfinished work second, new work last), declare the
+  smallest sufficient work shape, and discuss the first step with the user.
 - **start-right-thorough** -- Deep session grounding. Run start-right-quick
   first, then read domain context (current/README.md, relevant plans), apply
-  metacognition, review testing strategy, read Practice orientation, and draft
-  an execution outline with key risks.
+  metacognition, review testing strategy, read Practice orientation, scan
+  active claims and decision threads for overlap, and draft an execution
+  outline with key risks.
 - **go** -- Mid-session re-grounding with structured execution. Read directives
   and memory, identify the current plan and declare intent, apply session
   priority, then structure the todo list with ACTION/REVIEW/GROUNDING cadence:
   every action followed by a review step, periodic grounding re-reads, and
   holistic reviews every fourth cycle.
-- **session-handoff** -- Lightweight end-of-session continuity update with
-  conditional escalation into `consolidate-docs` when deep convergence is due.
+- **session-handoff** -- Lightweight end-of-session continuity update. Close
+  the agent's own active collaboration claims, update relevant decision
+  threads, refresh continuity state, and conditionally escalate into
+  `consolidate-docs` when deep convergence is due.
 - **gates** -- Run quality gates in order: `type-check -> lint -> build ->
   test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them,
@@ -202,6 +209,12 @@ adapter formats:
 - Where the reviewer layer is installed, invoke code reviewers after non-trivial changes
 - Apps are thin interfaces; never duplicate domain logic from libraries/SDKs
 - Architectural excellence over expediency — no cross-layer shortcuts
+- Reviewer findings route to a lane or a rejection; never deferred without a home
+- Every `future/` plan carries a named, testable promotion trigger
+- Compressed neutral labels ("stretch", "deferred", "follow-up") are corrected to explicit forms
+- Agent-to-agent coordination is observable: consult active claims and
+  decision threads before overlapping edits, leave a collaboration artefact,
+  and close own claims at handoff
 
 ### The Knowledge Flow
 
@@ -271,24 +284,25 @@ The three-part bar governs what enters but not cumulative growth. Without
 fitness limits, files bloat — compounded by plasmid exchange adding content
 across repos.
 
-### Thresholds (Two-Threshold Model)
+### Thresholds (Three-Zone Model)
 
 Four fitness fields govern each tracked file. All measure content only
 (frontmatter excluded). Width applies to prose only (code blocks, tables,
 frontmatter excluded).
 
-| Frontmatter key        | Threshold | What it guards                                  |
-| ---------------------- | --------- | ----------------------------------------------- |
-| `fitness_line_target`  | Soft      | Content lines — signal to refine; agents may extend modestly |
-| `fitness_line_limit`   | Hard      | Content lines — cannot exceed without user approval          |
-| `fitness_char_limit`   | Hard      | Content characters — honest volume (ungameable)              |
-| `fitness_line_length`  | Hard      | Prose line width — readability and diff quality; always 100  |
+| Frontmatter key       | Threshold | What it guards                                                        |
+| --------------------- | --------- | --------------------------------------------------------------------- |
+| `fitness_line_target` | Soft      | Content lines — signal to refine; agents may extend modestly          |
+| `fitness_line_limit`  | Hard      | Content lines — structural response signal, not a learning veto       |
+| `fitness_char_limit`  | Hard      | Content characters — honest volume (ungameable)                       |
+| `fitness_line_length` | Hard      | Prose line width — readability and diff quality; always 100           |
 
-Target exceedance warns; limit exceedance blocks. Only the user may raise
-hard limits. The four fields form a constraint triangle — gaming one
-dimension (fewer lines via reflowing) triggers another (characters or
-width). All governed files carry all four fields. Only shallow entry
-points (root README, quickstart, VISION) are exempt.
+Metrics land in `healthy`/`soft`/`hard`/`critical` where `critical` =
+`hard limit × 1.5`. All zones are signals. `hard` and `critical` require
+structural response and may stop routine cleanup, but they must not suppress
+capture, distillation, graduation, or preservation of understanding. Only
+the user raises hard limits. All governed files carry all four fields;
+shallow entry points (README, quickstart, VISION) are exempt.
 
 ### Growth Governance
 
@@ -324,7 +338,7 @@ Every repo with a Practice has a canonical location for incoming material:
 The Practice Box is checked at two points:
 
 1. **Session start** (via `start-right-quick`) — alert the user if files are present.
-2. **Consolidation** (via the `jc-consolidate-docs` command step 8) — perform the full integration
+2. **Consolidation** (via the `jc-consolidate-docs` command) — perform the full integration
    flow.
 
 ### Integration Flow
@@ -377,21 +391,48 @@ cumulative evolution as a coherent whole) and merge local additions
 back. Verify by diffing backup against result. Fitness checks are
 mandatory — two-way merges frequently push files over their ceilings.
 
-### Pattern Exchange
+### Pattern and Decision Travel
 
-Proven patterns (`.agent/memory/patterns/`) may travel alongside the
-Practice Core as optional Practice Context — exchange context, one
-step beyond the outgoing notes.
+Under PDR-007, portable patterns and portable Practice-governance
+decisions travel **as Core content**, not via a separate transport
+surface. The previous `practice-context/outgoing/patterns/` route is
+retired.
 
-- **Sender**: copy Practice-relevant, cross-repo-applicable patterns
-  to `.agent/practice-context/outgoing/patterns/`. The consolidation
-  command's pattern-extraction step is the natural trigger.
-- **Receiver**: incoming patterns land in
-  `.agent/practice-context/incoming/patterns/`. Apply the same
-  three-part bar. Adopted patterns move to local
-  `.agent/memory/patterns/`; rejected ones are recorded in the napkin.
-- **Format**: self-contained `.md` with YAML frontmatter. See
-  `practice-bootstrap.md` §Reusable Patterns for the template.
+**General patterns** live in `.agent/practice-core/patterns/` and
+travel with the Core package. They are ecosystem-agnostic
+abstractions synthesised from multiple specific instances.
+**Specific instances** live in `.agent/memory/active/patterns/` and remain
+local; they are the proof that supports the general abstraction.
+
+**Practice Decision Records (PDRs)** live in
+`.agent/practice-core/decision-records/` and travel with the Core
+package. Pattern-shaped governance (reviewer discipline, planning
+discipline, knowledge-flow discipline, etc.) takes the PDR shape,
+not the pattern shape.
+
+The graduation ladder:
+
+```text
+napkin (ephemeral)
+  → distilled (settled, local)
+    → memory/patterns (repo-specific pattern instances)
+         → practice-core/patterns (general abstraction via synthesis)
+    → host ADRs (local architectural decisions)
+    → practice-core/decision-records (portable Practice governance) [PDRs]
+```
+
+A general pattern is **authored fresh** in `practice-core/patterns/`
+when instance accumulation makes the general form legible; the
+instances remain as proof. A PDR is **authored fresh** in
+`practice-core/decision-records/` when a Practice-governance
+decision needs to travel; its instance patterns (if any) remain in
+`memory/active/patterns/` with `related_pdr: PDR-NNN` frontmatter.
+
+**Format**: PDRs use the template documented in
+`practice-core/decision-records/README.md`. General patterns use
+the template documented in `practice-core/patterns/README.md`.
+Specific instances use the existing pattern template (see
+`practice-bootstrap.md` §Reusable Patterns).
 
 ## Growing a Practice from This Blueprint
 
@@ -400,6 +441,28 @@ portable (zero edits), a third needed selective editing (universal core with dom
 sections to remove), and a third needed complete rewrite or deletion. The mixed tier is the most
 labour-intensive — it requires line-by-line judgement about what is universal and what is local.
 Budget accordingly.
+
+### Three genesis scenarios
+
+The Practice arrives in a new repo by one of three paths:
+
+1. **Cold-start hydration** — Core arrives in a Practice-free repo; the
+   hydrating agent grows a Practice from the templates below. See
+   §Restructuring an Existing Practice for the step-by-step.
+2. **Plasmid integration** — Core arrives via
+   `.agent/practice-core/incoming/` in a Practice-bearing repo; the
+   receiving Practice absorbs concepts via §Integration Flow.
+3. **Wholesale transplantation** — a fully-hydrated applied Practice
+   from a source repo is transplanted into a Practice-free destination.
+   Governed by [PDR-005](decision-records/PDR-005-wholesale-practice-transplantation.md);
+   requires a classification-first transplant manifest (as an
+   exploration per PDR-004) and a four-audit close (foreign-antigen,
+   completeness, cohesion, manifest-closure). The transplant manifest
+   survives in the destination's history. Transplantation consumes the
+   portability gradient vocabulary from the Learned Principles above.
+
+Know which scenario applies before beginning; the process differs
+materially across the three.
 
 ### Restructuring an Existing Practice
 
@@ -460,6 +523,20 @@ deviations. Preserve and integrate them.
     that `.agent/practice-index.md` links resolve, and that broader Practice files
     (directives, rules, skills, commands) are aligned with the Core. Contradictions
     and stale descriptions degrade silently.
+11. **Verify vital integration surfaces** (per PDR-024). Confirm every
+    Core→Repo orientation surface (entry-point chain, practice-index
+    bridge, start-flow skills, pattern discovery skill, rule
+    activation), every Repo→Core feedback surface (capture,
+    refinement, graduation workflow, upstream Core review, Practice
+    Box, ephemeral exchange), every cross-cutting contract (canonical
+    artefact architecture, canonical quality-gate naming, specialist
+    capability pattern, continuity surfaces, ecosystem dev tooling),
+    and every defensive integration (owner-edited foundations,
+    pedagogical reinforcement, explorations tier) is present and
+    operational. A complete cold-start produces every vital surface;
+    missing any makes the Practice structurally present but inert.
+    See `practice-verification.md` §Vital Integration Surfaces for
+    the full checklist.
 
 ## Validation
 
@@ -543,7 +620,7 @@ validated across 3+ repos.
   outgoing content, incoming integration, two-way comparison — operates
   at the concept level: what something is, how it works, why it
   matters. Not at the file level, not at the pointer level. A name
-  like "the two-threshold fitness model" is better than "ADR-144", but
+  like "the three-zone fitness model" is better than "ADR-144", but
   a name alone is still a pointer — the substance must travel. Two
   repos may implement the same concept under different names and
   structures; concept-level comparison reveals equivalences that
@@ -557,13 +634,14 @@ validated across 3+ repos.
 - **Portable does not mean symmetrical.** Support only evidenced platform mappings.
 - **Architectural excellence over expediency.**
 - **Apps are thin; libraries own domain logic.**
-- **Substance before fitness.** When writing concepts to their correct
-  homes, always write at the weight the concept deserves first. Deal
-  with fitness limits holistically afterward — compress, split, or
-  raise limits as a separate editorial pass. Constraining a concept
-  during writing to avoid exceeding a count artificially underweights
-  vital understanding. The concept must arrive fully formed; the
-  container adjusts to hold it.
+- **Learning before fitness.** When writing concepts to their correct
+  homes, always write at the weight the concept deserves first. Capture,
+  distil, and graduate the signal fully even if the container is already
+  near or over a fitness limit. Deal with fitness limits holistically
+  afterward — compress, split, graduate, or raise limits as a separate
+  structural pass. Constraining learning to avoid exceeding a count
+  artificially underweights vital understanding. The concept must arrive
+  fully formed; the container adjusts to hold it.
 
 ### Active Principles
 
@@ -613,3 +691,87 @@ validated across 3+ repos.
   depend on creates a broken install that false-greens on parity checks. The
   order is: canonical → activation → validation. Reversing it is a structural
   bug.
+- **Findings route to a lane or a rejection.** Every reviewer finding is
+  ACTIONED (with the edit cited), attached to a named owning lane with a
+  specific scheduled edit, or explicitly REJECTED with written rationale.
+  "Deferred as follow-up" without a named home is a smuggled drop. Parking
+  accumulates silently; routing surfaces structural gaps. Applies at review
+  layer and at planning layer (see next principle).
+- **Nothing unplanned without a promotion trigger.** After gap analysis or
+  scope-spanning audit, every identified item becomes: actioned now, MVP
+  (`current/` plan with acceptance criteria), future (`future/` plan with
+  named testable promotion trigger), or rejected with rationale. Items
+  without triggers are speculation dressed as plans. The trigger-naming
+  exercise frequently reveals that "future" items are either MVP in
+  disguise, or items nobody genuinely needs.
+- **Compressed neutral labels smuggle scope and uncertainty; at
+  the document-structure layer, multiple authoritative frames
+  smuggle drift.** Labels like "stretch", "deferred", "follow-up",
+  "nice to have", "maybe later" sound procedurally neutral but hide
+  scope debt and uncertainty the author could not resolve. Correct
+  by writing the explicit form: "un-started because pacing limited
+  us"; "routed to lane X because Y is the acceptance criterion";
+  "watchlist pending trigger Z." The document-structure sibling: a
+  document carrying two or more authoritative frames for one
+  concept (historical headings + new table + per-item inline notes;
+  "transitional dual-frame with sunset note") invites drift — frames
+  acquire edits independently and diverge. Correct by collapsing to
+  a single authoritative frame when the decision is settled.
+  Heavier to author; cannot hide weight.
+- **Implicit architectural intent is not enforced principle.** Adapter
+  patterns, dependency injection, and boundary separation may
+  structurally enable an architectural property (e.g. vendor
+  independence) without naming it as a first-class principle. The
+  naming is the upgrade path — it turns accidental architecture into a
+  testable invariant with a conformance gate. When a structural
+  property matters, write it down with a test, not just with an
+  implication. Implicit intent plus adapter code is not enforcement.
+- **Explorations sit between observation and decision.** Between napkin
+  (ephemeral observation) and ADR (committed decision) sits a durable
+  tier: option-weighing design-space documents that inform ADRs or
+  plans without being refined rules. Explorations may remain `active`
+  indefinitely if the question is not yet ripe. The knowledge flow has
+  captured → distilled → graduated as its main axis; explorations are
+  the sideways tier that carries the reasoning trail ADRs compress
+  out. Host-repo home convention: `docs/explorations/` with
+  timestamped filenames.
+- **Generalise where generalisation doesn't cost utility.** When
+  extracting or restating a principle, pattern, rule, or example,
+  prefer the most general form that still carries the behaviour-change
+  power. Specificity should be the feature, not the accident of first
+  observation. Test the candidate form against at least three
+  unrelated contexts before committing to a pitch: if it produces
+  correct behaviour in all of them, generalise; if it produces vacuous
+  or incorrect behaviour in any, specificity was carrying the utility
+  and must stay. A single-instance extraction is provisional by
+  construction; a pattern proven across many contexts is canonical.
+  This discipline raises the knowledge flow's output quality and
+  reduces the ecosystem-specific-orphan problem that transplantation
+  (PDR-005) would otherwise have to fix retroactively.
+- **Portability is a gradient, not a binary.** The Practice Core is
+  portability-disciplined at the file level; the rest of the applied
+  Practice sits on a gradient — fully-portable, portable-with-
+  adaptation, hybrid, local. Naming the gradient makes transplantation
+  tractable (PDR-005) and helps authors pitch new rules at the correct
+  level of abstraction at writing time. Fully-portable content carries
+  universal substance; local content carries intentional host-
+  specificity; the middle positions require explicit classification.
+  Each artefact in the applied Practice has a default position on the
+  gradient, and individual instances may deviate — classification is
+  explicit, not implicit.
+- **Integrations must be named to be verified.** The Practice binds to
+  its host repo through specific bidirectional surfaces: Core → Repo
+  (entry-point chain, practice-index bridge, start-flows, pattern
+  discovery, rule activation) and Repo → Core (capture, refinement,
+  graduation, upstream Core review, Practice Box, ephemeral exchange).
+  Cross-cutting canonical contracts (artefact architecture, quality-
+  gate names, specialist capability pattern, continuity surfaces,
+  ecosystem dev tooling) make the flows coherent across repos.
+  Unnamed integrations fail silently — present on disk, broken in
+  practice — producing Practice instances that are structurally
+  complete but inert (Practice Maturity Level 1). See PDR-024 for
+  the full enumeration and
+  `practice-verification.md` §Vital Integration Surfaces for the
+  verification checklist. The Practice ensures its own integrations
+  exist: hydration, consolidation, and transplantation all verify
+  each vital surface.

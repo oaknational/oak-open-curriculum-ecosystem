@@ -95,7 +95,7 @@ All three confirmed by user.
 Move existing flat `.md` files into `future/`. Create `README.md` with
 collection brief. Create `future/README.md` listing all iceboxed plans.
 Create empty `active/`, `current/`, `archive/completed/` with `.gitkeep`.
-No `roadmap.md` — icebox items are pre-strategic; a minimal roadmap stub
+No `roadmap.md` — icebox items are pre-strategic; a minimal roadmap note
 noting "icebox items are promoted to other collections when ready" is
 sufficient.
 
@@ -122,7 +122,7 @@ Create `README.md` with collection brief explaining purpose (upstream
 dependency tracking and cross-repo reference material). Keep existing
 `castr/` and `ooc-api-wishlist/` as reference material alongside
 lifecycle directories. Create empty `active/`, `current/`, `future/`,
-`archive/completed/` with `.gitkeep`. Minimal `roadmap.md` stub noting
+`archive/completed/` with `.gitkeep`. Minimal `roadmap.md` note noting
 external tracking is reactive. **Further consolidation of this
 collection deferred to a separate session.**
 
@@ -271,7 +271,7 @@ reference.
   deferred plans that do not yet belong to a specific collection.
   Items are promoted to other collections when scope and prerequisites
   become clear."
-- `icebox/roadmap.md` — minimal stub: "Icebox items are pre-strategic.
+- `icebox/roadmap.md` — minimal note: "Icebox items are pre-strategic.
   Promotion to `current/` or another collection happens when
   prerequisites and scope crystallise."
 - `icebox/future/README.md` — list all 12 moved files
@@ -296,7 +296,7 @@ reference.
   and cross-repo reference material. This collection tracks requirements
   on external systems (Oak API wishlist, cross-project references) that
   affect planning in other collections."
-- `external/roadmap.md` — minimal stub: "External tracking is reactive.
+- `external/roadmap.md` — minimal note: "External tracking is reactive.
   Items surface when upstream changes or cross-repo needs are identified."
 - `external/active/README.md` — empty, from template
 - `external/current/README.md` — empty, from template

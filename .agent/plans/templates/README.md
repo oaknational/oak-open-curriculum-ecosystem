@@ -35,7 +35,9 @@ sections.
 | [`risk-assessment.md`](components/risk-assessment.md) | Risk/mitigation table structure |
 | [`adversarial-review.md`](components/adversarial-review.md) | Post-implementation specialist review phase |
 | [`evidence-and-claims.md`](components/evidence-and-claims.md) | Claim classification and evidence/verification requirements |
+| [`lifecycle-triggers.md`](components/lifecycle-triggers.md) | Session entry, simple-plan/work-shape declaration, collaboration claim registration, handoff closure, and consolidation touch points |
 | [`documentation-propagation.md`](components/documentation-propagation.md) | Required ADR/directive/reference-doc and README update propagation |
+| [`session-discipline.md`](components/session-discipline.md) | Multi-session execution discipline: template-not-contract count, mid-arc checkpoints, context-budget thresholds, metacognition at session open |
 
 ## Document Hierarchy
 
@@ -45,7 +47,8 @@ content across them.
 | Document | Purpose | Location |
 |----------|---------|----------|
 | **Session prompt** | Operational entry — "where are we now" | `.agent/prompts/` |
-| **Executable plan** | Per-workstream task list with TDD phases | `.agent/plans/*/{active,current,future}/` |
+| **Executable plan** | Per-workstream task list with TDD phases | `.agent/plans/*/{active,current}/` |
+| **Strategic plan** | Later intent with a named promotion trigger | `.agent/plans/*/future/` |
 | **Roadmap** | Strategic milestone sequence | `.agent/plans/*/roadmap.md` |
 
 **Content flows one way**: facts are authoritative in one document
@@ -89,7 +92,8 @@ Use the lifecycle directory that matches the plan state:
 
 - `active/` — in progress now
 - `current/` — next-up, not started
-- `future/` — later/deferred
+- `future/` — later/deferred strategic intent only; promote to
+  `current/` or `active/` before writing executable task detail
 
 Fill in all `[bracketed]` placeholders.
 
@@ -115,5 +119,7 @@ Ask: "Could it be simpler without compromising quality?"
   more plans of the same type).
 - Add a **component** when the same building block appears across
   three or more plan types.
-- Keep components as guidance references, not mandatory inclusions.
+- Keep most components as guidance references, not mandatory inclusions.
+  `lifecycle-triggers.md` is required for non-trivial work unless the
+  plan records an explicit not-applicable rationale.
 - Update this README when adding templates or components.

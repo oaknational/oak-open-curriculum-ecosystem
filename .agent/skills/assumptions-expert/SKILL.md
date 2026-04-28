@@ -52,7 +52,7 @@ This skill follows the **inverted doctrine hierarchy** (per ADR-146):
 | Document | Load when |
 |----------|-----------|
 | `.agent/directives/testing-strategy.md` | Plan proposes new quality gates or test categories |
-| `.agent/directives/invoke-code-reviewers.md` | Plan proposes new specialist agents |
+| `.agent/memory/executive/invoke-code-reviewers.md` | Plan proposes new specialist agents |
 | `docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md` | Plan follows or extends the triplet pattern |
 | `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` | Plan proposes platform-specific artefacts |
 

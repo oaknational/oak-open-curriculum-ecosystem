@@ -1,4 +1,3 @@
-#!/usr/bin/env tsx
 /**
  * CLI entry point for the vocabulary mining pipeline.
  *
@@ -127,7 +126,7 @@ async function main(): Promise<void> {
 
   logger.info('Processing bulk download files...');
 
-  const result = await runPipeline(config);
+  const result = await runPipeline(config, logger);
   logger.info(formatPipelineResult(result));
 
   if (!result.success) {

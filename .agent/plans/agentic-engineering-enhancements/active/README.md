@@ -5,7 +5,7 @@ collection define policy/rationale; these active plans are the execution source
 of truth.
 
 | Phase | Active Plan | Scope | Status |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 0 | ~~phase-0-templates-and-components-foundation.md~~ | Template/component system hardening | ✅ Complete (archived) |
 | 1 | [phase-1-hallucination-guarding-execution.md](phase-1-hallucination-guarding-execution.md) | Hallucination guard policy and workflow integration | 📋 Planned |
 | 2 | [phase-2-evidence-based-claims-execution.md](phase-2-evidence-based-claims-execution.md) | Evidence bundle adoption and merge-readiness evidence checks | 📋 Planned |
@@ -13,11 +13,17 @@ of truth.
 | 4 | ~~phase-4-cross-agent-standardisation-execution.md~~ | ~~Cross-agent standardisation~~ **Superseded** by [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md) | ⛔ Superseded (archived) |
 | 5 | [phase-5-mutation-testing-execution.md](phase-5-mutation-testing-execution.md) | Mutation testing phases 0-3 execution | 📋 Planned |
 | HC-0 | [phase-0-baseline-metrics.plan.md](phase-0-baseline-metrics.plan.md) | Harness concepts: baseline metrics capture | 📋 Planned |
+| ACH | ~~[agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](../archive/completed/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md)~~ | Agentic corpus hub, research/report lanes, selected docs cross-links, and seed deep dives | ✅ Complete (archived) |
+| GCM | ~~[governance-concepts-and-agentic-mechanism-integration.execution.plan.md](../archive/completed/governance-concepts-and-agentic-mechanism-integration.execution.plan.md)~~ | Governance-concept routing closeout, adjacent-plan reconciliation, and doctrine no-change record | ✅ Complete (archived) |
 | ES | ~~[elasticsearch-specialist-capability.execution.plan.md](../archive/completed/elasticsearch-specialist-capability.execution.plan.md)~~ | Elasticsearch reviewer + skill + rule triplet following ADR-129 | ✅ Complete (archived) |
 | PCS | [plan-collection-structural-consistency.plan.md](plan-collection-structural-consistency.plan.md) | Bring all plan collections to canonical lifecycle structure (ADR-117) | 📋 Planned (audit complete, execution deferred) |
+| OAC | [operational-awareness-and-continuity-surface-separation.plan.md](operational-awareness-and-continuity-surface-separation.plan.md) | Repo-local awareness plane: separate canonical continuity contract, workstream resumption briefs, and thread-aware tactical track cards | 🔄 ACTIVE (promoted 2026-04-20) |
 | PC | ~~practice-convergence.plan.md~~ | Align Practice Core, local surfaces, and outgoing Context so documented standards are enforced | ✅ Complete (deleted) |
 
 Strategic context: [roadmap.md](../roadmap.md)
+
+Next-up queue: [current/README.md](../current/README.md)
+Later backlog: [future/README.md](../future/README.md)
 
 Documentation tracking for all phases:
 [documentation-sync-log.md](../documentation-sync-log.md)

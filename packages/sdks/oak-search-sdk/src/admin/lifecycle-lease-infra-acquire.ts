@@ -4,6 +4,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import {
@@ -188,7 +189,9 @@ export async function acquireLease(
   target: 'primary' | 'sandbox',
   holder: string,
   ttlMs: number,
+  logger?: Logger,
 ): Promise<Result<LifecycleLease, AdminError>> {
+  logger?.info('Acquiring lifecycle lease', { target, holder, ttlMs });
   const ensured = await ensureLeaseIndex(client);
   if (!ensured.ok) {
     return ensured;

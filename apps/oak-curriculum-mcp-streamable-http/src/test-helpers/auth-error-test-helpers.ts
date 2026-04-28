@@ -1,119 +1,94 @@
 /**
- * Test Helpers: Auth Error Integration Tests
+ * Test Helpers: Auth Error Testing
  *
  * Shared test utilities for auth error interception testing.
+ * Used by tool-handler-with-auth.unit.test.ts.
  */
 
 import { vi, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
-import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
+import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from '../runtime-config.js';
+import type { Env } from '../env.js';
 import { authLogContextSchema } from '../auth-log-context.js';
-import type { ToolHandlerDependencies } from '../handlers.js';
 import { createFakeLogger } from './fakes.js';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type {
-  CallToolResult,
-  Notification,
-  ServerRequest,
-} from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import {
   McpToolError,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { err } from '@oaknational/result';
 
-/**
- * Creates mock dependencies for auth error testing.
- *
- * Wraps the provided `executeMcpTool` function into a `createRequestExecutor`
- * factory that invokes the `onToolExecution` callback (for auth error capture).
- */
-export function createMockDeps(
-  executeMcpTool: (name: unknown, args: unknown, client: unknown) => Promise<ToolExecutionResult>,
-): Partial<ToolHandlerDependencies> {
-  return {
-    createRequestExecutor: vi.fn((config) => {
-      return vi.fn(async (name, args) => {
-        const execution = await executeMcpTool(name, args, {});
-        config.onToolExecution?.(name, execution);
-        if (execution.ok) {
-          return { content: [{ type: 'text' as const, text: JSON.stringify(execution.value) }] };
-        }
-        return {
-          content: [{ type: 'text' as const, text: execution.error.message }],
-          isError: true,
-        };
-      });
-    }),
-    getResourceUrl: () => 'https://test.example.com/mcp',
-  };
-}
-
-interface Params {
-  readonly signal: AbortSignal;
-  readonly requestId: string;
-  readonly sendNotification: (notification: Notification) => Promise<void>;
-  readonly sendRequest: (request: ServerRequest) => Promise<unknown>;
-}
-
-/**
- * Creates a real MCP server with `registerTool` replaced to capture handlers.
- *
- * @remarks
- * Uses a real `McpServer` instance — the SDK object naturally satisfies its
- * own types. Replaces `registerTool` with a handler-capturing function.
- *
- * The `as McpServer['registerTool']` assertion is irreducible: the MCP
- * SDK's `registerTool` has overloaded generics that TypeScript cannot
- * satisfy with any plain function. This was confirmed by type-reviewer
- * analysis. The eslint config for this file allows `as`-style assertions
- * (see eslint.config.ts).
- */
-export function createMockServer(
-  capturedHandlers: Map<string, (params: Params) => Promise<CallToolResult>>,
-): McpServer {
-  const server = new McpServer({ name: 'test-server', version: '0.0.0' });
-
-  function capturingRegisterTool(
-    name: string,
-    configOrCb: unknown,
-    handlerOrUndefined?: (params: unknown, extra: unknown) => Promise<CallToolResult>,
-  ): void {
-    void configOrCb;
-    if (handlerOrUndefined) {
-      const wrappedHandler = (params: Params) => handlerOrUndefined(params, {});
-      capturedHandlers.set(name, wrappedHandler);
-    }
-  }
-
-  // Irreducible assertion: McpServer.registerTool has overloaded generics
-  // that no plain function can satisfy. Confirmed by type-reviewer analysis.
-  server.registerTool = capturingRegisterTool as McpServer['registerTool'];
-
-  return server;
-}
-
 /** Creates a mock logger for testing. Delegates to the canonical fake. */
 export function createMockLogger(): Logger {
   return createFakeLogger();
 }
 
-/** Creates a mock runtime config for testing. */
-export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
+interface MockRuntimeConfigOverrides {
+  /**
+   * Env overrides merged onto the mock env.
+   *
+   * @remarks Values override the hermetic defaults below. Do not read from
+   * `process.env` to compose overrides — tests must pass literal values so
+   * outcomes do not depend on the developer's local environment or shell
+   * state.
+   */
+  readonly env?: Partial<Env>;
+  /**
+   * When true, returns an `AuthDisabledRuntimeConfig` (Clerk keys omitted).
+   */
+  readonly dangerouslyDisableAuth?: boolean;
+}
+
+const BASE_MOCK_ENV = {
+  OAK_API_KEY: 'test-key',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key',
+  SENTRY_MODE: 'off' as const,
+};
+
+const BASE_CLERK_KEYS = {
+  CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
+  CLERK_SECRET_KEY: 'test-clerk-secret',
+};
+
+const BASE_SHARED_FIELDS = {
+  useStubTools: false,
+  version: '0.0.0-test',
+  versionSource: 'APP_VERSION_OVERRIDE',
+  vercelHostnames: [],
+} as const;
+
+/**
+ * Creates a mock runtime config for testing.
+ *
+ * @remarks Entirely hermetic: no filesystem reads, no `process.env` access,
+ * no network. Callers pass all non-default values through `overrides`.
+ * `SENTRY_MODE` is pinned to `'off'` so `initialiseSentry` returns the noop
+ * runtime and real `Sentry.init()` is never reachable from tests
+ * (prevents process-listener accumulation).
+ */
+export function createMockRuntimeConfig(
+  overrides: MockRuntimeConfigOverrides & { dangerouslyDisableAuth: true },
+): AuthDisabledRuntimeConfig;
+export function createMockRuntimeConfig(
+  overrides?: MockRuntimeConfigOverrides & { dangerouslyDisableAuth?: false },
+): AuthEnabledRuntimeConfig;
+export function createMockRuntimeConfig(
+  overrides: MockRuntimeConfigOverrides = {},
+): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
+  if (overrides.dangerouslyDisableAuth === true) {
+    return {
+      env: { ...BASE_MOCK_ENV, ...overrides.env },
+      ...BASE_SHARED_FIELDS,
+      dangerouslyDisableAuth: true,
+    } satisfies AuthDisabledRuntimeConfig;
+  }
+
   return {
-    env: {
-      OAK_API_KEY: 'test-key',
-      CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
-      CLERK_SECRET_KEY: 'test-clerk-secret',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key',
-      SENTRY_MODE: 'off',
-    },
-    useStubTools: false,
+    env: { ...BASE_MOCK_ENV, ...BASE_CLERK_KEYS, ...overrides.env },
+    ...BASE_SHARED_FIELDS,
     dangerouslyDisableAuth: false,
-    version: '0.0.0-test',
-    vercelHostnames: [],
-  };
+  } satisfies AuthEnabledRuntimeConfig;
 }
 
 /** Creates a ToolExecutionResult with an auth error. */
@@ -157,18 +132,6 @@ class StatusError extends Error {
 
 function createStatusError(status: number, message: string): Error {
   return new StatusError(status, message);
-}
-
-/** Gets a registered handler from the captured handlers map. */
-export function getHandler(
-  capturedHandlers: Map<string, (params: unknown) => Promise<CallToolResult>>,
-  toolName: string,
-): (params: unknown) => Promise<CallToolResult> {
-  const handler = capturedHandlers.get(toolName);
-  if (!handler) {
-    throw new Error(`${toolName} handler not registered`);
-  }
-  return handler;
 }
 
 /**

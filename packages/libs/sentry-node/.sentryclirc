@@ -1,0 +1,25 @@
+; Workspace-local Sentry CLI configuration for the @oaknational/sentry-node
+; package. This package is the shared Sentry DI adapter consumed by BOTH
+; apps/oak-curriculum-mcp-streamable-http (project: oak-open-curriculum-mcp)
+; AND apps/oak-search-cli (project: oak-open-curriculum-search-cli). It
+; therefore intentionally does NOT pin `project` — the package itself
+; has no correct default target, so any ad-hoc CLI invocation run from
+; inside this directory MUST provide `--project` (or a `SENTRY_PROJECT`
+; env var, or `.sentryclirc` inheritance from an ancestor) explicitly.
+; That is the right fail-fast posture for a shared library: silent
+; cross-targeting into the wrong consumer's project is worse than a
+; clear "no project configured" error.
+;
+; Read by both `sentry-cli` (https://docs.sentry.io/cli/configuration/)
+; and the dev `sentry` CLI (https://cli.sentry.dev/configuration/) using
+; identical INI semantics with nearest-wins ancestor discovery.
+;
+; Auth tokens are never committed here. Provide `SENTRY_AUTH_TOKEN` via
+; the environment (or `~/.sentryclirc [auth] token` for interactive use).
+;
+; See docs/operations/sentry-cli-usage.md for the full CLI usage matrix
+; and the composition rules we rely on.
+
+[defaults]
+org = oak-national-academy
+url = https://de.sentry.io

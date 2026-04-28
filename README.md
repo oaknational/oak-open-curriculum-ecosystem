@@ -1,8 +1,11 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oaknational_oak-open-curriculum-ecosystem&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
+[![AI Code Assurance](https://sonarcloud.io/api/project_badges/ai_code_assurance?project=oaknational_oak-open-curriculum-ecosystem)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
+
 # Oak Open Curriculum Ecosystem
 
 Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, and semantic search over the curriculum data powered by Elasticsearch Serverless.
 
-**Strategic Overview**: For the vision, delivery roadmap, and engineering approach, see the [Strategic Overview](docs/foundation/strategic-overview.md).
+**Vision and direction**: For the timeless framing of what this repository is for, see [VISION.md](docs/foundation/VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---
 
@@ -19,14 +22,27 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 **Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
 
-- [Strategic Overview](docs/foundation/strategic-overview.md) — reading guide connecting vision, roadmap, and engineering approach
 - [VISION.md](docs/foundation/VISION.md) — what this project delivers, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
+- [Latest progress update](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters
 
 ## Developers and AI agents
 
 - **Developers** — continue to [Quick Start](#quick-start) below
-- **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md)
+- **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
+
+**Browse the documentation by section**:
+[Foundation](docs/foundation/README.md) (vision and the agentic
+engineering system) ·
+[Governance](docs/governance/README.md) (development, TypeScript,
+testing, accessibility, security) ·
+[Architecture](docs/architecture/README.md) (ADRs, OpenAPI pipeline,
+provider system) ·
+[Engineering](docs/engineering/README.md) (workflow, tooling,
+extending) ·
+[Operations](docs/operations/README.md) (env vars, troubleshooting) ·
+[Domain](docs/domain/README.md) (curriculum data) ·
+[Docs index](docs/README.md).
 
 ## What This Repo Provides
 
@@ -54,16 +70,20 @@ Together these sources enable **evidence-grounded curriculum discovery**: AI age
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
-- **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
+- **Tools** (model-controlled): 34 curriculum tools (24 generated from the OpenAPI schema, 8 aggregated, plus a user-search pair) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them. See [`apps/oak-curriculum-mcp-streamable-http/README.md`](apps/oak-curriculum-mcp-streamable-http/README.md) as the canonical count.
 - **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
-The standalone stdio workspace is now a legacy transitional surface. Future
-stdio support should come from a separate stdio entry point generalised from the
-HTTP MCP server workspace rather than from continued parallel maintenance of the
-standalone stdio app. See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
+The standalone stdio workspace has been retired and removed. The
+canonical MCP server workspace is now
+[`apps/oak-curriculum-mcp-streamable-http/`](apps/oak-curriculum-mcp-streamable-http/README.md);
+any future stdio support is expected to come from a separate stdio
+entry point generalised from that workspace rather than a parallel
+standalone app. See the
+[HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
 [ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md),
-and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+and
+[ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
 
 ## Quick Start
 
@@ -71,6 +91,10 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 
 - **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` or `fnm use` to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
+- **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
+- **jq** (optional, for `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`) — install via [jqlang.github.io/jq/download](https://jqlang.github.io/jq/download/)
+- **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
+- **sentry** (optional, for dev-time Sentry issue triage, event inspection, and Sentry Seer via `sentry issue list` / `sentry api`) — install via [cli.sentry.dev](https://cli.sentry.dev/) (`curl https://cli.sentry.dev/install -fsS | bash`) or `brew install getsentry/tools/sentry`. Required only for humans and agents using Seer or `sentry api` locally; the HTTP MCP server's Vercel-build source-map upload + release/deploy linkage is performed by [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/) inside the workspace's `build` script (see [`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`](apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts) and [ADR-163 §6 amendment 2026-04-21](docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)). Operator-driven `sentry-cli` invocations resolve via `pnpm exec sentry-cli` from the MCP app workspace (where `@sentry/cli` arrives as a transitive devDependency of `@sentry/esbuild-plugin`), or via `pnpm dlx @sentry/cli` from elsewhere. Any script that invokes the dev `sentry` CLI must wrap the invocation in the `require_command "sentry" "https://cli.sentry.dev/"` fail-fast pattern; each script currently defines `require_command` inline — see [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh) for the canonical dev-`sentry` helper. Both patterns and the full `sentry-cli` vs dev-`sentry` split are documented in [docs/operations/sentry-cli-usage.md](docs/operations/sentry-cli-usage.md) (see also [ADR-159](docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)).
 
 ### Install and verify
 
@@ -101,7 +125,9 @@ See [environment variables guide](docs/operations/environment-variables.md) for 
 
 ### Next steps
 
-The full [Quick Start Guide](docs/foundation/quick-start.md) covers architecture, key concepts, and development workflows. Each workspace README provides area-specific setup (see links in the capability table above).
+The [Architecture](#architecture) section below summarises the schema-first design and key directories. For the development process, commit conventions, and quality expectations, see [CONTRIBUTING.md](CONTRIBUTING.md). Each workspace README provides area-specific setup (see links in the capability table above).
+
+For the shape of the curriculum data and per-key-stage variance, see the [Curriculum Guide](docs/domain/curriculum-guide.md) and [Data Variances](docs/domain/DATA-VARIANCES.md). For how MCP tools execute against the OpenAPI schema at runtime, see [openapi-pipeline.md → Schema-First Tool Invocation](docs/architecture/openapi-pipeline.md#execution-model-schema-first-tool-invocation).
 
 ## Key Commands
 
@@ -149,13 +175,13 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Directory          | Purpose                                                                                                                  |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`            | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
+| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                |
 | `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
 | `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
 | `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
 | `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
 | `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`            | Developer documentation, guides, and 155+ ADRs                                                                           |
+| `docs/`            | Developer documentation, guides, and the full ADR index                                                                  |
 
 ### Workspace Summaries
 
@@ -163,7 +189,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Workspace                                                                        | Purpose                                                                                                                                                                                                      |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, prompts, and MCP App widget                                                                             |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 34 curriculum tools, resources, prompts, and MCP App widget                                                                             |
 | [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking |
 
 **SDKs:**
@@ -194,7 +220,6 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | [`@oaknational/env-resolution`](packages/libs/env-resolution/README.md)     | Environment resolution pipeline — `.env` discovery, validation, and injection |
 | [`@oaknational/search-contracts`](packages/libs/search-contracts/README.md) | Canonical semantic-search field and stage contracts                           |
 | [`@oaknational/sentry-node`](packages/libs/sentry-node/README.md)           | Shared Sentry Node config, sinks, fixture runtime, and flush helpers          |
-| [`@oaknational/sentry-mcp`](packages/libs/sentry-mcp/README.md)             | Metadata-only MCP observation wrappers                                        |
 
 **Design:**
 
@@ -209,7 +234,7 @@ Architectural Decision Records (ADRs) are the architectural source of truth. The
 - [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
-See the [full ADR index](docs/architecture/architectural-decisions/) for all decisions.
+See the [full ADR index](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) for all decisions (start with the "5 ADRs in 15 Minutes" block).
 
 ## Engineering Practice
 
@@ -268,9 +293,10 @@ over time rather than eroding.
 ## Credits and Attribution
 
 This repository brings together work from multiple contributors and open
-education organisations:
+education organisations. See [ATTRIBUTION.md](ATTRIBUTION.md) for full
+details, citations, and licence terms for each source.
 
-- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data (citation required when using EEF-derived outputs; see [LICENCE-DATA.md](LICENCE-DATA.md))
+- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data. Citation: Higgins, S., Katsipataki, M., Kokotsaki, D., Coleman, R., Major, L.E., & Coe, R. _Teaching and Learning Toolkit_. Education Endowment Foundation.
 - **Mark Hodierne** — [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology), primary author
 - **John Roberts** — EEF MCP server prototype
 
@@ -293,5 +319,6 @@ commit conventions, and quality expectations.
 - Issues: <https://github.com/oaknational/oak-open-curriculum-ecosystem/issues>
 - Licence (code): MIT — see [LICENCE](LICENCE)
 - Licence (curriculum data): see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
+- Attribution: see [ATTRIBUTION.md](ATTRIBUTION.md) for credits and citations
 - Branding is copyright Oak National Academy: [BRANDING.md](BRANDING.md)
 - Security: [SECURITY.md](SECURITY.md)

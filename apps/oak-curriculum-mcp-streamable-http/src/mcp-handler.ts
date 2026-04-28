@@ -15,6 +15,7 @@ import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { McpServerFactory } from './mcp-request-context.js';
+import { authInfoExtraSchema } from './auth/mcp-auth/auth-info-schema.js';
 import { createChildLogger } from './logging/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
 
@@ -134,6 +135,40 @@ function registerCleanupHandler(
 }
 
 /**
+ * Enrich the Sentry isolation scope with MCP method and user identity.
+ *
+ * @remarks Called early in the request lifecycle before transport handling.
+ * Uses Zod safeParse for safe userId extraction from `AuthInfo.extra`.
+ *
+ * Privacy posture for the `setUser` call below: the `userId` is an
+ * opaque, stable Clerk-issued identifier. It flows into Sentry's
+ * per-request scope only — not into any structured event-data
+ * envelope a future second-sink adapter would emit. Whether this
+ * identifier is permitted to flow downstream of the redaction
+ * barrier into other sinks (data warehouse Sink 2, PostHog Sink 3)
+ * is an open policy ruling owned by
+ * `docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md`;
+ * see also ADR-160 § History 2026-04-19 entry. The ADR-160 closure
+ * principle (every fan-out path applies the redaction policy)
+ * remains in force unchanged; the open question is what the
+ * redaction policy itself permits.
+ */
+function enrichObservabilityScope(
+  req: McpHandlerRequest,
+  observability: HttpObservability,
+  mcpMethod: string | undefined,
+): void {
+  if (mcpMethod) {
+    observability.setTag('mcp.method', mcpMethod);
+  }
+  const extraResult = authInfoExtraSchema.safeParse(req.auth?.extra);
+  const userId = extraResult.success ? extraResult.data.userId : undefined;
+  if (userId) {
+    observability.setUser({ id: userId });
+  }
+}
+
+/**
  * Per-request MCP handler (stateless pattern).
  *
  * Uses narrow request/response interfaces so test fakes satisfy the types
@@ -152,6 +187,8 @@ export function createMcpHandler(
         : undefined;
     const mcpMethod = extractMcpMethod(req.body);
     log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
+
+    enrichObservabilityScope(req, observability, mcpMethod);
 
     const { server, transport } = mcpFactory();
     await server.connect(transport);

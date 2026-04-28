@@ -19,6 +19,7 @@ import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js'
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
 import { generateUndocumentedResponseErrorFile } from './parts/generate-undocumented-response-error-file.js';
+import { applyParamDescriptionOverrides } from './parts/param-description-overrides.js';
 import { generateStubModules } from './stub-modules.js';
 import { sampleSchemaObject } from './schema-sample-core.js';
 import { createSchemaResolver, resolveResponseSchemaForOperation } from './response-schema.js';
@@ -214,6 +215,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     toolNamesSet.add(toolName);
 
     const { pathParamMetadata, queryParamMetadata } = buildParamMetadataForOperation(operation);
+    applyParamDescriptionOverrides(path, pathParamMetadata, queryParamMetadata);
     const toolFile = generateToolFile(
       toolName,
       path,

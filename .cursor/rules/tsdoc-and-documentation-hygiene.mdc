@@ -1,7 +1,0 @@
----
-description: Canonical TSDoc and documentation hygiene.
-globs: '**/*.{ts,tsx,mts}'
-alwaysApply: true
----
-
-Read and follow `.agent/rules/tsdoc-and-documentation-hygiene.md`.

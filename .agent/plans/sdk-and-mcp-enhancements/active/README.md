@@ -2,12 +2,17 @@
 
 Executable plans that are in progress now.
 
+Cross-boundary context report:
+[../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+— formal synthesis of the official ontology's implications for MCP orientation,
+direct ontology resources, search projections, and service-level updates.
+
 ## Umbrellas
 
 - [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) —
   MCP Apps migration. WS1-WS3 Phases 0-4.5 complete and shipped
   (PR #76 merged). Phase 5 pending.
-- [open-education-knowledge-surfaces.plan.md](open-education-knowledge-surfaces.plan.md) —
+- [../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) —
   **NEW**. Coordinate integration of three open education data sources
   (Oak API, Oak Ontology, EEF Toolkit) into MCP surfaces. Parent for
   WS-0 through WS-6 below.
@@ -17,25 +22,48 @@ Executable plans that are in progress now.
 Execution order:
 
 1. **WS-0**: ADR + root README update (narrative first)
-2. **WS-1**: [graph-resource-factory.plan.md](graph-resource-factory.plan.md) —
+2. **WS-1**: [graph-resource-factory.plan.md](../../knowledge-graph-integration/active/graph-resource-factory.plan.md) —
    **PENDING**. Extract shared graph infrastructure, refactor existing
    surfaces.
-3. **WS-2**: [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
+3. **WS-2**: [misconception-graph-mcp-surface.plan.md](../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) —
    **PENDING**. 12,858 misconceptions from bulk data (first factory
    consumer).
-4. **WS-3**: [eef-evidence-mcp-surface.plan.md](eef-evidence-mcp-surface.plan.md) —
+4. **WS-3**: [eef-evidence-mcp-surface.plan.md](../../knowledge-graph-integration/active/eef-evidence-mcp-surface.plan.md) —
    **PENDING**. EEF evidence resources + recommendation tool + prompt.
-5. **WS-4**: [nc-knowledge-taxonomy-surface.plan.md](nc-knowledge-taxonomy-surface.plan.md) —
+5. **WS-4**: [nc-knowledge-taxonomy-surface.plan.md](../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) —
    **PENDING**. NC knowledge taxonomy from the ontology (smallest KG
    integration).
-6. **WS-5**: [agent-guidance-consolidation.plan.md](agent-guidance-consolidation.plan.md) —
+6. **WS-5**: [agent-guidance-consolidation.plan.md](../../knowledge-graph-integration/active/agent-guidance-consolidation.plan.md) —
    **PENDING**. Consolidate agent guidance after all surfaces exist.
 7. **WS-6**: Documentation propagation (tracked in parent plan).
+
+Companion follow-on plan outside this collection:
+
+- [../../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) —
+  short neutral review plan for re-reading the ontology repo without a
+  search-first frame.
+- [../../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) —
+  strategic comparison plan that treats direct ontology use as the baseline
+  and tests whether Neo4j or Stardog earns a downstream serving role.
 
 ## MCP App UI
 
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   **PENDING**. Interactive user-search MCP App view. Post-merge.
+
+## Codegen Enhancements
+
+- [schema-resilience-and-response-architecture.plan.md](schema-resilience-and-response-architecture.plan.md) —
+  **PENDING (open questions)**. Address upstream schema validation
+  fragility: `.strict()` → `.strip()` or `.passthrough()` migration
+  (OQ1 pending owner decision), schema drift health endpoint
+  (Sentry-monitored), response `additionalContext` flag, and direct
+  API access guidance. Vercel deploy hook for auto-rebuild noted as
+  future option.
+- [upstream-api-reference-metadata.plan.md](upstream-api-reference-metadata.plan.md) —
+  **PENDING**. Add `upstreamApi` field to generated tool descriptors
+  with full upstream API URL, parameters, and statuses. For users who
+  discover tools via MCP then call the API directly.
 
 ## Exploration
 

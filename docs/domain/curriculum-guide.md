@@ -146,7 +146,7 @@ full-text search with semantic understanding and structured curriculum metadata.
 Build education tools and services using the SDK. Developers get typed,
 validated API access generated directly from the OpenAPI schema. They care about
 data structure correctness, type safety, and reliable API responses. Start with
-the [Quick Start Guide](../foundation/quick-start.md).
+the [root README Quick Start](../../README.md#quick-start).
 
 ### AI Agents
 

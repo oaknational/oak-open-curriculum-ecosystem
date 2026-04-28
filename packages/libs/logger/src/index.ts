@@ -14,9 +14,6 @@ export { mergeLogContext } from './context-merging.js';
 // Error Normalisation
 export { buildNormalizedError, isNormalizedError, normalizeError } from './error-normalisation.js';
 
-// JSON Sanitisation
-export { sanitiseForJson, isJsonValue, sanitiseObject } from './json-sanitisation.js';
-
 // Express Middleware (optional, requires express peer dependency)
 export {
   createRequestLogger,
@@ -28,8 +25,6 @@ export {
 } from './express-middleware.js';
 
 export type {
-  JsonObject,
-  JsonValue,
   LogContext,
   LogContextInput,
   LogContextInputValue,

@@ -37,13 +37,33 @@ Before any non-planning edits:
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
-2. Capture baseline signal:
+2. **Build-vs-Buy attestation** (REQUIRED if this plan integrates a
+   third-party vendor). State vendor, list first-party integrations
+   evaluated (plugins, SDKs, managed flows, official Actions), and
+   name why bespoke was chosen OR which first-party option was
+   adopted. Sunk-cost reasoning is not a valid answer. See
+   `feature-workstream-template.md` §Build-vs-Buy Attestation for the
+   canonical prose. `assumptions-reviewer` must run against this
+   attestation before the plan is marked READY FOR EXECUTION.
+3. **Reviewer phase-alignment**: plan-phase reviewers
+   (`assumptions-reviewer`, vendor specialist) fire PRE-execution;
+   mid-cycle reviewers (`test-reviewer`, `type-reviewer`, architecture
+   family, `code-reviewer`) fire DURING; close reviewers
+   (`docs-adr-reviewer`, `onboarding-reviewer`,
+   `release-readiness-reviewer`) fire POST. Scheduling all reviewers
+   at close is a phase-misalignment anti-pattern.
+4. **Lifecycle triggers**: apply
+   [`lifecycle-triggers.md`](components/lifecycle-triggers.md). Record
+   the work shape, consult active claims / log / decision threads,
+   register active areas before edits, and close own claims at
+   session-handoff.
+5. Capture baseline signal:
 
 ```bash
 [deterministic baseline command]
 ```
 
-3. Prepare evidence artefact:
+6. Prepare evidence artefact:
 
 ```bash
 cp .agent/plans/[collection]/evidence-bundle.template.md \
@@ -141,8 +161,9 @@ blocked protocol above.
   - required canonical docs updated or explicitly marked no-change with rationale
   - consolidation review completed using `jc-consolidate-docs`
 - Deterministic validation:
-  - `rg -n "## [Phase]|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/plans/[collection]/documentation-sync-log.md`
+  - `rg -n "## [Phase]|Status:|ADR-119 update or rationale|ADR-124 update or rationale|practice.md update or rationale|Consolidation review" .agent/plans/[collection]/documentation-sync-log.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
+  - `test -f docs/architecture/architectural-decisions/124-practice-propagation-model.md`
   - `test -f .agent/practice-core/practice.md`
 
 ## Evidence and Claims

@@ -1,5 +1,12 @@
-export { createSentryConfig, resolveSentryEnvironment, resolveSentryRelease } from './config.js';
+export {
+  createSentryConfig,
+  resolveSentryEnvironment,
+  resolveSentryRegistrationPolicy,
+  resolveSentryRelease,
+} from './config.js';
+export { resolveGitSha } from './config-resolution.js';
 export { createFixtureSentryStore } from './fixture.js';
+export { describeConfigError, mapCloseError, mapFlushError } from './runtime-error.js';
 export {
   createSentryInitOptions,
   defaultSentryNodeSdk,
@@ -9,20 +16,27 @@ export {
 export { createSentryLogSink, flushSentry, initialiseSentry } from './runtime.js';
 export type {
   FixtureSentryCapture,
+  FixtureSentryContextCapture,
   FixtureSentryExceptionCapture,
   FixtureSentryLogCapture,
   FixtureSentryStore,
+  FixtureSentryTagCapture,
+  FixtureSentryUserCapture,
   InitialiseSentryError,
   InitialiseSentryOptions,
   ObservabilityConfigError,
   ParsedSentryConfig,
   ResolvedSentryEnvironment,
+  ResolvedSentryRegistrationPolicy,
   ResolvedSentryRelease,
-  SentryConfigEnvironment,
-  SentryEnvironmentSource,
-  SentryFixtureConfig,
+  SentryEnvironmentWarning,
   SentryBreadcrumb,
+  SentryCloseError,
+  SentryConfigEnvironment,
+  SentryContextPayload,
+  SentryEnvironmentSource,
   SentryErrorEvent,
+  SentryFixtureConfig,
   SentryFlushError,
   SentryLiveConfig,
   SentryLoggerSdk,
@@ -31,6 +45,8 @@ export type {
   SentryNodeSdk,
   SentryOffConfig,
   SentryPostRedactionHooks,
-  SentryTransactionEvent,
+  SentryPrimitiveValue,
   SentryReleaseSource,
+  SentryTransactionEvent,
+  SentryUser,
 } from './types.js';

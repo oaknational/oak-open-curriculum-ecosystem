@@ -16,54 +16,67 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./api-schema": {
       "types": "./dist/api-schema.d.ts",
+      "development": "./src/api-schema.ts",
       "default": "./dist/api-schema.js"
     },
     "./mcp-tools": {
       "types": "./dist/mcp-tools.d.ts",
+      "development": "./src/mcp-tools.ts",
       "default": "./dist/mcp-tools.js"
     },
     "./search": {
       "types": "./dist/search.d.ts",
+      "development": "./src/search.ts",
       "default": "./dist/search.js"
     },
     "./zod": {
       "types": "./dist/zod.d.ts",
+      "development": "./src/zod.ts",
       "default": "./dist/zod.js"
     },
     "./bulk": {
       "types": "./dist/bulk.d.ts",
+      "development": "./src/bulk.ts",
       "default": "./dist/bulk.js"
     },
     "./vocab": {
       "types": "./dist/vocab.d.ts",
+      "development": "./src/vocab.ts",
       "default": "./dist/vocab.js"
     },
     "./vocab-data": {
       "types": "./dist/vocab-data.d.ts",
+      "development": "./src/vocab-data.ts",
       "default": "./dist/vocab-data.js"
     },
     "./query-parser": {
       "types": "./dist/query-parser.d.ts",
+      "development": "./src/query-parser.ts",
       "default": "./dist/query-parser.js"
     },
     "./observability": {
       "types": "./dist/observability.d.ts",
+      "development": "./src/observability.ts",
       "default": "./dist/observability.js"
     },
     "./admin": {
       "types": "./dist/admin.d.ts",
+      "development": "./src/admin.ts",
       "default": "./dist/admin.js"
     },
     "./widget-constants": {
       "types": "./dist/widget-constants.d.ts",
+      "development": "./src/widget-constants.ts",
       "default": "./dist/widget-constants.js"
     },
     "./synonyms": {
       "types": "./dist/synonyms.d.ts",
+      "development": "./src/synonyms.ts",
       "default": "./dist/synonyms.js"
     }
   },
@@ -72,20 +85,20 @@
     "postsdk-codegen": "pnpm -w format:root",
     "pregenerate:types": "pnpm generate:clean",
     "generate:types": "pnpm generate:openapi && pnpm generate:zod && pnpm generate:bulk",
-    "generate:openapi": "tsx code-generation/codegen.ts",
-    "generate:zod": "tsx code-generation/zodgen.ts",
-    "generate:bulk": "tsx code-generation/bulkgen.ts",
+    "generate:openapi": "node ../../../scripts/run-tsx-development.mjs code-generation/codegen.ts",
+    "generate:zod": "node ../../../scripts/run-tsx-development.mjs code-generation/zodgen.ts",
+    "generate:bulk": "node ../../../scripts/run-tsx-development.mjs code-generation/bulkgen.ts",
     "generate:clean": "rm -rf src/types/generated",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json && node --experimental-strip-types code-generation/copy-json-assets.ts",
-    "clean": "rm -rf dist .turbo src/types/generated",
+    "clean": "rm -rf dist .turbo",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts",
-    "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
+    "vocab-gen": "node ../../../scripts/run-tsx-development.mjs vocab-gen/run-vocab-gen.ts",
+    "scan:sitemap": "node ../../../scripts/run-tsx-development.mjs code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -95,7 +108,6 @@
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
-    "dotenv": "^17.4.1",
     "openapi-fetch": "^0.17.0",
     "openapi-typescript": "^7.13.0",
     "openapi3-ts": "^4.5.0",
@@ -106,7 +118,6 @@
     "@types/node": "^25.5.2",
     "eslint": "^10.2.0",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.3"
   },

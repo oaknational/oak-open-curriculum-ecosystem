@@ -5,6 +5,8 @@
     "incremental": false
   },
   "include": [
+    "build-scripts/**/*.ts",
+    "build-scripts/**/*.d.mts",
     "operations/**/*.ts",
     "src/**/*.ts",
     "scripts/**/*.ts",
@@ -13,8 +15,7 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",
-    "vitest.e2e.config.ts",
-    "widget/*.config.ts"
+    "vitest.e2e.config.ts"
   ],
   "exclude": ["node_modules", "dist", "temp-secrets", "smoke-tests", "../../.agent/reference/**"]
 }

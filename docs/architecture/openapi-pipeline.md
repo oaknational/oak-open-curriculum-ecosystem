@@ -1,7 +1,12 @@
 # The OpenAPI-First Pipeline
 
-**Last Updated**: 2026-03-07  
+**Last Updated**: 2026-04-26
+
 **Status**: Active architecture reference
+
+## Consumer data boundary (this monorepo)
+
+Code in **oak-open-curriculum-ecosystem** — SDK, MCP servers, search CLI, scripts, and agent workflows — must obtain curriculum and related data **only through the published Oak Open Curriculum HTTP API** (the contract published at `https://open-api.thenational.academy/api/v0/swagger.json` and materialised in codegen). **Do not** connect directly to Hasura, PostgreSQL, materialised view names, Elasticsearch indices, or any other internal Oak data or analytics systems from this repository. Naming or discussing implementation details (e.g. materialised view identifiers in public API or upstream service code) in reports or research is for **context and diagnosis**, not a pattern to replicate at the consumer boundary. The service that _implements_ the public API (for example, `oak-openapi` talking to a GraphQL layer) is upstream of this monorepo’s consumer contract.
 
 ## Problem Statement
 
@@ -130,7 +135,7 @@ This pattern works for **any** OpenAPI-compliant API:
 
 The primary implementation uses the Oak National Academy Curriculum API:
 
-- **OpenAPI Schema**: `https://open-api.thenational.academy/api/v0/openapi.json`
+- **OpenAPI Schema** (codegen in this monorepo uses the swagger URL): `https://open-api.thenational.academy/api/v0/swagger.json` (see `packages/sdks/oak-sdk-codegen/code-generation/codegen.ts`); a sibling `openapi.json` may also exist upstream.
 - **Generated SDK**: `@oaknational/curriculum-sdk`
 - **MCP Servers**:
   - `apps/oak-curriculum-mcp-streamable-http` (canonical MCP server workspace)
@@ -224,7 +229,7 @@ This pattern is formalized in several ADRs:
 
 - [Programmatic Tool Generation](./programmatic-tool-generation.md) - Details on MCP tool generation
 - [SDK Documentation](../../packages/sdks/oak-curriculum-sdk/README.md) - Runtime usage of the generated SDK
-- [Quick Start Guide](../foundation/quick-start.md) - Getting started guide
+- [Root README Quick Start](../../README.md#quick-start) - Getting started guide
 
 ## Execution Model: Schema-First Tool Invocation
 

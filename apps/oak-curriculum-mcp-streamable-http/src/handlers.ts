@@ -10,7 +10,6 @@
 import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
-import { wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { RuntimeConfig } from './runtime-config.js';
 import type { HttpObservability } from './observability/http-observability.js';
 import {
@@ -145,10 +144,9 @@ export function registerHandlers(
   registerTools(server, deps, options);
 
   registerAllResources(server, {
-    observability: options.observability,
     getWidgetHtml: options.getWidgetHtml,
   });
-  registerPrompts(server, options.observability);
+  registerPrompts(server);
 }
 
 /** Iterates over universal tools and registers each with the server. */
@@ -157,25 +155,20 @@ function registerTools(
   deps: ToolHandlerDependencies,
   options: RegisterHandlersOptions,
 ): void {
-  const mcpObservation = options.observability.createMcpObservationOptions();
-
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    const wrappedHandler = wrapToolHandler(
-      tool.name,
-      async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
-        return handleToolWithAuthInterception({
-          tool,
-          params,
-          deps,
-          logger: options.logger,
-          apiKey: options.runtimeConfig.env.OAK_API_KEY,
-          runtimeConfig: options.runtimeConfig,
-          createAssetDownloadUrl: options.createAssetDownloadUrl,
-          authInfo: extra.authInfo,
-        });
-      },
-      mcpObservation,
-    );
+    const handler = async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
+      options.observability.setTag('mcp.tool_name', tool.name);
+      return handleToolWithAuthInterception({
+        tool,
+        params,
+        deps,
+        logger: options.logger,
+        apiKey: options.runtimeConfig.env.OAK_API_KEY,
+        runtimeConfig: options.runtimeConfig,
+        createAssetDownloadUrl: options.createAssetDownloadUrl,
+        authInfo: extra.authInfo,
+      });
+    };
 
     const config = {
       title: tool.title,
@@ -185,9 +178,9 @@ function registerTools(
     };
 
     if (isAppToolEntry(tool)) {
-      registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
+      registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, handler);
     } else {
-      server.registerTool(tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
+      server.registerTool(tool.name, { ...config, _meta: { ...tool._meta } }, handler);
     }
   }
 }

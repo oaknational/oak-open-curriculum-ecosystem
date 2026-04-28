@@ -599,6 +599,13 @@ export interface components {
                     /** Deprecated */
                     order: number;
                 }[];
+                /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                examBoards?: {
+                    /** The title of the exam board */
+                    title: string;
+                    /** The slug of the exam board */
+                    slug: string;
+                }[];
             } | {
                 unitTitle: string;
                 unitOrder: number;
@@ -617,6 +624,13 @@ export interface components {
                     threadSlug: string;
                     /** Deprecated */
                     order: number;
+                }[];
+                /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                examBoards?: {
+                    /** The title of the exam board */
+                    title: string;
+                    /** The slug of the exam board */
+                    slug: string;
                 }[];
             })[];
             /**
@@ -663,6 +677,13 @@ export interface components {
                             /** Deprecated */
                             order: number;
                         }[];
+                        /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                        examBoards?: {
+                            /** The title of the exam board */
+                            title: string;
+                            /** The slug of the exam board */
+                            slug: string;
+                        }[];
                     } | {
                         unitTitle: string;
                         unitOrder: number;
@@ -681,6 +702,13 @@ export interface components {
                             threadSlug: string;
                             /** Deprecated */
                             order: number;
+                        }[];
+                        /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                        examBoards?: {
+                            /** The title of the exam board */
+                            title: string;
+                            /** The slug of the exam board */
+                            slug: string;
                         }[];
                     })[];
                 }[];
@@ -713,6 +741,13 @@ export interface components {
                         /** Deprecated */
                         order: number;
                     }[];
+                    /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                    examBoards?: {
+                        /** The title of the exam board */
+                        title: string;
+                        /** The slug of the exam board */
+                        slug: string;
+                    }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
@@ -731,6 +766,13 @@ export interface components {
                         threadSlug: string;
                         /** Deprecated */
                         order: number;
+                    }[];
+                    /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                    examBoards?: {
+                        /** The title of the exam board */
+                        title: string;
+                        /** The slug of the exam board */
+                        slug: string;
                     }[];
                 })[];
             })[];
@@ -774,6 +816,13 @@ export interface components {
                         /** Deprecated */
                         order: number;
                     }[];
+                    /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                    examBoards?: {
+                        /** The title of the exam board */
+                        title: string;
+                        /** The slug of the exam board */
+                        slug: string;
+                    }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
@@ -792,6 +841,13 @@ export interface components {
                         threadSlug: string;
                         /** Deprecated */
                         order: number;
+                    }[];
+                    /** The exam boards the unit appears in. Only populated when the sequence is requested without an exam board (e.g. `science-secondary` rather than `science-secondary-aqa`). */
+                    examBoards?: {
+                        /** The title of the exam board */
+                        title: string;
+                        /** The slug of the exam board */
+                        slug: string;
                     }[];
                 })[];
             }[];
@@ -1615,6 +1671,13 @@ export interface components {
                 unitSlug: string;
                 /** The unit title */
                 unitTitle: string;
+                /** The exam boards the unit appears in. Only populated for KS4 subjects when the request does not supply an `examBoard` filter. */
+                examBoards?: {
+                    /** The title of the exam board */
+                    title: string;
+                    /** The slug of the exam board */
+                    slug: string;
+                }[];
             }[];
             /**
              * Format: uri
@@ -3014,7 +3077,8 @@ export interface components {
          * @example [
          *       \{
          *         "title": "Number: Multiplication and division",
-         *         "slug": "number-multiplication-and-division"
+         *         "slug": "number-multiplication-and-division",
+         *         "unitCount": 78
          *       \}
          *     ]
          */
@@ -3023,6 +3087,8 @@ export interface components {
             title: string;
             /** The thread slug identifier */
             slug: string;
+            /** The number of published units in the thread */
+            unitCount: number;
             /** Threads are data concepts without Oak URLs on the website. Always null for thread resources. */
             oakUrl?: null;
         }[];
@@ -3693,7 +3759,9 @@ export interface operations {
     };
     "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": {
         parameters: {
-            query?: never;
+            query?: {
+                examBoard?: "aqa" | "edexcel" | "eduqas" | "ocr" | "wjec" | "edexcelb";
+            };
             header?: never;
             path: {
                 /** Key stage slug to filter by, e.g. 'ks2' */

@@ -36,7 +36,11 @@ if ! pnpm depcruise; then
 fi
 
 echo "🔤 Running quality gate checks..."
-pnpm turbo run --continue type-check lint test
+if ! pnpm turbo run --continue --output-logs=errors-only type-check lint test; then
+  echo "❌ Quality gate checks failed!"
+  echo "💡 Run 'pnpm turbo run --continue type-check lint test' to see full output"
+  exit 1
+fi
 
 echo "✅ Pre-commit checks completed!"
 

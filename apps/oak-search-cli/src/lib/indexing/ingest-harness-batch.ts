@@ -193,6 +193,14 @@ export async function runBatchIngestion(
 ): Promise<BulkIngestionResult> {
   const dryRun = options.dryRun ?? false;
   const verbose = options.verbose ?? false;
+  context.logger.info('Starting batch ingestion', {
+    dryRun,
+    verbose,
+    target: context.target,
+    granularity: context.granularity.kind,
+    subjectCount: context.subjects.length,
+    keyStageCount: context.keyStages.length,
+  });
   const metricsCollector = createSequenceFacetMetricsCollector();
   const state = createBatchProcessingState();
 

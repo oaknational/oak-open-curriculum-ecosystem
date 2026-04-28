@@ -6,6 +6,7 @@
  * JSON dataset pattern (`data.json`, `types.ts`, `index.ts`) and
  * delegates the mechanical write to {@link writeJsonDataset}.
  */
+import type { Logger } from '@oaknational/logger';
 import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
 import { writeJsonDataset, type JsonDatasetDescriptor } from './write-json-dataset.js';
 
@@ -193,6 +194,11 @@ export const priorKnowledgeGraphDescriptor: JsonDatasetDescriptor = {
 export async function writePriorKnowledgeGraphAsJson(
   graph: PriorKnowledgeGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
-  return writeJsonDataset(priorKnowledgeGraphDescriptor, graph, outputDir);
+  logger?.info('bulk.writer.write_prior_knowledge_graph_json', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
+  return writeJsonDataset(priorKnowledgeGraphDescriptor, graph, outputDir, logger);
 }

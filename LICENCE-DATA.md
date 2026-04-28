@@ -74,3 +74,8 @@ EEF MCP server prototype: John Roberts.
 Some upstream content may include third-party rights or trademarks that are
 not covered by OGL. Consult the upstream terms for guidance on third-party
 content.
+
+## Full Attribution
+
+For complete credits, citations, and per-source attribution statements,
+see [ATTRIBUTION.md](ATTRIBUTION.md).

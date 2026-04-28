@@ -8,19 +8,29 @@ Write about the experience rather than the method or impact. What shifted? What 
 
 Reading the [metacognition prompt](../directives/metacognition.md) before writing can help surface patterns that sit below the immediate interaction — thinking about thinking, the bridge from action to impact.
 
-Applied technical patterns belong in [`distilled.md`](../memory/distilled.md) or permanent documentation (`/docs/`, ADRs, READMEs). If an experience file accumulates primarily technical content, extract it during [documentation consolidation](../../.cursor/commands/jc-consolidate-docs.md) and leave a brief reflective stub in its place.
+**Experience is session-scoped.** A session captures its own subjective reflection at close under [`session-handoff` step 6c](../commands/session-handoff.md). Cross-session audit lives at [`consolidate-docs` step 4](../commands/consolidate-docs.md).
 
-This provides a Chronos time bridge between Kairos time sessions. The more direct experience we have, the better future learning will work.
+## Why the audit step exists
+
+`consolidate-docs` step 4 scans experience files for applied technical patterns and extracts any it finds to permanent documentation (`distilled.md`, ADRs, governance docs, READMEs). The audit exists for three reasons:
+
+1. **Preserving the purpose.** Experiences are for subjective experience. If technical content accumulates, it displaces the texture the files are meant to hold. The audit keeps the directory faithful to its intent.
+2. **Recovering stranded insight.** If technical content does land here by accident, we do not want it trapped in a surface the rest of the Practice does not read as authoritative. The audit rescues it to a home the rest of the Practice can act on.
+3. **Surfacing emergent insight.** Observing and reflecting across many experience files — across sessions and across threads — occasionally surfaces a pattern, principle, or decision that none of the individual experiences named. The audit is when that cross-cutting reading happens and the emergent insight is named elsewhere (a pattern, a PDR candidate, an ADR candidate).
+
+The audit is therefore **not** a salvage operation driven by expectation of technical pollution. It is a discipline that protects the subjective register, recovers stranded technical content if present, and surfaces cross-experience emergence.
+
+This directory provides a Chronos time bridge between Kairos time sessions. The more direct experience we have, the better future learning will work.
 
 ## Continuity Protocol
 
 Use this as a fast ritual to preserve and extend continuity across sessions.
 
 1. Ground on primary references
+   - Read: [start-right-quick](../skills/start-right-quick/shared/start-right.md)
    - Read: [GO workflow](../skills/go/shared/go.md)
-   - Read: [session-continuation.prompt.md](../prompts/session-continuation.prompt.md)
    - Read: [AGENT.md](../directives/AGENT.md)
-   - Skim: [principles.md](../directives/principles.md), [TypeScript practice](../../docs/governance/typescript-practice.md)
+   - Skim: [principles.md](../directives/principles.md), [orientation.md](../directives/orientation.md), [TypeScript practice](../../docs/governance/typescript-practice.md)
 
 2. Sample recent experience
    - Skim 1–3 relevant files below (Highlights). Note tags, decisions, open questions.

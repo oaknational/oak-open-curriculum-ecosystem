@@ -1,4 +1,4 @@
-import type { Rule } from 'eslint';
+import type { TSESLint } from '@typescript-eslint/utils';
 
 /**
  * Pattern matching `eslint-disable` directive variants but NOT `eslint-enable`.
@@ -36,7 +36,7 @@ const APPROVAL_MARKER_PATTERN = /--\s*jc:/iu;
  * `eslint-enable` comments are explicitly allowed; they undo prior disable
  * blocks and should not be restricted.
  */
-const noEslintDisableRule: Rule.RuleModule = {
+const noEslintDisableRule: TSESLint.RuleModule<'eslintDisableBanned' | 'tsDirectiveBanned', []> = {
   meta: {
     type: 'problem',
     docs: {
@@ -51,6 +51,7 @@ const noEslintDisableRule: Rule.RuleModule = {
         '@ts-ignore, @ts-expect-error, and @ts-nocheck are banned. Fix the root cause — TypeScript suppression directives are never permitted.',
     },
   },
+  defaultOptions: [],
 
   create(context) {
     return {

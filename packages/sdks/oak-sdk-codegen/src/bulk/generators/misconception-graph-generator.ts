@@ -6,6 +6,7 @@
  * This graph helps teachers identify common mistakes and AI agents provide
  * targeted tutoring support.
  */
+import type { Logger } from '@oaknational/logger';
 import type { ExtractedMisconception } from '../extractors/index.js';
 import {
   serializeDatasetToJson,
@@ -225,6 +226,11 @@ export function serializeMisconceptionGraph(graph: MisconceptionGraph): string {
 export async function writeMisconceptionGraphAsJson(
   graph: MisconceptionGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
-  return writeJsonDataset(misconceptionGraphDescriptor, graph, outputDir);
+  logger?.info('bulk.writer.write_misconception_graph', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
+  return writeJsonDataset(misconceptionGraphDescriptor, graph, outputDir, logger);
 }

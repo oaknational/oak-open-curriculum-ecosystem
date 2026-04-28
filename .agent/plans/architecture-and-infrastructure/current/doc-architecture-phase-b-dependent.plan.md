@@ -272,7 +272,9 @@ paths or ADR numbers — per the Practice Core boundary contract).
 standardisation phase (external dependency).
 
 **What**: Evaluate `eslint-plugin-import-x` patterns from the reference
-document (`.agent/reference/architecture/boundary-enforcement-with-eslint.md`)
+document (`.agent/research/developer-experience/boundary-enforcement-with-eslint.md`,
+re-homed during the Session 8 rehoming pass; PROMOTE-TO-REFERENCE proposal
+pending owner-vet per [PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md))
 against existing `@oaknational/eslint-plugin-standards` rules.
 
 **Evaluation questions**:

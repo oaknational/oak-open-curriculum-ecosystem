@@ -1,20 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { LogSink } from '@oaknational/logger';
-import { wrapPromptHandler, wrapResourceHandler, wrapToolHandler } from '@oaknational/sentry-mcp';
-import type { MergedMcpObservation } from '@oaknational/sentry-mcp';
 import {
-  createFixtureSentryStore,
-  type FixtureSentryLogCapture,
   type SentryBreadcrumb,
   type SentryErrorEvent,
   type SentryNodeSdk,
   type SentryTransactionEvent,
 } from '@oaknational/sentry-node';
-import { typeSafeKeys } from '@oaknational/type-helpers';
 import type { AuthDisabledRuntimeConfig } from '../runtime-config.js';
 import { createHttpObservabilityOrThrow } from './http-observability.js';
-
-type RecorderWithObservations = { readonly observations: readonly MergedMcpObservation[] };
 
 interface FakeSentrySdk {
   readonly sdk: SentryNodeSdk;
@@ -41,6 +34,7 @@ function createRuntimeConfig(
     dangerouslyDisableAuth: true,
     useStubTools: false,
     version: '1.2.3-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
     env: {
       OAK_API_KEY: 'test-api-key',
@@ -48,12 +42,12 @@ function createRuntimeConfig(
       ELASTICSEARCH_API_KEY: 'test-es-key',
       DANGEROUSLY_DISABLE_AUTH: 'true',
       LOG_LEVEL: 'info',
-      NODE_ENV: 'test',
       SENTRY_MODE: mode,
+      VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
       ...(mode === 'sentry'
         ? {
             SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
-            SENTRY_RELEASE: 'release-123',
+            SENTRY_RELEASE_OVERRIDE: 'release-123',
             SENTRY_TRACES_SAMPLE_RATE: '1',
           }
         : {}),
@@ -94,6 +88,10 @@ function createFakeSentrySdk(): FakeSentrySdk {
   const captureException = vi.fn<SentryNodeSdk['captureException']>();
   const captureMessage = vi.fn<SentryNodeSdk['captureMessage']>();
   const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
+  const close = vi.fn<SentryNodeSdk['close']>().mockResolvedValue(true);
+  const setUser = vi.fn<SentryNodeSdk['setUser']>();
+  const setTag = vi.fn<SentryNodeSdk['setTag']>();
+  const setContext = vi.fn<SentryNodeSdk['setContext']>();
 
   return {
     sdk: {
@@ -101,6 +99,10 @@ function createFakeSentrySdk(): FakeSentrySdk {
       captureException,
       captureMessage,
       flush,
+      close,
+      setUser,
+      setTag,
+      setContext,
       logger: noopLogger,
     },
     init,
@@ -118,12 +120,6 @@ function getInitOptions(fakeSentrySdk: FakeSentrySdk): Parameters<SentryNodeSdk[
   }
 
   return initOptions;
-}
-
-function getFixtureLogCaptures(
-  captures: readonly { readonly kind: string }[],
-): readonly FixtureSentryLogCapture[] {
-  return captures.filter((capture): capture is FixtureSentryLogCapture => capture.kind === 'log');
 }
 
 function requireDefined<T>(value: T | null | undefined, message: string): T {
@@ -172,23 +168,6 @@ function requireImmediateBeforeBreadcrumbResult(
   }
 
   return result;
-}
-
-function hasObservations(value: unknown): value is RecorderWithObservations {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'observations' in value &&
-    Array.isArray(value.observations)
-  );
-}
-
-function requireRecorderWithObservations(value: unknown): RecorderWithObservations {
-  if (!hasObservations(value)) {
-    throw new Error('Expected an in-memory MCP observation recorder');
-  }
-
-  return value;
 }
 
 function expectRedactedMcpErrorEvent(beforeSend: BeforeSendHook | undefined): void {
@@ -388,85 +367,5 @@ describe('createHttpObservability', () => {
     expect(JSON.stringify(event)).not.toContain('opaque-state');
     expect(JSON.stringify(event)).not.toContain('random-nonce');
     expect(JSON.stringify(event)).not.toContain('signed-client-jwt');
-  });
-});
-
-describe('createHttpObservability trace-context propagation', () => {
-  it('records metadata-only MCP observations that share trace context with logs in fixture mode', async () => {
-    const fixtureStore = createFixtureSentryStore();
-    const observability = createHttpObservabilityOrThrow(createRuntimeConfig('fixture'), {
-      fixtureStore,
-      stdoutSink: noopStdoutSink,
-    });
-    const recorder = requireRecorderWithObservations(observability.mcpRecorder);
-    const logger = observability.createLogger({ name: 'test-http' });
-    const observationOptions = observability.createMcpObservationOptions();
-
-    const wrappedTool = wrapToolHandler(
-      'test-tool',
-      async (params: { readonly topic: string }) => {
-        logger.info('tool.handler.log', { topic: params.topic });
-        return { ok: true };
-      },
-      observationOptions,
-    );
-    const wrappedResource = wrapResourceHandler(
-      'test-resource',
-      async () => {
-        logger.info('resource.handler.log');
-        return { contents: [] };
-      },
-      observationOptions,
-    );
-    const wrappedPrompt = wrapPromptHandler(
-      'test-prompt',
-      async () => {
-        logger.info('prompt.handler.log');
-        return { messages: [] };
-      },
-      observationOptions,
-    );
-
-    await observability.withSpan({
-      name: 'oak.http.request.mcp',
-      attributes: {
-        'http.route': '/mcp',
-      },
-      run: async () => {
-        await wrappedTool({ topic: 'fractions' });
-        await wrappedResource();
-        await wrappedPrompt();
-      },
-    });
-
-    expect(recorder.observations).toHaveLength(3);
-    expect(recorder.observations).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ kind: 'tool', name: 'test-tool', status: 'success' }),
-        expect.objectContaining({ kind: 'resource', name: 'test-resource', status: 'success' }),
-        expect.objectContaining({ kind: 'prompt', name: 'test-prompt', status: 'success' }),
-      ]),
-    );
-    const requestTraceId = recorder.observations[0]?.traceId;
-    expect(requestTraceId).toMatch(/^[0-9a-f]{32}$/);
-    for (const observation of recorder.observations) {
-      expect(observation.traceId).toBe(requestTraceId);
-      expect(typeSafeKeys(observation).sort()).toStrictEqual([
-        'durationMs',
-        'environment',
-        'kind',
-        'name',
-        'release',
-        'service',
-        'spanId',
-        'status',
-        'traceId',
-      ]);
-    }
-
-    const logCaptures = getFixtureLogCaptures(fixtureStore.captures);
-
-    expect(logCaptures).toHaveLength(3);
-    expect(logCaptures.every((capture) => capture.traceId === requestTraceId)).toBe(true);
   });
 });

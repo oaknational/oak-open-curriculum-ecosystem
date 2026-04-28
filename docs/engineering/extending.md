@@ -91,6 +91,72 @@ Core packages live in `packages/core/` and provide foundational abstractions.
 
 **Relevant ADRs**: [ADR-041](../architecture/architectural-decisions/041-workspace-structure-option-a.md) (workspace structure)
 
+## Adding a Rule, Skill, Command, or Sub-agent
+
+Rules, skills, commands, and sub-agents follow the three-layer artefact model
+(canonical content in `.agent/`, thin platform adapters in
+`.cursor/`/`.claude/`/`.agents/`/`.gemini/`). The canonical how-to lives in
+[`.agent/memory/executive/artefact-inventory.md`](../../.agent/memory/executive/artefact-inventory.md#how-to-create-new-artefacts)
+— step-by-step recipes for each artefact type, plus the platform-adapter
+parity required to keep `pnpm portability:check` green.
+
+**Always create the canonical file first** under `.agent/`, then add platform
+adapters, then run `pnpm portability:check`. Every canonical rule must cite
+the ADR(s) it operationalises with a leading "Operationalises ADR-NNN" line
+(ADR-131 §Self-Referential Property).
+
+**Relevant ADRs**:
+[ADR-114](../architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)
+(layered sub-agent prompt composition),
+[ADR-125](../architecture/architectural-decisions/125-agent-artefact-portability.md)
+(three-layer artefact model),
+[ADR-127](../architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md)
+(docs-as-infrastructure; naming hierarchy),
+[ADR-129](../architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
+(domain specialist reviewer + skill + rule triplet),
+[ADR-131](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
+(the capture → distil → graduate → enforce loop — new rules cite their ADR).
+
+## Adding an ADR
+
+ADRs are the architectural source of truth. See the [ADR index
+template](../architecture/architectural-decisions/README.md#template) for the
+minimum header shape (Status, Date, Related) and the Lifecycle section for
+status semantics (Proposed / Accepted / Superseded / Deprecated).
+
+Steps:
+
+1. Pick the next available number (scan
+   `docs/architecture/architectural-decisions/` for the highest existing ADR).
+2. Create the file as `NNN-kebab-slug.md` under
+   `docs/architecture/architectural-decisions/`.
+3. Fill Context, Decision, Consequences. Use an `## Amendments` section for
+   in-place revisions (see [ADR-125](../architecture/architectural-decisions/125-agent-artefact-portability.md#amendments)
+   as the canonical example).
+4. Add an entry to the ADR index
+   [`README.md`](../architecture/architectural-decisions/README.md) both in
+   the numeric list and in the relevant thematic cluster below it.
+5. Add an Operationalises-ADR citation to every rule / command that will
+   enforce the decision, per ADR-131 §Self-Referential Property.
+
+Governance claims that assert a property holds "universally" (e.g. "every
+rule cites its ADR", "one vocabulary everywhere") should be backed by a
+scanner — see pattern
+[`governance-claim-needs-a-scanner`](../../.agent/memory/active/patterns/governance-claim-needs-a-scanner.md)
+and the four live validators under `scripts/`.
+
+## Adopting a New Vendor CLI
+
+Follow the eight-point checklist in
+[docs/engineering/vendor-cli-adoption.md](./vendor-cli-adoption.md) —
+pnpm-first install, repo-tracked config, `onlyBuiltDependencies` entry,
+`knip.config.ts` ignore, shared libraries never pin `project`, fail-fast
+preflight, post-condition verification, root README prereq for interactive
+CLIs.
+
+**Relevant ADR**:
+[ADR-159](../architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md).
+
 ## General Principles
 
 Regardless of what you are adding:

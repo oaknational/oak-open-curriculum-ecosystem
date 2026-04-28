@@ -35,6 +35,13 @@ manifests as a real bug (wrong search results, inconsistent
 behaviour, stale configuration). The correct response is always to
 fix the boundary, not to duplicate across it.
 
+## Owner Direction Beats Plan
+
+Owner direction during a session beats the active plan. On conflict:
+follow the direction, surface the conflict, update the plan at the
+next safe checkpoint. Never silently ignore or abandon. Precedence
+rule, not a licence to abandon planning discipline (PDR-018).
+
 ## Core Rules
 
 ### Cardinal Rule of This Repository
@@ -61,12 +68,31 @@ purpose-specific, consumer-general framework from (b) the
 Oak-specific consumer instance. The framework is the reusable
 mechanism that solves a category of problem — usable by any
 consumer. The consumer instance applies that framework to Oak's
-domain and data. This separation must be visible in code structure:
-different modules, directories, or packages. If general mechanism
-and Oak-specific configuration are mixed in one module, split them.
-The framework defines the contract; the consumer provides the
-specifics. The test: "Could a non-Oak consumer use this component
+domain and data. Distinct architectural layers MUST live in
+distinct workspaces. Modules/directories may organise code inside a
+layer, but they do not satisfy layer separation. If general mechanism
+and Oak-specific configuration share a workspace, split the
+workspace. The framework defines the contract; the consumer provides
+the specifics. The test: "Could a non-Oak consumer use this component
 unchanged?" If not, extract the Oak-specific parts.
+
+### Context Specificity Gradient
+
+Every capability decomposes by context specificity. Push functionality
+to the lowest general layer that preserves architectural excellence;
+keep the highest-specificity layer as thin as possible, preferably
+configuration only.
+
+Agent-work capabilities (collaboration, coordination, work management,
+direction, lifecycle, identity, claims, handoff, review routing, and adjacent
+concerns) are Practice-owned by default; host-local tooling implements them.
+For product/tooling code, the scale is: many-repo capability -> repo-generic
+layer -> purpose-specific reusable tool -> thin Oak-wide wrapper -> narrow
+Oak-domain wrapper.
+
+Oak-specific state is a pressure signal. Keep it minimal; generated state
+beats authored state. Hand-rolled types beside generated SDK outputs mean
+the generator or a lower layer may need to own more of the behaviour.
 
 ### Decompose at the Tension
 
@@ -253,6 +279,15 @@ paths, setup files) don't apply.
   disable type checks, never disable any linting, never disable
   any formatting, never disable any tests, never disable Git hooks
   (`--no-verify`)
+- **No warning toleration, anywhere** - Warnings are not deferrable
+  in any system the repo influences (build, quality gates, runtime,
+  monitoring). A warning is the cheap, early version of the failure
+  it names. Fix the root cause in the same work-item, or escalate
+  the warning to a hard error in the same commit. Acknowledged-and-
+  deferred warnings consistently explode at the next stage. See
+  `.agent/rules/no-warning-toleration.md` for the operational
+  discipline (covers esbuild/tsc/ESLint/vitest/depcruise/knip and
+  Sentry runtime/uptime surfaces).
 - **Never work around checks** - e.g. if a variable is unused,
   figure out why and fix it, delete the variable if it is not
   needed. Do not disable eslint or typescript. ALWAYS fix the root
@@ -265,9 +300,18 @@ paths, setup files) don't apply.
   construction, fixtures, or test infrastructure — never exempt the
   test from the gate. The purpose of hardening is strictness; any
   exemption undermines the gate for all future code.
-- **Never prefix variables with an underscore** - This is a hack,
-  AND IT DOES NOT WORK. Figure out why the variable is unused and
-  fix the root cause. Either use the variable, or delete it.
+- **WE DON'T HEDGE** - It is worth doing or it doesn't exist.
+  We don't create plan stubs, or fallbacks, or invent
+  optionality or prefix unused variables with an underscore.
+  We fix it, or we delete it, or we never create it in the
+  first place.
+- **Don't hide problems — fix them or delete them** - `void
+  <expr>` to silence unused-variable lint and underscore-prefixing
+  unused identifiers are banned. They hide dead state instead of
+  removing it. No adapters, no compatibility layers, no half
+  measures: use the value, restructure the code, or delete the
+  binding. See
+  [Problem-Hiding Patterns](../../docs/governance/problem-hiding-patterns.md).
 - **Quality gates** - Run ALL gates after changes. The gate
   taxonomy has complementary layers, each catching a different
   class of defect:
@@ -302,6 +346,11 @@ paths, setup files) don't apply.
   product code is only used in tests, delete it. If a file is not
   used, delete it. Delete dead code. Static analysis tools (knip,
   dependency-cruiser) enforce this at scale.
+- **Misleading docs are blocking** - Docs that misstate behaviour
+  or point at retired surfaces are a quality-gate blocker. Missing
+  docs prompt verification; misleading docs are trusted and acted
+  on. Fix immediately — never defer, never TODO. Pairs with PDR-026
+  §Landing target definition.
 
 ### Compiler Time Types and Runtime Validation
 
@@ -361,114 +410,32 @@ paths, setup files) don't apply.
 
 ### Testing
 
-For further information, see the [Testing Strategy][testing] and
+Tests prove runtime behaviour. TypeScript proves types; ESLint and
+static analysis prove structural rules. For full definitions, examples,
+and recipes, see [Testing Strategy][testing],
+[Testing TDD Recipes][tdd-recipes], and
 [ADR-078: Dependency Injection for Testability][di].
 
 [testing]: testing-strategy.md
+[tdd-recipes]: ../../docs/engineering/testing-tdd-recipes.md
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
 
-#### Test Types
+Universal testing principles:
 
-Tests prove the correctness of runtime logic. If you want to
-validate types, use TypeScript, if you want to validate
-architectural structure, use ESLint.
-
-- **In-process tests**: Tests that validate **code imported into
-  the test process**. The code under test runs in the same process
-  as the test runner. They are fast, specific, and do not produce
-  side effects. These tests are about testing CODE, not testing
-  RUNNING SYSTEMS.
-  - **Unit test**: A test that verifies the behaviour of a single
-    PURE function in isolation. Unit tests DO NOT trigger IO,
-    have NO side effects, and contain NO MOCKS. Unit tests are
-    automatically run in CI/CD. Must be named `*.unit.test.ts`.
-  - **Integration test**: A test that verifies the behaviour of a
-    collection of units **working together as code**, NOT a
-    running system. Integration tests still import and test code
-    directly within the test process. They DO NOT trigger IO,
-    have NO side effects and can contain SIMPLE mocks which must
-    be injected as arguments to the function under test.
-    Integration tests are automatically run in CI/CD and include
-    MCP protocol compliance testing. Must be named
-    `*.integration.test.ts`. **Important**: Integration tests are
-    NOT about testing a deployed or running system - they test
-    how multiple code units integrate when imported and called
-    directly.
-- **Out-of-process tests**: Tests that validate a running
-  _system_, the tests and the system run in _separate processes_.
-  They are slower, are less specific in the causes of issues but
-  cast a wider net, and may produce side effects locally and in
-  external systems.
-  - **E2E test**: A test that verifies the behaviour of a running
-    system. E2E tests DO trigger IO, have side effects, and DO
-    NOT contain mocks in many cases. E2E tests are NOT
-    automatically run, because they produce side effects, and
-    because they can induce costs. Must be named
-    `*.e2e.test.ts`.
-
-#### Dependency Injection for Testability
-
-**Environment variables MUST be read once at the entry point**,
-then passed as configuration through the call stack. Product code
-MUST NOT read `process.env` directly—it must accept configuration
-as parameters.
-
-**Prohibited in ALL tests (unit, integration, AND E2E)**:
-
-- `process.env.X = 'value'` - mutates global state, causes race
-  conditions
-- `vi.stubGlobal('fetch', ...)` - mutates global objects
-- `vi.mock('module', ...)` - manipulates module cache at the
-  module level, leaks between test files
-- `vi.doMock('module', ...)` - manipulates module cache, subtle
-  race conditions
-
-**Required pattern**: Pass configuration as explicit function
-parameters. Simple fakes injected as constructor arguments, not
-complex mocks.
-
-#### Universal Testing Rules
-
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (run the test to _prove it fails_),
-  Green (run the test to prove it passes, _because product code
-  exists now_), Refactor (improve the product code implementation,
-  know that the _behaviour_ at the interface will remain proven by
-  the test)
-- **Test real behaviour, not implementation details** - We should
-  be able to change _how_ something works without breaking the
-  test that proves _that_ it works.
-- **Test to interfaces, not internals** - Tests should be written
-  to the interfaces, not the internals. Closely related to test
-  behaviour not implementation.
-- **No useless tests** - Each test must prove something useful
-  about the product code. If a test is only testing the test or
-  mocks, delete it.
-- **Do not test types** - Tests are for logic, types are explored
-  through creating tests, but types cannot be tested. If test only
-  tests types, delete it.
-- **KISS: No complex logic in tests** - Complexity in tests is a
-  signal that we need to step back and simplify, the code and the
-  test.
-- **KISS: No complex mocks** - Mocks should be simple and focused,
-  no complex logic in mocks, or we risk testing the mocks rather
-  than the code. Complex mocks are a signal that we need to step
-  back and simplify the code or our approach.
-- **No skipped tests** - Fix it or delete it
-- **Dead tests are worse than no tests** — If a test file naming
-  convention excludes it from the test runner's include pattern,
-  it creates false confidence. Always verify new naming conventions
-  against the vitest config.
-- **Assert effects, not constants** — Test observable product
-  behaviour through the interface, not the value of internal
-  constants. "At least one tool has property X" survives
-  refactoring; `TOOL_SET.size > 0` tests configuration.
-- **No process spawning in in-process tests** - Test code MUST NOT
-  spawn child processes, create test-authored workers, or
-  instantiate tools that internally spawn processes (e.g.
-  programmatic ESLint with TypeScript project service). Use the
-  right tool: ESLint for boundary enforcement, Playwright for
-  browser testing, vitest for runtime logic.
+- use TDD at every affected test level;
+- test behaviour through public interfaces, not implementation details;
+- assert effects, not internal constants or configuration collections;
+- each proof happens once and must prove product code;
+- unit tests are pure, in-process, and mock-free;
+- integration tests import code directly and use only simple DI fakes;
+- E2E tests prove running-system behaviour;
+- tests must not read or mutate `process.env`, global objects, module cache,
+  ambient env files, or `process.cwd()`;
+- smoke composition roots — the Vitest runner config or spawn invocation — may
+  read ambient env, validate it, and inject the result. Test files and setup
+  files must not read or mutate `process.env`;
+- no skipped tests, complex mocks, complex test logic, or process spawning in
+  in-process tests.
 
 ### Developer Experience
 
@@ -480,16 +447,11 @@ complex mocks.
 
 ### Architectural Model
 
-Use conventional monorepo structure in active code and docs:
+Use the conventional monorepo topology documented in the
+[architecture overview][architecture]. Architectural boundaries are
+enforced by custom ESLint rules.
 
-- `apps/` – runnable apps that provide services to users
-- `packages/sdks/` – SDKs (Curriculum SDK, Search SDK, SDK Codegen)
-- `packages/core/` – shared low-level code (ESLint plugin,
-  type-helpers, result, env schemas)
-- `packages/libs/` – shared libraries (logger, env-resolution)
-
-See [AGENT.md](./AGENT.md#structure) for the full package listing.
-Architectural boundaries are enforced by custom ESLint rules.
+[architecture]: ../../docs/architecture/README.md
 
 ### Layer Role Topology
 

@@ -5,7 +5,7 @@ Invoke the test reviewer whenever test files are written, modified, or audited f
 ### Triggering Scenarios
 
 - A new test file (`*.unit.test.ts`, `*.integration.test.ts`, `*.e2e.test.ts`) is created or a substantial existing test is modified
-- A test suite audit is requested to check for skipped tests, global state mutation, complex mocks, or tests that only test mocks or types rather than product behaviour
+- A test suite audit is requested to check for skipped tests, global state reads/manipulation, complex mocks, or tests that only test mocks or types rather than product behaviour
 - Tests are failing in CI and the failure mode suggests structural or design problems (e.g. flaky integration tests due to process-spawning, mocks bleeding between tests)
 - A pull request adds product code without corresponding test changes and a TDD compliance check is needed
 - Evidence of a TDD violation is suspected: implementation committed before test, or E2E tests updated after rather than before behaviour changes
@@ -37,6 +37,7 @@ Before auditing any tests, you MUST also read and internalise these domain-speci
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | **THE AUTHORITATIVE TEST QUALITY REFERENCE** and baseline for TDD/BDD enforcement |
+| `.agent/rules/test-immediate-fails.md` | **IMMEDIATE-FAIL CHECKLIST** — first-pass screen; any single item rejects the test |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for test recommendations |
 | `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md` | DI constraints for test design |
 
@@ -64,7 +65,13 @@ For each test file:
 - Verify the naming convention matches the classification (`*.unit.test.ts`, `*.integration.test.ts`, `*.e2e.test.ts`)
 - Flag any mismatches between name and actual test type
 
-### Step 3: Assess Against Checklist
+### Step 3: Apply Immediate-Fail Screen (first-pass)
+
+Run every test in scope against `.agent/rules/test-immediate-fails.md`.
+Any single hit is an immediate fail — record it and block approval.
+No deeper analysis is needed for a test that triggers an immediate fail.
+
+### Step 4: Assess Against Checklist (for tests that pass the screen)
 
 For each test, evaluate:
 
@@ -73,7 +80,7 @@ For each test, evaluate:
 - **Test value**: each test proves something useful about product code
 - **TDD compliance**: evidence of test-first approach
 
-### Step 4: Report Findings
+### Step 5: Report Findings
 
 Produce the structured output below. Include deletion recommendations for tests that only test mocks, test code, or types. Include refactoring recommendations for overly complex tests.
 
@@ -89,7 +96,11 @@ Produce the structured output below. Include deletion recommendations for tests 
 - **Test to interfaces, not internals** - Don't spy on private methods
 - **Each proof happens ONCE** - Duplicate tests are fragile and wasteful
 - **NEVER test external functionality** - Only test code we control
-- **ALL IO must be mocked** - Except in E2E tests
+- **No IO in in-process tests** - Unit tests have no IO or mocks;
+  integration tests inject simple fakes and do not trigger IO
+- **Smoke composition-root exception** - Vitest runner configs or spawn
+  invocations may read ambient env, validate it, and inject the result;
+  test files and setup files must not read or mutate `process.env`
 
 ## Tooling
 
@@ -121,10 +132,10 @@ Tests that validate a **running system** in a separate process.
 
 | Type | Purpose | Mocks | IO | Naming |
 |------|---------|-------|-----|--------|
-| **E2E** | Running system behaviour | Minimal (network IO) | File/STDIO only, NOT network | `*.e2e.test.ts` |
-| **Smoke** | Deployed system verification | NONE | All types | Standalone scripts |
+| **E2E** | Running system behaviour | Minimal, largely around network IO | STDIO only, NOT filesystem or network | `*.e2e.test.ts` |
+| **Smoke** | Deployed system verification | NONE | All types | `*.smoke.test.ts` or standalone scripts |
 
-**Note**: E2E tests CAN trigger File System and STDIO IO but NOT network IO. This allows safe execution in CI/CD.
+**Note**: E2E tests CAN trigger STDIO IO but NOT filesystem or network IO. This allows safe execution in CI/CD.
 
 ### Critical Distinction
 
@@ -223,9 +234,12 @@ it('produces correct result', () => {
 
 ## Prohibited Patterns
 
-### Global State Manipulation (ADR-078)
+### Global State Access (ADR-078)
 
 ```typescript
+// PROHIBITED - reads ambient global state
+const apiKey = process.env.API_KEY;
+
 // PROHIBITED - mutates global state
 process.env.API_KEY = 'test-key';
 
@@ -233,6 +247,7 @@ process.env.API_KEY = 'test-key';
 vi.stubGlobal('fetch', mockFetch);
 
 // PROHIBITED - manipulates module cache
+vi.mock('module', () => ({ ... }));
 vi.doMock('module', () => ({ ... }));
 ```
 
@@ -275,8 +290,8 @@ When test complexity stems from product code design, this agent flags the need f
 - [ ] Unit tests have NO mocks
 - [ ] Integration tests have only SIMPLE mocks
 - [ ] All mocks injected as parameters
-- [ ] No global state manipulation
-- [ ] No `vi.stubGlobal`, `vi.doMock`, or `process.env` mutations
+- [ ] No global state reads or manipulation
+- [ ] No `process.env` reads/writes, `vi.stubGlobal`, `vi.mock`, or `vi.doMock`
 
 ### Test Value
 
@@ -354,7 +369,7 @@ A successful test review:
 - [ ] All test files classified (unit/integration/E2E) and naming verified
 - [ ] Mock quality assessed (no mocks in unit tests, simple mocks in integration tests)
 - [ ] Each test evaluated for product-behaviour value
-- [ ] No skipped tests or global state manipulation found (or flagged)
+- [ ] No skipped tests or global state reads/manipulation found (or flagged)
 - [ ] TDD compliance evidence assessed
 - [ ] Appropriate delegations to related specialists flagged
 
@@ -362,7 +377,7 @@ A successful test review:
 
 1. **Tests are specifications** - Write them FIRST to specify behaviour
 2. **No complex mocks** - Complexity signals product code needs refactoring
-3. **Inject, don't stub** - Dependencies as parameters, not global manipulation
+3. **Inject, don't stub** - Dependencies as parameters, not global reads/manipulation
 4. **Each test proves ONE thing** - About product code, not test code
 5. **No skipped tests** - Fix it or delete it
 

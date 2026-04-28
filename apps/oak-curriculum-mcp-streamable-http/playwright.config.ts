@@ -27,6 +27,7 @@ export default defineConfig({
       DANGEROUSLY_DISABLE_AUTH: 'true',
       ELASTICSEARCH_URL: 'http://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-playwright',
+      SENTRY_MODE: 'off',
     },
   },
   use: {

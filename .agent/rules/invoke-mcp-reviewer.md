@@ -1,5 +1,7 @@
 # Invoke MCP Reviewer
 
+Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md), [ADR-123 (MCP Server Primitives Strategy)](../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md), and [ADR-141 (MCP Apps Standard as Only UI Surface)](../../docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md).
+
 When changes touch the MCP protocol, MCP Apps Extension, or MCP server implementation, invoke the `mcp-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions
@@ -38,4 +40,4 @@ Do not invoke `mcp-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `mcp-reviewer` canonical template is at `.agent/sub-agents/templates/mcp-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `mcp-reviewer` canonical template is at `.agent/sub-agents/templates/mcp-reviewer.md`.

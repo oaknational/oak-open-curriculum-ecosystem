@@ -1,4 +1,3 @@
-import { createInMemoryMcpObservationRecorder } from '@oaknational/sentry-mcp';
 import { context, trace } from '@opentelemetry/api';
 import {
   getActiveSpanContextSnapshot,
@@ -45,33 +44,44 @@ function createFakeActiveContext(nextId: () => number) {
   return trace.setSpan(context.active(), trace.wrapSpanContext(nextFakeSpanContext(nextId)));
 }
 
+const noopLifecycleDelegates: Pick<
+  HttpObservability,
+  'captureHandledError' | 'setUser' | 'setTag' | 'setContext' | 'flush' | 'close'
+> = {
+  captureHandledError() {
+    // No-op: tests can override via spread.
+  },
+  setUser() {
+    // No-op: tests can override via spread.
+  },
+  setTag() {
+    // No-op: tests can override via spread.
+  },
+  setContext() {
+    // No-op: tests can override via spread.
+  },
+  async flush() {
+    return { ok: true, value: undefined };
+  },
+  async close() {
+    return { ok: true, value: undefined };
+  },
+};
+
 export function createFakeHttpObservability(): HttpObservability {
   const nextId = createSpanCounter();
-  const recorder = createInMemoryMcpObservationRecorder();
   const logger = createFakeLogger();
-
   const observability: HttpObservability = {
     service: 'test-http',
     environment: 'test',
     release: 'test-release',
     tracer: undefined,
-    mcpRecorder: recorder,
     getActiveSpanContext: getActiveSpanContextSnapshot,
-    async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
+    async withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T> {
       return await context.with(createFakeActiveContext(nextId), async () => await options.run());
     },
     createLogger() {
       return logger;
-    },
-    createMcpObservationOptions() {
-      return {
-        service: 'test-http',
-        environment: 'test',
-        release: 'test-release',
-        recorder,
-        runtime: observability,
-        tracer: undefined,
-      };
     },
     async withSpan<T>(options: HttpSpanOptions<T>): Promise<T> {
       return await context.with(
@@ -82,12 +92,7 @@ export function createFakeHttpObservability(): HttpObservability {
     withSpanSync<T>(options: HttpSyncSpanOptions<T>): T {
       return context.with(createFakeActiveContext(nextId), () => options.run(noopSpanHandle));
     },
-    captureHandledError() {
-      // No-op in the default fake; tests can override this with a recording implementation.
-    },
-    async flush() {
-      return { ok: true, value: undefined };
-    },
+    ...noopLifecycleDelegates,
   };
 
   return observability;

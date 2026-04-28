@@ -5,6 +5,20 @@
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 **Related**: [Hooks Portability Plan](./hooks-portability.plan.md), [Manifest-Driven Adapter Generation — Strategic Plan](./adapter-generation.plan.md), [Continuity and Surprise Practice Adoption](../archive/completed/continuity-and-surprise-practice-adoption.plan.md)
 
+## Portability Clarification
+
+All agent infrastructure in this repository must be cross-vendor wherever
+the behaviour can be expressed in local portable Practice surfaces. This plan
+does not create the first cross-vendor collaboration substrate, and it must not
+be read as permission to build single-agent infrastructure elsewhere.
+
+The baseline collaboration substrate is already cross-vendor: markdown,
+JSON state, rules, commands, skills, and schemas that Claude Code, Codex,
+Cursor, and other capable agents can read and write. This future plan is
+narrower. It proposes an additional local-first sidecar layer for structured
+session metadata when vendor-native session models, hooks, launch wrappers,
+and transcript stores diverge.
+
 ## Problem and Intent
 
 Session state is fragmented across vendors.

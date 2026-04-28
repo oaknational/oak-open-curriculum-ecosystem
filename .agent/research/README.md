@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 6 April 2026  
+**Last Updated**: 19 April 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -11,7 +11,9 @@
 | Document Type | Location | Nature | Purpose |
 |---------------|----------|--------|---------|
 | **Research** | `.agent/research/` | Permanent | Record discoveries, insights, analysis |
-| **Reference** | `.agent/reference/` | Permanent | Long-lived supporting material for agents and developers (not ADRs) |
+| **Analysis** | `.agent/analysis/` | Evidence | Hold investigations, baselines, and evidence bundles |
+| **Reports** | `.agent/reports/` | Promoted | Stable audits and formal syntheses once promoted |
+| **Reference** | `.agent/reference/` | Curated library | Owner-vetted, evergreen read-to-learn material — promotion-gated per [PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md) |
 | **Plans** | `.agent/plans/` | Ephemeral | Track work in progress, acceptance criteria |
 | **Prompts** | `.agent/prompts/` | Entry points | Start new sessions with context |
 | **Experience** | `.agent/experience/` | Reflections | Metacognitive learnings |
@@ -48,6 +50,7 @@ Understanding Oak's curriculum structure and knowledge representation.
 | [curriculum-structure-3d-model.md](curriculum-structure-3d-model.md) | 3D curriculum visualization | Spatial metaphor for curriculum navigation |
 | [ONTOLOGY_RESEARCH_SUMMARY.md](ONTOLOGY_RESEARCH_SUMMARY.md) | Ontology research summary | |
 | [official-api-ontology-comparison.md](official-api-ontology-comparison.md) | API vs ontology comparison | |
+| [kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Graph-serving platform comparison | Direct-use baseline plus Neo4j/Stardog strengths, weaknesses, unknowns, and prototype-worthy use cases for external features |
 | **[open-curriculum-concept-graph/](open-curriculum-concept-graph/)** | Concept graph research | |
 | **[ooc/](ooc/)** | Open Curriculum research | Bulk download analysis, data quality |
 | [threads-analysis.md](threads-analysis.md) | Thread structure analysis | 164 threads, cross-year progressions |
@@ -55,6 +58,18 @@ Understanding Oak's curriculum structure and knowledge representation.
 | [SEQUENCE_VS_PROGRAMME_SUMMARY.md](SEQUENCE_VS_PROGRAMME_SUMMARY.md) | Sequence vs programme | |
 | [sequence-vs-programme-analysis.md](sequence-vs-programme-analysis.md) | Detailed comparison | |
 | [owa-programme-slug-analysis.md](owa-programme-slug-analysis.md) | Programme slug patterns | |
+
+### Companion Surfaces Outside Research
+
+These are not research artefacts, but they are important adjacent documents for
+the ontology lane.
+
+| Surface | Type | Why it matters |
+|---------|------|----------------|
+| [../plans/knowledge-graph-integration/README.md](../plans/knowledge-graph-integration/README.md) | Collection hub | Main discovery surface for ontology integration, direct-use baseline, platform comparison, and adjacent pedagogy work |
+| [../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis of the official Oak ontology against current MCP orientation, direct ontology surfaces, search projections, QA, and governance/update needs |
+| [../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
+| [../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future strategic plan | Direct-use-first comparison plan for testing whether Neo4j or Stardog adds enough downstream serving value to justify adoption |
 
 ### 🤖 AI & MCP
 
@@ -81,11 +96,15 @@ developer-experience inputs used to improve Oak's agentic engineering system.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
+| **[agentic-engineering/](agentic-engineering/README.md)** | Agentic-engineering lane index | Theme-based routing for operating model, reviewer systems, safety/evidence, continuity, and graph-memory research |
 | **[developer-experience/](developer-experience/)** | Developer-experience research index | Onboarding, enforcement, and external research guide |
 | ├─ [README.md](developer-experience/README.md) | Developer-experience index | Entry point for local DX research and the local novel repair lane |
 | ├─ [architectural-enforcement-playbook.md](developer-experience/architectural-enforcement-playbook.md) | Architectural enforcement | Guardrails, prompts, and enforcement posture |
 | ├─ [2026-02-20-onboarding-review.md](developer-experience/2026-02-20-onboarding-review.md) | Onboarding review | Friction points and onboarding improvements |
 | └─ local `developer-experience/novel/` lane | Ignored repair lane | Raw imports and sibling clean copies; stable promotion deferred |
+| [graphify-oak-practice-analysis.md](graphify-oak-practice-analysis.md) | Derived graph memory exploration | Navigation layer over the practice estate, explicit attribution requirement |
+| [mcp_agent_guidance_provision.md](mcp_agent_guidance_provision.md) | MCP help-surface design | Start-here resources, help tools, and prompt-oriented discoverability |
+| [openai_claude_gemini_apps_sdk_comparison.md](openai_claude_gemini_apps_sdk_comparison.md) | Cross-vendor app surface comparison | Host/UI surface differences around MCP and embedded experiences |
 
 ### 🔐 Authentication & Security
 
@@ -271,6 +290,18 @@ Some subdirectories have their own README files:
 - [eslint-enhancements/index.md](eslint-enhancements/index.md)
 - [ooc/README.md](ooc/README.md) (if exists)
 - [open-curriculum-concept-graph/README.md](open-curriculum-concept-graph/README.md) (if exists)
+
+## Holding Bay: `notes/`
+
+[`notes/`](notes/README.md) is a transient holding bay for material
+relocated from `.agent/reference/` during the 2026-04-22 reformation
+of `reference/` into a curated library tier
+([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)).
+Material in `notes/` is awaiting per-file disposition (research
+proper, reference promotion, executive memory, archive, or delete);
+the per-file pass is tracked by
+[`reference-research-notes-rehoming.plan.md`](../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md) (archived 2026-04-22 Session 8 with execution record).
+The bay is removed when empty.
 
 ---
 

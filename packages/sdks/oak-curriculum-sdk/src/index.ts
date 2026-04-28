@@ -68,7 +68,7 @@ export { DEFAULT_RETRY_CONFIG } from './config/retry-config.js';
 
 export {
   isValidPath,
-  isAllowedMethod,
+  isApiHttpMethod,
   isKeyStage,
   isSubject,
   isAssetType,
@@ -167,12 +167,10 @@ export {
   typeSafeKeys,
   typeSafeValues,
   typeSafeEntries,
-  typeSafeFromEntries,
   typeSafeGet,
   typeSafeSet,
   typeSafeHas,
   typeSafeHasOwn,
-  typeSafeOwnKeys,
 } from './types/helpers/type-helpers.js';
 
 // ============================================================================

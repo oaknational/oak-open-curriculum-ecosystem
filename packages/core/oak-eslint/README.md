@@ -52,6 +52,14 @@ parameter (`'generation'`, `'runtime'`, or `'search'`) determines the constraint
 All roles block `@workspace/*` imports to ensure all cross-workspace
 dependencies go through published package names.
 
+#### Removing a lib from `LIB_PACKAGES`
+
+When removing an entry from `LIB_PACKAGES`, check ALL packages
+that call `createLibBoundaryRules` with that name.
+`createLibBoundaryRules` generates zone patterns using
+`../${otherLib}/**` relative paths — removing a lib without
+updating all consumers silently breaks their boundary rules.
+
 ## Configs
 
 | Config        | Description                                                                                            |

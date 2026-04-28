@@ -190,6 +190,11 @@ export async function buildPairDocuments(
   units: readonly PairUnit[],
 ): Promise<BulkOperations> {
   const { ks, subject, subjectSequences, sequenceSources } = context;
+  ingestLogger.debug('Building pair documents', {
+    subject,
+    keyStage: ks,
+    unitCount: units.length,
+  });
   const subjectProgrammesUrl = getSubjectProgrammesUrl(subject, ks);
 
   const { unitOps, lessonOps, rollupOps, unitSummaries } = await buildCoreDocumentOps(

@@ -36,6 +36,11 @@ export async function processUnitSummary(
   unitContextMap: UnitContextMap,
   lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
 ): Promise<{ summary: SearchUnitSummary; ops: BulkOperations } | null> {
+  ingestLogger.debug('Processing unit summary for indexing', {
+    unitSlug: unit.unitSlug,
+    subject,
+    keyStage: ks,
+  });
   const result = await client.getUnitSummary(unit.unitSlug);
 
   if (!result.ok) {

@@ -1,6 +1,7 @@
 import { esClient } from './es-client';
 import type { estypes } from '@elastic/elasticsearch';
 import { typeSafeEntries } from '@oaknational/type-helpers';
+import { searchLogger } from './logger';
 // use types from estypes only
 
 /**
@@ -73,6 +74,12 @@ function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
 }
 
 export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchResponse<T>> {
+  searchLogger.debug('Executing Elasticsearch search', {
+    index: body.index,
+    size: body.size ?? 25,
+    hasQuery: body.query !== undefined,
+    hasRetriever: body.retriever !== undefined,
+  });
   const client = esClient();
   const res = await client.search<T, Record<string, estypes.AggregationsAggregate>>(
     buildSearchParams(body),

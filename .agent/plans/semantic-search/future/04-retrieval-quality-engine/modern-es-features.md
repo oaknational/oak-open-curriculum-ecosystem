@@ -71,7 +71,7 @@ All items must be attempted and documented before this level can be declared "ex
 
 The `text_similarity_reranker` is an **Elastic-native retriever** that provides two-stage semantic reranking:
 
-```
+```text
 Stage 1: RRF fusion (current architecture)
          ↓
 Stage 2: text_similarity_reranker (re-scores top-K)
@@ -117,6 +117,7 @@ From research ([elasticsearch-approaches.md](../../../../research/elasticsearch/
 4. **Document**: [EXPERIMENT-LOG.md](../../../../evaluations/EXPERIMENT-LOG.md)
 
 **References**:
+
 - [Semantic reranking](https://www.elastic.co/docs/solutions/search/ranking/semantic-reranking)
 - [`text_similarity_reranker` retriever](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/text-similarity-reranker-retriever)
 
@@ -175,6 +176,7 @@ From research ([elasticsearch-approaches.md](../../../../research/elasticsearch/
 | Pinning / exclusions | Enforce deterministic ranking or blocking |
 
 **References**:
+
 - [Rule retriever](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rule-retriever)
 - [Semantic search + Query rules](https://www.elastic.co/search-labs/blog/semantic-search-query-rules)
 
@@ -187,6 +189,7 @@ From research ([elasticsearch-approaches.md](../../../../research/elasticsearch/
 Current search only **boosts** relevant results. It doesn't **penalise** irrelevant ones.
 
 Without negative controls:
+
 - Ambiguous queries drift toward overly broad results
 - Sensitive domains risk over-recall
 - Subject/phase mismatches go unpenalised
@@ -237,6 +240,7 @@ Without negative controls:
 ### The Problem
 
 `fuzziness: AUTO` applies edit distance based on term length:
+
 - 0 edits for 1-2 char terms
 - 1 edit for 3-5 char terms
 - **2 edits for 6+ char terms**
@@ -253,6 +257,7 @@ For educational content, this causes false positives when typos look like differ
 ### Elasticsearch Best Practices
 
 From ES documentation:
+
 - 80% of human misspellings have edit distance of 1
 - Edit distance 2 is "overly permissive" for long words
 - **Recommendation**: Use `fuzziness: 1` instead of `AUTO` for better precision
@@ -297,7 +302,7 @@ This breaks cross-topic queries:
 
 From ES documentation, several formats are available:
 
-```
+```json
 // Fixed: all terms required
 "minimum_should_match": "100%"
 
@@ -316,6 +321,7 @@ From ES documentation, several formats are available:
 **Implemented: `2<65%`**
 
 This conditional expression means:
+
 - ≤2 terms: all required (same as previous)
 - >2 terms: 65% required (more lenient than previous 75%)
 
@@ -373,6 +379,7 @@ minimum_should_match: '-1'
 ### Note on 2-term Cross-Topic Queries
 
 The `2<65%` configuration does NOT help 2-term cross-topic queries like "electricity and magnets" — these still require both terms. Fixing this requires either:
+
 1. Using `1<65%` or `50%` (more aggressive, may hurt precision)
 2. **Domain term boosting** (preferred long-term solution) — boost curriculum vocabulary so specialized lessons rank higher even when matching only one term
 
@@ -415,6 +422,7 @@ Add a dedicated retriever or scoring function that boosts matches on curriculum 
 ### Vocabulary Sources
 
 The curriculum SDK already contains structured vocabulary:
+
 - Lesson keywords (from API)
 - Unit titles
 - Subject-specific synonyms
@@ -454,6 +462,7 @@ const rrfConfig = {
 | k=100+  | More weight to lower-ranked results   |
 
 **Protocol**:
+
 1. Baseline with k=60
 2. Test k values: [20, 40, 60, 80, 100]
 3. Measure MRR per category

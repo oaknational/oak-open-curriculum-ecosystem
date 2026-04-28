@@ -7,10 +7,10 @@
  * OAuth payloads, not just already-parsed objects.
  */
 
-import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 import { redactFormEncodedString } from './redaction-form.js';
 import { redactUrlString } from './redaction-url.js';
-import type { TelemetryRecord, TelemetryValue } from './types.js';
+import type { JsonObject, JsonValue } from './types.js';
 
 /**
  * Redaction placeholder used across all observability surfaces.
@@ -70,7 +70,7 @@ const REDACTED_QUERY_KEYS = new Set([
   'token',
 ]);
 
-function isTelemetryObject(value: TelemetryValue): value is TelemetryRecord {
+function isJsonObject(value: JsonValue): value is JsonObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
@@ -143,17 +143,18 @@ function redactScalarForKey(key: string | undefined, value: string): string {
   return redactString(value);
 }
 
-function redactArray(
-  values: readonly TelemetryValue[],
-  key: string | undefined,
-): readonly TelemetryValue[] {
+function redactArray(values: readonly JsonValue[], key: string | undefined): readonly JsonValue[] {
   return values.map((entry) => redactTelemetryValue(entry, key));
 }
 
-function redactObject(value: TelemetryRecord): TelemetryRecord {
-  return typeSafeFromEntries(
-    typeSafeEntries(value).map(([key, entry]) => [key, redactTelemetryValue(entry, key)]),
-  );
+function redactObject(value: JsonObject): JsonObject {
+  const redacted: Record<string, JsonValue> = {};
+
+  for (const [key, entry] of typeSafeEntries(value)) {
+    redacted[key] = redactTelemetryValue(entry, key);
+  }
+
+  return redacted;
 }
 
 /**
@@ -163,7 +164,7 @@ function redactObject(value: TelemetryRecord): TelemetryRecord {
  * @param key - Optional parent key used for key-specific redaction rules
  * @returns Redacted JSON-safe telemetry value
  */
-export function redactTelemetryValue(value: TelemetryValue, key?: string): TelemetryValue {
+export function redactTelemetryValue(value: JsonValue, key?: string): JsonValue {
   if (typeof value === 'string') {
     return redactScalarForKey(key, value);
   }
@@ -176,7 +177,7 @@ export function redactTelemetryValue(value: TelemetryValue, key?: string): Telem
     return redactArray(value, key);
   }
 
-  if (isTelemetryObject(value)) {
+  if (isJsonObject(value)) {
     return redactObject(value);
   }
 
@@ -189,7 +190,7 @@ export function redactTelemetryValue(value: TelemetryValue, key?: string): Telem
  * @param value - JSON-safe telemetry object
  * @returns Redacted object
  */
-export function redactTelemetryObject(value: TelemetryRecord): TelemetryRecord {
+export function redactTelemetryObject(value: JsonObject): JsonObject {
   return redactObject(value);
 }
 
@@ -221,7 +222,11 @@ export function redactHeaderValue(
 export function redactHeaderRecord(
   headers: Readonly<Record<string, string | string[] | number | undefined>>,
 ): Record<string, string> {
-  return typeSafeFromEntries(
-    typeSafeEntries(headers).map(([key, value]) => [key, redactHeaderValue(key, value)]),
-  );
+  const redactedHeaders: Record<string, string> = {};
+
+  for (const [key, value] of typeSafeEntries(headers)) {
+    redactedHeaders[key] = redactHeaderValue(key, value);
+  }
+
+  return redactedHeaders;
 }

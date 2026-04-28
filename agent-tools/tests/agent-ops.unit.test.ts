@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectPhaseFromEvents, resolveDiffCwd } from '../src/core/agent-ops';
+import { HELP_TEXT, parseCliArgs } from '../src/bin/claude-agent-ops-cli';
+import { detectPhaseFromEvents, isValidAgentId, resolveDiffCwd } from '../src/core/agent-ops';
 
 describe('agent ops', () => {
   it('detects testing phase from recent pnpm commands', () => {
@@ -112,5 +113,17 @@ describe('agent ops', () => {
     });
 
     expect(cwd).toBe('/repo');
+  });
+
+  it('parses help aliases without invoking the CLI process', () => {
+    expect(parseCliArgs(['help']).command).toBe('help');
+    expect(parseCliArgs(['--help']).command).toBe('help');
+    expect(parseCliArgs(['-h']).command).toBe('help');
+    expect(HELP_TEXT).toContain('claude-agent-ops');
+  });
+
+  it('validates agent ids without inspecting the filesystem', () => {
+    expect(isValidAgentId('abc123')).toBe(true);
+    expect(isValidAgentId('../bad')).toBe(false);
   });
 });

@@ -82,9 +82,10 @@ export interface ValidatedClientOptions {
 }
 
 /**
- * HTTP methods supported by validation
+ * HTTP methods supported by validation.
+ * Derived from POSSIBLE_HTTP_METHODS in the generated SDK schema.
  */
-export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head' | 'trace';
+export type { PossibleHttpMethod as HttpMethod } from '@oaknational/sdk-codegen/api-schema';
 
 /**
  * Type predicate to check if a validation result is successful

@@ -6,11 +6,12 @@
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import { parser as tseslintParser } from 'typescript-eslint';
+import { globalIgnores } from 'eslint/config';
+import { configs as tseslintConfigs, parser as tseslintParser } from 'typescript-eslint';
 import {
   configs,
   createImportResolverSettings,
+  defineConfigArray,
   ignores,
   testRules,
   appArchitectureRules,
@@ -23,11 +24,49 @@ import {
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
-const eslintConfig = defineConfig(
+function createJavaScriptRuleOverrides(): Record<string, 'off'> {
+  const overrides: Record<string, 'off'> = {};
+
+  for (const config of configs.strict) {
+    for (const ruleName in config.rules ?? {}) {
+      if (ruleName.startsWith('@typescript-eslint/')) {
+        overrides[ruleName] = 'off';
+      }
+    }
+  }
+
+  return overrides;
+}
+
+const javaScriptRuleOverrides = createJavaScriptRuleOverrides();
+
+const eslintConfig = defineConfigArray(
   globalIgnores([...ignores, 'build/**', 'bulk-downloads/**', 'scripts/**/*.mjs']),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
-  ...configs.strict,
+  configs.strict,
+
+  {
+    files: ['**/*.js', '**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        URL: 'readonly',
+        console: 'readonly',
+        process: 'readonly',
+      },
+      parserOptions: {
+        program: null,
+        project: false,
+        projectService: false,
+      },
+    },
+    rules: {
+      ...javaScriptRuleOverrides,
+      ...tseslintConfigs.disableTypeChecked.rules,
+    },
+  },
 
   {
     files: ['**/*.ts'],
@@ -70,6 +109,34 @@ const eslintConfig = defineConfig(
       ...readOnlyCliBoundaryRules,
     },
   },
+  // ADR-162 observability-first: require structured emission in newly
+  // exported async functions. Rule is path-scoped internally to apps/**
+  // and packages/sdks/**.
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      '@oaknational/require-observability-emission': 'error',
+    },
+  },
+  // ADR-088 Result pattern + ADR-162 engineering-axis: preserve caught
+  // error context when throwing new errors inside catch blocks.
+  //  Enforcement surface matches the observability emitter
+  // surface because both are the same trust-boundary class — apps +
+  // SDK runtime entry points; packages/core/* and packages/libs/* are
+  // leaf layers whose error ergonomics differ. ESLint built-in rule
+  // (added in 9.35.0) supersedes the originally planned custom
+  // `require-error-cause` rule — the built-in is a documented superset
+  // covering missing cause, cause-mismatch, destructured loss, and
+  // variable shadowing. `requireCatchParameter: true` forbids no-param
+  // catch blocks so every caught error is available as a cause.
+  // See ADR-162 History 2026-04-19 addendum for the re-scoping
+  // rationale and the opt-out protocol.
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      'preserve-caught-error': ['error', { requireCatchParameter: true }],
+    },
+  },
   {
     files: ['src/cli/admin/**/*.ts', 'src/lib/indexing/**/*.ts', 'src/adapters/**/*.ts'],
     // Privileged subtrees override default read-only policy.
@@ -90,6 +157,33 @@ const eslintConfig = defineConfig(
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/test-*.ts', '**/__tests__/**'],
     rules: { ...testRules },
+  },
+
+  // Smoke tests are explicitly permitted real IO per ADR-161 (on-demand
+  // pipeline, out of CI). The hermetic-test restrictions do not apply.
+  {
+    files: ['**/smoke-tests/**/*.test.ts', '**/*.smoke.test.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+      'no-restricted-properties': 'off',
+    },
+  },
+
+  // Test-ceremony migration backlog — see
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
+  // Each entry is a known violation; delete as files migrate.
+  {
+    files: [
+      // production-factory imports (not subject under test)
+      'src/cli/shared/with-loaded-cli-env.unit.test.ts',
+      'src/observability/cli-observability.unit.test.ts',
+      // vi.mock family
+      'src/adapters/hybrid-data-source.integration.test.ts',
+      'src/lib/elastic-http.unit.test.ts',
+    ],
+    rules: {
+      'no-restricted-properties': 'off',
+    },
   },
 
   // Evaluation scripts - same standards as src/ but allow console.log
@@ -257,8 +351,9 @@ const eslintConfig = defineConfig(
       'scripts/**',
       'operations/**',
       'evaluation/**',
-      'smoke-test*.ts',
-      'smoke-tests/**',
+      // Runner config is the smoke-suite composition root; test and setup
+      // files receive injected config and must not read process.env.
+      'vitest.smoke.config.ts',
       'src/lib/elasticsearch/setup/cli.ts',
       'src/lib/elasticsearch/setup/ingest.ts',
       'src/cli/shared/pass-through.ts',

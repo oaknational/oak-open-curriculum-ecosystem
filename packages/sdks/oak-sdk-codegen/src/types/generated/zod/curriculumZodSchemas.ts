@@ -145,6 +145,11 @@ const SequenceUnitsResponseSchema = z.array(
                       .strict()
                   )
                   .optional(),
+                examBoards: z
+                  .array(
+                    z.object({ title: z.string(), slug: z.string() }).strict()
+                  )
+                  .optional(),
               })
               .strict(),
             z
@@ -171,6 +176,11 @@ const SequenceUnitsResponseSchema = z.array(
                         order: z.number(),
                       })
                       .strict()
+                  )
+                  .optional(),
+                examBoards: z
+                  .array(
+                    z.object({ title: z.string(), slug: z.string() }).strict()
                   )
                   .optional(),
               })
@@ -230,6 +240,16 @@ const SequenceUnitsResponseSchema = z.array(
                                     .strict()
                                 )
                                 .optional(),
+                              examBoards: z
+                                .array(
+                                  z
+                                    .object({
+                                      title: z.string(),
+                                      slug: z.string(),
+                                    })
+                                    .strict()
+                                )
+                                .optional(),
                             })
                             .strict(),
                           z
@@ -254,6 +274,16 @@ const SequenceUnitsResponseSchema = z.array(
                                       threadTitle: z.string(),
                                       threadSlug: z.string(),
                                       order: z.number(),
+                                    })
+                                    .strict()
+                                )
+                                .optional(),
+                              examBoards: z
+                                .array(
+                                  z
+                                    .object({
+                                      title: z.string(),
+                                      slug: z.string(),
                                     })
                                     .strict()
                                 )
@@ -306,6 +336,13 @@ const SequenceUnitsResponseSchema = z.array(
                               .strict()
                           )
                           .optional(),
+                        examBoards: z
+                          .array(
+                            z
+                              .object({ title: z.string(), slug: z.string() })
+                              .strict()
+                          )
+                          .optional(),
                       })
                       .strict(),
                     z
@@ -331,6 +368,13 @@ const SequenceUnitsResponseSchema = z.array(
                                 threadSlug: z.string(),
                                 order: z.number(),
                               })
+                              .strict()
+                          )
+                          .optional(),
+                        examBoards: z
+                          .array(
+                            z
+                              .object({ title: z.string(), slug: z.string() })
                               .strict()
                           )
                           .optional(),
@@ -389,6 +433,13 @@ const SequenceUnitsResponseSchema = z.array(
                             .strict()
                         )
                         .optional(),
+                      examBoards: z
+                        .array(
+                          z
+                            .object({ title: z.string(), slug: z.string() })
+                            .strict()
+                        )
+                        .optional(),
                     })
                     .strict(),
                   z
@@ -414,6 +465,13 @@ const SequenceUnitsResponseSchema = z.array(
                               threadSlug: z.string(),
                               order: z.number(),
                             })
+                            .strict()
+                        )
+                        .optional(),
+                      examBoards: z
+                        .array(
+                          z
+                            .object({ title: z.string(), slug: z.string() })
                             .strict()
                         )
                         .optional(),
@@ -674,7 +732,15 @@ const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
       yearSlug: z.string(),
       yearTitle: z.string(),
       units: z.array(
-        z.object({ unitSlug: z.string(), unitTitle: z.string() }).strict()
+        z
+          .object({
+            unitSlug: z.string(),
+            unitTitle: z.string(),
+            examBoards: z
+              .array(z.object({ title: z.string(), slug: z.string() }).strict())
+              .optional(),
+          })
+          .strict()
       ),
       oakUrl: z.url().optional(),
     })
@@ -1544,6 +1610,7 @@ const AllThreadsResponseSchema = z.array(
     .object({
       title: z.string(),
       slug: z.string(),
+      unitCount: z.number(),
       oakUrl: z.null().optional(),
     })
     .strict()
@@ -1974,6 +2041,13 @@ export const endpoints: readonly Endpoint[] = ([
           "science",
           "spanish",
         ]),
+      },
+      {
+        name: "examBoard",
+        type: "Query",
+        schema: z
+          .enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"])
+          .optional(),
       },
     ],
     response: AllKeyStageAndSubjectUnitsResponseSchema,

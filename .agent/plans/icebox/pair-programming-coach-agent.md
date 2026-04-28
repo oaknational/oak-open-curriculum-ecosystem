@@ -123,7 +123,7 @@ vscode.languages.registerCodeLensProvider(selector, {
 
 ### High-Level Design
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    VSCode/Cursor IDE                         │
 │                                                              │
@@ -205,7 +205,7 @@ vscode.languages.registerCodeLensProvider(selector, {
 
 ### Event Flow
 
-```
+```text
 Developer types code
        ↓
 onDidChangeTextDocument fires
@@ -332,7 +332,7 @@ Developer can review/apply/dismiss
 
 ### Sidebar Panel (Primary Interface)
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │  🤖 Pair Programming Coach              │
 ├─────────────────────────────────────────┤
@@ -361,7 +361,7 @@ Developer can review/apply/dismiss
 
 ### Status Bar Indicator
 
-```
+```text
 🤖 Coach: 2 suggestions  |  [Click to open panel]
 ```
 

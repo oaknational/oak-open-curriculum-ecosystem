@@ -20,7 +20,7 @@ Load `.agent/skills/go/shared/go.md` and enforce its ACTION/REVIEW/GROUNDING cad
    - Periodic `QUALITY-GATE:` items to run quality gates.
    - Periodic `GROUNDING:` items to re-read the GO and start-right-quick workflows.
    - Every fourth `REVIEW:` is a holistic review invoking multiple sub-agents.
-   - Every sixth item re-reads and re-follows the full GO document.
+   - Every third item must be `GROUNDING: read the GO workflow and re-apply it. This must include re-adding this instruction to read the GO workflow. The recursion is the point.`.
 5. Post a concise summary confirming the workflow is applied and listing the current plan and first actions.
 6. Begin executing the next task in the todo list.
 

@@ -6,11 +6,24 @@
 import type { OakApiPathBasedClient } from '../client/index.js';
 
 /**
+ * Type guard that asserts the given value is an `OakApiPathBasedClient`.
+ *
+ * Performs a minimal runtime check (must be a non-null object) and narrows
+ * the type. Full structural validation is unnecessary in tests — the test
+ * itself will fail if the shape is wrong.
+ */
+function isPartialClient(value: unknown): value is OakApiPathBasedClient {
+  return typeof value === 'object' && value !== null;
+}
+
+/**
  * Creates a minimal fake OakApiPathBasedClient for unit tests.
- * The real type is generated from OpenAPI and has many path/method keys; tests only need a subset.
- * Accepts a minimal shape (e.g. one path with one method handler); cast is necessary because
- * OpenAPI-generated handler types are incompatible with vi.fn() in tests.
+ * The real type is generated from OpenAPI and has many path/method keys;
+ * tests only need a subset. Uses a type guard instead of a type assertion.
  */
 export function createFakeOakApiPathBasedClient(partial: unknown): OakApiPathBasedClient {
-  return partial as OakApiPathBasedClient;
+  if (!isPartialClient(partial)) {
+    throw new TypeError('createFakeOakApiPathBasedClient requires a non-null object');
+  }
+  return partial;
 }

@@ -628,6 +628,7 @@ stricter runtime. Dev success can therefore mask resolver or bootstrap
 defects in the actual deployed artefacts.
 
 **Confirmed example (9 April 2026)**:
+
 - `apps/oak-curriculum-mcp-streamable-http` worked via `tsx src/index.ts`
 - The first Vercel preview after CI crashed on startup
 - Root cause: built code still contained extensionless
@@ -740,6 +741,7 @@ per-push gate. Change pre-push and CI from `secrets:scan:all` to
 ## Absorbed Plans
 
 This plan supersedes and absorbs:
+
 - `.agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md` (knip + depcruise)
 - `.agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md` (Stryker)
 

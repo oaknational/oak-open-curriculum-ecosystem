@@ -13,6 +13,7 @@ import type {
   ObservabilityError,
   TelemetryFetchOptions,
 } from '@oaknational/oak-search-sdk/read';
+import { observeLogger } from '../../lib/logger';
 
 /**
  * Fetch persisted telemetry from Elasticsearch.
@@ -25,6 +26,7 @@ export async function handleTelemetry(
   observability: ObservabilityService,
   options: TelemetryFetchOptions,
 ): Promise<Result<ZeroHitTelemetry, ObservabilityError>> {
+  observeLogger.debug('Handling telemetry fetch command', { capability: 'observe_telemetry' });
   return observability.fetchTelemetry(options);
 }
 

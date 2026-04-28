@@ -138,6 +138,7 @@ async function writeRollbackMeta(
 export async function validateAliases(
   deps: AliasLifecycleDeps,
 ): Promise<Result<AliasValidationResult, AdminError>> {
+  deps.logger?.info('Validating search aliases', { target: deps.target });
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return aliasResult;
@@ -145,6 +146,10 @@ export async function validateAliases(
   const entries = SEARCH_INDEX_KINDS.map((kind) => {
     const alias = resolveAliasName(BASE_INDEX_NAMES[kind], deps.target);
     return assessAliasHealth(alias, aliasResult.value[kind]);
+  });
+  deps.logger?.info('Search alias validation complete', {
+    totalAliases: entries.length,
+    unhealthyAliases: entries.filter((entry) => !entry.healthy).length,
   });
   return ok({ allHealthy: entries.every((e) => e.healthy), entries });
 }

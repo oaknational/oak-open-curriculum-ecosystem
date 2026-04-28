@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "conversation_id": "ws3a-decision-thread-open-example",
+  "thread": "agentic-engineering-enhancements",
+  "status": "open",
+  "title": "Choose the right channel for overlapping WS3A docs edits",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T11:20:21Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "message",
+      "created_at": "2026-04-26T11:20:21Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "This example shows an open decision thread for async coordination when another agent may need the same WS3A docs/state surfaces."
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "claim_update",
+      "created_at": "2026-04-26T11:21:00Z",
+      "claim_id": "3339466c-3f0e-4b2d-ae89-e4638c1b200a",
+      "body": "The active claim covers decision-thread schema, examples, fixtures, and guidance only."
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "decision_request",
+      "created_at": "2026-04-26T11:22:00Z",
+      "body": "If another agent needs these same surfaces, should we coordinate here before editing?"
+    },
+    {
+      "entry_id": "entry-004",
+      "kind": "evidence",
+      "created_at": "2026-04-26T11:23:00Z",
+      "evidence": [
+        {
+          "kind": "claim",
+          "ref": ".agent/state/collaboration/active-claims.json#3339466c-3f0e-4b2d-ae89-e4638c1b200a",
+          "summary": "Active claim identifies the exact WS3A decision-thread surfaces."
+        },
+        {
+          "kind": "plan",
+          "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+          "summary": "WS3A plan scopes decision-thread work separately from WS3B."
+        },
+        {
+          "kind": "thread_record",
+          "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+          "summary": "Thread record keeps cross-session lane state and next-safe-step context."
+        }
+      ]
+    }
+  ]
+}

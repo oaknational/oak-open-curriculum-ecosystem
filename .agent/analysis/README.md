@@ -1,9 +1,44 @@
-# Analysis Reports
+# Analysis
 
-Purpose: consolidated, focussed reports on product, repo, and practice
-investigations.
+Purpose: consolidated, focussed investigations and evidence on product, repo,
+and practice questions.
 
-## Reports
+## Agentic Engineering Investigations and Evidence
+
+- [../reference/agentic-engineering/README.md](../reference/agentic-engineering/README.md)
+  — concept hub routing back into evidence and source lanes
+- `continuity-adoption-baseline.md`
+  - Pre-rollout baseline for continuity, session handoff, and deep
+    consolidation boundaries in the MCP App lane.
+- `continuity-adoption-evidence.md`
+  - Live evidence log for resumptions, `GO` sessions, and deep-consolidation
+    triggers after the continuity rollout.
+- `continuity-operational-awareness-baseline.md`
+  - Baseline classification of the continuation prompt, adjacent continuity
+  surfaces, and the repo-local operational-awareness gap created by parallel
+  agent tracks.
+- `agentic-mechanism-inventory-baseline.md`
+  - Baseline inventory of interaction planes, control loops, posture
+    selection, work-ledger patterns, authority order, signals/alerts/feeds,
+    evidence surfaces, and renewal triggers surfaced by the workbench topology
+    note.
+- `governance-concepts-and-mechanism-gap-baseline.md`
+  - Abstract comparison baseline for governance planes, boundary models,
+    authority gradients, supervised execution, signal ecology, residual-risk
+    surfaces, and the local mechanism gaps they expose.
+- `practice-aligned-direction-and-gap-baseline.md`
+  - Analysis-grade comparison matrix mapping ecosystem direction-of-travel
+    signals to repo-local Practice intentions, current mechanism state, and
+    routing targets. Derived from the four direction-of-travel research notes
+    (Slice A governance projects, Slice B practice-methodology primitives,
+    Slice C cross-lane survey, Slice D adjacent enablers). Pairs with the
+    governance-concepts baseline above.
+
+Promoted audits and formal syntheses belong in
+[`.agent/reports/agentic-engineering/`](../reports/agentic-engineering/README.md).
+This directory remains the authoritative lane for investigations and evidence.
+
+## Other Investigations
 
 - `legacy-search-report.md`
   - Legacy deployed search (OWA + search-api), end-to-end flow, filters, tech stack, gaps, env wiring, and data-flow diagram.
@@ -15,12 +50,6 @@ investigations.
   - Scenario-based request/response pairs for legacy and semantic search endpoints.
 - `feature-goals-roadmap-alignment.md`
   - Parity and exceed feature goals, extra high-impact work, and alignment to the roadmap.
-- `continuity-adoption-baseline.md`
-  - Pre-rollout baseline for continuity, session handoff, and deep
-    consolidation boundaries in the MCP App lane.
-- `continuity-adoption-evidence.md`
-  - Live evidence log for resumptions, `GO` sessions, and deep-consolidation
-    triggers after the continuity rollout.
 
 ## Suggested reading order
 

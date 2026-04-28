@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.1.0",
+  "claims": [
+    {
+      "claim_id": "8d2c6b44-fd43-4f4d-9a11-a94a0e227301",
+      "agent_id": {
+        "agent_name": "Example Agent",
+        "platform": "fixture",
+        "model": "fixture",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/example-overlap.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-26T08:00:00Z",
+      "freshness_seconds": 14400,
+      "intent": "Synthetic RED fixture for the owner-forced claim close path.",
+      "notes": "No owner-forced close event has occurred yet; this fixture reserves the desired history shape without claiming live evidence.",
+      "archived_at": "2026-04-26",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-04-26T08:30:00Z",
+        "closed_by": {
+          "agent_name": "Owner",
+          "platform": "human",
+          "model": "human",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Owner directed that the claim be closed because the claimed area was no longer active work.",
+        "evidence": [
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
+            "summary": "WS3A requires explicit owner-forced close classification."
+          }
+        ]
+      }
+    }
+  ]
+}

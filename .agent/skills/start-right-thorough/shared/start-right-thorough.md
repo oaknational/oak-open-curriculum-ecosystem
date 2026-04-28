@@ -3,7 +3,7 @@ prompt_id: start-right-thorough
 title: "Start Right (Thorough)"
 type: workflow
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-04-26
 ---
 
 # Start Right (Thorough)
@@ -18,8 +18,82 @@ Read and internalise these documents:
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
 3. @.agent/directives/testing-strategy.md — TDD at all levels
 4. @.agent/directives/schema-first-execution.md — Types flow from schema
+5. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
+6. Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+   block in the ADR index. Open any ADR whose slug matches your current
+   work area from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
+
+## Active-Claims Registry
+
+Before any edit, read `.agent/state/collaboration/active-claims.json` and
+apply the [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
+rule. Also scan `.agent/state/collaboration/shared-comms-log.md`, any open
+`.agent/state/collaboration/conversations/*.json` files, and any active
+`.agent/state/collaboration/escalations/*.json` files for the thread
+or areas you will touch. Bootstrap fast-path: if no entries other than
+your own exist, append a "no other agents present" comms event and proceed.
+On overlap, consult the generated log and decision
+threads before deciding how to coordinate (proceed with caution, ping,
+append/open a decision thread, request a sidebar, record a joint
+decision, open or close an escalation, or ask the owner). Then register
+your own claim covering the areas you intend to touch, using the
+collaboration-state helper when available.
+
+When reading `active-claims.json`, surface any fresh root `commit_queue`
+entries as advisory commit-ordering signals: `intent_id`, `agent_id`, files,
+subject, phase, and expiry. Queue entries are discovery and ordering signals,
+not mechanical refusals.
+
+When writing the thread identity row, prefer an existing owner-assigned
+`agent_name` if it matches this identity. For Codex, derive the full PDR-027
+identity block before both thread registration and shared-state writes:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+```
+
+For non-Codex platforms or name-only display, use
+`pnpm agent-tools:agent-identity --format display` when a
+`PRACTICE_AGENT_SESSION_ID_*` variable or `CODEX_THREAD_ID` is available; pass
+`--seed "<stable-session-seed>"` explicitly when no platform seed is exposed.
+Do not use personal-email fallback.
+
+Codex sessions with `CODEX_THREAD_ID` available must use the derived
+`agent_name` and `session_id_prefix`, not `Codex` / `unknown`. Codex
+`SessionStart` hooks may inject the same block as developer context, but the
+preflight command remains the correctness check.
+
+Before staging or committing, use the always-active commit skill. It
+checks for fresh `commit_queue` entries and `git:index/head` commit-window
+claims, enqueues your intended bundle before staging, verifies the staged
+bundle exactly before `git commit`, and clears the queue entry after success.
+
+## Learning-Loop Surfaces
+
+Before engaging with the work, scan the active-memory capture surfaces:
+
+- `.agent/memory/active/distilled.md` — hard-won rules across sessions
+- `.agent/memory/active/napkin.md` — current session observations
+- `.agent/memory/active/patterns/` — reusable patterns (ADR-150 §Interaction Points)
+- `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
+  plugin-managed capture buffers. The remember plugin owns their
+  lifecycle (rotation, archival, deletion); scan for recent observations
+  at session open. Extract any cross-session insight into `napkin.md` or
+  `distilled.md` per the standard graduation flow — do not mutate the
+  buffers directly.
+- Your own platform's per-user memory and session logs. Scan the
+  surface for the platform you are running on:
+  - Claude Code: `~/.claude/projects/<project>/memory/`
+  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`
+  - Codex: `~/.codex/memories/`, `~/.codex/history.jsonl`
+
+  Read only the surface that matches your current platform at
+  session open. Cross-platform ingestion (reading another
+  platform's surface for insight) is a consolidation-time
+  activity, not a session-open one — see `consolidate-docs`
+  step 3.
 
 ## Guiding Questions
 
@@ -32,9 +106,24 @@ Before diving in, pause and ask:
 
 Step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you.
 
+## Work Shape and Simple Plan
+
+Before the first non-planning edit, leave an observable work-shape
+artefact:
+
+- trivial work uses the landing target or explicit no-landing reason;
+- bounded non-trivial work records a simple plan in chat or the touched
+  thread record, naming goal, scope, validation, and lifecycle touch
+  points;
+- multi-session, architectural, Practice, cross-workspace, or high-risk
+  work uses an executable repo plan in `current/` or `active/`.
+
+Do not force a repo plan file for every small edit. The requirement is
+that the work shape and validation path are visible before mutation.
+
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
+Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs`.
 
 ## Commit
 
@@ -93,6 +182,10 @@ pnpm test:widget:ui
 pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
-# Informational practice health
-pnpm practice:fitness:informational  # Soft-ceiling report; not a blocking gate
+# Practice health — three-zone model, ADR-144
+pnpm practice:fitness:informational  # Four-zone report (always exit 0)
+# Consolidation-closure signal (used by jc-consolidate-docs):
+#   pnpm practice:fitness:strict-hard
+# Vocabulary consistency (ADR-144 §Key Principles #1):
+#   pnpm practice:vocabulary
 ```

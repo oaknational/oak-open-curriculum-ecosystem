@@ -13,6 +13,7 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
+import type { Logger } from '@oaknational/logger';
 import {
   isToolName,
   UndocumentedResponseError,
@@ -27,6 +28,7 @@ import {
   classifyUndocumentedResponse,
 } from './classify-error-response.js';
 import { McpToolError, McpParameterError } from './error-types.js';
+import { createNoopLogger } from './noop-logger.js';
 
 export { McpToolError, McpParameterError } from './error-types.js';
 
@@ -122,7 +124,14 @@ export async function executeToolCall(
   maybeToolName: unknown,
   maybeParams: unknown,
   client: OakApiPathBasedClient,
+  logger?: Logger,
 ): Promise<ToolExecutionResult> {
+  const executionLogger = logger ?? createNoopLogger();
+  executionLogger.debug('mcp-tool.generated.execute', {
+    toolName: typeof maybeToolName === 'string' ? maybeToolName : '<unknown>',
+    hasParams: maybeParams !== undefined,
+  });
+
   if (!isToolName(maybeToolName)) {
     return err(
       new McpToolError(`Unknown tool: ${String(maybeToolName)}`, String(maybeToolName), {
@@ -133,7 +142,7 @@ export async function executeToolCall(
 
   const toolName: ToolName = maybeToolName;
   try {
-    const result = await callTool(toolName, client, maybeParams);
+    const result = await callTool(toolName, client, maybeParams, executionLogger);
     return ok(result);
   } catch (error) {
     return mapErrorToResult(error, toolName);

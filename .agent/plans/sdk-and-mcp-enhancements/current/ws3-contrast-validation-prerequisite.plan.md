@@ -141,6 +141,7 @@ isolation for development feedback.
 ### 1. Pure functions (TDD)
 
 Write RED tests first for:
+
 - `hexToSrgb` — known hex values to known RGB
 - `srgbToRelativeLuminance` — known RGB to known luminance (WCAG formula)
 - `contrastRatio` — known luminance pairs to known ratios
@@ -158,6 +159,7 @@ contract — the manifest data lives in `oak-design-tokens`.
 ### 3. Author contrast-pairings.ts
 
 Define all current pairings for both themes. At minimum:
+
 - `text-primary` on `surface-page`, `surface-panel`
 - `text-secondary` on `surface-page`, `surface-panel`
 - `text-inverse` on `accent`, `accent-strong`
@@ -170,6 +172,7 @@ Define all current pairings for both themes. At minimum:
 ### 4. Build pipeline integration
 
 Extend `build-css.ts` to:
+
 - Load `contrast-pairings.ts`
 - Resolve all referenced tokens to hex (both themes)
 - Call `validateContrastPairings()` per theme
@@ -179,6 +182,7 @@ Extend `build-css.ts` to:
 ### 5. Fix blocking token issues
 
 Using the new tool to prove the fix:
+
 - **Focus ring**: Replace or supplement `sky-400` for light theme focus.
   Double-ring technique (2px accent + 2px dark outline) recommended by
   accessibility reviewer. Verify ≥3:1 against both surfaces.
@@ -193,6 +197,7 @@ development feedback. The build gate catches violations automatically.
 ### 7. Documentation
 
 Update `docs/governance/design-token-practice.md`:
+
 - Contrast validation API surface
 - Pairing manifest format and authoring guide
 - WCAG AA threshold constants and triadic model

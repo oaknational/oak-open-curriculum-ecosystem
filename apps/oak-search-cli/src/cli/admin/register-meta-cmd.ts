@@ -11,7 +11,7 @@
  */
 
 import type { Command } from 'commander';
-import { sanitiseForJson } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 import { err, ok, type Result } from '@oaknational/result';
 import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import { isIndexMetaDoc } from '@oaknational/sdk-codegen/search';

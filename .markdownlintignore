@@ -1,10 +1,46 @@
-.agent/
+# Markdownlint scope: lint canon surfaces inside `.agent/`, ignore the rest.
+#
+# Doctrine: `.agent/rules/no-warning-toleration.md` §Scope discipline.
+# The gate's footprint IS the doctrine's footprint. Canon surfaces
+# (directives, memory, plans, practice-context, practice-core, rules,
+# skills, commands, sub-agents) lint by default. Reference / synthesis /
+# archive / generated material is explicitly excluded below; moving a
+# folder out of this list is a deliberate governance act, not a
+# silent expansion.
+
+# `.agent/` non-canon surfaces — explicitly excluded:
+.agent/analysis/
+.agent/archive/
+.agent/evaluations/
+.agent/experience/
+.agent/hooks/
+.agent/milestones/
+.agent/proposals/
+.agent/prompts/
+.agent/reference/
+.agent/reference-local/
+.agent/reports/
+.agent/research/
+.agent/roles/
+
+# Other agent-platform dot-dirs — out of scope for now (vendored third-party
+# skill packs dominate; bringing them in is a separate governance act
+# requiring per-folder vendored-content exclusions). The npm script passes
+# `--dot` so these would otherwise be walked.
+.cursor/
+.claude/
+.agents/
+
+# Repo-wide non-canon surfaces:
 tmp/
 CHANGELOG.md
 **/archive/**
 **/reference/**
 **/research/**
 **/temp-secrets/**
+
+# Plugin-managed ephemeral capture buffers (remember plugin owns lifecycle)
+.remember/
 
 # Third-party dependencies
 node_modules/**

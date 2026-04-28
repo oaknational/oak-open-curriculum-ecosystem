@@ -4,7 +4,11 @@ import { createIngestHarness } from './ingest-harness';
 import { resolveSearchIndexName } from '../search-index-target';
 import type { EsTransport } from './ingest-harness-ops';
 
-const FIXTURE_ROOT = path.join(process.cwd(), 'fixtures/sandbox');
+// Anchored at this file's directory so the test stays hermetic with respect
+// to the caller's cwd — tests must not read `process.cwd()` as implicit
+// input. Fixtures live at `<workspace>/fixtures/sandbox`; this file is at
+// `<workspace>/src/lib/indexing/`, so step up three levels.
+const FIXTURE_ROOT = path.join(import.meta.dirname, '../../../fixtures/sandbox');
 
 interface MockEsTransport extends EsTransport {
   requestMock: ReturnType<typeof vi.fn>;

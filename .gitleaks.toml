@@ -18,6 +18,22 @@ description = "Clerk publishable keys are public by design"
 regexTarget = "match"
 regexes = ['''pk_test_[A-Za-z0-9]+''', '''pk_live_[A-Za-z0-9]+''']
 
+# Test fixture API keys in unit/integration tests are not real secrets.
+# Pattern: 'oak-key-12345', 'elastic-key-12345', 'search-key-12345' etc.
+[[allowlists]]
+description = "Test fixture keys in test files"
+paths = ['''\.test\.ts$''']
+
+# SonarCloud issue/hotspot keys (e.g. `AZ3PzDg2qR2lgcKGwtUx`) are public
+# identifiers used to reference Sonar findings via the Sonar MCP and REST
+# APIs. They appear in collaboration-state records and plan-body
+# documentation when describing Sonar interactions. They cannot
+# authenticate API calls or access private data.
+[[allowlists]]
+description = "SonarCloud issue/hotspot keys are public identifiers"
+regexTarget = "match"
+regexes = ['''AZ[0-9A-Za-z_-]{15,30}''']
+
 [[rules]]
 id = "oak-api-key-uuid"
 description = "Detect UUID-style OAK_API_KEY assignments"

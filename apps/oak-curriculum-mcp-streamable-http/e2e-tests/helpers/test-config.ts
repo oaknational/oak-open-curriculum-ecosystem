@@ -4,10 +4,9 @@ import type {
   AuthEnabledRuntimeConfig,
   RuntimeConfig,
 } from '../../src/runtime-config.js';
-import {
-  createHttpObservabilityOrThrow,
-  type HttpObservability,
-} from '../../src/observability/http-observability.js';
+import type { Env } from '../../src/env.js';
+import type { HttpObservability } from '../../src/observability/http-observability.js';
+import { createFakeHttpObservability } from '../../src/test-helpers/observability-fakes.js';
 
 /**
  * Creates a no-op Clerk middleware factory for E2E tests.
@@ -52,17 +51,22 @@ export function createNoOpClerkMiddleware(): () => RequestHandler {
  * When `dangerouslyDisableAuth` is true, Clerk keys are omitted.
  * When false (or not specified), Clerk keys are included.
  *
+ * @remarks Fully hermetic: no filesystem reads, no `process.env` access, no
+ * network. Callers pass all non-default values through `overrides`. Env
+ * overrides are partial — hermetic defaults supply the rest.
+ *
  * @param overrides - Optional partial config to override defaults
  * @returns A complete RuntimeConfig with test-appropriate values
  */
 export function createMockRuntimeConfig(
-  overrides?: Partial<RuntimeConfig>,
+  overrides?: Omit<Partial<RuntimeConfig>, 'env'> & { readonly env?: Partial<Env> },
 ): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
   const { env: envOverrides, dangerouslyDisableAuth, ...restOverrides } = overrides ?? {};
 
   const shared = {
     useStubTools: false,
     version: '0.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE' as const,
     vercelHostnames: [],
     ...restOverrides,
   };
@@ -77,7 +81,6 @@ export function createMockRuntimeConfig(
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
         SENTRY_MODE: 'off' as const,
         LOG_LEVEL: 'error' as const,
-        NODE_ENV: 'test' as const,
         DANGEROUSLY_DISABLE_AUTH: 'true' as const,
         ...envOverrides,
       },
@@ -95,12 +98,34 @@ export function createMockRuntimeConfig(
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
       SENTRY_MODE: 'off' as const,
       LOG_LEVEL: 'error' as const,
-      NODE_ENV: 'test' as const,
       ...envOverrides,
     },
   } satisfies AuthEnabledRuntimeConfig;
 }
 
-export function createMockObservability(runtimeConfig: RuntimeConfig): HttpObservability {
-  return createHttpObservabilityOrThrow(runtimeConfig);
+/**
+ * Returns a plain fake {@link HttpObservability} for tests.
+ *
+ * @remarks **Interface-conformance retention.** The `runtimeConfig`
+ * parameter is intentionally retained to mirror the production factory's
+ * call signature so tests can swap factories without changing call sites,
+ * even though the fake is independent of runtime config. The
+ * `void runtimeConfig;` statement signals "I see this parameter, the fake
+ * intentionally does not use it" rather than introducing a leading-
+ * underscore rename (which would silence the unused-parameter signal
+ * without carrying the rationale forward). Tests do not exercise
+ * observability behaviour via this helper; if a test needs to assert on
+ * observability interactions it should import {@link createFakeHttpObservability}
+ * directly and spy on the returned object. The production factory
+ * `createHttpObservabilityOrThrow` is deliberately NOT imported here so
+ * tests do not pull in production observability wiring as incidental
+ * infrastructure.
+ *
+ * Sonar `typescript:S3735` (Remove this use of the "void" operator) is
+ * dismissed-with-rationale on this site: the void here is the intentional
+ * unused-parameter signal pinned by this comment, not a Promise discard.
+ */
+export function createMockObservability(runtimeConfig?: RuntimeConfig): HttpObservability {
+  void runtimeConfig;
+  return createFakeHttpObservability();
 }

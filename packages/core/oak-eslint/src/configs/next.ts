@@ -1,5 +1,5 @@
 import nextPlugin from '@next/eslint-plugin-next';
-import type { Linter } from 'eslint';
+import tseslint from 'typescript-eslint';
 import { react } from './react.js';
 
 /**
@@ -9,15 +9,12 @@ import { react } from './react.js';
  * plugin conflicts with our custom react config. The eslint-config-next package
  * bundles its own react/react-hooks plugins which conflict with ours.
  */
-export const next: Linter.Config[] = [
-  ...react,
-  {
-    plugins: {
-      '@next/next': nextPlugin,
-    },
-    rules: {
-      ...nextPlugin.configs.recommended.rules,
-      ...nextPlugin.configs['core-web-vitals'].rules,
-    },
+export const next = tseslint.config(react, {
+  plugins: {
+    '@next/next': nextPlugin,
   },
-];
+  rules: {
+    ...nextPlugin.configs.recommended.rules,
+    ...nextPlugin.configs['core-web-vitals'].rules,
+  },
+});

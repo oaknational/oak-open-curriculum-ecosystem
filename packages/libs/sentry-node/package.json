@@ -30,14 +30,16 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@oaknational/build-metadata": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
-    "@sentry/node": "^10.47.0"
+    "@sentry/node": "^10.48.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@sentry/cli": "3.3.5",
     "@types/node": "^25.5.2",
     "eslint": "^10.2.0",
     "globals": "^17.4.0",

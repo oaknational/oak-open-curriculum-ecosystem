@@ -19,6 +19,7 @@
 
 import { Command } from 'commander';
 import { createObservabilityService } from '@oaknational/oak-search-sdk/read';
+import type { CliObservability } from '../../observability/index.js';
 import {
   createEsClient,
   withEsClient,
@@ -47,37 +48,43 @@ const observeDeps: WithEsClientDeps = {
  * Register the `observe telemetry` subcommand (SDK-mapped).
  *
  * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
+ * @param cliEnvLoader - Cached loader for validated CLI environment values
+ * @param observability - Optional CLI observability for span wrapping
  */
-function registerTelemetryCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
+function registerTelemetryCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): void {
   parent
     .command('telemetry')
     .description('Fetch persisted zero-hit telemetry from Elasticsearch')
     .option('-l, --limit <n>', 'Maximum number of events to return', '50')
     .action(
-      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv, opts: { limit: string }) => {
-        const esClient = createEsClient(cliEnv);
-        await withEsClient(
-          esClient,
-          async () => {
-            const observability = createObservabilityService(
-              esClient,
-              buildSearchSdkConfig(cliEnv),
-            );
-            const result = await handleTelemetry(observability, {
-              limit: parseInt(opts.limit, 10),
-            });
-            if (!result.ok) {
-              observeLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-              printError(`${result.error.type}: ${result.error.message}`);
-              observeDeps.setExitCode(1);
-              return;
-            }
-            printJson(result.value);
-          },
-          observeDeps,
-        );
-      }),
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, opts: { limit: string }) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const obsService = createObservabilityService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleTelemetry(obsService, {
+                limit: parseInt(opts.limit, 10),
+              });
+              if (!result.ok) {
+                observeLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+                printError(`${result.error.type}: ${result.error.message}`);
+                observeDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            observeDeps,
+          );
+        },
+        observability ? { observability, commandName: 'observe.telemetry' } : undefined,
+      ),
     );
 }
 
@@ -85,45 +92,55 @@ function registerTelemetryCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader)
  * Register the `observe summary` subcommand (SDK-mapped).
  *
  * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
+ * @param cliEnvLoader - Cached loader for validated CLI environment values
+ * @param observability - Optional CLI observability for span wrapping
  */
-function registerSummaryCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
+function registerSummaryCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): void {
   parent
     .command('summary')
     .description('Show aggregated zero-hit summary')
     .action(
-      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
-        const esClient = createEsClient(cliEnv);
-        await withEsClient(
-          esClient,
-          async () => {
-            const observability = createObservabilityService(
-              esClient,
-              buildSearchSdkConfig(cliEnv),
-            );
-            // handleSummary is a sync in-memory operation — cannot fail, no Result wrapping needed
-            const result = handleSummary(observability);
-            printJson(result);
-          },
-          observeDeps,
-        );
-      }),
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const obsService = createObservabilityService(esClient, buildSearchSdkConfig(cliEnv));
+              // handleSummary is a sync in-memory operation — cannot fail, no Result wrapping needed
+              const result = handleSummary(obsService);
+              printJson(result);
+            },
+            observeDeps,
+          );
+        },
+        observability ? { observability, commandName: 'observe.summary' } : undefined,
+      ),
     );
 }
 
 /**
  * Create the `observe` subcommand group.
  *
- * @param cliEnv - Validated CLI environment values
+ * @param cliEnvLoader - Cached loader for validated CLI environment values
+ * @param observability - Optional CLI observability for span wrapping
  * @returns A Commander `Command` with observe subcommands registered
  */
-export function observeCommand(cliEnvLoader: SearchCliEnvLoader): Command {
+export function observeCommand(
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): Command {
   const cmd = new Command('observe').description(
     'Zero-hit telemetry, event purging, and summaries',
   );
 
-  registerTelemetryCmd(cmd, cliEnvLoader);
-  registerSummaryCmd(cmd, cliEnvLoader);
+  registerTelemetryCmd(cmd, cliEnvLoader, observability);
+  registerSummaryCmd(cmd, cliEnvLoader, observability);
   registerPassThrough(
     cmd,
     'purge',

@@ -24,6 +24,7 @@ import { buildBulkOps, type BulkOperationEntry } from './bulk-ops-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
+import { ingestLogger } from '../lib/logger';
 
 /** Configuration for hybrid data source */
 export interface HybridDataSourceConfig {
@@ -214,6 +215,10 @@ export async function createHybridDataSource(
   categoryMap?: CategoryMap,
 ): Promise<Result<HybridDataSource, AdminError>> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
+  ingestLogger.debug('Creating hybrid data source', {
+    sequenceSlug: bulkFile.sequenceSlug,
+    enableKs4Supplementation: fullConfig.enableKs4Supplementation,
+  });
   const bulkAdapter = createBulkDataAdapter(bulkFile, categoryMap);
   const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
   const ks4Result = await buildKs4ContextSafe(

@@ -26,6 +26,7 @@
 import { ok, err, type Result } from '@oaknational/result';
 import type { SdkFetchError } from '@oaknational/curriculum-sdk';
 import type { SequenceUnitsResponse } from '../types/oak';
+import { ingestLogger } from '../lib/logger';
 
 /**
  * Category information for a unit.
@@ -210,6 +211,9 @@ export async function fetchCategoryMapForSequences(
   deps: CategoryFetchDeps,
   sequenceSlugs: readonly string[],
 ): Promise<Result<CategoryMap, Error>> {
+  ingestLogger.debug('Fetching category maps for sequences', {
+    sequenceCount: sequenceSlugs.length,
+  });
   const merged = new Map<string, readonly CategoryInfo[]>();
 
   for (const slug of sequenceSlugs) {

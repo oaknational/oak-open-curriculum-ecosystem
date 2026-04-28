@@ -85,6 +85,8 @@ function registerOAuthRoutes(
   observability: HttpObservability,
   upstreamBaseUrl: string,
   upstreamMetadata: UpstreamAuthServerMetadata,
+  oauthRateLimiter: RequestHandler,
+  metadataRateLimiter: RequestHandler,
 ): void {
   runBootstrapPhase(
     log,
@@ -92,7 +94,14 @@ function registerOAuthRoutes(
     'registerPublicOAuthMetadata',
     appCounter,
     () => {
-      registerPublicOAuthMetadataEndpoints(app, runtimeConfig, upstreamMetadata, log, allowedHosts);
+      registerPublicOAuthMetadataEndpoints(
+        app,
+        runtimeConfig,
+        upstreamMetadata,
+        log,
+        allowedHosts,
+        metadataRateLimiter,
+      );
     },
     observability,
   );
@@ -104,13 +113,22 @@ function registerOAuthRoutes(
     appCounter,
     () => {
       log.info('OAuth proxy enabled', { upstreamBaseUrl });
-      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log, observability }));
+      app.use(
+        createOAuthProxyRoutes({
+          config: { upstreamBaseUrl, logger: log, observability },
+          oauthRateLimiter,
+        }),
+      );
     },
     observability,
   );
 }
 
-/** Sets up OAuth metadata endpoints, proxy routes, and error caching prevention. */
+/**
+ * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
+ */
+// observability-emission-exempt: orchestration wrapper; concrete emissions live
+// in runBootstrapPhase/runAsyncBootstrapPhase and the nested route setup.
 export async function setupOAuthAndCaching(
   app: Express,
   runtimeConfig: RuntimeConfig,
@@ -119,7 +137,9 @@ export async function setupOAuthAndCaching(
   appCounter: number,
   allowedHosts: readonly string[],
   observability: HttpObservability,
-  injectedMetadata?: UpstreamAuthServerMetadata,
+  injectedMetadata: UpstreamAuthServerMetadata | undefined,
+  oauthRateLimiter: RequestHandler,
+  metadataRateLimiter: RequestHandler,
 ): Promise<void> {
   if (!runtimeConfig.dangerouslyDisableAuth) {
     const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(
@@ -140,6 +160,8 @@ export async function setupOAuthAndCaching(
       observability,
       upstreamBaseUrl,
       upstreamMetadata,
+      oauthRateLimiter,
+      metadataRateLimiter,
     );
   }
 

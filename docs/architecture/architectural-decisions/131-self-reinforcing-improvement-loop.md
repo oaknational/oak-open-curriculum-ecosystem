@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-03-08
-**Related**: [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [ADR-144 (Two-Threshold Fitness Model)](144-two-threshold-fitness-model.md), [How the Agentic Engineering System Works](../../foundation/agentic-engineering-system.md) (human-readable engineering narrative)
+**Related**: [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [ADR-144 (Three-Zone Fitness Model)](144-two-threshold-fitness-model.md), [How the Agentic Engineering System Works](../../foundation/agentic-engineering-system.md) (human-readable engineering narrative)
 
 ## Context
 
@@ -39,19 +39,19 @@ progression; the table below maps the full set of interactions between
 artefacts and mechanisms, including edges that are implicit in the
 existing operational documentation:
 
-| From              | To                        | Interaction                                                                                                                            |
-| ----------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Napkin            | Distilled                 | Distillation extracts high-signal content                                                                                              |
-| Distilled         | Permanent docs            | Consolidation graduates settled entries                                                                                                |
-| Distilled         | Practice-core             | Meta-principles graduate to Learned Principles                                                                                         |
-| Permanent docs    | Rules                     | Principles become enforceable rule extractions                                                                                         |
-| Rules             | Work                      | Governed work generates new learning                                                                                                   |
-| Work              | Napkin                    | Mistakes and discoveries are captured continuously                                                                                     |
-| Practice box      | Practice-core             | Integration flow merges incoming material (ADR-124)                                                                                    |
-| Practice-core     | Practice box (other repo) | Plasmid exchange carries evolved files (ADR-124)                                                                                       |
-| Experience files  | Distilled/permanent docs  | Consolidation extracts matured technical patterns                                                                                      |
-| Code patterns     | Work                      | Proven abstractions inform implementation                                                                                              |
-| Fitness functions | All stages                | Governors trigger distillation, graduation, tightening (see [ADR-144](144-two-threshold-fitness-model.md) for the two-threshold model) |
+| From              | To                        | Interaction                                                                                                                         |
+| ----------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Napkin            | Distilled                 | Distillation extracts high-signal content                                                                                           |
+| Distilled         | Permanent docs            | Consolidation graduates settled entries                                                                                             |
+| Distilled         | Practice-core             | Meta-principles graduate to Learned Principles                                                                                      |
+| Permanent docs    | Rules                     | Principles become enforceable rule extractions                                                                                      |
+| Rules             | Work                      | Governed work generates new learning                                                                                                |
+| Work              | Napkin                    | Mistakes and discoveries are captured continuously                                                                                  |
+| Practice box      | Practice-core             | Integration flow merges incoming material (ADR-124)                                                                                 |
+| Practice-core     | Practice box (other repo) | Plasmid exchange carries evolved files (ADR-124)                                                                                    |
+| Experience files  | Distilled/permanent docs  | Consolidation extracts matured technical patterns                                                                                   |
+| Code patterns     | Work                      | Proven abstractions inform implementation                                                                                           |
+| Fitness functions | All stages                | Governors trigger distillation, graduation, tightening (see [ADR-144](144-two-threshold-fitness-model.md) for the three-zone model) |
 
 ### Consolidate-Docs as the Convergence Point
 

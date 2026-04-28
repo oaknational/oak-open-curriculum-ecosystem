@@ -39,7 +39,6 @@ This skill is for **repair**, not editorial rewrite or summary generation.
 - The markdown contains `cite`, `filecite`, `turn...`, or other internal
   export markers
 - The DOCX appears to preserve live links that the markdown has lost
-- The document contains time-sensitive claims that need an accuracy sweep
 - The report currently sits in a scratch or import lane and needs either a
   clean sibling copy there or a later promotion into tracked canon
 
@@ -47,7 +46,7 @@ This skill is for **repair**, not editorial rewrite or summary generation.
 
 Treat the export as a recovery artefact, not as canonical source material.
 
-Read `.agent/memory/patterns/chatgpt-report-normalisation.md` before making
+Read `.agent/memory/active/patterns/chatgpt-report-normalisation.md` before making
 structural decisions or choosing a rebuild strategy.
 
 ## Deliverable
@@ -60,34 +59,51 @@ structural decisions or choosing a rebuild strategy.
   Mermaid/code fences, and comparison-table shape.
 - Treat the DOCX as the authority for the real external URLs hidden behind
   broken export markers.
-- Follow the user's output contract explicitly: in-place repair, sibling clean
-  copy, or later promotion into tracked canon.
+- **Always write to a new sibling clean file (`*-clean.md`).** The clean
+  markdown is a **separate output path** created for this repair pass: do not
+  rename the source file into the clean name, do not edit the source markdown
+  in place, and do not replace an existing `*-clean.md` unless the task
+  explicitly says to refresh that artefact.
+- **Never overwrite the source markdown.**
 - Limit changes to faithful-copy repair work: citation-link recovery,
   export-artefact removal, broken markdown repair, deduplicating obvious export
   junk, and light formatting cleanup.
+- Render references using the **inline anchor + thematic `## References`
+  table** convention (workflow step 6): inline citations become
+  `[[N]](#ref-N)` and the bibliography lives at the bottom of the file
+  grouped by source family.
+- **The clean file contains the report and its references table only.** The
+  citation-set audit (workflow step 7) is recorded in the agent's napkin,
+  not embedded in the clean output. The clean file should read as a faithful
+  copy of the report; meta-information about the recovery pass does not
+  belong inside it.
 - The deliverable from this skill is the clean copy itself, not a report about
   the document.
 
 ## Workflow
 
 1. Inventory the available copies.
-   - When a paired `.md` and `.docx` both exist, assume the markdown is the
-     editing target and structural scaffold unless proved otherwise.
+   - When a paired `.md` and `.docx` both exist, treat the markdown as the
+     read-only structural source scaffold.
    - Prefer the `.docx` for hyperlink recovery, not for rewriting the text.
    - Prefer the existing markdown if its structure is already better than a
      fresh conversion.
-   - Use the PDF as a tie-breaker for pagination, formatting, or missing text.
+   - Use the PDF only as a verification surface for missing or ambiguous
+     fragments; do not let PDF extraction re-drive structure or section order.
 
 2. Inspect the strong layers with local tools.
    - `textutil -convert txt -stdout report.docx` for visible text
-   - `unzip -p report.docx word/_rels/document.xml.rels` for hyperlink targets
-     (note: for ChatGPT deep-research exports, the rels file often contains
-     very few URLs — most citation links are embedded in the document body and
-     only recoverable via `pandoc`)
-   - `pandoc report.docx -t gfm` as the **primary citation recovery surface**
-     for ChatGPT exports — this converts the DOCX body into markdown with
-     properly numbered `[[N]](URL)` citation links at the correct text
-     positions, which is the authoritative source for positional replacement
+   - `unzip -p report.docx word/_rels/document.xml.rels` for hyperlink targets.
+     For ChatGPT deep-research exports the `_rels` file lists the **canonical
+     citation URL set** — empirically (Sentry/PostHog 2026-04-19) it agrees
+     with the PDF link annotations and the ChatGPT Sources panel exactly. Use
+     it as the URL-set authority and as a sanity check against pandoc.
+   - `pandoc report.docx -t gfm` as the **canonical positional layer** for
+     ChatGPT exports — this converts the DOCX body into markdown with
+     numbered `[[N]](URL)` citation links at the correct text positions, so
+     it tells you **where** each citation belongs in the prose. The URL set
+     pandoc emits should be a subset of (and in healthy cases, equal to)
+     the DOCX `_rels` set after deduplication.
    - If `pandoc` emits a trailing horizontal-rule or raw-URL bibliography
      dump, treat only the body before that dump as the usable citation surface
      unless a link is uniquely recoverable there
@@ -119,10 +135,10 @@ structural decisions or choosing a rebuild strategy.
    `[\ue200-\ue2ff]` in regex.
 
 3. Choose the canonical editing target.
-   - The editing target is the source-faithful clean copy.
-   - In the normal paired-export case, edit the existing markdown in place
-     unless the user has explicitly asked to preserve the raw markdown and
-     write a sibling clean copy.
+   - The editing target is a **new** source-faithful clean sibling copy
+     (`*-clean.md`) on disk, not a mutating pass over the export markdown.
+   - In the normal paired-export case, always preserve the original markdown
+     untouched and write repairs into the sibling clean file.
    - Keep the markdown's section order, paragraphing, tables, lists, Mermaid
      blocks, and local prose rhythm whenever they are already readable.
    - Use the DOCX relationship table and, if needed, pandoc output as a lookup
@@ -130,13 +146,10 @@ structural decisions or choosing a rebuild strategy.
      the markdown.
    - If the repo already has a readable markdown scaffold under
      `.agent/research/`, `.agent/reference/`, or another tracked doc estate,
-     clean and upgrade it in place.
-   - If the current copy sits in an ignored staging lane, do not assume that
-     promotion is required. Follow the user's requested landing zone: either
-     write a sibling clean copy there and defer promotion, or promote into a
-     tracked path if that is the task.
-   - When raw inputs must remain re-importable, prefer sibling outputs such as
-     `*-clean.md` over overwriting the raw markdown by default.
+     use it as the structural source and emit a sibling clean copy.
+   - If the current copy sits in an ignored staging lane, keep source inputs
+     untouched and write the clean sibling copy in the same lane unless the
+     task explicitly requests promotion.
    - Do not replace a better hand-edited structure with a worse direct
      conversion.
    - Do not promote a DOCX-first or pandoc-first rebuild over an existing
@@ -184,20 +197,90 @@ structural decisions or choosing a rebuild strategy.
    - Do not attach broad bundles of recovered links to one sentence just
      because they were adjacent in the DOCX export.
    - Do not add new citations to previously uncited prose unless needed to
-     repair a broken citation, support a corrected factual claim, or document
-     an accuracy-sweep rewrite.
+     repair a broken citation.
    - Prefer local relative links for repo artefacts
    - Use direct site URLs for external sources, de-noised and stable
 
-6. Sweep unstable claims before calling the document canonical.
-   - Versions, release dates, licences, Python support, API behaviour, pricing,
-     or policy claims
-   - Verify against primary sources first: official docs, official package
-     metadata, and official repositories
-   - Anchor brittle claims to exact dates or rewrite them to age more
-     gracefully
+6. Render references as a deduplicated table at the end of the clean file.
 
-7. Finish with a short editorial pass.
+   The default output convention is **inline anchor links + a thematically
+   grouped `## References` section**, not full URLs sprinkled inline.
+   Recipe:
+
+   - Walk the recovered inline citations in document order. Build an ordered
+     map of unique URLs (after `utm_*` stripping), assigning the **first**
+     occurrence the next ref number `N`.
+   - Replace each inline citation with `[[N]](#ref-N)` so the same URL at
+     three positions reuses the same number — the reader can see reuse.
+   - Append a `## References` section at the bottom of the clean file with
+     thematic subsections grouping refs by source family (e.g. *Sentry
+     product documentation*, *PostHog pricing*, *Third-party reviews &
+     community*). Each entry is a single line:
+     `- <a id="ref-N"></a>**[N]** <https://full.url/>`.
+   - Do **not** add a `### Recovery notes` block, diagnostic counts, or any
+     other meta-commentary about the recovery pass to the clean file. The
+     clean file is a faithful copy of the report; the audit lives only in
+     the agent napkin (step 7).
+   - Theme groups are content-driven: pick obvious source families for the
+     report at hand. Order groups so the report's primary subject leads.
+     Within a group, sort by ref number (which preserves first-occurrence
+     order in the prose).
+   - Do not invent titles, authors, or dates that are not present in the
+     source. URL alone is honest; titles require an explicit verification
+     pass which is out of scope for the repair-only skill.
+   - This convention applies whether the inputs gave many distinct URLs or
+     few — heavy reuse is itself information, and the bibliography makes it
+     visible.
+
+7. Audit the citation set and record the diagnostic in the agent napkin.
+
+   Before closing, run a citation-set audit and record it in
+   `.agent/memory/active/napkin.md` (today's session entry). This is required
+   tooling hygiene, not part of the deliverable: the clean file stays a
+   faithful copy of the report; the audit is agent-side meta-information
+   that helps the next normalisation pass detect anomalies quickly.
+
+   Diagnostic counts to record:
+
+   - count of `turn…` (or equivalent internal-search) refs in the source
+     markdown, plus unique count — these are the model's internal
+     search-result identifiers, not citations in their own right
+   - count of citation blocks at distinct prose positions in the source
+     markdown
+   - count of unique external URLs in the DOCX `_rels`
+     (`unzip -p ... word/_rels/document.xml.rels`)
+   - count of unique URI annotations in the PDF if a PDF is present
+     (extract via `pypdf` annotations, ignoring obvious export-branding
+     footer links such as `https://chatgpt.com/?utm_src=deep-research-pdf`)
+   - count of numbered citations the body emitted, and how many unique
+     URLs they map to after deduplication
+
+   For ChatGPT deep-research exports, the empirically established
+   relationship across multiple normalisation passes is:
+
+   - the source-markdown `turn…` set is the **wide search funnel** — sites
+     consulted during research; this number is typically much larger than
+     the citation set
+   - the DOCX `_rels` URL set, the PDF annotation URI set (minus
+     export-branding footer links), and the ChatGPT Sources panel for the
+     conversation **all agree** on the **selected citation set** — the
+     supporting-evidence / further-reading list
+   - so the URL count is **not a recovery ceiling representing loss**; it
+     is the canonical citation set the model chose. The funnel from many
+     `turn…` refs down to fewer cited URLs is the source's editorial
+     selection step, not a pandoc or DOCX rendering bug
+
+   In the napkin entry, state the four counts and one sentence on whether
+   the three citation surfaces agree. **Disagreement** between DOCX `_rels`,
+   PDF annotations, and Sources panel is the real signal worth surfacing
+   and acting on — not the funnel ratio. If they all agree, record that
+   agreement plainly so the next pass starts with a known-good baseline.
+
+8. Keep the repair faithful; do not run an editorial or factual sweep.
+   - Normalisation is a repair task, not an analysis pass.
+   - If factual updates are needed, raise a follow-on task explicitly.
+
+9. Finish with a short editorial pass.
    - Preserve tables, code fences, Mermaid blocks, and list structure
    - Restore markdown block boundaries around headings, lists, and tables after
      automated conversion; pandoc-style exports often collapse these and make a
@@ -209,20 +292,37 @@ structural decisions or choosing a rebuild strategy.
      boundary (but do not collapse intentional indentation inside code fences
      or Mermaid blocks)
    - Match repo conventions such as British spelling when they apply
-   - Add a dated accuracy note when you perform a sweep
-   - Summarise unresolved gaps rather than hiding uncertainty
+   - Do not rewrite claims for freshness; preserve source wording.
+   - Summarise unresolved repair ambiguities rather than hiding uncertainty.
 
-8. Run local validation on the final markdown.
-   - Use the repo-appropriate markdown validation surface for the edited file
+10. Run local validation on the final markdown.
+
+- Use the repo-appropriate markdown validation surface for the edited file
      or files. If the target doc estate intentionally excludes markdownlint,
      use structural validation instead of forcing it.
-   - Grep for leftover `cite`, `filecite`, `turn...`, and
+- **Structural parity vs the structural baseline:** before the automated drift
+     proof, compare the **new** `*-clean.md` to the **primary structural source**.
+     When a source `.md` exists, that baseline is the original markdown
+     scaffold: same heading sequence and depth (ATX `#` lines), same overall
+     section order, and no missing or merged tables, lists, code fences, or
+     Mermaid blocks relative to what you started from. When **no** source `.md`
+     exists, agree an explicit baseline first (for example the pre-bibliography
+     `pandoc` body) and apply the same outline checks against that baseline.
+     Use a side-by-side outline diff or extracted heading lists if that makes
+     gaps obvious. Structural repair is allowed only where the baseline was
+     already broken; otherwise mismatches mean content was lost or reordered and
+     must be fixed before closing.
+- Grep for leftover `cite`, `filecite`, `turn...`, and
      `utm_source=chatgpt.com` markers when the export started noisy
-   - Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
+- Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
      invisible to normal grep and the Read tool but remain in file bytes
-   - Strip the clean copy of all citation markup and compare against the
-     original (also stripped) to confirm text identity — the two texts must
-     be character-identical after normalising whitespace
+- Apply the same normalisation function to both files for drift proof:
+     `strip_citations(text)` removes PUA citation blocks/marker artefacts from
+     the baseline markdown and removes `[[N]](URL)` citations from clean markdown.
+     Then normalise whitespace and confirm the two texts are
+     character-identical. Treat this drift proof as the **body-text** loss check
+     after citation normalisation; it does not replace the structural outline
+     comparison above.
 
 ## Validation
 
@@ -237,13 +337,28 @@ Before closing the task, confirm:
 - Every footnote used in the body is defined
 - Tables are still real markdown tables, and adjacent prose has not been
   accidentally pulled into them
-- The references support the claims they are attached to
-- Time-sensitive claims were either verified or softened
-- Text identity confirmed: the clean copy stripped of citations is
-  character-identical to the original stripped of PUA citation blocks
-- The cleaned output landed in the agreed destination: tracked canon when
-  promotion was requested, or the agreed repair lane when promotion was
-  explicitly deferred
+- Citations are mechanically sound: each repair sits at the intended
+  export-marker position, there are no obvious misattached links or giant
+  citation bundles, and unresolved placement is visible in the clean copy
+  rather than silently guessed
+- Inline citations use the `[[N]](#ref-N)` anchor form and every `N` resolves
+  to a single `<a id="ref-N"></a>` entry in the `## References` section
+- The clean file contains the report and its thematic `## References` section
+  only — no `### Recovery notes` block, no diagnostic counts, no other
+  meta-commentary about the recovery pass
+- The citation-set audit (source-`turn…`, DOCX `_rels`, PDF annotation, and
+  body-emit counts, plus a one-line statement about whether the three
+  citation surfaces agree) is recorded in `.agent/memory/active/napkin.md` for the
+  current session
+- Structural parity confirmed against the agreed baseline (normally the source
+  `.md` scaffold): heading outline, section order, and block-level shape
+  (tables, fenced code and Mermaid blocks, major list structures) match except
+  where the baseline was already irreparably broken and that scope was agreed
+- Text identity confirmed: baseline markdown (source `.md` when present, or the
+  agreed markdown stand-in for drift proof) and `*-clean.md` pass the same
+  strip/normalise comparison and are character-identical
+- The cleaned output was written to a **new** sibling `*-clean.md` file while
+  keeping the original markdown unchanged
 
 ## Guardrails
 
@@ -260,6 +375,22 @@ Before closing the task, confirm:
   artefacts.
 - Do not rebuild citation numbering globally from heuristics if local
   marker-by-marker repair is possible.
+- Do not describe the funnel from many `turn…` refs down to fewer cited
+  URLs as "loss" or as a "recovery ceiling". For ChatGPT deep-research
+  exports, the DOCX `_rels` URL set, the PDF annotation URI set, and the
+  ChatGPT Sources panel agree on the canonical citation set; the wider
+  `turn…` set is the model's internal search funnel and was never the
+  citation set. Treat disagreement between those three surfaces as the
+  real signal, not the funnel ratio.
+- Do not invent titles, dates, or source descriptions for the references
+  section that are not present in the inputs. Bare URLs are honest.
+- Do not leave full external URLs sprinkled inline in the prose when the
+  references-table convention applies — the inline form is `[[N]](#ref-N)`
+  and full URLs live in the `## References` section.
+- Do not embed the citation-set audit, diagnostic counts, or any
+  `### Recovery notes` block inside the clean file. The clean file is a
+  faithful copy of the report plus its references table; the audit is
+  agent-side meta-information that belongs in the napkin only.
 - Do not build a marker-string-to-URL lookup table — the same `citeturn`
   marker string maps to different citations at different document positions.
   Always use positional context matching against the pandoc conversion.
@@ -273,8 +404,10 @@ Before closing the task, confirm:
   document clearer.
 - Do not introduce GitHub blob links when a repo-local path is the canonical
   target.
-- Do not assume that ignored staging inputs must be overwritten or promoted.
-  Follow the explicit output contract for the task.
+- Always emit a **new** sibling `*-clean.md` output (separate path). When an
+  export `.md` exists, never overwrite it in place. Compare the clean file’s
+  structure to the agreed baseline before finishing, and leave DOCX/PDF inputs
+  unchanged unless the task explicitly allows mutating them.
 
 ## Escalate
 

@@ -1,139 +1,142 @@
 #!/usr/bin/env node
 /**
- * Production Build Server Harness
+ * Local Source Server Harness
  *
- * Runs the built production bundle (dist/index.js) locally with configurable
- * environment to diagnose deployment issues and validate instrumentation.
+ * Loads environment from a selected file, then starts the same DI-friendly
+ * source server path used by `src/index.ts`. This keeps the harness on the
+ * repo's supported testability seam rather than dynamically loading the built
+ * deploy bundle.
  *
  * Usage:
- *   ENV_FILE=.env.harness.auth-enabled node scripts/server-harness.js
- *   ENV_FILE=.env.harness.auth-disabled node scripts/server-harness.js
- *   ENV_FILE=.env.harness.missing-clerk node scripts/server-harness.js
+ *   ENV_FILE=.env.harness.auth-enabled pnpm prod:harness
+ *   ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+ *   ENV_FILE=.env.harness.missing-clerk pnpm prod:harness
  *
  * Environment:
  *   ENV_FILE - Path to .env file (default: .env.harness)
  *   PORT - Server port (default: 3001)
  */
 
-import { readFileSync, existsSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import http from 'node:http';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { setupExpressErrorHandler } from '@sentry/node';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const rootDir = resolve(__dirname, '..');
+import { createApp } from '../src/application.js';
+import { bootstrapApp } from '../src/bootstrap-app.js';
+import { WIDGET_HTML_CONTENT } from '../src/generated/widget-html-content.js';
+import {
+  createHttpObservability,
+  describeHttpObservabilityError,
+} from '../src/observability/http-observability.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { startConfiguredHttpServer } from '../src/server-runtime.js';
 
-// Logging utilities
+const thisDir = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(thisDir, '..');
+
 const log = {
-  info: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'INFO',
-      message: msg,
-      ...meta,
-    };
-    console.log(JSON.stringify(entry));
+  info(message, meta = {}) {
+    console.log(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        level: 'INFO',
+        message,
+        ...meta,
+      }),
+    );
   },
-  error: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'ERROR',
-      message: msg,
-      ...meta,
-    };
-    console.error(JSON.stringify(entry));
+  error(message, meta = {}) {
+    console.error(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        level: 'ERROR',
+        message,
+        ...meta,
+      }),
+    );
   },
-  debug: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'DEBUG',
-      message: msg,
-      ...meta,
-    };
-    console.log(JSON.stringify(entry));
+  debug(message, meta = {}) {
+    console.log(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        level: 'DEBUG',
+        message,
+        ...meta,
+      }),
+    );
   },
 };
 
-// Load environment file
-const envFile = process.env.ENV_FILE || '.env.harness';
-const envPath = resolve(rootDir, envFile);
+function loadEnvFile(envFile) {
+  const envPath = resolve(rootDir, envFile);
 
-log.info('Server harness starting', {
-  harness: 'production-build',
-  envFile,
-  envPath,
-  nodeVersion: process.version,
-  platform: process.platform,
-});
+  if (!existsSync(envPath)) {
+    log.info('No environment file found, using process.env', {
+      fileLoaded: false,
+      searched: envPath,
+    });
+    return;
+  }
 
-if (existsSync(envPath)) {
   log.info('Loading environment from file', { path: envPath });
+
   const envContent = readFileSync(envPath, 'utf-8');
   const lines = envContent.split('\n');
 
   for (const line of lines) {
     const trimmed = line.trim();
-    // Skip empty lines and comments
     if (!trimmed || trimmed.startsWith('#')) {
       continue;
     }
 
     const match = trimmed.match(/^([^=]+)=(.*)$/);
-    if (match) {
-      const [, key, value] = match;
-      // Remove quotes if present
-      const cleanValue = value.replace(/^["'](.*)["']$/, '$1');
-      process.env[key] = cleanValue;
-      log.debug('Loaded environment variable', {
-        key,
-        valuePreview: key.includes('SECRET') || key.includes('KEY') ? '[REDACTED]' : cleanValue,
-      });
+    if (!match) {
+      continue;
     }
+
+    const [, key, value] = match;
+    const cleanValue = value.replace(/^["'](.*)["']$/, '$1');
+    process.env[key] = cleanValue;
+    log.debug('Loaded environment variable', {
+      key,
+      valuePreview: key.includes('SECRET') || key.includes('KEY') ? '[REDACTED]' : cleanValue,
+    });
   }
+
   log.info('Environment loaded successfully', { fileLoaded: true });
-} else {
-  log.info('No environment file found, using process.env', {
-    fileLoaded: false,
-    searched: envPath,
+}
+
+function logConfigSnapshot() {
+  log.info('Configuration snapshot', {
+    PORT: process.env.PORT || '3001',
+    NODE_ENV: process.env.NODE_ENV,
+    LOG_LEVEL: process.env.LOG_LEVEL,
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
+    CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY
+      ? `[REDACTED-${process.env.CLERK_PUBLISHABLE_KEY.substring(0, 10)}...]`
+      : undefined,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? '[REDACTED]' : undefined,
+    OAK_API_KEY: process.env.OAK_API_KEY ? '[REDACTED]' : undefined,
+    ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
   });
 }
 
-// Log current configuration (redact secrets)
-const configSnapshot = {
-  PORT: process.env.PORT || '3001',
-  NODE_ENV: process.env.NODE_ENV,
-  LOG_LEVEL: process.env.LOG_LEVEL,
-  DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
-  CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY
-    ? '[REDACTED-' + process.env.CLERK_PUBLISHABLE_KEY.substring(0, 10) + '...]'
-    : undefined,
-  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? '[REDACTED]' : undefined,
-  OAK_API_KEY: process.env.OAK_API_KEY ? '[REDACTED]' : undefined,
-  ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
-};
+async function main() {
+  const envFile = process.env.ENV_FILE || '.env.harness';
 
-log.info('Configuration snapshot', configSnapshot);
-
-// Import and start server
-const startTime = Date.now();
-
-log.info('Importing production bundle', {
-  bundlePath: 'dist/application.js',
-});
-
-try {
-  const { createApp, loadRuntimeConfig } = await import(`${rootDir}/dist/application.js`);
-
-  if (typeof createApp !== 'function') {
-    throw new Error('createApp is not a function in production bundle');
-  }
-
-  log.info('Production bundle loaded', {
-    createAppType: typeof createApp,
-    loadTimeMs: Date.now() - startTime,
+  log.info('Server harness starting', {
+    harness: 'source-di',
+    envFile,
+    envPath: resolve(rootDir, envFile),
+    nodeVersion: process.version,
+    platform: process.platform,
   });
 
-  // Load runtime config from process.env (loaded from ENV_FILE above)
+  loadEnvFile(envFile);
+  logConfigSnapshot();
+
   const configResult = loadRuntimeConfig({
     processEnv: process.env,
     startDir: rootDir,
@@ -141,63 +144,49 @@ try {
 
   if (!configResult.ok) {
     log.error('Failed to load runtime config', {
-      message: configResult.error.message,
+      error: configResult.error.message,
       diagnostics: configResult.error.diagnostics,
     });
     process.exit(1);
   }
 
-  // Create Express app (async — fetches upstream metadata when auth is enabled)
-  const appCreationStart = Date.now();
-  const app = await createApp({ runtimeConfig: configResult.value });
-  const appCreationTime = Date.now() - appCreationStart;
+  const runtimeConfig = configResult.value;
+  const observabilityResult = createHttpObservability(runtimeConfig);
 
-  log.info('Express app created', {
-    appCreationTimeMs: appCreationTime,
-    totalTimeMs: Date.now() - startTime,
+  if (!observabilityResult.ok) {
+    log.error('Failed to create observability', {
+      error: describeHttpObservabilityError(observabilityResult.error),
+    });
+    process.exit(1);
+  }
+
+  const observability = observabilityResult.value;
+  const startTime = Date.now();
+
+  await startConfiguredHttpServer({
+    runtimeConfig,
+    observability,
+    createApp: async (options) =>
+      await createApp({
+        ...options,
+        getWidgetHtml: () => WIDGET_HTML_CONTENT,
+        setupSentryErrorHandler:
+          runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+      }),
+    bootstrapApp,
+    createServer: (app) => http.createServer(app),
+    onSignal: (signal, handler) => {
+      process.once(signal, handler);
+    },
+    exit: (code) => process.exit(code),
   });
 
-  // Start server
-  const port = process.env.PORT || 3001;
-  const server = app.listen(port, () => {
-    const listenTime = Date.now() - startTime;
-    log.info('Server listening', {
-      port,
-      host: 'localhost',
-      listenTimeMs: listenTime,
-      totalBootstrapMs: listenTime,
-      url: `http://localhost:${port}`,
-    });
-    log.info('Harness ready for requests', {
-      healthCheck: `http://localhost:${port}/healthz`,
-      landingPage: `http://localhost:${port}/`,
-      mcpEndpoint: `http://localhost:${port}/mcp`,
-    });
+  log.info('Harness ready for requests', {
+    bootstrapMs: Date.now() - startTime,
+    healthCheck: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/healthz`,
+    landingPage: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/`,
+    mcpEndpoint: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/mcp`,
   });
-
-  // Graceful shutdown
-  const shutdown = async (signal) => {
-    log.info('Shutdown signal received', { signal });
-
-    server.close(() => {
-      log.info('Server closed');
-      process.exit(0);
-    });
-
-    // Force exit after 5 seconds
-    setTimeout(() => {
-      log.error('Forced shutdown after timeout');
-      process.exit(1);
-    }, 5000);
-  };
-
-  process.on('SIGINT', () => shutdown('SIGINT'));
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
-} catch (error) {
-  log.error('Failed to start server', {
-    error: error.message,
-    stack: error.stack,
-    totalTimeMs: Date.now() - startTime,
-  });
-  process.exit(1);
 }
+
+await main();

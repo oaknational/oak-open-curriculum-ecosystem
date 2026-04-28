@@ -1,9 +1,8 @@
 import request from 'supertest';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
-import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
-import { loadRuntimeConfig } from './runtime-config.js';
+import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
+import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import type { Express } from 'express';
 
 /**
@@ -16,20 +15,11 @@ describe('Security Headers (Integration)', () => {
   let app: Express;
 
   beforeEach(async () => {
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test',
-      DANGEROUSLY_DISABLE_AUTH: 'true',
-      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key',
-    };
-    const result = loadRuntimeConfig({
-      processEnv: testEnv,
-      startDir: process.cwd(),
+    const runtimeConfig = createMockRuntimeConfig({
+      dangerouslyDisableAuth: true,
+      env: { ALLOWED_HOSTS: 'localhost,127.0.0.1,::1' },
     });
-    const runtimeConfig = unwrap(result);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const observability = createFakeHttpObservability();
     app = await createApp({
       runtimeConfig,
       observability,
@@ -130,6 +120,13 @@ describe('Security Headers (Integration)', () => {
 
       expect(res.status).toBe(200);
       expect(res.type).toBe('text/html');
+    });
+
+    it('exposes the runtime app version in the response header and HTML metadata', async () => {
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['x-app-version']).toBe('0.0.0-test');
+      expect(res.text).toContain('<meta name="app-version" content="0.0.0-test" />');
     });
   });
 

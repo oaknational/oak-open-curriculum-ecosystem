@@ -7,7 +7,11 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
-import { formatError, type UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
+import {
+  formatError,
+  resolveUniversalToolLogger,
+  type UniversalToolExecutorDependencies,
+} from '../universal-tool-shared.js';
 import type {
   SearchRetrievalService,
   LessonsSearchResult,
@@ -141,6 +145,14 @@ export async function runExploreTool(
   args: ExploreArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.explore-topic.execute', {
+    toolName: 'explore-topic',
+    query: args.query,
+    subject: args.subject,
+    keyStage: args.keyStage,
+  });
+
   const outcomes = await parallelSearch(args, deps.searchRetrieval);
   const allFailed = !outcomes.lessons.ok && !outcomes.units.ok && !outcomes.threads.ok;
 

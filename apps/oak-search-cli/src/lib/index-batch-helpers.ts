@@ -181,6 +181,10 @@ export async function buildOpsForPair(
   subjectContext: SubjectContext,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<BuildOpsForPairResult> {
+  ingestLogger.debug('Building operations for subject/key-stage pair', {
+    subject,
+    keyStage,
+  });
   const { subjectSequences, sequenceSources, unitContextMap } = subjectContext;
   const { units, skipped, skipReason } = await fetchPairData(client, keyStage, subject);
 

@@ -88,8 +88,14 @@ async function buildVerifyDocCounts(
   target: SearchIndexTarget,
   version: string,
   minDocCount: number,
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
   const resolver = createVersionedIndexResolver(version, target);
+  logger?.debug('Verifying versioned index document counts', {
+    version,
+    target,
+    minDocCount,
+  });
   try {
     for (const kind of SEARCH_INDEX_KINDS) {
       const resolvedName = resolver(kind);
@@ -152,14 +158,14 @@ export function buildLifecycleDeps(
     createVersionedIndexes: (version) =>
       buildCreateVersionedIndexes(client, target, logger, version),
     runVersionedIngest,
-    resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target),
-    atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps),
-    readIndexMeta: () => readIndexMeta(client),
-    writeIndexMeta: (meta) => writeIndexMeta(client, meta),
-    listVersionedIndexes: (baseName, t) => listVersionedIndexes(client, baseName, t),
-    deleteVersionedIndex: (name) => deleteVersionedIndex(client, name),
+    resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target, logger),
+    atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps, logger),
+    readIndexMeta: () => readIndexMeta(client, logger),
+    writeIndexMeta: (meta) => writeIndexMeta(client, meta, logger),
+    listVersionedIndexes: (baseName, t) => listVersionedIndexes(client, baseName, t, logger),
+    deleteVersionedIndex: (name) => deleteVersionedIndex(client, name, logger),
     verifyDocCounts: (version, minDocCount) =>
-      buildVerifyDocCounts(client, target, version, minDocCount),
+      buildVerifyDocCounts(client, target, version, minDocCount, logger),
     generateVersion: generateTimestampVersion,
     target,
     logger,
@@ -178,14 +184,14 @@ export function buildAliasLifecycleDeps(
   logger?: Logger,
 ): AliasLifecycleDeps {
   return {
-    resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target),
-    atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps),
-    readIndexMeta: () => readIndexMeta(client),
-    writeIndexMeta: (meta) => writeIndexMeta(client, meta),
-    listVersionedIndexes: (baseName, t) => listVersionedIndexes(client, baseName, t),
-    deleteVersionedIndex: (name) => deleteVersionedIndex(client, name),
+    resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target, logger),
+    atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps, logger),
+    readIndexMeta: () => readIndexMeta(client, logger),
+    writeIndexMeta: (meta) => writeIndexMeta(client, meta, logger),
+    listVersionedIndexes: (baseName, t) => listVersionedIndexes(client, baseName, t, logger),
+    deleteVersionedIndex: (name) => deleteVersionedIndex(client, name, logger),
     verifyDocCounts: (version, minDocCount) =>
-      buildVerifyDocCounts(client, target, version, minDocCount),
+      buildVerifyDocCounts(client, target, version, minDocCount, logger),
     target,
     logger,
   };

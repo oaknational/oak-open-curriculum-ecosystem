@@ -45,4 +45,4 @@ Guidance for processing review feedback — whether from human reviewers or sub-
 ## References
 
 - `.agent/sub-agents/templates/` — reviewer prompt templates
-- `.agent/directives/invoke-code-reviewers.md` — when and how reviewers are invoked
+- `.agent/memory/executive/invoke-code-reviewers.md` — when and how reviewers are invoked

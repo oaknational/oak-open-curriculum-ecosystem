@@ -151,6 +151,9 @@ const DISCONNECTED_STATUS: CacheStatus = { enabled: true, connected: false, keyC
 
 /** Check SDK cache status without creating a full client. */
 export async function getSdkCacheStatus(env: OakClientEnv): Promise<CacheStatus> {
+  cacheLogger.debug('Checking SDK cache status', {
+    cacheEnabled: env.SDK_CACHE_ENABLED ?? false,
+  });
   if (!env.SDK_CACHE_ENABLED) {
     return { enabled: false, connected: false, keyCount: 0 };
   }

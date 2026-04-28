@@ -61,6 +61,7 @@ Avoid "build time" without qualification — it's ambiguous between codegen time
 ## Analysis Tools
 
 Beyond manual import tracing, use these for thorough analysis:
+
 - **knip** — detects unused exports, unused dependencies, and unused files. Can reveal which exports from a workspace are actually consumed, and which are dead.
 - **dependency-cruiser** — traces the full import graph with cycle detection and layer violation reporting. Can enforce codegen→runtime direction rules at the module level.
 - **ESLint boundary rules** — `createSdkBoundaryRules()` in `oak-eslint` already enforces SDK-to-SDK direction. Can be extended for cross-category enforcement.
@@ -119,6 +120,7 @@ Import-level tracing of what each "lifecycle-agnostic" package actually provides
 ### `result` — GENUINELY SHARED
 
 Codegen imports (2 files):
+
 - `code-generation/sitemap-scanner.ts` — `ok`, `err`, `Result` (value + type)
 - `code-generation/typegen/routing/validate-canonical-urls.ts` — `ok`, `err`, `Result`
 
@@ -131,6 +133,7 @@ Runtime imports: 50+ files across all runtime workspaces. Heavy use of `ok`, `er
 ### `observability` — GENUINELY SHARED (thin usage)
 
 Codegen imports (2 files):
+
 - `code-generation/create-codegen-logger.ts` — `getActiveSpanContextSnapshot` (value)
 - `vocab-gen/run-vocab-gen.ts` — `getActiveSpanContextSnapshot` (value)
 
@@ -145,6 +148,7 @@ Runtime imports: 15+ files across HTTP app, search CLI, sentry-node, sentry-mcp,
 Codegen imports (0 files in `code-generation/` or `vocab-gen/`): **None.**
 
 The 2 "codegen" imports come from `src/` files that are **convenience barrels/re-exports for runtime consumers**, not codegen scripts:
+
 - `src/types/helpers/type-helpers.ts` — a barrel re-export consumed by curriculum-sdk at runtime
 - `src/synonym-export.ts` — functions consumed by search-sdk and search-cli at runtime (candidates for conversion to codegen-time generators, see work item 1)
 
@@ -157,6 +161,7 @@ Runtime imports: 15+ files across curriculum-sdk, search-sdk, HTTP app, search C
 ### `logger` — GENUINELY SHARED but MISCLASSIFIED
 
 Codegen imports (~15 files in `code-generation/` and `vocab-gen/`):
+
 - `normalizeError` — 7 files (value)
 - `logLevelToSeverityNumber`, `parseLogLevel`, `buildResourceAttributes` — 2 files (value)
 - `Logger` type — 5 files (type-only)
@@ -185,6 +190,7 @@ Zero codegen imports. Runtime only. Classification as `packages/libs/` is correc
 ### 1. Convert synonym functions from runtime to codegen-time — MEDIUM IMPACT
 
 `src/synonym-export.ts` contains functions that process **static synonym data defined in the codebase**:
+
 - `buildElasticsearchSynonyms()` — produces ES synonym set JSON
 - `buildPhraseVocabulary()` — produces a `ReadonlySet<string>` of multi-word curriculum terms
 - `buildSynonymLookup()` — produces a `ReadonlyMap<string, string>` of alternative→canonical
@@ -195,6 +201,7 @@ These are currently called at runtime by search-sdk (e.g., `buildPhraseVocabular
 **Correct approach**: Convert these to codegen-time generators (same pattern as `generateWidgetConstants`, thread progressions, concept graphs). Run during `pnpm sdk-codegen`, produce committed TypeScript constants, consume the constants at runtime. This follows the cardinal rule: "ALL the heavy lifting MUST happen at sdk-codegen time."
 
 **Work**:
+
 - Create generators in `code-generation/` or `vocab-gen/` that run the existing functions and write committed constants to `src/types/generated/`
 - Update search-sdk and search-cli to import committed constants instead of calling builder functions
 - The builder functions themselves can stay as internal utilities used by the generators — they just stop being exported to runtime consumers
@@ -215,14 +222,17 @@ The search CLI's ingestion commands use `readAllBulkFiles()` during index popula
 The ADR-108 4-workspace decomposition remains a valid future target for separating Generic from Oak-specific concerns. However, the lifecycle analysis shows less runtime contamination than initially assessed:
 
 **Correctly codegen-time in `src/`:**
+
 - `src/bulk/` — bulk data processing for codegen pipeline
 - `src/synonyms/` — static synonym data (input to codegen)
 - `src/types/generated/` — committed codegen output
 
 **Convert to codegen-time (item 1 above):**
+
 - `src/synonym-export.ts` — synonym builder functions → committed constants
 
 **Convenience re-exports (lifecycle-neutral barrels):**
+
 - `src/types/helpers/type-helpers.ts` — re-export of `@oaknational/type-helpers`
 - Various `src/*.ts` barrels (`api-schema.ts`, `search.ts`, `mcp-tools.ts`) — re-export committed generated types for runtime consumers via public subpaths
 
@@ -235,6 +245,7 @@ Move `packages/libs/logger` to `packages/core/logger`.
 **Why**: Logger is genuinely lifecycle-agnostic — used by 15+ codegen files and all runtime workspaces. Current placement in `libs/` (runtime) is incorrect.
 
 **Work**:
+
 - Move directory: `packages/libs/logger/` → `packages/core/logger/`
 - Update `pnpm-workspace.yaml`: change `packages/libs/logger` to `packages/core/logger`
 - Update ESLint boundary rules: remove `@oaknational/logger` from `LIB_PACKAGE_IMPORTS`, ensure it's permitted from core
@@ -270,7 +281,7 @@ Derived from actual dependency evidence (`package.json` analysis of all packages
 
 ### The Tiers
 
-```
+```text
 Tier 0  PRIMITIVES     Zero workspace deps, pure, stateless. Importing one
                        cannot transitively pull in any project code.
 
@@ -303,20 +314,24 @@ Higher tiers may import from lower tiers. Lower tiers MUST NOT import from highe
 ### Current packages mapped to tiers (from dependency evidence)
 
 **Tier 0 — Primitives** (verified zero deps):
+
 - `result` — zero deps, pure Result monad
 - `type-helpers` — zero deps, pure type utilities
 
 **Tier 1 — Infrastructure** (verified workspace deps or operational character):
+
 - `observability` → `type-helpers` + `@opentelemetry/api`. Reads OTel span context (stateful). **Decomposition question**: are redaction patterns generic or Oak-specific?
 - `logger` → `observability`, `type-helpers` + `express` peer. Creates sinks, manages levels (configured). **Decomposition required**: `buildResourceAttributes` (Vercel-specific), Express middleware are consumer instances, not framework. Generic framework stays T1; consumer instances move to T2b.
 - `env` → `zod` only (zero workspace deps). But reads `process.env` (environmental). **Decomposition question**: generic validation mechanism vs Oak-specific env var schemas.
 - `design-tokens-core` → `result`. Generic token framework. Shared visual infrastructure. **Already decomposed**: `oak-design-tokens` is the Oak consumer instance (correctly in T2b).
 
 **Tier 2a — Codegen-time**:
+
 - `oak-sdk-codegen` — the codegen machine. Dependencies include `logger`, `observability`, `result`, `type-helpers` + many external.
 - `openapi-zod-client-adapter` → `openapi-zod-client` only. Currently in `core/` but used exclusively by codegen.
 
 **Tier 2b — Runtime libs**:
+
 - `env-resolution` → `result` + `dotenv`, `zod`. Runtime configuration loading.
 - `sentry-node` → `logger`, `observability`, `result`, `type-helpers` + `@sentry/node`. Error monitoring.
 - `sentry-mcp` → `observability` + `@opentelemetry/api`. MCP-specific telemetry.
@@ -325,16 +340,18 @@ Higher tiers may import from lower tiers. Lower tiers MUST NOT import from highe
 - `oak-search-sdk` — runtime SDK.
 
 **Tier 3 — Apps**:
+
 - `oak-curriculum-mcp-streamable-http` — MCP HTTP server. Contains widget codegen step.
 - `oak-search-cli` — mixed: queries=runtime, ingestion/index-setup=codegen-time/operational.
 
 **Tier 1 — Infrastructure (design)**:
+
 - `design-tokens-core` → `result`. Generic token framework. Generates CSS/TS constants from token definitions. Shared visual infrastructure used by multiple UIs.
 - `oak-design-tokens` → `design-tokens-core`, `result`. Oak-specific token consumer instance. (Framework/Consumer pattern already correctly applied here.)
 
 ### The dependency DAG confirms the tiers
 
-```
+```text
 result (T0)  ←  observability (T1)  ←  logger (T1)  ←  sentry-node (T2b)
                                                     ←  sdk-codegen (T2a)
 type-helpers (T0)  ←  observability (T1)  ←  logger (T1)
@@ -353,7 +370,8 @@ Tooling (`oak-eslint`, `agent-tools`) is orthogonal — it stays at the monorepo
 After applying Framework/Consumer decomposition, infrastructure packages may split (e.g., logger-framework + oak-logger-vercel), increasing the package count in Tiers 1 and 2b.
 
 **Option A: Four product roots**:
-```
+
+```text
 primitives/           # Tier 0 — zero deps, pure, stateless
   result/
   type-helpers/
@@ -383,7 +401,8 @@ runtime/              # Tier 2b + Tier 3
 ```
 
 **Option B: Three product roots (primitives inside infrastructure)**:
-```
+
+```text
 shared/               # Tier 0 + 1
   primitives/         # result, type-helpers — zero deps sublayer
   services/           # logger-framework, observability-framework, design-tokens-core
@@ -397,7 +416,8 @@ runtime/              # Tier 2b + 3
 ```
 
 **Option C: Three product roots (explicit primitives root)**:
-```
+
+```text
 core/                 # Tier 0 — primitives only, zero deps guaranteed
   result/
   type-helpers/
@@ -410,6 +430,7 @@ runtime/              # Tier 2b + 3
 ```
 
 The choice depends on:
+
 1. How many packages land in each tier after the deep analysis + Framework/Consumer decomposition
 2. Whether the primitives/infrastructure distinction is worth a physical root (or a sublayer suffices)
 3. The total churn cost vs. the architectural clarity gained
@@ -427,6 +448,7 @@ Each tension below was identified by pushing past "classify around the compromis
 **Cause**: Everything is in one workspace because "the codegen produces it, so it lives there." Runtime consumers import generated types AND hand-written utilities AND re-exported primitives all from `@oaknational/sdk-codegen`.
 
 **Foundational solution**: Separate the codegen engine from its output distribution. Runtime consumers should:
+
 - Import primitives directly from their source packages (`@oaknational/type-helpers`, not via `@oaknational/sdk-codegen`)
 - Import committed codegen output from a package that contains ONLY committed output, not codegen scripts
 
@@ -439,10 +461,12 @@ Each tension below was identified by pushing past "classify around the compromis
 **Cause**: The package grew organically. Generic mechanisms and deployment-specific adaptations were added to the same package because they're "all about logging."
 
 **Foundational solution**: Apply the "Separate Framework from Consumer" principle. Ask: "Could a non-Oak, non-Vercel, non-Express consumer use this component unchanged?"
+
 - **Generic logging framework** (Tier 1): `UnifiedLogger`, error normalisation, JSON sanitisation, log levels, severity mapping, OTel format, sink interfaces, context merging.
 - **Deployment-specific adaptations** (Tier 2b): `buildResourceAttributes` (Vercel env var detection), `getDeploymentEnvironment`, Express middleware.
 
 **Analysis task**: Apply this decomposition question to every infrastructure package:
+
 - `observability` — are redaction rules generic or Oak-specific?
 - `env` — is the validation mechanism generic, or are the schemas Oak-specific?
 - `sentry-node`, `sentry-mcp` — already consumer instances, or do they contain reusable framework logic?
@@ -488,6 +512,7 @@ Define the four-tier layered architecture. Define import direction rules. Define
 For each package, answer: does every exported function/type align with its tier? Are there exports that should move?
 
 **Tools**:
+
 - `knip` — find unused exports, unused dependencies, unused files. Reveals which exports from each package are actually consumed and by whom.
 - `dependency-cruiser` — trace the full import graph. Enforce tier direction rules at the module level. Detect violations.
 - Manual grep/read — for specific function-level questions that tools can't answer.
@@ -535,6 +560,7 @@ For each package, answer: does every exported function/type align with its tier?
 ### Phase 3: Optimal placement decisions
 
 Based on Phase 2 evidence:
+
 - Final tier assignment for each package
 - List of functions/exports that need to move between packages or tiers
 - Decision on physical directory structure (informed by package counts per tier)
@@ -581,10 +607,12 @@ Current definitions from [principles.md](/.agent/directives/principles.md) and A
 - **packages/design/** — design token workspaces producing CSS artifacts.
 
 **Gaps**: The definitions conflate two independent dimensions:
+
 1. **Concern** (what the code does): SDK vs lib vs primitive vs infrastructure vs design vs tooling
 2. **Lifecycle** (when the code runs): codegen-time vs runtime vs lifecycle-agnostic
 
 Current `packages/core/` conflates two qualitatively different things:
+
 - **Primitives** (`result`, `type-helpers`) — zero deps, pure, stateless. Safe for anything.
 - **Infrastructure** (`observability`, `env`) — has deps, configuration, or environmental needs. Carries operational weight.
 

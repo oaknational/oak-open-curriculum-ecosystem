@@ -10,7 +10,7 @@ ADR-125 established the three-layer model for agent artefacts: canonical content
 
 This plan describes a **target portability architecture**, not the current
 repo-local hook baseline. The authoritative local contract remains
-[`cross-platform-agent-surface-matrix.md`](../../../reference/cross-platform-agent-surface-matrix.md),
+[`cross-platform-agent-surface-matrix.md`](../../../memory/executive/cross-platform-agent-surface-matrix.md),
 which currently records only Claude Code `PreToolUse` as wired in this repo.
 
 Target-state platform posture:
@@ -20,7 +20,7 @@ Target-state platform posture:
 | Claude Code | Supported for tracked `PreToolUse` only | `.claude/settings.json` `hooks` key |
 | Cursor | Unsupported in the local support matrix | `.cursor/hooks.json` after fresh verification and wiring |
 | Gemini CLI | Unsupported in the local support matrix | `.gemini/settings.json` `hooks` key after fresh verification and wiring |
-| Codex | Unsupported | Blocked on upstream support |
+| Codex | Upstream hooks supported behind `codex_hooks`; no repo-local hooks wired | Wire only after fresh verification; no documented `SessionEnd` equivalent, so session-close cleanup still needs TTL fallback |
 
 ## Problem Statement
 
@@ -47,7 +47,7 @@ a prerequisite for basic hook adoption.
 
 Extend the three-layer model to hooks:
 
-```
+```text
 .agent/hooks/                           # Layer 1: Canonical hook scripts
   scripts/
     block-destructive-commands.sh        # Shared validation logic
@@ -166,7 +166,10 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 
 1. **Stdin schema normalisation**: Claude Code, Cursor, and Gemini all send JSON on stdin but with slightly different schemas. Should scripts handle all three, or should a thin adapter normalise the input before calling the script?
 2. **Node.js vs shell**: Shell scripts are universally available but limited. Node.js scripts can use `jq`-like JSON parsing natively. Which should be the default?
-3. **Codex**: When Codex adds hook support, will it follow the same stdin/stdout/exit-code pattern? The plan should be revisited when Codex hooks ship.
+3. **Codex**: Codex hooks now exist and use JSON on stdin plus command-hook
+   output. Promotion still needs fresh local verification of supported events,
+   especially because current Codex docs expose turn-scoped `Stop` but no
+   documented `SessionEnd`.
 4. **Hook testing**: How do we test hooks? Unit tests for the scripts with mock stdin? Integration tests that verify the hook fires correctly in each platform?
 5. **Claude Code prompt/agent hooks**: These are uniquely powerful (LLM-evaluated gates, multi-turn verification). Should we create canonical prompt templates in `.agent/hooks/prompts/` that Claude Code's prompt hooks reference?
 
@@ -209,7 +212,7 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 |---|---|
 | Stdin schema differences break scripts across platforms | Phase 0 research; schema-tolerant parsing or thin normaliser |
 | Hooks slow down agent workflow | Keep hooks fast (< 1s); use async where supported |
-| Codex adds hooks with a different protocol | Design scripts to be protocol-tolerant; revisit when Codex ships hooks |
+| Codex hook events differ from other platforms | Design scripts to be protocol-tolerant; do not use Codex `Stop` as session-exit cleanup unless a real `SessionEnd` surface lands |
 | Hook scripts need platform-specific tool names in matchers | Matchers stay in platform config (Layer 2); scripts receive normalised input |
 
 ## Dependencies
@@ -217,7 +220,8 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 - ADR-125 (three-layer model) — already accepted
 - Repo-local activation beyond Claude Code `PreToolUse` — requires fresh
   verification, wiring, and matrix updates
-- Codex hook support — blocked on upstream (openai/codex#7396)
+- Codex hook support — available upstream behind `codex_hooks`, but local
+  project wiring and `SessionEnd` parity remain unverified
 
 ## Non-Goals
 

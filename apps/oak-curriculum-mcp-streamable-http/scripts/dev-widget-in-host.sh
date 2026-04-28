@@ -26,28 +26,39 @@ MCP_SERVER_PORT="${MCP_SERVER_PORT:-3333}"
 MCP_SERVER_URL="http://localhost:${MCP_SERVER_PORT}/mcp"
 EXT_APPS_DIR="${TMPDIR:-/tmp}/mcp-ext-apps"
 
-# --- Check bun ---
-if ! command -v bun >/dev/null 2>&1; then
-  echo "Error: bun is required for the MCP Apps reference host."
-  echo ""
-  echo "Install: npm install -g bun  (or see https://bun.sh)"
-  echo ""
-  echo "Alternative: pnpm dev:widget serves the widget standalone"
-  echo "at http://localhost:5173/ without needing bun."
+require_command() {
+  local command_name="$1"
+  local install_url="$2"
+
+  if command -v "${command_name}" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "Error: required command '${command_name}' is not installed." >&2
+  echo "Install instructions: ${install_url}" >&2
   exit 1
-fi
+}
+
+# --- Check required external tools ---
+require_command "bun" "https://bun.sh/docs/installation"
+require_command "curl" "https://curl.se/download.html"
+require_command "git" "https://git-scm.com/downloads"
+# ext-apps basic-host uses npm scripts in the upstream example workspace.
+require_command "npm" "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
 
 # --- Check MCP server is reachable (healthz, not /mcp which requires POST) ---
 HEALTHZ_URL="http://localhost:${MCP_SERVER_PORT}/healthz"
 echo "Checking MCP server at ${HEALTHZ_URL}..."
 if ! curl -sf --max-time 3 "${HEALTHZ_URL}" >/dev/null 2>&1; then
-  echo ""
-  echo "Error: No MCP server responding on port ${MCP_SERVER_PORT}."
-  echo ""
-  echo "Start the server first in a separate terminal:"
-  echo "  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth"
-  echo ""
-  echo "Then re-run this script."
+  {
+    echo ""
+    echo "Error: No MCP server responding on port ${MCP_SERVER_PORT}."
+    echo ""
+    echo "Start the server first in a separate terminal:"
+    echo "  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth"
+    echo ""
+    echo "Then re-run this script."
+  } >&2
   exit 1
 fi
 echo "MCP server is running."

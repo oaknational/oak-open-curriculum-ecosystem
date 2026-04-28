@@ -55,7 +55,6 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
     ),
     handle: (m, acc) => {
       const [, prog, unit, lesson] = m;
-      acc.programmeSlugs.add(prog);
       acc.unitToProgramme.set(unit, prog);
       acc.lessonToProgrammeUnit.set(lesson, { programmeSlug: prog, unitSlug: unit });
       acc.lessonSlugs.add(lesson);
@@ -65,18 +64,12 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   {
     pattern: /^\/teachers\/programmes\/([^/]+)\/units\/([^/]+)\/lessons\/?$/,
     handle: (m, acc) => {
-      acc.programmeSlugs.add(m[1]);
       acc.unitToProgramme.set(m[2], m[1]);
     },
   },
-  // /teachers/programmes/{p}/units
+  // /teachers/programmes/{p}/units (canonical programme listing page)
   {
     pattern: /^\/teachers\/programmes\/([^/]+)\/units\/?$/,
-    handle: (m, acc) => void acc.programmeSlugs.add(m[1]),
-  },
-  // /teachers/programmes/{p} (root)
-  {
-    pattern: /^\/teachers\/programmes\/([^/]+)\/?$/,
     handle: (m, acc) => void acc.programmeSlugs.add(m[1]),
   },
   // /teachers/key-stages/{ks}/subjects/{subj}/programmes
@@ -228,7 +221,9 @@ export function validateScanResult(result: SitemapCategorisation): string[] {
     errors.push('No lesson paths found. Expected /teachers/lessons/ URLs in sitemap.');
   }
   if (result.totals.programmes === 0) {
-    errors.push('No programme paths found. Expected /teachers/programmes/ URLs in sitemap.');
+    errors.push(
+      'No programme listing paths found. Expected /teachers/programmes/{slug}/units URLs.',
+    );
   }
   if (result.totals.sequences === 0) {
     errors.push(

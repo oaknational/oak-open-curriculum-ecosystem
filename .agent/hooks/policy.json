@@ -22,7 +22,7 @@
       "description": "Block agents from writing user-approved exception markers into file content. Only the project owner can approve eslint-disable exceptions with the JC: prefix."
     },
     "sessionStart": {
-      "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/distilled.md before starting work.",
+      "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/active/distilled.md before starting work.",
       "practice_box_check": "Check .agent/practice-core/incoming/ for new Practice Core files.",
       "description": "Remind the agent to ground itself at session start."
     },

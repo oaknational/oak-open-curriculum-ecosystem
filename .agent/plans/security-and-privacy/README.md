@@ -16,6 +16,7 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 | `future/phase-1-security-claim-contract.md` | Future artefact | Phase 1 security claim contract target |
 | `future/phase-2-evidence-merge-readiness-rules.md` | Future artefact | Phase 2 evidence merge-readiness rules target |
 | `future/phase-3-baseline-control-cut-list.md` | Future artefact | Phase 3 baseline control cut list target |
+| `future/cloudflare-mcp-public-beta-security-gate.plan.md` | Future strategic brief | Cloudflare MCP security gate, Practice deltas, and product threat-model enhancements before public beta |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `developing-secure-mcp-servers.research.md` | Research | Hardening evidence base and control backlog |
 | `evidence-bundle.template.md` | Template | Claim/evidence artefact format for non-trivial security claims |
@@ -71,5 +72,12 @@ Also apply:
 
 - **Milestone 1**: security baseline readiness for public alpha confidence.
 - **Milestone 2**: hardening expansion after alpha feedback.
+- **Milestone 3**: public beta is blocked until the Cloudflare MCP security
+  gate is satisfied. The gate evaluates Cloudflare's 2026-04-14 enterprise MCP
+  reference architecture
+  (<https://blog.cloudflare.com/enterprise-mcp/>) against Oak's remote/public
+  MCP threat model and records either enabled controls or evidence-backed
+  declines. Strategic detail now lives in
+  [cloudflare-mcp-public-beta-security-gate.plan.md](future/cloudflare-mcp-public-beta-security-gate.plan.md).
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.

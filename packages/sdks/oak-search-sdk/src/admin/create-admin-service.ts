@@ -67,9 +67,10 @@ export function createAdminService(
     verifyConnection: () => verifyConnection(esClient),
     listIndexes: () => listIndexes(esClient),
     updateSynonyms: () => upsertSynonyms(esClient, logger),
-    getIndexMeta: () => readIndexMeta(esClient),
-    setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
-    verifyDocCounts: (expectations) => verifyDocCounts(esClient, resolveIndex, expectations),
+    getIndexMeta: () => readIndexMeta(esClient, logger),
+    setIndexMeta: (meta) => writeIndexMeta(esClient, meta, logger),
+    verifyDocCounts: (expectations) =>
+      verifyDocCounts(esClient, resolveIndex, expectations, logger),
     countDocs: () => countDocs(esClient, resolveIndex),
   };
 }

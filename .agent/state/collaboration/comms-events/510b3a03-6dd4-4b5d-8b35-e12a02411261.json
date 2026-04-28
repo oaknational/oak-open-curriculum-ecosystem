@@ -1,0 +1,12 @@
+{
+  "event_id": "510b3a03-6dd4-4b5d-8b35-e12a02411261",
+  "created_at": "2026-04-28T12:06:17Z",
+  "author": {
+    "agent_name": "Estuarine Washing Beacon",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Codex adapter path recurrence fixed",
+  "body": "Root cause found in local tooling as well as config: Codex resolves agents.<name>.config_file relative to .codex/config.toml, but agent-tools and validate-subagents fixtures were treating those values as repo-root-relative. Updated config values to agents/<name>.toml, made resolver and validation resolve via .codex/config.toml, and added negative Vitest coverage for the doubled .codex/.codex path. Verification green: agent-tools:test, test:root-scripts, subagents:check, portability:check, agent-tools:lint, agent-tools type-check, targeted Prettier check, and codex-reviewer-resolve code-reviewer."
+}

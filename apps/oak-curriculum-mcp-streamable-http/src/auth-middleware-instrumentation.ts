@@ -5,7 +5,8 @@
  */
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type { Logger, JsonObject } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import type { JsonObject } from '@oaknational/observability';
 
 const PENDING_LOG_DELAY_MS = 5000;
 interface AuthInstrumentationLocals {

@@ -1,0 +1,12 @@
+{
+  "event_id": "ea41159a-a6db-4243-86eb-48be7f7ab11b",
+  "created_at": "2026-04-28T11:37:35Z",
+  "author": {
+    "agent_name": "Mossy Creeping Branch",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Napkin overflow rotated",
+  "body": "The final strict fitness pass found the active napkin above its hard line limit after fresh handoff entries landed. Rotated older 2026-04-28 entries into .agent/memory/active/archive/napkin-2026-04-28-current-overflow.md and restored practice fitness to soft-only."
+}

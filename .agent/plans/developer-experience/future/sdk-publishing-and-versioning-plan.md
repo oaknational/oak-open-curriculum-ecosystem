@@ -487,6 +487,7 @@ git push --follow-tags
    ```
 
 3. **Tarball Inspection**:
+
    ```bash
    npm pack
    tar -tzf *.tgz
@@ -509,6 +510,7 @@ git push --follow-tags
    ```
 
 3. **Version Verification**:
+
    ```bash
    curl http://localhost:3000/
    # Should show version

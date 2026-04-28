@@ -79,6 +79,9 @@ Every executable plan MUST have:
    testing-strategy.md, schema-first-execution.md
 7. **Non-goals** — what we are explicitly NOT doing (YAGNI)
 8. **Learning Loop** — all plans MUST end with running the consolidation workflow
+9. **Lifecycle triggers** — plans that touch non-trivial work MUST
+   reference `.agent/plans/templates/components/lifecycle-triggers.md`
+   or record why each lifecycle touch point is not applicable
 
 ## Promotion Workflow (`future/` -> `current/` -> `active/`)
 

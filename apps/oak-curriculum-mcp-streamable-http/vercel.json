@@ -1,4 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "express"
+  "framework": "express",
+  "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
 }

@@ -115,7 +115,11 @@ export function resolveHttpDevExecutionPlan({
     server: {
       label: 'http-dev-server',
       command: resolveWorkspaceBinary(workspaceRoot, 'tsx'),
-      args: ['src/index.ts'],
+      // --import @sentry/node/preload: required Node.js ESM hook for Sentry
+      // auto-instrumentation. Registers import-in-the-middle loader hooks
+      // BEFORE application modules load. See scripts/start-server.sh for
+      // the full rationale and Sentry doc references.
+      args: ['--import', '@sentry/node/preload', 'src/index.ts'],
       cwd: workspaceRoot,
       env: resolveServerEnv(parentEnv, mode),
       output: resolveServerOutput(mode, workspaceRoot, now),
@@ -143,11 +147,19 @@ function isHttpDevMode(input: string): input is HttpDevMode {
 }
 
 function resolveServerEnv(parentEnv: NodeJS.ProcessEnv, mode: HttpDevMode): NodeJS.ProcessEnv {
+  const localEnv = { ...parentEnv };
+  delete localEnv.VERCEL_ENV;
+  delete localEnv.VERCEL_GIT_COMMIT_REF;
+  delete localEnv.VERCEL_GIT_COMMIT_SHA;
+  delete localEnv.VERCEL_BRANCH_URL;
+  delete localEnv.SENTRY_RELEASE_OVERRIDE;
+
   return {
-    ...parentEnv,
+    ...localEnv,
     ALLOWED_HOSTS: LOCAL_ALLOWED_HOSTS,
     DANGEROUSLY_DISABLE_AUTH: mode === 'observe-noauth' ? 'true' : 'false',
     LOG_LEVEL: 'debug',
+    ...(mode === 'observe-noauth' ? { SENTRY_MODE: 'off' } : {}),
   };
 }
 

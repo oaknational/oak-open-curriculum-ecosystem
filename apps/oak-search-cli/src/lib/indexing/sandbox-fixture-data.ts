@@ -18,6 +18,7 @@ import {
   getRecordKeys,
   parseStringKeyedObject,
 } from './sandbox-fixture-validation';
+import { ingestLogger } from '../logger';
 
 /**
  * Canonical unit descriptor extracted from the sandbox fixture payloads.
@@ -67,6 +68,7 @@ export interface FixtureData {
  * Loads a sandbox fixture JSON file and converts it into parsed, schema-validated data.
  */
 export async function loadSandboxFixtureData(fixtureRoot: string): Promise<FixtureData> {
+  ingestLogger.debug('Loading sandbox fixture data', { fixtureRoot });
   return {
     keyStages: parseKeyStages(await loadJson(fixtureRoot, 'key-stages.json')),
     subjects: parseSubjects(await loadJson(fixtureRoot, 'subjects.json')),

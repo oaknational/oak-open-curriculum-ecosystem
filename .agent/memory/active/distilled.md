@@ -1,0 +1,247 @@
+---
+fitness_line_target: 200
+fitness_line_limit: 275
+fitness_char_limit: 16500
+fitness_line_length: 100
+split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
+---
+
+# Distilled Learnings
+
+Hard-won rules extracted from napkin sessions. Read this before every session.
+Every entry earned its place by changing behaviour.
+
+**Source**: Distilled from archived napkins
+`napkin-2026-02-24.md` through `napkin-2026-04-28.md`
+(sessions 2026-02-10 to 2026-04-25).
+
+**Permanent documentation**: Entries graduate to permanent
+docs when stable and a natural home exists. Always graduate
+useful understanding — fitness management handles the
+consequences. What remains here is repo/domain-specific
+context with no natural permanent home.
+
+---
+
+## User Preferences
+
+- Plans must be **discoverable** (linked from README, roadmap,
+  AND session prompt) AND **actionable** (status tracking tables,
+  completion checklists, resolved open questions).
+
+Collaboration-specific entries formerly in this section graduated
+to the [user-collaboration directive][user-collaboration] on 2026-04-24.
+The merge-blocking simplification preference also lives there now.
+
+## Multi-agent collaboration
+
+The agent-to-agent working model lives in
+[`agent-collaboration.md`][agent-collaboration]. The discovery surface
+is the shared communication log at `.agent/state/collaboration/shared-comms-log.md`. The
+structured claims registry (WS1) lives at
+`.agent/state/collaboration/active-claims.json`. Three foundational
+behavioural rules are loaded as session-open tripwires:
+[`dont-break-build-without-fix-plan`](../../rules/dont-break-build-without-fix-plan.md),
+[`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md),
+and
+[`register-active-areas-at-session-open`](../../rules/register-active-areas-at-session-open.md).
+Knowledge and communication, not mechanical refusals — locks would be
+routed around at the cost of architectural excellence.
+
+The protocol is platform independent by design. Platform-specific
+agent-team features may help build, inspect, or stress test the system,
+but the local markdown/JSON/rules/commands/skills/hooks surfaces are the
+operating substrate for Practice-owned coordination concepts and must remain
+sufficient without platform-native collaboration features.
+
+Before adding a new always-visible coordination surface, widen the regular
+state audit first. WS3A showed that active claims, closure history, decision
+threads, unresolved decision requests, evidence bundles, and schema
+validation became usable once `consolidate-docs` reported them together.
+Structured state plus consolidation output is usually the first dashboard.
+
+Split evidenced durability gaps from speculative coordination mechanisms.
+WS3A claim-history / decision-thread work was grounded in real harvest
+evidence; WS3B sidebar, timeout, and file-backed owner escalation remain
+promotion-gated until async decision threads prove insufficient.
+
+Tripwire-observable-artefacts entries graduated 2026-04-25 to
+[PDR-029 v2 amendment][pdr-029].
+
+Owner-directed pause as a load-bearing planning move graduated
+2026-04-26 to [PDR-026 amendment][pdr-026].
+
+Parallel reviewer dispatch and structural-then-pre-landing review
+phasing graduated 2026-04-26 to [PDR-015 amendment][pdr-015].
+
+ADR/PDR citation discipline remains live-distilled until enough
+evidence accumulates to graduate to a PDR amendment or a rule:
+when citing an ADR or PDR by number, verify the filename and the
+substance against the live decision-record file rather than
+inheriting plan-body shorthand.
+
+Shared-state files are read/write collaboration surfaces, not commit blockers
+and not read-only under active overlap. Changes to `active-claims.json`,
+closed-claim archives, shared communication logs, conversation files, napkin,
+distilled memory, and thread records may be included in another agent's
+governance/docs commit when that avoids blocking useful work. When a handoff or
+coordination update needs these files, read the current state and write the
+update; use the commit queue / `git:index/head` window to serialize the commit
+and make the overlap visible. Active claims on shared-state docs are
+coordination signals, not no-write locks. Keep repo-functionality commits
+pathspec-clean; allow shared state to travel with the closeout that made it
+current. When editing hot shared JSON manually, prefer surgical, parser-backed
+edits or transaction helpers over full-file rewrites.
+
+When an apparently orphaned active claim is found, archive it only through a
+deliberate governance pass or owner-forced close. If another session is
+already performing that cleanup, let the natural claim lifecycle finish rather
+than deleting unilaterally.
+
+## Workspace-first before external tooling or new infrastructure
+
+Three failure modes share one shape and one fix. Before reaching for
+external tools or proposing new code, exhaust workspace inventory:
+
+- **Diagnostic failure investigation**: when remote tooling truncates
+  (Vercel MCP, Sentry MCP, GitHub API), search the workspace for
+  owner-provided artefacts (`vercel_logs/`, `test-results/`,
+  `coverage/`) BEFORE retrying the same tool with bigger limits.
+  The owner may have downloaded the complete artefact locally.
+- **Brief enumeration of failing checks**: a brief listing failing PR
+  checks is a snapshot from when the prior session closed. Run
+  `gh pr checks <PR>` first; cross-check against the brief. Pre-existing
+  red gates the brief omitted are still blocking — *all gate failures
+  are blocking at all times, regardless of cause or location*
+  (principles.md §Code Quality).
+- **Infrastructure proposals**: before adding new Zod schemas /
+  validation pipelines / helper modules, survey existing `core/` and
+  `libs/` packages. `@oaknational/env` already has shared schema
+  contracts; `@oaknational/env-resolution` already has the
+  schema-validate-then-narrow flow; `@oaknational/build-metadata`
+  already has the constant-type-predicate pattern in place. Extending
+  existing infrastructure beats parallel implementations every time.
+- **Vendor-platform plans**: see [PDR-033][pdr-033] and the pattern
+  instance at [`patterns/vendor-doc-review-for-unknown-unknowns.md`][vendor-pattern].
+  Vendor-doc review at plan time finds capability gaps;
+  vendor-specialist reviewer dispatch at implementation time catches
+  contract violations. Both review acts are routine, not exceptional.
+- **Cross-system observability claims**: before investigating one system's
+  behaviour, align all relevant artefacts first. For Vercel / Sentry /
+  GitHub validation, compare local HEAD, origin, PR head, latest Vercel
+  deployment SHA, and Sentry deploy/release metadata. If they disagree,
+  establish which artefact is being tested before making runtime claims.
+
+Captured in `feedback_workspace_first_for_diagnostics`,
+`feedback_gh_pr_checks_over_brief`, and
+`feedback_check_workspace_packages_before_proposing` (2026-04-26
+session).
+
+Test-fixtures-encode-production-shape doctrine graduated 2026-04-26
+to [PDR-034][pdr-034].
+
+Constant-type-predicate call-site uptake clause graduated 2026-04-26
+to [ADR-153 amendment][adr-153] as Step 5 of the pattern.
+
+Config-load-side-effects discipline graduated 2026-04-26 to
+[ADR-164][adr-164].
+
+## Process
+
+Planning-discipline entries in this section remain routed to the
+`planning-specialist-capability.plan.md` plan until the Planning
+expert triplet executes.
+
+Disposition-drift doctrine graduated 2026-04-28 to
+[PDR-018 §Disposition drift at phase boundaries][pdr-018].
+
+- **Learning before fitness**: capture, distil, graduate, and write the
+  signal fully even when the destination file is near or over a fitness
+  limit. Fitness limits are health signals. They route structural follow-up
+  — refine, split, graduate, or adjust limits — but never justify starving
+  the learning loop.
+- **Lead with narrative, not infrastructure**: on a multi-workstream
+  initiative, write the ADR and README first. WS-0 (narrative) →
+  WS-1 (factory) → WS-2+ (consumers).
+- **Narrative sections drift first**: when syncing plan state,
+  inspect body status lines, decision tables, and current-state
+  prose — not just frontmatter and todo checkboxes.
+- **Reconcile parent when child changes runtime truth**: a child
+  plan that evolves runtime architecture must reconcile the parent
+  plan and closure proof in the same session.
+- **CLI-first enumeration before owner questions**: research
+  the generic REST surface (`sentry api`, `clerk api`, vendor-
+  equivalent) before raising any owner question about observability
+  or infrastructure state. "The specialist tool doesn't surface X"
+  ≠ "X is unknowable from automation." **Extends to workstream
+  sizing**: when owner direction names a repo-level mechanism
+  (build cancellation, env-var policy, release resolution),
+  search the repo for prior implementation before sizing a
+  workstream. "Stated many times" or "should already be true"
+  signals the substance may exist and the gap is
+  documentation/linkage, not implementation.
+- **Validation closures: produce locally-producible evidence
+  first**. For deployment validation lanes, generate every
+  locally-producible proof under a session-specific release tag
+  before asking. Only ask for owner action when tooling cannot
+  reach the artefact.
+- **Split client-compatibility out of deployment-validation
+  lanes**: a client-specific compat issue emerging in an active
+  deployment-validation lane spins into its own follow-up plan.
+  Shared preview infra ≠ shared plan ownership.
+- **Dry-run multi-step workflows against accumulated state** before
+  committing to the recipe; produces *proceed* or *stage differently*.
+- **Plan-as-artefact gravity**: when a remediation plan grows multiple
+  session-history sections, re-grounding tables, and re-classification
+  amendments while the gates it targets remain red, the plan body has
+  become an artefact rather than an execution document. Symptoms:
+  inline "Session 1 / Session 2 / Session 2.0.5" prose; verification
+  tables of stale assertions; a 12-phase scope mixing different signal
+  classes (e.g. CodeQL + Sonar + duplications + micro-clusters);
+  per-session re-grounding cost exceeding per-session closure rate.
+  Cure: archive the plan body (preserve as `*.superseded-by-*.md`),
+  port load-bearing evidence files (security reviews, sink-trace
+  findings) but not prose, write a one-page replacement scoped to a
+  single signal class with one row per finding and a structural cure
+  (or owner-authorised dismissal-with-evidence) per row, no inline
+  history. Witnessed on `pr-87-architectural-cleanup.plan.md` →
+  superseded 2026-04-28 by `pr-87-codeql-alerts.plan.md`.
+
+Non-planning process entries graduated on 2026-04-24 to:
+`validate-full-target-estate`, `read-diagnostic-artefacts-in-full`,
+`consolidate-at-third-consumer`, `generator-first-mindset`,
+`documentation-hygiene`, reviewer doctrine, build-system doctrine,
+practice verification, and the collaboration directive.
+
+## Architecture (Agent Infrastructure)
+
+<!-- "Implicit architectural intent is not enforced principle" graduated
+2026-04-19 — codified as ADR-162 (Observability-First), now Accepted. -->
+
+Agent-infrastructure portability entries graduated on 2026-04-24 to PDR-009
+and ADR-125. Live counts are enforced by `pnpm portability:check`, not
+repeated here.
+
+## Repo-Specific Rules
+
+The `src/bulk/generators/` / `vocab-gen/generators/` duplication is
+deferred to the SDK codegen decomposition plan for a separate session:
+`plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`.
+
+## Build System (Domain-Specific)
+
+Build-system entries graduated on 2026-04-24 to
+[`docs/engineering/build-system.md`][build-system].
+
+[user-collaboration]: ../../directives/user-collaboration.md
+[agent-collaboration]: ../../directives/agent-collaboration.md
+[build-system]: ../../../docs/engineering/build-system.md
+[adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
+[adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
+[pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
+[pdr-018]: ../../practice-core/decision-records/PDR-018-planning-discipline.md#disposition-drift-at-phase-boundaries-2026-04-28-amendment
+[pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log
+[pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md#amendment-log
+[pdr-033]: ../../practice-core/decision-records/PDR-033-vendor-doc-review-for-unknown-unknowns.md
+[pdr-034]: ../../practice-core/decision-records/PDR-034-test-fixtures-encode-production-shape.md
+[vendor-pattern]: patterns/vendor-doc-review-for-unknown-unknowns.md

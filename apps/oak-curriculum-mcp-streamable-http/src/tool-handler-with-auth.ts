@@ -127,6 +127,7 @@ async function executeWithAuthCapture(
 
   const executor = deps.createRequestExecutor({
     apiKey,
+    logger,
     createAssetDownloadUrl,
     onToolExecution: (name: unknown, execution) => {
       if (!execution.ok) {

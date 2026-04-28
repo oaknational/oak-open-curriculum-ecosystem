@@ -10,7 +10,7 @@
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
-import { formatError } from '../universal-tool-shared.js';
+import { formatError, resolveUniversalToolLogger } from '../universal-tool-shared.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type { UserSearchArgs } from './types.js';
 import { validateUserSearchArgs } from './validation.js';
@@ -29,6 +29,16 @@ export async function runUserSearchTool(
   args: UserSearchArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.user-search.execute', {
+    toolName: 'user-search',
+    query: args.query,
+    scope: args.scope,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+  });
+
   // Delegate to the existing search SDK — revalidates through its pipeline
   const searchInput = {
     query: args.query,
@@ -61,6 +71,12 @@ export async function handleUserSearchExecution(
   input: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.user-search.handle', {
+    toolName: 'user-search',
+    hasInput: input !== undefined,
+  });
+
   const validation = validateUserSearchArgs(input);
   if (!validation.ok) {
     return formatError(validation.message);

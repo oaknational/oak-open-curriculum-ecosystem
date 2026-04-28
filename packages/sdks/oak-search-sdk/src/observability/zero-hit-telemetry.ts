@@ -3,6 +3,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type {
   ZeroHitEvent,
@@ -33,7 +34,12 @@ export async function fetchTelemetry(
   options: TelemetryFetchOptions,
   client: Client,
   indexName: string,
+  logger?: Logger,
 ): Promise<Result<ZeroHitTelemetry, ObservabilityError>> {
+  logger?.debug('Fetching zero-hit telemetry', {
+    indexName,
+    limit: options.limit,
+  });
   try {
     const response = await client.search({
       index: indexName,

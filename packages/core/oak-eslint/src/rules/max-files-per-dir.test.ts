@@ -1,67 +1,108 @@
-import { RuleTester } from '@typescript-eslint/rule-tester';
-import type { RuleModule } from '@typescript-eslint/utils/ts-eslint';
-import rule from './max-files-per-dir.js';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
-import * as os from 'node:os';
+import { describe, expect, it } from 'vitest';
+import {
+  evaluateMaxFilesPerDir,
+  maxFilesPerDirRule,
+  type DirectoryInventory,
+} from './max-files-per-dir.js';
+import { ruleTester } from '../test-support/rule-tester.js';
 
-import { createRequire } from 'node:module';
-import { afterAll, describe, it } from 'vitest';
-
-const require = createRequire(import.meta.url);
-
-RuleTester.afterAll = afterAll;
-RuleTester.describe = describe;
-RuleTester.it = it;
-
-const ruleTester = new RuleTester({
-  languageOptions: {
-    parser: require('@typescript-eslint/parser'),
+const SAMPLE_INVENTORIES: readonly DirectoryInventory[] = [
+  {
+    directory: '/repo/packages/core/oak-eslint/src/rules',
+    files: ['a.ts', 'b.ts', 'c.ts'],
   },
+  {
+    directory: '/repo/ignored',
+    files: ['a.ts', 'b.ts', 'c.ts'],
+  },
+  {
+    directory: '/repo/packages/core/oak-eslint/src/configs',
+    files: ['index.ts', 'strict.ts'],
+  },
+];
+
+describe('evaluateMaxFilesPerDir', () => {
+  it('reports the alphabetically first matching file for an overfull directory inventory', () => {
+    expect(
+      evaluateMaxFilesPerDir({
+        filePath: '/repo/packages/core/oak-eslint/src/rules/a.ts',
+        inventories: SAMPLE_INVENTORIES,
+        pattern: '*.ts',
+        maxFiles: 2,
+        ignoreDirs: [],
+      }),
+    ).toEqual({
+      dir: '/repo/packages/core/oak-eslint/src/rules',
+      actual: 3,
+      pattern: '*.ts',
+      max: 2,
+    });
+  });
+
+  it('ignores non-anchor files, ignored directories, and directories within the cap', () => {
+    expect(
+      evaluateMaxFilesPerDir({
+        filePath: '/repo/packages/core/oak-eslint/src/rules/b.ts',
+        inventories: SAMPLE_INVENTORIES,
+        pattern: '*.ts',
+        maxFiles: 2,
+        ignoreDirs: [],
+      }),
+    ).toBeNull();
+
+    expect(
+      evaluateMaxFilesPerDir({
+        filePath: '/repo/ignored/a.ts',
+        inventories: SAMPLE_INVENTORIES,
+        pattern: '*.ts',
+        maxFiles: 2,
+        ignoreDirs: ['/repo/ignored'],
+      }),
+    ).toBeNull();
+
+    expect(
+      evaluateMaxFilesPerDir({
+        filePath: '/repo/packages/core/oak-eslint/src/configs/index.ts',
+        inventories: SAMPLE_INVENTORIES,
+        pattern: '*.ts',
+        maxFiles: 2,
+        ignoreDirs: [],
+      }),
+    ).toBeNull();
+  });
 });
 
-function withTmpDir(setup: (dir: string) => string[]) {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'max-files-'));
-  const files = setup(tmp);
-  return {
-    dir: tmp,
-    files,
-    cleanup: () => fs.rmSync(tmp, { recursive: true, force: true }),
-  };
-}
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- ESLint RuleModule vs typescript-eslint RuleModule type mismatch
-ruleTester.run('max-files-per-dir', rule as unknown as RuleModule<string, unknown[]>, {
+ruleTester.run('max-files-per-dir', maxFilesPerDirRule, {
   valid: [
-    (() => {
-      const { dir, cleanup } = withTmpDir((d) => {
-        fs.writeFileSync(path.join(d, 'a.ts'), 'export {};');
-        fs.writeFileSync(path.join(d, 'b.ts'), 'export {};');
-        return ['a.ts', 'b.ts'];
-      });
-      return {
-        code: 'export {};',
-        filename: path.join(dir, 'a.ts'),
-        options: [{ maxFiles: 2 }],
-        after: cleanup,
-      };
-    })(),
+    {
+      code: 'export {};',
+      filename: '/repo/packages/core/oak-eslint/src/configs/index.ts',
+      options: [{ maxFiles: 2, pattern: '*.ts', inventories: SAMPLE_INVENTORIES }],
+    },
+    {
+      code: 'export {};',
+      filename: '/repo/packages/core/oak-eslint/src/rules/b.ts',
+      options: [{ maxFiles: 2, pattern: '*.ts', inventories: SAMPLE_INVENTORIES }],
+    },
+    {
+      code: 'export {};',
+      filename: '/repo/ignored/a.ts',
+      options: [
+        {
+          maxFiles: 2,
+          pattern: '*.ts',
+          inventories: SAMPLE_INVENTORIES,
+          ignoreDirs: ['/repo/ignored'],
+        },
+      ],
+    },
   ],
   invalid: [
-    (() => {
-      const { dir, cleanup } = withTmpDir((d) => {
-        fs.writeFileSync(path.join(d, 'a.ts'), 'export {};');
-        fs.writeFileSync(path.join(d, 'b.ts'), 'export {};');
-        fs.writeFileSync(path.join(d, 'c.ts'), 'export {};');
-        return ['a.ts', 'b.ts', 'c.ts'];
-      });
-      return {
-        code: 'export {};',
-        filename: path.join(dir, 'a.ts'), // Anchor file
-        options: [{ maxFiles: 2 }],
-        errors: [{ messageId: 'tooManyFiles' }],
-        after: cleanup,
-      };
-    })(),
+    {
+      code: 'export {};',
+      filename: '/repo/packages/core/oak-eslint/src/rules/a.ts',
+      options: [{ maxFiles: 2, pattern: '*.ts', inventories: SAMPLE_INVENTORIES }],
+      errors: [{ messageId: 'tooManyFiles' }],
+    },
   ],
 });

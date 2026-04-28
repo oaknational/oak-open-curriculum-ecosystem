@@ -2,26 +2,24 @@ import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
+import sonarjs from 'eslint-plugin-sonarjs';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
 
-import type { Linter, ESLint } from 'eslint';
-
-import { noEslintDisableRule } from '../rules/no-eslint-disable.js';
+import { oakPlugin } from '../plugin.js';
 
 /**
- * Inline plugin registration for the `@oaknational` namespace.
+ * Shared plugin registration for the `@oaknational` namespace.
  *
- * This registers the plugin directly inside the recommended config so that
- * any consumer spreading `configs.recommended` automatically gets the
- * `@oaknational/*` rule namespace. Consumers should NOT separately register
- * the `@oaknational` plugin — the config provides it.
+ * This wires the same plugin definition that `src/index.ts` exports so the
+ * packaged rule inventory and the rules available through
+ * `configs.recommended` cannot drift apart.
+ *
+ * `require-observability-emission` is registered here (rule available)
+ * but not activated in the recommended rule set. Per ADR-162 Phase 5
+ * acceptance, each `apps/*` and `packages/sdks/*` workspace enables the
+ * rule at `warn` in its own flat config. Preset-level activation is
+ * deliberately avoided so the rule never fires outside its intended scope.
  */
-const oakPlugin: ESLint.Plugin = {
-  rules: {
-    'no-eslint-disable': noEslintDisableRule,
-  },
-};
-
 /**
  * Restricted types shared between recommended and strict configs.
  *
@@ -48,12 +46,19 @@ export const RECOMMENDED_RESTRICTED_TYPES = {
   },
 } as const;
 
-export const recommended: Linter.Config[] = [
+export const recommended = tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
+  // sonarjs plugin is registered but no rules are currently activated.
+  // Full `sonarjs.configs.recommended` activation is tracked by the
+  // sonarjs-activation-and-sonarcloud-backlog plan in
+  // .agent/plans/architecture-and-infrastructure/current/ — flip the
+  // entry below back to `sonarjs.configs.recommended` when the plan is
+  // in its GREEN phase.
+  { plugins: { sonarjs } },
   prettierConfig,
   {
     plugins: {
@@ -119,13 +124,11 @@ export const recommended: Linter.Config[] = [
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
 
-      // Check suppression — eslint-disable is banned unless user-approved
-      // TODO: Promote to 'error' after Phase 3 eslint-disable remediation is complete
-      // See: .agent/plans/architecture-and-infrastructure/archive/completed/ci-consolidation-and-gate-parity.plan.md
-      '@oaknational/no-eslint-disable': 'warn',
+      '@oaknational/no-eslint-disable': 'error',
+      '@oaknational/no-dynamic-import': 'error',
 
       // TSDoc
-      'tsdoc/syntax': 'warn',
+      'tsdoc/syntax': 'error',
 
       // Prevent export *
       'no-restricted-syntax': [
@@ -138,4 +141,4 @@ export const recommended: Linter.Config[] = [
       ],
     },
   },
-];
+);

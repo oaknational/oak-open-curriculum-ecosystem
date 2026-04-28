@@ -67,7 +67,7 @@ export function createObservabilityService(
     getRecentZeroHits: (limit) => getRecentZeroHits(events, limit),
     getZeroHitSummary: () => getZeroHitSummary(events),
     persistZeroHitEvent: (event) => persistEvent(event, zeroHitConfig, esClient, zeroHitIndex),
-    fetchTelemetry: (options) => fetchTelemetry(options, esClient, zeroHitIndex),
+    fetchTelemetry: (options) => fetchTelemetry(options, esClient, zeroHitIndex, logger),
   };
 }
 

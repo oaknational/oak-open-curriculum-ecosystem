@@ -1,12 +1,12 @@
 import { err, ok, type Result } from '@oaknational/result';
+import { parseOptionalBooleanFlag, parseTracesSampleRate, validateDsn } from './config-parsing.js';
 import {
-  parseOptionalBooleanFlag,
-  parseTracesSampleRate,
-  trimToUndefined,
-  validateDsn,
-} from './config-parsing.js';
-import { resolveSentryEnvironment, resolveSentryRelease } from './config-resolution.js';
+  resolveGitSha,
+  resolveSentryEnvironment,
+  resolveSentryRelease,
+} from './config-resolution.js';
 import type {
+  GitShaSource,
   ObservabilityConfigError,
   ParsedSentryConfig,
   ResolvedSentryEnvironment,
@@ -18,11 +18,21 @@ import type {
   SentryOffConfig,
 } from './types.js';
 
-export { resolveSentryEnvironment, resolveSentryRelease } from './config-resolution.js';
+export {
+  resolveSentryEnvironment,
+  resolveSentryRegistrationPolicy,
+  resolveSentryRelease,
+} from './config-resolution.js';
 
 interface ParsedSentryBooleanFlags {
   readonly enableLogs: boolean | undefined;
   readonly debug: boolean | undefined;
+}
+
+interface ResolvedConfigInputs {
+  readonly mode: SentryMode;
+  readonly flags: ParsedSentryBooleanFlags;
+  readonly environment: ResolvedSentryEnvironment;
 }
 
 function isSentryMode(value: string): value is SentryMode {
@@ -30,7 +40,7 @@ function isSentryMode(value: string): value is SentryMode {
 }
 
 function parseMode(input: SentryConfigEnvironment): Result<SentryMode, ObservabilityConfigError> {
-  const rawMode = trimToUndefined(input.SENTRY_MODE);
+  const rawMode = input.SENTRY_MODE?.trim();
 
   if (!rawMode) {
     return ok('off');
@@ -82,16 +92,11 @@ function parseBooleanFlags(
   });
 }
 
-function createOffConfig(
-  environment: ResolvedSentryEnvironment,
-  release: ResolvedSentryRelease,
-): SentryOffConfig {
+function createOffConfig(environment: ResolvedSentryEnvironment): SentryOffConfig {
   return {
     mode: 'off',
     environment: environment.value,
     environmentSource: environment.source,
-    release: release.value,
-    releaseSource: release.source,
     enableLogs: false,
     sendDefaultPii: false,
     debug: false,
@@ -102,6 +107,7 @@ function createFixtureConfig(
   environment: ResolvedSentryEnvironment,
   release: ResolvedSentryRelease,
   flags: ParsedSentryBooleanFlags,
+  gitSha: { readonly value: string; readonly source: GitShaSource } | undefined,
 ): SentryFixtureConfig {
   return {
     mode: 'fixture',
@@ -109,6 +115,7 @@ function createFixtureConfig(
     environmentSource: environment.source,
     release: release.value,
     releaseSource: release.source,
+    ...(gitSha ? { gitSha: gitSha.value, gitShaSource: gitSha.source } : {}),
     enableLogs: flags.enableLogs ?? true,
     sendDefaultPii: false,
     debug: flags.debug ?? false,
@@ -120,6 +127,7 @@ function createLiveConfig(
   environment: ResolvedSentryEnvironment,
   release: ResolvedSentryRelease,
   flags: ParsedSentryBooleanFlags,
+  gitSha: { readonly value: string; readonly source: GitShaSource } | undefined,
 ): Result<SentryLiveConfig, ObservabilityConfigError> {
   const dsnResult = validateDsn(input.SENTRY_DSN);
 
@@ -140,6 +148,7 @@ function createLiveConfig(
     environmentSource: environment.source,
     release: release.value,
     releaseSource: release.source,
+    ...(gitSha ? { gitSha: gitSha.value, gitShaSource: gitSha.source } : {}),
     tracesSampleRate: tracesSampleRateResult.value,
     enableLogs: flags.enableLogs ?? true,
     sendDefaultPii: false,
@@ -147,9 +156,9 @@ function createLiveConfig(
   });
 }
 
-export function createSentryConfig(
+function resolveConfigInputs(
   input: SentryConfigEnvironment,
-): Result<ParsedSentryConfig, ObservabilityConfigError> {
+): Result<ResolvedConfigInputs, ObservabilityConfigError> {
   const modeResult = parseMode(input);
 
   if (!modeResult.ok) {
@@ -162,23 +171,43 @@ export function createSentryConfig(
     return flagResult;
   }
 
-  const mode = modeResult.value;
-  const environment = resolveSentryEnvironment(input);
-  const releaseResult = resolveSentryRelease(mode, input);
+  return ok({
+    mode: modeResult.value,
+    flags: flagResult.value,
+    environment: resolveSentryEnvironment(input),
+  });
+}
+
+export function createSentryConfig(
+  input: SentryConfigEnvironment,
+): Result<ParsedSentryConfig, ObservabilityConfigError> {
+  const resolvedResult = resolveConfigInputs(input);
+
+  if (!resolvedResult.ok) {
+    return resolvedResult;
+  }
+
+  const { mode, flags, environment } = resolvedResult.value;
+
+  if (mode === 'off') {
+    return ok(createOffConfig(environment));
+  }
+
+  const releaseResult = resolveSentryRelease(input);
 
   if (!releaseResult.ok) {
     return releaseResult;
   }
 
-  const release = releaseResult.value;
+  const gitShaResult = resolveGitSha(input);
 
-  if (mode === 'off') {
-    return ok(createOffConfig(environment, release));
+  if (!gitShaResult.ok) {
+    return gitShaResult;
   }
 
   if (mode === 'fixture') {
-    return ok(createFixtureConfig(environment, release, flagResult.value));
+    return ok(createFixtureConfig(environment, releaseResult.value, flags, gitShaResult.value));
   }
 
-  return createLiveConfig(input, environment, release, flagResult.value);
+  return createLiveConfig(input, environment, releaseResult.value, flags, gitShaResult.value);
 }

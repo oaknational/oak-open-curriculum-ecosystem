@@ -12,7 +12,7 @@
  * mechanism real MCP hosts (Cursor, etc.) use.
  *
  * @see .agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md
- * @see .agent/memory/distilled.md line 151 — "pieces vs composition" gap
+ * @see .agent/memory/active/distilled.md line 151 — "pieces vs composition" gap
  */
 
 import { once } from 'node:events';

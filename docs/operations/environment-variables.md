@@ -23,11 +23,17 @@ exceptions only if required.
 
 ## Quick Reference by Contribution Level
 
-| Contribution Level                                         | Required Variables                                          | Optional Variables | Setup Time    |
-| ---------------------------------------------------------- | ----------------------------------------------------------- | ------------------ | ------------- |
-| **Level 1**: Unit tests, type-checking, linting            | None                                                        | None               | 0 minutes     |
-| **Level 2**: Local dev servers, integration tests          | `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY` | `LOG_LEVEL`        | 10-15 minutes |
-| **Level 3**: Full E2E, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*`                 | `SEARCH_API_KEY`   | 1-2 hours     |
+| Contribution Level                                      | Required Variables                                          | Optional Variables | Setup Time    |
+| ------------------------------------------------------- | ----------------------------------------------------------- | ------------------ | ------------- |
+| **Level 1**: Unit tests, type-checking, linting         | None                                                        | None               | 0 minutes     |
+| **Level 2**: Local dev servers, integration tests       | `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY` | `LOG_LEVEL`        | 10-15 minutes |
+| **Level 3**: Smoke, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*`                 | `SEARCH_API_KEY`   | 1-2 hours     |
+
+> **Note**: `pnpm test:e2e` itself uses mocks and dependency injection
+> and does not require credentials. The Level 3 row above covers the
+> related but distinct workflows of smoke testing, live search, and
+> OAuth testing — see
+> [troubleshooting → E2E Tests Fail](./troubleshooting.md#e2e-tests-fail).
 
 ## Monorepo-Wide Variables
 
@@ -40,9 +46,9 @@ cp .env.example .env
 
 ### Required for Most Development
 
-| Variable      | Purpose                   | Where to Get                                                                            | Used By                                     |
-| ------------- | ------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `OAK_API_KEY` | Access Oak Curriculum API | [Request a free key](https://open-api.thenational.academy/docs/about-oaks-api/api-keys) | SDK, MCP servers (stdio & HTTP), Search app |
+| Variable      | Purpose                   | Where to Get                                                                            | Used By                          |
+| ------------- | ------------------------- | --------------------------------------------------------------------------------------- | -------------------------------- |
+| `OAK_API_KEY` | Access Oak Curriculum API | [Request a free key](https://open-api.thenational.academy/docs/about-oaks-api/api-keys) | SDK, HTTP MCP server, Search app |
 
 ### Authentication (HTTP MCP Server)
 
@@ -236,6 +242,6 @@ pnpm test:e2e       # E2E tests (uses mocks and DI — no env vars needed)
 
 ## Related Documentation
 
-- [Quick Start Guide](../foundation/quick-start.md) - Getting started with development
+- [Root README Quick Start](../../README.md#quick-start) - Getting started with development
 - [Root README](../../README.md) - Repository overview
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines

@@ -3,6 +3,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import {
@@ -64,7 +65,12 @@ async function retryRenewalAfterOccConflict(
 export async function renewLease(
   client: Client,
   lease: LifecycleLease,
+  logger?: Logger,
 ): Promise<Result<LifecycleLease, AdminError>> {
+  logger?.debug('Renewing lifecycle lease', {
+    target: lease.target,
+    holder: lease.holder,
+  });
   try {
     const response = await client.index({
       index: LIFECYCLE_LEASE_INDEX,
@@ -91,7 +97,12 @@ export async function renewLease(
 export async function releaseLease(
   client: Client,
   lease: LifecycleLease,
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
+  logger?.info('Releasing lifecycle lease', {
+    target: lease.target,
+    holder: lease.holder,
+  });
   try {
     await client.delete({
       index: LIFECYCLE_LEASE_INDEX,
@@ -117,7 +128,9 @@ export async function releaseLease(
 export async function inspectLease(
   client: Client,
   target: 'primary' | 'sandbox',
+  logger?: Logger,
 ): Promise<Result<LeaseStatus, AdminError>> {
+  logger?.debug('Inspecting lifecycle lease', { target });
   const docId = leaseDocId(target);
   try {
     const doc = await client.get<LeaseDocument>({
@@ -166,7 +179,9 @@ export async function inspectLease(
 export async function forceReleaseLease(
   client: Client,
   target: 'primary' | 'sandbox',
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
+  logger?.warn('Force-releasing lifecycle lease', { target });
   const docId = leaseDocId(target);
   try {
     await client.delete({

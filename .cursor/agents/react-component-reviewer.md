@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: react-component-reviewer
-model: gpt-5.4-xhigh
+model: claude-opus-4-7
 description: React component architecture reviewer for hooks correctness, render performance, prop API design, and composition patterns in UI-shipping workspaces.
 readonly: true
 ---

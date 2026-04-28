@@ -1,0 +1,6 @@
+---
+description: Before any edit in a session, register the session's agent identity on every thread it will touch by updating or adding the identity row in the thread's next-session record per the additive-identity rule.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/register-identity-on-thread-join.md`.

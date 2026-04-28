@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { discoverSessionsWithFs, formatTimestamp } from '../src/core/runtime';
 
@@ -29,33 +29,41 @@ describe('runtime integration', () => {
     const sessionPath = `${projectsRoot}/${escapedRoot}/${sessionId}`;
     const brokenPath = `${projectsRoot}/${escapedRoot}/${brokenSessionId}`;
 
-    const sessions = discoverSessionsWithFs(projectsRoot, root, {
-      existsSync: () => true,
-      readdirSync: () => [sessionId, brokenSessionId, 'not-a-session-id'],
-      statSync: (pathValue) => {
-        if (pathValue === brokenPath) {
-          throw new Error('unreadable');
-        }
-        if (pathValue === sessionPath) {
-          return {
-            mtimeMs: expectedTimestampMs,
-            size: 0,
-            isFile: () => false,
-            isDirectory: () => true,
-          };
-        }
-        return { mtimeMs: 0, size: 0, isFile: () => true, isDirectory: () => false };
-      },
-      lstatSync: () => ({ isSymbolicLink: () => false }),
-      readFileSync: () => '',
-    });
+    const stderrWrite = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    try {
+      const sessions = discoverSessionsWithFs(projectsRoot, root, {
+        existsSync: () => true,
+        readdirSync: () => [sessionId, brokenSessionId, 'not-a-session-id'],
+        statSync: (pathValue) => {
+          if (pathValue === brokenPath) {
+            throw new Error('unreadable');
+          }
+          if (pathValue === sessionPath) {
+            return {
+              mtimeMs: expectedTimestampMs,
+              size: 0,
+              isFile: () => false,
+              isDirectory: () => true,
+            };
+          }
+          return { mtimeMs: 0, size: 0, isFile: () => true, isDirectory: () => false };
+        },
+        lstatSync: () => ({ isSymbolicLink: () => false }),
+        readFileSync: () => '',
+      });
 
-    expect(sessions).toHaveLength(1);
-    const [session] = sessions;
-    expect(session).toBeDefined();
-    if (session !== undefined) {
-      expect(session.sessionId).toBe(sessionId);
-      expect(session.timestampMs).toBe(expectedTimestampMs);
+      expect(stderrWrite).toHaveBeenCalledWith(
+        `Error: unable to inspect session entry '${brokenPath}': unreadable\n`,
+      );
+      expect(sessions).toHaveLength(1);
+      const [session] = sessions;
+      expect(session).toBeDefined();
+      if (session !== undefined) {
+        expect(session.sessionId).toBe(sessionId);
+        expect(session.timestampMs).toBe(expectedTimestampMs);
+      }
+    } finally {
+      stderrWrite.mockRestore();
     }
   });
 });

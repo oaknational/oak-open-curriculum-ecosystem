@@ -51,6 +51,7 @@
     "clean": "rm -rf dist .turbo",
     "dev": "tsup --watch",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "type-check": "tsc --noEmit"
   },

@@ -4,7 +4,7 @@ This directory contains a split version of the upstream API metadata wishlist to
 
 ## Key references
 
-- API docs: https://open-api.thenational.academy/docs/about-oaks-api/api-overview
+- API docs: <https://open-api.thenational.academy/docs/about-oaks-api/api-overview>
 - OpenAPI schema (local): packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-original.json
 - Canonical field name: semantic_summary
 - Archive (original single file): .agent/plans/external/ooc-api-wishlist/archive/upstream-api-metadata-wishlist.md

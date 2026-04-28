@@ -3,25 +3,186 @@ prompt_id: start-right-quick
 title: "Start Right (Quick)"
 type: workflow
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-04-26
 ---
 
 # Start Right (Quick)
 
-Ground yourself before beginning work.
+Ground yourself before beginning work. Read in the order below; each
+step leads to the surfaces the next step assumes.
 
-## Foundation Documents
+## Ground First (reading order)
 
-Read and internalise these documents:
+### 1. Durable directives
 
-1. @.agent/directives/AGENT.md — Entry point and documentation index
+Read and internalise. **This foundation-directive reading is the
+necessary precondition for Family-A Class A.1 (per PDR-029
+§Decision; A.1 is single-layer post-2026-04-21 Session 5
+reclassification — foundation-directive grounding is background
+grounding, not an installed tripwire layer; the installed layer
+is the plan-body first-principles-check rule).**
+
+1. @.agent/directives/AGENT.md — operational entry point and index
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
 3. @.agent/directives/testing-strategy.md — TDD at all levels
-4. @.agent/directives/schema-first-execution.md — Types flow from schema
+4. @.agent/directives/schema-first-execution.md — types flow from schema
+5. @.agent/directives/orientation.md — layering contract and authority order
+
+### 2. Start-here ADRs
+
+Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+block in the ADR index. Open any ADR whose slug matches your current
+workstream from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
+
+### 3. Learning-loop surfaces (active memory)
+
+- @.agent/memory/active/distilled.md — hard-won rules
+- @.agent/memory/active/napkin.md — current session observations
+- @.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md —
+  constraint at tripwire-design time (passive guidance needs an active
+  layer to fire under context pressure)
+- `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
+  plugin-managed capture buffers. The remember plugin owns their
+  lifecycle (rotation, archival, deletion); scan for recent observations
+  at session open. Extract any cross-session insight into `napkin.md`
+  or `distilled.md` per the standard graduation flow — do not mutate
+  the buffers directly.
+- Your own platform's per-user memory and session logs. Scan the
+  surface for the platform you are running on:
+  - Claude Code: `~/.claude/projects/<project>/memory/`
+  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`; Composer may inject deterministic identity from `.cursor/hooks/oak-session-identity.mjs` (`sessionStart`; see `agent-tools/docs/agent-identity.md` and [Cursor Hooks](https://cursor.com/docs/hooks))
+  - Codex: `~/.codex/memories/`, `~/.codex/history.jsonl`
+
+  Read only the surface that matches your current platform at
+  session open. Cross-platform ingestion (reading another
+  platform's surface for insight) is a consolidation-time
+  activity, not a session-open one — see `consolidate-docs`
+  step 3.
+
+### 4. Live state (operational memory) — authority order
+
+Read in order; stop at whichever answers your next-step question:
+
+1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
+2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
+3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
+4. `.agent/state/collaboration/active-claims.json` — active-claims
+   registry and ordered advisory `commit_queue`
+5. `.agent/state/collaboration/shared-comms-log.md` — generated recent
+   free-form collaboration context
+6. `.agent/state/collaboration/conversations/*.json` — open decision
+   threads, sidebars, joint decisions, unresolved decision requests, and
+   evidence obligations for the touched thread or area
+7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
+   escalation cases for the touched thread or area
+8. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+
+When reading `active-claims.json`, surface any fresh `commit_queue` entries
+alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
+`phase`, and `expires_at`. Queue entries are discovery and ordering signals,
+not mechanical refusals.
+
+Apply the
+   [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
+rule before any edit: enumerate the areas you intend to touch, register
+your own active claim through the collaboration-state helper when available,
+and leave an artefact proving the registry was
+consulted. If no entries other than your own exist, log "no other agents
+present" through an immutable comms event and proceed (bootstrap fast-path).
+On overlap, consult the shared communication log and any
+open decision-thread and escalation files before deciding whether to
+proceed, ping, append a decision thread, request a sidebar, record a
+joint decision, open or close an escalation, or ask the owner.
+
+When registering your PDR-027 identity row, use an existing owner-assigned
+`agent_name` if one matches. Otherwise derive a session display name with
+`pnpm agent-tools:agent-identity --format display`. The CLI reads (in order)
+`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_CODEX`, then the harness-native `CODEX_THREAD_ID`.
+Platform hooks set the platform-suffixed Practice variable: the Claude Code
+`SessionStart` hook (`.claude/hooks/practice-session-identity.mjs`) appends
+`PRACTICE_AGENT_SESSION_ID_CLAUDE` to `$CLAUDE_ENV_FILE`, and the Cursor
+`sessionStart` hook (`.cursor/hooks/oak-session-identity.mjs`) injects
+`PRACTICE_AGENT_SESSION_ID_CURSOR`. If none of these is set in your shell
+(e.g. the hook artefact has not been built yet), pass
+`--seed "<stable-session-seed>"` explicitly. Do not use personal-email
+fallback.
+
+Before any Codex thread registration or shared collaboration-state write,
+prefer the full PDR-027 identity preflight:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+```
+
+Codex sessions with `CODEX_THREAD_ID` available must not write new thread rows
+or collaboration state as `Codex` / `unknown`; use the derived `agent_name` and
+`session_id_prefix`. Codex `SessionStart` hooks may inject the same block as
+developer context, but the preflight command remains the correctness check.
+
+Before staging or committing, use the always-active commit skill. It
+checks for fresh `commit_queue` entries and `git:index/head` commit-window
+claims, enqueues your intended bundle before staging, verifies the staged
+bundle exactly before `git commit`, and clears the queue entry after success.
+
+### 5. Active plans
+
+Read the active plan(s) named in the thread's next-session record.
+Plans are authoritative for scope, sequencing, acceptance, and
+validation.
+
+### 6. Live branch state
+
+```bash
+git status --short
+git log --oneline --decorate -5
+```
 
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
+Check `.agent/practice-core/incoming/` for practice-core files. If
+present, alert the user — incoming material may carry learnings from
+another repo. Full integration happens during `/jc-consolidate-docs`.
+
+## Per-Session Landing Commitment
+
+State your landing target at session open. See
+[PDR-026: Per-Session Landing Commitment](../../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
+for the doctrine; the ritual is:
+
+> Target: `<lane-id or artefact>` — `<specific outcome>`.
+
+A landing is a specific invariant achieved in code — a rule enabled,
+a test added, a file authored, a commit made, a deployment registered
+— not a plan edit or a "lane opened."
+
+If no landing is appropriate:
+
+> No-landing session — reason: `<reason>`.
+
+Bounded exceptions: deep-consolidation, Core-trinity refinement, and
+root-cause investigation sessions. Any other no-landing session is
+drift.
+
+## Work Shape and Simple Plan
+
+Before the first non-planning edit, leave a small observable plan
+artefact whose size matches the work:
+
+- **Trivial work**: the landing target or no-landing reason is enough.
+- **Bounded non-trivial work**: record a simple plan in chat or the
+  touched thread record naming goal, scope, validation, and lifecycle
+  touch points.
+- **Multi-session, architectural, Practice, cross-workspace, or high-risk
+  work**: use an executable repo plan in `current/` or `active/`.
+
+This is a work-shape declaration, not a repo plan file for every edit.
+It operationalises PDR-026 without turning small fixes into plan theatre.
+
+For observability work specifically: if the landing moves a matrix
+cell in
+[`what-the-system-emits-today.md`](../../../plans/observability/what-the-system-emits-today.md)
+from empty to populated, update the artefact in the same commit.
 
 ## Session Priority
 
@@ -42,25 +203,38 @@ Before diving in, pause and ask:
 
 ## Commit
 
-**Commit** to excellence in systems architecture, software engineering, and developer experience. Choose architectural correctness over short-term expediency. This requires critical and _long-term_ thinking.
+**Commit** to excellence in systems architecture, software engineering,
+and developer experience. Choose architectural correctness over
+short-term expediency. This requires critical and *long-term*
+thinking.
 
 ## Schema-First Nuance
 
-Schema-first is absolute for SDK code calling the upstream API or extracting from the OpenAPI spec. It is acceptable to add additional metadata (e.g., MCP tool descriptions) at sdk-codegen time.
+Schema-first is absolute for SDK code calling the upstream API or
+extracting from the OpenAPI spec. It is acceptable to add additional
+metadata (e.g., MCP tool descriptions) at sdk-codegen time.
 
-When analysing generated files, always analyse the generator code that produced them — the generator is the source of truth.
+When analysing generated files, always analyse the generator code that
+produced them — the generator is the source of truth.
 
 ## Sub-agent Reviews
 
-Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready platform-specific invocation examples.
+Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after
+making changes. The full invocation matrix, timing tiers, quick-triage
+checklist, worked examples, and copy/paste-ready platform-specific
+invocation examples live in executive memory:
+[`.agent/memory/executive/invoke-code-reviewers.md`](../../../memory/executive/invoke-code-reviewers.md).
 
 ## Process
 
-**Do not assume you know the initial step.** Discuss with the user first.
+**Do not assume you know the initial step.** Discuss with the user
+first.
 
 ## Quality Gates
 
-Run after making changes. Note: some gates trigger earlier ones; caching prevents duplicate work. See @docs/engineering/build-system.md and ADR-065 for caching details.
+Run after making changes. Note: some gates trigger earlier ones;
+caching prevents duplicate work. See @docs/engineering/build-system.md
+and ADR-065 for caching details.
 
 ```bash
 # From repo root, one at a time
@@ -83,6 +257,10 @@ pnpm test:widget:ui
 pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
-# Informational practice health
-pnpm practice:fitness:informational  # Soft-ceiling report; not a blocking gate
+# Practice health — three-zone model, ADR-144
+pnpm practice:fitness:informational  # Four-zone report (always exit 0)
+# Consolidation-closure signal (run via jc-consolidate-docs):
+#   pnpm practice:fitness:strict-hard
+# Vocabulary consistency (ADR-144 §Key Principles #1):
+#   pnpm practice:vocabulary
 ```

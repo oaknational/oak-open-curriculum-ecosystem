@@ -1,4 +1,5 @@
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import {
@@ -43,6 +44,7 @@ function startRenewalLoop(
   client: Client,
   initialLease: LifecycleLease,
   renewalEveryMs: number,
+  logger?: Logger,
 ): {
   currentLease: () => LifecycleLease;
   renewalFailure: () => AdminError | null;
@@ -57,12 +59,13 @@ function startRenewalLoop(
       return;
     }
     renewalInFlight = true;
-    void renewLease(client, activeLease).then((result) => {
+    void renewLease(client, activeLease, logger).then((result) => {
       renewalInFlight = false;
       if (stopped) {
         return;
       }
       if (!result.ok) {
+        logger?.warn('Lifecycle lease renewal failed', { message: result.error.message });
         failure = result.error;
         return;
       }
@@ -108,18 +111,24 @@ export async function withLifecycleLease<T>(
   client: Client,
   target: 'primary' | 'sandbox',
   execute: () => Promise<Result<T, AdminError>>,
-  options?: { ttlMs?: number; holder?: string; renewalEveryMs?: number },
+  options?: { ttlMs?: number; holder?: string; renewalEveryMs?: number; logger?: Logger },
 ): Promise<Result<T, AdminError>> {
+  const logger = options?.logger;
   const configResult = resolveLeaseConfig(options);
   if (!configResult.ok) {
     return configResult;
   }
+  logger?.info('Running operation with lifecycle lease', {
+    target,
+    holder: configResult.value.holder,
+  });
 
   const acquired = await acquireLease(
     client,
     target,
     configResult.value.holder,
     configResult.value.ttlMs,
+    logger,
   );
   if (!acquired.ok) {
     return acquired;
@@ -129,6 +138,7 @@ export async function withLifecycleLease<T>(
     client,
     acquired.value,
     resolveRenewalInterval(options?.renewalEveryMs, acquired.value.ttlMs),
+    logger,
   );
   const executionResult = await runWithExecutionCapture(execute);
   renewal.stop();
@@ -138,7 +148,7 @@ export async function withLifecycleLease<T>(
     return earlyReturn;
   }
 
-  const released = await releaseLease(client, renewal.currentLease());
+  const released = await releaseLease(client, renewal.currentLease(), logger);
   if (!released.ok) {
     return err(released.error);
   }

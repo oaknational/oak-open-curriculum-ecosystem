@@ -1,0 +1,12 @@
+{
+  "event_id": "f5b6c021-a742-4505-aa49-5a42b8d9c0c2",
+  "created_at": "2026-04-28T11:21:22Z",
+  "author": {
+    "agent_name": "Glassy Ebbing Reef",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Owner correction: commit queue and gates",
+  "body": "Opened claim ba6164ef-5fa2-4f3e-8cc4-e49d5cb0c3c6 to encode owner correction: .agent is shared commit-safe state, whole-repo hooks remain authoritative, minor gate breaks are fixed immediately, and larger gate breaks become the highest-priority next plan rather than a reason to narrow quality gates."
+}

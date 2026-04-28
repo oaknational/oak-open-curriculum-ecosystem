@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
-import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
-import { createNoOpClerkMiddleware } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpClerkMiddleware,
+} from './helpers/test-config.js';
 
 /**
  * Header Redaction E2E Tests
@@ -15,40 +16,14 @@ import { createNoOpClerkMiddleware } from './helpers/test-config.js';
  */
 
 const ACCEPT = 'application/json, text/event-stream';
-
-/**
- * Isolated test environment with auth bypassed.
- * No global `process.env` mutation — see ADR-078.
- */
-const authBypassedEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
-  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-};
-
-/**
- * Isolated test environment with auth enforced.
- */
-const authEnforcedEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-  CLERK_SECRET_KEY: 'sk_test_123',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
-  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-};
+const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 
 async function createBypassedApp() {
-  const result = loadRuntimeConfig({
-    processEnv: authBypassedEnv,
-    startDir: process.cwd(),
+  const runtimeConfig = createMockRuntimeConfig({
+    dangerouslyDisableAuth: true,
+    env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
-  const runtimeConfig = unwrap(result);
-  const observability = createHttpObservabilityOrThrow(runtimeConfig);
+  const observability = createMockObservability(runtimeConfig);
   return await createApp({
     runtimeConfig,
     observability,
@@ -57,12 +32,10 @@ async function createBypassedApp() {
 }
 
 async function createEnforcedApp() {
-  const result = loadRuntimeConfig({
-    processEnv: authEnforcedEnv,
-    startDir: process.cwd(),
+  const runtimeConfig = createMockRuntimeConfig({
+    env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
-  const runtimeConfig = unwrap(result);
-  const observability = createHttpObservabilityOrThrow(runtimeConfig);
+  const observability = createMockObservability(runtimeConfig);
   return await createApp({
     runtimeConfig,
     observability,

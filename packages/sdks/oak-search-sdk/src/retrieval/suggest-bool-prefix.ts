@@ -6,6 +6,7 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import type { SearchSuggestionItem } from '@oaknational/sdk-codegen/search';
 
 import type { SuggestParams } from '../types/retrieval-params.js';
@@ -65,7 +66,13 @@ export async function runBoolPrefix(
   index: string,
   scopeKind: IndexKind,
   docSearch: BoolPrefixSearchFn,
+  logger?: Logger,
 ): Promise<readonly SearchSuggestionItem[]> {
+  logger?.debug('Running bool-prefix suggestion query', {
+    scopeKind,
+    size,
+    index,
+  });
   const fields = [...BOOL_PREFIX_FIELDS[scopeKind]];
   const filters = buildBoolPrefixFilters(params, scopeKind);
   const query: estypes.QueryDslQueryContainer = {

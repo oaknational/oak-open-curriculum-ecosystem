@@ -3,21 +3,23 @@ boundary: cross-boundary
 doc_role: index
 authority: docs-root-navigation
 status: active
-last_reviewed: 2026-03-12
+last_reviewed: 2026-04-20
 ---
 
 # Documentation for Oak Open Curriculum Ecosystem
 
-**Last Updated**: 2026-03-12
+**Last Updated**: 2026-04-20
 **Status**: Active index
 
 ## Getting Started
 
-- **Evaluating the project?** → [Strategic Overview](foundation/strategic-overview.md) — vision, roadmap, engineering approach, and handoff readiness in one reading path
+- **Evaluating the project?** → [VISION.md](foundation/VISION.md) for the timeless framing, then the latest snapshot in the [reports surface](../.agent/reports/) and the live [high-level plan](../.agent/plans/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
-- **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
-- **Working with AI?** → Start with [`start-right-quick` command](../.cursor/commands/jc-start-right-quick.md), shared workflow ([`start-right.md`](../.agent/skills/start-right-quick/shared/start-right.md)), or skill ([`start-right-quick/SKILL.md`](../.agent/skills/start-right-quick/SKILL.md)), then [AGENT.md](../.agent/directives/AGENT.md)
+- **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
+- **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `$jc-start-right-quick` in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).
+- **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Research Lanes & Hub](../.agent/research/agentic-engineering/README.md) — concept-and-deep-dive hub linking canon, deep dives, research, evidence, reports, and docs surfaces
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
+- **Browsing by section?** → [Foundation](foundation/README.md) · [Governance](governance/README.md) · [Architecture](architecture/README.md) · [Engineering](engineering/README.md) · [Operations](operations/README.md) · [Domain](domain/README.md)
 
 ## Core Documentation
 
@@ -33,7 +35,8 @@ last_reviewed: 2026-03-12
 
 ### Development
 
-- [Quick Start Guide](foundation/quick-start.md) - Architecture, setup, and development workflows for new contributors
+- [Root README Quick Start](../README.md#quick-start) — install, verify, and key commands for new contributors
+- [CONTRIBUTING.md](../CONTRIBUTING.md) — development process, conventions, and quality expectations
 - [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
 - [Environment Variables](operations/environment-variables.md) - Complete setup guide
 - [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers
@@ -52,8 +55,9 @@ last_reviewed: 2026-03-12
 
 - [How the Agentic Engineering System Works](foundation/agentic-engineering-system.md) - The Practice explained as an integrated engineering system
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
-- [Continuity Practice](governance/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture
-- [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system (agent-facing)
+- [Continuity Practice](../.agent/directives/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture (moved to directives)
+- [**The Practice**](../.agent/practice-core/index.md) - Orientation and entry point for the Practice (agent-facing)
+- [Agentic Engineering Research Lanes & Hub](../.agent/research/agentic-engineering/README.md) - Concept-and-deep-dive map for broader corpus discovery
 
 ## Code Standards and Testing
 
@@ -64,6 +68,18 @@ last_reviewed: 2026-03-12
 - [Accessibility Practice](governance/accessibility-practice.md) - WCAG 2.2 AA compliance, Playwright + axe-core testing
 - [Design Token Practice](governance/design-token-practice.md) - DTCG three-tier model, contrast validation, CSS output
 - [MCP App Styling](governance/mcp-app-styling.md) - CSS custom properties, host integration, font loading, CSP declarations
+
+## Observability
+
+- [MCP Server Observability Wiring](../apps/oak-curriculum-mcp-streamable-http/docs/observability.md) —
+  authoritative per-app guide: auto-instrumentation, per-request span, scope enrichment, Express error handler DI wiring, redaction barrier entry points, source-map upload
+- [Sentry Node Library](../packages/libs/sentry-node/README.md) —
+  package-level reference for `@oaknational/sentry-node`: modes, shared delegates (hook registry), fixture store, redaction barrier closure
+- [Sentry Deployment Runbook](operations/sentry-deployment-runbook.md) — deployment-side runbook
+- [Sentry CLI Usage](operations/sentry-cli-usage.md) — `sentry-cli` adoption and `.sentryclirc` composition
+- [ADR-143](architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability boundary
+- [ADR-160](architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md) — non-bypassable redaction barrier
+- [ADR-162](architecture/architectural-decisions/162-observability-first.md) — observability-first principle (five-axis, vendor-independence)
 
 ## Search Application
 

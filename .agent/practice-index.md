@@ -14,10 +14,16 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | ----------------------------------------------------------------- | --------------------------------------------------------- |
 | [AGENT.md](directives/AGENT.md)                                   | Operational entry point for agents                        |
 | [principles.md](directives/principles.md)                         | Authoritative rules — must be followed at all times       |
+| [user-collaboration.md](directives/user-collaboration.md)         | Agent-to-owner working model                              |
+| [agent-collaboration.md](directives/agent-collaboration.md)       | Agent-to-agent working model                              |
 | [testing-strategy.md](directives/testing-strategy.md)             | TDD at all levels                                         |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
 | [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |
-| [invoke-code-reviewers.md](directives/invoke-code-reviewers.md)   | Specialist reviewer invocation matrix and timing guidance |
+| [orientation.md](directives/orientation.md)                       | Layering contract: directives / memory / reference / practice-core; authority order |
+
+(The reviewer invocation matrix previously listed here has moved to
+[`memory/executive/invoke-code-reviewers.md`](memory/executive/invoke-code-reviewers.md)
+as executive memory — it is operational reference, not doctrine.)
 
 ### Architecture Guidance (docs/agent-guidance/)
 
@@ -29,22 +35,46 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 
 The governance layer is larger than a single file:
 
-- **34 canonical rules** live in [`.agent/rules/`](rules/)
+- **43 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
-  [`.claude/rules/`](../.claude/rules/)
+  [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
+  [`.agents/rules/`](../.agents/rules/)
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
 - The narrative hook explainer lives in [`.agent/hooks/README.md`](hooks/README.md)
 - The live platform-support map lives in
-  [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md)
+  [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md)
 
 Representative rules:
 
 | Rule                                                       | Purpose                                               |
 | ---------------------------------------------------------- | ----------------------------------------------------- |
 | [follow-the-practice.md](rules/follow-the-practice.md)     | Keep work aligned with the full Practice system       |
-| [tdd-at-all-levels.md](rules/tdd-at-all-levels.md)         | Enforce RED → GREEN → REFACTOR across test levels     |
+| [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
+| [follow-agent-collaboration-practice.md](rules/follow-agent-collaboration-practice.md) | Follow the agent-to-agent working model |
+| [use-agent-comms-log.md](rules/use-agent-comms-log.md) | Announce non-trivial intent in the shared communication log |
+| [capture-practice-tool-feedback.md](rules/capture-practice-tool-feedback.md) | Capture Practice and host-local tooling feedback in the napkin |
+| [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits and commit-window claims before staging/commit |
+| [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim or commit window |
+| [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
+| [read-diagnostic-artefacts-in-full.md](rules/read-diagnostic-artefacts-in-full.md) | Read complete diagnostic output before hypothesising |
+| [consolidate-at-third-consumer.md](rules/consolidate-at-third-consumer.md) | Canonicalise duplicated shapes at the third consumer |
+| [tdd-for-refactoring.md](rules/tdd-for-refactoring.md)     | Enforce RED → GREEN → REFACTOR during refactoring     |
 | [no-type-shortcuts.md](rules/no-type-shortcuts.md)         | Prevent type-erasing shortcuts and assertion drift    |
 | [invoke-code-reviewers.md](rules/invoke-code-reviewers.md) | Require the reviewer matrix after non-trivial changes |
+
+### Collaboration State Surface
+
+Collaboration state lives under
+[`state/collaboration/`](state/collaboration/). It is this repo's local
+operational instance of Practice-owned coordination concepts: shared log
+entries, active claims, the root `commit_queue`, closed claim history,
+decision threads, sidebars, joint decisions, and escalations. The
+at-a-glance channel register lives in
+[`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md).
+`start-right` reads collaboration state before edits, the commit skill
+opens/closes `git:index/head` claims before staging or committing,
+`session-handoff` closes the agent's own active state, and
+`consolidate-docs` audits stale or unresolved entries.
 
 Hook support:
 
@@ -53,7 +83,7 @@ Hook support:
 | Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
 | Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
 | Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
-| Cross-platform support matrix | [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
+| Cross-platform support matrix | [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
 
 ## Architectural Decisions
 
@@ -64,18 +94,30 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-114](../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) | Layered sub-agent prompt composition architecture                                  |
 | [ADR-117](../docs/architecture/architectural-decisions/117-plan-templates-and-components.md)                     | Plan templates and components                                                      |
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)                      | Agentic engineering practice — naming and conceptual boundary                      |
-| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — eight-file package, self-containment, practice-index bridge |
+| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — Core package contract, self-containment, practice-index bridge (contract expanded to files + required directories by PDR-007) |
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)                        | Agent artefact portability — three-layer model for skills, commands, and rules     |
 | [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
 | [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |
+| [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)             | Agent-work Practice phenotype boundary for this repo's local implementation surfaces |
+
+## Agentic Corpus Hub
+
+For concept-driven routing across canon, research, evidence, plans, reflective
+sources, and deep dives, use
+[`.agent/research/agentic-engineering/README.md`](research/agentic-engineering/README.md).
+This is both the lane router and the merged concept-and-deep-dive hub
+(consolidated during the Session 8 rehoming pass per
+[reference-research-notes-rehoming plan](plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md), archived Session 8);
+it routes back to the authoritative ADRs, Practice Core, `/docs/**`
+surfaces, and supporting source lanes.
 
 ## Commands, Skills, and Prompts
 
 The execution surface is intentionally split by role:
 
-- **10 stable canonical commands** in [`.agent/commands/`](commands/)
+- **12 stable canonical commands** in [`.agent/commands/`](commands/)
 - **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **27 canonical skills** in [`.agent/skills/`](skills/)
+- **36 canonical skills** in [`.agent/skills/`](skills/)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -83,10 +125,10 @@ Representative execution surfaces:
 
 | Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
 | --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`session-handoff.md`](commands/session-handoff.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`commit.md`](commands/commit.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
+| Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`session-handoff.md`](commands/session-handoff.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
 | Experimental commands | [`.agent/commands/experiments/`](commands/experiments/) | `collaborate`, `step-back`, `think`                                                                                                                                                                                                                                                                                                                                                             | Trial surfaces not yet promoted into the stable command set   |
-| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
-| Session prompts       | [`.agent/prompts/`](prompts/)                           | [`session-continuation.prompt.md`](prompts/session-continuation.prompt.md), [`gt-review.md`](prompts/archive/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)                                                                                                                                                                                       | Stateful session entry points tied to active plans or domains |
+| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`commit`](skills/commit/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
+| Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. [`gt-review.md`](prompts/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL.md).                                                     | Stateful session entry points tied to active plans or domains |
 
 ## Memory and Patterns
 
@@ -95,10 +137,11 @@ reusable knowledge:
 
 | Artefact | Location | Purpose |
 | --- | --- | --- |
-| Distilled learnings | [`memory/distilled.md`](memory/distilled.md) | Hard-won rules — read before every session |
-| Pattern library | [`memory/patterns/`](memory/patterns/README.md) | 56 abstract solutions to recurring design problems |
-| Session napkin | [`memory/napkin.md`](memory/napkin.md) | Current session observations, written continuously |
-| Napkin archive | [`memory/archive/`](memory/archive/) | Rotated napkins (historical record) |
+| Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Hard-won rules — read before every session |
+| Collaboration channels | [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md) | Register of communication options and when to use each |
+| Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | 77 abstract solutions to recurring design problems |
+| Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |
+| Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
 
 The patterns skill ([`.agent/skills/patterns/SKILL.md`](skills/patterns/SKILL.md))
 teaches agents to check the pattern library before inventing new approaches.
@@ -109,19 +152,23 @@ and `.agents/skills/patterns/`.
 
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| [`.agent/directives/`](directives/)                                                           | Principles, rules, and operational directives                               |
+| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs) + `patterns/` (general abstractions) + `incoming/` (Practice Box) |
+| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
-| [`.agent/memory/`](memory/)                                                                   | Institutional memory — napkin, distilled learnings, and code patterns       |
+| [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
+| [`.agent/state/`](state/)                                                                     | Live coordination state — shared communication log, active claims + `commit_queue`, closed claims, decision threads, sidebars, joint decisions, and escalations |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |
 | [`.agent/skills/`](skills/)                                                                   | Canonical skills (platform-agnostic)                                        |
 | [`.agent/commands/`](commands/)                                                               | Canonical commands (platform-agnostic)                                      |
 | [`.agent/research/`](research/)                                                               | Research documents and analysis                                             |
+| [`.agent/analysis/`](analysis/)                                                               | Investigations and evidence                                                 |
+| [`.agent/reports/`](reports/)                                                                 | Promoted formal audits and syntheses                                        |
 | [`.agent/reference/`](reference/)                                                             | Supporting reference material, including the cross-platform surface matrix  |
 | [`.cursor/`](../.cursor/)                                                                     | Cursor platform adapters (thin wrappers)                                    |
 | [`.claude/`](../.claude/)                                                                     | Claude Code platform adapters (thin wrappers)                               |
 | [`.gemini/`](../.gemini/)                                                                     | Gemini CLI platform adapters (thin wrappers)                                |
-| [`.agents/`](../.agents/)                                                                     | Codex skill and command adapters (thin wrappers)                            |
+| [`.agents/`](../.agents/)                                                                     | Portable skill, command, and rule adapters (thin wrappers)                  |
 | [`.codex/`](../.codex/)                                                                       | Codex project-agent configuration (reviewer sub-agents)                     |
 | [`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/) | Permanent architectural decision records                                    |

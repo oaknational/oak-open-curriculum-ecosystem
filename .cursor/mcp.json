@@ -1,12 +1,20 @@
 {
   "mcpServers": {
+    "sentry-ooc-mcp": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-mcp"
+    },
+    "sentry-ooc-search-cli": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-search-cli"
+    },
     "oak-prod": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
     },
     "oak-preview": {
       "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-feat-gatehardeningpart1.vercel.thenational.academy/mcp"
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy/mcp"
     },
     "oak-local": {
       "type": "http",
@@ -25,7 +33,7 @@
         "next-devtools-mcp@latest"
       ]
     },
-    "Vercel": {
+    "cursor-vercel": {
       "type": "http",
       "url": "https://mcp.vercel.com",
       "headers": {}

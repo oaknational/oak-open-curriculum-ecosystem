@@ -47,7 +47,7 @@ Claude Code currently has thin native activation wired for
 Additional Claude overrides can stay in `.claude/settings.local.json`,
 which is gitignored and additive.
 
-See `.agent/reference/cross-platform-agent-surface-matrix.md` for the
+See `.agent/memory/executive/cross-platform-agent-surface-matrix.md` for the
 full platform support status.
 
 Cursor, Gemini CLI, GitHub Copilot, and Codex remain unsupported.

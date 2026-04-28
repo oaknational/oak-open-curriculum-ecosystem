@@ -14,7 +14,7 @@
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies |
 | `active/README.md` | Active index | Atomic executable plans mapped one-to-one to roadmap phases |
 | `current/README.md` | Current index | Next-up plans that are queued and ready |
-| `future/README.md` | Future index | Deferred/later plans and ideas |
+| `future/README.md` | Future index | Deferred strategic plans and ideas with promotion triggers |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `[plan-a].plan.md` | Strategic source plan | Policy intent, rationale, success criteria |
 | `[research-a].research.md` | Research | Evidence base and external context |
@@ -35,7 +35,8 @@
 - **Roadmap (`roadmap.md`)**: strategic phase sequence, dependencies, status.
 - **Active plans (`active/*.md`)**: in-progress execution only (NOW).
 - **Current plans (`current/*.md`)**: queued/next plans (NEXT), not yet started.
-- **Future plans (`future/*.md`)**: deferred/later plans (LATER), not yet started.
+- **Future plans (`future/*.md`)**: deferred strategic intent (LATER), not
+  executable until promoted to `current/` or `active/`.
 - **Strategic source plans (`*.plan.md`)**: intent and rationale only.
 - **Research docs (`*.research.md`)**: evidence base only, not execution instructions.
 - **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`): proof of documentation propagation and evidence-backed claims.
@@ -48,11 +49,12 @@ the strategic source plan and roadmap.
 No phase is complete until update handling is recorded for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
-3. any additionally impacted ADRs, `/docs/` pages, and README files
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
+4. any additionally impacted ADRs, `/docs/` pages, and README files
 
 Also apply:
-[`jc-consolidate-docs`](../../../.cursor/commands/jc-consolidate-docs.md)
+[`jc-consolidate-docs`](../../commands/consolidate-docs.md)
 
 ## Milestone Alignment
 

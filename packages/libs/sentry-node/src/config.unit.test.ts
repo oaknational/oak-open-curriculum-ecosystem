@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { createSentryConfig, resolveSentryEnvironment, resolveSentryRelease } from './config.js';
 
+const FULL_SHA = 'c8b666485ecb08b5dc27e428737b4077c0531f57';
+const SHORT_SHA = FULL_SHA.slice(0, 7);
+
 describe('createSentryConfig', () => {
-  it('defaults to off with deterministic environment and release fallbacks', () => {
-    const result = createSentryConfig({});
+  it('defaults to off without becoming a Sentry release carrier', () => {
+    const result = createSentryConfig({
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
+    });
 
     expect(result.ok).toBe(true);
 
@@ -11,23 +18,45 @@ describe('createSentryConfig', () => {
       return;
     }
 
-    expect(result.value).toEqual({
+    expect(result.value).toMatchObject({
       mode: 'off',
       environment: 'development',
       environmentSource: 'development',
-      release: 'local-dev',
-      releaseSource: 'local-dev',
       enableLogs: false,
       sendDefaultPii: false,
       debug: false,
     });
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
+  });
+
+  it('does not use production app version as a Sentry release carrier in off mode', () => {
+    const result = createSentryConfig({
+      SENTRY_MODE: 'off',
+      VERCEL_ENV: 'production',
+      VERCEL_GIT_COMMIT_REF: 'main',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.environment).toBe('production');
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
   });
 
   it('uses explicit environment and release inputs when present', () => {
     const result = createSentryConfig({
       SENTRY_MODE: 'fixture',
-      SENTRY_ENVIRONMENT: 'preview',
-      SENTRY_RELEASE: 'abcdef123',
+      SENTRY_ENVIRONMENT_OVERRIDE: 'preview',
+      SENTRY_RELEASE_OVERRIDE: 'abcdef123',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
     });
 
     expect(result.ok).toBe(true);
@@ -37,32 +66,36 @@ describe('createSentryConfig', () => {
     }
 
     expect(result.value.environment).toBe('preview');
-    expect(result.value.environmentSource).toBe('SENTRY_ENVIRONMENT');
+    expect(result.value.environmentSource).toBe('SENTRY_ENVIRONMENT_OVERRIDE');
+    expect(result.value.mode).toBe('fixture');
+    if (result.value.mode !== 'fixture') {
+      return;
+    }
     expect(result.value.release).toBe('abcdef123');
-    expect(result.value.releaseSource).toBe('SENTRY_RELEASE');
+    expect(result.value.releaseSource).toBe('SENTRY_RELEASE_OVERRIDE');
   });
 
   it('treats empty strings as absent inputs', () => {
     const environment = resolveSentryEnvironment({
-      SENTRY_ENVIRONMENT: '   ',
+      SENTRY_ENVIRONMENT_OVERRIDE: '   ',
       VERCEL_ENV: '',
-      NODE_ENV: 'test',
     });
-    const release = resolveSentryRelease('fixture', {
-      SENTRY_RELEASE: '',
-      VERCEL_GIT_COMMIT_SHA: '   ',
-      GITHUB_SHA: 'github-sha',
+    const release = resolveSentryRelease({
+      SENTRY_RELEASE_OVERRIDE: '',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
     });
 
     expect(environment).toEqual({
-      value: 'test',
-      source: 'NODE_ENV',
+      value: 'development',
+      source: 'development',
     });
     expect(release).toEqual({
       ok: true,
       value: {
-        value: 'github-sha',
-        source: 'GITHUB_SHA',
+        value: `dev-${SHORT_SHA}`,
+        source: 'development_short_sha',
       },
     });
   });
@@ -72,9 +105,47 @@ describe('createSentryConfig', () => {
       SENTRY_MODE: 'off',
       SENTRY_DSN: '',
       SENTRY_TRACES_SAMPLE_RATE: '',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
     });
 
     expect(result.ok).toBe(true);
+  });
+
+  it('keeps off mode green when deploy release metadata is absent', () => {
+    const result = createSentryConfig({
+      SENTRY_MODE: 'off',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+    });
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.mode).toBe('off');
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
+  });
+
+  it('keeps live mode strict when deploy release metadata is absent', () => {
+    expect(
+      createSentryConfig({
+        SENTRY_MODE: 'sentry',
+        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+        SENTRY_TRACES_SAMPLE_RATE: '0.5',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+      }),
+    ).toEqual({
+      ok: false,
+      error: {
+        kind: 'missing_git_sha',
+      },
+    });
   });
 
   it('treats off mode as a kill switch even when live-only inputs are present', () => {
@@ -82,6 +153,9 @@ describe('createSentryConfig', () => {
       SENTRY_MODE: 'off',
       SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
       SENTRY_TRACES_SAMPLE_RATE: '0.5',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
     });
 
     expect(result.ok).toBe(true);
@@ -95,12 +169,16 @@ describe('createSentryConfig', () => {
       enableLogs: false,
       debug: false,
     });
+    expect('release' in result.value).toBe(false);
+    expect('releaseSource' in result.value).toBe(false);
   });
 
-  it('defaults fixture mode to local capture with logs enabled', () => {
+  it('uses dev-shortsha in fixture mode on development', () => {
     const result = createSentryConfig({
       SENTRY_MODE: 'fixture',
-      NODE_ENV: 'development',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+      VERCEL_GIT_COMMIT_SHA: FULL_SHA,
     });
 
     expect(result.ok).toBe(true);
@@ -112,7 +190,7 @@ describe('createSentryConfig', () => {
     expect(result.value).toMatchObject({
       mode: 'fixture',
       environment: 'development',
-      release: 'local-dev',
+      release: `dev-${SHORT_SHA}`,
       enableLogs: true,
       sendDefaultPii: false,
       debug: false,
@@ -123,6 +201,9 @@ describe('createSentryConfig', () => {
     expect(
       createSentryConfig({
         SENTRY_MODE: 'disabled',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
       }),
     ).toEqual({
       ok: false,
@@ -139,7 +220,9 @@ describe('createSentryConfig', () => {
         SENTRY_MODE: 'sentry',
         SENTRY_DSN: 'not-a-dsn',
         SENTRY_TRACES_SAMPLE_RATE: '0.5',
-        SENTRY_RELEASE: 'release-123',
+        SENTRY_RELEASE_OVERRIDE: 'release-123',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
       }),
     ).toEqual({
       ok: false,
@@ -154,7 +237,9 @@ describe('createSentryConfig', () => {
         SENTRY_MODE: 'sentry',
         SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
         SENTRY_TRACES_SAMPLE_RATE: '2',
-        SENTRY_RELEASE: 'release-123',
+        SENTRY_RELEASE_OVERRIDE: 'release-123',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
       }),
     ).toEqual({
       ok: false,
@@ -165,7 +250,24 @@ describe('createSentryConfig', () => {
     });
   });
 
-  it('requires a release in live mode', () => {
+  it('fails closed on production/main when APP_VERSION is missing', () => {
+    expect(
+      createSentryConfig({
+        SENTRY_MODE: 'sentry',
+        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+        SENTRY_TRACES_SAMPLE_RATE: '0.5',
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+      }),
+    ).toEqual({
+      ok: false,
+      error: {
+        kind: 'missing_app_version',
+      },
+    });
+  });
+
+  it('fails closed in development when no git SHA is available', () => {
     expect(
       createSentryConfig({
         SENTRY_MODE: 'sentry',
@@ -175,7 +277,7 @@ describe('createSentryConfig', () => {
     ).toEqual({
       ok: false,
       error: {
-        kind: 'missing_release_for_live_mode',
+        kind: 'missing_git_sha',
       },
     });
   });
@@ -184,6 +286,9 @@ describe('createSentryConfig', () => {
     expect(
       createSentryConfig({
         SENTRY_SEND_DEFAULT_PII: 'true',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
       }),
     ).toEqual({
       ok: false,
@@ -198,6 +303,9 @@ describe('createSentryConfig', () => {
       createSentryConfig({
         SENTRY_MODE: 'fixture',
         SENTRY_ENABLE_LOGS: 'flase',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
       }),
     ).toEqual({
       ok: false,
@@ -205,6 +313,25 @@ describe('createSentryConfig', () => {
         kind: 'invalid_boolean_flag',
         name: 'SENTRY_ENABLE_LOGS',
         value: 'flase',
+      },
+    });
+  });
+
+  it('fails closed for invalid git sha metadata', () => {
+    expect(
+      createSentryConfig({
+        SENTRY_MODE: 'fixture',
+        APP_VERSION: '1.5.0',
+        APP_VERSION_SOURCE: 'root_package_json',
+        VERCEL_GIT_COMMIT_SHA: FULL_SHA,
+        GIT_SHA: 'not-a-sha',
+        GIT_SHA_SOURCE: 'GIT_SHA_OVERRIDE',
+      }),
+    ).toEqual({
+      ok: false,
+      error: {
+        kind: 'invalid_git_sha',
+        value: 'not-a-sha',
       },
     });
   });

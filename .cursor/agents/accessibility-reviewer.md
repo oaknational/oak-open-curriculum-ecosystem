@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: accessibility-reviewer
-model: gpt-5.4-xhigh
+model: gpt-5.5
 description: WCAG 2.2 AA compliance reviewer for rendered HTML, ARIA attributes, keyboard interaction, colour contrast, and focus management in UI-shipping workspaces.
 readonly: true
 ---

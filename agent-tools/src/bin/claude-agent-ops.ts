@@ -10,7 +10,7 @@ import {
   type CliCommand,
   type CliHandler,
 } from './claude-agent-ops-cli';
-import { detectPhaseFromEvents, resolveDiffCwd } from '../core/agent-ops';
+import { detectPhaseFromEvents, isValidAgentId, resolveDiffCwd } from '../core/agent-ops';
 import {
   evaluateAgentInfrastructureHealth,
   formatAgentInfrastructureHealthReport,
@@ -208,9 +208,6 @@ function resolveWorktree(root: string, agentId: string): string | null {
   }
   const direct = join(root, '.claude', 'worktrees', `agent-${agentId}`);
   return existsSync(direct) ? direct : null;
-}
-function isValidAgentId(agentId: string): boolean {
-  return /^[0-9a-z]{1,64}$/u.test(agentId);
 }
 function readEvents(root: string, agentId: string) {
   const jsonlPath = resolveAgentJsonlPath(root, agentId, resolveHomePath());

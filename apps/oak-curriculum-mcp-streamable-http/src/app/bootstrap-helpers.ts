@@ -5,14 +5,13 @@ import {
   logLevelToSeverityNumber,
   createPhasedTimer,
   normalizeError,
-  sanitiseForJson,
   type Logger,
   type LogContextInput,
   type PhasedTimer,
 } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
-import { createEnrichedErrorLogger } from '../logging/index.js';
 import { redactHeaders } from '../logging/header-redaction.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 
@@ -133,15 +132,18 @@ export async function runAsyncBootstrapPhase<T>(
 }
 
 /**
- * Sets up base Express middleware (JSON parsing, correlation, logging, error handling).
+ * Sets up base Express middleware: JSON, correlation, and debug request logging.
+ * Error handlers register later for Sentry compatibility. Not a route handler:
+ * CodeQL #69 (line 146, `app.use(createCorrelationMiddleware(...))`) is a
+ * misclassification — correlation middleware is cross-cutting, not auth-bearing.
  */
 export function setupBaseMiddleware(
   app: Express,
   log: Logger,
-  observability?: Pick<HttpObservability, 'captureHandledError'>,
+  observability?: Pick<HttpObservability, 'setTag'>,
 ): void {
   app.use(expressJson({ limit: '1mb' }));
-  app.use(createCorrelationMiddleware(log));
+  app.use(createCorrelationMiddleware(log, { observability }));
 
   const debugEnabled = log.isLevelEnabled?.(logLevelToSeverityNumber('DEBUG')) ?? false;
   if (debugEnabled) {
@@ -152,7 +154,6 @@ export function setupBaseMiddleware(
       }),
     );
   }
-  app.use(createEnrichedErrorLogger(log, observability));
 }
 
 /**
@@ -238,6 +239,12 @@ export function initializeAppInstance(
   log.debug(`Creating app #${String(appId)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appId;
+
+  // Trust exactly one reverse proxy (Vercel CDN) so req.ip reflects the
+  // real client IP from X-Forwarded-For rather than the CDN's address.
+  // This MUST be set before any rate-limiting middleware.
+  app.set('trust proxy', 1);
+
   const timer = createPhasedTimer();
   return { app, timer, appId };
 }

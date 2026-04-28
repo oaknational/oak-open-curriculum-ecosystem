@@ -8,14 +8,15 @@
 
 ## Purpose
 
-[Strategic sequence for the collection. Execution detail lives in lifecycle
-plans (`active/`, `current/`, `future/`).]
+[Strategic sequence for the collection. Execution detail lives in
+`active/` or `current/`; `future/` carries later strategic intent with a
+named promotion trigger.]
 
 Authoritative execution sources:
 
 1. [active/plan-in-progress.md]
 2. [current/plan-next.md]
-3. [future/plan-later.md]
+3. [future/plan-later.md] — strategic backlog, not executable yet
 
 ---
 
@@ -24,12 +25,13 @@ Authoritative execution sources:
 No phase can be marked complete until documentation updates are handled for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
-3. any additionally impacted ADRs, `/docs/` pages, or README files
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
+4. any additionally impacted ADRs, `/docs/` pages, or README files
 
 Record updates (or no-change rationale) in a collection-local
 `documentation-sync-log.md`.
-Apply `.cursor/commands/jc-consolidate-docs.md` before closing major phases.
+Apply `.agent/commands/consolidate-docs.md` before closing major phases.
 
 ---
 
@@ -73,7 +75,8 @@ Phase 2: [Name]                     [Status]
 
 ### Phase 2 — [Name]
 
-- Later plan: [future/phase-2-*.md]
+- Later strategic plan: [future/phase-2-*.md]
+- Promotion trigger: [named, testable condition before it becomes current]
 - Done when: [definition of done]
 - Dependencies: [dependency list]
 

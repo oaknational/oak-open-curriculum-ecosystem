@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import {
-  OakApiKeyEnvSchema,
+  BuildEnvSchema,
   ElasticsearchEnvSchema,
   LoggingEnvSchema,
+  OakApiKeyEnvSchema,
   SentryEnvSchema,
 } from '@oaknational/env';
+import { RELEASE_ENVIRONMENTS } from '@oaknational/build-metadata';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
@@ -17,10 +19,17 @@ const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
  * CORS is unconditionally permissive (all origins allowed). Security is
  * enforced by OAuth authentication, not by origin restrictions. See the
  * ADR on permissive CORS for OAuth-protected MCP servers.
+ *
+ * Vercel system env vars (`VERCEL_ENV`, `VERCEL_BRANCH_URL`, etc.) come
+ * from the shared `BuildEnvSchema` so the runtime path and the
+ * build-time path validate against one contract. `BuildEnvSchema`
+ * encodes `VERCEL_BRANCH_URL` as a hostname (no scheme) per the
+ * Vercel docs.
  */
 const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
   .extend(SentryEnvSchema.shape)
+  .extend(BuildEnvSchema.shape)
   .extend({
     CLERK_PUBLISHABLE_KEY: z.string().min(1).optional(),
     CLERK_SECRET_KEY: z.string().min(1).optional(),
@@ -29,12 +38,23 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),
-    VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
-    VERCEL_URL: z.string().optional(),
-    VERCEL_BRANCH_URL: z.string().optional(),
-    VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
-    VERCEL_GIT_COMMIT_SHA: z.string().optional(),
+    APP_VERSION_OVERRIDE: z.string().optional(),
+    GIT_SHA_OVERRIDE: z.string().optional(),
     OAK_API_BASE_URL: z.url().optional(),
+    /**
+     * Shared secret that gates the diagnostic `/test-error` route.
+     *
+     * When set in `preview` or `development` environments, registers
+     * `POST /test-error` for repeatable Sentry capture validation
+     * (handled / unhandled / rejected modes). Forbidden in
+     * production — `superRefine` below makes that a hard startup
+     * failure.
+     *
+     * Minimum 16 chars to discourage trivial brute-force; rate-
+     * limited at the route level via the existing `oauthRateLimiter`
+     * (30 req / 15 min / IP).
+     */
+    TEST_ERROR_SECRET: z.string().min(16).optional(),
   });
 
 /**
@@ -46,13 +66,31 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
 export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
   // Production safety: DANGEROUSLY_DISABLE_AUTH must NEVER be true in production.
   // This makes misconfiguration a hard startup failure rather than a silent bypass.
-  if (data.DANGEROUSLY_DISABLE_AUTH === 'true' && data.VERCEL_ENV === 'production') {
+  if (
+    data.DANGEROUSLY_DISABLE_AUTH === 'true' &&
+    data.VERCEL_ENV === RELEASE_ENVIRONMENTS.production
+  ) {
     ctx.addIssue({
       code: 'custom',
       path: ['DANGEROUSLY_DISABLE_AUTH'],
       message:
         'DANGEROUSLY_DISABLE_AUTH cannot be true in production. ' +
         'This flag is for local development only.',
+    });
+    return;
+  }
+
+  // Production safety: TEST_ERROR_SECRET must NEVER be set in production.
+  // The /test-error route exists for diagnostic capture validation;
+  // production has no need for it and a misconfigured secret would
+  // expose a controlled-throw surface to the public internet.
+  if (data.TEST_ERROR_SECRET && data.VERCEL_ENV === RELEASE_ENVIRONMENTS.production) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['TEST_ERROR_SECRET'],
+      message:
+        'TEST_ERROR_SECRET must not be set in production. ' +
+        'The /test-error route is for preview/development diagnostic use only.',
     });
     return;
   }

@@ -1,0 +1,6 @@
+---
+description: Append a signed entry to the agent communications log before non-trivial edits.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/use-agent-comms-log.md`.

@@ -38,13 +38,13 @@
 | E-003 | file-span | second-pass atlas identifies snapshot-first delegation discipline as a local transfer candidate | `.agent/research/developer-experience/novel/2026-04-02-external-agent-system-semantic-atlas-second-pass.md` |
 | E-004 | file-span | worker reintegration trace isolates flush, resume, and handoff boundaries worth keeping | `.agent/research/developer-experience/novel/2026-04-02-external-agent-system-semantic-atlas-worker-mesh-lane-reintegration-trace.md` |
 | E-005 | file-span | extension/ops surfaces identify a health-probe-style diagnostic surface as especially transferable | `.agent/research/developer-experience/novel/2026-04-02-external-agent-system-semantic-atlas-extension-and-ops-surfaces.md` |
-| E-006 | file-span | existing repo tooling already holds the underlying diagnostic signals | `agent-tools/src/bin/claude-agent-ops.ts`, `scripts/validate-portability.mjs`, `.agent/reference/cross-platform-agent-surface-matrix.md` |
+| E-006 | file-span | existing repo tooling already holds the underlying diagnostic signals | `agent-tools/src/bin/claude-agent-ops.ts`, `scripts/validate-portability.mjs`, `.agent/memory/executive/cross-platform-agent-surface-matrix.md` |
 
 ## 4. Command Evidence
 
 | Command | Result | Output Ref |
 |---|---|---|
-| `rg -n "Transfer candidates|Consensus asks|Portable lessons" .agent/research/developer-experience/novel/*.md` | pass | E-001, E-003, E-005 |
+| `rg -n "Transfer candidates\|Consensus asks\|Portable lessons" .agent/research/developer-experience/novel/*.md` | pass | E-001, E-003, E-005 |
 | `sed -n '1,260p' .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md` | pass | E-002 |
 | `sed -n '1,260p' agent-tools/src/bin/claude-agent-ops.ts` | pass | E-006 |
 

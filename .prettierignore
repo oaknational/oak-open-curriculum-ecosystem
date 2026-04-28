@@ -13,6 +13,9 @@ reference
 scratch
 .cursor
 
+# Plugin-managed ephemeral capture buffers (remember plugin owns lifecycle)
+.remember/
+
 # Generated files (DO NOT FORMAT)
 *.generated.ts
 *.generated.js
@@ -66,6 +69,9 @@ apps/oak-search-cli/bulk-downloads/**
 **/.stryker-tmp/
 **/reports/
 **/temp-secrets/
+
+# Build artefacts (gitignored, regenerated)
+**/.widget-build/
 
 # Agent artifacts
 .agent/

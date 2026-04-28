@@ -329,6 +329,24 @@ Key changes from the original decision:
 
 The proxy is always-on, transparent, and stateless. See [ADR-115](115-proxy-oauth-as-for-cursor.md) for the full decision.
 
+## Amendment: Canonical User-ID Provider Through Public Alpha (2026-04-21)
+
+Clerk is the **canonical user-ID provider for the Oak Open Curriculum ecosystem through the public alpha period**. During this scope, all Oak services that need a user-identity boundary (MCP HTTP server, Aila/Semantic Search, and any new alpha-scope service) MUST use the same shared Clerk instance and treat the Clerk-issued user identifier (`userId` claim from validated tokens) as the canonical user-identity primitive.
+
+**Scope of the temporal commitment**:
+
+- **Through public alpha** = until the public alpha period ends. The end of public alpha is a discrete milestone (named by Oak product leadership); not a fixed date.
+- **At alpha end**, this decision is **revisited**, not auto-renewed. The revisit may reaffirm Clerk as the permanent IdP, may switch providers, may federate, or may introduce a multi-provider strategy. The revisit is itself a new ADR.
+- **No mid-alpha provider swaps**: the cost of fragmenting user-IDs across services mid-alpha (broken sessions, audit gaps, allowlist drift) outweighs any provider-comparison benefit during this window. Provider concerns surfaced during alpha are captured for the alpha-end revisit, not acted on mid-window.
+
+**What this constrains**:
+
+- New alpha-scope services adopt the shared Clerk instance, not a parallel one.
+- User-identity primitives in code, schemas, and audit logs are typed against the Clerk `userId` shape (per ADR-024 dependency injection patterns).
+- Vendor-lock mitigations from the original §Mitigations section remain active — token validation via standard OIDC/JWKS, provider-agnostic MCP code paths — so the alpha-end revisit is not foreclosed.
+
+**Why named explicitly now**: prior to this amendment, the temporal scope of the Clerk decision was implicit. The retracted standing-decisions register entry `Clerk canonical user-ID provider through public alpha` captured the owner's explicit decision that the canonical-IdP commitment is bounded to alpha. Graduated to this amendment in 2026-04-21 Session 5 per the standing-decisions decomposition arc.
+
 ## Related Decisions
 
 - **ADR-052**: OAuth 2.1 for MCP HTTP Authentication - Why OAuth (not Clerk-specific)

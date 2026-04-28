@@ -1,6 +1,6 @@
 # SDK Codegen Workspace Decomposition
 
-**Last Updated**: 2026-03-02
+**Last Updated**: 2026-04-24
 **Lane**: `future/` — strategic brief, post-M1 merge
 **Scope**: Decompose `oak-sdk-codegen` into two focused workspaces aligned
 with data lineage boundaries
@@ -62,6 +62,11 @@ The ESLint OOM was resolved structurally during M1:
 The data duplication is eliminated. The remaining architectural debt
 (generator duplication, extractor overlap, workspace decomposition) is the
 subject of this plan.
+
+**Practice routing note (2026-04-24)**: the distilled Practice entry about
+`src/bulk/generators/` duplicating `vocab-gen/generators/` is owned here.
+The non-Planning Practice remediation deliberately did not touch bulk/codegen
+DRY work; execute this plan in a separate session when that refactor is active.
 
 ---
 

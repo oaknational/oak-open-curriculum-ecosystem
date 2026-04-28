@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1.0",
+  "conversation_id": "joint-decision-without-decider-red",
+  "thread": "agentic-engineering-enhancements",
+  "status": "open",
+  "title": "Joint decision missing decider",
+  "participants": [
+    {
+      "agent_name": "Codex",
+      "platform": "codex",
+      "model": "GPT-5",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-04-26T18:20:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "joint_decision",
+      "created_at": "2026-04-26T18:20:00Z",
+      "author": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "body": "This fixture should fail schema validation because no role is decider.",
+      "joint_decision_id": "missing-decider",
+      "joint_decision_state": "proposed",
+      "roles": [
+        {
+          "role": "actor",
+          "agent": {
+            "agent_name": "Codex",
+            "platform": "codex",
+            "model": "GPT-5",
+            "session_id_prefix": "unknown"
+          }
+        }
+      ],
+      "ack_due_at": "2026-04-27T18:20:00Z"
+    }
+  ]
+}

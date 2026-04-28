@@ -49,7 +49,7 @@ This plan consolidates all bulk data analysis work into a single cohesive effort
 
 Bulk analysis code lives in the **codegen workspace**:
 
-```
+```text
 packages/sdks/oak-sdk-codegen/
 ├── vocab-gen/              # Vocabulary mining and graph generation tools
 ├── src/vocab-gen/          # Runtime helpers consumed by vocab-gen

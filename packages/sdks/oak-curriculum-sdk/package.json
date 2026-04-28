@@ -6,6 +6,10 @@
   "main": "dist/index.js",
   "files": [
     "dist",
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.integration.test.ts",
+    "!src/**/*.bak",
     "README.md",
     "LICENCE"
   ],
@@ -16,70 +20,87 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./client": {
       "types": "./dist/client/index.d.ts",
+      "development": "./src/client/index.ts",
       "default": "./dist/client/index.js"
     },
     "./client/*": {
       "types": "./dist/client/*.d.ts",
+      "development": "./src/client/*.ts",
       "default": "./dist/client/*.js"
     },
     "./config": {
       "types": "./dist/config/index.d.ts",
+      "development": "./src/config/index.ts",
       "default": "./dist/config/index.js"
     },
     "./config/*": {
       "types": "./dist/config/*.d.ts",
+      "development": "./src/config/*.ts",
       "default": "./dist/config/*.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
+      "development": "./src/types/index.ts",
       "default": "./dist/types/index.js"
     },
     "./types/*": {
       "types": "./dist/types/*.d.ts",
+      "development": "./src/types/*.ts",
       "default": "./dist/types/*.js"
     },
     "./mcp": {
       "types": "./dist/mcp/execute-tool-call.d.ts",
+      "development": "./src/mcp/execute-tool-call.ts",
       "default": "./dist/mcp/execute-tool-call.js"
     },
     "./mcp/*": {
       "types": "./dist/mcp/*.d.ts",
+      "development": "./src/mcp/*.ts",
       "default": "./dist/mcp/*.js"
     },
     "./validation": {
       "types": "./dist/validation/index.d.ts",
+      "development": "./src/validation/index.ts",
       "default": "./dist/validation/index.js"
     },
     "./validation/*": {
       "types": "./dist/validation/*.d.ts",
+      "development": "./src/validation/*.ts",
       "default": "./dist/validation/*.js"
     },
     "./public/search": {
       "types": "./dist/public/search.d.ts",
+      "development": "./src/public/search.ts",
       "default": "./dist/public/search.js"
     },
     "./public/search.js": {
       "types": "./dist/public/search.d.ts",
+      "development": "./src/public/search.ts",
       "default": "./dist/public/search.js"
     },
     "./public/mcp-tools": {
       "types": "./dist/public/mcp-tools.d.ts",
+      "development": "./src/public/mcp-tools.ts",
       "default": "./dist/public/mcp-tools.js"
     },
     "./public/mcp-tools.js": {
       "types": "./dist/public/mcp-tools.d.ts",
+      "development": "./src/public/mcp-tools.ts",
       "default": "./dist/public/mcp-tools.js"
     },
     "./elasticsearch": {
       "types": "./dist/elasticsearch.d.ts",
+      "development": "./src/elasticsearch.ts",
       "default": "./dist/elasticsearch.js"
     },
     "./elasticsearch.js": {
       "types": "./dist/elasticsearch.d.ts",
+      "development": "./src/elasticsearch.ts",
       "default": "./dist/elasticsearch.js"
     }
   },

@@ -19,9 +19,9 @@ overview.
 
 Almost certainly not. If you are a human developer:
 
-- **Start with the [README](../README.md)** at the repository root
-- **Follow the [Quick Start](../docs/foundation/quick-start.md)** for
-  setup and development workflows
+- **Start with the [README](../README.md)** at the repository root —
+  the [Quick Start](../README.md#quick-start) section covers setup and
+  the key commands
 - **Read [CONTRIBUTING.md](../CONTRIBUTING.md)** for contribution
   guidelines and code standards
 - **Browse the [docs/](../docs/)** directory for architecture,
@@ -55,9 +55,9 @@ the enforcement mechanism — not these files.
 
 The most readable parts of `.agent/` for humans:
 
-- [memory/patterns/](memory/patterns/README.md) — 56 reusable solutions
+- [memory/active/patterns/](memory/active/patterns/README.md) — 77 reusable solutions
   to recurring design problems, with anti-patterns and evidence
-- [memory/distilled.md](memory/distilled.md) — hard-won rules from
+- [memory/active/distilled.md](memory/active/distilled.md) — hard-won rules from
   accumulated session experience
 - [directives/principles.md](directives/principles.md) — the code
   quality and architecture rules that govern all work

@@ -1,5 +1,5 @@
 import { countPracticeBoxFiles } from './health-probe-shared';
-import { evaluateContinuityPromptFreshness } from './health-probe-continuity-state';
+import { evaluateContinuityContractFreshness } from './health-probe-continuity-state';
 import {
   evaluateHookPolicySpineCoherence,
   evaluatePracticeBoxState,
@@ -12,6 +12,6 @@ export function evaluateStateChecks(repoRoot: string, now: Date): readonly Healt
   return [
     evaluateHookPolicySpineCoherence(repoRoot),
     evaluatePracticeBoxState(practiceBoxFileCount),
-    evaluateContinuityPromptFreshness(repoRoot, now, practiceBoxFileCount),
+    evaluateContinuityContractFreshness(repoRoot, now),
   ];
 }

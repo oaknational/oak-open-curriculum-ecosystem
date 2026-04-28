@@ -15,7 +15,6 @@ const LIB_PACKAGE_IMPORTS = [
   '@oaknational/logger',
   '@oaknational/search-contracts',
   '@oaknational/sentry-node',
-  '@oaknational/sentry-mcp',
 ] as const;
 
 type DesignPackageImport = '@oaknational/design-tokens-core' | '@oaknational/oak-design-tokens';
@@ -153,7 +152,7 @@ export const FOUNDATION_LIB_PACKAGES = ['env-resolution', 'logger', 'search-cont
 /**
  * Adapter libraries may depend on foundation libraries only.
  */
-export const ADAPTER_LIB_PACKAGES = ['sentry-node', 'sentry-mcp'] as const;
+export const ADAPTER_LIB_PACKAGES = ['sentry-node'] as const;
 
 /**
  * List of all libraries for reference.

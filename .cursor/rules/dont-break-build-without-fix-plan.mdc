@@ -1,0 +1,6 @@
+---
+description: Do not break the build without a fix plan; cross-agent gate-recovery discipline.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/dont-break-build-without-fix-plan.md`.

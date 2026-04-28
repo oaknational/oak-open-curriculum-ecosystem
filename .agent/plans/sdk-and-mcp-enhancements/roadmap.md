@@ -33,7 +33,7 @@ isProject: false
 # MCP Apps Standard Migration Plan
 
 **Status**: ACTIVE
-**Last Updated**: 2026-04-10
+**Last Updated**: 2026-04-28
 
 ---
 
@@ -118,6 +118,9 @@ WS3: fresh React MCP App rebuild            ▶ active
   Phase 6b: post-Phase 5 docs/gates         ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
+Tool token economy / progressive discovery  📋 future
+Schema resilience + response architecture   ⏳ pending (user-requested, high priority, OQ1 open)
+Upstream API reference metadata             ⏳ pending (user-requested, high priority)
 Future additive feature backlog             ⏳ blocked on remaining canonical work
 ```
 
@@ -152,11 +155,41 @@ Complete on 31 March 2026. These plans remain the closure evidence:
 - [archive/completed/auth-safety-correction.plan.md](archive/completed/auth-safety-correction.plan.md)
 - [archive/completed/auth-boundary-type-safety.plan.md](archive/completed/auth-boundary-type-safety.plan.md)
 
+### Schema resilience and response architecture — USER-REQUESTED, HIGH PRIORITY
+
+[active/schema-resilience-and-response-architecture.plan.md](active/schema-resilience-and-response-architecture.plan.md)
+addresses the upstream schema validation fragility exposed by a
+third-party MCP consumer. Covers: `.strict()` migration (open
+question: `.strip()` vs `.passthrough()`), schema drift health
+endpoint on the MCP server (Sentry-monitored), `additionalContext`
+response flag, and direct API access guidance. Vercel deploy hook
+for auto-rebuild on drift noted as future option. Blocked on owner
+decision for OQ1. No dependencies on MCP Apps work.
+
+### Upstream API reference metadata — USER-REQUESTED, HIGH PRIORITY
+
+[active/upstream-api-reference-metadata.plan.md](active/upstream-api-reference-metadata.plan.md)
+adds an `upstreamApi` field to every generated tool descriptor, providing
+the full upstream Oak API URL template, HTTP method, separated path/query
+parameters, and documented statuses. Enables users who discover tools via
+MCP to call the API directly. No dependencies on MCP Apps work — can
+proceed independently on any branch.
+
 ### Output schema follow-up
 
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
 remains valid follow-on work. It can advance independently where transport
 exposure does not depend on unfinished MCP Apps execution.
+
+### Tool token economy and progressive discovery
+
+[future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md)
+captures the Cloudflare/Anthropic Code Mode research, including the pattern of
+collapsing large tool surfaces into progressive discovery plus sandboxed
+execution. It is future strategic context, not an implementation commitment.
+Promotion should start with Oak-specific token-footprint measurement and with
+the Cloudflare MCP security gate if any generated-code execution surface is in
+scope.
 
 ### Completed design-token prerequisite
 
@@ -207,6 +240,8 @@ This roadmap can be treated as complete when:
 - [current/README.md](current/README.md) — queued and resumable execution plans
 - [mcp-apps-support.research.md](mcp-apps-support.research.md) — canonical MCP
   Apps research summary for Oak
+- [future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md) —
+  strategic token-economy and progressive-discovery brief
 - [future/README.md](future/README.md) — later work beyond the active migration
 - [../agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md](../agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md) —
   parallel reviewer-capability upgrade tracked in the agentic-engineering

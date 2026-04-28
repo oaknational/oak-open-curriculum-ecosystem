@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-04-05
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; collaboration-state write safety 🔄 active; Codex session identity plumbing ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-28
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -9,8 +9,19 @@
 ## Purpose
 
 This roadmap is the strategic phase sequence for the
-`agentic-engineering-enhancements` collection. Execution detail lives in
-`active/` plans with atomic tasks and deterministic validation.
+`agentic-engineering-enhancements` collection while keeping detail in lifecycle
+lanes:
+
+- `active/` — now
+- `current/` — next
+- `future/` — later
+- `archive/completed/` — historical evidence
+
+Lane indexes:
+
+1. [active/README.md](active/README.md)
+2. [current/README.md](current/README.md)
+3. [future/README.md](future/README.md)
 
 Strategic source plans remain authoritative for intent/rationale; active plans
 are authoritative for execution tasks.
@@ -35,6 +46,8 @@ Active adjacent execution sources:
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
 5. ~~continuity-and-surprise-practice-adoption.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
 6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
+7. [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) (agentic corpus discoverability hub — ✅ complete)
+8. [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md) (governance-concept routing closeout — ✅ complete)
 
 ---
 
@@ -52,8 +65,9 @@ No phase can be marked complete until documentation updates have been handled
 for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
-3. any additionally impacted ADRs, `/docs/` pages, or README files
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
+4. any additionally impacted ADRs, `/docs/` pages, or README files
 
 Each phase must either:
 
@@ -62,7 +76,7 @@ Each phase must either:
   [documentation-sync-log.md](documentation-sync-log.md)
 
 Before phase closure, apply the
-[`jc-consolidate-docs` workflow](../../../.cursor/commands/jc-consolidate-docs.md)
+[`jc-consolidate-docs` workflow](../../commands/consolidate-docs.md)
 to ensure no settled documentation remains trapped in plans/prompts.
 
 ---
@@ -74,7 +88,26 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist
+  (✅), Sentry specialist (🔄), MCP upgrade (✅), continuity adoption (✅),
+  operational-awareness separation (⏭️), governance-concept integration (✅),
+  incoming Practice integration (✅), learning-loop negative-feedback tightening
+  (⏭️), practice/process structural improvements (⏭️), agent infrastructure
+  portability remediation (⏭️), practice-graph payoff-peak pilot (⏭️), Reviewer
+  Gateway upgrade (⏭️), Planning specialist (⏭️), Express specialist (📋),
+  Cyber security specialist (📋), Web/API security specialist (📋), Privacy
+  specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem
+  specialist (📋), Graph memory exploration (📋), TDD specialist (📋), Developer
+  experience specialist (📋), Repair workflow wording hazard detection (📋),
+  Cross-vendor session sidecars (📋), Collaboration-state domain model (📋),
+  Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist
+  operational tooling layer (ADR-137, strategic), External pointer-surface
+  integration (📋)
+- **Expert expansion coordination**: Planning specialist owns the Planning
+  reviewer/skill/rule triplet; practice/process structural improvements feeds
+  planning discipline and other permanent-home gaps into the right doctrine
+  surfaces; agent infrastructure portability remediation keeps the growing
+  expert/skill/rule estate portable and validated.
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -96,9 +129,14 @@ Adjacent:
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   CTY:  Continuity/session-handoff adoption          ✅ COMPLETE
+  OAW:  Operational awareness separation             ⏭️ QUEUED
+  GCM:  Governance-concept integration               ✅ COMPLETE
   PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
+  LFT:  Learning-loop negative-feedback tightening   ⏭️ QUEUED
+  PPS:  Practice/process structural improvements     ⏭️ QUEUED
+  APR:  Agent infrastructure portability remediation ⏭️ QUEUED
   MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
@@ -106,15 +144,22 @@ Adjacent:
   PRV:  Privacy specialist capability                📋 PLANNED
   WGD:  Web/API GDPR specialist capability           📋 PLANNED
   OOCE: Oak Open Curriculum Ecosystem specialist     📋 PLANNED
-  PLN:  Planning specialist capability               📋 PLANNED
+  GME:  Graph memory exploration                     📋 STRATEGIC
+  PLN:  Planning specialist capability               ⏭️ QUEUED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED
   RWD:  Repair workflow wording hazard detection     📋 PLANNED
   GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
   SSC:  Cross-vendor session sidecars                📋 STRATEGIC
+  CSW:  Collaboration-state write safety             🔄 ACTIVE
+  CSI:  Codex session identity plumbing              ✅ COMPLETE
+  CSD:  Collaboration-state domain model             📋 STRATEGIC
+  ICQ:  Intent-to-commit queue                       ✅ COMPLETE
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
+  OMT:  Operating-model mechanism taxonomy           📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
+  EPS:  External pointer-surface integration         📋 STRATEGIC
 ```
 
 ---
@@ -242,8 +287,222 @@ Adjacent:
 - Notes:
   - intentionally outside the numbered phase sequence
   - Wave 1 closed with an explicit `promote` decision on 2026-04-03
-  - the outgoing portable note and same-day follow-on Practice Core promotion
+- the outgoing portable note and same-day follow-on Practice Core promotion
     both landed after the evidence window closed
+
+### Adjacent — Operational Awareness and Continuity Surface Separation
+
+- Active plan:
+  [operational-awareness-and-continuity-surface-separation.plan.md](archive/completed/operational-awareness-and-continuity-surface-separation.plan.md)
+- Goal:
+  - separate the canonical continuity contract, workstream resumption state,
+    and thread-aware tactical coordination into distinct repo-local surfaces
+  - keep the continuation prompt as a behavioural entry surface only
+  - prove a markdown-first model before promoting any broader sidecar-store
+    design
+  - define portability criteria without mutating Practice Core in the initial
+    lane
+- Status: 🔄 ACTIVE (promoted `current/` → `active/` on 2026-04-20)
+- Notes:
+  - adjacent to the completed continuity-adoption lane and the future
+    cross-vendor sidecars plan
+  - the default proof path is repo-local first, portable candidate second
+  - initial non-goals explicitly exclude SQLite sidecars, AGENT changes, and
+    blind prompt trimming
+
+### Adjacent — Governance Concepts and Agentic Mechanism Integration
+
+- Active plan:
+  [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md)
+- Source strategy:
+  [governance-concepts-and-agentic-mechanism-integration.plan.md](current/governance-concepts-and-agentic-mechanism-integration.plan.md)
+- Goal:
+  - extract governance-plane, boundary, authority, supervision, and
+    signal-routing concepts from a compared governance corpus using fully local
+    naming
+  - record a baseline, deep dive, and formal report without copying source
+    names or wording
+  - route each concept to an existing plan, future plan, reference lane,
+    report lane, doctrine candidate, or explicit reject/defer decision
+  - identify high-impact next-step candidates without prematurely mutating
+    Practice Core, ADRs, or PDRs
+- Status: ✅ Complete
+- Notes:
+  - complements the operational-awareness and reviewer-gateway lanes instead of
+    replacing them
+  - the evidence lane now owns the attempt -> observed outcome -> proven
+    result split
+- the future mechanism-taxonomy lane now holds the remaining boundary-model,
+    signal-ecology, residual-risk, and governance-plane abstraction debt
+  - doctrine-adjacent canon was reviewed and intentionally left unchanged in
+    this closeout
+
+### Adjacent — Learning-Loop Negative-Feedback Tightening
+
+- Strategic plan:
+  [learning-loop-negative-feedback-tightening.plan.md](current/learning-loop-negative-feedback-tightening.plan.md)
+- Findings report:
+  [learning-loops-and-balancing-feedback-report.md](../../reports/agentic-engineering/deep-dive-syntheses/learning-loops-and-balancing-feedback-report.md)
+- Goal:
+  - instantiate PDR-028 drift-detection sections on the three live
+    executive-memory surfaces
+  - make `consolidate-docs` step 9 record explicit memory-quality
+    dispositions for governed files outside `healthy`
+  - strengthen balancing power without new validators, new memory layers, or
+    broad Practice Core rewrites
+- Status: ⏭️ Queued
+- Notes:
+  - intentionally narrow follow-on, not a learning-loop redesign
+  - complements reference-tier curation and ADR-144 fitness without changing
+    thresholds or blocking behaviour
+
+### Adjacent — Multi-Agent Collaboration Protocol (MAC)
+
+- Strategic plan:
+  [multi-agent-collaboration-protocol.plan.md](current/multi-agent-collaboration-protocol.plan.md)
+- Split execution plans:
+  - [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+    — WS3A: evidence provision, protocol observability, durable
+    claim-closure history, and lightweight decision threads; complete
+    and archived 2026-04-26
+  - [multi-agent-collaboration-sidebar-and-escalation.plan.md](current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+    — WS3B: sidebar, timeout, and owner-escalation mechanics;
+    implemented 2026-04-26 alongside joint-decision integration
+- Goal:
+  - install structural infrastructure for parallel agents working on
+    the same repo without clashing — by *seeing* what each other is
+    doing and *talking* about overlap when it matters
+  - protocol is advisory not enforcing: knowledge and communication,
+    not mechanical refusals
+  - protocol is platform independent by design: platform-native
+    agent-team features may help build it, but local portable Practice
+    markdown/JSON/rules/commands/skills/hooks surfaces must remain
+    sufficient to operate it
+- Status: ✅ WS3B-IMPLEMENTED; WS5 paused on post-WS4A/WS3B observation
+  (refreshed 2026-04-26)
+- Landings:
+  - WS0 (vocabulary + shared communication log + foundational rules) —
+    `63c66c88` 2026-04-25
+  - WS1 (structured claims registry + tripwire rule + stale-claim
+    audit + start-right wiring) — `a5d33519` 2026-04-25
+  - WS2 (collaboration memory class + founding pattern graduation) —
+    `293742cd` 2026-04-25
+  - WS3A decision-thread / claim-history / observability slice —
+    uncommitted 2026-04-26; complete
+  - WS4A lifecycle integration —
+    uncommitted 2026-04-26; start-right, session-handoff,
+    consolidate-docs, plan templates, and Practice / ADR surfaces now
+    recognise WS0-WS3A collaboration state
+  - WS3B sidebar/escalation + joint-decision integration —
+    uncommitted 2026-04-26; conversation schema v1.1.0,
+    escalation schema, fixtures, and workflow reporting installed
+- Evidence gates:
+  - Original WS3 evidence inspection: ≥ 3 real parallel-session
+    coordination events using the WS0 + WS1 surfaces. Owner-directed
+    harvest completed on 2026-04-26 and split WS3. WS3A is now complete.
+  - WS4A was then owner-authorised and completed as a narrow
+    lifecycle-integration pass.
+  - Three-agent phase-transition evidence and owner direction satisfied the
+    WS3B promotion gate on 2026-04-26; owner-approved implementation
+    landed the same day.
+  - Remaining WS5 scope is post-WS4A observation / seed harvest across
+    real sessions.
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - split workstreams: WS3A (decision-thread / claim-history /
+    observability; complete), WS3B (sidebar / escalation; complete), WS4A
+    (lifecycle integration; complete), WS5 (harvest/refinement evidence;
+    paused)
+  - while WS5 is paused, evidence accumulates passively from any session
+    that uses the WS0/WS1 surfaces — no active session is required
+  - inspection points: `consolidate-docs § 7e`, napkin rotation
+
+### Adjacent — Practice and Process Structural Improvements
+
+- Strategic plan:
+  [practice-and-process-structural-improvements.plan.md](current/practice-and-process-structural-improvements.plan.md)
+- Goal:
+  - create permanent homes for process knowledge currently stranded in
+    `distilled.md`
+  - add a user-collaboration directive for the agent-to-owner working model,
+    scope discipline, risk classification, feedback, onboarding, and archive
+    discipline (the multi-agent collaboration protocol's WS0 has since
+    landed both `user-collaboration.md` and `agent-collaboration.md`)
+  - feed Planning discipline into the dedicated Planning specialist capability
+    plan instead of creating a duplicate generic planning skill
+  - author portability PDR/ADR doctrine after, or in parallel with, the ADR-125
+    documentation work in the portability remediation plan
+  - graduate remaining distilled entries only after the destination surfaces
+    exist
+- Status: ⏭️ Queued (`current/`)
+- Notes:
+  - this is a structural doctrine plan, not another expert-capability plan
+  - Phase 2 is the reconciliation point with the Planning specialist capability
+  - Phase 3 depends on
+    [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+    Phase 5
+
+### Adjacent — Agent Infrastructure Portability Remediation
+
+- Strategic plan:
+  [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+- Goal:
+  - canonicalise vendor-installed skills into `.agent/skills/`
+  - add missing thin wrappers across `.agents/`, `.claude/`, and `.cursor/`
+  - harden `pnpm portability:check` with reverse validation and thin-wrapper
+    form checks
+  - update ADR-125, the artefact inventory, and the cross-platform matrix so
+    the expanding expert/skill/rule estate has accurate creation guidance
+  - add a repo-owned skill install/update workflow so external skill updates do
+    not overwrite tracked platform adapters
+- Status: ⏭️ Queued (`current/`)
+- Notes:
+  - this plan is the adapter and validator scaling prerequisite for a larger
+    expert collection
+  - its Phase 5 documentation update is the direct dependency for the
+    portability PDR/ADR work in the structural-improvements plan
+  - it should be considered before adding further manual specialist adapters
+
+### Adjacent — Practice Graph Payoff-Peak Pilot
+
+- Source plan:
+  [practice-graph-payoff-peak-pilot.plan.md](current/practice-graph-payoff-peak-pilot.plan.md)
+- Strategic parent:
+  [graphify-and-graph-memory-exploration.plan.md](future/graphify-and-graph-memory-exploration.plan.md)
+- Goal:
+  - build the highest-value/effort first slice of a derived Practice graph
+  - keep the graph advisory, local, deterministic, and read-only
+  - land the work in repo-native shape: TypeScript only, esbuild for new
+    workspaces, thin CLI surface through `agent-tools`
+- Status: ⏭️ Queued
+- Notes:
+  - bounded to an explicit pilot corpus spanning Practice, ADRs, onboarding,
+    and selected live plans
+  - dedicated internal app/service surface is intentionally deferred
+  - Graphify remains an inspiration source with explicit acknowledgement, not
+    an adopted runtime
+
+### Adjacent — Agentic Corpus Discoverability Hub
+
+- Active plan:
+  [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md)
+- Source strategy:
+  [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md)
+- Goal:
+  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); merged into the lane README at `.agent/research/agentic-engineering/README.md` during the Session 8 rehoming pass per [rehoming plan](future/reference-research-notes-rehoming.plan.md))
+  - create named research and reports lanes with reciprocal README links
+  - make selected `/docs/**` entry points route into the wider source corpus
+    without changing canon location
+  - seed five deep-dive extracts that route back to canon, evidence, and
+    source lanes
+- Status: ✅ Complete
+- Notes:
+  - intentionally outside the numbered roadmap phase sequence
+  - analysis remains the authoritative investigation/evidence lane; reports are
+    formal promoted outputs only
+  - final workspace gate caveat was external to this lane: `pnpm check`
+    reached `knip` and then failed on an unrelated `estree` dependency issue
+    in the concurrent `oak-eslint` change set
 
 ### Adjacent — Incoming Practice Context Integration and Write-Back
 
@@ -282,6 +541,42 @@ Adjacent:
   - not yet queued; promote when concrete multi-vendor session ergonomics
     justify executable work
   - adjacent to adapter generation, but not blocked on it
+
+### Adjacent — External Pointer-Surface Integration (EPS)
+
+- Strategic plan:
+  [external-pointer-surface-integration.plan.md](future/external-pointer-surface-integration.plan.md)
+- Goal:
+  - treat Linear (and possibly GitHub Projects) as a peer pointer-surface to
+    the repo's authoritative thread + landing model — not a mirror, not a
+    duplicate plan store
+  - structurally honest mapping: thread → Linear label (lifetime indefinite),
+    landing → Linear issue (lifetime finite), repo → Linear project,
+    navigation map → one Linear Document
+  - infrastructure not ritual: passive Document plus active firing surface
+    in `session-handoff.md` step 7c (four-step documentation walkthrough
+    per PDR-029 as amended 2026-04-21 — *active means markdown-ritual,
+    not code execution*) plus six-check stale-identity audit walkthrough
+    in `/jc-consolidate-docs` step 7c (PDR-029 two-complementary-layers)
+  - PII stays out of version control via gitignored
+    `.agent/local/linear.local.json` with committed `.example.json` schema
+- Status: 📋 Strategic reference (`future/`) — capture-only; Phase 0
+  owner-gated decisions must ratify before promotion
+- Captured: 2026-04-21 (Session opener arc; owner-ratified directives:
+  long-term architectural excellence; threads must surface and never collapse;
+  infrastructure not ritual; capture-only this turn)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - one-way sync only: repo authoritative; Linear is derived
+  - cadence: per-session-close on landing (PDR-026 emission event), matching
+    Cursor's "visible without spam" principle
+  - GitHub Projects assessed as marginal value given the org-internal
+    visibility goal already covered by repo + Linear; deferred unless a
+    public-roadmap need surfaces
+  - PDR-027 amendment vs new external-pointer-surface PDR is a Phase 0
+    decision (recommended: amend PDR-027)
+  - register pointer:
+    [`repo-continuity.md § Pending-graduations register § Infrastructure`](../../memory/operational/repo-continuity.md)
 
 ### Adjacent — Sentry Specialist Capability
 
@@ -452,15 +747,21 @@ Adjacent:
 ### Adjacent — Planning Specialist Capability
 
 - Strategic plan:
-  [planning-specialist-capability.plan.md](future/planning-specialist-capability.plan.md)
+  [planning-specialist-capability.plan.md](current/planning-specialist-capability.plan.md)
 - Goal:
   - add a canonical planning reviewer, skill, and situational rule (ADR-129 triplet)
-  - specialist in plan architecture, lifecycle, discoverability, and documentation
-    sync requirements
+  - specialist in plan architecture, lifecycle, discoverability, integration
+    routing, and documentation sync requirements
   - enforce: correct template usage, required sections, phase gates, cross-reference
-    maintenance, plan-vs-docs separation
+    maintenance, plan-vs-docs separation, integration routing register durability,
+    archival hygiene, backlog health
   - authority source is plan templates, collection READMEs, and practice-core docs
-- Status: 📋 PLANNED (future/)
+- Status: ⏭️ QUEUED (promoted from future/ 2026-04-20)
+- Promotion evidence:
+  - plan-surface integration session (2026-04-20) required routing 8 candidates
+    across a 60-artefact surface — specialist-level plan-routing complexity
+  - planning architecture is stable (ADR-117, status legend, sync discipline)
+  - owner approved promotion
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements docs-adr-reviewer (which owns ADR content) — this specialist
@@ -613,6 +914,48 @@ Adjacent:
   - documentation sync log records updates/no-change rationale
 - Dependencies: Phase 0 complete
 
+### Adjacent — Staged Doctrine Consolidation and Graduation ✅ ARC CLOSED
+
+- Archived plan:
+  [archive/completed/staged-doctrine-consolidation-and-graduation.plan.md](archive/completed/staged-doctrine-consolidation-and-graduation.plan.md)
+- Final shape: eight-session arc (originally six; reshaped 6→7 at
+  Session 6 close per PDR-026 §Deferral-honesty when reference-tier
+  reformation became load-bearing; reshaped 7→8 at Session 7 close
+  to separate rehoming from final arc-close). All 8 sessions landed.
+- Status: ✅ CLOSED 2026-04-22 Session 8 (Merry / cursor / claude-opus-4-7)
+- Landings of note across the arc:
+  - 5 new portable PDRs: PDR-027 (Threads / Sessions / Identity);
+    PDR-028 (Executive-Memory Feedback Loop); PDR-029 (Perturbation-
+    Mechanism Bundle); PDR-030 (Plane-Tag Vocabulary); PDR-031
+    (Build-vs-Buy Attestation Pre-ExitPlanMode); PDR-032 (Reference
+    Tier as Curated Library)
+  - PDR amendments: PDR-005 (source-side preservation); PDR-011
+    (continuity surfaces); PDR-012 (reviewer-findings disposition
+    discipline); PDR-014 (graduation-target routing); PDR-015 ×2
+    (friction-ratchet + reviewer phases); PDR-019 (ADRs state WHAT);
+    PDR-026 (per-session landing + deferral-honesty + landing-target
+    definition); PDR-027 (workstream-collapse amendment)
+  - ADR amendments: ADR-053; ADR-150
+  - Rules: `no-verify-requires-fresh-authorisation`;
+    `register-identity-on-thread-join`; `executive-memory-drift-capture`;
+    `plan-body-first-principles-check`; `documentation-hygiene`
+  - Principles: "Owner Direction Beats Plan"; "Misleading docs are
+    blocking"; "Cardinal rule"
+  - Reference tier reformation (PDR-032): 35 files relocated en
+    bloc; rehoming first-drain pass executed Session 8 (22 MOVED + 4
+    DELETED + 1 KEPT) — see archived
+    [reference-research-notes-rehoming.plan.md](archive/completed/reference-research-notes-rehoming.plan.md)
+  - Pattern graduations: `feel-state-of-completion-preceding-evidence-of-completion` (3/3 Sessions 4 + 5 + 7); inherited-framing-bias; passive-guidance; plus several outgoing-triage absorptions
+  - Outgoing triage closed: `practice-context/outgoing/` contains
+    only `README.md`
+- Owner amendments at close (Session 7): `pnpm practice:fitness --strict-hard`
+  exits-0 DoD requirement DROPPED for the arc; current fitness state
+  HARD (4 hard, 10 soft) explicitly accepted as not-blocking; four
+  directive files (`principles.md`, `AGENT.md`, `testing-strategy.md`,
+  `continuity-practice.md`) carried forward as Due-but-not-blocking
+  pending-graduations register entry, owner-appetite-triggered (no SLA)
+- Dependencies: none
+
 ---
 
 ## Gap Analysis — Tech Stack vs Specialist Coverage (2026-03-14)
@@ -680,7 +1023,13 @@ specialists, not deferred.
 
 **Practice/process specialists (invoked on methodology signal):**
 
-- planning specialist 📋, tdd specialist 📋, devx specialist 📋
+- planning specialist ⏭️, tdd specialist 📋, devx specialist 📋
+
+**Expansion support lanes (scale and coherence for the roster):**
+
+- reviewer gateway upgrade ⏭️, practice/process structural improvements ⏭️,
+  agent infrastructure portability remediation ⏭️, adapter generation 📋,
+  agent classification taxonomy 📋
 
 **Situational (on-demand, not tied to change profile):**
 

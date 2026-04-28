@@ -43,6 +43,9 @@ export async function cleanupOldGenerations(
   deps: AliasLifecycleDeps,
   protectedVersions?: ReadonlySet<string>,
 ): Promise<CleanupResult> {
+  deps.logger?.info('Cleaning up old search index generations', {
+    protectedVersionCount: protectedVersions?.size ?? 0,
+  });
   let deleted = 0;
   let failed = 0;
   for (const kind of SEARCH_INDEX_KINDS) {
@@ -107,6 +110,7 @@ export async function cleanupOrphanedIndexes(
   deps: Pick<AliasLifecycleDeps, 'deleteVersionedIndex' | 'target' | 'logger'>,
   version: string,
 ): Promise<void> {
+  deps.logger?.info('Cleaning up orphaned versioned indexes', { version });
   for (const kind of SEARCH_INDEX_KINDS) {
     const indexName = resolveVersionedIndexName(BASE_INDEX_NAMES[kind], deps.target, version);
     const deleteResult = await deps.deleteVersionedIndex(indexName);

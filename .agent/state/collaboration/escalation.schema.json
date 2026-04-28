@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "escalation.schema.json",
+  "title": "Agent Collaboration Owner Escalation",
+  "description": "Live owner-facing unresolved case record. Escalations are not durable decision authority: the owner resolution is written back to the referenced conversation as a decision, joint_decision, or resolution entry, then the escalation closes by reference.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "escalation_id",
+    "status",
+    "thread",
+    "conversation_id",
+    "originating_entry_id",
+    "title",
+    "opened_at",
+    "opened_by",
+    "owner_action_requested",
+    "reason"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"],
+      "description": "Semantic version of this escalation schema."
+    },
+    "escalation_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Stable slug-like identifier unique within .agent/state/collaboration/escalations/."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "closed"],
+      "description": "Whether the owner-facing escalation is still unresolved."
+    },
+    "thread": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Slug of the work thread this escalation belongs to."
+    },
+    "conversation_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Conversation that owns the durable discussion and eventual decision."
+    },
+    "originating_entry_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Entry in the conversation that triggered this escalation."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "opened_by": {
+      "$ref": "active-claims.schema.json#/$defs/agent_id"
+    },
+    "owner_action_requested": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Concrete owner decision or action needed to unblock the agents."
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Why peer coordination cannot resolve the issue without owner input."
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "active-claims.schema.json#/$defs/evidence_ref"
+      }
+    },
+    "closed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "closed_by": {
+      "$ref": "active-claims.schema.json#/$defs/agent_id"
+    },
+    "resolution_conversation_entry_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Conversation entry that records the durable owner resolution."
+    },
+    "resolution_summary": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "closed"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": [
+          "closed_at",
+          "closed_by",
+          "resolution_conversation_entry_id",
+          "resolution_summary"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "open"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {
+              "required": ["closed_at"]
+            },
+            {
+              "required": ["resolution_conversation_entry_id"]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

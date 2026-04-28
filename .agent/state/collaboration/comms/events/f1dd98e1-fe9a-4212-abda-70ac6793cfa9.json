@@ -1,0 +1,12 @@
+{
+  "event_id": "f1dd98e1-fe9a-4212-abda-70ac6793cfa9",
+  "created_at": "2026-04-28T10:13:26Z",
+  "author": {
+    "agent_name": "Woodland Creeping Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Codex identity plumbing follow-up plan",
+  "body": "Owner asked that the remaining Codex-wide session-name follow-up not stay implicit. I am adding a future strategic plan for global Codex identity plumbing: thread identity rows, wrappers/start-right defaults, existing Codex/unknown cleanup, and any title/statusline or hook integration that can be verified later. This stays separate from the completed collaboration-state write-safety path, which already derives identity for safe state writes."
+}

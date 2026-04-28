@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { generateScopesSupportedFile } from './generate-scopes-supported-file.js';
+import { SCOPES_SUPPORTED } from '../../../../src/types/generated/api-schema/mcp-tools/scopes-supported.js';
 
 describe('generateScopesSupportedFile', () => {
   it('returns a string containing the SCOPES_SUPPORTED constant', () => {
@@ -9,7 +10,9 @@ describe('generateScopesSupportedFile', () => {
 
   it('includes the correct scopes from security policy', () => {
     const result = generateScopesSupportedFile();
-    expect(result).toContain("['email']");
+    const quotedScopes = [...SCOPES_SUPPORTED].map((scope) => `'${scope}'`).join(', ');
+    const expectedScopesLiteral = `[${quotedScopes}]`;
+    expect(result).toContain(expectedScopesLiteral);
   });
 
   it('has as const assertion for type narrowing', () => {

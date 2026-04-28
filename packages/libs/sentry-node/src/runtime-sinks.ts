@@ -40,13 +40,14 @@ function toSentryLoggerLevel(level: LogEvent['level']): SentryLoggerLevel {
 }
 
 export function createSentryTags(
-  config: { readonly environment: string; readonly release: string },
+  config: { readonly environment: string; readonly release: string; readonly gitSha?: string },
   serviceName: string,
   traceContext: { readonly traceId?: string; readonly spanId?: string } | undefined,
 ): {
   readonly service: string;
   readonly environment: string;
   readonly release: string;
+  readonly 'git.commit.sha'?: string;
   readonly traceId?: string;
   readonly spanId?: string;
 } {
@@ -54,6 +55,7 @@ export function createSentryTags(
     service: serviceName,
     environment: config.environment,
     release: config.release,
+    ...(config.gitSha ? { 'git.commit.sha': config.gitSha } : {}),
     ...(traceContext?.traceId ? { traceId: traceContext.traceId } : {}),
     ...(traceContext?.spanId ? { spanId: traceContext.spanId } : {}),
   };

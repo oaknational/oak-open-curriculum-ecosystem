@@ -72,6 +72,7 @@ Before archival, mine completed outcomes into permanent documentation
 |------|-----------|--------------|---------|
 | Documentation Accuracy Improvements | 2026-02 | Documentation inaccuracies and structural issues fixed as prerequisite for enforcement work. | [archived plan](agentic-engineering-enhancements/archive/completed/documentation-accuracy-improvements.plan.md) |
 | Continuity and Surprise Practice Adoption | 2026-04-03 | Installed `session-handoff`, split ordinary continuity from deep consolidation, closed the evidence window with an explicit `promote` decision, and graduated the portable continuity note that later promoted into Practice Core. | [archived plan](agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md) |
+| Owner-Directed Intent-to-Commit Queue | 2026-04-27 | Implemented the advisory FIFO `commit_queue` and exact staged-bundle verification in `5c39d1d4`, then graduated the shared git transaction / authorial-bundle tripwire into PDR-029 Family A Class A.3 while keeping `session_counter` future-only. | [archived plan](agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md) |
 | Cross-Agent Standardisation | 2026-03 | Superseded — absorbed into ADR-125 (Agent Artefact Portability). | [archived plan](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md) |
 
 ---
@@ -81,6 +82,14 @@ Before archival, mine completed outcomes into permanent documentation
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
 | No-Console Enforcement | 2026-03-04 | Superseded — folded into `developer-experience/active/devx-strictness-convergence.plan.md`. | [archived plan](architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md) |
+
+---
+
+## Observability
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| MCP Post-Root-Green Follow-Through | 2026-04-23 | Closed the bounded repo-owned corrective lane after the root-green rerun: strict sitemap validation restored, wrapper/fallback drift removed, the configured Sentry build gate aligned to canonical env loading, and remaining manual validation stages explicitly externalised to the owner. | [archived plan](observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) |
 
 ---
 

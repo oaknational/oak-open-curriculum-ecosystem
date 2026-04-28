@@ -1,21 +1,5 @@
-import { defineConfig } from 'tsup';
+import { createLibConfig } from '../../../tsup.config.base.js';
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-  },
-  format: ['esm'],
-  dts: false, // Let TypeScript handle declarations
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  target: 'es2022',
-  minify: false,
-  bundle: true,
-  tsconfig: './tsconfig.build.json',
-  // Exclude test files from build
-  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
-  outDir: 'dist',
-  treeshake: true,
+export default createLibConfig({
   external: ['fs', 'path', 'node:fs', 'node:path', 'node:module', 'node:url'],
 });

@@ -13,6 +13,5 @@ export {
 export {
   generatePathOperationsConstant,
   generateOperationsByIdConstant,
-  generateAllowedMethodsConstant,
   generateOperationConstants,
 } from './operation-generators.js';

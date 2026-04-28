@@ -1,8 +1,16 @@
-# Architectural Decisions Records
+---
+boundary: B2-Architecture
+doc_role: index
+authority: adr-navigation
+status: active
+last_reviewed: 2026-04-19
+---
 
-> **Navigation**: [Architecture Home](../README.md) | [Architecture Map (archived)](../../archive/ARCHITECTURE_MAP.md) | [Architecture Overview (archived)](../../archive/architecture-overview.md)
+# Architectural Decision Records
 
-This file is an index of architectural decisions made during the development of this repository.
+> **Navigation**: [Architecture Home](../README.md) | [OpenAPI Pipeline](../openapi-pipeline.md) | [Practice Core](../../../.agent/practice-core/index.md) | [Practice Index](../../../.agent/practice-index.md)
+
+This file is an index of architectural decisions made during the development of this repository. The wider system that governs how these decisions are authored, propagated, and reviewed is **the Practice** — see [Practice Core](../../../.agent/practice-core/index.md) for the portable definition and [Practice Index](../../../.agent/practice-index.md) for this repository's local bridge.
 
 ## Start Here: 5 ADRs in 15 Minutes
 
@@ -52,14 +60,14 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-034: System Boundaries and Type Assertions](034-system-boundaries-and-type-assertions.md)
 - [ADR-035: Unified SDK-MCP Code Generation](035-unified-sdk-mcp-code-generation.md)
 - [ADR-036: Data-Driven Code Generation](036-data-driven-code-generation.md)
-- [ADR-037: Embedded Tool Information](037-embedded-tool-information.md)
+- [ADR-037: Embedded Tool Information](037-embedded-tool-information.md) ← **Superseded by [ADR-038](038-compilation-time-revolution.md)**
 - [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
 - [ADR-040: Neutral Architecture and Identity Allowlist](040-neutral-architecture-and-identity-allowlist.md)
 - [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
 - [ADR-042: Runtime Adapters Folder](042-runtime-adapters-folder.md)
 - [ADR-043: Codegen in Build and CI](043-codegen-in-build-and-ci.md)
-- [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
-- [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
+- [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md) ← **Superseded by [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)**
+- [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md) ← **Superseded by [ADR-151](151-mcp-app-styling-independence.md)**
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
 - [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md) ← **Partially Superseded** by ADR-145
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
@@ -67,7 +75,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-050: MCP Tool Layering DAG](050-mcp-tool-layering-dag.md)
 - [ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging](051-opentelemetry-compliant-logging.md) ← **Supersedes ADR-017**
 - [ADR-052: OAuth 2.1 for MCP HTTP Server Authentication](052-oauth-2.1-for-mcp-http-authentication.md)
-- [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md)
+- [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md) (amended 2026-04-21 — temporal scope named: canonical user-ID provider through public alpha)
 - [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-055: Zod Version Boundaries](055-zod-version-boundaries.md)
 - [ADR-056: ~~Conditional Clerk Middleware for Discovery~~](056-conditional-clerk-middleware-for-discovery.md) (SUPERSEDED by ADR-113)
@@ -78,12 +86,12 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md) _(superseded)_
 - [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
-- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
+- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md) ← **Superseded by [ADR-067](067-sdk-generated-elasticsearch-mappings.md)**
 - [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
 - [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
 - [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
-- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
+- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md) ← **Superseded by [ADR-087](087-batch-atomic-ingestion.md)**
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
 - [ADR-074: Elastic-Native-First Philosophy](074-elastic-native-first-philosophy.md)
@@ -155,7 +163,9 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
-- [ADR-144: Two-Threshold Fitness Model](144-two-threshold-fitness-model.md)
+- [ADR-144: Three-Zone Fitness Model](144-two-threshold-fitness-model.md) — filename
+  retains its original ADR-144 slug because the ADR was amended in place; see
+  Status block in the ADR for history
 - [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
 - [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
 - [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
@@ -169,6 +179,15 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
 - [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
+- [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
+- [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
+- [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md) (supersedes ADR-143 §6 in part)
+- [ADR-161: Network-Free PR-Check CI Boundary](161-network-free-pr-check-ci-boundary.md)
+- [ADR-162: Observability-First — Every Capability Emits Across Five Axes](162-observability-first.md) ← **Proposed** (extends ADR-143; acceptance gated on Phase 5 of the observability strategy restructure)
+- [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](163-sentry-release-identifier-and-vercel-production-attribution.md) (operationalises L-7 release/deploy linkage; Accepted 2026-04-19; amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)
+- [ADR-164: Config-Load Side Effects Must Not Require Test-Execution Resources](164-config-load-side-effects.md) (vitest/ESLint/Prettier configs must not throw at module-evaluation time on missing test-time credentials; Accepted 2026-04-26)
+- [ADR-165: Agent Work Practice Phenotype Boundary](165-agent-work-practice-phenotype-boundary.md) (local implementation boundary for PDR-035 agent-work Practice authority; Accepted 2026-04-28)
+- [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md) — 2026-04-26 amendment adds Step 5 (call-site uptake) to the four-step pattern.
 
 ## Key Architectural Decisions
 
@@ -182,7 +201,7 @@ For understanding our API integration approach:
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 - **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
-- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, visible in code structure
+- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, enforced through workspace topology
 - **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
 - **[ADR-132](132-sitemap-scanner-for-canonical-url-validation.md)** - Sitemap scanner and reference-map validation for canonical URL generation
 
@@ -191,6 +210,11 @@ For understanding authentication, authorization, and observability:
 - **[ADR-052](052-oauth-2.1-for-mcp-http-authentication.md)** - OAuth 2.1 for MCP HTTP server authentication
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
+- **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation (§6 superseded in part by ADR-160)
+- **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
+- **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
+- **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
+- **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
@@ -205,13 +229,14 @@ For understanding the agentic engineering practice:
 - **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
-- **[ADR-144](144-two-threshold-fitness-model.md)** - Two-threshold fitness model: target (soft, agent-extendable) vs limit (hard, user-approval) with consistent character and line-width governance
+- **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
 - **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions reviewer: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
 - **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
 - **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
+- **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

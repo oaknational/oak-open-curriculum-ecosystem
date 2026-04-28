@@ -157,6 +157,9 @@ export async function fetchAndBuildThreadOps(
   client: OakClient,
   options: FetchThreadsOptions,
 ): Promise<ThreadBulkOperation[]> {
+  ingestLogger.debug('Fetching and building thread operations', {
+    subjectCount: options.subjectSlugs.length,
+  });
   const threads = await fetchAndEnrichThreads(client, options);
   return buildThreadOps(threads);
 }

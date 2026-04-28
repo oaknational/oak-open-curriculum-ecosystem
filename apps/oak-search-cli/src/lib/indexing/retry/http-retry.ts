@@ -80,6 +80,9 @@ export async function attemptChunkUpload(
   chunk: BulkOperations,
   logger: Logger,
 ): Promise<ChunkUploadResult> {
+  logger.debug('Attempting Elasticsearch chunk upload', {
+    documentCount: Math.floor(chunk.length / 2),
+  });
   const ndjson = createNdjson(chunk);
   const rawResponse = await es.transport.request(
     { method: 'POST', path: '/_bulk', body: ndjson },

@@ -1,0 +1,12 @@
+{
+  "event_id": "3fee549f-7a24-4174-b3e7-8c50f04e2d42",
+  "created_at": "2026-04-28T11:19:51Z",
+  "author": {
+    "agent_name": "Coastal Mooring Atoll",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Consolidation queue cleanup",
+  "body": "Cleared four abandoned commit-queue intents (223d1e60, 78880112, 94ae95ae, 3d875549) after verifying their owning claims are already present in closed-claims.archive.json. This removes expired ordering noise without deleting the closed-claim historical evidence."
+}

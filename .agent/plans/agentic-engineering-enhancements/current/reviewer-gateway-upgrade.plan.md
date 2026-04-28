@@ -26,6 +26,21 @@ It must stay compatible with the wider taxonomy direction: **agents are not
 synonymous with reviewers** — other agents may advise, research, or enable
 process.
 
+## Coordination With Expert Expansion
+
+This plan is the routing/scaling counterpart to the expanding expert roster.
+It does not create new experts itself. It must track:
+
+- [planning-specialist-capability.plan.md](planning-specialist-capability.plan.md)
+  as the canonical owner for the Planning expert triplet.
+- [practice-and-process-structural-improvements.plan.md](practice-and-process-structural-improvements.plan.md)
+  as the source of process-discipline and collaboration-doctrine homes that
+  may create new review signals.
+- [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md)
+  as the platform-adapter and validator scaling lane for the expert estate.
+- [agent-classification-taxonomy.plan.md](../future/agent-classification-taxonomy.plan.md)
+  as the naming/tier/mode contract that will eventually reshape gateway output.
+
 ## What Changes
 
 ### Identity
@@ -157,6 +172,49 @@ still require a **deep** review.
 - Process escalation recommendations from sentinel reports
 - Invoke deep specialists where sentinels flagged concerns beyond their scope
 
+### Gateway as posture selector and signal router
+
+The gateway is also one concrete implementation of the broader operating-model
+mechanisms described in
+[`workbench-agent-operating-topology.md`](../../../reference/agentic-engineering/workbench-agent-operating-topology.md).
+For review work, the gateway acts as a **posture selector** and
+**signal router**.
+
+It should also be described as one layer in the repo's
+**layered-safeguard stack**. Rules shape authoring behaviour, the gateway
+routes and scales review effort, quality gates verify outputs, and continuity
+plus evidence surfaces preserve short-horizon state and proof. The gateway is
+therefore a safeguard layer, not the whole governance system.
+
+Its important inputs are:
+
+- direct user instruction and plan checkpoints
+- change-category and domain signals from the diff
+- quality-gate failures and other risk alerts
+- sentinel escalation recommendations
+- missing-coverage alerts from earlier review rounds
+
+These inputs are the gateway's main **review-signal** family. Some of them are
+also **relationship-confidence signals**: signals that change scrutiny or
+latitude because of context rather than file content alone. Examples include
+direct user correction, repeated sentinel escalation from one track, unclear
+ownership between adjacent reviewers, or a plan checkpoint that demands
+broader traceability. They change routing and depth, but they do not create a
+formal authority ladder in this lane.
+
+Its outputs are:
+
+- whether the turn should be sweep-first, directly specialist-led, or gateway
+  only
+- which specialists to invoke
+- what review depth each specialist should use
+- when the review should happen
+
+This plan should therefore be treated as the review-system home for
+posture-selection and signal-routing semantics. It does not own the whole
+repo's signal taxonomy, but it should provide the strongest concrete example of
+that wider mechanism family.
+
 ### Platform Invocation Constraint
 
 All orchestration goes through the primary session agent (or a general-purpose
@@ -176,7 +234,7 @@ choice.
 
 ### Directive Updates
 
-`.agent/directives/invoke-code-reviewers.md` should be renamed and restructured
+`.agent/memory/executive/invoke-code-reviewers.md` should be renamed and restructured
 to reflect the gateway's broader role. The current content is good but needs:
 
 1. Rename to `invoke-reviewers.md` (or equivalent — decided during taxonomy work)
@@ -198,6 +256,10 @@ should be renamed to match the directive rename.
   gateway's expanded role; the taxonomy plan provides the *execution mechanics*
   of the rename itself. The taxonomy plan now includes the three-tier model
   and fast-agent generalization that this gateway consumes.
+- **Operating-Model Mechanism Taxonomy**: The gateway is one concrete
+  implementation of posture selection, signal routing, and escalation
+  semantics. The future taxonomy work should generalise those concepts, not
+  replace this lane's review-specific design.
 - **Review Depth Dimension (WS6)**: The gateway is the primary consumer of
   depth selection guidance — it decides which tier each specialist review
   should run at.
@@ -211,7 +273,7 @@ should be renamed to match the directive rename.
 
 This plan does NOT create new files from scratch — it upgrades existing ones:
 
-1. Redesign the triage model in `.agent/directives/invoke-code-reviewers.md`
+1. Redesign the triage model in `.agent/memory/executive/invoke-code-reviewers.md`
    (layered triage, depth selection, coverage tracking)
 2. Expand the worked examples for the full specialist roster
 3. Update the gateway agent template (currently `code-reviewer`) to reflect
@@ -229,10 +291,71 @@ This plan does NOT create new files from scratch — it upgrades existing ones:
 - The depth selection integration depends on WS6 (review depth dimension)
   being designed first
 
+## Direction-of-Travel Scope Expansion (2026-04-20)
+
+Three high-impact uplift candidates from the practice-aligned direction-of-
+travel research ([practice-aligned-direction-and-gap-baseline.md](../../../analysis/practice-aligned-direction-and-gap-baseline.md))
+route to this plan as natural scope expansions. All three belong to the
+**reviewer-systems cluster** — the densest uplift cluster in the baseline,
+with evidence from agent-native code review (Greptile), identity/OAuth
+modernisation (RFC 9728), and the cross-lane direction survey.
+
+### Expansion 1: Machine-readable reviewer-suggestion artefact
+
+**Status**: Scoped, not yet executing
+**Evidence**: Greptile "Fix in X" model — machine-readable handoff with
+explicit file paths and line numbers, cross-tool integration
+(Claude Code, Codex, Cursor, Devin).
+
+Reviewer subagents currently return prose; the main agent implements
+informally. This expansion scopes whether the reviewer-suggestion
+output should grow a structured schema (file-path + line-number +
+suggested-change) so the gateway can route suggestions mechanically
+rather than relying on the main agent to parse prose.
+
+**Relationship to existing scope**: Extends the gateway's handoff contract
+(Deliverable 3) and the tier-aware orchestration model (sentinel
+escalation recommendations already structured; reviewer suggestions
+are not).
+
+### Expansion 2: Per-team learning loop
+
+**Status**: Scoped, not yet executing
+**Evidence**: Greptile per-team learning — 👍/👎 reactions and replies
+"teach Greptile what matters" with explicit 2-3 week stabilisation
+period for per-team noise calibration.
+
+Reviewers currently do not learn from accept/reject signals. This
+expansion scopes whether reviewer-suggestion outcomes (accepted,
+rejected-with-rationale, partially-accepted) should feed back into
+reviewer prompts as calibration context.
+
+**Relationship to existing scope**: Extends review coverage tracking
+(Scope Expansion item 6) from "which specialists were invoked" to
+"what happened to their suggestions".
+
+### Expansion 3: RFC 9728 PRM audit
+
+**Status**: Scoped, not yet executing
+**Evidence**: MCP `2025-11-25` adds OIDC Discovery 1.0, OAuth Client
+ID Metadata, RFC 9728 alignment. Backstage v1.50 fixes MCP OAuth 2.0
+PRM endpoint. No recorded audit of this repo's MCP PRM endpoint
+against RFC 9728.
+
+One-off scope addition: schedule a Clerk/MCP-reviewer joint pass
+against the MCP server's Protected Resource Metadata endpoint to
+verify RFC 9728 compliance.
+
+**Relationship to existing scope**: Extends the domain cluster (Clerk +
+MCP signals) with a concrete audit task. Not blocking for gateway
+redesign; can be scheduled independently.
+
 ## Next Promotion Trigger
 
 Promote this plan into explicit active execution when:
 
 1. the taxonomy rename mechanics are ready to coordinate with it, or
 2. the current flat checklist causes repeated coverage misses or review-noise
-   churn in live sessions
+   churn in live sessions, or
+3. direction-of-travel scope expansions (above) create sufficient pull to
+   justify independent execution ahead of the taxonomy rename

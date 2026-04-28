@@ -1,29 +1,24 @@
-import {
-  normalizeError,
-  sanitiseObject,
-  type LogContextInput,
-  type Logger,
-  type LogSink,
-} from '@oaknational/logger';
-import { err, type Result } from '@oaknational/result';
-import {
-  createInMemoryMcpObservationRecorder,
-  type McpObservationOptions,
-  type McpObservationRecorder,
-  type McpObservationRuntime,
-} from '@oaknational/sentry-mcp';
+import { type LogContextInput, type Logger, type LogSink } from '@oaknational/logger';
+import { err, ok, type Result } from '@oaknational/result';
 import {
   createSentryConfig,
   createSentryLogSink,
-  flushSentry,
   initialiseSentry,
   type FixtureSentryStore,
-  type SentryFlushError,
+  type InitialiseSentryError,
+  type ParsedSentryConfig,
   type SentryNodeRuntime,
   type SentryNodeSdk,
 } from '@oaknational/sentry-node';
 import { trace, type Tracer } from '@opentelemetry/api';
-import type { WithActiveSpanOptions } from '@oaknational/observability';
+import type {
+  ActiveSpanContextSnapshot,
+  ObservabilityCloseError,
+  ObservabilityContextPayload,
+  ObservabilityFlushError,
+  ObservabilityUser,
+  WithActiveSpanOptions,
+} from '@oaknational/observability';
 import type { HttpLoggerOptions } from '../logging/index.js';
 import { createHttpLogger } from '../logging/index.js';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -32,6 +27,7 @@ import { describeHttpObservabilityError } from './http-observability-error.js';
 import type { HttpSpanOptions, HttpSyncSpanOptions, SpanFunctions } from './span-helpers.js';
 import { createSpanFunctions } from './span-helpers.js';
 import { createHttpPostRedactionHooks } from './sanitise-mcp-events.js';
+import { createSentryDelegates } from './sentry-observability-delegates.js';
 
 export { describeHttpObservabilityError } from './http-observability-error.js';
 export type { HttpSpanHandle, HttpSpanOptions, HttpSyncSpanOptions } from './span-helpers.js';
@@ -45,32 +41,51 @@ interface CreateHttpObservabilityOptions {
   readonly stdoutSink?: LogSink;
 }
 
-export interface HttpObservability extends McpObservationRuntime {
+export interface HttpObservability {
+  readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
+  withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T>;
   readonly service: string;
   readonly environment: string;
-  readonly release: string;
+  readonly release?: string;
   readonly tracer: Tracer | undefined;
-  readonly mcpRecorder: McpObservationRecorder;
   readonly fixtureStore?: FixtureSentryStore;
   createLogger(options?: HttpLoggerOptions): Logger;
-  createMcpObservationOptions(): Pick<
-    McpObservationOptions,
-    'environment' | 'recorder' | 'release' | 'runtime' | 'service' | 'tracer'
-  >;
   withSpan<T>(options: HttpSpanOptions<T>): Promise<T>;
   withSpanSync<T>(options: HttpSyncSpanOptions<T>): T;
   captureHandledError(error: unknown, context?: LogContextInput): void;
-  flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
-}
-
-const noopMcpObservationRecorder: McpObservationRecorder = {
-  record(): void {
-    // Intentionally empty: off and live sentry mode do not keep an in-memory MCP transcript.
-  },
-};
-
-function createMcpRecorder(mode: SentryNodeRuntime['config']['mode']): McpObservationRecorder {
-  return mode === 'fixture' ? createInMemoryMcpObservationRecorder() : noopMcpObservationRecorder;
+  /**
+   * Set the user identity on the current isolation scope.
+   *
+   * @remarks Called per-request from the MCP handler when auth context
+   * is available. Sentry v8+ forks an isolation scope per Express
+   * request, so this writes to the request's scope only. Pass `null`
+   * to clear user context.
+   */
+  setUser(user: ObservabilityUser | null): void;
+  /**
+   * Set a tag on the current isolation scope.
+   *
+   * @remarks Tags are string-only. Sentry serialises tag values as
+   * strings; number/boolean would add no value and mislead callers
+   * into expecting typed filtering.
+   */
+  setTag(key: string, value: string): void;
+  /**
+   * Set structured context on the current isolation scope.
+   *
+   * @remarks Pass `null` to clear a named context.
+   */
+  setContext(name: string, context: ObservabilityContextPayload | null): void;
+  flush(timeoutMs?: number): Promise<Result<void, ObservabilityFlushError>>;
+  /**
+   * Close the observability transport — drains pending events AND disables the SDK.
+   *
+   * @remarks Preferred over {@link flush} for process shutdown. `close()`
+   * drains the event queue and then disables the SDK, which is the correct
+   * semantic when the process is about to exit. All three shutdown paths
+   * (SIGTERM, server error, bootstrap failure) should use this method.
+   */
+  close(timeoutMs?: number): Promise<Result<void, ObservabilityCloseError>>;
 }
 
 function createLoggerFactory(
@@ -97,24 +112,23 @@ interface BuildObservabilityParams {
   readonly sentryRuntime: SentryNodeRuntime;
   readonly serviceName: string;
   readonly environment: string;
-  readonly release: string;
+  readonly release?: string;
   readonly tracer: Tracer | undefined;
-  readonly mcpRecorder: McpObservationRecorder;
   readonly stdoutSink?: LogSink;
 }
 
 function buildObservabilityObject(params: BuildObservabilityParams): HttpObservability {
   const spanFunctions = createSpanFunctions(params.tracer);
+  const delegates = createSentryDelegates(params.sentryRuntime);
 
   const observability: HttpObservability = {
     service: params.serviceName,
     environment: params.environment,
-    release: params.release,
+    ...(params.release ? { release: params.release } : {}),
     tracer: params.tracer,
-    mcpRecorder: params.mcpRecorder,
     fixtureStore: params.sentryRuntime.fixtureStore,
     getActiveSpanContext: spanFunctions.getActiveSpanContext,
-    async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
+    async withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T> {
       return await spanFunctions.withSpan({
         name: options.name,
         attributes: options.attributes,
@@ -127,27 +141,9 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
       spanFunctions.getActiveSpanContext,
       params.stdoutSink,
     ),
-    createMcpObservationOptions() {
-      return {
-        service: params.serviceName,
-        environment: params.environment,
-        release: params.release,
-        recorder: params.mcpRecorder,
-        runtime: observability,
-        tracer: params.tracer,
-      };
-    },
     withSpan: spanFunctions.withSpan,
     withSpanSync: spanFunctions.withSpanSync,
-    captureHandledError(error, captureContext): void {
-      params.sentryRuntime.captureHandledError(
-        normalizeError(error),
-        sanitiseObject(captureContext) ?? undefined,
-      );
-    },
-    async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
-      return await flushSentry(params.sentryRuntime, timeoutMs);
-    },
+    ...delegates,
   };
 
   return observability;
@@ -157,19 +153,36 @@ function resolveTracer(mode: string, serviceName: string, version: string): Trac
   return mode === 'sentry' ? trace.getTracer(serviceName, version) : undefined;
 }
 
-export function createHttpObservability(
+function createSentryConfigEnvironment(runtimeConfig: RuntimeConfig) {
+  return {
+    ...runtimeConfig.env,
+    APP_VERSION: runtimeConfig.version,
+    APP_VERSION_SOURCE: runtimeConfig.versionSource,
+    ...(runtimeConfig.gitSha
+      ? { GIT_SHA: runtimeConfig.gitSha, GIT_SHA_SOURCE: runtimeConfig.gitShaSource }
+      : {}),
+  };
+}
+
+function initialiseHttpSentryRuntime(
   runtimeConfig: RuntimeConfig,
-  options?: CreateHttpObservabilityOptions,
-): Result<HttpObservability, HttpObservabilityError> {
-  const sentryConfigResult = createSentryConfig(runtimeConfig.env);
+  options: CreateHttpObservabilityOptions | undefined,
+): Result<
+  {
+    readonly config: ParsedSentryConfig;
+    readonly runtime: SentryNodeRuntime;
+    readonly serviceName: string;
+  },
+  InitialiseSentryError | HttpObservabilityError
+> {
+  const sentryConfigResult = createSentryConfig(createSentryConfigEnvironment(runtimeConfig));
 
   if (!sentryConfigResult.ok) {
     return err(sentryConfigResult.error);
   }
 
-  const sentryConfig = sentryConfigResult.value;
   const serviceName = options?.serviceName ?? DEFAULT_HTTP_SERVICE_NAME;
-  const sentryRuntimeResult = initialiseSentry(sentryConfig, {
+  const sentryRuntimeResult = initialiseSentry(sentryConfigResult.value, {
     serviceName,
     sdk: options?.sentrySdk,
     fixtureStore: options?.fixtureStore,
@@ -180,18 +193,39 @@ export function createHttpObservability(
     return err(sentryRuntimeResult.error);
   }
 
+  return ok({
+    config: sentryConfigResult.value,
+    runtime: sentryRuntimeResult.value,
+    serviceName,
+  });
+}
+
+export function createHttpObservability(
+  runtimeConfig: RuntimeConfig,
+  options?: CreateHttpObservabilityOptions,
+): Result<HttpObservability, HttpObservabilityError> {
+  const sentryInitialisationResult = initialiseHttpSentryRuntime(runtimeConfig, options);
+
+  if (!sentryInitialisationResult.ok) {
+    return sentryInitialisationResult;
+  }
+
+  const {
+    config: sentryConfig,
+    runtime: sentryRuntime,
+    serviceName,
+  } = sentryInitialisationResult.value;
   const tracer = resolveTracer(sentryConfig.mode, serviceName, runtimeConfig.version);
 
   return {
     ok: true,
     value: buildObservabilityObject({
       runtimeConfig,
-      sentryRuntime: sentryRuntimeResult.value,
+      sentryRuntime,
       serviceName,
       environment: sentryConfig.environment,
-      release: sentryConfig.release,
+      ...(sentryConfig.mode === 'off' ? {} : { release: sentryConfig.release }),
       tracer,
-      mcpRecorder: createMcpRecorder(sentryRuntimeResult.value.config.mode),
       stdoutSink: options?.stdoutSink,
     }),
   };

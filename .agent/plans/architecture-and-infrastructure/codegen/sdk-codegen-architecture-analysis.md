@@ -36,7 +36,7 @@ has three distinct responsibilities that are currently entangled:
 
 ### 2.1 Directory Layout
 
-```
+```text
 packages/sdks/oak-sdk-codegen/
 ├── code-generation/           # OpenAPI → types pipeline (hand-authored generators)
 │   ├── codegen.ts             #   Entry: OpenAPI → api-schema types
@@ -140,7 +140,7 @@ This is the fundamental constraint: anything consumers import via
 
 ### 3.1 OpenAPI Type Generation (`code-generation/`)
 
-```
+```text
 Upstream OpenAPI schema (HTTP or cached JSON)
     ↓
 code-generation/codegen.ts  →  src/types/generated/api-schema/  (~90 files)
@@ -159,7 +159,7 @@ consumers — they are build-time tooling.
 
 ### 3.2 Curriculum Graph Generation (`vocab-gen/`)
 
-```
+```text
 Bulk download JSON files (apps/oak-search-cli/bulk-downloads/)
     ↓
 vocab-gen/run-vocab-gen.ts
@@ -188,7 +188,7 @@ This pipeline has three problems:
 
 ### 3.3 Bulk Processing Pipeline (`src/bulk/`)
 
-```
+```text
 Bulk download JSON files
     ↓
 src/bulk/reader.ts      →  parsed bulk data
@@ -281,11 +281,13 @@ extractors are used by both graph generation and search indexing.
 ### 5.2 What Each Consumer Actually Needs
 
 **`@oaknational/sdk-codegen/vocab`** — only 6 files in oak-curriculum-sdk:
+
 - Runtime data values: `threadProgressionGraph`, `prerequisiteGraph`, `conceptGraph`
 - Types: `ConceptGraph`, `ConceptId`, `ConceptCategory`, `ConceptEdge`
 - NO generator functions imported through this path
 
 **`@oaknational/sdk-codegen/bulk`** — only oak-search-cli:
+
 - Types: `Unit`, `Lesson`, `BulkDownloadFile`, `BulkFileResult` (from schemas/reader)
 - Runtime: `readAllBulkFiles` (from reader)
 - Runtime: `generateMinedSynonyms` (from generators — ONE function)
@@ -392,7 +394,7 @@ outside `src/` means:
 
 ### 7.2 The Duplication Cascade
 
-```
+```text
 vocab-gen/generators/           ← Generator logic (runs at gen-time via tsx)
     │
     │  DUPLICATED because...
@@ -458,7 +460,7 @@ that defines the runtime values.
 
 ### Proposed Domain Split
 
-```
+```text
 packages/sdks/oak-sdk-codegen/
 ├── src/                           # ALL source code (generators + runtime)
 │   ├── api-codegen/               #   Domain 1: OpenAPI → types (was code-generation/)
@@ -591,4 +593,4 @@ plan's Phase 4 (consolidate generators) — if generators are already inside
 - [Session Continuation](../../../prompts/archive/session-continuation.prompt.md)
 - [Schema-First Execution](../../../directives/schema-first-execution.md)
 - [Rules](../../../directives/principles.md)
-- [Distilled Learnings](../../../memory/distilled.md) — generator duplication noted
+- [Distilled Learnings](../../../memory/active/distilled.md) — generator duplication noted

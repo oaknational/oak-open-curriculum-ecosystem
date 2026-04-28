@@ -1,0 +1,7 @@
+---
+description: SonarQube MCP server usage guidelines
+globs:
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/sonarqube-mcp-instructions.md`.

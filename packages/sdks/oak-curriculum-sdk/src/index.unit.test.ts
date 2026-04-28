@@ -6,7 +6,7 @@ import {
   KEY_STAGES,
   isValidPathParameter,
   isValidPath,
-  isAllowedMethod,
+  isApiHttpMethod,
   extractSlug,
   generateOakUrlWithContext,
 } from '.';
@@ -28,8 +28,8 @@ describe('Public API: type guards and allowed values', () => {
     expect(isValidPath('/key-stages')).toBe(true);
     expect(isValidPath('/definitely-not-a-path')).toBe(false);
 
-    expect(isAllowedMethod('get')).toBe(true);
-    expect(isAllowedMethod('post')).toBe(false);
+    expect(isApiHttpMethod('get')).toBe(true);
+    expect(isApiHttpMethod('post')).toBe(false);
   });
 
   it('exposes URL helpers and they behave deterministically', () => {

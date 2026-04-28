@@ -1,43 +1,45 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
-import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { parseSseEnvelope } from './helpers/sse.js';
-import { createNoOpClerkMiddleware } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpClerkMiddleware,
+} from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
+const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 
-/**
- * Isolated test environment with auth bypassed.
- * No global `process.env` mutation — see ADR-078.
- */
-const authBypassedEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
-  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-};
+async function createBypassedApp() {
+  const runtimeConfig = createMockRuntimeConfig({
+    dangerouslyDisableAuth: true,
+    env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
+  });
+  const observability = createMockObservability(runtimeConfig);
+  return await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+  });
+}
 
-/**
- * Isolated test environment with auth enforced.
- * No `DANGEROUSLY_DISABLE_AUTH` — Clerk middleware is active.
- */
-const authEnforcedEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-  CLERK_SECRET_KEY: 'sk_test_123',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
-  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-};
+async function createEnforcedApp() {
+  const runtimeConfig = createMockRuntimeConfig({
+    env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
+  });
+  const observability = createMockObservability(runtimeConfig);
+  return await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
+    clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+  });
+}
 
 const ToolListItemSchema = z.looseObject({ name: z.string() });
 
@@ -82,19 +84,7 @@ const ResultWithErrorSchema = z.object({
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authEnforcedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      upstreamMetadata: TEST_UPSTREAM_METADATA,
-      clerkMiddlewareFactory: createNoOpClerkMiddleware(),
-    });
+    const app = await createEnforcedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
@@ -116,17 +106,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -157,17 +137,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects missing Accept header with 406', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -178,17 +148,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects initialize without clientInfo', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -209,17 +169,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -240,17 +190,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('initialize response includes server instructions for agent guidance', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -273,17 +213,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('initialize response includes Oak branding in serverInfo', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -309,17 +239,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {
-    const configResult = loadRuntimeConfig({
-      processEnv: authBypassedEnv,
-      startDir: process.cwd(),
-    });
-    const runtimeConfig = unwrap(configResult);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
+    const app = await createBypassedApp();
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)

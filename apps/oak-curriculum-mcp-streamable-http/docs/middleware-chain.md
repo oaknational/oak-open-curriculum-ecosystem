@@ -60,6 +60,29 @@ For any incoming HTTP request, middleware executes in this order:
    9a. Landing Page Handler
 ```
 
+## Rate Limiting
+
+Per-route rate limiters are mounted on `/mcp`, `/oauth/*`, the OAuth
+metadata endpoints, and `/assets/download/*`. They run after auth-context
+setup but before the route handler — exhausting a bucket returns 429
+before the auth or upstream proxy logic executes. The four profiles
+(MCP, OAuth, metadata, asset) and their windows live in
+`src/rate-limiting/rate-limit-profiles.ts`; the limiter is wired through
+the injectable `RateLimiterFactory` from `src/rate-limiting/rate-limiter-factory.ts`
+per [ADR-078 (DI for testability)](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
+
+Key extraction is **runtime-aware**: on Vercel (`VERCEL_ENV` set in the
+validated env), the limiter keys on the `x-vercel-forwarded-for` header
+that Vercel writes server-side from the TCP connection. On non-Vercel
+runtimes, that header is client-spoofable and is ignored — keys derive
+from `req.ip` instead. The runtime-detection seam is
+`runtimeConfig.env.VERCEL_ENV !== undefined`, derived once at the
+composition root in `src/application.ts` and passed as
+`RateLimiterFactoryOptions.isVercelRuntime`. See
+[ADR-158 §Runtime-Aware Key Extraction](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md#runtime-aware-key-extraction)
+for the threat model, load-bearing platform assumptions, and
+configuration-drift tripwires.
+
 ## Request Flow Diagrams
 
 ### Complete Request Lifecycle (Mermaid)

@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "active-claims.schema.json",
+  "title": "Active Agent Claims Registry",
+  "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; v1.2.0 also treats area.kind enum expansion as additive, so older runtime readers preserve unknown area kinds as opaque claimed areas rather than rejecting the registry. major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step. The maintained latest schema validates supported v1.x files and narrows v1.1.0 validation where enum shape changed; do not validate v1.2.0 files with an older v1.1.0 schema. It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields and opaque enum values rather than rejecting the file. The runtime contract is preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "commit_queue", "claims"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.1.0", "1.2.0", "1.3.0"],
+      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims. Version 1.3.0 adds the ordered advisory commit_queue for staged-bundle ownership."
+    },
+    "commit_queue": {
+      "type": "array",
+      "description": "Ordered advisory FIFO queue for commit-window ownership. Array order is the queue order; this is not a mechanical lock. Successful commits remove their queue entry.",
+      "items": {
+        "$ref": "#/$defs/intent_to_commit"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "description": "Currently-active claims. Empty array means no agent has registered an active claim. Stale claims are archived to closed-claims.archive.json by consolidate-docs.",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "const": "1.1.0" }
+        }
+      },
+      "then": {
+        "properties": {
+          "claims": {
+            "items": {
+              "properties": {
+                "areas": {
+                  "items": {
+                    "properties": {
+                      "kind": {
+                        "enum": ["files", "workspace", "plan", "adr"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "agent_id",
+        "thread",
+        "areas",
+        "claimed_at",
+        "intent"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this claim entry. UUID v4 recommended; any string that is unique across the active and archived registries is acceptable."
+        },
+        "agent_id": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "thread": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Slug of the thread this claim is on (e.g. 'agentic-engineering-enhancements'). Matches a thread record at .agent/memory/operational/threads/<slug>.next-session.md."
+        },
+        "areas": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Areas of the repo this claim covers. At least one area required.",
+          "items": {
+            "$ref": "#/$defs/area"
+          }
+        },
+        "claimed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when this claim was registered."
+        },
+        "freshness_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "default": 14400,
+          "description": "How long this claim should be treated as current. After claimed_at + freshness_seconds, the claim is stale (noise to be audited at consolidation, not a blocker that strands other agents). Default 14400 (4 hours)."
+        },
+        "heartbeat_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional ISO 8601 timestamp updated by the agent during long sessions to keep a claim fresh. Absence means the claim is as fresh as claimed_at."
+        },
+        "sidebar_open": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether a sidebar conversation is currently open against this claim. The conversation file owns sidebar lifecycle; this field is only a liveness hint."
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short free-form description of what the agent intends. Strength of signal is communicated through the prose here ('atomic refactor in progress, please coordinate' vs 'routine edits, ping me if you also touch this'). Single-level claim model — no exclusivity gradient field; intent prose carries strength."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional free-form coordination note for whoever reads this entry."
+        },
+        "intent_to_commit": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Optional pointer to this claim's current entry in the root commit_queue. The queue owns ordering and lifecycle."
+        },
+        "archived_at": {
+          "type": "string",
+          "format": "date",
+          "description": "Optional ISO 8601 date set by consolidate-docs § 7e when archiving a stale claim to closed-claims.archive.json. Presence indicates the entry has been archived; absence indicates it is (or was) active. This field should only appear in closed-claims.archive.json — its presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        },
+        "closure": {
+          "$ref": "#/$defs/closure",
+          "description": "Structured closure metadata required in closed-claims.archive.json. Presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        }
+      }
+    },
+    "intent_to_commit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent_id",
+        "claim_id",
+        "agent_id",
+        "files",
+        "commit_subject",
+        "queued_at",
+        "updated_at",
+        "expires_at",
+        "phase"
+      ],
+      "properties": {
+        "intent_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this queued commit intent."
+        },
+        "claim_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Active claim this queue entry belongs to."
+        },
+        "agent_id": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Repository-relative file paths the agent intends to stage."
+        },
+        "commit_subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Draft commit subject so peers can see the intended durable history label before it lands."
+        },
+        "queued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Refreshed by the owning agent on commit-queue phase changes."
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Explicit wall-clock stale-reporting timestamp. Expiry does not auto-remove or auto-resolve the queue entry."
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["queued", "staging", "pre_commit", "abandoned"],
+          "description": "Advisory lifecycle phase. Successful commits remove their queue entry rather than preserving phase=complete."
+        },
+        "staged_bundle_fingerprint": {
+          "type": "string",
+          "description": "SHA-256 fingerprint over git diff --cached --name-status and git diff --cached --full-index --binary."
+        },
+        "staged_name_status": {
+          "type": "string",
+          "description": "Recorded git diff --cached --name-status output for staged-bundle inspection."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional free-form coordination note for this queued commit intent."
+        }
+      }
+    },
+    "agent_id": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_name", "platform", "model", "session_id_prefix"],
+      "description": "Per PDR-027 agent identity schema. Reused unchanged from thread-record identity rows.",
+      "properties": {
+        "agent_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Persistent descriptive name for this agent on this thread."
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Platform identifier: claude-code, cursor, codex, gemini, etc."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical model id, e.g. claude-opus-4-7-1m."
+        },
+        "session_id_prefix": {
+          "type": "string",
+          "description": "First 6 characters of the harness session ID; 'unknown' if not exposed."
+        }
+      }
+    },
+    "area": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "patterns"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["files", "workspace", "plan", "adr", "git"],
+          "description": "Kind of area being claimed. 'files' for path globs; 'workspace' for a pnpm workspace name; 'plan' for a plan file slug; 'adr' for an ADR number; 'git' for shared git transaction surfaces such as index/head."
+        },
+        "patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Patterns identifying the area. Globs for files; workspace names for workspace; plan file paths for plan; ADR numbers (e.g. 'ADR-163') for adr; git transaction labels (e.g. 'index/head') for git."
+        }
+      }
+    },
+    "closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "closed_at",
+        "closed_by",
+        "summary",
+        "evidence"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["explicit", "stale", "owner_forced"],
+          "description": "How the claim left the active registry: normal agent close, staleness archival, or owner-directed close."
+        },
+        "closed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the claim was closed or archived."
+        },
+        "closed_by": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable closure outcome."
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          },
+          "description": "Structured references that justify or explain the closure."
+        }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref", "summary"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "log_entry",
+            "decision_thread",
+            "claim",
+            "plan",
+            "adr",
+            "napkin",
+            "thread_record",
+            "commit",
+            "command_output"
+          ],
+          "description": "Kind of repository evidence the reference points at."
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative repository path, claim_id, commit hash, or durable evidence anchor."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this evidence supports the closure."
+        }
+      }
+    }
+  }
+}

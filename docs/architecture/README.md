@@ -3,25 +3,28 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-03-28
+last_reviewed: 2026-04-19
 ---
 
 # Architecture
 
-**Last Updated**: 2026-03-28
+**Last Updated**: 2026-04-19
 **Status**: Active architectural index
 
 ## Start Here
 
-1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) - **Read this first** to understand the core pattern
-2. **→ Current Architecture Overview (this page)** - Standard structure and boundaries
-3. **→ Historical Context: Greek Ecosystem Deprecation** ([deprecation doc](./greek-ecosystem-deprecation.md))
+1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) — **read this first** to understand the core pattern.
+2. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
+3. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.
 
-ADRs define how the system should work and are the architectural source of truth. Start with the [ADR index](./architectural-decisions/), then these foundational decisions that shape the entire codebase:
+The foundational ADRs that shape the entire codebase — the canonical
+[Start Here: 5 ADRs in 15 Minutes](./architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+block in the ADR index:
 
 - [ADR-029](./architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](./architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](./architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-048](./architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
 - [ADR-107](./architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK and NL boundary
 
 ## Reference Documentation
@@ -32,14 +35,14 @@ ADRs define how the system should work and are the architectural source of truth
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
   - `packages/core/` – foundational shared code and provider-neutral primitives (result/env/observability/eslint/openapi adapter)
-  - `packages/libs/` – shared runtime libraries (foundation libs: logger/env-resolution/search-contracts; adapter libs: sentry-node/sentry-mcp)
+  - `packages/libs/` – shared runtime libraries (foundation libs: logger/env-resolution/search-contracts; adapter lib: sentry-node)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools
-- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
+- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so the canonical Streamable HTTP transport (`/mcp`) — and any future stdio entry point generalised from it — share the same schema-derived contract
 - **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
 - Provider architecture: see [Provider System](./provider-system.md) and [Provider Contracts](./provider-contracts.md)
-- Getting started: see [Quick Start Guide](../foundation/quick-start.md)
+- Getting started: see the [root README Quick Start](../../README.md#quick-start)
 
 #### Rules & Relationships
 
@@ -48,6 +51,7 @@ ADRs define how the system should work and are the architectural source of truth
   repo-root tooling or fixtures require them.
 - Intra‑package relative imports are allowed; avoid private/internal subpaths.
 - Dependencies flow: `core` has no monorepo dependencies outside `core` (intra-core dependencies are permitted, and external dependencies must remain minimal and provider-neutral); foundation `libs` depend on `core`, with `search-contracts` as the documented exception that may consume approved `@oaknational/sdk-codegen` subpath exports; adapter `libs` may depend on foundation `libs` plus `core`; `sdks` depend on `core`/`libs` and approved generated SDK surfaces (for example runtime/search consume `@oaknational/sdk-codegen` exports per ADR-108, not direct `oak-search-sdk` → `curriculum-sdk` imports); `apps` depend on `sdks`/`libs`/`core`.
+- **Core package decomposition principle**: when splitting a core package that has acquired runtime dependencies, schemas and type-level code stay in `core`; the runtime pipeline moves to `libs`. This preserves core's provider-neutral, minimal-dependency constraint.
 
 ### Implementation Guides
 
@@ -66,6 +70,13 @@ ADRs define how the system should work and are the architectural source of truth
 
 ## Related Agent Guidance
 
+The wider system that governs how the architectural decisions and
+guidance below are authored, propagated, and reviewed is **the
+Practice** — see [Practice Core](../../.agent/practice-core/index.md)
+for the portable definition and
+[Practice Index](../../.agent/practice-index.md) for this
+repository's local bridge.
+
 - [Development Practice](../governance/development-practice.md)
 - [Testing Strategy](../../.agent/directives/testing-strategy.md)
 - [TypeScript Practice](../governance/typescript-practice.md)
@@ -75,4 +86,17 @@ ADRs define how the system should work and are the architectural source of truth
 - [Architectural Refinements Plan (completed)](../../.agent/plans/archive/completed/architectural-refinements-plan.md)
 - [Workspace Structure Options (completed analysis)](../../.agent/plans/archive/completed/workspace-structure-options.md)
 - [Serverless Hosting Plan (deferred)](../../.agent/plans/icebox/serverless-hosting-plan.md)
-- [OpenAI Connector Alias Removal](./openai-connector-deprecation.md)
+
+## Historical Context
+
+Prior architectural states retained for traceability — evidence trails
+cited from current ADRs, not current guidance. See
+[historical/README.md](./historical/README.md) for scope and
+contents. Do not read these to learn how the system works today.
+
+## Related Design Space
+
+- [Explorations](../explorations/) — option-weighing and research
+  documents that sit between session observations and committed ADRs.
+  Some inform ADRs that live in this directory; others inform plans
+  that live under `.agent/plans/`.

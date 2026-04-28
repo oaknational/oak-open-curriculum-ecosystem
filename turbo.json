@@ -12,7 +12,11 @@
     "CLERK_SECRET_KEY",
     "DANGEROUSLY_DISABLE_AUTH",
     "ELASTICSEARCH_URL",
-    "ELASTICSEARCH_API_KEY"
+    "ELASTICSEARCH_API_KEY",
+    "SENTRY_AUTH_TOKEN",
+    "SENTRY_DSN",
+    "SENTRY_MODE",
+    "SENTRY_TRACES_SAMPLE_RATE"
   ],
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
@@ -51,6 +55,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -66,6 +71,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -81,6 +87,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",

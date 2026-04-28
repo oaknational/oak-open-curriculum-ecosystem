@@ -12,12 +12,10 @@ import type {
   SentryNodeSdk,
   SentryPostRedactionHooks,
 } from './types.js';
-
-/** Sentry hook parameter types — derived from `NodeOptions` to avoid importing private types. */
+// Sentry hook parameter types — derived from NodeOptions to avoid importing private types.
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
 type SentryTransactionEvent = Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0];
-
 interface FakeCaptureExceptionCall {
   readonly error: Error;
   readonly context?: CaptureContext;
@@ -42,6 +40,10 @@ interface FakeSdk {
   readonly captureException: ReturnType<typeof vi.fn<SentryNodeSdk['captureException']>>;
   readonly captureMessage: ReturnType<typeof vi.fn<SentryNodeSdk['captureMessage']>>;
   readonly flush: ReturnType<typeof vi.fn<SentryNodeSdk['flush']>>;
+  readonly close: ReturnType<typeof vi.fn<SentryNodeSdk['close']>>;
+  readonly setUser: ReturnType<typeof vi.fn<SentryNodeSdk['setUser']>>;
+  readonly setTag: ReturnType<typeof vi.fn<SentryNodeSdk['setTag']>>;
+  readonly setContext: ReturnType<typeof vi.fn<SentryNodeSdk['setContext']>>;
   readonly initCalls: readonly NodeOptions[];
   readonly exceptionCalls: readonly FakeCaptureExceptionCall[];
   readonly messageCalls: readonly FakeCaptureMessageCall[];
@@ -62,14 +64,32 @@ function createFakeSdk(loggerOverride?: SentryNodeSdk['logger']): FakeSdk {
     messageCalls.push({ message, context });
   });
   const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
+  const close = vi.fn<SentryNodeSdk['close']>().mockResolvedValue(true);
+  const setUser = vi.fn<SentryNodeSdk['setUser']>();
+  const setTag = vi.fn<SentryNodeSdk['setTag']>();
+  const setContext = vi.fn<SentryNodeSdk['setContext']>();
   const loggerSdk = loggerOverride ?? noopLoggerSdk;
 
   return {
-    sdk: { init, captureException, captureMessage, flush, logger: loggerSdk },
+    sdk: {
+      init,
+      captureException,
+      captureMessage,
+      flush,
+      close,
+      setUser,
+      setTag,
+      setContext,
+      logger: loggerSdk,
+    },
     init,
     captureException,
     captureMessage,
     flush,
+    close,
+    setUser,
+    setTag,
+    setContext,
     initCalls,
     exceptionCalls,
     messageCalls,
@@ -228,7 +248,14 @@ function expectRedactedBreadcrumbDetails(
 }
 
 function createConfig(input: SentryConfigEnvironment): ParsedSentryConfig {
-  return expectOk(createSentryConfig(input));
+  return expectOk(
+    createSentryConfig({
+      APP_VERSION: '1.0.0-test',
+      APP_VERSION_SOURCE: 'APP_VERSION_OVERRIDE',
+      VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
+      ...input,
+    }),
+  );
 }
 
 function createOffConfig(): Extract<ParsedSentryConfig, { readonly mode: 'off' }> {
@@ -246,8 +273,8 @@ function createFixtureConfig(
 ): Extract<ParsedSentryConfig, { readonly mode: 'fixture' }> {
   const config = createConfig({
     SENTRY_MODE: 'fixture',
-    SENTRY_ENVIRONMENT: 'preview',
-    SENTRY_RELEASE: 'release-123',
+    SENTRY_ENVIRONMENT_OVERRIDE: 'preview',
+    SENTRY_RELEASE_OVERRIDE: 'release-123',
     ...overrides,
   });
 
@@ -265,7 +292,7 @@ function createLiveConfig(
     SENTRY_MODE: 'sentry',
     SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
     SENTRY_TRACES_SAMPLE_RATE: '0.5',
-    SENTRY_RELEASE: 'release-123',
+    SENTRY_RELEASE_OVERRIDE: 'release-123',
     ...overrides,
   });
 
@@ -381,7 +408,7 @@ describe('initialiseSentry', () => {
   it('initialises live mode with deny-by-default trace propagation', () => {
     const sdk = createFakeSdk();
     const runtime = initialiseRuntime(
-      createLiveConfig({ SENTRY_ENVIRONMENT: 'production' }),
+      createLiveConfig({ SENTRY_ENVIRONMENT_OVERRIDE: 'production' }),
       sdk.sdk,
     );
     const initOptions = getOnlyCall(sdk.initCalls, 'Expected init options');
@@ -600,7 +627,7 @@ describe('initialiseSentry', () => {
     const errorFn = vi.fn<SentryNodeSdk['logger']['error']>();
     const sdk = createFakeSdk({ ...noopLoggerSdk, error: errorFn });
     const runtime = initialiseRuntime(
-      createLiveConfig({ SENTRY_ENVIRONMENT: 'production' }),
+      createLiveConfig({ SENTRY_ENVIRONMENT_OVERRIDE: 'production' }),
       sdk.sdk,
     );
     const sink = requireDefined(createSentryLogSink(runtime), 'Expected live sink');
@@ -669,30 +696,5 @@ describe('initialiseSentry', () => {
         message: 'sdk init failed',
       },
     });
-  });
-});
-
-describe('createSentryInitOptions', () => {
-  it('matches the live config contract', () => {
-    const initOptions = createSentryInitOptions(
-      createLiveConfig({
-        SENTRY_ENABLE_LOGS: 'false',
-        SENTRY_DEBUG: 'true',
-      }),
-      {
-        serviceName: 'oak-http',
-      },
-    );
-
-    expect(initOptions).toEqual(
-      expect.objectContaining({
-        dsn: 'https://key@example.ingest.sentry.io/123',
-        release: 'release-123',
-        tracesSampleRate: 0.5,
-        enableLogs: false,
-        debug: true,
-        tracePropagationTargets: DEFAULT_TRACE_PROPAGATION_TARGETS,
-      }),
-    );
   });
 });

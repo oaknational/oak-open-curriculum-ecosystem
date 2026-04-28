@@ -5,7 +5,6 @@
     "Aila",
     "asteasolutions",
     "Cleanup",
-    "cloc",
     "codegen",
     "codemods",
     "commitlint",
@@ -29,6 +28,7 @@
     "Hodierne",
     "isinstance",
     "keystage",
+    "knip",
     "labelledby",
     "lexend",
     "linted",
@@ -65,8 +65,8 @@
     "rshe",
     "Scheffer",
     "semh",
-    "shellcheck",
     "Signaling",
+    "sonarqube",
     "spld",
     "strapline",
     "sucrase",
@@ -132,7 +132,11 @@
   "prettier.configPath": ".prettierrc.json",
   "editor.formatOnSave": true,
   "[typescriptreact]": {
-    "editor.defaultFormatter": "prettier.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.language": "en-GB"
+  "cSpell.language": "en-GB",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "oaknational-cloud",
+    "projectKey": "oaknational_oak-open-curriculum-ecosystem"
+  }
 }
