@@ -8,15 +8,17 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28T~12:50Z (Choppy Lapping Rudder / claude-code /
-claude-opus-4-7-1m / `d73d0b` — PR-87 Phase 2 pre-phase complete; security
-review found 2 MUST-FIX bypass paths (FIND-001/002 X-Forwarded-For spoofing
-on Vercel); Phase 2 sequencing revised so Phase 2.0.5 keyGenerator cure
-lands BEFORE the brand-preservation type narrowing. Four commits pushed:
-c1677d84, ca7e6e4b, 6a2b4e54, c601d515. Cluster A claim 87fb2797 closes
-at handoff; new strategic future plan added for agent coordination CLI
-ergonomics. Owner direction: move Phase 2 implementation to a fresh
-session.)
+**Last refreshed**: 2026-04-28T~15:30Z (Abyssal Cresting Compass /
+claude-code / claude-opus-4-7-1m / `6efc47` — PR-87 Phase 2.0.5 keyGenerator
+cure landed (a7ce1a39); doc alignment landed (d3e86fd1); PR-87 mega-plan
+archived and superseded by one-page CodeQL-only plan (d6693239). Mid-session
+re-classification of FIND-001/002 from MUST-FIX → HARDENING after Vercel
+docs verification — cure is defence-in-depth + configuration-drift insurance,
+not exploit closure. Owner-directed plan reset: scope-lock to CodeQL only;
+defer Sonar to a separate plan. Owner-flagged hypothesis at session close:
+the 1,680-file / +167k-line PR diff may be triggering CodeQL stale-instance /
+skip-by-size behaviour — fresh session probes that BEFORE writing structural
+cures.)
 
 **Incremental refresh**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
 `019dd3` — owner-requested deep consolidation pass. Historical continuity
@@ -139,7 +141,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave-and-phase-1.1-finish-env-scrub-three-commits-pushed-sonar-hotspot-panel-100-percent-OK / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5-keygenerator-cure-doc-alignment-and-plan-reset-to-codeql-only / 2026-04-28; Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2 / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-void-underscore-rule-author / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5 / 2026-04-27. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Mooring Atoll / `codex` / `GPT-5` / session-handoff-codex-identity-archive-claim-closeout / 2026-04-28; Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-planning-and-commit-gate-doctrine-handoff / 2026-04-28; Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning-final-handoff / 2026-04-28. |
 
@@ -163,6 +165,17 @@ Current branch-primary facts:
   evidence path is primary.
 
 ## Current Session Focus
+
+**Latest focus (2026-04-28T~15:30Z, Abyssal Cresting Compass)**: PR-87
+Phase 2.0.5 keyGenerator cure landed and reframed mid-session as defence-
+in-depth (not exploit closure) after Vercel-docs verification contradicted
+the security review's premise. Doc alignment landed (ADR-158 amended;
+governance + workspace docs aligned; dual-edge framing + read-only
+blast-radius callout added per owner direction). PR-87 mega-plan archived
+and superseded by a one-page CodeQL-only plan. Owner-flagged hypothesis at
+session close: the 1,680-file / +167k-line PR diff may be triggering CodeQL
+stale-instance / skip-by-size behaviour — fresh session probes that
+hypothesis BEFORE writing structural cures.
 
 Current distinct focus (2026-04-28 Coastal Mooring Atoll): owner-requested deep
 consolidation. The pass preserves knowledge while moving live operational
@@ -266,17 +279,29 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
-**Branch-primary lane (PR-87 Phase 2.0.5, owner-directed move to fresh
-session)**: Open a fresh `observability-sentry-otel` claim covering at
-minimum `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts`
-plus the new `rate-limiter-factory.unit.test.ts`. Then TDD the Vercel-aware
-`keyGenerator` cure per
-[`plans/observability/active/pr-87-architectural-cleanup.plan.md`](../../plans/observability/active/pr-87-architectural-cleanup.plan.md)
-§"Phase 2.0.5". Evidence + bypass-path enumeration at
-[`plans/observability/active/pr-87-cluster-a-security-review.md`](../../plans/observability/active/pr-87-cluster-a-security-review.md).
-The keyGenerator cure lands BEFORE Phase 2.1 (brand-preservation type
-narrowing) per reviewer recommendation; the spoofing bypass is exploitable
-today.
+**Branch-primary lane (PR-87 CodeQL alerts, owner-directed scope-lock to
+CodeQL only)**: Open
+[`plans/observability/current/pr-87-codeql-alerts.plan.md`](../../plans/observability/current/pr-87-codeql-alerts.plan.md)
+as the single source of truth (the prior `pr-87-architectural-cleanup.plan.md`
+was archived 2026-04-28 — do not re-derive from it). **First action is a
+diff-size / stale-instance probe**: PR-87 diff is 1,680 files / +167k lines,
+and an open alert may be a CodeQL platform skip-by-size or stale-instance
+artefact rather than a missing fix. For each open alert, check
+`most_recent_instance.commit_sha` vs PR head and confirm the file/line still
+exists. If most alerts are stale-instance, force a re-analysis (push a no-op
+or wait for the next push) before writing structural cures. Only if the
+hypothesis is rejected do you execute the table:
+
+- Alerts #70/71/72/81 (`js/missing-rate-limiting`): brand-preservation type
+  narrowing through `RateLimitRequestHandler`. One commit.
+- Alert #69: investigate recogniser shape; same brand cure or
+  owner-authorised dismissal with file:line evidence.
+- Alerts #76/#77 (`js/http-to-file-access`): typed `SchemaCache` capability
+  for the codegen schema-cache writer. One commit.
+
+Sonar is **out of scope** for this plan; a separate plan opens after CodeQL
+closes. Phase 2.0.5 keyGenerator cure already landed (a7ce1a39 + d3e86fd1)
+as defence-in-depth; it does not move CodeQL but is part of PR-87 history.
 
 Other lanes:
 

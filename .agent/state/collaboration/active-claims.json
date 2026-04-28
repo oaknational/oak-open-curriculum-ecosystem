@@ -1,30 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "96801993-df30-42c7-84be-20b252c36d3a",
-      "agent_id": {
-        "agent_name": "Abyssal Cresting Compass",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "6efc47"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
-            ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
-            ".agent/memory/active/distilled.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-28T15:21:29Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Archive PR-87 mega-plan (artefact-gravity); open one-page CodeQL-only plan; distil lesson"
-    }
-  ]
+  "claims": []
 }

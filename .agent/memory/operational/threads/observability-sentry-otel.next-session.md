@@ -1,5 +1,48 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Participating agent identities
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+|---|---|---|---|---|---|---|
+| Abyssal Cresting Compass | claude-code | claude-opus-4-7-1m | `6efc47` | PR-87 Phase 2.0.5 keyGenerator cure + doc alignment + plan-reset | 2026-04-28 | 2026-04-28 |
+
+(Identity rows for prior agents are recoverable from git history; this table is the additive-identity register going forward.)
+
+---
+
+**Session-close 2026-04-28T~15:30Z (Abyssal Cresting Compass, claude-code, claude-opus-4-7-1m, session seed `6efc47...`)** — Phase 2.0.5 (keyGenerator) landed; doc alignment landed; PR-87 mega-plan archived; one-page CodeQL plan opened. PR-87 head = origin = `d6693239`. Three commits this session:
+
+- `a7ce1a39` — `fix(rate-limit): add Vercel-aware keyGenerator with runtime-gated header trust`. New `vercelAwareKeyGenerator` + `RateLimiterFactoryOptions`; `createDefaultRateLimiterFactory` now requires explicit `isVercelRuntime` (no default-arg footgun). Wired through `createRateLimiters` + `application.ts` (derives from `runtimeConfig.env.VERCEL_ENV !== undefined`). 14 unit + 2 integration tests. **Mid-session re-classification** — security-reviewer found Vercel docs contradict the original "Vercel appends to X-Forwarded-For" premise; FIND-001/002 reclassified MUST-FIX → HARDENING. Cure landed as defence-in-depth + configuration-drift insurance, not exploit closure.
+- `d3e86fd1` — `docs(observability): align ADR-158 + governance docs with PR-87 keyGenerator cure`. ADR-158 amended with Runtime-Aware Key Extraction sub-section, dual-edge framing (Cloudflare + Vercel as two distinct layers per owner direction), read-only blast-radius callout, configuration-drift tripwires. `safety-and-security.md`, workspace `README.md`, and `middleware-chain.md` aligned.
+- `d6693239` — `docs(observability): archive PR-87 mega-plan; open one-page CodeQL-only plan`. Owner-directed reset: `pr-87-architectural-cleanup.plan.md` superseded by `pr-87-codeql-alerts.plan.md` (one-page table, CodeQL-only, Sonar deferred). Plan-as-artefact-gravity lesson distilled.
+
+**Critical observation, owner-flagged at session close**: PR-87 diff is **1,680 files / +167,170 / -18,791** — a CodeQL alert that "doesn't update" may actually be a CodeQL-platform skip-by-size or stale-instance behaviour, not a missing fix. Fresh session should test this hypothesis BEFORE writing structural cures (see "Next safe step" below).
+
+**Live state at session-close** (re-fetch at session-open per owner doctrine):
+
+- CodeQL open alerts on PR-87 head: **7** (5 × `js/missing-rate-limiting`, 2 × `js/http-to-file-access`). Sites listed in the new plan's table.
+- Sonar QG: ERROR (out of scope for the new plan; separate Sonar plan after CodeQL closes).
+- Active claims registry: empty at session close.
+- S5443 cross-thread coordination request to `agentic-engineering-enhancements` (posted by Choppy Lapping Rudder 2026-04-28T11:36Z): **still no response** as of session-close. Phase 2.0.5 proceeded independently per plan body. Next session should re-check.
+
+**What next session does (CodeQL-only, scope-locked)**:
+
+1. **Open the new plan**: `.agent/plans/observability/current/pr-87-codeql-alerts.plan.md` is the single source of truth. Do not re-derive from the archived mega-plan.
+2. **Test the diff-size / stale-instance hypothesis FIRST** before writing any structural cure. Two cheap probes:
+   - For each open alert, check `most_recent_instance.commit_sha` vs PR head. A stale SHA suggests CodeQL hasn't re-analysed that file since an earlier commit.
+   - Check whether the flagged file still exists at PR-87 head and whether the line numbers match. If a file was deleted/renamed by an earlier commit on the branch but the alert persists, it's a CodeQL stale-instance issue, not a missing fix.
+   - If most/all alerts are stale-instance, the fix is to force a re-run (push a no-op or wait for the next push) rather than restructure the code. Saves days.
+3. If the diff-size/stale-instance hypothesis is rejected (alerts are genuinely current), execute the table:
+   - Alerts #70/71/72/81: brand-preservation type narrowing through `RateLimitRequestHandler`. One commit.
+   - Alert #69: investigate recogniser shape; same brand cure or owner-authorised dismissal with file:line evidence.
+   - Alerts #76/#77: typed `SchemaCache` capability for the codegen schema-cache writer. One commit.
+4. Re-fetch live alerts after each push. When the table is empty, run Phase 12 verify and update PR description.
+5. Sonar work is **not in scope**. A separate plan opens after CodeQL closes (or after owner-authorised dismissals are recorded).
+
+**Discipline carried forward**: no fallback dispositions; one signal class per plan; one-page table only; no inline session histories in the plan body. If a re-grounding pass would need more than half a page, that's a signal to ask the owner whether the scope is still right rather than expand the plan.
+
+---
+
 **Session-close 2026-04-28T~12:50Z (Choppy Lapping Rudder, claude-code, claude-opus-4-7-1m, session seed `d73d0b...`)** — Phase 2 PRE-PHASE complete, scope EXPANDED. PR-87 head at session-close = origin = `c601d515`. Four commits landed and pushed in this session:
 
 - `c1677d84` — `chore(state): open Cluster A claim and post cross-thread S5443 request`. Coordination state for the Cluster A claim (87fb2797) plus two comms events (S5443 cross-thread regression request to agentic-engineering-enhancements + arrival liveness on this thread).

@@ -23,6 +23,80 @@ Older 2026-04-28 entries from the active file were moved during the final
 consolidation pass to
 [`archive/napkin-2026-04-28-current-overflow.md`](archive/napkin-2026-04-28-current-overflow.md).
 
+## 2026-04-28 — PR-87 Phase 2.0.5 + Doc Alignment + Plan Reset (Abyssal Cresting Compass)
+
+### What Was Done
+
+- TDD'd Phase 2.0.5 Vercel-aware keyGenerator cure (a7ce1a39).
+- Mid-session security re-review against Vercel docs reclassified FIND-001/002
+  MUST-FIX → HARDENING. Cure landed as defence-in-depth, not exploit closure.
+- Doc alignment commit (d3e86fd1) updated ADR-158 with Runtime-Aware Key
+  Extraction, dual-edge framing (Cloudflare + Vercel), read-only blast-radius
+  callout per owner direction.
+- Owner-directed plan reset (d6693239): archived 12-phase mega-plan; opened
+  one-page CodeQL-only plan; distilled "plan-as-artefact gravity" lesson.
+
+### Surprise 1 — security review premise contradicted by vendor docs
+
+- **Expected**: a security-reviewer finding classified MUST-FIX with detailed
+  threat-model walk-through is reliable enough to act on.
+- **Actual**: the cluster-A security review's load-bearing premise ("Vercel
+  appends to client-supplied X-Forwarded-For") was contradicted by Vercel's
+  own published docs ("we currently OVERWRITE the X-Forwarded-For header").
+  The reviewer had explicitly flagged that vendor behaviour was "documented,
+  not measured" — but no source citation accompanied the appends claim.
+- **Why expectation failed**: review-by-reasoning-from-authority can encode
+  outdated or unverified vendor-platform behaviour. The reviewer's verification
+  caveat was correct; the substantive classification was not.
+- **Behaviour change**: when a finding's classification turns on a vendor-
+  platform behaviour, fetch the current vendor docs and quote them inline
+  before MUST-FIX. Treat any uncited vendor claim as load-bearing-and-untested.
+  Captured as "verify load-bearing platform claims against current vendor docs
+  before MUST-FIX" methodology lesson; placement deferred to Practice Core.
+
+### Surprise 2 — live verification can be inconclusive even with a working preview
+
+- **Expected**: pushing to PR-87 → preview deploy → curl tests would directly
+  confirm or refute Vercel's overwrite-vs-append behaviour.
+- **Actual**: external observation could not distinguish the cases. Multi-
+  instance counter divergence (per ADR-158 FIND-005/006) made rate-limit
+  responses noisy; edge caching contaminated the metadata endpoint test;
+  Sentry preview logs had headers PII-redacted.
+- **Why expectation failed**: I assumed the rate limiter would behave as a
+  single-instance counter under test load. Vercel's serverless fan-out and
+  Cloudflare's edge cache mean external behavioural tests can't pin down
+  per-key behaviour without an unredacted echo endpoint.
+- **Behaviour change**: when designing a live-verification test for a
+  serverless deployment, name the multi-instance/cache/redaction
+  inconclusiveness modes upfront. If the test can't distinguish those from
+  the hypothesis under test, propose a debug-echo endpoint or an alternative
+  observation surface before running the test.
+
+### Surprise 3 — plan-as-artefact gravity
+
+- **Expected**: a plan that gets re-grounded each session converges over time.
+- **Actual**: the pr-87-architectural-cleanup plan accumulated re-grounding
+  meta-content (Session 1/2/2.0/2.0.5 histories, verification tables of stale
+  assertions, re-classification amendments) faster than it delivered closures.
+  After 5+ sessions, gates remained red. Owner correctly named the failure
+  mode and directed an archive + scope-locked restart.
+- **Why expectation failed**: the plan tried to handle CodeQL + Sonar +
+  duplications + 16 micro-clusters in one body. Mixed mechanics → mixed
+  velocity → recurring re-grounding cost > per-session closure rate. Adding
+  more meta-content to compensate made it worse.
+- **Behaviour change**: one signal class per plan; one-page table; no inline
+  session histories in the plan body; if a re-grounding pass would need >
+  half a page, ask the owner whether scope is still right. Distilled into
+  `distilled.md` §Process as "Plan-as-artefact gravity".
+
+### ADR/PDR candidates
+
+- **No new ADR candidate** beyond the ADR-158 amendment that already landed.
+- **PDR candidate (deferred to Practice Core)**: a methodology-lesson
+  surface for "verify vendor-platform claims before MUST-FIX classification."
+  Reviewer suggested sub-agent practice notes rather than ADR. Flagged for
+  consultation rather than acted on unilaterally.
+
 ## 2026-04-28 — Final Cloudflare MCP Handoff
 
 ### What Was Done
