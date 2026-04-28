@@ -20,7 +20,7 @@ const stubLogger = {
 
 describe('OAuth route rate limiting', () => {
   it('returns 429 with OAuth error shape after exceeding limit on POST /oauth/register', async () => {
-    const factory = createDefaultRateLimiterFactory();
+    const factory = createDefaultRateLimiterFactory({ isVercelRuntime: false });
     const oauthLimiter = factory({
       windowMs: 60_000,
       limit: 1,
@@ -73,7 +73,7 @@ describe('OAuth route rate limiting', () => {
   });
 
   it('rate-limits GET /oauth/authorize (amplification vector)', async () => {
-    const factory = createDefaultRateLimiterFactory();
+    const factory = createDefaultRateLimiterFactory({ isVercelRuntime: false });
     const oauthLimiter = factory({
       windowMs: 60_000,
       limit: 1,

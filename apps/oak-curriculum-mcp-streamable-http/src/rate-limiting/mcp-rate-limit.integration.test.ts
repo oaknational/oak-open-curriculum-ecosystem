@@ -20,7 +20,7 @@ function createTestRuntimeConfig() {
 
 /** Creates a factory that overrides all profiles to a low limit for fast testing. */
 function createLowLimitFactory(limit: number) {
-  const realFactory = createDefaultRateLimiterFactory();
+  const realFactory = createDefaultRateLimiterFactory({ isVercelRuntime: false });
   const lowLimitFactory: typeof realFactory = (options) =>
     realFactory({ ...options, windowMs: 60_000, limit });
   return lowLimitFactory;

@@ -1,5 +1,5 @@
 /**
- * Creates rate limiter middleware instances for the three route profiles.
+ * Creates rate limiter middleware instances for the four route profiles.
  *
  * Extracted from the composition root (`application.ts`) to keep that file
  * under the 250-line threshold. The factory is injectable for tests (ADR-078);
@@ -11,6 +11,7 @@ import type { RequestHandler } from 'express';
 
 import {
   type RateLimiterFactory,
+  type RateLimiterFactoryOptions,
   createDefaultRateLimiterFactory,
   MCP_RATE_LIMIT,
   OAUTH_RATE_LIMIT,
@@ -30,6 +31,9 @@ interface RateLimiters {
  * Creates rate limiter middleware for MCP, OAuth flow, OAuth metadata
  * discovery, and asset download routes.
  *
+ * @param factoryOptions - Configuration for the production factory. Ignored
+ *   when `factoryOverride` is supplied. The composition root derives
+ *   `isVercelRuntime` from the validated env (`runtimeConfig.env.VERCEL_ENV`).
  * @param factoryOverride - Optional factory for test injection. Defaults to
  *   {@link createDefaultRateLimiterFactory} (production `express-rate-limit`).
  * @returns An object containing all four rate limiter middleware instances.
@@ -37,15 +41,18 @@ interface RateLimiters {
  * @example
  * ```typescript
  * // Production
- * const limiters = createRateLimiters();
+ * const limiters = createRateLimiters({ isVercelRuntime: true });
  *
- * // Test injection
+ * // Test injection (factoryOptions is ignored when factoryOverride is set)
  * const fakeLimiter: RequestHandler = (_req, _res, next) => { next(); };
- * const limiters = createRateLimiters(() => fakeLimiter);
+ * const limiters = createRateLimiters({ isVercelRuntime: false }, () => fakeLimiter);
  * ```
  */
-export function createRateLimiters(factoryOverride?: RateLimiterFactory): RateLimiters {
-  const factory = factoryOverride ?? createDefaultRateLimiterFactory();
+export function createRateLimiters(
+  factoryOptions: RateLimiterFactoryOptions,
+  factoryOverride?: RateLimiterFactory,
+): RateLimiters {
+  const factory = factoryOverride ?? createDefaultRateLimiterFactory(factoryOptions);
   return {
     mcpRateLimiter: factory(MCP_RATE_LIMIT),
     oauthRateLimiter: factory(OAUTH_RATE_LIMIT),

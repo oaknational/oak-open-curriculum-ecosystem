@@ -25,7 +25,7 @@ import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
 
 function buildApp(metadataRateLimiterLimit: number, useStubTools: boolean): Express {
-  const factory = createDefaultRateLimiterFactory();
+  const factory = createDefaultRateLimiterFactory({ isVercelRuntime: false });
   const metadataRateLimiter = factory({
     windowMs: 60_000,
     limit: metadataRateLimiterLimit,

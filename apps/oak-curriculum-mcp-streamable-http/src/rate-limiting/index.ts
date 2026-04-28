@@ -1,14 +1,16 @@
 /**
  * Application-layer rate limiting for the HTTP MCP server.
  *
- * Provides a DI-friendly factory ({@link RateLimiterFactory}) and three
+ * Provides a DI-friendly factory ({@link RateLimiterFactory}) and four
  * pre-configured profiles ({@link MCP_RATE_LIMIT}, {@link OAUTH_RATE_LIMIT},
- * {@link ASSET_RATE_LIMIT}) for defence-in-depth behind CDN edge protection.
+ * {@link METADATA_RATE_LIMIT}, {@link ASSET_RATE_LIMIT}) for
+ * defence-in-depth behind CDN edge protection.
  *
  * @see ADR-158 for the multi-layer security architecture.
  */
 export {
   type RateLimiterFactory,
+  type RateLimiterFactoryOptions,
   createDefaultRateLimiterFactory,
 } from './rate-limiter-factory.js';
 

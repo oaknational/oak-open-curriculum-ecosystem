@@ -4,28 +4,61 @@ plan_ref: pr-87-architectural-cleanup
 phase: 2.1
 reviewer: security-reviewer (claude-opus)
 review_run_at: 2026-04-28T11:54Z
+re_review_run_at: 2026-04-28T13:58Z
 branch: feat/otel_sentry_enhancements
 ref_sha: 7c589a0a
 status: evidence
-findings_summary: "2 MUST-FIX, 2 SHOULD-FIX, 4 HARDENING; FIND-001/002 require keyGenerator cure BEFORE brand-preservation type narrowing"
+findings_summary: "Re-reviewed 2026-04-28 against current Vercel docs: FIND-001/002 reclassified MUST-FIX → HARDENING (premise contradicted); 2 SHOULD-FIX, 4 HARDENING; cure landing as defensive hardening not exploit closure"
 ---
 
 # PR-87 Cluster A — Pre-Phase Adversarial Security Review
+
+> **Re-assessment notice (2026-04-28T13:58Z).** The original review was
+> written against an unverified assumption that "Vercel's edge **appends**
+> the connecting client's IP to any incoming `X-Forwarded-For` header
+> rather than replacing it" (Topic 1, ATTACK section, Topic 2 CURRENT).
+> Independent verification against current Vercel docs at
+> <https://vercel.com/docs/headers/request-headers> (fetched 2026-04-28)
+> contradicts that premise: Vercel **overwrites** `X-Forwarded-For` on
+> non-Enterprise plans ("we currently overwrite the X-Forwarded-For header
+> and do not forward external IPs. This restriction is in place to prevent
+> IP spoofing"); custom-XFF passthrough is gated behind a paid Enterprise
+> "Trusted Proxy" feature.
+>
+> Re-review verdict (security-reviewer, claude-opus, 2026-04-28T13:58Z):
+> FIND-001 and FIND-002 are reclassified **MUST-FIX → HARDENING**. The
+> rotating-XFF bypass attack as described is not exploitable on this
+> deployment. The Vercel-aware `keyGenerator` cure remains worth landing
+> as **defence-in-depth** (configuration-drift insurance, decoupling from
+> `trust proxy`, protection if a customer-owned proxy is later added
+> upstream of Vercel) — but it does not need to land before the
+> Phase 2.1 brand-preservation work, and the commit framing must be
+> "hardening" rather than "exploit closure". FIND-003, FIND-004, and the
+> HARDENING items (FIND-005..009) are unchanged.
+>
+> The original "appends" framing below is preserved verbatim for audit
+> trail; treat the substantive sections as superseded by this notice for
+> any classification or sequencing decision.
 
 **Scope.** Live rate-limiting bypass surface on `feat/otel_sentry_enhancements`
 at ref `7c589a0a`, independent of CodeQL. Read-only review; no code changes
 proposed beyond architectural cures.
 
-**Status.** RISKS FOUND. Two MUST-FIX, two SHOULD-FIX, four HARDENING.
+**Status (original).** RISKS FOUND. Two MUST-FIX, two SHOULD-FIX, four HARDENING.
 The headline risk is straightforward `X-Forwarded-For` spoofing on Vercel
 because `app.set('trust proxy', 1)` is paired with the unmodified default
 `keyGenerator`.
+
+**Status (post-reassessment).** Two HARDENING (was MUST-FIX), two SHOULD-FIX,
+four HARDENING. No exploitable bypass on this deployment. See re-assessment
+notice above.
 
 **Verification limits.** Reviewer did not run live traffic against the
 deployed Vercel function. Findings are derived from source plus the
 installed `express-rate-limit@8.3.2` source in `node_modules`. Vercel-edge
 header-stripping behaviour is documented behaviour, not measured here;
-FIND-001 remains the dominant concern even under conservative assumptions.
+the original FIND-001 framing assumed an unverified "appends" semantic
+which Vercel docs contradict — see re-assessment notice above.
 
 ---
 

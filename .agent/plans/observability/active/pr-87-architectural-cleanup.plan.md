@@ -11,7 +11,7 @@ overview: >
   allowed dismissal / accept / false_positive / cpd-exclusion language as a
   fallback disposition.
 status: active
-last_updated: 2026-04-28T12:35Z
+last_updated: 2026-04-28T14:20Z
 todos:
   - id: phase-0-re-harvest
     content: "Phase 0: Live re-harvest of PR-87 signals (Sonar MCP, CodeQL alerts API, PR comments). Cluster table refresh."
@@ -29,11 +29,11 @@ todos:
     content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
     status: pending
   - id: cluster-a-security-review
-    content: "Phase 2.1 pre-phase adversarial security review: COMPLETE 2026-04-28T11:54Z. Findings: 2 MUST-FIX (FIND-001/002 X-Forwarded-For spoofing on Vercel bypasses every rate limiter), 2 SHOULD-FIX (FIND-003 OAuth single-bucket sharing, FIND-004 /healthz unlimited), 4 HARDENING (FIND-005..009). Evidence at .agent/plans/observability/active/pr-87-cluster-a-security-review.md. Reviewer recommendation: keyGenerator cure BEFORE brand narrowing."
+    content: "Phase 2.1 pre-phase adversarial security review: COMPLETE 2026-04-28T11:54Z; RE-REVIEWED 2026-04-28T13:58Z. Re-review against current Vercel docs (https://vercel.com/docs/headers/request-headers, fetched 2026-04-28) found the original 'Vercel APPENDS to X-Forwarded-For' premise was contradicted by Vercel's documented OVERWRITE behaviour. FIND-001/002 reclassified MUST-FIX → HARDENING (no exploitable bypass on this deployment). FIND-003/004 SHOULD-FIX, FIND-005..009 HARDENING unchanged. Cure remains worth landing as defence-in-depth + configuration-drift insurance. Evidence at .agent/plans/observability/active/pr-87-cluster-a-security-review.md (re-assessment notice in frontmatter)."
     status: completed
   - id: cluster-a-keygenerator-cure
-    content: "Phase 2.0.5 (FIND-001/002, MUST-FIX): centralise Vercel-aware keyGenerator in rate-limiter-factory.ts — read x-vercel-forwarded-for first (split on comma, take first), fall back to req.ip only when absent, pass through ipKeyGenerator(ip, 56). RED+GREEN+REFACTOR with rotating-XFF integration test. Lands BEFORE Phase 2.1 brand work; spoofing bypass is exploitable today."
-    status: pending
+    content: "Phase 2.0.5 (FIND-001/002, HARDENING after re-review): vercelAwareKeyGenerator + RateLimiterFactoryOptions in rate-limiter-factory.ts; isVercelRuntime gates header trust (x-vercel-forwarded-for ignored on non-Vercel because client-spoofable). Required parameter (no default) per wilma's footgun finding. Wired through createRateLimiters + application.ts (derives from runtimeConfig.env.VERCEL_ENV). 14 unit + 2 integration tests across both runtime branches. 5 reviewers absorbed (security re-review, code, type, wilma, test). Live preview verification scheduled post-push."
+    status: completed
   - id: cluster-a-rate-limiting
     content: "Phase 2.1 (Cluster A): DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Type narrowing through RateLimitRequestHandler end-to-end (factory return, DI param types, registration sites, test fake). Closes 4 of 5 alerts; #69 disposition follows the (A)/(B)/(C) ladder in the cluster section. No fallback dispositions."
     status: pending

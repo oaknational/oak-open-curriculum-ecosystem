@@ -12,7 +12,7 @@ import { createFakeLogger } from '../test-helpers/logger-fakes.js';
 
 describe('asset download route rate limiting', () => {
   it('returns 429 after exceeding the per-IP limit', async () => {
-    const factory = createDefaultRateLimiterFactory();
+    const factory = createDefaultRateLimiterFactory({ isVercelRuntime: false });
     const assetLimiter = factory({
       windowMs: 60_000,
       limit: 1,

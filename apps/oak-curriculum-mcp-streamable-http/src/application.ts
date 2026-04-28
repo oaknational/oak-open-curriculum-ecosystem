@@ -159,8 +159,12 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
 
+  // VERCEL_ENV is set on Vercel (production|preview|development), absent
+  // elsewhere — see rate-limiter-factory.ts module TSDoc for why this
+  // gates trust of x-vercel-forwarded-for.
+  const isVercelRuntime = options.runtimeConfig.env.VERCEL_ENV !== undefined;
   const { mcpRateLimiter, oauthRateLimiter, metadataRateLimiter, assetRateLimiter } =
-    createRateLimiters(options.rateLimiterFactory);
+    createRateLimiters({ isVercelRuntime }, options.rateLimiterFactory);
 
   const { dnsRebindingMiddleware, allowedHosts } = setupPreAuthPhases(
     app,
