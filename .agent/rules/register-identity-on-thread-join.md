@@ -27,6 +27,17 @@ descriptive default with the portable agent-tools CLI:
 pnpm agent-tools:agent-identity --format display
 ```
 
+For collaboration-state writes, prefer the stricter preflight format because
+it emits the full PDR-027 block plus seed source:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+```
+
+When `CODEX_THREAD_ID` is present, new Codex shared-state writes must not use
+`Codex` / `unknown`; the thread id is the deterministic seed for both the
+display name and the six-character session prefix.
+
 Use the platform-provided seed when available (`CLAUDE_SESSION_ID` or
 `CODEX_THREAD_ID`). **Cursor (Composer)** sets `OAK_AGENT_SEED` from the
 composer `session_id` via the project `sessionStart` hook

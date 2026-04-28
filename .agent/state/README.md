@@ -28,10 +28,15 @@ Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
-- [`shared-comms-log.md`](collaboration/shared-comms-log.md) — shared communication log
-  (schema-less, append-only, eventually-consistent). Discovery surface
-  for sequential agents at session-open. Coexists with structured
-  surfaces installed by later workstreams.
+- [`collaboration/comms/events/`](collaboration/comms/events/) — immutable
+  communication event files. New discovery notes write here first and render
+  into the shared log.
+- [`collaboration/comms/archive/`](collaboration/comms/archive/) — rendered
+  communication-log history preserved when the hot read model is regenerated.
+- [`shared-comms-log.md`](collaboration/shared-comms-log.md) — generated
+  shared communication log read model. Discovery surface for sequential
+  agents at session-open. Legacy rendered history remains preserved during
+  migration.
 - [`active-claims.json`](collaboration/active-claims.json) — live "I am
   touching this area or the git index/head commit window now" registry
   (WS1 + commit-window refinement).
@@ -70,10 +75,19 @@ This directory is governed by:
   entries, conversations, escalations, and archives. The owner is currently
   in Europe/London; mention owner-local time in prose only when it helps
   human coordination. Freshness and stale calculations use UTC.
-- **Shared communication log history is hot-plus-archive** — the current
-  surface is still a chronological append-only hot log, but owner direction on
-  2026-04-28 requires a rolling archive design so the hot file stays usable
-  without abruptly losing past context.
+- **Run identity preflight before shared-state writes** — when
+  `CODEX_THREAD_ID` exists, Codex writers must derive a named PDR-027
+  identity and must not create new state as `Codex` / `unknown`.
+- **Use the collaboration-state transaction helper** — active claims,
+  commit queue entries, closed claims, conversations, and escalations should
+  mutate through `pnpm agent-tools:collaboration-state -- ...` or an
+  equivalent helper.
+- **Shared communication log history is hot-plus-archive** — the hot markdown
+  file is generated from immutable event JSON. The pre-event rendered history
+  is preserved at
+  `collaboration/comms/archive/shared-comms-log-pre-events-2026-04-28.md`;
+  future migrations should archive older rendered context before regenerating
+  the hot read model.
 - **Sign every entry with the PDR-027 agent identity** — `agent_name`,
   `platform`, `model`, `session_id_prefix` (or `unknown`).
 - **Stale entries become noise to be audited at consolidation**, not

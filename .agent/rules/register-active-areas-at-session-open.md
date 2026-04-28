@@ -8,10 +8,15 @@ artefact** that proves you consulted (consultation must be observable
 post-hoc; an unwritten consultation is indistinguishable from no
 consultation at all):
 
+Before writing the claim, run identity preflight or an equivalent wrapper.
+Codex sessions with `CODEX_THREAD_ID` available must derive a named
+`agent_name` and `session_id_prefix`; new Codex claim writes must not use
+`Codex` / `unknown`.
+
 - **(a-1) Registry empty (bootstrap fast-path)** — the registry has no
-  entries other than your own. Append a single
-  `"no other agents present"` note to the shared communication log and
-  register your claim. The shared-communication-log entry is the artefact.
+  entries other than your own. Append a single comms event noting
+  `"no other agents present"` and register your claim. The rendered
+  shared-log entry is the artefact.
 - **(a-2) Registry populated but no overlap** — other agents have active
   claims, but none of their `areas` intersect yours. Register your own
   claim with a `notes` value summarising the scan, e.g.
@@ -22,7 +27,7 @@ consultation at all):
   [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
   and any open decision-thread files for context, then decide how to
   coordinate: proceed with caution, ping the other agent via the shared
-  communication log, open or append a decision thread under
+  communication log through a comms event, open or append a decision thread under
   `.agent/state/collaboration/conversations/`, request a sidebar inside
   that conversation, record a joint decision when peer commitment is
   needed, open an owner escalation under
@@ -30,7 +35,7 @@ consultation at all):
   `AskUserQuestion`.
   Record the decision in your own claim's `notes` field citing the other
   agent's `claim_id` and, when used, the `conversation_id` (and additionally
-  append a shared-communication-log entry if the decision requires
+  append a comms event if the decision requires
   response). The `notes` field plus optional log or decision-thread entry
   are the artefacts.
 
@@ -78,6 +83,14 @@ ownership before `git commit`, and clear the queue entry after success. If
 another fresh `git:index/head` claim exists, coordinate rather than racing the
 git lock.
 
+Claim, heartbeat, close, stale-archive, and commit-queue mutations should use
+the collaboration-state transaction helper, directly or through the commit
+skill:
+
+```bash
+pnpm agent-tools:collaboration-state -- claims open|heartbeat|close|archive-stale ...
+```
+
 ## At session close
 
 Write durable closure history, then remove your active entry:
@@ -106,8 +119,9 @@ is now well-recorded but does not prevent recurrence.
 
 WS0 of the
 [multi-agent-collaboration-protocol](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
-plan installed the shared communication log — a schema-less append-only surface
-that any agent can read for "what has been happening here recently?" WS1
+plan installed the shared communication log — now treated as a generated
+read model from immutable comms events — that any agent can read for "what
+has been happening here recently?" WS1
 (this rule) crystallises the active-area signal into a queryable structured
 registry. The rule converts a discoverable convention into an active,
 always-applied tripwire at session open — the same conversion
@@ -159,7 +173,7 @@ gradient as a refinement amendment.
 ## Bootstrap fast-path
 
 If `active-claims.json` contains no entries other than your own, append a
-single line to the shared communication log noting *"no other agents present"* and proceed.
+single comms event noting *"no other agents present"* and proceed.
 Solo sessions pay the protocol's minimum overhead — one read, one write —
 not the full coordination cycle.
 

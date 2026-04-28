@@ -8,9 +8,9 @@
 ## Portability Clarification
 
 All agent infrastructure in this repository must be cross-vendor wherever
-the behaviour can be expressed in repo-owned surfaces. This plan does not
-create the first cross-vendor collaboration substrate, and it must not be
-read as permission to build single-agent infrastructure elsewhere.
+the behaviour can be expressed in local portable Practice surfaces. This plan
+does not create the first cross-vendor collaboration substrate, and it must not
+be read as permission to build single-agent infrastructure elsewhere.
 
 The baseline collaboration substrate is already cross-vendor: markdown,
 JSON state, rules, commands, skills, and schemas that Claude Code, Codex,

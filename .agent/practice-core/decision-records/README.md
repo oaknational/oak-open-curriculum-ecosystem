@@ -127,3 +127,4 @@ marked as host-local context and not carrying decision substance.
 | [PDR-032](PDR-032-reference-tier-as-curated-library.md) | Reference Tier as Curated Library | Accepted |
 | [PDR-033](PDR-033-vendor-doc-review-for-unknown-unknowns.md) | Vendor-Doc Review for Unknown Unknowns in Third-Party Platform Plans | Accepted |
 | [PDR-034](PDR-034-test-fixtures-encode-production-shape.md) | Test Fixtures Encode Production Shape, Not the Code's Expectation | Accepted |
+| [PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md) | Agent Work Capabilities Belong to the Practice | Accepted |

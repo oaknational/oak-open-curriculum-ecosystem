@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-03-04
-**Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md)
+**Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
 
@@ -363,6 +363,16 @@ surface. `pnpm portability:check` now validates forward coverage,
 reverse adapter links, wrapper form, `skills-lock.json`, symlink-free
 skill adapters, and Claude tracked permission parity.
 
+### 2026-04-28 — Agent-work capability ownership boundary
+
+PDR-035 clarifies that agent collaboration, coordination, work management,
+direction, lifecycle, identity, claims, handoff, review routing, and adjacent
+agent-work behaviours are Practice substance by default. This ADR's layer model
+therefore describes how this repo hosts and activates those artefacts; it does
+not make local platform adapters, state files, or tooling the source of
+portable agent-work doctrine. ADR-165 records this repository's phenotype
+boundary for those local surfaces.
+
 ## References
 
 - `.agent/skills/` — canonical skills (36: 12 active, 24 passive)
@@ -371,3 +381,4 @@ skill adapters, and Claude tracked permission parity.
 - `.agent/sub-agents/` — canonical sub-agent prompts (ADR-114), personas, and components
 - `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` — platform adapters
 - [ADR-135](135-agent-classification-taxonomy.md) — agent classification taxonomy referenced in the 2026-04-17 amendment
+- [ADR-165](165-agent-work-practice-phenotype-boundary.md) — local phenotype boundary for PDR-035 agent-work capabilities

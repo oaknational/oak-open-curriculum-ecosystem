@@ -101,7 +101,7 @@ committing, and the commit skill closes the claim on success, failure, or
 abort. The 2026-04-27 `2ccefad4` turn-race then showed that visibility is not
 ordering. Queue-first follow-up completed in
 [`intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md):
-schema v1.3.0 adds an ordered advisory `commit_queue`, and the repo-owned
+schema v1.3.0 adds an ordered advisory `commit_queue`, and the local
 helper verifies staged file equality, staged fingerprint, and commit subject
 before a commit is allowed to make history durable. The durable governance home
 is now
@@ -110,10 +110,11 @@ is now
 owner-directed pass.
 
 The collaboration substrate is cross-vendor by design. Its authoritative
-surfaces are repo-owned markdown, JSON state, rules, commands, skills, and
-schemas readable by Claude Code, Codex, Cursor, and other capable agents.
-Platform-specific wrappers may improve ergonomics, but they are adapters
-around the portable substrate, not the collaboration authority.
+surfaces are local portable Practice markdown, JSON state, rules, commands,
+skills, and schemas readable by Claude Code, Codex, Cursor, and other capable
+agents. Platform-specific wrappers may improve ergonomics, but they are
+adapters around the portable substrate, not the collaboration authority. PDR-035
+and ADR-165 now name the concept/phenotype split for this boundary.
 
 WS5 remains **paused on owner direction**. The evidence surface has moved on
 since the original 2026-04-25 pause: later shared-communication-log entries
@@ -210,16 +211,16 @@ ownership, or conflict resolution. The proposal is to install one.
    claims. **Every other principle in this list is in service to this
    one.**
 2. **Platform independence is a core value and operating constraint**.
-   The collaboration system must be able to operate fully from repo-owned
-   markdown, JSON, rules, commands, skills, hooks, and other portable
-   surfaces that any capable agent system can read and write.
+   The collaboration system must be able to operate fully from local portable
+   Practice markdown, JSON, rules, commands, skills, hooks, and other surfaces
+   that any capable agent system can read and write.
    Platform-native agent-team features may help build, inspect, or stress
    test this system, and platform-specific tools may feed lessons back into
-   the repo-owned surfaces, but they are optional accelerants. They must
-   never become operational dependencies, fallbacks, or replacements for
-   the repo-owned protocol. Where a coordination behaviour can be platform
-   agnostic, make it platform agnostic; use platform-specific affordances
-   only behind adapters or as non-authoritative aids.
+   the local surfaces, but they are optional accelerants. They must never
+   become operational dependencies, fallbacks, or replacements for the
+   Practice protocol. Where a coordination behaviour can be platform agnostic,
+   make it platform agnostic; use platform-specific affordances only behind
+   adapters or as non-authoritative aids.
 3. **Existing `collaboration.md` is implicitly user-only**. Renaming to
    `user-collaboration.md` and adding a sibling `agent-collaboration.md`
    names what is already implicit and creates symmetric room for the
@@ -331,7 +332,7 @@ ownership, or conflict resolution. The proposal is to install one.
   files prove the design. (See Follow-up Work for evidence-gated hooks.)
 - **No platform-native agent-team dependency**. Platform-specific team or
   collaboration features may help build or test the protocol, but the
-  protocol itself must remain operable from repo-owned portable surfaces.
+  protocol itself must remain operable from local portable Practice surfaces.
 - **No threat model beyond trusted agents**. The protocol assumes agents
   follow the doctrine in good faith. Misbehaving agents are out of scope.
 - **All agents work on the same branch**. Isolation is conventional
@@ -1282,7 +1283,7 @@ schemas, but those amendments are separate commits with their own gates.
 | Platform-adapter rule-loading varies across Claude/Cursor/Codex | WS4A made the canonical workflow surfaces explicit and `pnpm portability:check` passed; WS5 watches real platform engagement and routes any platform-specific complexity to follow-up. (Wilma MAJOR-7 absorbed.) |
 | Two agents attempt WS0 simultaneously | Worst case is git merge conflict on rename; second agent rebases or coordinates with owner via existing channels. The protocol's *function* does not depend on enforced isolation at WS0 land. (Wilma BLOCKING-1 absorbed under advisory model.) |
 | Bidirectional citation chain (rule ↔ gate-recovery-cadence) drifts silently | WS0 acceptance adds consolidate-docs validation step; WS4A wires the validation into the audit cycle. (Wilma MINOR-10 absorbed.) |
-| Platform-native agent-team features become an implicit dependency | Design Principle 2 forbids this. Platform-specific tools may help build or inspect the repo-owned system, but operation must remain markdown/JSON/rules/commands/skills/hooks first and portable across agent systems. |
+| Platform-native agent-team features become an implicit dependency | Design Principle 2 forbids this. Platform-specific tools may help build or inspect the local phenotype, but operation must remain markdown/JSON/rules/commands/skills/hooks first and portable across agent systems. |
 | Misbehaving agent claims excessive scope or never closes claims | Trusted-agents threat model named explicitly in Design Principle 13. Owner detects and resolves at consolidation. Hostile-agent threat model is a future PDR, out of scope. (Wilma MINOR-11, MINOR-12 absorbed.) |
 
 ## Wilma's Adversarial Review — Findings Absorbed
@@ -1428,7 +1429,7 @@ After WS5 completes, run `/jc-consolidate-docs` over the new surfaces:
    coordination behaviour can be platform agnostic, it should be. The
    protocol may use platform-specific tools to help build, inspect, and
    stress test the system, but those tools must never become the system
-   or a required fallback. The repo-owned markdown/JSON/rules/commands/
+   or a required fallback. The local markdown/JSON/rules/commands/
    skills/hooks surfaces must be sufficient to operate fully. Settled
    2026-04-26.
 8. **Operational seeds in every workstream**. Each WS lands with both

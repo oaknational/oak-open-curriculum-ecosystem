@@ -1,5 +1,6 @@
-import { randomUUID } from 'node:crypto';
-import { readFile, rename, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
+
+import { updateJsonFileWithRetry } from '../collaboration-state/index.js';
 
 import {
   type CommitIntent,
@@ -19,15 +20,18 @@ export async function readRegistry(registryPath: string): Promise<CommitQueueReg
 }
 
 /**
- * Atomically write an updated active-claims registry.
+ * Transactionally update the active-claims registry for queue writes.
  */
-export async function writeRegistry(
+export async function updateRegistry(
   registryPath: string,
-  registry: CommitQueueRegistry,
+  transform: (registry: CommitQueueRegistry) => CommitQueueRegistry,
 ): Promise<void> {
-  const tmpPath = `${registryPath}.tmp-${randomUUID()}`;
-  await writeFile(tmpPath, `${JSON.stringify(registry, null, 2)}\n`);
-  await rename(tmpPath, registryPath);
+  await updateJsonFileWithRetry({
+    filePath: registryPath,
+    parseText: (text) => parseRegistry(JSON.parse(text), registryPath),
+    transform,
+    maxAttempts: 5,
+  });
 }
 
 function parseRegistry(value: unknown, registryPath: string): CommitQueueRegistry {

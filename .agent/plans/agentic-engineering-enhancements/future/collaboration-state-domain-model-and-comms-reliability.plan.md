@@ -1,6 +1,6 @@
 # Collaboration State Domain Model and Communication Reliability
 
-**Status**: 📋 STRATEGIC / FUTURE
+**Status**: 📋 STRATEGIC / FUTURE — FIRST SLICE PROMOTED
 **Domain**: Agentic Engineering Enhancements
 **Parent**:
 [`agent-collaboration.md`](../../../directives/agent-collaboration.md)
@@ -10,10 +10,22 @@ and
 [`agent-collaboration-channels.md`](../../../memory/executive/agent-collaboration-channels.md);
 [`collaboration-state-lifecycle.md`](../../../memory/operational/collaboration-state-lifecycle.md);
 [`intent-to-commit-and-session-counter.plan.md`](intent-to-commit-and-session-counter.plan.md);
-[`cross-vendor-session-sidecars.plan.md`](cross-vendor-session-sidecars.plan.md)
+[`cross-vendor-session-sidecars.plan.md`](cross-vendor-session-sidecars.plan.md);
+[PDR-035](../../../practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md);
+[ADR-165](../../../../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)
 
-Strategic brief, not executable work yet. Execution decisions are finalised
-only if this is promoted to `current/` or `active/`.
+Strategic brief. The first executable slice is now promoted as
+[`../current/collaboration-state-write-safety.plan.md`](../current/collaboration-state-write-safety.plan.md),
+focused on deterministic identity preflight, safe shared-state writes, TTL
+cleanup, immutable comms events, and hook deferral. This future brief remains
+the broader domain-model reference for later attention-routing, archive, and
+hook polish.
+
+**Owner priority update (2026-04-28):** native hooks and session-exit cleanup
+are refinements. The pressing problem is clashing writes to shared
+collaboration state. The next session should promote this strategic brief into
+a current executable plan focused first on multi-agent-safe writes for shared
+state records. Do not wait for more collision evidence before promotion.
 
 ## Problem and Intent
 
@@ -35,6 +47,15 @@ The intent is to design a clearer collaboration-state domain model and a more
 reliable write path while preserving the Practice's low-friction operating
 style. The target is not "more machinery"; it is fewer ambiguous choices at the
 moment an agent needs to communicate.
+
+Priority order:
+
+1. relieve shared-state write collisions and partial-read/write hazards across
+   the full state family;
+2. define only enough domain-model boundary to choose correct write mechanisms
+   per state record type;
+3. then refine lifecycle automation, including hooks, session-close cleanup,
+   and push-style attention where platform support exists.
 
 Metacognition note: the bridge from action to impact is responsibility
 separation. A queued or event-log write path only helps if agents know whether
@@ -104,13 +125,15 @@ owner, or capturing learning for later distillation.
   rolling archive model so the hot narrative surface stays readable without
   abruptly losing past context.
 - Codex-specific note: current Codex supports hooks, including turn-scoped
-  `Stop`, but no documented `SessionEnd` equivalent has been verified. Codex
-  should therefore rely on standard freshness/TTL cleanup for missed
-  session-close handling until a true session-end hook is documented and wired.
+  `Stop`, but no documented `SessionEnd` equivalent has been verified. This is
+  not blocking the urgent shared-state write work. Codex should rely on
+  standard freshness/TTL cleanup for missed session-close handling until a true
+  session-end hook is documented and wired.
 - `agent-tools` is a TypeScript-specific implementation surface in this repo.
-  The capabilities it implements are Practice capabilities and should have a
-  portable conceptual contract that can be reimplemented in non-TypeScript
-  Practices.
+  The capabilities it implements are Practice capabilities by default
+  (PDR-035) and should have a portable conceptual contract that can be
+  reimplemented in non-TypeScript Practices. ADR-165 records this repo's local
+  phenotype boundary.
 - Agent identity is itself part of the domain model. A session reporting as
   `Codex` / `unknown` is not just cosmetic: several continuity mechanisms rely
   on stable agent identity for claims, sidebars, queue entries, closures, and
@@ -128,6 +151,8 @@ In scope:
 - Define the domain roles for collaboration-state surfaces:
   shared discovery narrative, live ownership, commit intent, structured
   coordination, owner escalation, durable closure history, and learning capture.
+- Prioritise implementation decisions that reduce real write clashes in shared
+  state over hook/session-exit refinements.
 - Decide whether the shared communication log should become a generated read
   model from per-entry events.
 - Decide the write protocol for every shared inter-agent state family after
@@ -205,20 +230,21 @@ The leading candidate is an event-log-backed communication surface:
   and pre-edit checks.
 - Treat session-close as a first-class lifecycle event where supported. Claude
   Code, Gemini, Cursor, and GitHub Copilot can be evaluated for native
-  session-end cleanup hooks during promotion. Codex currently has hooks but no
-  documented session-end hook; use turn-scoped `Stop` only for best-effort
-  reminders and standard TTL/janitor cleanup for missed closes.
+  session-end cleanup hooks during promotion, but this must not delay the
+  write-safety slice. Codex currently has hooks but no documented session-end
+  hook; use turn-scoped `Stop` only for best-effort reminders and standard
+  TTL/janitor cleanup for missed closes.
 
 SQLite or another database remains a later option if event files prove
 insufficient. It should not be the first tracked source of truth because binary
-diffs and merge behaviour are poor for repo-owned Practice state.
+diffs and merge behaviour are poor for local Practice state instances.
 
 ## Dependencies and Sequencing Assumptions
 
 - Finish the current documentation refresh first so the existing Practice keeps
   working while the deeper model is designed.
-- Collect at least one more concrete collision or near-collision from real
-  multi-agent use, unless the owner explicitly promotes this plan sooner.
+- The owner has already promoted the urgency of shared-state write collisions.
+  Do not wait for another collision before creating the executable plan.
 - Review the existing communication-channel register before inventing new
   surfaces:
   `memory/executive/agent-collaboration-channels.md`.
@@ -256,7 +282,7 @@ diffs and merge behaviour are poor for repo-owned Practice state.
 - Shared communication history rotates predictably, with archived history still
   discoverable during consolidation and incident reconstruction.
 - The TypeScript implementation in `agent-tools` is clearly described as a
-  host-local implementation of portable Practice behaviour.
+  host-local phenotype implementation of portable Practice behaviour.
 
 ## Risks and Unknowns
 
@@ -291,7 +317,12 @@ diffs and merge behaviour are poor for repo-owned Practice state.
 
 ## Promotion Trigger Into `current/`
 
-Promote this to a current executable plan when any of these happens:
+**Satisfied 2026-04-28 by owner direction:** resolving clashing writes to shared
+state is pressing, while hooks are a refinement the Practice can live without
+for now.
+
+Promote this to a current executable plan now. The following remain additional
+triggers/evidence, not prerequisites:
 
 - another shared-log collision, claim/queue collision, conversation write
   collision, closure/archive conflict, or partial-read incident occurs;
@@ -308,7 +339,8 @@ Promote this to a current executable plan when any of these happens:
 ## Executable-Plan Notes For Promotion
 
 When promoted, use an executable quality-fix or adoption-rollout plan. The first
-implementation slice should be TDD-shaped:
+implementation slice should be TDD-shaped and scoped to shared-state
+write-safety before hook/session-exit automation:
 
 1. RED: validation tests prove the chosen shared-state write protocols reject
    malformed timestamps, missing identity, duplicate event ids, stale/future

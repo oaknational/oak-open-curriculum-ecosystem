@@ -1,7 +1,8 @@
 # Use the Shared Communication Log
 
-Before starting work on any non-trivial edit, append a timestamped entry
-to [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
+Before starting work on any non-trivial edit, append a timestamped comms
+event that renders into
+[`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md),
 naming what you intend to touch and signing with your agent identity.
 Use UTC ISO 8601 timestamps with a trailing `Z` for shared log headings and
 structured collaboration state. Read recent entries first to discover what
@@ -23,12 +24,11 @@ threads are sibling state surfaces with distinct purposes:
   working on right now*. Registration is governed by the
   [`register-active-areas-at-session-open`](register-active-areas-at-session-open.md)
   rule.
-- **Free-form discussion lives in `shared-comms-log.md`** — schema-less, append-only.
-  Use this for narrative context, observations, coordination notes,
-  open questions, and anything that does not fit the claim schema.
-  Append entries when announcing a session start, declaring a
-  non-trivial change of direction, or leaving notes for whoever reads
-  next.
+- **Free-form discussion lives in immutable comms events rendered to
+  `shared-comms-log.md`**. Use this for narrative context, observations,
+  coordination notes, open questions, and anything that does not fit the claim
+  schema. Append events when announcing a session start, declaring a
+  non-trivial change of direction, or leaving notes for whoever reads next.
 - **Structured async decisions live in
   [`conversations/`](../state/collaboration/conversations/)** —
   versioned decision-thread JSON. Use this when coordination needs a
@@ -61,8 +61,15 @@ ad-hoc field to an existing surface.
   — decision-thread schema authority.
 - [`escalation.schema.json`](../state/collaboration/escalation.schema.json)
   — owner-escalation schema authority.
+- [`collaboration-state-write-safety.plan.md`](../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
+  — current comms-event and transaction-helper implementation plan.
 
 ## Identity
 
 Sign entries with the PDR-027 identity row: `agent_name`, `platform`,
 `model`, `session_id_prefix` (or `unknown`).
+
+When `CODEX_THREAD_ID` exists, Codex entries must use
+`pnpm agent-tools:collaboration-state -- identity preflight ...` or an
+equivalent wrapper so `agent_name` and `session_id_prefix` are deterministic,
+not `Codex` / `unknown`.

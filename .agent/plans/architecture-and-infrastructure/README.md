@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-04-16
+**Last Updated**: 2026-04-28
 
 ---
 
@@ -33,6 +33,11 @@ Quality gate hardening has been promoted to current (2026-04-11):
 [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md).
 Knip triage child plan completed 2026-04-12 and archived to
 [archive/completed/knip-triage-and-remediation.plan.md](archive/completed/knip-triage-and-remediation.plan.md).
+
+Workspace layer separation audit has been promoted to current (2026-04-28):
+[current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md).
+It prepares the repo-wide migration for the ADR-154 rule that distinct
+architectural layers must live in distinct workspaces.
 
 ## Strategic Backlog (Future)
 
@@ -67,6 +72,7 @@ Roadmap:
 | [`codegen/`](codegen/README.md) | Post-M1 | SDK codegen workspace decomposition — [strategic plan](codegen/future/sdk-codegen-workspace-decomposition.md) + [research](codegen/sdk-codegen-architecture-analysis.md). Temporary turbo overrides applied by [turbo boundary fix](../semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md) until decomposition completes. |
 | `active/sentry-otel-integration.execution.plan.md` | M2 | Active execution source for the Sentry + OTel foundation |
 | `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
+| `current/workspace-layer-separation-audit.plan.md` | Post-M2 | Repo-wide layer/workspace audit and migration-preparation lane for ADR-154 |
 | `future/oak-surface-isolation-and-generic-foundation-programme.plan.md` | Post-M2 | Strategic umbrella for extracting generic foundations and making Oak workspaces thin leaves |
 | `future/observability-and-quality-metrics.plan.md` | M2 + M3 | Strategic umbrella for the observability foundation, alerting, and quality dashboards |
 | `future/codex-mcp-server-compatibility.plan.md` | Post-M2 branch follow-up | Strategic brief for Codex-specific MCP auth compatibility work after Sentry validation closes |

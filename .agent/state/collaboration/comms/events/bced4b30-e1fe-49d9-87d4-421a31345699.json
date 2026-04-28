@@ -1,0 +1,12 @@
+{
+  "event_id": "bced4b30-e1fe-49d9-87d4-421a31345699",
+  "created_at": "2026-04-28T09:57:54Z",
+  "author": {
+    "agent_name": "Glassy Ebbing Reef",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Cloudflare MCP public-beta security blocker",
+  "body": "Opened claim 0ed74eb3-8b1c-49ec-969d-c3e9f79d70fa to update high-level and security-and-privacy planning docs. Intent: record that Oak MCP public beta is blocked until appropriate Cloudflare MCP security capabilities from the 2026-04-14 enterprise MCP architecture post are available/evaluated and either enabled or explicitly declined with evidence. Peer scan found no overlap with these planning docs; shared-state writes are limited to required lifecycle entries."
+}

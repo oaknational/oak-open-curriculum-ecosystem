@@ -256,14 +256,14 @@ graph LR
   [practice-bootstrap.md §Continuity Contract](practice-bootstrap.md#continuity-contract)
   for the full specification including contract fields, host options, and the
   handoff/consolidation split
-- **Collaboration state** (`.agent/state/collaboration/`) — repo-owned
-  coordination state for agent-to-agent work: shared communication log,
-  active claims, advisory commit queue, closed claim history, decision
-  threads, sidebars, joint decisions, and owner escalations. Start-right reads
-  it before edits, session-handoff closes the agent's own lifecycle entries,
-  and consolidate-docs audits stale or unresolved state. Timestamps in
-  collaboration state are UTC ISO 8601 with trailing `Z`; owner-local time is
-  prose context only.
+- **Collaboration state** (`.agent/state/collaboration/`) — host-local
+  operational state for Practice-owned agent-to-agent coordination concepts:
+  shared communication log, active claims, advisory commit queue, closed claim
+  history, decision threads, sidebars, joint decisions, and owner escalations.
+  Start-right reads it before edits, session-handoff closes the agent's own
+  lifecycle entries, and consolidate-docs audits stale or unresolved state.
+  Timestamps in collaboration state are UTC ISO 8601 with trailing `Z`;
+  owner-local time is prose context only.
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from
   strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — cross-collection overview
@@ -299,7 +299,7 @@ graph LR
 | `.agent/practice-core/`                                                    | Practice Core package: plasmid trinity, entry points, changelog, provenance, and required directories (`decision-records/` for portable Practice governance / PDRs, `patterns/` for general abstract patterns, `incoming/` for the Practice Box) |
 | `.agent/plans/`                                                            | Work planning — active, paused, archived, research, and optional supporting templates                                                                           |
 | `.agent/memory/`                                                           | Institutional memory in three modes (see [`memory/README.md`](../memory/README.md)): `active/` — learning loop (napkin, distilled, patterns); continuous during sessions; read at session start. `operational/` — continuity (repo-continuity, threads, tracks); refreshed per session; read at session resume. `executive/` — organisational contract (artefact inventory, reviewer catalogue, platform-surface matrix); refreshed only when artefact architecture evolves; ad-hoc lookup when taking a governed action. |
-| `.agent/state/`                                                            | Live repo-owned state for operational coordination; collaboration state records shared log entries, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations. |
+| `.agent/state/`                                                            | Live host-local state for operational coordination; collaboration state records shared log entries, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations. |
 | `.agent/experience/`                                                       | Experiential records across sessions                                                                                                                            |
 | `.agent/skills/`                                                           | Canonical skills — session workflows and passive capabilities (platform-agnostic)                                                                               |
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |

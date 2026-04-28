@@ -68,12 +68,31 @@ purpose-specific, consumer-general framework from (b) the
 Oak-specific consumer instance. The framework is the reusable
 mechanism that solves a category of problem — usable by any
 consumer. The consumer instance applies that framework to Oak's
-domain and data. This separation must be visible in code structure:
-different modules, directories, or packages. If general mechanism
-and Oak-specific configuration are mixed in one module, split them.
-The framework defines the contract; the consumer provides the
-specifics. The test: "Could a non-Oak consumer use this component
+domain and data. Distinct architectural layers MUST live in
+distinct workspaces. Modules/directories may organise code inside a
+layer, but they do not satisfy layer separation. If general mechanism
+and Oak-specific configuration share a workspace, split the
+workspace. The framework defines the contract; the consumer provides
+the specifics. The test: "Could a non-Oak consumer use this component
 unchanged?" If not, extract the Oak-specific parts.
+
+### Context Specificity Gradient
+
+Every capability decomposes by context specificity. Push functionality
+to the lowest general layer that preserves architectural excellence;
+keep the highest-specificity layer as thin as possible, preferably
+configuration only.
+
+Agent-work capabilities (collaboration, coordination, work management,
+direction, lifecycle, identity, claims, handoff, review routing, and adjacent
+concerns) are Practice-owned by default; host-local tooling implements them.
+For product/tooling code, the scale is: many-repo capability -> repo-generic
+layer -> purpose-specific reusable tool -> thin Oak-wide wrapper -> narrow
+Oak-domain wrapper.
+
+Oak-specific state is a pressure signal. Keep it minimal; generated state
+beats authored state. Hand-rolled types beside generated SDK outputs mean
+the generator or a lower layer may need to own more of the behaviour.
 
 ### Decompose at the Tension
 

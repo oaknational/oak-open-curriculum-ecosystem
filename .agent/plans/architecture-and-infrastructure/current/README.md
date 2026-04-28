@@ -6,6 +6,7 @@ Current queued work for this collection.
 
 | Priority | Plan | Scope | Status |
 |----------|------|-------|--------|
+| P0 | [workspace-layer-separation-audit.plan.md](./workspace-layer-separation-audit.plan.md) | Repo-wide audit and migration preparation for the rule that distinct architectural layers must live in distinct workspaces | Queued |
 | P1 | [config-architecture-standardisation-plan.md](./config-architecture-standardisation-plan.md) | Shared config DI and runtime-config standardisation | Queued |
 | P2 | [security-dependency-triage.plan.md](./security-dependency-triage.plan.md) | Dependabot, CodeQL, and outdated dependency triage | Queued |
 | P3 | [doc-architecture-phase-a-immediate.plan.md](./doc-architecture-phase-a-immediate.plan.md) | QA register, fitness function ADR, ADR index, C4 diagrams, layer contract | Queued |

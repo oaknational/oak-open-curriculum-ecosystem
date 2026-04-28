@@ -68,8 +68,8 @@ Read in order; stop at whichever answers your next-step question:
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
    registry and ordered advisory `commit_queue`
-5. `.agent/state/collaboration/shared-comms-log.md` — recent free-form
-   collaboration context
+5. `.agent/state/collaboration/shared-comms-log.md` — generated recent
+   free-form collaboration context
 6. `.agent/state/collaboration/conversations/*.json` — open decision
    threads, sidebars, joint decisions, unresolved decision requests, and
    evidence obligations for the touched thread or area
@@ -85,10 +85,11 @@ not mechanical refusals.
 Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
 rule before any edit: enumerate the areas you intend to touch, register
-your own active claim, and leave an artefact proving the registry was
+your own active claim through the collaboration-state helper when available,
+and leave an artefact proving the registry was
 consulted. If no entries other than your own exist, log "no other agents
-present" to `.agent/state/collaboration/shared-comms-log.md` and proceed (bootstrap
-fast-path). On overlap, consult the shared communication log and any
+present" through an immutable comms event and proceed (bootstrap fast-path).
+On overlap, consult the shared communication log and any
 open decision-thread and escalation files before deciding whether to
 proceed, ping, append a decision thread, request a sidebar, record a
 joint decision, open or close an escalation, or ask the owner.
@@ -106,6 +107,15 @@ Platform hooks set the platform-suffixed Practice variable: the Claude Code
 (e.g. the hook artefact has not been built yet), pass
 `--seed "<stable-session-seed>"` explicitly. Do not use personal-email
 fallback.
+
+Before any shared collaboration-state write, prefer:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+```
+
+Codex sessions with `CODEX_THREAD_ID` available must not write new state as
+`Codex` / `unknown`; use the derived name and prefix.
 
 Before staging or committing, use the always-active commit skill. It
 checks for fresh `commit_queue` entries and `git:index/head` commit-window

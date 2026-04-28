@@ -13,6 +13,7 @@
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "type-check": "tsc -p tsconfig.json",
     "agent-identity": "pnpm -s build && node dist/src/bin/agent-identity.js",
+    "collaboration-state": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/collaboration-state.js",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "commit-queue": "pnpm -s build && node dist/src/bin/commit-queue.js",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts",

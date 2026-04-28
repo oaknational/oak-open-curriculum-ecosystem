@@ -91,11 +91,12 @@ consolidation, and transplantation close.
 + **Start-flow skills**: canonical session-start workflows exist
   (typically `start-right-quick`, `start-right-thorough`) with
   platform adapters per PDR-009.
-+ **Collaboration-state consultation**: repo-owned coordination state
-  exists for shared log entries, active claims, advisory commit queue,
-  closed claim history, decision threads, sidebars, joint decisions, and
-  escalations; start-flow skills tell agents when to read it and UTC is
-  canonical for collaboration timestamps.
++ **Collaboration-state consultation**: host-local operational state
+  exists for Practice-owned coordination concepts: shared log entries,
+  active claims, advisory commit queue, closed claim history, decision
+  threads, sidebars, joint decisions, and escalations; start-flow skills
+  tell agents when to read it and UTC is canonical for collaboration
+  timestamps.
 + **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at both `practice-core/patterns/` (general abstractions)
   and `memory/active/patterns/` (instances).

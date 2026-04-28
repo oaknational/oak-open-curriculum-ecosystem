@@ -55,7 +55,7 @@ Locks are the wrong tool for reasoning peers.
 ## Platform Independence
 
 Where a collaboration behaviour can be platform agnostic, make it platform
-agnostic. The protocol operates from repo-owned portable surfaces:
+agnostic. The protocol operates from local portable Practice surfaces:
 markdown, JSON, rules, commands, skills, hooks, and thin platform adapters.
 Platform-specific agent-team features may help build, inspect, stress test,
 or feed lessons back, but they are optional accelerants, not fallbacks,
@@ -223,6 +223,7 @@ or commit.
 
 This directive operationalises PDR-026 (per-session landing as claim
 granularity), PDR-027 (identity reuse), PDR-029 (tripwire pattern),
+PDR-035 (agent-work capabilities belong to the Practice),
 PDR-011 / ADR-150 (capture → distil → graduate → enforce), and
 ADR-125 (canonical `.agent/` content with thin platform adapters).
 

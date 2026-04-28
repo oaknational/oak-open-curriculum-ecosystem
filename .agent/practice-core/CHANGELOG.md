@@ -4,6 +4,19 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-28 — agent-work capabilities assigned to the Practice
+
+Owner-directed consolidation after the repo/tooling/Practice boundary was
+clarified. Practice-Core changes:
+
+- **PDR-035 (NEW)** — Agent Work Capabilities Belong to the Practice. Agent
+  collaboration, coordination, work management, direction, lifecycle, identity,
+  claims, handoff, review routing, learning flow, command/rule activation, and
+  adjacent agent-operational mechanisms are Practice substance by default.
+- **Phenotype boundary named locally** — host repos own only local files, state
+  instances, tools, hooks, platform wrappers, schemas, scripts, and execution
+  plans. This repo's implementation boundary is recorded in ADR-165.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-28 — Practice/tool feedback and live collaboration surfaces refreshed
 
 Owner-directed documentation pass after active multi-agent friction around
@@ -102,7 +115,7 @@ surface; `practice-lineage.md` teaches start-right / session-handoff
 coordination responsibilities; PDR-024 names collaboration-state
 consultation as a vital integration surface. ADR-119 and ADR-124 were
 refreshed so the ADR narrative matches the live Practice Core package and
-repo-owned coordination state. Closeout review also clarified the Practice
+host-local coordination state instance. Closeout review also clarified the Practice
 Core quality taxonomy: hard gates are always blocking, while specialist
 review is preferred evidence whose findings require disposition and block
 only when classified as blocking or when they surface hard gate / rule

@@ -65,10 +65,11 @@ Representative rules:
 ### Collaboration State Surface
 
 Collaboration state lives under
-[`state/collaboration/`](state/collaboration/). It is the repo-owned
-coordination layer for shared log entries, active claims, the root
-`commit_queue`, closed claim history, decision threads, sidebars, joint
-decisions, and escalations. The at-a-glance channel register lives in
+[`state/collaboration/`](state/collaboration/). It is this repo's local
+operational instance of Practice-owned coordination concepts: shared log
+entries, active claims, the root `commit_queue`, closed claim history,
+decision threads, sidebars, joint decisions, and escalations. The
+at-a-glance channel register lives in
 [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md).
 `start-right` reads collaboration state before edits, the commit skill
 opens/closes `git:index/head` claims before staging or committing,
@@ -97,6 +98,7 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)                        | Agent artefact portability — three-layer model for skills, commands, and rules     |
 | [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
 | [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |
+| [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)             | Agent-work Practice phenotype boundary for this repo's local implementation surfaces |
 
 ## Agentic Corpus Hub
 

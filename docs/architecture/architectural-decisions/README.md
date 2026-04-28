@@ -186,6 +186,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-162: Observability-First — Every Capability Emits Across Five Axes](162-observability-first.md) ← **Proposed** (extends ADR-143; acceptance gated on Phase 5 of the observability strategy restructure)
 - [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](163-sentry-release-identifier-and-vercel-production-attribution.md) (operationalises L-7 release/deploy linkage; Accepted 2026-04-19; amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)
 - [ADR-164: Config-Load Side Effects Must Not Require Test-Execution Resources](164-config-load-side-effects.md) (vitest/ESLint/Prettier configs must not throw at module-evaluation time on missing test-time credentials; Accepted 2026-04-26)
+- [ADR-165: Agent Work Practice Phenotype Boundary](165-agent-work-practice-phenotype-boundary.md) (local implementation boundary for PDR-035 agent-work Practice authority; Accepted 2026-04-28)
 - [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md) — 2026-04-26 amendment adds Step 5 (call-site uptake) to the four-step pattern.
 
 ## Key Architectural Decisions
@@ -200,7 +201,7 @@ For understanding our API integration approach:
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 - **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
-- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, visible in code structure
+- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, enforced through workspace topology
 - **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
 - **[ADR-132](132-sitemap-scanner-for-canonical-url-validation.md)** - Sitemap scanner and reference-map validation for canonical URL generation
 
@@ -235,6 +236,7 @@ For understanding the agentic engineering practice:
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
 - **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
+- **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

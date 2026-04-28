@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; collaboration-state write safety 🔄 active; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
 **Last Updated**: 2026-04-28
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -151,6 +151,7 @@ Adjacent:
   RWD:  Repair workflow wording hazard detection     📋 PLANNED
   GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
   SSC:  Cross-vendor session sidecars                📋 STRATEGIC
+  CSW:  Collaboration-state write safety             🔄 ACTIVE
   CSD:  Collaboration-state domain model             📋 STRATEGIC
   ICQ:  Intent-to-commit queue                       ✅ COMPLETE
   AGN:  Manifest-driven adapter generation           📋 PLANNED
@@ -373,9 +374,9 @@ Adjacent:
   - protocol is advisory not enforcing: knowledge and communication,
     not mechanical refusals
   - protocol is platform independent by design: platform-native
-    agent-team features may help build it, but repo-owned markdown/JSON/
-    rules/commands/skills/hooks surfaces must remain sufficient to
-    operate it
+    agent-team features may help build it, but local portable Practice
+    markdown/JSON/rules/commands/skills/hooks surfaces must remain
+    sufficient to operate it
 - Status: ✅ WS3B-IMPLEMENTED; WS5 paused on post-WS4A/WS3B observation
   (refreshed 2026-04-26)
 - Landings:

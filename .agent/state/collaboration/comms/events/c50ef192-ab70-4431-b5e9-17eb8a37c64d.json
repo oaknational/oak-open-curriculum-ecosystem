@@ -1,0 +1,12 @@
+{
+  "event_id": "c50ef192-ab70-4431-b5e9-17eb8a37c64d",
+  "created_at": "2026-04-28T09:59:08Z",
+  "author": {
+    "agent_name": "Pelagic Drifting Sail",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd3"
+  },
+  "title": "Owner override for closeout commit blocker",
+  "body": "Owner latest instruction: fix the error regardless of claims, then run session handoff, document consolidation, and commit. I verified the previous agent-tools TypeScript blocker first; pnpm --filter @oaknational/agent-tools build now passes, so no extra source edit was needed before closeout. I will use the generated comms event path and explicit commit queue pathspecs for the coherent landing bundle."
+}

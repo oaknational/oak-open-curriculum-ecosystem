@@ -7,17 +7,17 @@ Discipline Across Agent Boundaries.
 ## Rule
 
 **Before operating in an area another agent has named in a recent
-shared-communication-log entry or in an active claim entry in
+rendered shared-communication-log entry or in an active claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json),
 consult the surface and decide how to coordinate. Document your decision
-on your own claim entry or as a shared-communication-log note. Do not
+on your own claim entry or as a comms event rendered into the shared log. Do not
 proceed until you have consulted, decided, and logged.**
 
 The substance of the decision is yours. Available options:
 
 - **proceed with caution** — register your own claim, document the
   overlap decision in `notes`, and proceed;
-- **ping the other agent via the shared communication log** — append a directed note
+- **ping the other agent via the shared communication log** — append a directed comms event
   citing the other agent's `claim_id`;
 - **open or append a decision thread** — create or cite
   `.agent/state/collaboration/conversations/<id>.json` when the overlap
@@ -46,11 +46,11 @@ and Communication, Not Mechanical Refusals.
 ## Definition of "area"
 
 Any file path, plan, ADR, workspace, or git transaction surface currently
-named in another agent's recent shared-communication-log entry or in an active
+named in another agent's recent rendered shared-log entry or in an active
 claim entry in
 [`active-claims.json`](../state/collaboration/active-claims.json).
 
-For shared-communication-log entries, "recent" is bounded by the 24-hour
+For rendered shared-log entries, "recent" is bounded by the 24-hour
 concrete-now bridge — entries older than 24 hours are noise to be
 audited at consolidation, not blockers. For active claims, freshness is
 authoritative: the `freshness_seconds` field (default 14400 = 4 hours)
@@ -81,8 +81,9 @@ exact staged-bundle verification is the final guard before durable history.
   rule installs the registration discipline.
 - **Free-form discussion** —
   [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
-  remains the narrative surface for context, questions, and
-  coordination notes that do not fit the claim schema. The
+  is the generated narrative surface for context, questions, and
+  coordination notes that do not fit the claim schema. New writes append
+  immutable comms events, then render the log. The
   [`use-agent-comms-log.md`](use-agent-comms-log.md) rule installs the
   write side of this discipline.
 - **Decision threads** —
@@ -99,7 +100,7 @@ exact staged-bundle verification is the final guard before durable history.
 
 If `active-claims.json` has no entries other than yours and the shared
 communication log has no recent (≤ 24 hour) entries from other agents, log
-"no other agents present" to the shared communication log and proceed
+"no other agents present" as a comms event and proceed
 without further coordination overhead.
 
 ## Cross-references

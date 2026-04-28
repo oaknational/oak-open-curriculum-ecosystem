@@ -33,12 +33,13 @@ rule. Also scan `.agent/state/collaboration/shared-comms-log.md`, any open
 `.agent/state/collaboration/conversations/*.json` files, and any active
 `.agent/state/collaboration/escalations/*.json` files for the thread
 or areas you will touch. Bootstrap fast-path: if no entries other than
-your own exist, log "no other agents present" to the shared
-communication log and proceed. On overlap, consult the log and decision
+your own exist, append a "no other agents present" comms event and proceed.
+On overlap, consult the generated log and decision
 threads before deciding how to coordinate (proceed with caution, ping,
 append/open a decision thread, request a sidebar, record a joint
 decision, open or close an escalation, or ask the owner). Then register
-your own claim covering the areas you intend to touch.
+your own claim covering the areas you intend to touch, using the
+collaboration-state helper when available.
 
 When reading `active-claims.json`, surface any fresh root `commit_queue`
 entries as advisory commit-ordering signals: `intent_id`, `agent_id`, files,
@@ -52,6 +53,15 @@ session display name with
 `CLAUDE_SESSION_ID` or `CODEX_THREAD_ID`; pass
 `--seed "<stable-session-seed>"` or set `OAK_AGENT_SEED` explicitly when it
 does not. Do not use personal-email fallback.
+
+Before shared collaboration-state writes, run:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+```
+
+Codex sessions with `CODEX_THREAD_ID` available must use the derived
+`agent_name` and `session_id_prefix`, not `Codex` / `unknown`.
 
 Before staging or committing, use the always-active commit skill. It
 checks for fresh `commit_queue` entries and `git:index/head` commit-window

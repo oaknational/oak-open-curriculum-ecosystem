@@ -15,6 +15,8 @@ pdr_kind: governance
 (canonical-first artefact architecture — another vital integration);
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (continuity surfaces — another);
+[PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md)
+(agent-work capabilities are Practice substance by default);
 [PDR-002](PDR-002-pedagogical-reinforcement-in-foundational-practice-docs.md)
 (deliberate cross-document reinforcement — a defensive integration);
 [PDR-003](PDR-003-sub-agent-protection-of-foundational-practice-docs.md)
@@ -106,7 +108,7 @@ start, artefact search, and workflow invocation.
 | **Entry-point chain** | Repo-facing files direct each agent platform to the canonical Practice directives | `CLAUDE.md`, `AGENTS.md`, `GEMINI.md` at repo root, each pointing at `.agent/directives/AGENT.md`; AGENT.md chains to `principles.md` + `testing-strategy.md` + trinity |
 | **Practice-index bridge** | The one permitted Core→local external link; bridges portable Core substance to the host repo's local artefacts | `.agent/practice-index.md` (per ADR-124 / retained by PDR-007) |
 | **Start-flow skills** | Session-start workflows that orient agents to the Practice before work begins | Canonical `start-right-quick` / `start-right-thorough` skills with platform adapters (per PDR-009) |
-| **Collaboration-state consultation** | Session-start workflows expose live agent-to-agent coordination state before mutation | Repo-owned state for shared log, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations |
+| **Collaboration-state consultation** | Session-start workflows expose live agent-to-agent coordination state before mutation | Host-local state for Practice-owned shared log, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations |
 | **Pattern discovery skill** | Consulted when agents face recurring design problems; routes to the correct pattern surface | Canonical `patterns` skill pointing at `practice-core/patterns/` (general abstractions) and `memory/active/patterns/` (instances) |
 | **Rule activation** | Canonical rules activated via platform-native triggers (always-on, glob-scoped, agent-selected) | `.agent/rules/` canonical + per-platform triggers (`.cursor/rules/*.mdc`, `.claude/rules/*.md`, etc.) per PDR-009 |
 

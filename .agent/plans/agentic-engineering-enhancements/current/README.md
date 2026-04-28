@@ -29,6 +29,7 @@ plans when scheduled.
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
 | [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Adjacent: structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; WS4A lifecycle integration implemented; WS3B sidebar/escalation and joint-decision integration implemented; WS5 remains observation-gated | WS3B-IMPLEMENTED |
 | [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: sidebar, timeout, and owner-escalation design implemented with conversation-schema and escalation-state support | IMPLEMENTED |
+| [collaboration-state-write-safety.plan.md](collaboration-state-write-safety.plan.md) | Promoted first slice from the collaboration-state domain-model brief: deterministic identity preflight, immutable comms events, transaction-safe shared JSON writes, TTL cleanup baseline, and hook deferral | IN PROGRESS |
 
 Recently completed:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)

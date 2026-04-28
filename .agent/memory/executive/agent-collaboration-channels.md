@@ -16,8 +16,8 @@ time can appear in prose when helpful, but the state clock is UTC.
 | # | Channel | Shape | When to use |
 | --- | --- | --- | --- |
 | 1 | **Thread record** `<slug>.next-session.md` | Durable async, narrative, multi-session | Continuity across sessions on a single thread; identity registration; landing target |
-| 2 | **Shared communication log** `state/collaboration/shared-comms-log.md` | Schema-less append-only markdown, eventually-consistent | Leave notes for whoever reads next; discover what other agents have been working on |
-| 2a | **Active claim** `state/collaboration/active-claims.json` | Structured JSON, live liveness signal | Register "I am touching this area now" or a short-lived `git:index/head` commit window |
+| 2 | **Shared communication log** `state/collaboration/shared-comms-log.md` | Generated markdown read model from immutable comms events | Discover what other agents have been working on; append new notes through the comms event helper |
+| 2a | **Active claim** `state/collaboration/active-claims.json` | Structured JSON, live liveness signal, transaction-mutated | Register "I am touching this area now" or a short-lived `git:index/head` commit window |
 | 3 | **Decision thread** `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Concrete overlap discussion, sidebars, joint decisions, decisions, resolutions, and evidence |
 | 4 | **Sidebar entries** inside a decision thread | Short-lived focused exchange by mutual agreement | Tighter peer/owner exchange; expiry is stale-reporting only |
 | 4b | **Escalation file** `state/collaboration/escalations/<id>.json` | Live owner-facing unresolved case record | Owner tiebreaker; durable resolution is written back to the conversation |
@@ -61,12 +61,23 @@ Need to communicate something to another agent?
     └── Owner question via AskUserQuestion (5b)
 ```
 
+## Write Interface
+
+For new shared-state writes, prefer
+`pnpm agent-tools:collaboration-state -- ...`. It provides identity
+preflight, immutable comms event append/render, transaction-safe claim,
+conversation, escalation, and stale-archive commands. Codex writes with
+`CODEX_THREAD_ID` available must derive a named identity rather than writing
+as `Codex` / `unknown`.
+
 ## Cross-references
 
 - [`agent-collaboration.md`](../../directives/agent-collaboration.md) —
   full working model and forward references.
 - [`use-agent-comms-log.md`](../../rules/use-agent-comms-log.md) —
   shared-communication-log usage discipline.
+- [`collaboration-state-write-safety.plan.md`](../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
+  — current write-safety implementation plan and CLI contract.
 - [`respect-active-agent-claims.md`](../../rules/respect-active-agent-claims.md)
   — area-consultation tripwire.
 - [`register-active-areas-at-session-open.md`](../../rules/register-active-areas-at-session-open.md)

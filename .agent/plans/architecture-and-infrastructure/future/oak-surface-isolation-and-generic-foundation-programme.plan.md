@@ -27,11 +27,12 @@ todos:
 
 # Oak Surface Isolation and Generic Foundation Programme
 
-**Last Updated**: 2026-04-03
+**Last Updated**: 2026-04-28
 **Status**: Strategic brief — not yet executable
 **Lane**: `future/`
 **Related plans**:
 
+- `current/workspace-layer-separation-audit.plan.md`
 - `codegen/future/sdk-codegen-workspace-decomposition.md`
 - `current/config-architecture-standardisation-plan.md`
 - `future/stdio-http-server-alignment.md`
@@ -60,6 +61,14 @@ Intent: every non-Oak capability becomes generic first, and every Oak package
 becomes a thin instance, brand pack, composition root, or domain leaf over
 that generic capability.
 
+**2026-04-28 owner clarification:** this programme is not only about naming or
+removing Oak strings from otherwise generic packages. Most code in the repo is
+not yet properly separated into layers. Distinct architectural layers MUST live
+in distinct workspaces. A same-workspace directory, module, barrel, or package
+split is not sufficient when the concerns differ by generality, lifecycle,
+dependency weight, or consumer specificity. The current executable audit plan
+owns the immediate layer/workspace matrix and migration-map work.
+
 This is a strategic umbrella, not a single executable refactor. Execution
 belongs in tranche-specific `current/` and `active/` plans once sequencing,
 rename maps, and deterministic validation are locked.
@@ -81,16 +90,20 @@ Each tranche lands as a clean break.
 
 Every affected area must end in the same structural shape:
 
-1. **Generic foundation workspace**
+1. **One layer per workspace**
+   - every workspace owns one coherent architectural layer
+   - modules/directories organise within a layer; they do not separate layers
+   - mixed-layer workspaces split, move code down, or move thin wrappers up
+2. **Generic foundation workspace**
    - generic name
    - no Oak strings, Oak defaults, Oak telemetry namespaces, Oak brand
      emission, curriculum-specific assumptions, or app-path ownership
      metadata
-2. **Thin Oak leaf workspace**
+3. **Thin Oak leaf workspace**
    - explicit `oak-` identity
    - owns Oak-only brand values, curriculum semantics, Oak URL behaviour,
      Oak search/domain assets, and final composition
-3. **One-way dependency direction**
+4. **One-way dependency direction**
    - generic foundations never import Oak leaves
    - Oak leaves may depend on generic foundations
 
@@ -228,8 +241,9 @@ Intent:
 
 ## Promotion Trigger Into `current/`
 
-Promote the first executable child plan only when all of the following are
-true:
+The immediate executable child is now
+[`current/workspace-layer-separation-audit.plan.md`](../current/workspace-layer-separation-audit.plan.md).
+Promote tranche implementation plans only when all of the following are true:
 
 1. this workspace classification matrix is complete and current
 2. every workspace in the tranche has an agreed target state

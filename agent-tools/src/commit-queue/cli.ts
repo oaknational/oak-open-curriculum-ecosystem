@@ -18,7 +18,7 @@ import {
   usage,
 } from './args.js';
 import { getStagedBundle } from './git.js';
-import { readRegistry, writeRegistry } from './registry.js';
+import { readRegistry, updateRegistry } from './registry.js';
 import {
   type CommitIntent,
   type CommitQueueCliInput,
@@ -35,28 +35,27 @@ const DEFAULT_TTL_SECONDS = 900;
  */
 export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<number> {
   const registryPath = resolveRegistryPath(input.repoRoot, input.options);
-  const registry = await readRegistry(registryPath);
   const now = nowIso(input.options);
 
   if (input.command === 'enqueue') {
-    return runEnqueueCommand({ registryPath, registry, options: input.options });
+    return runEnqueueCommand({ registryPath, options: input.options });
   }
   if (input.command === 'phase') {
-    return runPhaseCommand({ registryPath, registry, options: input.options, now });
+    return runPhaseCommand({ registryPath, options: input.options, now });
   }
   if (input.command === 'record-staged') {
-    return runRecordStagedCommand({ registryPath, registry, options: input.options, now, input });
+    return runRecordStagedCommand({ registryPath, options: input.options, now, input });
   }
   if (input.command === 'verify-staged') {
     return runVerifyStagedCommand({
-      registry,
+      registry: await readRegistry(registryPath),
       options: input.options,
       now,
       repoRoot: input.repoRoot,
     });
   }
   if (input.command === 'complete') {
-    return runCompleteCommand({ registryPath, registry, options: input.options });
+    return runCompleteCommand({ registryPath, options: input.options });
   }
 
   throw new Error(usage());
@@ -97,14 +96,13 @@ function expiresAtIso(startIso: string, ttlSeconds: number): string {
 
 async function runEnqueueCommand(input: CommandInput): Promise<number> {
   const intent = createIntent(input.options);
-  if (!input.registry.claims.some((claim) => claim.claim_id === intent.claim_id)) {
-    throw new Error(`unknown claim_id: ${intent.claim_id}`);
-  }
+  await updateRegistry(input.registryPath, (registry) => {
+    if (!registry.claims.some((claim) => claim.claim_id === intent.claim_id)) {
+      throw new Error(`unknown claim_id: ${intent.claim_id}`);
+    }
 
-  await writeRegistry(
-    input.registryPath,
-    enqueueCommitIntent({ registry: input.registry, intent }),
-  );
+    return enqueueCommitIntent({ registry, intent });
+  });
   process.stdout.write(`${intent.intent_id}\n`);
   return 0;
 }
@@ -112,16 +110,20 @@ async function runEnqueueCommand(input: CommandInput): Promise<number> {
 async function runPhaseCommand(input: CommandInputWithNow): Promise<number> {
   const phase = requirePhase(input.options);
   const intentId = requireOption(input.options, 'intent-id');
-  requireIntent(input.registry, intentId);
-  await writeRegistry(input.registryPath, phaseRegistry(input, phase, intentId));
+  await updateRegistry(input.registryPath, (registry) => {
+    requireIntent(registry, intentId);
+    return phaseRegistry(input, registry, phase, intentId);
+  });
   return 0;
 }
 
 async function runRecordStagedCommand(input: CommandInputWithCli): Promise<number> {
   const intentId = requireOption(input.options, 'intent-id');
-  requireIntent(input.registry, intentId);
   const staged = getStagedBundle(input.input.repoRoot);
-  await writeRegistry(input.registryPath, stagedRegistry(input, intentId, staged));
+  await updateRegistry(input.registryPath, (registry) => {
+    requireIntent(registry, intentId);
+    return stagedRegistry(input, registry, intentId, staged);
+  });
   return 0;
 }
 
@@ -143,21 +145,21 @@ function runVerifyStagedCommand(input: VerifyInput): number {
 
 async function runCompleteCommand(input: CommandInput): Promise<number> {
   const intentId = requireOption(input.options, 'intent-id');
-  requireIntent(input.registry, intentId);
-  await writeRegistry(
-    input.registryPath,
-    completeCommitIntent({ registry: input.registry, intentId }),
-  );
+  await updateRegistry(input.registryPath, (registry) => {
+    requireIntent(registry, intentId);
+    return completeCommitIntent({ registry, intentId });
+  });
   return 0;
 }
 
 function phaseRegistry(
   input: CommandInputWithNow,
+  registry: CommitQueueRegistry,
   phase: CommitQueuePhase,
   intentId: string,
 ): CommitQueueRegistry {
   return updateCommitIntentPhase({
-    registry: input.registry,
+    registry,
     intentId,
     phase,
     nowIso: input.now,
@@ -167,11 +169,12 @@ function phaseRegistry(
 
 function stagedRegistry(
   input: CommandInputWithNow,
+  registry: CommitQueueRegistry,
   intentId: string,
   staged: StagedBundle,
 ): CommitQueueRegistry {
   return recordStagedBundle({
-    registry: input.registry,
+    registry,
     intentId,
     nowIso: input.now,
     stagedNameStatus: staged.stagedNameStatus,
@@ -216,7 +219,6 @@ function requireIntent(registry: CommitQueueRegistry, intentId: string): CommitI
 
 interface CommandInput {
   readonly registryPath: string;
-  readonly registry: CommitQueueRegistry;
   readonly options: CommitQueueCliOptions;
 }
 

@@ -45,10 +45,14 @@ Lane indexes:
   opens on that branch after the MCP branch merges.
 - Cross-app config standardisation and security dependency triage remain the
   next queued executable items in [current/README.md](current/README.md).
+- Workspace layer separation audit is now queued in
+  [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md)
+  to turn ADR-154's strengthened rule into an authoritative
+  layer/workspace matrix and migration tranche map.
 - A new strategic umbrella,
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md),
-  now defines the later programme for separating generic foundations from Oak
-  leaves across all affected workspaces.
+  now defines the later programme for separating layers into workspaces and
+  generic foundations from Oak leaves across all affected workspaces.
 - [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md)
   has been promoted to `current/` (2026-04-11) and is the explicit first
   candidate once the current improvement tranche is complete.
@@ -77,7 +81,8 @@ The quality gate hardening plan has been promoted to current (2026-04-11):
 ```text
 Phase 1: Sentry + OTel foundation                     🔄 active
 Phase 2: Config + dependency standardisation          ⏳ current
-Phase 3: Oak surface isolation programme              📋 future
+Phase 3: Workspace layer separation programme         ⏳ current/future
+  Audit: repo-wide layer/workspace matrix             ⏳ current
   Tranche 1: platform/runtime foundations             📋 future
   Tranche 2: design system                            📋 future
   Tranche 3: tooling/governance                       📋 future
@@ -117,16 +122,18 @@ Phase 4: Quality/operations hardening                 📋 future
 - Done when:
   config and dependency hygiene no longer block later structural work
 
-### Phase 3 — Oak Surface Isolation and Generic Foundations
+### Phase 3 — Workspace Layer Separation and Generic Foundations
 
+- Executable audit:
+  [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md)
 - Strategic umbrella:
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md)
 - Companion strategic plan:
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md)
 - Done when:
-  the mixed foundations have been split or neutralised by tranche, Oak
-  workspaces are visibly thin leaves, and one-way dependency direction is
-  enforceable
+  every workspace owns one coherent layer, mixed foundations have been split
+  or neutralised by tranche, Oak workspaces are visibly thin leaves, and
+  one-way dependency direction is enforceable
 
 ### Phase 4 — Quality and Operational Hardening
 

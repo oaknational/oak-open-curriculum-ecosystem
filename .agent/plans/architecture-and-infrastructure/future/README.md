@@ -9,7 +9,7 @@ queue item, then to `../active/` when implementation starts.
 
 | Priority | Plan | Role |
 |---|---|---|
-| P0 | [oak-surface-isolation-and-generic-foundation-programme.plan.md](./oak-surface-isolation-and-generic-foundation-programme.plan.md) | Strategic umbrella for separating Oak-specific leaves from generic foundations across runtime, design, tooling, SDK/codegen, search, and app surfaces |
+| P0 | [oak-surface-isolation-and-generic-foundation-programme.plan.md](./oak-surface-isolation-and-generic-foundation-programme.plan.md) | Strategic umbrella for enforcing one-layer-per-workspace and separating Oak-specific leaves from generic foundations across runtime, design, tooling, SDK/codegen, search, and app surfaces |
 | P0 | [observability-and-quality-metrics.plan.md](./observability-and-quality-metrics.plan.md) | Strategic umbrella for the M2 observability foundation plus M3 alerting and quality-metrics hardening |
 | P0 | [`observability/future/sentry-observability-maximisation.plan.md`](../../observability/future/sentry-observability-maximisation.plan.md) | Strategic parent for closing every available Sentry product loop across MCP (server + widget) and Search CLI; executable lane at [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../../observability/active/sentry-observability-maximisation-mcp.plan.md) for the MCP branch. Moved 2026-04-18 per the observability restructure. |
 | P1 | [codex-mcp-server-compatibility.plan.md](./codex-mcp-server-compatibility.plan.md) | Strategic follow-up for Codex-specific MCP auth compatibility after the active Sentry validation lane closes |
@@ -32,3 +32,7 @@ Downstream demonstrations of the programme (in other collections):
 Strategic context: [../roadmap.md](../roadmap.md)
 In-progress execution: [../active/README.md](../active/README.md)
 Next-up queue: [../current/README.md](../current/README.md)
+
+Immediate executable child:
+
+- [../current/workspace-layer-separation-audit.plan.md](../current/workspace-layer-separation-audit.plan.md) — audit current workspace topology, produce the authoritative layer/workspace matrix, and slice migration tranches

@@ -20,15 +20,24 @@ All timestamp fields in collaboration state use UTC ISO 8601 with a trailing
 `Z`. Use owner-local time only as explanatory prose; freshness windows,
 expiry reports, and stale-claim audits are computed from UTC values.
 
+Before any shared-state mutation, run identity preflight or an equivalent
+wrapper. For Codex, `CODEX_THREAD_ID` must derive the PDR-027 identity block;
+new writes must not fall back to `Codex` / `unknown` while that seed exists:
+
+```bash
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+```
+
 ### Open a Claim
 
 1. Apply the
    [`register-active-areas-at-session-open`][register-rule] rule: list
    intended areas, scan `active-claims.json` for overlap, decide how to
    coordinate.
-2. Append a new entry under `claims[]` with a fresh `claim_id` (UUID v4
-   recommended), the agent's PDR-027 identity block, the thread slug,
-   the area list, `claimed_at` (now), and a brief `intent` line.
+2. Use the collaboration-state helper to append a new claim under
+   `claims[]` with a fresh `claim_id` (UUID v4 recommended), the agent's
+   PDR-027 identity block, the thread slug, the area list, `claimed_at`
+   (now), and a brief `intent` line.
 3. Use the default `freshness_seconds` (14400 = 4 hours) for most
    slices. Long sessions either set a larger value at open time or
    refresh `heartbeat_at`.
@@ -63,6 +72,10 @@ Use `pnpm agent-tools:commit-queue --` through the commit skill:
 `expires_at` is a wall-clock stale-reporting timestamp. Expiry never
 auto-removes a queue entry and never blocks another agent by itself.
 `session_counter` is intentionally absent from v1.3.0.
+
+Commit-queue mutations reuse the same JSON transaction helper as active
+claims so parallel enqueue/phase/complete operations re-read current state
+inside the transaction window.
 
 ### Refresh During Work
 
@@ -111,6 +124,18 @@ Fresh but quiet claims are informational only: possible crashed session,
 not a block. The next staleness threshold archives the entry
 automatically.
 
+The portable cleanup command is:
+
+```bash
+pnpm agent-tools:collaboration-state -- claims archive-stale \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --now <UTC> --platform <platform> --model <model>
+```
+
+Default TTLs are type-specific: normal claims `14400s`, commit/index claims
+`900s`, sidebars `1800s`, and known missed session-close grace `600s`.
+
 ## Decision Threads
 
 Open `.agent/state/collaboration/conversations/<id>.json` when an overlap
@@ -124,6 +149,14 @@ chosen, then a `resolution` entry with `outcome` and `body`, setting
 `status: "closed"`, and adding `closed_at`. Cite the thread from related
 claim closures or log entries when it explains the route taken. Do not
 copy the body into the thread record.
+
+Append conversation entries through the transaction helper:
+
+```bash
+pnpm agent-tools:collaboration-state -- conversation append \
+  --file .agent/state/collaboration/conversations/<id>.json \
+  --entry-json '<entry-json>'
+```
 
 ## Sidebars
 
@@ -161,6 +194,9 @@ not the durable decision.
 When the owner resolves the case, write the durable result back into the
 conversation as a `decision`, `joint_decision`, or `resolution` entry,
 then close the escalation with `resolution_conversation_entry_id`.
+
+Open or close escalation files through the same transaction helper using
+`pnpm agent-tools:collaboration-state -- escalation open|close`.
 
 ## Protocol Observability
 

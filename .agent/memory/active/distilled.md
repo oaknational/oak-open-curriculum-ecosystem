@@ -12,7 +12,7 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-25.md`
+`napkin-2026-02-24.md` through `napkin-2026-04-28.md`
 (sessions 2026-02-10 to 2026-04-25).
 
 **Permanent documentation**: Entries graduate to permanent
@@ -50,9 +50,9 @@ routed around at the cost of architectural excellence.
 
 The protocol is platform independent by design. Platform-specific
 agent-team features may help build, inspect, or stress test the system,
-but the repo-owned markdown/JSON/rules/commands/skills/hooks surfaces are
-the operating substrate and must remain sufficient without platform-native
-collaboration features.
+but the local markdown/JSON/rules/commands/skills/hooks surfaces are the
+operating substrate for Practice-owned coordination concepts and must remain
+sufficient without platform-native collaboration features.
 
 Before adding a new always-visible coordination surface, widen the regular
 state audit first. WS3A showed that active claims, closure history, decision
@@ -79,6 +79,19 @@ evidence accumulates to graduate to a PDR amendment or a rule:
 when citing an ADR or PDR by number, verify the filename and the
 substance against the live decision-record file rather than
 inheriting plan-body shorthand.
+
+Shared-state files are sweep-up surfaces, not commit blockers. Changes to
+`active-claims.json`, closed-claim archives, shared communication logs,
+conversation files, napkin, and distilled memory may be included in another
+agent's governance/docs commit when that avoids blocking useful work. Keep
+repo-functionality commits pathspec-clean; allow shared state to travel with
+the closeout that made it current. When editing hot shared JSON manually,
+prefer surgical, parser-backed edits over full-file rewrites.
+
+When an apparently orphaned active claim is found, archive it only through a
+deliberate governance pass or owner-forced close. If another session is
+already performing that cleanup, let the natural claim lifecycle finish rather
+than deleting unilaterally.
 
 ## Workspace-first before external tooling or new infrastructure
 

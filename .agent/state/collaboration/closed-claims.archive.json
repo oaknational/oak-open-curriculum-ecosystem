@@ -102,7 +102,7 @@
       "claimed_at": "2026-04-25T16:23:27Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan \u2014 claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
+      "intent": "WS1 implementation: promote embryo log into structured claims registry; install register-active-areas-at-session-open tripwire rule; wire consolidate-docs stale-claim audit; update directive and start-right skills. Self-application pilot per WS1 plan — claim opened and closed within the same atomic landing commit to demonstrate the lifecycle end-to-end.",
       "notes": "Closed at landing commit time. Archived as the founding entry in closed-claims.archive.json so future agents can see what a complete claim lifecycle looks like in real data, not just the schema definition. archived_at recorded below.",
       "archived_at": "2026-04-25",
       "closure": {
@@ -156,7 +156,7 @@
       "claimed_at": "2026-04-25T18:46:15Z",
       "freshness_seconds": 14400,
       "intent": "Pending-graduations promotion pass per owner direction: PDR-029 v2 amendment (tripwire-observability + advisory-not-enforcing); PDR-015 amendment (assumption-challenge / discussion-before-absorption); PDR-018 amendment (plan placement follows ownership); register hygiene; evaluate owner-correction cluster on substance not instance-count.",
-      "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength \u2014 three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
+      "notes": "Closed at session-end. Doctrine landed as f1f28e85 (8 files, 533+ insertions). Coordination with Keen Dahl on the observability thread functioned at production strength — three back-and-forth turns via embryo log + structured registry, additive merge on shared state surfaces (committed by Keen Dahl as 44930351 with both our edits). The protocol's first multi-turn coordination dance under real concurrent load.",
       "archived_at": "2026-04-25",
       "closure": {
         "kind": "explicit",
@@ -1553,27 +1553,27 @@
           {
             "kind": "commit",
             "ref": "e37a5795",
-            "summary": "Chunk 1 \u2014 commit-window protocol with git:index/head claims (schemas v1.2.0). 16 files, +275/-74."
+            "summary": "Chunk 1 — commit-window protocol with git:index/head claims (schemas v1.2.0). 16 files, +275/-74."
           },
           {
             "kind": "commit",
             "ref": "38472766",
-            "summary": "Chunk 2 \u2014 commit-window protocol + joint-decision protocol plan updates. 5 files, +58/-44."
+            "summary": "Chunk 2 — commit-window protocol + joint-decision protocol plan updates. 5 files, +58/-44."
           },
           {
             "kind": "commit",
             "ref": "9925ad59",
-            "summary": "Chunk 3 \u2014 learning-first fitness correction across Practice Core + ADR-144. 7 files, +22/-19."
+            "summary": "Chunk 3 — learning-first fitness correction across Practice Core + ADR-144. 7 files, +22/-19."
           },
           {
             "kind": "commit",
             "ref": "9bd91f81",
-            "summary": "Chunk 4 \u2014 pattern-library refresh for commit-window + learning-first. 6 files, +64/-37."
+            "summary": "Chunk 4 — pattern-library refresh for commit-window + learning-first. 6 files, +64/-37."
           },
           {
             "kind": "commit",
             "ref": "564e284f",
-            "summary": "Chunk 5a \u2014 close L-IMM lane fully after owner Marketplace verification. 3 files, +78/-91."
+            "summary": "Chunk 5a — close L-IMM lane fully after owner Marketplace verification. 3 files, +78/-91."
           },
           {
             "kind": "log_entry",
@@ -1641,12 +1641,12 @@
           {
             "kind": "command_output",
             "ref": "pnpm portability:check 2026-04-26T17:33Z",
-            "summary": "12 canonical commands, 36 canonical skills, 41 canonical rules, 22 reviewer adapters, 43 Cursor triggers, 41 Claude rules, 41 .agents rules, 40 command adapters across 4 platforms \u2014 all clean."
+            "summary": "12 canonical commands, 36 canonical skills, 41 canonical rules, 22 reviewer adapters, 43 Cursor triggers, 41 Claude rules, 41 .agents rules, 40 command adapters across 4 platforms — all clean."
           },
           {
             "kind": "command_output",
             "ref": "grep -rln 'collaboration/log.md' (live paths only)",
-            "summary": "Empty result \u2014 no live surface still references the old path."
+            "summary": "Empty result — no live surface still references the old path."
           }
         ]
       }
@@ -1687,7 +1687,7 @@
           {
             "kind": "commit",
             "ref": "a85b903c",
-            "summary": "docs(plans): add agent-identity-derivation plan and open ethereal-alpaca session \u2014 landed on feat/otel_sentry_enhancements."
+            "summary": "docs(plans): add agent-identity-derivation plan and open ethereal-alpaca session — landed on feat/otel_sentry_enhancements."
           },
           {
             "kind": "log_entry",
@@ -1788,7 +1788,7 @@
           "model": "claude-opus-4-7-1m",
           "session_id_prefix": "unknown"
         },
-        "summary": "Commit 80d9c2c0 landed on second attempt. First attempt blocked by markdownlint MD040 on a fenced code block in Frolicking Toast's earlier shared-comms-log entry; fixed by adding the `text` language tag (small additive edit on a co-tenant additive-append surface). Pre-commit chain (format-check, markdownlint, knip, depcruise, turbo type-check + lint + test across 19 packages) passed cleanly with full turbo cache hit on the second attempt. 19 files changed; 807 insertions; 92 deletions. Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 \u00d73 + S2871 \u00d75 + S6571 \u00d73 + S3776 \u00d72 on next push.",
+        "summary": "Commit 80d9c2c0 landed on second attempt. First attempt blocked by markdownlint MD040 on a fenced code block in Frolicking Toast's earlier shared-comms-log entry; fixed by adding the `text` language tag (small additive edit on a co-tenant additive-append surface). Pre-commit chain (format-check, markdownlint, knip, depcruise, turbo type-check + lint + test across 19 packages) passed cleanly with full turbo cache hit on the second attempt. 19 files changed; 807 insertions; 92 deletions. Resolves CodeQL #62/#63/#75/#79/#80 + Sonar S5852 ×3 + S2871 ×5 + S6571 ×3 + S3776 ×2 on next push.",
         "evidence": [
           {
             "kind": "commit",
@@ -1859,7 +1859,7 @@
           "model": "claude-opus-4-7-1m",
           "session_id_prefix": "unknown"
         },
-        "summary": "Session-end closure. PR-87 Phase 1 + 1A + 2 landed in commits 80d9c2c0 (substantive) + a85b903c (plan) + 7eb8a546 (commit-window record); session execution plan at ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md complete for in-scope phases. Phase 3-6 deferred to a follow-up session per the master plan. Three local commits NOT pushed \u2014 owner decides timing. Decision thread closed at conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Active claims registry empty at session close.",
+        "summary": "Session-end closure. PR-87 Phase 1 + 1A + 2 landed in commits 80d9c2c0 (substantive) + a85b903c (plan) + 7eb8a546 (commit-window record); session execution plan at ~/.claude/plans/jc-plan-jc-metacognition-pr-87-remediat-ethereal-alpaca.md complete for in-scope phases. Phase 3-6 deferred to a follow-up session per the master plan. Three local commits NOT pushed — owner decides timing. Decision thread closed at conversations/pr-87-codeql-sonar-ethereal-alpaca.json. Active claims registry empty at session close.",
         "evidence": [
           {
             "kind": "commit",
@@ -2323,7 +2323,7 @@
           {
             "kind": "command_output",
             "ref": "code-reviewer; docs-adr-reviewer; architecture-reviewer-fred",
-            "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan \u00a7Solution Architecture; update-config wording retired in \u00a7Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
+            "summary": "Three reviewers returned GO-WITH-CONDITIONS / COMPLIANT / GO-WITH-CONDITIONS. All substantive conditions absorbed before commit (CLAUDE_PROJECT_DIR shim anchor; src/claude/ documented in plan §Solution Architecture; update-config wording retired in §Dependencies; security-reviewer deferral disposition recorded; doc-accuracy nit fixed; plan archived per repo convention). Security-reviewer formally deferred with developer-local threat-model rationale."
           }
         ]
       }
@@ -2349,7 +2349,7 @@
       "freshness_seconds": 900,
       "sidebar_open": false,
       "intent": "Stage and commit the Phase 8 substantive bundle for agent-identity-derivation: Claude Code statusline shim, agent-tools src/claude/ adapter pair (untracked from prior Codex pass), package.json chmod, .claude/settings.json statusLine, agent-identity.md platform-status update, plan archive move + active/parent README updates, and thread next-session record refresh. State-file closeout (active-claims.json + closed-claims.archive.json + shared-comms-log.md) follows in a separate close-the-window commit per the 3a5e3d81 + ed256e6f pattern.",
-      "notes": "Pathspecs: .claude/scripts/statusline-identity.mjs, .claude/settings.json, agent-tools/src/claude/**, agent-tools/tests/claude/**, agent-tools/package.json, agent-tools/docs/agent-identity.md, plan move, parent + active READMEs, thread next-session record, plus knip.config.ts (added during commit-window iteration after pre-commit hook surfaced unused-export findings). Gates green: agent-tools build/type-check/lint/test/test:e2e, root format, markdownlint, knip, portability:check, full pre-commit pipeline. Peer claim: Vining Bending Root (9c7f4e51) on observability-sentry-otel \u2014 disjoint pathspec, mutually acknowledged.",
+      "notes": "Pathspecs: .claude/scripts/statusline-identity.mjs, .claude/settings.json, agent-tools/src/claude/**, agent-tools/tests/claude/**, agent-tools/package.json, agent-tools/docs/agent-identity.md, plan move, parent + active READMEs, thread next-session record, plus knip.config.ts (added during commit-window iteration after pre-commit hook surfaced unused-export findings). Gates green: agent-tools build/type-check/lint/test/test:e2e, root format, markdownlint, knip, portability:check, full pre-commit pipeline. Peer claim: Vining Bending Root (9c7f4e51) on observability-sentry-otel — disjoint pathspec, mutually acknowledged.",
       "archived_at": "2026-04-27",
       "closure": {
         "kind": "explicit",
@@ -2370,7 +2370,7 @@
           {
             "kind": "command_output",
             "ref": "git log --oneline -3",
-            "summary": "25d7c271, ed256e6f, 3a5e3d81 \u2014 substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
+            "summary": "25d7c271, ed256e6f, 3a5e3d81 — substantive Phase 8 bundle landed cleanly atop the prior identity foundation commits."
           }
         ]
       }
@@ -3428,7 +3428,7 @@
       ],
       "claimed_at": "2026-04-27T10:18:00Z",
       "freshness_seconds": 27720,
-      "intent": "PR-87 quality remediation under corrected disposition table \u2014 revert 03a58787; per-site Sonar work; Sonar Hotspot review; CodeQL #62/#63 polynomial-redos fix in remove-noise-phrases.ts",
+      "intent": "PR-87 quality remediation under corrected disposition table — revert 03a58787; per-site Sonar work; Sonar Hotspot review; CodeQL #62/#63 polynomial-redos fix in remove-noise-phrases.ts",
       "notes": "Claim restored to active-claims by owner commit 8cd49fe1 after the previous session's close attempt left the registry empty. Owner has now directed (2026-04-27T~14:00Z, plan approval session) that this claim be closed: the previous-session disposition framework is being superseded by a cluster-by-architectural-root-cause approach in /Users/jim/.claude/plans/1-those-were-my-composed-key.md. Co-tenant pathspecs (agent-tools/...) are not migrated to the closure record; that territory is not in the new claim's scope.",
       "archived_at": "2026-04-27",
       "closure": {
@@ -3455,7 +3455,7 @@
           {
             "kind": "commit",
             "ref": "dba01e7c",
-            "summary": "Revert of 03a58787 multicriteria suppression \u2014 the named principle violation that prompted the metacognitive correction."
+            "summary": "Revert of 03a58787 multicriteria suppression — the named principle violation that prompted the metacognitive correction."
           },
           {
             "kind": "commit",
@@ -3500,7 +3500,7 @@
       ],
       "claimed_at": "2026-04-27T14:05:00Z",
       "freshness_seconds": 14400,
-      "intent": "PR-87 architectural cleanup per /Users/jim/.claude/plans/1-those-were-my-composed-key.md \u2014 cluster-by-architectural-root-cause resolution. Phase 0 live re-harvest, Phase 1 owner exemplar edits, then Clusters A (DI-opacity rate-limiting), B (generic command runner \u2192 capabilities), C (schema-cache boundary), E (throw-non-Error per-site), F (bash hygiene), D (generated-code duplication). No suppressions; no per-rule sweeps.",
+      "intent": "PR-87 architectural cleanup per /Users/jim/.claude/plans/1-those-were-my-composed-key.md — cluster-by-architectural-root-cause resolution. Phase 0 live re-harvest, Phase 1 owner exemplar edits, then Clusters A (DI-opacity rate-limiting), B (generic command runner → capabilities), C (schema-cache boundary), E (throw-non-Error per-site), F (bash hygiene), D (generated-code duplication). No suppressions; no per-rule sweeps.",
       "notes": "Approved plan supersedes the Briny Ebbing Lagoon claim 331bce87 which is being closed in this session per owner direction. Pathspecs broaden as clusters open; will re-narrow at session-handoff. Plan file approved at /Users/jim/.claude/plans/1-those-were-my-composed-key.md.",
       "archived_at": "2026-04-27",
       "closure": {
@@ -3512,7 +3512,7 @@
           "model": "claude-opus-4-7-1m",
           "session_id_prefix": "compose"
         },
-        "summary": "Session-close after owner-directed metacognitive correction. Phase 1 of PR-87 architectural cleanup landed (5 commits, all pushed). Custom void/_ ESLint rule authored under drift then audited and stripped of allowlists during session-close; rule retained as dormant code; sweep work reverted entirely. Intermediary /jc-consolidate-docs ran. Fresh session resumes from clean state with full audit instructions in plan \u00a7\"Session 1 \u2014 outcome and suspect work\".",
+        "summary": "Session-close after owner-directed metacognitive correction. Phase 1 of PR-87 architectural cleanup landed (5 commits, all pushed). Custom void/_ ESLint rule authored under drift then audited and stripped of allowlists during session-close; rule retained as dormant code; sweep work reverted entirely. Intermediary /jc-consolidate-docs ran. Fresh session resumes from clean state with full audit instructions in plan §\"Session 1 — outcome and suspect work\".",
         "evidence": [
           {
             "kind": "commit",
@@ -3542,7 +3542,7 @@
           {
             "kind": "plan",
             "ref": ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
-            "summary": "Active plan with \u00a7\"Session 1 (Pelagic Flowing Dock) \u2014 outcome and suspect work\" enumerating session 1 results, what was reverted, and audit instructions for fresh session."
+            "summary": "Active plan with §\"Session 1 (Pelagic Flowing Dock) — outcome and suspect work\" enumerating session 1 results, what was reverted, and audit instructions for fresh session."
           },
           {
             "kind": "napkin",
@@ -4081,6 +4081,542 @@
             "kind": "commit_queue",
             "ref": "e5be95d2-b6f6-421d-99bf-2ed320534bfa",
             "summary": "Queue verified the exact staged bundle fingerprint before commit and was completed after commit."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cf818930-cf21-4630-9901-0def7afd3100",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/executive/artefact-inventory.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "agent-tools/README.md",
+            "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T08:33:06Z",
+      "freshness_seconds": 3600,
+      "intent": "Documentation-only capture of the owner-directed specificity-gradient doctrine across application code, Practice Core, and optional host-local operational tooling.",
+      "notes": "Active claim scan was empty at session open. Existing unrelated modified plan file stayed outside this claim.",
+      "archived_at": "2026-04-28T08:37:12Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T08:37:12Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Captured the specificity-gradient doctrine in principles, ADR-154, agent-tools documentation, artefact inventory, and the napkin.",
+        "evidence": [
+          {
+            "kind": "adr",
+            "ref": "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+            "summary": "ADR now names the specificity gradient and host-local operational tooling boundary."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md#owner-doctrine-context-specific-layers-stay-thin",
+            "summary": "Napkin records the owner doctrine for the learning loop."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm markdownlint-check:root; pnpm exec prettier --check; git diff --check",
+            "summary": "Formatting, markdown lint, and whitespace checks passed for the touched files."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "210417dd-012d-40b2-a16d-e1477e856622",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/executive/artefact-inventory.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/practice-index.md",
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-verification.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+            ".agent/rules/capture-practice-tool-feedback.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "agent-tools/README.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+            "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T08:54:26Z",
+      "freshness_seconds": 3600,
+      "intent": "Graduate the session's agent-work ownership doctrine into Practice PDRs and repo ADRs, then update adjacent plans, memory, and tooling docs so agent collaboration/coordination/work management/direction are treated as Practice substance with local phenotype implementations only.",
+      "notes": "Active claim scan was empty before opening. This was a documentation/state consolidation pass; existing adjacent modified continuity files were worked with rather than reverted.",
+      "archived_at": "2026-04-28T09:12:21Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T09:12:21Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Graduated agent-work ownership doctrine to PDR-035 and ADR-165, then aligned adjacent Practice Core, ADR, directive, memory, plan, state, and agent-tools surfaces to treat agent-work concepts as Practice substance with local phenotype implementations.",
+        "evidence": [
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+            "summary": "Portable Practice decision created for agent-work capability ownership."
+          },
+          {
+            "kind": "adr",
+            "ref": "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
+            "summary": "Repo phenotype ADR created for local implementation surfaces."
+          },
+          {
+            "kind": "command_output",
+            "ref": "jq empty; pnpm markdownlint-check:root; pnpm exec prettier --check; git diff --check; pnpm practice:fitness:informational",
+            "summary": "JSON, markdown lint, formatting, and whitespace checks passed; practice fitness remains informational CRITICAL due existing napkin/principles/repo-continuity pressure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ba379ca-0695-4c1c-8997-59552de6603e",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/architecture-and-infrastructure/current/README.md",
+            ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+            ".agent/plans/architecture-and-infrastructure/future/README.md",
+            ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md",
+            ".agent/plans/architecture-and-infrastructure/README.md",
+            ".agent/plans/architecture-and-infrastructure/roadmap.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:16:03Z",
+      "freshness_seconds": 3600,
+      "intent": "Strengthen the layer-separation doctrine so distinct architectural layers must live in separate workspaces, then update the architecture plans and continuity state with an executable audit/planning artefact for repo-wide workspace layer separation.",
+      "notes": "Active claim scan was empty. This pass works on top of existing uncommitted Practice/ADR consolidation changes and avoids reverting them.",
+      "archived_at": "2026-04-28T09:23:43Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T09:23:43Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Strengthened the layer-separation doctrine so distinct architectural layers require distinct workspaces, then created and linked the current workspace-layer separation audit plan across architecture and continuity surfaces.",
+        "evidence": [
+          {
+            "kind": "adr",
+            "ref": "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+            "summary": "ADR-154 now makes workspace topology the enforcement surface for layer separation."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+            "summary": "Current executable audit plan created for the layer/workspace matrix and migration tranches."
+          },
+          {
+            "kind": "command_output",
+            "ref": "jq empty; pnpm markdownlint-check:root; pnpm exec prettier --check; git diff --check; pnpm practice:fitness:informational",
+            "summary": "JSON, targeted markdown lint, formatting, and whitespace checks passed; practice fitness remains informational CRITICAL due known napkin/principles/repo-continuity pressure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b9fb7743-4069-41fd-a108-f63e4e97995b",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/agent-collaboration.md",
+            ".agent/directives/principles.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/executive/artefact-inventory.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/roadmap.md",
+            ".agent/plans/architecture-and-infrastructure/**",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            ".agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/practice-verification.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-index.md",
+            ".agent/rules/capture-practice-tool-feedback.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "agent-tools/README.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            "docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md",
+            "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:37:54Z",
+      "freshness_seconds": 3600,
+      "intent": "Run owner-requested session handoff, deep documentation consolidation, validation, and a pathspec-scoped commit for the Practice and architecture documentation changes from this session.",
+      "notes": "Initial scan found one fresh non-overlapping hook-test/agent-tools implementation claim (06418931-cf89-44dc-88f5-44315dcf93ca). Re-scan during consolidation found Woodland Creeping Petal claim a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b overlapping repo-continuity/thread/collaboration-state docs after this closeout claim had opened. Proceeding with caution: pathspec commit will avoid both agents' claimed code surfaces; shared collaboration-state files may be swept up per owner doctrine.",
+      "archived_at": "2026-04-28T09:42:23Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T09:42:23Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Completed owner-requested session handoff and documentation consolidation: refreshed continuity surfaces, rotated the active napkin, ran collaboration-state and fitness audits, and prepared a pathspec-scoped documentation commit.",
+        "evidence": [
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record refreshed with Pelagic Drifting Sail identity and workspace-layer audit next step."
+          },
+          {
+            "kind": "memory_archive",
+            "ref": ".agent/memory/active/archive/napkin-2026-04-28.md",
+            "summary": "Overweight active napkin rotated and new active napkin started."
+          },
+          {
+            "kind": "command_output",
+            "ref": "JSON parse audit; collaboration-state snapshot; pnpm practice:fitness:informational; pnpm practice:fitness:strict-hard",
+            "summary": "State JSON parsed; active collaboration state reported; fitness improved from CRITICAL to HARD; strict-hard still fails on known principles/repo-continuity pressure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "06418931-cf89-44dc-88f5-44315dcf93ca",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "scripts/check-blocked-content.mjs",
+            "scripts/check-blocked-content.unit.test.ts",
+            "scripts/check-blocked-content.integration.test.ts",
+            "scripts/check-blocked-patterns.mjs",
+            "scripts/check-blocked-patterns.unit.test.ts",
+            "scripts/check-blocked-patterns.integration.test.ts",
+            "agent-tools/src/core/health-probe*.ts",
+            "agent-tools/tests/health-probe*.ts",
+            "agent-tools/src/bin/claude-agent-ops*.ts",
+            "agent-tools/src/bin/cursor-session-from-claude-session*.ts",
+            "agent-tools/tests/agent-ops.unit.test.ts",
+            "agent-tools/tests/agent-identity/agent-identity.e2e.test.ts",
+            "agent-tools/tests/session-tools.unit.test.ts",
+            "agent-tools/tests/cli-smoke.e2e.test.ts",
+            "agent-tools/vitest.e2e.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:36:25Z",
+      "freshness_seconds": 14400,
+      "intent": "Implement hook test layering and IO remediation: lower/delete hook-related IO tests, add pure policy parsing and DI seams, and remove agent-tools CLI E2E process/filesystem coverage from regular gates.",
+      "notes": "Bootstrap fast-path: active-claims.json had claims: [] and commit_queue: [] before opening. Existing dirty worktree is unrelated Practice/docs work; edits will stay on the hook-test/code surfaces listed here plus append-only collaboration state.",
+      "archived_at": "2026-04-28T09:42:31Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T09:42:31Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Implemented hook test layering and IO remediation by adding pure policy/input helpers, injecting hook guard dependencies in tests, deleting process/filesystem E2E coverage, and keeping real IO at runtime composition boundaries.",
+        "evidence": [
+          {
+            "kind": "command_output",
+            "ref": "pnpm test:root-scripts",
+            "summary": "Passed after rewriting PreToolUse command/content guard tests to avoid filesystem policy and prior-file IO."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm agent-tools:test && pnpm agent-tools:test:e2e",
+            "summary": "Agent-tools unit/integration tests passed; E2E config exits cleanly with no retained IO-bearing E2E files."
+          },
+          {
+            "kind": "command_output",
+            "ref": "pnpm type-check && pnpm lint && pnpm test && git diff --check",
+            "summary": "Final type, lint, full test, and whitespace gates passed."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c4ffa696-61cb-49df-8d82-d4209706426f",
+      "agent_id": {
+        "agent_name": "Pelagic Drifting Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:44:19Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit documentation closeout for agent-work ownership, workspace-layer separation, handoff, and consolidation.",
+      "notes": "Pathspec-scoped docs/state commit. Staged set was empty before opening. Fresh peer claim a8dfe1e5 overlaps some docs/state surfaces and owns collaboration-state implementation code; this commit avoids all active implementation code paths and relies on shared-state sweep-up for hot collaboration files.",
+      "intent_to_commit": "78880112-2ad2-46cf-b9eb-e113329f1d26",
+      "archived_at": "2026-04-28T09:47:27Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T09:47:27Z",
+        "closed_by": {
+          "agent_name": "Pelagic Drifting Sail",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Commit window closed without a commit because commit-queue verification could not rebuild agent-tools while concurrent collaboration-state write-safety WIP has TypeScript errors. No hook bypass was used.",
+        "evidence": [
+          {
+            "kind": "command_output",
+            "ref": "pnpm agent-tools:commit-queue -- verify-staged --intent-id 78880112-2ad2-46cf-b9eb-e113329f1d26",
+            "summary": "Verification failed during agent-tools build on TypeScript errors in concurrent src/collaboration-state WIP."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0ed74eb3-8b1c-49ec-969d-c3e9f79d70fa",
+      "agent_id": {
+        "agent_name": "Glassy Ebbing Reef",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd3"
+      },
+      "thread": "security-and-privacy",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/high-level-plan.md",
+            ".agent/plans/security-and-privacy/README.md",
+            ".agent/plans/security-and-privacy/roadmap.md",
+            ".agent/plans/security-and-privacy/deferred-controls-register.md",
+            ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:57:20Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record that public beta of the Oak MCP server is blocked on appropriate Cloudflare MCP security capabilities from the 2026-04-14 Cloudflare enterprise MCP architecture post.",
+      "notes": "Scanned registry before opening: fresh claims a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b and a58518fd-3e02-4912-af6f-dadfd37167aa are on agentic engineering, collaboration-state, hook remediation, and shared lifecycle surfaces. No overlap with high-level or security-and-privacy planning docs; shared collaboration-state writes limited to required claim lifecycle.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:01:20Z",
+        "closed_by": {
+          "agent_name": "Glassy Ebbing Reef",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd3"
+        },
+        "summary": "Recorded Cloudflare MCP public-beta security blocker in the high-level milestone plan, security-and-privacy collection README, roadmap, and Phase 3 baseline cut list.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0ed74eb3-8b1c-49ec-969d-c3e9f79d70fa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bf9ff320-f1c1-4d92-90e2-048fbed335b9",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T10:02:42Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit the hook test IO remediation bundle.",
+      "notes": "Pathspecs: hook guard scripts/tests, agent-tools hook health/CLI tests, and closeout handoff docs. Gates: type-check, lint, test:root-scripts, agent-tools:test, agent-tools:test:e2e, and test passed; practice informational remains HARD on known docs pressure. Peer claims: Woodland collaboration-state WIP remains active; no fresh git index/head window observed; staged set was empty.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:08:27Z",
+        "closed_by": {
+          "agent_name": "Verdant Flowering Blossom",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknow"
+        },
+        "summary": "Committed ec49e8ec (test(hooks): remove IO from hook tests); commit queue intent 58f00f07-ff78-47ff-9049-f40e5cda21d0 completed after pre-commit gates passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bf9ff320-f1c1-4d92-90e2-048fbed335b9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a58518fd-3e02-4912-af6f-dadfd37167aa",
+      "agent_id": {
+        "agent_name": "Verdant Flowering Blossom",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "scripts/check-blocked-content.mjs",
+            "scripts/check-blocked-content.unit.test.ts",
+            "scripts/check-blocked-content.integration.test.ts",
+            "scripts/check-blocked-patterns.mjs",
+            "scripts/check-blocked-patterns.unit.test.ts",
+            "scripts/check-blocked-patterns.integration.test.ts",
+            "agent-tools/src/bin/claude-agent-ops.ts",
+            "agent-tools/src/core/agent-ops.ts",
+            "agent-tools/src/core/health-probe-hook-state.ts",
+            "agent-tools/tests/agent-ops.unit.test.ts",
+            "agent-tools/tests/health-probe.unit.test.ts",
+            "agent-tools/tests/agent-identity/agent-identity.e2e.test.ts",
+            "agent-tools/tests/cli-smoke.e2e.test.ts",
+            "agent-tools/tests/health-probe.fixtures.ts",
+            "agent-tools/vitest.e2e.config.ts",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T09:52:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run owner-requested session handoff, document consolidation, and a pathspec-scoped commit for hook test IO remediation.",
+      "notes": "Peer claim a8dfe1e5-5a93-4020-89ab-c5d0bb8fa57b owns collaboration-state write-safety implementation files. This closeout will avoid package.json and agent-tools collaboration-state implementation paths; shared state edits are limited to lifecycle/commit coordination required by owner-requested handoff and commit.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T10:08:27Z",
+        "closed_by": {
+          "agent_name": "Verdant Flowering Blossom",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknow"
+        },
+        "summary": "Ran the owner-requested session handoff and document consolidation workflows; hook test IO remediation landed as ec49e8ec; generated coordination state remains in the working tree with other live shared-state updates.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a58518fd-3e02-4912-af6f-dadfd37167aa",
+            "summary": "Claim explicitly closed by owning session."
           }
         ]
       }

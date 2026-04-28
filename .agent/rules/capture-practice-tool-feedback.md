@@ -2,8 +2,9 @@
 
 Operationalises
 [PDR-011](../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md),
-[PDR-014](../practice-core/decision-records/PDR-014-graduation-and-archive-protocol.md),
+[PDR-014](../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md),
 [PDR-024](../practice-core/decision-records/PDR-024-vital-integration-surfaces.md),
+[PDR-035](../practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md),
 and
 [ADR-131](../../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md).
 
@@ -16,11 +17,11 @@ still close to the work. These subjective and ergonomic signals are
 first-class evidence for the capture -> distil -> graduate loop.
 
 For this repo, `agent-tools` is a TypeScript-specific implementation surface
-for capabilities that should exist in every hydrated Practice. In another
-repo, the equivalent host-local surface may be a shell script, Python tool,
-editor extension, CI job, or something else. Capture the feedback at the
-behaviour level so consolidation can separate portable Practice substance
-from local implementation details.
+for Practice-owned capabilities. In another repo, the equivalent host-local
+surface may be a shell script, Python tool, editor extension, CI job, or
+something else, and some capabilities may need no local tool at all. Capture
+the feedback at the behaviour level so consolidation can separate portable
+Practice substance from local implementation details.
 
 ## Suggested Napkin Shape
 

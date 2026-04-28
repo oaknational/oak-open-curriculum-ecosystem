@@ -1,6 +1,37 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Ethereal Threading Supernova / codex /
+**Last refreshed**: 2026-04-28 (Verdant Flowering Blossom / codex / GPT-5 /
+unknown — owner-requested hook test IO remediation closeout. Session handoff
+and consolidation rechecked entry points, capture buffers, collaboration state,
+fitness, and gates; hook/root-script tests now use pure helpers and injected
+fakes rather than filesystem/process IO; agent-tools CLI E2E files with only
+process/filesystem smoke value are deleted from the CI E2E surface. Commit
+closeout also repaired a narrow collaboration-state export-surface blocker
+that `knip` found in the active write-safety WIP.)
+
+**Prior refresh**: 2026-04-28 (Pelagic Drifting Sail / codex / GPT-5 /
+unknown — owner explicitly instructed: fix the closeout error regardless of
+claims, then run `jc-session-handoff`, `jc-consolidate-docs`, and commit. The
+previous commit blocker no longer reproduced; `pnpm --filter
+@oaknational/agent-tools build` passed before any cross-claim source edit.)
+
+**Prior refresh**: 2026-04-28 (Woodland Creeping Petal / codex / GPT-5 /
+019dd3 — in-progress collaboration-state write-safety implementation.
+Promoted the strategic brief to
+[`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md);
+added deterministic Codex identity preflight, immutable comms event tooling,
+transaction-guarded JSON writes for shared collaboration state, TTL archive
+baseline, and commit-queue transaction reuse. Hooks remain a later refinement.)
+
+**Prior refresh**: 2026-04-28 (Pelagic Drifting Sail / codex / GPT-5 /
+unknown — owner clarified that distinct architectural layers must live in
+distinct workspaces. ADR-154, `principles.md`, architecture plan indexes,
+roadmap, repo-continuity, and napkin now point at the current executable
+workspace-layer separation audit plan. Handoff/consolidation rotated the
+overweight active napkin into `archive/napkin-2026-04-28.md` and distilled the
+remaining shared-state lessons.)
+
+**Prior refresh**: 2026-04-28 (Ethereal Threading Supernova / codex /
 GPT-5 / 019dd2 — final session handoff before owner-directed stop.
 Preserved the Codex hooks correction and session-close state semantics:
 Codex hooks exist upstream, but current official events show turn-scoped
@@ -216,8 +247,8 @@ former "embryo" vocabulary has been replaced on live surfaces with
 **shared communication log/system** language. Owner's platform-independence
 note is now integrated as a plan constraint and napkin principle:
 platform-specific agent-team features may help build or inspect the
-system, but the repo-owned markdown/JSON/rules/commands/skills/hooks
-surfaces must be sufficient to operate fully. Stale evidence-gate language
+system, but the local markdown/JSON/rules/commands/skills/hooks surfaces
+must be sufficient to operate fully. Stale evidence-gate language
 updated: the 2026-04-25 shared-communication-log entries now appear to
 meet the 3+ coordination-event inspection threshold, but this does **not**
 auto-resume WS3+; next step is owner-directed WS5 evidence harvest /
@@ -351,6 +382,9 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Verdant Flowering Blossom` | `codex` | `GPT-5` | *`unknown`* | `hook-test-io-remediation-handoff-consolidation-commit-closeout` | 2026-04-28 | 2026-04-28 |
+| `Woodland Creeping Petal` | `codex` | `GPT-5` | `019dd3` | `collaboration-state-write-safety-current-plan-implementation` | 2026-04-28 | 2026-04-28 |
+| `Pelagic Drifting Sail` | `codex` | `GPT-5` | *`unknown`* | `agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout` | 2026-04-28 | 2026-04-28 |
 | `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation; identity-session-handoff-consolidation; practice-tool-feedback-and-collaboration-state-domain-model-preservation` | 2026-04-24 | 2026-04-28 |
 | `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
 | `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff; cursor-sessionstart-hook-identity-mirror-docs-tests` | 2026-04-26 | 2026-04-27 |
@@ -376,7 +410,39 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session preserved collaboration-state session-close semantics
+**Latest session landed hook test IO remediation (2026-04-28 Verdant
+Flowering Blossom):**
+
+- retained hook tests now prove policy parsing, content extraction,
+  added-pattern matching, hook-health formatting, CLI arg parsing, and
+  guard composition at the lowest viable layer;
+- PreToolUse command/content guards accept injected blocked patterns and prior
+  readers, keeping policy-file and prior-file IO in runtime composition roots;
+- agent-tools CLI E2E tests that only proved `pnpm tsx` process startup,
+  help text, health output, cursor filtering, or invalid agent-id behaviour
+  were deleted or lowered to pure unit coverage;
+- validation passed for `pnpm test:root-scripts`, `pnpm agent-tools:test`,
+  `pnpm agent-tools:test:e2e`, `pnpm type-check`, `pnpm lint`, `pnpm knip`,
+  `pnpm depcruise`, `pnpm test`, `pnpm format-check:root`,
+  `pnpm markdownlint-check:root`, `pnpm practice:vocabulary`, and
+  `git diff --check`. `pnpm practice:fitness:strict-hard` still fails on
+  known documentation fitness pressure in `principles.md`,
+  `collaboration-state-conventions.md`, and `repo-continuity.md`.
+
+**Latest session is implementing collaboration-state write safety
+(2026-04-28 Woodland Creeping Petal):**
+
+- promoted the collaboration-state domain-model/comms-reliability brief into
+  [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md);
+- added `pnpm agent-tools:collaboration-state -- ...` for identity preflight,
+  comms append/render, claims open/heartbeat/close/archive-stale,
+  conversation append, escalation open/close, and state checks;
+- added transaction-guarded JSON writes for active claims, closed claims,
+  conversations, escalations, and commit queue mutations;
+- kept hook/session-exit work as later polish and retained TTL cleanup as the
+  portable baseline.
+
+**Prior session preserved collaboration-state session-close semantics
 (2026-04-28 Ethereal Threading Supernova):**
 
 - corrected the Codex platform classification after owner supplied the
@@ -428,7 +494,7 @@ Rudder):**
   graduation; the future source plan carries the `2ccefad4` turn-race
   evidence and now keeps only the residual `session_counter` slice future-only;
 - added active-claims schema v1.3.0 with root `commit_queue`, optional claim
-  `intent_to_commit` pointer, and repo-owned helper
+  `intent_to_commit` pointer, and local helper
   `pnpm agent-tools:commit-queue --` for enqueue, phase, staged-fingerprint capture,
   exact staged-bundle verification, and completion cleanup;
 - updated commit, start-right, active-claim, collaboration, consolidation, and
@@ -803,7 +869,9 @@ nl -ba .agent/directives/AGENT.md
   shared inter-agent state records get multi-agent-safe write paths after the
   domain boundaries are named, log/claims/conversation responsibility split,
   UTC validation need, sidebar attention questions, active-participant
-  verification gap, and identity-preflight requirement.
+  verification gap, and identity-preflight requirement. Owner priority update
+  2026-04-28: promotion trigger is satisfied; clashing writes to shared state
+  are pressing, while hooks/session-exit cleanup are refinements.
 - Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 - Follow-on:
@@ -820,14 +888,16 @@ or captured in the working tree (refreshed 2026-04-27).**
 
 **2026-04-28 update:** the communication-channel register, Practice/tooling
 feedback capture rule, UTC convention, and ADR/PDR drift refresh are now
-captured. The remaining work is strategic domain modelling, not an immediate
-hotfix: decide whether shared communications need an event-file/queue write
-path, how claims/logs/conversations differ, how agents discover targeted
-sidebars, and how identity/liveness preflight prevents phantom participants.
+captured. Owner has now clarified priority: resolving clashing writes to shared
+state is pressing. The next session should promote
+`collaboration-state-domain-model-and-comms-reliability.plan.md` into a current
+executable plan and start with write-safety for shared state records, defining
+only enough domain model to choose the right mechanism per record type.
 Owner-settled follow-up semantics are preserved: session close closes claims;
 resume opens fresh claims; stale/orphan TTL cleanup handles missed closes;
-shared comms needs hot-plus-archive retention; Codex has hooks but no
-documented session-exit hook yet.
+shared comms needs hot-plus-archive retention. Codex has hooks but no
+documented session-exit hook yet; treat that as refinement, not a blocker for
+the shared-state write-safety slice.
 WS0 (`63c66c88`), WS1 (`a5d33519`), WS2 (`293742cd`), WS3A, the
 owner-approved lifecycle wiring pass, and the `git:index/head`
 coordination refinement are reflected in documentation/state surfaces.
@@ -893,6 +963,11 @@ validation.
   `.agent/rules/capture-practice-tool-feedback.md`, platform adapters in
   `.agents/`, `.claude/`, and `.cursor/`, and napkin guidance naming
   `agent-tools` as this repo's TypeScript-specific implementation surface.
+- Agent-work ownership is now settled explicitly: PDR-035 says collaboration,
+  coordination, work management, direction, lifecycle, identity, claims,
+  handoff, review routing, and adjacent mechanisms belong to the portable
+  Practice; ADR-165 records this repo's phenotype boundary for `.agent/state`,
+  operational memory, platform adapters, plans, and `agent-tools`.
 - Communication-channel discoverability now points to
   [`agent-collaboration-channels.md`](../../../memory/executive/agent-collaboration-channels.md)
   from executive, operational, and Practice index surfaces.
@@ -902,7 +977,9 @@ validation.
   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   is the durable holding point for shared-log collision analysis, sidebar
   polling/attention/push questions, identity preflight, and stale/phantom
-  active-participant reconciliation.
+  active-participant reconciliation. Its promotion trigger is satisfied by
+  owner direction; do not wait for another collision before creating the
+  executable plan.
 - Session-close semantics are owner-settled for current terminal-based
   agents: do not reclaim old claims on resume; close claims when the agent
   closes the session; if cleanup is missed, mark stale/orphaned after the
@@ -912,8 +989,13 @@ validation.
   live file small enough for scan/start-right use, and roll older context into
   a durable archive rather than deleting it.
 - Codex hook support is no longer unknown: upstream hooks exist, but no
-  documented `SessionEnd` parity exists yet. Use standard TTL cleanup for
-  Codex missed exits unless a future Codex session-exit event appears.
+  documented `SessionEnd` parity exists yet. This is secondary to the pressing
+  shared-state write-collision work; use standard TTL cleanup for Codex missed
+  exits unless a future Codex session-exit event appears.
+- Owner override on 2026-04-28 allowed crossing claim boundaries to fix the
+  closeout blocker. The live blocker was resolved by current WIP before a new
+  source edit: `pnpm --filter @oaknational/agent-tools build` passes. Future
+  agents should re-run stale blocker commands before editing active WIP.
 - Cross-vendor shared-log communication has a live proof point and a limit:
   Codex left Vining a repo-context-specific future-design note with no
   platform bridge, but the first heartbeat found no visible pickup. Treat the
@@ -949,6 +1031,10 @@ validation.
 - Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
+- `pnpm practice:fitness --strict-hard` currently fails on structural pressure
+  in `principles.md`, `collaboration-state-conventions.md`, and
+  `repo-continuity.md`. The write-safety plan now carries the closure rule:
+  remediate or owner-route those hard findings before marking that plan done.
 - The owner corrected the live participant set to Codex, Estuarine, and
   Prismatic. Treat `Luminous Dancing Quasar` as a stale/phantom claim or
   identity mismatch unless a sub-agent registration is found; claim existence
@@ -980,36 +1066,43 @@ the advisory commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Collaboration-state domain model** — when owner-promoted, start from
-   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
-   First safe step: reconcile active participant registry vs the real active
-   agents (Codex, Estuarine, Prismatic), especially the `Luminous` phantom
-   claim and missing Estuarine claim; then define state-domain boundaries and
-   choose write-safety mechanisms for every shared inter-agent state record,
-   plus session-close TTL cleanup, shared-comms rolling archive, sidebar
-   attention cadence, UTC validation, and identity preflight.
+1. **Collaboration-state write safety** — continue
+   [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md).
+   The plan is now promoted and implementation is underway. Next safe step is
+   validation and doc consolidation: keep the first slice focused on
+   deterministic identity preflight, immutable comms events,
+   transaction-guarded shared JSON writes, and TTL cleanup. Treat
+   hooks/session-exit cleanup as a later refinement.
 
-2. **Strict exact-optional cleanup** — fix the pre-existing
+2. **Workspace layer separation audit** — architecture-and-infrastructure now
+   has a queued executable plan:
+   [`workspace-layer-separation-audit.plan.md`](../../../plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md).
+   First safe step: Phase 0 inventory against ADR-154, ADR-108, the Oak
+   surface isolation programme, `pnpm-workspace.yaml`, and current package
+   manifests before any package moves.
+
+3. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
-3. **First real sidebar / joint-decision seed** — when a real overlap uses
+4. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-4. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+5. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-5. **Observability branch-primary** — read the
+6. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-6. **Lifecycle integration follow-up** — only if owner-directed, observe
-   whether the new start-right / handoff / template lifecycle triggers are
-   actually used in the next few sessions. Do not add hooks without evidence;
-   first real sidebar/joint-decision usage should feed WS5 observation.
-7. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
+7. **Lifecycle integration follow-up** — only after write-collision relief is
+   underway or owner-directed, observe whether the new start-right / handoff /
+   template lifecycle triggers are actually used in real sessions. Do not add
+   hook refinements before the shared-state write path is made safer; first
+   real sidebar/joint-decision usage should feed WS5 observation.
+8. **Codex/Cursor identity display follow-up** — Codex automatic seeding is
    wired; CLI/TUI title/statusline surfaces exist, but no supported IDE
    custom-title setting was found. Cursor composer `session_id` seeds the repo
    hook; **tab title** still requires manual rename from mirror or a future
    Cursor API — track product requests separately from repo derivation.
-8. **Other agentic engineering work** — pick an owner-directed queued plan.
+9. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
@@ -1039,4 +1132,5 @@ Choose the lane deliberately:
   to it.
 - If agent-tools communication primitives resume, keep the implementation
   TypeScript-specific but document the capability contract as portable
-  Practice behaviour.
+  Practice behaviour under PDR-035, with this repo's implementation choices
+  treated as ADR-165 phenotype.

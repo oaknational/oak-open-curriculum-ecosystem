@@ -8,13 +8,11 @@ split_strategy: "Extract per-surface lifecycle detail to companion docs as new s
 
 # Collaboration State Conventions
 
-Operational guide to the live state in `.agent/state/collaboration/`:
-where it lives, how it evolves, and how stale entries are cleaned up. The
-doctrinal authority is
-[`agent-collaboration.md`][directive] plus
-[PDR-029 Family A Class A.3][pdr-029] for the shared git transaction /
-authorial-bundle tripwire; this file is the how-it-works-in-practice
-companion. Detailed lifecycle recipes live in
+Operational guide to `.agent/state/collaboration/`: where it lives, how it
+evolves, and how stale entries are cleaned up. Authority:
+[`agent-collaboration.md`][directive], [PDR-035][pdr-035] for agent-work
+ownership, and [PDR-029 Family A Class A.3][pdr-029] for the shared git
+transaction tripwire. Detailed lifecycle recipes live in
 [`collaboration-state-lifecycle.md`][lifecycle].
 
 ## Surfaces
@@ -25,8 +23,9 @@ canonical value for stale/fresh calculations and durable state.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
-| [`shared-comms-log.md`][log] | Schema-less append-only markdown | Current hot log is append-only; future domain-model work must add rolling archive without losing older context | WS0 + 2026-04-28 owner direction |
-| [`active-claims.json`][active-claims] | Structured JSON; queryable registry plus `commit_queue` | Append-on-claim and append-on-queue; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue |
+| [`comms/events/`][comms-events] | One immutable JSON file per communication event | Exclusive-create append; render into the shared log; archive old rendered history rather than deleting it | CSW |
+| [`shared-comms-log.md`][log] | Generated markdown read model | Human/agent discovery surface rendered from comms events; legacy rendered history remains preserved during migration | WS0 + CSW |
+| [`active-claims.json`][active-claims] | Structured JSON; queryable registry plus `commit_queue` | Mutate through the collaboration-state transaction helper; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue + CSW |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
 | [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS3A |
 | [`closed-claims.archive.json`][closed-claims] | JSON archive preserving claim body plus closure metadata | Append-on-explicit-close, stale archive, or owner-forced close; never deleted; permanent reference for `claim_id` citations | WS1/WS3A |
@@ -80,6 +79,20 @@ staleness is worse than delayed staleness because it creates false noise
 during live edits. WS5 evidence is the planned re-evaluation gate.
 Commit-window claims intentionally override this to 900 seconds because
 staging/commit should be brief.
+
+## Write-Safety Contract
+
+New shared-state writes use the
+[`collaboration-state-write-safety`][csw-plan] contract:
+
+- derive identity before mutation; Codex writes with `CODEX_THREAD_ID`
+  available must not write as `Codex` / `unknown`;
+- append discovery notes as immutable comms events and render
+  `shared-comms-log.md` as a read model;
+- mutate active claims, commit queue entries, closed claims, conversations,
+  and escalations through the transaction helper exposed by
+  `pnpm agent-tools:collaboration-state -- ...`;
+- keep hooks as later polish. TTL cleanup is the portable baseline.
 
 ## Session-Close and Resume Semantics
 
@@ -164,9 +177,11 @@ fields:
   founding pattern that motivated the protocol.
 
 [directive]: ../../directives/agent-collaboration.md
+[pdr-035]: ../../practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md
 [pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md
 [lifecycle]: collaboration-state-lifecycle.md
 [log]: ../../state/collaboration/shared-comms-log.md
+[comms-events]: ../../state/collaboration/comms/events/
 [active-claims]: ../../state/collaboration/active-claims.json
 [active-claims-schema]: ../../state/collaboration/active-claims.schema.json
 [closed-claims-schema]: ../../state/collaboration/closed-claims.schema.json
@@ -181,3 +196,4 @@ fields:
 [consolidate-7e]: ../../commands/consolidate-docs.md#stale-claim-audit
 [founding-pattern]: ../collaboration/parallel-track-pre-commit-gate-coupling.md
 [p]: ../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
+[csw-plan]: ../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md

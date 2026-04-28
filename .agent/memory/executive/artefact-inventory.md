@@ -27,7 +27,19 @@ For the live platform support matrix, see
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
 | `.agent/memory/active/patterns/` | Reusable solutions ([README](../active/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
-| `agent-tools/` | Agent workflow CLIs |
+
+## Host-Local Operational Tooling
+
+| Location | Purpose |
+|----------|---------|
+| `agent-tools/` | TypeScript implementation of optional Practice-operational CLIs |
+
+`agent-tools/` is not portable Practice Core content and is not a platform
+adapter. It is this repo's TypeScript implementation of capabilities that
+may need equivalents in other ecosystems. Behaviour-level contracts belong in
+`.agent/`; implementation details stay in the host-local tool. Agent-work
+capabilities are Practice-owned by default per PDR-035; this repo's phenotype
+boundary is ADR-165.
 
 ## Platform Entrypoints
 
