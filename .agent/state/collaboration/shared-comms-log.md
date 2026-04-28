@@ -3546,3 +3546,99 @@ closure entry needs to be re-added by Coastal in a future session;
 their session-close evidence remains durable in the comms-log entry
 at 2026-04-27T16:46:45Z (committed). Owner direction needed on
 whether to commit Coastal's remaining 15 uncommitted files.
+
+---
+
+### 2026-04-28T05:26:51Z — `Tidal Rolling Lighthouse` / `claude-code` / `claude-opus-4-7-1m` / `compose` — PR-87 Phase 1 (Cluster B) execution open
+
+Opening claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` for the runGitCommand-chain lockdown on `feat/otel_sentry_enhancements`.
+
+**Areas touched:**
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+- (read-only reference) `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`
+
+**Intent:** Phase 1 of the re-grounded execution plan at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. Replace the generic `executeGitCommand(args, cwd)` DI seam with two narrow named capabilities (`gitShowFileAtSha`, `gitFetchShallow`); validate `VERCEL_GIT_PREVIOUS_SHA` at trust boundary against `/^[0-9a-f]{40}$/`; run `execFileSync` with a scrubbed env (no HOME, `GIT_CONFIG_GLOBAL=/dev/null`, `GIT_CONFIG_SYSTEM=/dev/null`, `GIT_TERMINAL_PROMPT=0`). TDD: existing 8 unit tests get extended; SHA-format negative cases added; runtime success of the two capabilities under scrubbed env asserted.
+
+**Why this matters:** adversarial security review (this session) surfaced a MUST-FIX argv-injection class — `previousSha` flowing unchecked into `git fetch --depth=1 origin <sha>` and `git show <sha>:package.json`. `execFileSync` skips the shell, but git itself parses options, so a hostile leading-`-` value (`--upload-pack=…`, `--output=…`, `--exec-path=…`, `--config …`) can hijack git behaviour. Vercel docs treat `VERCEL_GIT_*` as pass-through from upstream provider — outside Oak's trust boundary.
+
+**Coordination note for the next agent reading this log:** the cluster commit will close the last TO_REVIEW Sonar hotspot (`AZ3D3iflrIk5eL0ceU__`, S4036 PATH at `vercel-ignore-production-non-release-build.mjs:152`) by changing the data flow, not by status flip. No Sonar MCP write call is made for the hotspot.
+
+---
+
+### 2026-04-28T05:48:04Z — `Tidal Rolling Lighthouse` / `claude-code` / `claude-opus-4-7-1m` / `compose` — Phase 1 (Cluster B) WIP handoff
+
+Heartbeat refresh on claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65`; claim remains OPEN at session-close. Work landed in working tree, not committed. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open).
+
+**Working tree (8 file-level changes uncommitted):**
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs` — full lockdown refactor.
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs` — 8 → 32 tests.
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.integration.test.mjs` — DELETED (mis-classified per testing-strategy item 8).
+- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts` — NEW e2e runtime contract test.
+- `.agent/memory/active/napkin.md`, `.agent/memory/operational/repo-continuity.md`, `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`, `.agent/state/collaboration/active-claims.json`, `.agent/state/collaboration/shared-comms-log.md` — continuity surface refreshes.
+
+**Reviewer status:** 4-of-5 dispatched and absorbed (`code-reviewer`, `security-reviewer`, `architecture-reviewer-fred`, `test-reviewer`). `architecture-reviewer-wilma` deferred to next session — fail-open posture under ADR-163 §10 + shallow-clone fetch reachability.
+
+**Gates pending re-run after second-wave edits:** lint:fix, type-check, full test, test:e2e, markdownlint, format, build. Pre-second-wave gates were green (32/32 unit + 721/721 full + 110/110 root-scripts).
+
+**Coordination note for the next agent:** do NOT close the claim until Phase 1 commit lands and gates re-confirm green. The Stance section of the re-grounded plan is operational at every phase boundary — no fallback dispositions, no `accept` / `false_positive` / `cpd.exclusions`.
+
+---
+
+### 2026-04-28T15:00:00Z — `Luminous Dancing Quasar` / `claude-code` / `claude-opus-4-7-1m` / `pr87ph` — PR-87 Phase 1 second-wave open (claim inherited)
+
+Inheriting open claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` from `Tidal Rolling Lighthouse` per PDR-027 additive identity. Tidal's lineage entry preserved in `lineage[]` on the claim; agent_id rotated to current holder. Session display name derived via `pnpm agent-tools:agent-identity --seed pr87-phase1-cluster-b-2026-04-28-second-wave --format display`.
+
+**State verified at session-open** (verification commands precede every assertion below):
+
+- `git rev-parse HEAD && git rev-parse origin/feat/otel_sentry_enhancements && gh pr view 87 …` → all three at `fe2c18f5e2f0af488ed5c87be64acd5ce72422cf`; `mergeStateStatus=BLOCKED`, `mergeable=MERGEABLE`. Brief's expectation holds.
+- `git status --porcelain` → 8 file-level changes (3 build-scripts + 5 .agent continuity surfaces). Matches Tidal's handoff. The integration-test "deletion" was working-tree-only — never tracked in HEAD — so no `D` line appears, but the file is gone, which is the relevant fact.
+- `mcp__sonarqube__get_project_quality_gate_status pullRequest=87` → ERROR. `new_violations=27`, `new_duplicated_lines_density=5.6%`, `new_security_hotspots_reviewed=90.9%`. Expected unchanged values held.
+- `mcp__sonarqube__search_security_hotspots status=TO_REVIEW pullRequest=87` → 1 hotspot: `AZ3D3iflrIk5eL0ceU__`, S4036 PATH at `vercel-ignore-production-non-release-build.mjs:152`. The same site Phase 1 closes via env-scrub.
+- `gh api …code-scanning/alerts?ref=refs/pull/87/head&state=open` → 7 OPEN alerts: 5 × `js/missing-rate-limiting` (Cluster A) + 2 × `js/http-to-file-access` on `schema-cache.ts` (Cluster C). Matches plan §"Verified live state".
+
+**Plan of record**: `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` (12 phases, owner-approved); architectural map at `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.md`.
+
+**Next moves**:
+
+1. Dispatch `architecture-reviewer-wilma` against the working-tree refactor — brief: fail-open posture under ADR-163 §10 + shallow-clone fetch reachability for arbitrary previous-deploy SHAs on Vercel runtime; recommend whether `git log --oneline -n 100` local-search supplement is warranted.
+2. Absorb Wilma's findings inline if non-trivial.
+3. Re-run gates one-at-a-time (filter, lint:fix, type-check, full test, test:e2e, format, markdownlint, build).
+4. Cluster commit naming the architectural shape: `refactor(vercel-ignore): lock down git capabilities; add boundary SHA validation; scrub git env`. Body absorbs all 5 reviewers + sweep findings + empirical-proof note.
+5. Push; observe CI; verify hotspot `AZ3D3iflrIk5eL0ceU__` drops out of dataflow (NOT via status flip).
+6. Phase 2 (Cluster A) opens with pre-phase `security-reviewer` adversarial dispatch on rate-limit bypass paths.
+
+**Discipline carried forward**: §Stance is operational at every phase boundary. No fallback dispositions; no `accept` / `false_positive` / `cpd.exclusions`. State assertions in documentation MUST be preceded by the verification command that produced them. Trigger words ("stylistic", "false-positive", "out of scope", "convention", "language idiom", "all done", "all pushed", "per the brief", "per the handoff", "fall back to") halt me at the site.
+
+**Coordination note for the next agent reading this log:** if you arrive after my session-close, verify state independently — owner may push between sessions. The cluster commit subject is committed by the plan's discipline; do not soften it under context pressure.
+
+---
+
+### 2026-04-28T15:25:00Z — `Luminous Dancing Quasar` / `claude-code` / `claude-opus-4-7-1m` / `pr87ph` — concurrent agent detected on agent-tools/
+
+Mid-session observation: `git status --porcelain` re-run during the Phase 1 lint pass surfaces files that were not present at my session-open: `agent-tools/src/claude/session-identity-hook.ts` (new), `agent-tools/src/bin/claude-session-identity-hook.ts` (new), `agent-tools/tests/claude/session-identity-hook.unit.test.ts` (new), plus modifications to `agent-tools/src/bin/agent-identity-cli.ts`, `agent-tools/src/cursor/oak-session-identity-hook.ts`, `agent-tools/tests/agent-identity/cli.unit.test.ts`, `agent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts`. File timestamps cluster around 07:17–07:19Z (during my session). `ps aux` shows a second `claude` process (pid 45897, started 06:21Z) running in parallel — likely the source.
+
+The new files appear to implement the Claude Code SessionStart hook design that the predecessor scoped at session-close (`now.md`: "designed SessionStart/$CLAUDE_ENV_FILE fix w/ PRACTICE_* prefix, identified multi-instance namespace collision risk requiring design resolution before impl"). No claim for them is registered in `active-claims.json`. This is a coordination signal, not a refusal — I am not editing or committing those files; my Phase 1 cluster commit stages only the `apps/oak-curriculum-mcp-streamable-http/**` changes I own.
+
+**Repo-wide gates note:** `pnpm lint:fix` currently fails repo-wide because `agent-tools/src/claude/session-identity-hook.ts:104:22` has an unresolved `@typescript-eslint/consistent-type-assertions` error. That is the parallel session's WIP and not on my critical path. I am running gates **scoped to `@oaknational/oak-curriculum-mcp-streamable-http`** and the touched config files; full repo gates wait for the parallel session to converge.
+
+---
+
+### 2026-04-28T15:32:00Z — `Luminous Dancing Quasar` / `claude-code` / `claude-opus-4-7-1m` / `pr87ph` — Phase 1 commit BLOCKED at pre-commit
+
+Phase 1 cluster commit attempted with 13 explicit pathspecs; pre-commit hook failed because the repo-wide `pnpm lint` invoked across all workspaces hit `agent-tools/src/claude/session-identity-hook.ts:104:22` (`@typescript-eslint/consistent-type-assertions` on a `parsed as { readonly session_id?: unknown }` cast). My commit message validated clean via `scripts/check-commit-message.sh -F`; my workspace gates were all green; staged set is exactly the 13 files queued.
+
+The agent-tools/ file was last modified 42 seconds before the hook ran — the parallel session is actively editing it. No claim for that file is registered in `active-claims.json`. Per `.agent/rules/no-verify-requires-fresh-authorisation.md` and the §Stance discipline ("no fallback dispositions, no check disables"), I have NOT bypassed the hook. Per `.agent/rules/respect-active-agent-claims.md` I have NOT touched the parallel session's file.
+
+Coordination paths the owner can choose:
+
+1. Wait for the parallel session to fix and converge (passive); I can re-attempt the commit.
+2. Authorise --no-verify for this one commit so Phase 1 can land before re-converging.
+3. Direct me to make a surgical type-guard refactor on `session-identity-hook.ts:104` (intrudes on parallel session WIP).
+4. Direct the parallel session via owner-side action (the parallel session is not currently logging here).
+
+Commit queue entry phase moved to `blocked_external` with a verbatim record of the failure and these options. Files remain staged for fast re-attempt.
+
+**Resolved 2026-04-28T15:35:00Z** — owner-confirmed the parallel session's lint issue is fixed; `pnpm --filter @oaknational/agent-tools lint` exits clean. Queue phase moved back to `staging`; re-staging the active-claims.json + this comms-log update so the resolution narrative lands in the cluster commit, then re-attempting.

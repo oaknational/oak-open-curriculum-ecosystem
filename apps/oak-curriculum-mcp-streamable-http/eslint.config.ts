@@ -68,7 +68,7 @@ const config = defineConfigArray(
   },
   // no special ignores for vitest.e2e.config.ts; treat as config file below
   {
-    files: ['**/*.ts'],
+    files: ['**/*.ts', '**/*.d.mts'],
     languageOptions: {
       parserOptions: {
         projectService: true,

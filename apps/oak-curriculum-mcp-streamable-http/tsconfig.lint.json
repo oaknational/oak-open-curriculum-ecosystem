@@ -6,6 +6,7 @@
   },
   "include": [
     "build-scripts/**/*.ts",
+    "build-scripts/**/*.d.mts",
     "operations/**/*.ts",
     "src/**/*.ts",
     "scripts/**/*.ts",

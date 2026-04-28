@@ -8,7 +8,24 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-27 (Coastal Washing Rudder / codex /
+**Last refreshed**: 2026-04-28 (Tidal Rolling Lighthouse / claude-code /
+claude-opus-4-7-1m — PR-87 quality remediation re-grounding pass. Fresh
+state harvested: PR-87 head `fe2c18f5`, mergeable=blocked, CodeQL 7 OPEN
+(5 Cluster A + 2 Cluster C), Sonar QG ERROR with `new_violations=27`,
+`new_duplicated_lines_density=5.6%`, `new_security_hotspots_reviewed=90.9%`
+(1 TO_REVIEW remaining at `vercel-ignore-production-non-release-build.mjs:152`).
+Owner re-framed remaining 7 CodeQL alerts as two architectural problems
+("constraining what is written to disk" + "making rate limiting visible to
+the analysis"). Owner elevated **Cluster B (`runGitCommand` lockdown)** to
+top priority; adversarial security review surfaced a **MUST-FIX argv-injection**
+class via `VERCEL_GIT_PREVIOUS_SHA`. Owner-approved 12-phase execution plan
+landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` after
+metacognition + assumptions-reviewer pass that closed three drift channels
+("if recognition does not propagate" fallback in Phase 2; "Resolve in Sonar
+MCP" hotspot status flip; "keep finding shapes until it does" open-ended
+loop in Phase 11). Session was planning-only — no commits.)
+
+**Prior refresh**: 2026-04-27 (Coastal Washing Rudder / codex /
 gpt-5.5 / 019dcf — owner-directed queue governance graduation pass. Queue
 doctrine from evidence commit `5c39d1d4` is now graduated into PDR-029 Family A
 Class A.3, operational semantics live in collaboration-state conventions and
@@ -40,8 +57,9 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`; current HEAD was verified as
-  `0b8af81f` during the 2026-04-27 queue-governance edit pass.
+- Branch: `feat/otel_sentry_enhancements`; current HEAD verified as
+  `fe2c18f5` during the 2026-04-28 PR-87 re-grounding edit pass (matches
+  origin and PR head).
 - Current dirty work is the owner-directed queue governance graduation plus
   preserved prior queue-handoff collaboration-state closeout. Active claims and
   `commit_queue` are empty after this closeout; re-check both plus
@@ -98,7 +116,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Full history in thread record. Latest active identities: Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2-phase-0-1-cluster-q-and-cluster-a-sink-trace / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-and-void-underscore-rule-author-then-metacognitive-correction-and-handoff / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5-execution-and-metacognitive-correction / 2026-04-27; Frolicking Toast / `claude-code` / `claude-opus-4-7-1m` / L-IMM-execution / 2026-04-26. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Fragrant Sheltering Pollen / `codex` / `gpt-5.5` / owner-directed-codex-app-server-rollback-agent-tools-gates-and-commit-queue-evidence / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27; Pelagic Washing Sail / `codex` / `gpt-5` / collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout / 2026-04-27. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
@@ -193,26 +211,35 @@ Choose the lane deliberately:
    - L-IMM lane (operational hardening): closed at 6/6.
      [`archive/completed/sentry-immediate-next-steps.plan.md`](../../plans/observability/archive/completed/sentry-immediate-next-steps.plan.md).
    - [`active/pr-87-architectural-cleanup.plan.md`](../../plans/observability/active/pr-87-architectural-cleanup.plan.md)
-     supersedes the previous `pr-87-quality-finding-resolution.plan.md`
-     (now in `archive/superseded/`). HEAD = origin = PR-87 head =
-     `cadc26eb` (2 commits pushed by Opalescent Gliding Prism this
-     session: `882d1f2c` re-grounding + `cadc26eb` dormant-rule deletion).
-     CodeQL OPEN: 7 (was 12; 5 dismissed in Cluster Q). Sonar QG ERROR:
-     27 violations + 5.7% duplication + 2 TO_REVIEW hotspots (one
-     pending Cluster B refactor; the new one accepted as SAFE this
-     session).
-   - **Next safe step on this lane**: Cluster A (DI-opacity rate-limiting,
-     5 CodeQL alerts). Sink-trace analysis landed in plan body
-     §Cluster A "Sink-trace findings (Session 2)". Multi-file structural
-     cure: narrow `RateLimiterFactory` return type from `RequestHandler`
-     to `RateLimitRequestHandler`, extend test fake at
-     `test-helpers/rate-limiter-fakes.ts` with stub `getKey`/`resetKey`
-     methods, narrow parameter types in 3 route-registration files.
-     Multi-commit; needs CI cycle for CodeQL recognition probe; reviewer
-     dispatch (code/type/test/security/mcp/arch-fred/arch-wilma in
-     parallel). Fallback per plan: dismiss-with-rationale citing TSDoc
-     attestations at `auth-routes.ts:18-32, 47-75, 124-138` + integration
-     tests at `rate-limiter-di.integration.test.ts`.
+     remains the architectural map. **HEAD = origin = PR-87 head =
+     `fe2c18f5`** (verified 2026-04-28 evening). CodeQL OPEN: 7 unchanged
+     (5 Cluster A + 2 Cluster C). Sonar QG ERROR: 27 violations + 5.6%
+     duplication + 1 TO_REVIEW hotspot (Cluster B target).
+   - **Re-grounded execution plan** for this branch lives at
+     `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` (12 phases,
+     owner-approved 2026-04-28). It schedules the architectural-cleanup
+     map against fresh evidence and threads adversarial-security-review
+     findings into Cluster B. **No fallback dispositions; no check
+     disables; generated code is fully our responsibility.**
+   - **Next safe step on this lane**: **Phase 1 — Cluster B**
+     (`runGitCommand` lockdown) is **WIP in the working tree** (Tidal
+     Rolling Lighthouse, 2026-04-28; 8 file-level changes uncommitted).
+     The architectural refactor + 32-test unit suite + 1 e2e runtime
+     test are landed locally; four reviewers (code / security / fred /
+     test) have run with findings absorbed inline (filePath validation,
+     diagnostic-reason naming, current-version stderr parity, integration
+     test reclassified to `e2e-tests/vercel-ignore-runtime.e2e.test.ts`,
+     unified local capability naming). **What next session does**:
+     dispatch Wilma (deferred reviewer; brief: fail-open posture under
+     ADR-163 §10 + shallow-clone fetch reachability for arbitrary
+     previous-deploy SHAs); re-run gates after second-wave edits
+     (lint:fix, type-check, full test, test:e2e, markdownlint, format,
+     build); cluster commit naming the architectural shape; push;
+     observe CodeQL + Sonar on next CI; move to Phase 2 (Cluster A).
+     Closes the last TO_REVIEW Sonar hotspot via data-flow change, not
+     status flip. Full state in
+     `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` §"Execution
+     status (2026-04-28 evening)".
    - **Reinstate plan**: [`future/no-problem-hiding-patterns-rule-reinstatement.plan.md`](../../plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md)
      opened per Decision 1B follow-up; queued for after PR-87 ships.
    - **`current/sentry-preview-validation-and-quality-triage.plan.md`** —
@@ -251,6 +278,33 @@ These are visible owner-appetite items, not blockers for the active lanes:
    removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
+
+**Status (2026-04-28 Tidal Rolling Lighthouse, Phase 1 WIP handoff with
+light consolidation)**: light consolidation pass completed during
+session-handoff per owner direction. Entry-point sweep clean (CLAUDE.md,
+AGENTS.md both at canonical pointer-only shape). Napkin over line limit
+(391 / 300) — preserved deliberately; the four-instance disposition-drift
+narrative (Vining → Pelagic → Opalescent → Tidal) is the load-bearing
+evidence for the "due" graduation entry below. Rotation of settled
+sub-entries deferred to next deep consolidation; rotating now would lose
+cross-session evidence still building toward graduation. Distilled.md
+already carries Vining's settled lesson at §"Drift recurs while authoring
+the enforcement of the principle it violates"; the new Tidal entry
+extends the manifestation set to "fall back to" optionality in plan
+drafting even after explicit denial. Phase 1 Cluster B work is WIP in
+working tree (not committed); see thread record for full state.
+
+**Status (2026-04-28 Tidal Rolling Lighthouse — earlier in same session,
+PR-87 quality remediation re-planning)**: not due — light planning
+session, no commits, no thread movement beyond plan-file authorship at
+`/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. The
+existing-pattern "investigation-mode drifts into disposition-mode under
+context pressure" entry below saw a third instance this session (the
+agent drafted three "fall back to" channels in the planning artefact
+itself, owner-corrected, then assumptions-reviewer caught two more
+residual instances). Updating that pending-graduations entry's evidence
+trail; not yet escalating to graduated. Per standing direction: do not
+run consolidation as a default option in session handoff.
 
 **Status (2026-04-27 Opalescent Gliding Prism, PR-87 architectural cleanup
 Session 2 handoff)**: not due — owner-gated. The active lane is PR-87
@@ -420,12 +474,24 @@ snapshots.
   master-plan ACCEPT/DISABLE tables, but also **authoring enforcement
   rules** (where friction the rule causes induces softening), and added
   trigger-word vocabulary ("convention" / "language idiom" /
-  "well-known name" / "canonical TS idiom"). Source surfaces:
-  `napkin.md` 2026-04-27 Vining Bending Root entry, `napkin.md`
-  2026-04-27 Pelagic Flowing Dock entry, `distilled.md` "Drift recurs
-  while authoring the enforcement of the principle it violates"
-  entry, master plan §"Phase 5 Metacognitive Correction", active plan
-  §"Session 1 (Pelagic Flowing Dock) — outcome and suspect work".
+  "well-known name" / "canonical TS idiom"). **Third instance landed
+  2026-04-28 evening (Tidal Rolling Lighthouse, while authoring the
+  PR-87 re-grounded execution plan)**: drift surfaced as "fall back to"
+  optionality in Phase 2 ("if recognition does not propagate"), Phase 3
+  ("dismiss-with-rationale fallback"), Phase 11 ("keep finding shapes
+  until it does"), and a Phase 1 "Resolve in Sonar MCP" sub-step that
+  framed hotspot status as a thing to reason about. **Owner-corrected
+  once** ("inventing optionality and attempting to present false choices
+  while avoiding work"); assumptions-reviewer caught **three further
+  residual instances** that the self-correction missed. The drift
+  manifestation set now includes: planning-time "if X cure does not
+  succeed, dispose at the check level" framing — even when the
+  fallback is named as forbidden elsewhere in the same document.
+  Source surfaces: `napkin.md` 2026-04-27 Vining + Pelagic + 2026-04-28
+  Tidal entries, `distilled.md` "Drift recurs while authoring the
+  enforcement of the principle it violates" entry, master plan §"Phase 5
+  Metacognitive Correction", `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`
+  §"Stance" + Phase 2 / 3 / 11 closing lines.
 - 2026-04-27; "no adapters, no compatibility layers, no half measures"
   reinforced cross-cuttingly through Pelagic Flowing Dock session;
   ADR or principles.md amendment to elevate this to a top-level rule

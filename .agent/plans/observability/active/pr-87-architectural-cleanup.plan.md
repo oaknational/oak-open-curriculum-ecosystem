@@ -5,9 +5,14 @@ overview: >
   of CodeQL alerts and SonarCloud issues. Findings are diagnostic signals,
   not work items. Every cluster is evaluated against four owner-authored
   architectural lenses; each disposition re-derives from principles.md at
-  the site. Supersedes pr-87-quality-finding-resolution.plan.md.
+  the site. Supersedes pr-87-quality-finding-resolution.plan.md. Re-grounded
+  execution scheduling lives at /Users/jim/.claude/plans/composed-petting-hejlsberg.md
+  (Tidal Rolling Lighthouse, 2026-04-28); that plan owns 12-phase
+  sequencing, fresh-evidence verification, and the absolute prohibition on
+  check disables / `accept` / `false_positive` dispositions across all
+  remaining clusters.
 status: active
-last_updated: 2026-04-27
+last_updated: 2026-04-28
 todos:
   - id: phase-0-re-harvest
     content: "Phase 0: Live re-harvest of PR-87 signals (Sonar MCP, CodeQL alerts API, PR comments). Cluster table refresh."
@@ -25,11 +30,14 @@ todos:
     content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
     status: pending
   - id: cluster-a-rate-limiting
-    content: "Cluster A: DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Sketch withRateLimit curry; verify CodeQL recognises; if so, apply at all 5 sites."
+    content: "Cluster A: DI-opacity on route registration (5 CodeQL js/missing-rate-limiting alerts). Re-grounded plan §Phase 2: type narrowing through RateLimitRequestHandler end-to-end (factory return, DI param types, registration sites, test fake). Pre-phase security review of bypass paths. No fallback dispositions."
     status: pending
+  - id: cluster-b-runGitCommand-lockdown
+    content: "Cluster B (Phase 1, TOP PRIORITY): runGitCommand chain lockdown. WIP in working tree (Tidal Rolling Lighthouse, 2026-04-28). Refactor + 32 unit tests + 1 e2e runtime test landed; reviewer findings absorbed (filePath validation, diagnostic reason, current-version stderr parity, integration→e2e reclassification, unified naming). Wilma dispatch + final gates + cluster commit + push pending in next session. See /Users/jim/.claude/plans/composed-petting-hejlsberg.md §'Execution status' for full state."
+    status: in_progress
   - id: cluster-b-vercel-runner
-    content: "Cluster B: Replace generic runGitCommand with purpose-specific capabilities (gitShowFileAtSha, gitFetchShallow). DI as capability, not shell access. TDD."
-    status: pending
+    content: "Cluster B (legacy id, kept for cross-reference): scope is fully captured under cluster-b-runGitCommand-lockdown above. Treat the WIP id as authoritative."
+    status: in_progress
   - id: cluster-c-schema-cache
     content: "Cluster C: Schema-cache write boundary (CodeQL #76, #77). Per-site investigation; likely dismiss-with-rationale citing validate-then-cache + ADR-029."
     status: pending

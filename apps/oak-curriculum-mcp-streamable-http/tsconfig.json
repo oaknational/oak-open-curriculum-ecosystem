@@ -9,6 +9,7 @@
     "src/**/*.ts",
     "scripts/**/*.ts",
     "build-scripts/**/*.ts",
+    "build-scripts/**/*.d.mts",
     "smoke-tests/**/*.ts",
     "tests/**/*.ts",
     "**/*.test.ts",

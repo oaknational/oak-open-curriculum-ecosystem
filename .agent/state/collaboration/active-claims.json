@@ -1,5 +1,77 @@
 {
   "schema_version": "1.3.0",
-  "commit_queue": [],
-  "claims": []
+  "commit_queue": [
+    {
+      "intent_id": "luminous-pr87-phase1-2026-04-28T15:30",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Quasar",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "pr87ph"
+      },
+      "commit_subject": "refactor(vercel-ignore): lock down git capabilities; add boundary sha validation; scrub git env",
+      "phase": "staging",
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+        ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+        "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs",
+        "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.d.mts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/eslint.config.ts",
+        "apps/oak-curriculum-mcp-streamable-http/tsconfig.json",
+        "apps/oak-curriculum-mcp-streamable-http/tsconfig.lint.json"
+      ],
+      "queued_at": "2026-04-28T15:30:00Z",
+      "expires_at": "2026-04-28T16:00:00Z",
+      "notes": "Phase 1 cluster commit for PR-87 (Cluster B runGitCommand lockdown). Concurrent agent active on agent-tools/ (see shared-comms-log 2026-04-28T15:25:00Z); explicit pathspec staging avoids cross-contamination. **BLOCKED 2026-04-28T15:32:00Z** by parallel session's lint error in agent-tools/src/claude/session-identity-hook.ts:104 (`@typescript-eslint/consistent-type-assertions` on a `parsed as { ... }` cast). Their file modified 42s before the pre-commit hook ran — actively in flight. Pre-commit hook runs lint repo-wide; my workspace-scoped gates were green. Awaiting owner direction (wait / per-commit --no-verify auth / surgical fix on their file / coordinate via comms-log). Files staged exactly as queued; commit message validated; only the gate is the blocker."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "6395ea9c-bd44-417e-8b17-c3f9c5dc3f65",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Quasar",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "pr87ph"
+      },
+      "lineage": [
+        {
+          "agent_name": "Tidal Rolling Lighthouse",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "compose",
+          "claimed_at": "2026-04-28T05:26:51Z",
+          "handed_over_at": "2026-04-28T15:00:00Z"
+        }
+      ],
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts"
+          ]
+        },
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/active/pr-87-architectural-cleanup.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T05:26:51Z",
+      "heartbeat_at": "2026-04-28T15:00:00Z",
+      "freshness_seconds": 14400,
+      "intent": "Phase 1 of PR-87 quality remediation: lock down runGitCommand chain. Replace generic executeGitCommand DI seam with two narrow capabilities (gitShowFileAtSha, gitFetchShallow); validate VERCEL_GIT_PREVIOUS_SHA at trust boundary against /^[0-9a-f]{40}$/; scrub git env to neutralise hostile global/system config. Closes MUST-FIX argv-injection class surfaced by adversarial security review and the last TO_REVIEW Sonar hotspot.",
+      "notes": "Inherited 2026-04-28T15:00:00Z by Luminous Dancing Quasar (additive identity per PDR-027). Working tree carries refactor + 32 unit tests + 1 e2e test (uncommitted). 4-of-5 reviewers absorbed (code/security/fred/test) under Tidal; this session dispatches deferred architecture-reviewer-wilma (fail-open + shallow-clone reachability under ADR-163 §10), absorbs findings, re-runs gates one-at-a-time, cluster-commits naming the architectural shape, pushes, observes hotspot AZ3D3iflrIk5eL0ceU__ drop, then proceeds to Phase 2 (Cluster A rate-limit type narrowing). Stance: no fallback dispositions."
+    }
+  ]
 }

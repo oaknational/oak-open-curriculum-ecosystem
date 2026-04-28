@@ -1,5 +1,23 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+**Session-close 2026-04-28 evening (Tidal Rolling Lighthouse, claude-code, claude-opus-4-7-1m, session seed `composed-petting-hejlsberg-2026-04-28`)** — Planning + Phase 1 implementation **in flight, not committed**. HEAD = origin = PR-87 head = `fe2c18f5` (unchanged from session open). Owner-approved 12-phase re-grounded execution plan landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. **Top-priority elevation**: Cluster B (`runGitCommand` lockdown) is now Phase 1.
+
+**Phase 1 progress (working tree, uncommitted)**:
+
+- **Refactor landed locally** at `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`: `runGitCommand(args, cwd)` removed; replaced by `gitShowFileAtSha(sha, filePath, cwd)` + `gitFetchShallow(sha, cwd)` capabilities. `validateGitSha` + `GIT_SHA_PATTERN = /^[0-9a-f]{40}$/` at trust boundary. `scrubbedGitEnv` drops HOME and all inherited keys, pins GIT_CONFIG_GLOBAL/SYSTEM to `/dev/null`, sets GIT_TERMINAL_PROMPT=0. `safeReadCurrentVersion` and `safeReadPreviousVersion` now emit symmetric stderr diagnostics on failure (fail-open made observable). Boundary diagnostic names `length=N, reason=<class>` via `describeShaValidationFailure` — never the raw value. `gitShowFileAtSha` defence-in-depth-validates `filePath` (no leading `-`, no newline, non-empty).
+- **32-test unit suite** at `vercel-ignore-production-non-release-build.unit.test.mjs` covering: `validateGitSha` (positive + 5 negative classes); `scrubbedGitEnv` (PATH preservation, GIT_CONFIG pinning, HOME omission, exhaustive whole-object equality, throws on missing PATH); capability-internal SHA + filePath defence-in-depth; ADR-163 §10 truth-table with new DI shape; boundary validation (length-only, reason-class, hostile-never-logged, whitespace-as-unset).
+- **New e2e runtime test** at `apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts` exercising `gitShowFileAtSha` against the actual repo under `scrubbedGitEnv` to prove HOME-absence does not break git on Vercel-equivalent runtimes.
+- **Old integration test deleted** (`vercel-ignore-production-non-release-build.integration.test.mjs`) per testing-strategy item 8 (in-process tests must not spawn child processes).
+- **Reviewer dispatch (4-of-5)**: `code-reviewer`, `security-reviewer`, `architecture-reviewer-fred`, `test-reviewer` — all run; findings absorbed inline. **`architecture-reviewer-wilma` is deferred** to next session (recommended by both code-reviewer and architect-fred for fail-open posture under ADR-163 §10 + shallow-clone fetch reachability for arbitrary previous-deploy SHAs). Brief is in the plan body.
+- **Sweep**: agent-tools `runtime.ts:130` + `commit-queue/git.ts:16` are sibling generic-runner sites with internal-literal-args consumers. Threat model differs (no untrusted-input boundary). Surfaced for owner direction; not in PR-87 scope.
+- **Gates run pre-second-wave** (✓): `pnpm test` (721/721), `pnpm test:root-scripts` (110/110), `pnpm type-check`, `pnpm lint:fix`, `pnpm format:root`, `pnpm markdownlint:root`, `pnpm build`, `pnpm sdk-codegen`. **Gates pending re-run after second-wave edits**: lint:fix, type-check, full test, test:e2e, markdownlint, format, build.
+
+**What next session does**: dispatch Wilma; re-run gates one-at-a-time; cluster commit naming architectural shape ("refactor(vercel-ignore): lock down git capabilities; add boundary SHA validation; scrub git env"); push; observe CodeQL + Sonar (hotspot `AZ3D3iflrIk5eL0ceU__` should drop out of dataflow — if not, env-scrub is incomplete; do not flip status field); then move to Phase 2 (Cluster A — type narrowing through `RateLimitRequestHandler`). Active claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` remains OPEN; heartbeat refreshed at session-close.
+
+**Discipline carried forward**: no fallback dispositions; no `accept` / `false_positive` / `cpd.exclusions` in any phase; generated code is fully our responsibility. The Stance section of the plan is operational at every phase boundary, not just at the header.
+
+---
+
 **Session-close 2026-04-27T18:47Z (Opalescent Gliding Prism, claude-code, claude-opus-4-7-1m, session seed `radiant-pillow-2026-04-27`)** — 2 commits landed AND PUSHED (`882d1f2c`, `cadc26eb`); HEAD = origin = PR-87 head = `cadc26eb`. Phase 0 (plan-body re-grounding), Phase 1 (dormant rule deletion + reinstate stub), and Cluster Q dispositions (5 CodeQL dismissed + 1 Sonar hotspot accept) landed. Cluster A sink-trace analysis captured in plan body. Owner direction at planning: Decisions 1B + 2A + 3A. Session closed at context-budget threshold per owner direction.
 
 ## Opening statement for next session
@@ -965,6 +983,7 @@ rehearsal).
 | `Ethereal Alpaca` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-1-1a-2-execution-semver-dry-noise-redos-critical-sonar; agent-identity-derivation-plan-author; co-tenant-with-frolicking-toast-graduation-pass` | 2026-04-26 | 2026-04-26 |
 | `Pelagic Flowing Dock` | `claude-code` | `claude-opus-4-7-1m` | `compose` | `pr-87-architectural-cluster-plan-author-and-executor; closed-briny-ebbing-lagoon-claim-on-owner-direction; cluster-by-architectural-root-cause-resolution-replaces-per-rule-disposition` | 2026-04-27 | 2026-04-27 |
 | `Opalescent Gliding Prism` | `claude-code` | `claude-opus-4-7-1m` | `radiant-pillow` | `pr-87-architectural-cleanup-session-2-phase-0-plan-body-regrounding-phase-0-5-cluster-q-sink-probe-phase-1-dormant-rule-deletion-and-reinstate-stub-cluster-q-dispositions-via-codeql-and-sonar-mcp-cluster-a-sink-trace-analysis-handoff-at-context-budget-threshold` | 2026-04-27 | 2026-04-27 |
+| `Tidal Rolling Lighthouse` | `claude-code` | `claude-opus-4-7-1m` | `composed-petting` | `pr-87-quality-remediation-replan-12-phase-execution-plan-then-phase-1-cluster-b-runGitCommand-lockdown-implementation-with-32-unit-tests-1-e2e-runtime-test-and-4-of-5-reviewer-absorption-WIP-uncommitted-wilma-deferred-to-next-session` | 2026-04-28 | 2026-04-28 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
