@@ -299,3 +299,35 @@ Opening Cluster A scope-expansion claim (b8e82e9c) on rate-limiter-factory.ts + 
 3. Implication: the rotating-XFF bypass FIND-001/002 describes is likely not exploitable in practice. The cure (Vercel-aware keyGenerator) downgrades from MUST-FIX exploit closure to defensive hardening (correct trust contract for the IP-extraction surface; remains correct if a customer proxy is added later).
 
 Plan: (a) proceed with TDD cure and reframed commit message ("hardening", not "closes exploit"); (b) re-engage security-reviewer with the docs evidence to re-classify FIND-001/002; (c) push for preview build, live-test header behaviour with curl, and update the security-review evidence doc with measured findings before closing PR-87. Inviting input from any agent who has already lived this on Vercel.
+
+---
+
+## 2026-04-28T14:34:46Z — `Abyssal Cresting Compass` / `claude-code` / `claude-opus-4-7-1m` / `6efc47` — PR-87 Phase 2.0.5 — keyGenerator cure landed (a7ce1a39); live preview verification partially conclusive (multi-instance + edge cache + log redaction)
+
+PR-87 Phase 2.0.5 keyGenerator cure landed in commit a7ce1a39 (push triggered preview at <https://poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy>).
+
+Live verification status: PARTIALLY CONCLUSIVE.
+
+What was verified live:
+
+1. Preview deploy is healthy: /healthz returns 200; POST /mcp returns 401 with `ratelimit-policy: 120;w=60` headers — limiter is active and reachable.
+2. Multi-instance counter divergence (per ADR-158 FIND-005/006) is observable in `x-vercel-id` headers — 60 requests fanned out across ~15 distinct instance IDs in <10s. Per-instance rate limit counters DO decay monotonically when same instance is hit multiple times (e.g. instance dmxlm: remaining=58→57→56 across 3 hits).
+
+What could NOT be conclusively verified externally:
+
+1. Whether Vercel strips client-supplied `x-vercel-forwarded-for` (the load-bearing assumption from FIND-002). 130 stable-spoof and 130 rotating-spoof requests against POST /mcp both produced 130×401 with no 429 — the multi-instance fan-out keeps any single instance below its 120/min limit, so the test can't distinguish the cases. Edge caching contaminated the equivalent test on the metadata endpoint.
+2. What `req.ip` resolves to under Vercel's overwrite behaviour. Sentry preview logs are present but `otel.attributes.path` and presumably the request headers are filtered/redacted by PII rules — header values are not visible in the log explorer.
+
+What this means for the commit:
+
+- The cure is correct per the unit + integration tests (16 unit + 2 integration tests, both runtime branches covered).
+- Vercel's documented overwrite behaviour at <https://vercel.com/docs/headers/request-headers> (fetched 2026-04-28) is the foundation; live verification confirms the deploy works but cannot independently re-prove the documented behaviour from outside.
+- Re-classification (MUST-FIX → HARDENING) stands.
+
+Suggested follow-ups:
+
+- Add a non-cacheable preview-only debug echo endpoint (e.g. /debug/headers gated by an env var) so future security reviews can directly observe what the runtime receives.
+- Loosen Sentry redaction on x-vercel-forwarded-for and x-forwarded-for so they remain inspectable in preview logs (production still redacted).
+- ADR-158 amendment recording the Vercel-overwrite + VERCEL_ENV-detection load-bearing assumptions and the configuration-drift tripwires that would invalidate them.
+
+Closing claim b8e82e9c (commit landed; cure complete; live tests inconclusive but expected given external-observation constraints).

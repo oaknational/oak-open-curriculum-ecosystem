@@ -426,12 +426,24 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 
 **Rate limiting**: Application-layer per-IP rate limiting is built in via
 `express-rate-limit` on all MCP routes (120/min), OAuth routes (30/15min),
-and asset download routes (60/min). This is defence-in-depth — the
-in-memory store is probabilistic on Vercel serverless (per-instance, resets
-on cold start). **CDN/edge rate limiting must also be configured** for
-production deployment to provide authoritative protection. See
+and asset download routes (60/min). This is the **fourth** edge layer
+after Cloudflare → Vercel-edge → app-auth, and is deliberately
+probabilistic (per-instance in-memory store, resets on cold start). The
+authoritative volumetric defence is the Cloudflare + Vercel edge stack;
+the application-layer limiter exists to catch low-rate abuse and
+upstream-amplification patterns that slip through the edges. The
+read-only blast radius (all MCP tools are read-only) means a successful
+bypass cannot mutate state — only exhaust upstream Oak API quota or
+Vercel compute budget. See
 [ADR-158](../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
 for the full multi-layer security architecture.
+
+Key extraction is runtime-aware: on Vercel (`VERCEL_ENV` set), the limiter
+keys on `x-vercel-forwarded-for`; otherwise it falls back to `req.ip`. If
+this app is deployed on a non-Vercel host, configure your own trust-proxy
+chain so `req.ip` reflects the real client IP — `x-vercel-forwarded-for`
+is intentionally ignored off-Vercel because clients can spoof it. See
+[ADR-158 §Runtime-Aware Key Extraction](../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md#runtime-aware-key-extraction).
 
 **Documentation Status**: Last verified 2026-04-09 against `src/application.ts`,
 the built-artifact E2E coverage, and the current workspace-level transport

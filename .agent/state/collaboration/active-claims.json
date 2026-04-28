@@ -3,7 +3,7 @@
   "commit_queue": [],
   "claims": [
     {
-      "claim_id": "b8e82e9c-9d7c-4388-b494-b7e6f13d23b6",
+      "claim_id": "2342e63d-fd2f-4bc1-acfa-1f7c1fd1cd0f",
       "agent_id": {
         "agent_name": "Abyssal Cresting Compass",
         "platform": "claude-code",
@@ -15,15 +15,17 @@
         {
           "kind": "files",
           "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.unit.test.ts"
+            "docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md",
+            "docs/governance/safety-and-security.md",
+            "apps/oak-curriculum-mcp-streamable-http/README.md",
+            "apps/oak-curriculum-mcp-streamable-http/docs/middleware-chain.md"
           ]
         }
       ],
-      "claimed_at": "2026-04-28T13:56:46Z",
+      "claimed_at": "2026-04-28T14:56:58Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "PR-87 Phase 2.0.5 keyGenerator cure (defensive hardening; review-premise contradicted by Vercel docs; verifying live)"
+      "intent": "PR-87 Phase 2.0.5 doc alignment: amend ADR-158 + safety-and-security.md (P0) + workspace README + middleware-chain.md (P1) per docs-adr-reviewer audit"
     }
   ]
 }

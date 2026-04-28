@@ -123,22 +123,40 @@ Errors are classified and handled appropriately:
 
 The HTTP MCP server operates behind multiple defence layers. Each layer
 catches threats the others miss. No single layer is sufficient alone.
+The two edge-protection layers (Cloudflare in front of Vercel) are the
+authoritative volumetric defence; application-layer controls are
+deliberately probabilistic defence-in-depth.
 
 ### Layer Stack
 
-| Layer                        | Protection                                                                                                                                                                                                                                            | Failure Mode                                                              |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead.                                                                                                              | Bypassed if attacker controls DNS for an allowed host                     |
-| **CDN/Edge**                 | Volumetric DDoS, geographic blocking, bot detection, TLS termination (Vercel edge)                                                                                                                                                                    | Bypassed by direct origin access or low-rate attacks below CDN thresholds |
-| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                                                                                                                                       | Bypassed if OAuth token compromised or auth disabled                      |
-| **Application — rate limit** | Per-IP rate limiting on MCP, OAuth, and asset routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). See [ADR-158](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md). | Distributed attacks across IPs; counter reset on cold start               |
-| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                                                                                                                                    | Exhaustible via amplification from our server                             |
+| Layer                        | Protection                                                                                                                                                                                                                                            | Failure Mode                                                               |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead.                                                                                                              | Bypassed if attacker controls DNS for an allowed host                      |
+| **Cloudflare (outer edge)**  | CDN/WAF in front of Vercel: volumetric DDoS, bot management, edge rate-limit rules, TLS termination, geo-restrictions                                                                                                                                 | Bypassed by direct-origin access or low-rate attacks below edge thresholds |
+| **Vercel (inner edge)**      | Vercel platform DDoS protection, edge functions, regional routing                                                                                                                                                                                     | Bypassed by direct-origin access or low-rate attacks below edge thresholds |
+| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                                                                                                                                       | Bypassed if OAuth token compromised or auth disabled                       |
+| **Application — rate limit** | Per-IP rate limiting on MCP, OAuth, and asset routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). See [ADR-158](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md). | Distributed attacks across IPs; counter reset on cold start                |
+| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                                                                                                                                    | Exhaustible via amplification from our server                              |
+
+**Read-only blast radius.** All MCP tools exposed by this server are
+read-only — there is no state-mutation surface. A successful bypass at
+any layer cannot corrupt data; the worst-case impact is exhaustion of
+upstream Oak API per-key quota or Vercel compute budget. This shapes
+proportionality across the controls below: the application-layer rate
+limiter protects quota and compute budget, not data integrity.
 
 ### Trust Boundaries
 
 - **Client → CDN**: untrusted; CDN applies edge protection
-- **CDN → app origin**: semi-trusted; `trust proxy` must be configured
-  for `req.ip` to reflect the real client IP
+- **CDN → app origin**: semi-trusted. Rate-limit key extraction is
+  runtime-aware: on Vercel the limiter reads `x-vercel-forwarded-for`
+  (Vercel-edge-written); on non-Vercel runtimes it falls back to
+  `req.ip` (and the operator's local proxy chain must be configured for
+  that fallback to be correct). `x-vercel-forwarded-for` is **never**
+  trusted on non-Vercel runtimes — any client could spoof it. See
+  [ADR-158 §Runtime-Aware Key Extraction](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md#runtime-aware-key-extraction)
+  for the load-bearing platform assumptions and configuration-drift
+  tripwires.
 - **App → upstream API**: authenticated via `OAK_API_KEY`; our server is
   the trust principal, not the end user
 - **Iframe sandbox → host**: MCP Apps SDK widget runs in a sandboxed

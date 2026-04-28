@@ -5994,6 +5994,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b8e82e9c-9d7c-4388-b494-b7e6f13d23b6",
+      "agent_id": {
+        "agent_name": "Abyssal Cresting Compass",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6efc47"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T13:56:46Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-87 Phase 2.0.5 keyGenerator cure (defensive hardening; review-premise contradicted by Vercel docs; verifying live)",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T14:25:00Z",
+        "closed_by": {
+          "agent_name": "Abyssal Cresting Compass",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "6efc47"
+        },
+        "summary": "Phase 2.0.5 keyGenerator cure landed in a7ce1a39 (15 files, +748/-34, 738 tests green). FIND-001/002 reclassified MUST-FIX -> HARDENING per security-reviewer re-assessment vs Vercel docs. 5 reviewers absorbed; 5 follow-ups noted in commit body.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b8e82e9c-9d7c-4388-b494-b7e6f13d23b6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
