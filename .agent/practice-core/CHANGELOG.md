@@ -4,6 +4,24 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-28 — Practice/tool feedback and live collaboration surfaces refreshed
+
+Owner-directed documentation pass after active multi-agent friction around
+shared communication writes, platform-specific `agent-tools`, and
+collaboration-channel discoverability. Practice-Core changes:
+
+- **Practice/tool feedback capture** — the napkin and bootstrap guidance now
+  require agents to capture frustrations, friction, insights, ideas, wishlist
+  items, and general impressions from the Practice and host-local tools that
+  implement Practice capabilities. In this repo, `agent-tools` is named as the
+  TypeScript-specific implementation surface; the portable behaviour remains
+  Practice-level.
+- **Collaboration state refresh** — `practice.md`, `practice-verification.md`,
+  PDR-011, and PDR-024 now reflect the current live state: shared communication
+  log, active claims, advisory commit queue, closed claim history, decision
+  threads, sidebars, joint decisions, and escalations. UTC ISO 8601 timestamps
+  with trailing `Z` are named as the collaboration-state convention.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-27 — queue governance graduated into PDR-029
 
 Owner-directed queue graduation pass after commit `5c39d1d4` successfully

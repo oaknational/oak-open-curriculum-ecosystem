@@ -61,6 +61,11 @@ next session:
   differently.
 - **Tool/environment surprises**: things about this repo, its
   tooling, or its patterns that you did not expect.
+- **Practice/tooling feedback**: frustrations, friction, surprises,
+  insights, ideas, wishlist items, or general impressions from using the
+  Practice or a host-local tool that implements a Practice capability. In
+  this repo that includes `agent-tools`; in other repos it includes the
+  equivalent local implementation surface.
 - **Positive surprises**: cases where a simpler or stronger approach
   worked better than expected.
 - **Preferences**: how the user likes things done.

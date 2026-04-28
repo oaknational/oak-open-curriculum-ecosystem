@@ -39,6 +39,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 | `future/cross-vendor-session-sidecars.plan.md` | Plan (Future) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters |
+| `future/collaboration-state-domain-model-and-comms-reliability.plan.md` | Plan (Future) | Clarify collaboration-state responsibilities, reliable shared-state writes, sidebar attention, UTC validation, and identity preflight |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
 | `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
@@ -83,9 +84,9 @@ Plans and research for hardening the agentic engineering practice through physic
    MCP upgrade -> Practice/process structural improvements -> Planning ->
    Express -> security/privacy cluster (cyber security -> web/API security ->
    privacy -> web/API GDPR) -> OOCE -> Graph memory exploration -> TDD ->
-   DevX -> Repair Workflow Wording Hazard Detection -> Agent infrastructure
-   portability remediation -> Adapter Generation -> Agent Classification
-   Taxonomy
+   DevX -> Repair Workflow Wording Hazard Detection -> Collaboration State
+   Domain Model -> Agent infrastructure portability remediation -> Adapter
+   Generation -> Agent Classification Taxonomy
 6. **Research as evidence base**: augmented safety -> augmented practices ->
    standardisation landscape
 

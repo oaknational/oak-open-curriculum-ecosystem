@@ -92,8 +92,10 @@ consolidation, and transplantation close.
   (typically `start-right-quick`, `start-right-thorough`) with
   platform adapters per PDR-009.
 + **Collaboration-state consultation**: repo-owned coordination state
-  exists for shared log entries, active claims, closed claim history,
-  and decision threads; start-flow skills tell agents when to read it.
+  exists for shared log entries, active claims, advisory commit queue,
+  closed claim history, decision threads, sidebars, joint decisions, and
+  escalations; start-flow skills tell agents when to read it and UTC is
+  canonical for collaboration timestamps.
 + **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at both `practice-core/patterns/` (general abstractions)
   and `memory/active/patterns/` (instances).
@@ -103,7 +105,8 @@ consolidation, and transplantation close.
 ### Category B — Repo → Core (feedback)
 
 + **Capture surface**: session-local observation storage (napkin or
-  equivalent) exists and is used.
+  equivalent) exists and is used, including Practice/tooling feedback from
+  host-local implementations of Practice capabilities.
 + **Refinement surface**: settled-rules surface (distilled.md or
   equivalent) exists and is read at session start.
 + **Graduation workflow**: `consolidate-docs` (or equivalent)

@@ -57,12 +57,19 @@ This directory is governed by:
   — area-consultation tripwire.
 - [`.agent/rules/use-agent-comms-log.md`](../rules/use-agent-comms-log.md)
   — shared-communication-log usage discipline.
+- [`.agent/memory/executive/agent-collaboration-channels.md`](../memory/executive/agent-collaboration-channels.md)
+  — at-a-glance register for choosing the right communication channel.
 - [`.agent/memory/operational/collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md)
   — operational lifecycle and channel-selection guidance for collaboration
   state.
 
 ## Lifecycle Discipline
 
+- **UTC is canonical for collaboration timestamps** — use UTC ISO 8601
+  timestamps with a trailing `Z` in shared log headings, claims, queue
+  entries, conversations, escalations, and archives. The owner is currently
+  in Europe/London; mention owner-local time in prose only when it helps
+  human coordination. Freshness and stale calculations use UTC.
 - **Append-only on the shared communication log** — chronological appending; no
   rotation, no archive at WS0; no schema other than "use this."
 - **Sign every entry with the PDR-027 agent identity** — `agent_name`,
@@ -80,3 +87,7 @@ This directory is governed by:
   ownership and commit windows, escalations for unresolved owner-facing
   cases, the napkin for learning, and thread records for cross-session
   lane state.
+- **Use the communication-channel register before guessing** — when the
+  right surface is unclear, consult
+  [agent-collaboration-channels.md](../memory/executive/agent-collaboration-channels.md)
+  before creating a new coordination shape.

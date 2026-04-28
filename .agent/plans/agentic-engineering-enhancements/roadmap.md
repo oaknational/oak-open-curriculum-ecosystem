@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
-**Last Updated**: 2026-04-27
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-28
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -99,9 +99,10 @@ This roadmap aligns to:
   specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem
   specialist (📋), Graph memory exploration (📋), TDD specialist (📋), Developer
   experience specialist (📋), Repair workflow wording hazard detection (📋),
-  Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model
-  mechanism taxonomy (📋), specialist operational tooling layer (ADR-137,
-  strategic), External pointer-surface integration (📋)
+  Cross-vendor session sidecars (📋), Collaboration-state domain model (📋),
+  Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist
+  operational tooling layer (ADR-137, strategic), External pointer-surface
+  integration (📋)
 - **Expert expansion coordination**: Planning specialist owns the Planning
   reviewer/skill/rule triplet; practice/process structural improvements feeds
   planning discipline and other permanent-home gaps into the right doctrine
@@ -150,6 +151,7 @@ Adjacent:
   RWD:  Repair workflow wording hazard detection     📋 PLANNED
   GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
   SSC:  Cross-vendor session sidecars                📋 STRATEGIC
+  CSD:  Collaboration-state domain model             📋 STRATEGIC
   ICQ:  Intent-to-commit queue                       ✅ COMPLETE
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC

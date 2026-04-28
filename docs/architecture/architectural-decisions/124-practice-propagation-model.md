@@ -81,7 +81,8 @@ The practice-index carries navigable links to the local repo's:
 - **Tools and workflows** — commands, skills, rules
 - **Artefact directories** — `.agent/`, `.cursor/`, `docs/`
 - **Live coordination state** — collaboration-state directories such as
-  shared logs, active claims, closed claim history, and decision threads
+  shared logs, active claims, advisory commit queue, closed claim history,
+  decision threads, sidebars, joint decisions, and escalations
 
 The format is specified by `practice-bootstrap.md` with a template
 and required sections. The practice-index is NOT part of the

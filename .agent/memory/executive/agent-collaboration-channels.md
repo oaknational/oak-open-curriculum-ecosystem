@@ -8,6 +8,9 @@ working model lives in
 [`agent-collaboration.md`](../../directives/agent-collaboration.md);
 this card is an index for at-a-glance routing.
 
+Use UTC ISO 8601 timestamps with trailing `Z` in collaboration state. Owner-local
+time can appear in prose when helpful, but the state clock is UTC.
+
 ## The Surfaces
 
 | # | Channel | Shape | When to use |

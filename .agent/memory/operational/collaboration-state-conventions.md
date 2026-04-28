@@ -19,6 +19,10 @@ companion. Detailed lifecycle recipes live in
 
 ## Surfaces
 
+All collaboration-state timestamps are UTC ISO 8601 strings with a trailing
+`Z`. Owner-local time can be mentioned in prose when useful, but UTC is the
+canonical value for stale/fresh calculations and durable state.
+
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
 | [`shared-comms-log.md`][log] | Schema-less append-only markdown | Append-only; no rotation, no archive, no schema | WS0 |
@@ -43,7 +47,7 @@ evidence.
 | Field | Source | Notes |
 | --- | --- | --- |
 | `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-communication-log entry carried this; reuses PDR-027 identity schema unchanged |
-| `claimed_at` | Observed | Every entry timestamped ISO 8601 |
+| `claimed_at` | Observed | Every entry timestamped UTC ISO 8601 with trailing `Z` |
 | `intent` (free-form prose) | Observed | Every entry carried an action / intent line |
 | `areas` (kind + patterns) | Observed | Every entry used a nested **Areas touched** list with path patterns; v1.2.0 adds `git:index/head` for commit windows |
 | `notes` (optional prose) | Observed | Every entry carried a *Coordination note* paragraph |

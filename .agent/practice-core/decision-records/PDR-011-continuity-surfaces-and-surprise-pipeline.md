@@ -587,11 +587,14 @@ authored carries a **split-surface host**:
 - Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
 - Live coordination state: `.agent/state/` (introduced 2026-04-25 by
   WS0 of multi-agent collaboration protocol). Currently:
-  `state/collaboration/shared-comms-log.md` (shared communication log, schema-less,
-  append-only). WS1 adds `state/collaboration/active-claims.json`
-  (structured claims registry); WS3 adds `state/collaboration/conversations/`
-  (per-topic conversation files) and `state/collaboration/escalations/`
-  (owner-escalation surface). State surfaces are governed by
+  `state/collaboration/shared-comms-log.md` (shared communication log,
+  schema-less append-only discovery narrative),
+  `state/collaboration/active-claims.json` (structured claims registry plus
+  root advisory `commit_queue`), `state/collaboration/closed-claims.archive.json`
+  (durable claim history), `state/collaboration/conversations/` (per-topic
+  decision threads, sidebars, joint decisions, and evidence), and
+  `state/collaboration/escalations/` (owner-escalation surface). State
+  timestamps are UTC ISO 8601 with trailing `Z`. State surfaces are governed by
   [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md).
 - Experience records: `.agent/experience/`.
 - Mid-session re-grounding: canonical `GO` skill with platform

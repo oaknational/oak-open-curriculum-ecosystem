@@ -35,7 +35,7 @@ as executive memory — it is operational reference, not doctrine.)
 
 The governance layer is larger than a single file:
 
-- **41 canonical rules** live in [`.agent/rules/`](rules/)
+- **43 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
   [`.agents/rules/`](../.agents/rules/)
@@ -52,6 +52,7 @@ Representative rules:
 | [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
 | [follow-agent-collaboration-practice.md](rules/follow-agent-collaboration-practice.md) | Follow the agent-to-agent working model |
 | [use-agent-comms-log.md](rules/use-agent-comms-log.md) | Announce non-trivial intent in the shared communication log |
+| [capture-practice-tool-feedback.md](rules/capture-practice-tool-feedback.md) | Capture Practice and host-local tooling feedback in the napkin |
 | [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits and commit-window claims before staging/commit |
 | [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim or commit window |
 | [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
@@ -63,15 +64,16 @@ Representative rules:
 
 ### Collaboration State Surface
 
-WS0-WS3A collaboration state lives under
+Collaboration state lives under
 [`state/collaboration/`](state/collaboration/). It is the repo-owned
-coordination layer for shared log entries, active claims, closed claim
-history, commit-window claims, and decision threads. `start-right` reads it before edits,
-the commit skill opens/closes `git:index/head` claims before staging or committing,
+coordination layer for shared log entries, active claims, the root
+`commit_queue`, closed claim history, decision threads, sidebars, joint
+decisions, and escalations. The at-a-glance channel register lives in
+[`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md).
+`start-right` reads collaboration state before edits, the commit skill
+opens/closes `git:index/head` claims before staging or committing,
 `session-handoff` closes the agent's own active state, and
-`consolidate-docs` audits stale or unresolved entries. WS3B sidebar,
-timeout, and escalation state is intentionally absent until promoted by
-owner direction or real decision-thread evidence.
+`consolidate-docs` audits stale or unresolved entries.
 
 Hook support:
 
@@ -134,6 +136,7 @@ reusable knowledge:
 | Artefact | Location | Purpose |
 | --- | --- | --- |
 | Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Hard-won rules — read before every session |
+| Collaboration channels | [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md) | Register of communication options and when to use each |
 | Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | 77 abstract solutions to recurring design problems |
 | Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |
 | Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
@@ -151,7 +154,7 @@ and `.agents/skills/patterns/`.
 | [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
-| [`.agent/state/`](state/)                                                                     | Live coordination state — collaboration log, active claims, closed claims, and decision threads |
+| [`.agent/state/`](state/)                                                                     | Live coordination state — shared communication log, active claims + `commit_queue`, closed claims, decision threads, sidebars, joint decisions, and escalations |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |

@@ -13,6 +13,7 @@ memory taxonomy (active / operational / executive).
 | Surface | Purpose | Look up when… |
 | --- | --- | --- |
 | [`artefact-inventory.md`](artefact-inventory.md) | Canonical-vs-adapter taxonomy + how-to create skills / commands / rules / sub-agents | Adding a new skill, command, rule, or sub-agent |
+| [`agent-collaboration-channels.md`](agent-collaboration-channels.md) | At-a-glance register of communication and coordination channels | Choosing how to communicate with another agent, the owner, or a reviewer |
 | [`invoke-code-reviewers.md`](invoke-code-reviewers.md) | Reviewer catalogue, layered triage, worked examples | Non-trivial change is about to close and reviewers need choosing |
 | [`cross-platform-agent-surface-matrix.md`](cross-platform-agent-surface-matrix.md) | Platform-adapter support matrix across Cursor / Claude / Codex / Gemini | Verifying platform-adapter parity; adding a new platform |
 

@@ -3,8 +3,14 @@
 Before starting work on any non-trivial edit, append a timestamped entry
 to [`.agent/state/collaboration/shared-comms-log.md`](../state/collaboration/shared-comms-log.md)
 naming what you intend to touch and signing with your agent identity.
-Read recent entries first to discover what other agents have been
-working on.
+Use UTC ISO 8601 timestamps with a trailing `Z` for shared log headings and
+structured collaboration state. Read recent entries first to discover what
+other agents have been working on.
+
+The owner is currently in the Europe/London timezone. Agents may mention
+owner-local time in prose when it helps human coordination, but UTC is the
+canonical timestamp for claims, queues, conversations, escalations, archives,
+and stale/fresh calculations.
 
 ## Related surfaces, distinct purposes
 
@@ -38,6 +44,9 @@ These surfaces coexist. Registering a claim does not replace appending
 to the log; opening a decision thread does not replace either. The log
 is the discovery narrative, the registry is the working roster, and a
 decision thread is the structured async record for a specific topic.
+If those responsibilities start to blur, capture that as a domain-model
+signal in the napkin or an active plan rather than adding another
+ad-hoc field to an existing surface.
 
 ## Authority
 

@@ -493,9 +493,15 @@ The napkin is the capture stage of the learning loop. It is always active.
 
 **Continuous updates**: Write whenever you learn something worth
 recording -- errors you figure out, user corrections, your own mistakes,
-tool surprises, approaches that work or fail. Be specific: "Assumed API
-returns list but it returns paginated object with `.items`" not "Made an
-error."
+tool surprises, Practice/tooling friction, insights, ideas, wishlist
+items, general impressions, or approaches that work or fail. Practice-tool
+feedback includes host-local tools that implement Practice capabilities:
+in this repo `agent-tools` is the TypeScript-specific implementation
+surface, while other repos may supply a shell, Python, editor, CI, or
+other equivalent. Capture the behaviour-level signal so consolidation can
+separate portable Practice substance from local implementation detail. Be
+specific: "Assumed API returns list but it returns a paginated object with
+`.items`" not "Made an error."
 
 **Structure**:
 

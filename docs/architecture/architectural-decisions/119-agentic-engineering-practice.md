@@ -79,7 +79,8 @@ codebase:
 - **Learning mechanisms** — napkin, distilled learnings, experience
   records
 - **Agent-to-agent coordination** — shared communication log, active
-  claims, closed claim history, and decision threads
+  claims, advisory commit queue, closed claim history, decision threads,
+  sidebars, joint decisions, and escalations
 - **Operational state** — repo-owned live state that start-right,
   session-handoff, and consolidate-docs read or update
 - **Platform bindings** — canonical `.agent/` content plus thin

@@ -106,7 +106,7 @@ start, artefact search, and workflow invocation.
 | **Entry-point chain** | Repo-facing files direct each agent platform to the canonical Practice directives | `CLAUDE.md`, `AGENTS.md`, `GEMINI.md` at repo root, each pointing at `.agent/directives/AGENT.md`; AGENT.md chains to `principles.md` + `testing-strategy.md` + trinity |
 | **Practice-index bridge** | The one permitted Core→local external link; bridges portable Core substance to the host repo's local artefacts | `.agent/practice-index.md` (per ADR-124 / retained by PDR-007) |
 | **Start-flow skills** | Session-start workflows that orient agents to the Practice before work begins | Canonical `start-right-quick` / `start-right-thorough` skills with platform adapters (per PDR-009) |
-| **Collaboration-state consultation** | Session-start workflows expose live agent-to-agent coordination state before mutation | Repo-owned state for shared log, active claims, closed claim history, and decision threads |
+| **Collaboration-state consultation** | Session-start workflows expose live agent-to-agent coordination state before mutation | Repo-owned state for shared log, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations |
 | **Pattern discovery skill** | Consulted when agents face recurring design problems; routes to the correct pattern surface | Canonical `patterns` skill pointing at `practice-core/patterns/` (general abstractions) and `memory/active/patterns/` (instances) |
 | **Rule activation** | Canonical rules activated via platform-native triggers (always-on, glob-scoped, agent-selected) | `.agent/rules/` canonical + per-platform triggers (`.cursor/rules/*.mdc`, `.claude/rules/*.md`, etc.) per PDR-009 |
 
@@ -117,7 +117,7 @@ these, the Practice stagnates.
 
 | Surface | Role |
 |---|---|
-| **Capture surface** | Session-local observation storage (napkin or equivalent) — where surprises and corrections land at the moment they occur |
+| **Capture surface** | Session-local observation storage (napkin or equivalent) — where surprises, corrections, and Practice/tooling feedback land at the moment they occur |
 | **Refinement surface** | Settled rules distilled from captures (distilled.md or equivalent) — read at session start |
 | **Graduation workflow** | Consolidate-docs or equivalent — the workflow that moves substance from ephemeral to permanent surfaces (PDRs, patterns, trinity amendments) |
 | **Upstream Core review** | The consolidate-docs step that reads existing Core content against current practice and surfaces refinement candidates (contradictions, extensions, refinements, supersessions, drift) |
@@ -341,7 +341,9 @@ Category A (Core → Repo):
   `.agent/state/collaboration/shared-comms-log.md`,
   `.agent/state/collaboration/active-claims.json`,
   `.agent/state/collaboration/closed-claims.archive.json`, and
-  `.agent/state/collaboration/conversations/`.
+  `.agent/state/collaboration/conversations/` plus
+  `.agent/state/collaboration/escalations/`; the active-claims registry
+  carries the advisory `commit_queue`.
 - Pattern discovery skill: `.agent/skills/patterns/SKILL.md` (updated
   this session to point at both Core and memory pattern surfaces).
 - Rule activation: `.agent/rules/*` canonical + `.cursor/rules/*.mdc`,

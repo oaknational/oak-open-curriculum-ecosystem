@@ -16,6 +16,10 @@ the doctrinal authority is
 
 ## Claims
 
+All timestamp fields in collaboration state use UTC ISO 8601 with a trailing
+`Z`. Use owner-local time only as explanatory prose; freshness windows,
+expiry reports, and stale-claim audits are computed from UTC values.
+
 ### Open a Claim
 
 1. Apply the

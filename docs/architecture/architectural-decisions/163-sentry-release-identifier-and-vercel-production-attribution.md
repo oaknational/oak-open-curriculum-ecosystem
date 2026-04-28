@@ -770,6 +770,29 @@ not implementation details`, no behavioural test was lost — the
   longer an indirection layer between `vercel.json` and the canonical
   implementation for an integration test to assert against.
 
+**Enforcement hardening** (third amendment, 2026-04-28; commit `9b2b2ed7`):
+
+- `VERCEL_GIT_PREVIOUS_SHA` is treated as untrusted input from Vercel's
+  upstream-provider pass-through and validated at the trust boundary with
+  `/^[0-9a-f]{40}$/`. Invalid values are treated as if the previous SHA were
+  unset, preserving the §10 fail-open posture for previous-version
+  unreachability, and emit a stderr diagnostic naming length and failure reason
+  without logging attacker-controlled bytes.
+- The former generic git runner is replaced by two named capabilities:
+  `gitShowFileAtSha(sha, filePath, cwd)` and `gitFetchShallow(sha, cwd)`.
+  Both re-validate SHA input as defence in depth; `gitShowFileAtSha` also
+  rejects empty paths, leading-dash paths, and paths containing newlines.
+- Git subprocesses run with a scrubbed environment: `PATH` is preserved,
+  `GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` are pinned to `/dev/null`,
+  `GIT_TERMINAL_PROMPT=0`, `HOME` is omitted, and all other inherited keys are
+  dropped. Missing `PATH` is reported as a build-environment defect before the
+  script falls through to the build so the defect is visible in the Vercel log.
+- `safeReadCurrentVersion` and `safeReadPreviousVersion` now emit symmetric
+  stderr diagnostics on read, parse, fetch, and post-fetch show failures.
+- A sibling `.d.mts` declaration file and Vercel-runtime e2e test make the
+  `.mjs` capabilities typed for in-repo TypeScript consumers and exercise
+  `gitShowFileAtSha` against the actual repository under the scrubbed env.
+
 Rationale: the §1 release identifier is meaningful only if production
 deploys correspond exactly to semantic-release commits. Without this
 rule, a merge commit on `main` would deploy under a stale semver
@@ -1107,6 +1130,13 @@ ReleaseInput` so that `@oaknational/sentry-node` delegates at
   bottom of this file. This is the second amendment to ADR-163's §1 +
   §10 pair; the first landed at commit `06bf25d7`, the second at
   commit `2822e525`.
+- **2026-04-28 — third enforcement hardening amendment**: Commit
+  `9b2b2ed7` tightens the Vercel ignore script without changing the §10 truth
+  table: `VERCEL_GIT_PREVIOUS_SHA` is validated at the trust boundary; the
+  generic git runner is replaced by `gitShowFileAtSha` and `gitFetchShallow`;
+  git subprocesses run under a scrubbed environment; current/previous version
+  probes emit symmetric stderr diagnostics; and a typed `.d.mts` companion plus
+  Vercel-runtime e2e test preserve TypeScript discoverability and runtime proof.
 
 ## Reviewer Dispositions (2026-04-24 first amendment)
 
