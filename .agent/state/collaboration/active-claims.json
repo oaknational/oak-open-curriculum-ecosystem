@@ -1,5 +1,84 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "87fb2797-b664-4684-b928-dd41b5d59762",
+      "agent_id": {
+        "agent_name": "Choppy Lapping Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d73d0b"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/create-rate-limiters.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/rate-limiter-fakes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/application.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-brand.compile-test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/rate-limiter-fakes.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:33:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-87 Phase 2 / Cluster A: rate-limit type narrowing through RateLimitRequestHandler end-to-end (factory return, DI parameter types, registration sites, test fake brand-conformance). Pre-phase security-reviewer dispatch then RED → GREEN → REFACTOR; cluster commit absorbs reviewer findings.",
+      "notes": "Plan: .agent/plans/observability/active/pr-87-architectural-cleanup.plan.md (Cluster A section). Coastal Mooring Atoll claim 1271c798 holds the plan-doc itself; this claim is implementation-only and does not overlap. Will coordinate via comms events on Edit (v)/(viii) gaps before authoring into the plan-doc."
+    },
+    {
+      "claim_id": "441366cd-272b-4251-836a-884cc98954ea",
+      "agent_id": {
+        "agent_name": "Choppy Lapping Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d73d0b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:49:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Capture γ-execution protocol-experience observations: write future strategic plan for collaboration-state CLI ergonomics + cross-thread request correlation; add napkin entry. Owner-directed feedback after live use of the inter-agent communication protocol.",
+      "notes": "Complementary to existing collaboration-state-domain-model-and-comms-reliability and collaboration-state-write-safety plans; focuses specifically on agent-facing CLI ergonomics, request/response correlation, session-open liveness, and stance-staleness mitigation. No overlap with active claims."
+    },
+    {
+      "claim_id": "514129a4-bf77-48b2-83b6-56ac1707cd77",
+      "agent_id": {
+        "agent_name": "Choppy Lapping Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d73d0b"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T11:57:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Three sequential commits: chore(state) coord state; docs(plans) new future plan; docs(napkin) γ-execution notes. Then push to origin.",
+      "notes": "Pathspec-clean: only files this session authored. Leftover prior-Codex files (identity-plumbing, codex hooks, repo-continuity, threads) deliberately excluded; will surface to owner separately."
+    }
+  ]
 }
