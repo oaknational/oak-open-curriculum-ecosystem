@@ -498,3 +498,49 @@ self-review caught zero of the four.
   read models, and any future event files. The owner is not currently seeing
   the same clash pattern in the claim registry, but the design must prevent
   moving log jams from one state file to another.
+
+## 2026-04-28 — Shared-state files should not block other agents' commits (owner doctrine)
+
+**Owner stated this explicitly during the session-handoff cleanup.** Changes to shared-state files (the napkin, distilled, conversation logs, comms log, active-claims.json) should NOT block commits by other agents. Those mutations are allowed to get swept up in other agents' commits as a side effect.
+
+The principle being optimised: the actual concern is **placing changes to repo functionality in the right bucket** — feature commits stay clean, governance commits stay clean. The meta-information (notes, observations, governance state) changes constantly across agents and is not authoritatively owned by any one commit. Strict separation costs more in commit clashes than it saves in commit-message tidiness.
+
+The trade-off the doctrine accepts: a percentage of "ownership" of who edited the napkin/comms-log entry will look strange in `git blame`, because Codex's commit might carry a Claude session's napkin edit. That is acceptable. What is NOT acceptable is having commits blocked because two sessions happened to touch the same shared-state file.
+
+Applies to: `.agent/state/collaboration/active-claims.json`, `.agent/state/collaboration/closed-claims.archive.json`, `.agent/state/collaboration/shared-comms-log.md`, `.agent/state/collaboration/conversations/*.json`, `.agent/memory/active/napkin.md`, `.agent/memory/active/distilled.md`. Probably extends to `.remember/now.md` and similar capture buffers. Does NOT apply to repo-functionality files (source, tests, configs, docs that describe behaviour) — those still need explicit ownership at commit time.
+
+Downstream implication for the commit skill: the explicit-pathspec staging rule still holds, but adding shared-state files that another agent has edited to your own commit is *not* a respect-active-agent-claims violation; it is the mechanism by which the doctrine is implemented. The napkin/comms-log appear-merge pattern is benign.
+
+**Graduation candidate:** worth promoting from napkin to `distilled.md` or `.agent/rules/respect-active-agent-claims.md` and the commit skill so future sessions read the principle inline.
+
+## 2026-04-28 — Parallel-edit clash on `active-claims.json` during cleanup; Write rejected, Edit would have been smoother
+
+During the post-feature cleanup, I tried `Write` on the full `active-claims.json` to rewrite it cleanly (remove my abandoned queue entries, archive my completed claim). Codex was concurrently in `pre_commit` phase committing 27 unrelated `practice-core` files, and the `commit-queue` CLI had been mutating the same file (writing queue entries) on Codex's side. My read had become stale; the `Write` tool refused with "File has been modified since read."
+
+The fix in the moment was just to back off and let Codex's commit land first, then redo the cleanup. But the friction is real: full-file `Write` on a file that *any* agent might be touching is a concurrency anti-pattern. **Surgical `Edit` calls on specific JSON regions tolerate concurrent file mutations far better** because they only fail if the *exact `old_string`* changed, not if any byte of the file changed.
+
+**Smoothing options for future iterations** (not implemented today, just noted):
+
+1. **Tooling**: extend `commit-queue` CLI with claim-management commands (`close-claim --claim-id ...`, `archive-claim --claim-id ...`) so claim mutations go through one tool that takes its own short-lived lock and re-reads on conflict.
+2. **Editing convention**: when touching `active-claims.json` / `shared-comms-log.md` / conversation JSONs by hand, prefer `Edit` over `Write` so concurrent unrelated modifications upstream of my anchor don't reject the edit.
+3. **Append-only canonical surfaces**: comms-log is already de-facto append-only; treat it that way explicitly. JSON files with arrays could benefit from a tiny "append-claim-entry" helper.
+4. **Coordination signal**: the `commit-window` claim with `kind: git, patterns: [index/head]` is already the spec's answer — when I see another agent has it open, defer my own shared-state edits until their queue entry leaves `pre_commit`.
+
+For today: the doctrine the owner gave me (sweep-up is OK) reduces the urgency of any of these. Tomorrow's tooling could pick this up.
+
+## 2026-04-28 — SessionStart hook fires only on next session start; in-session verification deferred
+
+The new Claude Code `SessionStart` hook (`.claude/hooks/practice-session-identity.mjs`) writes `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` into `$CLAUDE_ENV_FILE` and emits an `additionalContext` payload. **This hook does NOT fire in the session that landed it.** End-to-end verification requires opening a new Claude Code session on this branch.
+
+Verification plan for the next session opener:
+
+1. Open a fresh Claude Code session on `feat/otel_sentry_enhancements` (or `main` once merged).
+2. Inside the new session, check the first turn for `[Practice agent identity]` block in `additionalContext` (it will read as a system-context preamble naming the derived display name and including the non-binding `/rename` suggestion).
+3. From a Bash tool call, run `echo "$PRACTICE_AGENT_SESSION_ID_CLAUDE"` — expect a 36-char UUID. Confirms `$CLAUDE_ENV_FILE` was sourced correctly.
+4. Run `pnpm agent-tools:agent-identity --format display` (no `--seed`) — expect the deterministic display name matching the new session's identity. Confirms the CLI's new env precedence reads `PRACTICE_AGENT_SESSION_ID_CLAUDE` correctly.
+
+If any of these fail, the issue is most likely either (a) the `agent-tools` build artefact was missing when the hook fired (the shim exits 0 with `{}` silently in that case — soft surface) or (b) the `.claude/settings.json` `SessionStart` entry was not loaded (check `cat .claude/settings.json | jq .hooks.SessionStart`). The end-to-end smoke test in this session via `node .claude/hooks/practice-session-identity.mjs` with stub stdin already verified the adapter chain itself.
+
+## 2026-04-28 — Orphaned-claim handling resolved by parallel session, not by me
+
+Luminous Dancing Quasar's claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` was already archived to `closed-claims.archive.json` by commit `48fe86cb docs(continuity): close phase 1 + 1.1 of pr-87 (cluster b); archive claim 6395ea9c` while I was investigating the cleanup. Owner had told me the claim was orphaned; the right move was to wait briefly and let the natural cleanup happen rather than unilaterally remove a claim that another agent might have been about to manage themselves. Confirmed Lemma: **when an orphaned claim is in shared state, the cheapest correct path is to let the next governance pass archive it; do not delete unilaterally.**

@@ -3740,3 +3740,23 @@ Opening short-lived claim `6d7b8094-c32b-4229-96dc-8b259537f0d8` to amend the fu
 Owner correction: the write-reliability mechanism should not be scoped only to the shared communication log. Once the state domain-model boundaries are defined, every shared inter-agent state record — claims, queue entries, conversations, sidebars, escalations, logs, generated read models, and any future event files — needs a multi-agent-safe write path so the system does not move clashes from one file into another.
 
 Closed claim `6d7b8094-c32b-4229-96dc-8b259537f0d8` at `2026-04-28T07:33:00Z` after updating the future plan, future/current indexes, thread record, and napkin.
+
+---
+
+### 2026-04-28T07:38:39Z — `Codex` / `codex` / `GPT-5` / `unknown` — documentation commit landed
+
+Commit `3ff8d59f` landed: `docs(practice): capture collaboration-state domain follow-up`.
+
+Commit queue intent `e5be95d2-b6f6-421d-99bf-2ed320534bfa` verified the 27-file staged documentation bundle before commit and was completed after commit. Closed short-lived `git:index/head` claim `48aa1d77-4930-40ba-a613-45b0d10097d0`.
+
+Mixed shared-state files remain unstaged/uncommitted because they include interleaved session entries from other agents: `napkin.md`, `repo-continuity.md`, `active-claims.json`, `closed-claims.archive.json`, `shared-comms-log.md`, the PR-87 observability thread record/plan, and Prismatic's open conversation file. The durable plan and thread record from this task are committed in `3ff8d59f`.
+
+---
+
+### 2026-04-28T08:35:00Z — `Prismatic Glowing Sun` / `claude-code` / `claude-opus-4-7-1m` / `22e835` — Cleanup: archive my claim, close sidebar, napkin notes
+
+Feature commit `bb08a99b feat(agent-identity)` already landed. Now closing governance loose ends: archived my claim `f1e0b2a8-…` to `closed-claims.archive.json` with closure metadata; cleared abandoned queue entries `e482e889-…` and `c04aabec-…`; closed sidebar `pr-87-vercel-ignore-test-failures-prismatic-sidebar` as moot (resolved by parallel commits `84571ccf` and `48fe86cb`).
+
+Napkin updated with four entries: (1) the owner doctrine that shared-state files should not block other agents' commits — sweep-up is OK; (2) the parallel-edit clash on `active-claims.json` during cleanup and surgical-Edit-vs-Write friction; (3) the SessionStart hook in-session verification plan for the next session opener; (4) the orphaned-claim resolution lesson — let the next governance pass archive, do not delete unilaterally.
+
+This cleanup commit sweeps up Codex's `2026-04-28T07:38:39Z` comms-log entry per the new sweep-up doctrine.

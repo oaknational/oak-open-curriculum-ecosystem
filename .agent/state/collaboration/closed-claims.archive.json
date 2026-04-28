@@ -2,6 +2,69 @@
   "schema_version": "1.3.0",
   "claims": [
     {
+      "claim_id": "f1e0b2a8-4c6e-4a3a-9b2e-d3a8b9c1f2e7",
+      "agent_id": {
+        "agent_name": "Prismatic Glowing Sun",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "22e835"
+      },
+      "lineage": [],
+      "thread": "agent-identity-platform-surfaces",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/agent-identity-cli.ts",
+            "agent-tools/src/bin/claude-session-identity-hook.ts",
+            "agent-tools/src/claude/session-identity-hook.ts",
+            "agent-tools/src/cursor/oak-session-identity-hook.ts",
+            "agent-tools/tests/agent-identity/cli.unit.test.ts",
+            "agent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts",
+            "agent-tools/tests/claude/session-identity-hook.unit.test.ts",
+            "agent-tools/docs/agent-identity.md",
+            ".claude/hooks/practice-session-identity.mjs",
+            ".claude/settings.json",
+            ".agent/skills/start-right-quick/shared/start-right.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:39:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Practice-prefix env var rename (OAK_AGENT_SEED + dead CLAUDE_SESSION_ID → PRACTICE_AGENT_SESSION_ID_{CLAUDE,CURSOR,CODEX}); add Claude Code SessionStart hook that writes PRACTICE_AGENT_SESSION_ID_CLAUDE to $CLAUDE_ENV_FILE and injects identity additionalContext + non-binding /rename suggestion; correct the start-right directive that incorrectly told Claude Code agents to expect CLAUDE_SESSION_ID from env.",
+      "notes": "Landed in feat(agent-identity) commit bb08a99b. TDD throughout — 91/91 unit + 13/13 e2e in agent-tools, type-check, lint, markdownlint, format, portability:check, subagents:check all clean. End-to-end smoke test of the .mjs shim verified env-file write and hookSpecificOutput stdout for session 22e835. In-session verification of $PRACTICE_AGENT_SESSION_ID_CLAUDE reaching Bash tool calls deferred to next session open. Cursor live re-test and Codex Practice wrapper called out as future work in agent-tools/docs/agent-identity.md.",
+      "archived_at": "2026-04-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T08:35:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Glowing Sun",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "22e835"
+        },
+        "summary": "Feature work landed in bb08a99b; claim closed at landing per the protocol. Sidebar `pr-87-vercel-ignore-test-failures-prismatic-sidebar` opened during the session was resolved as moot when commit `84571ccf` (vercel-ignore test fix) landed unblocking the pre-commit gate.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "bb08a99b",
+            "summary": "Feature commit landing the SessionStart hook + Practice env-var rename."
+          },
+          {
+            "kind": "commit",
+            "ref": "84571ccf",
+            "summary": "Parallel session's vercel-ignore test fix that unblocked my pre-commit gate."
+          },
+          {
+            "kind": "commit",
+            "ref": "5d6622d0",
+            "summary": "Parallel session's e2e expectation update for my CLI rename — courtesy commit landed mid-session."
+          }
+        ]
+      }
+    },
+    {
       "claim_id": "fbde22cf-3bea-4c22-83ba-dd17e09d4508",
       "agent_id": {
         "agent_name": "Fresh Prince",
@@ -3971,6 +4034,53 @@
             "kind": "napkin",
             "ref": ".agent/memory/active/napkin.md#owner-amendment",
             "summary": "Napkin records the owner amendment for consolidation."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "48aa1d77-4930-40ba-a613-45b0d10097d0",
+      "agent_id": {
+        "agent_name": "Codex",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "unknown"
+      },
+      "lineage": [],
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-28T07:36:12Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit documentation-only Practice collaboration-state follow-up.",
+      "notes": "Pathspec-scoped commit; excludes mixed shared-state files containing other agents' session entries.",
+      "archived_at": "2026-04-28T07:38:39Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-28T07:38:39Z",
+        "closed_by": {
+          "agent_name": "Codex",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "unknown"
+        },
+        "summary": "Committed documentation-only Practice collaboration-state follow-up as 3ff8d59f using a verified 27-file staged bundle.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "3ff8d59f",
+            "summary": "docs(practice): capture collaboration-state domain follow-up"
+          },
+          {
+            "kind": "commit_queue",
+            "ref": "e5be95d2-b6f6-421d-99bf-2ed320534bfa",
+            "summary": "Queue verified the exact staged bundle fingerprint before commit and was completed after commit."
           }
         ]
       }
