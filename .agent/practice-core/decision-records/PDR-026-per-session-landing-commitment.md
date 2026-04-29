@@ -40,6 +40,54 @@ continuity unit).
 
 ## Amendment Log
 
+- **2026-04-29 amendment — knowledge preservation is absolute and is
+  never a deferrable landing (Nebulous Illuminating Satellite /
+  claude-code / claude-opus-4-7-1m; owner-directed graduation during
+  the 2026-04-29 deep consolidation pass after the napkin SKILL,
+  consolidate-docs, and respect-active-agent-claims rule were
+  sharpened).** Writing to shared-state knowledge surfaces (napkin,
+  distilled, patterns, thread records, repo-continuity, comms log,
+  conversations, escalations, claims, repo-continuity Pending-
+  Graduations Register, and any other surface that records what
+  agents and the owner know together) is **never** a deferrable
+  landing. Capture is sacred; the deferral-honesty discipline does
+  not apply to it.
+
+  Concretely:
+
+  - **The deferral-honesty discipline (Session 6 amendment) governs
+    deferred *work*, not deferred *capture*.** A constraint or
+    trade-off plus evidence plus falsifiability check is the right
+    shape for "we did not land Phase 3 today because owner directed
+    us to pause WS1." It is the wrong shape for "we did not write
+    down what we learned today because the file was full" — the
+    correct response to the file being full is thoughtful holistic
+    promotion of mature concepts to permanent homes, never
+    suppression of capture.
+  - **Fitness limits are advisory, never a constraint on capture.**
+    Two valid responses when a write would push a shared-state
+    knowledge surface past its target/limit: (a) write in full and
+    flag the file for attention, or (b) thoughtful holistic
+    promotion of mature concepts to a permanent home via the
+    `consolidate-docs` §7 graduation scan. Naive cutting,
+    compression, summarisation, or skipping the write are forbidden.
+  - **Shared-state coordination surfaces are always writable and
+    always commit-includable** regardless of any active claim
+    (deliberate anti-log-jam tradeoff). Active claims on shared
+    state are coordination signals, never no-write locks. The commit
+    queue / `git:index/head` window is the serialisation mechanism.
+
+  Surfaces operationalising this:
+  [`napkin/SKILL.md` §Knowledge Preservation Is Absolute][napkin-skill],
+  [`commands/consolidate-docs.md` §Learning Preservation][consolidate-docs-preservation],
+  [`rules/respect-active-agent-claims.md` §Shared-state always writable][respect-shared-state-rule],
+  and [`memory/active/distilled.md`][distilled].
+
+  [napkin-skill]: ../../skills/napkin/SKILL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
+  [consolidate-docs-preservation]: ../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure
+  [respect-shared-state-rule]: ../../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable
+  [distilled]: ../../memory/active/distilled.md
+
 - **2026-04-26 amendment — owner-directed pause is a load-bearing
   planning move (Frolicking Toast / claude-code / claude-opus-4-7-1m;
   agentic-engineering-enhancements thread; consolidation graduation

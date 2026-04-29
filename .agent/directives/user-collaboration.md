@@ -16,6 +16,53 @@ It complements, but does not replace, [principles.md](principles.md). If a
 collaboration habit conflicts with a repository principle, surface the conflict
 and discuss it with the owner rather than silently choosing one.
 
+## Owner Working Style
+
+Six durable identity assertions about how the owner approaches engineering
+decisions in this repository. Promoted 2026-04-29 from `.remember/recent.md`
+candidates after multi-session validation. Treat as load-bearing context
+when interpreting owner direction:
+
+- **Phased, gated activation over big-bang integrations.** The owner
+  creates explicit decision gates before rolling out large
+  infrastructure changes; defaults to staged enforcement (visibility
+  before strict). Reflected in ADR-166 (architectural budget system),
+  the visibility-before-enforcement layer in plan structure, and the
+  evidence-gated promotion bar across PDRs.
+- **Capture-and-distill workflows wired into existing processes.**
+  The owner builds capture surfaces (`.remember/`, napkin, distilled,
+  consolidate-docs) that wire into existing processes rather than
+  parallel tracking; tools come into the loop, not alongside it.
+- **Formalises emergent patterns through explicit graduation.**
+  Patterns are captured as candidates first, validated across
+  sessions, then graduated to permanent homes via a deliberate
+  process. Meta-patterns (the-frame-was-the-fix; tool-error-as-
+  question; scope-as-goal) are specifically captured across multiple
+  sessions before promotion.
+- **Gates advancement on real-world evidence; pauses pending
+  validation.** Workstreams are paused on owner direction when
+  evidence is needed before further commitment. Owner-directed pause
+  is a load-bearing planning move (PDR-026 amendment 2026-04-26),
+  not a deferral. External blockers (Vercel, Sentry, Cloudflare)
+  also pause workstreams pending validation.
+- **Designs formal coordination protocols for multi-agent execution.**
+  The owner abstracts lock-contention, joint-decision, and stale-claim
+  patterns as infrastructure (active-claims registry, shared comms
+  log, decision threads, sidebars, escalations, intent-to-commit
+  queue, deterministic identity). The protocol substrate must be
+  platform-independent by design.
+- **Rejects half-measure compromises on principles.** The owner
+  reverts code mid-implementation rather than accept governance
+  shortcuts. "WE DON'T HEDGE" is a top-level principle. The 2026-04-29
+  doctrine sharpenings (knowledge-preservation absolute; shared-state
+  always-writable; never-disable-checks) all originated as owner
+  refusals to accept compromise framings.
+
+These identity assertions shape how agents should interpret owner
+silence (inferred priority on the more principled option), owner
+reframes ("this is not the goal" — instrumental work was treated as
+terminal), and owner pauses (load-bearing decisions, not idle delay).
+
 ## Working Model
 
 The collaboration model is dialogue, not an authority hierarchy. The owner is

@@ -26,6 +26,36 @@ against each other).
 
 ## Amendment Log
 
+- **2026-04-29 amendment — brief reviewers with full merge-gate
+  scope when gating merge (Nebulous Illuminating Satellite /
+  claude-code / claude-opus-4-7-1m; owner-directed graduation during
+  the 2026-04-29 deep consolidation pass after the Verdant Regrowing
+  Pollen TS6 closeout session conflated arc-scope with branch-merge-
+  gate-scope).** A reviewer's verdict is scoped to the prompt that
+  briefed them. "GO WITH CONDITIONS" reads as a green merge signal
+  only when the reviewer's brief matches the merge-gate scope, not
+  just the arc the agent is working on. When asking a reviewer to
+  gate merge:
+
+  - **Include the full merge-gate criteria in the brief**: zero
+    failing gates, zero warnings (per `no-warning-toleration`), all
+    named merge conditions (Sonar zero, PR comments resolved,
+    deployment passes, manual validation steps), and the underlying
+    goal the work is instrumental to.
+  - **Read reviewer verdicts as scope-bounded artefacts.** A passing
+    or "GO WITH CONDITIONS" verdict speaks only to what was asked;
+    it is never a verdict on what wasn't asked. Conflating arc-scope
+    with merge-gate-scope is the named failure mode.
+  - **Treat instrumental work as instrumental.** A complete TS6
+    migration plan or a closed phase checklist is upstream of the
+    goal, not the goal. Re-read the goal at every commit boundary
+    and at every reviewer dispatch.
+
+  Instance pattern:
+  [`scope-as-goal.md`](../../memory/active/patterns/scope-as-goal.md).
+  Cross-reference under PDR-018 amendment of the same date for the
+  planning-discipline framing.
+
 - **2026-04-26 amendment — parallel reviewer dispatch and structural-
   then-pre-landing review phasing (Frolicking Toast / claude-code /
   claude-opus-4-7-1m; agentic-engineering-enhancements thread;

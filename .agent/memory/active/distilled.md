@@ -80,18 +80,17 @@ when citing an ADR or PDR by number, verify the filename and the
 substance against the live decision-record file rather than
 inheriting plan-body shorthand.
 
-Shared-state files are read/write collaboration surfaces, not commit blockers
-and not read-only under active overlap. Changes to `active-claims.json`,
-closed-claim archives, shared communication logs, conversation files, napkin,
-distilled memory, and thread records may be included in another agent's
-governance/docs commit when that avoids blocking useful work. When a handoff or
-coordination update needs these files, read the current state and write the
-update; use the commit queue / `git:index/head` window to serialize the commit
-and make the overlap visible. Active claims on shared-state docs are
-coordination signals, not no-write locks. Keep repo-functionality commits
-pathspec-clean; allow shared state to travel with the closeout that made it
-current. When editing hot shared JSON manually, prefer surgical, parser-backed
-edits or transaction helpers over full-file rewrites.
+**Shared-state files are ALWAYS writable and ALWAYS commit-includable
+regardless of any active claim** (deliberate tradeoff to prevent log
+jams; see [`respect-active-agent-claims` § Shared-state always
+writable][respect-shared-state-rule]).
+This covers `active-claims.json`, closed-claim archives, the shared
+communication log, comms events, conversations, escalations, napkin,
+distilled, patterns, repo-continuity, thread records, and tracks.
+Active claims on shared state are coordination signals, never no-write
+locks. The commit queue / `git:index/head` window is the serialisation
+mechanism, not the claim. Prefer surgical, parser-backed edits or
+transaction helpers for hot shared JSON over full-file rewrites.
 
 When an apparently orphaned active claim is found, archive it only through a
 deliberate governance pass or owner-forced close. If another session is
@@ -155,11 +154,20 @@ expert triplet executes.
 Disposition-drift doctrine graduated 2026-04-28 to
 [PDR-018 §Disposition drift at phase boundaries][pdr-018].
 
-- **Learning before fitness**: capture, distil, graduate, and write the
-  signal fully even when the destination file is near or over a fitness
-  limit. Fitness limits are health signals. They route structural follow-up
-  — refine, split, graduate, or adjust limits — but never justify starving
-  the learning loop.
+- **Learning before fitness — knowledge preservation is absolute**:
+  writing to shared-state knowledge surfaces (napkin, distilled,
+  patterns, thread records, repo-continuity, comms log, conversations,
+  escalations, claims) is NEVER blocked by fitness limits. Two valid
+  responses when a write would push past target/limit: (a) write in
+  full and flag the file for attention, or (b) thoughtful holistic
+  promotion of mature concepts to a permanent home (ADR/PDR/governance/
+  rule/principle/README/TSDoc) via the consolidate-docs §7 graduation
+  scan. Naive cutting, compression, summarisation, or skipping the
+  write are all forbidden. Fitness pressure routes to consolidate-docs
+  §9 as structural follow-up, never as retroactive permission to have
+  written less. See [napkin SKILL § Knowledge Preservation Is
+  Absolute][napkin-skill-preservation] and [consolidate-docs §
+  Learning Preservation][consolidate-docs-preservation].
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).
@@ -236,6 +244,9 @@ Build-system entries graduated on 2026-04-24 to
 [user-collaboration]: ../../directives/user-collaboration.md
 [agent-collaboration]: ../../directives/agent-collaboration.md
 [build-system]: ../../../docs/engineering/build-system.md
+[respect-shared-state-rule]: ../../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable
+[napkin-skill-preservation]: ../../skills/napkin/SKILL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
+[consolidate-docs-preservation]: ../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure
 [adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
 [adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
 [pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log

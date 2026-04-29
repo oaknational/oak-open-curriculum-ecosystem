@@ -72,17 +72,65 @@ held over).
 
 ## Learning Preservation Overrides Fitness Pressure
 
-Fitness limits are health signals, including hard and critical signals.
-They are never more important than preserving understanding and knowledge.
-Do not suppress capture, distillation, graduation, or useful writing because
-the destination file is near, at, or over a fitness threshold.
+**Writing to shared-state records of knowledge is NEVER blocked by
+fitness limits.** Fitness signals — including SOFT, HARD, and CRITICAL
+— are health indicators about the destination file's structure; they
+are never a constraint on the insight itself. This rule applies to
+the napkin, `distilled.md`, `patterns/*.md`, per-thread next-session
+records, repo-continuity, the shared communication log, conversations,
+escalations, claims, and every other surface that records shared
+state.
 
-If learning belongs in `napkin.md`, write it. If napkin rotation is due,
-distil it. If distilled learning belongs in `distilled.md` or a permanent
-home, write it there at the weight the signal deserves. Fitness pressure
-created by preserving knowledge is then routed to step 9 as follow-up
-structure work: refine, split, graduate, or adjust limits. The wrong move is
-to preserve a green fitness report by starving the learning loop.
+The only two valid responses when a write would push a file past
+target or limit are:
+
+1. **Write the full observation and flag the file for attention** —
+   capture, distil, or graduate at the weight the signal deserves;
+   record fitness pressure for routing to step 9.
+2. **Thoughtful, holistic promotion of mature concepts and knowledge**
+   out of the file to a permanent home — apply the step 7a/7b
+   graduation criteria to entries that are stable and have a natural
+   permanent destination (ADR, PDR, governance doc, principles, rule,
+   README, TSDoc). Promotion is substance-led, not space-led.
+
+**What is NEVER valid**:
+
+- Compressing, trimming, or "summarising" the new insight to fit the
+  budget.
+- Naively cutting existing entries to make room. Removal is a
+  graduation decision, not a space-making decision.
+- Skipping or deferring capture / distillation / graduation because
+  the destination file is full.
+- Preserving a green fitness report by starving the learning loop.
+
+If learning belongs in `napkin.md`, write it. If napkin rotation is
+due, distil it. If distilled learning belongs in `distilled.md` or a
+permanent home, write it there at full weight. Resulting fitness
+pressure routes to step 9 as follow-up structure work — refine,
+split, graduate, or adjust limits — never as retroactive permission
+to have written less.
+
+## Plan supersession discipline
+
+When a plan is narrowed, reframed, or superseded, the same change set
+that performs the supersession MUST also land a supersession mapping.
+The mapping records, for every dropped scope item:
+
+1. **Item moved** — verbatim frontmatter id or section heading.
+2. **New owner plan** — file path of the plan now owning the scope.
+3. **Acceptance lane** — the named todo or section in the new owner.
+4. **Rationale for move** — one-sentence reason for the route choice.
+
+The mapping lives in the receiving archive's README (e.g.
+`.agent/plans/<workspace>/archive/superseded/README.md`) or as an
+appendix on the archived source plan itself, **never as a standalone
+plan**. A standalone crosswalk plan after the supersession lands is
+duplicative; the audit trail belongs adjacent to the artefact it
+traces.
+
+(Doctrine graduated 2026-04-29 from
+`sentry-observability-translation-crosswalk.plan.md` §Verification
+Rule; the standalone crosswalk plan was archived in the same pass.)
 
 ## Steps
 

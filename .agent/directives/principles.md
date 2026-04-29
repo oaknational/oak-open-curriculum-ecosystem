@@ -275,10 +275,12 @@ paths, setup files) don't apply.
 ### Code Quality
 
 - **TDD** — see §Code Design above
-- **NEVER disable checks** - Never disable any quality gates, never
-  disable type checks, never disable any linting, never disable
-  any formatting, never disable any tests, never disable Git hooks
-  (`--no-verify`)
+- **NEVER disable checks** - Quality gates are NEVER disabled.
+  Type checks, linting, formatting, tests, Git hooks (`--no-verify`),
+  CI steps — none of them. The **`gate-off-fix-gate-on`** sequence
+  (disable, fix, re-enable) is a named anti-pattern; the gate stays
+  on throughout. See [`never-disable-checks.md`](../rules/never-disable-checks.md)
+  for the operational discipline.
 - **No warning toleration, anywhere** - Warnings are not deferrable
   in any system the repo influences (build, quality gates, runtime,
   monitoring). A warning is the cheap, early version of the failure
@@ -288,10 +290,6 @@ paths, setup files) don't apply.
   `.agent/rules/no-warning-toleration.md` for the operational
   discipline (covers esbuild/tsc/ESLint/vitest/depcruise/knip and
   Sentry runtime/uptime surfaces).
-- **Never work around checks** - e.g. if a variable is unused,
-  figure out why and fix it, delete the variable if it is not
-  needed. Do not disable eslint or typescript. ALWAYS fix the root
-  cause, never work around it.
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
 - **Never weaken a gate to solve a testing problem** - If a test

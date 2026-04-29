@@ -33,39 +33,61 @@ logging. The distillation rotation in the
 [consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.
 
-## Never Hold Back Insight to Fit a Budget
+## Knowledge Preservation Is Absolute — Fitness Is Never a Constraint
 
-**Fitness budgets are advisory, never a constraint on capture.** If
-a session-end observation runs to thirty lines and the napkin is
-already over its target, the right answer is to record the full
-observation and flag that the file needs attention — never to trim,
-compress, or split the insight to fit the budget. Capture is sacred;
-fitness is a signal that consolidation is overdue, not a signal to
-write less.
+**Writing to shared-state records of knowledge is NEVER blocked by
+fitness limits.** This applies to every shared-state knowledge surface:
+the napkin, `distilled.md`, `patterns/*.md`, per-thread next-session
+records, repo-continuity, the shared communication log, decision
+threads, escalations, claims, and any other surface that records what
+agents and the owner know together. The rule is to ALWAYS preserve
+the knowledge and then flag that the file needs follow-up attention.
 
-Concretely:
+The only two valid responses when a write would push a file past its
+fitness target or limit are:
 
-- If `fitness_line_target` / `fitness_line_limit` would force you to
-  shorten an insight, **do not shorten it**. Write it in full and add
-  a note (`<!-- fitness exceeded by N lines; needs consolidation -->`)
-  at the top of the new entry so the next consolidation pass knows.
-- If you find yourself drafting a "concise version" of an insight to
-  hit the budget, stop. The concise version is lossy. Drop the budget,
-  not the insight.
-- The same rule applies to `distilled.md`, `patterns/*.md`,
-  per-thread next-session records, and any other markdown surface
-  with fitness front-matter. Budgets describe the file's need for
-  rotation; they do not describe the insight's right to exist.
+1. **Write the full observation and flag the file for attention** —
+   record the insight at the weight the signal deserves, add a note
+   (`<!-- fitness exceeded by N lines; needs consolidation -->`) at the
+   top of the new entry, and let the next consolidation pass route the
+   structural pressure.
+2. **Thoughtful, holistic promotion of mature concepts and knowledge**
+   out of the file to permanent homes — ADRs, PDRs, principles, rules,
+   patterns, READMEs, governance docs — applying the
+   [`/jc-consolidate-docs`](../../commands/consolidate-docs.md)
+   graduation scan (step 7) to specific entries that are stable and
+   have a natural permanent home. This is the deeper response: not
+   "make space" but "the knowledge has matured enough to leave the
+   staging surface."
 
-**Why**: Owner-named in 2026-04-29 TS6 migration session. The agent
-truncated the napkin entry for the session because the file was at
-282/300 lines, and pointed to deeper artefacts as a substitute.
-Owner: "never hold back, it's that simple. Never avoid preserving
-useful information or knowledge because of an arbitrary file length
-signal, the fitness functions are important but advisory, and the
-right answer is to preserve the knowledge and flag that the file
-needs attention, the answer is never to constrain the recording of
-insight in order to tick a box."
+**What is NEVER valid**:
+
+- Trimming, compressing, or "summarising" the new insight to fit the
+  budget. Compressed capture is lossy capture.
+- Naively cutting existing entries to make room. Each existing entry
+  earned its place; removal is a graduation decision (does it have a
+  permanent home?), not a space-making decision.
+- Splitting the insight into shorter pieces purely to satisfy a line
+  count. Split only when the substance genuinely separates into
+  distinct concerns.
+- Skipping or deferring the write because the file is full. The file
+  being full is a structural signal, not a write veto.
+- Drafting a "concise version" alongside the full version and choosing
+  which to keep. Drop the budget, not the insight.
+
+Capture is sacred; fitness is a signal that consolidation or
+graduation is overdue, never a signal to write less.
+
+**Why**: Owner-named twice in the 2026-04-29 sessions. First during
+the TS6 migration session: the agent truncated a napkin entry because
+the file was at 282/300 lines and pointed to deeper artefacts as a
+substitute. Second during the consolidation refresh: "writing to the
+napkin, distilled, and similar records of shared state is NEVER
+blocked by fitness function limits, the rule is to ALWAYS preserve
+knowledge, and then flag that the file needs follow-up attention;
+never write less to stay under a limit, never naively cut content,
+the only valid approach is a thoughtful and holistic promotion of
+concepts and knowledge."
 
 ## Continuous Updates
 
