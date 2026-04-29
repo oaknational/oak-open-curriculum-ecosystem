@@ -95,4 +95,4 @@ echo ""
 echo "=========================================="
 echo ""
 
-SERVERS="[\"${MCP_SERVER_URL}\"]" npm run dev
+SERVERS="[\"${MCP_SERVER_URL}\"]" pnpm dev

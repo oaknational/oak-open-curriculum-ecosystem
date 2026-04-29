@@ -42,7 +42,6 @@
       "Bash(npx skills:*)",
       "Bash(git check-ignore:*)",
       "Bash(echo \"exit: $?\")",
-      "Bash(npm view:*)",
       "Bash(git clone:*)",
       "WebFetch(domain:docs.sentry.io)",
       "WebFetch(domain:support.claude.com)",
