@@ -428,6 +428,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Nebulous Illuminating Satellite` | `claude-code` | `claude-opus-4-7-1m` | `fe4acc` | `doctrine-sharpening-and-deeper-convergence-pass; gate-off-fix-gate-on-anti-pattern-elevation; practice-core-surface-retirement-execution; pattern-and-displaced-doctrine-graduations; trinity-active-principles-extensions-with-per-diff-approval; deferred-items-plan-family-authoring; six-commit-landing-shape` | 2026-04-29 | 2026-04-29 |
 | `Pearly Swimming Atoll` | `codex` | `GPT-5` | `019dd9` | `repo-goal-narrative-refresh` | 2026-04-29 | 2026-04-29 |
 | `Estuarine Washing Beacon` | `codex` | `GPT-5` | `019dd3` | `codex-agent-config-path-and-skill-discovery-repair` | 2026-04-28 | 2026-04-28 |
 | `Squally Diving Anchor` | `codex` | `GPT-5` | `019dd8` | `pr-lifecycle-skill-need-capture` | 2026-04-29 | 2026-04-29 |
