@@ -1137,6 +1137,35 @@ ReleaseInput` so that `@oaknational/sentry-node` delegates at
   git subprocesses run under a scrubbed environment; current/previous version
   probes emit symmetric stderr diagnostics; and a typed `.d.mts` companion plus
   Vercel-runtime e2e test preserve TypeScript discoverability and runtime proof.
+- **2026-04-29 — Sentry deployment identity from env, not source
+  (OSS-readiness)**: The `SentryBuildPluginIdentity` type (org / project /
+  repoSlug) was previously declared as a literal `IDENTITY` constant in
+  `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts` with values
+  `oak-national-academy` / `oak-open-curriculum-mcp` /
+  `oaknational/oak-open-curriculum-ecosystem`. This embedded Oak-specific
+  Sentry identity in source — incompatible with the open-source posture
+  of this repository. The Vercel build log on commit `040da8e` surfaced
+  the drift indirectly: Turbo logged `Warning - the following environment
+variables are set on your Vercel project, but missing from "turbo.json"`
+  for `SENTRY_ORG` and `SENTRY_PROJECT` (~36 warn lines, one per
+  workspace × variable). The Vercel-side env vars existed but were never
+  read because the literals shadowed them. **Decision**: identity flows
+  from the env boundary in all environments. New
+  `resolveSentryBuildPluginIdentity(env)` boundary parser reads
+  `SENTRY_ORG` (required) and `SENTRY_PROJECT` (required); `repoSlug`
+  resolves from `SENTRY_REPO_SLUG` first, then falls back to
+  `${VERCEL_GIT_REPO_OWNER}/${VERCEL_GIT_REPO_SLUG}` (Vercel auto-
+  populates both at build time on any connected repository, including
+  forks). `createSentryBuildPlugin` becomes single-argument: identity is
+  resolved inside, on the `configured` path only, so disabled / skipped
+  builds (local dev, fork preview without auth token) tolerate missing
+  identity vars. `turbo.json` `globalPassThroughEnv` is extended with
+  `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_REPO_SLUG`,
+  `VERCEL_GIT_REPO_OWNER`, and `VERCEL_GIT_REPO_SLUG` so Turbo no longer
+  strips them from build tasks. **Rule going forward**: no Sentry
+  deployment identity may be declared as a literal in source for this
+  repository. Reviewers must treat such literals as a regression of this
+  amendment.
 
 ## Reviewer Dispositions (2026-04-24 first amendment)
 

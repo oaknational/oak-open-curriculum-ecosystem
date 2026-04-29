@@ -47,19 +47,18 @@ import {
   createSentryBuildPlugin,
   type ResolvedBuildTimeGitSha,
   type SentryBuildEnvironment,
-  type SentryBuildPluginIdentity,
   type SentryBuildPluginInputs,
 } from './build-scripts/sentry-build-plugin.js';
 
-const IDENTITY: SentryBuildPluginIdentity = {
-  org: 'oak-national-academy',
-  project: 'oak-open-curriculum-mcp',
-  repoSlug: 'oaknational/oak-open-curriculum-ecosystem',
-};
-
 // Snapshot the build-time env at the boundary. `createSentryBuildEnvironment`
 // keeps the app build identity as the canonical version fact, then projects it
-// into the Sentry release surface.
+// into the Sentry release surface (including the deployment identity vars
+// SENTRY_ORG, SENTRY_PROJECT, SENTRY_REPO_SLUG, VERCEL_GIT_REPO_OWNER, and
+// VERCEL_GIT_REPO_SLUG used by the Sentry plugin's identity resolution).
+//
+// No deployment identity is declared as a literal in this file: this is an
+// open-source repository, and every fork must be able to set its own Sentry
+// org/project/repo via env without editing source. See ADR-163.
 const envResult = createSentryBuildEnvironment(process.env);
 
 if (!envResult.ok) {
@@ -70,7 +69,7 @@ if (!envResult.ok) {
 
 const env: SentryBuildEnvironment = envResult.value;
 
-const intent = createSentryBuildPlugin(env, IDENTITY);
+const intent = createSentryBuildPlugin(env);
 
 if (!intent.ok) {
   // Vital-identity error per the §Truth Tables fail-policy.
