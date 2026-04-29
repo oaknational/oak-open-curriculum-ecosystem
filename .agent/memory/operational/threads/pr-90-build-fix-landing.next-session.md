@@ -69,8 +69,13 @@ PR-90 verification:
 
 ## Next Landing Target
 
-**Owner-only**: manual MCP server validation, then squash-merge PR-90 to
-`main`. No further agent execution required for this thread before merge.
+**Owner-only remaining**: squash-merge PR-90 to `main`.
+
+Owner manual MCP server validation **confirmed** by the owner on
+2026-04-29 (after the `54832c91` push, with all CI gates green). All
+agent-completable work for this thread is done. The thread closes
+when the squash-merge lands; pending that, no further agent action is
+required on this thread.
 
 Post-merge work (out-of-scope for this thread but raised in the PR-90
 closure register at <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/90#issuecomment-4346625386>):

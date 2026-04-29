@@ -1,37 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "21943b5a-555f-429e-85af-20709ef9afea",
-      "agent_id": {
-        "agent_name": "Solar Threading Star",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "6d68d6"
-      },
-      "thread": "pr-90-build-fix-landing",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "scripts/**",
-            "apps/**",
-            "packages/**",
-            ".github/workflows/**",
-            ".agent/plans/architecture-and-infrastructure/current/**",
-            ".agent/plans/architecture-and-infrastructure/active/**",
-            ".agent/memory/operational/threads/pr-90-build-fix-landing.next-session.md",
-            ".agent/memory/operational/threads/README.md",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-29T13:45:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Land PR #90: resolve Sonar quality gate (12 new issues), Copilot review comments, Cursor Bugbot findings, ci.yml stale .mjs reference; preserve architectural excellence over expediency.",
-      "notes": "Active-claims scan: Squally Diving Anchor on continuity/sector-engagement surfaces (disjoint). Will route comms via events queue since shared-comms-log.md is in Squally's claim."
-    }
-  ]
+  "claims": []
 }
