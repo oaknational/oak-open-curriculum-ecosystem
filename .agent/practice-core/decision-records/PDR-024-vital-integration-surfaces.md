@@ -82,6 +82,34 @@ the repo — and bind the repo's feedback to the Core — must be
 explicit, enumerable, and verified. Without enumeration, they fail
 silently because nothing in the repo looks wrong.
 
+## Amendment 2026-04-29 — Core-pattern routing and Practice Context outbound exchange retired
+
+PDR-007's 2026-04-29 amendment retires `.agent/practice-core/patterns/`
+and `.agent/practice-context/` as live Core surfaces. This PDR's
+"vital integration surfaces" set is updated accordingly:
+
+- **Pattern discovery skill**: routes only to `.agent/memory/active/patterns/`
+  for repo-grounded engineering instances; Practice-governance
+  patterns route to PDR-shaped artefacts (PDRs with
+  `pdr_kind: pattern` frontmatter, or PDR amendments). The previous
+  "Core-pattern lookup" path is removed; there is no Core-pattern
+  destination.
+- **Ephemeral exchange (outbound)**: `practice-context/outgoing/` is
+  removed as an integration surface. Outbound substance routes by
+  shape — Practice-governance to PDRs in
+  `practice-core/decision-records/`; general abstract patterns to
+  PDRs with `pdr_kind: pattern`; engineering instances to
+  `.agent/memory/active/patterns/`; host-local reference material to
+  `.agent/reference/`; exploratory material to `.agent/research/`.
+- **Inbound Practice exchange**: continues to use
+  `.agent/practice-core/incoming/` (preserved).
+
+The original integration table below is preserved as historical
+context; the amendments above govern current routing. Affected rows:
+"Pattern discovery skill" and "Ephemeral exchange (outbound)" in the
+table at §"The vital integration surfaces" — read those rows through
+the amendment lens. Other rows are unchanged.
+
 ## Decision
 
 **Every Practice-bearing repo has a named set of vital integration

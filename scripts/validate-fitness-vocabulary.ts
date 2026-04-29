@@ -48,12 +48,7 @@ const FORBIDDEN_PHRASES = [
 ];
 
 const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modules']);
-const EXCLUDED_PATH_PREFIXES = [
-  '.agent/practice-context-backup-',
-  '.agent/practice-context/incoming/',
-  '.agent/practice-core-backup-',
-  '.agent/practice-core/incoming/',
-];
+const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
 const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/'];
 
@@ -63,8 +58,6 @@ const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/'];
  */
 const ALLOWED_FILES = new Set([
   'docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md',
-  '.agent/practice-context/outgoing/three-dimension-fitness-functions.md',
-  '.agent/practice-context/outgoing/validate-practice-fitness.ts',
   'scripts/validate-fitness-vocabulary.ts',
   'scripts/validate-fitness-vocabulary.unit.test.ts',
 ]);

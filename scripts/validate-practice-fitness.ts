@@ -22,12 +22,7 @@ export const FITNESS_MODE_INFORMATIONAL = 'informational';
 export const CRITICAL_RATIO = 1.5;
 
 const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modules']);
-const EXCLUDED_PATH_PREFIXES = [
-  '.agent/practice-context-backup-',
-  '.agent/practice-context/incoming/',
-  '.agent/practice-core-backup-',
-  '.agent/practice-core/incoming/',
-];
+const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
 
 const ZONE_RANK = Object.freeze({

@@ -76,15 +76,6 @@ describe('shouldInspectFile', () => {
     ).toBe(false);
   });
 
-  it('excludes the outgoing broadcast files (carry provenance of the evolution)', () => {
-    expect(
-      shouldInspectFile('.agent/practice-context/outgoing/three-dimension-fitness-functions.md'),
-    ).toBe(false);
-    expect(shouldInspectFile('.agent/practice-context/outgoing/validate-practice-fitness.ts')).toBe(
-      false,
-    );
-  });
-
   it('excludes the vocabulary validator itself and its tests', () => {
     expect(shouldInspectFile('scripts/validate-fitness-vocabulary.ts')).toBe(false);
     expect(shouldInspectFile('scripts/validate-fitness-vocabulary.unit.test.ts')).toBe(false);

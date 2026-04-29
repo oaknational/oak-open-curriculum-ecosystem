@@ -8,11 +8,19 @@ here).
 
 ## Relationship to Practice Core
 
-This directory holds **specific instances**. General, ecosystem-
-agnostic abstractions live in `.agent/practice-core/patterns/` and
-are authored through synthesis from multiple instances. Patterns
-describing Practice-governance (review, planning, consolidation,
-etc.) live as PDRs in `.agent/practice-core/decision-records/`.
+This directory holds **specific repo-grounded instances** of
+engineering patterns and is the **primary pattern home** for the
+repo. General, ecosystem-agnostic abstract patterns and
+Practice-governance patterns (review, planning, consolidation,
+reviewer authority, etc.) live as **PDRs** in
+`.agent/practice-core/decision-records/` — patterns may use
+`pdr_kind: pattern` frontmatter to mark themselves as the general
+form of a recurring engineering or governance problem.
+
+The previous `.agent/practice-core/patterns/` directory was retired
+2026-04-29 (PDR-007 amendment): no general patterns had been
+authored there, and Practice-governance abstractions matured as
+PDRs instead. There is no Core-pattern destination.
 
 ## Sibling memory classes
 

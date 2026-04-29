@@ -52,6 +52,22 @@ cross-session breadth, full-weight substance, and executable
 promotion. Each has an anti-pattern that looks acceptable locally
 but corrodes the flow over time.
 
+## Amendment 2026-04-29 — Pattern routing follows PDR-007 retirement
+
+PDR-007's 2026-04-29 amendment retires `.agent/practice-core/patterns/`
+as a Core directory. This PDR's "Knowledge artefact roles" table is
+updated accordingly: the `pattern` row's "Typical home" column lists
+`.agent/memory/active/patterns/` for engineering instances and
+**PDR-shaped artefacts** (PDRs with `pdr_kind: pattern` frontmatter,
+or PDR amendments) for Practice-governance patterns. There is no
+`practice-core/patterns/` destination.
+
+The bidirectional flow described in §"Bidirectional flow" still
+operates; the only change is that the "general pattern abstraction"
+output of cross-instance synthesis lands as a PDR (with
+`pdr_kind: pattern`) rather than in the retired `practice-core/patterns/`
+directory.
+
 ## Decision
 
 **Consolidation runs across sessions (not just the current one).
@@ -160,7 +176,7 @@ make the primary role explicit.
 | `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | `.agent/directives/`, `docs/governance/` |
 | `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | `docs/engineering/*-patterns.md`, focused recipe docs |
 | `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | `docs/operations/troubleshooting.md`, runbooks |
-| `pattern` | Empirical behaviour or solution shape proven by recurring practice | `.agent/memory/active/patterns/`, `.agent/practice-core/patterns/` |
+| `pattern` | Empirical behaviour or solution shape proven by recurring practice | `.agent/memory/active/patterns/` (engineering instances); Practice-governance patterns take PDR shape with `pdr_kind: pattern` (per PDR-007 amendment 2026-04-29) |
 | `rule` | Always-applied obligation that must fire at a decision point | `.agent/rules/`, platform rule adapters |
 | `command rubric` | Workflow step that operationalises doctrine at a named command boundary | `.agent/commands/` |
 | `scanner or gate` | Executable enforcement for high-confidence obligations | scripts, hooks, CI, quality gates |

@@ -19,17 +19,21 @@ and authoritative in any repo that hydrates the same Practice.
 
 ## Relationship to the Practice Core and Context
 
-Under the PDR-007 Core contract, PDRs are a **first-class Core
-directory**. The Practice is organised with one always-required
-Core package and one optional peer companion:
+Under the PDR-007 Core contract (as amended 2026-04-29), PDRs are a
+**first-class Core directory**. The Practice is organised as the
+Core package alone:
 
 | Layer | Path | Role | Travels with Practice |
 |---|---|---|---|
-| **Core** | `.agent/practice-core/` | The Core package: trinity + verification + entry points + changelog + provenance + `decision-records/` (this directory) + `patterns/` + `incoming/`. The memotype. | Always — required. |
-| **Context** | `.agent/practice-context/` | Optional ephemeral-exchange companion (sharpened under PDR-007). Sender-maintained `outgoing/`; transient receiver-side `incoming/`. | Optional — travels when sender chooses to include. |
+| **Core** | `.agent/practice-core/` | The Core package: trinity + verification + entry points + changelog + provenance + `decision-records/` (this directory) + `incoming/`. The memotype. | Always — required. |
 
 `decision-records/` is inside the Core package; PDRs travel with
-the Core by construction.
+the Core by construction. The previous `patterns/` Core directory
+and `practice-context/` peer companion were retired 2026-04-29
+(PDR-007 amendment); patterns live at `.agent/memory/active/patterns/`
+(engineering instances) or as PDRs with `pdr_kind: pattern`
+(governance). Inbound Practice exchange uses `incoming/`; outbound
+substance routes by shape per PDR-024 amendment 2026-04-29.
 
 ## Intended Evolution
 

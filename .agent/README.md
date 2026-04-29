@@ -69,8 +69,7 @@ docs, READMEs) via the consolidation workflow.
 | --- | --- |
 | `directives/` | Authoritative rules, testing strategy, schema-first execution directive, and operational entry point ([AGENT.md](directives/AGENT.md)) |
 | `rules/` | Individual canonical rules referenced by platform adapters (`.claude/rules/`, `.cursor/rules/`) |
-| `practice-core/` | Foundational practice definitions (practice spec, lineage tracking, bootstrap sequence) for cross-repo exchange |
-| `practice-context/` | Staging area for importing/exporting practice artefacts between repositories |
+| `practice-core/` | Foundational practice definitions (practice spec, lineage tracking, bootstrap sequence) for cross-repo exchange. Includes `decision-records/` (PDRs), `incoming/` (inbound practice exchange), and the trinity blueprint files. The previous `patterns/` directory and `practice-context/` exchange surface were retired 2026-04-29 (PDR-007 amendment); patterns live at `memory/active/patterns/` (engineering instances) or as PDRs with `pdr_kind: pattern` (governance). |
 | [`practice-index.md`](practice-index.md) | Bridge file linking portable Practice Core to this repo's local artefacts |
 
 ### Planning and execution
