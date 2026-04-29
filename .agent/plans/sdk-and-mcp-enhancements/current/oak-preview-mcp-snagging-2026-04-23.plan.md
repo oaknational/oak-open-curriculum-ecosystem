@@ -1,6 +1,6 @@
 ---
 name: "Oak Preview MCP Snagging — 2026-04-23 Pass"
-overview: "Investigate and resolve the in-repo findings from the 2026-04-23 black-box validation of the oak-preview MCP surface. Covers explore-topic relevance tuning, the empty-questions response investigation, and a consistent MCP-side response surface for empty / no-match / unsupported cases. Upstream-only findings from the same pass are tracked separately under .agent/plans/external/ooc-issues/."
+overview: "Investigate and resolve the in-repo findings from the 2026-04-23 black-box validation of the oak-preview MCP surface. Covers explore-topic relevance tuning, the empty-questions response investigation, and a consistent MCP-side response surface for empty / no-match / unsupported cases. Upstream-only findings from the same pass are tracked separately under .agent/plans/sector-engagement/ooc-issues/."
 todos:
   - id: ws1-explore-topic-snagging
     content: "WS1: Reproduce the explore-topic relevance regression with a curated nonsense-input fixture set, isolate which scope (lessons / units / threads) is most permissive, and decide whether the fix sits in the search service (RRF / threshold) or in the MCP tool's headline composition."
@@ -35,7 +35,7 @@ The owner has classified them as follows:
 | # | Finding (short) | Disposition |
 |---|-----------------|-------------|
 | 1 | `get-rate-limit` returns zeros | **Not a bug** — that key has no limits. No action. |
-| 2 | Threads endpoints leak Hasura 500 | Upstream only — see Issue 1 of `.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`. |
+| 2 | Threads endpoints leak Hasura 500 | Upstream only — see Issue 1 of `.agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`. |
 | 3 | `download-asset` returns Vercel preview URL | **Not a bug** — that is the preview environment URL. No action. |
 | 4 | `explore-topic` returns confident weak matches for nonsense input | **In-repo (this plan, WS1)** — primarily search service, possibly also MCP tool composition. |
 | 5 | KS4 science lessons listing has repeated `lesson_slug` rows | Upstream investigation — see Issue 2 of the API issue report. |
@@ -122,7 +122,7 @@ The cause may be:
 
 The wire response gives the consumer no way to distinguish these two
 cases. The complementary upstream ask is Issue 3 in
-`.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`,
+`.agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`,
 which asks the API team to add a discriminator on the wire.
 
 ### Investigation steps
@@ -169,7 +169,7 @@ several different shapes:
 
 This mirrors the inconsistency described in the upstream response
 doctrine proposal (Issue 5 of
-`.agent/plans/external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`),
+`.agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`),
 but the MCP layer can begin tightening its own contract before the
 upstream change lands.
 
@@ -220,6 +220,6 @@ ad-hoc per tool.
 
 - Consolidated upstream API issue report (single doc, suitable for
   passing to the API team verbatim):
-  - [`../../external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`](../../external/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md)
+  - [`../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`](../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md)
 - Predecessor in-repo snagging pass (provenance):
   - [`../archive/completed/oak-preview-mcp-snagging.execution.plan.md`](../archive/completed/oak-preview-mcp-snagging.execution.plan.md)

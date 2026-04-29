@@ -45,7 +45,7 @@ The foundation document is renamed to eliminate the three-way naming collision. 
 
 ### 4. Automated enforcement
 
-The portability validation script (`scripts/validate-portability.mjs`) enforces that every canonical rule in `.agent/rules/` has adapters on all supported platforms. This was added as Check 7 in a prior change and prevents future orphaned rules.
+The portability validation script (`scripts/validate-portability.ts`) enforces that every canonical rule in `.agent/rules/` has adapters on all supported platforms. This was added as Check 7 in a prior change and prevents future orphaned rules.
 
 ## Rationale
 

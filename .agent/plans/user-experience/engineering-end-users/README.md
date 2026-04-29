@@ -51,7 +51,7 @@ Engineering and Ed-Tech users rely on a clear host-compatibility contract:
 | [../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | Renderer/fallback sequencing for user-facing behaviour |
 | [../../architecture-and-infrastructure/README.md](../../architecture-and-infrastructure/README.md) | Reliability and infrastructure consistency across servers |
 | [../../developer-experience/future/sdk-publishing-and-versioning-plan.md](../../developer-experience/future/sdk-publishing-and-versioning-plan.md) | Versioning and adoption ergonomics for consumers |
-| [../../external/ooc-api-wishlist/index.md](../../external/ooc-api-wishlist/index.md) | Upstream schema/API assumptions that affect integration UX |
+| [../../sector-engagement/ooc-api-wishlist/index.md](../../sector-engagement/ooc-api-wishlist/index.md) | Upstream schema/API assumptions that affect integration UX |
 | [../public-alpha-experience-contract.md](../public-alpha-experience-contract.md) | Shared alpha promise and no-go criteria |
 
 ---
@@ -87,6 +87,6 @@ For Option X vs Option Y decisioning, engineering-facing evidence should include
 
 | Risk | Engineering/Ed-Tech Impact | Source |
 |------|----------------------------|--------|
-| Canonical URL pattern drift | Integrations emit broken links and degrade trust in generated outputs | [../../external/ooc-api-wishlist/06-response-metadata-and-caching.md](../../external/ooc-api-wishlist/06-response-metadata-and-caching.md) |
-| Missing programme/tier metadata | Product workflows cannot reliably disambiguate GCSE pathways | [../../external/ooc-api-wishlist/18-programmes-and-identifiers-examples.md](../../external/ooc-api-wishlist/18-programmes-and-identifiers-examples.md) |
-| Incomplete error/transcript signalling | Consumers cannot implement reliable fallback/error UX | [../../external/ooc-api-wishlist/11-assets-and-transcripts-examples.md](../../external/ooc-api-wishlist/11-assets-and-transcripts-examples.md) |
+| Canonical URL pattern drift | Integrations emit broken links and degrade trust in generated outputs | [../../sector-engagement/ooc-api-wishlist/06-response-metadata-and-caching.md](../../sector-engagement/ooc-api-wishlist/06-response-metadata-and-caching.md) |
+| Missing programme/tier metadata | Product workflows cannot reliably disambiguate GCSE pathways | [../../sector-engagement/ooc-api-wishlist/18-programmes-and-identifiers-examples.md](../../sector-engagement/ooc-api-wishlist/18-programmes-and-identifiers-examples.md) |
+| Incomplete error/transcript signalling | Consumers cannot implement reliable fallback/error UX | [../../sector-engagement/ooc-api-wishlist/11-assets-and-transcripts-examples.md](../../sector-engagement/ooc-api-wishlist/11-assets-and-transcripts-examples.md) |

@@ -6317,6 +6317,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "70f3219a-a816-469b-a563-70b6e2688e81",
+      "agent_id": {
+        "agent_name": "Squally Diving Anchor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd8"
+      },
+      "thread": "sector-engagement",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T11:07:47Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit sector engagement planning taxonomy docs.",
+      "notes": "Pathspecs: sector-engagement plan collection, rehomed external/KG plans, affected plan indexes, scoped shared-state render; gates: Prettier, markdownlint, git diff --check, link/path checks, collaboration-state check green; peer claims: Verdant Regrowing Pollen TS6 claim active and disjoint except shared state.",
+      "archived_at": "2026-04-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T11:14:05Z",
+        "closed_by": {
+          "agent_name": "Squally Diving Anchor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd8"
+        },
+        "summary": "Commit window closed after 33b25495 landed sector engagement planning taxonomy docs; queue entry 79c844a3-fe92-440a-9eb0-1a17c50c043a completed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "70f3219a-a816-469b-a563-70b6e2688e81",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

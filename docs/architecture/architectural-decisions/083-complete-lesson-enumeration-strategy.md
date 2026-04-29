@@ -272,7 +272,7 @@ The bulk-first approach (ADR-093) uses bulk download for enumeration, with API o
 - Upstream API code: `reference/oak-openapi/src/lib/handlers/units/units.ts`
 - Upstream API code: `reference/oak-openapi/src/lib/handlers/keyStageSubjectLessons/keyStageSubjectLessons.ts`
 - Materialized views: `sequenceView` vs `unitVariantLessonsView` in `reference/oak-openapi/src/lib/owaClient.ts`
-- API Wishlist: `.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md`
+- API Wishlist: `.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md`
 
 ---
 

@@ -58,7 +58,7 @@ thresholds and a single global ratio.
 | `critical` | count > hard limit × `CRITICAL_RATIO`                        | Loop failure — governance has not fired upstream | Stop routine work. Open a remediation lane. Conduct a loop-health post-mortem (see §Loop Health below). Preserve the learning.    |
 
 `CRITICAL_RATIO` is declared once in the validator
-(`scripts/validate-practice-fitness.mjs`) as a named constant. Its current
+(`scripts/validate-practice-fitness.ts`) as a named constant. Its current
 value is `1.5`. The ratio applies uniformly to `fitness_line_limit`,
 `fitness_char_limit`, and `fitness_line_length`. No per-file
 `fitness_*_critical` frontmatter field exists; if a file legitimately needs
@@ -161,7 +161,7 @@ purpose is to surface loop-level failure modes before they re-emerge.
   internalised. It is a single global constant, not a per-file field, so the
   burden is small.
 - Surface-consistency discipline is required: the zone vocabulary must appear
-  verbatim on every live surface. `scripts/validate-fitness-vocabulary.mjs`
+  verbatim on every live surface. `scripts/validate-fitness-vocabulary.ts`
   (invoked via `pnpm practice:vocabulary`) scans live markdown and script
   surfaces for the retired two-threshold phrases and exits 1 if any appear
   outside permitted locations (this ADR itself, outgoing broadcast

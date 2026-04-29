@@ -9,6 +9,7 @@ queue item, then to `../active/` when implementation starts.
 
 | Priority | Plan | Role |
 |---|---|---|
+| P0 | [architectural-budget-system-across-scales.plan.md](./architectural-budget-system-across-scales.plan.md) | Strategic companion lens for cross-scale architectural bounds, visibility-before-enforcement, and anti-gaming doctrine. It links to the visibility/enforcement child briefs without replacing the workspace layer-separation programme. |
 | P0 | [oak-surface-isolation-and-generic-foundation-programme.plan.md](./oak-surface-isolation-and-generic-foundation-programme.plan.md) | Strategic umbrella for enforcing one-layer-per-workspace and separating Oak-specific leaves from generic foundations across runtime, design, tooling, SDK/codegen, search, and app surfaces |
 | P0 | [observability-and-quality-metrics.plan.md](./observability-and-quality-metrics.plan.md) | Strategic umbrella for the M2 observability foundation plus M3 alerting and quality-metrics hardening |
 | P0 | [`observability/future/sentry-observability-maximisation.plan.md`](../../observability/future/sentry-observability-maximisation.plan.md) | Strategic parent for closing every available Sentry product loop across MCP (server + widget) and Search CLI; executable lane at [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../../observability/active/sentry-observability-maximisation-mcp.plan.md) for the MCP branch. Moved 2026-04-18 per the observability restructure. |
@@ -27,11 +28,16 @@ Companion future plan in the nested codegen lane:
 
 Downstream demonstrations of the programme (in other collections):
 
-- [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](../../sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md) — route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline once tranche 4 lands; first external consumer of the generic foundation
+- [sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](../../sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md) — route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline once tranche 4 lands; first external consumer of the generic foundation
 
 Strategic context: [../roadmap.md](../roadmap.md)
 In-progress execution: [../active/README.md](../active/README.md)
 Next-up queue: [../current/README.md](../current/README.md)
+
+Architectural budget child briefs:
+
+- [architectural-budget-visibility-layer.plan.md](./architectural-budget-visibility-layer.plan.md) — read-only metrics child; promote only for one named consumer trigger at a time
+- [architectural-budget-enforcement-layer.plan.md](./architectural-budget-enforcement-layer.plan.md) — later gate-promotion child; blocked until visibility, remediation, and non-zero failure modes are proven
 
 Immediate executable child:
 

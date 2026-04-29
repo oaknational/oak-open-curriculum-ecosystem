@@ -358,7 +358,7 @@ transformation layer entirely. Prerequisites: SDK workspace separation (in
 progress), side-by-side validation, then adapter removal. See
 [ADR-055](./architectural-decisions/055-zod-version-boundaries.md),
 [ADR-108](./architectural-decisions/108-sdk-workspace-decomposition.md), and
-the [Castr plan](../../.agent/plans/external/castr/README.md).
+the [Castr plan](../../.agent/plans/sector-engagement/castr/README.md).
 
 ## Key Takeaway
 

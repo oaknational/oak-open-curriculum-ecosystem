@@ -462,6 +462,6 @@ and are enforced by ESLint SDK boundary rules:
 - [ADR-038: Compilation-Time Revolution](038-compilation-time-revolution.md)
 - [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
 - [SDK Workspace Separation Plan (Canonical)](../../../.agent/plans/semantic-search/archive/completed/sdk-workspace-separation.md) (archived, complete)
-- [Castr Requirements](../../../.agent/plans/external/castr/README.md)
+- [Castr Requirements](../../../.agent/plans/sector-engagement/castr/README.md)
 
 [ws-sep]: ../../../.agent/plans/semantic-search/archive/completed/sdk-workspace-separation.md

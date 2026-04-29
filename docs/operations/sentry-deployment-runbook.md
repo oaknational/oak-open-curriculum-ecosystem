@@ -149,7 +149,7 @@ and ADR-163 disagree, the ADR wins.
 1. `.github/workflows/release.yml` runs `semantic-release` on
    successful CI on `main`. `semantic-release` bumps the root
    `package.json` version and creates a commit back to `main`.
-2. `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+2. `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`
    is wired as `ignoreCommand` in the workspace `vercel.json`. It
    cancels production builds that do not advance the root
    `package.json` version beyond the previous successful production

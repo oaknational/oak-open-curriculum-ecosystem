@@ -1,430 +1,307 @@
 ---
 name: "Directory Complexity Enablement"
-overview: "Canonical executable plan for the supporting constraints, toolchain, and staged rollout gates required before Oak enables `max-files-per-dir`."
+overview: "Executable child plan for the directory-cardinality layer of the architectural budget system, centred on deterministic max-files-per-dir rollout."
 todos:
-  - id: phase-0-baseline-lock
-    content: "Phase 0: Lock the directory-complexity baseline, scope, and ownership boundaries."
+  - id: phase-0-current-truth-baseline
+    content: "Phase 0: Refresh current truth for max-files-per-dir, depcruise, knip, pnpm check, hooks, exports, nested package markers, and crowded directories."
     status: pending
-  - id: phase-1-policy-contract
-    content: "Phase 1: Define the remediation contract and directory-complexity SOP."
+  - id: phase-1-remediation-contract
+    content: "Phase 1: Define the directory-cardinality remediation SOP and deterministic inventory contract."
     status: pending
-  - id: phase-2-supporting-enforcement
-    content: "Phase 2: Land the supporting enforcement bundle (boundary contract, depcruise, knip, and `pnpm check` integration)."
+  - id: phase-2-red-rule-and-config-proofs
+    content: "Phase 2: Add RED tests proving unwired/no-op behaviour, inventory determinism, and an over-limit fixture."
     status: pending
-  - id: phase-3-pilot-calibration
-    content: "Phase 3: Pilot the supporting bundle on real Oak hotspots and calibrate activation settings."
+  - id: phase-3-green-targeted-activation
+    content: "Phase 3: Wire max-files-per-dir in the agreed initial scope with minimal structural remediation."
     status: pending
-  - id: phase-4-staged-activation
-    content: "Phase 4: Export, wire, and activate `max-files-per-dir` only after the supporting bundle proves out."
+  - id: phase-4-pilot-calibration
+    content: "Phase 4: Pilot on real crowded directories and calibrate threshold, ignores, and rollout scope from evidence."
     status: pending
-  - id: phase-5-docs-closure
-    content: "Phase 5: Complete documentation propagation, cross-reference cleanup, and lifecycle follow-through."
+  - id: phase-5-docs-and-gate-readiness
+    content: "Phase 5: Propagate docs, update tracking, run reviewers, and prepare any future gate promotion through the enforcement layer."
     status: pending
 ---
 
 # Directory Complexity Enablement
 
 **Created**: 2026-03-07
-**Last Updated**: 2026-03-07
-**Status**: 🟡 PLANNING (`current/`)
-**Scope**: Define and execute the full supporting constraint bundle that must exist before Oak enables `max-files-per-dir`, then stage a narrow activation with deterministic validation.
+**Last Updated**: 2026-04-29
+**Status**: Queued executable child plan in `current/`
+**Parent doctrine**:
+[ADR-166](../../../../docs/architecture/architectural-decisions/166-architectural-budget-system-across-scales.md)
+and
+[Architectural Budget System Across Scales](../../architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md)
 
----
+## Role
 
-## Canonical Status
+This plan owns the directory-cardinality execution slice of the architectural
+budget system. It is no longer the single source of truth for every supporting
+architecture guardrail. The parent ADR and architecture plans own the
+cross-scale doctrine; this plan owns the safe rollout of
+`@oaknational/max-files-per-dir`.
 
-This is the **single executable source of truth** for the directory-complexity workstream:
+Directory budgets are intra-layer signals only. If a crowded directory reveals
+framework/consumer mixing, lifecycle mixing, or context-specificity tension,
+the response is a workspace or package boundary plan, not a deeper directory
+tree.
 
-1. the remediation SOP and refactoring contract
-2. the supporting structural guardrails that make directory limits architecturally useful
-3. the staged activation criteria for `max-files-per-dir`
-
-Overlapping plans must reference this file rather than duplicate execution detail.
-
-Delegated/folded sources:
-
-- `../active/devx-strictness-convergence.plan.md`
-- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
-- `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
-
----
-
-## Context
+## Current Truth
 
 Oak already has:
 
-- a working but unwired `packages/core/oak-eslint/src/rules/max-files-per-dir.ts`
-- strong file/function complexity guardrails in shared ESLint configs
-- custom boundary rules for `core`, `libs`, `sdks`, and `apps`
+- strict function, file, depth, and cyclomatic-complexity lint rules in the
+  shared ESLint config
+- `pnpm knip`, `pnpm depcruise`, and both tools in the root `pnpm check` path
+- `.dependency-cruiser.mjs` as the graph-gate configuration
+- `knip.config.ts` as the unused-code and dependency-hygiene configuration
+- an implemented but unwired
+  `packages/core/oak-eslint/src/rules/max-files-per-dir.ts`
 
-Oak does **not** yet have the full companion system that prevents `max-files-per-dir` from degenerating into "shuffle files until lint passes":
+The remaining directory-cardinality gap is narrower:
 
-- a canonical SOP for how to respond to a directory-complexity breach
-- barrel-boundary enforcement proving that extracted sub-domains expose narrow public APIs
-- dead-code enforcement to clean up refactors
-- a `pnpm check` path that keeps the supporting toolchain permanently active
-- calibrated rollout evidence showing what threshold and ignore policy Oak should actually use
-
-The external comparator reviewed on 2026-03-07 confirmed the useful pattern:
-
-1. define the remediation contract first
-2. enforce public API and internal-boundary discipline
-3. clean up dead code created by refactors
-4. only then enable the directory-count rule
+- the rule is not registered in the plugin/config path
+- the rule can silently no-op without a configured inventory
+- there is no deterministic inventory source or ignore policy
+- there is no Oak SOP for responding to a directory-count failure
+- crowded directories have not been piloted against the future rule
 
 ## Goal
 
-Create a single, evidence-backed Oak plan that lands the structural support bundle first and enables `max-files-per-dir` only after the repo can respond to it with bounded-context refactors rather than mechanical file movement.
+Enable `max-files-per-dir` only after Oak can respond to a breach with
+cohesive intra-layer design, deterministic inventory evidence, and reviewed
+rollout settings.
 
 ## Non-Goals
 
-- Immediate repo-wide activation of `max-files-per-dir`
-- Choosing a final file-count threshold before hotspot evidence exists
-- Adopting `eslint-plugin-boundaries` by default if Oak's existing custom boundary rules can express the required constraints
-- Folding unrelated strictness work (`vi.mock`, type-assertion burn-down, override removal) into this plan
-
----
+- No immediate repo-wide activation.
+- No threshold selection before baseline and pilot evidence.
+- No re-planning completed `knip`, `depcruise`, or `pnpm check` integration.
+- No directory split where ADR-154 requires workspace separation.
+- No suppressions, threshold inflation, or compatibility barrels.
+- No new graph tool while dependency-cruiser owns graph enforcement.
 
 ## Foundation Alignment
 
-Before each phase starts:
+Before each phase:
 
-1. Re-read `.agent/directives/principles.md`
-2. Re-read `.agent/directives/testing-strategy.md`
-3. Re-read `.agent/directives/schema-first-execution.md`
-4. Ask: **Could it be simpler without compromising quality?**
+1. Re-read `.agent/directives/principles.md`.
+2. Re-read `.agent/directives/testing-strategy.md`.
+3. Re-read `.agent/directives/schema-first-execution.md`.
+4. Ask: could it be simpler without compromising quality?
 
-Non-negotiables for this plan:
+Relevant doctrine:
 
-- No compatibility layers
-- No check-disabling shortcuts
-- No threshold inflation to hide violations
-- No barrel-file sprawl that re-exports internals as a workaround
-- No duplication of execution detail across plan files
+- ADR-019: domain-driven file splitting
+- ADR-041: workspace dependency direction
+- ADR-121: quality-gate surfaces
+- ADR-154: directories do not substitute for workspace layer boundaries
+- ADR-155: decompose at the tension
+- ADR-166: architectural budgets across scales
 
----
+## Phase 0: Current-Truth Baseline
 
-## Phase Plan
+**Goal**: refresh the exact state before writing rule or config code.
 
-### Phase 0: Baseline and Scope Lock
+**RED evidence first**:
 
-Goal:
+1. Prove where `max-files-per-dir` is implemented, exported, and unwired.
+2. Prove current `knip`, `depcruise`, and `pnpm check` wiring from live files.
+3. Prove whether hook/CI surfaces can fail non-zero for future promoted gates.
+4. Inventory package export shapes, deep-import candidates, nested package
+   markers, and the largest authored directories.
 
-- Lock the exact baseline, supporting-tool gap, and ownership boundaries before any execution work begins.
+**Acceptance criteria**:
 
-RED (evidence first):
+1. The baseline names current truth, not March 2026 assumptions.
+2. Any hook failure-mode issue is routed to quality-gate hardening before gate
+   promotion is claimed.
+3. Top crowded directories are recorded as pilot candidates, not automatic
+   refactor targets.
+4. Nested package markers are classified as workspace, fixture/generated, or
+   remediation-needed.
 
-1. Prove the current state of `max-files-per-dir` wiring, boundary rules, and toolchain gaps.
-2. Inventory the current hotspot classes that would be affected by a future rollout.
-3. Prove which parts of the work belong here versus in adjacent strictness/enforcement plans.
-
-GREEN (minimal implementation):
-
-1. Record the authoritative baseline and scope in this plan only.
-2. Move overlapping plans to reference this plan for directory-complexity execution detail.
-
-REFACTOR (cleanup/documentation):
-
-1. Remove stale claims that still imply execution detail is owned elsewhere.
-2. Keep one authoritative execution path for this workstream.
-
-Acceptance criteria:
-
-1. `max-files-per-dir` current state is documented with exact code-location evidence.
-2. Supporting-tool gaps (`dependency-cruiser`, `knip`, `pnpm check` integration, SOP) are explicitly listed.
-3. Adjacent plans describe this file as the canonical execution source for this work.
-
-Deterministic validation:
+**Deterministic validation**:
 
 ```bash
 rg --line-number "max-files-per-dir" packages/core/oak-eslint/src
-rg --line-number "dependency-cruiser|knip|pnpm check" package.json turbo.json .agent/plans
-rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans/developer-experience .agent/plans/agentic-engineering-enhancements
+rg --line-number "depcruise|knip|check" package.json
+test -f .dependency-cruiser.mjs
+test -f knip.config.ts
+find apps packages agent-tools -name package.json -not -path "*/node_modules/*"
 ```
 
----
+## Phase 1: Remediation Contract and Inventory Design
 
-### Phase 1: Policy Contract and Remediation SOP
+**Goal**: define how developers respond to a directory-cardinality breach.
 
-Goal:
+**RED evidence first**:
 
-- Define the architectural response contract so a directory-limit failure produces cohesive refactoring, not file shuffling.
+1. Prove existing guidance covers file/function splitting but not directory
+   cardinality.
+2. Prove the rule needs a non-empty inventory to avoid silent success.
 
-RED (tests/evidence first):
+**GREEN implementation**:
 
-1. Prove what the current repo guidance says about splitting files/functions/directories.
-2. Identify the missing directory-complexity-specific instructions.
+1. Add or update the canonical Oak guidance for directory-cardinality
+   remediation.
+2. Define the inventory source, sorting, generated/fixture exclusions, and
+   ignore policy.
+3. Require every breach to choose one response:
+   - extract cohesive intra-layer sub-domains
+   - move code to a lower general layer
+   - split a workspace when the tension is a layer boundary
+   - delete dead code
+   - generate repeated structure instead of authoring it by hand
 
-GREEN (minimal implementation):
+**Acceptance criteria**:
 
-1. Create a canonical directory-complexity SOP in the appropriate Oak guidance surface.
-2. Define the required response pattern:
-   - identify sub-domains
-   - extract cohesive groups, not single-file orphans
-   - add explicit `index.ts` contracts
-   - keep internals private
-   - avoid wildcard exports
-3. Decide whether Oak needs a new dedicated rule/doc surface or whether an existing guidance surface should be extended.
+1. The SOP bans threshold bumps and suppressions as a primary response.
+2. The inventory contract is deterministic and cannot be empty unnoticed.
+3. The SOP points to ADR-154 when directory refactoring would hide a layer
+   split.
 
-REFACTOR (cleanup/documentation):
-
-1. Ensure the SOP and plan language agree on the same remediation vocabulary.
-2. Remove any stale references that still imply "split because lint said so" without contract guidance.
-
-Acceptance criteria:
-
-1. Oak has a single canonical SOP for directory-complexity remediation.
-2. The SOP explicitly bans threshold bumps and suppressions as the primary response.
-3. The SOP explicitly requires bounded-context extraction and public API design.
-
-Deterministic validation:
+**Deterministic validation**:
 
 ```bash
-test -f .agent/rules/directory-complexity-enablement.md || test -f docs/governance/directory-complexity-enablement.md
-rg --line-number "bounded context|index\\.ts|wildcard export|threshold|suppress" .agent/rules docs/governance .agent/directives
+rg --line-number "directory-cardinality|directory complexity|max-files-per-dir" .agent docs packages/core/oak-eslint
+rg --line-number "ADR-154|ADR-166|inventory|threshold|suppress" .agent docs
 ```
 
----
+## Phase 2: RED Rule and Config Proofs
 
-### Phase 2: Supporting Enforcement Bundle
+**Goal**: write failing tests that prove the desired rule wiring before
+implementation.
 
-Goal:
+**RED tests**:
 
-- Land the structural support bundle that makes directory limits safe and meaningful.
+1. Plugin registration fails until `max-files-per-dir` is exported.
+2. Shared config test fails until the rule is configured for the chosen scope.
+3. Inventory test fails when inventories are empty or unstable.
+4. Fixture test fails on a known over-limit directory.
 
-RED (tests/evidence first):
+**Acceptance criteria**:
 
-1. Prove the current boundary model can or cannot express the needed public-API constraints.
-2. Prove the repo currently lacks barrel-boundary and dead-code enforcement.
-3. Prove the current `pnpm check` path does or does not include the required structural checks.
+1. RED failures are behavioural, not missing-import or type-check failures.
+2. Tests prove the configured inventory is non-empty and sorted.
+3. The failure message points to the canonical remediation guidance.
 
-GREEN (minimal implementation):
-
-1. Choose and implement the semantic-boundary path:
-   - prefer extending Oak's existing custom `boundary.ts` rules if they are sufficient
-   - adopt `eslint-plugin-boundaries` only if the custom rules cannot express the required semantics cleanly
-2. Add `dependency-cruiser` configuration enforcing barrel/public-API access patterns for the selected scopes.
-3. Add `knip` configuration for dead-code and unused-export cleanup after refactors.
-4. Integrate the chosen structural checks into the repo `pnpm check` path.
-5. **Supplemental graph-only tooling is out of scope.** `dependency-cruiser` already enforces cycles, orphans, and boundaries; for visual inspection when untangling cycles, `pnpm depcruise:report` emits DOT suitable for Graphviz or editor plugins—no second graph tool is required.
-
-REFACTOR (cleanup/documentation):
-
-1. Update tooling docs and plan references so the support bundle is described once.
-2. Remove stale assumptions that `max-files-per-dir` can be enabled without this bundle.
-
-Acceptance criteria:
-
-1. Oak has an explicit, tested boundary/public-API contract for extracted sub-domains.
-2. Oak has `dependency-cruiser` configuration for barrel-boundary enforcement.
-3. Oak has `knip` configuration for dead-code detection in the same scopes.
-4. The `pnpm check` path references the selected structural checks.
-5. The plan records the rationale for the semantic-boundary implementation choice.
-
-Deterministic validation:
+**Deterministic validation**:
 
 ```bash
-test -f .dependency-cruiser.cjs
-rg --line-number "index\\.ts|forbidden|circular" .dependency-cruiser.cjs
-test -f knip.ts || test -f knip.json || test -f knip.config.ts
-rg --line-number "depcruise|knip|pnpm check" package.json turbo.json
-rg --line-number "eslint-plugin-boundaries|createSdkBoundaryRules|appBoundaryRules|appArchitectureRules" packages/core/oak-eslint apps packages
-```
-
----
-
-### Phase 3: Pilot and Calibration
-
-Goal:
-
-- Run the support bundle against real Oak hotspots before enabling the directory-count rule.
-
-RED (tests/evidence first):
-
-1. Identify one or more real candidate hotspots from Oak's current structure.
-2. Prove how the support bundle behaves on those hotspots before `max-files-per-dir` is active.
-
-GREEN (minimal implementation):
-
-1. Choose pilot scopes from the baseline.
-2. Apply the support bundle and fix resulting structural issues with cohesive extraction.
-3. Capture evidence about:
-   - practical sub-domain boundaries
-   - barrel/public-API ergonomics
-   - dead-code cleanup burden
-   - likely threshold and ignore-suffix policy
-
-REFACTOR (cleanup/documentation):
-
-1. Fold the pilot findings back into this plan's rollout settings.
-2. Tighten the staged-activation criteria using real evidence rather than intuition.
-
-Acceptance criteria:
-
-1. At least one real Oak hotspot has been used as a calibration pilot.
-2. The plan records the recommended threshold, ignore policy, and initial activation scope.
-3. The pilot demonstrates that the support bundle changes developer behaviour in the intended way.
-
-Deterministic validation:
-
-```bash
-pnpm type-check
-pnpm lint
-pnpm test
-rg --line-number "threshold|ignore|pilot|hotspot" .agent/plans/developer-experience/current/directory-complexity-enablement.execution.plan.md
-```
-
----
-
-### Phase 4: Staged `max-files-per-dir` Activation
-
-Goal:
-
-- Export, wire, and activate `max-files-per-dir` only after the supporting bundle has been proven.
-
-RED (tests/evidence first):
-
-1. Add or update rule/config tests that fail until the rule is exported and wired correctly.
-2. Prove the activation fails cleanly on known breached directories before remediation.
-
-GREEN (minimal implementation):
-
-1. Improve the Oak rule message so it points to the canonical Oak remediation guidance.
-2. Export the rule from `packages/core/oak-eslint/src/index.ts`.
-3. Wire the rule into the chosen shared config or initial target scopes only.
-4. Apply the calibrated threshold and ignore policy from Phase 3.
-5. Remediate the initial breaches structurally.
-
-REFACTOR (cleanup/documentation):
-
-1. Remove any stale comments or plan text that still describe the rule as unwired-only.
-2. Record the rollout boundary clearly: pilot scope first, broader rollout only after successful evidence.
-
-Acceptance criteria:
-
-1. `max-files-per-dir` is exported and wired in the agreed initial scope.
-2. The rule message points to Oak's canonical SOP.
-3. Initial breaches are resolved by bounded-context refactors rather than threshold changes.
-4. The activation scope and threshold match the Phase 3 calibration decision.
-
-Deterministic validation:
-
-```bash
-rg --line-number "max-files-per-dir" packages/core/oak-eslint/src/index.ts packages/core/oak-eslint/src/configs
 pnpm --filter @oaknational/eslint-plugin-standards test
 pnpm --filter @oaknational/eslint-plugin-standards lint
+```
+
+## Phase 3: GREEN Targeted Activation
+
+**Goal**: wire the rule in the smallest reviewed scope that proves the path.
+
+**GREEN implementation**:
+
+1. Export and register the rule in the plugin surface.
+2. Configure the agreed initial scope with the deterministic inventory.
+3. Improve the rule message to name the remediation contract.
+4. Remediate initial breaches structurally, or route each out-of-scope breach
+   to a named workspace/package plan.
+
+**Acceptance criteria**:
+
+1. The rule fails fast if the configured inventory is missing.
+2. The initial scope is explicit and justified.
+3. Remediation does not create proxy barrels, artificial packages, or layer
+   hiding.
+4. Any workspace-level finding is routed to the architecture programme.
+
+**Deterministic validation**:
+
+```bash
+rg --line-number "max-files-per-dir" packages/core/oak-eslint/src
+pnpm --filter @oaknational/eslint-plugin-standards test
 pnpm lint
 ```
 
----
+## Phase 4: Pilot and Calibration
 
-### Phase 5: Documentation Propagation and Lifecycle Closure
+**Goal**: use real hotspots to calibrate rollout behaviour from evidence.
 
-Goal:
+**Pilot expectations**:
 
-- Ensure surrounding docs reference this canonical plan and that the workstream can later move cleanly through `active/` and archive.
+1. Choose pilot directories from the Phase 0 baseline.
+2. Record whether each pilot response is directory extraction, lower-layer
+   move, workspace split, deletion, or generated output.
+3. Calibrate threshold and ignore policy from the pilot.
+4. Re-check that changes reduce conceptual load rather than moving it to a
+   neighbouring directory or workspace.
 
-RED (tests/evidence first):
+**Acceptance criteria**:
 
-1. Scan for stale references that still imply the old split ownership.
-2. Verify collection indexes, roadmaps, and source plans all point at this file.
+1. At least one real crowded directory has evidence-backed disposition.
+2. Threshold and ignore policy are justified by pilot data.
+3. Package API and dependency direction stay cleaner after remediation.
 
-GREEN (minimal implementation):
-
-1. Update collection indexes and strategic/source plans.
-2. Record the planning update in `../documentation-sync-log.md`.
-3. Prepare promotion guidance for moving this plan from `current/` to `active/` once execution starts.
-
-REFACTOR (cleanup/documentation):
-
-1. Remove duplicated execution detail from adjacent plans where practical.
-2. Keep this plan as the only place that fully describes the staged rollout.
-
-Acceptance criteria:
-
-1. Developer-experience indexes and roadmap reference this plan.
-2. Agentic-engineering source/execution surfaces reference this plan for this workstream.
-3. Documentation sync tracking records the canonicalisation change.
-
-Deterministic validation:
-
-```bash
-rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans/developer-experience .agent/plans/agentic-engineering-enhancements
-pnpm markdownlint-check:root
-```
-
----
-
-## Quality Gates
-
-After each sub-task:
+**Deterministic validation**:
 
 ```bash
 pnpm type-check
 pnpm lint
 pnpm test
-```
-
-After each toolchain or config phase:
-
-```bash
-pnpm build
-pnpm type-check
-pnpm lint
-pnpm test
-```
-
-Additional targeted gates when structural tools land:
-
-```bash
 pnpm depcruise
 pnpm knip
 ```
 
-If a supplemental graph tool is adopted in Phase 2, add it here and to the repo quality-gate path at the same time.
+## Phase 5: Documentation and Gate Readiness
 
----
+**Goal**: close the child plan without overstating enforcement status.
+
+**Tasks**:
+
+1. Update developer-experience indexes and documentation sync log.
+2. Update ADR-121 and build-system docs only if a check is promoted to a gate.
+3. Route repo-wide enforcement to the future enforcement-layer plan until
+   visibility and remediation are complete.
+4. Run required reviewers and record dispositions.
+5. Run consolidation after settled doctrine is ready to graduate.
+
+**Acceptance criteria**:
+
+1. Surrounding docs describe this plan as the directory-cardinality child.
+2. Quality-gate docs do not claim new gate coverage before it exists.
+3. Reviewer findings are fixed, rejected with rationale, or explicitly
+   deferred with owner-visible evidence.
+
+**Deterministic validation**:
+
+```bash
+rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans
+pnpm markdownlint-check:root .agent/plans/developer-experience docs/architecture/architectural-decisions
+git diff --check
+```
 
 ## Reviewer Gate Strategy
 
-At each phase completion checkpoint:
-
-1. Always: `code-reviewer`, `docs-adr-reviewer`
-2. Structural/tooling phases (2, 4): `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `config-reviewer`
-3. Calibration/rollout phases (3, 4): `test-reviewer`
-
-Do not mark a phase complete until required reviewer findings are either fixed or explicitly carried as dated follow-up debt in this plan.
-
----
+- Phase 0: `assumptions-reviewer`, `config-reviewer`
+- Phase 1: `docs-adr-reviewer`, `architecture-reviewer-fred`
+- Phase 2 and Phase 3: `code-reviewer`, `test-reviewer`,
+  `config-reviewer`
+- Phase 4: `architecture-reviewer-betty`,
+  `architecture-reviewer-wilma`
+- Phase 5: `code-reviewer`, `docs-adr-reviewer`,
+  `assumptions-reviewer`
 
 ## Risks and Mitigations
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| `max-files-per-dir` is enabled before the support bundle exists | Mechanical file shuffling, boundary regressions, churn | Phase sequencing is mandatory; activation is blocked until Phase 3 evidence exists |
-| `dependency-cruiser` and `knip` are added without clear scope | High-noise rollout and low trust in the tools | Start with pilot scopes and record scope rationale in this plan |
-| Boundary tooling is overcomplicated | Tooling drift and unnecessary maintenance | Prefer extending Oak's existing custom boundary rules unless a clear gap is proven |
-| Threshold chosen too early | Wrong activation pressure and avoidable churn | Calibrate threshold and ignore policy in Phase 3 |
-| Adjacent plans continue duplicating execution detail | Canonical drift and stale references | Update all overlapping plans to point here and keep this file authoritative |
+| Risk | Mitigation |
+|---|---|
+| The rule silently no-ops | Require non-empty deterministic inventory and config tests |
+| Counts cause mechanical splits | SOP requires a structural response and reviewer disposition |
+| Directory split hides layer tension | ADR-154 routes layer tension to workspace separation |
+| Existing gate state is misrepresented | Phase 0 refreshes live `knip`, `depcruise`, and `pnpm check` truth |
+| Hook/CI promotion claims are false | Enforcement waits for non-zero failure-mode proof |
 
----
+## Next Session Entry Point
 
-## Cross-References
-
-- `../active/devx-strictness-convergence.plan.md`
-- `../README.md`
-- `../roadmap.md`
-- `./README.md`
-- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
-- `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
-- `../../../reference/architecture/boundary-enforcement-with-eslint.md`
-- `../../../research/developer-experience/architectural-enforcement-playbook.md`
-
----
-
-## Next Session Entry Point (Standalone)
-
-1. Apply session grounding with `start-right-quick` unless the work expands again.
-2. Re-read the three foundation directives.
-3. Treat this plan as the canonical execution source for directory-complexity work.
-4. Start with Phase 0 baseline confirmation, not implementation.
+1. Apply `start-right-quick`.
+2. Re-read ADR-166, ADR-154, and this plan.
+3. Start with Phase 0 baseline refresh, not rule wiring.
+4. Treat any cross-scale finding as evidence for the parent architecture
+   programme rather than forcing it into directory remediation.

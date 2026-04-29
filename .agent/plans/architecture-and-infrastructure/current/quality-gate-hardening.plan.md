@@ -2,12 +2,15 @@
 name: "Quality Gate Hardening"
 overview: "Unified plan for all pending quality gate enhancements: reconcile gate documentation with reality, standardise ESLint config foundation, promote static analysis tools, harden enforcement, enable mutation testing, and remediate all findings."
 todos:
-  - id: refresh-stale-counts
-    content: "Tier 0: re-run pnpm knip, pnpm depcruise, pnpm audit, count eslint-disable and type-assertion warnings, measure coverage baselines."
+  - id: refresh-open-counts-and-drift
+    content: "Tier 0: run promoted knip/depcruise drift checks, run pnpm audit, count eslint-disable and type-assertion warnings, measure coverage baselines."
     status: pending
   - id: reconcile-gate-docs
     content: "Reconcile ADR-121 (matrix + prose + principle #4), ADR-147, build-system.md, workflow.md, accessibility-practice.md — 5 factual errors, 2 verify-vs-mutate discrepancies, stale prose, falsified principle, inter-ADR contradiction."
     status: completed
+  - id: pre-push-turbo-exit-propagation
+    content: "Fix and prove pre-push exits non-zero when the main Turbo gate fails; required before relying on further hook-based gate promotion."
+    status: pending
   - id: eslint-config-standardisation
     content: "Audit and standardise ESLint flat-config composition across all workspaces. Foundation — must precede all lint-rule promotions."
     status: pending
@@ -30,13 +33,13 @@ todos:
     content: "Promote @oaknational/no-eslint-disable from warn to error after eslint-disable-remediation.plan.md completes."
     status: pending
   - id: enable-knip
-    content: "Triage knip findings across unused files/exports and dependency hygiene, including undeclared workspace imports that currently escape blocking gates, then promote to blocking QG. Child plan: knip-triage-and-remediation.plan.md"
+    content: "Completed: knip findings triaged and promoted to blocking QG. Child plan: knip-triage-and-remediation.plan.md"
     status: completed
   - id: enable-depcruise
-    content: "Resolve dependency-cruiser findings (circular deps, orphans) and promote to blocking QG, while keeping manifest-completeness enforcement separate."
+    content: "Completed: dependency-cruiser findings resolved and promoted to blocking QG, with manifest/API enforcement kept separate."
     status: completed
   - id: enable-max-files-per-dir
-    content: "Enable the max-files-per-dir ESLint rule across all workspaces and remediate violations."
+    content: "Route max-files-per-dir through the ADR-166 directory-cardinality child plan before any repo-wide gate promotion."
     status: pending
   - id: promote-type-assertions-in-tests
     content: "Remove the testRules exception that makes consistent-type-assertions a warning rather than an error. Remediate all ~218 assertion warnings across 6 workspaces."
@@ -57,17 +60,17 @@ todos:
 
 # Quality Gate Hardening
 
-**Last Updated**: 2026-04-11
-**Status**: Current — owner decisions resolved 2026-04-11, gate topology implemented, ADR-121 reconciled
+**Last Updated**: 2026-04-29
+**Status**: Current — owner decisions resolved 2026-04-11, ADR-121 reconciled; gate topology implemented except the known pre-push Turbo exit-propagation blocker
 **Scope**: All pending quality gate promotions and enforcement hardenings, consolidated into a single plan with remediation work for each.
 
 ## Problem and Intent
 
-The repository has several quality tools installed but not yet promoted to
-blocking gates, enforcement gaps where checks are weaker than the principles
-demand, and documentation drift where the gate documentation no longer matches
-the actual gate implementations. Each tool surfaces genuine pre-existing issues
-that must be remediated before promotion.
+The repository has some quality tools still awaiting promotion, enforcement
+gaps where checks are weaker than the principles demand, and historical
+documentation drift where gate documentation needed reconciliation. Knip and
+dependency-cruiser are now completed gate foundations; remaining work must not
+reopen those promotions unless a fresh drift check finds new issues.
 
 This plan unifies all pending quality gate work into a single plan to prevent
 fragmentation across multiple small plans.
@@ -123,44 +126,44 @@ pattern, so typed lint stays both truthful and predictable.
 
 ## Findings (2026-04-11 audit)
 
-### Gate documentation drift (ADR-121 vs reality)
+### Historical gate documentation drift before reconciliation
 
-ADR-121 has **5 factual errors**, **1 labelling ambiguity**, and
-**1 additional verify-vs-mutate discrepancy** in its coverage matrix:
+Before reconciliation, ADR-121 had **5 factual errors**,
+**1 labelling ambiguity**, and **1 additional verify-vs-mutate discrepancy**
+in its coverage matrix:
 
-1. ADR says CI **excludes** `test:e2e` — CI **includes** it
-2. ADR says CI **excludes** `smoke:dev:stub` — CI **includes** it
-3. ADR says CI **excludes** `test:ui` — CI **includes** it
-4. ADR says `pnpm check` uses `secrets:scan:all` — it uses
+1. ADR said CI **excludes** `test:e2e` — CI **included** it
+2. ADR said CI **excludes** `smoke:dev:stub` — CI **included** it
+3. ADR said CI **excludes** `test:ui` — CI **included** it
+4. ADR said `pnpm check` uses `secrets:scan:all` — it used
    `secrets:scan` (branch/tag scope, not full history)
 5. *(labelling ambiguity)* ADR matrix cell for `pnpm check` format
-   already annotates `(format:root)` but the row label misleadingly
+   already annotated `(format:root)` but the row label misleadingly
    implies verify-only
-6. ADR says `pnpm check` uses `markdownlint-check` — it uses
+6. ADR said `pnpm check` uses `markdownlint-check` — it used
    `markdownlint:root` (mutating fix mode)
-7. ADR says `pnpm check` uses `lint` — it uses `lint:fix`
+7. ADR said `pnpm check` uses `lint` — it used `lint:fix`
    (same verify-vs-mutate class as points 5 and 6)
 
-The verify-vs-mutate pattern (points 5-7) is systematic: `pnpm check`
-consistently uses fix-mode commands (`format:root`, `markdownlint:root`,
-`lint:fix`) while other surfaces use verify-only commands. This should be
-captured as a deliberate design decision with a rationale, not left as
-per-row annotations.
+The verify-vs-mutate pattern (points 5-7) was systematic: `pnpm check`
+used fix-mode commands (`format:root`, `markdownlint:root`, `lint:fix`)
+while other surfaces used verify-only commands. The reconciliation captured
+that as a deliberate decision with rationale.
 
-**Beyond the matrix**, ADR-121's prose is also stale:
+**Beyond the matrix**, ADR-121's prose was also stale:
 
 - **Rationale for exclusions** (lines 72-78): says "CI excludes
-  `test:e2e`: E2E tests hit Elasticsearch" — this is now false
+  `test:e2e`: E2E tests hit Elasticsearch" — this was false
 - **Consequences** (lines 108-110): says `test:ui` and
-  `smoke:dev:stub` are local-only — also false
+  `smoke:dev:stub` are local-only — also false at the time
 - **Design principle #4**: "CI runs a strict subset of what
   pre-push covers" — CI now includes `test:e2e`, `test:ui`, and
   `smoke:dev:stub`, none of which are in pre-push. CI is broader
   in some dimensions, not a strict subset. This principle must be
-  either restored (add missing checks to pre-push) or revised.
+  either restored or revised.
 - **ADR-147 contradiction**: ADR-147 states "Tests run in CI via
   test:a11y script" but ADR-121 explicitly marks `test:a11y` as
-  excluded from CI. These two accepted ADRs contradict each other.
+  excluded from CI. These two accepted ADRs contradicted each other.
 
 Additional documentation drift:
 
@@ -173,8 +176,8 @@ Additional documentation drift:
 - `docs/governance/accessibility-practice.md`: references quality
   gates that will change if `test:a11y` is promoted to CI
 
-All of the above must be corrected before any hardening decisions
-that rely on the coverage matrix.
+All of the above was corrected by the completed reconciliation before later
+hardening decisions that relied on the coverage matrix.
 
 ### Missing gate: dependency vulnerability scanning
 
@@ -222,18 +225,14 @@ No fix has been applied. No tracking file exists. The napkin referenced
 
 ### Assumptions requiring validation
 
-**Stale counts (must refresh before committing to tiered execution):**
+**Open counts (must refresh before committing to remaining execution):**
 
-1. **Knip finding counts are current** — the 728-issue count (94 unused
-   files, 626 unused exports, 14 dependency issues) is from 2026-03-26.
-   New work since then (WS-0/1/2, type extraction, namespace work) may
-   have changed the counts in either direction. Must re-run `pnpm knip`
-   before triaging.
-2. **Depcruise finding counts are current** — the 88-violation count (39
-   circular, 49 orphans) is from 2026-03-26. Same staleness risk.
-3. **ESLint disable count (~64) is current** — from 2026-03-29. Some
+1. **Knip and depcruise drift checks are current** — both tools have completed
+   promotion baselines. Re-run them as drift checks, not as fresh triage or
+   promotion work.
+2. **ESLint disable count (~64) is current** — from 2026-03-29. Some
    remediation may have occurred during subsequent work. Must re-count.
-4. **`consistent-type-assertions` warning count (~218) is current** —
+3. **`consistent-type-assertions` warning count (~218) is current** —
    not re-verified. Must re-count before estimating effort.
 
 **Technical hypotheses:**
@@ -281,13 +280,14 @@ No fix has been applied. No tracking file exists. The napkin referenced
 
 ## Effort/Impact Classification
 
-### Tier 0: Refresh stale counts (prerequisite for execution)
+### Tier 0: Refresh Open Counts and Static-Analysis Drift
 
-Before committing to tiered execution, re-run all tools to update
-counts. All effort estimates below depend on these being current.
+Before committing to tiered execution, re-run active open tools to update
+counts. Completed static-analysis promotions are historical baselines, not
+future work.
 
-- `pnpm knip` — last run 2026-03-26
-- `pnpm depcruise` — last run 2026-03-26
+- `pnpm knip` — completed and promoted 2026-04-11; rerun only as drift check
+- `pnpm depcruise` — completed and promoted 2026-04-12; rerun only as drift check
 - Count eslint-disable comments — last counted 2026-03-29
 - Count `consistent-type-assertions` warnings — never re-verified
 - `pnpm audit` — never run as a gate, current findings unknown
@@ -310,7 +310,7 @@ New gates that fill genuine enforcement gaps.
 | Item | Effort | Impact | Notes |
 |------|--------|--------|-------|
 | Add `pnpm audit` gate (new ADR-158, parallels ADR-111) | < 1 hr + triage | High | Zero vulnerability scanning today; must run audit first to assess findings |
-| Targeted knip: dependency fixes only | 2-3 hrs | High | Undeclared deps caused real CI failures (PR #76) |
+| Static-analysis drift check | 1-2 hrs | Medium | Rerun promoted `knip` and `depcruise` to catch drift, not to reopen promotion |
 | Built-artifact proof in E2E | 2-3 hrs | High | Mandate `test:e2e` boots `dist/` under plain Node, not a separate lane |
 | Promote test:a11y + widget to CI | 1-2 hrs + stability validation | Medium-High | ADR-147 says blocking but CI doesn't enforce; need N consecutive green runs |
 | Add coverage thresholds (ratchet model) | 2-4 hrs | Medium-High | Depends on baselines; pair with awareness of `passWithNoTests: true` |
@@ -322,7 +322,7 @@ on ESLint config standardisation (Tier 1) completing first.
 
 | Item | Effort | Impact | Notes |
 |------|--------|--------|-------|
-| Depcruise: resolve circular deps | 1 day | Medium | 5 distinct cycles, 39 errors (count may be stale) |
+| Depcruise drift follow-up | Routed to completed child | Medium | Baseline promotion complete; only new drift or config changes belong here |
 | `consistent-type-assertions` promotion | 1-2 days | Medium | ~218 warnings; mechanical bulk but structural fakes may slip |
 | `no-eslint-disable` promotion | Blocked by eslint-disable remediation | High | Remediation plan has zero progress; re-assess before scheduling |
 | Forbidden-comment test infrastructure | 0.5 day | Medium | Must solve without weakening any gate |
@@ -331,11 +331,11 @@ on ESLint config standardisation (Tier 1) completing first.
 
 | Item | Effort | Impact | Notes |
 |------|--------|--------|-------|
-| Full knip remediation (unused exports) | 2-3 days | Medium | Largest scope, phased approach |
-| Knip + depcruise promotion to `pnpm check` | After remediation | High (eventual) | Requires clean baseline |
+| Knip drift follow-up | Routed to completed child | Medium | Baseline promotion complete; only new drift or config changes belong here |
+| Package API / deep-import enforcement | ADR-166 enforcement layer | High (eventual) | Requires visibility baseline and deterministic failure mode |
 | Stryker mutation testing | 2+ days | Medium | Needs healthy test suite first (test audit sibling plan) |
 | `no-child-process-in-tests` rule | 1 day | Low-Medium | 2 existing violators |
-| `max-files-per-dir` enablement | 1 day | Low | Scope unknown |
+| `max-files-per-dir` enablement | ADR-166 directory-cardinality child | Low now, higher after baseline | Estimate and dependencies live in the child plan |
 | oak-eslint self-linting | 0.5 day | Low | Low external impact |
 
 ## Domain Boundaries
@@ -355,12 +355,12 @@ on ESLint config standardisation (Tier 1) completing first.
    any gate (no exemptions)
 9. **oak-eslint self-linting**
 10. **`@oaknational/no-eslint-disable` promotion** — warn to error
-11. **knip** — triage findings, promote to blocking QG
-12. **dependency-cruiser** — resolve findings, promote to blocking QG
-13. **max-files-per-dir** — enable and remediate
-14. **`consistent-type-assertions` in tests** — promote to error
-15. **Stryker mutation testing**
-16. **`no-child-process-in-tests` ESLint rule**
+11. **knip/depcruise drift checks** — rerun promoted gates and route any new
+    drift to the completed child plans
+12. **max-files-per-dir** — route through ADR-166 directory-cardinality child
+13. **`consistent-type-assertions` in tests** — promote to error
+14. **Stryker mutation testing**
+15. **`no-child-process-in-tests` ESLint rule**
 
 ### Not in Scope
 
@@ -380,62 +380,44 @@ to compensate.
 
 | Enhancement | Depends on | Notes |
 |------------|-----------|-------|
-| Tier 0: Refresh stale counts | None | **Do before everything** — effort estimates depend on current data |
+| Tier 0: Refresh open counts and drift | None | **Do before everything** — effort estimates depend on current data |
 | ADR-121 + ADR-147 reconciliation | None | **Do first** — all other decisions depend on accurate gate docs |
 | ESLint config standardisation | None | **Foundation** — must precede all lint-rule promotions |
 | Flaky E2E investigation | None | Independent |
 | `pnpm audit` gate | ADR reconciliation | Run `pnpm audit` first to assess findings; new ADR-158 |
-| Targeted knip: dependency fixes | None | First static-analysis candidate |
+| Static-analysis drift check | Completed promotion baselines | Rerun `knip` and `depcruise`; do not re-plan completed promotion |
 | Built-artifact proof in E2E | None | Fold into `test:e2e`, not a separate lane |
 | Promote a11y/widget to CI | ADR reconciliation | Must prove deterministic (N consecutive green runs) |
 | Coverage thresholds | None | Must measure baselines first |
-| Depcruise: resolve circular deps | None | Independent but complementary to knip |
+| Depcruise drift follow-up | Completed depcruise child plan | Only new drift or config changes belong here |
 | `consistent-type-assertions` | **ESLint config standardisation** | Lint-rule promotion on trustworthy infrastructure |
 | `no-eslint-disable` promotion | **ESLint config standardisation** + `eslint-disable-remediation.plan.md` | Remediation plan has zero progress; re-assess |
-| `max-files-per-dir` | **ESLint config standardisation** | Lint-rule promotion on trustworthy infrastructure |
+| `max-files-per-dir` | ADR-166 directory-cardinality child + ESLint config standardisation | Gate promotion waits for enforcement-layer preconditions |
 | Forbidden-comment test infra | None | Must solve without gate weakening |
-| Full knip remediation | Targeted knip | Phased after dependency-only fixes |
-| Knip + depcruise promotion | Full remediation of both | Requires clean baseline |
+| Knip drift follow-up | Completed knip child plan | Only new drift or config changes belong here |
+| Package API / deep-import enforcement | ADR-166 enforcement layer | Requires visibility baseline and deterministic failure mode |
 | Stryker | Test audit (sibling plan) | Mutation testing most valuable after healthy suite |
 | `no-child-process-in-tests` | None | Prevents future violations |
 | oak-eslint self-linting | Forbidden-comment infra | Investigate circular dependency risk first |
 
 ## Enhancement Details
 
-### 0a. Reconcile ADR-121, ADR-147, and downstream docs (NEW)
+### 0a. Reconcile ADR-121, ADR-147, and downstream docs — COMPLETE
 
-**Problem**: ADR-121's coverage matrix has 5 factual errors and 2
-verify-vs-mutate discrepancies (see Findings above). The Rationale,
-Consequences, and Design Principles prose sections are also stale.
-ADR-147 contradicts ADR-121 about `test:a11y` in CI. Downstream docs
-(`build-system.md`, `workflow.md`, `accessibility-practice.md`) have
-corresponding drift.
+**Completed**: ADR-121 reconciliation is complete and the frontmatter todo is
+marked done. This section remains as historical context for why gate-surface
+documentation needed a reconciliation pass.
 
-**Fix**: Amend ADR-121 (the decision model is sound; only content is
-stale):
+**Follow-up**: Any new gate-surface change must update ADR-121 and build-system
+docs in the same landing as the actual check promotion. Do not reopen this
+historical reconciliation as future work unless new drift is discovered.
 
-1. Update the coverage matrix to match actual `ci.yml`, `package.json`,
-   and husky hooks
-2. Rewrite the "Rationale for exclusions" to match current reality
-3. Update the Consequences section
-4. Either restore design principle #4 ("CI is a strict subset of
-   pre-push") by adding missing checks to pre-push, or revise the
-   principle to reflect the current reality — **owner decision required**
-5. Decide whether `pnpm check`'s verify-vs-mutate pattern is intentional
-   (auto-fix then continue) or an oversight (should be verify-only
-   like CI) — **owner decision required**
-6. Decide whether `pnpm check` should use `secrets:scan:all` (matching
-   pre-push) to honour "most comprehensive" — **owner decision required**
-7. Add a Change Log section for auditability
+Completed remediation covered the coverage matrix, exclusion rationale,
+consequences, design-principle wording, verify-vs-mutate decision, secret-scan
+surface, ADR-147 alignment, and downstream docs that were stale at the time.
 
-Update ADR-147 to be consistent with ADR-121's corrected matrix.
-
-Update downstream docs: `build-system.md` (matrix, inline scripts),
-`workflow.md` (stale "local-only" claims), `accessibility-practice.md`
-(if `test:a11y` moves to CI).
-
-**Remediation**: Documentation-only. No code changes. Three owner
-decisions required (items 4-6 above).
+**Remediation**: Complete. Future gate-surface drift should open a new dated
+finding instead of reopening this historical reconciliation.
 
 ### 0b. Add Dependency Vulnerability Scanning (NEW)
 
@@ -579,28 +561,36 @@ pre-commit, pre-push, CI, and `pnpm check`. ADR-121 coverage matrix
 updated. See child plan
 `knip-triage-and-remediation.plan.md` for full resolution details.
 
-### 5. Enable dependency-cruiser as a Blocking Quality Gate
+### 5. Enable dependency-cruiser as a Blocking Quality Gate — COMPLETE
 
-**Problem**: dependency-cruiser finds circular dependencies and orphan modules.
-These need resolution before promotion. It does not currently police package
-manifests, so it cannot be relied on to catch undeclared direct dependencies or
-missing type-only devDependencies.
+**Completed**: 2026-04-12. The child plan
+[depcruise-triage-and-remediation.plan.md](depcruise-triage-and-remediation.plan.md)
+resolved the circular-dependency and orphan baseline, promoted strict
+dependency-cruiser coverage, and left `.dependency-cruiser.mjs` plus
+`pnpm depcruise` in the root quality-gate path.
 
-**Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to all four gate surfaces.
+Dependency-cruiser still does not police every package-manifest concern. That
+is not a depcruise defect; package export and deep-import enforcement belongs
+to the ADR-166 enforcement layer after visibility and remediation planning.
 
-**Remediation**: Child plan: [depcruise-triage-and-remediation.plan.md](depcruise-triage-and-remediation.plan.md).
+### 6. Enable max-files-per-dir via the Directory-Cardinality Child Plan
 
-**Verified findings (2026-04-12)**: 87 violations (44 circular dependency
-errors collapsing to ~5 distinct cycles, 43 orphan warnings mostly from
-generated docs and test files). 1,940 modules cruised.
+**Problem**: The `@oaknational/max-files-per-dir` ESLint rule exists but is
+not registered or activated. The rule also depends on configured inventories,
+so a careless activation can silently no-op.
 
-### 6. Enable max-files-per-dir
+**Fix**: Execute
+[developer-experience/current/directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+as the directory-cardinality child of ADR-166. That plan owns the baseline
+refresh, deterministic inventory contract, RED rule/config tests, pilot
+calibration, and staged activation.
 
-**Problem**: The `@oaknational/max-files-per-dir` ESLint rule exists but is not activated in any config.
+**Remediation**: Do not split directories mechanically. Each breach must route
+to a structural response: cohesive intra-layer extraction, lower-layer move,
+workspace split, dead-code deletion, or generated output.
 
-**Fix**: Add the rule to `configs.recommended` or `configs.strict`. Remediate any directories that exceed the threshold by splitting into subdirectories.
-
-**Remediation**: Audit all directories, split where needed.
+**Gate note**: ADR-121 and build-system docs must change only when a
+`max-files-per-dir` check actually runs on a gate surface.
 
 ### 7. Promote `consistent-type-assertions` in Tests to Error
 
@@ -698,9 +688,9 @@ per-push gate. Change pre-push and CI from `secrets:scan:all` to
 
 ## Risks and Unknowns
 
-- **All counts are stale** — knip (2026-03-26), depcruise (2026-03-26),
-  eslint-disable (2026-03-29), type-assertions (never re-verified).
-  Tier 0 refresh is mandatory before committing to execution.
+- **Open counts may be stale** — eslint-disable was last counted 2026-03-29
+  and type-assertions have never been re-verified. Knip and depcruise are
+  completed gate foundations; rerun them as drift checks only.
 - Isolated-worktree verification can reveal missing manifest entries
   masked by parent `node_modules` resolution
 - Workspace-level ESLint config drift can create false unresolved-import

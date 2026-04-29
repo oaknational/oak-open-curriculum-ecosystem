@@ -1,6 +1,6 @@
 ---
 name: "Dependency-Cruiser Triage and Remediation"
-overview: "Deep-audit all depcruise findings, verify every assumption with evidence, resolve circular dependencies and orphans, promote no-orphans to error severity, promote to blocking quality gate on all four surfaces."
+overview: "Completed deep-audit and remediation of depcruise findings, including strict no-orphans promotion and blocking quality-gate promotion."
 todos:
   - id: phase-0-audit
     content: "Phase 0: Deep audit — re-run depcruise, verify every cycle and orphan classification, question all plan assumptions, correct before acting."
@@ -26,27 +26,26 @@ todos:
 
 **Last Updated**: 2026-04-12
 **Status**: Complete — all phases 0-4 resolved 2026-04-12
-**Scope**: Deep-audit all depcruise findings, verify every assumption, resolve
-circular dependencies and orphans, promote `no-orphans` to error severity,
-promote to blocking quality gate on all four surfaces.
+**Scope**: Completed deep-audit of depcruise findings, verified assumptions,
+resolved circular dependencies and orphans, promoted `no-orphans` to error
+severity, and promoted dependency-cruiser to blocking quality-gate coverage.
 **Parent**: [quality-gate-hardening.plan.md](quality-gate-hardening.plan.md)
 (item `enable-depcruise`)
 
 ## Context
 
-Dependency-cruiser is installed and configured (`.dependency-cruiser.mjs`) but
-is not wired into any gate surface. It runs on demand via `pnpm depcruise` and
-**already exits non-zero** when errors exist (exit code = error count; verified
-exit code 44 for 44 errors). It is simply not included in `pnpm check`,
-pre-commit, pre-push, or CI.
+Dependency-cruiser started this child plan installed and configured
+(`.dependency-cruiser.mjs`) but not wired into all gate surfaces. The completed
+state is now the source of truth: dependency-cruiser has been remediated and
+promoted, and `pnpm depcruise` is part of the root quality-gate path.
 
-The `no-orphans` rule is currently configured as `warn` severity. The end
-state of this plan promotes it to `error` so that all depcruise rules are
-strict — the tool reports only errors, never warnings.
+The `no-orphans` rule was promoted as part of the completed work so the
+depcruise baseline is strict. Future package export, deep-import, or API-surface
+budget work belongs to ADR-166's enforcement layer rather than reopening this
+completed baseline plan.
 
-The parent plan identifies depcruise as a Tier 2 gate addition. This plan is
-modelled on the completed knip triage (904 findings → 0, promoted to all four
-gate surfaces in ~2 days of focused work).
+The parent plan now treats depcruise as a completed gate foundation. This file
+remains in `current/` only until archive cleanup moves it to completed history.
 
 ### Relationship to knip
 
@@ -61,8 +60,8 @@ determines the resolution.
 | **Knip** | Unused deps, unused files, unused exports, dependency hygiene | Circular imports, architectural boundary violations |
 | **Depcruise** | Circular deps, orphan modules, layer violations (core→libs→apps) | Unused code, undeclared dependencies |
 
-Knip is now a blocking gate on all four surfaces. Depcruise is the natural next
-promotion.
+Knip and depcruise are now blocking gates on the root quality-gate path. This
+section remains as historical rationale for why depcruise was promoted next.
 
 ### Key insight from knip
 

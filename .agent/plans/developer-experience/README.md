@@ -35,12 +35,14 @@ On 2026-03-03 the collection was manually migrated into lifecycle lanes, and the
   - `archive/superseded/eslint-override-removal.plan.md`
 - Cross-collection folded/delegated sources (2026-03-04):
   - `../architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md` (superseded and folded here)
-  - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md` (strictness-adjacent architectural work now references the canonical directory-complexity plan below)
+  - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md` (strictness-adjacent architectural work now references the directory-cardinality child plan below)
 
 ## Canonical Directory-Complexity Plan
 
 - Current canonical plan: `current/directory-complexity-enablement.execution.plan.md`
-- Purpose: define the supporting enforcement bundle and staged rollout gates required before Oak enables `max-files-per-dir`
+- Purpose: execute the directory-cardinality child of ADR-166, including
+  current-truth baseline, deterministic inventory, remediation SOP, pilot
+  calibration, and staged `max-files-per-dir` activation
 - Folded/delegated sources:
   - `active/devx-strictness-convergence.plan.md` (directory-complexity subset extracted)
   - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`

@@ -38,6 +38,8 @@ todos:
 - `future/stdio-http-server-alignment.md`
 - `current/doc-architecture-phase-a-immediate.plan.md` — C4 diagrams and fitness functions must align with this programme's direction
 - `current/doc-architecture-phase-b-dependent.plan.md` — boundary enforcement evaluation and operability practice must account for new services/structure
+- `future/architectural-budget-system-across-scales.plan.md` — companion
+  visibility and anti-gaming lens; topology migrations remain owned here
 
 ## Problem and Intent
 
@@ -72,6 +74,11 @@ owns the immediate layer/workspace matrix and migration-map work.
 This is a strategic umbrella, not a single executable refactor. Execution
 belongs in tranche-specific `current/` and `active/` plans once sequencing,
 rename maps, and deterministic validation are locked.
+
+The architectural budget system is a companion lens over this programme, not a
+replacement owner. Budget signals help find concentration, artificial splits,
+and public-API pressure; this programme still owns one-layer-per-workspace
+topology and tranche migrations.
 
 ## Public Interface Rule
 

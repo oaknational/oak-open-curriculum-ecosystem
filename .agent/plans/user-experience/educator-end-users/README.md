@@ -57,7 +57,7 @@ Implementation sequencing remains in semantic-search and SDK/MCP plans.
 | [../../semantic-search/future/08-experience-surfaces-and-extensions/advanced-features.md](../../semantic-search/future/08-experience-surfaces-and-extensions/advanced-features.md) | Defines extension-capability journeys that map to educator outcomes |
 | [../../sdk-and-mcp-enhancements/roadmap.md](../../sdk-and-mcp-enhancements/roadmap.md) | App surface/host compatibility for user-facing UI |
 | [../../security-and-privacy/roadmap.md](../../security-and-privacy/roadmap.md) | Safety and trust signals in educational usage contexts |
-| [../../external/ooc-api-wishlist/index.md](../../external/ooc-api-wishlist/index.md) | Upstream API constraints that can block or degrade educator journeys |
+| [../../sector-engagement/ooc-api-wishlist/index.md](../../sector-engagement/ooc-api-wishlist/index.md) | Upstream API constraints that can block or degrade educator journeys |
 | [../public-alpha-experience-contract.md](../public-alpha-experience-contract.md) | Shared alpha promise and no-go criteria |
 
 ---
@@ -75,9 +75,9 @@ Implementation sequencing remains in semantic-search and SDK/MCP plans.
 
 | Risk | Educator Impact | Source |
 |------|-----------------|--------|
-| Broken canonical URL patterns | Teachers lose trust when generated lesson links fail | [../../external/ooc-api-wishlist/06-response-metadata-and-caching.md](../../external/ooc-api-wishlist/06-response-metadata-and-caching.md) |
-| Missing programme/tier context | GCSE-level discovery and comparison journeys are ambiguous | [../../external/ooc-api-wishlist/18-programmes-and-identifiers-examples.md](../../external/ooc-api-wishlist/18-programmes-and-identifiers-examples.md) |
-| Incomplete transcript signalling | Accessibility and explanation journeys become inconsistent | [../../external/ooc-api-wishlist/11-assets-and-transcripts-examples.md](../../external/ooc-api-wishlist/11-assets-and-transcripts-examples.md) |
+| Broken canonical URL patterns | Teachers lose trust when generated lesson links fail | [../../sector-engagement/ooc-api-wishlist/06-response-metadata-and-caching.md](../../sector-engagement/ooc-api-wishlist/06-response-metadata-and-caching.md) |
+| Missing programme/tier context | GCSE-level discovery and comparison journeys are ambiguous | [../../sector-engagement/ooc-api-wishlist/18-programmes-and-identifiers-examples.md](../../sector-engagement/ooc-api-wishlist/18-programmes-and-identifiers-examples.md) |
+| Incomplete transcript signalling | Accessibility and explanation journeys become inconsistent | [../../sector-engagement/ooc-api-wishlist/11-assets-and-transcripts-examples.md](../../sector-engagement/ooc-api-wishlist/11-assets-and-transcripts-examples.md) |
 
 ---
 

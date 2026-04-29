@@ -14,7 +14,7 @@ sessions and may be touched by multiple agents over time. Threads
 are the continuity unit. A *session* is a time-bounded agent
 occurrence that participates in one or more threads.
 
-Currently active threads (2026-04-24):
+Currently active threads (2026-04-29):
 
 - `observability-sentry-otel` — product thread; Sentry/OTel public-
   alpha integration on branch `feat/otel_sentry_enhancements`.
@@ -23,6 +23,9 @@ Currently active threads (2026-04-24):
 - `cloudflare-mcp-security-and-token-economy-plans` — product/security
   planning thread; Cloudflare MCP public-beta gate and token-efficient MCP
   tool-use strategy.
+- `architectural-budget-system` — architecture/devx planning thread;
+  cross-scale architectural budget doctrine, visibility, and staged
+  enforcement planning.
 
 Archived threads:
 

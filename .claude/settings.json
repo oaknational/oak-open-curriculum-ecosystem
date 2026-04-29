@@ -89,7 +89,8 @@
       "Skill(add-app-to-server)",
       "Skill(convert-web-app)",
       "Skill(create-mcp-app)",
-      "Skill(migrate-oai-app)"
+      "Skill(migrate-oai-app)",
+      "mcp__plugin_vercel_vercel__get_project"
     ]
   },
   "hooks": {
@@ -160,6 +161,10 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "node .claude/scripts/statusline-identity.mjs"
+  },
   "enabledPlugins": {
     "mcp-apps@mcp-apps": true,
     "sentry@claude-plugins-official": true,
@@ -168,9 +173,5 @@
     "sonarqube@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "node .claude/scripts/statusline-identity.mjs"
   }
 }

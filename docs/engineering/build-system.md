@@ -24,7 +24,7 @@ registry by semver alone.
 
 Source-executed TypeScript entrypoints are part of the workspace contract. When
 a script runs `.ts` or source-first `.js` directly, invoke it through
-`node scripts/run-tsx-development.mjs <entrypoint>` (or the package-relative
+`node scripts/<script>.ts via pnpm exec tsx <entrypoint>` (or the package-relative
 equivalent) so Node enables the workspace `development` export condition while
 loading `tsx`. Packages that are expected to participate in that clean-state
 source execution path must publish matching `development` export entries for

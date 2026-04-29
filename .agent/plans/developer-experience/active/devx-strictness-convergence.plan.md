@@ -60,10 +60,10 @@ This canonical plan executes:
 1. `no-console` policy convergence and violation remediation.
 2. Strictness-specific ESLint convergence work needed for shared config promotion.
 
-Extracted to the canonical directory-complexity plan:
+Extracted to the directory-cardinality child plan:
 
 - `../current/directory-complexity-enablement.execution.plan.md`
-- supporting structural guardrails required before `max-files-per-dir`
+- deterministic inventory and config tests for `max-files-per-dir`
 - staged activation of `max-files-per-dir` itself
 
 ### Phase 2 Scope Addendum (2026-03-04)
@@ -504,7 +504,7 @@ Non-goals in this phase:
 
 - Do not attempt full violation burn-down yet.
 - Do not remove workspace override blocks yet.
-- Do not duplicate directory-complexity supporting constraints from the canonical queued plan.
+- Do not duplicate directory-cardinality execution from the queued child plan.
 - Skills/commands/rules architecture and migration are handled by the Agent Artefact Portability plan.
 
 ---

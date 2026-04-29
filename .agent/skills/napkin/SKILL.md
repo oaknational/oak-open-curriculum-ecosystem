@@ -33,6 +33,40 @@ logging. The distillation rotation in the
 [consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.
 
+## Never Hold Back Insight to Fit a Budget
+
+**Fitness budgets are advisory, never a constraint on capture.** If
+a session-end observation runs to thirty lines and the napkin is
+already over its target, the right answer is to record the full
+observation and flag that the file needs attention — never to trim,
+compress, or split the insight to fit the budget. Capture is sacred;
+fitness is a signal that consolidation is overdue, not a signal to
+write less.
+
+Concretely:
+
+- If `fitness_line_target` / `fitness_line_limit` would force you to
+  shorten an insight, **do not shorten it**. Write it in full and add
+  a note (`<!-- fitness exceeded by N lines; needs consolidation -->`)
+  at the top of the new entry so the next consolidation pass knows.
+- If you find yourself drafting a "concise version" of an insight to
+  hit the budget, stop. The concise version is lossy. Drop the budget,
+  not the insight.
+- The same rule applies to `distilled.md`, `patterns/*.md`,
+  per-thread next-session records, and any other markdown surface
+  with fitness front-matter. Budgets describe the file's need for
+  rotation; they do not describe the insight's right to exist.
+
+**Why**: Owner-named in 2026-04-29 TS6 migration session. The agent
+truncated the napkin entry for the session because the file was at
+282/300 lines, and pointed to deeper artefacts as a substitute.
+Owner: "never hold back, it's that simple. Never avoid preserving
+useful information or knowledge because of an arbitrary file length
+signal, the fitness functions are important but advisory, and the
+right answer is to preserve the knowledge and flag that the file
+needs attention, the answer is never to constrain the recording of
+insight in order to tick a box."
+
 ## Continuous Updates
 
 Update the napkin as you work, not just at session start and
