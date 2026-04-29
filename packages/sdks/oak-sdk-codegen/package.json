@@ -85,9 +85,9 @@
     "postsdk-codegen": "pnpm -w format:root",
     "pregenerate:types": "pnpm generate:clean",
     "generate:types": "pnpm generate:openapi && pnpm generate:zod && pnpm generate:bulk",
-    "generate:openapi": "node ../../../scripts/run-tsx-development.mjs code-generation/codegen.ts",
-    "generate:zod": "node ../../../scripts/run-tsx-development.mjs code-generation/zodgen.ts",
-    "generate:bulk": "node ../../../scripts/run-tsx-development.mjs code-generation/bulkgen.ts",
+    "generate:openapi": "pnpm exec tsx code-generation/codegen.ts",
+    "generate:zod": "pnpm exec tsx code-generation/zodgen.ts",
+    "generate:bulk": "pnpm exec tsx code-generation/bulkgen.ts",
     "generate:clean": "rm -rf src/types/generated",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json && node --experimental-strip-types code-generation/copy-json-assets.ts",
     "clean": "rm -rf dist .turbo",
@@ -97,8 +97,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "vocab-gen": "node ../../../scripts/run-tsx-development.mjs vocab-gen/run-vocab-gen.ts",
-    "scan:sitemap": "node ../../../scripts/run-tsx-development.mjs code-generation/sitemap-scanner.ts"
+    "vocab-gen": "pnpm exec tsx vocab-gen/run-vocab-gen.ts",
+    "scan:sitemap": "pnpm exec tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

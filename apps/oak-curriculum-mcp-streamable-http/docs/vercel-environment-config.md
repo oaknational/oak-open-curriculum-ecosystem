@@ -221,7 +221,7 @@ host label instead of reusing the production semver row.
 
 ```json
 {
-  "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
+  "ignoreCommand": "node runtime-only-scripts/vercel-ignore-production-non-release-build.mjs"
 }
 ```
 

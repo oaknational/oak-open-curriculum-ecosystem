@@ -6,7 +6,7 @@ import {
   getCodexAdapterValidation,
   getCodexRegistrationValidation,
   parseCodexRegistrations,
-} from './validate-subagents-helpers.mjs';
+} from './validate-subagents-helpers.js';
 
 const repoRoot = process.cwd();
 

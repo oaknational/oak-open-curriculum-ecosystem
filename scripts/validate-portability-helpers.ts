@@ -1,7 +1,7 @@
 export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';
 export const SURFACE_MATRIX_PATH = '.agent/memory/executive/cross-platform-agent-surface-matrix.md';
-export const CLAUDE_HOOK_COMMAND = 'node scripts/check-blocked-patterns.mjs';
+export const CLAUDE_HOOK_COMMAND = 'pnpm exec tsx scripts/check-blocked-patterns.ts';
 export const RULES_INDEX_PATH = 'RULES_INDEX.md';
 export const DEFAULT_CODEX_PROJECT_DOC_MAX_BYTES = 32 * 1024;
 
@@ -73,7 +73,7 @@ export function surfaceMatrixDescribesClaudeHook(surfaceMatrix) {
   return (
     hookRowMatches &&
     surfaceMatrix.includes('.agent/hooks/policy.json') &&
-    surfaceMatrix.includes('scripts/check-blocked-patterns.mjs') &&
+    surfaceMatrix.includes('scripts/check-blocked-patterns.ts') &&
     surfaceMatrix.includes('Policy Spine') &&
     policySpineSemanticsMatch
   );

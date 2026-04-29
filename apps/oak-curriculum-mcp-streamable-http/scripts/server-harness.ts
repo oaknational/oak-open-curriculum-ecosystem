@@ -36,40 +36,33 @@ import { startConfiguredHttpServer } from '../src/server-runtime.js';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(thisDir, '..');
 
+type LogLevel = 'INFO' | 'ERROR' | 'DEBUG';
+type LogMeta = Readonly<Record<string, unknown>>;
+
+function emit(level: LogLevel, message: string, meta: LogMeta = {}): void {
+  const entry = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+    ...meta,
+  };
+  const out = level === 'ERROR' ? process.stderr : process.stdout;
+  out.write(`${JSON.stringify(entry)}\n`);
+}
+
 const log = {
-  info(message, meta = {}) {
-    console.log(
-      JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level: 'INFO',
-        message,
-        ...meta,
-      }),
-    );
+  info(message: string, meta?: LogMeta) {
+    emit('INFO', message, meta);
   },
-  error(message, meta = {}) {
-    console.error(
-      JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level: 'ERROR',
-        message,
-        ...meta,
-      }),
-    );
+  error(message: string, meta?: LogMeta) {
+    emit('ERROR', message, meta);
   },
-  debug(message, meta = {}) {
-    console.log(
-      JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level: 'DEBUG',
-        message,
-        ...meta,
-      }),
-    );
+  debug(message: string, meta?: LogMeta) {
+    emit('DEBUG', message, meta);
   },
 };
 
-function loadEnvFile(envFile) {
+function loadEnvFile(envFile: string): void {
   const envPath = resolve(rootDir, envFile);
 
   if (!existsSync(envPath)) {

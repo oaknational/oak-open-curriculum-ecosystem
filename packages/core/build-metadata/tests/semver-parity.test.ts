@@ -3,22 +3,23 @@
  *
  * @remarks
  * Asserts that the canonical npm-`semver`-backed implementation in
- * `src/semver.ts` agrees with the inline regex copies retained in two
- * pre-`pnpm install` / pre-`dist/` script consumers:
+ * `src/semver.ts` agrees with the inline regex copy retained in the
+ * one remaining pre-`pnpm install` script consumer:
  *
- * - `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
- * - `scripts/validate-root-application-version.mjs`
+ * - `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`
  *
- * The inline copies cannot import the canonical module: Vercel runs
- * the ignoreCommand BEFORE `pnpm install`, and the validate script
- * runs before any `dist/` is populated. This parity test is the
- * anti-drift gate that converts "two byte-equivalent copies that must
- * stay in sync" into "one canonical (npm-backed) + two parity-tested
- * inlines".
+ * That inline copy cannot import the canonical module: Vercel runs
+ * the ignoreCommand BEFORE `pnpm install`. This parity test is the
+ * anti-drift gate that keeps the inline regex byte-equivalent to the
+ * canonical implementation.
  *
- * If you modify either inline script's regex or comparison helpers,
- * mirror the change in the `INLINE_*` copies below in lock-step. The
- * test will fail until parity is restored.
+ * Other consumers (oak-search-cli pre-build validation,
+ * runtime-metadata) now import {@link isValidSemver} from
+ * `@oaknational/build-metadata` directly.
+ *
+ * If you modify the vercel-ignore script's regex or comparison
+ * helpers, mirror the change in the `INLINE_*` copies below in
+ * lock-step. The test will fail until parity is restored.
  */
 
 import { describe, expect, it } from 'vitest';

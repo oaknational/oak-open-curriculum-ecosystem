@@ -5,8 +5,7 @@
  * Sends a sequence of test requests to the running harness server
  * and reports timing and success/failure status.
  *
- * Usage:
- *   node scripts/run-requests.js
+ * Usage: pnpm exec tsx scripts/run-requests.ts
  *
  * Environment:
  *   BASE_URL - Server base URL (default: http://localhost:3001)
@@ -15,48 +14,50 @@
  *   RETRY_HEALTH_DELAY_MS - Delay between health check retries (default: 1000)
  */
 
-// Node.js built-in fetch is available in Node 18+
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
-const TIMEOUT_MS = parseInt(process.env.TIMEOUT_MS || '10000', 10);
-const RETRY_HEALTH_ATTEMPTS = parseInt(process.env.RETRY_HEALTH_ATTEMPTS || '30', 10);
-const RETRY_HEALTH_DELAY_MS = parseInt(process.env.RETRY_HEALTH_DELAY_MS || '1000', 10);
+const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3001';
+const TIMEOUT_MS = parseInt(process.env.TIMEOUT_MS ?? '10000', 10);
+const RETRY_HEALTH_ATTEMPTS = parseInt(process.env.RETRY_HEALTH_ATTEMPTS ?? '30', 10);
+const RETRY_HEALTH_DELAY_MS = parseInt(process.env.RETRY_HEALTH_DELAY_MS ?? '1000', 10);
 
-// Logging utilities
+type LogLevel = 'INFO' | 'ERROR' | 'SUCCESS';
+type LogMeta = Readonly<Record<string, unknown>>;
+
+function emit(level: LogLevel, msg: string, meta: LogMeta = {}): void {
+  const entry = {
+    timestamp: new Date().toISOString(),
+    level,
+    message: msg,
+    ...meta,
+  };
+  const out = level === 'ERROR' ? process.stderr : process.stdout;
+  out.write(`${JSON.stringify(entry)}\n`);
+}
+
 const log = {
-  info: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'INFO',
-      message: msg,
-      ...meta,
-    };
-    console.log(JSON.stringify(entry));
-  },
-  error: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'ERROR',
-      message: msg,
-      ...meta,
-    };
-    console.error(JSON.stringify(entry));
-  },
-  success: (msg, meta = {}) => {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level: 'SUCCESS',
-      message: msg,
-      ...meta,
-    };
-    console.log(JSON.stringify(entry));
-  },
+  info: (msg: string, meta?: LogMeta) => emit('INFO', msg, meta),
+  error: (msg: string, meta?: LogMeta) => emit('ERROR', msg, meta),
+  success: (msg: string, meta?: LogMeta) => emit('SUCCESS', msg, meta),
 };
 
-// Sleep utility
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
 
-// Request with timeout
-async function fetchWithTimeout(url, options, timeoutMs) {
+function errorName(error: unknown): string {
+  return error instanceof Error ? error.name : 'UnknownError';
+}
+
+function errorStack(error: unknown): string | undefined {
+  return error instanceof Error ? error.stack : undefined;
+}
+
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -69,15 +70,14 @@ async function fetchWithTimeout(url, options, timeoutMs) {
     return response;
   } catch (error) {
     clearTimeout(timeout);
-    if (error.name === 'AbortError') {
+    if (errorName(error) === 'AbortError') {
       throw new Error(`Request timeout after ${timeoutMs}ms`, { cause: error });
     }
     throw error;
   }
 }
 
-// Wait for server to be ready
-async function waitForHealthCheck() {
+async function waitForHealthCheck(): Promise<true> {
   log.info('Waiting for server health check', {
     url: `${BASE_URL}/healthz`,
     maxAttempts: RETRY_HEALTH_ATTEMPTS,
@@ -100,7 +100,7 @@ async function waitForHealthCheck() {
     } catch (error) {
       log.info('Health check failed, retrying', {
         attempt,
-        error: error.message,
+        error: errorMessage(error),
       });
     }
 
@@ -112,21 +112,38 @@ async function waitForHealthCheck() {
   throw new Error(`Server health check failed after ${RETRY_HEALTH_ATTEMPTS} attempts`);
 }
 
-// Execute a single request scenario
-async function executeRequest(scenario) {
+interface RequestScenario {
+  readonly name: string;
+  readonly method: string;
+  readonly path: string;
+  readonly body?: unknown;
+  readonly headers?: Readonly<Record<string, string>>;
+}
+
+interface RequestResult {
+  readonly name: string;
+  readonly method: string;
+  readonly path: string;
+  readonly success: boolean;
+  readonly status: number | null;
+  readonly durationMs: number;
+  readonly errorMessage: string | null;
+}
+
+async function executeRequest(scenario: RequestScenario): Promise<RequestResult> {
   const { name, method, path, body, headers = {} } = scenario;
 
   log.info(`Executing request: ${name}`, { method, path });
 
   const startTime = Date.now();
   let success = false;
-  let status = null;
-  let errorMessage = null;
-  let responseBody;
+  let status: number | null = null;
+  let errMsg: string | null = null;
+  let responseBody: unknown;
 
   try {
     const url = `${BASE_URL}${path}`;
-    const options = {
+    const options: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -134,7 +151,7 @@ async function executeRequest(scenario) {
       },
     };
 
-    if (body) {
+    if (body !== undefined) {
       options.body = JSON.stringify(body);
     }
 
@@ -166,9 +183,9 @@ async function executeRequest(scenario) {
       });
     }
   } catch (error) {
-    errorMessage = error.message;
+    errMsg = errorMessage(error);
     log.error(`Request error: ${name}`, {
-      error: errorMessage,
+      error: errMsg,
       durationMs: Date.now() - startTime,
     });
   }
@@ -180,26 +197,23 @@ async function executeRequest(scenario) {
     success,
     status,
     durationMs: Date.now() - startTime,
-    errorMessage,
+    errorMessage: errMsg,
   };
 }
 
-// Main execution
-async function main() {
+async function main(): Promise<void> {
   log.info('Request runner starting', {
     baseUrl: BASE_URL,
     timeoutMs: TIMEOUT_MS,
   });
 
-  const results = [];
+  const results: RequestResult[] = [];
   let allSucceeded = true;
 
   try {
-    // Wait for server to be ready
     await waitForHealthCheck();
 
-    // Define request scenarios
-    const scenarios = [
+    const scenarios: readonly RequestScenario[] = [
       {
         name: 'Health Check',
         method: 'GET',
@@ -233,7 +247,6 @@ async function main() {
       },
     ];
 
-    // Execute each scenario
     for (const scenario of scenarios) {
       const result = await executeRequest(scenario);
       results.push(result);
@@ -242,34 +255,31 @@ async function main() {
         allSucceeded = false;
       }
 
-      // Brief pause between requests
       await sleep(500);
     }
 
-    // Print summary table
-    console.log('\n' + '='.repeat(80));
-    console.log('REQUEST SUMMARY');
-    console.log('='.repeat(80));
-    console.log('Name                    | Method | Status | Duration | Result');
-    console.log('-'.repeat(80));
+    process.stdout.write('\n' + '='.repeat(80) + '\n');
+    process.stdout.write('REQUEST SUMMARY\n');
+    process.stdout.write('='.repeat(80) + '\n');
+    process.stdout.write('Name                    | Method | Status | Duration | Result\n');
+    process.stdout.write('-'.repeat(80) + '\n');
 
     for (const result of results) {
       const name = result.name.padEnd(23);
       const method = result.method.padEnd(6);
-      const status = (result.status || 'ERROR').toString().padEnd(6);
+      const statusStr = (result.status === null ? 'ERROR' : result.status.toString()).padEnd(6);
       const duration = `${result.durationMs}ms`.padEnd(8);
       const resultStr = result.success ? '✅ OK' : '❌ FAIL';
 
-      console.log(`${name} | ${method} | ${status} | ${duration} | ${resultStr}`);
+      process.stdout.write(`${name} | ${method} | ${statusStr} | ${duration} | ${resultStr}\n`);
 
       if (result.errorMessage) {
-        console.log(`  Error: ${result.errorMessage}`);
+        process.stdout.write(`  Error: ${result.errorMessage}\n`);
       }
     }
 
-    console.log('='.repeat(80));
+    process.stdout.write('='.repeat(80) + '\n');
 
-    // Overall summary
     const totalDuration = results.reduce((sum, r) => sum + r.durationMs, 0);
     const successCount = results.filter((r) => r.success).length;
     const failCount = results.length - successCount;
@@ -291,12 +301,13 @@ async function main() {
     }
   } catch (error) {
     log.error('Request runner failed', {
-      error: error.message,
-      stack: error.stack,
+      error: errorMessage(error),
+      stack: errorStack(error),
     });
     process.exit(1);
   }
 }
 
-// Run
-main();
+await main();
+
+export {};

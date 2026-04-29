@@ -81,7 +81,7 @@ the default handler. Local `dist/index.js` is not the deployed artefact.
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
-  "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
+  "ignoreCommand": "node runtime-only-scripts/vercel-ignore-production-non-release-build.mjs"
 }
 ```
 

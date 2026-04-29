@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist .turbo",
-    "build": "node ../../../scripts/run-tsx-development.mjs src/build.ts",
+    "build": "pnpm exec tsx src/build.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "lint": "eslint .",

@@ -22,11 +22,15 @@ const appRoot = resolve(scriptDir, '..');
 const inputPath = resolve(appRoot, '.widget-build/oak-banner.html');
 const outputPath = resolve(appRoot, 'src/generated/widget-html-content.ts');
 
-let html;
+function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && 'code' in error;
+}
+
+let html: string;
 try {
   html = readFileSync(inputPath, 'utf-8');
 } catch (error) {
-  if (error.code === 'ENOENT') {
+  if (isErrnoException(error) && error.code === 'ENOENT') {
     process.stderr.write(
       `Widget HTML not found at ${inputPath}.\n` +
         'Vite must build the widget before the embed script runs.\n' +

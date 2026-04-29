@@ -13,7 +13,7 @@ import {
   HOOK_POLICY_PATH,
   RULES_INDEX_PATH,
   SURFACE_MATRIX_PATH,
-} from './validate-portability-helpers.mjs';
+} from './validate-portability-helpers.js';
 
 const repoRoot = process.cwd();
 const SKILLS_LOCK_PATH = 'skills-lock.json';

@@ -3,15 +3,16 @@
  *
  * @remarks
  * The shared, npm-`semver`-backed home for application-version
- * validation logic. Replaces three near-identical inline copies of
- * the same regex previously scattered across
- * `runtime-metadata.ts`, `scripts/validate-root-application-version.mjs`,
- * and `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`.
+ * validation logic. Replaces previously scattered inline copies of
+ * the same regex across `runtime-metadata.ts` and
+ * `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`.
  *
- * The two scripts retain inline copies for their pre-`pnpm install`
- * (vercel-ignore) and pre-`dist/` (validate-root-application-version)
- * constraints; their inline regex stays in sync with this module via
- * the parity test at `tests/semver-parity.test.ts`.
+ * The vercel-ignore script retains an inline copy because it runs as
+ * Vercel's `ignoreCommand` BEFORE `pnpm install` and so cannot import
+ * any package dependency. Its inline regex stays in sync with this
+ * module via the parity test at `tests/semver-parity.test.ts`. All
+ * other consumers (including `apps/oak-search-cli/scripts/validate-application-version.ts`)
+ * import {@link isValidSemver} directly.
  *
  * @packageDocumentation
  */

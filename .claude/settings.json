@@ -111,7 +111,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-patterns.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-patterns.ts",
             "timeout": 5
           }
         ]
@@ -121,7 +121,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-content.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-content.ts",
             "timeout": 5
           }
         ]
@@ -131,7 +131,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-content.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-content.ts",
             "timeout": 5
           }
         ]

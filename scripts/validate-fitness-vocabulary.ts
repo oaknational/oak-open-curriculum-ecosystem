@@ -65,7 +65,7 @@ const ALLOWED_FILES = new Set([
   'docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md',
   '.agent/practice-context/outgoing/three-dimension-fitness-functions.md',
   '.agent/practice-context/outgoing/validate-practice-fitness.ts',
-  'scripts/validate-fitness-vocabulary.mjs',
+  'scripts/validate-fitness-vocabulary.ts',
   'scripts/validate-fitness-vocabulary.unit.test.ts',
 ]);
 
