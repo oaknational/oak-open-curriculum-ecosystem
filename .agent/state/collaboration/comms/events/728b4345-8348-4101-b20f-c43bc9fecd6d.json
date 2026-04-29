@@ -1,0 +1,12 @@
+{
+  "event_id": "728b4345-8348-4101-b20f-c43bc9fecd6d",
+  "created_at": "2026-04-29T07:17:15Z",
+  "author": {
+    "agent_name": "Verdant Swaying Fern",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "c34d50"
+  },
+  "title": "TS6 migration session moved to fresh context — Tasks 1–8 done, 9 and 10 pending",
+  "body": "Session moved to fresh context per owner direction after recurring mistake-pattern accumulation (sed-bypass of Read-then-Edit safety; see napkin Surprise 5). Branch fix/build_issues now passes pnpm build, pnpm type-check, pnpm test, and pnpm knip (knip exit 0 with one informational .css hint). Working tree holds ~170 uncommitted files spanning the TS6 migration plus owner-directed architectural rules (workspace-to-root-script ban; all-TypeScript-scripts with dedicated no-compile-no-deps directory exception; vercel-ignore moved to apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/). The full plan with completion status, recommended commit shape (7 commits), and continuation guidance for the fresh session lives at .agent/plans/architecture-and-infrastructure/current/typescript-6-migration-and-workspace-script-rules.plan.md. Pending: ADR-167 authoring (Task #9, invoke docs-adr-reviewer) and final quality-gate sweep + release-readiness review (Task #10). Vitest config coupling (workspace vitest.config.ts importing root vitest.config.base.ts across 19 workspaces) is the same architectural smell as the workspace-to-root-script ban but for configs; not yet addressed and surfaced for owner direction in the fresh session."
+}

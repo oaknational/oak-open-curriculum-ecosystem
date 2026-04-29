@@ -1,11 +1,11 @@
 ---
 name: "Education Skills MCP Surface"
 overview: "Integrate evidence-based pedagogical skills from the Agent Skills ecosystem into the MCP server as prompts and discovery tools, with proper licence isolation and upstream update mechanism."
-parent_plan: "open-education-knowledge-surfaces.plan.md"
+parent_plan: "../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "eef-evidence-mcp-surface.plan.md"
-  - "misconception-graph-mcp-surface.plan.md"
-  - "nc-knowledge-taxonomy-surface.plan.md"
+  - "../current/eef-evidence-mcp-surface.plan.md"
+  - "../../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
+  - "../../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, architecture-reviewer-barney"
 status: future
 todos:
@@ -40,7 +40,7 @@ todos:
 
 # Education Skills MCP Surface
 
-**Status**: FUTURE
+**Status**: FUTURE — strategic/reference design, not yet executable
 **Last Updated**: 2026-04-15
 **Branch**: TBD (branch from `main` when promoted to active)
 **Upstream**: [GarethManning/claude-education-skills](https://github.com/GarethManning/claude-education-skills) (CC BY-SA 4.0)
@@ -50,6 +50,10 @@ todos:
 No content from the upstream education skills repository has been
 integrated into this repo. This plan is a forward-looking design
 document only.
+
+Implementation detail below is reference context. Execution decisions,
+acceptance criteria, and validation commands are finalised only during
+promotion to `current/` or `active/`.
 
 **When integration begins**, it will be strictly as an **alpha
 exploration** — the goal is to evaluate the material, understand how
@@ -356,7 +360,7 @@ T8: E2E tests                                      ← quality gate
 
 ### Parent
 
-- [open-education-knowledge-surfaces.plan.md](open-education-knowledge-surfaces.plan.md)
+- [open-education-knowledge-surfaces.plan.md](../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
   — this plan adds a fourth external content source to the coordinator
 
 ### Siblings
@@ -372,7 +376,7 @@ T8: E2E tests                                      ← quality gate
 ### Strategic Context
 
 - **Evidence integration strategy**
-  (`.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`)
+  (`.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md`)
   — education skills fulfil R5 (Implementation Guidance) and R6
   (Pedagogical Workflow Orchestration) at a level EEF data alone cannot
 - **Ontology integration strategy**
@@ -435,11 +439,11 @@ patterns.
 
 ## Foundation Alignment
 
-- [principles.md](../../../directives/principles.md) — strict, complete,
+- [principles.md](../../../../directives/principles.md) — strict, complete,
   schema-first
-- [testing-strategy.md](../../../directives/testing-strategy.md) — TDD
+- [testing-strategy.md](../../../../directives/testing-strategy.md) — TDD
   at all levels
-- [schema-first-execution.md](../../../directives/schema-first-execution.md)
+- [schema-first-execution.md](../../../../directives/schema-first-execution.md)
   — Zod validation at ingestion boundary
 
 First question: Could it be simpler without compromising quality?

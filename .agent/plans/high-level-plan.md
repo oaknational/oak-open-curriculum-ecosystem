@@ -292,8 +292,6 @@ broaden platform reach.
    - One MCP server serving ChatGPT, Claude, Cursor, and generic MCP hosts via MCP Apps standard
    - Migration plan:
      [roadmap.md](sdk-and-mcp-enhancements/roadmap.md)
-   - Supporting:
-     [concept-preservation-and-supersession-map.md](sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md)
 3. **Architectural enforcement adoption**
    - Full plan:
      [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md)
@@ -344,7 +342,8 @@ Strategic architecture remains anchored in:
 | `architecture-and-infrastructure/` | Cross-cutting architecture, observability, system quality | 📋 M3 Public Beta | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `user-experience/` | Persona-level outcome contracts | 📋 M1-M2 | [user-experience/README.md](user-experience/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |
-| `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |
+| `knowledge-graph-integration/` | Internal Oak KG integration, ontology repo/workspace decisions, search projections, graph serving | 🔄 M2-M3 mixed lanes | [knowledge-graph-integration/README.md](knowledge-graph-integration/README.md) |
+| `sector-engagement/` | External data sources, upstream coordination, partner review threads, and adoption support for Oak resources | 📋 Reference | [sector-engagement/README.md](sector-engagement/README.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 
 ---
@@ -356,7 +355,14 @@ Strategic architecture remains anchored in:
 - Incorporate Claude Education Skills as a user facing feature
 - Incorporate EEF Evidence as a user facing feature (JR's demo)
 - Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
-- International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+- International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+- API/KG convergence: decide whether the sibling `oak-openapi` and
+  `oak-curriculum-ontology` repos remain separate, become generated artefact
+  dependencies, or move closer to this monorepo — see
+  [sector-engagement/future/oak-openapi-monorepo-integration.plan.md](sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
+  and
+  [knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+- External KG adoption: define how MATs, edtechs, researchers, and public-sector partners can consume Oak KG assets responsibly — see [sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md](sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md)
 - Token-efficient MCP tool use: evaluate Cloudflare/Anthropic Code Mode
   patterns, progressive tool discovery, and result filtering against Oak's
   teacher-facing curriculum workflows first, with engineering/API workflows as

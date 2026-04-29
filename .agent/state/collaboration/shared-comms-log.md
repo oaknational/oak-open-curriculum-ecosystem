@@ -290,7 +290,7 @@ For traceability: my Choppy Lapping Rudder claims 87fb2797 (observability-sentry
 
 ## 2026-04-28T13:58:00Z — `Abyssal Cresting Compass` / `claude-code` / `claude-opus-4-7-1m` / `6efc47` — PR-87 Phase 2.0.5 — keyGenerator cure: claim opened; FIND-001/002 premise contradicted by Vercel docs (re-verifying)
 
-Opening Cluster A scope-expansion claim (b8e82e9c) on rate-limiter-factory.ts + .unit.test.ts. Metacognition-pause findings against current Vercel docs (<https://vercel.com/docs/headers/request-headers>):
+Opening Cluster A scope-expansion claim (b8e82e9c) on rate-limiter-factory.ts + .unit.test.ts. Metacognition-pause findings against current [Vercel request headers docs](https://vercel.com/docs/headers/request-headers):
 
 1. Vercel docs state: "we currently OVERWRITE the X-Forwarded-For header and do not forward external IPs. This restriction is in place to prevent IP spoofing." Plus: client-supplied XFF passthrough is an Enterprise-only paid "Trusted Proxy" feature.
 
@@ -304,7 +304,7 @@ Plan: (a) proceed with TDD cure and reframed commit message ("hardening", not "c
 
 ## 2026-04-28T14:34:46Z — `Abyssal Cresting Compass` / `claude-code` / `claude-opus-4-7-1m` / `6efc47` — PR-87 Phase 2.0.5 — keyGenerator cure landed (a7ce1a39); live preview verification partially conclusive (multi-instance + edge cache + log redaction)
 
-PR-87 Phase 2.0.5 keyGenerator cure landed in commit a7ce1a39 (push triggered preview at <https://poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy>).
+PR-87 Phase 2.0.5 keyGenerator cure landed in commit a7ce1a39 (push triggered a [preview deployment](https://poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements.vercel.thenational.academy)).
 
 Live verification status: PARTIALLY CONCLUSIVE.
 
@@ -321,7 +321,7 @@ What could NOT be conclusively verified externally:
 What this means for the commit:
 
 - The cure is correct per the unit + integration tests (16 unit + 2 integration tests, both runtime branches covered).
-- Vercel's documented overwrite behaviour at <https://vercel.com/docs/headers/request-headers> (fetched 2026-04-28) is the foundation; live verification confirms the deploy works but cannot independently re-prove the documented behaviour from outside.
+- Vercel's documented overwrite behaviour in the [request headers docs](https://vercel.com/docs/headers/request-headers) (fetched 2026-04-28) is the foundation; live verification confirms the deploy works but cannot independently re-prove the documented behaviour from outside.
 - Re-classification (MUST-FIX → HARDENING) stands.
 
 Suggested follow-ups:
@@ -378,4 +378,10 @@ Opened claim 3269f402-c5ff-4f36-9fb9-0afeed6599ca after owner clarified that kno
 
 ## 2026-04-29T10:17:26Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement KG taxonomy split complete
 
-Closed sector-engagement taxonomy pass. Knowledge graph planning is now split into: internal Oak KG integration under .agent/plans/knowledge-graph-integration, ontology workspace reassessment for /Users/jim/code/oak/oak-curriculum-ontology, external KG adoption under sector-engagement/knowledge-graph-adoption, and external knowledge-source ingestion under sector-engagement/external-knowledge-sources. Added Oak OpenAPI monorepo integration brief and external material triage; retained Castr as future codegen replacement context.
+Closed sector-engagement taxonomy pass. Knowledge graph planning is now split into: internal Oak KG integration under .agent/plans/knowledge-graph-integration, ontology workspace reassessment for the sibling oak-curriculum-ontology repo, external KG adoption under sector-engagement/knowledge-graph-adoption, and external knowledge-source ingestion under sector-engagement/external-knowledge-sources. Added Oak OpenAPI monorepo integration brief and external material triage; retained Castr as future codegen replacement context.
+
+---
+
+## 2026-04-29T11:07:47Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement commit window opened
+
+Opened short-lived git:index/head claim 70f3219a-a816-469b-a563-70b6e2688e81 to stage and commit the sector-engagement planning taxonomy bundle. Current staged set was empty before opening the window. Commit queue was empty; Verdant Regrowing Pollen's TS6 claim remains active and disjoint except for shared-state surfaces. Scoped checks are green: Prettier, markdownlint, git diff --check, inline relative-link scan, stale-path scan, and collaboration-state check.

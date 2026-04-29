@@ -26,15 +26,15 @@ todos:
 **Last Updated**: 2026-04-17
 **Status**: Strategic brief — not yet executable
 **Lane**: `future/`
-**Collection**: `sdk-and-mcp-enhancements/`
+**Collection**: `sector-engagement/`
 **Related plans**:
 
 - [Oak Surface Isolation and Generic Foundation Programme](../../architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md) (strategic pre-requisite — Tranche 4 "SDK and Codegen")
 - [SDK Codegen Workspace Decomposition](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md) (companion codegen strategy absorbed by Tranche 4)
-- [Open Education Knowledge Surfaces](../active/open-education-knowledge-surfaces.plan.md) (multi-source open-education narrative this plan extends)
-- [EEF Evidence MCP Surface](../active/eef-evidence-mcp-surface.plan.md),
-  [Education Skills MCP Surface](../active/education-skills-mcp-surface.plan.md),
-  [NC Knowledge Taxonomy Surface](../active/nc-knowledge-taxonomy-surface.plan.md) (sibling open-education integrations already in flight)
+- [Open Education Knowledge Surfaces](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) (multi-source open-education narrative this plan extends)
+- [EEF Evidence MCP Surface](../external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md),
+  [Education Skills MCP Surface](../external-knowledge-sources/future/education-skills-mcp-surface.plan.md),
+  [NC Knowledge Taxonomy Surface](../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) (sibling open-education integrations already in flight)
 
 ## Source Research
 
@@ -142,7 +142,7 @@ are deferred to a second lane and are not in scope here.
 3. Active Milestone 2 observability and MCP Apps work takes priority over
    this plan; promotion is not appropriate until those blockers close.
 4. Any active work in
-   [Open Education Knowledge Surfaces](../active/open-education-knowledge-surfaces.plan.md)
+   [Open Education Knowledge Surfaces](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
    should be at or near a stable seam before the Finnish demonstration
    promotes, so the multi-source narrative stays coherent.
 5. The first lane assumes anonymous OpenAPI ingestion only. Any attempt to

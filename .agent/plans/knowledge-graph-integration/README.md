@@ -1,12 +1,12 @@
 # Knowledge Graph Integration
 
-Ontology and knowledge-graph hub for Oak's formal curriculum model,
-direct ontology-backed surfaces, search projections, QA/governance
-work, downstream graph-serving evaluation, and adjacent evidence or
-pedagogy integrations.
+Internal engineering hub for Oak-owned knowledge graph work: integrating the
+Oak Curriculum Ontology and Oak-derived graphs into the MCP server, semantic
+search service, QA workflows, and any future graph-serving layer.
 
-The EEF and pedagogy work is an important sibling lane here, but it is
-not the identity of the collection.
+This collection is deliberately not the home for every graph-shaped idea:
+sector-facing adoption and external knowledge/data-source ingestion now live
+under [sector-engagement/](../sector-engagement/).
 
 **Active Plans**: [active/](active/)
 **Current Queue**: [current/](current/)
@@ -17,13 +17,11 @@ not the identity of the collection.
 
 | File | Description |
 |------|-------------|
-| [active/open-education-knowledge-surfaces.plan.md](active/open-education-knowledge-surfaces.plan.md) | Umbrella plan: three open education data sources → MCP surfaces |
+| [active/open-education-knowledge-surfaces.plan.md](active/open-education-knowledge-surfaces.plan.md) | Historical umbrella plan: multi-source knowledge surfaces, now split across internal KG and sector-engagement lanes |
 | [active/graph-resource-factory.plan.md](active/graph-resource-factory.plan.md) | WS-1: Shared graph resource factory (DONE) |
 | [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | WS-2: Misconception graph MCP surface (DONE) |
-| [active/eef-evidence-mcp-surface.plan.md](active/eef-evidence-mcp-surface.plan.md) | WS-3: EEF evidence recommendation tool + resources |
 | [active/nc-knowledge-taxonomy-surface.plan.md](active/nc-knowledge-taxonomy-surface.plan.md) | WS-4: Oak KG knowledge taxonomy from ontology |
 | [active/agent-guidance-consolidation.plan.md](active/agent-guidance-consolidation.plan.md) | WS-5: Agent guidance consolidation |
-| [active/education-skills-mcp-surface.plan.md](active/education-skills-mcp-surface.plan.md) | WS-6: Education skills from Agent Skills ecosystem |
 
 ## Current Queue
 
@@ -43,10 +41,8 @@ not the identity of the collection.
 
 | File | Type | Description |
 |------|------|-------------|
-| [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md) | Strategic brief | Impact requirements, three-layer architecture, integration levels, crosswalk design |
-| [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md) | Technical reference | Implementation-level comparison of EEF and Oak MCP stacks |
-| [future/eef-toolkit.json](future/eef-toolkit.json) | Data reference | Full EEF Toolkit dataset (30 strands, v0.2.0, April 2026) |
 | [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md) | Strategic brief | Moving from static ontology copies to dynamic integration (published package or workspace) |
+| [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md) | Strategic brief | Re-open the previous no-monorepo decision now that MCP, KGs, and API convergence is an organisational priority |
 | [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md) | Short future plan | Re-read the official ontology repo from an upstream-first starting point and write up what that fresh pass changes |
 | [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Strategic future plan | Start with direct ontology use as the control case, then compare bounded Neo4j and Stardog serving prototypes against the same Oak use cases |
 | [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
@@ -58,29 +54,25 @@ not the identity of the collection.
    [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
 2. **Direct-use versus platform comparison**:
    [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
-3. **Ontology source strategy**:
+3. **Ontology workspace reassessment**:
+   [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+4. **Ontology source strategy**:
    [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
-4. **Fresh-perspective follow-on**:
+5. **Fresh-perspective follow-on**:
    [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md)
-5. **Search-adjacent graph strategy**:
+6. **Search-adjacent graph strategy**:
    [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md)
-6. **Platform research note**:
+7. **Platform research note**:
    [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
-7. **Evidence integration strategy**:
-   [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md)
-8. **Technical detail**: [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md)
-9. **Data reference**: [future/eef-toolkit.json](future/eef-toolkit.json) (when needed)
+8. **External knowledge sources**:
+   [../sector-engagement/external-knowledge-sources/README.md](../sector-engagement/external-knowledge-sources/README.md)
 
 ## Document Roles (DRY)
 
 - **Ontology and platform strategy**: intent, impact requirements,
-  integration levels, platform-decision framing, and strategic
-  questions. The authoritative document for *why* and *what*.
-- **Technical comparison**: implementation detail, scoring algorithm,
-  data model, evidence map. The authoritative document for *how* the
-  prototype works.
-- **Data file**: the actual EEF dataset. Authoritative for strand
-  content, metrics, and coverage.
+  integration levels, platform-decision framing, workspace-integration
+  questions, and strategic questions. The authoritative document for *why* and
+  *what*.
 - **Formal report**: promoted synthesis tying the official ontology to
   current MCP orientation, direct ontology surfaces, search projections,
   QA, and governance/update implications.
@@ -95,23 +87,33 @@ not the identity of the collection.
 
 ## The Core Threads
 
-This collection now carries two connected but distinct threads:
+The knowledge-graph programme is split into four connected but distinct
+threads:
 
-1. **Ontology and knowledge-graph work**: treat the official Oak
-   ontology as a first-class structural asset for MCP orientation,
+1. **Internal Oak KG integration** (this collection): treat the official Oak
+   ontology and Oak-derived graphs as first-class assets for MCP orientation,
    standalone `oak-kg-*` surfaces, search projections, QA, and later
    serving-platform evaluation.
-2. **Evidence and pedagogy integration**: compose EEF and related
-   pedagogical sources with Oak's curriculum surfaces once the
-   structural ontology boundary is clear.
+2. **Ontology repo / workspace integration** (this collection): decide whether
+   the sibling `oak-curriculum-ontology` repo remains a separate Python repo,
+   becomes a published artefact dependency, or is brought into this monorepo
+   with explicit developer-experience safeguards.
+3. **External organisation use of Oak KGs**:
+   [sector-engagement/knowledge-graph-adoption/](../sector-engagement/knowledge-graph-adoption/)
+   owns how MATs, edtechs, researchers, and other organisations can use Oak's
+   ontology, graph exports, SDKs, MCP resources, and search projections.
+4. **External knowledge/data sources**:
+   [sector-engagement/external-knowledge-sources/](../sector-engagement/external-knowledge-sources/)
+   owns EEF, education skills, external curriculum APIs, and future third-party
+   knowledge graphs used as data sources for Oak applications.
 
 The governing baseline is:
 
 1. use pinned ontology artefacts directly where they already create value
 2. evaluate `neither`, `Neo4j`, `Stardog`, or `both` only after the direct-use
    baseline is explicit
-3. let EEF and pedagogy work enrich the lane without redefining it as an
-   EEF-only programme
+3. route sector-facing and external-source questions to sector-engagement
+   rather than hiding them in internal KG plans
 
 ## Promotion Triggers
 
@@ -119,12 +121,14 @@ The governing baseline is:
 platform comparison): can promote independently whenever ontology-serving,
 QA, or search-projection questions need execution.
 
-**Levels 1-3** (EEF resources, recommendation tool, prompts): ready
-to promote to `current/` now. These use EEF JSON data directly and
-do not depend on the ontology or KG alignment audit.
+**Ontology workspace reassessment**: promote when the owner wants an
+architecture decision about whether the separate Python ontology repo should
+remain separate, become a generated/published dependency, or enter this
+monorepo.
 
-**Levels 4/4b** (ontology extension, graph queries): promote when
-the KG alignment audit completes, or the EEF project reaches v0.5.
+**External source/adoption work**: promote through the sector-engagement
+subthreads when the next action is a partner-facing playbook, external
+data-source feasibility spike, or adoption support plan.
 
 ## Terminology Note
 
@@ -136,15 +140,13 @@ bulk data. Levels 4/4b work with the formal ontology.
 
 ## Credits and Attribution
 
-- **EEF Toolkit data**: Education Endowment Foundation
-- **EEF MCP server prototype**: John Roberts (JR)
-  `<john.roberts@thenational.academy>`
 - **Oak Curriculum Ontology**: Mark Hodierne (MH)
   `<mark@markhodierne.com>` (primary author, 170 commits)
 
-**Author-addition requirement**: When any aspect of the EEF work or
-the KG is integrated functionally into the oak-mcp-ecosystem repo,
-add JR and/or MH to the authors list.
+**Author-addition requirement**: When any aspect of the KG is integrated
+functionally into the oak-mcp-ecosystem repo, add MH to the authors list.
+External-source attribution requirements live with the sector-engagement
+source thread.
 
 ## Dependencies
 
@@ -152,7 +154,9 @@ add JR and/or MH to the authors list.
 |---|---|---|
 | Oak MCP ecosystem | Production | Tool surface, deployment, and discovery surfaces |
 | Oak Curriculum Ontology | v0.1.0, stable | Structural source for direct ontology use and later serving evaluation |
-| EEF Toolkit data | v0.2.0, 30 strands | Evidence source for the sibling pedagogy lane |
+
+Use the owner-provided sibling `oak-curriculum-ontology` checkout for local
+planning/review when available.
 
 ## Foundation Documents (Mandatory Re-read)
 

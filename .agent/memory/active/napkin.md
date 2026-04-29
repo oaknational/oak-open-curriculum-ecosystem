@@ -798,8 +798,8 @@ as one label. Four distinct intents need separate homes:
 
 - internal Oak KG integration into MCP, semantic search, QA, and graph-serving
   layers;
-- the architecture decision about whether the Python
-  `/Users/jim/code/oak/oak-curriculum-ontology` repo should move closer to this
+- the architecture decision about whether the sibling Python
+  `oak-curriculum-ontology` repo should move closer to this
   TypeScript/pnpm/Turbo monorepo;
 - external organisations using Oak's own KG assets in their projects;
 - external knowledge graphs or structured knowledge sources that Oak may ingest

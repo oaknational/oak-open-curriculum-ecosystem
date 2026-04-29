@@ -4,7 +4,7 @@ overview: "Review and consolidate the advice delivered to AI agents via server i
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"
-  - "eef-evidence-mcp-surface.plan.md"
+  - "../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer"
 isProject: false
 todos:

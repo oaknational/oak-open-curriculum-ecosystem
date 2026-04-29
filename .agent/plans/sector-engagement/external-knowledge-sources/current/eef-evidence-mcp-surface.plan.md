@@ -1,9 +1,9 @@
 ---
 name: "EEF Evidence MCP Surface"
 overview: "Expose EEF Teaching and Learning Toolkit data as MCP resources, an aggregated recommendation tool, and an evidence-grounded lesson planning prompt."
-parent_plan: "open-education-knowledge-surfaces.plan.md"
+parent_plan: "../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "misconception-graph-mcp-surface.plan.md"
+  - "../../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
 isProject: false
 todos:
@@ -47,10 +47,10 @@ todos:
 
 # EEF Evidence MCP Surface
 
-**Status**: PENDING — all 12 findings resolved, ready for implementation (WS-3)
+**Status**: QUEUED — all 12 findings resolved, ready for promotion when implementation starts (WS-3)
 **Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
-**Strategic context**: `.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`
+**Strategic context**: `.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md`
 (this plan implements Levels 2-3 of the evidence integration strategy)
 
 ## Pre-Implementation Review Findings — RESOLVED
@@ -94,9 +94,9 @@ plan brings the evidence data into Oak's production MCP server using
 Oak's established patterns — following the same approach as the
 misconception graph and prior knowledge graph surfaces.
 
-The EEF data file (`eef-toolkit.json`, v0.2.0) is already in the repo
-at `.agent/plans/knowledge-graph-integration/future/eef-toolkit.json`. This plan
-copies it into the SDK as a static data asset.
+The EEF data file (`eef-toolkit.json`, v0.2.0) is already in the repo at
+`.agent/plans/sector-engagement/external-knowledge-sources/future/eef-toolkit.json`.
+This plan copies it into the SDK as a static data asset.
 
 ## Impact-Preserving Requirements
 

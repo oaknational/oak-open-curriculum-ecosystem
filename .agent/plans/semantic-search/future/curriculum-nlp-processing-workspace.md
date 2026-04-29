@@ -478,8 +478,8 @@ systems.
 
 ## 12. Reference: `algo-experiments` Pattern
 
-The `/Users/jim/code/personal/algo-experiments` repo provides the
-reference implementation for the Python workspace setup:
+The personal `algo-experiments` checkout provides the reference
+implementation for the Python workspace setup:
 
 - `pyproject.toml` with `[tool.uv] package = true`
 - Hatchling build backend with `packages = ["python"]`
@@ -525,5 +525,5 @@ First question: Could it be simpler without compromising quality?
 | [vocabulary-glossary-and-mining-surfaces.research.md](03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | Research input — asset model |
 | [curriculum-asset-opportunity-map.research.md](../curriculum-asset-opportunity-map.research.md) | Research input — opportunity tiers |
 | [open-education-knowledge-surfaces.plan.md](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | Parent coordination — outputs feed MCP surfaces |
-| [evidence-integration-strategy.md](../../knowledge-graph-integration/future/evidence-integration-strategy.md) | Sibling — `PEDAGOGICAL_PATTERN` entities link to EEF strands |
-| [kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md) | Sibling — ontology alignment informs relationship extraction |
+| [evidence-integration-strategy.md](../../sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md) | Sibling — `PEDAGOGICAL_PATTERN` entities link to EEF strands |
+| [kg-alignment-audit.execution.plan.md](../../knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md) | Sibling — ontology alignment informs relationship extraction |

@@ -375,7 +375,7 @@ Until the upstream API provides flat fields, we implement **denormalisation at i
 3. Decorate indexed documents with arrays of all applicable values
 4. Cache all SDK requests in Redis (14-day TTL with jitter)
 
-**Documented in**: [ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
+**Documented in**: [ADR-080: KS4 Metadata Denormalisation Strategy](../../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 
 **Limitations**:
 
@@ -591,9 +591,9 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 
 **ADRs**:
 
-- [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) - Dense vector code removal
-- [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER-only embedding strategy
-- [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Semantic summary generation
+- [ADR-075](../../../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) - Dense vector code removal
+- [ADR-076](../../../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER-only embedding strategy
+- [ADR-077](../../../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Semantic summary generation
 
 **Current Embedding State**:
 

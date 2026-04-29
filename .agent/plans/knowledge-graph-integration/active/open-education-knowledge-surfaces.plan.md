@@ -5,9 +5,9 @@ status: active
 child_plans:
   - "graph-resource-factory.plan.md"
   - "misconception-graph-mcp-surface.plan.md"
-  - "eef-evidence-mcp-surface.plan.md"
+  - "../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
-  - "education-skills-mcp-surface.plan.md"
+  - "../../sector-engagement/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer, architecture-reviewer-betty"
 todos:
@@ -77,7 +77,7 @@ vision document.
 ## Strategic Context
 
 - **Evidence integration strategy**:
-  `.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`
+  `.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md`
   (R1-R8 impact-preserving requirements)
 - **KG alignment audit**:
   `.agent/plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`
@@ -85,11 +85,10 @@ vision document.
 - **M2 milestone**: `.agent/milestones/m2-extension-surfaces.md`
   (KG alignment is an M2 gate)
 
-This plan implements Levels 1-3 of the evidence integration strategy
-(EEF JSON + bulk data — no ontology dependency) plus the smallest
-meaningful KG integration (Oak KG knowledge taxonomy — static extraction,
-no Neo4j). The deeper ontology integration (Levels 4/4b) follows the
-KG alignment audit and is tracked separately.
+This historical umbrella now spans two plan homes. Internal Oak KG integration
+remains here; EEF and education-skills source ingestion moved to
+`sector-engagement/external-knowledge-sources/`. The deeper ontology
+integration follows the KG alignment audit and is tracked separately.
 
 **Two graph derivation methods**: The graphs in this repo are property
 graphs derived from Oak bulk download data (codegen-time extraction).
@@ -339,7 +338,8 @@ with factory.
 
 ## WS-3: EEF Evidence Surface
 
-**Existing plan**: `eef-evidence-mcp-surface.plan.md`
+**Existing plan**:
+`sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
 
 2 resources (methodology+caveats, strands overview), 1 recommendation
 tool (`recommend-evidence-for-context` with 40/30/20/10 scoring),
