@@ -1,7 +1,6 @@
 import { createLibConfig } from '../../../tsup.config.base.js';
 
 export default createLibConfig({
-  dts: true,
   external: [
     'fs',
     'path',
