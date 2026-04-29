@@ -20,12 +20,19 @@ Currently active threads (2026-04-29):
   alpha integration on branch `feat/otel_sentry_enhancements`.
 - `agentic-engineering-enhancements` — Practice thread; documentation
   roles, continuity surfaces, and fitness-pressure remediation.
+- `sector-engagement` — planning thread; external organisation adoption,
+  partner reviews, and external data-source impact routing for Oak's open
+  curriculum infrastructure.
 - `cloudflare-mcp-security-and-token-economy-plans` — product/security
   planning thread; Cloudflare MCP public-beta gate and token-efficient MCP
   tool-use strategy.
 - `architectural-budget-system` — architecture/devx planning thread;
   cross-scale architectural budget doctrine, visibility, and staged
   enforcement planning.
+- `pr-90-build-fix-landing` — single-PR closure thread; quality-gate
+  closure for PR #90 (`fix/build_issues` → `main`), covering
+  TS-invocation pattern consistency and the Sonar mechanical sweep,
+  with owner MCP manual validation as the merge precondition.
 
 Archived threads:
 

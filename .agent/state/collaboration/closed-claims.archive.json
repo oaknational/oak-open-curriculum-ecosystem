@@ -2,6 +2,108 @@
   "schema_version": "1.3.0",
   "claims": [
     {
+      "claim_id": "fe4acc7e-deep-cons-2026-04-29-15-30",
+      "agent_id": {
+        "agent_name": "Nebulous Illuminating Satellite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fe4acc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/**",
+            ".agent/skills/**",
+            ".agent/rules/**",
+            ".agent/commands/**",
+            ".agent/directives/**",
+            ".agent/practice-core/**",
+            ".agent/practice-context/**",
+            ".agent/experience/**",
+            ".agent/plans/observability/active/**",
+            ".agent/plans/observability/current/**",
+            ".agent/plans/agentic-engineering-enhancements/**",
+            "docs/architecture/architectural-decisions/**",
+            "docs/governance/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T15:30:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Full deep /jc-consolidate-docs convergence run per owner direction.",
+      "notes": "Disjoint from Solar's PR #90 product-surface claim; coordinated with Pearly Swimming Atoll's sector-engagement narrative claim via comms event.",
+      "archived_at": "2026-04-29T16:30:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T16:30:00Z",
+        "closed_by": "Nebulous Illuminating Satellite",
+        "summary": "Deeper /jc-consolidate-docs convergence run COMPLETE. (1) gate-off-fix-gate-on anti-pattern doctrine elevation: never-disable-checks rule + principles.md amendment + Cursor/.agents wrappers + RULES_INDEX entry; register flipped from pattern-candidate to anti-pattern. (2) Practice Core retirement complete (4 phases): PDR-007/024/014 amended; practice-core/patterns/ and practice-context/ deleted; trinity navigation updated; routing log salvaged. (3) Sub-agent reports actioned: 4 strong patterns graduated (install-session-blind, reframing-before-hardening, recital-loses-to-recipe-momentum, breadth-as-evasion); 4-of-6 displaced doctrine extractions landed; plan-supersession discipline graduated to consolidate-docs. (4) Lifecycle moves: mcp-local-startup-release-boundary + depcruise archived; temp-agent-collaboration-continuation deleted. (5) PR-90 thread registered. (6) Identity Candidates graduated to user-collaboration.md. (7) Final fitness: SOFT-only. Deferred to register: Plan 2 (PDR creation), Plan 6 (~700-line trim), 5 trinity Active Principles structural extensions, pre-2026-02-15 experience corpus extraction. No commit performed.",
+        "evidence": [
+          ".agent/rules/never-disable-checks.md",
+          ".agent/practice-core/decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md",
+          ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+          ".agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md",
+          ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.plan.md",
+          ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.phase-0-ledger.md",
+          ".agent/memory/active/patterns/install-session-blind-to-cold-start-gaps.md",
+          ".agent/memory/active/patterns/reframing-before-hardening.md",
+          ".agent/memory/active/patterns/recital-loses-to-recipe-momentum.md",
+          ".agent/memory/active/patterns/breadth-as-evasion.md",
+          ".agent/plans/observability/archive/superseded/README.md",
+          ".agent/state/collaboration/comms/events/fe4acc7e-deep-cons-close-2026-04-29-16-30.json"
+        ]
+      }
+    },
+    {
+      "claim_id": "fe4acc7e-1234-4abc-9def-0123456789ab",
+      "agent_id": {
+        "agent_name": "Nebulous Illuminating Satellite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fe4acc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/**",
+            ".agent/skills/**",
+            ".agent/rules/**",
+            ".agent/commands/**",
+            ".agent/directives/**",
+            ".agent/practice-core/**",
+            ".agent/experience/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T14:30:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Doctrine sharpening (knowledge-preservation absolute + shared-state always-commitable) plus deep /jc-consolidate-docs run: napkin rotation, ADR/PDR scan, Practice Core review, fitness audit, collaboration-state audit.",
+      "notes": "Disjoint from Solar's PR #90 product-surface claim.",
+      "archived_at": "2026-04-29T15:15:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T15:15:00Z",
+        "closed_by": "Nebulous Illuminating Satellite",
+        "summary": "Deep /jc-consolidate-docs pass complete: doctrine sharpenings landed (knowledge-preservation absolute, shared-state always-commitable); napkin rotated; repo-continuity history archived; 3 stale plans moved to archive; owner-directed graduations landed (tool-error-as-question pattern + PDR-018 amendment; scope-as-goal pattern + PDR-015 amendment; testing-strategy amendment for behaviour-shape + e2e no-IO; PDR-026 amendment for knowledge-preservation absolutism); practice-core-surface-retirement.plan.md added to agentic-engineering current README. Fitness SOFT-only (17 soft, 0 hard, 0 critical) - down from 2 critical + 1 hard at session start.",
+        "evidence": [
+          ".agent/memory/active/archive/napkin-2026-04-29.md",
+          ".agent/memory/operational/archive/repo-continuity-session-history-2026-04-29.md",
+          ".agent/memory/active/patterns/tool-error-as-question.md",
+          ".agent/memory/active/patterns/scope-as-goal.md",
+          ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
+          ".agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md",
+          ".agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md",
+          ".agent/state/collaboration/comms/events/fe4acc7e-cons-doc-close-2026-04-29-15-15.json"
+        ]
+      }
+    },
+    {
       "claim_id": "f5a7c2b1-e8d4-4093-a5c6-7b1d8e3f9201",
       "agent_id": {
         "agent_name": "Verdant Regrowing Pollen",
@@ -6434,6 +6536,166 @@
           {
             "kind": "claim",
             "ref": "70f3219a-a816-469b-a563-70b6e2688e81",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3b70b732-42da-4339-9914-56cf47a60e5c",
+      "agent_id": {
+        "agent_name": "Squally Diving Anchor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd8"
+      },
+      "thread": "sector-engagement",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/README.md",
+            ".agent/plans/sector-engagement/roadmap.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/README.md",
+            ".agent/memory/operational/threads/sector-engagement.next-session.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T12:11:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run requested sector-engagement handoff and light consolidation, plus capture PR lifecycle skill need.",
+      "notes": "Active-claims scan: registry empty before opening; no peer overlap. Scope is documentation/continuity only, following commit 33b25495 sector-engagement taxonomy.",
+      "archived_at": "2026-04-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T12:16:28Z",
+        "closed_by": {
+          "agent_name": "Squally Diving Anchor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd8"
+        },
+        "summary": "Sector-engagement handoff and light consolidation complete: thread continuity, impact framing, PR lifecycle skill plan, napkin, and comms updates written; Solar Threading Star's disjoint PR #90 claim preserved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3b70b732-42da-4339-9914-56cf47a60e5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "codex-019dd9-repo-goal-narrative-refresh",
+      "agent_id": {
+        "agent_name": "Pearly Swimming Atoll",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd9"
+      },
+      "thread": "sector-engagement",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            "docs/foundation/**",
+            "docs/README.md",
+            "docs/architecture/README.md",
+            "docs/architecture/openapi-pipeline.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/architectural-decisions/119-agentic-engineering-practice.md",
+            "docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md",
+            "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+            "docs/engineering/extending.md",
+            "docs/domain/curriculum-guide.md",
+            "apps/oak-curriculum-mcp-streamable-http/README.md",
+            "packages/sdks/oak-curriculum-sdk/README.md",
+            "apps/oak-search-cli/README.md",
+            "apps/oak-search-cli/docs/ARCHITECTURE.md",
+            ".agent/plans/high-level-plan.md",
+            ".agent/plans/sector-engagement/**",
+            ".agent/plans/sdk-and-mcp-enhancements/README.md",
+            ".agent/plans/semantic-search/README.md",
+            ".agent/plans/knowledge-graph-integration/README.md",
+            ".agent/HUMANS.md",
+            ".agent/practice-index.md",
+            ".agent/practice-core/README.md",
+            ".agent/practice-core/practice.md",
+            ".agent/memory/operational/threads/sector-engagement.next-session.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T14:51:36Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Refresh live repo-goal narrative surfaces per owner request; documentation/planning prose only.",
+      "notes": "Consulted active claims before editing: overlaps Solar Threading Star pr-90-build-fix-landing on apps/packages and Nebulous Illuminating Satellite agentic-engineering-enhancements on Practice/ADR/doc surfaces. Owner-directed docs-only narrative refresh; proceeding with narrow prose edits, no runtime/package/API/schema/generated changes.",
+      "archived_at": "2026-04-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T14:59:49Z",
+        "closed_by": {
+          "agent_name": "Pearly Swimming Atoll",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd9"
+        },
+        "summary": "Completed owner-directed repo goal narrative refresh across live docs/planning/Practice/ADR surfaces; ran root format/markdownlint, git diff --check, concept/licence sweeps, and collaboration-state check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "codex-019dd9-repo-goal-narrative-refresh",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9d432adb-6a8f-49ec-aaf6-c7d2071adb74",
+      "agent_id": {
+        "agent_name": "Pearly Swimming Atoll",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dd9"
+      },
+      "thread": "sector-engagement",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T15:52:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit repo-goal narrative refresh plus handoff/consolidation state.",
+      "notes": "Owner authorised unstaging the pre-existing peer bundle; current staged set is empty. Intended pathspecs are public/foundation/technical narrative docs, live planning/Practice surfaces touched by Pearly Swimming Atoll, landing-page wording, collaboration comms events/log, claim lifecycle state, sector thread handoff, napkin, and AGENTS.md pointer cleanup. Active Solar PR-90 claim noted; shared-state paths remain commit-includable.",
+      "archived_at": "2026-04-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T15:58:28Z",
+        "closed_by": {
+          "agent_name": "Pearly Swimming Atoll",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dd9"
+        },
+        "summary": "Committed repo-goal narrative refresh and handoff state as b4b86a2c; pre-commit format, markdownlint, knip, depcruise, and turbo type-check/lint/test all passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9d432adb-6a8f-49ec-aaf6-c7d2071adb74",
             "summary": "Claim explicitly closed by owning session."
           }
         ]

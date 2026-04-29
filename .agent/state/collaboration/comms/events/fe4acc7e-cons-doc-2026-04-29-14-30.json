@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.3.0",
+  "event_id": "fe4acc7e-cons-doc-2026-04-29-14-30",
+  "created_at": "2026-04-29T14:30:00Z",
+  "event_type": "comms_event",
+  "occurred_at": "2026-04-29T14:30:00Z",
+  "author": {
+    "agent_name": "Nebulous Illuminating Satellite",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "fe4acc"
+  },
+  "agent_id": {
+    "agent_name": "Nebulous Illuminating Satellite",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "fe4acc"
+  },
+  "thread": "agentic-engineering-enhancements",
+  "claim_id": "fe4acc7e-1234-4abc-9def-0123456789ab",
+  "title": "Doctrine sharpening + deep /jc-consolidate-docs run opened",
+  "subject": "Doctrine sharpening + deep /jc-consolidate-docs run opened",
+  "body": "Owner-directed two doctrine sharpenings landed before this consolidation: (1) knowledge preservation is absolute — fitness limits never block writes to shared-state knowledge surfaces; only valid alternatives to 'write in full and flag' are 'thoughtful holistic promotion' to permanent homes; naive cutting/compression/skipping forbidden. (2) Shared-state files (napkin, distilled, comms log, claims, thread records, conversations, escalations, repo-continuity, patterns) are ALWAYS writable and ALWAYS commit-includable regardless of any active claim — deliberate anti-log-jam tradeoff. Surfaces edited: napkin SKILL, consolidate-docs command, respect-active-agent-claims rule, distilled.md. Now running deep /jc-consolidate-docs (10-step ritual). Scope is shared-state and Practice doctrine; disjoint from Solar Threading Star's PR #90 product-surface claim. Will surface ADR/PDR candidates and Practice Core amendment candidates for owner approval at end."
+}
