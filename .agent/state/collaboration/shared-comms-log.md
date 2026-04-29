@@ -331,3 +331,51 @@ Suggested follow-ups:
 - ADR-158 amendment recording the Vercel-overwrite + VERCEL_ENV-detection load-bearing assumptions and the configuration-drift tripwires that would invalidate them.
 
 Closing claim b8e82e9c (commit landed; cure complete; live tests inconclusive but expected given external-observation constraints).
+
+---
+
+## 2026-04-28T16:10:50Z — `Fruited Sprouting Glade` / `codex` / `GPT-5` / `019dd4` — Practice Core surface retirement plan
+
+No other agents present in active-claims.json. I am adding only the in-repo current plan for retiring Practice Context and the empty Practice Core patterns surface; implementation changes are out of scope for this session.
+
+---
+
+## 2026-04-29T07:17:15Z — `Verdant Swaying Fern` / `claude` / `claude-opus-4-7` / `c34d50` — TS6 migration session moved to fresh context — Tasks 1–8 done, 9 and 10 pending
+
+Session moved to fresh context per owner direction after recurring mistake-pattern accumulation (sed-bypass of Read-then-Edit safety; see napkin Surprise 5). Branch fix/build_issues now passes pnpm build, pnpm type-check, pnpm test, and pnpm knip (knip exit 0 with one informational .css hint). Working tree holds ~170 uncommitted files spanning the TS6 migration plus owner-directed architectural rules (workspace-to-root-script ban; all-TypeScript-scripts with dedicated no-compile-no-deps directory exception; vercel-ignore moved to apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/). The full plan with completion status, recommended commit shape (7 commits), and continuation guidance for the fresh session lives at .agent/plans/architecture-and-infrastructure/current/typescript-6-migration-and-workspace-script-rules.plan.md. Pending: ADR-167 authoring (Task #9, invoke docs-adr-reviewer) and final quality-gate sweep + release-readiness review (Task #10). Vitest config coupling (workspace vitest.config.ts importing root vitest.config.base.ts across 19 workspaces) is the same architectural smell as the workspace-to-root-script ban but for configs; not yet addressed and surfaced for owner direction in the fresh session.
+
+---
+
+## 2026-04-29T07:26:12Z — `Verdant Swaying Fern` / `claude` / `claude-opus-4-7` / `c34d50` — Session-handoff complete — TS6 migration ready for fresh-session pickup
+
+Ran /jc-session-handoff per owner direction. Continuity surfaces updated: napkin Surprise 5 (sed-bypass anti-pattern); plan file at .agent/plans/architecture-and-infrastructure/current/typescript-6-migration-and-workspace-script-rules.plan.md with strengthened bootstrap commands, step-by-step continuation guidance, and explicit anti-patterns-to-avoid list (5 myopia surfaces); repo-continuity.md incremental refresh + Deep Consolidation Status entry (not due — owner-directed lightweight handoff) + two new pending-graduations register entries (ADR-168 for TS6/workspace-script-rules; pattern-or-PDR candidate for tool-error-as-question meta-pattern). ADR number corrected from 167 to 168 (Ethereal Illuminating Comet authored ADR-167 on hook-execution-failure visibility in parallel). No thread touched (work was branch-fix-bound, not thread-bound — plan file is the durable continuity carrier). active-claims registry empty throughout the session; no claims required closure. No conversation/escalation work touched. Entry-point drift sweep clean for CLAUDE.md and GEMINI.md; AGENTS.md retains pre-existing RULES_INDEX.md pointer (not introduced this session). Working-tree state at handoff: ~170 uncommitted files; pnpm build/type-check/test/knip all green. Recommended landing shape: 7 logical commits (see plan Commit Shape section). Tasks #9 (ADR-168 authoring with docs-adr-reviewer) and #10 (final quality-gate sweep + release-readiness-reviewer) are the explicit next-session work. Open question carried forward: vitest-config-base coupling across 19 workspaces (same shape as workspace-to-root-script ban but for configs) — not yet addressed.
+
+---
+
+## 2026-04-29T07:43:28Z — `Verdant Regrowing Pollen` / `claude` / `claude-opus-4-7` / `b3812b` — TS6 closeout session opened — Lane A execution starting
+
+Session opened on fix/build_issues to land Tasks #9–#10 of the TS6 migration plan and the 7-commit landing shape. Bootstrap fast-path: active-claims registry empty (no other agents present); proceeding with sole-agent responsibility for all 173 uncommitted files in the working tree. Verified state matches Verdant Swaying Fern's handoff: pnpm type-check green (36/36 cached), pnpm --filter agent-tools build green. Plan to be promoted from current/ to active/ with new Execution Discipline section adding structural anti-pattern guards for the five myopia surfaces named in the prior session's napkin (reviewer-as-prosthetic, confirmation-reading, hook-as-obstacle, fitness-as-constraint, sed-bypass). Lane B (post-PR-87 Vercel build failure on main) is owner-blocked at Step 1 of its triage plan (build log retrieval) and will follow on a fresh branch from main once Lane A merges. ADR-168 number availability to be re-verified before authoring. Opening claim covering the plan file, working-tree TS6 changes, the to-be-authored ADR, and the cross-ref updates to napkin/repo-continuity. Will write claim directly to active-claims.json (Verdant Swaying Fern precedent: direct continuity edits preferred over CLI on this branch when build-migration work is concurrent; the CLI rebuild path is fragile).
+
+---
+
+## 2026-04-29T09:53:27Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement plan collection claim opened
+
+Opened claim 520afc14-294c-4df3-9c41-f429350e53de for a sector-engagement planning taxonomy pass. Scope: create .agent/plans/sector-engagement, rehome the existing external planning material, move the Finnish external-pipeline demonstration brief, add an OEAI sub-thread review, and update affected plan/docs links. Active-claim scan found Verdant Regrowing Pollen on TS6 migration paths only; no overlap with this taxonomy bundle beyond shared .agent coordination surfaces.
+
+---
+
+## 2026-04-29T09:59:36Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement taxonomy pass closed
+
+Closed claim 520afc14-294c-4df3-9c41-f429350e53de after creating the sector-engagement collection, rehoming the existing external planning material, moving the Finnish external-pipeline demonstration brief, adding the OEAI initial review thread, updating affected live links, and passing scoped Prettier, markdownlint, git diff --check, and collaboration-state checks.
+
+---
+
+## 2026-04-29T10:05:10Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement second taxonomy pass opened
+
+Opened claim 3269f402-c5ff-4f36-9fb9-0afeed6599ca after owner clarified that knowledge-graph integration, Oak OpenAPI monorepo integration, and ontology repo re-examination all belong under sector engagement. Scope is planning taxonomy and live link updates only; Verdant Regrowing Pollen's TS6 migration claim remains disjoint.
+
+---
+
+## 2026-04-29T10:17:26Z — `Squally Diving Anchor` / `codex` / `GPT-5` / `019dd8` — Sector engagement KG taxonomy split complete
+
+Closed sector-engagement taxonomy pass. Knowledge graph planning is now split into: internal Oak KG integration under .agent/plans/knowledge-graph-integration, ontology workspace reassessment for /Users/jim/code/oak/oak-curriculum-ontology, external KG adoption under sector-engagement/knowledge-graph-adoption, and external knowledge-source ingestion under sector-engagement/external-knowledge-sources. Added Oak OpenAPI monorepo integration brief and external material triage; retained Castr as future codegen replacement context.

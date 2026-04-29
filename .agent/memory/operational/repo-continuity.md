@@ -50,6 +50,68 @@ curriculum probes, Sentry MCP preview/error correlation, ADR-163 release-id
 story confirmed against live aggregates, OAuth proxy **`429` + unconditional
 `.json()`** root cause captured for **`handleToken`**. No working-tree edits.)
 
+**Incremental refresh**: 2026-04-29 (Nebulous Weaving Dusk / codex / GPT-5 /
+`019dd7` — architectural budget planning pass landed in docs/plans: ADR-166
+created and tightened, parent/visibility/enforcement budget plans added, the
+directory-cardinality plan rewritten as the `max-files-per-dir` child, and
+roadmap/index references reconciled. Validation passed for root markdownlint
+and scoped `git diff --check`. Aggregate build/check gates are not claimed
+because concurrent TS6/build migration work is active on `fix/build_issues`.)
+
+**Incremental refresh**: 2026-04-29 (Verdant Swaying Fern / claude /
+claude-opus-4-7 / `c34d50` — TS6 migration mid-flight on `fix/build_issues`,
+moved to fresh session per owner direction after recurring mistake-pattern
+accumulation (sed-bypass of Read-then-Edit safety, captured as napkin
+Surprise 5). Tasks #1–#8 done and verified by green build, type-check, test,
+and knip; Tasks #9 (ADR-167 authoring) and #10 (final quality-gate sweep +
+release-readiness review) are pending. ~170 uncommitted files in working
+tree; owner-recommended 7-commit landing shape is documented in the plan.
+Plan: [`typescript-6-migration-and-workspace-script-rules`][ts6-plan]. New
+patterns landed: `hook-as-question-not-obstacle`; `ground-before-framing`
+extended with 2026-04-29 evidence; napkin skill amended with "Never Hold Back
+Insight to Fit a Budget" rule. Owner-directed architectural rules captured:
+workspace-to-root-script ban, all-TypeScript-scripts with dedicated
+no-compile-no-deps directory exception (currently
+`apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/` for the
+vercel-ignore script). Open question for fresh session: vitest-config-base
+coupling (19 workspaces import `../../../vitest.config.base`) — same shape as
+the script ban but for configs; not yet addressed.)
+
+[ts6-plan]: ../../plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md
+
+**Incremental refresh**: 2026-04-29 (Ethereal Illuminating Comet / claude-code /
+claude-opus-4-7-1m / `05f2e9` — small-scope test deletion on `fix/build_issues`:
+removed `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/zodgen.e2e.test.ts`
+plus stale `test-cache/zod-out/`. Test was a misclassified e2e (in-process
+function call), violated "do not test types", duplicated existing unit +
+integration coverage, and `execSync('npx tsc')` shelled out incompatibly with
+the repo's pnpm dependency config. Verified `pnpm test` 855 passed, `pnpm
+test:e2e` 8 passed, `pnpm type-check` clean. Deletion staged in working tree;
+not committed. **Owner-flagged process anomaly for separate investigation**:
+this session ran without a `/rename`, without joining a thread, without
+registering an active claim, and without writing to `shared-comms-log.md`.
+The work was small and off-thread (no collision risk), but the coordination
+ritual silently degraded — captured as a pending-graduations candidate
+(small-work bypass of coordination surfaces) plus a napkin Surprise. Not to
+be retroactively fixed in this handoff per owner direction. **Post-handoff
+landings (same session, same identity)**: diagnosed and fixed a silent
+`sonar-secrets` PreToolUse:Read hook failure that had been swallowed three
+times during the codegen-package work (relative path
+`.claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh` resolved
+against shell cwd after `cd packages/sdks/oak-sdk-codegen`, exit 127, no
+visibility because the hook is non-blocking). Fix shape: registered hook
+commands in `.claude/settings.json` rewritten to use `${CLAUDE_PROJECT_DIR}`
+dynamic paths; new wrapper at `.claude/hooks/_lib/log-hook-errors.sh`
+persists non-zero hook exits to `.claude/logs/hook-errors.log` (gitignored)
+with timestamped diagnostic blocks. Authored ADR-167 documenting the
+discipline. Owner caught a wording mistake in the ADR — initial Decision
+§2 said "absolute path", which would hard-code one machine's layout into
+version control; reframed to "dynamic path rooted at platform-provided
+project-root variable" with explicit rejection of both bare-relative and
+literal-absolute shapes. New pending-graduations register entry added for
+PDR extraction of the hook-failure-visibility canonical contract.
+Markdownlint clean for all session edits.)
+
 Recent historical refresh summaries are preserved in git history, the touched
 thread records, and
 [`archive/repo-continuity-session-history-2026-04-28.md`](archive/repo-continuity-session-history-2026-04-28.md).
@@ -60,7 +122,11 @@ in `archive/` or the per-thread next-session records.
 
 ## Current State
 
-- Branch: `feat/otel_sentry_enhancements`; current HEAD is `c601d515`
+- Observed checkout for the latest handoff: branch `fix/build_issues`, HEAD
+  `171a94fd`, with unrelated package/tsconfig/build/lockfile work in progress.
+  Do not infer PR-87 branch health from this checkout.
+- Historical PR-87 branch state: `feat/otel_sentry_enhancements`; current HEAD
+  was `c601d515`
   (= origin = PR-87 head). Four Choppy Lapping Rudder commits landed and
   pushed this session: `c1677d84` (Cluster A claim + cross-thread S5443
   request), `ca7e6e4b` (new agent-coordination-CLI-ergonomics future plan),
@@ -149,6 +215,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage-readout / 2026-04-28; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5-keygenerator-cure-doc-alignment-and-plan-reset-to-codeql-only / 2026-04-28; Choppy Lapping Rudder / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2-pre-phase-security-review-and-phase-2.0.5-scope-expansion / 2026-04-28; Luminous Dancing Quasar / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-cluster-b-second-wave / 2026-04-28; Tidal Rolling Lighthouse / `claude-code` / `claude-opus-4-7-1m` / pr-87-quality-remediation-replan-2026-04-28 / 2026-04-28; Opalescent Gliding Prism / `claude-code` / `claude-opus-4-7-1m` / pr-87-architectural-cleanup-session-2 / 2026-04-27; Pelagic Flowing Dock / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-1-void-underscore-rule-author / 2026-04-27; Vining Bending Root / `claude-code` / `claude-opus-4-7-1m` / pr-87-phases-3-5 / 2026-04-27. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, and continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Full history in thread record. Latest active identities: Coastal Mooring Atoll / `codex` / `GPT-5` / session-handoff-codex-identity-archive-claim-closeout / 2026-04-28; Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-planning-and-commit-gate-doctrine-handoff / 2026-04-28; Mossy Creeping Branch / `codex` / `GPT-5` / codex-session-identity-plumbing-current-slice-and-doctrine-propagation / 2026-04-28; Verdant Flowering Blossom / `codex` / `GPT-5` / hook-test-io-remediation-and-shared-state-sweep-policy-closeout / 2026-04-28; Woodland Creeping Petal / `codex` / `GPT-5` / collaboration-state-write-safety-current-plan-implementation / 2026-04-28; Pelagic Drifting Sail / `codex` / `GPT-5` / agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout / 2026-04-28; Ethereal Threading Supernova / `codex` / `GPT-5` / codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff / 2026-04-28; Codex / `codex` / `GPT-5` / practice-tool-feedback-and-collaboration-state-domain-model-preservation / 2026-04-28; Coastal Washing Rudder / `codex` / `gpt-5.5` / owner-directed-queue-governance-graduation-pdr-029-and-plan-archive / 2026-04-27; Prismatic Waxing Constellation / `codex` / `gpt-5.5` / owner-directed-intent-to-commit-queue-implementation / 2026-04-27; Composer / `cursor` / `Composer` / cursor-sessionstart-hook-identity-mirror-docs-tests-handoff / 2026-04-27. |
+| `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, and staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-security-token-economy-planning-final-handoff / 2026-04-28. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation work
@@ -171,6 +238,14 @@ Current branch-primary facts:
   evidence path is primary.
 
 ## Current Session Focus
+
+**Latest focus (2026-04-29, Nebulous Weaving Dusk, Codex GPT-5)**:
+architectural budget planning pass. ADR-166 and the parent/child planning
+topology now define function/file/directory/workspace/package-API/graph budgets,
+visibility-before-enforcement rollout, anti-gaming rules, and review cadence.
+No enforcement code was enabled. Aggregate `agent-tools`/build validation is
+blocked by concurrent TS6 `baseUrl` migration work on `fix/build_issues`; do
+not treat that as budget-plan evidence.
 
 **Latest focus (2026-04-28, Luminous Waning Aurora, Cursor Composer)**: Read-only
 Sentry MCP + Curriculum MCP probes on preview: confirmed single active **`release`
@@ -317,6 +392,13 @@ as defence-in-depth; it does not move CodeQL but is part of PR-87 history.
 
 Other lanes:
 
+- **Architectural budget system** — planning/doctrine landed in ADR-166 and
+  the parent/child plans. Resume from
+  [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md).
+  Next safe step is owner choice: either promote the visibility layer for one
+  named consumer trigger, or start Phase 0 of the directory-cardinality child
+  plan. Do not enable blocking enforcement before baseline/remediation and
+  ADR-121/build-system propagation are ready.
 - **Cloudflare MCP public-beta gate / token economy** — do not start
   implementation from the borrowed Code Mode pattern. First either promote the
   security gate to `current/` with a Cloudflare control disposition table, or
@@ -402,6 +484,67 @@ These are visible owner-appetite items, not blockers for the active lanes:
    removing the `statusLine` block from `.claude/settings.json`.
 
 ## Deep Consolidation Status
+
+Incremental status (2026-04-29 Verdant Swaying Fern session-handoff to
+fresh context): **not due — owner directed lightweight handoff to a
+fresh session before further TS6/build-infrastructure work, citing
+recurring sed-bypass-of-Read-then-Edit mistake-pattern accumulation.**
+Tasks #1–#8 of the TS6 migration plan landed and verified; Tasks #9
+(ADR-168 authoring) and #10 (final quality-gate sweep +
+release-readiness review) are owner-explicit next-session work named
+in
+[`typescript-6-migration-and-workspace-script-rules.plan.md`](../plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md).
+Two new pending-graduations register entries added: ADR-168 candidate
+(TS6 + workspace-script architectural rules); pattern-or-PDR
+candidate for the "tool-error-as-question" meta-pattern (third-surface
+trigger, given five distinct surfaces of the same anti-pattern fired
+in a single session). Five napkin Surprises captured (reviewer
+prosthetic / confirmation reading / hook-as-obstacle / fitness-as-
+constraint / sed bypass). Patterns landed: new
+`hook-as-question-not-obstacle.md`; `ground-before-framing.md`
+extended with same-session evidence. Skill correction: napkin
+SKILL.md amended with "Never Hold Back Insight to Fit a Budget"
+section. **No thread touched** this session — work was branch-fix-
+bound (`fix/build_issues`), not thread-bound; the plan file is the
+durable continuity carrier. Active-claims registry was empty
+throughout the session; no claim required closure (state explicitly
+noted per workflow §8). No open conversations or escalations were
+touched. Entry-point drift sweep clean for CLAUDE.md and GEMINI.md;
+AGENTS.md retains its pre-existing RULES_INDEX.md pointer line —
+not introduced this session, same observation Ethereal made earlier.
+~170 uncommitted files in working tree at session-end; landing shape
+recommended in the plan as 7 logical commits.
+
+Incremental status (2026-04-29 Ethereal Illuminating Comet final handoff):
+**not due — combined session (test deletion + silent-hook fix + ADR-167)
+landed three pending-graduations candidates and one new ADR; portable
+generalisation deferred to a future session and a future second-platform
+implementation per PDR-009.** Repo-continuity remains over fitness limits
+(inherited from prior session); napkin remains over fitness limits
+(inherited). This combined handoff added three pending-graduations entries
+(small-work coordination-skip; test misnaming as exemption; hook-failure
+visibility canonical contract), authored ADR-167 with three Future Work
+items naming the PDR graduation path, fixed the silent `sonar-secrets`
+hook bug, and reframed the ADR's Decision §2 per owner correction
+(absolute → dynamic-path-rooted-at-platform-variable). Three napkin
+Surprises captured (coordination-skip, test-misnaming, absolute-path
+wording smuggling). Active-claims registry remained empty throughout the
+session; no claim was opened, none required closure (state explicitly
+noted per workflow §8). Entry-point drift sweep clean (CLAUDE.md,
+AGENTS.md, GEMINI.md unchanged this session; pre-existing AGENTS.md
+RULES_INDEX.md line is a separate historical concern, not session-
+introduced drift). Concurrent independent work by Verdant Swaying Fern
+(claude / claude-opus-4-7) on TS6 migration on the same branch landed in
+parallel; their refresh entry sits between Nebulous and Ethereal in the
+incremental-refresh sequence — no overlap with this session's edits, no
+collision risk observed.
+
+Incremental status (2026-04-29 Nebulous Weaving Dusk handoff): not due —
+the ADR-shaped decision from this session was created directly as ADR-166 and
+then amended before handoff. The planning surfaces and ADR/index links were
+validated; no unhomed ADR/PDR candidate, entrypoint drift, or repeated surprise
+requires `jc-consolidate-docs` now. Active-claims registry is empty; no
+collaboration claim required closure.
 
 **Status (2026-04-28 Coastal Mooring Atoll, owner-requested deep
 consolidation pass)**: completed the deep pass that was explicitly requested to
@@ -598,3 +741,68 @@ snapshots.
   separate keyGenerator cure that lands FIRST); trigger: second cross-session
   instance OR owner direction; status: pending. Evidence:
   observability/active/pr-87-cluster-a-security-review.md.
+- 2026-04-29; small-work bypass of coordination surfaces; rule or
+  continuity-practice amendment binding session-open registration to *first
+  edit* rather than to thread join, so off-thread / small-scope sessions
+  cannot silently skip `/rename`, claim registration, and shared-log
+  participation; trigger: owner-flagged this session AND named for separate
+  investigation by other sessions; status: pending. Evidence:
+  napkin Surprise 1 in
+  [`napkin.md` §"2026-04-29 — Misclassified e2e test deletion + coordination-surface skip"](../active/napkin.md).
+  Cross-reference: [`passive-guidance-loses-to-artefact-gravity`](../active/patterns/passive-guidance-loses-to-artefact-gravity.md).
+- 2026-04-29; test misnaming as exemption mechanism (a `.e2e.test.ts`
+  suffix used as filename certificate to escape in-process restrictions
+  the test would otherwise fail — process spawning, type-only assertions,
+  fs writes); testing-strategy amendment to classify tests by behaviour
+  shape (imported code vs. separate process), not by filename suffix;
+  trigger: second observed instance OR owner direction; status: pending.
+  Evidence: deleted `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/zodgen.e2e.test.ts`
+  plus napkin Surprise 2 in same entry as above.
+- 2026-04-29; agent-infrastructure failure visibility (non-blocking
+  agentic-platform hooks fail silently by default, which compromises
+  defensive layers like secrets scanners); PDR candidate extracting the
+  canonical contract (message shape, registration discipline, wrapper
+  responsibility split) from
+  [ADR-167](../../../docs/architecture/architectural-decisions/167-hook-execution-failures-must-be-observable.md)
+  to Practice Core; trigger: second platform (Cursor, Codex, Gemini CLI,
+  or other) implementing a thin wrapper honouring the canonical contract,
+  OR owner direction to graduate without waiting; status: pending.
+  Evidence: ADR-167 reference instance for Claude Code +
+  `.claude/hooks/_lib/log-hook-errors.sh` wrapper + `.claude/settings.json`
+  registration update (staged in working tree, not committed).
+- 2026-04-29; TypeScript 6 migration + workspace-script architectural
+  rules (workspace-to-root-script ban; all-TypeScript-scripts rule;
+  dedicated no-compile-no-deps directory exception for scripts that
+  cannot have a build step or external dependencies, e.g. Vercel's
+  `ignoreCommand`); ADR candidate (next available number is **168**
+  given Ethereal Illuminating Comet authored ADR-167 in parallel);
+  trigger: graduation pass at consolidate-docs OR owner direction;
+  status: pending. Evidence: plan
+  [`typescript-6-migration-and-workspace-script-rules`][ts6-plan];
+  Tasks #1–#8 landed (build/type-check/test/knip green), ADR
+  authoring (Task #9) deferred to fresh session per owner direction
+  after sed-bypass mistake-pattern accumulation. Body should cover
+  baseUrl removed (rationale: TS6 deprecation; zero `paths` aliases;
+  `moduleResolution: bundler` makes baseUrl inert), `rootDir: "./src"`
+  convention reaffirmed for build configs, `types: ["node"]` added at
+  base (TS6 changed default to `[]`), `erasableSyntaxOnly: true` retained,
+  workspace-to-root-script ban with concrete remediation pattern,
+  all-TypeScript-scripts rule with the dedicated-directory exception,
+  Husky `.sh` shell-script exception (genuine pre-existing structure),
+  vitest-config-base coupling acknowledged as deferred open question
+  (same shape, configs vs scripts).
+- 2026-04-29; recurring myopia patterns at every signal surface
+  (reviewer-as-prosthetic; confirmation-reading-vs-exploration;
+  hook-as-obstacle; fitness-as-constraint; sed-bypass-of-Read-then-Edit);
+  pattern candidate or PDR amendment for "tool-error-as-question"
+  meta-pattern; trigger: third surface where the same anti-pattern
+  recurs OR owner direction to graduate the meta-pattern (not just
+  the per-surface instances); status: pending. Evidence: napkin
+  2026-04-29 entry "TS6 migration myopia (Verdant Swaying Fern)"
+  with five Surprise sub-sections documenting five distinct surfaces
+  where the same "tool-returns-error → find-bypass" instinct fired
+  in a single session; new pattern
+  [`hook-as-question-not-obstacle.md`](../active/patterns/hook-as-question-not-obstacle.md);
+  [`ground-before-framing.md`](../active/patterns/ground-before-framing.md)
+  extended with same-session evidence; napkin skill amended with
+  "Never Hold Back Insight to Fit a Budget" rule.

@@ -56,6 +56,24 @@ not "is the grounding accurate?". The corrective rule was added to
 the session prompt's "Ground First" step so future sessions read the
 composition root explicitly.
 
+**2026-04-29 TS6 migration session** — Owner reported "everything
+broke" after a TypeScript ^5 → ^6 version bump and pasted one error
+(TS5011). The agent fixed the literal error in four
+`tsconfig.build.json` files, dispatched config-reviewer and
+code-reviewer, and built a 5-phase plan on their findings. The agent
+never ran `pnpm build` or `pnpm type-check` independently to capture
+the full failure surface. The plan inherited the reviewers' frame —
+{TS5011, TS5101, four pre-existing inconsistencies} — when the actual
+failure surface was larger (a workspace `.mjs` build script not picked
+up by TypeScript, plus an architectural smell of workspaces calling
+`../../scripts/` from the repo root) and was visible only by running
+the build and reading the diff with exploration questions. Owner
+caught the architectural smell directly from the diff that the agent
+had staged. General lesson: reviewers extend the picture with
+expertise; they do not establish the picture. Run the failing command,
+capture full output, read it as exploration before constructing any
+plan from reviewer findings.
+
 **2026-04-17 Sentry L-0b close — `satisfies` gate overclaim**
 (commit `d08c6969`). The first session plan asserted that a
 TypeScript `satisfies readonly (keyof NodeOptions)[]` check would

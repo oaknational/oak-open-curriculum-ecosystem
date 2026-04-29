@@ -3,7 +3,7 @@ boundary: B2-Architecture
 doc_role: index
 authority: adr-navigation
 status: active
-last_reviewed: 2026-04-19
+last_reviewed: 2026-04-29
 ---
 
 # Architectural Decision Records
@@ -187,7 +187,18 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](163-sentry-release-identifier-and-vercel-production-attribution.md) (operationalises L-7 release/deploy linkage; Accepted 2026-04-19; amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)
 - [ADR-164: Config-Load Side Effects Must Not Require Test-Execution Resources](164-config-load-side-effects.md) (vitest/ESLint/Prettier configs must not throw at module-evaluation time on missing test-time credentials; Accepted 2026-04-26)
 - [ADR-165: Agent Work Practice Phenotype Boundary](165-agent-work-practice-phenotype-boundary.md) (local implementation boundary for PDR-035 agent-work Practice authority; Accepted 2026-04-28)
-- [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md) — 2026-04-26 amendment adds Step 5 (call-site uptake) to the four-step pattern.
+- [ADR-166: Architectural Budget System Across Scales](166-architectural-budget-system-across-scales.md)
+  (cross-scale architectural bounds, visibility-before-enforcement, and
+  anti-gaming doctrine; Accepted 2026-04-29)
+- [ADR-167: Hook Execution Failures Must Be Observable](167-hook-execution-failures-must-be-observable.md)
+  (non-blocking agentic-platform hooks must route through a logging
+  wrapper that persists non-zero exits to a developer-readable file;
+  host-specific Claude Code reference instance with platform-portable
+  generalisation named under Future Work; Accepted 2026-04-29)
+- [ADR-168: TypeScript 6 Baseline and Workspace-Script Architectural Rules](168-typescript-6-baseline-and-workspace-script-architectural-rules.md)
+  (TS6 compiler-options baseline, ban on workspace-to-root scripts,
+  all-TS-scripts rule with the `runtime-only-scripts/` directory
+  exception for no-compile-no-deps cases; Accepted 2026-04-29)
 
 ## Key Architectural Decisions
 
