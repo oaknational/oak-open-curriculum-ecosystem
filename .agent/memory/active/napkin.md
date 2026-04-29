@@ -130,6 +130,38 @@ elevate `gate-off-fix-gate-on` as anti-pattern doctrine. Outcomes
 - 3 sub-agent reports (experience audit, trinity drift, displaced
   doctrine) feeding the register and Practice Core review.
 
+### Surprise — "trim" framing reverted to size-target thinking
+
+- **Expected**: naming the deferred multi-agent-collaboration-protocol
+  child plan as a "plan-body trim" was a neutral description of a
+  ~700-line subtractive change.
+- **Actual**: owner pushback —"is it a 'trim' so much as a refinement
+  of which concepts live in which homes?" The "trim" word focuses
+  the work on artefact size; the actual substance is concept
+  placement (each section is either canonically homed elsewhere now
+  or genuine plan-scoped substance). Line count is a downstream
+  consequence of correct placement, not the goal.
+- **Why expectation failed**: I had just graduated PDR-026 amendment
+  ("knowledge preservation is absolute") and the napkin SKILL rewrite
+  ("naive cutting forbidden; thoughtful holistic promotion is the
+  alternative") earlier this same session — and reverted to a
+  size-frame the moment I named follow-on work. This is the
+  recital-loses-to-recipe-momentum pattern firing on its own
+  graduation: I authored the rule, quoted it, and bypassed it under
+  recipe momentum. Companion of install-session-blind-to-cold-start-
+  gaps: the install session's confidence is context-blind to its
+  own future bypasses.
+- **Behaviour change**: when naming follow-on work that acts on a
+  surface where doctrine has graduated, name the substance as
+  concept placement (where does each concept live now?), not
+  artefact size. The "trim" / "compression" / "size reduction"
+  vocabulary smuggles the size-frame back in. Renamed the child
+  plan file to `multi-agent-collaboration-protocol-concept-home-refinement.plan.md`,
+  reframed the body, parent coordination doc, and register entry.
+  Captured here as a third instance of the recital-loses-to-recipe-
+  momentum pattern within a single session arc (counts as evidence
+  for promotion of that pattern from provisional to graduated).
+
 [practice-core-retirement]: ../../plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.plan.md
 [never-disable]: ../../rules/never-disable-checks.md
 

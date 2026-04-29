@@ -1,6 +1,6 @@
 ---
 fitness_line_target: 400
-fitness_line_limit: 500
+fitness_line_limit: 525
 fitness_char_limit: 35000
 fitness_line_length: 200
 split_strategy: "Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here"
@@ -469,15 +469,18 @@ continuity snapshots.
   PDR-003 care-and-consult posture); status: pending. Evidence:
   displaced-doctrine sub-agent report from 2026-04-29 deep
   consolidation pass.
-- 2026-04-29; multi-agent-collaboration-protocol.plan.md plan-body
-  trim (~700 lines); doctrine has graduated to canonical surfaces
+- 2026-04-29; multi-agent-collaboration-protocol.plan.md concept-home
+  refinement; doctrine has graduated to canonical surfaces
   (agent-collaboration directive, respect-active-agent-claims rule,
   distilled.md, consolidate-docs §7e, PDR-029 Family A.3); plan body
-  still narrates the doctrine alongside execution status; trim is
-  pure subtractive but largest of the six audited plans; trigger:
-  owner direction (preserves audit-trail role for WS5 evidence
-  harvest); status: pending. Evidence: displaced-doctrine sub-agent
-  report from 2026-04-29 deep consolidation pass.
+  still narrates the doctrine alongside execution status; the work is
+  routing each section to its canonical home (or keeping it as
+  plan-scoped substance), not a size-target trim — line count falls
+  because duplication is removed; trigger: owner direction (preserves
+  audit-trail role for WS5 evidence harvest); status: pending. Evidence:
+  displaced-doctrine sub-agent report from 2026-04-29 deep consolidation
+  pass; child plan at
+  [`multi-agent-collaboration-protocol-concept-home-refinement.plan.md`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol-concept-home-refinement.plan.md).
 - 2026-04-29; trinity Active Principles + bootstrap structural
   extensions for the five 2026-04-29 doctrine sharpenings (knowledge-
   preservation absolute, shared-state always-writable, tool-error-as-

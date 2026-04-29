@@ -2,7 +2,7 @@
 provenance: provenance.yml
 fitness_line_target: 200
 fitness_line_limit: 300
-fitness_char_limit: 15000
+fitness_char_limit: 15500
 fitness_line_length: 100
 ---
 
@@ -96,6 +96,10 @@ consolidation, and transplantation close.
   threads, sidebars, joint decisions, and escalations; start-flow skills
   tell agents when to read it and UTC is canonical for collaboration
   timestamps.
++ **Shared-state writability smoke**: the canonical writer can write
+  to shared-state surfaces while a claim is held on the same path;
+  rules / skills / commands do not turn shared-state into write-blocked
+  surfaces (PDR-026 amendment 2026-04-29).
 + **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at `memory/active/patterns/` (engineering instances) and
   `practice-core/decision-records/` (Practice-governance patterns

@@ -123,6 +123,13 @@ This process is universal. It costs nothing and prevents shallow execution.
 - **Integration test**: units working together as code (not a running
   system). Simple mocks/fakes injected as parameters only. No global state
   access/manipulation. Naming convention varies by ecosystem.
+- **Classification by behaviour shape, not filename suffix.** Tests are
+  classified by what they actually do — does the test exchange protocol
+  with a separate running system, or does it import product code into
+  the test process? — not by what they are named. A `.e2e.test.ts`
+  filename does not exempt a test from in-process restrictions; the
+  behaviour-shape classification governs. Filename is signal, not
+  exemption. (Codified at testing-strategy amendment 2026-04-29.)
 - **Prohibited**: global state access/manipulation in tests -- environment
   variable reads/writes, global mock injection, module cache manipulation, or
   any mechanism that creates hidden coupling between tests.
@@ -215,6 +222,12 @@ adapter formats:
 - Agent-to-agent coordination is observable: consult active claims and
   decision threads before overlapping edits, leave a collaboration artefact,
   and close own claims at handoff
+- Shared-state files are always writable: claims on shared-state
+  surfaces (napkin, distilled, patterns, thread records, repo-continuity,
+  comms log, conversations, escalations, claims) are coordination
+  signals, not no-write locks. Writes are never blocked; the commit
+  queue / `git:index/head` window is the serialisation mechanism.
+  Anti-log-jam tradeoff per PDR-026 amendment 2026-04-29.
 
 ### The Knowledge Flow
 
@@ -641,10 +654,33 @@ validated across 3+ repos.
   afterward — compress, split, graduate, or raise limits as a separate
   structural pass. Constraining learning to avoid exceeding a count
   artificially underweights vital understanding. The concept must arrive
-  fully formed; the container adjusts to hold it.
+  fully formed; the container adjusts to hold it. Two valid responses
+  to a write that pushes a shared-state knowledge surface past
+  target/limit: write the insight in full and flag the file for
+  attention, OR thoughtful holistic promotion of mature concepts to
+  permanent homes. Forbidden: naive cutting, compression,
+  summarisation, splitting-for-budget, skipping the write, drafting a
+  "concise version" alongside the full version. (Codified at PDR-026
+  amendment 2026-04-29.)
 
 ### Active Principles
 
+- **Tool error as question.** Every signal-surface return (tool, hook,
+  reviewer, validator, type-checker, fitness signal, Edit-tool safety
+  contract) is a question about state. Three valid responses:
+  understand-and-address; understand-and-dismiss-with-rationale;
+  understand-and-stop. Never skip-understanding. The instinct of
+  "tool returns error → find bypass" is the named anti-pattern.
+  Codified at PDR-018 amendment 2026-04-29; instance patterns at
+  `.agent/memory/active/patterns/` (`tool-error-as-question`,
+  `hook-as-question-not-obstacle`, `ground-before-framing`).
+- **Reviewer scope equals prompted scope.** A reviewer's verdict is
+  scoped to the brief that briefed them. "GO WITH CONDITIONS" reads as
+  a green merge signal only when the reviewer's brief matches the
+  merge-gate scope. When asking a reviewer to gate merge, brief them
+  with the full merge-gate criteria. Conflating arc-scope with
+  merge-gate-scope is the named failure mode (`scope-as-goal`
+  pattern). Codified at PDR-015 amendment 2026-04-29.
 - **Metacognition is a technology, not a checklist.** Preserve named
   recursion, the affective break, and the grounding anchor. Replacing this with
   a planning template destroys the mechanism.
