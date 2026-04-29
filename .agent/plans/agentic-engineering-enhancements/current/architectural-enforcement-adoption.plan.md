@@ -122,7 +122,7 @@ Directory-complexity-related enforcement work is now split by disruption profile
 - **Goal:** Keep the dependency graph free from cycles, orphans, and forbidden
   layer-direction edges.
 - **Execution source:** completed dependency-cruiser child plan:
-  [depcruise-triage-and-remediation.plan.md](../../architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md).
+  [depcruise-triage-and-remediation.plan.md](../../architecture-and-infrastructure/archive/completed/depcruise-triage-and-remediation.plan.md).
 - **Rule intent:** dependency-cruiser owns graph shape. Package API, barrel,
   and deep-import enforcement are future ADR-166 enforcement-layer concerns,
   not directory-cardinality execution.

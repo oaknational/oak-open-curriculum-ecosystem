@@ -25,7 +25,7 @@ lesson: >
   no inline session histories. See distilled.md "Plan-as-artefact gravity"
   for the graduated form of this lesson.
 ported_evidence:
-  - .agent/plans/observability/active/pr-87-cluster-a-security-review.md
+  - .agent/plans/observability/archive/completed/pr-87-cluster-a-security-review.md
     (security re-review of FIND-001..009; methodology lesson on verifying
     load-bearing platform claims). Retained in active/.
   - Phase 1 vercel-ignore commits (9b2b2ed7, 84571ccf, 5d6622d0) — landed.
@@ -80,7 +80,7 @@ todos:
     content: "Phase 1B: Delete dormant `no-problem-hiding-patterns` rule cleanly (rule.ts, .unit.test.ts, plugin.ts registration). Single commit. Then write reinstate stub plan in observability/future/."
     status: pending
   - id: cluster-a-security-review
-    content: "Phase 2.1 pre-phase adversarial security review: COMPLETE 2026-04-28T11:54Z; RE-REVIEWED 2026-04-28T13:58Z. Re-review against current Vercel docs (https://vercel.com/docs/headers/request-headers, fetched 2026-04-28) found the original 'Vercel APPENDS to X-Forwarded-For' premise was contradicted by Vercel's documented OVERWRITE behaviour. FIND-001/002 reclassified MUST-FIX → HARDENING (no exploitable bypass on this deployment). FIND-003/004 SHOULD-FIX, FIND-005..009 HARDENING unchanged. Cure remains worth landing as defence-in-depth + configuration-drift insurance. Evidence at .agent/plans/observability/active/pr-87-cluster-a-security-review.md (re-assessment notice in frontmatter)."
+    content: "Phase 2.1 pre-phase adversarial security review: COMPLETE 2026-04-28T11:54Z; RE-REVIEWED 2026-04-28T13:58Z. Re-review against current Vercel docs (https://vercel.com/docs/headers/request-headers, fetched 2026-04-28) found the original 'Vercel APPENDS to X-Forwarded-For' premise was contradicted by Vercel's documented OVERWRITE behaviour. FIND-001/002 reclassified MUST-FIX → HARDENING (no exploitable bypass on this deployment). FIND-003/004 SHOULD-FIX, FIND-005..009 HARDENING unchanged. Cure remains worth landing as defence-in-depth + configuration-drift insurance. Evidence at .agent/plans/observability/archive/completed/pr-87-cluster-a-security-review.md (re-assessment notice in frontmatter)."
     status: completed
   - id: cluster-a-keygenerator-cure
     content: "Phase 2.0.5 (FIND-001/002, HARDENING after re-review): vercelAwareKeyGenerator + RateLimiterFactoryOptions in rate-limiter-factory.ts; isVercelRuntime gates header trust (x-vercel-forwarded-for ignored on non-Vercel because client-spoofable). Required parameter (no default) per wilma's footgun finding. Wired through createRateLimiters + application.ts (derives from runtimeConfig.env.VERCEL_ENV). 14 unit + 2 integration tests across both runtime branches. 5 reviewers absorbed (security re-review, code, type, wilma, test). Live preview verification scheduled post-push."
@@ -426,7 +426,7 @@ existing "misclassification" TSDoc as a substitute for the cure.
 
 **Pre-phase adversarial security review**: completed 2026-04-28T11:54Z by
 `security-reviewer` (claude-opus). Findings landed at
-[`pr-87-cluster-a-security-review.md`](pr-87-cluster-a-security-review.md):
+[`pr-87-cluster-a-security-review.md`](../completed/pr-87-cluster-a-security-review.md):
 **2 MUST-FIX, 2 SHOULD-FIX, 4 HARDENING**. The headline (FIND-001/FIND-002):
 `app.set('trust proxy', 1)` (`bootstrap-helpers.ts:246`) plus default
 `keyGenerator` (no override at `rate-limiter-factory.ts:71-80`) means a single

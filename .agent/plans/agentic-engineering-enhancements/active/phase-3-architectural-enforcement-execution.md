@@ -79,7 +79,7 @@ Execution ownership changed for part of this stream:
   - completed dependency-cruiser ownership is recorded without duplicating the
     child plan task breakdown
 - Deterministic validation:
-  - `rg -n "depcruise-triage-and-remediation\\.plan\\.md|dependency-cruiser" ../architectural-enforcement-adoption.plan.md ../../architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
+  - `rg -n "depcruise-triage-and-remediation\\.plan\\.md|dependency-cruiser" ../architectural-enforcement-adoption.plan.md ../../architecture-and-infrastructure/archive/completed/depcruise-triage-and-remediation.plan.md`
 
 ### Task 3.4 (Source Phase 4): Knip Integration
 

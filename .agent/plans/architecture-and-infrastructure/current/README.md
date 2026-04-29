@@ -31,7 +31,7 @@ Quality gate hardening (promoted from future/ 2026-04-11):
 |----------|------|-------|--------|
 | P0 | [quality-gate-hardening.plan.md](./quality-gate-hardening.plan.md) | Unified plan for all pending quality gate promotions and enforcement hardening | Owner decisions resolved, ADR-121 reconciled |
 | P0 | [knip-triage-and-remediation.plan.md](../archive/completed/knip-triage-and-remediation.plan.md) | Child plan: run knip, investigate findings with evidence, remediate | **Complete** (all phases resolved 2026-04-12; archived 2026-04-17) |
-| P1 | [depcruise-triage-and-remediation.plan.md](./depcruise-triage-and-remediation.plan.md) | Child plan: triage depcruise findings, resolve circular deps and orphans, promote to blocking gate | **Complete** (all phases resolved 2026-04-12; archive cleanup pending) |
+| P1 | [depcruise-triage-and-remediation.plan.md](../archive/completed/depcruise-triage-and-remediation.plan.md) | Child plan: triage depcruise findings, resolve circular deps and orphans, promote to blocking gate | **Complete** (all phases resolved 2026-04-12; archived 2026-04-29) |
 
 Related strategic umbrella:
 

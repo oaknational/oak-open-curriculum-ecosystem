@@ -25,7 +25,7 @@ Remediation and merge hygiene:
 
 | Plan | Scope | Status |
 |---|---|---|
-| [ci-green-for-merge.plan.md](./ci-green-for-merge.plan.md) | Keep CI green through the Sentry + practice-enforce merge | In-flight — `verify-ci-green` todo pending. |
+| [ci-green-for-merge.plan.md](../archive/completed/ci-green-for-merge.plan.md) | Keep CI green through the Sentry + practice-enforce merge | **Complete** — PR #70 long since merged; archived 2026-04-29. |
 | [eslint-disable-remediation.plan.md](./eslint-disable-remediation.plan.md) | Remove 64 actionable `eslint-disable` comments | In-progress — 7 todo categories pending. |
 | [typescript-6-migration-and-workspace-script-rules.plan.md](../archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md) | TS6 migration closeout + workspace-script architectural rules (workspace-to-root-script ban; all-TS-scripts; runtime-only-scripts directory exception) | **Complete** — landed across `a34f8402`–`dcd45776` and ratified by [ADR-168](../../../../docs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md); plan archived 2026-04-29 (Verdant Regrowing Pollen). |
 
