@@ -1,10 +1,24 @@
 # Next-Session Record — `pr-90-build-fix-landing` thread
 
 **Last refreshed**: 2026-04-29 (Solar Threading Star / claude-code /
-claude-opus-4-7-1m / `6d68d6` — thread registered at session open after
-grounding the failing CI surface and Sonar gate, completing metacognition,
-and authoring the closure plan. No code yet edited; session paused before
-execution per owner direction.)
+claude-opus-4-7-1m / `6d68d6` — Phases 0–5 of the closure plan executed.
+Five commits landed and pushed: `b8540657` TS-invocation alignment across
+CI/docs/research (5 surfaces; Phase 0 audit caught 2 sibling drift sites the
+handoff missed); `78718b3b` Sonar mechanical sweep of 12 OPEN/CONFIRMED issues
+across 4 `scripts/validate-*` files; `532b0871` removal of duplicate H3 in
+archived napkin (post-push Cursor Bugbot finding); `bdcf21ae` local-detection
+gate for `node scripts/X.{mjs,ts,js}` patterns (10 unit + 1 integration test,
++11 tests under `pnpm test:root-scripts`); plus the Phase 5 commit enabling
+markdownlint MD024 with `siblings_only: true` and fixing the 3 sibling-level
+duplicates surfaced. The owner's external-detection principle ("where an
+external system catches a problem, ask if it could be caught locally and
+either implement it or raise with effort/risk/ROI") drove Phases 4 and 5;
+both gaps caught externally on this PR are now closed by local quality gates.
+All required CI gates green on PR-90: test ✓, SonarCloud Code Analysis ✓
+(0 OPEN/CONFIRMED, 50 FIXED), CodeQL ✓, Cursor Bugbot ✓, Vercel ✓. Practice
+fitness: SOFT-only (0 hard, 0 critical, 19 soft). Outstanding precondition
+is owner manual MCP server validation — agent-completable work for this PR
+is done.)
 
 ## Thread Identity
 
@@ -32,36 +46,48 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**This session (Solar Threading Star)**: planning landing only — author the
-PR #90 closure plan and register the thread. Plan landed at
-[`pr-90-landing-closure.plan.md`](../../../plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md).
-No code edits committed.
+**This session (Solar Threading Star)**: closure plan executed end-to-end.
+Phases 0–3 complete; PR-90 is in agent-completable terminal state. Outstanding
+gate is owner manual MCP server validation only.
 
-Evidence:
+Evidence (commits, all pushed to `fix/build_issues`):
 
+- `b8540657` — `fix(build): align ts-script invocation pattern across ci, docs, and research`
+- `78718b3b` — `chore(sonar): mechanical sweep of 12 quality-gate issues across validate-* scripts`
+- `532b0871` — `chore(napkin): remove duplicate heading in archived 2026-04-29 napkin`
+- `bdcf21ae` — `test(scripts): add local detection gate for stale node scripts/X.{mjs,ts,js} patterns`
+- _(Phase 5 commit pending push)_ — enable markdownlint MD024 with `siblings_only: true`; fix 3 sibling-level duplicate-heading violations
+
+PR-90 verification:
+
+- All required CI gates green: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/90>
+- Sonar PR analysis: <https://sonarcloud.io/dashboard?id=oaknational_oak-open-curriculum-ecosystem&pullRequest=90> — 0 OPEN/CONFIRMED, 50 FIXED.
+- Closure comment with local-detection register: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/90#issuecomment-4346625386>
+- Follow-up comment with sharper MD024 finding: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/90#issuecomment-4346657905>
 - Plan: `.agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md`
-- Active claim: `21943b5a-555f-429e-85af-20709ef9afea` in
-  `.agent/state/collaboration/active-claims.json`
-- Comms event: `853b358d-bb36-4774-9ce0-3bb9be612588.json`
-- Failing CI: <https://github.com/oaknational/oak-open-curriculum-ecosystem/actions/runs/25107898664>
-- Sonar PR analysis: <https://sonarcloud.io/dashboard?id=oaknational_oak-open-curriculum-ecosystem&pullRequest=90>
+- Active claim `21943b5a` to be closed at session-handoff.
 
 ## Next Landing Target
 
-Execute the plan in three phases:
+**Owner-only**: manual MCP server validation, then squash-merge PR-90 to
+`main`. No further agent execution required for this thread before merge.
 
-1. **Phase 0** — Repo-wide grep audit confirming no TS-invocation drift
-   sites beyond the three named (ci.yml × 2, build-system.md, research
-   example).
-2. **Phase 1** — Single commit aligning CI + docs + research example on
-   `pnpm exec tsx scripts/<script>.ts`.
-3. **Phase 2** — Single commit applying 12 mechanical Sonar fixes
-   (S2871×2, S7735×4, S7778, S7780×3, S7781, S6557).
-4. **Phase 3** — Full quality-gate sweep, CI/Sonar verification, post PR
-   comment surfacing MCP manual validation as owner precondition.
+Post-merge work (out-of-scope for this thread but raised in the PR-90
+closure register at <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/90#issuecomment-4346625386>):
 
-Owner-only precondition before merge: manual MCP server validation. Agent
-must surface this explicitly; do not gate on it.
+1. **Workflow + markdown TS-invocation lint** — root-script test that greps
+   `.github/workflows/*.yml` and authored markdown for `node scripts/*` and
+   asserts canonical `pnpm exec tsx scripts/<script>.ts` form. ~20 min effort,
+   very high ROI; closes the class of drift this PR cleaned up.
+2. **`markdownlint` MD024 re-enable** — currently globally disabled in
+   `.markdownlint.json` (`"no-duplicate-heading": false`). Probable config:
+   `siblings_only: true` to permit patterned repeated headings under different
+   parents. ~10 min effort + impact-scoped enable; closes the duplicate-heading
+   detection gap that Cursor Bugbot caught twice on this PR.
+3. **`eslint-plugin-sonarjs` rule activation** — owned by the existing
+   multi-phase plan
+   [`sonarjs-activation-and-sonarcloud-backlog.plan.md`](../../../plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md).
+   The 12 Sonar fixes landed in `78718b3b` reduce the activation backlog.
 
 ## Session Shape and Grounding Order
 

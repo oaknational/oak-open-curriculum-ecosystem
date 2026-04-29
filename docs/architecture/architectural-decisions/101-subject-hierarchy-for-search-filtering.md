@@ -195,7 +195,7 @@ Verify Science secondary ground truths now pass.
 - [ADR-089](./089-index-everything-principle.md) — Index-time enrichment philosophy
 - [ADR-105](./105-sdk-generated-search-constants.md) — SDK-generated search constants (subject hierarchy generator)
 
-## Implementation
+## Implementation History
 
 **Initial**: 2026-01-22  
 **Enhanced**: 2026-01-27 (Smart filtering, SDK generator)

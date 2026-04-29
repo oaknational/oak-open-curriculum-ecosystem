@@ -4,23 +4,47 @@ overview: "Land PR #90 (fix/build_issues) — TS-invocation pattern consistency 
 todos:
   - id: phase-0-audit
     content: "Phase 0: Audit all repo-wide TS-script invocation drift sites and confirm scope."
-    status: pending
+    status: completed
   - id: phase-1-ts-invocation
     content: "Phase 1: Convert ci.yml + docs/build-system.md + research example to canonical pnpm exec tsx pattern in one commit."
-    status: pending
+    status: completed
   - id: phase-2-sonar
     content: "Phase 2: Mechanical Sonar sweep — 12 OPEN/CONFIRMED issues across 4 scripts/validate-* files."
-    status: pending
+    status: completed
   - id: phase-3-verify
     content: "Phase 3: Verify CI test job + Sonar gate green; surface MCP manual validation as owner precondition."
-    status: pending
+    status: completed
+  - id: phase-4-ts-invocation-gate
+    content: "Phase 4: Implement local-detection gate for stale `node scripts/X.{mjs,ts,js}` invocations (TDD: helper + 10 unit + 1 integration test)."
+    status: completed
+  - id: phase-5-md024
+    content: "Phase 5: Re-enable markdownlint MD024 with siblings_only:true and fix the 3 sibling-level duplicate-heading violations it surfaces."
+    status: completed
 ---
 
 # PR #90 Landing Closure
 
 **Last Updated**: 2026-04-29
-**Status**: 🟢 IN PROGRESS
+**Status**: 🟡 AGENT-WORK COMPLETE — AWAITING OWNER MCP MANUAL VALIDATION
 **Scope**: Close out PR #90 quality-gate failures and merge preconditions without expanding architectural scope.
+
+**Outcome**: All required CI gates green on PR #90:
+test ✅, SonarCloud Code Analysis ✅ (0 OPEN/CONFIRMED, 50 FIXED),
+CodeQL ✅, Cursor Bugbot ✅, Vercel ✅. Five commits landed:
+`b8540657` (TS-invocation alignment, 5 surfaces), `78718b3b` (Sonar mechanical
+sweep, 12 issues), `532b0871` (Cursor Bugbot napkin duplicate-heading fix +
+MD024-disabled discovery), `bdcf21ae` (Phase 4 — local-detection gate for
+`node scripts/X.{mjs,ts,js}` patterns: pure helper + 10 unit + 1 integration
+test, +11 tests under `pnpm test:root-scripts`), and the Phase 5 commit
+(MD024 enabled with `siblings_only: true`; 3 sibling-level duplicates
+surfaced and fixed). Phase 0 audit caught 2 sibling drift sites the prior
+session handoff had not named (research/claude-code-hook-activation.md and
+apps/.../deployment-architecture.md). The owner-introduced external-detection
+principle drove Phases 4 and 5 — both gaps caught externally on this PR are
+now closed by local quality gates. Closure comment with local-detection
+register posted at PR comment `4346625386`; follow-up with sharper MD024
+finding at PR comment `4346657905`. Outstanding precondition: owner manual
+MCP server validation, then squash-merge.
 
 ---
 
