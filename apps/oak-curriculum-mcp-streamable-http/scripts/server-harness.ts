@@ -164,7 +164,7 @@ async function main() {
         ...options,
         getWidgetHtml: () => WIDGET_HTML_CONTENT,
         setupSentryErrorHandler:
-          runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+          runtimeConfig.env.SENTRY_MODE === 'off' ? undefined : setupExpressErrorHandler,
       }),
     bootstrapApp,
     createServer: (app) => http.createServer(app),

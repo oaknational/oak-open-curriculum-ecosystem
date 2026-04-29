@@ -36,7 +36,7 @@ function readPackageJsonVersion(rawJson: string): string | undefined {
 
 function trimToUndefined(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
+  return trimmed || undefined;
 }
 
 function fail(message: string): never {

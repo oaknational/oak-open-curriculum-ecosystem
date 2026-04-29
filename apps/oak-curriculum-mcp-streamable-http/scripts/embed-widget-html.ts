@@ -40,7 +40,7 @@ try {
   }
   throw error;
 }
-const escaped = html.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+const escaped = html.replaceAll('\\', '\\\\').replaceAll('`', '\\`').replaceAll('${', '\\${');
 
 mkdirSync(dirname(outputPath), { recursive: true });
 

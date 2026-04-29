@@ -50,4 +50,7 @@ Field data remains derived from `@oaknational/sdk-codegen/search` so source-of-t
 
 - `packages/libs/search-contracts/README.md`
 - `packages/libs/search-contracts/src/field-inventory.integration.test.ts`
-- `.agent/plans/semantic-search/archive/completed/field-integrity-test-manifest.json`
+- `vitest.field-integrity.config.ts` (explicit `include` array — replaces
+  the previous `field-integrity-test-manifest.json` indirection per
+  ADR-168's all-TS-scripts rule and the testing-strategy directive's
+  vitest-direct invocation principle)

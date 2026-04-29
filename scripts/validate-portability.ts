@@ -60,10 +60,10 @@ function extractFrontmatter(content) {
 }
 
 function getFrontmatterValue(frontmatter, key) {
-  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`^${escapedKey}:\\s*(.+)$`, 'm');
+  const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  const regex = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm');
   const match = frontmatter.match(regex);
-  return match?.[1]?.trim().replace(/^['"]|['"]$/g, '') ?? '';
+  return match?.[1]?.trim().replaceAll(/^['"]|['"]$/g, '') ?? '';
 }
 
 async function listFiles(relDir, extension) {
@@ -360,7 +360,7 @@ const canonicalAgentNames = [
     ...claudeAgentFiles.map((file) => path.basename(file, '.md')),
     ...codexAgentFiles.map((file) => path.basename(file, '.toml')),
   ]),
-].sort();
+].sort((a, b) => a.localeCompare(b));
 
 for (const issue of getReviewerAdapterParityIssues({
   cursorAgentFiles,

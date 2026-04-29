@@ -42,7 +42,13 @@ export function isClaudeHookWired(claudeSettings, hookCommand = CLAUDE_HOOK_COMM
 }
 
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+}
+
+function stripDirAndExtension(filePath, extension) {
+  const lastSlash = filePath.lastIndexOf('/');
+  const basename = lastSlash >= 0 ? filePath.slice(lastSlash + 1) : filePath;
+  return basename.endsWith(extension) ? basename.slice(0, -extension.length) : basename;
 }
 
 export function isClaudeHookWiredInText(claudeSettingsText, hookCommand = CLAUDE_HOOK_COMMAND) {
@@ -141,7 +147,7 @@ export function getSkillPermissionIssues({
   );
 
   for (const file of claudeCommandFiles) {
-    const commandName = file.replace(/^.*\/|\.md$/gu, '');
+    const commandName = stripDirAndExtension(file, '.md');
     if (!permittedSkills.has(commandName)) {
       issues.push(
         `${claudeSettingsPath}: Claude command adapter "${commandName}" has no Skill(${commandName}) entry in permissions.allow`,
@@ -167,18 +173,18 @@ export function getReviewerAdapterParityIssues({
 }) {
   const issues = [];
   const cursorAgentNames = new Set(
-    cursorAgentFiles.map((file) => file.replace(/^.*\/|\.md$/gu, '')),
+    cursorAgentFiles.map((file) => stripDirAndExtension(file, '.md')),
   );
   const claudeAgentNames = new Set(
-    claudeAgentFiles.map((file) => file.replace(/^.*\/|\.md$/gu, '')),
+    claudeAgentFiles.map((file) => stripDirAndExtension(file, '.md')),
   );
   const codexAgentNames = new Set(
-    codexAgentFiles.map((file) => file.replace(/^.*\/|\.toml$/gu, '')),
+    codexAgentFiles.map((file) => stripDirAndExtension(file, '.toml')),
   );
 
   const canonicalAgentNames = [
     ...new Set([...cursorAgentNames, ...claudeAgentNames, ...codexAgentNames]),
-  ].sort();
+  ].sort((a, b) => a.localeCompare(b));
 
   for (const agentName of canonicalAgentNames) {
     if (!cursorAgentNames.has(agentName)) {
@@ -217,13 +223,13 @@ export function getRulesIndexPortabilityIssues({
   const canonicalRuleSet = new Set(canonicalRuleFiles);
   const indexedRuleSet = new Set(extractCanonicalRulePaths(rulesIndexContent));
 
-  for (const ruleFile of [...canonicalRuleSet].sort()) {
+  for (const ruleFile of [...canonicalRuleSet].sort((a, b) => a.localeCompare(b))) {
     if (!indexedRuleSet.has(ruleFile)) {
       issues.push(`${rulesIndexPath}: missing canonical rule entry ${ruleFile}`);
     }
   }
 
-  for (const indexedRuleFile of [...indexedRuleSet].sort()) {
+  for (const indexedRuleFile of [...indexedRuleSet].sort((a, b) => a.localeCompare(b))) {
     if (!canonicalRuleSet.has(indexedRuleFile)) {
       issues.push(`${rulesIndexPath}: references non-canonical rule ${indexedRuleFile}`);
     }

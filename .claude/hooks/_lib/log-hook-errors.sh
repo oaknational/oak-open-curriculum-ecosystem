@@ -31,14 +31,14 @@ trap 'rm -f "$stderr_capture"' EXIT
 "$@" 2>"$stderr_capture"
 ec=$?
 
-if [ "$ec" -ne 0 ]; then
+if [[ "$ec" -ne 0 ]]; then
   {
     printf '[%s] hook-error\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     printf '  exit:    %d\n' "$ec"
     printf '  cmd:     %s\n' "$*"
     printf '  cwd:     %s\n' "$PWD"
     printf '  project: %s\n' "$project_dir"
-    if [ -s "$stderr_capture" ]; then
+    if [[ -s "$stderr_capture" ]]; then
       printf '  stderr:\n'
       sed 's/^/    /' "$stderr_capture"
     fi
@@ -47,7 +47,7 @@ if [ "$ec" -ne 0 ]; then
 fi
 
 # Re-emit captured stderr so the harness still records it.
-if [ -s "$stderr_capture" ]; then
+if [[ -s "$stderr_capture" ]]; then
   cat "$stderr_capture" >&2
 fi
 

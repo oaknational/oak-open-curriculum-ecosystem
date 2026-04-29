@@ -43,17 +43,19 @@ export function parseTurboSummary(summaryJson) {
     const tasks = readArray(summaryRecord.tasks, 'Turbo summary field "tasks"').map(
       (taskValue, index) => {
         const taskRecord = readRecord(taskValue, `Turbo summary task at index ${index}`);
+        const taskIdLabel = `Turbo summary task ${index} field "taskId"`;
+        const taskId = readString(taskRecord.taskId, taskIdLabel);
         const taskExecutionRecord = readRecord(
           taskRecord.execution,
-          `Turbo summary task "${readString(taskRecord.taskId, `Turbo summary task ${index} field "taskId"`)}" field "execution"`,
+          `Turbo summary task "${taskId}" field "execution"`,
         );
         const cacheRecord = readRecord(
           taskRecord.cache,
-          `Turbo summary task "${readString(taskRecord.taskId, `Turbo summary task ${index} field "taskId"`)}" field "cache"`,
+          `Turbo summary task "${taskId}" field "cache"`,
         );
 
         return {
-          taskId: readString(taskRecord.taskId, `Turbo summary task ${index} field "taskId"`),
+          taskId,
           taskName: readString(taskRecord.task, `Turbo summary task ${index} field "task"`),
           packageName: readString(
             taskRecord.package,

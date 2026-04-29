@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import process from 'node:process';
+
 /**
  * Request Runner for Production Build Harness
  *
@@ -15,9 +17,9 @@
  */
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3001';
-const TIMEOUT_MS = parseInt(process.env.TIMEOUT_MS ?? '10000', 10);
-const RETRY_HEALTH_ATTEMPTS = parseInt(process.env.RETRY_HEALTH_ATTEMPTS ?? '30', 10);
-const RETRY_HEALTH_DELAY_MS = parseInt(process.env.RETRY_HEALTH_DELAY_MS ?? '1000', 10);
+const TIMEOUT_MS = Number.parseInt(process.env.TIMEOUT_MS ?? '10000', 10);
+const RETRY_HEALTH_ATTEMPTS = Number.parseInt(process.env.RETRY_HEALTH_ATTEMPTS ?? '30', 10);
+const RETRY_HEALTH_DELAY_MS = Number.parseInt(process.env.RETRY_HEALTH_DELAY_MS ?? '1000', 10);
 
 type LogLevel = 'INFO' | 'ERROR' | 'SUCCESS';
 type LogMeta = Readonly<Record<string, unknown>>;
@@ -159,7 +161,7 @@ async function executeRequest(scenario: RequestScenario): Promise<RequestResult>
     status = response.status;
 
     const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       responseBody = await response.json();
     } else {
       responseBody = await response.text();
@@ -309,5 +311,3 @@ async function main(): Promise<void> {
 }
 
 await main();
-
-export {};

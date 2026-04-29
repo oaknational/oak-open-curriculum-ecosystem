@@ -35,7 +35,7 @@
     "test": "turbo run --continue test",
     "test:widget": "turbo run --continue test:widget",
     "test:root-scripts": "vitest run --config vitest.config.ts && pnpm exec tsx scripts/validate-eslint-boundaries.ts",
-    "test:field-integrity": "pnpm exec tsx scripts/run-field-integrity-tests.ts",
+    "test:field-integrity": "vitest run --config vitest.field-integrity.config.ts",
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",
     "test:ui": "turbo run --continue test:ui",

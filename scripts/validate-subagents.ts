@@ -53,8 +53,8 @@ function extractFrontmatter(content) {
  * @param {string} key
  */
 function getFrontmatterValue(frontmatter, key) {
-  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`^${escapedKey}:\\s*(.+)$`, 'm');
+  const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  const regex = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm');
   const match = frontmatter.match(regex);
   return match?.[1]?.trim() ?? '';
 }
@@ -146,9 +146,7 @@ for (const wrapperFile of wrapperFiles) {
   }
 }
 
-if (!(await exists(CODEX_CONFIG_PATH))) {
-  addIssue(`Missing Codex project-agent registry: ${CODEX_CONFIG_PATH}`);
-} else {
+if (await exists(CODEX_CONFIG_PATH)) {
   const codexRegistrations = parseCodexRegistrations(await readText(CODEX_CONFIG_PATH));
   const { issues: registrationIssues, registrationsByName: resolvedRegistrationsByName } =
     getCodexRegistrationValidation({
@@ -162,6 +160,8 @@ if (!(await exists(CODEX_CONFIG_PATH))) {
   for (const [agentName, configFile] of resolvedRegistrationsByName.entries()) {
     codexRegistrationsByName.set(agentName, configFile);
   }
+} else {
+  addIssue(`Missing Codex project-agent registry: ${CODEX_CONFIG_PATH}`);
 }
 
 for (const codexAdapterFile of codexAdapterFiles) {
