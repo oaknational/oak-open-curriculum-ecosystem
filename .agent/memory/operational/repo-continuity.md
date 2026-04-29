@@ -8,7 +8,28 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-29T17:30Z (Nebulous Illuminating Satellite /
+**Last refreshed**: 2026-04-29T21:30Z (Solar Threading Star / claude-code /
+claude-opus-4-7-1m / `6d68d6` — PR #90 closure thread complete; owner manual
+MCP validation confirmed; PR ready for squash-merge. 13 commits this session
+across 7 phases: TS-invocation alignment (5 surfaces, 2 sibling drift sites
+caught by Phase 0 audit beyond the handoff's 3 named), Sonar mechanical sweep
+(12 issues), Cursor Bugbot napkin fix, local-detection gate (TDD pure helper +
+unit + integration → refactored to canonical validator pattern + standalone
+script after testing-strategy compliance challenge), MD024 enabled with
+`siblings_only: true` (3 sibling-level duplicates surfaced and fixed; rule was
+globally disabled), validator-pattern test-strategy refactor, future +
+executable plans for `scripts/validate-*` family workspace migration (4
+parallel reviewer consensus), future plan for Vercel build-warning elimination
+(2 classes from full 4006-event log read), `.gitignore` for
+scheduled_tasks.lock, owner-MCP-validation closeout. Plus end-of-session
+sharpening: caught real bug in `breadth-as-evasion.md` (broken machine-local
+link refs); principle "No absolute paths" graduated to "No machine-local paths"
+with the three forbidden + three permitted shapes named explicitly; new
+canonical rule `.agent/rules/no-machine-local-paths.md` with thin adapters
+across all 4 platforms; `RULES_INDEX.md` updated. PR comments posted (5
+total). Outstanding: owner squash-merge of PR #90.
+
+**Earlier refresh**: 2026-04-29T17:30Z (Nebulous Illuminating Satellite /
 claude-code / claude-opus-4-7-1m / `fe4acc` — deeper /jc-consolidate-docs
 convergence run + deferred-items plan family + trinity Active Principles
 extensions per-diff approval, landed across 6 commits (`123396e2`,
@@ -96,7 +117,7 @@ live in each thread record; this table is the repo-level index.
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Squally Diving Anchor / `codex` / `GPT-5` / sector-engagement-taxonomy-and-handoff / 2026-04-29. |
-| `pr-90-build-fix-landing` | Branch closeout — PR #90 (`fix/build_issues` → `main`); Sonar quality gate, Copilot review comments, Cursor Bugbot findings, ci.yml stale `.mjs` reference, owner manual MCP server validation | [`threads/pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md) | Solar Threading Star / `claude-code` / `claude-opus-4-7-1m` / pr-90-landing-closure-planner / 2026-04-29 (and prior fix/build_issues sessions: Verdant Swaying Fern, Verdant Regrowing Pollen, Ethereal Illuminating Comet, Nebulous Weaving Dusk, Nebulous Illuminating Satellite). |
+| `pr-90-build-fix-landing` | Branch closeout — PR #90 (`fix/build_issues` → `main`); all CI gates green, owner MCP manual validation confirmed; ready for squash-merge | [`threads/pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md) | Solar Threading Star / `claude-code` / `claude-opus-4-7-1m` / pr-90-landing-closure-and-machine-local-paths-rule / 2026-04-29 (and prior fix/build_issues sessions: Verdant Swaying Fern, Verdant Regrowing Pollen, Ethereal Illuminating Comet, Nebulous Weaving Dusk, Nebulous Illuminating Satellite). |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -316,6 +337,41 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-04-29; PR-90 closure session — `breadth-as-evasion.md` machine-local
+  link refs; principle "No absolute paths" → "No machine-local paths" with
+  three forbidden + three permitted shapes; new canonical rule
+  `.agent/rules/no-machine-local-paths.md` with worked-example catalogue;
+  thin adapters across `.claude/`, `.cursor/`, `.agents/`; `RULES_INDEX.md`
+  updated; status: graduated 2026-04-29 (this session).
++ 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
+  structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
+  owner-direction "complex-with-tests must live in workspace"; 4 parallel
+  architecture reviewers convergent; future + executable plans authored
+  ([`current/scripts-validator-family-workspace-migration.plan.md`](../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md));
+  Phase 0 of the executable plan graduates the owner-direction rule to
+  `.agent/rules/no-workspace-evading-scripts.md` and authors ADR delta or
+  peer ADR via docs-adr-reviewer; trigger: owner directs Phase 0 OR third
+  validator class accumulated; status: pending.
++ 2026-04-29; PR-90 closure session — `external-systems-shouldnt-be-the-
+  first-detector` principle introduced by owner mid-session, drove Phases 4
+  and 5 (TS-invocation gate + MD024 enable). Recursively useful (caught its
+  own meta-instances via Cursor Bugbot napkin finding). PDR candidate to
+  graduate the principle to canonical Practice doctrine; trigger: owner
+  direction OR second session where the principle applies; status: pending.
++ 2026-04-29; PR-90 closure session — testing-strategy.md §Test Types named
+  "validation scripts that require external resources should be standalone
+  scripts, not tests" caught my Phase 4 misclassification (vitest-as-
+  validator-harness). The principle is sound but lives in one paragraph;
+  worth elaborating in `docs/engineering/testing-tdd-recipes.md` with the
+  contrast pattern (validator script + helper unit tests vs integration test
+  on real-FS repo state); trigger: second similar misclassification OR
+  owner direction; status: pending.
++ 2026-04-29; PR-90 closure session — Vercel build emits 2 warning classes
+  (pnpm `@humanfs/node` bin defect; 3 env vars not in `turbo.json`).
+  Captured in
+  [`future/vercel-build-warning-elimination.plan.md`](../../plans/architecture-and-infrastructure/future/vercel-build-warning-elimination.plan.md).
+  Trigger: third warning class accumulates OR owner direction; status:
+  pending (future plan).
 + 2026-04-29; doctrine sharpening on knowledge-preservation absolutism +
   shared-state always-commitable; surfaces graduated to napkin SKILL,
   consolidate-docs command, respect-active-agent-claims rule, distilled.md;

@@ -221,6 +221,52 @@ Non-planning process entries graduated on 2026-04-24 to:
 `documentation-hygiene`, reviewer doctrine, build-system doctrine,
 practice verification, and the collaboration directive.
 
+**Stated principles require structural enforcement.** A principle
+that names a class of bug will eventually catch its own author. The
+cure is mechanical: rule files (`.agent/rules/`), validators
+(`scripts/validate-*` or workspace validators), ESLint rules, type
+guards, schema validation. Stating a principle in `principles.md`
+without an enforcement surface is a known failure mode — the
+"no absolute paths" rule was in `principles.md` for months while
+patterns under `.agent/memory/active/patterns/` embedded machine-
+local link refs that the principle should have prevented. Sharpened
+2026-04-29 to "no machine-local paths" with three forbidden + three
+permitted shapes named explicitly, and operationalised via
+`.agent/rules/no-machine-local-paths.md` + thin platform adapters.
+Sibling case: `gate-off-fix-gate-on` was named in plan prose for
+weeks before the owner-direction graduated it to anti-pattern doctrine
+plus the `never-disable-checks.md` rule on 2026-04-29.
+
+**External-system findings tell you about your local detection
+gap, not just the immediate bug.** When SonarCloud, Copilot, or
+Cursor Bugbot catches something in your PR, ask: could this have
+been caught locally? If yes, by what method? Implement or raise
+with effort/risk/ROI. The principle is recursively useful: each
+external finding generates a local-detection question, and applying
+that question can surface meta-instances (Cursor Bugbot finding a
+duplicate heading → reveals MD024 globally disabled). The
+implementation choice depends on scope: regression-prevention gates
+for classes the current PR fixed belong inline; pre-existing
+findings independent of PR scope belong in follow-up plans with
+captured effort/risk/ROI. Owner-introduced 2026-04-29 during PR-90
+closure; drove Phases 4 and 5 of that plan.
+
+**Validation scripts are not tests.** A vitest test file that walks
+the real repo file system and asserts a property of repo state is
+running a validator, not testing code behaviour. testing-strategy.md
+§Test Types names this: "Validation scripts that require external
+resources should be standalone scripts, not tests." Caught 2026-04-29
+when my Phase 4 integration test for the TS-invocation gate was
+revealed as a thinly-disguised validator. Refactor: pure helper
+(unit-tested) + standalone runtime script following the
+`validate-eslint-boundaries.ts` shape, wired into
+`pnpm test:root-scripts`. Five existing peers in `scripts/`
+(validate-portability, validate-fitness-vocabulary, etc.) match the
+correct shape for their helpers — all of them belong in a workspace
+per the broader "complex-with-tests must live in a workspace" rule
+(scheduled in
+[`current/scripts-validator-family-workspace-migration.plan.md`](../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md)).
+
 ## Architecture (Agent Infrastructure)
 
 <!-- "Implicit architectural intent is not enforced principle" graduated

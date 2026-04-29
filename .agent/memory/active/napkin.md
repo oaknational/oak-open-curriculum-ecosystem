@@ -263,3 +263,106 @@ serialisation mechanism is the commit queue / `git:index/head` window.
   collaboration event rather than an inconvenience. First preserve the peer's
   worktree contents, then make the index ownership change visible to the peer,
   and only then proceed with a fresh queue entry.
+
+## 2026-04-29 — PR #90 closure session (Solar Threading Star)
+
+### Surprise 1 — vitest as harness for "lint the repo state" misclassified the test
+
+- **Expected**: my Phase 4 helper + unit tests + integration test followed
+  the "canonical pattern" set by `validate-portability.integration.test.ts`.
+- **Actual**: when the owner asked "are these tests doing the right thing
+  at the right level with the right tools", reading testing-strategy.md
+  cold revealed the integration test was a **validator-script wearing a
+  vitest harness**. testing-strategy.md §Test Types names exactly this:
+  "Validation scripts that require external resources should be standalone
+  scripts, not tests." My "integration test" walked the real repo FS and
+  asserted a property of repo state — that's not testing code behaviour;
+  it's running a validator. The fact that 5 existing peers in `scripts/`
+  did the same thing was not canon, just shared drift.
+- **Fix**: deleted the integration test; created
+  `scripts/validate-no-stale-script-invocations.ts` as a standalone runtime
+  following the `validate-eslint-boundaries.ts` shape; wired into
+  `pnpm test:root-scripts`. Unit tests stayed (they test the pure helper —
+  legitimate); collapsed three near-duplicate cases into one `it.each`
+  parameterised proof; added the missing edge case (two matches on same
+  line).
+- **Pattern shape note**: "look at peers" is a useful first orientation,
+  but peers can be drift. The canonical-pattern test is:
+  does it match the named guidance in the directives, not just what other
+  files in the same directory do?
+
+### Surprise 2 — `scripts/` is an undeclared tier; the whole validator family needs migration
+
+- **Expected**: aligning with `validate-portability.ts` etc. as the
+  "canonical pattern" was the right architectural call.
+- **Actual**: the owner immediately raised "anything complex enough to
+  need tests MUST be moved into a proper workspace". Four parallel
+  architecture reviewers (Barney/Betty/Fred/Wilma) confirmed: `scripts/`
+  is not in `pnpm-workspace.yaml`, not in ADR-041's tier table, not in
+  `eslint-plugin-standards/boundary.ts`. Yet it hosts ~2,335 lines of
+  validator logic (`validate-portability` 553L, `validate-practice-fitness`
+  685L, `validate-fitness-vocabulary` 216L, `validate-subagents` 230L,
+  `validate-eslint-boundaries` ~80L, plus my new ~250L). All have helpers
+  - unit (some + integration) tests. The pattern is invisible to the
+  workspace tooling estate (depcruise, boundary rules, type-check, turbo).
+- **Fix**: future + current plans authored
+  (`scripts-validator-family-workspace-migration.plan.md`); Phase 0
+  resolves the Build-vs-Buy via assumptions-reviewer (default
+  `agent-tools/`; Betty argues for new workspace on cohesion grounds);
+  Phase 1 pilot-migrates the new validator (zero coupling, smallest
+  surface); Phases 2–6 batch the rest, fix the cross-workspace src/
+  bypass in `validate-eslint-boundaries`, consolidate the duplicated
+  filesystem walker.
+- **Pattern shape note**: when an owner principle exists in memory and
+  napkin but not yet as a canonical `.agent/rules/` file, the doctrine
+  is one-sided — it can be invoked but not enforced. The current/ plan's
+  Task 0.2 graduates the rule before any code moves.
+
+### Surprise 3 — broken machine-local link refs in a pattern file the principle should have prevented
+
+- **Expected**: the "No absolute paths" principle in `principles.md`
+  prevents machine-coupled paths in repo content.
+- **Actual**: `breadth-as-evasion.md` lines 105-106 had two reference-
+  style markdown link definitions pointing at
+  `../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_*.md`.
+  Both broken: the `..` chain escapes the repo into a per-user Claude
+  Code memory directory that doesn't exist in any contributor's repo,
+  AND the `Users-jim-code-...` segment hardcodes the original author's
+  username. The principle as written treated absolute-vs-relative as the
+  load-bearing distinction; the bug demonstrates the real principle is
+  reachability and meaning. Sibling case: ADR-167's "absolute path"
+  wording (Surprise 3 in archived napkin-2026-04-29) — same architectural
+  class, different surface.
+- **Fix**: principle renamed to "No machine-local paths" with three
+  forbidden shapes (literal absolute paths; relative paths escaping into
+  per-user surfaces; hardcoded usernames or flattened-project-id
+  segments) and three permitted shapes (repo-relative; templated
+  placeholders like `~/.claude/projects/<project>/`; platform-provided
+  variables like `${CLAUDE_PROJECT_DIR}`). New canonical rule
+  `.agent/rules/no-machine-local-paths.md` authored with full failure-
+  mode catalogue, detection greps, and 3 worked examples (this bug,
+  ADR-167's wording, and a templated-vs-embedded contrast). Thin
+  adapters in `.claude/`, `.cursor/`, `.agents/`. Index updated.
+- **Pattern shape note**: a principle that catches a class often
+  catches its own author. Stated principles are necessary but not
+  sufficient; structural enforcement (rule files, validators, lint
+  rules) closes the gap. The same pattern fires across multiple
+  surfaces: `gate-off-fix-gate-on` was just graduated as anti-pattern;
+  this is the same shape applied to path-portability.
+
+### Surprise 4 — the external-detection principle is recursively useful
+
+- **Expected**: applying "external system catches → local detection
+  gap" once to PR-90's findings would suffice.
+- **Actual**: the principle catches its own meta-instances. After
+  Phase 4 landed, post-push Cursor Bugbot found a duplicate heading in
+  the rotated archive napkin. Investigating: markdownlint MD024 was
+  globally disabled in `.markdownlint.json`. That gap was stronger than
+  my closure comment had documented. Phase 5 enabled MD024 with
+  `siblings_only: true` (the spike found exactly 3 genuine duplicates
+  across the whole repo), fixed all three, and the rule fires going
+  forward.
+- **Pattern shape note**: principles that operate over a set of
+  external observations apply to ALL observations from that set,
+  including ones surfaced by applying the principle. Don't stop after
+  the first round.

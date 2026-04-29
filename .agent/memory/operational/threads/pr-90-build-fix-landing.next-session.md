@@ -35,7 +35,7 @@ Star. The thread persists until the PR merges or is explicitly closed.
 | `Verdant Swaying Fern` | `claude` | `claude-opus-4-7` | `c34d50` | `ts6-migration-executor` | 2026-04-29 | 2026-04-29 |
 | `Verdant Regrowing Pollen` | `claude` | `claude-opus-4-7` | `b3812b` | `ts6-closeout-and-vercel-unblock` | 2026-04-29 | 2026-04-29 |
 | `Ethereal Illuminating Comet` | `claude-code` | `claude-opus-4-7-1m` | `05f2e9` | `e2e-test-deletion-and-adr-167` | 2026-04-29 | 2026-04-29 |
-| `Solar Threading Star` | `claude-code` | `claude-opus-4-7-1m` | `6d68d6` | `pr-90-landing-closure-planner` | 2026-04-29 | 2026-04-29 |
+| `Solar Threading Star` | `claude-code` | `claude-opus-4-7-1m` | `6d68d6` | `pr-90-landing-closure-and-machine-local-paths-rule` | 2026-04-29 | 2026-04-29 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
