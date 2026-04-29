@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.6.0...v1.6.1) (2026-04-29)
+
+
+### Bug Fixes
+
+* **build:** unblock Vercel release pipeline + TS6 migration + workspace-script rules ([#90](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/90)) ([54f07f6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/54f07f63dba39364f5088fcdb25bd471c2a356d5)), closes [#80](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/80) [hi#context](https://github.com/hi/issues/context) [#70](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/70)
+
 # [1.6.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.5.0...v1.6.0) (2026-04-28)
 
 
