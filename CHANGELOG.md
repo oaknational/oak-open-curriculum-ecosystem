@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.6.1...v1.7.0) (2026-04-29)
+
+
+### Features
+
+* fix repeat merge error in pnpm-lock ([bb4f2d0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bb4f2d02a407e1d1712a4d26e2c99baf5ce0d044))
+
 ## [1.6.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.6.0...v1.6.1) (2026-04-29)
 
 
