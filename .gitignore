@@ -43,6 +43,11 @@ collaboration.txt
 # Hand-authored Vitest provided-context augmentation.
 !apps/oak-search-cli/vitest-provided-context.d.ts
 
+# Hand-authored Vite client-types augmentation for the MCP widget
+# (TS6's empty `types: []` default removed implicit `vite/client` triple-slash
+# resolution; the widget's CSS side-effect imports need it explicit).
+!apps/oak-curriculum-mcp-streamable-http/widget/src/vite-env.d.ts
+
 # File system artifacts
 .DS_Store
 

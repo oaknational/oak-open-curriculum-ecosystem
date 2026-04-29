@@ -1,3 +1,4 @@
+import { ROOT_PACKAGE_VERSION } from '@oaknational/env';
 import { describe, expect, it } from 'vitest';
 
 import { getDisplayHostname, resolveApplicationVersion } from '../src/runtime-metadata.js';
@@ -25,7 +26,7 @@ describe('resolveApplicationVersion', () => {
       return;
     }
 
-    expect(result.value.value).toBe('1.5.0');
+    expect(result.value.value).toBe(ROOT_PACKAGE_VERSION);
     expect(result.value.source).toBe('root_package_json');
   });
 

@@ -3,7 +3,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext"],
-    "baseUrl": ".",
     "allowJs": false,
     "noEmit": true,
     "incremental": true,
