@@ -1,52 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "f5a7c2b1-e8d4-4093-a5c6-7b1d8e3f9201",
-      "agent_id": {
-        "agent_name": "Verdant Regrowing Pollen",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "b3812b"
-      },
-      "thread": "fix/build_issues",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/architecture-and-infrastructure/current/typescript-6-migration-and-workspace-script-rules.plan.md",
-            ".agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md",
-            ".agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md"
-          ]
-        },
-        {
-          "kind": "files",
-          "patterns": [
-            "**/tsconfig*.json",
-            "apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/**",
-            "apps/oak-search-cli/scripts/validate-application-version.ts",
-            "scripts/**",
-            "widget/src/vite-env.d.ts",
-            "knip.config.ts",
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/operational/repo-continuity.md",
-            ".agent/plans/architecture-and-infrastructure/current/README.md",
-            ".agent/plans/architecture-and-infrastructure/active/README.md"
-          ]
-        },
-        {
-          "kind": "adr",
-          "patterns": [
-            "docs/architecture/architectural-decisions/168-*.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-04-29T07:43:28Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Land Tasks #9–#10 of the TS6 migration plan: promote plan current/ → active/ with Execution Discipline anti-pattern guards; land 7 sensibly-grouped commits per the documented commit shape; author ADR-168 (TS6 baseline + workspace-script-ban + all-TS-scripts with runtime-only-scripts directory exception); run final QG sweep; invoke release-readiness-reviewer.",
-      "notes": "Sole agent on this session per owner direction; responsible for all 173 uncommitted working-tree files. Claim opened via direct JSON edit (Verdant Swaying Fern precedent); CLI rebuild path is fragile mid-TS6-work even though agent-tools currently builds clean."
-    }
-  ]
+  "claims": []
 }

@@ -8,7 +8,32 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-28T~15:30Z (Abyssal Cresting Compass /
+**Last refreshed**: 2026-04-29T~13:10Z (Verdant Regrowing Pollen /
+claude-code / claude-opus-4-7-1m / `b3812b` — long-arc session unblocked
+the Vercel release pipeline. Original failure on `dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6`
+(release commit `171a94fd` for v1.6.0): pnpm refused to parse a multi-document
+`pnpm-lock.yaml`, fell back to npm-registry fetches, hit Node 24.x's
+`URLSearchParams` strictness change as `ERR_PNPM_META_FETCH_FAIL`. Commit `a34f8402`
+(this session) regenerated a clean single-document lockfile; Vercel preview now
+passes (`dpl_GMwYNx3AojnVx7o3gGM2n3SMWeFm` and onwards) on PR #90.
+
+Branch `fix/build_issues` consolidated work from multiple agents/sessions
+(intended squash-merge): 12 author-commits from this session + 2 from owner
+bundling; PR #90 is open against `main` with a comprehensive description.
+ADRs landed: 166 (architectural budget system), 167 (hook-execution-failure
+visibility), 168 (TS6 baseline + workspace-script architectural rules). TS6
+plan archived to `archive/completed/`. Sonar partial fixes landed in `16743c69`;
+~30 Sonar issues remain pending (mechanical: replaceAll, String.raw, sort
+callbacks, negated-condition flips, startsWith). Open next-session work:
+zero Sonar issues, resolve PR review comments + Cursor Bugbot findings,
+investigate `.github/workflows/ci.yml` reference to a removed `.mjs` script,
+owner manual MCP server validation, then merge. **Critical falsifiability
+note for next session**: lockfile-corruption hypothesis was confirmed by Vercel
+preview pass, not just by local gate green.
+
+Earlier session continuity entries below for cross-session context:
+
+**Prior refresh**: 2026-04-28T~15:30Z (Abyssal Cresting Compass /
 claude-code / claude-opus-4-7-1m / `6efc47` — PR-87 Phase 2.0.5 keyGenerator
 cure landed (a7ce1a39); doc alignment landed (d3e86fd1); PR-87 mega-plan
 archived and superseded by one-page CodeQL-only plan (d6693239). Mid-session

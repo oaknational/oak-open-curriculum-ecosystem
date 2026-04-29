@@ -2,6 +2,85 @@
   "schema_version": "1.3.0",
   "claims": [
     {
+      "claim_id": "f5a7c2b1-e8d4-4093-a5c6-7b1d8e3f9201",
+      "agent_id": {
+        "agent_name": "Verdant Regrowing Pollen",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b3812b"
+      },
+      "thread": "fix/build_issues",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md"
+          ]
+        },
+        {
+          "kind": "files",
+          "patterns": [
+            "**/tsconfig*.json",
+            "apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/**",
+            "apps/oak-search-cli/scripts/validate-application-version.ts",
+            "scripts/**",
+            "widget/src/vite-env.d.ts",
+            "knip.config.ts"
+          ]
+        },
+        {
+          "kind": "adr",
+          "patterns": [
+            "docs/architecture/architectural-decisions/168-*.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-29T07:43:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Land Tasks #9-#10 of the TS6 migration plan; subsequently expanded under owner direction to all-changes ownership including Vercel build unblock + PR #90 quality gate.",
+      "notes": "Sole agent on this session per owner direction; responsible for all uncommitted working-tree files.",
+      "archived_at": "2026-04-29T13:10:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-29T13:10:00Z",
+        "closed_by": {
+          "agent_name": "Verdant Regrowing Pollen",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b3812b"
+        },
+        "summary": "Session closing for fresh-context handoff per owner direction. Vercel release pipeline unblocked (preview pass on dpl_GMwYNx3AojnVx7o3gGM2n3SMWeFm, root cause was lockfile corruption at 171a94fd resolved by Commit 1's regen). Adjacent ADRs 166/167/168 landed; TS6 plan archived. PR #90 open with comprehensive description. ~30 Sonar issues remain pending (mechanical), PR comments + ci.yml mjs reference + owner manual MCP validation are next-session work before merge.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "16743c69",
+            "summary": "Most recent commit on fix/build_issues; partial Sonar fixes for PR #90 quality gate."
+          },
+          {
+            "kind": "commit",
+            "ref": "65a50c70",
+            "summary": "TS6 plan archival + ADR-168 wording fix removing post-merge framing."
+          },
+          {
+            "kind": "adr",
+            "ref": "docs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md",
+            "summary": "ADR ratifying TS6 baseline + workspace-script-ban + all-TS-scripts rule + runtime-only-scripts directory exception."
+          },
+          {
+            "kind": "log_entry",
+            "ref": "2026-04-29T13:10:00Z entry under Verdant Regrowing Pollen in shared-comms-log.md",
+            "summary": "Handoff comms entry naming the closing state, the Vercel-unblock outcome, and the next-session work."
+          },
+          {
+            "kind": "napkin",
+            "ref": ".agent/memory/active/napkin.md § '2026-04-29 — Vercel-build-unblock + PR #90'",
+            "summary": "Session-end summary, four Surprises, owner-directed rules, and captured-to-durable-surfaces section."
+          }
+        ]
+      }
+    },
+    {
       "claim_id": "f1e0b2a8-4c6e-4a3a-9b2e-d3a8b9c1f2e7",
       "agent_id": {
         "agent_name": "Prismatic Glowing Sun",
