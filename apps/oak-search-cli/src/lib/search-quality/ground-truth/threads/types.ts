@@ -16,8 +16,6 @@
 import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { ExpectedRelevance } from '../types';
 
-export type { ExpectedRelevance } from '../types';
-
 /**
  * A ground truth entry for thread search.
  *

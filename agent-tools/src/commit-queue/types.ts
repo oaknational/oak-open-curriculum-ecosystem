@@ -4,7 +4,7 @@ const COMMIT_QUEUE_PHASES = [...ACTIVE_COMMIT_QUEUE_PHASES, 'abandoned'] as cons
 type ActiveCommitQueuePhase = (typeof ACTIVE_COMMIT_QUEUE_PHASES)[number];
 export type CommitQueuePhase = (typeof COMMIT_QUEUE_PHASES)[number];
 type JsonPrimitive = string | number | boolean | null;
-export type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
+type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
 
 /**
  * JSON object shape preserved when the queue helper updates registry state.

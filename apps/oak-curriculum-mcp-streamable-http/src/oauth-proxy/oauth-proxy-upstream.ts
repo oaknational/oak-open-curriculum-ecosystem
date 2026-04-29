@@ -19,7 +19,7 @@ import { z } from 'zod';
  * to point to the local proxy origin. Capability fields are passed through
  * unchanged from the upstream AS.
  */
-export const upstreamAuthServerMetadataSchema = z.object({
+const upstreamAuthServerMetadataSchema = z.object({
   issuer: z.string(),
   authorization_endpoint: z.string(),
   token_endpoint: z.string(),

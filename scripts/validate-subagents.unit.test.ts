@@ -7,7 +7,7 @@ import {
   readCodexDeveloperInstructions,
   readTomlBasicStringValue,
   resolveCodexConfigFilePath,
-} from './validate-subagents-helpers.mjs';
+} from './validate-subagents-helpers.js';
 
 describe('parseCodexRegistrations', () => {
   it('extracts agent names, descriptions, and adapter paths from Codex config text', () => {

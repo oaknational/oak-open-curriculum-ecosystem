@@ -1,14 +1,14 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { LessonSkipReason } from './ingestion-events';
 
-export interface SkippedUnit {
+interface SkippedUnit {
   unitSlug: string;
   unitTitle: string;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
 }
 
-export interface SkippedLessonGroup {
+interface SkippedLessonGroup {
   unitSlug: string;
   unitTitle: string;
   lessonCount: number;
@@ -23,7 +23,7 @@ export interface SkippedLessonGroup {
  * This captures lessons that failed individually (e.g., 404 from lesson summary),
  * as opposed to lessons skipped because their parent unit was unavailable.
  */
-export interface SkippedLesson {
+interface SkippedLesson {
   /** The lesson slug that was skipped. */
   lessonSlug: string;
   /** The unit slug containing the lesson. */

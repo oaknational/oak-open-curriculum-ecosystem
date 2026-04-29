@@ -7,7 +7,7 @@ import {
   parseBlockedContentPolicy,
   parseHookInput,
   readStreamText,
-} from './check-blocked-content.mjs';
+} from './check-blocked-content.js';
 
 describe('parseHookInput', () => {
   it('parses valid JSON text', () => {

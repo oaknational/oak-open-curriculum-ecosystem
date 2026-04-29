@@ -7,7 +7,7 @@ import type { JsonValue } from './types.js';
 /**
  * Plain object shape accepted by the sanitiser.
  */
-export type PlainObjectValue =
+type PlainObjectValue =
   | JsonValue
   | Date
   | Error
@@ -21,7 +21,7 @@ export type PlainObject = Readonly<Record<string, PlainObjectValue>>;
 /**
  * Strategy for handling `undefined` values during sanitisation.
  */
-export type UndefinedStrategy = 'null' | 'omit';
+type UndefinedStrategy = 'null' | 'omit';
 
 /**
  * Shared sanitiser execution context.

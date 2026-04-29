@@ -2,12 +2,12 @@ import type { SearchSubjectSlug } from '../../types/oak';
 import type { SequenceFacetProcessingMetrics } from './sequence-facet-index';
 
 /** Metrics entry for a single sequence facet. */
-export interface SequenceFacetMetricsEntry extends SequenceFacetProcessingMetrics {
+interface SequenceFacetMetricsEntry extends SequenceFacetProcessingMetrics {
   readonly subject: SearchSubjectSlug;
 }
 
 /** Summary of all sequence facet processing metrics. */
-export interface SequenceFacetMetricsSummary {
+interface SequenceFacetMetricsSummary {
   readonly totalSequences: number;
   readonly includedSequences: number;
   readonly skippedSequences: number;

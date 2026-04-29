@@ -4,7 +4,7 @@ import {
   findForbiddenPhrases,
   shouldInspectFile,
   shouldReportMatch,
-} from './validate-fitness-vocabulary.mjs';
+} from './validate-fitness-vocabulary.js';
 
 describe('shouldReportMatch', () => {
   it('reports non-filename matches of two-threshold', () => {
@@ -86,7 +86,7 @@ describe('shouldInspectFile', () => {
   });
 
   it('excludes the vocabulary validator itself and its tests', () => {
-    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.mjs')).toBe(false);
+    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.ts')).toBe(false);
     expect(shouldInspectFile('scripts/validate-fitness-vocabulary.unit.test.ts')).toBe(false);
   });
 });

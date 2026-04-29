@@ -39,7 +39,7 @@ export type Phase = 'primary' | 'secondary';
  * - **2**: Relevant — useful for the query, reasonable result
  * - **1**: Marginally relevant — somewhat related but not ideal
  */
-export type RelevanceScore = 1 | 2 | 3;
+type RelevanceScore = 1 | 2 | 3;
 
 /**
  * Expected relevance judgments for search results.

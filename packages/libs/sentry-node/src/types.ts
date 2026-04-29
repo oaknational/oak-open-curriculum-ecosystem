@@ -34,7 +34,7 @@ export type SentryEnvironmentSource = 'SENTRY_ENVIRONMENT_OVERRIDE' | 'VERCEL_EN
  * from that version (on production) OR from a branch URL / short SHA
  * (on preview/development).
  */
-export type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';
+type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';
 
 /**
  * Source the resolved Sentry release name was derived from.

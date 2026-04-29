@@ -27,7 +27,7 @@ export interface CollaborationArea {
   readonly patterns: readonly string[];
 }
 
-export interface CollaborationEvidence {
+interface CollaborationEvidence {
   readonly kind:
     | 'log_entry'
     | 'decision_thread'
@@ -42,7 +42,7 @@ export interface CollaborationEvidence {
   readonly summary: string;
 }
 
-export interface CollaborationClosure {
+interface CollaborationClosure {
   readonly kind: 'explicit' | 'stale' | 'owner_forced';
   readonly closed_at: string;
   readonly closed_by: CollaborationAgentId;

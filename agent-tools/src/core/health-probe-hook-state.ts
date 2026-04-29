@@ -170,7 +170,7 @@ function collectSurfaceMatrixDetails(surfaceMatrixText: string | null): string[]
   pushIfMissing(
     details,
     surfaceMatrixText,
-    'scripts/check-blocked-patterns.mjs',
+    'scripts/check-blocked-patterns.ts',
     `${SURFACE_MATRIX_PATH} does not describe the repo-local hook runtime script.`,
   );
   pushIfMissing(

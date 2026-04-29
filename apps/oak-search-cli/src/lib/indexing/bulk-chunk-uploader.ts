@@ -34,7 +34,6 @@ import {
 
 // Re-export for consumers
 export type { EsTransport } from './retry';
-export type { IndexOperationCounts } from './bulk-index-counts';
 
 /**
  * Result of a bulk upload operation.
