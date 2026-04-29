@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # UserPromptSubmit hook: Scan prompt for secrets before sending
 
 if ! command -v sonar &> /dev/null; then

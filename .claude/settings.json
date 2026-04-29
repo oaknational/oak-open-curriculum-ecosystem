@@ -89,7 +89,8 @@
       "Skill(add-app-to-server)",
       "Skill(convert-web-app)",
       "Skill(create-mcp-app)",
-      "Skill(migrate-oai-app)"
+      "Skill(migrate-oai-app)",
+      "mcp__plugin_vercel_vercel__get_project"
     ]
   },
   "hooks": {
@@ -111,7 +112,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-patterns.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-patterns.ts",
             "timeout": 5
           }
         ]
@@ -121,7 +122,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-content.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-content.ts",
             "timeout": 5
           }
         ]
@@ -131,7 +132,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-content.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-content.ts",
             "timeout": 5
           }
         ]
@@ -141,7 +142,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh ${CLAUDE_PROJECT_DIR}/.claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh",
             "timeout": 60
           }
         ]
@@ -153,12 +154,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh ${CLAUDE_PROJECT_DIR}/.claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
             "timeout": 60
           }
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node .claude/scripts/statusline-identity.mjs"
   },
   "enabledPlugins": {
     "mcp-apps@mcp-apps": true,
@@ -168,9 +173,5 @@
     "sonarqube@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "node .claude/scripts/statusline-identity.mjs"
   }
 }

@@ -3,7 +3,7 @@ boundary: B2-Architecture
 doc_role: index
 authority: adr-navigation
 status: active
-last_reviewed: 2026-04-19
+last_reviewed: 2026-04-29
 ---
 
 # Architectural Decision Records
@@ -11,6 +11,11 @@ last_reviewed: 2026-04-19
 > **Navigation**: [Architecture Home](../README.md) | [OpenAPI Pipeline](../openapi-pipeline.md) | [Practice Core](../../../.agent/practice-core/index.md) | [Practice Index](../../../.agent/practice-index.md)
 
 This file is an index of architectural decisions made during the development of this repository. The wider system that governs how these decisions are authored, propagated, and reviewed is **the Practice** — see [Practice Core](../../../.agent/practice-core/index.md) for the portable definition and [Practice Index](../../../.agent/practice-index.md) for this repository's local bridge.
+
+Current framing: the ADR corpus supports the repository goal of making Oak's
+openly licenced, fully sequenced and resourced curriculum reusable through
+generated SDKs, MCP and MCP Apps, the OpenAPI-to-MCP pipeline, hybrid semantic
+search, knowledge graphs, and the reusable agentic-first Practice.
 
 ## Start Here: 5 ADRs in 15 Minutes
 
@@ -187,7 +192,18 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](163-sentry-release-identifier-and-vercel-production-attribution.md) (operationalises L-7 release/deploy linkage; Accepted 2026-04-19; amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)
 - [ADR-164: Config-Load Side Effects Must Not Require Test-Execution Resources](164-config-load-side-effects.md) (vitest/ESLint/Prettier configs must not throw at module-evaluation time on missing test-time credentials; Accepted 2026-04-26)
 - [ADR-165: Agent Work Practice Phenotype Boundary](165-agent-work-practice-phenotype-boundary.md) (local implementation boundary for PDR-035 agent-work Practice authority; Accepted 2026-04-28)
-- [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md) — 2026-04-26 amendment adds Step 5 (call-site uptake) to the four-step pattern.
+- [ADR-166: Architectural Budget System Across Scales](166-architectural-budget-system-across-scales.md)
+  (cross-scale architectural bounds, visibility-before-enforcement, and
+  anti-gaming doctrine; Accepted 2026-04-29)
+- [ADR-167: Hook Execution Failures Must Be Observable](167-hook-execution-failures-must-be-observable.md)
+  (non-blocking agentic-platform hooks must route through a logging
+  wrapper that persists non-zero exits to a developer-readable file;
+  host-specific Claude Code reference instance with platform-portable
+  generalisation named under Future Work; Accepted 2026-04-29)
+- [ADR-168: TypeScript 6 Baseline and Workspace-Script Architectural Rules](168-typescript-6-baseline-and-workspace-script-architectural-rules.md)
+  (TS6 compiler-options baseline, ban on workspace-to-root scripts,
+  all-TS-scripts rule with the `runtime-only-scripts/` directory
+  exception for no-compile-no-deps cases; Accepted 2026-04-29)
 
 ## Key Architectural Decisions
 
@@ -196,6 +212,7 @@ For understanding our API integration approach:
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
+- **[ADR-157](157-multi-source-open-education-integration.md)** - Multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms

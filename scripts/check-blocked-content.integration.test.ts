@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  buildPreToolUseDenyResponse,
-  runPreToolUseContentGuard,
-} from './check-blocked-content.mjs';
+import { buildPreToolUseDenyResponse, runPreToolUseContentGuard } from './check-blocked-content.js';
 
 describe('runPreToolUseContentGuard', () => {
   it('writes a deny payload when new content introduces a blocked pattern', async () => {

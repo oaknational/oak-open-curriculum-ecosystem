@@ -737,7 +737,7 @@ For **exclusive** filtering ("Foundation only, not Higher"), query must explicit
 
 ## Related Documentation
 
-- [Upstream API Wishlist](../../../.agent/plans/external/ooc-api-wishlist/index.md) - Request for flat fields
+- [Upstream API Wishlist](../../../.agent/plans/sector-engagement/ooc-api-wishlist/index.md) - Request for flat fields
 - [Semantic Search Prompt](../../../.agent/prompts/semantic-search/semantic-search.prompt.md) - Entry point for AI sessions
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md) - Redis caching strategy
 - [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md) - Cache TTL strategy

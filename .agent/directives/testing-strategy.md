@@ -148,10 +148,22 @@ slower, are less specific in the causes of issues but cast a wider
 net, and may produce side effects locally and in external systems.
 
 - **E2E test**: A test that verifies the behaviour of a running
-  system. E2E tests CAN trigger STDIO IO but NOT filesystem or
-  network IO, CAN have side effects, and contain minimal mocks,
-  largely around network IO. These constraints are to allow the
-  E2E tests to be safely run in CI/CD.
+  system. E2E tests CAN exchange STDIO with the running system —
+  this is the protocol channel that defines what an E2E test IS for
+  stdio-transport systems (MCP stdio). E2E tests MUST NOT trigger
+  filesystem IO, network IO, or any other side-effecting IO; the
+  test's job is to drive the system over its protocol channel and
+  assert on the response, not to manipulate the surrounding
+  environment. E2E tests CAN have side effects strictly attributable
+  to the running system itself, contain minimal mocks (largely around
+  network IO inside the system), and MUST NOT spawn additional
+  processes — only the runner harness boots the system. Naming
+  alone (a `.e2e.test.ts` filename) does NOT exempt a test from
+  in-process restrictions; classification is by **behaviour shape**
+  (does the test exchange protocol with a separate running system?),
+  not by filename suffix. A test that imports product code into the
+  test process is an integration test even if named `.e2e.test.ts`.
+  These constraints are to allow E2E tests to be safely run in CI/CD.
 
 - **Smoke test**: A test that verifies the behaviour of a running
   system, locally or deployed. Smoke tests CAN trigger all IO

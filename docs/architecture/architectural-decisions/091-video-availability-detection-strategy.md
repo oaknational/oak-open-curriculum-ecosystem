@@ -140,5 +140,5 @@ Delay implementation until API provides complete video availability data.
 
 - [Efficient API Traversal Plan (ARCHIVED)](../../../.agent/plans/semantic-search/archive/completed/efficient-api-traversal.md)
 - [ADR-093: Bulk-First Ingestion Strategy](./093-bulk-first-ingestion-strategy.md) — Supersedes this ADR
-- [API Wishlist: Boolean Resource Flags](../../../.agent/plans/external/ooc-api-wishlist/05-medium-priority-requests.md#13-add-boolean-resource-flags-to-lesson-list-responses)
+- [API Wishlist: Boolean Resource Flags](../../../.agent/plans/sector-engagement/ooc-api-wishlist/05-medium-priority-requests.md#13-add-boolean-resource-flags-to-lesson-list-responses)
 - [queryGate.ts](../../../reference/oak-openapi/src/lib/queryGate.ts) — Upstream TPC filtering

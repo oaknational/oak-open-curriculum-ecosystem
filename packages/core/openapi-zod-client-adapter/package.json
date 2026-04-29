@@ -41,7 +41,7 @@
     "globals": "^17.4.0",
     "openapi3-ts": "^4.5.0",
     "tsup": "^8.5.1",
-    "typescript": "^5",
+    "typescript": "^6",
     "vitest": "^4.1.3"
   },
   "engines": {

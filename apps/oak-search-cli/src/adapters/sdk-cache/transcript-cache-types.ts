@@ -80,7 +80,7 @@ export type TranscriptCacheEntry =
  * Cache entry for an available transcript.
  * Contains the full transcript text and VTT caption data.
  */
-export interface TranscriptCacheEntryAvailable {
+interface TranscriptCacheEntryAvailable {
   /** Discriminant for available transcript. */
   readonly status: 'available';
   /** The transcript text content. */
@@ -93,7 +93,7 @@ export interface TranscriptCacheEntryAvailable {
  * Cache entry indicating the lesson has no video asset.
  * Determined from the bulk assets endpoint (`hasVideo === false`).
  */
-export interface TranscriptCacheEntryNoVideo {
+interface TranscriptCacheEntryNoVideo {
   /** Discriminant for no video asset. */
   readonly status: 'no_video';
 }
@@ -102,7 +102,7 @@ export interface TranscriptCacheEntryNoVideo {
  * Cache entry indicating the transcript was not found.
  * Used for API 404 responses and empty transcript responses (200 with no content).
  */
-export interface TranscriptCacheEntryNotFound {
+interface TranscriptCacheEntryNotFound {
   /** Discriminant for not found / empty transcript. */
   readonly status: 'not_found';
 }
@@ -113,7 +113,7 @@ export interface TranscriptCacheEntryNotFound {
  * Semantically distinct from `not_found`: the resource exists but cannot
  * be accessed for legal reasons.
  */
-export interface TranscriptCacheEntryLegallyRestricted {
+interface TranscriptCacheEntryLegallyRestricted {
   /** Discriminant for legally restricted transcript. */
   readonly status: 'legally_restricted';
 }

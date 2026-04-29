@@ -2,12 +2,43 @@
 
 ## Participating agent identities
 
+This table is the canonical additive-identity register for the
+`observability-sentry-otel` thread, per
+[PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
+Pre-PDR-027 rows below have `*unknown*` `session_id_prefix` (the
+deterministic-identity plumbing landed 2026-04-26); current rows
+(2026-04-26 onwards) carry full identity. New sessions add rows;
+matching `platform + model + agent_name` updates `last_session`.
+
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 |---|---|---|---|---|---|---|
+| `unattributed` | `unknown` | `unknown` | `*unknown*` | `executor` | 2026-04-21 | 2026-04-21 |
+| Samwise | claude-code | claude-opus-4-7-1m | `*unknown*` | migration-maintenance | 2026-04-21 | 2026-04-21 |
+| Merry | cursor | claude-opus-4-7 | `*unknown*` | cleanup-only | 2026-04-22 | 2026-04-22 |
+| Pippin | cursor | claude-opus-4-7 | `*unknown*` | diagnosis / correction / WS0-WS3 doctrine landing / plan rewrites / pre-flight audits | 2026-04-22 | 2026-04-24 |
+| Codex | codex | `*unknown*` | `*unknown*` | repo-owned-repair / closeout / doc-consolidation | 2026-04-23 | 2026-04-23 |
+| Codex | codex | GPT-5 | `*unknown*` | startup-boundary plan-author / gate-green committer / reviewer-finding reintegration / sentry-state handoff | 2026-04-24 | 2026-04-26 |
+| Codex | cursor | GPT-5.5 | `*unknown*` | session-handoff / startup-boundary phase-0 / RED + gate-recovery / phase-2 partial-green | 2026-04-24 | 2026-04-25 |
+| Frodo | claude-code | claude-opus-4-7-1m | `*unknown*` | commit-owner pre-staged plan-body tightening; release-identifier plan revision; WS2 §2.0 split | 2026-04-24 | 2026-04-24 |
+| Jazzy | claude-code | claude-sonnet-4-6 | `*unknown*` | release-identifier WS3 drafting; §3.0 reviewer-gate amendment; paused at pre-commit knip on parallel-track coupling | 2026-04-25 | 2026-04-25 |
+| Jiggly Pebble | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 comment analysis; PR-87 quality-finding resolution plan author | 2026-04-25 | 2026-04-25 |
+| Keen Dahl | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 phase-0 walk + assumptions-reviewer close; vercel-branch-url bug fix; magic-strings refactor; build-env schema; sentry-validation plan | 2026-04-25 | 2026-04-26 |
+| Sharded Stroustrup | claude-code | claude-opus-4-7-1m | `*unknown*` | sentry preview-validation end-to-end empirical closure; test-error route shipped; correlation-id Sentry tag; L-IMM/L-OPS into maximisation | 2026-04-26 | 2026-04-26 |
+| Frolicking Toast | claude-code | claude-opus-4-7-1m | `*unknown*` | L-IMM execution; tier-1 flush-timeout; tier-3a/3b verifications; tier-3c ignore-errors scaffold; tier-2 fingerprinting | 2026-04-26 | 2026-04-26 |
+| Ethereal Alpaca | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 phase-1 1a/2 execution; semver dry; redos critical Sonar; agent-identity-derivation plan author | 2026-04-26 | 2026-04-26 |
+| Pelagic Flowing Dock | claude-code | claude-opus-4-7-1m | `compose` | PR-87 architectural-cluster plan author + executor; cluster-by-architectural-root-cause replaces per-rule disposition | 2026-04-27 | 2026-04-27 |
+| Opalescent Gliding Prism | claude-code | claude-opus-4-7-1m | `radiant-pillow` | PR-87 architectural-cleanup session 2; phase-0 regrounding; phase-0.5 cluster-Q sink-probe; phase-1 dormant-rule deletion | 2026-04-27 | 2026-04-27 |
+| Tidal Rolling Lighthouse | claude-code | claude-opus-4-7-1m | `composed-petting` | PR-87 quality-remediation replan; phase-1 cluster-B runGitCommand lockdown; 32 unit tests + 1 e2e runtime test | 2026-04-28 | 2026-04-28 |
+| Luminous Dancing Quasar | claude-code | claude-opus-4-7-1m | `pr87ph` | PR-87 phase-1 cluster-B second wave; wilma dispatch + absorption; phase-1.1 env-scrub; three commits pushed (9b2b2ed7, 5d6622d0, 84571ccf) | 2026-04-28 | 2026-04-28 |
+| Choppy Lapping Rudder | claude-code | claude-opus-4-7-1m | `d73d0b` | PR-87 phase-2 pre-phase security review; phase-2.0.5 keyGenerator cure inserted before brand narrowing; cross-thread S5443 coordination | 2026-04-28 | 2026-04-28 |
 | Abyssal Cresting Compass | claude-code | claude-opus-4-7-1m | `6efc47` | PR-87 Phase 2.0.5 keyGenerator cure + doc alignment + plan-reset | 2026-04-28 | 2026-04-28 |
-| Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code (no repo edit) | 2026-04-28 | 2026-04-28 |
+| Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code | 2026-04-28 | 2026-04-28 |
 
-(Identity rows for prior agents are recoverable from git history; this table is the additive-identity register going forward.)
+(Two-table normalisation 2026-04-29: prior versions of this record
+held a duplicate identity table near the bottom of the file. Merged
+into this canonical register during the 2026-04-29 deep consolidation
+pass; older deeper-narrative session-close blocks below this header
+remain unchanged.)
 
 ---
 
@@ -57,7 +88,7 @@
 
 **Phase 2 verification result**: Coastal Mooring Atoll's deep-consolidation pass (commit `7c589a0a`, claim 1271c798 closed 11:26:31Z) substantively landed all eight Edits the Phase 2 brief required — §Stance, 12-phase sequencing, brand-preservation Cluster A contract, Cluster C/H/D §Stance alignment, Cluster B-COMPLETE marker, frontmatter todos, Lifecycle "in-repo plan is single source of truth". Phase 2.0 collapsed to verification only.
 
-**Phase 2.1 pre-phase adversarial security review COMPLETE (2026-04-28T11:54Z, security-reviewer claude-opus)**. Findings landed at `.agent/plans/observability/active/pr-87-cluster-a-security-review.md`:
+**Phase 2.1 pre-phase adversarial security review COMPLETE (2026-04-28T11:54Z, security-reviewer claude-opus)**. Findings landed at `.agent/plans/observability/archive/completed/pr-87-cluster-a-security-review.md` (archived 2026-04-29 alongside its now-superseded source plan):
 
 - **2 MUST-FIX**: FIND-001/002 — `app.set('trust proxy', 1)` (`bootstrap-helpers.ts:246`) plus default `keyGenerator` (no override at `rate-limiter-factory.ts:71-80`) means a single attacker can rotate `X-Forwarded-For` to bypass *every* rate limiter. Vercel appends client IP to incoming XFF; Express trusts the right-most-but-one entry; attacker controls it. **Brand preservation alone does NOT fix this. The CodeQL `js/missing-rate-limiting` alerts point at a real exploitable problem.**
 - **2 SHOULD-FIX**: FIND-003 OAuth proxy single-bucket sharing (cross-endpoint amplification + legitimate self-DoS); FIND-004 `/healthz` unlimited at app layer.
@@ -1015,11 +1046,11 @@ Disposition #3 / positive-note #4 sub-clauses); enumeration expanded
 **13 → 15 items**; MAJORs and MINORs absorbed before staging.
 Resume instructions, exact pause-time `git status`, drafted commit
 message, and post-commit hash-fill follow-up are recorded in
-[`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
+[`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/archive/completed/sentry-release-identifier-ws3-resume.evidence.md).
 
 **Prior refresh**: 2026-04-24 (Codex / cursor / GPT-5.5 — completed Phase 1
 RED tests for
-[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/archive/completed/mcp-local-startup-release-boundary.plan.md)
 after promoting it to active and completing Phase 0 inventory evidence. Phase 2
 GREEN is next; no runtime code has changed yet.
 
@@ -1213,33 +1244,15 @@ rehearsal).
   deploy proof, and request-context diagnostics.
 - **Branch**: `feat/otel_sentry_enhancements` (branch-primary)
 
-## Participating agent identities
+## Identity register
 
-| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
-| --- | --- | --- | --- | --- | --- | --- |
-| *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
-| `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
-| `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
-| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
-| `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author; startup-boundary-gate-green-committer; reviewer-finding-reintegration; pushed-handoff; marketplace-verification-closeout; sentry-state-handoff-under-same-branch-experiment` | 2026-04-24 | 2026-04-26 |
-| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `session-handoff-closeout; startup-boundary-phase0-executor; startup-boundary-red-and-gate-recovery-planning; gate-recovery-executor; startup-boundary-phase2-partial-green` | 2026-04-24 | 2026-04-25 |
-| `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
-| `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
-| `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored` | 2026-04-25 | 2026-04-25 |
-| `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close; vercel-branch-url-bug-fix; magic-strings-refactor; build-env-schema; sentry-validation-plan` | 2026-04-25 | 2026-04-26 |
-| `Sharded Stroustrup` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `sentry-preview-validation-end-to-end-empirical-closure; test-error-route-shipped; correlation-id-sentry-tag; widget-metadata-fragile-tests-removed; doc-driven-gap-finding-on-sentry-docs; L-IMM-and-L-OPS-lanes-into-maximisation; sentry-immediate-and-pr-87-parallel-execution-split; consolidation-rationalisation-memo` | 2026-04-26 | 2026-04-26 |
-| `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `L-IMM-execution-tier-1-flush-timeout-tier-3a-3b-verifications-tier-3c-ignore-errors-scaffold-tier-3d-marketplace-pending-tier-2-fingerprinting-with-reviewer-dispatch` | 2026-04-26 | 2026-04-26 |
-| `Ethereal Alpaca` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-1-1a-2-execution-semver-dry-noise-redos-critical-sonar; agent-identity-derivation-plan-author; co-tenant-with-frolicking-toast-graduation-pass` | 2026-04-26 | 2026-04-26 |
-| `Pelagic Flowing Dock` | `claude-code` | `claude-opus-4-7-1m` | `compose` | `pr-87-architectural-cluster-plan-author-and-executor; closed-briny-ebbing-lagoon-claim-on-owner-direction; cluster-by-architectural-root-cause-resolution-replaces-per-rule-disposition` | 2026-04-27 | 2026-04-27 |
-| `Opalescent Gliding Prism` | `claude-code` | `claude-opus-4-7-1m` | `radiant-pillow` | `pr-87-architectural-cleanup-session-2-phase-0-plan-body-regrounding-phase-0-5-cluster-q-sink-probe-phase-1-dormant-rule-deletion-and-reinstate-stub-cluster-q-dispositions-via-codeql-and-sonar-mcp-cluster-a-sink-trace-analysis-handoff-at-context-budget-threshold` | 2026-04-27 | 2026-04-27 |
-| `Tidal Rolling Lighthouse` | `claude-code` | `claude-opus-4-7-1m` | `composed-petting` | `pr-87-quality-remediation-replan-12-phase-execution-plan-then-phase-1-cluster-b-runGitCommand-lockdown-implementation-with-32-unit-tests-1-e2e-runtime-test-and-4-of-5-reviewer-absorption-WIP-uncommitted-wilma-deferred-to-next-session` | 2026-04-28 | 2026-04-28 |
-| `Luminous Dancing Quasar` | `claude-code` | `claude-opus-4-7-1m` | `pr87ph` | `pr-87-phase-1-cluster-b-second-wave-wilma-dispatch-and-absorption-cluster-commit-and-push-then-phase-1.1-finish-env-scrub-via-absolute-git-binary-cognitive-complexity-refactor-fixture-cleanup-three-commits-pushed-9b2b2ed7-and-5d6622d0-and-84571ccf-sonar-hotspot-panel-flipped-to-100-percent-OK` | 2026-04-28 | 2026-04-28 |
-| `Choppy Lapping Rudder` | `claude-code` | `claude-opus-4-7-1m` | `d73d0b` | `pr-87-phase-2-pre-phase-security-review-with-2-must-fix-x-forwarded-for-spoofing-bypass-2-should-fix-and-4-hardening-findings-phase-2.0.5-keygenerator-cure-inserted-before-brand-narrowing-cluster-a-claim-87fb2797-opened-and-closed-at-handoff-cross-thread-s5443-coordination-request-posted-four-commits-pushed-c1677d84-ca7e6e4b-6a2b4e54-c601d515-new-strategic-future-plan-for-coordination-cli-ergonomics` | 2026-04-28 | 2026-04-28 |
-
-Identity discipline remains additive per
+The canonical additive-identity register for this thread lives at the
+top of the file (§Participating agent identities). Older deeper-narrative
+session-close blocks below this header remain unchanged for historical
+context. Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
-new sessions add rows; they do not rewrite older attribution.
+new sessions add rows to the canonical register; they do not rewrite older
+attribution.
 
 ---
 
@@ -1319,7 +1332,7 @@ commands above, and resume from the unresolved Phase 2 decision rather than
 rediscovering gate state.
 
 **Next session re-attempts**: resume Lane B in
-[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/archive/completed/mcp-local-startup-release-boundary.plan.md)
 Phase 2. First decide whether `RuntimeConfig` should carry a first-class
 `AppBuildIdentity` value now; then rerun reviewers against the latest
 reviewer-driven fixes; then run `smoke:dev:stub`, `test:ui`, and `test:a11y`.
@@ -1407,7 +1420,7 @@ discipline (per PDR-026):
 - **What next session re-attempts**: WS3 commit + post-commit
   hash-fill + WS5 quality gates. Resume instructions are recorded
   in
-  [`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/active/sentry-release-identifier-ws3-resume.evidence.md).
+  [`sentry-release-identifier-ws3-resume.evidence.md`](../../../plans/observability/archive/completed/sentry-release-identifier-ws3-resume.evidence.md).
 
 **Behavioural carry-forward** (informed by Pippin's spiral 2026-04-24
 and Frodo's voluntary-stop discipline 2026-04-24): the §3.0 reviewer
@@ -1642,12 +1655,12 @@ Evidence:
 ### Owning plan(s)
 
 - **Focused local-startup follow-up**:
-  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/archive/completed/mcp-local-startup-release-boundary.plan.md)
   — active record; all phases completed and packaged in `d9cb54e8`.
-  [`phase-0-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-0-evidence.md)
+  [`phase-0-evidence`](../../../plans/observability/archive/completed/mcp-local-startup-release-boundary.phase-0-evidence.md)
   names the source-of-truth matrix, local gate preconditions, test
   classification, ADR-163 decision, and Phase 1 RED targets.
-  [`phase-1-red-evidence`](../../../plans/observability/active/mcp-local-startup-release-boundary.phase-1-red-evidence.md)
+  [`phase-1-red-evidence`](../../../plans/observability/archive/completed/mcp-local-startup-release-boundary.phase-1-red-evidence.md)
   records the focused failing tests and reviewer clearance for GREEN.
 - **Completed gate-recovery precondition**:
   [`gate-recovery-cadence.plan.md`](../../../plans/observability/active/gate-recovery-cadence.plan.md)

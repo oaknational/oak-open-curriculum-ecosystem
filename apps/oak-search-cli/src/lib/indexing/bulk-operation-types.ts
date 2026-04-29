@@ -40,7 +40,7 @@ export interface BulkCreateAction {
 /**
  * Elasticsearch bulk delete action metadata.
  */
-export interface BulkDeleteAction {
+interface BulkDeleteAction {
   readonly delete: {
     readonly _index: string;
     readonly _id: string;
@@ -64,7 +64,7 @@ function isBulkActionObject(value: unknown): value is BulkAction {
 /**
  * Union of all document types that can be indexed.
  */
-export type BulkDocument =
+type BulkDocument =
   | SearchLessonsIndexDoc
   | SearchUnitsIndexDoc
   | SearchUnitRollupDoc

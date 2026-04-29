@@ -39,11 +39,57 @@ This rule **does not refuse entry** to claimed areas. It fires as a
 tripwire — *consult, decide, log* — not as a refusal — *do not enter*.
 The logged decision is the artefact that proves consultation.
 
-`.agent/` is the shared Practice/coordination surface. Claims on `.agent`
-paths make overlap visible, but they do not block committing current `.agent`
-state. Handoff records, claim/queue lifecycle state, thread records, napkin
-entries, generated comms logs, plans, rules, and skills may be swept into a
-commit when they belong to the live bundle or keep shared state durable.
+### Shared-state files are always writable and always commit-includable
+
+**Shared-state files can ALWAYS be written to and ALWAYS be added to
+ANY commit, regardless of any active claim.** This is a deliberate
+tradeoff to prevent log jams: blocking writes or commit-inclusion on
+claims would serialise the very surfaces whose purpose is to make
+parallel work coordinated and visible.
+
+The shared-state surfaces this absolutism covers include:
+
+- `.agent/memory/active/napkin.md` and `distilled.md`
+- `.agent/memory/active/patterns/**`
+- `.agent/memory/operational/repo-continuity.md`
+- `.agent/memory/operational/threads/*.next-session.md` and
+  `.agent/memory/operational/threads/README.md`
+- `.agent/memory/operational/tracks/*.md`
+- `.agent/state/collaboration/active-claims.json` and
+  `closed-claims.archive.json`
+- `.agent/state/collaboration/shared-comms-log.md` and the
+  underlying `comms/events/*.json`
+- `.agent/state/collaboration/conversations/*.json`
+- `.agent/state/collaboration/escalations/*.json`
+- Any other markdown or JSON surface whose purpose is to record
+  shared knowledge or coordination state
+
+Claims on these paths make overlap visible; they NEVER block writes
+to them, and they NEVER block their inclusion in another agent's
+commit when that keeps shared state durable. Active claims on shared
+state are coordination signals, not no-write locks.
+
+Concretely, when committing:
+
+- A repo-functionality commit MAY sweep current shared-state edits
+  into the same commit when those edits are part of the live bundle
+  (handoff records, comms events generated during the session, claim
+  closures, thread record refreshes, napkin observations).
+- A pure governance / docs / shared-state commit MAY include any
+  shared-state surface freely.
+- The commit queue and the `git:index/head` window remain the
+  serialisation mechanism — they prevent two agents from staging
+  concurrently, but they do not gate which shared-state files an
+  agent may include.
+- Prefer surgical, parser-backed edits or transaction helpers for
+  hot shared JSON over full-file rewrites; this preserves concurrent
+  writes by other agents.
+
+The deliberate tradeoff: agents may occasionally need to reconcile
+near-simultaneous shared-state writes (the substrate's transaction
+helpers handle the structured cases). That cost is paid willingly to
+keep shared state always-current and to avoid the much larger cost
+of serialising coordination-surface progress behind area claims.
 
 Whole-repo gate failures are different from ordinary overlap. If a fresh
 peer-owned file breaks a minor hook such as formatting or markdown style,

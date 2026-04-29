@@ -20,7 +20,7 @@ This document captures **data quirks** that affect how consumers process curricu
 | Bulk duplicate causes              | ❌ No        | Section 7 of this document        |
 
 **TODO**: Consider adding a `dataQuirks` section to the ontology to capture these edge cases.
-See `.agent/plans/external/ooc-api-wishlist/22-ontology-and-graphs-api-proposal.md` for the full proposal.
+See `.agent/plans/sector-engagement/ooc-api-wishlist/22-ontology-and-graphs-api-proposal.md` for the full proposal.
 
 ---
 
@@ -186,7 +186,7 @@ The API response structure varies by subject and key stage. Understanding patter
 > **Sources**:
 >
 > - [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts)
-> - [01-derived-fields-and-ks4-metadata.md](../../.agent/plans/external/ooc-api-wishlist/01-derived-fields-and-ks4-metadata.md)
+> - [01-derived-fields-and-ks4-metadata.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/01-derived-fields-and-ks4-metadata.md)
 
 ### Programme Factors
 
@@ -299,7 +299,7 @@ From [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-
 
 ## 7. Bulk Download Data Integrity Issues
 
-> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md)
+> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md)
 
 ### Duplicate Lessons in Bulk Download
 
@@ -388,7 +388,7 @@ The [Oak Bulk Download page](https://open-api.thenational.academy/bulk-download)
 
 ## 9. API Pagination Bug
 
-> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md)
+> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md)
 
 The `/key-stages/{ks}/subject/{subject}/lessons` endpoint returns **incomplete data** when called without a unit filter:
 
@@ -457,7 +457,7 @@ Sequence → Tier → Unit (for Maths KS4)
 ## 12. Type Consistency Issues
 
 > **Critical**: These issues require special handling in SDK code.
-> **Source**: [05-medium-priority-requests.md](../../.agent/plans/external/ooc-api-wishlist/05-medium-priority-requests.md) #11
+> **Source**: [05-medium-priority-requests.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/05-medium-priority-requests.md) #11
 
 ### Year: Three Different Representations
 
@@ -501,7 +501,7 @@ year:
 
 ### Null Handling: Four Different Semantics
 
-> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md) Issue 4
+> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md) Issue 4
 
 | Representation  | Example           | Where Used                    |
 | --------------- | ----------------- | ----------------------------- |
@@ -532,7 +532,7 @@ year:
 
 ### Duplicate Records in Bulk Data
 
-> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md) Issue 1
+> **Source**: [00-overview-and-known-issues.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md) Issue 1
 
 Validated by scanning bulk snapshots in `reference/bulk_download_data/`.  
 See Section 7 for full tables and totals.
@@ -593,13 +593,13 @@ Note: `all-years` only valid for `physical-education-primary` sequence.
 
 ### Upstream API Wishlist
 
-| Document                                                                                                                    | Focus                                                 |
-| --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md)             | API bugs, data integrity issues, enhancement requests |
-| [01-derived-fields-and-ks4-metadata.md](../../.agent/plans/external/ooc-api-wishlist/01-derived-fields-and-ks4-metadata.md) | KS4 metadata, derived fields registry                 |
-| [05-medium-priority-requests.md](../../.agent/plans/external/ooc-api-wishlist/05-medium-priority-requests.md)               | **Type consistency issues (#11)**, schema `$ref`      |
-| [15-bulk-download-examples.md](../../.agent/plans/external/ooc-api-wishlist/15-bulk-download-examples.md)                   | Bulk download data examples                           |
-| [index.md](../../.agent/plans/external/ooc-api-wishlist/index.md)                                                           | Complete wishlist navigation                          |
+| Document                                                                                                                             | Focus                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| [00-overview-and-known-issues.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md)             | API bugs, data integrity issues, enhancement requests |
+| [01-derived-fields-and-ks4-metadata.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/01-derived-fields-and-ks4-metadata.md) | KS4 metadata, derived fields registry                 |
+| [05-medium-priority-requests.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/05-medium-priority-requests.md)               | **Type consistency issues (#11)**, schema `$ref`      |
+| [15-bulk-download-examples.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/15-bulk-download-examples.md)                   | Bulk download data examples                           |
+| [index.md](../../.agent/plans/sector-engagement/ooc-api-wishlist/index.md)                                                           | Complete wishlist navigation                          |
 
 ### Planning
 

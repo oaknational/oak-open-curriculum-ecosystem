@@ -117,7 +117,7 @@ Two rules follow:
 2. **Expanding the gate to cover a surface where the doctrine should
    bind is the normal way doctrine spreads.** Canon surfaces
    (`.agent/directives/`, `.agent/memory/`, `.agent/plans/`,
-   `.agent/practice-context/`, `.agent/practice-core/`, `.agent/rules/`,
+   `.agent/practice-core/`, `.agent/rules/`,
    `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/`, plus
    workspace source, configs, and shared infrastructure) belong inside
    each relevant gate by default. Reference / synthesis / archive /

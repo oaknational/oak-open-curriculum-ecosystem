@@ -31,7 +31,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import { gitShowFileAtSha } from '../build-scripts/vercel-ignore-production-non-release-build.mjs';
+import { gitShowFileAtSha } from '../runtime-only-scripts/vercel-ignore-production-non-release-build.mjs';
 
 const thisDir = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(thisDir, '../../..');

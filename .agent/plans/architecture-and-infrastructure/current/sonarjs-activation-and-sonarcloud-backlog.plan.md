@@ -624,7 +624,19 @@ This plan:
 After all phases complete (or after the final ship if scope reduced), run `/jc-consolidate-docs` to:
 
 - graduate settled content (e.g., "sonarjs recommended is the permanent floor" → ADR or governance doc)
-- extract reusable patterns (e.g., gate-off-fix-gate-on is a pattern)
+- *(updated 2026-04-29)* `gate-off-fix-gate-on` was originally
+  framed here as a pattern candidate. Owner has since rejected it
+  as an **anti-pattern** — quality gates are NEVER disabled. See
+  [`never-disable-checks.md`](../../../rules/never-disable-checks.md)
+  rule and [`principles.md` §Code Quality](../../../directives/principles.md#code-quality)
+  amendment. This plan is **not** an instance of the anti-pattern:
+  the sonarjs gate is currently inactive by inheritance (the
+  placeholder `{ plugins: { sonarjs } }` entry registers the plugin
+  but activates no rules), not by deliberate disablement. Phase 5
+  activates a previously-absent gate after the backlog is clear; the
+  doctrine-strict alternative would be to activate the gate
+  immediately (Phase 0) and fix findings under it with the gate on
+  — a tradeoff against initial CI redness for many commits.
 - rotate the napkin
 - manage fitness
 - update the practice exchange

@@ -13,6 +13,11 @@ last_reviewed: 2026-04-19
 
 ## Start Here
 
+The architecture exists to turn Oak's openly licenced, fully sequenced and
+resourced curriculum into reusable primitives: generated SDKs, MCP and MCP App
+surfaces, hybrid semantic search, knowledge graph integration, and the
+OpenAPI-to-MCP pipeline that lets those pieces be reused inside and beyond Oak.
+
 1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) — **read this first** to understand the core pattern.
 2. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
 3. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.

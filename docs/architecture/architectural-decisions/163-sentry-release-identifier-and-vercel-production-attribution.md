@@ -659,7 +659,7 @@ The repo's existing `.github/workflows/release.yml` uses
 `semantic-release` to bump `package.json` and create a commit back to
 `main` on every successful CI run on `main`. That commit is the only
 commit Vercel builds to production (enforced by
-`apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`,
+`apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`,
 which cancels non-version-bump production builds).
 
 This ADR does not change the GitHub release workflow or the ignore
@@ -677,7 +677,7 @@ each subject to the ignoreCommand check.
 > **Amendment 2026-04-24 (production cancellation rule)**
 >
 > ADR-163 §9 names
-> `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+> `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`
 > as the script that cancels non-version-bump production builds, but
 > the **cancellation rule itself** was never stated as a numbered ADR
 > decision. The rule lived only in the script and its tests; the ADR
@@ -731,7 +731,7 @@ script does not silently swallow the diagnostic).
 **Enforcement mechanism** (second amendment, 2026-04-24):
 
 - **Canonical implementation**:
-  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`
   exports the pure `runVercelIgnoreCommand` function. All decision
   logic (branch gate, current-vs-previous semver comparison,
   exit-code mapping, stderr diagnostic emission) lives here. The
@@ -748,7 +748,7 @@ node` headed so `vercel.json`'s `ignoreCommand` invokes it
   directly to the canonical implementation at the same path. The
   literal command string is owned by `vercel.json`, not by this ADR.
 - **Unit tests**:
-  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+  `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
   covers all rows of the truth table above and is the proof for the
   rule itself.
 - **Comparator**: the version comparison uses the npm `semver`
@@ -1072,7 +1072,7 @@ intact.
   historical record. (2) New §10 records the production cancellation
   rule (production builds on `main` are cancelled unless the commit
   advances root `package.json` semver), naming
-  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  `apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs`
   as the canonical implementation and the workspace shim +
   `vercel.json` `ignoreCommand` as the wiring. Wiring integrity
   proven by a new wiring integration test (Enforcement §6); rule

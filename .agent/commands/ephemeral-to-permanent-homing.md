@@ -43,8 +43,8 @@ of these:
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | Host-repo architectural decisions                              | ADRs in `docs/architecture/architectural-decisions/`                            |
 | Practice-governance decisions (review/planning/etc.)           | PDRs in `.agent/practice-core/decision-records/` (portable; travels with Core)  |
-| General abstract engineering patterns (ecosystem-agnostic)     | `.agent/practice-core/patterns/` (via synthesis from ≥2 instances)              |
-| Specific engineering pattern instances (ecosystem-grounded)    | `.agent/memory/active/patterns/` (repo-local)                                   |
+| General abstract engineering patterns (ecosystem-agnostic)     | PDR with `pdr_kind: pattern` in `.agent/practice-core/decision-records/` (per PDR-007 amendment 2026-04-29; Core `patterns/` directory retired) |
+| Specific engineering pattern instances (ecosystem-grounded)    | `.agent/memory/active/patterns/` (repo-local; primary pattern home)             |
 | System behaviour documentation                                 | READMEs in the relevant workspace                                               |
 | Technical reference (data shapes, APIs, edge cases)            | TSDoc in source files or workspace READMEs                                      |
 | Operator runbooks, deployment context, on-call material        | `docs/operations/*.md` (host-local operations docs)                             |
@@ -53,7 +53,8 @@ of these:
 | Always-applied agent operational rules                         | `.agent/rules/*.md` with platform adapters at `.cursor/rules/`, `.claude/rules/` |
 | Subjective experience (texture, what work was like)            | `.agent/experience/<date>-<slug>.md`                                            |
 | Patterns/gotchas not yet stable enough to graduate             | `.agent/memory/active/distilled.md` (short-term staging only)                   |
-| Ephemeral exchange between Practice-bearing repos              | `.agent/practice-context/outgoing/` (transient; expires after integration)      |
+| Inbound Practice exchange (incoming sender→this-repo)          | `.agent/practice-core/incoming/` (transient; integrate per PDR-007 / PDR-024 then clear) |
+| Outbound Practice exchange substance (durable, by shape)       | Routes to PDRs / `.agent/reference/` / `.agent/research/` per PDR-024 amendment 2026-04-29 (Practice Context outbound surface retired) |
 
 If a piece of drift content does not match any of these shapes, the
 question to ask is not "where do I force it?" but **"is this useful

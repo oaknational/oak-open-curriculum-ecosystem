@@ -40,6 +40,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 | `future/cross-vendor-session-sidecars.plan.md` | Plan (Future) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters |
 | `future/collaboration-state-domain-model-and-comms-reliability.plan.md` | Plan (Future) | Clarify collaboration-state responsibilities, reliable shared-state writes, sidebar attention, UTC validation, and identity preflight |
+| `future/pr-lifecycle-skill.plan.md` | Plan (Future) | Future PR lifecycle skill covering creation, reviewer-facing descriptions, unresolved comments, reviewer waits, CI/Sonar/Bugbot feedback, and gate-honest closeout |
 | `archive/completed/codex-session-identity-plumbing.plan.md` | Plan (Completed) | Codex SessionStart identity context, shared preflight guidance for thread rows/state writes, report-only anonymous Codex record audit, and ADR/PDR propagation |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
 | `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |

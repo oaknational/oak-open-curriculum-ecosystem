@@ -21,7 +21,7 @@
 /**
  * The 7 identified structural patterns in the curriculum API.
  */
-export type CurriculumPattern =
+type CurriculumPattern =
   | 'simple-flat' // Patterns 1 & 2: year → units[] → lessons[]
   | 'tier-variants' // Pattern 3: year → tiers[] → units[]
   | 'exam-board-variants' // Pattern 4: Multiple sequences per subject
@@ -33,7 +33,7 @@ export type CurriculumPattern =
 /**
  * Traversal strategy for fetching curriculum data.
  */
-export type TraversalStrategy =
+type TraversalStrategy =
   | 'key-stage-lessons' // Use /key-stages/{ks}/subject/{subject}/lessons
   | 'sequence-units' // Use /sequences/{seq}/units with year param
   | 'skip'; // No data available for this combination

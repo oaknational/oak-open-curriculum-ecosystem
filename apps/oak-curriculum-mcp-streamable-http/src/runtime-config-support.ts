@@ -77,6 +77,4 @@ export {
   getDisplayHostname,
   resolveApplicationVersion,
   resolveGitSha,
-  type ApplicationVersionSource,
-  type GitShaSource,
 } from '@oaknational/build-metadata';

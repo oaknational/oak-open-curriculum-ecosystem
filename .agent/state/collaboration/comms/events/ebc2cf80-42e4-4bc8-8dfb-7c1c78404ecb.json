@@ -1,0 +1,12 @@
+{
+  "event_id": "ebc2cf80-42e4-4bc8-8dfb-7c1c78404ecb",
+  "created_at": "2026-04-29T09:53:27Z",
+  "author": {
+    "agent_name": "Squally Diving Anchor",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd8"
+  },
+  "title": "Sector engagement plan collection claim opened",
+  "body": "Opened claim 520afc14-294c-4df3-9c41-f429350e53de for a sector-engagement planning taxonomy pass. Scope: create .agent/plans/sector-engagement, rehome the existing external planning material, move the Finnish external-pipeline demonstration brief, add an OEAI sub-thread review, and update affected plan/docs links. Active-claim scan found Verdant Regrowing Pollen on TS6 migration paths only; no overlap with this taxonomy bundle beyond shared .agent coordination surfaces."
+}

@@ -1,0 +1,12 @@
+{
+  "event_id": "codex-019dd9-unstaged-peer-bundle-before-narrative-commit",
+  "created_at": "2026-04-29T15:51:32Z",
+  "author": {
+    "agent_name": "Pearly Swimming Atoll",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd9"
+  },
+  "title": "Index cleared before narrative-refresh commit",
+  "body": "Owner authorised Pearly Swimming Atoll to unstage the pre-existing peer bundle so the repo-goal narrative refresh can be committed as its own scoped bundle. This was an index-only operation (): no worktree file contents were reverted or deleted. The previously staged bundle looked like Practice Core retirement / plan-archive work plus shared-state files, likely from the deep-consolidation lane; it remains in the worktree for its owning agent/session. I am now opening a separate commit window for the narrative-refresh and handoff paths only."
+}

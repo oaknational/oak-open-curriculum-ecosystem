@@ -229,7 +229,8 @@ injected mocks -- naming convention adapted to local ecosystem), **What to
 Test** (project-specific surfaces), **Workflow** (TDD always, tests next to
 code). Make explicit that strictness means complete proof in the correct layer
 rather than forcing type, lint, import-boundary, or repo-state checks into
-tests.
+tests. Classification rule: behaviour shape, not filename suffix. Filename
+is signal, not exemption (testing-strategy amendment 2026-04-29).
 
 ## Architectural Decision Records (ADRs)
 
@@ -383,6 +384,10 @@ or browser-facing specialists.
 | `code-reviewer` | Gateway reviewer, always invoked | Correctness, edge cases, security, performance, readability, maintainability, test coverage. Triages to specialists.                                                  |
 | `test-reviewer` | Test quality and TDD compliance  | Test classification (unit/integration), naming conventions, mock simplicity, test value, TDD evidence. Recommends deletion for tests that test mocks or types.        |
 | `type-reviewer` | TypeScript type safety           | Type flow tracing, type widening detection, assertion usage, external boundary validation. Core principle: "why solve at runtime what you can embed at compile time?" |
+
+When dispatching a reviewer to gate merge or completion, brief with the
+full merge-gate scope, not the arc scope — reviewer verdicts are
+scope-bounded artefacts (PDR-015 amendment 2026-04-29).
 
 ## Commands: Canonical and Platform Adapters
 

@@ -2,14 +2,15 @@
 name: "Documentation Architecture Phase A: Immediate Improvements"
 overview: >
   Five documentation-only improvements with no dependencies: quality attribute
-  register, fitness function ADR, ADR index categorisation, C4 architecture
-  diagrams, and document layer content contract. All can execute in parallel.
+  register, ADR-166 / ADR-121 gate-mapping follow-up, ADR index
+  categorisation, C4 architecture diagrams, and document layer content
+  contract. All can execute in parallel.
 todos:
   - id: i1-quality-attribute-register
     content: "I1: Create quality attribute register at docs/architecture/quality-attribute-register.md"
     status: pending
-  - id: i2-fitness-function-adr
-    content: "I2: Write ADR framing quality gates as architectural fitness functions"
+  - id: i2-gate-mapping-follow-up
+    content: "I2: Follow up ADR-166 / ADR-121 gate-to-quality-attribute mapping without creating a duplicate ADR by default"
     status: pending
   - id: i4-adr-index-categorisation
     content: "I4: Add categorised view and skipped-number note to ADR index"
@@ -27,7 +28,7 @@ todos:
 
 # Documentation Architecture Phase A: Immediate Improvements
 
-**Last Updated**: 2026-04-10
+**Last Updated**: 2026-04-29
 **Status**: Queued
 **Scope**: Five documentation-only improvements with no dependencies
 **Parent**: [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md)
@@ -163,59 +164,29 @@ pnpm markdownlint:root
 
 ## Task I2: Fitness Function Framing ADR
 
-**File**: `docs/architecture/architectural-decisions/157-quality-gates-as-fitness-functions.md`
-(or next available number)
+**Status**: Partially satisfied by
+`docs/architecture/architectural-decisions/166-architectural-budget-system-across-scales.md`.
 
-**What**: An ADR that re-frames the existing 9-layer quality gate taxonomy as
-"architectural fitness functions" using the vocabulary from evolutionary
-architecture (Thoughtworks, Richards & Ford).
+**What**: Do not create the stale `157-quality-gates-as-fitness-functions.md`
+ADR. ADR-166 now carries the cross-scale fitness-function vocabulary for
+architectural budgets. Any remaining quality-attribute mapping work should
+extend ADR-166 or ADR-121 during execution, rather than adding a competing ADR.
 
-**Content structure**:
+**Remaining work**:
 
-1. **Context**: The repo has a 9-layer quality gate taxonomy. The external
-   research (FOSA, Thoughtworks) identifies "fitness functions" as the primary
-   mechanism for preventing architectural drift. Our quality gates ARE fitness
-   functions — this ADR names them as such.
-2. **Decision**: Adopt the fitness function vocabulary. Each quality gate layer
-   protects one or more quality attributes from the register. New gates must
-   specify which quality attribute they protect.
-3. **Consequences**: New gates evaluated against the quality attribute register.
-   Existing gates mapped to the attributes they protect. The vocabulary
-   connects our practice to the broader architecture community's language.
-
-**Mapping to include**:
-
-| Gate Layer | Fitness Function | Protects (QA Register) |
-|-----------|-----------------|------------------------|
-| Formatting | Style consistency | Maintainability |
-| Type correctness | Compile-time safety | Type safety |
-| Linting | Pattern enforcement, boundary rules | Evolvability, Type safety |
-| Static analysis | Dead code, circular deps | Maintainability, Evolvability |
-| Testing | Behavioural correctness | Testability, Type safety |
-| Mutation testing | Test suite effectiveness | Testability |
-| Build | Production artefact integrity | Operability |
-| Specialist review | Architectural compliance | All attributes |
-| Accessibility audit | WCAG 2.2 AA compliance | Accessibility |
-
-**Enforcement hook** (from Betty review): The ADR must specify where and how
-the "new gates must specify which quality attribute they protect" requirement
-is operationalised. Options:
-
-- Add a checklist item to the quality-gate-hardening plan template
-- Add a review checklist item to the code-reviewer agent's gate evaluation
-- Add a section to the quality-fix-plan-template.md
-
-Without enforcement, this ADR is relabelling, not governance.
+1. Decide whether the gate-to-quality-attribute mapping belongs in ADR-121,
+   ADR-166, or the quality attribute register once Task I1 is complete.
+2. Do not add a second ADR unless the remaining mapping work cannot be cleanly
+   expressed as an amendment to one of those existing documents.
+3. Any future gate-mapping requirement must name an enforcement hook; passive
+   vocabulary alone is not sufficient governance.
 
 **Acceptance Criteria**:
 
-1. ADR file exists with correct template structure (Status, Date, Context,
-   Decision, Consequences)
-2. Includes the gate-to-quality-attribute mapping table
-3. References the quality attribute register (I1)
-4. Specifies at least one enforcement mechanism for the new-gate requirement
-5. Added to ADR index README.md
-6. markdownlint passes
+1. This plan no longer points at an already-used ADR number.
+2. Any remaining quality-gate fitness-function work extends ADR-121, ADR-166,
+   or the quality attribute register.
+3. markdownlint passes.
 
 ---
 
@@ -369,16 +340,17 @@ They need to know where content belongs.
 ## Related Architectural Organisation Plans
 
 These plans reshape the workspace structure and boundaries. The C4 diagrams
-(I5), quality attribute register (I1), and fitness function framing (I2) must
-align with the architectural direction they set:
+(I5), quality attribute register (I1), and ADR-166 / ADR-121 gate-mapping
+follow-up (I2) must align with the architectural direction they set:
 
 - [Oak Surface Isolation](../future/oak-surface-isolation-and-generic-foundation-programme.plan.md) — separating Oak-specific surfaces from generic foundations; affects C4 container diagram scope
 - [Workspace Topology Exploration](../../sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md) — four-tier layered architecture model; affects C4 container diagram layer annotations and fitness function boundary rules
 - [SDK Codegen Workspace Decomposition](../codegen/future/sdk-codegen-workspace-decomposition.md) — SDK codegen restructuring; affects C4 container diagram SDK container boundaries
 
 **Alignment requirement**: C4 diagrams (I5) must reflect the current structure
-but note the planned direction. The fitness function ADR (I2) must account for
-the boundary enforcement rules that the topology exploration will introduce.
+but note the planned direction. The gate-mapping follow-up (I2) must account
+for the boundary enforcement rules that the topology exploration will
+introduce.
 
 ---
 

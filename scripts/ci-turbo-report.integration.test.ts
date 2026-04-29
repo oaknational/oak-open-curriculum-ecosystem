@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { findLatestSummaryFile, runCiTurboReport } from './ci-turbo-report.mjs';
+import { findLatestSummaryFile, runCiTurboReport } from './ci-turbo-report.js';
 
 function createTurboSummaryJson(tasks) {
   const failedCount = tasks.filter((task) => task.execution.exitCode !== 0).length;

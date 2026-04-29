@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-04-28
+**Last Updated**: 2026-04-29
 
 ---
 
@@ -38,6 +38,13 @@ Workspace layer separation audit has been promoted to current (2026-04-28):
 [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md).
 It prepares the repo-wide migration for the ADR-154 rule that distinct
 architectural layers must live in distinct workspaces.
+
+Architectural budget doctrine has been added as a future strategic companion
+(2026-04-29):
+[future/architectural-budget-system-across-scales.plan.md](future/architectural-budget-system-across-scales.plan.md).
+It treats function, file, directory, workspace, package API, and dependency
+graph bounds as one visibility-before-enforcement system without replacing the
+workspace layer-separation programme.
 
 ## Strategic Backlog (Future)
 
@@ -74,6 +81,7 @@ Roadmap:
 | `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
 | `current/workspace-layer-separation-audit.plan.md` | Post-M2 | Repo-wide layer/workspace audit and migration-preparation lane for ADR-154 |
 | `future/oak-surface-isolation-and-generic-foundation-programme.plan.md` | Post-M2 | Strategic umbrella for extracting generic foundations and making Oak workspaces thin leaves |
+| `future/architectural-budget-system-across-scales.plan.md` | Post-M2 | Strategic companion for ADR-166 architectural budgets, visibility, and staged enforcement |
 | `future/observability-and-quality-metrics.plan.md` | M2 + M3 | Strategic umbrella for the observability foundation, alerting, and quality dashboards |
 | `future/codex-mcp-server-compatibility.plan.md` | Post-M2 branch follow-up | Strategic brief for Codex-specific MCP auth compatibility work after Sentry validation closes |
 | `future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md` | Post-M2 | Strategic comparison of Solid Pods vs user-keyed private store architecture for long-term teacher preferences and memory |

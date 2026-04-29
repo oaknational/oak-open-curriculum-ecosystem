@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatAnnotations, formatSummaryTable, parseTurboSummary } from './ci-turbo-report.mjs';
+import { formatAnnotations, formatSummaryTable, parseTurboSummary } from './ci-turbo-report.js';
 
 function createValidTurboSummaryJson() {
   return {

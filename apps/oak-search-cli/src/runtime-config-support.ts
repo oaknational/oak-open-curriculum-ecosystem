@@ -40,9 +40,4 @@ export interface LoadRuntimeConfigOptions {
   readonly startDir: string;
 }
 
-export {
-  resolveApplicationVersion,
-  resolveGitSha,
-  type ApplicationVersionSource,
-  type GitShaSource,
-} from '@oaknational/build-metadata';
+export { resolveApplicationVersion, resolveGitSha } from '@oaknational/build-metadata';

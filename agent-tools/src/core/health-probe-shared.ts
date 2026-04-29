@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const CLAUDE_HOOK_COMMAND = 'node scripts/check-blocked-patterns.mjs';
+export const CLAUDE_HOOK_COMMAND = 'pnpm exec tsx scripts/check-blocked-patterns.ts';
 const COMMANDS_DIR = '.agent/commands';
 export const CURSOR_COMMANDS_DIR = '.cursor/commands';
 export const CLAUDE_COMMANDS_DIR = '.claude/commands';

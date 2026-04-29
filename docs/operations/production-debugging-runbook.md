@@ -690,8 +690,6 @@ done
 - Search wider time window (±5 minutes)
 - Search by approximate request parameters
 
-## Further Reading
-
 ## Local Production Build Testing
 
 The built-server harness allows you to test the production build locally before deploying to Vercel, helping diagnose deployment issues and validate instrumentation in a production-like environment.

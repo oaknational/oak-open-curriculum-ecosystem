@@ -92,7 +92,7 @@ See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 | [security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md) | Safety, evidence quality, and trust boundaries for end users |
 | [architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md) | Reliability, observability, and operational quality surface as UX |
 | [developer-experience/future/sdk-publishing-and-versioning-plan.md](../developer-experience/future/sdk-publishing-and-versioning-plan.md) | Developer-facing clarity and upgrade safety affect adoption |
-| [external/ooc-api-wishlist/index.md](../external/ooc-api-wishlist/index.md) | Upstream API/schema constraints that shape UX feasibility |
+| [sector-engagement/ooc-api-wishlist/index.md](../sector-engagement/ooc-api-wishlist/index.md) | Upstream API/schema constraints that shape UX feasibility |
 
 ---
 

@@ -12,8 +12,6 @@ import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/curriculum-
 import type { KeyStage, AllSubjectSlug } from '../../types/oak';
 import { type Phase, buildKeyStageFilter, collectMetadataFilters } from './phase-filter-utils';
 
-export { type Phase } from './phase-filter-utils';
-
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /**

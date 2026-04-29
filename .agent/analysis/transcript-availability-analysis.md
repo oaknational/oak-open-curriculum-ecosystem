@@ -382,7 +382,7 @@ The "transcript not found" warnings are **expected behavior**, not bugs:
 
 ## Related Documentation
 
-- [OOC API Wishlist](../plans/external/ooc-api-wishlist/00-overview-and-known-issues.md)
+- [OOC API Wishlist](../plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md)
 - [Content Coverage (Oak Docs)](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage)
 - [Terms and Conditions](https://www.thenational.academy/legal/terms-and-conditions-api-version)
 - [ADR-083: Complete Lesson Enumeration Strategy](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)

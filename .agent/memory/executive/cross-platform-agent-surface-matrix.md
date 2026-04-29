@@ -19,7 +19,7 @@ platform support, this file is the authoritative local source.
 Claude Code currently has native `PreToolUse` activation for Bash
 commands via the tracked project `.claude/settings.json`, backed by the
 canonical policy in `.agent/hooks/policy.json` and the repo-local
-runtime script `scripts/check-blocked-patterns.mjs`. Local additive
+runtime script `scripts/check-blocked-patterns.ts`. Local additive
 overrides, when needed, live in `.claude/settings.local.json`.
 
 Status by platform:
@@ -45,7 +45,7 @@ This repo's hook and adapter surfaces follow a small Policy Spine:
 | --- | --- | --- |
 | Canonical policy (`.agent/`) | Declares intended behaviour and support | No |
 | Native activation (tracked `.claude/settings.json`) | Activates supported policy in the repo baseline | No |
-| Repo-local runtime (`scripts/check-blocked-patterns.mjs`) | Enforces the active native hook path | No |
+| Repo-local runtime (`scripts/check-blocked-patterns.ts`) | Enforces the active native hook path | No |
 | Explanatory mirrors (this matrix, hook README) | Describe the live state and support contract | No |
 
 Failure semantics:

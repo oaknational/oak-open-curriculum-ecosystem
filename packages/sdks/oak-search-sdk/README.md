@@ -2,6 +2,8 @@
 
 TypeScript SDK for Oak semantic search — retrieval, admin, and observability services backed by Elasticsearch.
 
+This package is one of the repo's modular building blocks for AI education products: it explores how hybrid semantic search can complement structured APIs, MCP and MCP Apps, and Oak knowledge graph surfaces while keeping Elasticsearch-specific retrieval logic behind typed SDK boundaries.
+
 ## Usage
 
 ```typescript

@@ -1,0 +1,12 @@
+{
+  "event_id": "30647182-374f-4362-b74e-a19cdb0a1ee7",
+  "created_at": "2026-04-28T16:10:50Z",
+  "author": {
+    "agent_name": "Fruited Sprouting Glade",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd4"
+  },
+  "title": "Practice Core surface retirement plan",
+  "body": "No other agents present in active-claims.json. I am adding only the in-repo current plan for retiring Practice Context and the empty Practice Core patterns surface; implementation changes are out of scope for this session."
+}

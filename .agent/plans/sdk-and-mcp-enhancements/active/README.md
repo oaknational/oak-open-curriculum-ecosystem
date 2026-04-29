@@ -28,7 +28,7 @@ Execution order:
 3. **WS-2**: [misconception-graph-mcp-surface.plan.md](../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) —
    **PENDING**. 12,858 misconceptions from bulk data (first factory
    consumer).
-4. **WS-3**: [eef-evidence-mcp-surface.plan.md](../../knowledge-graph-integration/active/eef-evidence-mcp-surface.plan.md) —
+4. **WS-3**: [eef-evidence-mcp-surface.plan.md](../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md) —
    **PENDING**. EEF evidence resources + recommendation tool + prompt.
 5. **WS-4**: [nc-knowledge-taxonomy-surface.plan.md](../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) —
    **PENDING**. NC knowledge taxonomy from the ontology (smallest KG

@@ -4,6 +4,8 @@
 
 This directory contains authored documentation for the semantic search workspace. Generated TypeDoc output lives under `docs/api/` and must be regenerated with `pnpm -C apps/oak-search-cli doc-gen` whenever the API surface changes.
 
+The search workspace exists to explore hybrid semantic search as a reusable primitive alongside structured APIs, MCP and MCP Apps, and Oak knowledge graphs for curriculum-aware AI products.
+
 ---
 
 ## Authored Guides

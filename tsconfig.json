@@ -2,9 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": "."
+    "rootDir": "."
   },
-  "include": ["*.config.ts", "*.config.base.ts", "stryker.config.mjs", "eslint-rules/**/*.ts"],
+  "include": ["*.config.ts", "*.config.base.ts", "stryker.config.mjs"],
   "exclude": ["node_modules", "dist", "reference/**"]
 }

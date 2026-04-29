@@ -46,8 +46,8 @@ Active adjacent execution sources:
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
 5. ~~continuity-and-surprise-practice-adoption.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
 6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
-7. [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) (agentic corpus discoverability hub — ✅ complete)
-8. [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md) (governance-concept routing closeout — ✅ complete)
+7. [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](archive/completed/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) (agentic corpus discoverability hub — ✅ complete)
+8. [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](archive/completed/governance-concepts-and-agentic-mechanism-integration.execution.plan.md) (governance-concept routing closeout — ✅ complete)
 
 ---
 
@@ -211,8 +211,10 @@ Adjacent:
 - Convergence update (2026-03-04):
   - Strictness-specific ESLint convergence tasks (`no-console`, shared-config promotion work) are executed in
     [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
-  - Directory-complexity supporting constraints, depcruise/knip/`pnpm check` integration, and staged `max-files-per-dir` activation are executed in
+  - Directory-cardinality and staged `max-files-per-dir` activation are executed in
     [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+  - Depcruise and knip promotion are completed quality-gate-hardening history;
+    future package API and deep-import enforcement routes through ADR-166.
 - Done when:
   - enforcement phases 0-5 are delivered with deterministic validation
   - evidence-backed claims exist for enforcement outcomes
@@ -313,7 +315,7 @@ Adjacent:
 ### Adjacent — Governance Concepts and Agentic Mechanism Integration
 
 - Active plan:
-  [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md)
+  [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](archive/completed/governance-concepts-and-agentic-mechanism-integration.execution.plan.md)
 - Source strategy:
   [governance-concepts-and-agentic-mechanism-integration.plan.md](current/governance-concepts-and-agentic-mechanism-integration.plan.md)
 - Goal:
@@ -485,11 +487,11 @@ Adjacent:
 ### Adjacent — Agentic Corpus Discoverability Hub
 
 - Active plan:
-  [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md)
+  [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](archive/completed/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md)
 - Source strategy:
   [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md)
 - Goal:
-  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); merged into the lane README at `.agent/research/agentic-engineering/README.md` during the Session 8 rehoming pass per [rehoming plan](future/reference-research-notes-rehoming.plan.md))
+  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); merged into the lane README at `.agent/research/agentic-engineering/README.md` during the Session 8 rehoming pass per [rehoming plan](archive/completed/reference-research-notes-rehoming.plan.md))
   - create named research and reports lanes with reciprocal README links
   - make selected `/docs/**` entry points route into the wider source corpus
     without changing canon location

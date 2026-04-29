@@ -171,7 +171,7 @@ Platform-specific mode invocation patterns are designed as part of the adapter l
 
 ### Validation Updates
 
-`pnpm subagents:check` (`scripts/validate-subagents.mjs`) is extended to:
+`pnpm subagents:check` (`scripts/validate-subagents.ts`) is extended to:
 
 1. Verify every agent has a `classification` field in frontmatter with a valid value (`domain_expert`, `process_executor`, `specialist`).
 2. Verify specialist-classified agents reference the specialist input contract component.
@@ -229,4 +229,4 @@ The Practice Core (portable blueprint) and the applied Practice (this repo's ope
 - `.agent/sub-agents/components/` — reusable prompt components
 - `.agent/memory/executive/invoke-code-reviewers.md` — invocation guidance (to be renamed)
 - `.agent/practice-core/` — Practice Core files
-- `scripts/validate-subagents.mjs` — sub-agent validation script
+- `scripts/validate-subagents.ts` — sub-agent validation script

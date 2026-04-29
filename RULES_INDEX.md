@@ -38,6 +38,8 @@ files below are the source of truth for always-on repository rule doctrine.
 - `.agent/rules/no-skipped-tests.md`
 - `.agent/rules/no-type-shortcuts.md`
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
+- `.agent/rules/never-disable-checks.md`
+- `.agent/rules/no-machine-local-paths.md`
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/pre-merge-divergence-analysis.md`

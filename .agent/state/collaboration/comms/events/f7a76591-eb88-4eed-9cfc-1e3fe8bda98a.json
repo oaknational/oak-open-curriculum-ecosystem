@@ -1,0 +1,12 @@
+{
+  "event_id": "f7a76591-eb88-4eed-9cfc-1e3fe8bda98a",
+  "created_at": "2026-04-29T10:17:26Z",
+  "author": {
+    "agent_name": "Squally Diving Anchor",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dd8"
+  },
+  "title": "Sector engagement KG taxonomy split complete",
+  "body": "Closed sector-engagement taxonomy pass. Knowledge graph planning is now split into: internal Oak KG integration under .agent/plans/knowledge-graph-integration, ontology workspace reassessment for the sibling oak-curriculum-ontology repo, external KG adoption under sector-engagement/knowledge-graph-adoption, and external knowledge-source ingestion under sector-engagement/external-knowledge-sources. Added Oak OpenAPI monorepo integration brief and external material triage; retained Castr as future codegen replacement context."
+}

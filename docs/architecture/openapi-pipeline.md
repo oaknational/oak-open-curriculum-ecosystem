@@ -151,6 +151,12 @@ API. The planned SDK workspace decomposition (ADR-108)
 formalises this by separating generic pipeline concerns from
 Oak-specific configuration.
 
+That generality is part of the repository goal. The OpenAPI-to-MCP server
+pipeline is both an Oak implementation path and a reusable primitive for the
+wider education and technology sectors: a way to turn openly licenced,
+well-specified education APIs into typed SDKs, MCP tools, and MCP Apps without
+hand-maintained schemas or host-specific wrappers.
+
 ## How It Works
 
 ### Type Generation Flow
@@ -358,7 +364,7 @@ transformation layer entirely. Prerequisites: SDK workspace separation (in
 progress), side-by-side validation, then adapter removal. See
 [ADR-055](./architectural-decisions/055-zod-version-boundaries.md),
 [ADR-108](./architectural-decisions/108-sdk-workspace-decomposition.md), and
-the [Castr plan](../../.agent/plans/external/castr/README.md).
+the [Castr plan](../../.agent/plans/sector-engagement/castr/README.md).
 
 ## Key Takeaway
 

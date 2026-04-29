@@ -81,7 +81,7 @@ the default handler. Local `dist/index.js` is not the deployed artefact.
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
-  "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
+  "ignoreCommand": "node runtime-only-scripts/vercel-ignore-production-non-release-build.mjs"
 }
 ```
 
@@ -244,13 +244,13 @@ The build pipeline has two independent steps:
 ### Widget Codegen (`build:widget`)
 
 ```json
-"build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js"
+"build:widget": "vite build --config widget/vite.config.ts && pnpm exec tsx scripts/embed-widget-html.ts"
 ```
 
 1. **Vite** builds the widget React app into `.widget-build/oak-banner.html`
    (intermediate, gitignored). Uses `vite-plugin-singlefile` to inline all
    JavaScript and CSS — the canonical MCP Apps pattern for sandboxed iframes.
-2. **`embed-widget-html.js`** reads the built HTML and writes
+2. **`embed-widget-html.ts`** reads the built HTML and writes
    `src/generated/widget-html-content.ts` — a committed TypeScript constant
    exporting `WIDGET_HTML_CONTENT`.
 

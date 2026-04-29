@@ -2,7 +2,7 @@
 provenance: provenance.yml
 fitness_line_target: 200
 fitness_line_limit: 300
-fitness_char_limit: 15000
+fitness_char_limit: 15500
 fitness_line_length: 100
 ---
 
@@ -25,15 +25,14 @@ After creating all files, validate:
 
 1. `.agent/practice-core/` contains the full Practice Core package:
    the eight files (trinity + verification + entry points + changelog
-   + provenance), plus the three required directories —
-   `decision-records/` (with its README and any PDRs),
-   `patterns/` (with its README and any general abstract patterns),
-   and `incoming/.gitkeep`. The contract is the **set of surfaces
+   + provenance), plus the two required directories —
+   `decision-records/` (with its README and any PDRs) and
+   `incoming/.gitkeep`. The contract is the **set of surfaces
    and their roles**, not a file count; growth by explicit decision
-   per PDR-007. One optional peer directory may accompany the Core:
-   `.agent/practice-context/` (sender-maintained ephemeral exchange
-   material; `incoming/` there is transient; `outgoing/` sharpened
-   under PDR-007 to ephemeral-exchange-only).
+   per PDR-007 (as amended 2026-04-29 — the `patterns/` Core
+   directory and `practice-context/` peer companion were retired;
+   patterns live at `.agent/memory/active/patterns/` or as PDRs
+   with `pdr_kind: pattern`).
 2. `.agent/practice-index.md` exists, all its links resolve, and its
    sections match the format specified in
    [practice-bootstrap.md](practice-bootstrap.md).
@@ -97,9 +96,15 @@ consolidation, and transplantation close.
   threads, sidebars, joint decisions, and escalations; start-flow skills
   tell agents when to read it and UTC is canonical for collaboration
   timestamps.
++ **Shared-state writability smoke**: the canonical writer can write
+  to shared-state surfaces while a claim is held on the same path;
+  rules / skills / commands do not turn shared-state into write-blocked
+  surfaces (PDR-026 amendment 2026-04-29).
 + **Pattern discovery skill**: canonical `patterns` skill exists
-  pointing at both `practice-core/patterns/` (general abstractions)
-  and `memory/active/patterns/` (instances).
+  pointing at `memory/active/patterns/` (engineering instances) and
+  `practice-core/decision-records/` (Practice-governance patterns
+  with `pdr_kind: pattern` frontmatter; per PDR-007 amendment
+  2026-04-29, Core `patterns/` directory retired).
 + **Rule activation**: canonical rules in `.agent/rules/` have
   platform-native activation triggers (per-platform per PDR-009).
 
@@ -117,8 +122,8 @@ consolidation, and transplantation close.
 + **Practice Box (inbound)**: `practice-core/incoming/` exists
   (typically with `.gitkeep`) as the receiver for inbound Core
   packages.
-+ **Ephemeral exchange (outbound)**: `practice-context/outgoing/`
-  exists (optional) scoped to ephemeral exchange only per PDR-007.
++ **Outbound substance routing**: routes by shape per PDR-024
+  amendment 2026-04-29 (Practice Context outbound surface retired).
 
 ### Category D — Cross-cutting contracts
 

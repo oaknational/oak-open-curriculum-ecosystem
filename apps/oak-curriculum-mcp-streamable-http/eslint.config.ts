@@ -148,6 +148,12 @@ const config = defineConfigArray(
       // The rest of the gate logic stays in pure helpers under
       // build-scripts/sentry-configured-build-gate.ts.
       'build-scripts/run-sentry-configured-build.ts',
+      // Workspace tooling scripts (dev/test harness CLIs, e.g.
+      // `run-requests.ts`, `server-harness.ts`, `embed-widget-html.ts`).
+      // These are not product code — they read env vars at startup as
+      // their composition contract. ADR-168 covers the all-TS-scripts
+      // workspace rule and the runtime-only-scripts directory exception.
+      'scripts/**/*.ts',
     ],
     rules: {
       'no-restricted-syntax': [
@@ -262,9 +268,23 @@ const config = defineConfigArray(
     },
   },
   {
+    // Workspace tooling scripts: dev/test harness CLIs (e.g.
+    // `run-requests.ts`, `server-harness.ts`, `embed-widget-html.ts`).
+    // These are tooling, not product code — they read env vars at
+    // startup, structure heterogeneous log metadata via
+    // `Record<string, unknown>`, and are organised as imperative
+    // scripts rather than decomposed modules. The same architectural
+    // class as `build-scripts/**/*.{js,mjs}` (already exempted below)
+    // and the search-cli's `scripts/**/*.ts` block. ADR-168 records
+    // the workspace-script tier.
     files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
     rules: {
       'no-console': 'off',
+      complexity: 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      '@typescript-eslint/no-restricted-types': 'off',
     },
   },
   {
@@ -278,6 +298,24 @@ const config = defineConfigArray(
   },
   {
     files: ['build-scripts/**/*.js', 'build-scripts/**/*.mjs'],
+    rules: {
+      complexity: 'off',
+      'import-x/no-relative-parent-imports': 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      'no-console': 'off',
+    },
+  },
+  {
+    // Dedicated no-compile-no-deps directory per ADR-168. These
+    // scripts execute in environments that run BEFORE `pnpm install`
+    // (e.g. Vercel's `ignoreCommand`), so they cannot have a build
+    // step or external dependencies. They inline vendored helpers
+    // (semver), read process.env directly as their composition
+    // contract, and intentionally remain imperative single-file
+    // scripts. Same architectural class as `build-scripts/**/*.{js,mjs}`.
+    files: ['runtime-only-scripts/**/*.js', 'runtime-only-scripts/**/*.mjs'],
     rules: {
       complexity: 'off',
       'import-x/no-relative-parent-imports': 'off',

@@ -116,15 +116,14 @@ sufficient.
 
 All move to `icebox/future/`. No content changes.
 
-### D2: `external/` — CONFIRMED
+### D2: `sector-engagement/` — UPDATED
 
-Create `README.md` with collection brief explaining purpose (upstream
-dependency tracking and cross-repo reference material). Keep existing
-`castr/` and `ooc-api-wishlist/` as reference material alongside
-lifecycle directories. Create empty `active/`, `current/`, `future/`,
-`archive/completed/` with `.gitkeep`. Minimal `roadmap.md` note noting
-external tracking is reactive. **Further consolidation of this
-collection deferred to a separate session.**
+Owner direction on 2026-04-29 superseded the narrower `external/`
+collection name. The collection is now `sector-engagement/`, covering
+upstream dependency tracking, external data sources, partner/reference
+material, organisation-specific review threads, and adoption support for
+Oak resources. Keep existing `castr/`, `ooc-api-wishlist/`, and
+`ooc-issues/` as reference material alongside lifecycle directories.
 
 ### D3: `user-experience/` — CONFIRMED
 
@@ -288,28 +287,30 @@ reference.
 - All four lifecycle READMEs exist
 - `icebox/README.md` has header lifecycle links
 
-### Task 2.2: `external/` — add structure
+### Task 2.2: `sector-engagement/` — add structure
 
 **Create**:
 
-- `external/README.md` — collection brief: "Upstream dependency tracking
-  and cross-repo reference material. This collection tracks requirements
-  on external systems (Oak API wishlist, cross-project references) that
-  affect planning in other collections."
-- `external/roadmap.md` — minimal note: "External tracking is reactive.
-  Items surface when upstream changes or cross-repo needs are identified."
-- `external/active/README.md` — empty, from template
-- `external/current/README.md` — empty, from template
-- `external/future/README.md` — empty, from template
-- `external/archive/completed/.gitkeep`
+- `sector-engagement/README.md` — collection brief for external data sources,
+  upstream coordination, partner/reference material, organisation-specific
+  review threads, and adoption support for Oak resources.
+- `sector-engagement/roadmap.md` — strategic phase sequence for rehoming,
+  partner/adoption taxonomy, external data-source demonstrations, and
+  organisation-specific support playbooks.
+- `sector-engagement/active/README.md` — empty active index.
+- `sector-engagement/current/README.md` — empty current index.
+- `sector-engagement/future/README.md` — future index.
+- `sector-engagement/archive/completed/.gitkeep`
 
-**Keep**: `external/castr/` and `external/ooc-api-wishlist/` unchanged.
+**Keep**: `sector-engagement/castr/`,
+`sector-engagement/ooc-api-wishlist/`, and
+`sector-engagement/ooc-issues/` as reference material.
 
 **Acceptance**:
 
 - All lifecycle directories and READMEs exist
-- Existing `castr/` and `ooc-api-wishlist/` untouched
-- `external/README.md` has header lifecycle links
+- Existing `castr/`, `ooc-api-wishlist/`, and `ooc-issues/` preserved
+- `sector-engagement/README.md` has header lifecycle links
 
 ### Task 2.3: `user-experience/` — add lifecycle directories
 
@@ -425,15 +426,16 @@ passes.
 
 1. **Phase 1 first** — it unblocks Phase 3 (README alignment needs the
    directories to exist for links to resolve).
-2. **Phase 2 can parallelise** — `icebox/`, `external/`, and
+2. **Phase 2 can parallelise** — `icebox/`, `sector-engagement/`, and
    `user-experience/` are independent.
 3. **Use `git mv`** for icebox file moves to preserve history.
 4. **All templates** are at `.agent/plans/templates/`. Copy and
    customise; do not inline templates mechanically.
 5. **markdownlint** is the primary quality gate for this work (no
    product code changes).
-6. The `external/` collection is confirmed for structural standardisation
-   now, with further content consolidation deferred to a separate session.
+6. The `sector-engagement/` collection is confirmed for structural
+   standardisation now, with deeper engagement taxonomy work deferred to a
+   separate session.
 
 ---
 

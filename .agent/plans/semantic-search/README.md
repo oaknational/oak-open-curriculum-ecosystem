@@ -4,6 +4,9 @@
 
 ## Start Here
 
+- Purpose: explore how hybrid semantic search works in conjunction with APIs,
+  MCP, MCP Apps, and Oak knowledge graphs so AI education products can find,
+  explain, and compose curriculum resources from natural-language intent.
 - Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 - Knowledge-graph hub: [../knowledge-graph-integration/README.md](../knowledge-graph-integration/README.md)
 - Strategic sequence: [roadmap.md](roadmap.md)

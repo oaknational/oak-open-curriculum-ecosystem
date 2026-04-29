@@ -2,7 +2,7 @@
 provenance: provenance.yml
 fitness_line_target: 375
 fitness_line_limit: 500
-fitness_char_limit: 29000
+fitness_char_limit: 30500
 fitness_line_length: 100
 ---
 
@@ -12,6 +12,9 @@ The Practice is the self-reinforcing system of principles, structures, agents,
 and tooling that governs how work happens in this repository. It creates the
 conditions for safe, high-quality human-AI collaboration. The Practice is what
 produces the repo's deliverables — but it is not the deliverables themselves.
+It is deliberately plain text and vendor-portable: agents from major platforms
+can collaborate, continually learn and adapt, and preserve institutional and
+operational knowledge where future work can inspect it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
 links to this repo's directives, ADRs, and tools,
@@ -84,6 +87,19 @@ constraining a concept during writing to stay within a count underweights
 vital understanding. Fitness is a post-writing health signal, never a reason
 to suppress learning.
 
+The discipline has two valid responses to a write that pushes a shared-state
+knowledge surface past target/limit: write the insight in full and flag the
+file for attention, OR thoughtful holistic promotion of mature concepts to
+permanent homes (ADR / PDR / governance doc / principles / rule / README /
+TSDoc) via the graduation scan. The forbidden responses are naive cutting,
+compression, summarisation, splitting-for-budget, skipping the write, or
+drafting a "concise version" alongside the full version. Compressed capture
+is lossy capture; capture is sacred. (See PDR-026 amendment 2026-04-29.)
+
+The strict-and-complete posture has an operational form at the signal-surface
+level: tool error is a question, not a problem to bypass (see PDR-018
+amendment 2026-04-29).
+
 This layer defines _why_ the Practice works.
 
 ### Structure
@@ -135,7 +151,7 @@ graph LR
     P -->|"inform"| W
 ```
 
-### Five Audiences
+### Six Audiences
 
 | Stage        | Artefact                                | Audience                                | Fitness governor                                                                                  |
 | ------------ | --------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -264,6 +280,13 @@ graph LR
   lifecycle entries, and consolidate-docs audits stale or unresolved state.
   Timestamps in collaboration state are UTC ISO 8601 with trailing `Z`;
   owner-local time is prose context only.
+  The shared-state contract: claims surface coordination, never refuse
+  entry. Shared-state knowledge surfaces (napkin, distilled, patterns,
+  thread records, repo-continuity, comms log, conversations, escalations,
+  claims) are ALWAYS writable and ALWAYS commit-includable regardless of
+  any active claim — deliberate anti-log-jam tradeoff. The commit queue /
+  `git:index/head` window is the serialisation mechanism, not the claim.
+  (See PDR-026 amendment 2026-04-29.)
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from
   strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — cross-collection overview

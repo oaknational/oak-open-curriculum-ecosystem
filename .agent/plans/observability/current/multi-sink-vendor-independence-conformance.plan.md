@@ -76,18 +76,24 @@ the regression.
 
 ## Design Principles
 
-1. **Prove, don't assert** — ADR-162 asserts vendor-independence;
-   this plan proves it twice (emission + structural).
-2. **Structural over behavioural where possible** — the ESLint rule
-   runs at every commit; the emission test runs per release. Catching
-   a regression at commit-time is cheaper.
-3. **Allowlist, not blocklist** — the import lint lists permitted
-   locations; everything else is denied. A new vendor SDK lands with
-   an explicit allowlist change, not silent adoption.
-4. **Composition-root carve-out is explicit** — per ADR-162's
-   §Vendor-Independence clause, composition roots MAY import vendor
-   SDKs as DI wiring. The allowlist encodes this carve-out file-by-
-   file, not via pattern.
+This plan operationalises two enforcement doctrines that now live in
+[ADR-162 § Enforcement Principles](../../../../docs/architecture/architectural-decisions/162-observability-first.md#enforcement-principles)
+(graduated 2026-04-29): **prove, don't assert** (paired emission +
+structural tests) and **allowlist, not blocklist** (explicit
+permitted-location listing, composition-root carve-out encoded
+file-by-file).
+
+Plan-scoped tradeoffs (not doctrine):
+
+- **Structural over behavioural where possible** — the ESLint rule
+  runs at every commit; the emission test runs per release. Catching
+  a regression at commit-time is cheaper. This is sequencing, not
+  doctrine.
+- **Composition-root carve-out is explicit** — per ADR-162's
+  §Vendor-Independence clause, composition roots MAY import vendor
+  SDKs as DI wiring. The allowlist encodes this carve-out file-by-
+  file, not via pattern. (This is now part of the ADR's allowlist
+  doctrine; cited here for plan-body clarity.)
 
 **Non-Goals** (YAGNI):
 

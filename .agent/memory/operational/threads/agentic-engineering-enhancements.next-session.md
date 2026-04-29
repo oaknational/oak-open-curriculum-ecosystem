@@ -1,6 +1,12 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
+**Last refreshed**: 2026-04-29 (Squally Diving Anchor / codex / GPT-5 /
+019dd8 — owner-requested PR lifecycle skill need captured as the future
+[`pr-lifecycle-skill.plan.md`](../../../plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md).
+No implementation started; this is a planning note for a future Practice-owned
+skill.)
+
+**Prior refresh**: 2026-04-28 (Coastal Mooring Atoll / codex / GPT-5 /
 019dd3 — lightweight session handoff after the Codex identity plan archive.
 The completed archive claim is closed, entrypoints remain pointer-only, the
 thread identity row is refreshed, and Mossy Creeping Branch's napkin overflow
@@ -422,7 +428,10 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Nebulous Illuminating Satellite` | `claude-code` | `claude-opus-4-7-1m` | `fe4acc` | `doctrine-sharpening-and-deeper-convergence-pass; gate-off-fix-gate-on-anti-pattern-elevation; practice-core-surface-retirement-execution; pattern-and-displaced-doctrine-graduations; trinity-active-principles-extensions-with-per-diff-approval; deferred-items-plan-family-authoring; six-commit-landing-shape` | 2026-04-29 | 2026-04-29 |
+| `Pearly Swimming Atoll` | `codex` | `GPT-5` | `019dd9` | `repo-goal-narrative-refresh` | 2026-04-29 | 2026-04-29 |
 | `Estuarine Washing Beacon` | `codex` | `GPT-5` | `019dd3` | `codex-agent-config-path-and-skill-discovery-repair` | 2026-04-28 | 2026-04-28 |
+| `Squally Diving Anchor` | `codex` | `GPT-5` | `019dd8` | `pr-lifecycle-skill-need-capture` | 2026-04-29 | 2026-04-29 |
 | `Coastal Mooring Atoll` | `codex` | `GPT-5` | `019dd3` | `session-handoff-codex-identity-archive-claim-closeout` | 2026-04-28 | 2026-04-28 |
 | `Glassy Ebbing Reef` | `codex` | `GPT-5` | `019dd3` | `cloudflare-planning-and-commit-gate-doctrine-handoff` | 2026-04-28 | 2026-04-28 |
 | `Mossy Creeping Branch` | `codex` | `GPT-5` | `019dd3` | `codex-session-identity-plumbing-current-slice-and-doctrine-propagation` | 2026-04-28 | 2026-04-28 |
@@ -1213,7 +1222,12 @@ Choose the lane deliberately:
    Only perform manual repair of historical anonymous rows when there is
    stronger evidence than the row itself; keep title/statusline as optional
    display.
-9. **Other agentic engineering work** — pick an owner-directed queued plan.
+9. **PR lifecycle skill** — promote
+   [`pr-lifecycle-skill.plan.md`](../../../plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md)
+   when the next PR closeout needs agent-owned creation, comment harvesting,
+   reviewer-wait handling, CI/Sonar/Bugbot triage, and gate-honest closure.
+   First slice should be a documentation skill only.
+10. **Other agentic engineering work** — pick an owner-directed queued plan.
    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
@@ -1247,3 +1261,7 @@ Choose the lane deliberately:
   TypeScript-specific but document the capability contract as portable
   Practice behaviour under PDR-035, with this repo's implementation choices
   treated as ADR-165 phenotype.
+- If PR closeout friction recurs, promote the PR lifecycle skill before adding
+  more ad hoc PR instructions to existing skills. The skill must preserve
+  gate-honest quality improvement and reviewer-facing communication as its
+  first principles.

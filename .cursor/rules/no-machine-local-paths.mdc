@@ -1,0 +1,6 @@
+---
+description: Filesystem paths in version-controlled files must resolve identically on every machine. Forbids literal absolute paths, relative paths reaching outside the repo into per-user surfaces, and hardcoded usernames or user-specific path segments.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-machine-local-paths.md`.

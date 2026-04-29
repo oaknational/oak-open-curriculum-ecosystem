@@ -84,7 +84,7 @@ export interface ExamSubjectEntry {
 }
 
 /** Unit entry in the sequence response. */
-export interface UnitEntry {
+interface UnitEntry {
   readonly unitSlug?: string;
   readonly unitTitle: string;
   readonly unitOrder: number;
@@ -103,7 +103,7 @@ export interface Ks4Logger {
 }
 
 /** Log data for KS4 context operations. */
-export interface Ks4LogData extends LogContextInput {
+interface Ks4LogData extends LogContextInput {
   sequenceSlug?: string;
   examBoard?: string | null;
   ks4Option?: string | null;

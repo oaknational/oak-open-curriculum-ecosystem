@@ -410,4 +410,4 @@ Each unit document should contain:
 - **[Data Variances](../../docs/domain/DATA-VARIANCES.md)** — Consolidated reference for all curriculum data differences
 - [ADR-080: KS4 Metadata Denormalisation Strategy](../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 - [ADR-083: Complete Lesson Enumeration Strategy](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
-- [Upstream API Wishlist](./external/ooc-api-wishlist/00-overview-and-known-issues.md)
+- [Upstream API Wishlist](../plans/sector-engagement/ooc-api-wishlist/00-overview-and-known-issues.md)

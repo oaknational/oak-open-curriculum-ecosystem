@@ -2,6 +2,13 @@
 
 Practical guidance for adding new capabilities to the Oak Open Curriculum Ecosystem.
 
+Extensions should strengthen the repository's reusable building blocks:
+OpenAPI-generated SDKs, MCP and MCP App surfaces, hybrid semantic search,
+knowledge graph resources, and the Practice that keeps agentic-first
+engineering knowledge in plain text. Prefer additions that make Oak's openly
+licenced curriculum easier for internal Oak teams and the wider education and
+technology sectors to build with.
+
 ## Adding New MCP Tools
 
 MCP tools are generated from the OpenAPI schema — you do not write tool definitions by hand. When a new API endpoint appears in the upstream OpenAPI specification, `pnpm sdk-codegen` generates the corresponding MCP tool automatically.

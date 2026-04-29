@@ -65,9 +65,3 @@ Status: Deferred (execute after import hygiene and docs polish). This plan mirro
 2. Wire Notion app with Workers provider (2–4h)
 3. Add Wrangler config, bindings, and deploy preview (1–2h)
 4. Document deployment and update architecture docs (1–2h)
-
-## Acceptance
-
-- Cloudflare provider passes contract tests identically to Node.
-- Example deployment documented with env/setup steps.
-- Lint/type-check/test/build all green.

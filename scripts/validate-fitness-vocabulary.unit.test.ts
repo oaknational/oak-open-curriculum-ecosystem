@@ -4,7 +4,7 @@ import {
   findForbiddenPhrases,
   shouldInspectFile,
   shouldReportMatch,
-} from './validate-fitness-vocabulary.mjs';
+} from './validate-fitness-vocabulary.js';
 
 describe('shouldReportMatch', () => {
   it('reports non-filename matches of two-threshold', () => {
@@ -76,17 +76,8 @@ describe('shouldInspectFile', () => {
     ).toBe(false);
   });
 
-  it('excludes the outgoing broadcast files (carry provenance of the evolution)', () => {
-    expect(
-      shouldInspectFile('.agent/practice-context/outgoing/three-dimension-fitness-functions.md'),
-    ).toBe(false);
-    expect(shouldInspectFile('.agent/practice-context/outgoing/validate-practice-fitness.ts')).toBe(
-      false,
-    );
-  });
-
   it('excludes the vocabulary validator itself and its tests', () => {
-    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.mjs')).toBe(false);
+    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.ts')).toBe(false);
     expect(shouldInspectFile('scripts/validate-fitness-vocabulary.unit.test.ts')).toBe(false);
   });
 });
@@ -125,7 +116,9 @@ describe('findForbiddenPhrases', () => {
     const content = 'This is advisory, not a blocking gate and a blocking violation.';
     const findings = findForbiddenPhrases('test.md', content);
 
-    const phrases = findings.map((finding) => finding.phrase).toSorted();
+    const phrases = findings
+      .map((finding) => finding.phrase)
+      .toSorted((left, right) => left.localeCompare(right));
     expect(phrases).toContain('advisory, not a blocking gate');
     expect(phrases).toContain('blocking violation');
     expect(phrases).toContain('not a blocking gate');

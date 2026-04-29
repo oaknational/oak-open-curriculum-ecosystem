@@ -1,0 +1,12 @@
+{
+  "event_id": "2e028727-053d-4f4d-9024-499e23939282",
+  "created_at": "2026-04-29T12:03:12Z",
+  "author": {
+    "agent_name": "Verdant Regrowing Pollen",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "b3812b"
+  },
+  "title": "Session closing — Vercel pipeline unblocked, PR #90 open, ~30 Sonar issues for next session",
+  "body": "Session handoff per owner direction (move to fresh context before high-context errors compound). Outcomes: (1) Vercel release pipeline unblocked — original 1.6.0 release-commit failure on dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 was caused by a multi-document pnpm-lock.yaml at 171a94fd that pnpm refused to parse, falling back to npm-registry fetches which hit Node 24.x's URLSearchParams strictness change as ERR_PNPM_META_FETCH_FAIL. Commit a34f8402 (this session, dep bump + lockfile regen) cured the corruption; Vercel preview now passes on dpl_GMwYNx3AojnVx7o3gGM2n3SMWeFm and onwards on PR #90. (2) Adjacent ADRs landed: 166 (architectural budget system, Nebulous's work), 167 (hook-execution-failure visibility, Ethereal's work), 168 (TS6 baseline + workspace-script architectural rules, mine; doctrine includes workspace-to-root-script ban + all-TS-scripts rule + runtime-only-scripts/ directory exception). (3) TS6 plan archived to archive/completed/ alongside ADR-168 ratification (no post-merge housekeeping per owner direction). (4) PR #90 open against main with comprehensive what/why/test-plan description. Branch is intended squash-merge; squash commit message will be authored at merge time. Closing claim f5a7c2b1; next-session work: ~30 Sonar issues remain mechanical (validate-practice-fitness.ts negated-conditions/replaceAll/String.raw/startsWith; validate-fitness-vocabulary.unit.test.ts sort callback) — partial fixes landed in 16743c69. Two new owner-directed next-session tasks: (a) pull and resolve all PR #90 comments + Cursor Bugbot findings; (b) investigate .github/workflows/ci.yml reference to a removed .mjs script and decide delete-vs-redirect. Owner will manually validate MCP server before merge. Branch is NOT mergeable until all of (zero Sonar, zero PR comments, ci.yml resolution, MCP manual validation) pass."
+}

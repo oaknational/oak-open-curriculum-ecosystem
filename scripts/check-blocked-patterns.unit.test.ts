@@ -6,7 +6,7 @@ import {
   findBlockedPattern,
   parseBlockedPatternPolicy,
   parseHookInput,
-} from './check-blocked-patterns.mjs';
+} from './check-blocked-patterns.js';
 
 describe('findBlockedPattern', () => {
   it('matches dangerous git flags even when arguments appear between tokens', () => {

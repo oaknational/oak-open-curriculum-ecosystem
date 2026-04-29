@@ -23,7 +23,7 @@ import { ingestLogger } from '../logger';
 /**
  * Canonical unit descriptor extracted from the sandbox fixture payloads.
  */
-export interface FixtureUnitDescriptor {
+interface FixtureUnitDescriptor {
   readonly keyStage: KeyStage;
   readonly subject: SearchSubjectSlug;
   readonly unitSlug: string;
@@ -33,7 +33,7 @@ export interface FixtureUnitDescriptor {
 /**
  * Canonical lesson group descriptor extracted from the sandbox fixture payloads.
  */
-export interface FixtureLessonGroup {
+interface FixtureLessonGroup {
   readonly keyStage: KeyStage;
   readonly subject: SearchSubjectSlug;
   readonly unitSlug: string;

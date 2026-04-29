@@ -2,23 +2,33 @@
 name: patterns
 classification: passive
 description: >-
-  Check .agent/practice-core/patterns/ (general abstractions) and
-  .agent/memory/active/patterns/ (repo-local instances) for known solutions
-  to recurring design problems before inventing a new approach.
-  Triggered when facing code, architecture, process, testing, or
-  agent infrastructure decisions.
+  Check .agent/memory/active/patterns/ for repo-grounded pattern
+  instances and .agent/practice-core/decision-records/ for
+  Practice-governance patterns (PDRs with pdr_kind: pattern) before
+  inventing a new approach. Triggered when facing code, architecture,
+  process, testing, or agent infrastructure decisions.
 ---
 
 # Patterns
 
 When you identify a design problem -- whether it involves type-safety, system boundaries, engineering workflows, test design, or agent infrastructure -- check the pattern surfaces for known solutions before inventing a new approach.
 
-**Two surfaces, distinct roles** (per PDR-007):
+**Two surfaces, distinct roles** (per PDR-007 as amended 2026-04-29):
 
-- **`.agent/practice-core/patterns/`** — general, ecosystem-agnostic abstract patterns that travel with the Practice Core. Read here first: if a general pattern already names your class of problem, it prevents re-inventing the abstraction.
-- **`.agent/memory/active/patterns/`** — specific, ecosystem-grounded pattern instances proven in this repo (TypeScript, Zod, Vitest, MCP, etc.). Read here second: instances show how the general pattern is expressed concretely in this stack.
+- **`.agent/memory/active/patterns/`** — repo-grounded pattern
+  instances proven in this stack (TypeScript, Zod, Vitest, MCP,
+  etc.). The primary pattern home. Read here first.
+- **`.agent/practice-core/decision-records/`** — Practice-governance
+  patterns take **PDR shape** with `pdr_kind: pattern` frontmatter.
+  General abstract patterns (cross-repo, ecosystem-agnostic) that
+  would have been "Core patterns" pre-2026-04-29 retirement now
+  graduate as PDRs. Browse the PDR index when looking for the
+  general form of a recurring engineering problem.
 
-**Not here**: Practice-governance patterns (review discipline, planning discipline, reviewer authority, etc.) live as PDRs in `.agent/practice-core/decision-records/`, not in either patterns directory. If your question is about how the Practice itself operates, consult the PDR index.
+The previous `.agent/practice-core/patterns/` directory was retired
+2026-04-29 (PDR-007 amendment) — no general patterns had been
+authored there over its lifetime; all Practice-governance abstractions
+matured as PDRs instead. There is no Core-pattern destination.
 
 ## When to Use
 
@@ -35,12 +45,11 @@ When you identify a design problem -- whether it involves type-safety, system bo
 
 ## Steps
 
-1. Read `.agent/practice-core/patterns/README.md` first for general abstractions that travel with the Core.
-2. Read `.agent/memory/active/patterns/README.md` for repo-local instances.
-3. Match the current problem against each pattern's `use_this_when` field.
-4. If a pattern matches, read its full file and apply the approach. When a specific instance matches but the general form also exists, the general pattern names the principle; the instance shows one concrete expression.
-5. If the question is about how the Practice itself operates (review, planning, reviewer authority, etc.), consult `.agent/practice-core/decision-records/README.md` instead — Practice-governance substance is PDR-shaped, not pattern-shaped.
-6. If nothing matches, proceed normally -- do not force a fit.
+1. Read `.agent/memory/active/patterns/README.md` for repo-grounded pattern instances.
+2. Match the current problem against each pattern's `use_this_when` field.
+3. If a pattern matches, read its full file and apply the approach.
+4. If nothing in `memory/active/patterns/` matches but the problem feels structural / cross-cutting, consult `.agent/practice-core/decision-records/README.md` — Practice-governance patterns and general abstract patterns live there as PDRs (filter for `pdr_kind: pattern` or browse by topic).
+5. If nothing matches, proceed normally -- do not force a fit.
 
 ## Important
 

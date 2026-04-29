@@ -1,7 +1,7 @@
 # Architecture and Infrastructure Roadmap
 
 **Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
-**Last Updated**: 2026-04-17
+**Last Updated**: 2026-04-29
 **Session Entry**: [`start-right-quick`](../../skills/start-right-quick/SKILL.md) + [`memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md)
 
 ---
@@ -49,6 +49,12 @@ Lane indexes:
   [current/workspace-layer-separation-audit.plan.md](current/workspace-layer-separation-audit.plan.md)
   to turn ADR-154's strengthened rule into an authoritative
   layer/workspace matrix and migration tranche map.
+- Architectural budget doctrine is now captured in
+  [ADR-166](../../../docs/architecture/architectural-decisions/166-architectural-budget-system-across-scales.md)
+  and the future strategic companion plan
+  [future/architectural-budget-system-across-scales.plan.md](future/architectural-budget-system-across-scales.plan.md).
+  This adds a cross-scale visibility and anti-gaming lens without replacing
+  the workspace layer-separation programme.
 - A new strategic umbrella,
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md),
   now defines the later programme for separating layers into workspaces and
@@ -83,6 +89,7 @@ Phase 1: Sentry + OTel foundation                     🔄 active
 Phase 2: Config + dependency standardisation          ⏳ current
 Phase 3: Workspace layer separation programme         ⏳ current/future
   Audit: repo-wide layer/workspace matrix             ⏳ current
+  Companion: architectural budget visibility lens     📋 future
   Tranche 1: platform/runtime foundations             📋 future
   Tranche 2: design system                            📋 future
   Tranche 3: tooling/governance                       📋 future
@@ -130,6 +137,10 @@ Phase 4: Quality/operations hardening                 📋 future
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md)
 - Companion strategic plan:
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md)
+- Cross-scale budget companion:
+  [future/architectural-budget-system-across-scales.plan.md](future/architectural-budget-system-across-scales.plan.md)
+  with visibility and enforcement child briefs. This companion provides
+  health signals and anti-gaming doctrine; tranche plans still own migrations.
 - Done when:
   every workspace owns one coherent layer, mixed foundations have been split
   or neutralised by tranche, Oak workspaces are visibly thin leaves, and

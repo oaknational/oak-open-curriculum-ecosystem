@@ -5,6 +5,13 @@
 Planning hub for SDK pipeline evolution, MCP Apps work, and related
 architectural changes.
 
+This collection is where Oak turns its OpenAPI contract into reusable
+developer and AI-platform surfaces: generated SDKs, MCP tools, MCP Apps, and
+the OpenAPI-to-MCP server pipeline. The purpose is both product-facing and
+sector-facing: explore what MCP Apps can do in hosts such as Claude Cowork and
+ChatGPT, while making Oak's openly licenced curriculum easier for external
+education and technology teams to build with.
+
 **Collection Roadmap**: [roadmap.md](roadmap.md)
 **Active Plans**: [active/README.md](active/README.md)
 **Current Plans**: [current/README.md](current/README.md)

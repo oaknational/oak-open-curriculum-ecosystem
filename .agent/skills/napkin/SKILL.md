@@ -33,6 +33,62 @@ logging. The distillation rotation in the
 [consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.
 
+## Knowledge Preservation Is Absolute — Fitness Is Never a Constraint
+
+**Writing to shared-state records of knowledge is NEVER blocked by
+fitness limits.** This applies to every shared-state knowledge surface:
+the napkin, `distilled.md`, `patterns/*.md`, per-thread next-session
+records, repo-continuity, the shared communication log, decision
+threads, escalations, claims, and any other surface that records what
+agents and the owner know together. The rule is to ALWAYS preserve
+the knowledge and then flag that the file needs follow-up attention.
+
+The only two valid responses when a write would push a file past its
+fitness target or limit are:
+
+1. **Write the full observation and flag the file for attention** —
+   record the insight at the weight the signal deserves, add a note
+   (`<!-- fitness exceeded by N lines; needs consolidation -->`) at the
+   top of the new entry, and let the next consolidation pass route the
+   structural pressure.
+2. **Thoughtful, holistic promotion of mature concepts and knowledge**
+   out of the file to permanent homes — ADRs, PDRs, principles, rules,
+   patterns, READMEs, governance docs — applying the
+   [`/jc-consolidate-docs`](../../commands/consolidate-docs.md)
+   graduation scan (step 7) to specific entries that are stable and
+   have a natural permanent home. This is the deeper response: not
+   "make space" but "the knowledge has matured enough to leave the
+   staging surface."
+
+**What is NEVER valid**:
+
+- Trimming, compressing, or "summarising" the new insight to fit the
+  budget. Compressed capture is lossy capture.
+- Naively cutting existing entries to make room. Each existing entry
+  earned its place; removal is a graduation decision (does it have a
+  permanent home?), not a space-making decision.
+- Splitting the insight into shorter pieces purely to satisfy a line
+  count. Split only when the substance genuinely separates into
+  distinct concerns.
+- Skipping or deferring the write because the file is full. The file
+  being full is a structural signal, not a write veto.
+- Drafting a "concise version" alongside the full version and choosing
+  which to keep. Drop the budget, not the insight.
+
+Capture is sacred; fitness is a signal that consolidation or
+graduation is overdue, never a signal to write less.
+
+**Why**: Owner-named twice in the 2026-04-29 sessions. First during
+the TS6 migration session: the agent truncated a napkin entry because
+the file was at 282/300 lines and pointed to deeper artefacts as a
+substitute. Second during the consolidation refresh: "writing to the
+napkin, distilled, and similar records of shared state is NEVER
+blocked by fitness function limits, the rule is to ALWAYS preserve
+knowledge, and then flag that the file needs follow-up attention;
+never write less to stay under a limit, never naively cut content,
+the only valid approach is a thoughtful and holistic promotion of
+concepts and knowledge."
+
 ## Continuous Updates
 
 Update the napkin as you work, not just at session start and

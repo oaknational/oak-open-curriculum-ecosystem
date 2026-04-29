@@ -20,9 +20,9 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
 | [compliance/](compliance/) | External policy compliance, directory listing requirements, regulatory alignment | 📋 Planned |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
-| [external/](external/) | Upstream API wishlist | 📋 Reference |
+| [sector-engagement/](sector-engagement/) | External data sources, upstream coordination, partner review threads, KG adoption support, and external-source intake | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
-| [knowledge-graph-integration/](knowledge-graph-integration/) | Oak Curriculum Ontology integration, KG surfaces, graph serving, EEF evidence | 🔄 Active |
+| [knowledge-graph-integration/](knowledge-graph-integration/) | Internal Oak Curriculum Ontology integration, KG surfaces, graph serving, search projections, and ontology workspace decisions | 🔄 Active |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |
 | [templates/](templates/) | Plan templates | 📚 Reference |
 

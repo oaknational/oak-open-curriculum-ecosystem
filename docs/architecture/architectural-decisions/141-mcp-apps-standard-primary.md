@@ -36,6 +36,11 @@ Oak's MCP Apps rollout. Resource registration now imports
 `@modelcontextprotocol/ext-apps/server`; tool registration and the widget client
 bridge complete in later work streams.
 
+**Current framing note (2026-04-29):** this decision also carries the repo's
+MCP Apps exploration goal. Oak is testing how one MCP App surface can work in
+AI platforms such as Claude Cowork and ChatGPT while remaining a developer tool
+surface for teams building with Oak's curriculum primitives.
+
 ## Decision
 
 Oak builds one MCP server with MCP Apps widgets. ChatGPT is one host among

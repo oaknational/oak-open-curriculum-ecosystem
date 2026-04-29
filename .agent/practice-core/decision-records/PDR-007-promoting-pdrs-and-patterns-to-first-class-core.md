@@ -1,6 +1,6 @@
 # PDR-007: Promoting PDRs and Universal Patterns to First-Class Core Infrastructure
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-04-29)
 **Date**: 2026-04-18
 **Related**:
 [PDR-001](PDR-001-location-of-practice-decision-records.md)
@@ -87,6 +87,47 @@ package of required files and required directories." Add two
 first-class Core directories: `decision-records/` and `patterns/`.
 Sharpen `.agent/memory/active/patterns/` and `.agent/practice-context/outgoing/`
 to their remaining roles. Fold Pattern Exchange into Core travel.**
+
+### Amendment 2026-04-29 — `patterns/` and `practice-context/` retired
+
+The 2026-04-18 decision introduced `practice-core/patterns/` as a
+first-class Core directory for general abstract patterns synthesised
+from ≥2 instances. By 2026-04-29 no general patterns had been
+authored there: every Practice-governance abstraction matured as a
+PDR (or as PDR amendments) instead, and every engineering instance
+remained at `.agent/memory/active/patterns/` per PDR-007's own
+synthesis-not-move rule. The empty `practice-core/patterns/` directory
+was carrying contract weight (it was a "required Core directory" per
+the decision) without carrying substance.
+
+The `practice-context/` exchange surface was likewise emptied: every
+substantive routing has resolved to a PDR, an ADR, `.agent/reference/`,
+or `.agent/research/`; the `outgoing/` README is a routing-log of
+completed retirements with no live forward-looking content.
+
+This amendment retires both surfaces from the Core contract:
+
+- **`practice-core/patterns/` is no longer a required Core directory.**
+  Practice-governance patterns take the **PDR** shape with
+  `pdr_kind: pattern` frontmatter; engineering instances live at
+  `.agent/memory/active/patterns/`. There are no Core-pattern
+  destinations.
+- **`.agent/practice-context/` is retired entirely.** Both `incoming/`
+  and `outgoing/` are removed. Inbound Practice exchange uses
+  `.agent/practice-core/incoming/` (preserved). Outbound exchange
+  routes by substance to PDRs, `.agent/reference/`, or `.agent/research/`
+  per PDR-024 §Vital Integration Surfaces.
+
+**Affected sections below**: `### patterns/` (lines 134–175) describes
+the retired surface as a Core directory; treat that section as
+historical context for the original decision and refer to this
+amendment for the current contract. The `### practice-context/outgoing/`
+section (line 199) is similarly historical. Other PDR-007 substance
+(decision-records as Core, sharpening of memory/active/patterns,
+Pattern Exchange folds into Core travel) is unchanged and remains
+canonical. PDR-024 (vital integration surfaces) and PDR-014
+(consolidation and knowledge flow discipline) carry the corresponding
+amendments of the same date.
 
 ### The new Core contract
 

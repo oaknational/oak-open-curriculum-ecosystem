@@ -38,8 +38,8 @@ const config: KnipConfig = {
 
   workspaces: {
     '.': {
-      entry: ['scripts/**/*.{ts,mjs}'],
-      project: ['scripts/**/*.{ts,mjs}'],
+      entry: ['scripts/**/*.ts'],
+      project: ['scripts/**/*.ts'],
     },
     'agent-tools': {
       // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
@@ -51,25 +51,25 @@ const config: KnipConfig = {
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [
-        'esbuild.config.ts',
         'src/index.ts',
         'src/application.ts',
         'src/server.ts',
         'build-scripts/**/*.ts',
-        'build-scripts/**/*.mjs',
         'operations/**/*.ts',
-        'scripts/**/*.js',
+        'scripts/**/*.ts',
+        'runtime-only-scripts/**/*.mjs',
         'widget/src/main.tsx',
+        'widget/src/vite-env.d.ts',
         'smoke-tests/**/*.ts',
         'e2e-tests/**/*.ts',
       ],
       project: [
         'src/**/*.ts',
         'build-scripts/**/*.ts',
-        'build-scripts/**/*.mjs',
         'e2e-tests/**/*.ts',
         'operations/**/*.ts',
-        'scripts/**/*.js',
+        'scripts/**/*.ts',
+        'runtime-only-scripts/**/*.mjs',
         'tests/**/*.ts',
         'smoke-tests/**/*.ts',
         'widget/src/**/*.{ts,tsx,css}',
@@ -112,9 +112,6 @@ const config: KnipConfig = {
         '@asteasolutions/zod-to-openapi',
         'typedoc-plugin-markdown',
         'vite-tsconfig-paths',
-        // Used via `pnpm exec tsx` pass-through execution and tsx shebangs.
-        // Knip does not detect binary/shebang usage as dependency usage.
-        'tsx',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
       ],
@@ -143,7 +140,6 @@ const config: KnipConfig = {
       project: ['src/**/*.ts'],
     },
     'packages/design/oak-design-tokens': {
-      entry: ['src/build.ts'],
       project: ['src/**/*.ts'],
     },
     'packages/libs/env-resolution': {

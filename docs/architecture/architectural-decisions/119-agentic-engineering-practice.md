@@ -30,6 +30,13 @@ The repository-level purpose and impact framing is defined in
 framing: the naming, boundary, and operating model of the agentic engineering
 practice.
 
+**Current framing note (2026-04-29):** the Practice is now also described as
+a reusable, self-improving, plain-text framework for agentic-first engineering.
+That wording does not change this ADR's decision; it clarifies why the
+Practice keeps collaboration, learning, and operational knowledge in the repo
+so agents from major vendors can work together without relying on private
+platform memory.
+
 [Oak's stated mission](https://www.thenational.academy/about-us/who-we-are)
 is to _"improve pupil outcomes and close the disadvantage gap by
 supporting teachers to teach, and enabling pupils to access, a

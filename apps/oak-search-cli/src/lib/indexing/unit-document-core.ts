@@ -24,7 +24,7 @@ import type { Ks4DocumentFields } from './document-transform-helpers';
 /**
  * Thread information for unit documents.
  */
-export interface UnitThreadInfo {
+interface UnitThreadInfo {
   readonly slugs: readonly string[];
   readonly titles: readonly string[];
   readonly orders: readonly number[];
@@ -33,7 +33,7 @@ export interface UnitThreadInfo {
 /**
  * Unit enrichment fields.
  */
-export interface UnitEnrichmentFields {
+interface UnitEnrichmentFields {
   readonly unit_topics?: readonly string[];
   readonly description?: string;
   readonly why_this_why_now?: string;

@@ -15,7 +15,9 @@ status, baselines) lives elsewhere.
 ## Contents
 
 - [VISION.md](./VISION.md) — The **why**: mission, audiences, value, scope
-  boundaries, three-orders impact, positioning, licensing.
+  boundaries, MCP Apps exploration, sector reuse of Oak's openly licenced
+  curriculum, semantic search, knowledge graphs, three-orders impact,
+  positioning, licensing.
 - [How the Agentic Engineering System Works](./agentic-engineering-system.md) —
   The **how**: an engineering-lens explanation of the Practice for human
   readers.

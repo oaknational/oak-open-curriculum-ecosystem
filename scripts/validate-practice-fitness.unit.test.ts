@@ -6,7 +6,7 @@ import {
   getExitCode,
   shouldInspectFitnessPath,
   worstZone,
-} from './validate-practice-fitness.mjs';
+} from './validate-practice-fitness.js';
 
 describe('classifyFitnessZone', () => {
   it('returns null when neither a target nor a hard limit is declared', () => {

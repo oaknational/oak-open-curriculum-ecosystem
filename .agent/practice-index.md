@@ -6,6 +6,11 @@ created during hydration and stays in the repo. The baseline content model is
 specified by `practice-core/practice-bootstrap.md`, but local sections can be
 split more explicitly when that improves discoverability.
 
+In this repo, the Practice is the reusable plain-text framework that lets
+agents from major vendors collaborate on Oak's open curriculum infrastructure,
+learn from each session, and keep institutional and operational knowledge in
+the repository where future agents and humans can use it.
+
 For the Practice Core files and their roles, see [practice-core/index.md](practice-core/index.md).
 
 ## Directives

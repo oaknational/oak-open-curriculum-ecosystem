@@ -15,13 +15,13 @@ todos:
     content: "Phase 2: Record canonical delegation for developer-experience execution owners."
     status: completed
   - id: p3-phase3-depcruise
-    content: "Phase 3: Delegate dependency-cruiser execution to the canonical directory-complexity plan."
+    content: "Phase 3: Mark dependency-cruiser delegation as historical; depcruise is now live via .dependency-cruiser.mjs and root gates."
     status: completed
   - id: p3-phase4-knip
-    content: "Phase 4: Delegate knip execution to the canonical directory-complexity plan."
+    content: "Phase 4: Mark knip delegation as historical; knip is now live and future budget work consumes its findings."
     status: completed
   - id: p3-phase5-grounding
-    content: "Phase 5: Delegate directory-complexity grounding and `pnpm check` integration while retaining collection-level oversight."
+    content: "Phase 5: Delegate directory-cardinality grounding while retaining collection-level oversight."
     status: completed
   - id: p3-doc-sync
     content: "Update documentation sync log with ADR/directive/reference-doc/README impact for Phase 3."
@@ -43,8 +43,8 @@ Execution ownership changed for part of this stream:
    - strictness-specific shared-config promotion work
 2. Delegated to [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md):
    - remediation SOP for directory-complexity breaches
-   - boundary/public-API support bundle
-   - depcruise, knip, and `pnpm check` integration for this workstream
+   - deterministic inventory and config tests for `max-files-per-dir`
+   - pilot calibration and staged directory-cardinality activation
    - staged `max-files-per-dir` activation
 3. Retained in this plan:
    - evidence bundling for non-trivial enforcement claims
@@ -76,16 +76,18 @@ Execution ownership changed for part of this stream:
 ### Task 3.3 (Source Phase 3): Dependency-Cruiser Lockdown
 
 - Output:
-  - canonical execution ownership is delegated and this file no longer duplicates the task breakdown
+  - completed dependency-cruiser ownership is recorded without duplicating the
+    child plan task breakdown
 - Deterministic validation:
-  - `rg -n "directory-complexity-enablement\\.execution\\.plan\\.md|dependency-cruiser" ../architectural-enforcement-adoption.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
+  - `rg -n "depcruise-triage-and-remediation\\.plan\\.md|dependency-cruiser" ../architectural-enforcement-adoption.plan.md ../../architecture-and-infrastructure/archive/completed/depcruise-triage-and-remediation.plan.md`
 
 ### Task 3.4 (Source Phase 4): Knip Integration
 
 - Output:
-  - canonical execution ownership is delegated and referenced consistently
+  - completed knip ownership is recorded without delegating back to the
+    directory-cardinality child
 - Deterministic validation:
-  - `rg -n "directory-complexity-enablement\\.execution\\.plan\\.md|knip" ../architectural-enforcement-adoption.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
+  - `rg -n "knip-triage-and-remediation\\.plan\\.md|knip" ../architectural-enforcement-adoption.plan.md ../../architecture-and-infrastructure/archive/completed/knip-triage-and-remediation.plan.md`
 
 ### Task 3.5 (Source Phase 5): Agentic Grounding
 

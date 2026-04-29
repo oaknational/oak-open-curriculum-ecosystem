@@ -21,6 +21,35 @@ aspirations).
 
 ## Amendment Log
 
+- **2026-04-29 amendment — tool error as question; reviewer-scope
+  equals prompted-scope (Nebulous Illuminating Satellite / claude-code
+  / claude-opus-4-7-1m; owner-directed graduation during the
+  2026-04-29 deep consolidation pass after the TS6-migration session
+  surfaced five distinct manifestations of the same anti-pattern).**
+  Two related disciplines graduate to portable Practice doctrine:
+  - **Tool error as question.** When a tool, signal, hook, or reviewer
+    returns a non-pass result, the first response is to understand
+    what is being asked, not to find a way past it. The instinct of
+    "tool returns error → find bypass" recurs across reviewer findings,
+    diff reading, pre-commit hooks, fitness signals, the Edit-tool
+    safety contract, CI gates, type checkers, and validators. The fix
+    is one of three valid responses (understand-and-address,
+    understand-and-dismiss-with-rationale, understand-and-stop) — never
+    skip-understanding. Instance patterns:
+    [`tool-error-as-question.md`](../../memory/active/patterns/tool-error-as-question.md),
+    [`hook-as-question-not-obstacle.md`](../../memory/active/patterns/hook-as-question-not-obstacle.md),
+    [`ground-before-framing.md`](../../memory/active/patterns/ground-before-framing.md).
+  - **Reviewer scope equals prompted scope.** A reviewer's verdict is
+    scoped to the prompt that briefed them; "GO WITH CONDITIONS" reads
+    as a green merge signal only when the reviewer's brief matches the
+    merge-gate scope. When asking a reviewer to gate merge, brief them
+    with the full merge-gate criteria (zero failing gates, no warning
+    toleration, all merge conditions named), not just the arc you are
+    working on. Failure mode: instrumental work treated as terminal
+    because the work-list was full. Instance pattern:
+    [`scope-as-goal.md`](../../memory/active/patterns/scope-as-goal.md).
+    Cross-reference under PDR-015 amendment of the same date.
+
 - **2026-04-28 amendment — disposition drift under context pressure
   (Coastal Mooring Atoll / codex / GPT-5; owner-directed deep
   consolidation after PR-87 planning drift recurred across Vining,

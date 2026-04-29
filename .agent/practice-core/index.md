@@ -20,11 +20,10 @@ The Practice Core is a **bounded package of files plus required directories** th
 | [index.md](index.md)                                 | Entry point for agents: operational orientation (this file)              |
 | [CHANGELOG.md](CHANGELOG.md)                         | What changed: repo-tagged summaries for plasmid integration              |
 | [provenance.yml](provenance.yml)                     | Per-file evolution chains for the plasmid trinity                        |
-| [decision-records/](decision-records/)               | **Directory** — Practice Decision Records (PDRs): portable governance decisions about the Practice |
-| [patterns/](patterns/)                               | **Directory** — General ecosystem-agnostic abstract patterns synthesised from specific instances |
+| [decision-records/](decision-records/)               | **Directory** — Practice Decision Records (PDRs): portable governance decisions about the Practice; also carries Practice-governance and general abstract patterns (PDRs with `pdr_kind: pattern`) per PDR-007 amendment 2026-04-29 |
 | [incoming/](incoming/)                               | **Directory** — Practice Box: transient receiver for inbound Core packages |
 
-The trinity files point to `provenance.yml` for their evolution history and evolve between repos. For day-to-day work you do not need to read any of these — they are the blueprint, not the building. The `.agent/practice-context/` peer directory (sender-maintained ephemeral exchange material) may accompany the Core but is not part of it.
+The trinity files point to `provenance.yml` for their evolution history and evolve between repos. For day-to-day work you do not need to read any of these — they are the blueprint, not the building. The previous `patterns/` Core directory and `.agent/practice-context/` peer companion were retired 2026-04-29 (PDR-007 amendment); patterns live at `.agent/memory/active/patterns/` (engineering instances) or as PDRs (governance and general abstractions).
 
 ## Boundary Contract
 
@@ -51,21 +50,14 @@ practice-index bridges portable concepts to each host's local artefacts.
 
 The `incoming/` directory is the Practice Box. When Practice Core files arrive from another repo, they land here. Check it at session start (via `start-right`) and during consolidation. See the Integration Flow in `practice-lineage.md` for details.
 
-If `.agent/practice-context/` exists, read `README.md` and `incoming/` as
-received ephemeral support during hydration or integration. `incoming/` is
-transient and should be cleared after integration. Local `outgoing/` is
-sharpened under PDR-007 to ephemeral exchange only (no substance found
-nowhere else).
-
 Read `decision-records/README.md` and every PDR file. PDRs are
 authoritative governance decisions about the Practice itself; they are
 first-class Core content under the PDR-007 contract and travel with the
-Core package.
-
-Read `patterns/README.md` and any general abstract patterns present.
-These are ecosystem-agnostic patterns synthesised from specific instances;
-they travel with the Core. Specific instances remain in `.agent/memory/active/patterns/`
-in each host repo.
+Core package. PDRs may carry `pdr_kind: pattern` frontmatter when they
+encode a general abstract pattern (per PDR-007 amendment 2026-04-29 —
+the previous `patterns/` Core directory was retired and pattern
+abstractions now graduate as PDRs). Specific engineering pattern
+instances remain in `.agent/memory/active/patterns/` in each host repo.
 
 If the local repo spans multiple agent platforms, maintain an explicit local
 surface contract in `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
@@ -82,11 +74,9 @@ If the Practice Core files have been placed somewhere other than `.agent/practic
 
 Then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md). The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications -- adapt ALL templates to local tooling and conventions. The templates use TypeScript/Node.js as concrete examples; substitute your ecosystem's equivalents. As part of hydration, create `.agent/practice-index.md` -- the bridge file that carries navigable links to the local repo's artefacts (see the template in [practice-bootstrap.md](practice-bootstrap.md)). See the Bootstrap Checklist in [practice-bootstrap.md](practice-bootstrap.md) for validation.
 
-If `.agent/practice-context/` exists, read `incoming/` before adapting the
-Practice. It may contain useful framing from the sending repo.
-
 Read every PDR in `decision-records/` before adapting the Practice. PDRs
 carry portable governance decisions that constrain how the Practice
-behaves in any repo, not just the sending one. Read any general patterns
-in `patterns/` — these are ecosystem-agnostic abstractions that travel
-with the Core.
+behaves in any repo, not just the sending one. PDRs with
+`pdr_kind: pattern` frontmatter additionally carry general abstract
+patterns that travel with the Core (per PDR-007 amendment 2026-04-29,
+patterns no longer have a dedicated Core directory).

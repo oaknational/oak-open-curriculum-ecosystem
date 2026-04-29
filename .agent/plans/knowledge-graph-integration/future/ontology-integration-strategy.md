@@ -11,10 +11,18 @@ specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney,
 
 # Ontology Integration Strategy
 
-**Status**: FUTURE
-**Last Updated**: 2026-04-11
+**Status**: FUTURE — historical strategy, decision reopened
+**Last Updated**: 2026-04-29
 **Depends on**: WS-4 (Oak KG knowledge taxonomy surface) proving the
 integration pattern works with a static copy first.
+
+> **2026-04-29 update**: The earlier recommendation against a monorepo
+> workspace is no longer treated as settled. Oak's organisational priority now
+> requires re-examining how the MCP server, Oak knowledge graphs, semantic
+> search, and API contract come together. Use
+> [oak-curriculum-ontology-workspace-reassessment.plan.md](oak-curriculum-ontology-workspace-reassessment.plan.md)
+> as the current decision-reopening brief; this document remains valuable
+> historical context.
 
 ## Problem
 
@@ -150,22 +158,27 @@ this repo's codegen pipeline extracts what it needs at build time.
 - CI must handle submodule initialisation
 - Still requires this repo to parse `.ttl` files
 
-## Recommendation
+## Previous Recommendation
 
-**Option A (published npm package)** is the preferred long-term
-strategy. It preserves the independence of both repos, uses
-standard tooling, and creates a reusable asset that other projects
-can consume. The ontology repo already has a Python build pipeline;
-adding a JSON extraction + npm publish step is a natural extension.
+The following recommendation is historical context from before the
+2026-04-29 reopening. It should not be treated as the current decision
+authority; use
+[oak-curriculum-ontology-workspace-reassessment.plan.md](oak-curriculum-ontology-workspace-reassessment.plan.md)
+for the live decision frame.
 
-**Option C (git submodule)** is an acceptable interim step if
-Option A is blocked by ontology repo capacity. It's strictly better
-than static copies because the version is pinned and the update
-mechanism is explicit.
+**Option A (published npm package)** was the preferred long-term strategy. It
+preserves the independence of both repos, uses standard tooling, and creates a
+reusable asset that other projects can consume. The ontology repo already has a
+Python build pipeline; adding a JSON extraction + npm publish step is a natural
+extension.
 
-**Option B (monorepo workspace)** is not recommended. The
-toolchain mismatch (Python vs Node.js) and the blurred ownership
-boundary outweigh the zero-lag benefit.
+**Option C (git submodule)** was an acceptable interim step if Option A is
+blocked by ontology repo capacity. It's strictly better than static copies
+because the version is pinned and the update mechanism is explicit.
+
+**Option B (monorepo workspace)** was not recommended in this earlier analysis.
+That conclusion is now reopened because the organisational priority around MCP,
+Oak KGs, semantic search, and API convergence may change the trade-off.
 
 ## Migration Path
 

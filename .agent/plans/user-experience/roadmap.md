@@ -139,5 +139,5 @@ Decision output:
 | `security-and-privacy/` | Safety, evidence discipline, and trust boundary assurance |
 | `architecture-and-infrastructure/` | Reliability and observability that users directly feel |
 | `developer-experience/` | Integration ergonomics for developer adoption |
-| `external/ooc-api-wishlist/` | Upstream API/schema constraints that affect UX feasibility |
+| `sector-engagement/ooc-api-wishlist/` | Upstream API/schema constraints that affect UX feasibility |
 | `research/auth/` | Clerk production migration decision and rollout planning |

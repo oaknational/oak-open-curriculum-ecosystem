@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # PreToolUse hook: Scan files before reading to prevent secret leakage
 # Blocks file reads if secrets are detected
 

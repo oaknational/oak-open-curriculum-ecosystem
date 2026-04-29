@@ -12,7 +12,7 @@ import {
   isClaudeHookWiredInText,
   SURFACE_MATRIX_PATH,
   surfaceMatrixDescribesClaudeHook,
-} from './validate-portability-helpers.mjs';
+} from './validate-portability-helpers.js';
 
 const supportedHookPolicy = {
   platform_support: {
@@ -31,7 +31,7 @@ const documentedSurfaceMatrix = `# Cross-Platform Agent Surface Matrix
 Claude Code currently has native \`PreToolUse\` activation for Bash
 commands via the tracked project \`.claude/settings.json\`,
 backed by the canonical policy in \`.agent/hooks/policy.json\` and the
-repo-local runtime script \`scripts/check-blocked-patterns.mjs\`.
+repo-local runtime script \`scripts/check-blocked-patterns.ts\`.
 
 ## Policy Spine
 
@@ -49,7 +49,7 @@ describe('isClaudeHookWired', () => {
               hooks: [
                 {
                   type: 'command',
-                  command: 'node scripts/check-blocked-patterns.mjs',
+                  command: 'pnpm exec tsx scripts/check-blocked-patterns.ts',
                 },
               ],
             },
@@ -70,7 +70,7 @@ describe('isClaudeHookWiredInText', () => {
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-patterns.mjs"
+            "command": "pnpm exec tsx scripts/check-blocked-patterns.ts"
           }
         ]
       }
@@ -88,7 +88,7 @@ describe('isClaudeHookWiredInText', () => {
       {
         "hooks": [
           {
-            "command": "node scripts/check-blocked-patterns.mjs",
+            "command": "pnpm exec tsx scripts/check-blocked-patterns.ts",
             "type": "command"
           }
         ],
@@ -148,7 +148,7 @@ describe('getClaudeHookPortabilityIssues', () => {
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-blocked-patterns.mjs"
+            "command": "pnpm exec tsx scripts/check-blocked-patterns.ts"
           }
         ]
       }
@@ -173,7 +173,7 @@ describe('getClaudeHookPortabilityIssues', () => {
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/some-other-hook.mjs"
+            "command": "node scripts/some-other-hook.ts"
           }
         ]
       }
@@ -184,7 +184,7 @@ describe('getClaudeHookPortabilityIssues', () => {
         surfaceMatrix: documentedSurfaceMatrix,
       }),
     ).toContain(
-      '.agent/hooks/policy.json: Claude Code is marked supported but .claude/settings.json does not wire Bash PreToolUse to node scripts/check-blocked-patterns.mjs',
+      '.agent/hooks/policy.json: Claude Code is marked supported but .claude/settings.json does not wire Bash PreToolUse to pnpm exec tsx scripts/check-blocked-patterns.ts',
     );
   });
 
@@ -228,8 +228,8 @@ describe('getClaudeHookPortabilityIssues', () => {
         claudeSettingsExists: false,
         claudeSettings: null,
         surfaceMatrix: documentedSurfaceMatrix.replace(
-          '`scripts/check-blocked-patterns.mjs`',
-          '`scripts/other-hook.mjs`',
+          '`scripts/check-blocked-patterns.ts`',
+          '`scripts/other-hook.ts`',
         ),
       }),
     ).toContain(

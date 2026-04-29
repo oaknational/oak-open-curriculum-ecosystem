@@ -12,7 +12,7 @@ todos:
     content: "Create an explicit quality attribute register with ranked priorities and measurable targets"
     status: pending
   - id: fitness-function-framing
-    content: "Re-frame existing quality gates as architectural fitness functions with ADR"
+    content: "Follow up ADR-166 / ADR-121 gate-to-quality-attribute mapping without creating a duplicate ADR by default"
     status: pending
   - id: trade-off-framework
     content: "Add trade-off navigation guidance to principles.md for quality attribute tensions"
@@ -708,7 +708,8 @@ COORDINATES WITH EXTERNAL PLAN:
   5+ instances of restated content
 - New contributors (human or AI) can navigate from entry point to specific
   ADR in ≤3 hops
-- The fitness function ADR is cited when evaluating new quality gates
+- ADR-166 / ADR-121 gate-mapping guidance is cited when evaluating new quality
+  gates
 
 ## Risks and Unknowns
 

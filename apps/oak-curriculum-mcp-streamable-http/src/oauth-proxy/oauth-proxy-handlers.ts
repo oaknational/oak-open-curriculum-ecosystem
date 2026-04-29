@@ -18,7 +18,7 @@ import { applyParsedResponse, readUpstreamBody } from './oauth-proxy-response.js
 import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
 
 /** Minimal structured logger interface for the proxy. */
-export type ProxyLogger = Pick<Logger, 'debug' | 'error' | 'info' | 'warn'>;
+type ProxyLogger = Pick<Logger, 'debug' | 'error' | 'info' | 'warn'>;
 
 /** Configuration for the OAuth proxy route handlers. */
 export interface OAuthProxyConfig {

@@ -250,8 +250,8 @@ paths or ADR numbers — per the Practice Core boundary contract).
 **Candidates for propagation**:
 
 1. **Quality attribute register** — template for explicit quality priorities
-2. **Fitness function framing** — quality gates as architectural fitness
-   functions (concept, not specific gates)
+2. **ADR-166 / ADR-121 gate-mapping follow-up** — quality gates as
+   architectural fitness functions (concept, not specific gates)
 3. **Document layer content contract** — directive/rule/governance distinction
 4. **Agentic socio-technical architecture** — the novel human+AI team model
 
