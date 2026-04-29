@@ -16,7 +16,17 @@ lanes, evidence surfaces, and formal report lanes — use the
 
 ## What This System Does
 
-Every line of code, configuration, and documentation in this repository is written by AI agents. Humans provide direction, design guardrails, and corrective feedback. The **Agentic Engineering Practice** — "the Practice" — is the interconnected system that makes this safe, high-quality, and self-improving. It is not a static rulebook; it is a living system with control loops, learning loops, and propagation mechanisms that compound quality over time. See [ADR-119 §Why "Practice" and Not "Framework"](../architecture/architectural-decisions/119-agentic-engineering-practice.md) for the philosophical distinction.
+Every line of code, configuration, and documentation in this repository is
+written by AI agents. Humans provide direction, design guardrails, and
+corrective feedback. The **Agentic Engineering Practice** — "the Practice" —
+is the interconnected system that makes this safe, high-quality, and
+self-improving. It is a reusable plain-text framework for agentic-first
+engineering: agents from major vendors can collaborate, learn, adapt, and keep
+institutional and operational knowledge in the repo where it is useful. It is
+not a static rulebook; it is a living system with control loops, learning
+loops, and propagation mechanisms that compound quality over time. See
+[ADR-119 §Why "Practice" and Not "Framework"](../architecture/architectural-decisions/119-agentic-engineering-practice.md)
+for the philosophical distinction.
 
 ## Where Things Live
 

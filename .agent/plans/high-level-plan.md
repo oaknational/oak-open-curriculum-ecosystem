@@ -15,6 +15,17 @@ This file is a strategic index. Execution detail belongs in collection roadmaps
 and active plans. Per-milestone summaries (audience, value, progression gates):
 [milestones/](../milestones/).
 
+## Repository Goal Narrative
+
+The strategic goal is to turn Oak's openly licenced, fully sequenced and
+resourced curriculum into world-class primitives and modular building blocks
+for education applications. The live work explores MCP Apps in AI platforms
+such as Claude Cowork and ChatGPT; makes the Curriculum SDK, MCP server, and
+OpenAPI-to-MCP server pipeline easier for the wider education and technology
+sectors to use; combines hybrid semantic search with APIs, MCP, and Oak
+knowledge graphs; and keeps the self-improving Practice visible as a reusable
+plain-text framework for agentic-first engineering across major agent vendors.
+
 ---
 
 ## Milestone Sequence
@@ -113,9 +124,9 @@ Milestone 3 backlog items.
 **Goal**: Make the repository safe to be public on GitHub. The HTTP MCP
 server remains private alpha (invitation-only) at this stage.
 
-**User impact**: The SDK, MCP servers, and search infrastructure become publicly
-available — external developers and edtech teams can start building curriculum
-tools on Oak's open data for the first time.
+**User impact**: The SDK, MCP servers, search infrastructure, and pipeline
+patterns become publicly available — external developers and edtech teams can
+start building curriculum tools on Oak's open data for the first time.
 
 **Completed** (2026-03-02):
 

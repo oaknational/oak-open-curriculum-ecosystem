@@ -12,11 +12,14 @@ public body whose mission is to improve pupil outcomes and close the
 disadvantage gap by supporting teachers to teach, and enabling pupils to access,
 a high-quality curriculum.
 
-Oak publishes a **fully open curriculum**: openly licensed, free of third-party
+Oak publishes a **fully open curriculum**: openly licenced, free of third-party
 copyright (where possible), and organised for reuse. The curriculum is
 accessible through the
 [Open Curriculum API](https://open-api.thenational.academy/), and this
 repository builds tools and AI services on top of that public data.
+Those tools include the Curriculum SDK, MCP server and MCP Apps, hybrid
+semantic search, and knowledge graph surfaces that help educators, AI tools,
+and external education technology teams work with the curriculum safely.
 
 ## How the Curriculum is Organised
 

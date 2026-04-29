@@ -13,7 +13,12 @@ last_reviewed: 2026-04-20
 
 ## Getting Started
 
-- **Evaluating the project?** → [VISION.md](foundation/VISION.md) for the timeless framing, then the latest snapshot in the [reports surface](../.agent/reports/) and the live [high-level plan](../.agent/plans/high-level-plan.md)
+- **Evaluating the project?** → [VISION.md](foundation/VISION.md) for the
+  timeless framing: MCP Apps exploration in AI platforms, sector reuse of
+  Oak's openly licenced curriculum, hybrid semantic search, knowledge graphs,
+  modular building blocks, and the agentic-first Practice. Then read the
+  latest snapshot in the [reports surface](../.agent/reports/) and the live
+  [high-level plan](../.agent/plans/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
 - **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `$jc-start-right-quick` in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).

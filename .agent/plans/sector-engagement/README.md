@@ -24,6 +24,23 @@ resources travel beyond this repository:
 - cross-project requirements packs that are read by people outside the Oak
   repo.
 
+## Impact Intent
+
+The desired impact is not just that this repo contains useful code. The desired
+impact is that Oak's open curriculum infrastructure becomes a practical public
+asset: external organisations can understand it, trust it, adapt it, and build
+with it without depending on private Oak context. Sector-engagement plans should
+therefore name the outside user or organisation, the resource they need, the
+support or evidence that would make reuse safe, and the point at which an
+internal engineering plan is needed.
+
+The recurring resources in scope are the OpenAPI-driven pipeline, generated
+SDKs, MCP server surfaces, semantic-search configuration, knowledge-graph
+assets, and the documentation/playbooks that make those assets usable by
+others. The collection also tracks how MCP Apps in AI platforms such as Claude
+Cowork and ChatGPT can turn those assets into practical end-user and developer
+experiences.
+
 Implementation of the underlying systems usually remains with the relevant
 engineering collections. For example, SDK publishing stays in
 `developer-experience/`, MCP runtime work stays in `sdk-and-mcp-enhancements/`,

@@ -11,6 +11,12 @@ Next status: public alpha
 
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
+It is also the repo's primary MCP Apps exploration surface: one server for
+end-user AI experiences in platforms such as
+[Claude Cowork](https://www.anthropic.com/product/claude-cowork) and ChatGPT,
+and one developer tool surface for teams building on Oak's openly licenced,
+fully sequenced and resourced curriculum.
+
 > **Canonical MCP server workspace**. This is the sole MCP server workspace.
 > The legacy stdio workspace was removed per
 > [ADR-128](../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
@@ -45,7 +51,12 @@ changes via `pnpm sdk-codegen`.
 
 **Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, and `learning-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task.
 
-Together, tools give the AI autonomous access to curriculum data, resources give capable clients pre-loaded context, and prompts give users structured entry points for common tasks. The goal is to make Oak's curriculum discoverable and usable through AI assistants, helping teachers find, understand, and adapt high-quality curriculum resources.
+Together, tools give the AI autonomous access to curriculum data, resources
+give capable clients pre-loaded context, and prompts give users structured
+entry points for common tasks. The goal is to make Oak's curriculum
+discoverable and usable through AI assistants, developer workflows, and MCP App
+hosts, helping teachers and builders find, understand, adapt, and reuse
+high-quality curriculum resources.
 
 For the architectural rationale behind this primitive mapping, see [ADR-123](../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) and [ADR-058](../../docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md).
 

@@ -72,12 +72,28 @@ It serves three groups:
 The central objective is leverage: reduce the cost, time, and risk of building
 high-quality curriculum tooling.
 
+Concretely, the repository exists to:
+
+- explore what can be done with MCP Apps in AI platforms such as
+  [Claude Cowork](https://www.anthropic.com/product/claude-cowork) and
+  ChatGPT
+- make Oak's openly licenced, fully sequenced and resourced curriculum easier
+  for the wider education and technology sectors to use through the Curriculum
+  SDK, MCP server, and OpenAPI-to-MCP server pipeline
+- explore hybrid semantic search, APIs, MCP, and Oak knowledge graphs as
+  complementary primitives for AI education products
+- provide world-class modular building blocks for education applications,
+  internally at Oak and across the wider sector
+- develop the Practice as a reusable, self-improving, plain-text framework for
+  agentic-first engineering across major agent vendors
+
 ## What We Deliver
 
 The repository delivers a small, composable pipeline for working with Oak's
-open curriculum data: a strict, type-safe **Curriculum SDK** generated end-to-end
-from Oak's OpenAPI schema; **MCP servers** that expose the curriculum to AI
-clients (ChatGPT, Claude, Cursor, and any other MCP-capable host); and a
+open curriculum data: a strict, type-safe **Curriculum SDK** generated
+end-to-end from Oak's OpenAPI schema; **MCP servers and MCP Apps** that expose
+the curriculum to AI clients and developer tools (including ChatGPT, Claude
+Cowork, Claude Desktop, Cursor, and any other MCP-capable host); and a
 **semantic search service** with its own SDK and MCP tools so the corpus is
 fully discoverable from natural-language requests. Downstream teams can run
 their own search infrastructure (for example Elasticsearch Serverless) using
@@ -85,9 +101,11 @@ this repository as the implementation baseline.
 
 Alongside this product infrastructure, the repository develops the operating
 system for delivery itself: Oak's
-[agentic engineering practice](agentic-engineering-system.md) and associated
-guardrails, including architectural enforcement and human-AI collaboration
-improvements
+[agentic engineering practice](agentic-engineering-system.md), a reusable
+plain-text framework for agents from major vendors to collaborate, continually
+learn and adapt, and keep institutional and operational knowledge in the repo
+where it is useful. It includes architectural enforcement and human-AI
+collaboration improvements
 ([ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
 ## Non-Goals
@@ -113,6 +131,8 @@ including:
 - a true curriculum knowledge graph
 - a conceptual framework that defines curriculum resources as minimal building
   blocks
+- reusable knowledge graph exports and traversal surfaces that help external
+  organisations build on Oak's curriculum structure
 - APIs for AI-assisted assessment of generated curriculum resources against
   high standards of pedagogical rigour
 - additional AI-driven curriculum services developed across Oak
@@ -156,9 +176,9 @@ channels:
 2. **Delivery quality and speed**: the combination of shared infrastructure and
    the agentic engineering practice increases delivery throughput while
    maintaining rigour.
-3. **Ecosystem amplification**: external developers and EdTech organisations
-   can build on Oak's open curriculum data, increasing reach beyond what Oak
-   can deliver alone.
+3. **Ecosystem amplification**: external developers, EdTech organisations,
+   public-sector partners, and technology teams can build on Oak's open
+   curriculum data, increasing reach beyond what Oak can deliver alone.
 4. **Strategic integration point**: emerging Oak capabilities (knowledge graph,
    pedagogical rigour APIs, additional AI services) can be integrated once and
    then exposed consistently through SDK and MCP surfaces.
@@ -215,7 +235,8 @@ Oak's mission.
 
 The long-term intent is for this repository to become a primary Oak product
 surface alongside the main Oak site: open infrastructure, integrated AI
-capabilities, and curriculum intelligence made usable by the wider world.
+capabilities, curriculum intelligence, and modular building blocks made usable
+by the wider world.
 
 ## Open Source And Licensing
 

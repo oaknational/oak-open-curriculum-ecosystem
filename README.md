@@ -3,7 +3,7 @@
 
 # Oak Open Curriculum Ecosystem
 
-Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, and semantic search over the curriculum data powered by Elasticsearch Serverless.
+Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, MCP Apps, and semantic search over the curriculum data powered by Elasticsearch Serverless.
 
 **Vision and direction**: For the timeless framing of what this repository is for, see [VISION.md](docs/foundation/VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
@@ -16,7 +16,23 @@ Tools for building AI applications on the [Oak National Academy Open Curriculum]
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
 
-This repository is how Oak makes its openly-licensed, fully sequenced, and fully resourced curriculum available to AI systems and the wider education technology community, via SDKs, MCP servers, and semantic search. AI assistants like Claude, ChatGPT, and Gemini can search Oak's curriculum, explore lessons, units, threads, and sequences, and other structured educational content — helping teachers find, adapt, and use high-quality curriculum resources.
+This repository is how Oak makes its openly licenced, fully sequenced, and
+fully resourced curriculum easier for the wider education and technology
+sectors to use. It provides the Oak Curriculum SDK, the canonical MCP server
+as both an end-user-facing app surface and a developer tool, the
+OpenAPI-to-MCP server pipeline, hybrid semantic search, and knowledge graph
+surfaces as modular building blocks for education applications.
+
+The repository also explores what can be done with MCP Apps in AI platforms
+such as [Claude Cowork](https://www.anthropic.com/product/claude-cowork) and
+ChatGPT. AI assistants can search Oak's curriculum, explore lessons, units,
+threads, sequences, and other structured educational content — helping
+teachers find, adapt, and use high-quality curriculum resources.
+
+Underneath the product surfaces, the repo develops a reusable,
+self-improving Practice for agentic-first engineering: a plain-text framework
+that lets agents from major vendors collaborate, learn, and keep operational
+knowledge in the repository where it remains useful.
 
 ## Not a developer? Start here
 
@@ -48,11 +64,11 @@ extending) ·
 
 Three capabilities, powered by three open education data sources:
 
-| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                         |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                        |
-| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel) |
-| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
+| Capability          | What it does                                                                                                                                                    | Packages                                                                                         |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                           | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                        |
+| **MCP Servers**     | AI assistants and developer tools can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) and MCP Apps | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel) |
+| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                    | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
 
 ### Data Sources
 
@@ -60,11 +76,18 @@ This repository integrates three open education data sources, each answering a d
 
 | Source                                                                                                                        | What It Provides                                                                                                                                             | Licence                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly-licensed, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly licenced, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
 | [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                             | Oak's formal semantic representation of curriculum structure aligned to the National Curriculum for England (2014), using W3C standards (RDF/OWL/SKOS/SHACL) | OGL v3.0 (data) + MIT (code)                                                           |
 | [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                                      | Attribution required                                                                   |
 
-Together these sources enable **evidence-grounded curriculum discovery**: AI agents can search for content (Oak API), understand where it fits in the curriculum structure (ontology), and recommend evidence-backed teaching approaches (EEF). See [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for full licence terms.
+Together these sources enable **evidence-grounded curriculum discovery**: AI
+agents can search for content (Oak API), understand where it fits in the
+curriculum structure (ontology), and recommend evidence-backed teaching
+approaches (EEF). They also give internal Oak teams and external builders a
+set of world-class primitives for curriculum-aware products. See
+[ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
+for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for
+full licence terms.
 
 ### MCP Server Capabilities
 

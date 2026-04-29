@@ -2,6 +2,15 @@
 
 TypeScript SDK for accessing Oak National Academy's Curriculum API. Generated, not hand-written — when the API schema changes, `pnpm sdk-codegen` regenerates all types, validators, and MCP tools automatically.
 
+## Why This Exists
+
+The SDK makes Oak's openly licenced, fully sequenced and resourced curriculum
+usable by internal Oak teams and the wider education and technology sectors. It
+is the typed foundation for direct API integration, generated MCP tools, and
+the OpenAPI-to-MCP server pipeline. The aim is to provide a world-class
+primitive that application builders can compose with MCP, hybrid semantic
+search, and knowledge graph surfaces without copying Oak-specific schema logic.
+
 ## Installation
 
 ```bash

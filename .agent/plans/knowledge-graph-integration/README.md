@@ -4,6 +4,12 @@ Internal engineering hub for Oak-owned knowledge graph work: integrating the
 Oak Curriculum Ontology and Oak-derived graphs into the MCP server, semantic
 search service, QA workflows, and any future graph-serving layer.
 
+The wider goal is to unlock impact from Oak's knowledge graphs as reusable
+curriculum primitives. Internally, this means better MCP orientation, search
+projections, QA, and graph traversal. Externally, it means sector-facing
+support for organisations that want to understand or build on Oak's ontology,
+graph exports, SDKs, MCP resources, and search projections.
+
 This collection is deliberately not the home for every graph-shaped idea:
 sector-facing adoption and external knowledge/data-source ingestion now live
 under [sector-engagement/](../sector-engagement/).

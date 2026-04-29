@@ -29,6 +29,12 @@ enable evidence-grounded curriculum discovery: an AI agent can search for
 content (Oak API), understand where it fits in the curriculum structure
 (ontology), and recommend evidence-backed teaching approaches (EEF).
 
+**Current framing note (2026-04-29):** this decision is part of the wider repo
+goal to combine APIs, MCP, hybrid semantic search, and Oak knowledge graphs as
+complementary primitives. The integration is not only internal enrichment; it
+is also intended to help the wider education and technology sectors build on
+Oak's openly licenced curriculum and knowledge surfaces.
+
 ### Data Sources
 
 **[Oak Open Curriculum API](https://open-api.thenational.academy/)**
@@ -43,7 +49,7 @@ Oak's formal semantic representation of curriculum structure, aligned to
 the National Curriculum for England (2014). Uses W3C standards (RDF, OWL,
 SKOS, SHACL). This is an Oak-developed representation and does not
 constitute an official DfE National Curriculum publication. Primary
-author: Mark Hodierne. Data licensed under OGL v3.0; code licensed under
+author: Mark Hodierne. Data licenced under OGL v3.0; code licenced under
 MIT.
 
 **[EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)**

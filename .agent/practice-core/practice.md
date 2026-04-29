@@ -12,6 +12,9 @@ The Practice is the self-reinforcing system of principles, structures, agents,
 and tooling that governs how work happens in this repository. It creates the
 conditions for safe, high-quality human-AI collaboration. The Practice is what
 produces the repo's deliverables — but it is not the deliverables themselves.
+It is deliberately plain text and vendor-portable: agents from major platforms
+can collaborate, continually learn and adapt, and preserve institutional and
+operational knowledge where future work can inspect it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
 links to this repo's directives, ADRs, and tools,

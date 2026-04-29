@@ -13,6 +13,17 @@ feedback, and support for organisations that may use Oak's pipelines, SDKs, MCP
 servers, semantic search configuration, generated schemas, or related open
 education resources.
 
+The live opportunity is broader than publication. Oak's openly licenced,
+fully sequenced and resourced curriculum can become a shared sector asset when
+the SDK, MCP server, OpenAPI-to-MCP pipeline, hybrid search, and knowledge graph
+surfaces are understandable, supportable, and safe to reuse.
+
+The impact test for this roadmap is: could a credible external organisation use
+or learn from an Oak resource because this plan made the route clear? File moves,
+repo topology decisions, and partner reviews are only valuable when they reduce
+the gap between Oak's internal infrastructure and a real external adopter,
+partner, data-source steward, or public-sector collaborator.
+
 Authoritative execution sources:
 
 1. [active/README.md](active/README.md)
@@ -62,7 +73,8 @@ Phase 4: Organisation-specific support playbooks            Future
 
 - Done when: the former external planning material, upstream API reports, Castr
   requirements, Finnish pipeline brief, and OEAI initial review are discoverable
-  from this collection.
+  from this collection, with the intended external user or data-source
+  relationship visible from the collection index.
 - Dependencies: no implementation dependencies.
 
 ### Phase 1 - Split KG/Adoption/Source Taxonomy
@@ -100,7 +112,9 @@ Phase 4: Organisation-specific support playbooks            Future
   [oeai/](oeai/),
   [knowledge-graph-adoption/](knowledge-graph-adoption/)
 - Done when: a partner-facing review produces a concrete support playbook,
-  adoption decision, or explicit no-go rationale.
+  adoption decision, explicit no-go rationale, or implementation handoff whose
+  acceptance criteria are framed around the external organisation's ability to
+  use the resource.
 - Dependencies: partner needs, licensing/governance clarity, and implementation
   readiness of the relevant Oak resources.
 

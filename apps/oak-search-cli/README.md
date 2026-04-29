@@ -8,6 +8,12 @@
 
 The operator CLI for Oak's semantic search system. Consumes `@oaknational/oak-search-sdk` to provide commands for searching, administration, evaluation, and observability. Ingests Oak Curriculum content via the official SDK, stores enriched documents across **Elasticsearch Serverless indices**, and provides **server-side RRF** (lexical + semantic) search with suggestions, facets, and observability telemetry.
 
+This workspace explores how hybrid semantic search can work alongside APIs,
+MCP, MCP Apps, and Oak knowledge graphs to power AI education products. It is
+not just a CLI: it is the operational reference for reusable search primitives
+that can support internal Oak tools and external applications built on Oak's
+open curriculum data.
+
 > **All curriculum data flows through `@oaknational/curriculum-sdk`; types and validators are generated via `pnpm sdk-codegen` from the OpenAPI schema.** When the API changes, `pnpm sdk-codegen` regenerates types, and this workspace automatically uses the updated definitions. No manual type definitions exist — everything imports from the generated SDK.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
@@ -22,6 +28,10 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 ## What It Does
 
 The semantic search workspace indexes Oak's entire curriculum into Elasticsearch for users to search using natural language.
+It complements the Curriculum SDK, MCP server, and knowledge graph work:
+structured APIs provide authoritative data, MCP exposes it to AI hosts, search
+finds the right resources from natural-language intent, and graphs explain
+relationships and progression.
 
 ### Current Focus: Educator Curriculum Search
 

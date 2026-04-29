@@ -1,6 +1,7 @@
 # The Practice
 
 The Practice is a system of principles, guardrails, skills, and a self-teaching learning loop -- working together to ensure quality, reverse entropy, and support innovation.
+It is a reusable plain-text framework for agentic-first engineering: agents from major vendors can collaborate, learn, adapt, and preserve useful operational knowledge inside the repo.
 
 This directory is the Practice Core, the self-contained heart of the system. The Core is transferable to other repos, see below. The Core integrates into a specific repo via a stable link to the `practice-index.md` file.
 

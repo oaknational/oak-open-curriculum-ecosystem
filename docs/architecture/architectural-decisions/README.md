@@ -12,6 +12,11 @@ last_reviewed: 2026-04-29
 
 This file is an index of architectural decisions made during the development of this repository. The wider system that governs how these decisions are authored, propagated, and reviewed is **the Practice** — see [Practice Core](../../../.agent/practice-core/index.md) for the portable definition and [Practice Index](../../../.agent/practice-index.md) for this repository's local bridge.
 
+Current framing: the ADR corpus supports the repository goal of making Oak's
+openly licenced, fully sequenced and resourced curriculum reusable through
+generated SDKs, MCP and MCP Apps, the OpenAPI-to-MCP pipeline, hybrid semantic
+search, knowledge graphs, and the reusable agentic-first Practice.
+
 ## Start Here: 5 ADRs in 15 Minutes
 
 New to the repo? Read these five ADRs first for the architectural foundations:
@@ -207,6 +212,7 @@ For understanding our API integration approach:
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
+- **[ADR-157](157-multi-source-open-education-integration.md)** - Multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms

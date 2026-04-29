@@ -9,8 +9,10 @@ This repository is built through agentic engineering — AI agents write the
 code, humans provide direction and design guardrails. The `.agent/` directory
 (~20 subdirectories, hundreds of files) is the operational scaffolding that
 makes this work: rules, plans, session memory, specialist reviewer
-definitions, and a learning loop that improves governance over time. The
-formal definition is in
+definitions, and a learning loop that improves governance over time. It keeps
+agentic-first engineering knowledge in plain text so agents from major vendors
+can collaborate, learn, and adapt without relying on private platform memory.
+The formal definition is in
 [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
 and the root [README](../README.md#engineering-practice) has a plain-language
 overview.
