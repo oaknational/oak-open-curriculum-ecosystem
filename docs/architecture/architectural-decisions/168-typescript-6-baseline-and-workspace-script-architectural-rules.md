@@ -275,9 +275,9 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
 
   This ADR is the closing commit of the arc (the six-commit shape).
   The executable plan
-  [`active/typescript-6-migration-and-workspace-script-rules.plan.md`][ts6-plan]
-  remains in `active/` until the final quality-gate sweep +
-  release-readiness review have run; archival to `archive/completed/`
-  is a follow-on step.
+  [`archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md`][ts6-plan]
+  has been archived to `archive/completed/` alongside this ADR's
+  authoring (see ADR-117's plan-lifecycle convention) — the work is
+  complete and durable doctrine now lives in this ADR.
 
-[ts6-plan]: ../../../.agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md
+[ts6-plan]: ../../../.agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md

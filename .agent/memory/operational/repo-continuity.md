@@ -77,7 +77,7 @@ vercel-ignore script). Open question for fresh session: vitest-config-base
 coupling (19 workspaces import `../../../vitest.config.base`) — same shape as
 the script ban but for configs; not yet addressed.)
 
-[ts6-plan]: ../../plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md
+[ts6-plan]: ../../plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md
 
 **Incremental refresh**: 2026-04-29 (Ethereal Illuminating Comet / claude-code /
 claude-opus-4-7-1m / `05f2e9` — small-scope test deletion on `fix/build_issues`:
@@ -493,7 +493,7 @@ Tasks #1–#8 of the TS6 migration plan landed and verified; Tasks #9
 (ADR-168 authoring) and #10 (final quality-gate sweep +
 release-readiness review) are owner-explicit next-session work named
 in
-[`typescript-6-migration-and-workspace-script-rules.plan.md`](../plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md).
+[`typescript-6-migration-and-workspace-script-rules.plan.md`](../plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md).
 Two new pending-graduations register entries added: ADR-168 candidate
 (TS6 + workspace-script architectural rules); pattern-or-PDR
 candidate for the "tool-error-as-question" meta-pattern (third-surface

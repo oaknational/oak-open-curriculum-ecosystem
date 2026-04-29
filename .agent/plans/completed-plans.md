@@ -82,6 +82,7 @@ Before archival, mine completed outcomes into permanent documentation
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
 | No-Console Enforcement | 2026-03-04 | Superseded — folded into `developer-experience/active/devx-strictness-convergence.plan.md`. | [archived plan](architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md) |
+| TypeScript 6 Migration and Workspace-Script Architectural Rules | 2026-04-29 | Migrated to TS6 (baseUrl removal, `types: ["node"]`, `rootDir` for build configs); banned workspace-to-root scripts; ratified the all-TS-scripts rule with the `runtime-only-scripts/` directory exception for no-compile-no-deps cases. Doctrine landed in [ADR-168](../../docs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md). Implementation across `a34f8402`–`dcd45776`. | [archived plan](architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md) |
 
 ---
 

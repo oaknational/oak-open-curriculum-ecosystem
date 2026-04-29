@@ -16,7 +16,8 @@
           "kind": "plan",
           "patterns": [
             ".agent/plans/architecture-and-infrastructure/current/typescript-6-migration-and-workspace-script-rules.plan.md",
-            ".agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md"
+            ".agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md",
+            ".agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md"
           ]
         },
         {

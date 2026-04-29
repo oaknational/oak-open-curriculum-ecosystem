@@ -506,7 +506,7 @@ in the plan.
 
 In-repo continuation surfaces:
 
-- Plan: [`typescript-6-migration-and-workspace-script-rules.plan.md`](../../plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md)
+- Plan: [`typescript-6-migration-and-workspace-script-rules.plan.md`](../../plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md)
   (promoted current/ → active/ on 2026-04-29 by Verdant Regrowing Pollen)
   — full Done/Pending status, commit shape, continuation guidance,
   carried-forward risks (vitest-config-base coupling open question).
