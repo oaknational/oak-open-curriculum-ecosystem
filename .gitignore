@@ -30,6 +30,9 @@ collaboration.txt
 # Claude agent worktrees (transient, machine-local)
 .claude/worktrees/
 
+# Claude hook error log (machine-local; created on demand by .claude/hooks/_lib/log-hook-errors.sh)
+.claude/logs/
+
 # Generated docs
 **/docs/api
 **/docs/api-md/index.md

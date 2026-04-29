@@ -141,7 +141,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh ${CLAUDE_PROJECT_DIR}/.claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh",
             "timeout": 60
           }
         ]
@@ -153,7 +153,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh ${CLAUDE_PROJECT_DIR}/.claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
             "timeout": 60
           }
         ]
