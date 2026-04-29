@@ -9,7 +9,7 @@
  *
  * The helper is pure and operates on an in-memory list of files; the
  * runtime that walks the file system is in
- * `check-stale-script-invocations.ts`.
+ * `validate-no-stale-script-invocations.ts`.
  *
  * @packageDocumentation
  */
