@@ -87,8 +87,8 @@ jobs:
 
       - name: Report Turbo summary
         if: always()
-        run: node scripts/ci-turbo-report.mjs >> "$GITHUB_STEP_SUMMARY"
+        run: pnpm exec tsx scripts/ci-turbo-report.ts >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check schema cache drift (advisory)
         if: always()
-        run: node scripts/ci-schema-drift-check.mjs
+        run: pnpm exec tsx scripts/ci-schema-drift-check.ts

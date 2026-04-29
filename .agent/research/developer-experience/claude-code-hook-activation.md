@@ -12,7 +12,7 @@ real repo.
 - **Native surface**: tracked project `.claude/settings.json`
 - **Hook event**: `PreToolUse`
 - **Matcher**: `Bash`
-- **Runtime**: `node scripts/check-blocked-patterns.mjs`
+- **Runtime**: `pnpm exec tsx scripts/check-blocked-patterns.ts`
 - **Canonical policy**: `.agent/hooks/policy.json`
 
 The runtime reads Claude's hook payload from `stdin`, extracts the shell
