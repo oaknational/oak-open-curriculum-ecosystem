@@ -57,7 +57,7 @@ export function isClaudeHookWiredInText(claudeSettingsText, hookCommand = CLAUDE
   }
 
   const escapedCommand = escapeRegExp(hookCommand);
-  const commandPattern = new RegExp(`"command"\\s*:\\s*"${escapedCommand}"`, 'u');
+  const commandPattern = new RegExp(String.raw`"command"\s*:\s*"${escapedCommand}"`, 'u');
 
   return (
     claudeSettingsText.includes('"PreToolUse"') &&

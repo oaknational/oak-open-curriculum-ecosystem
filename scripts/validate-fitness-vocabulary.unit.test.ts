@@ -116,7 +116,9 @@ describe('findForbiddenPhrases', () => {
     const content = 'This is advisory, not a blocking gate and a blocking violation.';
     const findings = findForbiddenPhrases('test.md', content);
 
-    const phrases = findings.map((finding) => finding.phrase).toSorted();
+    const phrases = findings
+      .map((finding) => finding.phrase)
+      .toSorted((left, right) => left.localeCompare(right));
     expect(phrases).toContain('advisory, not a blocking gate');
     expect(phrases).toContain('blocking violation');
     expect(phrases).toContain('not a blocking gate');

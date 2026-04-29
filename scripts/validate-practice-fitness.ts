@@ -163,8 +163,8 @@ function extractFrontmatter(content) {
  * @returns {number | null}
  */
 function getFrontmatterNumber(frontmatter, key) {
-  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`^${escapedKey}:\\s*(.+)$`, 'm');
+  const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  const regex = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm');
   const match = frontmatter?.match(regex);
   if (!match) return null;
   const num = Number(match[1].trim());
@@ -207,7 +207,7 @@ function classifyLines(content) {
       return { text, kind: 'code-block', lineNumber: index + 1 };
     }
 
-    if (/^\|/.test(text.trim())) {
+    if (text.trim().startsWith('|')) {
       return { text, kind: 'table', lineNumber: index + 1 };
     }
 
@@ -512,8 +512,8 @@ function formatLineStatus(result) {
     return `    Lines:            ${count}  (no threshold)`;
   }
 
-  const targetPart = result.targetLines != null ? `target ${result.targetLines}` : '';
-  const limitPart = result.limitLines != null ? `limit ${result.limitLines}` : '';
+  const targetPart = result.targetLines == null ? '' : `target ${result.targetLines}`;
+  const limitPart = result.limitLines == null ? '' : `limit ${result.limitLines}`;
   const thresholds = [targetPart, limitPart].filter(Boolean).join(' / ');
 
   return `    Lines:            ${count} / ${thresholds}  ${zoneGlyph(result.lineZone)}`;
@@ -521,19 +521,19 @@ function formatLineStatus(result) {
 
 function formatResult(result) {
   const lines = [];
-  lines.push(`  ${result.filename}  ${zoneGlyph(result.overallZone)}`);
+  lines.push(`  ${result.filename}  ${zoneGlyph(result.overallZone)}`, formatLineStatus(result));
 
-  lines.push(formatLineStatus(result));
-
-  if (result.charZone != null) {
+  if (result.charZone == null) {
+    lines.push(`    Characters:       ${String(result.totalChars).padStart(6)}  (no limit)`);
+  } else {
     lines.push(
       `    Characters:       ${String(result.totalChars).padStart(6)} / ${result.limitChars}  ${zoneGlyph(result.charZone)}`,
     );
-  } else {
-    lines.push(`    Characters:       ${String(result.totalChars).padStart(6)}  (no limit)`);
   }
 
-  if (result.proseZone != null) {
+  if (result.proseZone == null) {
+    lines.push(`    Max prose line:   ${String(result.maxProseLen).padStart(6)}  (no limit)`);
+  } else {
     const detail =
       result.proseZone === 'healthy'
         ? ''
@@ -541,8 +541,6 @@ function formatResult(result) {
     lines.push(
       `    Max prose line:   ${String(result.maxProseLen).padStart(6)} / ${result.maxProseLineWidth}  ${zoneGlyph(result.proseZone)}${detail}`,
     );
-  } else {
-    lines.push(`    Max prose line:   ${String(result.maxProseLen).padStart(6)}  (no limit)`);
   }
 
   if (

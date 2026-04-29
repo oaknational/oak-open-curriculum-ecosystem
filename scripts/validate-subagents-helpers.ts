@@ -91,7 +91,7 @@ export function extractCanonicalPaths(developerInstructions) {
       paths.add(match[1]);
     }
   }
-  return [...paths].sort();
+  return [...paths].sort((left, right) => left.localeCompare(right));
 }
 
 export function getCodexRegistrationValidation({
