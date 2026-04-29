@@ -29,7 +29,8 @@ todos:
 
 **Created**: 2026-03-30
 **Status**: PLANNED — not yet executable
-**Principle**: "Build up through scales — Functions → Modules → Packages"
+**Authority**: [`principles.md` § Build up through scales](../../../directives/principles.md#code-design-and-architectural-principles)
+(canonical principle; this plan is its application to repo-level scripts).
 
 ## Problem
 

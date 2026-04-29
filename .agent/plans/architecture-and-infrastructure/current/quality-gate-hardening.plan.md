@@ -128,6 +128,15 @@ pattern, so typed lint stays both truthful and predictable.
 
 ### Historical gate documentation drift before reconciliation
 
+> **Graduated 2026-04-29.** The pre-reconciliation defect inventory (5
+> matrix factual errors, 1 labelling ambiguity, 1 verify-vs-mutate
+> discrepancy, prose drift across 3 sections, ADR-147 contradiction,
+> verify-vs-mutate decision rationale) now lives at
+> [ADR-121 § Change Log 2026-04-29 entry](../../../../docs/architecture/architectural-decisions/121-quality-gate-surfaces.md#change-log)
+> as the canonical audit trail. The plan-body restatement below is
+> retained as historical detail for the 2026-04-11 audit; the
+> reconciliation outcome itself is captured in the ADR.
+
 Before reconciliation, ADR-121 had **5 factual errors**,
 **1 labelling ambiguity**, and **1 additional verify-vs-mutate discrepancy**
 in its coverage matrix:
@@ -564,7 +573,7 @@ updated. See child plan
 ### 5. Enable dependency-cruiser as a Blocking Quality Gate — COMPLETE
 
 **Completed**: 2026-04-12. The child plan
-[depcruise-triage-and-remediation.plan.md](depcruise-triage-and-remediation.plan.md)
+[depcruise-triage-and-remediation.plan.md](../archive/completed/depcruise-triage-and-remediation.plan.md)
 resolved the circular-dependency and orphan baseline, promoted strict
 dependency-cruiser coverage, and left `.dependency-cruiser.mjs` plus
 `pnpm depcruise` in the root quality-gate path.

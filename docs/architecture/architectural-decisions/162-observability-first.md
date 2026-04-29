@@ -183,6 +183,25 @@ Phase 5 of the
      catch a consumer that imports a vendor SDK directly but still
      routes emissions to stdout; mechanism #5 does.
 
+### Enforcement Principles
+
+The five mechanisms above operationalise two doctrines that govern
+any future vendor-boundary enforcement work in this ADR (graduated
+2026-04-29 from `multi-sink-vendor-independence-conformance.plan.md`
+§Design Principles):
+
+1. **Prove, don't assert.** This ADR's vendor-independence clause
+   is programmatically proven by paired tests, not asserted in
+   prose. Future amendments expanding the clause's scope (new
+   sinks, new axes) MUST land paired tests in the same change set.
+2. **Allowlist, not blocklist.** Structural enforcement of the
+   vendor-independence clause lists the permitted locations for
+   vendor SDK imports; everything else is denied. A new vendor SDK
+   lands with an explicit allowlist change, not silent adoption.
+   `RuleTester` cases accompany each new vendor pattern in the same
+   PR as the adapter. The composition-root carve-out is encoded
+   file-by-file in the allowlist, not via a pattern exception.
+
 ### The Five Axes — What Each Covers
 
 | Axis          | Primary signal                                                                    | MVP owner (post-restructure)                                                                  |
