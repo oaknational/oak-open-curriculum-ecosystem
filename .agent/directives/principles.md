@@ -185,13 +185,14 @@ this way produces cleaner boundaries and simpler classification.
   documentation in the docs/ directory, to TSDoc annotations and
   ADRs. Observe progressive disclosure, starting with the most
   general information and working towards the most specific.
-- **No absolute paths** - The repo is used on many machines. ALL
-  filesystem paths in the repo (documentation, plans, config,
-  frontmatter, comments, example commands) MUST be relative:
-  either relative to the repo root or relative to the file
-  containing the path. NO absolute paths (e.g. `/Users/...`,
-  `C:\...`). Absolute paths expose usernames and local directory
-  structure and do not resolve for other contributors or in CI.
+- **No machine-local paths** — Paths in version-controlled files
+  MUST resolve identically on every machine. Forbidden: literal
+  absolute paths; relative paths escaping the repo into per-user
+  surfaces (`..` reaching `~/.claude/`); hardcoded usernames or
+  flattened-project-id segments. Use repo-relative paths in-repo,
+  templated placeholders (`<project>`) for per-user surfaces, and
+  platform variables (`${CLAUDE_PROJECT_DIR}`) for runtime paths.
+  See `.agent/rules/no-machine-local-paths.md`.
 - **No symlinks** — Symlinks are forbidden. Structure workspaces
   properly and use the pnpm workspace dependency graph. Any
   discovered symlinks must be removed immediately as highest

@@ -85,14 +85,14 @@ pattern is firing. Trim to direct answer + minimal evidence.
 
 ## Cross-References
 
-- User-memory feedback:
-  [`feedback_answer_verification_questions_directly.md`][feedback-answer]
-  — the same instruction at user-memory layer (already canonical
-  for the auto-memory store).
-- User-memory feedback:
-  [`feedback_register_owner_direction_substance.md`][feedback-register]
-  — register triggers on substance, not instance count; this
-  pattern's evidence is specifically owner-flagged.
+- Per-user Claude auto-memory feedback (each user's own copy at
+  `~/.claude/projects/<project>/memory/`; not in-repo, not portable
+  across users): `feedback_answer_verification_questions_directly.md`
+  — the same instruction at user-memory layer (already canonical for
+  each user's auto-memory store); and
+  `feedback_register_owner_direction_substance.md` — register
+  triggers on substance, not instance count; this pattern's evidence
+  is specifically owner-flagged.
 - Sibling pattern:
   [`tool-error-as-question.md`](tool-error-as-question.md) — same
   shape at a different surface: the agent's instinct to find a
@@ -101,6 +101,3 @@ pattern is firing. Trim to direct answer + minimal evidence.
   [`scope-as-goal.md`](scope-as-goal.md) — work-list-as-goal is
   the breadth-shaped distraction from "is the goal achieved";
   evasion at structural rather than verbal scale.
-
-[feedback-answer]: ../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_answer_verification_questions_directly.md
-[feedback-register]: ../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_register_owner_direction_substance.md
