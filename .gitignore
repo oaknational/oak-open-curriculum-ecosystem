@@ -33,6 +33,9 @@ collaboration.txt
 # Claude hook error log (machine-local; created on demand by .claude/hooks/_lib/log-hook-errors.sh)
 .claude/logs/
 
+# Claude scheduled-tasks lock (machine-local; session/PID-bound; managed by the harness)
+.claude/scheduled_tasks.lock
+
 # Generated docs
 **/docs/api
 **/docs/api-md/index.md
