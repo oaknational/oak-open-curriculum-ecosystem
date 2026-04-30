@@ -189,10 +189,12 @@ Different signals want different responses, and I currently default
 the second to the first. Restored the entry; deferred remediation
 properly.
 
-### Cross-cutting pattern: five same-shape reframes in one session
+### Cross-cutting pattern: six same-shape reframes in one session
 
-All five surprises are the same shape: I produce a path that
-"works in frame" instead of asking whether the frame is right.
+Six reframes by session close. The first five share one shape:
+I produce a path that "works in frame" instead of asking whether
+the frame is right. The sixth is meta — it's about the shape of
+my classification reasoning when I propose graduations.
 
 1. "corruption" → "split-brain" (frame inherited from commit
    messages; never tested);
@@ -203,13 +205,38 @@ All five surprises are the same shape: I produce a path that
 4. "brittle structural gate" → "build log already carries the
    signal" (static detector vs reading discipline);
 5. "compress to fit fitness limit" → "preserve learning, accept
-   metric, route to disposition" (metric satisfaction vs substance).
+   metric, route to disposition" (metric satisfaction vs substance);
+6. "default to PDR for everything" → "consciously distinguish
+   PDR-shape from ADR-shape; some candidates need both; surface
+   the reasoning so the call is auditable" (graduation
+   classification visible vs implicit).
 
-The cure is structural, not motivational: a pre-action gate that
-fires when an action is about to "make a failing signal pass" —
-*ask whether the signal is the right measure first*. Candidate for
-graduation as either a distilled.md entry (agent-side reasoning
-discipline) or a PDR amendment (review/planning discipline).
+Reframes 1–5 graduated to PDRs 040, 041, 042 + ADR-169. Reframe 6
+is a doctrine candidate for next session — possibly an amendment to
+consolidate-docs §7a (the ADR/PDR scan) requiring explicit
+PDR-shape vs ADR-shape rationale per candidate. The cure is
+structural: surface classification reasoning rather than collapse
+it.
+
+### Pending-Graduations Register split lesson
+
+The register grew large enough that it was contributing the bulk of
+`repo-continuity.md`'s HARD fitness state, and the register's
+responsibility is distinct from the live operational state
+repo-continuity carries. Splitting it into its own file dropped
+repo-continuity from HARD to SOFT cleanly; the new file is GREEN.
+
+The structural trigger pattern worth naming: *when a surface is
+both contributing the bulk of a host file's HARD fitness AND
+representing a domain of responsibility distinct from the host
+file's named purpose, split it out.* Either condition alone is
+weaker; the conjunction is decisive.
+
+Other separable domains in `repo-continuity.md` noted for later
+analysis (recorded in repo-continuity itself):
+Repo-Wide Invariants / Non-Goals; Open Owner-Decision Items;
+earlier consolidation-status narratives; Current Session Focus.
+None hits the conjunction yet; each has a named trigger condition.
 
 ### Doctrine surfaced
 

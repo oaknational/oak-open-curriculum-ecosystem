@@ -8,10 +8,21 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T~12:00Z (Briny Lapping Harbor /
-`claude-code` / `claude-opus-4-7-1m` / `8cd55dc7` —
-`fix/pnpm-action-setup-pin-to-maintainer-latest` branch / PR #92 OPEN.
-Root-cause investigation of recurring Vercel production failures on
+**Last refreshed**: 2026-04-30T~13:30Z (Briny Lapping Harbor /
+`claude-code` / `claude-opus-4-7-1m` / `9f9b4969` —
+`fix/pnpm-action-setup-pin-to-maintainer-latest` branch / PR #92
+OPEN. **Graduation phase landed**: PDR-040 (pin to maintainer-Latest,
+not highest), PDR-041 (composition-obscurity investigation
+methodology), PDR-042 (signal-distinguishing pre-action gate),
+ADR-169 (this repo's adoption companion to PDR-040). Pending-
+Graduations Register split out from `repo-continuity.md § Deep
+consolidation status` into its own file at
+[`pending-graduations.md`](pending-graduations.md); doctrine
+references in `consolidate-docs.md` and `session-handoff.md`
+updated. Other separable domains noted for later. Sixth reframe
+captured (PDR-vs-ADR conscious distinction; bias toward defaulting
+to PDRs). **Earlier in session**:
+root-cause investigation of recurring Vercel production failures on
 every `chore(release)` commit since 1.6.1. **The bug was an obscured
 composition error**: every layer in the chain made a defensible local
 choice and the failure was emergent from their interaction. Four
