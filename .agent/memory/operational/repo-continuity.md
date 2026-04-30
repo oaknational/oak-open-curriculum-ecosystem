@@ -8,81 +8,62 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T~late (Iridescent Soaring Planet /
-`claude-code` / `claude-opus-4-7-1m` / `b38261` —
-`feat/eef_exploration` branch / **PR #93 open**, 5 commits ahead of
-main (1 unpushed at session-close, owner authorised push when ready;
-do not push without explicit authorisation per session protocol).
-**Session-close state**: docs+code reviewer round ran; 12 questions
-posed to owner; owner direction collapsed 10 of them into mechanical
-fixes / specialist-routing-by-rule / fantasy-infrastructure removal;
-2 architectural decisions taken (NodeProjection recursive deep-path
-type with depth bound 4; EvidenceCorpus wrapping shape, not extends).
-Plan estate updated, ADR-157 demoted Accepted → Proposed, brittle
-exact-count assertions and LLM-graded outcome conditions removed
-from corpus plan. **First task of next session**: run type-reviewer
-over the current plan estate per code-reviewer's recommendation;
-specific review questions in
-[`threads/eef.next-session.md` § First Task of Next Session](threads/eef.next-session.md).
-Two new doctrine candidates added to graduation queue: *stop inventing
-optionality* (third instance across sessions; could graduate now) and
-*don't shoehorn a value-claim into infrastructure that cannot carry
-it*. **EEF graph-and-corpus
-architecture session** restructured the EEF plan estate into a
-five-increment delivery sequence with explicit promotion gates.
-Increment 1 (`graph-query-layer.plan.md`, CURRENT) provides a
-7-operation polymorphic query layer over prerequisite + misconception
+**Last refreshed**: 2026-04-30T~17:00Z (Fragrant Sheltering Petal /
+`claude-code` / `claude-opus-4-7-1m` / `360064` —
+`feat/eef_exploration` branch / **PR #93 open**, 7 commits ahead of
+origin (4 unpushed at session-close; owner-authorised push window
+unchanged from prior session — do not push without explicit
+authorisation per session protocol). **Session focus**: EEF
+type-reviewer round on plan estate. Three commits landed:
+`2ea1a413 docs(plans): apply type-reviewer findings to EEF plan estate`
+(10 of 11 findings applied as plan-body edits — `Result<T, E>` on
+fallible GraphView ops, non-empty-tuple `caveats` and `citations`,
+`ComparisonDimension` literal union, DeepKeyPath array-stop + T7a
+compile-time smoke-test, `ExplainOptions` clarified, `NodeFilter` /
+`RankOptions` sketched, T19 claim corrected, Zod date / semver
+precision on meta fields, journey citation propagation note);
+`1a947297 docs: vision rewrite and sector reusable-components contract`
+(orphan Squally Washing Jetty / Cursor Composer bundle committed on
+their behalf per owner direction; attribution recorded in commit
+body); `2a3f69b5 docs(plans): close school_context_schema.properties
+typing question` (read the actual JSON, removed the predecessor's
+`Record<string, unknown>` carve-out, typed concretely as
+`SchoolContextSchema` with recursive `JsonSchemaProperty`; F2/F3
+strengthened in conservation map). **Owner correction (load-bearing)**:
+escalating an empirically verifiable question instead of reading the
+data is the same optionality-invention anti-pattern from last session,
+applied to a fact-check rather than a design call. Fourth instance
+across sessions; pending-graduations candidate moved to `due` —
+graduation target is a `.agent/rules/apply-dont-ask.md` rule covering
+both the principles-already-named-the-path case and the answer-is-
+in-the-artefact case. Increment 1 promotion gate (T1 + plan-body
+first-principles check) is now type-design-clear; `pnpm sdk-codegen`
+round-trip is the next structural verification.
 
-+ EEF strands with progressive disclosure (manifest → summary → detail
-→ edge) and mandatory projection. Increment 2 (`eef-evidence-corpus.plan.md`,
-CURRENT, replaces predecessor `eef-evidence-mcp-surface.plan.md`)
-models EEF as `EvidenceCorpus = GraphView + ScoringEngine`, adds
-`explain` and `compare` tools, adds the `pupil-premium-strategy-review`
-prompt (Workflow B from strategy doc, never previously executable),
-makes citation discipline (R1, R7) a structural type-system invariant,
-and adds freshness-gate + telemetry + negative-space + load-bearing
-JR credit todos. Increment 3 (`cross-source-journeys.plan.md`, FUTURE)
-designs the journey primitive with two reference journeys
-(`evidence-aware-lesson-sequencing`, `prerequisite-trace`) and
-prototypes the question of whether journeys need a new MCP primitive
-or can ride on prompts. EEF cluster relocated from
-`external-knowledge-sources/` into a dedicated `eef/` subthread under
-`sector-engagement/`. Predecessor preserved byte-identically in
-`originals/` for verification, then deleted after independent
-re-read pass found and patched three real preservation gaps. Pre-
-session predecessor recoverable via
-`git show e2796757:<predecessor-path>`. Mandatory three-line user-
-value template embedded in every task across all three new plans —
-graduation candidate to a rule. Five doctrine candidates surfaced
-(see [`active/napkin.md` § Doctrine candidates surfaced](../active/napkin.md)).
-Subjective texture preserved at
+**Earlier this session arc (2026-04-30, Iridescent Soaring Planet)**:
+docs+code reviewer round ran; 12 questions posed to owner; owner
+direction collapsed 10 of them into mechanical fixes / specialist-
+routing-by-rule / fantasy-infrastructure removal; 2 architectural
+decisions taken (NodeProjection recursive deep-path type with depth
+bound 4; EvidenceCorpus wrapping shape, not extends). Plan estate
+updated, ADR-157 demoted Accepted → Proposed, brittle exact-count
+assertions and LLM-graded outcome conditions removed from corpus plan.
+EEF plan estate restructured into a five-increment delivery sequence
+on top of a polymorphic graph-query foundation: Increment 1
+(`graph-query-layer.plan.md`, CURRENT) — 7-operation query layer over
+prerequisite / misconception / EEF strands with progressive disclosure
+and mandatory projection; Increment 2 (`eef-evidence-corpus.plan.md`,
+CURRENT, replaces predecessor) — `EvidenceCorpus = GraphView +
+ScoringEngine` with `explain` / `compare` tools, structural citation
+type, freshness gate, telemetry, JR credit; Increment 3
+(`cross-source-journeys.plan.md`, FUTURE) — journey primitive design.
+EEF cluster relocated to dedicated `eef/` subthread under
+`sector-engagement/`; predecessor recoverable via
+`git show e2796757:<predecessor-path>`. Two doctrine candidates added
+to queue: *stop inventing optionality*, *don't shoehorn a value-claim
+into infrastructure that cannot carry it*. Subjective texture at
 [`experience/2026-04-30-iridescent-graph-corpus-composition.md`](../../experience/2026-04-30-iridescent-graph-corpus-composition.md);
-new EEF thread record at
-[`threads/eef.next-session.md`](threads/eef.next-session.md).)
-
-**Earlier this session**: EEF graph-and-corpus architecture session
-restructured the EEF plan estate into a five-increment delivery
-sequence on top of a new polymorphic graph-query foundation. Increment
-1 (`graph-query-layer.plan.md`, CURRENT) provides 7 operations with
-progressive disclosure (manifest → summary → detail → edge) and
-mandatory recursive-projection. Increment 2 (`eef-evidence-corpus.plan.md`,
-CURRENT) models EEF as `EvidenceCorpus` wrapping a `GraphView` (not
-extending), adds explain and compare tools, the
-`pupil-premium-strategy-review` prompt, structural citation type as
-type-system invariant, freshness gate, telemetry, negative-space
-documentation, JR credit as release-blocker T20. Increment 3
-(`cross-source-journeys.plan.md`, FUTURE) designs the journey
-primitive. EEF cluster relocated from `external-knowledge-sources/`
-into a dedicated `eef/` subthread. Predecessor preserved in
-`originals/` for verification, then deleted after independent
-re-read pass found and patched three real preservation gaps (KG-
-independence statement, data-shape unit-test contract, key-files
-table). Pre-session predecessor recoverable via
-`git show e2796757:<predecessor-path>`. Subjective texture +
-methodology refinement preserved at
-[`experience/2026-04-30-iridescent-graph-corpus-composition.md`](../../experience/2026-04-30-iridescent-graph-corpus-composition.md);
-new EEF thread record at
-[`threads/eef.next-session.md`](threads/eef.next-session.md).
+thread record at [`threads/eef.next-session.md`](threads/eef.next-session.md).
 
 **Prior refresh**: 2026-04-30T~13:30Z (Briny Lapping Harbor /
 `claude-code` / `claude-opus-4-7-1m` / `9f9b4969` —
@@ -196,7 +177,8 @@ live in each thread record; this table is the repo-level index.
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
-| `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
+| `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff (committed by Fragrant Sheltering Petal as `1a947297`) / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
+| `eef` | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation | [`threads/eef.next-session.md`](threads/eef.next-session.md) | Most-recent: Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30. Prior: Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -215,15 +197,26 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 
 ## Current Session Focus
 
-**2026-04-30 (Squally Washing Jetty, Cursor Composer, completed)**:
-foundation Vision layer (compositional thesis, Three Orders +
-`Worked Example: Aila`, reusable sector-component canon + link to partner
-adoption contract); root README mirror + `### Sector reusable components`;
+**2026-04-30 (Fragrant Sheltering Petal, Claude Code, completed)**:
+EEF type-reviewer round on plan estate. 11 reviewer findings, 10
+applied as plan-body edits, 1 resolved by reading the data (not
+escalation). Three commits landed: `2ea1a413`, `1a947297` (orphan
+Squally Washing Jetty bundle, committed on their behalf with
+attribution per owner direction), `2a3f69b5`. Owner correction
+captured: empirically verifiable questions resolved by reading the
+artefact, not by escalation. Branch now 7 commits ahead of origin
+(4 unpushed at session-close); push window per prior session protocol.
+
+**2026-04-30 (Squally Washing Jetty, Cursor Composer, completed and
+committed by Fragrant Sheltering Petal as `1a947297`)**: foundation
+Vision layer (compositional thesis, Three Orders + `Worked Example:
+Aila`, reusable sector-component canon); root README mirror +
+`### Sector reusable components`;
 [`sector-reusable-components-adoption.plan.md`](../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
-in `sector-engagement/current/` plus collection index + roadmap Phase 4 wiring;
-reciprocal `related_plans` on KG external adoption future brief. Lint evidence
-in session; **git commit not performed by this Composer session**—owner index
-or dedicated commit window.
+in `sector-engagement/current/` plus collection index + roadmap
+Phase 4 wiring; reciprocal `related_plans` on KG external adoption
+future brief. Cursor session closed without commit; Claude Code session
+took commit per owner direction.
 
 **2026-04-30 (Verdant Sheltering Glade, in flight)**: post-mortem +
 fitness remediation lane (owner-deferred housekeeping-with-intent).
@@ -355,8 +348,26 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-30 Briny Lapping Harbor): `due — multiple triggers`**.
-Triggers fired this session:
+**Status (2026-04-30 Fragrant Sheltering Petal): `due — multiple
+triggers, not bounded for this closeout`**. Owner directed
+session-handoff only this turn ("this session is complete, please
+update all appropriate plans and continuity surfaces, then run the
+session handoff workflow") — no escalation to `/jc-consolidate-docs`.
+Triggers carrying forward, plus those newly fired this session:
+
++ **Repeated surprises suggest a new rule (4th instance, gradation
+  trigger fully fired)**: *stop inventing optionality* — agent
+  produces option-shaped output when work calls for action-shaped or
+  read-shaped output. Documented in this session's napkin entry as
+  the unifying shape across four sessions; pending-graduations
+  register entry moved to `due`; graduation target
+  `.agent/rules/apply-dont-ask.md`.
++ **Settled doctrine exists only in ephemeral artefacts**: the
+  optionality-invention rule above is in the register and napkin
+  only — no rule file yet.
+
+**Earlier triggers (2026-04-30 Briny Lapping Harbor) carried
+forward** — pending consolidation:
 
 + **A plan or milestone has closed**: 2026-04-29
   lockfile-corruption-diagnosis-discipline candidate's
@@ -422,8 +433,13 @@ after this consolidation:
   hard limit. Pre-existing, not this session. Disposition: trivial
   (next edit naturally lands under limit; not closure-blocking).
 
-User explicitly directed escalation to `/jc-consolidate-docs` after
-session-handoff closes. Continue.
+User direction (2026-04-30 Briny Lapping Harbor) explicitly directed
+escalation to `/jc-consolidate-docs` after that session's handoff
+closed. **That escalation is no longer current as of 2026-04-30
+Fragrant Sheltering Petal**: the owner directed session-handoff only
+("run the session handoff workflow"), not consolidation. Deep
+consolidation remains `due` but unbounded; a future session takes it
+up deliberately when owner directs.
 
 ---
 

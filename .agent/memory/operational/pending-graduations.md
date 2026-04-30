@@ -325,6 +325,38 @@ continuity snapshots.
   canonical homes; group by similar source files (phase-* cluster,
   2025-01 cluster, 2025-08 cluster) for batch processing.
 
++ 2026-04-30; **stop inventing optionality** — agent produces option-shaped
+  output when the work calls for action-shaped or read-shaped output. Four
+  instances across sessions: (1) Iridescent's 12-question round where 10 of
+  12 should not have been posed (principles or reviewers had named the
+  path); (2) Briny Lapping Harbor's "Option B: disable canonical default"
+  alongside the corrected investigation frame; (3) Iridescent's session-
+  close where the same shape was named explicitly as doctrine candidate;
+  (4) Fragrant Sheltering Petal's bucket-(c) escalation of an empirically
+  verifiable question instead of reading `eef-toolkit.json`. Underlying
+  mechanism is the same in every case — couple analysis to a presented
+  decision when the decision is already made (by principles, reviewer,
+  data, or owner reframe). **Status: due** — graduation trigger fully
+  fired (4 instances + owner direction across multiple sessions).
+  Graduation target: `.agent/rules/apply-dont-ask.md`. Rule must specify
+  the two-pronged pre-question gate: (a) have principles or a reviewer
+  already named the path? (b) is the answer in an artefact in the repo
+  I have not read? If either tripwire fires, apply / read; do not pose
+  to the owner. Pose only when neither principles nor data resolves the
+  fork. Evidence trail: napkin entries from Iridescent and Fragrant
+  sessions; commit `2a3f69b5` is the bridge from bucket-(c)-as-escalation
+  to bucket-(c)-as-applied (read the data, removed the carve-out).
++ 2026-04-30; **don't shoehorn a value-claim into infrastructure that
+  cannot carry it** — when the right way to verify something does not
+  exist yet, the honest plan says so and ships the structural enforcement
+  that does exist; it does not invent brittle tests or fantasy operational
+  protocols to fill the gap. Sense-check: "if this stopped existing
+  tomorrow, who would know? how?" If the answer is "no one, because the
+  infrastructure for knowing doesn't exist", do not pretend the
+  infrastructure exists. Status: pending. Trigger: second instance OR
+  owner direction. Evidence: Iridescent's session-close napkin (LLM-
+  graded outcome conditions in EEF plan removed under owner direction).
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

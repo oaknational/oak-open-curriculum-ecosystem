@@ -154,6 +154,33 @@ clear. Increment 1's "T1 + plan-body first-principles check" gate is
 closer to satisfied; the `pnpm sdk-codegen` round-trip is the next
 structural verification.
 
+## First Task of Next Session
+
+**Promote Increment 1 (`graph-query-layer.plan.md`) toward ACTIVE.**
+Type-design portion of the promotion gate is now satisfied (this
+session, see Type-Reviewer Round Outcome above). Remaining gate
+conditions:
+
+1. T1 tracer use cases (21 minimum, 7 ops × 3 graphs) — owner
+   sign-off pending.
+2. Plan-body first-principles check applied to tracer shapes against
+   the actual data files for prerequisite, misconception, and EEF
+   strands graphs. The third-graph-protection mechanism (≥2-of-3
+   tracer support before any operation ships) is the structural
+   guard against EEF-shaped over-fitting.
+3. EEF corpus plan (Increment 2) ready to start in parallel.
+
+If owner approves promotion, the natural next move is the
+`pnpm sdk-codegen` round-trip — the round-trip is the next
+structural verification that the type designs work in actual SDK
+code, not just plan-body sketches.
+
+**Out-of-band next-session candidate**: graduate *stop inventing
+optionality* to `.agent/rules/apply-dont-ask.md` per the
+pending-graduations register's `due` entry. Belongs to the
+`agentic-engineering-enhancements` thread, not `eef`; flagged here
+so the next EEF session does not re-trip on the pattern.
+
 ## Previous First Task (resolved)
 
 **Run the type-reviewer over the current plan estate** — code-reviewer

@@ -699,3 +699,121 @@ Collaboration: `active-claims.json` holds only **Fragrant Sheltering Petal**
 `eef` lane claim — **no** Composer-session claim ⇒ explicit claim closure skipped (stated observable).
 
 ADR/PDR scan (session-handoff §6b): **nothing qualifies** — reusable canon is deliberate Vision + plan prose, not a new AD boundary.
+
+## 2026-04-30 — EEF type-reviewer round + the optionality-as-fact-check shape (Fragrant Sheltering Petal)
+
+Session focus: deliver the type-reviewer round on the EEF plan estate
+that Iridescent Soaring Planet briefed at handoff, plus the concomitant
+plan edits.
+
+### Surprise — escalating an empirically verifiable question
+
+- **Expected**: my "bucket (c) finding" closeout was textbook. I
+  surfaced the `school_context_schema.properties` carve-out as a
+  genuine architectural fork and presented it to the owner with three
+  paths for resolution.
+- **Actual**: owner: *"why are you asking me to make a decision about
+  a file instead of reading the file?"* The answer was in
+  `eef-toolkit.json` — a closed JSON Schema document with 9 named
+  properties, each a standard JSON Schema property descriptor. Reading
+  the file took 60 seconds and removed the carve-out outright; no
+  decision needed.
+- **Why expectation failed**: I treated the type-reviewer's category-
+  (c) framing as a green light to escalate, when the reviewer's own
+  rationale — "Owner to confirm whether this is genuinely open-ended
+  or has a known closed shape" — was empirically settleable. The
+  category-(c) flag named the question; reading the data answered it.
+  I propagated the question without checking whether it was still a
+  question after I read the source.
+- **Behaviour change**: pre-question gate is now two-pronged, not
+  one. Before posing a question to the owner, run BOTH tests:
+  1. Have principles or a reviewer already named the path? (Iridescent's
+     gate from last session.)
+  2. Is the answer in an artefact in the repo I haven't read?
+     (This session.)
+  If either tripwire fires, apply / read; do not ask. The gate is
+  the same — pose to owner only when neither principles nor data
+  resolves the fork.
+
+### The pattern's full shape — and its 4th instance
+
+Across four sessions:
+
+1. **Iridescent (2026-04-30 morning, 12-question round)**: hedging
+   things principles or reviewers had already decided as
+   "should we?" — bias-toward-deferral via false optionality.
+2. **Briny Lapping Harbor (2026-04-30 afternoon, pnpm action-setup)**:
+   producing two-option paths after the frame had been corrected,
+   instead of acting on the corrected frame. Specifically: "Option B:
+   set managePackageManagerVersions: false" alongside "investigate
+   the actual mismatch" after owner had reframed it as split-brain
+   (not corruption).
+3. **Iridescent's session-close (2026-04-30 late afternoon)**:
+   12-question round to owner where 10 of 12 should not have been
+   posed; only 2 were genuine architectural forks. Surfaced as
+   "stop inventing optionality" doctrine candidate.
+4. **This session (2026-04-30 evening)**: posing an empirical question
+   to the owner instead of reading the file the answer lives in.
+
+The pattern's full surface: agent produces **option-shaped output**
+when the work calls for **action-shaped or read-shaped output**. The
+underlying mechanism is the same in every instance — couple analysis
+to a presented decision, even when the decision is already made (by
+principles, by reviewer recommendation, by data, or by the owner's
+prior reframe). The shape is the same; only the surface varies.
+
+This is the 4th instance and the graduation trigger has fully fired.
+The pattern is rule-shaped — its prescription is concrete and gateable
+("before posing a question, run both pre-question tripwires"). Moved
+to `due` in the pending-graduations register; graduation target is
+`.agent/rules/apply-dont-ask.md` covering all four surfaces of the
+shape.
+
+### Pattern note — substrate-vs-axis applied to commit bundles
+
+Three commits this session, three different intents kept distinct:
+
+1. `2ea1a413 docs(plans): apply type-reviewer findings...` — EEF round
+   (my queued intent).
+2. `1a947297 docs: vision rewrite and sector reusable-components
+   contract` — orphan Squally Washing Jetty bundle, on their behalf,
+   per owner authorisation.
+3. `2a3f69b5 docs(plans): close school_context_schema.properties
+   typing question` — fix surfaced by owner correction; bridge from
+   bucket-(c)-as-escalation to bucket-(c)-as-applied.
+
+The discipline that made this work: each bundle staged by **explicit
+pathspec from the queued intent**; the orphan parallel work was
+visibly separate from my EEF claim's pathspec; the school_context_schema
+fix landed in its own commit rather than getting bundled retroactively
+into the type-reviewer commit. Three intents, three commits — the
+substrate-vs-axis distinction Vining named for plan collections, and
+that I applied to staging in the prior session, generalises further:
+it applies to coherent commit boundaries within a single session.
+
+### What this session displaces
+
+- *Old framing (pre-question test)*: "Have principles or a reviewer
+  already named the path?" → **Replaced by**: two-pronged test that
+  also asks "Is the answer in an artefact I haven't read?"
+- *Old escalation pattern*: type-reviewer's "(c) genuine architectural
+  fork" treated as a green light to escalate → **Replaced by**:
+  category-(c) flags a question; *answering the question* still
+  requires running the two-pronged pre-question test before the
+  escalation.
+
+### Doctrine candidates this session
+
+10 (carrying from Iridescent). **Stop inventing optionality** — 4th
+instance. Trigger fully fired. Move to `due`. Rule-shaped target:
+`.agent/rules/apply-dont-ask.md`.
+
+11 (carrying from Iridescent). **Don't shoehorn a value-claim into
+infrastructure that cannot carry it** — 1st instance, ripening.
+
+12 (NEW this session). **Read the data before escalating an
+empirical question** — sub-shape of (10), but worth surfacing as a
+specific tripwire. The general pattern is the optionality-invention
+shape; the specific tripwire is "before posing a question to the
+owner, scan for the artefact that contains the answer." Could
+graduate as a sub-bullet of the (10) rule rather than its own rule.
