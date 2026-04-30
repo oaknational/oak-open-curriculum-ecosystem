@@ -54,7 +54,7 @@ into todo bodies and decision sections.
 | Finding | Resolution preserved | New home (todo or section) |
 |---|---|---|
 | **F1** Data placement (SDK `src/mcp/data/`, not codegen) | YES | `eef-evidence-corpus.plan.md` T2; ADR-157 reaffirmed |
-| **F2** Type all fields, no `Record<string, unknown>` | YES | T2; full Zod schema preserved by reference to predecessor in originals/ |
+| **F2** Type all fields, no `Record<string, unknown>` | YES | T2; full Zod schema preserved by reference to predecessor (recoverable via `git show e2796757:<predecessor-path>`) |
 | **F3** Meta — all 7 fields typed | YES | T2 |
 | **F4** Direct Zod `.parse()` at load, not `as const satisfies` | YES | T2 |
 | **F5** Null-impact guard — pre-filter 4 strands before scoring | YES, expanded with explicit IDs in scoring engine docstring | T5 ScoringEngine; 4 strand IDs preserved verbatim |
@@ -252,7 +252,7 @@ restructure:
 ## N. Verification log (the "double check" the owner asked for)
 
 After authoring this map, the predecessor was independently re-read on
-2026-04-30 against the new plan. Two real preservation gaps were found
+2026-04-30 against the new plan. Three real preservation gaps were found
 and patched in the new plan before deletion of `originals/`:
 
 1. **"EEF JSON only — KG-independent / Levels 2-3 independent"** — the

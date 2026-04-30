@@ -6,8 +6,9 @@ as an **evidence corpus** (composition: graph foundation + ranking
 engine) on Oak's MCP server.
 
 **Status**: Strategic brief landed; executable plan restructured 2026-04-30
-into corpus-and-graph shape (CURRENT, awaiting promotion to ACTIVE
-once foundation graph-query-layer plan reaches ACTIVE).
+into corpus-and-graph shape (CURRENT lifecycle bucket, awaiting
+promotion to ACTIVE once foundation graph-query-layer plan reaches
+ACTIVE — see [Promotion Rule](#promotion-rule)).
 **Last Updated**: 2026-04-30
 **Originating session branch**: `feat/eef_exploration`
 **Conservation evidence**: semantic preservation map at
@@ -120,7 +121,7 @@ Currency note: snapshot is 28 days old at relocation. The EEF Toolkit is a
 "living systematic review" updated roughly twice per year; caveat #8 inside the
 JSON itself records that the data reflects "May 2025 and October 2025 living
 systematic review updates where available." A fresh upstream check would be
-prudent before the executable plan promotes from QUEUED to ACTIVE.
+prudent before the executable plan promotes from CURRENT to ACTIVE.
 
 ## Parent and Sibling Relationships
 
@@ -146,6 +147,7 @@ prudent before the executable plan promotes from QUEUED to ACTIVE.
 
 ## Promotion Rule
 
+<a id="promotion-rule"></a>
 Promote `current/eef-evidence-corpus.plan.md` from CURRENT to ACTIVE when:
 
 1. The owner gives the go-ahead;

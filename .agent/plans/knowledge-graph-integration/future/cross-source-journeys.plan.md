@@ -247,4 +247,4 @@ promote on observed insufficiency.
 - **Corpus (Inc 2)**: [`../../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 - **Parent**: [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md)
 - **Sibling (guidance)**: [`../active/agent-guidance-consolidation.plan.md`](../active/agent-guidance-consolidation.plan.md) — workflows defined there are the prose ancestor of journeys defined here.
-- **Session insight**: [`.agent/memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../memory/active/napkin.md)
+- **Session insight**: [`.agent/memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../memory/active/napkin.md)
