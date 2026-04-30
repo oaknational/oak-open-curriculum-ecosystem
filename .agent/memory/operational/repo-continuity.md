@@ -8,7 +8,28 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
+**Last refreshed**: 2026-04-30T15:45Z (Dewy Budding Sapling / claude-code /
+claude-opus-4-7-1m / `7e8db7` — `fix/sentry-identity-from-env` branch context
+only; no production code, schema, or runtime configuration touched. Practice
+work on the `agentic-engineering-enhancements` thread: investigated current
+skill-portability pipeline (`.agent/skills/` canonical + `.claude/`/`.cursor/`/
+`.agents/` thin wrappers + `skills-lock.json` + `pnpm portability:check`);
+drafted vendor-agnostic future strategic plan
+`canonical-first-skill-pack-ingestion-tooling.plan.md` that closes the unbuilt
+`pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged in the
+portability-remediation plan. Plan never names a delivery vendor — ecosystems
+referenced as illustrative only; tool source must contain no vendor-keyed
+conditionals (validator-enforceable rule). Promotion gated on PASS from
+assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma; reviews
+blocking later, not required now per owner direction. Discovery surfaces
+wired: future/README, collection README, roadmap, sibling adapter-generation
+forward-link, portability-remediation Phase 6 forward-link. Validators green:
+portability:check passed (12 commands, 36 skills, 45 rules, 22 reviewer
+adapters, 47 Cursor triggers, 45 Claude rules, 45 .agents rules, 40 command
+adapters across 4 platforms); markdownlint clean. Owner direction: skip the
+final consolidation gate this handoff — handled elsewhere.)
+
+**Earlier refresh**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
 claude-opus-4-7-1m / `bce99d` — `fix/sentry-identity-from-env` branch / PR #91
 preview verification + observability-config-coherence strategic plan +
 substrate-vs-axis-plans convention component + ADR-162 closure-property
@@ -127,7 +148,7 @@ live in each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Squally Diving Anchor / `codex` / `GPT-5` / sector-engagement-taxonomy-and-handoff / 2026-04-29. |
@@ -267,7 +288,17 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-30 Vining Ripening Leaf, owner-deferred)**:
+**Status (2026-04-30T15:45Z Dewy Budding Sapling, owner-directed skip)**:
+**still due — owner direction was to skip the final consolidation gate
+this handoff; consolidation handled elsewhere by the owner**. This
+session was a single future-plan draft + discovery-surface wiring on
+the `agentic-engineering-enhancements` thread; it did not address any
+of the previously-listed remediation items below. The earlier `due`
+status from Vining Ripening Leaf (handoff post-mortem + fitness
+remediation) remains live for whichever session the owner schedules
+next; this handoff did not regress it but did not advance it either.
+
+**Earlier status (2026-04-30 Vining Ripening Leaf, owner-deferred)**:
 **due — handoff post-mortem + fitness-pressure remediation next
 session**. The 2026-04-30 session ran a light handoff + light
 consolidation pass under explicit owner direction to commit-and-push,

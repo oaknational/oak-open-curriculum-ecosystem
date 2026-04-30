@@ -453,6 +453,7 @@ and
 | `Prismatic Waxing Constellation` | `codex` | `gpt-5.5` | `019dcd` | `owner-directed-intent-to-commit-queue-implementation` | 2026-04-27 | 2026-04-27 |
 | `Coastal Washing Rudder` | `codex` | `gpt-5.5` | `019dcf` | `owner-directed-queue-governance-graduation-pdr-029-and-plan-archive` | 2026-04-27 | 2026-04-27 |
 | `Ethereal Threading Supernova` | `codex` | `GPT-5` | `019dd2` | `codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff` | 2026-04-28 | 2026-04-28 |
+| `Dewy Budding Sapling` | `claude-code` | `claude-opus-4-7-1m` | `7e8db7` | `cloudflare-plugin-investigation-and-canonical-first-skill-pack-ingestion-future-plan-drafting-and-discovery-surface-wiring` | 2026-04-30 | 2026-04-30 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -463,7 +464,38 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**Latest session landed commit-gate doctrine correction (2026-04-28 Glassy
+**Latest session landed canonical-first skill pack ingestion future plan
+(2026-04-30 Dewy Budding Sapling):**
+
+- Investigated current skill-portability pipeline (canonical at
+  `.agent/skills/`, thin wrappers under `.claude/`, `.cursor/`, `.agents/`,
+  plus `skills-lock.json` and `pnpm portability:check`); confirmed manual
+  canonicalisation flow and the unbuilt
+  `pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged at the
+  close of the portability-remediation plan.
+- Drafted vendor-agnostic future strategic plan
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  — never names a delivery vendor; ecosystems referenced as illustrative
+  only (Anthropic / Vercel / Cloudflare / Clerk / ModelContextProtocol /
+  Cursor / Codex / future-not-yet-authored). Plan body forbids
+  vendor-keyed conditionals in tool source as a validator-enforceable rule.
+- Promotion gated on PASS from the deep sub-agent review set
+  (assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma).
+  Reviews are blocking later but not required now per owner direction.
+- Discovery surfaces wired: future/README.md table row, collection
+  README.md Documents row, roadmap.md Adjacent section + status header,
+  forward-link from sibling adapter-generation plan, forward-link from
+  Phase 6 mitigation note in current portability-remediation plan.
+- Validators green: `pnpm portability:check` (12 commands, 36 skills,
+  45 rules, 22 reviewer adapters, 47 Cursor triggers, 45 Claude rules,
+  45 .agents rules, 40 command adapters across 4 platforms);
+  markdownlint clean across all touched files.
+- No production code, schema, or runtime configuration touched.
+- Branch (`fix/sentry-identity-from-env`, PR #91) is observability work
+  by a different identity in a different thread; this session did not
+  modify it.
+
+**Prior session landed commit-gate doctrine correction (2026-04-28 Glassy
 Ebbing Reef):**
 
 - owner clarified that `.agent/` is shared Practice/coordination state and is
@@ -985,6 +1017,14 @@ nl -ba .agent/directives/AGENT.md
   [`knowledge-role-documentation-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md)
 - Context:
   [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
+- Strategic source / future (drafted 2026-04-30):
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  — vendor-agnostic CLI for ingesting any external skill pack into the
+  canonical-first three-layer model; closes the unbuilt mitigation option 1
+  of the portability-remediation plan (`pnpm agent-tools:canonicalise-vendor-skills`).
+  **Promotion is gated on PASS from the deep sub-agent review set**
+  (assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma).
+  Reviews are blocking later but not required now.
 
 ### Current Objective
 
@@ -1265,3 +1305,12 @@ Choose the lane deliberately:
   more ad hoc PR instructions to existing skills. The skill must preserve
   gate-honest quality improvement and reviewer-facing communication as its
   first principles.
+- If a second instance of manual external-skill-pack canonicalisation friction
+  occurs, OR an external pack with general value is requested for canonical
+  inclusion and the manual flow blocks Cursor/Codex uptake, OR drift is
+  detected in a vendored canonical skill that the current validator does not
+  catch, OR a fourth Layer-2 surface is introduced — promote
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md).
+  Promotion remains gated on PASS from assumptions-reviewer +
+  architecture-reviewer-fred|betty|barney|wilma. The plan body must not
+  acquire any vendor-keyed conditional (PDR-009 vendor-agnostic rule).

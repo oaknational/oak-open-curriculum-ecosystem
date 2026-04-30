@@ -24,6 +24,45 @@ unblock, doctrine sharpening). High-signal entries from that arc were
 graduated to canonical surfaces during the 2026-04-29 consolidation;
 the archived file remains the durable narrative record.
 
+## 2026-04-30 — Vendored canonical drift is invisible to the current portability validator (Dewy Budding Sapling)
+
+**Surprise.** `skills-lock.json` already records `(source, sourceType,
+computedHash)` for every externally-sourced canonical skill, and
+`scripts/validate-portability.ts` Check 9b validates the lock's
+*structural* shape (entry per locked skill, no symlink adapters, all
+adapter dirs present). It does **not** re-compute the hash and compare:
+a hand-edit to `.agent/skills/<vendored-name>/SKILL.md` would pass every
+current check — forward coverage, reverse links, thin-wrapper form,
+lock-presence — without any signal that vendored canonical content has
+drifted from the upstream pack it was sourced from.
+
+**Why it matters.** This is the silent-drift failure mode that PDR-009 +
+ADR-125 explicitly warn about: "Validation must be bidirectional"
+(PDR-009 §Layer 2). Reverse adapter links are bidirectional in the
+*structural* sense (every adapter points at canonical, every canonical
+has adapters). They are not bidirectional in the *content* sense
+(canonical content matches the upstream source the lock claims it came
+from). The `computedHash` field exists *for* this check, but no code
+re-computes it.
+
+**What this unlocks.** The justification for the new
+`canonical-first-skill-pack-ingestion-tooling.plan.md` future plan is
+not just "automate the manual canonicalisation flow" — it is "the
+validator currently cannot detect drift in vendored canonical content,
+and the tool delivery is the natural place to add the missing check".
+The plan body lists this as a promotion signal (signal 3: "Drift is
+detected in a vendored canonical skill that the current validator does
+not catch"). Without the new tool, the validator gap persists; without
+naming the gap, the new tool reads as nice-to-have automation rather
+than closing a real soundness hole.
+
+**Routing.** Captured in the new future plan §Open Decisions item 5
+(validator additions: drift detection via re-computed `localHash`).
+Surfacing here for cross-session memory because the gap exists *now*
+on `main` regardless of whether the future plan ever promotes —
+anyone editing a vendored canonical SKILL.md before that plan lands is
+operating without a safety net.
+
 ## 2026-04-30 — Substrate-vs-axis: invent-justification as completeness signal (Vining Ripening Leaf)
 
 **Working principle surfaced.** When you find yourself writing prose to
