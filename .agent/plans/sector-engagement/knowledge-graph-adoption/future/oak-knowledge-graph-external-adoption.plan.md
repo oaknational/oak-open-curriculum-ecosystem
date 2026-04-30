@@ -5,6 +5,7 @@ status: future
 related_plans:
   - "../../../knowledge-graph-integration/README.md"
   - "../../../knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
+  - "../../current/sector-reusable-components-adoption.plan.md"
 specialist_reviewer: "docs-adr-reviewer, security-reviewer, architecture-reviewer-betty"
 ---
 

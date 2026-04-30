@@ -36,8 +36,10 @@ internal engineering plan is needed.
 
 The recurring resources in scope are the OpenAPI-driven pipeline, generated
 SDKs, MCP server surfaces, semantic-search configuration, knowledge-graph
-assets, and the documentation/playbooks that make those assets usable by
-others. The collection also tracks how MCP Apps in AI platforms such as Claude
+assets, the reusable sector-component canon in foundation Vision [_What We
+Deliver_](../../../docs/foundation/VISION.md#what-we-deliver), and the
+documentation or playbooks that make those assets usable by others (see
+[current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)). The collection also tracks how MCP Apps in AI platforms such as Claude
 Cowork and ChatGPT can turn those assets into practical end-user and developer
 experiences.
 
@@ -53,6 +55,7 @@ implementation collection when promoted.
 
 | Path | Type | Description |
 |---|---|---|
+| [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md) | Current contract | Partner adoption claims anchored on Vision reusable-component inventory |
 | [roadmap.md](roadmap.md) | Roadmap | Sector-engagement phase sequence and ownership boundaries |
 | [active/README.md](active/README.md) | Active index | In-progress sector-engagement execution plans |
 | [current/README.md](current/README.md) | Current index | Queued sector-engagement plans |
@@ -69,14 +72,15 @@ implementation collection when promoted.
 ## Read Order
 
 1. [roadmap.md](roadmap.md)
-2. [future/README.md](future/README.md)
-3. [external-material-triage.md](external-material-triage.md)
-4. [eef/README.md](eef/README.md)
-5. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
-6. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
-7. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
-8. [ooc-issues/README.md](ooc-issues/README.md)
-9. [oeai/README.md](oeai/README.md)
+2. [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)
+3. [future/README.md](future/README.md)
+4. [external-material-triage.md](external-material-triage.md)
+5. [eef/README.md](eef/README.md)
+6. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
+7. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
+8. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
+9. [ooc-issues/README.md](ooc-issues/README.md)
+10. [oeai/README.md](oeai/README.md)
 
 ## Document Roles
 

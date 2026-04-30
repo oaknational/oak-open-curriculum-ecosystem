@@ -643,3 +643,59 @@ audience bullets include MCP Apps and graph-aligned primitives; Strategic
 Integrations framed as present depth + deepening trajectory; Aila KG bullet
 aligned with unified SDK/MCP exposure; `What We Deliver` names graph-aligned
 surfaces; `last_reviewed` bumped to 2026-04-30.
+
+## 2026-04-30 — Vision rewrite: layered impact + secondary-goal components
+
+Follow-up pass after style-and-impact-layer review. Owner approved all
+suggestions and added a **secondary goal**: beyond the services this repo runs,
+provide a reusable component set (OpenAPI-to-MCP pipeline, SDK generation,
+hybrid-search configuration, MCP/MCP App scaffolds, graph projection patterns,
+the Practice) that lowers the cost of innovation across the sector. Edits:
+
+- Hero now carries primary thesis + secondary-goal paragraph (components vs
+  services).
+- "What This Repository Is For" trimmed: removed `Concretely,` plus the five
+  redundant "exists to" bullets (incl. the "world-class" hyperbole).
+- "What We Deliver" now has an explicit reusable-components paragraph framing
+  reuse as a first-class delivery concern.
+- Three Orders rewritten with named beneficiaries (Oak engineering →
+  builders inside/outside Oak → teachers and pupils) and re-engages the
+  disadvantage-gap thread at order three. Practice + components woven into
+  orders one and two.
+- Aila moved to `Worked Example: Aila` after Three Orders so it illustrates
+  the orders rather than interrupting them.
+- `Investment Value For Oak` slimmed to two channels (strategic integration
+  point + public-value leadership); the mission-causal three are now a
+  pointer up to Three Orders.
+- Indicators and Positioning updated to mention components consistently;
+  em-dash spacing standardised; `surfaces surfaced` typo removed.
+
+Validation: `pnpm exec markdownlint docs/foundation/VISION.md` passed; no
+linter errors. `last_reviewed` already at 2026-04-30 from prior pass.
+
+## 2026-04-30 — README + sector-engagement reusable-components contract
+
+Owner asked to propagate Vision secondary goal to public README and open a sector-engagement plan keyed to `_What We Deliver_`. Implemented: README intro paragraph on sector components + `### Sector reusable components` bridging to playbook plan; tightened Data Sources prose (dropped world-class); non-technical VISION bullet mentions hosted vs reusable. New [sector-reusable-components adoption plan](../../../.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md) (partner claims discipline, canon table, todos for maturity matrix / first adopter). Indices: sector-engagement `README.md` Impact Intent + Documents + Read Order; `roadmap.md` Phase 4 links + `Last Updated`; `current/README.md`; reciprocal `related_plans` entry on KG external adoption future brief; Vision inventory paragraph back-links to new plan.
+
+`pnpm exec markdownlint` passed on README, Vision, touched sector-engagement files.
+
+## 2026-04-30 — Session handoff (Squally Washing Jetty): continuity + surprise
+
+`/jc-session-handoff` at owner request, bundled with `/jc-metacognition`.
+
+Surprise (*relative-path archaeology*):
+
+- **Expected**: thread-record `../../../plans/...` and `../../../../docs/...`
+  were arbitrarily mixed.
+- **Actual**: from `threads/`, `../../../plans` correctly lands `.agent/plans`;
+  repo-root `docs/` + `README.md` need **four** `../` hops. From `operational/`,
+  **`../../plans` is correct** (two hops to `.agent`). `repo-continuity.md`
+  briefly cited `../../../plans`, which resolves to a non-existent repo-root
+  `plans/` directory.
+- **Correction**: rewrote sector thread README + Vision anchors under
+  **`../../../../`**; fixed `repo-continuity.md` plan link back to **`../../plans/...`**.
+
+Collaboration: `active-claims.json` holds only **Fragrant Sheltering Petal**
+`eef` lane claim — **no** Composer-session claim ⇒ explicit claim closure skipped (stated observable).
+
+ADR/PDR scan (session-handoff §6b): **nothing qualifies** — reusable canon is deliberate Vision + plan prose, not a new AD boundary.

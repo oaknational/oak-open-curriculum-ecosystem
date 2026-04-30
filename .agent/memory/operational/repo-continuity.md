@@ -196,7 +196,7 @@ live in each thread record; this table is the repo-level index.
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
-| `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Squally Diving Anchor / `codex` / `GPT-5` / sector-engagement-taxonomy-and-handoff / 2026-04-29. |
+| `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -214,6 +214,16 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-04-30 (Squally Washing Jetty, Cursor Composer, completed)**:
+foundation Vision layer (compositional thesis, Three Orders +
+`Worked Example: Aila`, reusable sector-component canon + link to partner
+adoption contract); root README mirror + `### Sector reusable components`;
+[`sector-reusable-components-adoption.plan.md`](../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
+in `sector-engagement/current/` plus collection index + roadmap Phase 4 wiring;
+reciprocal `related_plans` on KG external adoption future brief. Lint evidence
+in session; **git commit not performed by this Composer session**—owner index
+or dedicated commit window.
 
 **2026-04-30 (Verdant Sheltering Glade, in flight)**: post-mortem +
 fitness remediation lane (owner-deferred housekeeping-with-intent).
@@ -299,9 +309,10 @@ CodeQL closes.
 
 Other lanes:
 
-+ **Sector engagement** — resume from
-  [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md).
-  Next safe step is owner choice of exactly one external-impact target.
++ **Sector engagement** — reusable-component **adoption contract** now in
+  [`plans/sector-engagement/current/sector-reusable-components-adoption.plan.md`](../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md).
+  Resume from [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md); next safe step is **owner-selected** playbook work
+  versus OEAI / API–KG convergence / source demo per thread record lane #4 bullets.
 + **Architectural budget system** — planning/doctrine landed in ADR-166
   and parent/child plans. Resume from
   [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md).

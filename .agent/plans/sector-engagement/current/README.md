@@ -1,6 +1,6 @@
 # Current Sector Engagement Plans
 
-No top-level sector-engagement plan is queued for immediate execution.
+- [sector-reusable-components-adoption.plan.md](sector-reusable-components-adoption.plan.md) — partner contract anchoring reusable sector-component adoption claims on foundation Vision [_What We Deliver_](../../../../docs/foundation/VISION.md#what-we-deliver); feeds Phase 4 playbooks.
 
 Nested subthread current plans:
 

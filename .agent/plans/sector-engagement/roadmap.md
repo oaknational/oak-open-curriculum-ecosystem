@@ -1,7 +1,7 @@
 # Sector Engagement Roadmap
 
 **Status**: Reference collection created; strategic engagement threads forming
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-04-30
 
 ---
 
@@ -103,6 +103,10 @@ Phase 4: Organisation-specific support playbooks            Future
 
 ### Phase 4 - Organisation-Specific Support Playbooks
 
+- Authoritative reusable-component canon (upstream for playbook wording):
+  [docs/foundation/VISION.md — What We Deliver](../../../docs/foundation/VISION.md#what-we-deliver)
+- Partner contract and playbook discipline:
+  [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)
 - Candidate threads:
   [oeai/](oeai/),
   [knowledge-graph-adoption/](knowledge-graph-adoption/)
