@@ -16,7 +16,13 @@
     "SENTRY_AUTH_TOKEN",
     "SENTRY_DSN",
     "SENTRY_MODE",
-    "SENTRY_TRACES_SAMPLE_RATE"
+    "SENTRY_ORG",
+    "SENTRY_PROJECT",
+    "SENTRY_REPO_SLUG",
+    "SENTRY_TRACES_SAMPLE_RATE",
+    "TEST_ERROR_SECRET",
+    "VERCEL_GIT_REPO_OWNER",
+    "VERCEL_GIT_REPO_SLUG"
   ],
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {

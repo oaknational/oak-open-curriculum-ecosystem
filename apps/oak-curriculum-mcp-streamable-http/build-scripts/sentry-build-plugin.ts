@@ -1,20 +1,15 @@
 /**
  * Sentry build-plugin intent factory for the MCP HTTP app's esbuild build.
  *
- * @remarks
- * Pure function that maps build-time environment + Oak identity literals
- * onto the registration intent the app's esbuild composition root will
- * hand to `@sentry/esbuild-plugin`. Holds the Sentry plugin at arm's
- * length — returns a typed description of "what to tell Sentry", not a
- * plugin instance. The composition root constructs the actual plugin
- * only when intent is `configured`.
- *
- * Boundary rationale: vendor coupling stays app-local.
- * `@oaknational/sentry-node` keeps its vendor-agnostic policy surface
- * (`resolveSentryEnvironment`, `resolveSentryRegistrationPolicy`);
- * release-name resolution lives in `@oaknational/build-metadata`'s
- * canonical {@link resolveRelease}, with git-SHA provenance resolved
- * independently via {@link resolveGitSha}.
+ * @remarks Pure function that maps the build-time env snapshot onto the
+ * registration intent the esbuild composition root hands to
+ * `@sentry/esbuild-plugin`. Holds the plugin at arm's length — returns a
+ * typed "what to tell Sentry" description, not a plugin instance. Vendor
+ * coupling stays app-local: `@oaknational/sentry-node` keeps its
+ * vendor-agnostic policy surface; release-name resolution lives in
+ * `@oaknational/build-metadata`'s {@link resolveRelease} with git-SHA
+ * provenance via {@link resolveGitSha}; deployment identity is resolved
+ * by {@link resolveSentryBuildPluginIdentity}.
  *
  * @packageDocumentation
  */
@@ -34,13 +29,12 @@ import {
   type ObservabilityConfigError,
   type SentryConfigEnvironment,
 } from '@oaknational/sentry-node';
-
-/** Repository / project identity literals owned by the MCP app deployment. */
-export interface SentryBuildPluginIdentity {
-  readonly org: string;
-  readonly project: string;
-  readonly repoSlug: string;
-}
+import {
+  resolveSentryBuildPluginIdentity,
+  type SentryBuildPluginIdentity,
+  type SentryBuildPluginIdentityError,
+} from './sentry-build-plugin-identity.js';
+import { trimToUndefined } from './trim-to-undefined.js';
 
 /**
  * The shape `@sentry/esbuild-plugin` expects for a registered build.
@@ -108,10 +102,21 @@ export type SentryBuildPluginIntent =
       readonly gitSha: ResolvedBuildTimeGitSha | undefined;
     };
 
-/** Build-time environment surface = ADR-163 policy env + the host-injected auth token. */
+/**
+ * Build-time environment surface = ADR-163 policy env + auth token +
+ * Sentry deployment identity vars + Vercel git-repo system vars used to
+ * derive `repoSlug`. Identity vars are typed `optional` here; the strict
+ * requirement lives in {@link resolveSentryBuildPluginIdentity}, which
+ * only fires on the `configured` path.
+ */
 export type SentryBuildEnvironment = SentryConfigEnvironment &
   ReleaseInput & {
     readonly SENTRY_AUTH_TOKEN?: string;
+    readonly SENTRY_ORG?: string;
+    readonly SENTRY_PROJECT?: string;
+    readonly SENTRY_REPO_SLUG?: string;
+    readonly VERCEL_GIT_REPO_OWNER?: string;
+    readonly VERCEL_GIT_REPO_SLUG?: string;
   };
 
 /**
@@ -132,12 +137,8 @@ export type CreateSentryBuildPluginError =
   | ReleaseError
   | RuntimeMetadataError
   | { readonly kind: 'missing_commit_sha_in_registered_environment'; readonly message: string }
-  | { readonly kind: 'missing_auth_token_on_production'; readonly message: string };
-
-function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
-}
+  | { readonly kind: 'missing_auth_token_on_production'; readonly message: string }
+  | SentryBuildPluginIdentityError;
 
 function resolveAuthTokenIntent(
   release: ResolvedRelease,
@@ -190,27 +191,25 @@ function resolveAuthTokenIntent(
 }
 
 /**
- * Map build-time env + identity onto the Sentry build-plugin intent.
+ * Map build-time env onto the Sentry build-plugin intent.
  *
- * @remarks Composes:
+ * @remarks Composes the registration-policy gate
+ * ({@link resolveSentryRegistrationPolicy}), release-name derivation
+ * ({@link resolveRelease}), git-SHA provenance ({@link resolveGitSha}),
+ * and deployment identity ({@link resolveSentryBuildPluginIdentity}),
+ * then runs the auth-token fail-policy split (`configured` / `skipped`
+ * / `missing_auth_token_on_production`).
  *
- * - {@link resolveSentryRegistrationPolicy} from `@oaknational/sentry-node`
- *   for the "should this build register a release at all?" gate.
- * - {@link resolveRelease} from `@oaknational/build-metadata` for the
- *   canonical release-name derivation (production = root
- *   `package.json` semver; preview = `VERCEL_BRANCH_URL` host label;
- *   development = `dev-<shortSha>`).
- * - {@link resolveGitSha} from `@oaknational/build-metadata` for the
- *   git-SHA provenance (used by `setCommits` and persisted into
- *   `BuildInfo` by the composition root).
+ * Identity resolution is deferred to the `configured` path so disabled
+ * / skipped builds tolerate missing identity vars (local dev, fork
+ * preview without auth token still produce an artefact).
  *
- * Then the auth-token gate decides between `configured` (plugin runs),
- * `skipped` (warn + continue, preview/dev only), and
- * `missing_auth_token_on_production` (vital-identity error).
+ * Single-argument signature: identity is resolved from `env`, not passed
+ * in. This is an open-source repository — no Sentry deployment identity
+ * may be declared as a literal in source. See ADR-163.
  */
 export function createSentryBuildPlugin(
   env: SentryBuildEnvironment,
-  identity: SentryBuildPluginIdentity,
 ): Result<SentryBuildPluginIntent, CreateSentryBuildPluginError> {
   const policy = resolveSentryRegistrationPolicy(env);
   if (!policy.ok) {
@@ -231,7 +230,12 @@ export function createSentryBuildPlugin(
     return gitShaResult;
   }
 
-  return resolveAuthTokenIntent(release.value, gitShaResult.value, identity, env);
+  const identityResult = resolveSentryBuildPluginIdentity(env);
+  if (!identityResult.ok) {
+    return identityResult;
+  }
+
+  return resolveAuthTokenIntent(release.value, gitShaResult.value, identityResult.value, env);
 }
 
 /**

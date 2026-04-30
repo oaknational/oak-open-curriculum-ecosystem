@@ -6700,6 +6700,54 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "72ab69c1-f4dc-40b5-9f11-7d521693e78c",
+      "agent_id": {
+        "agent_name": "Verdant Sheltering Glade",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c2227f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/experience/",
+            ".agent/memory/active/archive/",
+            ".agent/memory/operational/archive/",
+            ".agent/practice-core/decision-records/"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-30T08:23:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "post-mortem-and-fitness-remediation",
+      "notes": "Post-mortem on 2026-04-30 light handoff + napkin rotation + repo-continuity history archive + distilled.md line-268 investigation + substrate-vs-axis PDR disposition. Shared-state-only; no product code.",
+      "archived_at": "2026-04-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-30T08:49:08Z",
+        "closed_by": {
+          "agent_name": "Verdant Sheltering Glade",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "c2227f"
+        },
+        "summary": "All five mandatory outputs landed: (1) post-mortem at .agent/experience/2026-04-30-verdant-the-bundle-was-the-signal.md including 7c full audit; (2) napkin rotated to archive/napkin-2026-04-30.md, fresh napkin GREEN; (3) repo-continuity history archived to archive/repo-continuity-session-history-2026-04-30.md (live HARD residual is the Pending-Graduations Register, owner-direction-gated); (4) distilled.md critical-line investigation completed — graduated worked example to testing-tdd-recipes.md, no lines >150 chars; (5) substrate-vs-axis disposition: PDR-036 (Friction-as-Structural-Finding) + PDR-037 (Substrate-vs-Axis Plan Categorisation) authored per owner direction. Deep Consolidation Status flipped from due to not due. New candidate: commit-bundle-leakage-from-wildcard-staging in register. Leafy Bending Dew's build-scripts work is uncommitted in worktree; per their note, Claude Code session owns staging + commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "72ab69c1-f4dc-40b5-9f11-7d521693e78c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

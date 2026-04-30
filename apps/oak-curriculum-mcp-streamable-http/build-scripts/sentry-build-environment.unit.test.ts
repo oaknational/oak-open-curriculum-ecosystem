@@ -45,4 +45,38 @@ describe('createSentryBuildEnvironment', () => {
 
     expect(result.value.VERCEL_GIT_COMMIT_REF).toBe('main');
   });
+
+  it('projects Sentry deployment identity vars (org, project, repoSlug)', () => {
+    const result = createSentryBuildEnvironment({
+      APP_VERSION_OVERRIDE: '1.0.0',
+      SENTRY_ORG: 'my-org',
+      SENTRY_PROJECT: 'my-project',
+      SENTRY_REPO_SLUG: 'me/my-repo',
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.SENTRY_ORG).toBe('my-org');
+    expect(result.value.SENTRY_PROJECT).toBe('my-project');
+    expect(result.value.SENTRY_REPO_SLUG).toBe('me/my-repo');
+  });
+
+  it('projects Vercel git-repo system vars used to derive repoSlug', () => {
+    const result = createSentryBuildEnvironment({
+      APP_VERSION_OVERRIDE: '1.0.0',
+      VERCEL_GIT_REPO_OWNER: 'oaknational',
+      VERCEL_GIT_REPO_SLUG: 'oak-open-curriculum-ecosystem',
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.VERCEL_GIT_REPO_OWNER).toBe('oaknational');
+    expect(result.value.VERCEL_GIT_REPO_SLUG).toBe('oak-open-curriculum-ecosystem');
+  });
 });

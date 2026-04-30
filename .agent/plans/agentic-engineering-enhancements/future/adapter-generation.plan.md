@@ -131,6 +131,13 @@ fresh?" — comparing the manifest + templates against the generated output.
 - **Every future specialist plan**: Every new specialist benefits from manifest-
   driven generation. Reduces each specialist's "platform adapters" deliverable
   from "create 4–6 files" to "add manifest entry".
+- **Canonical-First Skill Pack Ingestion Tooling**:
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](canonical-first-skill-pack-ingestion-tooling.plan.md)
+  is the complementary lane for *externally-authored* skill packs. That plan
+  ingests external packs into Layer 1 + generates their thin wrappers; this
+  plan generates wrappers for *internally-authored* canonical artefacts. Both
+  populate the same Layer-2 directories and share the validator surface;
+  either can land first.
 
 ## Promotion Trigger
 

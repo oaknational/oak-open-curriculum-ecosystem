@@ -9,24 +9,25 @@
  * (production / preview / development), and the warn-vs-throw
  * fail-policy split.
  *
- * Post-collapse: `APP_VERSION` is supplied in the env snapshot (no
- * more ROOT_PACKAGE_VERSION side-channel); preview uses the
- * `VERCEL_BRANCH_URL` leftmost-host-label derivation.
+ * Identity resolution: no `IDENTITY` literal exists in source. Org,
+ * project, and `repoSlug` are read from the env snapshot at the boundary
+ * by `resolveSentryBuildPluginIdentity`. Tests inject them via the env
+ * factory, mirroring how Vercel populates them at build time.
  */
 
 import { describe, expect, it } from 'vitest';
+import { resolveSentryBuildPluginIdentity } from './sentry-build-plugin-identity.js';
 import {
   createSentryBuildPlugin,
   type SentryBuildEnvironment,
-  type SentryBuildPluginIdentity,
   type SentryBuildPluginInputs,
 } from './sentry-build-plugin.js';
 
-const IDENTITY: SentryBuildPluginIdentity = {
-  org: 'oak-national-academy',
-  project: 'oak-open-curriculum-mcp',
-  repoSlug: 'oaknational/oak-open-curriculum-ecosystem',
-};
+const SENTRY_ORG = 'oak-national-academy';
+const SENTRY_PROJECT = 'oak-open-curriculum-mcp';
+const REPO_OWNER = 'oaknational';
+const REPO_SLUG = 'oak-open-curriculum-ecosystem';
+const FULL_REPO_SLUG = `${REPO_OWNER}/${REPO_SLUG}`;
 
 const COMMIT_SHA = 'abcdef1234567890abcdef1234567890abcdef12';
 const APP_VERSION = '1.5.0';
@@ -43,6 +44,10 @@ function env(overrides: Partial<SentryBuildEnvironment> = {}): SentryBuildEnviro
     VERCEL_GIT_COMMIT_SHA: COMMIT_SHA,
     APP_VERSION,
     SENTRY_AUTH_TOKEN: AUTH_TOKEN,
+    SENTRY_ORG,
+    SENTRY_PROJECT,
+    VERCEL_GIT_REPO_OWNER: REPO_OWNER,
+    VERCEL_GIT_REPO_SLUG: REPO_SLUG,
     ...overrides,
   };
 }
@@ -66,53 +71,53 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
     env({ VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: 'main' });
 
   it('emits a configured intent', () => {
-    const result = createSentryBuildPlugin(productionMain(), IDENTITY);
+    const result = createSentryBuildPlugin(productionMain());
     expectConfigured(result);
   });
 
   it('uses APP_VERSION as the release name', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.release.name).toBe(APP_VERSION);
   });
 
   it('binds setCommits.commit to VERCEL_GIT_COMMIT_SHA', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.release.setCommits.commit).toBe(COMMIT_SHA);
   });
 
-  it('binds setCommits.repo to identity.repoSlug', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
-    expect(inputs.release.setCommits.repo).toBe(IDENTITY.repoSlug);
+  it('binds setCommits.repo to the resolved identity repoSlug', () => {
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    expect(inputs.release.setCommits.repo).toBe(FULL_REPO_SLUG);
   });
 
   it('sets deploy.env to "production"', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.release.deploy.env).toBe('production');
   });
 
   it('disables vendor telemetry', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.telemetry).toBe(false);
   });
 
   it('targets dist sourcemaps for post-upload deletion', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.sourcemaps.filesToDeleteAfterUpload).toEqual(['dist/server.js.map']);
   });
 
   it('passes through SENTRY_AUTH_TOKEN to the plugin inputs', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
     expect(inputs.authToken).toBe(AUTH_TOKEN);
   });
 
-  it('passes through identity (org, project)', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
-    expect(inputs.org).toBe(IDENTITY.org);
-    expect(inputs.project).toBe(IDENTITY.project);
+  it('passes through identity (org, project) from the env boundary', () => {
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    expect(inputs.org).toBe(SENTRY_ORG);
+    expect(inputs.project).toBe(SENTRY_PROJECT);
   });
 
   it('exposes the resolved release on the configured intent for persistence', () => {
-    const result = createSentryBuildPlugin(productionMain(), IDENTITY);
+    const result = createSentryBuildPlugin(productionMain());
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -127,7 +132,7 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
   });
 
   it('exposes the resolved gitSha on the configured intent for persistence', () => {
-    const result = createSentryBuildPlugin(productionMain(), IDENTITY);
+    const result = createSentryBuildPlugin(productionMain());
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -151,12 +156,12 @@ describe('createSentryBuildPlugin — preview environment', () => {
     });
 
   it('emits configured intent with deploy.env="preview"', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(preview(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(preview()));
     expect(inputs.release.deploy.env).toBe('preview');
   });
 
   it('derives release name as the leftmost label of VERCEL_BRANCH_URL hostname', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(preview(), IDENTITY));
+    const inputs = expectConfigured(createSentryBuildPlugin(preview()));
     expect(inputs.release.name).toBe(BRANCH_URL_LABEL);
   });
 });
@@ -169,7 +174,6 @@ describe('createSentryBuildPlugin — production env on non-main branch (downgra
         VERCEL_GIT_COMMIT_REF: 'feature/x',
         VERCEL_BRANCH_URL: BRANCH_URL,
       }),
-      IDENTITY,
     );
     const inputs = expectConfigured(result);
     expect(inputs.release.deploy.env).toBe('preview');
@@ -179,7 +183,7 @@ describe('createSentryBuildPlugin — production env on non-main branch (downgra
 
 describe('createSentryBuildPlugin — development without override', () => {
   it('emits disabled intent (registration_disabled_by_policy)', () => {
-    const result = createSentryBuildPlugin(env({ VERCEL_ENV: 'development' }), IDENTITY);
+    const result = createSentryBuildPlugin(env({ VERCEL_ENV: 'development' }));
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -188,6 +192,22 @@ describe('createSentryBuildPlugin — development without override', () => {
       kind: 'disabled',
       reason: 'registration_disabled_by_policy',
     });
+  });
+
+  it('tolerates missing identity vars when registration is disabled (fork-friendly)', () => {
+    // Local dev / fork checkout: no SENTRY_ORG, no SENTRY_PROJECT, no
+    // VERCEL_GIT_REPO_*. Build still succeeds because identity is resolved
+    // lazily, only on the configured path.
+    const result = createSentryBuildPlugin({
+      VERCEL_ENV: 'development',
+      APP_VERSION,
+      VERCEL_GIT_COMMIT_SHA: COMMIT_SHA,
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.kind).toBe('disabled');
   });
 });
 
@@ -199,7 +219,6 @@ describe('createSentryBuildPlugin — development with override pair (ADR-163 §
         SENTRY_RELEASE_REGISTRATION_OVERRIDE: '1',
         SENTRY_RELEASE_OVERRIDE: 'uat-candidate',
       }),
-      IDENTITY,
     );
     const inputs = expectConfigured(result);
     expect(inputs.release.name).toBe('uat-candidate');
@@ -216,7 +235,6 @@ describe('createSentryBuildPlugin — fail-policy split', () => {
         VERCEL_GIT_COMMIT_REF: 'feat/x',
         VERCEL_BRANCH_URL: BRANCH_URL,
       }),
-      IDENTITY,
     );
 
     expect(result.ok).toBe(true);
@@ -239,7 +257,6 @@ describe('createSentryBuildPlugin — fail-policy split', () => {
         SENTRY_RELEASE_REGISTRATION_OVERRIDE: '1',
         SENTRY_RELEASE_OVERRIDE: 'rehearsal',
       }),
-      IDENTITY,
     );
 
     expect(result.ok).toBe(true);
@@ -256,7 +273,6 @@ describe('createSentryBuildPlugin — fail-policy split', () => {
         VERCEL_ENV: 'production',
         VERCEL_GIT_COMMIT_REF: 'main',
       }),
-      IDENTITY,
     );
 
     expect(result.ok).toBe(false);
@@ -274,7 +290,6 @@ describe('createSentryBuildPlugin — fail-policy split', () => {
         VERCEL_GIT_COMMIT_REF: 'feat/x',
         VERCEL_BRANCH_URL: BRANCH_URL,
       }),
-      IDENTITY,
     );
 
     expect(result.ok).toBe(true);
@@ -289,7 +304,6 @@ describe('createSentryBuildPlugin — vital-identity errors propagate from polic
   it('returns err when override flag is set without override value (half-pair)', () => {
     const result = createSentryBuildPlugin(
       env({ VERCEL_ENV: 'development', SENTRY_RELEASE_REGISTRATION_OVERRIDE: '1' }),
-      IDENTITY,
     );
     expect(result).toEqual({
       ok: false,
@@ -304,7 +318,6 @@ describe('createSentryBuildPlugin — vital-identity errors propagate from polic
         VERCEL_GIT_COMMIT_REF: 'main',
         VERCEL_GIT_COMMIT_SHA: 'not-a-sha',
       }),
-      IDENTITY,
     );
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -321,12 +334,141 @@ describe('createSentryBuildPlugin — vital-identity errors propagate from polic
         VERCEL_GIT_COMMIT_REF: 'feat/x',
         VERCEL_BRANCH_URL: BRANCH_URL,
       }),
-      IDENTITY,
     );
     expect(result.ok).toBe(false);
     if (result.ok) {
       return;
     }
     expect(result.error.kind).toBe('missing_commit_sha_in_registered_environment');
+  });
+});
+
+describe('createSentryBuildPlugin — identity resolution on the configured path', () => {
+  it('returns err when SENTRY_ORG is missing on a registered build', () => {
+    const result = createSentryBuildPlugin(
+      env({
+        SENTRY_ORG: undefined,
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+      }),
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_sentry_org');
+  });
+
+  it('returns err when SENTRY_PROJECT is missing on a registered build', () => {
+    const result = createSentryBuildPlugin(
+      env({
+        SENTRY_PROJECT: undefined,
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+      }),
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_sentry_project');
+  });
+
+  it('returns err when neither SENTRY_REPO_SLUG nor the Vercel repo pair are available', () => {
+    const result = createSentryBuildPlugin(
+      env({
+        SENTRY_REPO_SLUG: undefined,
+        VERCEL_GIT_REPO_OWNER: undefined,
+        VERCEL_GIT_REPO_SLUG: undefined,
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+      }),
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_sentry_repo_slug');
+  });
+
+  it('treats whitespace-only identity vars as missing', () => {
+    const result = createSentryBuildPlugin(
+      env({
+        SENTRY_ORG: '   ',
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'main',
+      }),
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_sentry_org');
+  });
+});
+
+describe('resolveSentryBuildPluginIdentity — repoSlug derivation precedence', () => {
+  it('prefers an explicit SENTRY_REPO_SLUG over the Vercel repo pair', () => {
+    const result = resolveSentryBuildPluginIdentity(
+      env({
+        SENTRY_REPO_SLUG: 'fork-owner/fork-repo',
+        VERCEL_GIT_REPO_OWNER: 'oaknational',
+        VERCEL_GIT_REPO_SLUG: 'oak-open-curriculum-ecosystem',
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.repoSlug).toBe('fork-owner/fork-repo');
+  });
+
+  it('derives repoSlug from the Vercel repo pair when SENTRY_REPO_SLUG is unset', () => {
+    const result = resolveSentryBuildPluginIdentity(
+      env({
+        SENTRY_REPO_SLUG: undefined,
+        VERCEL_GIT_REPO_OWNER: 'oaknational',
+        VERCEL_GIT_REPO_SLUG: 'oak-open-curriculum-ecosystem',
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.repoSlug).toBe('oaknational/oak-open-curriculum-ecosystem');
+  });
+
+  it('returns err when only one half of the Vercel repo pair is available', () => {
+    const result = resolveSentryBuildPluginIdentity(
+      env({
+        SENTRY_REPO_SLUG: undefined,
+        VERCEL_GIT_REPO_OWNER: 'oaknational',
+        VERCEL_GIT_REPO_SLUG: undefined,
+      }),
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.error.kind).toBe('missing_sentry_repo_slug');
+  });
+
+  it('returns the typed identity when all three vars are explicit', () => {
+    const result = resolveSentryBuildPluginIdentity(
+      env({
+        SENTRY_ORG: 'my-org',
+        SENTRY_PROJECT: 'my-project',
+        SENTRY_REPO_SLUG: 'me/my-repo',
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value).toEqual({
+      org: 'my-org',
+      project: 'my-project',
+      repoSlug: 'me/my-repo',
+    });
   });
 });

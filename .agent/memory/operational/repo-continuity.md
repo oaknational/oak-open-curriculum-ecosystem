@@ -8,63 +8,57 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-29T21:30Z (Solar Threading Star / claude-code /
-claude-opus-4-7-1m / `6d68d6` — PR #90 closure thread complete; owner manual
-MCP validation confirmed; PR ready for squash-merge. 13 commits this session
-across 7 phases: TS-invocation alignment (5 surfaces, 2 sibling drift sites
-caught by Phase 0 audit beyond the handoff's 3 named), Sonar mechanical sweep
-(12 issues), Cursor Bugbot napkin fix, local-detection gate (TDD pure helper +
-unit + integration → refactored to canonical validator pattern + standalone
-script after testing-strategy compliance challenge), MD024 enabled with
-`siblings_only: true` (3 sibling-level duplicates surfaced and fixed; rule was
-globally disabled), validator-pattern test-strategy refactor, future +
-executable plans for `scripts/validate-*` family workspace migration (4
-parallel reviewer consensus), future plan for Vercel build-warning elimination
-(2 classes from full 4006-event log read), `.gitignore` for
-scheduled_tasks.lock, owner-MCP-validation closeout. Plus end-of-session
-sharpening: caught real bug in `breadth-as-evasion.md` (broken machine-local
-link refs); principle "No absolute paths" graduated to "No machine-local paths"
-with the three forbidden + three permitted shapes named explicitly; new
-canonical rule `.agent/rules/no-machine-local-paths.md` with thin adapters
-across all 4 platforms; `RULES_INDEX.md` updated. PR comments posted (5
-total). Outstanding: owner squash-merge of PR #90.
+**Last refreshed**: 2026-04-30T22:30Z (Leafy Bending Dew / `cursor` /
+`composer` / `8d0db5` — `observability-sentry-otel` MCP app **product code**:
+extracted shared `apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-
+to-undefined.ts` (`trimToUndefined` treats **`undefined`** and **post-trim
+`''`** explicitly; no ternary collapsing). Removed duplicate helpers from
+`sentry-build-plugin-identity.ts` and `sentry-build-plugin.ts`; added
+`trim-to-undefined.unit.test.ts`; `vitest run` green for that file +
+`sentry-build-plugin.unit.test.ts`. **Not committed**: owner direction — **the
+active Claude Code session on this repo/branch should own staging + conventional
+commit** for this bundle (Cursor handoff omitted commit deliberately). Fitness
+budget and deep consolidation gate explicitly out of scope for this Cursor
+closeout.)
 
-**Earlier refresh**: 2026-04-29T17:30Z (Nebulous Illuminating Satellite /
-claude-code / claude-opus-4-7-1m / `fe4acc` — deeper /jc-consolidate-docs
-convergence run + deferred-items plan family + trinity Active Principles
-extensions per-diff approval, landed across 6 commits (`123396e2`,
-`8560df5a`, `4d01847f`, `b7844608`, `daa8e706`, `f7baea40`). Three
-doctrine sharpenings (knowledge-preservation absolute; shared-state
-always writable; gate-off-fix-gate-on anti-pattern); Practice Core
-retirement complete (PDR-007/014/024 amendments; trinity nav updated;
-practice-core/patterns + practice-context directories deleted via
-`git rm`); 6 patterns graduated to memory/active/patterns/; displaced
-doctrine extracted from 4 of 6 audited plans (ADR-121 Change Log;
-ADR-162 Enforcement Principles; consolidate-docs Plan Supersession
-Discipline; observability/archive/superseded README); 6 stale plans
-archived; deferred-items plan family authored (parent + 4 children:
-build-vs-buy PDR, multi-agent-collaboration concept-home refinement,
-trinity extensions, pre-2026-02-15 experience corpus); five trinity
-Active Principles extensions applied per-diff (practice.md +
-practice-lineage.md + practice-bootstrap.md + practice-verification.md);
-owner-approved fitness limit raises on practice.md / practice-verification.md /
-repo-continuity.md to absorb the trinity extensions; six medium patterns,
-two PDR-shaped candidates, and the experience-corpus backlog added to
-register; Identity Candidates graduated from .remember/recent.md to
-user-collaboration.md §Owner Working Style. Concurrent disjoint work:
-Solar Threading Star (PR #90 product surfaces); Pearly Swimming Atoll
-(repo-goal-narrative refresh, claim closed mid-session). Final fitness
-SOFT-only.)
+**Earlier refresh**: 2026-04-30T15:45Z (Dewy Budding Sapling / claude-code /
+claude-opus-4-7-1m / `7e8db7` — `fix/sentry-identity-from-env` branch context
+only; no production code, schema, or runtime configuration touched. Practice
+work on the `agentic-engineering-enhancements` thread: investigated current
+skill-portability pipeline (`.agent/skills/` canonical + `.claude/`/`.cursor/`/
+`.agents/` thin wrappers + `skills-lock.json` + `pnpm portability:check`);
+drafted vendor-agnostic future strategic plan
+`canonical-first-skill-pack-ingestion-tooling.plan.md` that closes the unbuilt
+`pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged in the
+portability-remediation plan. Plan never names a delivery vendor — ecosystems
+referenced as illustrative only; tool source must contain no vendor-keyed
+conditionals (validator-enforceable rule). Promotion gated on PASS from
+assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma; reviews
+blocking later, not required now per owner direction. Discovery surfaces
+wired: future/README, collection README, roadmap, sibling adapter-generation
+forward-link, portability-remediation Phase 6 forward-link. Validators green:
+portability:check passed (12 commands, 36 skills, 45 rules, 22 reviewer
+adapters, 47 Cursor triggers, 45 Claude rules, 45 .agents rules, 40 command
+adapters across 4 platforms); markdownlint clean. Owner direction: skip the
+final consolidation gate this handoff — handled elsewhere.)
 
-**Prior refresh**: 2026-04-29T12:35Z (Squally Diving Anchor / codex /
-GPT-5 / `019dd8` — sector-engagement handoff and light consolidation after
-commit `33b25495`. The sector-engagement collection now carries explicit
-impact framing: external organisations should be able to understand, trust,
-adapt, and build with Oak's pipelines, SDKs, MCP server, semantic-search
-configuration, knowledge graphs, and generated artefacts. A new
-`sector-engagement` thread record is live, and the owner-requested PR
-lifecycle skill need is captured as a future Practice plan.)
+**Earlier refresh**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
+claude-opus-4-7-1m / `bce99d` — `fix/sentry-identity-from-env` branch / PR #91
+preview verification + observability-config-coherence strategic plan +
+substrate-vs-axis-plans convention component + ADR-162 closure-property
+ADR-to-plan bridge. No production code touched. Build `dpl_wTvPsL48u6bCn89Vscw29uot8M9H`
+verified READY via Sentry MCP + Vercel MCP: release
+`poc-oak-open-curriculum-mcp-git-fix-sentry-identity-from-env` correctly
+attributed to commit `837fcfde` with env=preview, 5 bootstrap spans + 10 DEBUG
+logs landed. Sentry-identity-from-env fix is working in production. No
+remediation deemed urgent for this branch — observability-config-coherence
+plan items all involve broader structural change. PDR candidate captured:
+substrate-vs-axis-plans convention + working principle "invent-justification-
+as-signal". Single commit landing all session artefacts at handoff close.)
 
+2026-04-29 incremental refresh entries (Solar Threading Star, Nebulous
+Illuminating Satellite, Squally Diving Anchor) archived 2026-04-30 to
+[`archive/repo-continuity-session-history-2026-04-30.md`](archive/repo-continuity-session-history-2026-04-30.md).
 Older 2026-04-28 / 2026-04-29 incremental refresh entries archived to
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md).
 Even older history lives in the 2026-04-22, 2026-04-26, and 2026-04-28
@@ -72,23 +66,19 @@ archives in the same directory.
 
 ## Current State
 
-+ Branch `fix/build_issues` carries the consolidated TS6 / Vercel-build /
-  ADR-166-167-168 work; PR #90 is open against `main`. Solar Threading Star
-  holds an active claim on PR #90 product surfaces (Sonar quality gate,
-  Copilot review comments, Cursor Bugbot findings, ci.yml stale `.mjs`
-  reference). Owner manual MCP server validation pending before merge.
-+ Vercel release pipeline is unblocked: original 1.6.0 release-commit
-  failure on `dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6` was a multi-document
-  `pnpm-lock.yaml` corruption at `171a94fd`; commit `a34f8402` regenerated
-  a clean lockfile and Vercel preview now passes.
-+ ADRs landed in the recent arc: 166 (architectural budget system), 167
-  (hook-execution-failure visibility), 168 (TS6 baseline +
-  workspace-script architectural rules). TS6 plan archived to
-  `archive/completed/`. Sonar partial fixes landed in `16743c69`; ~30
-  Sonar issues remain mechanical for next session.
-+ The branch is NOT mergeable until: zero Sonar, zero PR comments, ci.yml
-  resolution, MCP manual validation. Solar Threading Star is currently
-  working that closure.
++ Branch `fix/sentry-identity-from-env` carries PR #91 (OPEN). PR #90
+  merged 2026-04-29T20:43:22Z. The 2026-04-30 Vining session moved
+  Sentry build-plugin identity from hardcoded literals to env vars and
+  authored `observability-config-coherence.plan.md` + the
+  substrate-vs-axis-plans convention. The 2026-04-30 Leafy session
+  followed with the `trimToUndefined` boundary-helper refactor; commit
+  delegated to the active Claude Code session.
++ Vercel release pipeline is healthy: PR #91 preview build verified
+  READY via Sentry MCP + Vercel MCP (release attributed to commit
+  `837fcfde`, env=preview, 5 bootstrap spans + 10 DEBUG logs landed).
++ ADRs landed in the recent arc: 162 closure-property + ADR-to-plan
+  bridge; 166 (architectural budget system); 167 (hook-execution-failure
+  visibility); 168 (TS6 baseline + workspace-script architectural rules).
 + WS3A decision-thread / claim-history / observability work is complete
   and archived. WS4A lifecycle integration is complete. Commit-window
   protocol refinement is implemented; intent-to-commit queue v1.3.0
@@ -96,10 +86,11 @@ archives in the same directory.
   Codex-wide session identity plumbing landed; Cursor Composer has
   experimental project sessionStart hook. Workspace layer separation
   audit plan exists; first safe step is Phase 0 inventory.
-+ Critical fitness pressure resolved this consolidation: napkin.md
-  rotated; repo-continuity history archived. Remaining critical: prose
-  line width on distilled.md (2 lines >100 chars; queued under fitness §9
-  for refinement). All other fitness findings are SOFT.
++ Fitness state at 2026-04-30 close (Verdant Sheltering Glade):
+  napkin.md rotated and back to GREEN; repo-continuity.md history
+  archived (HARD on lines/chars — see closure disposition below);
+  distilled.md HARD on lines/chars after rotation (two PDR candidates
+  pending owner direction would graduate ~25 lines).
 + Branch-primary product thread: `observability-sentry-otel`. Practice
   thread: `agentic-engineering-enhancements`. Branch-level success
   criterion remains the full repo-root gate sequence in
@@ -112,21 +103,19 @@ live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Squally Diving Anchor / `codex` / `GPT-5` / sector-engagement-taxonomy-and-handoff / 2026-04-29. |
-| `pr-90-build-fix-landing` | Branch closeout — PR #90 (`fix/build_issues` → `main`); all CI gates green, owner MCP manual validation confirmed; ready for squash-merge | [`threads/pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md) | Solar Threading Star / `claude-code` / `claude-opus-4-7-1m` / pr-90-landing-closure-and-machine-local-paths-rule / 2026-04-29 (and prior fix/build_issues sessions: Verdant Swaying Fern, Verdant Regrowing Pollen, Ethereal Illuminating Comet, Nebulous Weaving Dusk, Nebulous Illuminating Satellite). |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
 
-The 2026-04-29 7c audit's `pr-90-build-fix-landing` finding is now
-**resolved**: thread is registered in this table and a thread record
-file exists at the canonical path. Solar Threading Star authored the
-thread record at session open; Nebulous Illuminating Satellite added
-the registration entry during the 2026-04-29 deep consolidation pass.
+The `pr-90-build-fix-landing` thread retired 2026-04-30 (PR #90 merged
+2026-04-29T20:43:22Z). Thread record retained at
+[`threads/pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md)
+for audit-trail value.
 
 ## Branch-Primary Lane State
 
@@ -137,22 +126,22 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 
 ## Current Session Focus
 
-**2026-04-29 (Nebulous Illuminating Satellite)**: doctrine sharpening on
-knowledge-preservation absolutism and shared-state always-commitable;
-deep `/jc-consolidate-docs` pass including napkin rotation,
-repo-continuity history archive, ADR/PDR candidate surfacing, Practice
-Core review, fitness disposition. Disjoint from Solar Threading Star's
-PR #90 product-surface work.
+**2026-04-30 (Verdant Sheltering Glade, in flight)**: post-mortem +
+fitness remediation lane (owner-deferred housekeeping-with-intent).
+Five mandatory outputs: handoff post-mortem, napkin rotation,
+repo-continuity history archive, distilled.md critical-line
+investigation, substrate-vs-axis PDR-candidate disposition.
 
-**2026-04-29 (Solar Threading Star, in flight)**: PR #90 landing closure —
-Sonar quality gate (12 new issues), Copilot review comments, Cursor
-Bugbot findings, ci.yml stale `.mjs` reference. Owner manual MCP server
-validation pending before merge.
+**2026-04-30 (Leafy Bending Dew, Cursor Composer, completed)**: Sentry
+esbuild build-scripts — shared `trimToUndefined` boundary helper +
+explicit handling for unset vs whitespace-empty; commit delegation to
+the active Claude Code session per owner.
 
-**2026-04-29 (Squally Diving Anchor, completed)**: sector-engagement
-taxonomy split into internal Oak KG integration, ontology workspace
-reassessment, external KG adoption, external knowledge-source ingestion;
-Oak OpenAPI monorepo integration brief; PR Lifecycle Skill future plan.
+**2026-04-30 (Vining Ripening Leaf, Dewy Budding Sapling, completed)**:
+Sentry build-plugin identity from env (PR #91 landed); observability
+config-coherence strategic plan + substrate-vs-axis convention;
+canonical-first skill-pack ingestion future plan + discovery-surface
+wiring.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -235,6 +224,11 @@ Other lanes:
   the active CodeQL-only replacement.
 + **Codex session identity plumbing** — high-impact current slice
   implemented and validated; remaining work is follow-up policy.
++ **Uncommitted Sentry build-script bundle (2026-04-30 Cursor)** — paths under
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/` (`trim-
+  to-undefined.ts`, wired imports, unit test). **Next action**: Claude Code
+  session **owns commit** when convenient (explicit owner instruction); Cursor
+  session closed without commit.
 
 ## Open Owner-Decision Items
 
@@ -253,82 +247,66 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-29 Nebulous Illuminating Satellite, deeper convergence pass)**:
-**completed this handoff** — deep consolidation already executed in this
-session arc (two stages); session-handoff is the closing capture edge.
-Next session: consolidation gate is `not due` unless a fresh trigger
-fires (per consolidate-docs trigger checklist).
+**Status (2026-04-30 Verdant Sheltering Glade, deferral CLOSED — `not
+due`)**: the post-mortem-and-fitness-remediation lane completed all five
+mandatory outputs the 2026-04-30 Vining handoff queued. Verifiable
+artefacts:
 
-Two-stage pass: (1) initial run sharpened doctrine
-(knowledge-preservation absolute; shared-state always-commitable),
-rotated napkin/repo-continuity, moved 3 stale plans, surfaced
-ADR/PDR candidates; (2) owner-directed deeper run addressed all
-outstanding audit findings, executed the practice-core-surface-
-retirement plan in full, and elevated `gate-off-fix-gate-on` from
-pattern-candidate to anti-pattern doctrine. Outcomes:
+1. **Handoff post-mortem** —
+   [`experience/2026-04-30-verdant-the-bundle-was-the-signal.md`](../../experience/2026-04-30-verdant-the-bundle-was-the-signal.md).
+   Findings: 7c thread-register freshness audit was abbreviated (Vining
+   self-confessed; this session ran the full audit at handoff close);
+   7a doctrine scan surfaced one PDR candidate, missed the
+   friction-as-structural-finding companion (routed to Item 5); thread
+   records other than `observability-sentry-otel` were not directly
+   missed but the `agentic-engineering-enhancements` plan family was
+   bundled into commit `75ac6b75` without updating its thread record at
+   that commit (closed in the follow-up `2a3acf48` 15 min later);
+   commit `75ac6b75` bundled 372 lines of parallel-session work plus a
+   stray `.claude/settings.json` plugin enable, surfacing
+   commit-bundle-leakage-from-wildcard-staging as candidate doctrine.
+2. **Napkin rotation** — outgoing archived to
+   [`archive/napkin-2026-04-30.md`](../active/archive/napkin-2026-04-30.md);
+   fresh napkin started; new distilled entries added (stage-by-pathspec,
+   hash-without-recompute); shared-state-always-writable paragraph
+   pruned to one-line pointer.
+3. **repo-continuity history archive** — historical refresh entries +
+   the 2026-04-29 deeper-convergence narrative + four graduated
+   register entries archived to
+   [`archive/repo-continuity-session-history-2026-04-30.md`](archive/repo-continuity-session-history-2026-04-30.md).
+4. **distilled.md critical-line investigation** — line 268 (172 chars)
+   was the inline deep-path link in the validation-scripts entry.
+   Investigation answers: (a) earlier zones did fire as soft warnings
+   on inline markdown links across consolidations but were treated as
+   benign-link-syntax overhead; (b) 150 is the right threshold for
+   prose, but the convention should be reference-style links for deep
+   paths so prose stays under 100 and the link reference lives in
+   non-prose territory; (c) yes — the entry was symptom of a missing
+   graduation. Disposition: graduated the worked example + contrast
+   pattern to
+   [`docs/engineering/testing-tdd-recipes.md § Validator Script vs
+   Integration Test`](../../../docs/engineering/testing-tdd-recipes.md#validator-script-vs-integration-test);
+   distilled now carries a one-line pointer entry.
+5. **PDR-candidate disposition for substrate-vs-axis-plans** — see
+   §Open Owner-Decision Items entry 6 below; owner decision recorded
+   inline.
 
-+ **Doctrine elevation**: new `.agent/rules/never-disable-checks.md`
-  rule + `principles.md` §Code Quality amendment + register flip
-  (anti-pattern, not pattern) + Cursor/.agents wrappers + RULES_INDEX
-  entry.
-+ **Practice Core retirement (4 phases complete)**: PDR-007 / PDR-024 /
-  PDR-014 amendments; trinity / verification / index navigation
-  updated; `.agent/practice-core/patterns/` and `.agent/practice-context/`
-  directories deleted via `git rm`; `practice-context/outgoing/README.md`
-  routing log salvaged to
-  `archive/practice-context-routing-log-2026-04-29.md`; validators /
-  scripts updated; portability + fitness + vocabulary checks green.
-+ **Pattern graduations from experience-audit**: 4 strong patterns
-  promoted (`tool-error-as-question`, `scope-as-goal`,
-  `install-session-blind-to-cold-start-gaps`,
-  `reframing-before-hardening`,
-  `recital-loses-to-recipe-momentum`, `breadth-as-evasion`); 6
-  medium patterns + 2 PDR-shaped + experience-corpus-backlog added
-  to register.
-+ **Displaced doctrine extraction (4 of 6 plans)**: build-tools-
-  workspace-extraction trimmed; quality-gate-hardening cited new
-  ADR-121 Change Log entry; multi-sink-vendor-independence-conformance
-  cited new ADR-162 § Enforcement Principles; sentry-observability-
-  translation-crosswalk archived after migrating tables to new
-  `archive/superseded/README.md` + plan-supersession discipline
-  graduated to consolidate-docs. Plans 2 (PDR creation) and 6
-  (~700-line plan-body trim) deferred to register for owner
-  direction.
-+ **Lifecycle moves**: `mcp-local-startup-release-boundary` plan +
-  evidence files archived; `depcruise-triage-and-remediation`
-  archived; `temp-agent-collaboration-continuation.md` deleted;
-  `gate-recovery-cadence` flagged as operational reference (kept in
-  active/ to preserve rule citation).
-+ **PR-90 thread registered**: `pr-90-build-fix-landing` in §Active
-  Threads; Solar Threading Star authored the thread record at
-  session open.
-+ **Identity register normalised**: dual identity tables in
-  `observability-sentry-otel.next-session.md` merged to single
-  canonical additive register at top.
-+ **Identity Candidates promoted**: 6 owner-identity assertions from
-  `.remember/recent.md` graduated to `user-collaboration.md`
-  §Owner Working Style.
-+ **PDR amendments**: PDR-018 (tool-error-as-question + reviewer-
-  scope-equals-prompted-scope), PDR-015 (brief reviewers with full
-  merge-gate scope), PDR-026 (knowledge preservation absolute),
-  PDR-007 / PDR-024 / PDR-014 (retirement-related), testing-strategy
-  directive (behaviour-shape classification + e2e no-IO discipline).
+**Residual fitness state at closure**: napkin GREEN; distilled
+HARD-pressure relieved by 2026-04-30 owner-directed promotions —
+[PDR-038 Stated Principles Require Structural Enforcement](../../practice-core/decision-records/PDR-038-stated-principles-require-structural-enforcement.md)
+and
+[PDR-039 External-System Findings Reveal Local Detection Gaps](../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md)
+authored, distilled entries reduced to pointer form. repo-continuity
+residual line/char pressure is the Pending-Graduations Register, which
+is doing exactly its job (queueing candidates with named triggers).
+Routed to §9 with explicit disposition: remaining HARD pressure
+reflects pending candidates, not low-value content; reduction tracks
+owner direction.
 
-Falsifiability: `pnpm practice:fitness:informational` SOFT-only
-(0 critical, 0 hard, 18 soft); `pnpm practice:vocabulary` clean;
-`pnpm portability:check` 12 commands / 36 skills / 44 rules passed;
-`pnpm test:root-scripts` 115/115 passed.
-
-Concurrent independent work: Pearly Swimming Atoll (codex)
-operating on sector-engagement narrative refresh on
-`practice-core/practice.md` + `practice-core/README.md`; coordinated
-via comms event at 2026-04-29T15:50Z; my Phase 1 trinity edits were
-sequenced to minimise overlap (mechanical refinement + retirement
-amendments only; major prose refactors deferred per Pearly's
-narrative claim).
-
-Earlier 2026-04-28 / 2026-04-29 status entries archived to
-[`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md).
+Earlier statuses (2026-04-30 Leafy rider, Dewy skip, Vining
+owner-deferred; 2026-04-29 Nebulous deeper convergence) all archived
+2026-04-30 to
+[`archive/repo-continuity-session-history-2026-04-30.md`](archive/repo-continuity-session-history-2026-04-30.md).
 
 ### Pending-Graduations Register
 
@@ -337,12 +315,6 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
-+ 2026-04-29; PR-90 closure session — `breadth-as-evasion.md` machine-local
-  link refs; principle "No absolute paths" → "No machine-local paths" with
-  three forbidden + three permitted shapes; new canonical rule
-  `.agent/rules/no-machine-local-paths.md` with worked-example catalogue;
-  thin adapters across `.claude/`, `.cursor/`, `.agents/`; `RULES_INDEX.md`
-  updated; status: graduated 2026-04-29 (this session).
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
   owner-direction "complex-with-tests must live in workspace"; 4 parallel
@@ -355,9 +327,11 @@ continuity snapshots.
 + 2026-04-29; PR-90 closure session — `external-systems-shouldnt-be-the-
   first-detector` principle introduced by owner mid-session, drove Phases 4
   and 5 (TS-invocation gate + MD024 enable). Recursively useful (caught its
-  own meta-instances via Cursor Bugbot napkin finding). PDR candidate to
-  graduate the principle to canonical Practice doctrine; trigger: owner
-  direction OR second session where the principle applies; status: pending.
+  own meta-instances via Cursor Bugbot napkin finding). **GRADUATED
+  2026-04-30 by Verdant Sheltering Glade per owner direction "promote
+  both now"** to
+  [PDR-039 External-System Findings Reveal Local Detection Gaps](../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md);
+  status: graduated 2026-04-30.
 + 2026-04-29; PR-90 closure session — testing-strategy.md §Test Types named
   "validation scripts that require external resources should be standalone
   scripts, not tests" caught my Phase 4 misclassification (vitest-as-
@@ -372,10 +346,6 @@ continuity snapshots.
   [`future/vercel-build-warning-elimination.plan.md`](../../plans/architecture-and-infrastructure/future/vercel-build-warning-elimination.plan.md).
   Trigger: third warning class accumulates OR owner direction; status:
   pending (future plan).
-+ 2026-04-29; doctrine sharpening on knowledge-preservation absolutism +
-  shared-state always-commitable; surfaces graduated to napkin SKILL,
-  consolidate-docs command, respect-active-agent-claims rule, distilled.md;
-  status: graduated 2026-04-29 (this consolidation pass).
 + 2026-04-29; owner-requested PR lifecycle skill note;
   `.agent/skills/pr-lifecycle/SKILL.md` plus possible PDR amendment for
   gate-honest PR stewardship; trigger: first real PR shepherding run using
@@ -386,17 +356,6 @@ continuity snapshots.
   plugin-managed ephemeral capture surfaces; trigger: second
   plugin-managed in-repo capture surface or owner direction; status:
   pending.
-+ 2026-04-24; Sonar activation/backlog plan; pattern candidate
-  `gate-off-fix-gate-on` — **REJECTED 2026-04-29 as anti-pattern,
-  not pattern, per owner direction**. Quality gates are NEVER
-  disabled. The framing was wrong from the outset: a plan whose
-  phase-0 turns a gate off is the anti-pattern's exact phenotype.
-  Doctrine elevated 2026-04-29 to:
-  [`principles.md` §Code Quality](../../directives/principles.md#code-quality)
-  amendment naming the anti-pattern,
-  [`never-disable-checks.md`](../../rules/never-disable-checks.md)
-  rule operationalising it; status: graduated 2026-04-29 as
-  anti-pattern doctrine.
 + 2026-04-23; ADR-163 release/version boundary and vendor passthrough
   audit; trigger: observability-thread consolidation audit; status:
   pending-audit.
@@ -426,8 +385,20 @@ continuity snapshots.
   (`--help` self-rejects; dispatch keys undiscoverable; `--platform`
   redundant when env-derived; claim file-list verbose; no `whoami`);
   future strategic plan candidate for promotion to `current/`; trigger:
-  second instance OR owner direction; status: pending. Evidence + plan:
-  agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md.
+  second instance OR owner direction; **status: ready for promotion**
+  (both triggers fired 2026-04-30 — owner observed warnings during
+  Verdant Sheltering Glade session, AND the session itself accumulated
+  new evidence). Second-instance evidence (2026-04-30):
+  `pnpm agent-tools:agent-identity` does not inherit
+  `PRACTICE_AGENT_SESSION_ID_CLAUDE` through `pnpm --filter` (forcing
+  --seed); `comms append` requires `--events-dir`, `--now`,
+  `--created-at` with no discoverable defaults; `claims open` requires
+  `--active`, `--thread`, `--area-kind` (with `--area-kind` rejecting
+  intuitive values like `shared-state` — only `files`/`workspace`/`plan`/
+  `adr`/`git` are accepted); `comms render` uses `--output` not
+  `--output-file`. Each error is a single iteration cost but they
+  compound to ~5–8 round-trips per session-open. Evidence + plan:
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
 + 2026-04-28; cross-thread comms event request/response correlation gap
   (no `audience`, no `in_response_to`, no TTL/escalation timer);
   minimal correlation primitive on the comms event schema as recommended
@@ -457,9 +428,6 @@ continuity snapshots.
   [ADR-167](../../../docs/architecture/architectural-decisions/167-hook-execution-failures-must-be-observable.md)
   to Practice Core; trigger: second platform implementing a thin
   wrapper, OR owner direction; status: pending.
-+ 2026-04-29; TypeScript 6 migration + workspace-script architectural
-  rules; ADR candidate; status: graduated 2026-04-29 to ADR-168 (commit
-  `dcd45776`).
 + 2026-04-29; recurring myopia patterns at every signal surface
   (reviewer-as-prosthetic; confirmation-reading-vs-exploration;
   hook-as-obstacle; fitness-as-constraint; sed-bypass); pattern
@@ -563,6 +531,49 @@ continuity snapshots.
   and-consult; sub-agent assessed as healthy-lag, not silent rot);
   status: pending. Evidence: trinity-drift sub-agent report from
   2026-04-29 deep consolidation pass.
++ 2026-04-30; graduation-trigger criteria too restrictive — owner
+  observation at session close (Verdant Sheltering Glade): the
+  default "trigger: second instance OR owner direction" criteria
+  used across most Pending-Graduations Register entries is too
+  restrictive in practice. Strong candidates with one robust instance
+  + clear principle articulation can wait sessions for a second
+  instance that may never come, while owner direction is a synchronous
+  cost. Future session needed to: (a) audit the trigger criteria
+  shape across the register; (b) propose alternative criteria
+  (single-instance-with-evidence-density, principle-articulation
+  quality test, structural-coverage check); (c) update consolidate-docs
+  §7a guidance. Trigger: future session with owner appetite for
+  flow refinement; status: pending. Evidence: this session graduated
+  PDR-036/037/038/039 on owner direction after the candidates had
+  been pending for sessions despite stable doctrine and worked
+  instances.
++ 2026-04-30; commit-bundle-leakage-from-wildcard-staging — wildcard
+  `git add -A` (or moral equivalent) over a working tree containing
+  another session's WIP produces a commit whose message is true for one
+  slice of the diff and silent about the rest. Surfaced 2026-04-30 by
+  the `75ac6b75` post-mortem (51 lines of legitimate continuity work
+  bundled with 372 lines of parallel Practice-thread plan work plus 3
+  lines of unrelated `.claude/settings.json` plugin enable). Corrective
+  shape: stage by explicit pathspec from the queued intent; verify
+  staged-bundle-matches-intent before commit; treat
+  files-outside-the-named-intent as a coordination event. Already
+  partially in distilled.md § Process; trigger for full graduation
+  (rule + commit-skill amendment): second cross-session instance OR
+  owner direction. Status: pending. Evidence:
+  [`experience/2026-04-30-verdant-the-bundle-was-the-signal.md`](../../experience/2026-04-30-verdant-the-bundle-was-the-signal.md).
++ 2026-04-30; substrate-vs-axis-plans convention + working principle
+  "invent-justification-as-signal"; **GRADUATED 2026-04-30 by Verdant
+  Sheltering Glade per owner direction "general principles are PDRs, if
+  there are two principles there are two PDRs; specific instances are
+  ADRs"** to two new PDRs:
+  [PDR-036 Friction-as-Structural-Finding](../../practice-core/decision-records/PDR-036-friction-as-structural-finding.md)
+  (generative principle) and
+  [PDR-037 Substrate-vs-Axis Plan Categorisation](../../practice-core/decision-records/PDR-037-substrate-vs-axis-plan-categorisation.md)
+  (Practice-governance applied to plan collections). The convention
+  component file at
+  [`templates/components/substrate-vs-axis-plans.md`](../../plans/templates/components/substrate-vs-axis-plans.md)
+  remains as the canonical worked-example artefact, now cited from PDR-037.
+  Status: graduated 2026-04-30.
 + 2026-04-29; pre-2026-02-15 experience corpus extraction backlog
   (~80 files dating from 2025-01 through 2026-02-15 contain
   inline doctrine, code blocks, principle catalogues that displace

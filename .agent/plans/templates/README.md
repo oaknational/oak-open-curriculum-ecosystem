@@ -38,6 +38,7 @@ sections.
 | [`lifecycle-triggers.md`](components/lifecycle-triggers.md) | Session entry, simple-plan/work-shape declaration, collaboration claim registration, handoff closure, and consolidation touch points |
 | [`documentation-propagation.md`](components/documentation-propagation.md) | Required ADR/directive/reference-doc and README update propagation |
 | [`session-discipline.md`](components/session-discipline.md) | Multi-session execution discipline: template-not-contract count, mid-arc checkpoints, context-budget thresholds, metacognition at session open |
+| [`substrate-vs-axis-plans.md`](components/substrate-vs-axis-plans.md) | Multi-axis plan collections: distinguish axis-shipping plans from cross-axis substrate plans; convention for inventory shape and ADR cross-reference |
 
 ## Document Hierarchy
 
