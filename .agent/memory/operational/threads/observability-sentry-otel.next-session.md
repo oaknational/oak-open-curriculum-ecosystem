@@ -34,12 +34,19 @@ matching `platform + model + agent_name` updates `last_session`.
 | Abyssal Cresting Compass | claude-code | claude-opus-4-7-1m | `6efc47` | PR-87 Phase 2.0.5 keyGenerator cure + doc alignment + plan-reset | 2026-04-28 | 2026-04-28 |
 | Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code | 2026-04-28 | 2026-04-28 |
 | Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
+| Leafy Bending Dew | cursor | composer | `8d0db5` | MCP HTTP Sentry esbuild helpers: dedup `trimToUndefined`, explicit absent shapes (`undefined` vs post-trim `''`); Cursor handoff — **commit owned by Claude Code** | 2026-04-30 | 2026-04-30 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
 into this canonical register during the 2026-04-29 deep consolidation
 pass; older deeper-narrative session-close blocks below this header
 remain unchanged.)
+
+---
+
+**Session-close 2026-04-30 (Leafy Bending Dew, cursor, composer, session seed prefix `8d0db5`)** — MCP HTTP app `@oaknational/oak-curriculum-mcp-streamable-http` **`build-scripts/` only**. Landed outcome: **`trimToUndefined` single implementation** at [`trim-to-undefined.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-to-undefined.ts) — explicit branches for **`value === undefined`** vs **`trimmed === ''`**; duplicate private helpers removed from [`sentry-build-plugin-identity.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin-identity.ts) and [`sentry-build-plugin.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts); [`trim-to-undefined.unit.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-to-undefined.unit.test.ts) added; `pnpm exec vitest run build-scripts/trim-to-undefined.unit.test.ts build-scripts/sentry-build-plugin.unit.test.ts` **PASS** (35 tests). **Deferral (PDR-026)**: named constraint — owner directed **no commit from this Cursor session**; **trade-off** — Claude Code retains **commit ownership** when it next touches the lane so staging follows explicit pathspec + commit skill. **Falsifiability**: working tree contains the listed paths; Claude session produces a conventional commit referencing this handoff block or §Next safe step bundle note.
+
+**ADR/PDR candidates (session-handoff §6b)**: none — mechanical boundary hygiene only.
 
 ---
 

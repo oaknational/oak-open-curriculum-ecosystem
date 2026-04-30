@@ -1,9 +1,10 @@
 ---
-fitness_line_target: 190
-fitness_line_limit: 260
-fitness_char_limit: 16000
-fitness_line_length: 100
-split_strategy: 'Split recipes by test level if this grows'
+fitness_line_target: 350
+fitness_line_limit: 500
+fitness_char_limit: 28000
+fitness_line_length: 120
+fitness_doc_kind: recipe
+split_strategy: 'Split recipes by test level if this grows past 500 lines'
 ---
 
 # Testing TDD Recipes
@@ -12,6 +13,26 @@ This is the worked-example companion to
 [Testing Strategy](../../.agent/directives/testing-strategy.md). The strategy
 is the authoritative doctrine; this file shows how to apply the doctrine at
 unit, integration, and E2E levels.
+
+> **Recipe document.** This is a recipes file. Recipes carry higher
+> fitness limits than policies/directives because their value scales with
+> worked examples, but the contract is reciprocal: the table of contents
+> below MUST stay current with every section heading. Adding or removing a
+> section without updating the ToC is a breach of the recipe contract.
+
+## Table of Contents
+
+- [TDD At All Levels](#tdd-at-all-levels)
+  - [Unit Test TDD](#unit-test-tdd)
+  - [Integration Test TDD](#integration-test-tdd)
+  - [E2E Test TDD](#e2e-test-tdd)
+- [Rule Summary](#rule-summary)
+- [Red Specs And File Naming](#red-specs-and-file-naming)
+- [Common Violations And Fixes](#common-violations-and-fixes)
+  - [Writing Code Before Tests](#writing-code-before-tests)
+  - [Updating E2E Tests After Implementation](#updating-e2e-tests-after-implementation)
+  - [Tests That Only Pass With The Current Implementation](#tests-that-only-pass-with-the-current-implementation)
+  - [Validator Script vs Integration Test](#validator-script-vs-integration-test)
 
 ## TDD At All Levels
 
@@ -213,3 +234,52 @@ it('produces the expected result', () => {
 
 The correct test survives refactoring because it proves behaviour, not the
 private route to that behaviour.
+
+### Validator Script vs Integration Test
+
+Per [Testing Strategy § Test Types](../../.agent/directives/testing-strategy.md):
+_validation scripts that require external resources should be standalone
+scripts, not tests_. A vitest file that walks the real repo file system
+and asserts a property of repo state is running a validator, not testing
+code behaviour. The vitest harness carries pre-commit gating semantics
+that do not match what the file is actually doing.
+
+Wrong shape (validator wearing a vitest harness):
+
+```typescript
+// scripts/validate-portability.integration.test.ts
+it('every canonical skill has a Claude adapter', () => {
+  const skills = readdirSync('.agent/skills');
+  for (const skill of skills) {
+    expect(existsSync(`.claude/skills/${skill}`)).toBe(true);
+  }
+});
+```
+
+Correct shape — pure helper unit-tested + standalone runtime script:
+
+```typescript
+// agent-tools/src/lib/portability-checks.ts (helper, pure)
+export function adapterMissingFor(canonical: readonly string[], adapters: readonly string[]) {
+  return canonical.filter((slug) => !adapters.includes(slug));
+}
+
+// agent-tools/src/lib/portability-checks.test.ts (unit test, no FS)
+it('reports canonical skills with no adapter', () => {
+  expect(adapterMissingFor(['a', 'b'], ['a'])).toEqual(['b']);
+});
+
+// scripts/validate-portability.ts (runtime script wired into pnpm test:root-scripts)
+const missing = adapterMissingFor(await listCanonicalSkills(), await listClaudeAdapters());
+if (missing.length > 0) {
+  console.error(`Missing: ${missing.join(', ')}`);
+  process.exit(1);
+}
+```
+
+Structural cue: if the test body is `readdirSync` / `existsSync` /
+`readFileSync` over real repo paths and assertions are about repo state
+(not function output), it belongs in `scripts/` (or a workspace), not in
+the test runner. "Look at peers" is a useful first orientation, but
+peers can be drift — the canonical-pattern test is _named guidance in
+the directives_, not the count of similar sibling files.

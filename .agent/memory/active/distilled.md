@@ -81,16 +81,9 @@ substance against the live decision-record file rather than
 inheriting plan-body shorthand.
 
 **Shared-state files are ALWAYS writable and ALWAYS commit-includable
-regardless of any active claim** (deliberate tradeoff to prevent log
-jams; see [`respect-active-agent-claims` § Shared-state always
-writable][respect-shared-state-rule]).
-This covers `active-claims.json`, closed-claim archives, the shared
-communication log, comms events, conversations, escalations, napkin,
-distilled, patterns, repo-continuity, thread records, and tracks.
-Active claims on shared state are coordination signals, never no-write
-locks. The commit queue / `git:index/head` window is the serialisation
-mechanism, not the claim. Prefer surgical, parser-backed edits or
-transaction helpers for hot shared JSON over full-file rewrites.
+regardless of any active claim.** Full coverage list, rationale, and
+the surgical-edit guidance graduated 2026-04-29 to
+[`respect-active-agent-claims` § Shared-state always writable][respect-shared-state-rule].
 
 When an apparently orphaned active claim is found, archive it only through a
 deliberate governance pass or owner-forced close. If another session is
@@ -251,21 +244,36 @@ findings independent of PR scope belong in follow-up plans with
 captured effort/risk/ROI. Owner-introduced 2026-04-29 during PR-90
 closure; drove Phases 4 and 5 of that plan.
 
-**Validation scripts are not tests.** A vitest test file that walks
-the real repo file system and asserts a property of repo state is
-running a validator, not testing code behaviour. testing-strategy.md
-§Test Types names this: "Validation scripts that require external
-resources should be standalone scripts, not tests." Caught 2026-04-29
-when my Phase 4 integration test for the TS-invocation gate was
-revealed as a thinly-disguised validator. Refactor: pure helper
-(unit-tested) + standalone runtime script following the
-`validate-eslint-boundaries.ts` shape, wired into
-`pnpm test:root-scripts`. Five existing peers in `scripts/`
-(validate-portability, validate-fitness-vocabulary, etc.) match the
-correct shape for their helpers — all of them belong in a workspace
-per the broader "complex-with-tests must live in a workspace" rule
-(scheduled in
-[`current/scripts-validator-family-workspace-migration.plan.md`](../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md)).
+**Validation scripts are not tests.** Worked example + contrast pattern
+graduated 2026-04-30 to [testing-tdd-recipes § Validator Script vs
+Integration Test][tdd-validator-recipe]. The scripts/-tier workspace
+migration follow-on lives in
+[`current/scripts-validator-family-workspace-migration.plan.md`][validator-migration-plan].
+
+**Stage by explicit pathspec, not wildcard.** A non-empty index or
+working-tree-files-outside-the-named-intent at commit time is a
+coordination event (peer's WIP), not an inconvenience. The cure is
+structural: the commit skill enqueues the intended bundle before
+staging; staging uses explicit pathspecs from that queued list, never
+`git add -A`; and the verify-staged-fingerprint step rejects any file
+outside the intent. Surfaced 2026-04-30 by the `75ac6b75` post-mortem
+where a continuity-deferral commit accidentally bundled 372 lines of
+parallel Practice-thread plan work plus an unrelated `.claude/settings.json`
+plugin enable. Companion to 2026-04-29 Pearly Swimming Atoll's index-
+ownership lesson: ownership transitions are made visible via shared
+comms, then proceed.
+
+**Hash presence without recompute is silent drift.** Any validator
+that *stores* a content hash in a lock or manifest but does *not*
+re-compute and compare on subsequent runs cannot detect drift.
+Surfaced 2026-04-30 in `validate-portability.ts` Check 9b: the lock
+records `(source, sourceType, computedHash)` for every vendored
+canonical skill, but the validator only checks structural shape, not
+content. A hand-edit to `.agent/skills/<vendored-name>/SKILL.md`
+passes every current check. The corrective is the natural one:
+recompute `localHash`, compare with `computedHash`, fail on mismatch.
+Closing this gap is in scope for the canonical-first-skill-pack-
+ingestion-tooling future plan.
 
 ## Architecture (Agent Infrastructure)
 
@@ -295,6 +303,8 @@ Build-system entries graduated on 2026-04-24 to
 [consolidate-docs-preservation]: ../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure
 [adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
 [adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
+[tdd-validator-recipe]: ../../../docs/engineering/testing-tdd-recipes.md#validator-script-vs-integration-test
+[validator-migration-plan]: ../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md
 [pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
 [pdr-018]: ../../practice-core/decision-records/PDR-018-planning-discipline.md#disposition-drift-at-phase-boundaries-2026-04-28-amendment
 [pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log

@@ -179,3 +179,31 @@ purpose is to surface loop-level failure modes before they re-emerge.
 - Existing file-level ratios (`fitness_line_limit` is ~1.3× `fitness_line_target`
   across most governed files) are unchanged. The new critical threshold is
   derived from `fitness_line_limit`, not from `fitness_line_target`.
+
+## Amendment Log
+
+### 2026-04-30 — Doc-kind classification + recipe ToC contract
+
+Owner direction (2026-04-30 Verdant Sheltering Glade session): recipe
+documents (`docs/engineering/*-recipes.md` and equivalents) carry higher
+fitness limits than policies or directives, because their value scales
+with worked examples. The contract is reciprocal — the recipe must
+maintain a current table of contents at the top of the file. Adding or
+removing a section without updating the ToC is a breach of the recipe
+contract.
+
+Frontmatter convention: declare `fitness_doc_kind: recipe` to mark a
+recipe document. Recipe targets/limits typically run ~2× the equivalent
+policy or directive (e.g. `fitness_line_limit: 500` rather than 260).
+Policy/directive defaults remain unchanged. Doc-kind frontmatter does
+not yet alter validator output; it is documentary classification today
+and a hook point for future per-kind validation rules.
+
+ToCs in recipe documents are agent-maintained by reading the file's
+heading hierarchy. Reviewers and consolidation passes should check ToC
+freshness when editing a recipe.
+
+First applied instances: this ADR's own amendment log (recipe-shaped
+amendment); `docs/engineering/testing-tdd-recipes.md` raised to
+`fitness_line_target: 350 / fitness_line_limit: 500 / fitness_char_limit:
+28000` and ToC added.
