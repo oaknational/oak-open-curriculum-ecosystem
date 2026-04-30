@@ -14,7 +14,7 @@ todos:
     content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns; sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
     status: pending
   - id: t2-zod-loader
-    content: "Zod-validated loader for eef-toolkit.json (preserves F1-F4 + F7 resolutions). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string(). school_context_schema.properties carve-out preserved pending owner resolution."
+    content: "Zod-validated loader for eef-toolkit.json (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties carve-out — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string()."
     status: pending
   - id: t3-methodology-resource
     content: "Methodology+caveats resource via graph factory (preserves F6 + F11 resolutions)."
@@ -339,10 +339,11 @@ export interface RankOptions<TNode> {
 (copied from this plan's `../reference/`) and
 `oak-curriculum-sdk/src/mcp/eef-toolkit-data.ts`. Preserves predecessor
 F1 (data home is SDK, not codegen — third-party static data),
-F2/F3 (all fields typed, no `Record<string, unknown>` except the
-schema-meta `school_context_schema.properties` — see Open Question
-below), F4 (direct Zod parse at load, not `as const satisfies`), F7
-(Zod validation at import time).
+**revises F2/F3** (all fields typed, no `Record<string, unknown>`
+anywhere — the predecessor's `school_context_schema.properties`
+carve-out is removed; see "Closed schema typing" below), F4 (direct
+Zod parse at load, not `as const satisfies`), F7 (Zod validation at
+import time).
 
 **Format precision**: the Zod schema MUST validate
 `meta.last_updated` and `meta.data_version` to their known formats,
@@ -355,16 +356,48 @@ Bare `z.string()` would let a malformed value (e.g. a free-text
 update note) parse cleanly and propagate into citation responses
 where it would mislead teachers about evidence currency.
 
-**Open question (surfaced at promotion-to-ACTIVE):** the
-`school_context_schema.properties` carve-out is preserved from the
-predecessor as a `Record<string, unknown>` exemption. Type-reviewer
-flagged this as unresolved: if the field is a genuinely open-ended
-JSON Schema `additionalProperties`-style structure, the exemption is
-correct under the principles' `unknown` exception ("incoming external
-boundary from a third-party system"). If it has a known closed shape,
-the exemption must be removed and the field typed concretely. Owner
-to confirm before promotion. The current state is "preserved from
-predecessor pending resolution".
+**Closed schema typing** (resolves the type-reviewer's bucket-(c)
+finding by reading the actual data): `school_context_schema` in
+`eef-toolkit.json` is itself a JSON Schema document with a known
+closed shape — `{ description: string; properties: { phase, key_stage,
+school_type, pupil_premium, send_percentage, ofsted_grade, attainment,
+workforce, priorities } }`. Each property value follows the standard
+JSON Schema property shape (`type`, optional `enum`, optional
+recursive `properties`, optional `items`). The predecessor's
+`Record<string, unknown>` exemption was an over-conservative reading;
+the structure is fully knowable. Type it as:
+
+```typescript
+import type { Result } from '@oaknational/result';
+
+type JsonSchemaProperty = {
+  readonly type: 'string' | 'number' | 'integer' | 'boolean' | 'object' | 'array';
+  readonly description?: string;
+  readonly enum?: readonly string[];
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly items?: JsonSchemaProperty;
+};
+
+interface SchoolContextSchema {
+  readonly description: string;
+  readonly properties: {
+    readonly phase: JsonSchemaProperty;
+    readonly key_stage: JsonSchemaProperty;
+    readonly school_type: JsonSchemaProperty;
+    readonly pupil_premium: JsonSchemaProperty;
+    readonly send_percentage: JsonSchemaProperty;
+    readonly ofsted_grade: JsonSchemaProperty;
+    readonly attainment: JsonSchemaProperty;
+    readonly workforce: JsonSchemaProperty;
+    readonly priorities: JsonSchemaProperty;
+  };
+}
+```
+
+The Zod schema mirrors this shape. If the upstream EEF dataset adds
+a tenth property, Zod parse fails loud at module load — which is
+correct: a contract change in the agent-discoverable schema deserves
+explicit attention, not silent acceptance.
 
 The full Zod schema is preserved verbatim from the predecessor; see
 the predecessor (recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)

@@ -54,8 +54,8 @@ into todo bodies and decision sections.
 | Finding | Resolution preserved | New home (todo or section) |
 |---|---|---|
 | **F1** Data placement (SDK `src/mcp/data/`, not codegen) | YES | `eef-evidence-corpus.plan.md` T2; ADR-157 reaffirmed |
-| **F2** Type all fields, no `Record<string, unknown>` | YES | T2; full Zod schema preserved by reference to predecessor (recoverable via `git show e2796757:<predecessor-path>`) |
-| **F3** Meta — all 7 fields typed | YES | T2 |
+| **F2** Type all fields, no `Record<string, unknown>` | YES, **strengthened** | T2 — the predecessor exempted `school_context_schema.properties` from this rule as a `Record<string, unknown>` carve-out. Reading the actual JSON shows the field is itself a JSON Schema document with a known closed shape (9 named properties, each a standard JSON Schema property descriptor). The carve-out is removed and the field is now typed concretely as a `SchoolContextSchema` interface with a recursive `JsonSchemaProperty` shape. F2 holds without exemption. |
+| **F3** Meta — all 7 fields typed | YES, **strengthened** | T2 — `meta.last_updated` and `meta.data_version` are now validated to their known formats (`z.string().date()` and a semver regex respectively) rather than bare `z.string()`. |
 | **F4** Direct Zod `.parse()` at load, not `as const satisfies` | YES | T2 |
 | **F5** Null-impact guard — pre-filter 4 strands before scoring | YES, expanded with explicit IDs in scoring engine docstring | T5 ScoringEngine; 4 strand IDs preserved verbatim |
 | **F6** URI scheme: `curriculum://eef-methodology`, `curriculum://eef-strands` | YES | T3, T4 |

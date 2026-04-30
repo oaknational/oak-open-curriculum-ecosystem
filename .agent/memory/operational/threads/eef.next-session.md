@@ -132,18 +132,27 @@ remediations applied. Of 11 findings:
   `meta.last_updated` and `meta.data_version` Zod precision tightened
   (`z.string().date()` and semver regex); journey citation propagation
   type note added to T4.
-- **Bucket (c) genuine architectural fork** — surfaced to owner:
-  `school_context_schema.properties` `Record<string, unknown>` carve-out
-  preserved from predecessor pending owner resolution. Question: is the
-  field a genuinely open-ended JSON Schema structure (carve-out stands
-  under the principles' `unknown` exception) or does it have a known
-  closed shape (carve-out must be removed and field typed concretely)?
+- **Bucket (c) resolved by reading the data, not by escalation:**
+  `school_context_schema` in `eef-toolkit.json` is itself a JSON Schema
+  document with a known closed shape — 9 named properties
+  (phase, key_stage, school_type, pupil_premium, send_percentage,
+  ofsted_grade, attainment, workforce, priorities), each a standard
+  JSON Schema property descriptor. The predecessor's
+  `Record<string, unknown>` carve-out was over-conservative; removed.
+  Plan T2 now types this as a concrete `SchoolContextSchema` interface
+  with a recursive `JsonSchemaProperty` shape; F2/F3 marked as
+  *revised*, not preserved verbatim. Owner correction (2026-04-30):
+  asking the owner to choose between "open" and "closed" when the
+  answer was in a file in the repo is the same optionality-invention
+  anti-pattern from last session, applied to a fact-check rather than
+  a design call. Fourth instance; graduation candidate has now
+  ripened.
 
-Promotion gate update: T1 + T2 of `graph-query-layer.plan.md` and T1, T5,
-T8, T12 of `eef-evidence-corpus.plan.md` are now type-design-clear modulo
-the `school_context_schema.properties` decision. Increment 1's "T1 +
-plan-body first-principles check" gate is closer to satisfied; the
-`pnpm sdk-codegen` round-trip is the next structural verification.
+Promotion gate update: T1 + T2 of `graph-query-layer.plan.md` and T1,
+T2, T5, T8, T12 of `eef-evidence-corpus.plan.md` are now type-design-
+clear. Increment 1's "T1 + plan-body first-principles check" gate is
+closer to satisfied; the `pnpm sdk-codegen` round-trip is the next
+structural verification.
 
 ## Previous First Task (resolved)
 
