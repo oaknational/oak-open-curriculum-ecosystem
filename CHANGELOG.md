@@ -1,3 +1,13 @@
+## [1.7.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.7.0...v1.7.1) (2026-04-30)
+
+
+### Bug Fixes
+
+* **observability:** also pass through TEST_ERROR_SECRET in turbo.json ([c9e3007](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c9e300757860d2485a7372fd34d7746977f11147))
+* **observability:** resolve Sentry build-plugin identity from env, not source ([f2a71d4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f2a71d4c97b44e323ed561538a996c6d82377d47))
+* remove unecessary complexity ([ee06114](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ee061144dd7b8cf237c6dd665e748f6c863259b6))
+* resolve recurring pnpm lock corruption ([837fcfd](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/837fcfde29b24cc2ca758afa8f33419169f9b950))
+
 # [1.7.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.6.1...v1.7.0) (2026-04-29)
 
 

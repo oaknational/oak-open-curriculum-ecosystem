@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
   "author": "https://github.com/jimCresswell",
