@@ -1,19 +1,21 @@
 # Oak vs EEF: Technical Stack Comparison
 
-> **Status**: future (reference artefact supporting evidence-integration-strategy.md)
+> **Status**: reference (artefact supporting [`../future/evidence-integration-strategy.md`](../future/evidence-integration-strategy.md))
 > **Date**: 10 April 2026
 > **Scope**: Technical comparison of the EEF Toolkit MCP server snapshot
 > against Oak's HTTP MCP stack
 >
 > **Credits**: EEF Toolkit data from the Education Endowment Foundation.
 > EEF MCP server prototype by John Roberts (JR)
-> `<john.roberts@thenational.academy>`. See `evidence-integration-strategy.md`
+> `<john.roberts@thenational.academy>`. See
+> [`../future/evidence-integration-strategy.md`](../future/evidence-integration-strategy.md)
 > for full attribution and author-addition requirements.
 
 This document is a **technical reference** supporting the strategic plan
-in `evidence-integration-strategy.md`. It compares the two systems at
-the implementation level. For impact requirements, integration levels,
-and strategic direction, see the strategy document.
+in [`../future/evidence-integration-strategy.md`](../future/evidence-integration-strategy.md).
+It compares the two systems at the implementation level. For impact
+requirements, integration levels, and strategic direction, see the
+strategy document.
 
 ---
 
@@ -112,7 +114,7 @@ and a per-recommendation caveat.
 
 ```text
 Toolkit
-├── meta                  # Provenance, versioning, licence, 8 caveats
+├── meta                  # Provenance, versioning, licence, 9 caveats
 ├── methodology           # Effect size → months conversion, scales
 ├── uk_context            # PP rates, national averages, KS mapping
 ├── school_context_schema # Input schema for recommendations

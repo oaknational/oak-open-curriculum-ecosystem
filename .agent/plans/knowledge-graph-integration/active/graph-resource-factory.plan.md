@@ -4,7 +4,7 @@ overview: "Extract shared infrastructure from the 3 existing graph-as-MCP-resour
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"
-  - "../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md"
+  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
 specialist_reviewer: "code-reviewer, type-reviewer, test-reviewer"

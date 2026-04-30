@@ -11,5 +11,6 @@ formerly grouped as generic `external/` planning.
 | OOC API wishlist | [ooc-api-wishlist/](ooc-api-wishlist/) | Reference / triage | Preserve as downstream consumer evidence. Validate against the current `oak-openapi` implementation before promoting any item as current work. |
 | OOC issue reports | [ooc-issues/](ooc-issues/) | Reference / triage | Preserve issue snapshots, but re-check against the current API implementation before action. |
 | OEAI review | [oeai/](oeai/) | Retain partner thread | Useful reference architecture review; not an adoption decision. |
-| External evidence and skills sources | [external-knowledge-sources/](external-knowledge-sources/) | Split into source-ingestion lane | Covers EEF Toolkit, education skills, and future third-party knowledge graphs as application data sources. |
+| EEF Toolkit evidence | [eef/](eef/) | Dedicated subthread | EEF Teaching and Learning Toolkit data, strategic brief, technical comparison, and queued MCP surface plan. |
+| External education skills + future KG sources | [external-knowledge-sources/](external-knowledge-sources/) | Source-ingestion lane | Covers education skills (CC BY-SA), and the meta-strategy for future third-party knowledge graphs as application data sources. |
 | Oak KG adoption by others | [knowledge-graph-adoption/](knowledge-graph-adoption/) | New adoption lane | Covers support for external organisations using Oak's own KG assets. |

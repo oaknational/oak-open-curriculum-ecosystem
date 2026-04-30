@@ -692,7 +692,7 @@ rather than the whole monorepo.
 - [`.agent/plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
 - [`.agent/plans/knowledge-graph-integration/active/graph-resource-factory.plan.md`](../plans/knowledge-graph-integration/active/graph-resource-factory.plan.md)
 - [`.agent/plans/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../plans/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md)
-- [`.agent/plans/knowledge-graph-integration/active/eef-evidence-mcp-surface.plan.md`](../plans/knowledge-graph-integration/active/eef-evidence-mcp-surface.plan.md)
+- [`.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 - [`.agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md`](../plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md)
 - [`.agent/plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md`](../plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md)
 - [`packages/sdks/oak-curriculum-sdk/src/mcp/graph-resource-factory.ts`](../../packages/sdks/oak-curriculum-sdk/src/mcp/graph-resource-factory.ts)

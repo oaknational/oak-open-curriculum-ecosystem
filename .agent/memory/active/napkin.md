@@ -267,3 +267,368 @@ discipline: when investigation is open, do not couple analysis to a
 proposed action. State the frame, surface the evidence, let the owner
 choose the path. The "Option A or Option B" structure I kept defaulting
 to encoded a hidden bias toward action.
+
+---
+
+## 2026-04-30 — EEF graph-and-corpus architecture session (Iridescent Soaring Planet)
+
+> **Note on length**: this entry intentionally exceeds the napkin's 300-line
+> fitness gate. Owner directed full preservation of session insight without
+> size limit. Consolidation will graduate selected entries to `distilled.md`,
+> patterns, ADRs, or PDRs and prune what remains.
+
+Session opened on `feat/eef_exploration` branch (clean, zero commits ahead of
+main) with a survey request: find all EEF-related plans and research. What
+followed was a four-turn arc that started as inventory, became a structural
+restructure, then re-framed the entire EEF integration architecture around
+graph operations + evidence corpus composition + cross-source journeys.
+
+### Surprise — exit criteria are shape, not outcome (repo-wide blind spot)
+
+I described the EEF plan as "ready to promote" against its own exit criteria
+(tools listed, resources listed, tests pass). The owner's seven-question
+pushback reframed: those are *shape* criteria, not *outcome* criteria. None of
+them require "an agent reliably produces an evidence-grounded lesson plan that
+cites a caveat the teacher can act on" — which is the impact the strategy doc
+explicitly names.
+
+This is repo-wide, not EEF-specific. Searching plans for outcome-shaped exit
+criteria turns up almost none; every plan I read had structural completion
+gates. The blind spot is in the plan template itself.
+
+### Architectural reframe — corpus IS-A graph + has-a ScoringEngine
+
+Owner asked whether evidence corpora should be modelled as a specialised
+subset of graphs. Worked it from first principles:
+
+- Mathematically, the EEF data IS a graph (30 nodes, sparse `related_strands`
+  - `tags` edges, plus out-of-corpus `related_guidance_reports`).
+- But the dominant access pattern is filter+rank with a context vector — not
+  a generic graph operation.
+- Cleanest model: `EvidenceCorpus = Graph + ScoringEngine` (composition, not
+  pure subset). Misconception and prerequisite graphs use only the Graph
+  foundation; EEF uses both.
+
+Tracer test: minimum useful operations earn their place when ≥2 of 3 graphs
+need them. `get_node`, `enumerate_nodes(filter)`, `neighbours`, `subgraph`,
+`find_by_tag` all pass; `rank` is EEF-only and stays in the corpus extension.
+
+Parallel three-graph implementation is the *protection mechanism* against
+EEF-shaped over-fitting. With only EEF, we'd build a recommendation engine
+and call it a graph. With all three exercising the foundation simultaneously,
+the graph layer earns its name and stays clean.
+
+### Reframe — graph factory replicates plumbing, not operations
+
+Originally I read `graph-resource-factory.plan.md` as "the graph layer".
+Re-reading it carefully against the user's seven questions: it is a
+*code-deduplication* factory. It produces 6 boilerplate layers (resource
+constant, JSON dump, tool definition with empty input schema, executor
+returning the full JSON, registration, handler wrap). Misconception graph
+proves this — its tool dumps all 12,858 nodes in one shot.
+
+The factory is plumbing. The interaction abstraction does not yet exist.
+
+### Owner correction — context size is the real "why" for the graph layer
+
+I framed the graph layer as enabling new operations. Owner reframed: the
+practical constraint that already exists is **context size**. Even the EEF
+JSON (90 KB) plus a misconception dump plus a thread-progressions dump blows
+past comfortable context windows. The graph layer's primary job is not "new
+operations the agent couldn't perform" — it is "focused responses that fit
+the agent's working context."
+
+This shifts the operations design. Progressive disclosure becomes the
+principle, not just an option:
+
+```text
+Manifest  → tiny: counts, types, version. The "is this graph what I think it is" probe.
+Summary   → typed digest, aggregations, distributions, top-N most-connected.
+Detail    → full fidelity for a focused subset, with explicit field projection.
+Edge      → relationships between requested nodes only.
+```
+
+Mandatory projection: every operation that returns nodes must accept a
+projection parameter so the response shapes to the agent's actual need.
+This is structural enforcement of progressive disclosure — the operation
+asks "what do you need?" rather than emitting "here's everything."
+
+The revised operation list is therefore 7, not 5:
+
+1. `graph_manifest(graph)`
+2. `graph_summary(graph, group_by?)`
+3. `get_node(graph, id, projection?)`
+4. `enumerate_nodes(graph, filter?, projection?, page?)`
+5. `neighbours(graph, node_id, edge_type?, projection?)`
+6. `subgraph(graph, root_ids, depth, projection?)`
+7. `find_by_tag(graph, tag, projection?)`
+
+### Decisions ratified in this session
+
+- **Composition framing**: corpus IS-A graph + has-a ScoringEngine. Yes.
+- **Five-increment delivery sequence with escape hatch**: yes.
+  - Inc 0 (already landed): misconception graph as JSON dump
+  - Inc 1: graph query layer (7 ops, polymorphic over 3 graphs)
+  - Inc 2: evidence corpus extension (EEF-first, generic shape)
+  - Inc 3: cross-source journey primitive
+  - Inc 4: telemetry + freshness + provenance
+  - Inc 5: school-context overlay (deferred, designed)
+- **Plan split**: graph layer in `knowledge-graph-integration/current/`;
+  EEF corpus + EEF journeys in `eef/current/`; cross-source journey
+  primitive design in `knowledge-graph-integration/future/`.
+- **User-value template** as mandatory three-liner: agreed, with owner
+  noting it could extend beyond EEF. *Not yet a rule — embed in new plans
+  first, see it work, graduate later.*
+- **Conservation property**: agent-judged semantic preservation, not
+  mechanical grep. Preserve **understanding and intent**, expand both —
+  not wording. Originals/ holds byte-identical copies; conservation map
+  is the load-bearing semantic artefact.
+- **Parallel implementation for prerequisite + misconception** alongside
+  EEF, to keep the graph layer honest.
+
+### Doctrine candidates surfaced — explicit graduation queue
+
+These are pattern/PDR/rule candidates emerging from this session. Each has a
+named graduation trigger and a candidate home. None graduate now; they ripen
+in the napkin until consolidation.
+
+1. **User-value template (mandatory three-liner) on every plan task.**
+   `User value | Provability | Architecture validation`. Currently embedded
+   in new EEF + graph-query-layer plans. **Graduation trigger**: when the
+   template has been applied in a third plan (or refused in a documented
+   exception), promote to a `.agent/rules/*.md` and reference from
+   `plan-architecture` documentation. **Candidate home**:
+   `.agent/rules/plan-task-user-value-template.md`.
+
+2. **Outcome-criteria gap is repo-wide, not plan-specific.** Most plan
+   files have shape exit criteria (tools listed, tests pass) and no
+   outcome exit criteria (teacher does X, measured by Y). **Graduation
+   trigger**: confirm in a sample of 5+ plans across collections.
+   **Candidate home**: PDR — "exit criteria must include at least one
+   outcome condition." Lives alongside the user-value rule above.
+
+3. **Progressive disclosure as a design principle for any data >a few KB.**
+   Manifest → Summary → Detail → Edge. Mandatory projection. **Graduation
+   trigger**: applied successfully across graph layer and one non-graph
+   surface (e.g. search response). **Candidate home**: `.agent/rules/`
+   or pattern in `.agent/memory/active/patterns/`.
+
+4. **Parallel-tracer-implementations as protection against single-use-case
+   overfit.** When designing a generic capability, exercise it against 2+
+   real consumers in the same delivery slice. **Graduation trigger**:
+   pattern observed twice (this session is one). **Candidate home**:
+   pattern.
+
+5. **Conservation requires a mind, not grep.** When restructuring plans,
+   semantic preservation (understanding + intent) is the load-bearing
+   property; checksums prove file preservation but not concept preservation.
+   **Graduation trigger**: applied to a second restructure successfully.
+   **Candidate home**: `.agent/rules/plan-restructure-conservation.md` or
+   incorporated into `jc-plan` skill.
+
+6. **Bias-toward-action in option presentation.** Carries from previous
+   session (Verdant Sheltering Glade) — surfacing here again. When I name
+   "Option A or Option B" with implicit preference, I am encoding action
+   bias rather than helping the owner choose. **Graduation trigger**:
+   already surfaced twice; this is the second instance. Worth promoting
+   to distilled or pattern at next consolidation. **Candidate home**:
+   `distilled.md § Communication`.
+
+### Open questions deliberately deferred into new plan bodies
+
+These are the questions I asked in the seven-question pushback that the new
+plans must answer (or explicitly defer with stated trigger):
+
+- **Refresh / freshness model** for EEF JSON. The plan now must name
+  ownership, trigger, and surfacing.
+- **Telemetry for impact verification**. Sentry spans + named metrics for
+  ranking events; caveat-presence rate sampling; cross-source journey
+  trace count.
+- **Negative-space surfaces**: which fields are deliberately not exposed
+  and why. Will become a section in the corpus plan.
+- **MCP App / UI surface**: deferred to Increment 5 or beyond. Not in
+  current scope; named explicitly so it cannot drift in.
+- **Multi-tenancy / persisted school context**: Increment 5, gated on
+  identity work.
+- **Ambiguity / clarification handling**: must be addressed in the prompt
+  design (Inc 2) — what happens when phase is unspecified.
+- **Cross-graph composition** (the misconception × EEF link): is the
+  *primary* purpose of Increment 3.
+- **Write-side / overlay graph**: deferred. Named, not designed.
+- **Citation discipline as enforcement**: the journey primitive (Inc 3)
+  is where this becomes structural — by carrying citations through the
+  composition trace, not relying on prompt prose.
+- **Versioning at agent surface**: addressed by Increment 4's
+  data-version-in-response surfacing.
+- **Whether "graph" framing is right for EEF**: settled — corpus IS-A
+  graph + has-a ScoringEngine. The graph framing is necessary but not
+  sufficient.
+
+### Method note — when ultrathink earned its name
+
+The owner triggered `ultrathink` with the architectural framing question.
+Reading my own response back, the value was not in length or thoroughness —
+it was in working a single question (corpus subset of graph?) from first
+principles instead of from naming convention. The trace:
+
+1. Define a graph mathematically (V, E, operations).
+2. Read the EEF data structure as a candidate graph.
+3. Check whether graph operations buy expressive power on this data.
+4. Notice the dominant access pattern is filter+rank, not traversal.
+5. Synthesise: composition, not subset.
+6. Test the abstraction against the parallel graphs (misconception,
+   prerequisite) — does the floor hold?
+7. Discover that parallel implementation is itself the protection mechanism.
+
+That sequence (definition → instance check → operation utility test →
+counter-pattern check → synthesis → tracer test) is a generalisable shape.
+**Worth a method-pattern entry**: `architectural-abstraction-validation`.
+Not graduated yet; one instance.
+
+### Method note — promotion vs observation
+
+In the previous turn I observed the exit-criteria/outcome-criteria gap and
+described it. I did not *promote* it from observation to recommendation. The
+owner had to ask "what questions have I not asked" to extract it. Lesson:
+when I notice a load-bearing gap, naming it is half the work; the other half
+is recommending action against it. Observation alone leaves the reader to
+decide what it means; promotion makes the implication explicit.
+
+This is a different shape from the bias-toward-action note above. Bias to
+action = couple analysis to a path before owner has chosen the frame.
+Failure to promote = leave analysis stranded and not surface the implication
+the analysis warrants. The discipline is in the middle: name the gap,
+recommend what it implies, but stop before naming a specific action that
+forecloses the owner's decision.
+
+### What this session displaces
+
+- *Old framing*: EEF plan ready to promote as written. **Replaced by**:
+  EEF plan needs restructure into corpus shape with graph foundation +
+  ranking + journeys + telemetry, parallel three-graph implementation.
+- *Old assumption*: graph factory provides graph operations. **Replaced
+  by**: graph factory replicates plumbing; operations layer is missing.
+- *Old approach to plan exit criteria*: shape conditions sufficient.
+  **Replaced by**: shape conditions necessary, outcome conditions
+  required.
+- *Old approach to plan restructure*: file-level preservation (git rename
+  - checksum) sufficient. **Replaced by**: file preservation necessary,
+  semantic conservation map required, agent-judged not grep-judged.
+
+### Bridge from action to impact (for the work this session has authorised)
+
+Action: rewrite EEF plan into corpus shape, add graph-query-layer plan,
+add cross-source-journeys future plan, snapshot originals with manifest +
+agent-judged conservation map. Embed user-value template throughout.
+
+Impact: a Year-7 maths teacher asking "what's the best way to teach
+negative numbers in our PP=68% school?" can be answered with: aligned Oak
+lessons, misconceptions targeted, EEF approaches with impact + caveat +
+cost, prerequisite anchors, complete provenance. None of this is
+buildable today. The increments make it buildable. Every increment ships
+an observable change to either the agent's response shape or the teacher's
+trust evidence. No "infrastructure now, value later" milestone exists —
+that anti-pattern is structurally excluded by the user-value template.
+
+Test of the architecture: the smallest teacher journey above must produce
+a response that (1) cites specific EEF strand with metrics, (2) carries
+the caveat, (3) names misconceptions from Oak data, (4) suggests an
+aligned lesson, (5) is reproducible from data version cited. If the
+architecture cannot support that, it is wrong, regardless of how clean
+the abstractions are.
+
+### Owner-direction round (2026-04-30, post-review)
+
+Twelve questions surfaced from docs+code review were posed to the owner
+as a structured check-in. The owner answered each directly and the
+combined response collapsed several of the questions into a single
+methodological correction. Recording the corrections here because the
+shape of *what was wrong with the questions* is more durable than the
+specific resolutions.
+
+**The pattern under the corrections.** Ten of the twelve questions
+should not have been posed. Two were genuinely architectural and
+deserved the owner's intervention (NodeProjection deep paths;
+EvidenceCorpus wrap vs extends). The other ten broke down into:
+
+- **Mechanical fixes I framed as questions** (parent plan child_plans
+  drift, refresh-script relocation, edge-type rename) — the principles
+  already named the right path; framing them as questions was hedging.
+  Owner: *"of course the plans should be up to date, why are you even
+  asking"*.
+- **Specialist-escalation I framed as a question** (type-reviewer)
+  when the gateway code-reviewer had already recommended it. Owner:
+  *"this isn't something that needs my intervention, the code reviewer
+  suggested type reviewer follow up, stop inventing optionality and
+  do it"*. The specialist-routing rule already names this as the
+  default action; reframing as "should we?" is the optionality
+  invention that's been a recurring tell of mine across sessions.
+- **Fantasy-infrastructure outcome conditions** I had embedded in the
+  plan (LLM-graded ≥95% citation-presence in CI, named rubrics +
+  owners + cadences) — *worth measuring*, but no infrastructure
+  exists for it. Owner: *"speculative, fantasy. What are we trying to
+  prove, why?"*. The plan was performing rigour without backing it.
+  Removed entirely; the structural citation type (T12) is what we
+  ship and prove. LLM-paraphrasing verification is honestly out of
+  scope until evaluation infrastructure exists.
+- **Brittle implementation-shaped tests** (T2 exact-count assertions:
+  30 strands, 4 null-impact, 17 school-context, 9 caveats). Owner:
+  *"brittle test, asserting implementation not behaviour, provides no
+  real value. If we are trying to ask 'does our framework surface all
+  nodes' or similar we can do better and more simply with test data"*.
+  Removed entirely; the loader's behaviour test is "real EEF data
+  parses through Zod without throwing". The framework-surface
+  question is a fixture-based integration test, not exact counts on
+  production data.
+- **Speculative ADR overreach.** I had treated ADR-157 as constraining
+  the in-flight work. Owner: *"ADR-157 is speculative, it should
+  mention this work, but not necessarily as fulfilment, and certainly
+  not as something that should constrain this work. Maybe change the
+  ADR state to proposed"*. Done — ADR-157 demoted from Accepted to
+  Proposed with a status-amendment note.
+- **User-value template as ceremony**, not as a sense-check. Owner:
+  *"the goal is make sure we are building useful things as a sense
+  check, not to tick boxes"*. Reframed in all three plans: a
+  sense-check applied where value is non-obvious; omitted on
+  wiring/credits/registration where value is inherited from the
+  parent capability.
+
+### Two new doctrine candidates from this round
+
+10. **Stop inventing optionality.** When the principles or a reviewer
+    has already named the right path, applying it is the move. Wrapping
+    that path as "should we?" with implicit choice is hedging — the
+    same hidden-bias-toward-action shape Verdant's session named, but
+    flipped: hidden bias toward *deferral* via false optionality.
+    *Trigger*: third instance across sessions; could now graduate.
+    *Home*: rule, or `distilled.md § Communication`.
+11. **Don't shoehorn a value-claim into infrastructure that cannot
+    carry it.** If the right way to verify something doesn't exist
+    yet, the honest plan says so and ships the structural enforcement
+    that does exist; it does not invent brittle tests or fantasy
+    operational protocols to fill the gap. Sense-check applied:
+    "if this stopped existing tomorrow, who would know? how?". If the
+    answer is "no one, because the infrastructure for knowing doesn't
+    exist", do not pretend the infrastructure exists. *Trigger*: this
+    session. *Home*: rule.
+
+### What this round changes about the session's metacognition
+
+Earlier in the session I named "promote observation to recommendation"
+as a methodology lesson. The corrections show I learned that lesson
+unevenly. Where the architecture deserved a real fork (Q1, Q2), I
+posed a clean either/or with the trade-offs surfaced — that worked.
+Where the path was already named by principles or reviewers, I still
+posed a fork — that didn't work, because the fork itself was the
+hedge.
+
+The discipline is: **before posing a question, ask whether the
+principles or an upstream reviewer have already answered it**. If yes,
+apply, don't ask. If no, the fork is real and the question deserves
+the owner's time.
+
+I will refine my session-end review pattern accordingly: after
+collecting reviewer findings, sort each finding into (a) decided by
+principles → apply, (b) decided by reviewer recommendation → apply,
+(c) genuine architectural fork → ask. Only category (c) goes in the
+question round.

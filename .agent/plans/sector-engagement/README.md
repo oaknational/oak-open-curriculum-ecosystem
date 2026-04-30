@@ -58,7 +58,8 @@ implementation collection when promoted.
 | [current/README.md](current/README.md) | Current index | Queued sector-engagement plans |
 | [future/README.md](future/README.md) | Future index | Deferred strategic briefs and partner/data-source opportunities |
 | [external-material-triage.md](external-material-triage.md) | Triage note | Current disposition of legacy external material and retained/rejected relevance |
-| [external-knowledge-sources/](external-knowledge-sources/) | Source-ingestion thread | External evidence, skills, public API, and future KG sources consumed by Oak applications |
+| [eef/](eef/) | EEF subthread | EEF Teaching and Learning Toolkit: queued MCP surface plan, strategic brief, technical comparison, and dataset snapshot |
+| [external-knowledge-sources/](external-knowledge-sources/) | Source-ingestion thread | External education skills, non-Oak public curriculum APIs, and future KG sources consumed by Oak applications |
 | [knowledge-graph-adoption/](knowledge-graph-adoption/) | Adoption thread | Support model for external organisations using Oak KG assets |
 | [castr/](castr/) | Partner/reference pack | Requirements for an external OpenAPI/codegen tool to support Oak's schema-first pipeline |
 | [ooc-api-wishlist/](ooc-api-wishlist/) | Upstream coordination | Oak Open Curriculum API wishlist, examples, and enhancement proposals |
@@ -70,11 +71,12 @@ implementation collection when promoted.
 1. [roadmap.md](roadmap.md)
 2. [future/README.md](future/README.md)
 3. [external-material-triage.md](external-material-triage.md)
-4. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
-5. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
-6. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
-7. [ooc-issues/README.md](ooc-issues/README.md)
-8. [oeai/README.md](oeai/README.md)
+4. [eef/README.md](eef/README.md)
+5. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
+6. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
+7. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
+8. [ooc-issues/README.md](ooc-issues/README.md)
+9. [oeai/README.md](oeai/README.md)
 
 ## Document Roles
 

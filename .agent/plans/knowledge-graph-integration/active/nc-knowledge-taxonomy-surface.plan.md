@@ -5,7 +5,7 @@ parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "graph-resource-factory.plan.md"
   - "misconception-graph-mcp-surface.plan.md"
-  - "../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md"
+  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "agent-guidance-consolidation.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
 isProject: false
