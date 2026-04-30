@@ -27,6 +27,7 @@ in the conservation map).
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Iridescent Soaring Planet` | `claude-code` | `claude-opus-4-7-1m` | `b38261` | `architecture-restructure-and-handoff` | 2026-04-30 | 2026-04-30 |
+| `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-reviewer-round` | 2026-04-30 | 2026-04-30 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -114,7 +115,37 @@ real interface when it lands. See Increment 2 § Risks.
 
 ---
 
-## First Task of Next Session
+## Type-Reviewer Round Outcome (2026-04-30, Fragrant Sheltering Petal)
+
+**Status**: type-reviewer round complete. Verdict: AT-RISK with concrete
+remediations applied. Of 11 findings:
+
+- **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
+  GraphView ops; non-empty tuple `caveats: readonly [string, ...string[]]`;
+  non-empty tuple `citations: readonly [Citation, ...Citation[]]`;
+  `ComparisonDimension` literal union (no `string[]` widening).
+- **Bucket (b) reviewer-recommendation** — applied: DeepKeyPath
+  array-stop constraint named in T2; T7a compile-time smoke-test added;
+  `ExplainOptions` clarified TNode-independent (sketched); `NodeFilter<TNode>`
+  and `RankOptions<TNode>` sketched in plans to prevent implementor drift;
+  T19 claim corrected to match actual structural enforcement;
+  `meta.last_updated` and `meta.data_version` Zod precision tightened
+  (`z.string().date()` and semver regex); journey citation propagation
+  type note added to T4.
+- **Bucket (c) genuine architectural fork** — surfaced to owner:
+  `school_context_schema.properties` `Record<string, unknown>` carve-out
+  preserved from predecessor pending owner resolution. Question: is the
+  field a genuinely open-ended JSON Schema structure (carve-out stands
+  under the principles' `unknown` exception) or does it have a known
+  closed shape (carve-out must be removed and field typed concretely)?
+
+Promotion gate update: T1 + T2 of `graph-query-layer.plan.md` and T1, T5,
+T8, T12 of `eef-evidence-corpus.plan.md` are now type-design-clear modulo
+the `school_context_schema.properties` decision. Increment 1's "T1 +
+plan-body first-principles check" gate is closer to satisfied; the
+`pnpm sdk-codegen` round-trip is the next structural verification.
+
+## Previous First Task (resolved)
 
 **Run the type-reviewer over the current plan estate** — code-reviewer
 explicitly recommended this in its session-close report; the
@@ -122,7 +153,8 @@ NodeProjection deep-path types and the EvidenceCorpus wrapping shape
 are the load-bearing review questions. Owner direction (2026-04-30):
 "this isn't something that needs my intervention, the code reviewer
 suggested type reviewer follow up, stop inventing optionality and do
-it."
+it." **Status**: complete (this session, see Type-Reviewer Round Outcome
+above).
 
 Brief the type-reviewer with:
 

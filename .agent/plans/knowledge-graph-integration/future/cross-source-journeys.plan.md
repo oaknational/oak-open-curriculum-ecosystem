@@ -20,7 +20,7 @@ todos:
     content: "Design and ship: prerequisite-trace journey (lesson → prerequisites → known misconceptions)."
     status: pending
   - id: t4-citation-trace
-    content: "Citation trace propagation: every step's citations roll up to the journey output structurally."
+    content: "Citation trace propagation: every step's citations roll up to the journey output structurally. The journey output's citation field MUST use the non-empty tuple type readonly [Citation, ...Citation[]] from the corpus plan T12 — widening to Citation[] at the journey boundary would break the compile-time invariant established in Increment 2."
     status: pending
   - id: t5-telemetry
     content: "Journey-level Sentry trace; downstream-usage proxy metric (does the next user message reference journey output?)"

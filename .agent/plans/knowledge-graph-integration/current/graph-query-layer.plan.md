@@ -30,7 +30,7 @@ todos:
     content: "Expose 7 MCP tools (one per operation), each domain-specific by graph; share internal SDK implementation. NOT a single polymorphic dispatcher tool."
     status: pending
   - id: t7-progressive-disclosure-tests
-    content: "Tests proving response size remains bounded under projection; tests proving manifest+summary+detail tiers compose correctly."
+    content: "Tests proving response size remains bounded under projection; tests proving manifest+summary+detail tiers compose correctly. Includes T7a: a DeepKeyPath compile-time smoke-test asserting the array-stop constraint (no element-index recursion) and depth-3 path inference on EefStrand."
     status: pending
   - id: t8-telemetry-seams
     content: "Sentry spans + named metrics for every operation; ratio-of-focused-to-full-dump dashboard query documented."
@@ -257,34 +257,77 @@ Per-operation user-value lines:
 **T2: GraphView interface** — `oak-curriculum-sdk/src/mcp/graph-views/`
 
 ```typescript
+import type { Result } from '@oaknational/result';
+
 export interface GraphView<TNode, TEdgeType extends string> {
   manifest(): GraphManifest;
-  summary(opts?: { groupBy?: keyof TNode | TEdgeType }): GraphSummary;
-  getNode(id: string, projection?: NodeProjection<TNode>): TNode | null;
+  summary(
+    opts?: { groupBy?: keyof TNode | TEdgeType },
+  ): Result<GraphSummary, GraphSummaryError>;
+  getNode(
+    id: string,
+    projection?: NodeProjection<TNode>,
+  ): Result<TNode, NodeNotFoundError>;
   enumerateNodes(opts?: {
     filter?: NodeFilter<TNode>;
     projection?: NodeProjection<TNode>;
     page?: { number: number; size: number };
-  }): EnumerateNodesResult<TNode>;
+  }): Result<EnumerateNodesResult<TNode>, EnumerateNodesError>;
   neighbours(opts: {
     nodeId: string;
     edgeType?: TEdgeType;
     direction?: 'in' | 'out' | 'both';
     projection?: NodeProjection<TNode>;
-  }): NeighbourResult<TNode>;
+  }): Result<NeighbourResult<TNode>, NodeNotFoundError>;
   subgraph(opts: {
     rootIds: readonly string[];
     depth: number;
     projection?: NodeProjection<TNode>;
-  }): SubgraphResult<TNode>;
+  }): Result<SubgraphResult<TNode>, SubgraphError>;
   findByTag(tag: string, projection?: NodeProjection<TNode>): readonly TNode[];
 }
 ```
 
+`Result<T, E>` is the canonical error-handling shape from
+[`@oaknational/result`](../../../../packages/core/result/src/index.ts) per
+`principles.md` §Code Design ("Don't throw, use the result pattern
+`Result<T, E>`, handle all cases explicitly"). `manifest()` and
+`findByTag()` return plain values: manifest is metadata that always
+exists; an empty tag-match list is a valid result, not a failure.
+
+**`NodeFilter<TNode>` shape** — preventing implementor drift toward
+`Partial<TNode>` (introduces unwanted optionality) or
+`Record<string, unknown>` (type destruction):
+
+```typescript
+type FieldPredicate<TFieldValue> =
+  | { readonly equals: TFieldValue }
+  | { readonly oneOf: readonly TFieldValue[] }
+  | (TFieldValue extends string
+      ? { readonly contains: string } | { readonly startsWith: string }
+      : never)
+  | (TFieldValue extends number
+      ? { readonly gte: number } | { readonly lte: number }
+      : never);
+
+type NodeFilter<TNode> = {
+  readonly [K in keyof TNode]?: FieldPredicate<TNode[K]>;
+};
+```
+
+The implementation may extend this with combinator predicates (`and`,
+`or`, `not`) when a tracer use case demands it. Default is field-level
+predicates only; combinators ship when ≥2 of 3 tracer adapters need
+them.
+
 `NodeProjection<TNode>` is a recursive deep-path type bounded to a
 declared maximum depth (default 4 levels — covers `headline.impact_months`,
-`effectiveness.mechanisms`, and similar two-level paths plus headroom).
-The shape is:
+`headline.cost_rating`, `school_context_relevance.implementation_requirements.cpd_intensity`,
+and similar paths up to depth 3 plus one level of headroom). The
+deepest real path on `EefStrand` is depth 3
+(`school_context_relevance.implementation_requirements.cpd_intensity`),
+so depth 4 sits one level beyond the deepest real path without producing
+empty path unions. The shape is:
 
 ```typescript
 type NodeProjection<TNode, Depth extends number = 4> =
@@ -293,6 +336,17 @@ type NodeProjection<TNode, Depth extends number = 4> =
 // DeepKeyPath produces literal-string path unions:
 //   'id' | 'name' | 'headline.impact_months' | 'headline.cost_rating' | ...
 ```
+
+**Implementation constraint — `DeepKeyPath` MUST stop at array
+boundaries.** Arrays are projection leaves: the path
+`'effectiveness.mechanisms'` selects the array as a whole; element-index
+paths like `'effectiveness.mechanisms.0'` or
+`'effectiveness.mechanisms[number]'` MUST NOT appear in the union.
+Recursing into array element types would produce nonsense projection
+keys for this domain. Concretely, the implementation must short-circuit
+when it encounters `ReadonlyArray<X>` or `Array<X>`, preserving the
+field path that names the array and stopping there. This constraint is
+testable at compile time (see T7 smoke-test).
 
 Default: `['id', 'displayName']` plus one numeric metric if the node
 type has one. This makes projection a *type-system* property, not a
@@ -344,6 +398,23 @@ established naming convention: `{operation}-{graph}` (e.g.
 - `subgraph` with depth=2 has bounded growth (≤50 nodes).
 - Default projection on EEF strands does NOT include `definition.full`,
   `key_findings`, `behind_the_average`, etc. (those are opt-in).
+
+**T7a: `DeepKeyPath` compile-time smoke-test** — a unit test (or a
+`*.test-d.ts` type-test file using `expectTypeOf`) that instantiates
+`NodeProjection<EefStrand>` and asserts:
+
+- `'headline.impact_months'` is a valid member.
+- `'school_context_relevance.implementation_requirements.cpd_intensity'`
+  is a valid member (depth 3, the deepest real path).
+- `'effectiveness.mechanisms'` is a valid member (array path, leaf).
+- `'tags.0'` is NOT a valid member (no element-index recursion).
+- `'tags[number]'` is NOT a valid member (no element-index recursion).
+
+This is the load-bearing test that proves the array-stop constraint
+named in T2 holds at compile time. If the test compiles and the
+forbidden members are absent from the union, the constraint is
+satisfied. If the implementation regresses to recursing into array
+element types, the test breaks loudly.
 
 ### Phase 6: Observability (T8)
 

@@ -11,10 +11,10 @@ status: current
 isProject: false
 todos:
   - id: t1-corpus-shape
-    content: "Define EvidenceCorpus = GraphView + ScoringEngine in the SDK; EEF strands becomes the first concrete corpus."
+    content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns; sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
     status: pending
   - id: t2-zod-loader
-    content: "Zod-validated loader for eef-toolkit.json (preserves the F1-F4 + F7 resolutions from the original plan)."
+    content: "Zod-validated loader for eef-toolkit.json (preserves F1-F4 + F7 resolutions). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string(). school_context_schema.properties carve-out preserved pending owner resolution."
     status: pending
   - id: t3-methodology-resource
     content: "Methodology+caveats resource via graph factory (preserves F6 + F11 resolutions)."
@@ -23,7 +23,7 @@ todos:
     content: "Strands resource via graph factory; default projection avoids dumping deep fields (F11)."
     status: pending
   - id: t5-scoring-engine
-    content: "ScoringEngine with composite weighting (40/30/20/10), null-impact guard (F5), and rationale generation (R1, R2, R7)."
+    content: "ScoringEngine with composite weighting (40/30/20/10), null-impact guard (F5), and rationale generation (R1, R2, R7). RankedResult uses non-empty tuple types: caveats: readonly [string, ...string[]], citations: readonly [Citation, ...Citation[]]."
     status: pending
   - id: t6-recommend-tool
     content: "recommend-evidence-for-context tool composing GraphView.enumerate_nodes + ScoringEngine.rank, with explicit data_coverage in response (F8, R8)."
@@ -32,7 +32,7 @@ todos:
     content: "explain-evidence-strand tool: returns full strand context with citations, caveats, provenance, and update_history."
     status: pending
   - id: t8-compare-tool
-    content: "compare-evidence-strands tool: side-by-side comparison across user-selected dimensions."
+    content: "compare-evidence-strands tool: side-by-side comparison across user-selected dimensions, typed as ComparisonDimension literal union (no string[] widening)."
     status: pending
   - id: t9-guidance-constant
     content: "eef-evidence-guidance.ts with AGGREGATED_EEF_EVIDENCE_GUIDANCE (preserves R1, R3, R7 prescriptions)."
@@ -44,7 +44,7 @@ todos:
     content: "pupil-premium-strategy-review prompt (Workflow B from strategy doc; previously not in executable plan)."
     status: pending
   - id: t12-citation-shape
-    content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats[]} as structured fields, not prose."
+    content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats: non-empty tuple} as structured fields. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod .min(1) re-asserts at runtime."
     status: pending
   - id: t13-freshness-gate
     content: "CI gate that fails when eef-toolkit.json is >180 days old; refresh script lives in SDK workspace at packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts."
@@ -65,7 +65,7 @@ todos:
     content: "ADR-123: add EEF resources, recommend/explain/compare tools, lesson-plan and PP-review prompts. Document corpus-vs-graph layering."
     status: pending
   - id: t19-e2e
-    content: "E2E shape conditions: tools/resources/prompts listed; declared types match; Citation type structurally non-empty at compile-time and Zod-validated at runtime. Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists."
+    content: "E2E shape conditions: tools/resources/prompts listed; declared types match; Citation has non-empty caveats tuple and the response carries a non-empty citations tuple at compile time, re-asserted at runtime via Zod .min(1). Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists."
     status: pending
   - id: t20-credits
     content: "Add John Roberts to repo authors; record in ATTRIBUTION.md and root README per the strategy doc's standing requirement."
@@ -263,6 +263,8 @@ documents the negative-space rationale fully.
 `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts`:
 
 ```typescript
+import type { Result } from '@oaknational/result';
+
 /**
  * Composition, not inheritance. The corpus *holds* a graph view,
  * it does not *become* one. Consumers reach the graph operations
@@ -270,12 +272,66 @@ documents the negative-space rationale fully.
  * boundary structural rather than only prose. Long-term
  * architectural evidence beats the surface-ergonomic shortcut of
  * `extends GraphView`.
+ *
+ * `ExplainOptions` is intentionally TNode-independent: a strand is
+ * identified by `strand_id` only, and the response carries the full
+ * node detail. `RankOptions<TNode>` and `CompareOptions<TNode>` carry
+ * `TNode` because they accept node-shape parameters (predicates,
+ * comparison sets); explain takes only an identifier.
  */
 export interface EvidenceCorpus<TNode, TEdgeType extends string> {
   readonly view: GraphView<TNode, TEdgeType>;
-  rank(opts: RankOptions<TNode>): RankedResults<TNode>;
-  explain(opts: ExplainOptions): NodeExplanation<TNode>;
-  compare(opts: CompareOptions<TNode>): ComparisonResult<TNode>;
+  rank(opts: RankOptions<TNode>): Result<RankedResults<TNode>, RankError>;
+  explain(opts: ExplainOptions): Result<NodeExplanation<TNode>, NodeNotFoundError>;
+  compare(opts: CompareOptions<TNode>): Result<ComparisonResult<TNode>, CompareError>;
+}
+
+export interface ExplainOptions {
+  readonly strand_id: string;
+  readonly projection?: NodeProjection<EefStrand>;
+}
+
+/**
+ * Comparison dimensions are a closed set derivable from the strand
+ * type at design time. Widening to `string[]` would violate
+ * principles.md §Compiler Time Types ("never widen types when a
+ * literal exists").
+ */
+export type ComparisonDimension =
+  | 'impact'
+  | 'cost'
+  | 'evidence_strength'
+  | 'school_context'
+  | 'implementation_requirements';
+
+export interface CompareOptions<TNode> {
+  readonly strand_ids: readonly [string, string, ...string[]];
+  readonly dimensions: readonly ComparisonDimension[];
+}
+
+/**
+ * Scoring weights and context vector for ranking. Sketched here so
+ * the implementor does not reach for `Partial<TNode>` or
+ * `Record<string, unknown>`. The full Zod schema lives alongside the
+ * scoring engine in T5.
+ */
+export interface RankOptions<TNode> {
+  readonly filter?: NodeFilter<TNode>;
+  readonly context: {
+    readonly phase: 'primary' | 'secondary';
+    readonly subject?: string;
+    readonly focus?:
+      | 'closing_disadvantage_gap'
+      | 'metacognition'
+      | 'literacy'
+      | 'numeracy'
+      | 'behaviour'
+      | 'feedback';
+    readonly pp_percentage?: number;
+    readonly max_cost?: 1 | 2 | 3 | 4 | 5;
+    readonly min_evidence?: 1 | 2 | 3 | 4 | 5;
+  };
+  readonly max_results?: number;
 }
 ```
 
@@ -284,8 +340,31 @@ export interface EvidenceCorpus<TNode, TEdgeType extends string> {
 `oak-curriculum-sdk/src/mcp/eef-toolkit-data.ts`. Preserves predecessor
 F1 (data home is SDK, not codegen — third-party static data),
 F2/F3 (all fields typed, no `Record<string, unknown>` except the
-schema-meta `school_context_schema.properties`), F4 (direct Zod parse
-at load, not `as const satisfies`), F7 (Zod validation at import time).
+schema-meta `school_context_schema.properties` — see Open Question
+below), F4 (direct Zod parse at load, not `as const satisfies`), F7
+(Zod validation at import time).
+
+**Format precision**: the Zod schema MUST validate
+`meta.last_updated` and `meta.data_version` to their known formats,
+not bare `z.string()`:
+
+- `last_updated` → `z.string().date()` (ISO 8601 date `YYYY-MM-DD`).
+- `data_version` → `z.string().regex(/^\d+\.\d+\.\d+$/)` (semver).
+
+Bare `z.string()` would let a malformed value (e.g. a free-text
+update note) parse cleanly and propagate into citation responses
+where it would mislead teachers about evidence currency.
+
+**Open question (surfaced at promotion-to-ACTIVE):** the
+`school_context_schema.properties` carve-out is preserved from the
+predecessor as a `Record<string, unknown>` exemption. Type-reviewer
+flagged this as unresolved: if the field is a genuinely open-ended
+JSON Schema `additionalProperties`-style structure, the exemption is
+correct under the principles' `unknown` exception ("incoming external
+boundary from a third-party system"). If it has a known closed shape,
+the exemption must be removed and the field typed concretely. Owner
+to confirm before promotion. The current state is "preserved from
+predecessor pending resolution".
 
 The full Zod schema is preserved verbatim from the predecessor; see
 the predecessor (recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
@@ -373,10 +452,16 @@ interface RankedResult<TNode> {
   score: number;
   componentBreakdown: { impact: number; evidence: number; cost: number; context: number };
   rationale: string;       // human-readable, generated from breakdown
-  caveats: readonly string[];
-  citations: readonly Citation[];  // structured, not prose (T12)
+  caveats: readonly [string, ...string[]];                // ≥1 caveat
+  citations: readonly [Citation, ...Citation[]];          // ≥1 citation, structured (T12)
 }
 ```
+
+The non-empty tuple types `readonly [string, ...string[]]` and
+`readonly [Citation, ...Citation[]]` enforce the ≥1 invariant at
+compile time. A scoring engine that produces a `RankedResult` with
+zero citations or zero caveats fails to type-check. This is the
+structural enforcement of R1 + R7 named in T12.
 
 - **User value**: agents downstream cannot accidentally hide the
   scoring rationale because it is a structured field on every result.
@@ -502,18 +587,23 @@ interface Citation {
   strand_id: string;
   strand_name: string;
   source: 'EEF Teaching and Learning Toolkit';
-  data_version: string;
-  last_updated: string;
-  eef_url: string;          // direct link to the strand page
-  caveats: readonly string[];
+  data_version: string;          // semver, validated in T2
+  last_updated: string;          // ISO 8601 date, validated in T2
+  eef_url: string;               // direct link to the strand page
+  caveats: readonly [string, ...string[]];  // ≥1 caveat enforced at compile time
 }
 ```
 
 This is a **structural** invariant: the response type makes it
-impossible to ship a recommendation without a citation array. The
-generated TS types enforce this at compile time; the Zod runtime
-validation (used in tests) re-asserts it. This converts R1 and R7 from
-prose prescriptions into type-system invariants.
+impossible to ship a recommendation without a non-empty citation
+array (T5 result type uses `readonly [Citation, ...Citation[]]`),
+and impossible to ship a citation without at least one caveat (the
+non-empty tuple above). The generated TS types enforce both
+invariants at compile time; the Zod runtime validation (used in
+tests) re-asserts them with `z.array(z.string()).min(1)` for
+caveats and `z.array(citationSchema).min(1)` for citations. This
+converts R1 and R7 from prose prescriptions into type-system
+invariants.
 
 - **User value**: a teacher can audit any recommendation's source by
   following its `eef_url`; a downstream lesson plan that paraphrases
@@ -621,11 +711,14 @@ structural-citation invariant are tested at the boundary we control.
   `resources/list`; both prompts in `prompts/list`.
 - Tool calls return valid responses matching declared types.
 - Recommendation response includes `data_coverage` and `data_version`.
-- The `Citation` type (T12) is structurally non-empty on every
-  recommendation, explain, and compare response — asserted at
-  compile time via the type signature and at runtime via Zod
-  validation in unit/integration tests. This is the structural
-  invariant; no LLM behaviour is being tested here.
+- The `Citation` type (T12) carries non-empty `caveats` and the
+  enclosing response carries a non-empty `citations` array on every
+  recommendation, explain, and compare response. Both invariants are
+  enforced at compile time via the non-empty tuple types
+  (`readonly [string, ...string[]]`,
+  `readonly [Citation, ...Citation[]]`) and re-asserted at runtime
+  via Zod `.min(1)` validation in unit/integration tests. This is
+  the structural invariant; no LLM behaviour is being tested here.
 - ADR-123 row count matches actual surface count at promotion time
   (delta-framed: this plan adds 3 tools, 2 prompts, 2 resources over
   whatever baseline ADR-123 carries when the corpus plan is promoted).

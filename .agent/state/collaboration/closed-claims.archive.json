@@ -6747,6 +6747,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "650061a5-a3ad-41c6-b829-46c2b5307072",
+      "agent_id": {
+        "agent_name": "Fragrant Sheltering Petal",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "360064"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/knowledge-graph-integration/future/cross-source-journeys.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-04-30T16:39:14Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF type-reviewer round on plan estate (graph-query-layer, eef-evidence-corpus, cross-source-journeys)",
+      "archived_at": "2026-04-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-04-30T16:56:33Z",
+        "closed_by": {
+          "agent_name": "Fragrant Sheltering Petal",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "360064"
+        },
+        "summary": "EEF type-reviewer round complete. 10 of 11 findings applied as plan edits; 1 surfaced for owner direction (school_context_schema.properties carve-out).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "650061a5-a3ad-41c6-b829-46c2b5307072",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
