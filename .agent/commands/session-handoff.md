@@ -146,14 +146,16 @@ asks for more, this command must not trigger:
    decision worth an ADR? A Practice-governance decision worth a
    PDR? An amendment to an existing ADR or PDR?"* If yes, add the
    candidate to the pending-graduations register at
-   `.agent/memory/operational/repo-continuity.md § Deep
-   consolidation status` per its schema (`captured-date`,
-   `source-surface`, `graduation-target`, `trigger-condition`,
-   `status`), OR as a distinct napkin entry with a `candidate:`
-   tag that the next register refresh promotes. This is capture
-   only; graduation happens at `consolidate-docs` step 7a. If
-   nothing qualifies, say so and move on — *"nothing qualifies"*
-   is a valid answer reached by asking, not by skipping.
+   [`.agent/memory/operational/pending-graduations.md`](../memory/operational/pending-graduations.md)
+   per its schema (`captured-date`, `source-surface`,
+   `graduation-target`, `trigger-condition`, `status`), OR as a
+   distinct napkin entry with a `candidate:` tag that the next
+   register refresh promotes. This is capture only; graduation
+   happens at `consolidate-docs` step 7a. If nothing qualifies,
+   say so and move on — *"nothing qualifies"* is a valid answer
+   reached by asking, not by skipping. (The register was split out
+   from `repo-continuity.md § Deep consolidation status` on
+   2026-04-30; older references to that location route here.)
 
    **6c. Record subjective experience (optional).** If the session
    produced a reflective surplus, capture it in
@@ -214,9 +216,8 @@ asks for more, this command must not trigger:
    touch on cross-session artefacts the session affected).
 
    **7a. Refresh the pending-graduations register.** Open
-   `.agent/memory/operational/repo-continuity.md § Deep
-   consolidation status` and, for each item whose state this
-   session's work affects:
+   [`.agent/memory/operational/pending-graduations.md`](../memory/operational/pending-graduations.md)
+   and, for each item whose state this session's work affects:
 
    - If a trigger condition fired this session (a second instance
      observed; a drafting slot reached; a consumption point hit):
