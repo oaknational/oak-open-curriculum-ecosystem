@@ -128,6 +128,15 @@ For the principle to remain enforceable rather than aspirational:
    `SENTRY_MODE=off` and asserts all structural event information
    persists via stdout/err.
 
+The plans that implement this closure property are catalogued under
+[`.agent/plans/observability/high-level-observability-plan.md`
+§Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
+The substrate distinction follows the convention recorded at
+[`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md):
+substrate plans enable axis-shipping work without themselves
+shipping axis output. The substrate inventory is the ADR-to-plan
+bridge for this section.
+
 ### Enforcement Mechanisms
 
 Four mechanisms, each concrete and testable. Details may be refined in
@@ -411,3 +420,16 @@ In summary:
   and the
   [strategic-parent maximisation plan](../../../.agent/plans/observability/future/sentry-observability-maximisation.plan.md)
   L-15 input framing.
+- **2026-04-30** — §"The Closure Property and Test Gate" gained an
+  explicit ADR-to-plan bridge naming the substrate inventory at
+  [`.agent/plans/observability/high-level-observability-plan.md`
+  §Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
+  No principle change. Trigger: a new substrate plan
+  ([`future/observability-config-coherence.plan.md`](../../../.agent/plans/observability/future/observability-config-coherence.plan.md))
+  exposed the implicit substrate category — the plan author had to
+  invent a justification for not placing the plan under any single
+  axis, signalling the categorisation was incomplete. The convention
+  is recorded as a reusable plan-collection component at
+  [`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md)
+  so future multi-axis collections (security, semantic-search,
+  agentic-engineering) inherit the shape without re-deriving it.

@@ -8,7 +8,21 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-29T21:30Z (Solar Threading Star / claude-code /
+**Last refreshed**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
+claude-opus-4-7-1m / `bce99d` — `fix/sentry-identity-from-env` branch / PR #91
+preview verification + observability-config-coherence strategic plan +
+substrate-vs-axis-plans convention component + ADR-162 closure-property
+ADR-to-plan bridge. No production code touched. Build `dpl_wTvPsL48u6bCn89Vscw29uot8M9H`
+verified READY via Sentry MCP + Vercel MCP: release
+`poc-oak-open-curriculum-mcp-git-fix-sentry-identity-from-env` correctly
+attributed to commit `837fcfde` with env=preview, 5 bootstrap spans + 10 DEBUG
+logs landed. Sentry-identity-from-env fix is working in production. No
+remediation deemed urgent for this branch — observability-config-coherence
+plan items all involve broader structural change. PDR candidate captured:
+substrate-vs-axis-plans convention + working principle "invent-justification-
+as-signal". Single commit landing all session artefacts at handoff close.)
+
+**Earlier refresh**: 2026-04-29T21:30Z (Solar Threading Star / claude-code /
 claude-opus-4-7-1m / `6d68d6` — PR #90 closure thread complete; owner manual
 MCP validation confirmed; PR ready for squash-merge. 13 commits this session
 across 7 phases: TS-invocation alignment (5 surfaces, 2 sibling drift sites
@@ -112,7 +126,7 @@ live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
@@ -563,6 +577,20 @@ continuity snapshots.
   and-consult; sub-agent assessed as healthy-lag, not silent rot);
   status: pending. Evidence: trinity-drift sub-agent report from
   2026-04-29 deep consolidation pass.
++ 2026-04-30; substrate-vs-axis-plans convention + working principle
+  "invent-justification-as-signal"; PDR candidate (Practice-governance
+  shape: convention applies to any multi-axis plan collection — security,
+  semantic-search, agentic-engineering — so the next Practice-bearing repo
+  re-derives without it). Recorded as plan-collection component at
+  [`templates/components/substrate-vs-axis-plans.md`](../../plans/templates/components/substrate-vs-axis-plans.md);
+  first applied instance in observability collection's
+  [`high-level-observability-plan.md §Substrate`](../../plans/observability/high-level-observability-plan.md);
+  ADR-162 history entry records the trigger. Trigger: owner direction for
+  PDR promotion OR second multi-axis collection adopting the substrate
+  shape; status: pending. Evidence:
+  [`observability-config-coherence.plan.md`](../../plans/observability/future/observability-config-coherence.plan.md)
+  is the first applied substrate plan; the convention component captures
+  the criterion + working principle.
 + 2026-04-29; pre-2026-02-15 experience corpus extraction backlog
   (~80 files dating from 2025-01 through 2026-02-15 contain
   inline doctrine, code blocks, principle catalogues that displace

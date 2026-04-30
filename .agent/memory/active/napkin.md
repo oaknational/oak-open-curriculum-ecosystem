@@ -24,6 +24,39 @@ unblock, doctrine sharpening). High-signal entries from that arc were
 graduated to canonical surfaces during the 2026-04-29 consolidation;
 the archived file remains the durable narrative record.
 
+## 2026-04-30 — Substrate-vs-axis: invent-justification as completeness signal (Vining Ripening Leaf)
+
+**Working principle surfaced.** When you find yourself writing prose to
+*justify* a structural exception, the categorisation is incomplete — not
+the exception unusual. The invented justification is the signal.
+
+**The instance.** I drafted a strategic plan
+([`observability-config-coherence.plan.md`](../../plans/observability/future/observability-config-coherence.plan.md))
+that didn't fit the five-axis observability frame. I added it to the
+future-plans table but deliberately *did not* place it in the five-axis
+coverage table — and wrote a justification ("cross-cutting infrastructure
+rather than axis-specific telemetry") to explain the avoidance. The
+justification was load-bearing but unrecorded. Owner asked: "do we need to
+call out the existence of cross-axis concerns explicitly?" The answer was
+yes — the invented justification was the signal that the categorisation
+was missing a category.
+
+**What landed.** The substrate-vs-axis distinction now lives as a reusable
+plan-collection convention at
+[`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../plans/templates/components/substrate-vs-axis-plans.md).
+The observability collection's high-level plan now carries a §Substrate
+section indexing six substrate plans. ADR-162 §"Closure Property and Test
+Gate" gained a one-line ADR-to-plan bridge and a history entry.
+
+**Generalisable.** The "invent-justification = categorisation incomplete"
+shape applies beyond plan collections: type unions, ADR categories, lint
+rule categories, anywhere a classification system meets edge cases.
+Captured in the component's §"Working principle" so future authors find
+the heuristic before they paper over an exception.
+
+**PDR candidate** in the pending-graduations register; trigger is owner
+direction OR second multi-axis collection adopting the substrate shape.
+
 ## 2026-04-29 — Doctrine sharpening + deep consolidation pass (Nebulous Illuminating Satellite)
 
 **Pointer entry.** The substance of this session has graduated to

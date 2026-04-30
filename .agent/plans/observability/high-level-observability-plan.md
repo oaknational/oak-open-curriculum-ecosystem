@@ -231,7 +231,31 @@ targets.
 | [`second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) | Three-sink strategic brief. **Vendor decisions**: warehouse settled as load-bearing (vendor open per Exploration 9); PostHog settled as the vendor for Sink 3 (per owner ruling 2026-04-19; timing open). **Sequencing**: warehouse adapter lands before PostHog adapter — owner-confirmed hard blocker. **Triggers**: warehouse adapter at public-beta (after warehouse-choice + identity-policy explorations close); PostHog adapter post-public-beta on a named question; alternative engineering sink only on a named Sentry gap (from exploration 1 or 2) with evidence |
 | [`customer-facing-status-page.plan.md`](future/customer-facing-status-page.plan.md) | Statuspage integration completes |
 | [`security-observability-phase-2.plan.md`](future/security-observability-phase-2.plan.md) | Exploration 6 or 7 conclusions OR first app-level security incident |
+| [`observability-config-coherence.plan.md`](future/observability-config-coherence.plan.md) | Owner-directed decisions on the four open design questions (sink registry location, locality enforcement strength, warnings-channel shape, helper placement). Resolves the dual sink-config mechanism, lifts Sentry validation to the env-resolution layer, adds local/remote sink classification, and provides the build-log + startup signal that makes Sentry wiring verifiable without opening Sentry. |
 | [`sentry-observability-maximisation.plan.md`](future/sentry-observability-maximisation.plan.md) | (Strategic parent brief across both runtimes; remains for cross-branch context) |
+
+### Substrate (cross-axis infrastructure)
+
+Plans whose primary value is enabling axis-shipping work rather than
+shipping axis output. Removing any one would not lose an axis signal
+directly, but every axis-shipping plan would have to re-derive the
+same infrastructure. This is a cross-cut index — each plan's
+canonical lifecycle entry remains in the table above; this section
+makes the substrate role visible.
+
+Convention defined by
+[`templates/components/substrate-vs-axis-plans.md`](../templates/components/substrate-vs-axis-plans.md);
+implements ADR-162 §"Closure Property and Test Gate" cross-axis
+infrastructure.
+
+| Plan | Lifecycle | Substrate role |
+|---|---|---|
+| [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) | `current/` | Zod-first event-schema contract every axis emits through |
+| [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) | `current/` | Programmatic conformance test for ADR-162's vendor-independence clause; ESLint rule + emission-persistence test |
+| [`mcp-http-runtime-canonicalisation.plan.md`](future/mcp-http-runtime-canonicalisation.plan.md) | `future/` | Runtime-shape simplification that every axis emitter inherits |
+| [`feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md) | `future/` | Provider-selection decision; substrate for any axis using flags |
+| [`second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) | `future/` | Three-sink architecture (Sentry / warehouse / PostHog); registry shape every axis emits onto |
+| [`observability-config-coherence.plan.md`](future/observability-config-coherence.plan.md) | `future/` | Sink registry unification + env-layer Sentry validation + build-log signal; resolves the dual-sink-mechanism debt and the verification-in-wrong-layer debt that all axes inherit |
 
 ### `archive/superseded/`
 

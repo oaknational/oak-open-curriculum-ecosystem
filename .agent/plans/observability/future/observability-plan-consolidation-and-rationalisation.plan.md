@@ -94,6 +94,7 @@ make those calls without reconstructing the landscape from scratch.
 | `future/security-observability-phase-2.plan.md` | Keep as future; depends on Phase 1 (current/security-observability.plan.md) |
 | `future/slo-and-error-budget.plan.md` | Keep as future; gate is alpha distributions |
 | `future/statuspage-integration.plan.md` | Possibly merge with `customer-facing-status-page.plan.md` if scope overlaps |
+| `future/observability-config-coherence.plan.md` | Keep as future; consolidates four related concerns (dual sink-config, validation in wrong layer, no locality classification, no build-log signal) — promotion gated on owner decisions per the plan's open-design-questions section. Coordinate with `current/multi-sink-vendor-independence-conformance.plan.md` on conformance-test ownership at promotion time. |
 
 ### Top-level
 

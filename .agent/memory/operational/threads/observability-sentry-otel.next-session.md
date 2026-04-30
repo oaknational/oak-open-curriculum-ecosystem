@@ -33,12 +33,34 @@ matching `platform + model + agent_name` updates `last_session`.
 | Choppy Lapping Rudder | claude-code | claude-opus-4-7-1m | `d73d0b` | PR-87 phase-2 pre-phase security review; phase-2.0.5 keyGenerator cure inserted before brand narrowing; cross-thread S5443 coordination | 2026-04-28 | 2026-04-28 |
 | Abyssal Cresting Compass | claude-code | claude-opus-4-7-1m | `6efc47` | PR-87 Phase 2.0.5 keyGenerator cure + doc alignment + plan-reset | 2026-04-28 | 2026-04-28 |
 | Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code | 2026-04-28 | 2026-04-28 |
+| Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
 into this canonical register during the 2026-04-29 deep consolidation
 pass; older deeper-narrative session-close blocks below this header
 remain unchanged.)
+
+---
+
+**Session-close 2026-04-30 (Vining Ripening Leaf, claude-code, claude-opus-4-7-1m, session seed `bce99d…`)** — Branch: `fix/sentry-identity-from-env` (PR #91; the narrow Sentry-identity-from-env fork off main, separate from PR #90's `fix/build_issues`). Investigative + planning + verification + governance landing; no production code touched. **What landed**:
+
+- **Strategic plan**: [`.agent/plans/observability/future/observability-config-coherence.plan.md`](../../../plans/observability/future/observability-config-coherence.plan.md) — five-WS brief consolidating four debt items (dual sink-config mechanism, Sentry validation in wrong layer, no sink-locality classification, no build-log/startup signal). Owner-prioritised: dual-system removal first (WS-A), wrong-layer fix second (WS-B), then risk × DX (WS-C build-log, WS-D ServerInstrumenter port, WS-E config-platform exploration). Vercel preflight explicitly dropped per owner direction.
+- **Reusable convention captured**: [`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../plans/templates/components/substrate-vs-axis-plans.md) — distinguishes axis-shipping plans from cross-axis substrate plans in any multi-axis collection. Records the working principle "when you have to invent a justification for an exception, the categorisation is incomplete." Trigger: I had to invent prose to justify why the new plan didn't fit the five-axis frame; the invented justification was the signal.
+- **ADR-162 amendment**: §"Closure Property and Test Gate" gained an ADR-to-plan bridge naming the substrate inventory; history entry recording trigger + no-principle-change. The substrate inventory of 6 plans now lives in `high-level-observability-plan.md §Substrate (cross-axis infrastructure)`.
+- **Discoverability**: new plan referenced from `high-level-observability-plan.md §future/`, `observability-plan-consolidation-and-rationalisation.plan.md §Future`, and the substrate cross-cut index.
+
+**Build verification (Sentry MCP + Vercel MCP) on `dpl_wTvPsL48u6bCn89Vscw29uot8M9H` (commit `837fcfde`)**: build READY; Sentry release `poc-oak-open-curriculum-mcp-git-fix-sentry-identity-from-env` exists with correct commit attribution, environment=preview, last_deploy 2026-04-30T06:40Z. 5 bootstrap spans + 10 DEBUG logs landed in Sentry tagged with the release; trace-id correlation working. All build-time + runtime envs verified indirectly (no env-listing MCP tool exposed; correctness inferred from successful release registration + emission). Caveat: no error events yet against this release (good — app healthy), so error path is structurally proven not directly exercised. The Sentry-identity-from-env fix is **working correctly in the preview deployment**.
+
+**Vercel build-log signal opacity confirmed**: the `[esbuild.config] Sentry plugin enabled: ...` console line is not visible in the API window (cached or buried under sdk-codegen markdownlint replay). This is itself the evidence WS-C of the new plan needs to exist.
+
+**No remediation on this branch**: WS-A through WS-E all involve substantive structural change touching multiple packages; none belongs on a focused identity-from-env fix branch. Recommended a tiny `console.error` defensive log in `esbuild.config.ts` as a possible micro-exception but explicitly NOT taking it (mission creep on a focused fix per owner).
+
+**PDR candidate surfaced**: substrate-vs-axis-plans convention + the "invent-justification-as-signal" working principle. Captured to register; awaiting owner direction for PDR promotion.
+
+**Commits this session** (about to land in one commit, post-handoff): observability-config-coherence plan; substrate-vs-axis-plans component; templates README entry; high-level-observability-plan substrate section + future-table entry; observability-plan-consolidation-and-rationalisation future-table entry; ADR-162 closure-property bridge + history entry; thread record + repo-continuity refresh; napkin entry; experience file.
+
+**Next safe step on this thread**: PR #91 owner review on the existing identity-from-env fix; observability-config-coherence plan promotion to `current/` is gated on owner decisions about the four open design questions (sink registry location, locality enforcement strength, warnings-channel shape, helper placement).
 
 ---
 
