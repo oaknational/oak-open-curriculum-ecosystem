@@ -1,7 +1,7 @@
 ---
 title: Vision
 status: active
-last_reviewed: 2026-04-20
+last_reviewed: 2026-04-30
 ---
 
 # Vision
@@ -19,6 +19,22 @@ Curriculum content served via that API is made available under upstream
 licence terms — currently Open Government Licence (OGL) v3.0 except where
 otherwise stated; see [LICENCE-DATA.md](../../LICENCE-DATA.md) for current
 authority. This repository exists to amplify the impact of that public asset.
+
+The vision is **compositional curriculum intelligence**: reusable sector
+infrastructure, not isolated point solutions. Typed curriculum APIs and a
+generated SDK give agents and applications contracts they can trust. Hybrid
+semantic search answers open-ended discovery across the corpus at scale.
+Oak's curriculum graph surfaces carry relationships between curriculum entities
+(pathways, threads, misconceptions, prerequisites, cross-links). Coverage and
+rigour deepen as formal graph work lands. Tools can therefore traverse and justify
+against structured relationships wherever they exist, rather than improvising
+purely from unstructured text alone.
+
+MCP servers and MCP Apps form the interoperability layer that AI assistants and
+engineering toolchains consume, bringing the same primitives to teachers in-product
+and to developers without bespoke integrations multiplying across the ecosystem.
+Oak's openly documented Practice is how that stack is delivered safely, quickly,
+and with continuous improvement.
 
 This document is the timeless statement of what the repository is for and why
 it matters. For the current delivery roadmap, see the
@@ -40,8 +56,10 @@ Answer: this repository gives you a production-grade path to build curriculum
 tools and AI services on top of Oak's open curriculum data, with:
 
 - typed and validated API access through the SDK
-- AI-agent integration through MCP servers
-- semantic discovery and retrieval patterns that are ready to operationalise
+- AI-agent integration through MCP servers and MCP Apps
+- hybrid semantic discovery and retrieval ready to operationalise
+- structured curriculum relationships through graph-aligned surfaces surfaced
+  via the same SDK and MCP primitives
 
 ### For Internal Stakeholders
 
@@ -91,11 +109,13 @@ Concretely, the repository exists to:
 
 The repository delivers a small, composable pipeline for working with Oak's
 open curriculum data: a strict, type-safe **Curriculum SDK** generated
-end-to-end from Oak's OpenAPI schema; **MCP servers and MCP Apps** that expose
+end-to-end from Oak's OpenAPI schema; **MCP Apps** that expose
 the curriculum to AI clients and developer tools (including ChatGPT, Claude
 Cowork, Claude Desktop, Cursor, and any other MCP-capable host); and a
 **semantic search service** with its own SDK and MCP tools so the corpus is
-fully discoverable from natural-language requests. Downstream teams can run
+fully discoverable from natural-language requests. Curriculum graph-aligned
+surfaces add structured relationships alongside retrieval, exposed through the
+same MCP and SDK pathways. Downstream teams can run
 their own search infrastructure (for example Elasticsearch Serverless) using
 this repository as the implementation baseline.
 
@@ -125,10 +145,15 @@ To keep scope clear, this repository is not:
 
 ## Strategic Integrations Ahead
 
-This repository is designed to integrate forthcoming Oak capabilities,
-including:
+Oak's curriculum intelligence evolves; this repository is where new depth lands
+inside the SDK and MCP integration surface—not as rival efforts. Knowledge-graph-aligned
+capabilities are partial today and deepen across releases: richer formal ontology,
+breadth of traversal queries, clearer export contracts for partners, tighter alignment
+between graph projections and search-facing records.
 
-- a true curriculum knowledge graph
+Further Oak capabilities slated to feed this same trajectory include:
+
+- richer formal modelling, validation, and serving of the curriculum knowledge graph
 - a conceptual framework that defines curriculum resources as minimal building
   blocks
 - reusable knowledge graph exports and traversal surfaces that help external
@@ -157,10 +182,11 @@ Concrete examples of how the two tracks reinforce each other:
    accurate curriculum search. The semantic search pipeline developed here
    provides that capability as reusable infrastructure rather than duplicated
    per-product.
-2. **Knowledge graph synergy** — As Oak develops a curriculum knowledge graph,
-   this repository will expose it through the SDK and MCP servers. Aila and
-   external tools alike can traverse concept relationships, enabling richer
-   lesson composition and cross-subject pathways.
+2. **Knowledge graph synergy** — Graph-aligned curriculum relationships already
+   reach agents through MCP alongside search and API tools; as formal graph depth
+   grows, exposure stays unified through SDK and MCP. Aila and external tools alike
+   can traverse richer relationships, strengthening lesson composition and cross-subject
+   pathways without fragmenting integration patterns.
 3. **Quality and safety patterns** — The agentic engineering practice's quality
    gates and type safety discipline are transferable patterns. Lessons learned
    here about safe human-AI collaboration inform how Aila and other Oak

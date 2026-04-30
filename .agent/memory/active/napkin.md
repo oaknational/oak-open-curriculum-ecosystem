@@ -632,3 +632,14 @@ collecting reviewer findings, sort each finding into (a) decided by
 principles → apply, (b) decided by reviewer recommendation → apply,
 (c) genuine architectural fork → ask. Only category (c) goes in the
 question round.
+
+## 2026-04-30 — Vision surfaces compositional thesis (`docs/foundation`)
+
+Owner feedback: the repo-goal narrative refresh lived in README / high-level
+plan but the compositional stack (API + hybrid search + graph surfaces + MCP &
+MCP Apps + sector reuse + Practice) arrived late in `VISION.md`. Landing edit:
+new opening thesis immediately after Oak/public-asset context; developer
+audience bullets include MCP Apps and graph-aligned primitives; Strategic
+Integrations framed as present depth + deepening trajectory; Aila KG bullet
+aligned with unified SDK/MCP exposure; `What We Deliver` names graph-aligned
+surfaces; `last_reviewed` bumped to 2026-04-30.

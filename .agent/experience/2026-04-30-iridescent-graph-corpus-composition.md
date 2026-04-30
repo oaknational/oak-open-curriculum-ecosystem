@@ -276,6 +276,118 @@ conservation-map review, plan-body first-principles check on test
 shapes. Reversible at every step until ship; provable at every step
 after.
 
+## Closing addendum — owner-direction round (post-reviewer)
+
+The session continued past the first handoff into a docs+code reviewer
+round and an owner-direction round on the resulting twelve questions.
+Both deserve their place in this experience file because the second
+round contains the sharper methodology lesson.
+
+### What the reviewer round produced
+
+`docs-adr-reviewer` and `code-reviewer` ran in parallel over the four
+committed plans. Each found 2 critical + 4 important issues. Textual
+fixes were applied immediately (broken napkin link, conservation-map
+count drift, residual `originals/` reference, lifecycle language
+tightening — committed as `c7063541`). Architectural findings were
+collected into a question round for owner direction.
+
+### What the owner-direction round revealed
+
+Twelve questions surfaced. The owner answered each directly. The
+answers fell into a sharper pattern than the questions had:
+
+- **Two were genuinely architectural** (NodeProjection deep paths;
+  EvidenceCorpus wrap vs extends). Owner gave the architectural
+  answer. Plan body updated accordingly: recursive deep-path type
+  with depth bound 4; wrapping shape `{ readonly view: GraphView<...>;
+  rank; explain; compare }`.
+- **Three were mechanical fixes I had framed as questions** (parent
+  plan child_plans drift; refresh-script relocation; edge-type
+  rename). Owner: *"of course the plans should be up to date, why are
+  you even asking"*. The principles already named the right path.
+- **One was specialist-escalation I had reframed as optionality**
+  (type-reviewer). Owner: *"this isn't something that needs my
+  intervention, the code reviewer suggested type reviewer follow up,
+  stop inventing optionality and do it"*.
+- **Three were fantasy infrastructure** (LLM-graded ≥95% citation-
+  presence in CI, named-rubric-and-cadence-and-owner outcome
+  conditions, latency p95 as CI gate). Owner: *"speculative,
+  fantasy. What are we trying to prove, why?"*. Removed entirely;
+  structural citation type (T12) is what the plan ships and proves.
+- **Two were brittle implementation-shaped tests** (T2 exact-count
+  assertions). Owner: *"brittle test, asserting implementation not
+  behaviour, provides no real value"*. Removed; loader test now
+  proves only that real EEF data parses without throwing.
+- **One was speculative ADR overreach** (treating ADR-157 as
+  constraining the in-flight work). Owner: demoted ADR-157 from
+  Accepted to Proposed.
+
+### The methodology lesson, sharper
+
+I named "promote observation to recommendation" earlier in this
+experience file as the lesson from Frame 2. The reviewer round and
+the owner-direction round taught the **mirror lesson**:
+
+**Stop inventing optionality when the answer is already named.**
+
+Verdant's session named *bias toward action* (couple analysis to a
+path before the owner has chosen the frame). This session reveals the
+mirror: *bias toward deferral via false optionality* (wrap the
+already-named next step as a question, hand it to the owner, call it
+disciplined consultation). It is hedging in a different costume.
+Same shape, different disguise.
+
+The discipline I will carry forward: **before posing a question, ask
+whether principles or an upstream reviewer have already answered it**.
+If yes, apply, don't ask. If no, the fork is real and the question
+deserves the owner's time. After this session I'll sort review
+findings into:
+
+- (a) decided by principles → apply silently
+- (b) decided by reviewer recommendation → apply silently with
+  attribution
+- (c) genuine architectural fork → ask
+
+Only category (c) goes to the owner. Ten of the twelve questions in
+this session belonged in (a) or (b). That is the gap to close.
+
+### Two new doctrine candidates added to the napkin
+
+10. **Stop inventing optionality.** *Trigger*: third instance across
+    sessions; could graduate now. *Home*: rule, or `distilled.md §
+    Communication`.
+11. **Don't shoehorn a value-claim into infrastructure that cannot
+    carry it.** If the right way to verify something doesn't exist
+    yet, the honest plan says so and ships the structural enforcement
+    that does exist. *Trigger*: this session. *Home*: rule.
+
+### What this changes about the bridge from action to impact
+
+The action statement is unchanged at the macro level — the increments
+land in the same order and the architecture has the same shape. But
+the *honesty* of the action statement is improved: removing the
+fantasy outcome conditions means the plan no longer overclaims what
+it can prove. Removing the brittle exact-count assertions means the
+test surface no longer pretends to be drift-detection when it's
+actually upstream-data assertion. Demoting ADR-157 to Proposed means
+the in-flight work isn't constrained by a speculative direction
+prematurely accepted.
+
+The plan now claims less and proves more of what it claims. That is
+the right direction for any plan-level honesty pass.
+
+### First task of next session
+
+Run the type-reviewer over the current plan estate. Specific review
+questions are recorded in
+[`threads/eef.next-session.md` § First Task of Next Session](../memory/operational/threads/eef.next-session.md).
+The `NodeProjection` recursive deep-path shape and the
+`EvidenceCorpus` wrapping shape are the load-bearing review
+questions; both are owner-decided architecturally but neither has
+been validated against TypeScript's actual instantiation behaviour.
+That validation is the type-reviewer's specific value.
+
 ## Identity and continuity
 
 This session's identity, per PDR-027: **Iridescent Soaring Planet** —

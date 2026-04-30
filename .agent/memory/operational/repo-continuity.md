@@ -10,8 +10,24 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 **Last refreshed**: 2026-04-30T~late (Iridescent Soaring Planet /
 `claude-code` / `claude-opus-4-7-1m` / `b38261` —
-`feat/eef_exploration` branch / no PR yet, 0 commits ahead of main at
-handoff time, three commits queued. **EEF graph-and-corpus
+`feat/eef_exploration` branch / **PR #93 open**, 5 commits ahead of
+main (1 unpushed at session-close, owner authorised push when ready;
+do not push without explicit authorisation per session protocol).
+**Session-close state**: docs+code reviewer round ran; 12 questions
+posed to owner; owner direction collapsed 10 of them into mechanical
+fixes / specialist-routing-by-rule / fantasy-infrastructure removal;
+2 architectural decisions taken (NodeProjection recursive deep-path
+type with depth bound 4; EvidenceCorpus wrapping shape, not extends).
+Plan estate updated, ADR-157 demoted Accepted → Proposed, brittle
+exact-count assertions and LLM-graded outcome conditions removed
+from corpus plan. **First task of next session**: run type-reviewer
+over the current plan estate per code-reviewer's recommendation;
+specific review questions in
+[`threads/eef.next-session.md` § First Task of Next Session](threads/eef.next-session.md).
+Two new doctrine candidates added to graduation queue: *stop inventing
+optionality* (third instance across sessions; could graduate now) and
+*don't shoehorn a value-claim into infrastructure that cannot carry
+it*. **EEF graph-and-corpus
 architecture session** restructured the EEF plan estate into a
 five-increment delivery sequence with explicit promotion gates.
 Increment 1 (`graph-query-layer.plan.md`, CURRENT) provides a
@@ -43,6 +59,30 @@ Subjective texture preserved at
 [`experience/2026-04-30-iridescent-graph-corpus-composition.md`](../../experience/2026-04-30-iridescent-graph-corpus-composition.md);
 new EEF thread record at
 [`threads/eef.next-session.md`](threads/eef.next-session.md).)
+
+**Earlier this session**: EEF graph-and-corpus architecture session
+restructured the EEF plan estate into a five-increment delivery
+sequence on top of a new polymorphic graph-query foundation. Increment
+1 (`graph-query-layer.plan.md`, CURRENT) provides 7 operations with
+progressive disclosure (manifest → summary → detail → edge) and
+mandatory recursive-projection. Increment 2 (`eef-evidence-corpus.plan.md`,
+CURRENT) models EEF as `EvidenceCorpus` wrapping a `GraphView` (not
+extending), adds explain and compare tools, the
+`pupil-premium-strategy-review` prompt, structural citation type as
+type-system invariant, freshness gate, telemetry, negative-space
+documentation, JR credit as release-blocker T20. Increment 3
+(`cross-source-journeys.plan.md`, FUTURE) designs the journey
+primitive. EEF cluster relocated from `external-knowledge-sources/`
+into a dedicated `eef/` subthread. Predecessor preserved in
+`originals/` for verification, then deleted after independent
+re-read pass found and patched three real preservation gaps (KG-
+independence statement, data-shape unit-test contract, key-files
+table). Pre-session predecessor recoverable via
+`git show e2796757:<predecessor-path>`. Subjective texture +
+methodology refinement preserved at
+[`experience/2026-04-30-iridescent-graph-corpus-composition.md`](../../experience/2026-04-30-iridescent-graph-corpus-composition.md);
+new EEF thread record at
+[`threads/eef.next-session.md`](threads/eef.next-session.md).
 
 **Prior refresh**: 2026-04-30T~13:30Z (Briny Lapping Harbor /
 `claude-code` / `claude-opus-4-7-1m` / `9f9b4969` —
