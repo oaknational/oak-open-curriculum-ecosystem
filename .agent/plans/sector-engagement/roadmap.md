@@ -43,9 +43,6 @@ should become executable work.
 - The former `external/` collection has been rehomed here because it already
   contained upstream API coordination, external issue reports, and a partner
   requirements pack for Castr.
-- The Finnish national curriculum API demonstration brief now lives in this
-  collection's `future/` lane as an external data-source and pipeline
-  generalisation opportunity.
 - External knowledge-source work has been split into
   [external-knowledge-sources/](external-knowledge-sources/), while internal
   Oak KG integration remains in
@@ -72,9 +69,9 @@ Phase 4: Organisation-specific support playbooks            Future
 ### Phase 0 - Rehome Existing Sector-Facing Material
 
 - Done when: the former external planning material, upstream API reports, Castr
-  requirements, Finnish pipeline brief, and OEAI initial review are discoverable
-  from this collection, with the intended external user or data-source
-  relationship visible from the collection index.
+  requirements, and OEAI initial review are discoverable from this collection,
+  with the intended external user or data-source relationship visible from the
+  collection index.
 - Dependencies: no implementation dependencies.
 
 ### Phase 1 - Split KG/Adoption/Source Taxonomy
@@ -97,8 +94,6 @@ Phase 4: Organisation-specific support playbooks            Future
 
 ### Phase 3 - External Data-Source Demonstrations
 
-- Later strategic plan:
-  [future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](future/finnish-national-curriculum-api-pipeline-demonstration.plan.md)
 - Related source-ingestion thread:
   [external-knowledge-sources/](external-knowledge-sources/)
 - Done when: at least one non-Oak data source can flow through the generalised

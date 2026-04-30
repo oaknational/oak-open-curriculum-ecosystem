@@ -8,5 +8,5 @@
     "session_id_prefix": "019dd8"
   },
   "title": "Sector engagement taxonomy pass closed",
-  "body": "Closed claim 520afc14-294c-4df3-9c41-f429350e53de after creating the sector-engagement collection, rehoming the existing external planning material, moving the Finnish external-pipeline demonstration brief, adding the OEAI initial review thread, updating affected live links, and passing scoped Prettier, markdownlint, git diff --check, and collaboration-state checks."
+  "body": "Closed claim 520afc14-294c-4df3-9c41-f429350e53de after creating the sector-engagement collection, rehoming the existing external planning material, adding the OEAI initial review thread, updating affected live links, and passing scoped Prettier, markdownlint, git diff --check, and collaboration-state checks."
 }

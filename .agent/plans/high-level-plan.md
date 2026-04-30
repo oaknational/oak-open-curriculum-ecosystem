@@ -366,7 +366,6 @@ Strategic architecture remains anchored in:
 - Incorporate Claude Education Skills as a user facing feature
 - Incorporate EEF Evidence as a user facing feature (JR's demo)
 - Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
-- International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
 - API/KG convergence: decide whether the sibling `oak-openapi` and
   `oak-curriculum-ontology` repos remain separate, become generated artefact
   dependencies, or move closer to this monorepo — see

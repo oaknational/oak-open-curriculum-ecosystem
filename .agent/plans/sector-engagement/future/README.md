@@ -5,7 +5,6 @@ Deferred strategic briefs and later engagement opportunities.
 | Plan | Scope | Status | Promotion Trigger |
 |---|---|---|---|
 | [oak-openapi-monorepo-integration.plan.md](oak-openapi-monorepo-integration.plan.md) | Decide whether and how the sibling `oak-openapi` repo should integrate with this monorepo so API, SDK, MCP, search, and KG work converge | Deferred | Oak wants a bounded architecture decision on the API repo boundary |
-| [finnish-national-curriculum-api-pipeline-demonstration.plan.md](finnish-national-curriculum-api-pipeline-demonstration.plan.md) | Route the Opetushallitus public curriculum APIs through the generalised OpenAPI -> SDK -> MCP pipeline as an external data-source demonstration | Deferred | Generic SDK/codegen foundation can ingest non-Oak OpenAPI without Oak-specific assumptions |
 
 Subthread-specific future plans live with their threads:
 

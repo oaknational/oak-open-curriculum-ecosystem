@@ -428,8 +428,8 @@ enhancements, semantic search, knowledge-graph integration, agentic
 engineering enhancements, architecture and infrastructure, security and
 privacy, developer experience, user experience, observability, compliance).
 173 research files covering knowledge graphs, Elasticsearch and Neo4j
-architecture, open curriculum concepts, Finnish curriculum APIs, the EEF
-Toolkit, auth systems, and more. 33 completed plans are indexed. 75
+architecture, open curriculum concepts, the EEF Toolkit, auth systems,
+and more. 33 completed plans are indexed. 75
 reusable patterns in the institutional memory.
 
 **Structure.** Plans have explicit lifecycle lanes (active, future, icebox,
@@ -444,12 +444,6 @@ icebox with explicit conditions for promotion rather than in informal notes.
 
 **Notable future directions.** Several specific directions are scoped with
 enough structure to be promotable to executable plans:
-
-- **International curriculum interoperability.** The Finnish National Agency
-  for Education (Opetushallitus) public curriculum APIs — ePerusteet,
-  TOTSU-Amosaa, OPS-Ylops — are mapped as a real second consumer of the
-  OpenAPI → SDK → MCP pipeline. This is not a hypothetical; it is a scoped
-  pipeline-generalisation demonstration contingent on a named prerequisite.
 
 - **EEF evidence integration.** A three-layer architecture (MCP ecosystem
   as transport, Oak Curriculum Ontology as structural bridge, EEF Toolkit

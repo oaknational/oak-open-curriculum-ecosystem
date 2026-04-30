@@ -6404,7 +6404,6 @@
           "patterns": [
             ".agent/plans/sector-engagement/**",
             ".agent/plans/external/**",
-            ".agent/plans/sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md",
             ".agent/plans/README.md",
             ".agent/plans/high-level-plan.md"
           ]
@@ -6440,7 +6439,7 @@
           "model": "GPT-5",
           "session_id_prefix": "019dd8"
         },
-        "summary": "Sector-engagement collection created, existing external planning material rehomed, Finnish external-pipeline brief moved, OEAI initial review added, affected links updated, and scoped checks passed.",
+        "summary": "Sector-engagement collection created, existing external planning material rehomed, OEAI initial review added, affected links updated, and scoped checks passed.",
         "evidence": [
           {
             "kind": "claim",

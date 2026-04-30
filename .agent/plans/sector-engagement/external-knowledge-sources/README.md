@@ -42,9 +42,6 @@ Out of scope:
 
 ## Related Sector Sources
 
-- [../future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](../future/finnish-national-curriculum-api-pipeline-demonstration.plan.md)
-  covers a public curriculum API rather than a graph, but exercises the same
-  external-source intake question.
 - [../oeai/initial-review.md](../oeai/initial-review.md) records a read-only
   review of an external education analytics architecture that may become a
   later engagement or data-model comparison thread.
