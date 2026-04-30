@@ -133,7 +133,7 @@ prudent before the executable plan promotes from CURRENT to ACTIVE.
 - **Cross-collection siblings**:
   - [`../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) — WS-2 (DONE), establishes graph factory pattern.
   - [`../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md`](../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — WS-4 (PENDING).
-- **Authoritative ADR**: [`docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) — typing discipline, URI scheme, namespace prefixes (`eef-*`), licensing.
+- **Related ADR (proposed, not constraining)**: [`docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) — typing discipline, URI scheme, namespace prefixes (`eef-*`), licensing. ADR is in **Proposed** status as of 2026-04-30; it documents a direction that the in-flight work explores, not a constraint that gates the work.
 
 ## Credits and Attribution
 

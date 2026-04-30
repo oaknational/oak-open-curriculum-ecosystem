@@ -184,11 +184,15 @@ outcome conditions:
 ## J. What is new (expansion log — intentional, owner-approved)
 
 These are not in the predecessor and are intentional additions from
-the architecture session of 2026-04-30:
+the architecture session of 2026-04-30, refined by owner direction
+later the same day:
 
-1. **Corpus shape** — `EvidenceCorpus = GraphView + ScoringEngine`
-   composition. Predecessor had bespoke recommendation; new structure
-   makes it a layer on top of the graph foundation.
+1. **Corpus shape** — `EvidenceCorpus` *wraps* a `GraphView` (`readonly view: GraphView<...>`)
+   rather than extending it. Composition by holding, not by being.
+   Predecessor had bespoke recommendation; new structure makes the
+   corpus/graph boundary structural rather than only prose. (Initial
+   draft used `extends`; corrected to wrapping under owner direction
+   "always prioritise long-term architectural evidence".)
 2. **`explain-evidence-strand` tool (T7)** — full strand context with
    citations, caveats, provenance, update_history.
 3. **`compare-evidence-strands` tool (T8)** — side-by-side comparison
@@ -196,18 +200,38 @@ the architecture session of 2026-04-30:
 4. **`pupil-premium-strategy-review` prompt (T11)** — Workflow B from
    strategy doc, now executable.
 5. **Citation type as structural invariant (T12)** — converts R1, R7
-   from prescription to type-system enforcement.
+   from prescription to type-system enforcement. This is the load-bearing
+   structural mechanism the plan ships and proves; LLM-paraphrasing
+   behaviour is honestly out of scope until evaluation infrastructure
+   exists.
 6. **Freshness gate + refresh script (T13)** — closes the freshness
-   debt the predecessor handwaved.
+   debt the predecessor handwaved. Refresh script lives inside the SDK
+   workspace, not at repo root, to respect the workspace-coupling rule.
 7. **Telemetry seams (T14)** — Sentry spans + named metrics.
 8. **Negative-space documentation (T15)** — what is not exposed and why.
-9. **Outcome exit conditions (in T19)** — citation-presence ≥95%,
-   latency p95, caveats-in-final-text.
-10. **Default projection convention** — applied to strands resource
-    (T4) and to `enumerate_nodes` everywhere (graph layer plan).
-11. **Three-line user-value template** — applied to every task.
-12. **JR credit promotion to release-blocker (T20)** — was prose in
+9. **Default projection convention** — applied to strands resource
+   (T4) and to `enumerate_nodes` everywhere (graph layer plan), with
+   recursive deep-path types in the graph layer (depth bound 4) for
+   strict type discipline.
+10. **User-value sense-check template** — applied where the value or
+    architectural assumption is non-obvious, omitted on wiring/credits/
+    registration tasks where value is inherited from the parent
+    capability. Explicitly *not* a mandatory ceremony on every task.
+11. **JR credit promotion to release-blocker (T20)** — was prose in
     predecessor.
+
+**Removed from the original 2026-04-30 expansion list under owner
+direction**: LLM-graded outcome conditions (citation-presence ≥95%
+across N=50 sampled, lesson-plan caveat-survival in final text,
+latency p95 ≤500ms-as-CI-gate) and the data-shape exact-count
+unit-test contract (30 strands, 4 null-impact, 17 school-context, 9
+caveats, 4 implementation, 6 behind_the_average). Both were
+infrastructure-shaped invention: LLM-graded tests in Vitest are
+non-deterministic shoehorning, and exact-count assertions test the
+upstream EEF dataset rather than Oak code. The structural citation
+type (item 5) is the actual mechanism the plan ships and proves;
+fixture-based behaviour tests are the right way to ask "does the
+framework surface all nodes?".
 
 ## K. What lives outside this plan now
 

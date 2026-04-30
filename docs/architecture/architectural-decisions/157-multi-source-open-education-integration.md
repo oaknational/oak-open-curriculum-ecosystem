@@ -1,13 +1,39 @@
 # ADR-157: Multi-Source Open Education Knowledge Integration
 
-**Status**: Accepted
-**Date**: 2026-04-10
+**Status**: Proposed (was Accepted; demoted 2026-04-30 — this ADR is a
+speculative direction, not a settled decision; in-flight work in the
+`sector-engagement/eef/` and `knowledge-graph-integration/` plan
+collections explores the space without being constrained by this ADR's
+specific structure. The ADR may be re-promoted to Accepted when the
+multi-source integration has shipped enough surface to confirm the
+typing-discipline, URI-scheme, and namespace decisions are still right.)
+**Date**: 2026-04-10 (status amended 2026-04-30)
 **Related**: [ADR-029](029-no-manual-api-data.md) — cardinal rule (applies to
 Oak API types; non-API data sources have their own typing disciplines),
 [ADR-030](030-sdk-single-source-truth.md) — SDK as single source of truth,
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives,
 [ADR-154](154-separate-framework-from-consumer.md) — separate framework from
 consumer (the graph resource factory follows this pattern)
+
+## Status Amendment Note (2026-04-30)
+
+This ADR was originally accepted on 2026-04-10 alongside a single
+queued plan that proposed exposing EEF Toolkit data through the
+existing graph factory pattern. The plan estate has since evolved
+(2026-04-30, Iridescent Soaring Planet): the EEF integration is now
+modelled as Increment 2 of a five-increment delivery sequence
+(graph-query foundation, evidence-corpus extension, cross-source
+journeys, telemetry/freshness, deferred school-context overlay),
+with `EvidenceCorpus` modelled as composition over a `GraphView`
+foundation rather than as a single-purpose surface.
+
+The structural decisions in this ADR (typing discipline for non-API
+data, `curriculum://` URI scheme with source-identifying segments,
+`eef-*` namespace prefix, machine-readable provenance metadata) are
+still operating assumptions for the in-flight work but should be
+re-evaluated when the corpus extension lands. Until then, this ADR
+is **proposed**, not **accepted** — it documents a direction, not a
+constraint.
 
 ## Context
 

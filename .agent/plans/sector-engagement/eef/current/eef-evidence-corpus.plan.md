@@ -47,7 +47,7 @@ todos:
     content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats[]} as structured fields, not prose."
     status: pending
   - id: t13-freshness-gate
-    content: "CI gate that fails when eef-toolkit.json is >180 days old; refresh script + ADR documenting refresh ownership."
+    content: "CI gate that fails when eef-toolkit.json is >180 days old; refresh script lives in SDK workspace at packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts."
     status: pending
   - id: t14-telemetry
     content: "Sentry spans on every corpus operation; named metrics for recommendations served, distinct contexts, citation-presence rate."
@@ -65,7 +65,7 @@ todos:
     content: "ADR-123: add EEF resources, recommend/explain/compare tools, lesson-plan and PP-review prompts. Document corpus-vs-graph layering."
     status: pending
   - id: t19-e2e
-    content: "E2E for shape AND outcome: tools listed, resources listed, AND citation-presence ≥95% across N=50 sampled responses."
+    content: "E2E shape conditions: tools/resources/prompts listed; declared types match; Citation type structurally non-empty at compile-time and Zod-validated at runtime. Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists."
     status: pending
   - id: t20-credits
     content: "Add John Roberts to repo authors; record in ATTRIBUTION.md and root README per the strategy doc's standing requirement."
@@ -121,7 +121,7 @@ see [`../reference/conservation-map.md`](../reference/conservation-map.md)
 for the full mapping. This plan **expands** beyond the predecessor — it
 does not replace any settled decision.
 
-## User-Value Template (mandatory on every task)
+## User-Value Sense-Check (apply where the value is non-obvious)
 
 ```text
 **User value**: [Specific user] can [do what they couldn't before]
@@ -130,6 +130,12 @@ does not replace any settled decision.
               is acceptable; hand-waving is not.]
 **Architecture validation**: [What assumption does this confirm or break?]
 ```
+
+This is a sense-check, not a ceremony. Apply it to tasks where the
+user value or architectural assumption is non-obvious. Wiring,
+registration, and credits tasks inherit value from the parent
+capability and do not need a triplet. The point is to make sure we are
+building useful things, not to tick boxes on every line.
 
 ## Plan Top-Line User Value
 
@@ -156,12 +162,18 @@ GraphView (foundation, lives in knowledge-graph-integration/current/graph-query-
   ├── neighbours, subgraph
   └── find_by_tag
 
-EvidenceCorpus = GraphView + ScoringEngine  ← THIS PLAN ADDS THE SCORING LAYER
-  ├── (everything from GraphView)
+EvidenceCorpus (this plan — wraps a GraphView, does NOT extend it)
+  ├── readonly view: GraphView<TNode, TEdgeType>   ← graph ops reached via corpus.view.*
   ├── rank(filter, weights, context) → RankedResults with rationale
   ├── explain(node, context) → caveats, provenance, update_history
   └── compare(node_ids, dimensions) → side-by-side
 ```
+
+Composition by *holding*, not by *being*. The boundary between graph
+operations and corpus operations is enforced structurally: a consumer
+holding an `EvidenceCorpus` reaches graph ops via `corpus.view.enumerate_nodes(...)`,
+making the layering visible at every call site. Interface extension
+would have collapsed the layering into a single object.
 
 The corpus extension lives in the SDK at
 `oak-curriculum-sdk/src/mcp/evidence-corpus/`. It depends on the
@@ -251,8 +263,16 @@ documents the negative-space rationale fully.
 `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts`:
 
 ```typescript
-export interface EvidenceCorpus<TNode, TEdgeType extends string>
-  extends GraphView<TNode, TEdgeType> {
+/**
+ * Composition, not inheritance. The corpus *holds* a graph view,
+ * it does not *become* one. Consumers reach the graph operations
+ * via `corpus.view.enumerate_nodes(...)`, keeping the corpus/graph
+ * boundary structural rather than only prose. Long-term
+ * architectural evidence beats the surface-ergonomic shortcut of
+ * `extends GraphView`.
+ */
+export interface EvidenceCorpus<TNode, TEdgeType extends string> {
+  readonly view: GraphView<TNode, TEdgeType>;
   rank(opts: RankOptions<TNode>): RankedResults<TNode>;
   explain(opts: ExplainOptions): NodeExplanation<TNode>;
   compare(opts: CompareOptions<TNode>): ComparisonResult<TNode>;
@@ -279,21 +299,19 @@ the predecessor (recoverable via `git show e2796757:.agent/plans/sector-engageme
 - **Architecture validation**: confirms Zod-at-boundary is correct
   for non-OpenAPI data sources (per ADR-157).
 
-**Data-shape unit-test contract (preserved verbatim from predecessor)**.
-The loader's unit tests must assert all of:
+**Loader behaviour, not data shape, is what we test.** The loader's unit
+test must prove one thing: a real EEF dataset parses through the Zod
+schema without throwing. That is product behaviour. Counts of strands,
+caveats, school-context entries, and named null-impact IDs are
+properties of the *upstream data*, not of Oak code; asserting them in
+Oak tests would be testing the EEF dataset, not the loader, and would
+break loudly every time EEF legitimately publishes a new strand or
+caveat.
 
-- `EefToolkitDataSchema.parse(rawData)` succeeds without throwing.
-- The strands array has length `30`.
-- Exactly `4` strands have `headline.impact_months === null`, and their
-  IDs are: `eef-tl-aspiration-interventions`, `eef-tl-learning-styles`,
-  `eef-tl-outdoor-adventure-learning`, `eef-tl-school-uniform`.
-- Exactly `17` strands have `school_context_relevance` defined.
-- `meta.caveats` has length `9`.
-- Exactly `4` strands have `implementation` defined.
-- Exactly `6` strands have `behind_the_average` defined.
-
-These assertions are the early-warning system for upstream data drift.
-A change in any count is a signal — never a silent fix.
+If we ever want to ask "does the framework expose all nodes correctly?",
+the answer is a small fixture-based integration test that builds a
+known graph from test data and exercises the operations against it —
+not exact-count assertions on production data.
 
 ### Phase B: Resources (T3–T4)
 
@@ -512,10 +530,12 @@ prose prescriptions into type-system invariants.
 **T13: Freshness gate** — A CI job that fails when
 `packages/sdks/oak-curriculum-sdk/src/mcp/data/eef-toolkit.json` has
 `meta.last_updated` >180 days old. A refresh script
-(`scripts/refresh-eef-toolkit.ts`) that fetches the upstream EEF
-data, validates it against the Zod schema, and produces a diff
-summary for human review. An ADR (or amendment to ADR-157) names the
-refresh owner.
+(`packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`)
+that fetches the upstream EEF data, validates it against the Zod
+schema, and produces a diff summary for human review. The script
+lives inside the SDK workspace so it has natural access to the Zod
+schema and stays inside the workspace boundary (no workspace-to-root
+script coupling).
 
 - **User value**: teachers receive evidence-backed recommendations
   whose data version is not silently >6 months stale; CI says so before
@@ -576,7 +596,10 @@ constants/getters from `public/mcp-tools.ts`.
 and `curriculum://eef-strands` in `register-resources.ts` via the
 existing `registerGraphResource()` helper.
 
-**T18: ADR-123 update** — Document:
+**T18: ADR-123 update** — Document, framed as a delta over whatever
+baseline ADR-123 carries at promotion time (graph-query-layer's
+21-tool addition lands first if Increment 1 → ACTIVE precedes
+Increment 2):
 
 - 2 new resources (`curriculum://eef-methodology`,
   `curriculum://eef-strands`).
@@ -586,40 +609,44 @@ existing `registerGraphResource()` helper.
   `pupil-premium-strategy-review`).
 - The corpus-vs-graph-vs-factory layering.
 - The default-projection convention for resources.
-- Aggregated-tool count update (current 11 → 14).
 
 ### Phase K: Tests (T19)
 
-**T19: E2E with shape AND outcome conditions** — both required.
+**T19: E2E shape conditions** — both the structural surface and the
+structural-citation invariant are tested at the boundary we control.
 
-**Shape conditions** (necessary):
+**Shape conditions** (what this plan proves and ships):
 
 - All three tools appear in `tools/list`; both resources in
   `resources/list`; both prompts in `prompts/list`.
 - Tool calls return valid responses matching declared types.
 - Recommendation response includes `data_coverage` and `data_version`.
-- ADR-123 row count matches actual surface count.
+- The `Citation` type (T12) is structurally non-empty on every
+  recommendation, explain, and compare response — asserted at
+  compile time via the type signature and at runtime via Zod
+  validation in unit/integration tests. This is the structural
+  invariant; no LLM behaviour is being tested here.
+- ADR-123 row count matches actual surface count at promotion time
+  (delta-framed: this plan adds 3 tools, 2 prompts, 2 resources over
+  whatever baseline ADR-123 carries when the corpus plan is promoted).
 
-**Outcome conditions** (also required):
+**Outcome verification is a separate concern.** Whether caveats
+survive LLM paraphrasing into a lesson plan, whether teachers act
+on recommendations, whether SENCO workflow time changes — all of
+these are valuable to know but **we do not have the right
+infrastructure** to verify them in this plan, and shoehorning a
+non-deterministic LLM-graded test into Vitest would be an
+infrastructure-shaped lie. When dedicated evaluation infrastructure
+exists for that class of question (LLM-as-judge harness, sampling
+protocol, rubric review surface), it lives outside this plan and
+runs on its own cadence. Until then, what we ship and prove is the
+structural enforcement at T12; the rest is honestly out of scope.
 
-- Citation-presence rate ≥95% across N=50 sampled
-  recommendation responses (LLM-graded against rubric: every
-  recommendation includes strand_id, data_version, eef_url, ≥1 caveat).
-- Recommendation latency p95 ≤500ms (Sentry sample over 24h).
-- At least one full lesson-plan-prompt round-trip produces an output
-  with caveats present in the final lesson-plan text (not just the
-  intermediate recommendation).
-
-**Specific test files to update** (preserved from predecessor's key-files
-table):
+**Specific test files to update**:
 
 - `apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts`
   — update the hardcoded `aggregatedTools` array to reflect three new
-  EEF tools.
-- Aggregated-tool count update in ADR-123: confirm baseline at
-  implementation time (predecessor expected 11 → 12 for one tool;
-  this plan adds three tools — the actual baseline at promotion time
-  may differ if WS-2 misconception tool has already shipped).
+  EEF tools at promotion time.
 
 ### Phase L: Credits (T20)
 

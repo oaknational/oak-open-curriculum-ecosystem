@@ -55,7 +55,7 @@ the **shape of the answer**? A list of tools the agent might call?
 A prompt with prose orchestration? A new MCP primitive that names
 journeys explicitly?
 
-## User-Value Template
+## User-Value Sense-Check (apply where the value is non-obvious)
 
 ```text
 **User value**: [Specific user] can [do what they couldn't before]
@@ -64,6 +64,9 @@ journeys explicitly?
               is acceptable.]
 **Architecture validation**: [What assumption does this confirm or break?]
 ```
+
+A sense-check, not a ceremony — applied where it forces useful thought,
+omitted where the value is inherited from a parent capability.
 
 ## Plan Top-Line User Value
 

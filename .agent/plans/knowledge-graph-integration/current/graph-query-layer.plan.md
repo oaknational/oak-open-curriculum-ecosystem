@@ -64,9 +64,7 @@ This plan adds a thin polymorphic query layer with **progressive
 disclosure** as a structural property and **mandatory projection** so the
 response shapes to the agent's actual need.
 
-## User-Value Template
-
-Every task in this plan must answer three lines, no exceptions:
+## User-Value Sense-Check (apply where the value is non-obvious)
 
 ```text
 **User value**: [Specific user] can [do what they couldn't before]
@@ -76,10 +74,11 @@ Every task in this plan must answer three lines, no exceptions:
 **Architecture validation**: [What assumption does this confirm or break?]
 ```
 
-This template is also embedded in [`../../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
+A sense-check, not a ceremony — applied where it forces useful
+thought, omitted where the value is inherited from a parent
+capability. The same template is embedded in
+[`../../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 and [`../future/cross-source-journeys.plan.md`](../future/cross-source-journeys.plan.md).
-It is a doctrine candidate (pending graduation to a `.agent/rules/*.md`
-entry once applied across three plans).
 
 ## Why This Plan Exists
 
@@ -282,10 +281,31 @@ export interface GraphView<TNode, TEdgeType extends string> {
 }
 ```
 
-`NodeProjection<TNode>` is a typed key-set with literal-string field
-paths. Default: `['id', 'displayName']` plus one numeric metric if the
-node type has one. This makes projection a *type-system* property, not
-a runtime convention.
+`NodeProjection<TNode>` is a recursive deep-path type bounded to a
+declared maximum depth (default 4 levels — covers `headline.impact_months`,
+`effectiveness.mechanisms`, and similar two-level paths plus headroom).
+The shape is:
+
+```typescript
+type NodeProjection<TNode, Depth extends number = 4> =
+  ReadonlyArray<DeepKeyPath<TNode, Depth>>;
+
+// DeepKeyPath produces literal-string path unions:
+//   'id' | 'name' | 'headline.impact_months' | 'headline.cost_rating' | ...
+```
+
+Default: `['id', 'displayName']` plus one numeric metric if the node
+type has one. This makes projection a *type-system* property, not a
+runtime convention. Strict, everywhere, always — full type discipline
+on the projection contract is non-negotiable.
+
+**On the depth bound**: a node type whose path-set produces an
+instantiation that hits TypeScript's recursion limit at depth 4 is a
+*signal* that the underlying type is too deep to be a useful
+projection target — at that point the agent wants `get_node` with a
+narrower projection or `explain` (in the corpus extension) for full
+detail. Compile-time failure on instantiation depth is a load-bearing
+drift signal, not a workaround target.
 
 ### Phase 3: Three adapters (T3-T5)
 
@@ -301,8 +321,10 @@ Edge types: `related_misconception`, `addressed_by_lesson`. Tags:
 subject + KS + misconception type.
 
 **T5: EefStrandsGraphView** — over the EEF strands data. Edge types:
-`related_strand`, `cites_guidance_report`. Tags: from the
-`tags` array on each strand.
+`related_strand` (from the `related_strands` field on each strand),
+`related_guidance_report` (from each entry of `related_guidance_reports`,
+preserving the data field name; edge target ID is the report URL). Tags:
+from the `tags` array on each strand.
 
 ### Phase 4: MCP tools (T6)
 

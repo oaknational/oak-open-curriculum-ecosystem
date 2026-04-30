@@ -114,37 +114,86 @@ real interface when it lands. See Increment 2 § Risks.
 
 ---
 
-## Open Owner Decisions
+## First Task of Next Session
 
-1. **Whether to graduate the user-value template to a rule now**, or
-   wait for it to be applied in a third plan first. Currently embedded
-   in three plans (graph-query-layer, eef-evidence-corpus,
-   cross-source-journeys). Graduation trigger named in napkin
-   doctrine candidates.
+**Run the type-reviewer over the current plan estate** — code-reviewer
+explicitly recommended this in its session-close report; the
+NodeProjection deep-path types and the EvidenceCorpus wrapping shape
+are the load-bearing review questions. Owner direction (2026-04-30):
+"this isn't something that needs my intervention, the code reviewer
+suggested type reviewer follow up, stop inventing optionality and do
+it."
 
-2. **Whether the substantial-restructure five-artefact-families
-   pattern** (executable plans + conservation map + originals snapshot
-   - napkin entry + inbound ref updates) graduates to a doctrine
-   immediately or waits for a second instance.
+Brief the type-reviewer with:
 
-3. **Refresh ownership for `eef-toolkit.json`** — Increment 2's T13
-   names a CI gate at >180 days. The 180-day threshold is arbitrary;
-   owner direction may set a different value or name a specific role
-   to own refresh PRs.
+- Branch: `feat/eef_exploration` at HEAD.
+- Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
+  deep-path type with depth bound 4; the seven-operation interface),
+  `eef-evidence-corpus.plan.md` (EvidenceCorpus wrapping a GraphView,
+  Citation type as structural invariant).
+- Specific questions for the reviewer:
+  1. Does the recursive `DeepKeyPath<TNode, Depth extends number = 4>`
+     shape produce useful inference at depth 4 for `EefStrand` (the
+     deepest node type), or does it hit instantiation limits earlier?
+  2. Does the `EvidenceCorpus { readonly view: GraphView<...>; rank;
+     explain; compare }` wrapping shape preserve the corpus/graph
+     boundary at every call site (consumers must go through
+     `corpus.view.*` for graph ops)?
+  3. Is the `Citation` type non-emptiness enforceable at compile time
+     via the response-type signature, or does runtime Zod-validation
+     have to carry the load?
 
-4. **Whether the journey primitive is a new MCP "playbook" type** or a
-   richer prompt class — the cross-source-journeys plan T1 prototypes
-   both shapes and recommends one. Decision deferred until prototyping.
+---
+
+## Resolved Owner Decisions (this session-close)
+
+All twelve open questions surfaced after the docs+code review have
+been settled by owner direction on 2026-04-30:
+
+1. **NodeProjection** → recursive deep paths, depth bound 4. Strict,
+   everywhere always.
+2. **EvidenceCorpus** → wrapping (`{ readonly view: GraphView<...>; ... }`),
+   not extends. Architectural evidence over surface ergonomics.
+3. **T2 data-shape unit-test contract** → REMOVED. Brittle, asserts
+   implementation not behaviour, provides no real value. Loader test
+   proves only that real EEF data parses without throwing. Framework
+   "surfaces all nodes" question answered by fixture-based behaviour
+   tests, not exact-count assertions.
+4. **T19 LLM-graded outcome conditions** → REMOVED. Worth measuring,
+   but no appropriate infrastructure exists; shoehorning into Vitest
+   is not the answer. Structural citation type (T12) is what we ship
+   and prove. LLM-paraphrasing verification is honestly out of scope
+   until evaluation infrastructure exists.
+5. (covered by 3) — Exact counts are brittle and provide no value.
+6. **ADR-157** → demoted to **Proposed** status with status-amendment
+   note; this work explores the space but is not constrained by it.
+7. **User-value template** → reframed as a sense-check, not a
+   ceremony. Applied where value or architectural assumption is
+   non-obvious; omitted on wiring/credits/registration. The point is
+   sense-checking that we are building useful things, not ticking
+   boxes.
+8. **Outcome operationalisation (named rubric/owner/cadence)** →
+   REMOVED. Speculative fantasy without infrastructure to back it.
+9. **Type-reviewer escalation** → first task of next session (see
+   above).
+10. **Parent plan child_plans drift** → fixed in this session.
+11. **Refresh script location** → relocated to SDK workspace.
+12. **Edge type rename** → `cites_guidance_report` →
+    `related_guidance_report` (matches data field).
 
 ---
 
 ## Doctrine Candidates Pending Graduation
 
 See napkin § "Doctrine candidates surfaced — explicit graduation queue"
-for the full list with triggers and candidate homes. Items 1–9 cover:
+for the full list with triggers and candidate homes. Items cover:
 
-1. User-value template
-2. Outcome-criteria gap (repo-wide)
+1. User-value sense-check template (now reframed; not "mandatory" — a
+   sense-check applied where value is non-obvious)
+2. Outcome-criteria gap (repo-wide) — note: separate concern from
+   "fantasy-infrastructure outcome conditions in plans without
+   evaluation infrastructure"; the gap is real, the fix is not
+   prescribing rubrics/owners we cannot deliver
 3. Progressive disclosure
 4. Parallel-tracer-implementations
 5. Conservation-requires-a-mind
@@ -153,6 +202,15 @@ for the full list with triggers and candidate homes. Items 1–9 cover:
 8. Two orders of plan architecture (data-tool-resource-prompt vs graph-corpus-journey)
 9. Bias-toward-action in option presentation (second instance — could
    graduate now)
+10. **NEW (this session-close)**: *Stop inventing optionality.* When
+    a reviewer or principle has already named the right path, the
+    next move is to apply it, not to wrap it as a question. Owner
+    flagged this as the meta-pattern under several of the 12 questions.
+11. **NEW**: *Don't shoehorn a value-claim into infrastructure that
+    can't carry it.* If the right way to verify something doesn't
+    exist yet, the honest plan says so and ships the structural
+    enforcement that does exist; it does not invent a brittle test
+    or a fantasy operational protocol to fill the gap.
 
 ---
 
@@ -170,13 +228,13 @@ for the full list with triggers and candidate homes. Items 1–9 cover:
    tools per graph (21 total). Resisted in plan body; surface in code
    review if it returns.
 4. **Citation enforcement misfire on prompt outputs**: structural
-   citation discipline is on tool calls, not LLM prose. Mitigation
-   already in plan body (T19 outcome condition samples final
-   lesson-plan text).
-5. **User-value template becoming rote**: at consolidation, sample 5
-   lines and ask "is this falsifiable? does it name a teacher action?"
-   If not, push back. Without that discipline the template is
-   decorative.
+   citation discipline is on tool calls, not LLM prose. The plan no
+   longer claims to verify LLM behaviour; that's honestly out of
+   scope until evaluation infrastructure exists.
+5. **User-value sense-check becoming rote**: at consolidation, sample
+   5 sense-check lines and ask "is this falsifiable? does it name a
+   teacher action?" If not, push back. Without that discipline the
+   sense-check is decorative.
 
 ---
 

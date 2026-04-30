@@ -536,3 +536,99 @@ the caveat, (3) names misconceptions from Oak data, (4) suggests an
 aligned lesson, (5) is reproducible from data version cited. If the
 architecture cannot support that, it is wrong, regardless of how clean
 the abstractions are.
+
+### Owner-direction round (2026-04-30, post-review)
+
+Twelve questions surfaced from docs+code review were posed to the owner
+as a structured check-in. The owner answered each directly and the
+combined response collapsed several of the questions into a single
+methodological correction. Recording the corrections here because the
+shape of *what was wrong with the questions* is more durable than the
+specific resolutions.
+
+**The pattern under the corrections.** Ten of the twelve questions
+should not have been posed. Two were genuinely architectural and
+deserved the owner's intervention (NodeProjection deep paths;
+EvidenceCorpus wrap vs extends). The other ten broke down into:
+
+- **Mechanical fixes I framed as questions** (parent plan child_plans
+  drift, refresh-script relocation, edge-type rename) — the principles
+  already named the right path; framing them as questions was hedging.
+  Owner: *"of course the plans should be up to date, why are you even
+  asking"*.
+- **Specialist-escalation I framed as a question** (type-reviewer)
+  when the gateway code-reviewer had already recommended it. Owner:
+  *"this isn't something that needs my intervention, the code reviewer
+  suggested type reviewer follow up, stop inventing optionality and
+  do it"*. The specialist-routing rule already names this as the
+  default action; reframing as "should we?" is the optionality
+  invention that's been a recurring tell of mine across sessions.
+- **Fantasy-infrastructure outcome conditions** I had embedded in the
+  plan (LLM-graded ≥95% citation-presence in CI, named rubrics +
+  owners + cadences) — *worth measuring*, but no infrastructure
+  exists for it. Owner: *"speculative, fantasy. What are we trying to
+  prove, why?"*. The plan was performing rigour without backing it.
+  Removed entirely; the structural citation type (T12) is what we
+  ship and prove. LLM-paraphrasing verification is honestly out of
+  scope until evaluation infrastructure exists.
+- **Brittle implementation-shaped tests** (T2 exact-count assertions:
+  30 strands, 4 null-impact, 17 school-context, 9 caveats). Owner:
+  *"brittle test, asserting implementation not behaviour, provides no
+  real value. If we are trying to ask 'does our framework surface all
+  nodes' or similar we can do better and more simply with test data"*.
+  Removed entirely; the loader's behaviour test is "real EEF data
+  parses through Zod without throwing". The framework-surface
+  question is a fixture-based integration test, not exact counts on
+  production data.
+- **Speculative ADR overreach.** I had treated ADR-157 as constraining
+  the in-flight work. Owner: *"ADR-157 is speculative, it should
+  mention this work, but not necessarily as fulfilment, and certainly
+  not as something that should constrain this work. Maybe change the
+  ADR state to proposed"*. Done — ADR-157 demoted from Accepted to
+  Proposed with a status-amendment note.
+- **User-value template as ceremony**, not as a sense-check. Owner:
+  *"the goal is make sure we are building useful things as a sense
+  check, not to tick boxes"*. Reframed in all three plans: a
+  sense-check applied where value is non-obvious; omitted on
+  wiring/credits/registration where value is inherited from the
+  parent capability.
+
+### Two new doctrine candidates from this round
+
+10. **Stop inventing optionality.** When the principles or a reviewer
+    has already named the right path, applying it is the move. Wrapping
+    that path as "should we?" with implicit choice is hedging — the
+    same hidden-bias-toward-action shape Verdant's session named, but
+    flipped: hidden bias toward *deferral* via false optionality.
+    *Trigger*: third instance across sessions; could now graduate.
+    *Home*: rule, or `distilled.md § Communication`.
+11. **Don't shoehorn a value-claim into infrastructure that cannot
+    carry it.** If the right way to verify something doesn't exist
+    yet, the honest plan says so and ships the structural enforcement
+    that does exist; it does not invent brittle tests or fantasy
+    operational protocols to fill the gap. Sense-check applied:
+    "if this stopped existing tomorrow, who would know? how?". If the
+    answer is "no one, because the infrastructure for knowing doesn't
+    exist", do not pretend the infrastructure exists. *Trigger*: this
+    session. *Home*: rule.
+
+### What this round changes about the session's metacognition
+
+Earlier in the session I named "promote observation to recommendation"
+as a methodology lesson. The corrections show I learned that lesson
+unevenly. Where the architecture deserved a real fork (Q1, Q2), I
+posed a clean either/or with the trade-offs surfaced — that worked.
+Where the path was already named by principles or reviewers, I still
+posed a fork — that didn't work, because the fork itself was the
+hedge.
+
+The discipline is: **before posing a question, ask whether the
+principles or an upstream reviewer have already answered it**. If yes,
+apply, don't ask. If no, the fork is real and the question deserves
+the owner's time.
+
+I will refine my session-end review pattern accordingly: after
+collecting reviewer findings, sort each finding into (a) decided by
+principles → apply, (b) decided by reviewer recommendation → apply,
+(c) genuine architectural fork → ask. Only category (c) goes in the
+question round.
