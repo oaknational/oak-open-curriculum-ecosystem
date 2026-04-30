@@ -34,6 +34,7 @@ import {
   type SentryBuildPluginIdentity,
   type SentryBuildPluginIdentityError,
 } from './sentry-build-plugin-identity.js';
+import { trimToUndefined } from './trim-to-undefined.js';
 
 /**
  * The shape `@sentry/esbuild-plugin` expects for a registered build.
@@ -138,11 +139,6 @@ export type CreateSentryBuildPluginError =
   | { readonly kind: 'missing_commit_sha_in_registered_environment'; readonly message: string }
   | { readonly kind: 'missing_auth_token_on_production'; readonly message: string }
   | SentryBuildPluginIdentityError;
-
-function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
-}
 
 function resolveAuthTokenIntent(
   release: ResolvedRelease,

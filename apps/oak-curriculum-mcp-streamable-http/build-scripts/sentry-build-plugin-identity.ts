@@ -18,6 +18,7 @@
  */
 
 import { err, ok, type Result } from '@oaknational/result';
+import { trimToUndefined } from './trim-to-undefined.js';
 
 /**
  * Minimal env shape the identity resolver needs.
@@ -66,11 +67,6 @@ export type SentryBuildPluginIdentityError =
   | { readonly kind: 'missing_sentry_org'; readonly message: string }
   | { readonly kind: 'missing_sentry_project'; readonly message: string }
   | { readonly kind: 'missing_sentry_repo_slug'; readonly message: string };
-
-function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed;
-}
 
 /**
  * Resolve the Sentry deployment identity from the build env snapshot.
