@@ -110,3 +110,84 @@ beyond plan collections.
   `repo-continuity.md` §Last refreshed / §Next safe step).
 
 - **ADR/PDR (6b)**. Nothing qualifies — pure refactor clarity.
+
+## 2026-04-30 — pnpm/action-setup pin saga (Briny Lapping Harbor)
+
+Vercel production was red on every `chore(release)` commit since 1.6.1.
+Three prior commits had "fixed" the lockfile by deleting the orphan first
+YAML document; each fix was undone by the next release. This session
+ended the cycle.
+
+### Surprises
+
+**Surprise 1 — I called valid pnpm output "corruption" three times.** The
+multi-document YAML stream is a legitimate format. The commit-message
+language ("recurring pnpm lock corruption") inherited that frame
+unexamined, and I propagated it for the first half of the investigation.
+Owner reframed: "it's not corruption at all, it's perfectly valid and
+what we are seeing is some kind of split brain." The reframe was the
+fix — every "delete the orphan document" commit had been authored under
+the wrong frame, manufacturing the next loop.
+
+**Surprise 2 — I proposed disabling a canonical default after the
+reframe.** Within the same response, after accepting the split-brain
+framing, I offered "set `managePackageManagerVersions: false`" as
+Option B with equal weight to "investigate the actual mismatch."
+Owner: "we are not turning off a canonical, standard, and default
+feature! Step back, ultrathink." The shape: I keep collapsing
+"understand the contract mismatch" into "remove the variable that
+introduces the failure mode." Twin to fix-the-producer-not-the-consumer
+but worse — silencing the producer's *correct* behaviour.
+
+**Surprise 3 — I proposed bumping action-setup to v6.0.3.** Owner:
+"we're using the wrong release, we should have taken the sha from
+latest, not from the highest number." `gh api .../releases/latest`
+returns v5.0.0; the entire v6.0.x saga is unmarked Latest, and the
+maintainers are holding it deliberately. Three reframes, all the same
+shape: I produced a path that "works in frame" instead of finding the
+right frame.
+
+**Surprise 4 — I proposed a brittle structural gate alongside the
+real fix.** Plan body initially included a multi-document
+`pnpm-lock.yaml` rejection check (`grep '^---$'`). Owner: "remove the
+surface 2 proposed check, it will break as soon as pnpm 11 is
+released, it's too brittle, we already have a strong signal in the
+build logs, the thing that has changed is that now we know what it
+means. The real problem is more general, how do we make sure that we
+are pinning to latest, not to 'highest'." Sharp distinction: the
+build-log signal "expected a single document in the stream" was
+load-bearing both 2026-04-29 and 2026-04-30, but only became
+*recognised as* load-bearing in this session. A static gate would
+freeze the recognition into the wrong shape (rejecting valid pnpm 11
+output once Latest moves). The structural fix lives at the pinning
+mechanism; the build log + reading discipline is the insurance. Plan
+revised: one structural surface (pin-to-Latest) + methodology
+insurance, not two parallel gates.
+
+### Doctrine surfaced
+
+**Pin GitHub Actions to maintainer-Latest, not highest version.** The
+two diverge precisely when a release line is unstable — exactly when
+divergence matters most. Captured in pending-graduations register;
+future plan
+[`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md)
+covers the validator + Dependabot config + multi-doc lockfile gate.
+
+**Composition obscurity is composition cost, not bug cost.** When a
+bug spans multiple sensible-in-isolation layers (`pnpm/action-setup@v6`
+→ pnpm 11 launcher → multi-doc YAML → pnpm 10 fast vs. slow path →
+Vercel fresh state → Node 24 strict URLSearchParams), no single layer
+is wrong; the composition fails. Investigation methodology must load
+*early*: read the build log first, workspace-first before remote
+tooling, upstream issue tracker before local theory, version
+archaeology when regression appeared. Recasts the 2026-04-29
+"lockfile-corruption diagnosis discipline" candidate into a sharper
+form; both triggers (second instance + owner direction) have fired.
+
+### Method note — when frame is the fix, agent stops jumping
+
+Three reframes from owner in one session is high-cost. The agent-side
+discipline: when investigation is open, do not couple analysis to a
+proposed action. State the frame, surface the evidence, let the owner
+choose the path. The "Option A or Option B" structure I kept defaulting
+to encoded a hidden bias toward action.

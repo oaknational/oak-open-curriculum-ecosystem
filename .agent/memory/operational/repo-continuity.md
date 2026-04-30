@@ -445,10 +445,33 @@ continuity snapshots.
   [`archive/napkin-2026-04-29.md`](../active/archive/napkin-2026-04-29.md).
 + 2026-04-29; lockfile-corruption diagnosis discipline (read build log
   before extending speculation list; speculation lists are negative
-  hypotheses, not narrowing tools); pattern candidate or distilled
-  process entry; trigger: second instance OR owner direction; status:
-  pending. Evidence: napkin 2026-04-29 Verdant Regrowing Pollen
-  Surprise 1.
+  hypotheses, not narrowing tools); recast 2026-04-30 as
+  **composition-obscurity investigation methodology** (read build log
+  first, workspace-first before remote tooling, upstream issue tracker
+  before local theory-spinning, version archaeology when regression
+  appeared); trigger: second instance fired 2026-04-30 (Briny Lapping
+  Harbor pnpm/action-setup pin saga — same shape: bug emergent from
+  composition of sensible-in-isolation layers, local fast path masked
+  it, only fresh-state full-parse path hit it); status: ready for
+  promotion (both triggers fired). Evidence: napkin 2026-04-29 Verdant
+  Regrowing Pollen Surprise 1; 2026-04-30 Briny Lapping Harbor
+  investigation; future plan
+  [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md);
+  fix commit `0929615e`.
++ 2026-04-30; pin GitHub Actions to maintainer-Latest SHA, not
+  highest-version-number SHA — the two diverge precisely when a
+  release line is unstable, which is when the divergence matters
+  most. Surfaced 2026-04-30 (Briny Lapping Harbor) when
+  `pnpm/action-setup@v6.0.2` was discovered to install pnpm 11 as
+  the launcher (writing multi-doc env-lockfile that breaks pnpm 10
+  consumers on Vercel) while GitHub's `/releases/latest` for that
+  action is `v5.0.0`. Future plan covers a validator that compares
+  pinned SHA against `/releases/latest` and a Dependabot config
+  that constrains proposals to Latest moves; trigger: second
+  cross-action instance OR owner direction OR near-violation in
+  PR review; status: pending (future plan authored). Evidence:
+  fix commit `0929615e`; future plan
+  [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md).
 + 2026-04-29; reviewer-scope-equals-prompted-scope (a reviewer's
   "GO WITH CONDITIONS" reads as green only if reviewer scope ≡ branch
   merge-gate scope; brief reviewers with full merge gate when
