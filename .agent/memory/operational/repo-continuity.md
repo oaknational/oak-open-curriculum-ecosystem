@@ -8,7 +8,35 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T22:30Z (Leafy Bending Dew / `cursor` /
+**Last refreshed**: 2026-04-30T~12:00Z (Briny Lapping Harbor /
+`claude-code` / `claude-opus-4-7-1m` / `8cd55dc7` —
+`fix/pnpm-action-setup-pin-to-maintainer-latest` branch / PR #92 OPEN.
+Root-cause investigation of recurring Vercel production failures on
+every `chore(release)` commit since 1.6.1. Diagnosis traced four
+defensible-in-isolation layers composing badly:
+`pnpm/action-setup@v6.0.2` installs pnpm 11 as launcher → pnpm 11
+writes env-lockfile as separate first YAML document → @semantic-release/git
+commits the dual-doc form → Vercel's fresh-state pnpm 10.33.2 install
+rejects multi-doc and falls back to npm registry, hitting Node 24
+strict URLSearchParams `ERR_INVALID_THIS`. Fix: re-pin
+`pnpm/action-setup` to maintainer-Latest v5.0.0 (SHA
+`fc06bc1257f339d1d5d8b3a19a8cae5388b55320`) in both `release.yml` and
+`ci.yml`; regenerate `pnpm-lock.yaml` as single-document. Audit of all
+4 pinned actions confirmed only `pnpm/action-setup` was mispinned;
+`actions/{checkout,setup-node,create-github-app-token}` correctly
+track Latest. Future strategic brief authored at
+[`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md):
+one structural surface (pin-to-Latest validator + Dependabot config
+constraining proposals to Latest moves) + composition-obscurity
+investigation methodology as supporting insurance. Multi-doc lockfile
+shape gate considered and rejected as too brittle. Pending-Graduations
+Register updated: 2026-04-29 lockfile-corruption-diagnosis-discipline
+candidate recast as composition-obscurity-investigation-methodology
+with both triggers fired; new candidate maintainer-Latest pin doctrine.
+Branch rebased onto local main so `9b633456 chore: housekeeping` is
+ancestor; force-pushed-with-lease per owner direction.)
+
+**Earlier refresh**: 2026-04-30T22:30Z (Leafy Bending Dew / `cursor` /
 `composer` / `8d0db5` — `observability-sentry-otel` MCP app **product code**:
 extracted shared `apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-
 to-undefined.ts` (`trimToUndefined` treats **`undefined`** and **post-trim
@@ -19,7 +47,8 @@ to-undefined.ts` (`trimToUndefined` treats **`undefined`** and **post-trim
 active Claude Code session on this repo/branch should own staging + conventional
 commit** for this bundle (Cursor handoff omitted commit deliberately). Fitness
 budget and deep consolidation gate explicitly out of scope for this Cursor
-closeout.)
+closeout. Bundle subsequently committed by Briny Lapping Harbor's
+2026-04-30 Cursor session in commit `387a7a89` and merged via PR #91.)
 
 **Earlier refresh**: 2026-04-30T15:45Z (Dewy Budding Sapling / claude-code /
 claude-opus-4-7-1m / `7e8db7` — `fix/sentry-identity-from-env` branch context
@@ -66,16 +95,20 @@ archives in the same directory.
 
 ## Current State
 
-+ Branch `fix/sentry-identity-from-env` carries PR #91 (OPEN). PR #90
-  merged 2026-04-29T20:43:22Z. The 2026-04-30 Vining session moved
-  Sentry build-plugin identity from hardcoded literals to env vars and
-  authored `observability-config-coherence.plan.md` + the
-  substrate-vs-axis-plans convention. The 2026-04-30 Leafy session
-  followed with the `trimToUndefined` boundary-helper refactor; commit
-  delegated to the active Claude Code session.
-+ Vercel release pipeline is healthy: PR #91 preview build verified
-  READY via Sentry MCP + Vercel MCP (release attributed to commit
-  `837fcfde`, env=preview, 5 bootstrap spans + 10 DEBUG logs landed).
++ Branch `fix/pnpm-action-setup-pin-to-maintainer-latest` carries PR #92
+  (OPEN, awaiting review + Vercel preview validation). PR #91 merged
+  2026-04-30T09:33Z. PR #90 merged 2026-04-29T20:43:22Z. Releases
+  1.7.0 and 1.7.1 tagged but Vercel production deploys for both went
+  to ERROR state on the dual-document `pnpm-lock.yaml` form. Fix in
+  PR #92 unblocks the release pipeline by re-pinning
+  `pnpm/action-setup` from v6.0.2 (which installs pnpm 11 as launcher
+  and writes multi-doc lockfiles) to maintainer-Latest v5.0.0 (which
+  uses pnpm 10.x and produces single-doc lockfiles). Branch
+  `fix/sentry-identity-from-env` retired post-merge.
++ Vercel release pipeline currently RED on `main` (production deploy
+  `dpl_DFmuKNShnu9Q4LMVycf27T4LDyeG` for commit `421ff154` in ERROR);
+  PR #92 expected to clear the failure both for the preview and for
+  the next release commit on main.
 + ADRs landed in the recent arc: 162 closure-property + ADR-to-plan
   bridge; 166 (architectural budget system); 167 (hook-execution-failure
   visibility); 168 (TS6 baseline + workspace-script architectural rules).
@@ -180,6 +213,17 @@ Current branch non-goals:
 
 Choose the lane deliberately:
 
+**PR #92 landing lane (Briny Lapping Harbor, active)**: review and
+merge PR #92 (`fix/pnpm-action-setup-pin-to-maintainer-latest`).
+Verify Vercel preview deploy goes READY (proves the dual-doc cleanup
+unblocks Vercel). After merge, watch the next `chore(release)` commit
+on main: it must NOT re-add the 94-line self-management preamble to
+`pnpm-lock.yaml`. Post-merge production deploy must go READY.
+Future strategic brief at
+[`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md)
+captures the structural enforcement work (pin-to-Latest validator +
+Dependabot config) — promotion-gated.
+
 **PR #90 landing lane (Solar Threading Star, active)**: continue Sonar
 quality gate closure, Copilot/Bugbot resolution, ci.yml triage, owner
 MCP validation. Plan:
@@ -247,7 +291,35 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-30 Verdant Sheltering Glade, deferral CLOSED — `not
+**Status (2026-04-30 Briny Lapping Harbor): `due — multiple triggers`**.
+Triggers fired this session:
+
++ **A plan or milestone has closed**: 2026-04-29
+  lockfile-corruption-diagnosis-discipline candidate's
+  second-instance-OR-owner-direction trigger fired; bug fix landed
+  via PR #92.
++ **Settled doctrine exists only in ephemeral artefacts**: the
+  maintainer-Latest action-pin doctrine is currently captured only
+  in napkin + Pending-Graduations Register; no PDR / rule yet.
++ **Repeated surprises suggest a rule, pattern, ADR, or governance
+  change**: four same-shape reframes ("not corruption — split-brain";
+  "don't disable canonical defaults"; "use Latest, not highest tag";
+  "the brittle structural gate is the wrong shape — the build log
+  already carries the signal"). Each one was the owner naming a
+  structural property the agent had missed. That repetition itself
+  is a surprise worth doctrine-shaping.
++ **Documentation drift question**: AGENTS.md contains a
+  "See RULES_INDEX.md" pointer that lives only in the Codex entry
+  point. Whether this is intentional platform-asymmetric routing
+  or unhomed drift is an owner-decision question worth raising at
+  consolidation depth.
+
+User explicitly directed escalation to `/jc-consolidate-docs` after
+session-handoff closes. Continue.
+
+---
+
+**Earlier status (2026-04-30 Verdant Sheltering Glade, deferral CLOSED — `not
 due`)**: the post-mortem-and-fitness-remediation lane completed all five
 mandatory outputs the 2026-04-30 Vining handoff queued. Verifiable
 artefacts:
