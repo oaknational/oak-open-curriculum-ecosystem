@@ -3,7 +3,7 @@
 > **Status**: future (strategic brief)
 > **Date**: 10 April 2026
 > **Author**: AI analysis (Claude Opus 4.6), commissioned by Jim Cresswell
-> **Data reference**: `eef-toolkit.json` in this directory
+> **Data reference**: [`../reference/eef-toolkit.json`](../reference/eef-toolkit.json)
 >
 > **Credits and attribution**:
 >
@@ -280,8 +280,9 @@ the former. Levels 4/4b work with the latter.
 
 ## 7. EEF Data Reference
 
-The `eef-toolkit.json` file in this directory contains the full EEF
-Teaching and Learning Toolkit dataset (v0.2.0, April 2026):
+The [`../reference/eef-toolkit.json`](../reference/eef-toolkit.json) file
+contains the full EEF Teaching and Learning Toolkit dataset (v0.2.0,
+last_updated 2026-04-02):
 
 - 30 evidence strands with headline metrics
 - Methodology (effect size conversion table, impact/cost/evidence
@@ -289,7 +290,8 @@ Teaching and Learning Toolkit dataset (v0.2.0, April 2026):
 - UK context (PP rates, national averages, KS mapping)
 - School context schema (input schema for recommendations)
 - 17/30 strands with school context relevance mapping
-- 8 caveats as structured data
+- 9 caveats as structured data (including the null-impact "insufficient
+  evidence" caveat introduced alongside the 4 zero-strength strands)
 
 This is the authoritative data reference for this plan collection.
 

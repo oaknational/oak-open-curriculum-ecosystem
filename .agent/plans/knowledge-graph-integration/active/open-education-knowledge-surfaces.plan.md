@@ -5,7 +5,7 @@ status: active
 child_plans:
   - "graph-resource-factory.plan.md"
   - "misconception-graph-mcp-surface.plan.md"
-  - "../../sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md"
+  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
   - "../../sector-engagement/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
@@ -77,7 +77,7 @@ vision document.
 ## Strategic Context
 
 - **Evidence integration strategy**:
-  `.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md`
+  `.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md`
   (R1-R8 impact-preserving requirements)
 - **KG alignment audit**:
   `.agent/plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`
@@ -85,9 +85,10 @@ vision document.
 - **M2 milestone**: `.agent/milestones/m2-extension-surfaces.md`
   (KG alignment is an M2 gate)
 
-This historical umbrella now spans two plan homes. Internal Oak KG integration
-remains here; EEF and education-skills source ingestion moved to
-`sector-engagement/external-knowledge-sources/`. The deeper ontology
+This historical umbrella now spans three plan homes. Internal Oak KG integration
+remains here; EEF source ingestion moved to its own dedicated subthread at
+`sector-engagement/eef/`; education-skills and other future external sources
+remain in `sector-engagement/external-knowledge-sources/`. The deeper ontology
 integration follows the KG alignment audit and is tracked separately.
 
 **Two graph derivation methods**: The graphs in this repo are property
@@ -339,7 +340,10 @@ with factory.
 ## WS-3: EEF Evidence Surface
 
 **Existing plan**:
-`sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
+`sector-engagement/eef/current/eef-evidence-corpus.plan.md` (renamed and
+restructured 2026-04-30 — see [`../reference/conservation-map.md`](../../sector-engagement/eef/reference/conservation-map.md)
+for the semantic preservation map. The pre-restructure predecessor is
+recoverable from git history per the conservation map's § Recovery path.)
 
 2 resources (methodology+caveats, strands overview), 1 recommendation
 tool (`recommend-evidence-for-context` with 40/30/20/10 scoring),

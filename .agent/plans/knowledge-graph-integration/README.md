@@ -35,6 +35,7 @@ under [sector-engagement/](../sector-engagement/).
 |------|-------------|
 | [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records |
 | [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities |
+| [current/graph-query-layer.plan.md](current/graph-query-layer.plan.md) | Increment 1 of EEF graph-and-corpus delivery: 7-operation polymorphic query layer over prerequisite + misconception + EEF strands, with progressive disclosure (manifest → summary → detail → edge) and mandatory projection. Foundation for [`../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). |
 
 ## Strategy and Research
 

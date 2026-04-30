@@ -3,7 +3,7 @@ name: "Education Skills MCP Surface"
 overview: "Integrate evidence-based pedagogical skills from the Agent Skills ecosystem into the MCP server as prompts and discovery tools, with proper licence isolation and upstream update mechanism."
 parent_plan: "../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "../current/eef-evidence-mcp-surface.plan.md"
+  - "../../eef/current/eef-evidence-corpus.plan.md"
   - "../../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
   - "../../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, architecture-reviewer-barney"
@@ -376,7 +376,7 @@ T8: E2E tests                                      ← quality gate
 ### Strategic Context
 
 - **Evidence integration strategy**
-  (`.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md`)
+  (`.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md`)
   — education skills fulfil R5 (Implementation Guidance) and R6
   (Pedagogical Workflow Orchestration) at a level EEF data alone cannot
 - **Ontology integration strategy**
