@@ -214,35 +214,15 @@ Non-planning process entries graduated on 2026-04-24 to:
 `documentation-hygiene`, reviewer doctrine, build-system doctrine,
 practice verification, and the collaboration directive.
 
-**Stated principles require structural enforcement.** A principle
-that names a class of bug will eventually catch its own author. The
-cure is mechanical: rule files (`.agent/rules/`), validators
-(`scripts/validate-*` or workspace validators), ESLint rules, type
-guards, schema validation. Stating a principle in `principles.md`
-without an enforcement surface is a known failure mode — the
-"no absolute paths" rule was in `principles.md` for months while
-patterns under `.agent/memory/active/patterns/` embedded machine-
-local link refs that the principle should have prevented. Sharpened
-2026-04-29 to "no machine-local paths" with three forbidden + three
-permitted shapes named explicitly, and operationalised via
-`.agent/rules/no-machine-local-paths.md` + thin platform adapters.
-Sibling case: `gate-off-fix-gate-on` was named in plan prose for
-weeks before the owner-direction graduated it to anti-pattern doctrine
-plus the `never-disable-checks.md` rule on 2026-04-29.
+**Stated principles require structural enforcement.** Graduated
+2026-04-30 to [PDR-038][pdr-038]. Three worked instances
+(no-machine-local-paths, never-disable-checks,
+validation-scripts-are-not-tests) preserved in the PDR.
 
 **External-system findings tell you about your local detection
-gap, not just the immediate bug.** When SonarCloud, Copilot, or
-Cursor Bugbot catches something in your PR, ask: could this have
-been caught locally? If yes, by what method? Implement or raise
-with effort/risk/ROI. The principle is recursively useful: each
-external finding generates a local-detection question, and applying
-that question can surface meta-instances (Cursor Bugbot finding a
-duplicate heading → reveals MD024 globally disabled). The
-implementation choice depends on scope: regression-prevention gates
-for classes the current PR fixed belong inline; pre-existing
-findings independent of PR scope belong in follow-up plans with
-captured effort/risk/ROI. Owner-introduced 2026-04-29 during PR-90
-closure; drove Phases 4 and 5 of that plan.
+gap.** Graduated 2026-04-30 to [PDR-039][pdr-039]. Worked instance
+(Cursor Bugbot duplicate heading → MD024 globally-disabled discovery
+→ class-of-bug gap closed) preserved in the PDR.
 
 **Validation scripts are not tests.** Worked example + contrast pattern
 graduated 2026-04-30 to [testing-tdd-recipes § Validator Script vs
@@ -305,6 +285,8 @@ Build-system entries graduated on 2026-04-24 to
 [adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
 [tdd-validator-recipe]: ../../../docs/engineering/testing-tdd-recipes.md#validator-script-vs-integration-test
 [validator-migration-plan]: ../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md
+[pdr-038]: ../../practice-core/decision-records/PDR-038-stated-principles-require-structural-enforcement.md
+[pdr-039]: ../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md
 [pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
 [pdr-018]: ../../practice-core/decision-records/PDR-018-planning-discipline.md#disposition-drift-at-phase-boundaries-2026-04-28-amendment
 [pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log

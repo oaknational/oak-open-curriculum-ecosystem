@@ -291,17 +291,17 @@ artefacts:
    §Open Owner-Decision Items entry 6 below; owner decision recorded
    inline.
 
-**Residual fitness state at closure**: napkin GREEN; distilled HARD on
-lines (308/275) and chars (16909/16500) — two PDR candidates pending
-owner direction (stated-principles-require-structural-enforcement and
-external-system-findings-tell-you-about-your-local-detection-gap)
-would graduate ~25 lines if directed; the remainder is canonical
-pointer registry. repo-continuity HARD on lines (552/525) and chars
-(35396/35000) after the archive — the residual bulk is the
-Pending-Graduations Register, which is doing exactly its job (queueing
-candidates that need owner direction). Routed to §9 with explicit
-disposition: HARD pressure reflects accumulated pending PDR/ADR
-candidates; reduction requires owner-directed graduation, not trimming.
+**Residual fitness state at closure**: napkin GREEN; distilled
+HARD-pressure relieved by 2026-04-30 owner-directed promotions —
+[PDR-038 Stated Principles Require Structural Enforcement](../../practice-core/decision-records/PDR-038-stated-principles-require-structural-enforcement.md)
+and
+[PDR-039 External-System Findings Reveal Local Detection Gaps](../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md)
+authored, distilled entries reduced to pointer form. repo-continuity
+residual line/char pressure is the Pending-Graduations Register, which
+is doing exactly its job (queueing candidates with named triggers).
+Routed to §9 with explicit disposition: remaining HARD pressure
+reflects pending candidates, not low-value content; reduction tracks
+owner direction.
 
 Earlier statuses (2026-04-30 Leafy rider, Dewy skip, Vining
 owner-deferred; 2026-04-29 Nebulous deeper convergence) all archived
@@ -327,9 +327,11 @@ continuity snapshots.
 + 2026-04-29; PR-90 closure session — `external-systems-shouldnt-be-the-
   first-detector` principle introduced by owner mid-session, drove Phases 4
   and 5 (TS-invocation gate + MD024 enable). Recursively useful (caught its
-  own meta-instances via Cursor Bugbot napkin finding). PDR candidate to
-  graduate the principle to canonical Practice doctrine; trigger: owner
-  direction OR second session where the principle applies; status: pending.
+  own meta-instances via Cursor Bugbot napkin finding). **GRADUATED
+  2026-04-30 by Verdant Sheltering Glade per owner direction "promote
+  both now"** to
+  [PDR-039 External-System Findings Reveal Local Detection Gaps](../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md);
+  status: graduated 2026-04-30.
 + 2026-04-29; PR-90 closure session — testing-strategy.md §Test Types named
   "validation scripts that require external resources should be standalone
   scripts, not tests" caught my Phase 4 misclassification (vitest-as-
