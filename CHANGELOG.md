@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.7.1...v1.7.2) (2026-04-30)
+
+
+### Bug Fixes
+
+* **build:** pin pnpm/action-setup to maintainer-Latest v5.0.0 ([8a92882](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8a928821a550644ad26d548633e38ff706caea61)), closes [pnpm/action-setup#228](https://github.com/pnpm/action-setup/issues/228) [pnpm/action-setup#228](https://github.com/pnpm/action-setup/issues/228) [pnpm/pnpm#11264](https://github.com/pnpm/pnpm/issues/11264)
+
 ## [1.7.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.7.0...v1.7.1) (2026-04-30)
 
 
