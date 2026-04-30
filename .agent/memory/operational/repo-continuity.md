@@ -8,7 +8,43 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T~13:30Z (Briny Lapping Harbor /
+**Last refreshed**: 2026-04-30T~late (Iridescent Soaring Planet /
+`claude-code` / `claude-opus-4-7-1m` / `b38261` —
+`feat/eef_exploration` branch / no PR yet, 0 commits ahead of main at
+handoff time, three commits queued. **EEF graph-and-corpus
+architecture session** restructured the EEF plan estate into a
+five-increment delivery sequence with explicit promotion gates.
+Increment 1 (`graph-query-layer.plan.md`, CURRENT) provides a
+7-operation polymorphic query layer over prerequisite + misconception
+
++ EEF strands with progressive disclosure (manifest → summary → detail
+→ edge) and mandatory projection. Increment 2 (`eef-evidence-corpus.plan.md`,
+CURRENT, replaces predecessor `eef-evidence-mcp-surface.plan.md`)
+models EEF as `EvidenceCorpus = GraphView + ScoringEngine`, adds
+`explain` and `compare` tools, adds the `pupil-premium-strategy-review`
+prompt (Workflow B from strategy doc, never previously executable),
+makes citation discipline (R1, R7) a structural type-system invariant,
+and adds freshness-gate + telemetry + negative-space + load-bearing
+JR credit todos. Increment 3 (`cross-source-journeys.plan.md`, FUTURE)
+designs the journey primitive with two reference journeys
+(`evidence-aware-lesson-sequencing`, `prerequisite-trace`) and
+prototypes the question of whether journeys need a new MCP primitive
+or can ride on prompts. EEF cluster relocated from
+`external-knowledge-sources/` into a dedicated `eef/` subthread under
+`sector-engagement/`. Predecessor preserved byte-identically in
+`originals/` for verification, then deleted after independent
+re-read pass found and patched three real preservation gaps. Pre-
+session predecessor recoverable via
+`git show e2796757:<predecessor-path>`. Mandatory three-line user-
+value template embedded in every task across all three new plans —
+graduation candidate to a rule. Five doctrine candidates surfaced
+(see [`active/napkin.md` § Doctrine candidates surfaced](../active/napkin.md)).
+Subjective texture preserved at
+[`experience/2026-04-30-iridescent-graph-corpus-composition.md`](../../experience/2026-04-30-iridescent-graph-corpus-composition.md);
+new EEF thread record at
+[`threads/eef.next-session.md`](threads/eef.next-session.md).)
+
+**Prior refresh**: 2026-04-30T~13:30Z (Briny Lapping Harbor /
 `claude-code` / `claude-opus-4-7-1m` / `9f9b4969` —
 `fix/pnpm-action-setup-pin-to-maintainer-latest` branch / PR #92
 OPEN. **Graduation phase landed**: PDR-040 (pin to maintainer-Latest,
