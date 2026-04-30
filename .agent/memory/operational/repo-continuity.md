@@ -531,6 +531,22 @@ continuity snapshots.
   and-consult; sub-agent assessed as healthy-lag, not silent rot);
   status: pending. Evidence: trinity-drift sub-agent report from
   2026-04-29 deep consolidation pass.
++ 2026-04-30; graduation-trigger criteria too restrictive — owner
+  observation at session close (Verdant Sheltering Glade): the
+  default "trigger: second instance OR owner direction" criteria
+  used across most Pending-Graduations Register entries is too
+  restrictive in practice. Strong candidates with one robust instance
+  + clear principle articulation can wait sessions for a second
+  instance that may never come, while owner direction is a synchronous
+  cost. Future session needed to: (a) audit the trigger criteria
+  shape across the register; (b) propose alternative criteria
+  (single-instance-with-evidence-density, principle-articulation
+  quality test, structural-coverage check); (c) update consolidate-docs
+  §7a guidance. Trigger: future session with owner appetite for
+  flow refinement; status: pending. Evidence: this session graduated
+  PDR-036/037/038/039 on owner direction after the candidates had
+  been pending for sessions despite stable doctrine and worked
+  instances.
 + 2026-04-30; commit-bundle-leakage-from-wildcard-staging — wildcard
   `git add -A` (or moral equivalent) over a working tree containing
   another session's WIP produces a commit whose message is true for one
