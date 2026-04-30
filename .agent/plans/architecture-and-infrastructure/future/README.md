@@ -21,14 +21,11 @@ queue item, then to `../active/` when implementation starts.
 | P1 | [ground-truth-archive-retirement.plan.md](./ground-truth-archive-retirement.plan.md) | Delete old 120-query ground-truth-archive/ and wire evaluation pipeline to canonical ground-truth/ model |
 | P1 | [oak-search-cli-command-surface-rationalisation.plan.md](./oak-search-cli-command-surface-rationalisation.plan.md) | Strategic follow-up to define one public `oaksearch` command architecture, demote non-CLI operations to package scripts, and delete commands/scripts that cannot prove ongoing value |
 | P2 | [stdio-http-server-alignment.md](./stdio-http-server-alignment.md) | Historical/server-alignment strategy reference; not an active observability adoption lane |
+| P1 | [build-pipeline-composition-safeguards.plan.md](./build-pipeline-composition-safeguards.plan.md) | Pin GitHub Actions to maintainer-`/releases/latest`, not to highest version number — validator + Dependabot config — with composition-obscurity investigation methodology as supporting insurance |
 
 Companion future plan in the nested codegen lane:
 
 - [../codegen/future/sdk-codegen-workspace-decomposition.md](../codegen/future/sdk-codegen-workspace-decomposition.md) — strategic split of mixed OpenAPI/codegen and bulk-data lineages; tranche 4 of the new programme must absorb rather than duplicate this direction
-
-Downstream demonstrations of the programme (in other collections):
-
-- [sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](../../sector-engagement/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md) — route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline once tranche 4 lands; first external consumer of the generic foundation
 
 Strategic context: [../roadmap.md](../roadmap.md)
 In-progress execution: [../active/README.md](../active/README.md)

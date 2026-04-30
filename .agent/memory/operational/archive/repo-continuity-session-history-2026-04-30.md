@@ -264,3 +264,60 @@ targets (rules, ADRs, principles).
 + 2026-04-29; TypeScript 6 migration + workspace-script architectural
   rules; ADR candidate; status: graduated 2026-04-29 to ADR-168 (commit
   `dcd45776`).
+
+## Earlier refresh: 2026-04-30T22:30Z (Leafy Bending Dew / Cursor)
+
+**Earlier refresh**: 2026-04-30T22:30Z (Leafy Bending Dew / `cursor` /
+`composer` / `8d0db5` — `observability-sentry-otel` MCP app **product code**:
+extracted shared `apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-
+to-undefined.ts` (`trimToUndefined` treats **`undefined`** and **post-trim
+`''`** explicitly; no ternary collapsing). Removed duplicate helpers from
+`sentry-build-plugin-identity.ts` and `sentry-build-plugin.ts`; added
+`trim-to-undefined.unit.test.ts`; `vitest run` green for that file +
+`sentry-build-plugin.unit.test.ts`. **Not committed**: owner direction — **the
+active Claude Code session on this repo/branch should own staging + conventional
+commit** for this bundle (Cursor handoff omitted commit deliberately). Fitness
+budget and deep consolidation gate explicitly out of scope for this Cursor
+closeout. Bundle subsequently committed by Briny Lapping Harbor's
+2026-04-30 Cursor session in commit `387a7a89` and merged via PR #91.)
+
+
+## Earlier refresh: 2026-04-30T15:45Z (Dewy Budding Sapling / Claude Code)
+
+**Earlier refresh**: 2026-04-30T15:45Z (Dewy Budding Sapling / claude-code /
+claude-opus-4-7-1m / `7e8db7` — `fix/sentry-identity-from-env` branch context
+only; no production code, schema, or runtime configuration touched. Practice
+work on the `agentic-engineering-enhancements` thread: investigated current
+skill-portability pipeline (`.agent/skills/` canonical + `.claude/`/`.cursor/`/
+`.agents/` thin wrappers + `skills-lock.json` + `pnpm portability:check`);
+drafted vendor-agnostic future strategic plan
+`canonical-first-skill-pack-ingestion-tooling.plan.md` that closes the unbuilt
+`pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged in the
+portability-remediation plan. Plan never names a delivery vendor — ecosystems
+referenced as illustrative only; tool source must contain no vendor-keyed
+conditionals (validator-enforceable rule). Promotion gated on PASS from
+assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma; reviews
+blocking later, not required now per owner direction. Discovery surfaces
+wired: future/README, collection README, roadmap, sibling adapter-generation
+forward-link, portability-remediation Phase 6 forward-link. Validators green:
+portability:check passed (12 commands, 36 skills, 45 rules, 22 reviewer
+adapters, 47 Cursor triggers, 45 Claude rules, 45 .agents rules, 40 command
+adapters across 4 platforms); markdownlint clean. Owner direction: skip the
+final consolidation gate this handoff — handled elsewhere.)
+
+
+## Earlier refresh: 2026-04-30T07:30Z (Vining Ripening Leaf / Claude Code)
+
+**Earlier refresh**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
+claude-opus-4-7-1m / `bce99d` — `fix/sentry-identity-from-env` branch / PR #91
+preview verification + observability-config-coherence strategic plan +
+substrate-vs-axis-plans convention component + ADR-162 closure-property
+ADR-to-plan bridge. No production code touched. Build `dpl_wTvPsL48u6bCn89Vscw29uot8M9H`
+verified READY via Sentry MCP + Vercel MCP: release
+`poc-oak-open-curriculum-mcp-git-fix-sentry-identity-from-env` correctly
+attributed to commit `837fcfde` with env=preview, 5 bootstrap spans + 10 DEBUG
+logs landed. Sentry-identity-from-env fix is working in production. No
+remediation deemed urgent for this branch — observability-config-coherence
+plan items all involve broader structural change. PDR candidate captured:
+substrate-vs-axis-plans convention + working principle "invent-justification-
+as-signal". Single commit landing all session artefacts at handoff close.)

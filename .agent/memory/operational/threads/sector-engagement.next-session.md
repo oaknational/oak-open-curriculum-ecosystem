@@ -136,9 +136,8 @@ and knowledge-graph work together.
 
 ### Blockers / Low-Confidence Areas
 
-- Partner needs are not yet prioritised; do not assume OEAI, Finnish API, KG
-  adoption, or OpenAPI convergence is the next impact target without owner
-  selection.
+- Partner needs are not yet prioritised; do not assume OEAI, KG adoption, or
+  OpenAPI convergence is the next impact target without owner selection.
 - The ontology workspace decision is reopened for organisational-priority
   reasons, but the Python-in-TypeScript-monorepo cognitive-load concern remains
   real evidence to resolve, not a footnote.

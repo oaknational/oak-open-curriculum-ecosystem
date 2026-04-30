@@ -4,7 +4,6 @@ overview: "Define the intake model for third-party knowledge graphs and structur
 status: future
 related_plans:
   - "evidence-integration-strategy.md"
-  - "../../future/finnish-national-curriculum-api-pipeline-demonstration.plan.md"
 specialist_reviewer: "architecture-reviewer-betty, security-reviewer, docs-adr-reviewer"
 ---
 
@@ -18,9 +17,9 @@ specialist_reviewer: "architecture-reviewer-betty, security-reviewer, docs-adr-r
 ## Problem and Intent
 
 Oak already has external-source candidates: EEF evidence, education skills,
-Finnish curriculum APIs, and partner/sector datasets such as OEAI's MAT
-analytics schema. Future candidates may be formal knowledge graphs rather than
-plain JSON or API surfaces.
+and partner/sector datasets such as OEAI's MAT analytics schema. Future
+candidates may be formal knowledge graphs rather than plain JSON or API
+surfaces.
 
 The intent is to define a common intake model before each source invents its
 own provenance, validation, licensing, update, and application-boundary rules.
@@ -49,8 +48,6 @@ Explicit non-goals:
    curriculum mapping, QA, or partner support.
 2. External source intake must not bypass schema-first validation or provenance
    clarity.
-3. The Finnish API plan remains the OpenAPI-shaped external-source proof; this
-   plan covers graph/knowledge-resource intake.
 
 ## Success Signals
 

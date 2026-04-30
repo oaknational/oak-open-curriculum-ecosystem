@@ -110,3 +110,160 @@ beyond plan collections.
   `repo-continuity.md` §Last refreshed / §Next safe step).
 
 - **ADR/PDR (6b)**. Nothing qualifies — pure refactor clarity.
+
+## 2026-04-30 — pnpm/action-setup pin saga (Briny Lapping Harbor)
+
+Vercel production was red on every `chore(release)` commit since 1.6.1.
+Three prior commits had "fixed" the lockfile by deleting the orphan first
+YAML document; each fix was undone by the next release. This session
+ended the cycle.
+
+### Surprises
+
+**Surprise 1 — I called valid pnpm output "corruption" three times.** The
+multi-document YAML stream is a legitimate format. The commit-message
+language ("recurring pnpm lock corruption") inherited that frame
+unexamined, and I propagated it for the first half of the investigation.
+Owner reframed: "it's not corruption at all, it's perfectly valid and
+what we are seeing is some kind of split brain." The reframe was the
+fix — every "delete the orphan document" commit had been authored under
+the wrong frame, manufacturing the next loop.
+
+**Surprise 2 — I proposed disabling a canonical default after the
+reframe.** Within the same response, after accepting the split-brain
+framing, I offered "set `managePackageManagerVersions: false`" as
+Option B with equal weight to "investigate the actual mismatch."
+Owner: "we are not turning off a canonical, standard, and default
+feature! Step back, ultrathink." The shape: I keep collapsing
+"understand the contract mismatch" into "remove the variable that
+introduces the failure mode." Twin to fix-the-producer-not-the-consumer
+but worse — silencing the producer's *correct* behaviour.
+
+**Surprise 3 — I proposed bumping action-setup to v6.0.3.** Owner:
+"we're using the wrong release, we should have taken the sha from
+latest, not from the highest number." `gh api .../releases/latest`
+returns v5.0.0; the entire v6.0.x saga is unmarked Latest, and the
+maintainers are holding it deliberately. Three reframes, all the same
+shape: I produced a path that "works in frame" instead of finding the
+right frame.
+
+**Surprise 4 — I proposed a brittle structural gate alongside the
+real fix.** Plan body initially included a multi-document
+`pnpm-lock.yaml` rejection check (`grep '^---$'`). Owner: "remove the
+surface 2 proposed check, it will break as soon as pnpm 11 is
+released, it's too brittle, we already have a strong signal in the
+build logs, the thing that has changed is that now we know what it
+means. The real problem is more general, how do we make sure that we
+are pinning to latest, not to 'highest'." Sharp distinction: the
+build-log signal "expected a single document in the stream" was
+load-bearing both 2026-04-29 and 2026-04-30, but only became
+*recognised as* load-bearing in this session. A static gate would
+freeze the recognition into the wrong shape (rejecting valid pnpm 11
+output once Latest moves). The structural fix lives at the pinning
+mechanism; the build log + reading discipline is the insurance. Plan
+revised: one structural surface (pin-to-Latest) + methodology
+insurance, not two parallel gates.
+
+**Surprise 5 — fitness HARD on repo-continuity, I compressed my own
+session entry.** During /jc-consolidate-docs, fitness check showed
+repo-continuity HARD on lines and chars. I responded by trimming my
+own Briny Last refreshed entry from ~30 to ~15 lines, cutting the
+four-layer composition cascade, the audit confirmation, and the
+shape-gate rejection rationale. Owner: "any changes to repo
+continuity need to be made thoughtfully, and in the spirit of
+learning and teaching and knowledge preservation where it is useful."
+**This is exactly what consolidate-docs §Learning Preservation
+Overrides Fitness Pressure forbids**: "Compressing, trimming, or
+'summarising' the new insight to fit the budget" / "Preserving a
+green fitness report by starving the learning loop." I had read the
+doctrine ten minutes earlier and then immediately violated it. That
+isn't oversight — it's a structural pull: *make the failing thing
+pass* fires faster than *what is this signal actually telling me*.
+The cure can't be more reading. It needs a pre-action gate: when a
+fitness signal appears, FIRST ask "what teaching content does this
+file carry that the metric is reflecting?" — only after answering
+that question should any tactical move be considered. Build-red is
+a contract violation (fix it); fitness-HARD is a structural-health
+diagnostic (graduate / split / accept with named disposition).
+Different signals want different responses, and I currently default
+the second to the first. Restored the entry; deferred remediation
+properly.
+
+### Cross-cutting pattern: six same-shape reframes in one session
+
+Six reframes by session close. The first five share one shape:
+I produce a path that "works in frame" instead of asking whether
+the frame is right. The sixth is meta — it's about the shape of
+my classification reasoning when I propose graduations.
+
+1. "corruption" → "split-brain" (frame inherited from commit
+   messages; never tested);
+2. "disable canonical default" → "respect canonical default"
+   (silencing a producer's correct behaviour);
+3. "highest tag" → "maintainer-Latest tag" (mechanical fact vs
+   maintainer judgement);
+4. "brittle structural gate" → "build log already carries the
+   signal" (static detector vs reading discipline);
+5. "compress to fit fitness limit" → "preserve learning, accept
+   metric, route to disposition" (metric satisfaction vs substance);
+6. "default to PDR for everything" → "consciously distinguish
+   PDR-shape from ADR-shape; some candidates need both; surface
+   the reasoning so the call is auditable" (graduation
+   classification visible vs implicit).
+
+Reframes 1–5 graduated to PDRs 040, 041, 042 + ADR-169. Reframe 6
+is a doctrine candidate for next session — possibly an amendment to
+consolidate-docs §7a (the ADR/PDR scan) requiring explicit
+PDR-shape vs ADR-shape rationale per candidate. The cure is
+structural: surface classification reasoning rather than collapse
+it.
+
+### Pending-Graduations Register split lesson
+
+The register grew large enough that it was contributing the bulk of
+`repo-continuity.md`'s HARD fitness state, and the register's
+responsibility is distinct from the live operational state
+repo-continuity carries. Splitting it into its own file dropped
+repo-continuity from HARD to SOFT cleanly; the new file is GREEN.
+
+The structural trigger pattern worth naming: *when a surface is
+both contributing the bulk of a host file's HARD fitness AND
+representing a domain of responsibility distinct from the host
+file's named purpose, split it out.* Either condition alone is
+weaker; the conjunction is decisive.
+
+Other separable domains in `repo-continuity.md` noted for later
+analysis (recorded in repo-continuity itself):
+Repo-Wide Invariants / Non-Goals; Open Owner-Decision Items;
+earlier consolidation-status narratives; Current Session Focus.
+None hits the conjunction yet; each has a named trigger condition.
+
+### Doctrine surfaced
+
+**Pin GitHub Actions to maintainer-Latest, not highest version.** The
+two diverge precisely when a release line is unstable — exactly when
+divergence matters most. Captured in pending-graduations register;
+future plan [build-pipeline-composition-safeguards][bpcs-plan] covers
+the validator + Dependabot config (multi-doc lockfile gate considered
+and rejected as too brittle).
+
+[bpcs-plan]: ../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md
+
+**Composition obscurity is composition cost, not bug cost.** When a
+bug spans multiple sensible-in-isolation layers (`pnpm/action-setup@v6`
+→ pnpm 11 launcher → multi-doc YAML → pnpm 10 fast vs. slow path →
+Vercel fresh state → Node 24 strict URLSearchParams), no single layer
+is wrong; the composition fails. Investigation methodology must load
+*early*: read the build log first, workspace-first before remote
+tooling, upstream issue tracker before local theory, version
+archaeology when regression appeared. Recasts the 2026-04-29
+"lockfile-corruption diagnosis discipline" candidate into a sharper
+form; both triggers (second instance + owner direction) have fired.
+
+### Method note — when frame is the fix, agent stops jumping
+
+Three reframes from owner in one session is high-cost. The agent-side
+discipline: when investigation is open, do not couple analysis to a
+proposed action. State the frame, surface the evidence, let the owner
+choose the path. The "Option A or Option B" structure I kept defaulting
+to encoded a hidden bias toward action.
