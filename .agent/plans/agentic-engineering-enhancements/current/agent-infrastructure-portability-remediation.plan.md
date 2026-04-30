@@ -410,7 +410,10 @@ update.
 1. **Script the canonicalisation** as an agent-tool
    (`pnpm agent-tools:canonicalise-vendor-skills`) that
    detects full content in platform dirs and replaces with
-   thin wrappers
+   thin wrappers — **promoted to a dedicated future plan**:
+   [`../future/canonical-first-skill-pack-ingestion-tooling.plan.md`](../future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+   (vendor-agnostic by construction; promotion gated on deep
+   sub-agent reviews).
 2. **Add a portability validator check** that catches full
    content in platform dirs (Phase 3, Check 14)
 3. **Document the workflow** so the human operator knows to

@@ -171,6 +171,7 @@
     "mcp-server-dev@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "cloudflare@claude-plugins-official": true
   }
 }

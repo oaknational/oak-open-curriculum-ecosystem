@@ -1,0 +1,330 @@
+# Canonical-First Skill Pack Ingestion Tooling — Strategic Plan
+
+**Status**: Future (not started)
+**Domain**: Agentic Engineering Enhancements
+**Promotion gate**: deep sub-agent reviews must run and PASS before promotion
+to `current/` (see §Promotion Trigger). Reviews are not required now; they are
+**blocking later**.
+
+**Related**:
+
+- [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
+- [PDR-009 (Canonical-first cross-platform architecture)](../../../practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md)
+- [`current/agent-infrastructure-portability-remediation.plan.md`](../current/agent-infrastructure-portability-remediation.plan.md)
+  — closes Phase 6 mitigation option 1 (`pnpm agent-tools:canonicalise-vendor-skills`,
+  flagged as future work and never built).
+- [`future/adapter-generation.plan.md`](adapter-generation.plan.md) —
+  complementary: that plan generates wrappers for *internally-authored*
+  canonical artefacts; this plan ingests *externally-authored* skill packs
+  into the same canonical layer.
+- [`future/hooks-portability.plan.md`](hooks-portability.plan.md) — sibling
+  Layer-1/Layer-2 portability work; shares the validator surface and the
+  `pnpm portability:check` gate.
+- [`future/agent-infrastructure-coherence-audit.plan.md`](agent-infrastructure-coherence-audit.plan.md)
+  — adjacent audit lens; may pick up vendored canonical drift or
+  single-consumer skills produced via this tool.
+- [`future/agent-classification-taxonomy.plan.md`](agent-classification-taxonomy.plan.md)
+  — downstream beneficiary; retiring or renaming an externally-sourced pack
+  becomes a single CLI invocation rather than a manual purge across four
+  directories.
+
+## Vendor-Agnostic Intent (Foundation)
+
+The Practice is **vendor-agnostic by construction** (PDR-009). All substantive
+content lives at Layer 1 (`.agent/`); every platform surface holds only thin
+wrappers at Layer 2. This plan extends that doctrine to **external skill
+packs**: any community or vendor-published pack — current or future, named or
+not yet authored — must enter the repo through the same canonical-first
+machinery, regardless of source.
+
+This plan **never names a specific vendor as a delivery target**. Sources are
+parameterised by `(sourceType, source-url)` and the tooling treats every pack
+identically. Existing examples in the repo (Clerk, ModelContextProtocol
+ext-apps) and adjacent ecosystems (Anthropic, Vercel, Cloudflare, Cursor,
+Codex, OpenAI, others not yet authored) are illustrative only and must not
+appear as conditional branches in tool source.
+
+The vendor-agnostic rule is validator-enforced: tool source code containing
+any conditional keyed on a specific source identity (`if (source ===
+'<vendor>')`, vendor-named modules, vendor-named test fixtures used as
+production switches, etc.) must fail review. If a pack proves awkward, the
+right fix is upstream in the source pack or in the source-fetcher adapter
+contract — never a special case in the canonicalisation pipeline.
+
+## Problem and Intent
+
+External skill ecosystems (`npx skills`, Claude marketplaces, Cursor remote
+rules, Codex skills, future ecosystems) install full SKILL.md content
+directly into platform adapter directories (`.claude/skills/`,
+`.cursor/skills/`, `.agents/skills/`). Under PDR-009 + ADR-125 the only valid
+resting place for substance is `.agent/skills/`; platform copies must be thin
+wrappers.
+
+The reconciling step today is a **manual canonicalisation flow** documented in
+[`current/agent-infrastructure-portability-remediation.plan.md`](../current/agent-infrastructure-portability-remediation.plan.md)
+§Phase 1 and §1.5. Each pack drop or upstream update requires running an
+external installer, picking the richest copy, moving content + bundled
+subdirs to `.agent/skills/`, injecting `classification` frontmatter, stripping
+installer artefacts (`.claude-plugin/`, `marketplace.json`, …), generating
+thin wrappers in three platform dirs, recording an entry in
+`skills-lock.json`, and running `pnpm portability:check`.
+
+That mitigation was flagged as future work at the close of remediation
+Phase 6 (mitigation option 1, "script the canonicalisation as an agent-tool")
+and never built. Manual execution introduces three drift risks the validator
+cannot currently catch:
+
+1. **Step omission** — a missed thin-wrapper write or stripped artefact slips
+   past `pnpm portability:check` if it happens before the validator runs.
+2. **Vendored canonical drift** — a hand-edit to `.agent/skills/<n>/SKILL.md`
+   for a previously-vendored pack is currently indistinguishable from
+   intentional content; the lock has a `computedHash` field but no validator
+   re-computes it.
+3. **Update conflict invisibility** — re-running an upstream installer
+   overwrites Layer 2 wrappers with full content; the canonical copy survives
+   but the wrappers must be regenerated by hand each time.
+
+This plan delivers the missing tool: a canonical-first, vendor-agnostic
+ingestion CLI under `agent-tools/` that takes any compliant external skill
+source and produces a fully PDR-009-compliant canonical + adapter set.
+
+## Domain Boundaries
+
+### In scope
+
+- A new CLI under `agent-tools/`, parameterised by `(sourceType, source-url)`.
+- Subcommands `add`, `verify`. `update` and `remove` deferred to v2.
+- Source-fetcher abstraction (v1: thin wrapper around an existing community
+  installer for fetching only; designed so direct `gh api`/`git clone` can
+  replace it without callers changing).
+- Canonicalisation pipeline: stage → normalise frontmatter (preserve
+  `name`/`description`, add `classification`) → strip installer artefacts →
+  write `.agent/skills/<name>/` (with bundled subdirs, atomic stage→rename) →
+  generate three thin wrappers → update `skills-lock.json` → run
+  `pnpm portability:check`.
+- Hash strategy decision and lock-schema evolution if needed.
+- Namespace-collision handling (`--prefix`, `--rename`, refuse-on-collision).
+- Selective import flags (`--include`, `--exclude`, `--dry-run`).
+- Validator co-evolution (drift detection on vendored canonical via re-hashed
+  comparison; lock-aware reverse checks).
+- Documentation: ADR-125 amendment, PDR-009 amendment if needed,
+  `agent-tools/README.md` section, post-install workflow update.
+
+### Out of scope (Non-goals)
+
+- **Vendor-specific behaviour** — explicitly forbidden by §Vendor-Agnostic
+  Intent. The CLI must work uniformly across all source packs; vendor-specific
+  shims belong upstream, never in our pipeline.
+- **MCP server portability** — `.mcp.json`-style server lists are a separate
+  Layer-2 surface; routed to a dedicated future plan if and when needed.
+- **Slash-command portability from external packs** — vendor-published
+  commands are not in this scope; routed to canonical commands only when
+  general-purpose value is established and the canonical command lane decides
+  to accept them.
+- **Replacing the manifest-driven adapter generator**
+  ([`adapter-generation.plan.md`](adapter-generation.plan.md)) — that plan
+  generates wrappers for internally-authored skills; this one ingests
+  externally-authored skills. Both populate the same Layer-2 directories;
+  their concerns do not overlap.
+- **Authoring conventions for new internal skills** — already covered by
+  ADR-125 + PDR-009.
+- **Local-edit preservation on vendored canonical in v1** — v1 ships
+  `forbid-and-overlay`; preserve-with-sentinels deferred (see §Open
+  Decisions).
+- **Executable phasing** — this is a strategic brief; execution decisions are
+  finalised at promotion to `current/`.
+
+## Dependencies and Sequencing Assumptions
+
+**Stable prerequisites (already in place):**
+
+- ADR-125 + PDR-009 portability contract.
+- `skills-lock.json` schema on `(source, sourceType, computedHash)`.
+- `scripts/validate-portability.ts` enforcing forward + reverse + form +
+  lock-presence checks.
+- `agent-tools/` workspace as the natural home for new CLIs (existing
+  `pnpm agent-tools:*` invocation pattern).
+
+**Open decisions, locked at promotion (see §Open Decisions):**
+
+- Hash strategy (lift source-CLI hash vs. compute local SHA-256 vs. record
+  both).
+- Local-edit policy on vendored canonical (forbid-and-overlay vs.
+  preserve-with-sentinels).
+- Source-fetcher dependency choice (wrap an existing community installer vs.
+  direct `gh api`/`git clone`).
+
+**Does not block on:**
+
+- [`adapter-generation.plan.md`](adapter-generation.plan.md) (complementary;
+  either can land first).
+- [`hooks-portability.plan.md`](hooks-portability.plan.md) (sibling Layer-2
+  work).
+- [`agent-classification-taxonomy.plan.md`](agent-classification-taxonomy.plan.md)
+  (downstream consumer).
+
+**Does block:**
+
+- Vendoring any further external skill pack canonically without re-running the
+  documented manual flow and accepting drift risk. Today, every additional
+  pack would require manual canonicalisation with no validator-protected drift
+  detection on the vendored content.
+
+## Success Signals (justify promotion)
+
+Promotion to `current/` is justified when **at least one** is true:
+
+1. A second instance of manual external-skill canonicalisation friction (first
+   instance: Clerk + MCP-Apps in PDR-009 portability remediation 2026-04-24).
+2. An external pack with general value (any source) is requested for canonical
+   inclusion and the manual flow would block uptake by the non-Claude
+   platforms.
+3. Drift is detected in a vendored canonical skill that the current validator
+   does not catch, proving the lock-hash drift check is needed.
+4. A second platform's canonical surface (e.g. a future fourth Layer-2 dir)
+   means the manual flow now requires four+ thin-wrapper writes per skill.
+5. Owner-direct promotion.
+
+**Operational success after delivery:**
+
+- A single command ingests an external skill pack end-to-end and
+  `pnpm portability:check` passes.
+- The flow exercises uniformly across at least three different source packs in
+  regression tests (illustrative coverage only — not a vendor target).
+- Vendor-specific logic appears nowhere in tool source (validator-enforced
+  boundary check).
+- ADR-125 records the post-install canonicalisation workflow as automated.
+
+## Risks and Unknowns
+
+| Risk | Direction | Reviewer treatment at promotion |
+|---|---|---|
+| Source-fetcher CLI interface drift | Pin version; keep behind a single `fetchSourceToStage()` adapter so swap-out cost is one file. | architecture-reviewer-betty: validate adapter boundary and long-term change-cost. |
+| Vendor-specific behaviour creeps in to handle one awkward source pack | Validator-enforced boundary: tool source must contain no vendor-keyed conditionals. | architecture-reviewer-fred: PDR-009 vendor-agnostic rule is the binding ADR; assumptions-reviewer: confirm the validator check is sufficient. |
+| Namespace collision between plugin-namespaced and canonical names | Default `--prefix <source-org>-` if collision; refuse-on-collision otherwise. | assumptions-reviewer: validate prefix policy is sufficient for foreseeable packs. |
+| Local edits to vendored canonical lost on update | v1 forbids local edits; overlays via sibling `<n>-local-overrides`. | architecture-reviewer-fred: ADR-125 amendment must record the policy. |
+| Bundled subdirs (`scripts/`, `evals/`, `references/`) ship empty in upstream | Lock-hash strategy must cover the subdir tree, not only `SKILL.md`. | architecture-reviewer-wilma: stress-test partial-content cases. |
+| Plugin still installed after canonicalisation → both surfaces load | Document uninstall step; consider a `prefer` field in lock. | assumptions-reviewer: confirm dual-load is acceptable in the interim. |
+| Hash provenance ambiguity (source-CLI vs local) | Record both, validate against local hash for drift, record upstream hash for provenance. | architecture-reviewer-barney: dependency-graph and schema evolution. |
+| Update conflicts produce silent overwrite | v1 ships `add` only; `update` is v2 with explicit diff-and-confirm. | test-reviewer at execution time. |
+| Network failures mid-fetch leave partial stage | Atomic stage→rename only after successful end-to-end stage write. | architecture-reviewer-wilma: enumerate adversarial fetch failure modes. |
+| Concurrent agent edits during ingestion | Use the existing `git index/HEAD` write window discipline; CLI must claim before writing. | architecture-reviewer-wilma: race conditions across active agent sessions. |
+
+## Promotion Trigger
+
+This plan promotes to `current/` only when **all** of the following are true:
+
+1. **Success signal fired** — at least one signal in §Success Signals has
+   occurred or owner-direct promotion has been issued.
+2. **Deep sub-agent reviews PASS** — the reviews below have run on this
+   strategic brief and returned PASS or PASS-WITH-CONDITIONS. Reviews are
+   **blocking** for promotion; they need not run now.
+   - `assumptions-reviewer` — proportionality, vendor-agnostic claim scope,
+     namespace policy sufficiency, build-vs-buy attestation, blocking-relation
+     legitimacy.
+   - `architecture-reviewer-fred` — ADR/PDR compliance: PDR-009
+     vendor-agnostic rule, ADR-125 three-layer model, validator-enforced
+     boundary against vendor-specific code paths.
+   - `architecture-reviewer-betty` — boundaries: source-fetcher adapter, lock
+     schema, validator integration; long-term change-cost trade-offs.
+   - `architecture-reviewer-barney` — dependency direction and structural
+     simplification (does the new CLI reduce overall moving parts vs the
+     manual flow?).
+   - `architecture-reviewer-wilma` — adversarial: failure modes (network
+     failures mid-fetch, partial canonical writes, hash collisions, race with
+     concurrent agent edits, bundled-subdir empty-file edge cases, namespace
+     collisions across three platforms simultaneously).
+3. **Open decisions locked** — every entry in §Open Decisions has a recorded
+   resolution, either inline in this plan or via amendment to ADR-125 / PDR-009.
+4. **Build-vs-buy attestation** — explicit comparison documented between
+   wrapping an existing community installer, direct `gh api`/`git clone`
+   fetcher, and contributing the canonicalisation step upstream to the
+   community installer. Choice and rationale captured here.
+
+## Open Decisions (locked at promotion)
+
+1. **Hash strategy.** Lift source-CLI hash, compute local SHA-256, or record
+   both. Default proposal: record both as `upstreamHash` and `localHash`;
+   validator re-computes `localHash` and rejects drift.
+2. **Local edit policy on vendored canonical.** Forbid-and-overlay vs.
+   preserve-with-sentinels. Default proposal: forbid-and-overlay; overlays
+   land in `<n>-local-overrides` sibling skill.
+3. **Source-fetcher dependency.** Pin a known-good external installer, or
+   fetch directly via `gh api` / `git clone`. Default proposal: wrap an
+   existing community installer in v1 behind a single-file adapter; document
+   the swap-out path.
+4. **Tool location and surface.** `agent-tools/src/skills/canonicalise.ts` +
+   bin entry, surfaced as `pnpm agent-tools:skills:add`/`:verify`. Default
+   proposal: this layout.
+5. **Validator additions.** Drift detection (re-compute `localHash`) and
+   lock-presence reverse check (every vendored canonical must have a lock
+   entry). Default proposal: both added as part of this plan.
+6. **`update` and `remove` subcommands.** Defer to v2 once `add` is exercised
+   against ≥3 source packs. Default proposal: defer.
+
+## Implementation Detail (Reference Only)
+
+The reference design from the originating session is:
+
+```text
+oak-skills add <sourceType>:<source-url> [--include ...] [--exclude ...] [--prefix ...] [--dry-run]
+   1. mkdir tmp/.skills-stage
+   2. fetchSourceToStage(sourceType, source-url)
+        v1: wrap an existing community installer (--copy --all into stage)
+   3. read stage tree; pick richest copy; apply filters
+   4. normalise frontmatter (name, description, classification)
+   5. strip installer artefacts (.claude-plugin/, marketplace.json, etc.)
+   6. write .agent/skills/<final-name>/ atomically (stage to <dir>.tmp/, fsync, rename)
+        retain bundled subdirs (references/, scripts/, evals/, ...)
+   7. generate thin wrappers in .claude/, .cursor/, .agents/
+   8. update skills-lock.json (source, sourceType, upstreamHash, localHash)
+   9. run pnpm portability:check (fail-loud)
+```
+
+Hash strategy reference: record both `upstreamHash` (from source CLI when
+available) and `localHash` (SHA-256 over the canonical SKILL.md ‖ bundled
+tree). Validator re-computes `localHash` on `pnpm portability:check` and
+rejects drift.
+
+This sketch is **reference only**. Execution decisions are finalised at
+promotion to `current/`.
+
+## Lifecycle Touch Points
+
+Per [`lifecycle-triggers.md`](../../templates/components/lifecycle-triggers.md),
+every executable promotion of this plan must, at minimum:
+
+- **Session entry** — start-right with active-claims read; this plan touches
+  the portability validator and `agent-tools/`, both shared surfaces.
+- **Pre-edit coordination** — register active areas covering
+  `agent-tools/src/skills/**`, `scripts/validate-portability.ts`,
+  `skills-lock.json`, ADR-125, and PDR-009.
+- **During work** — append to the comms log on validator-contract changes.
+- **Session handoff** — close claims; refresh continuity surfaces; run the
+  consolidation trigger check.
+- **Deep consolidation** — graduate any ingestion-related patterns or
+  surprises captured during execution.
+
+## Documentation Updates (Owned at Phase Close)
+
+- ADR-125: amend §"Externally installed skills" to record the automated
+  canonicalisation flow, replacing the current manual prose. Add §"Validator
+  drift detection" sub-section if the lock-hash comparison is introduced.
+- PDR-009: amend §Layer 2 if a new validator-enforced "no vendor-specific
+  code" rule needs portable language.
+- `agent-tools/README.md`: new section for the ingestion CLI.
+- `documentation-sync-log.md`: per-phase entry on phase closure (per the
+  collection's required canonical documents).
+- Cross-link from
+  [`current/agent-infrastructure-portability-remediation.plan.md`](../current/agent-infrastructure-portability-remediation.plan.md)
+  Phase 6 mitigation note to the completed execution plan.
+
+## What This Plan Does Not Solve
+
+- **MCP server portability** — out of scope; `.mcp.json`/equivalent server
+  lists are a separate Layer-2 surface.
+- **Slash-command portability from external packs** — out of scope; routed
+  via the canonical command lane case-by-case.
+- **Cross-vendor session sidecars** — covered by
+  [`cross-vendor-session-sidecars.plan.md`](cross-vendor-session-sidecars.plan.md);
+  unrelated machinery.

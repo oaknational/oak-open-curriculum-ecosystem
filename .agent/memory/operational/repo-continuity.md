@@ -267,11 +267,54 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-29 Nebulous Illuminating Satellite, deeper convergence pass)**:
+**Status (2026-04-30 Vining Ripening Leaf, owner-deferred)**:
+**due — handoff post-mortem + fitness-pressure remediation next
+session**. The 2026-04-30 session ran a light handoff + light
+consolidation pass under explicit owner direction to commit-and-push,
+and surfaced HARD-zone fitness pressure on `napkin.md`
+(395/300 lines + chars + prose width) and `repo-continuity.md`
+(602/525 lines + chars), plus 1 critical prose-line-width on
+`distilled.md`. Knowledge-preservation discipline is intact (no entries
+trimmed to fit budget); the proper response per ADR-144 §Loop Health is
+a deliberate remediation lane, deferred by owner direction to the
+**next session**.
+
+**What the next session must do**:
+
+1. **Handoff post-mortem**: assess whether the 2026-04-30 light handoff
+   met the deep-handoff bar the owner originally requested. Was the
+   napkin entry sufficient? Was the ADR/PDR-candidate surfacing
+   complete? Were any thread records missed? Specifically: did
+   `consolidate-docs` step 7c thread-register freshness audit run with
+   the full six checks, and did it produce findings? My session ran an
+   abbreviated check; the next session should run the full audit and
+   compare.
+2. **Fitness remediation**: napkin rotation per `consolidate-docs`
+   §6 (extract → merge → prune → archive → fresh napkin); repo-continuity
+   history archive per established pattern; investigate the
+   `distilled.md` 172-char critical line at line 268.
+3. **PDR candidate review**: the substrate-vs-axis-plans convention
+   (recorded 2026-04-30) is queued for owner-directed PDR promotion.
+   Decide whether to author a PDR or leave it as a
+   templates/components convention.
+
+**Why deferred**: the 2026-04-30 session's primary deliverable was the
+observability-config-coherence strategic plan + the substrate
+convention; commit/push closure was owner-directed; running deep
+consolidation in the same session would have exceeded the session
+shape. Owner explicitly stated remediation lands next session.
+
+**Falsifiability**: this status flips back to `not due` only after the
+next session runs (a) the post-mortem, (b) the napkin rotation, (c) the
+repo-continuity archive, (d) the distilled.md critical-line
+investigation, and (e) the PDR-candidate disposition. Each output is
+itself a verifiable artefact (rotated napkin path, archived
+continuity-history file, distilled.md update, PDR file or owner
+decision).
+
+**Earlier status (2026-04-29 Nebulous Illuminating Satellite, deeper convergence pass)**:
 **completed this handoff** — deep consolidation already executed in this
 session arc (two stages); session-handoff is the closing capture edge.
-Next session: consolidation gate is `not due` unless a fresh trigger
-fires (per consolidate-docs trigger checklist).
 
 Two-stage pass: (1) initial run sharpened doctrine
 (knowledge-preservation absolute; shared-state always-commitable),

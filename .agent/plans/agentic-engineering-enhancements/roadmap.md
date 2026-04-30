@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; collaboration-state write safety 🔄 active; Codex session identity plumbing ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
-**Last Updated**: 2026-04-28
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; multi-agent lifecycle integration ✅ complete; intent-to-commit queue ✅ complete; collaboration-state write safety 🔄 active; Codex session identity plumbing ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; collaboration-state domain model 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; canonical-first skill pack ingestion tooling 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-30
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -836,6 +836,30 @@ Adjacent:
   - execution shares rename mechanics with the Agent Classification Taxonomy
     plan — should be coordinated
   - triage model redesign can be drafted independently of the rename
+
+### Adjacent — Canonical-First Skill Pack Ingestion Tooling (CSPI)
+
+- Strategic plan:
+  [canonical-first-skill-pack-ingestion-tooling.plan.md](future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+- Goal:
+  - vendor-agnostic CLI under `agent-tools/` that ingests any external skill
+    pack into the canonical-first three-layer model
+  - closes the unbuilt mitigation option 1 of the portability-remediation
+    plan (`pnpm agent-tools:canonicalise-vendor-skills`, never built)
+  - validator-enforced rule that no vendor-specific code paths appear in tool
+    source — the Practice is vendor-agnostic with thin per-vendor wrappers
+    only at Layer 2
+  - lock-hash drift detection on vendored canonical skills as a new validator
+    surface
+- Status: 📋 Strategic (future/) — promotion gated on deep sub-agent reviews
+- Notes:
+  - illustrative source ecosystems include but are never targeted as
+    deliverables: Anthropic, Vercel, Cloudflare, Clerk, ModelContextProtocol,
+    Cursor, Codex, future packs not yet authored
+  - complementary to AGN below (internal wrappers via manifest) — both
+    populate the same Layer-2 directories without overlapping concerns
+  - reviewer set: `assumptions-reviewer`,
+    `architecture-reviewer-fred|betty|barney|wilma`
 
 ### Adjacent — Manifest-Driven Adapter Generation (AGN)
 
