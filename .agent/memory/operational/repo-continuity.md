@@ -12,83 +12,52 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 `claude-code` / `claude-opus-4-7-1m` / `8cd55dc7` —
 `fix/pnpm-action-setup-pin-to-maintainer-latest` branch / PR #92 OPEN.
 Root-cause investigation of recurring Vercel production failures on
-every `chore(release)` commit since 1.6.1. Diagnosis traced four
-defensible-in-isolation layers composing badly:
-`pnpm/action-setup@v6.0.2` installs pnpm 11 as launcher → pnpm 11
-writes env-lockfile as separate first YAML document → @semantic-release/git
-commits the dual-doc form → Vercel's fresh-state pnpm 10.33.2 install
-rejects multi-doc and falls back to npm registry, hitting Node 24
-strict URLSearchParams `ERR_INVALID_THIS`. Fix: re-pin
+every `chore(release)` commit since 1.6.1. **The bug was an obscured
+composition error**: every layer in the chain made a defensible local
+choice and the failure was emergent from their interaction. Four
+layers traced: (1) `pnpm/action-setup@v6.0.2` was pinned by highest
+tag, not maintainer-Latest (`gh api .../releases/latest` returns
+v5.0.0; the v6.0.x saga is unmarked Latest); (2) v6.0.x installs pnpm
+11 as launcher which writes its env-lockfile as a separate first
+YAML document into `pnpm-lock.yaml` *before* delegating to
+packageManager-pinned 10.33.2; (3) `@semantic-release/git` commits
+the dual-document form on every release; (4) Vercel's fresh-state
+pnpm install rejects multi-doc YAML, falls back to npm registry, and
+hits Node 24 strict `URLSearchParams` `ERR_INVALID_THIS`. Local pnpm
+10 reads dual-doc fine on its node_modules-cached fast path — which
+is why no developer saw the failure locally. Fix: re-pin
 `pnpm/action-setup` to maintainer-Latest v5.0.0 (SHA
-`fc06bc1257f339d1d5d8b3a19a8cae5388b55320`) in both `release.yml` and
-`ci.yml`; regenerate `pnpm-lock.yaml` as single-document. Audit of all
-4 pinned actions confirmed only `pnpm/action-setup` was mispinned;
-`actions/{checkout,setup-node,create-github-app-token}` correctly
-track Latest. Future strategic brief authored at
+`fc06bc1257f339d1d5d8b3a19a8cae5388b55320`) in `release.yml` and
+`ci.yml`; regenerate `pnpm-lock.yaml` as single-document. **Audit of
+all 4 pinned actions** confirmed only `pnpm/action-setup` was
+mispinned; `actions/{checkout,setup-node,create-github-app-token}`
+correctly track Latest. Future strategic brief authored at
 [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md):
-one structural surface (pin-to-Latest validator + Dependabot config
-constraining proposals to Latest moves) + composition-obscurity
-investigation methodology as supporting insurance. Multi-doc lockfile
-shape gate considered and rejected as too brittle. Pending-Graduations
-Register updated: 2026-04-29 lockfile-corruption-diagnosis-discipline
-candidate recast as composition-obscurity-investigation-methodology
-with both triggers fired; new candidate maintainer-Latest pin doctrine.
+single structural surface (pin-to-Latest validator + Dependabot
+config constraining proposals to Latest moves) plus
+composition-obscurity investigation methodology as supporting
+insurance. **A multi-document `pnpm-lock.yaml` shape gate was
+considered and rejected as too brittle** — pnpm 11 stable will
+eventually produce multi-doc lockfiles legitimately, and the build
+log already carries the load-bearing signal "expected a single
+document in the stream"; the methodology surface covers reading that
+signal correctly. Pending-Graduations Register: 2026-04-29
+lockfile-corruption-diagnosis-discipline candidate recast as
+composition-obscurity-investigation-methodology with both triggers
+fired (second instance + owner direction); new candidate
+maintainer-Latest pin doctrine. Subjective texture preserved at
+[`experience/2026-04-30-briny-the-frame-was-the-fix.md`](../../experience/2026-04-30-briny-the-frame-was-the-fix.md).
 Branch rebased onto local main so `9b633456 chore: housekeeping` is
 ancestor; force-pushed-with-lease per owner direction.)
 
-**Earlier refresh**: 2026-04-30T22:30Z (Leafy Bending Dew / `cursor` /
-`composer` / `8d0db5` — `observability-sentry-otel` MCP app **product code**:
-extracted shared `apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-
-to-undefined.ts` (`trimToUndefined` treats **`undefined`** and **post-trim
-`''`** explicitly; no ternary collapsing). Removed duplicate helpers from
-`sentry-build-plugin-identity.ts` and `sentry-build-plugin.ts`; added
-`trim-to-undefined.unit.test.ts`; `vitest run` green for that file +
-`sentry-build-plugin.unit.test.ts`. **Not committed**: owner direction — **the
-active Claude Code session on this repo/branch should own staging + conventional
-commit** for this bundle (Cursor handoff omitted commit deliberately). Fitness
-budget and deep consolidation gate explicitly out of scope for this Cursor
-closeout. Bundle subsequently committed by Briny Lapping Harbor's
-2026-04-30 Cursor session in commit `387a7a89` and merged via PR #91.)
-
-**Earlier refresh**: 2026-04-30T15:45Z (Dewy Budding Sapling / claude-code /
-claude-opus-4-7-1m / `7e8db7` — `fix/sentry-identity-from-env` branch context
-only; no production code, schema, or runtime configuration touched. Practice
-work on the `agentic-engineering-enhancements` thread: investigated current
-skill-portability pipeline (`.agent/skills/` canonical + `.claude/`/`.cursor/`/
-`.agents/` thin wrappers + `skills-lock.json` + `pnpm portability:check`);
-drafted vendor-agnostic future strategic plan
-`canonical-first-skill-pack-ingestion-tooling.plan.md` that closes the unbuilt
-`pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged in the
-portability-remediation plan. Plan never names a delivery vendor — ecosystems
-referenced as illustrative only; tool source must contain no vendor-keyed
-conditionals (validator-enforceable rule). Promotion gated on PASS from
-assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma; reviews
-blocking later, not required now per owner direction. Discovery surfaces
-wired: future/README, collection README, roadmap, sibling adapter-generation
-forward-link, portability-remediation Phase 6 forward-link. Validators green:
-portability:check passed (12 commands, 36 skills, 45 rules, 22 reviewer
-adapters, 47 Cursor triggers, 45 Claude rules, 45 .agents rules, 40 command
-adapters across 4 platforms); markdownlint clean. Owner direction: skip the
-final consolidation gate this handoff — handled elsewhere.)
-
-**Earlier refresh**: 2026-04-30T07:30Z (Vining Ripening Leaf / claude-code /
-claude-opus-4-7-1m / `bce99d` — `fix/sentry-identity-from-env` branch / PR #91
-preview verification + observability-config-coherence strategic plan +
-substrate-vs-axis-plans convention component + ADR-162 closure-property
-ADR-to-plan bridge. No production code touched. Build `dpl_wTvPsL48u6bCn89Vscw29uot8M9H`
-verified READY via Sentry MCP + Vercel MCP: release
-`poc-oak-open-curriculum-mcp-git-fix-sentry-identity-from-env` correctly
-attributed to commit `837fcfde` with env=preview, 5 bootstrap spans + 10 DEBUG
-logs landed. Sentry-identity-from-env fix is working in production. No
-remediation deemed urgent for this branch — observability-config-coherence
-plan items all involve broader structural change. PDR candidate captured:
-substrate-vs-axis-plans convention + working principle "invent-justification-
-as-signal". Single commit landing all session artefacts at handoff close.)
-
-2026-04-29 incremental refresh entries (Solar Threading Star, Nebulous
-Illuminating Satellite, Squally Diving Anchor) archived 2026-04-30 to
+2026-04-30 earlier-refresh entries (Leafy Bending Dew, Dewy Budding
+Sapling, Vining Ripening Leaf) archived 2026-04-30 by Briny Lapping
+Harbor to
 [`archive/repo-continuity-session-history-2026-04-30.md`](archive/repo-continuity-session-history-2026-04-30.md).
-Older 2026-04-28 / 2026-04-29 incremental refresh entries archived to
+2026-04-29 incremental refresh entries (Solar Threading Star, Nebulous
+Illuminating Satellite, Squally Diving Anchor) were archived 2026-04-30 to
+the same file. Older 2026-04-28 / 2026-04-29 incremental refresh entries
+archived to
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md).
 Even older history lives in the 2026-04-22, 2026-04-26, and 2026-04-28
 archives in the same directory.
@@ -302,17 +271,61 @@ Triggers fired this session:
   maintainer-Latest action-pin doctrine is currently captured only
   in napkin + Pending-Graduations Register; no PDR / rule yet.
 + **Repeated surprises suggest a rule, pattern, ADR, or governance
-  change**: four same-shape reframes ("not corruption — split-brain";
+  change**: five same-shape reframes ("not corruption — split-brain";
   "don't disable canonical defaults"; "use Latest, not highest tag";
   "the brittle structural gate is the wrong shape — the build log
-  already carries the signal"). Each one was the owner naming a
-  structural property the agent had missed. That repetition itself
-  is a surprise worth doctrine-shaping.
+  already carries the signal"; "preserve learning over fitness
+  metric"). Each one was the owner naming a structural property the
+  agent had missed. The fifth reframe fired *during this very
+  consolidation pass* when the agent compressed its own session
+  entry to fit fitness HARD — exactly the move
+  `consolidate-docs §Learning Preservation Overrides Fitness
+  Pressure` forbids. Doctrine-graduation candidate registered:
+  *signal-distinguishing pre-action gate* (build-red is a contract
+  violation; fitness-HARD is a structural-health diagnostic; they
+  want different responses).
 + **Documentation drift question**: AGENTS.md contains a
   "See RULES_INDEX.md" pointer that lives only in the Codex entry
   point. Whether this is intentional platform-asymmetric routing
   or unhomed drift is an owner-decision question worth raising at
   consolidation depth.
+
+### Fitness disposition (consolidate-docs step 9)
+
+`pnpm practice:fitness:informational` reports HARD on three files
+after this consolidation:
+
++ **`distilled.md`** (290 / hard 275): pre-existing pressure,
+  unchanged by this session. Disposition: route to graduation of
+  pending-register candidates that owner has not yet directed
+  promotion on. Constraint: owner-direction-gated promotion (per
+  PDR-003 care-and-consult posture on Practice substance).
+  Falsifiability: the owner can grant promotion at any time and
+  measure the resulting reduction; if any candidate has been
+  ready-with-stable-doctrine for ≥3 consolidations, the criterion
+  itself is the bottleneck, not the queue.
++ **`repo-continuity.md`** (635 / hard 525, 39370 chars / hard
+  35000): HARD reflects load-bearing teaching content — the Briny
+  Last refreshed entry preserves the four-layer composition
+  cascade, audit summary, and shape-gate-rejection rationale that
+  next-session agents need; the Verdant closure narrative
+  preserves closure-discipline teaching; the Pending-Graduations
+  Register is unusually rich post the recent doctrine acceleration.
+  **Disposition: deferred remediation lane (not closure blocker).**
+  Constraint: knowledge-preservation overrides metric pressure (per
+  consolidate-docs §Learning Preservation). Evidence: the napkin's
+  fifth-surprise post-mortem documents the failure mode of
+  metric-driven compression. Falsifiability check: a future
+  session can audit which entries in the Last refreshed entry,
+  Verdant closure narrative, or Pending-Graduations Register no
+  longer carry teaching value (because the doctrine has graduated
+  to a permanent home elsewhere) and graduate-or-archive them
+  without compression. Most likely structural follow-up: split the
+  Pending-Graduations Register into its own file (PDR amendment to
+  ADR-150 / PDR-011 if the surface convention itself is changing).
++ **`principles.md`** (24003 chars / hard 24000): 1 character over
+  hard limit. Pre-existing, not this session. Disposition: trivial
+  (next edit naturally lands under limit; not closure-blocking).
 
 User explicitly directed escalation to `/jc-consolidate-docs` after
 session-handoff closes. Continue.
@@ -544,6 +557,29 @@ continuity snapshots.
   PR review; status: pending (future plan authored). Evidence:
   fix commit `0929615e`; future plan
   [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md).
++ 2026-04-30; signal-distinguishing pre-action gate — the agent
+  defaults to "make the failing thing pass" when any failing
+  signal appears (build red, test red, lint red, pin highest,
+  fitness HARD), but those signals want different responses.
+  Build/test/lint-red is a contract violation (fix); fitness-HARD
+  is a structural-health diagnostic (graduate / split / accept
+  with named disposition) and is explicitly NOT a constraint on
+  the substance per consolidate-docs §Learning Preservation. The
+  agent currently collapses both into "fix the metric." Surfaced
+  2026-04-30 (Briny Lapping Harbor) by five same-shape reframes
+  in one session, the fifth firing during the consolidation pass
+  itself when the agent compressed its own Last refreshed entry
+  to fit fitness HARD, in direct violation of the doctrine it
+  had read ten minutes earlier. The cure is structural, not
+  motivational: a pre-action gate that asks "what is this signal
+  telling me?" before any action that would make a failing signal
+  pass. Graduation candidate: PDR amendment (probably PDR-018
+  planning discipline OR PDR-026 landing-commitment, OR a fresh
+  PDR if the substance proves cross-cutting). Trigger: second
+  cross-session instance OR owner direction; status: pending
+  (full session evidence in
+  [`experience/2026-04-30-briny-the-frame-was-the-fix.md`](../../experience/2026-04-30-briny-the-frame-was-the-fix.md)
+  and napkin Surprises 1–5).
 + 2026-04-29; reviewer-scope-equals-prompted-scope (a reviewer's
   "GO WITH CONDITIONS" reads as green only if reviewer scope ≡ branch
   merge-gate scope; brief reviewers with full merge gate when
