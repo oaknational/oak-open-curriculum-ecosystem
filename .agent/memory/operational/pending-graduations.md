@@ -143,7 +143,34 @@ continuity snapshots.
   case to promote the future plan to `current/` and execute its
   ergonomics-fix slice next consolidation. **Status: ready for
   promotion** (was already; third instance hardens the case
-  significantly).
+  significantly). **Fourth-instance evidence (2026-05-01, Deep
+  Navigating Stern, day-arc continuity commits `514838c9` +
+  `bc6cd2e6`)** — eight distinct frictions in one ceremony pair
+  produced ~60 seconds of pure flag-discovery and recovery
+  overhead per commit: (i) `agent-tools:agent-identity` first-call
+  build failure (transient, retry succeeded); (ii) `claims open
+  --help` rejected (unchanged); (iii) `claims open` required-flag
+  discovery by error iteration over **5 round-trips**
+  (`--platform`, `--model`, `--active`, `--now`); (iv) `claims
+  close` required another **3 round-trips** (`--closed` path,
+  `--summary` not `--closure-summary`, identity quartet); (v)
+  identity quartet repeated across every CLI call (`--platform`,
+  `--model`, `--agent-name`, `--seed`); (vi) commit-queue
+  `enqueue` records subject at enqueue time with no `update-subject`
+  subcommand — over-length subject required abandon-and-re-enqueue
+  cycle, leaving an `abandoned` row in `commit_queue`; (vii) `comms
+  append` uses `--body` while SKILL.md vocabulary suggested
+  `--message`; (viii) markdownlint `--fix` corrupted prose-`+` at
+  column 0 into a list marker, requiring two manual rephrasings.
+  Concrete fixes for the ergonomics slice to prioritise: subject-
+  correction subcommand; identity-quartet env defaults inside the
+  CLI binary (bypass `pnpm --filter` propagation gap); `--help`
+  acceptable without value; subcommand discovery; `comms append`
+  flag rename; required-flag enumeration on first error.
+  Adjacent: napkin 2026-05-01 fourth-instance entry surfaces an
+  *agent-authored prose interacts surprisingly with markdown
+  linters under wrap* observation as small operational discipline,
+  not a separate candidate.
 + 2026-05-01; ~~bootstrap fast-path should not pay full coordination
   cost~~ **WITHDRAWN 2026-05-01 by Deep Navigating Stern** under
   owner direction *"we never take the fast path we ONLY take the
@@ -556,6 +583,26 @@ continuity snapshots.
   disjointedness entry (Vining Whispering Root); concrete impact
   proposal sketched (graph-query-layer.plan.md amendments + sibling
   `graph-tools-workspace.plan.md` FUTURE).
+
++ 2026-05-01; **idea (pre-candidate): hook-layer safety net for
+  destructive operations** — owner-recorded after the 2026-05-01
+  destructive `git checkout --` incident. Concept: a `PreToolUse`
+  hook (or equivalent) that intercepts the named destructive Bash
+  operations (`git push --force*`, `git reset --hard*`, `git rebase*`,
+  `git clean -f*`, `git branch -D*`, `git checkout --*`,
+  `git restore*`, `git stash*`, `git revert*`, `git commit --amend*`,
+  `git push*`, `rm -rf*`) and either blocks or forces explicit fresh
+  authorisation per call. Operates as an active firing layer — the
+  shape that the recall-dependent-principles PDR (owner-authorised
+  2026-05-01) names as the structural cure for safety rules whose
+  passive-prose form does not survive flow-state pressure. Pairs
+  with the `.claude/settings.json` `permissions.deny` / `permissions.ask`
+  proposal (separate decision; settings are a coarser layer, hooks
+  give per-call surfacing in chat with reasoning context).
+  **Status: idea, not yet a doctrine candidate.** Not subject to any
+  trigger condition; recorded for future structural-cure design
+  rather than promotion through the candidate pipeline. Owner
+  decision required to activate.
 
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in

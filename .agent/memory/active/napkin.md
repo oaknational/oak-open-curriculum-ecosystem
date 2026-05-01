@@ -333,6 +333,167 @@ level*. The graduation candidate added to
 `pending-graduations.md` names this collision class at the right
 level so the next consolidation pass can route it.
 
+## 2026-05-01 — Practice/tooling feedback: queue-ceremony round-trip cost during day-arc continuity commit, fourth instance (Deep Navigating Stern)
+
+Captured per `.agent/rules/capture-practice-tool-feedback.md` after
+running the full `commit` skill end-to-end on commits `514838c9` and
+`bc6cd2e6` (day-arc continuity captures + coordination-state sweep).
+This is the **fourth cross-session instance** of the friction class
+already documented in
+[`pending-graduations.md`](../operational/pending-graduations.md)
+under "CLI first-touch friction on the collaboration-state CLI"
+(status `ready for promotion`; second instance 2026-04-30, third
+instance 2026-05-01 morning Vining Whispering Root). New evidence
+this turn:
+
+- **Surface**: `agent-tools:collaboration-state claims open / claims close`,
+  `agent-tools:commit-queue enqueue / phase / record-staged / verify-staged / complete`,
+  `agent-tools:comms append`, `pnpm markdownlint:root`.
+- **Signal**: friction (compound — eight distinct frictions across
+  the ceremony for a single commit).
+- **Observation**:
+    1. **`agent-tools:agent-identity` first-call build failure.**
+       First invocation failed inside `pnpm --filter @oaknational/agent-tools agent-identity`
+       with non-zero exit. Re-running `pnpm --filter @oaknational/agent-tools build`
+       directly succeeded (exit 0); subsequent CLI calls worked.
+       The agent-tools CLIs all run `pnpm -s build && node ...` as a
+       prefix, so a transient build-cache miss propagates as a CLI
+       failure; the recovery pattern is "build manually, retry CLI."
+       Symptom-cure-by-retry rather than visible-cause.
+    2. **`claims open --help` rejected.** `flag '--help' requires a
+       value` — same issue from the third-instance evidence,
+       unchanged.
+    3. **Required-flag discovery by error iteration.** Found the
+       `claims open` flag set across **5 round-trips**: missing
+       `--platform`, then `--model`, then `--active`, then `--now`,
+       finally success. `claims close` required another **3
+       round-trips**: `--closed` (path to archive), `--summary`
+       (NOT `--closure-summary`), and the same identity quartet
+       repeated. Each iteration is one CLI invocation costing
+       ~3-4 seconds + read-the-error + reformulate. Total: ~30-40
+       seconds of pure flag-discovery cost per commit, repeated
+       per close.
+    4. **Identity quartet repeated across CLIs.** Every
+       collaboration-state subcommand requires `--platform`,
+       `--model`, `--agent-name`, `--seed`. The values are constant
+       across the session but must be re-typed every call. No env-
+       var fallback in the called subprocess (the documented
+       `pnpm --filter` env-inheritance gap). `PRACTICE_AGENT_SESSION_ID_CLAUDE`
+       is in the parent shell but does not propagate; `--seed
+       "$PRACTICE_AGENT_SESSION_ID_CLAUDE"` works as the explicit
+       passthrough.
+    5. **Subject baked at enqueue, no update path.** `commit-queue
+       enqueue` records `commit_subject` in the queue entry;
+       `verify-staged` checks the staged subject matches. No
+       `update-subject` subcommand surfaced. When my draft subject
+       came in at 110 chars (over 100-char `header-max-length`), I
+       had to **abandon the entry and re-enqueue with the corrected
+       subject**, leaving an `abandoned` row in `commit_queue` for
+       the audit trail. This is recoverable but the abandon-and-
+       re-enqueue cycle costs another ~10 seconds and clutters the
+       queue. A subject-correction subcommand would let the agent
+       fix-and-continue.
+    6. **`comms append` flag mismatch.** First call used `--message`;
+       CLI rejected with `missing required option --body`. The
+       SKILL.md uses one term; the CLI uses another.
+    7. **Markdownlint prose-`+` corruption.** `pnpm markdownlint:root`
+       (the `--fix` variant) interpreted prose `+` symbols at
+       column 0 (after hard-wrap) as list markers and added
+       blank-lines-around-lists per MD032. Result: my prose
+       *"(4 cross-session instances + owner direction)"* hard-
+       wrapped onto a new line as `+ owner direction);` and the
+       autofixer added a blank line before it, producing visible
+       structural corruption. Two rephrasings required (one in
+       `repo-continuity.md`, one in
+       `threads/agentic-engineering-enhancements.next-session.md`)
+       to remove all line-leading `+` prose symbols. Lint cannot
+       distinguish prose-`+` from list-marker `+`.
+    8. **MD004 mass reformat.** Pre-existing `-` bullets in the
+       thread record (380 lines worth) were reformatted to `+` by
+       autofixer because my new entries set the consensus style to
+       `+` under MD004 `consistent` mode. Benign churn, but it
+       widened the commit's diff stat substantially and will look
+       like substantive change in `git log` to a reviewer who
+       doesn't read the diff.
+
+- **Behaviour change / candidate follow-up**: this is a fourth-
+  instance hardening of the existing `ready for promotion` register
+  entry, not a new candidate. The
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+  is owner-authorised for promotion to `current/`; this entry adds
+  weight to the urgency. Concrete fixes the plan should consider in
+  its ergonomics slice:
+  - Subject-correction subcommand (`commit-queue update-subject`).
+  - Identity-quartet env defaults inside the CLI binary (not in
+    the pnpm wrapper, so `pnpm --filter` propagation is bypassed).
+  - `--help` accepting no argument; subcommand discovery
+    (`claims` alone listing `open`/`close`/etc.).
+  - `comms append` flag rename to match SKILL.md vocabulary
+    (or vice versa).
+  - Required-flag enumeration on first error (instead of
+    one-flag-per-error iteration).
+- **Source plane**: `operational` (CLI is host-local implementation
+  of Practice-owned coordination capabilities).
+
+### Adjacent insight — agent-authored prose interacts surprisingly with markdown linters under wrap
+
+The prose-`+` corruption in (7) is a small instance of a larger
+property: **agent-authored continuity prose hard-wraps at fixed
+column counts, and any character that markdown treats as syntactic
+when it appears at column 0 can be silently transformed by a
+linter pass.** Candidates beyond `+`:
+
+- `-` (em-dash continued onto a new line; could become a `-` list
+  marker)
+- `*` (in math/bullet contexts)
+- `>` (block quote)
+- `1.`, `2.` etc. (any "number-period-space" at line start; ordered
+  list)
+- `#` (heading)
+- ` ` four-space indent (code block)
+- `|` (table row)
+- `[` / `]:` (link reference)
+
+Each is a "prose at column 0 looks like markdown syntax" trap.
+The structural cure for a continuity surface is one of: (a) pre-
+flight a linter check before commit (the pre-commit hook does this
+but we hit the issue *because* of the autofix, not the check); (b)
+disable autofix on continuity surfaces (autofix can corrupt prose;
+manual fix preserves intent); (c) write continuity prose with
+hard-wraps positioned so syntactic characters never land at column
+0; (d) markdownlint plugin that distinguishes prose-context from
+list-context (probably not worth building).
+
+(c) is the cheapest immediate cue: when wrapping a line whose
+continuation begins with `+`, `-`, `*`, `>`, `#`, `|`, `[`, or a
+digit-period, **adjust the wrap point** so a non-syntactic
+character is at column 0. The vocabulary trip-list from the
+rush-impulse metacognition extends naturally to a wrap-time check:
+*before final write, scan column-0 of every wrapped line for
+markdown-syntactic characters, and re-wrap if any are present.*
+
+This is a small mechanical discipline rather than a doctrine
+candidate, so I'm noting it here for future operational reference
+rather than promoting it to the register. If a second instance
+emerges, escalate to the markdown-shared-state-collision-safety
+candidate as adjacent territory (the linter interaction is part
+of the markdown-state surface's structural fragility).
+
+### Recursive note (this is the fourth napkin entry of the day)
+
+The first surfaced a tactic (jq-on-Read-blocked-file). The second
+surfaced the impulse beneath the tactic (rush as entropy
+generator). The third surfaced the shared-state collision class
+beneath the workflow the impulse keeps producing. This fourth
+surfaces the *operational cost* of the discipline that addresses
+the third — *using* the queue ceremony correctly produces 30-40
+seconds of friction per commit, plus markdown-linter interactions
+that require manual prose adjustment. The discipline is right;
+the implementation is the bottleneck. That's the very thesis of
+the CLI ergonomics promotion plan, now hardened with fourth-
+instance evidence. Each layer of the day's stack is in conversation
+with the others.
+
 ## 2026-05-01 — Producer/consumer disjointedness: the carve-outs were generator gaps, not domain constraints (Vining Whispering Root)
 
 Owner reframe at the close of the EEF-Increment-1 review turn:

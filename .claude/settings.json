@@ -90,6 +90,36 @@
       "Skill(create-mcp-app)",
       "Skill(migrate-oai-app)",
       "mcp__plugin_vercel_vercel__get_project"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git rebase:*)",
+      "Bash(git clean -f:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git clean -fx:*)",
+      "Bash(git clean -fdx:*)",
+      "Bash(git clean -df:*)",
+      "Bash(git clean -xf:*)",
+      "Bash(git clean -dxf:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git update-ref -d:*)"
+    ],
+    "ask": [
+      "Bash(git checkout --:*)",
+      "Bash(git checkout HEAD --:*)",
+      "Bash(git restore:*)",
+      "Bash(git stash:*)",
+      "Bash(git reset:*)",
+      "Bash(git revert:*)",
+      "Bash(git commit --amend:*)",
+      "Bash(git push:*)",
+      "Bash(git tag -d:*)",
+      "Bash(git push --delete:*)",
+      "Bash(rm -rf:*)"
     ]
   },
   "hooks": {
