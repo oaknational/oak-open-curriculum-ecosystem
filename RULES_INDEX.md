@@ -44,6 +44,7 @@ files below are the source of truth for always-on repository rule doctrine.
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/pre-merge-divergence-analysis.md`
 - `.agent/rules/read-agent-md.md`
+- `.agent/rules/read-before-asking.md`
 - `.agent/rules/read-diagnostic-artefacts-in-full.md`
 - `.agent/rules/register-active-areas-at-session-open.md`
 - `.agent/rules/register-identity-on-thread-join.md`

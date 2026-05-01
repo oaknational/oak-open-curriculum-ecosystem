@@ -36,6 +36,8 @@
       "Skill(jc-chatgpt-report-normalisation:*)",
       "Skill(patterns)",
       "Skill(patterns:*)",
+      "Skill(undo-change)",
+      "Skill(undo-change:*)",
       "WebFetch(domain:www.w3.org)",
       "WebFetch(domain:www.designtokens.org)",
       "WebFetch(domain:www.thenational.academy)",
