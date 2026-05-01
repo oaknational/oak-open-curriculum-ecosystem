@@ -1,11 +1,11 @@
 ---
 name: "EEF Evidence Corpus Surface"
 overview: "Expose the EEF Teaching and Learning Toolkit as an evidence corpus (graph + ranking engine) on top of the graph query layer, with two pedagogical prompts, structural citation discipline, telemetry, and a freshness story. Increment 2 (and EEF-side of 3+4) of the graph-and-corpus delivery sequence."
-parent_plan: "../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
+parent_plan: "../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "../../../knowledge-graph-integration/current/graph-query-layer.plan.md"
-  - "../../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
-  - "../../../knowledge-graph-integration/future/cross-source-journeys.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, type-reviewer, sentry-reviewer"
 status: current
 isProject: false
@@ -89,7 +89,7 @@ delivery sequence.
 ## Why This Plan Replaces Its Predecessor
 
 The previous plan (`eef-evidence-mcp-surface.plan.md`, recoverable via
-`git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
+`git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
 shipped:
 
 - 2 read-only resources (methodology, strands) as JSON dumps.
@@ -422,7 +422,7 @@ correct: a contract change in the agent-discoverable schema deserves
 explicit attention, not silent acceptance.
 
 The full Zod schema is preserved verbatim from the predecessor; see
-the predecessor (recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
+the predecessor (recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
 §Phase 1.
 
 - **User value**: any schema drift between EEF JSON and declared types
@@ -913,7 +913,7 @@ Promote when:
 
 1. Owner has approved the architecture session conclusions (DONE).
 2. The graph-query-layer plan
-   ([`../../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../knowledge-graph-integration/current/graph-query-layer.plan.md))
+   ([`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md))
    has reached ACTIVE.
 3. A fresh upstream EEF data check has been performed; if a new
    version is available, the snapshot is refreshed before any code
@@ -968,11 +968,11 @@ Before promoting:
 
 ## Cross-Plan References
 
-- **Predecessor (preserved byte-identical)**: the predecessor (recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
+- **Predecessor (preserved byte-identical)**: the predecessor (recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
 - **Conservation map**: [`../reference/conservation-map.md`](../reference/conservation-map.md)
-- **Foundation (Inc 1)**: [`../../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../knowledge-graph-integration/current/graph-query-layer.plan.md)
-- **Journeys (Inc 3)**: [`../../../knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../knowledge-graph-integration/future/cross-source-journeys.plan.md)
-- **Parent (coordinator)**: [`../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this plan owns its WS-3.
+- **Foundation (Inc 1)**: [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+- **Journeys (Inc 3)**: [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+- **Parent (coordinator)**: [`../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this plan owns its WS-3.
 - **Strategy**: [`../future/evidence-integration-strategy.md`](../future/evidence-integration-strategy.md)
 - **Technical reference**: [`../reference/oak-eef-technical-comparison.md`](../reference/oak-eef-technical-comparison.md)
 - **Data**: [`../reference/eef-toolkit.json`](../reference/eef-toolkit.json)

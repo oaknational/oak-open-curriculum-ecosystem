@@ -6,7 +6,7 @@ as data sources for applications, **except for EEF Toolkit material, which has
 its own dedicated subthread**.
 
 It is separate from
-[knowledge-graph-integration/](../../knowledge-graph-integration/), which owns
+[knowledge-graph-integration/](../../connecting-oak-resources/knowledge-graph-integration/), which owns
 internal Oak KG integration into MCP, search, QA, and graph-serving layers.
 
 ## Sibling Subthreads

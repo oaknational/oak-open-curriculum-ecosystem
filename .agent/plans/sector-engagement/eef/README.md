@@ -32,7 +32,7 @@ ownership clarity.
 
 Education skills, future third-party KGs, and the generic source-ingestion
 intake model remain in the sibling
-[`../external-knowledge-sources/`](../external-knowledge-sources/) subthread.
+[`../exploring-open-education-resources/external-knowledge-sources/`](../exploring-open-education-resources/external-knowledge-sources/) subthread.
 
 ## Scope
 
@@ -46,9 +46,9 @@ In scope:
 
 Out of scope:
 
-- non-EEF education-skills material (lives in `../external-knowledge-sources/`);
+- non-EEF education-skills material (lives in `../exploring-open-education-resources/external-knowledge-sources/`);
 - the formal Oak Curriculum Ontology integration (lives in
-  `../../knowledge-graph-integration/`);
+  `../../connecting-oak-resources/knowledge-graph-integration/`);
 - the EEF MCP server prototype source code (read-only external artefact;
   attribution is captured here).
 
@@ -62,9 +62,9 @@ foundation (Increment 1) and the cross-source journey primitive design
 | Inc | Plan home | Owns |
 |---|---|---|
 | 0 | already landed | misconception graph as JSON dump (baseline) |
-| 1 | [`../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation graph layer with progressive disclosure, polymorphic over prerequisite + misconception + EEF strands |
+| 1 | [`../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation graph layer with progressive disclosure, polymorphic over prerequisite + misconception + EEF strands |
 | 2 | [`current/eef-evidence-corpus.plan.md`](current/eef-evidence-corpus.plan.md) | Evidence corpus extension on top of graph layer; `recommend`, `explain`, `compare` tools; two prompts; structural citation discipline; freshness gate; telemetry |
-| 3 | [`../../knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../knowledge-graph-integration/future/cross-source-journeys.plan.md) | Cross-source journey primitive (search × misconception × EEF); first journey = `evidence-aware-lesson-sequencing` |
+| 3 | [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | Cross-source journey primitive (search × misconception × EEF); first journey = `evidence-aware-lesson-sequencing` |
 | 4 | within Inc 2 + Inc 1 | Telemetry + freshness + provenance (EEF-specific lives in Inc 2; graph-layer telemetry lives in Inc 1) |
 | 5 | deferred | School-context overlay (gated on multi-tenant identity) |
 
@@ -72,8 +72,8 @@ foundation (Increment 1) and the cross-source journey primitive design
 
 | Path | Type | Purpose |
 |---|---|---|
-| [current/eef-evidence-corpus.plan.md](current/eef-evidence-corpus.plan.md) | Executable plan (CURRENT) | Restructured successor to the original `eef-evidence-mcp-surface.plan.md`. 20 todos covering corpus shape, ranking engine, three tools, two prompts, structural citation enforcement, refresh gate, telemetry, negative-space documentation, and load-bearing credits to John Roberts. WS-3 of [`open-education-knowledge-surfaces.plan.md`](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md). |
-| [reference/conservation-map.md](reference/conservation-map.md) | **Semantic preservation map** | Agent-judged mapping of every concept/requirement/credit/todo from the predecessor to its new home, with a verification log. Load-bearing artefact for "nothing lost". The predecessor itself is recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` (see conservation map § Recovery path). |
+| [current/eef-evidence-corpus.plan.md](current/eef-evidence-corpus.plan.md) | Executable plan (CURRENT) | Restructured successor to the original `eef-evidence-mcp-surface.plan.md`. 20 todos covering corpus shape, ranking engine, three tools, two prompts, structural citation enforcement, refresh gate, telemetry, negative-space documentation, and load-bearing credits to John Roberts. WS-3 of [`open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md). |
+| [reference/conservation-map.md](reference/conservation-map.md) | **Semantic preservation map** | Agent-judged mapping of every concept/requirement/credit/todo from the predecessor to its new home, with a verification log. Load-bearing artefact for "nothing lost". The predecessor itself is recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` (see conservation map § Recovery path). |
 | [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md) | Strategic brief | Three-layer architecture, R1–R8 impact-preserving requirements, four integration levels (1–3 independently deliverable; 4/4b need formal ontology). |
 | [reference/oak-eef-technical-comparison.md](reference/oak-eef-technical-comparison.md) | Technical reference | Side-by-side comparison of the EEF Python prototype stack and Oak's HTTP MCP stack. |
 | [reference/eef-toolkit.json](reference/eef-toolkit.json) | Data snapshot | EEF dataset v0.2.0 (last_updated 2026-04-02). 30 strands, 9 caveats, 17/30 with school-context relevance. Authoritative input for `current/`. |
@@ -83,21 +83,21 @@ foundation (Increment 1) and the cross-source journey primitive design
 1. This README (orientation)
 2. [`future/evidence-integration-strategy.md`](future/evidence-integration-strategy.md)
    — *why* and *what*: impact requirements, integration levels, sequencing
-3. [`../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../knowledge-graph-integration/current/graph-query-layer.plan.md)
+3. [`../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
    — *foundation* (Increment 1): the graph operations EEF strands sit on
 4. [`current/eef-evidence-corpus.plan.md`](current/eef-evidence-corpus.plan.md)
    — *how* (Increment 2): the executable plan
 5. [`reference/conservation-map.md`](reference/conservation-map.md)
    — *what was preserved and what was added* in the 2026-04-30
    restructure (read this if you want to know that nothing was lost)
-6. [`../../knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../knowledge-graph-integration/future/cross-source-journeys.plan.md)
+6. [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
    — *future* (Increment 3): the journey primitive that cross-composes
    EEF with search and misconception data
 7. [`reference/oak-eef-technical-comparison.md`](reference/oak-eef-technical-comparison.md)
    — comparative context for the EEF prototype design choices
 8. [`reference/eef-toolkit.json`](reference/eef-toolkit.json) — the data itself
 
-To read the predecessor, use `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
+To read the predecessor, use `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
 (or follow the recovery instructions in the conservation map's
 § Recovery path).
 
@@ -125,14 +125,14 @@ prudent before the executable plan promotes from CURRENT to ACTIVE.
 
 ## Parent and Sibling Relationships
 
-- **Parent (coordinator)**: [`../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+- **Parent (coordinator)**: [`../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
   — multi-source coordinating plan; this subthread owns its **WS-3**.
 - **Sibling subthreads under `sector-engagement/`**:
-  - [`../external-knowledge-sources/`](../external-knowledge-sources/) — education skills + future KGs.
+  - [`../exploring-open-education-resources/external-knowledge-sources/`](../exploring-open-education-resources/external-knowledge-sources/) — education skills + future KGs.
   - [`../knowledge-graph-adoption/`](../knowledge-graph-adoption/) — outbound: external orgs using Oak's KG assets.
 - **Cross-collection siblings**:
-  - [`../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) — WS-2 (DONE), establishes graph factory pattern.
-  - [`../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md`](../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — WS-4 (PENDING).
+  - [`../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) — WS-2 (DONE), establishes graph factory pattern.
+  - [`../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — WS-4 (PENDING).
 - **Related ADR (proposed, not constraining)**: [`docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) — typing discipline, URI scheme, namespace prefixes (`eef-*`), licensing. ADR is in **Proposed** status as of 2026-04-30; it documents a direction that the in-flight work explores, not a constraint that gates the work.
 
 ## Credits and Attribution

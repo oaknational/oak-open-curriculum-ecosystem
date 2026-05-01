@@ -69,9 +69,9 @@ Read:
 2. `.agent/directives/principles.md`
 3. `.agent/directives/testing-strategy.md`
 4. `.agent/plans/semantic-search/research-index.md`
-5. `.agent/plans/knowledge-graph-integration/research/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
-6. `.agent/plans/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
-7. `.agent/plans/knowledge-graph-integration/current/kg-integration-quick-wins.plan.md`
+5. `.agent/plans/connecting-oak-resources/knowledge-graph-integration/research/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+6. `.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
+7. `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/kg-integration-quick-wins.plan.md`
 8. [oak-curriculum-ontology `README.md`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/README.md)
 9. [oak-curriculum-ontology `scripts/export_to_neo4j.py`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j.py)
 10. [oak-curriculum-ontology `scripts/export_to_neo4j_config.json`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j_config.json)
@@ -85,12 +85,12 @@ Run:
 git status --short
 git branch --show-current
 ls -1 .agent/plans/semantic-search/active
-ls -1 .agent/plans/knowledge-graph-integration/active
+ls -1 .agent/plans/connecting-oak-resources/knowledge-graph-integration/active
 ```
 
 Then read:
 
-1. `.agent/plans/knowledge-graph-integration/README.md`
+1. `.agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md`
 2. `.agent/plans/semantic-search/README.md`
 3. `.agent/plans/high-level-plan.md`
 

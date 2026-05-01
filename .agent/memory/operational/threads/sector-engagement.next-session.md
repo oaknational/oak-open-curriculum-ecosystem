@@ -76,7 +76,7 @@ Evidence (prior 2026-04-29 landing still authoritative for narrative sweep):
 - [Sector Engagement Roadmap](../../../plans/sector-engagement/roadmap.md)
 - [SDK and MCP Enhancements](../../../plans/sdk-and-mcp-enhancements/README.md)
 - [Semantic Search](../../../plans/semantic-search/README.md)
-- [Knowledge Graph Integration](../../../plans/knowledge-graph-integration/README.md)
+- [Knowledge Graph Integration](../../../plans/connecting-oak-resources/knowledge-graph-integration/README.md)
 - [MCP server README](../../../../apps/oak-curriculum-mcp-streamable-http/README.md)
 - [Curriculum SDK README](../../../../packages/sdks/oak-curriculum-sdk/README.md)
 - [Search CLI README](../../../../apps/oak-search-cli/README.md)
@@ -117,7 +117,7 @@ before implementation promotion:
    [roadmap](../../../plans/sector-engagement/roadmap.md).
 3. Read the sub-thread that matches the owner-selected landing:
    [OEAI](../../../plans/sector-engagement/oeai/README.md),
-   [external knowledge sources](../../../plans/sector-engagement/external-knowledge-sources/README.md),
+   [external knowledge sources](../../../plans/exploring-open-education-resources/external-knowledge-sources/README.md),
    [knowledge graph adoption](../../../plans/sector-engagement/knowledge-graph-adoption/README.md),
    or the relevant `future/` brief.
 4. Re-read the owning engineering collection before writing implementation
@@ -133,11 +133,11 @@ before implementation promotion:
 
 - [Sector Engagement Roadmap](../../../plans/sector-engagement/roadmap.md)
 - [OEAI Thread](../../../plans/sector-engagement/oeai/README.md)
-- [External Knowledge Sources](../../../plans/sector-engagement/external-knowledge-sources/README.md)
+- [External Knowledge Sources](../../../plans/exploring-open-education-resources/external-knowledge-sources/README.md)
 - [Knowledge Graph Adoption](../../../plans/sector-engagement/knowledge-graph-adoption/README.md)
 - [Sector reusable components adoption (current)](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
 - [Oak OpenAPI Monorepo Integration](../../../plans/sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
-- [Oak Curriculum Ontology Workspace Reassessment](../../../plans/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+- [Oak Curriculum Ontology Workspace Reassessment](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
 
 ### Current Objective
 

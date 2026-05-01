@@ -14,9 +14,9 @@ After the conservation review concluded ("nothing of value lost"), the
 three predecessor files remains permanently accessible via:
 
 ```bash
-git show <pre-session-commit>:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md
-git show <pre-session-commit>:.agent/plans/sector-engagement/external-knowledge-sources/future/evidence-integration-strategy.md
-git show <pre-session-commit>:.agent/plans/sector-engagement/external-knowledge-sources/future/oak-eef-technical-comparison.md
+git show <pre-session-commit>:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md
+git show <pre-session-commit>:.agent/plans/exploring-open-education-resources/external-knowledge-sources/future/evidence-integration-strategy.md
+git show <pre-session-commit>:.agent/plans/exploring-open-education-resources/external-knowledge-sources/future/oak-eef-technical-comparison.md
 ```
 
 The pre-session commit on this branch is `e2796757` (`chore(release):
@@ -107,7 +107,7 @@ not reproduce them inline, it points back to the original via path.
 
 | Element | Where it lives now |
 |---|---|
-| Full Zod schema (EefMetaSchema, EefUkContextSchema, EefImplementationRequirementsSchema, EefSchoolContextRelevanceSchema, EefHeadlineSchema, EefStrandSchema, EefToolkitDataSchema) | code: `oak-curriculum-sdk/src/mcp/eef-toolkit-data.ts` (T2). Verbatim schema lives in the predecessor — recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` § Phase 1. |
+| Full Zod schema (EefMetaSchema, EefUkContextSchema, EefImplementationRequirementsSchema, EefSchoolContextRelevanceSchema, EefHeadlineSchema, EefStrandSchema, EefToolkitDataSchema) | code: `oak-curriculum-sdk/src/mcp/eef-toolkit-data.ts` (T2). Verbatim schema lives in the predecessor — recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` § Phase 1. |
 | Composite scoring algorithm (`40/30/20/10` weighting, context_relevance accumulation) | preserved verbatim in `eef-evidence-corpus.plan.md` T5 |
 | Null-impact strand IDs (4) | preserved verbatim in T5 docstring; cross-referenced in scoring engine source |
 | Focus enum (the 7 most teacher-relevant priorities) | preserved verbatim in T6 |
@@ -246,10 +246,10 @@ restructure:
 
 - **Graph operations (manifest, summary, get_node, enumerate_nodes,
   neighbours, subgraph, find_by_tag)** — now in
-  [`../../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../knowledge-graph-integration/current/graph-query-layer.plan.md).
+  [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md).
   EEF strands becomes a `GraphView` adapter (T5 of that plan).
 - **Cross-source journeys** (search × misconception × EEF) — now in
-  [`../../../knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../knowledge-graph-integration/future/cross-source-journeys.plan.md).
+  [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md).
   Out of scope for the EEF corpus plan; the journey primitive is
   generic.
 - **R1/R7 structural enforcement** — the *citation type* is in this
@@ -275,8 +275,8 @@ restructure:
   Recovery path section above). The pre-session state is permanently
   in git history.
 - [`../current/eef-evidence-corpus.plan.md`](../current/eef-evidence-corpus.plan.md) — successor
-- [`../../../knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
-- [`../../../knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 (journeys)
+- [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
+- [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 (journeys)
 - [`../../../../memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../../memory/active/napkin.md) — full session insight
 
 ## N. Verification log (the "double check" the owner asked for)

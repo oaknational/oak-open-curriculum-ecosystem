@@ -411,10 +411,10 @@ narrative/scope work was settled in earlier sessions.
 - Conservation map (semantic preservation + verification log):
   [`.agent/plans/sector-engagement/eef/reference/conservation-map.md`](../plans/sector-engagement/eef/reference/conservation-map.md)
 - Increment 1 plan (foundation):
-  [`.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md`](../plans/knowledge-graph-integration/current/graph-query-layer.plan.md)
+  [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
 - Increment 2 plan (EEF as corpus):
   [`.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 - Increment 3 plan (cross-source journeys):
-  [`.agent/plans/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../plans/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+  [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
 - Pre-session predecessor (recoverable from git history):
-  `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
+  `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`

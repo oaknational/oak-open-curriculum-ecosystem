@@ -8,7 +8,7 @@ Deferred strategic briefs and later engagement opportunities.
 
 Subthread-specific future plans live with their threads:
 
-- [../external-knowledge-sources/future/](../external-knowledge-sources/future/)
+- [../exploring-open-education-resources/external-knowledge-sources/future/](../exploring-open-education-resources/external-knowledge-sources/future/)
   for third-party knowledge/data-source ingestion.
 - [../knowledge-graph-adoption/future/](../knowledge-graph-adoption/future/)
   for external organisations using Oak KG assets.

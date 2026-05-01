@@ -82,7 +82,7 @@ vision document.
   `.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md`
   (R1-R8 impact-preserving requirements)
 - **KG alignment audit**:
-  `.agent/plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`
   (ACTIVE — measures ontology-search overlap for deeper integration later)
 - **M2 milestone**: `.agent/milestones/m2-extension-surfaces.md`
   (KG alignment is an M2 gate)

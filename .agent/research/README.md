@@ -66,10 +66,10 @@ the ontology lane.
 
 | Surface | Type | Why it matters |
 |---------|------|----------------|
-| [../plans/knowledge-graph-integration/README.md](../plans/knowledge-graph-integration/README.md) | Collection hub | Main discovery surface for ontology integration, direct-use baseline, platform comparison, and adjacent pedagogy work |
+| [../plans/connecting-oak-resources/knowledge-graph-integration/README.md](../plans/connecting-oak-resources/knowledge-graph-integration/README.md) | Collection hub | Main discovery surface for ontology integration, direct-use baseline, platform comparison, and adjacent pedagogy work |
 | [../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis of the official Oak ontology against current MCP orientation, direct ontology surfaces, search projections, QA, and governance/update needs |
-| [../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
-| [../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future strategic plan | Direct-use-first comparison plan for testing whether Neo4j or Stardog adds enough downstream serving value to justify adoption |
+| [../plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
+| [../plans/connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../plans/connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future strategic plan | Direct-use-first comparison plan for testing whether Neo4j or Stardog adds enough downstream serving value to justify adoption |
 
 ### 🤖 AI & MCP
 

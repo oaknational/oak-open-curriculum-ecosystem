@@ -60,8 +60,8 @@ Evidence:
 - [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
 - [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
 - [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
-- [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
-- [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
+- [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
+- [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
 - [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
 - [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
 
@@ -72,7 +72,7 @@ Evidence:
 - All three plan files (graph-query-layer, eef-evidence-corpus,
   cross-source-journeys) are CURRENT or FUTURE; **none is ACTIVE**.
 - Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
-  tree; recoverable via `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`.
+  tree; recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`.
 - The `originals/` snapshot directory was created during the
   restructure for the verification pass and deleted afterwards (see
   conservation map § Recovery path).
@@ -222,7 +222,7 @@ Each of the 19 tracers carries:
 - A boundary check (drops to graph mechanics, not corpus scoring).
 - A verification footnote (`Verified against: <file> + <field path>`).
 
-Inline location: `.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`.
+Inline location: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`.
 
 ### Gate 2 — Plan-body first-principles check
 
@@ -301,7 +301,7 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
 
 ### Plan-body diff summary (since type-reviewer round)
 
-Modifications to `.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md`
+Modifications to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
 this session, across two review rounds:
 
 - Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
@@ -468,6 +468,6 @@ for the full list with triggers and candidate homes. Items cover:
 ## Cross-Plan and Cross-Thread Links
 
 - **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
-- **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
+- **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
 - **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 - **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.

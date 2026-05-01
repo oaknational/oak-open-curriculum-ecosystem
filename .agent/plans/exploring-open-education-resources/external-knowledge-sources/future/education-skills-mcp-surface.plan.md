@@ -1,11 +1,11 @@
 ---
 name: "Education Skills MCP Surface"
 overview: "Integrate evidence-based pedagogical skills from the Agent Skills ecosystem into the MCP server as prompts and discovery tools, with proper licence isolation and upstream update mechanism."
-parent_plan: "../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
+parent_plan: "../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "../../eef/current/eef-evidence-corpus.plan.md"
-  - "../../../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
-  - "../../../knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, architecture-reviewer-barney"
 status: future
 todos:
@@ -210,7 +210,7 @@ git subtree pull \
 ```
 
 **Why subtree over submodule**: The ontology integration strategy
-(`.agent/plans/knowledge-graph-integration/future/ontology-integration-strategy.md`)
+(`.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-integration-strategy.md`)
 already evaluated these trade-offs. Subtree avoids `--recurse-submodules`
 pain in CI, changes are regular commits, and local modifications merge
 cleanly. The same reasoning applies here.
@@ -360,7 +360,7 @@ T8: E2E tests                                      ← quality gate
 
 ### Parent
 
-- [open-education-knowledge-surfaces.plan.md](../../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+- [open-education-knowledge-surfaces.plan.md](../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
   — this plan adds a fourth external content source to the coordinator
 
 ### Siblings
@@ -380,7 +380,7 @@ T8: E2E tests                                      ← quality gate
   — education skills fulfil R5 (Implementation Guidance) and R6
   (Pedagogical Workflow Orchestration) at a level EEF data alone cannot
 - **Ontology integration strategy**
-  (`.agent/plans/knowledge-graph-integration/future/ontology-integration-strategy.md`)
+  (`.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-integration-strategy.md`)
   — the git subtree approach here is informed by the same trade-off
   analysis (subtree > submodule for content vendoring)
 

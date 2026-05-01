@@ -39,9 +39,9 @@ education and technology teams to build with.
 | [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |
 | [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | Canonical MCP Apps research summary for Oak. Active implementation is governed by the MCP Apps spec, `@modelcontextprotocol/ext-apps`, and the live executable plans |
 | [archive/completed/server-info-branding.plan.md](archive/completed/server-info-branding.plan.md) | Completed plan | MCP server branding alignment completed and archived |
-| [../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md](../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
-| [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future cross-boundary plan | Re-read the ontology repo from an upstream-first starting point and write up what that fresh pass changes |
-| [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future cross-boundary plan | Test direct ontology use as the control case before any Neo4j, Stardog, or hybrid serving decision is promoted |
+| [../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md](../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
+| [../connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future cross-boundary plan | Re-read the ontology repo from an upstream-first starting point and write up what that fresh pass changes |
+| [../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future cross-boundary plan | Test direct ontology use as the control case before any Neo4j, Stardog, or hybrid serving decision is promoted |
 | [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
 | [future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md) | Future strategic brief | Cloudflare/Anthropic Code Mode research, token-footprint measurement, progressive discovery, and Oak MCP applicability |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
@@ -51,8 +51,8 @@ education and technology teams to build with.
 1. [roadmap.md](roadmap.md)
 2. [active/README.md](active/README.md)
 3. [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
-4. [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md)
-5. [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
+4. [../connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md)
+5. [../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
 6. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 7. [archive/completed/ws3-widget-clean-break-rebuild.plan.md](archive/completed/ws3-widget-clean-break-rebuild.plan.md)
 8. [archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md](archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md)
