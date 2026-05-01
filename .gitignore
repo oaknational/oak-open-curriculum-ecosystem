@@ -54,8 +54,27 @@ collaboration.txt
 # resolution; the widget's CSS side-effect imports need it explicit).
 !apps/oak-curriculum-mcp-streamable-http/widget/src/vite-env.d.ts
 
-# File system artifacts
+# File system artefacts (macOS, Windows, Linux desktops)
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows thumbnail / folder metadata
+[Dd]esktop.ini
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Git Bash / MSYS crash dumps when running tooling on Windows
+*.stackdump
+
+# Windows Recycle Bin on mounts / removable media
+$RECYCLE.BIN/
+
+# Linux / freedesktop thumbnail cache when browsing repos in a GUI file manager
+.directory
 
 # Generated SDK reference data (JSON maps from sitemap scan; regenerated on demand).
 # See packages/sdks/oak-sdk-codegen/reference/README.md
