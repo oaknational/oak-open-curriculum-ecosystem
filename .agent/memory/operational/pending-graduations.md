@@ -424,6 +424,42 @@ continuity snapshots.
   **DO NOT APPLY** until owner re-authorises with a corrected shape
   or rejects the candidate. Status: quarantined (not pending, not
   due, not graduated).
+
+  **2026-05-01 owner-direction reframe (both candidates)**:
+
+  + *apply-don't-ask*: the rule needs reworking into something like
+    **"can this question be answered empirically?"** The action-bias
+    framing was wrong; the load-bearing distinction is whether the
+    question has a determinate answer reachable by reading code,
+    data, vendor docs, or generator output, versus genuinely
+    requiring owner judgement. Reformulation is owed before any
+    re-graduation attempt.
+
+  + *stop inventing optionality*: rule moves in the right direction
+    but **not necessarily at the right layer, level of abstraction,
+    or mechanism**. We need to name the impact first and re-think
+    from there — drafting the rule before naming the impact is
+    itself an instance of the failure mode the doctrine was trying
+    to name. Three distinct surfaces of "invented optionality" are
+    observed in the existing evidence trail and may decompose into
+    separate rules with different impacts:
+    + *Decision optionality* — bouncing forks to the owner that
+      have a determinate empirical answer (the apply-don't-ask
+      surface above; impact: wastes owner judgement, fragments
+      decision authority).
+    + *Design optionality* — adding configurable / optional /
+      extensible surface to a design that doesn't need it
+      (e.g. `Record<string, unknown>` carve-outs for a schema with
+      a closed shape; impact: erodes types, bakes in fragility).
+    + *Outcome optionality* — writing acceptance criteria that
+      hedge ("if X then Y else Z") when there is a single right
+      answer, or that depend on infrastructure that doesn't exist
+      (e.g. fantasy LLM-graded evals; impact: produces
+      unfalsifiable plans, see the don't-shoehorn-a-value-claim
+      doctrine candidate above).
+
+    Both candidates remain quarantined. The reformulations are not
+    yet drafted; the rethink is owed before any new authoring.
 + 2026-04-30; **don't shoehorn a value-claim into infrastructure that
   cannot carry it** — when the right way to verify something does not
   exist yet, the honest plan says so and ships the structural enforcement

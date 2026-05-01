@@ -76,6 +76,49 @@ The doctrine is therefore quarantined pending owner-led review of
 whether it can be re-authored with a robust destructive-action
 guard, or whether it should be rejected as a candidate.
 
+## 2026-05-01 owner reframe (both candidates)
+
+**apply-don't-ask**: needs reworking into something like *"can this
+question be answered empirically?"* The action-bias framing was
+wrong; the load-bearing distinction is whether the question has a
+determinate empirical answer (in code, data, vendor docs, generator
+output, schema, log files) versus genuinely requiring owner
+judgement. The pre-question gate is then "have I exhausted the
+empirically-answerable surfaces?", not "have principles or a
+reviewer named the path?". The two are related but not identical —
+the empirical-answerability shape carries no inherent action-bias,
+which is why the destructive-operation guard problem disappears
+(reading is non-destructive; the rule never produces pressure to
+*do* something irreversible).
+
+**stop inventing optionality**: moves in the right direction, but
+not necessarily at the right layer, level of abstraction, or
+mechanism. The impact needs to be named first; the rule shape
+follows from the impact, not the other way around. Three distinct
+surfaces of "invented optionality" appear in the existing evidence
+trail and may decompose into separate rules with different impacts:
+
+- *Decision optionality* — bouncing forks to the owner that have
+  a determinate empirical answer. Impact: wastes owner judgement;
+  fragments decision authority. (This is the apply-don't-ask
+  surface above; subsumed by the empirical-answerability reframe.)
+- *Design optionality* — adding configurable / optional /
+  extensible surface to a design that does not need it (e.g.
+  `Record<string, unknown>` carve-outs for a schema with a closed
+  shape; speculative future-proofing on type signatures). Impact:
+  erodes types; bakes in fragility; mints maintenance load.
+- *Outcome optionality* — writing acceptance criteria that hedge
+  when there is a single right answer, or that depend on
+  infrastructure that does not exist (e.g. fantasy LLM-graded
+  evals when the eval infrastructure has not been built). Impact:
+  produces unfalsifiable plans; sibling of the don't-shoehorn-a-
+  value-claim candidate.
+
+Both candidates remain quarantined. The reformulations are owed.
+Drafting the new rule shape *before* naming the impact would itself
+be an instance of the failure mode this doctrine is trying to
+name — so the rethink is the work, and the rewrite waits on it.
+
 ## Pointers (for the review)
 
 Surfaces that cite the doctrine or its mechanisms (left in place;
@@ -90,7 +133,7 @@ records risks compounding the original failure):
   apply the gate, not invent optionality around it")
 - `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
   — referenced as out-of-band graduation candidate
-- `.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md`
+- `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
   — `find_by_tag` carve-out references the doctrine
 - `.agent/experience/2026-04-30-iridescent-graph-corpus-composition.md`
   — methodology + reflection on the doctrine's emergence

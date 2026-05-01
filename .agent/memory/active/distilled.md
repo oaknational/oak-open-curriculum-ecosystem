@@ -255,6 +255,50 @@ recompute `localHash`, compare with `computedHash`, fail on mismatch.
 Closing this gap is in scope for the canonical-first-skill-pack-
 ingestion-tooling future plan.
 
+**Moving targets do not belong in permanent docs.** Tool counts, bug
+counts, lint counts, file counts, Git HEAD SHAs and any other figure
+that changes with ordinary work are appropriate only in ephemeral or
+state-tracking surfaces (`.remember/`, `.agent/state/`, session
+napkins, comms log). Embedding them in permanent docs (ADRs, PDRs,
+README, principles, directives, practice-index, plans-as-reference)
+only generates documentation drift; it provides no durable value. The
+Git label HEAD already exists as the stable index for "current
+commit" — re-recording the SHA in prose freezes a moment in time.
+Existing instances (e.g. "43 canonical rules / 12 stable canonical
+commands / 36 canonical skills / 77 abstract solutions" in
+`practice-index.md`, baked-in SHAs in long-lived docs) are prior-art
+violations to be remediated; remediation does not have to happen in
+the session of discovery. Cure when count itself is the point: route
+to a generated/scriptable surface (`pnpm portability:check`, fitness
+reports, generated indexes), not hand-maintained prose. Owner stated
+2026-05-01.
+
+**Practice-Core portability is by construction.** Anything under
+`.agent/practice-core/` (the trinity, entry points, CHANGELOG,
+provenance, `decision-records/`, `patterns/`, `incoming/`) must be
+repo-independent. No repo paths (`docs/...`, `src/...`,
+`packages/...`, `apps/...`, `../../skills/`, `../../commands/`,
+`../../memory/`, `../../plans/`, `../../experience/`, `../../rules/`,
+etc.). No ADR references (no `ADR-NNN`, no links into
+`docs/architecture/architectural-decisions/`). No commit references
+(no SHAs, no commit subjects, no `commit abcdef0` citations). The
+only outgoing link allowed from any file under `practice-core/` is to
+the stable bridge index `.agent/practice-index.md`. Cross-references
+between Core files (e.g. `practice.md` → `practice-lineage.md`,
+PDR → PDR) are internal to the Core package and remain allowed; what
+is forbidden is leakage out of the Core into the host repo. Existing
+violations (PDRs 038/039/040/041/042 linking
+`../../../docs/architecture/architectural-decisions/...`; PDR-026
+linking `../../skills/`, `../../commands/`, `../../memory/`,
+`../../plans/observability/`; PDR-041 linking `../../experience/...`
+and `../../plans/...`; `practice.md` / `practice-lineage.md` /
+`CHANGELOG.md` / `practice-bootstrap.md` mentioning `ADR-NNN`) are
+critical-architectural-failure-shaped prior art, not nitpicks; remediation
+is in scope for a future session, not necessarily the session of
+discovery. This constraint is stricter than the prior ADR-124 / PDR-007
+"Core self-containment" framing — it tightens the seam to a single
+permitted outgoing target. Owner stated 2026-05-01.
+
 ## Architecture (Agent Infrastructure)
 
 <!-- "Implicit architectural intent is not enforced principle" graduated

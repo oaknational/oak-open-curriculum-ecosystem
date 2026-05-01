@@ -32,6 +32,52 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-01 — Owner-stated doctrine: no moving targets in permanent docs; Practice-Core portability is by construction (Gnarled Fruiting Root)
+
+Two doctrinal points captured at session open via `/jc-start-right-quick`,
+no remediation in scope this session.
+
+1. **No moving targets in permanent docs.** Tool counts, bug counts,
+   lint counts, file counts, Git HEAD SHAs and similar moving figures
+   belong in ephemeral / state-tracking surfaces only (`.remember/`,
+   `.agent/state/`, napkin, comms log). Embedding them in permanent
+   docs (ADRs, PDRs, README, principles, directives, practice-index,
+   plans-as-reference) only generates drift; the Git label HEAD is
+   already the stable index for "current commit". Existing instances
+   in `.agent/practice-index.md` ("43 canonical rules / 12 stable
+   canonical commands / 36 canonical skills / 77 abstract solutions")
+   and any baked-in SHAs in long-lived docs are prior-art problems
+   to remediate, not necessarily this session.
+
+2. **Practice-Core portability is by construction.** Anything under
+   `.agent/practice-core/` MUST be repo-independent. No repo paths
+   (`docs/...`, `src/...`, `packages/...`, `apps/...`,
+   `../../skills/`, `../../commands/`, `../../memory/`,
+   `../../plans/`, `../../experience/`, `../../rules/`). No ADR refs
+   (no `ADR-NNN`, no links into
+   `docs/architecture/architectural-decisions/`). No commit refs (no
+   SHAs, no commit subjects). The only outgoing link allowed from
+   any file under `practice-core/` is to `.agent/practice-index.md`.
+   Cross-references between Core files (PDR↔PDR, trinity↔trinity)
+   remain allowed — they are internal to the Core package.
+
+   Audit (capture only) found the following violations: PDR-038,
+   PDR-039, PDR-040, PDR-041, PDR-042 link
+   `../../../docs/architecture/architectural-decisions/...`; PDR-026
+   links `../../skills/`, `../../commands/`, `../../memory/`,
+   `../../plans/observability/`; PDR-041 links `../../experience/...`
+   and `../../plans/...`; `practice.md`, `practice-lineage.md`,
+   `CHANGELOG.md`, `practice-bootstrap.md` mention `ADR-NNN`. These
+   are critical-architectural-failure-shaped, not nitpicks; in scope
+   for a future remediation session.
+
+This is a tightening of the prior ADR-124 / PDR-007 "Core
+self-containment" framing — the seam is now exactly one permitted
+outgoing target (the practice-index bridge), not "the host repo
+generally". Captured in `distilled.md § Process` and platform
+auto-memory (`feedback_no_moving_targets_in_permanent_docs`,
+`feedback_practice_core_portability_strict`).
+
 ## 2026-05-01 — Surprise: destructive `git checkout --` on peer files; structural cures landed (Vining Whispering Root)
 
 Captured per the napkin surprise format. This is the I-was-the-actor
@@ -578,7 +624,7 @@ that we are now discovering because of our graph consuming
 architecture?"*
 
 The plan I helped land
-([`graph-query-layer.plan.md`](../../plans/knowledge-graph-integration/current/graph-query-layer.plan.md))
+([`graph-query-layer.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md))
 treats the three graphs as data sources with fixed shapes. For EEF
 (external) that is honest. For prerequisite and misconception, **we
 control the generators in `oak-sdk-codegen/bulk/generators/`**. The
