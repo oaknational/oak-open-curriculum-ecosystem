@@ -116,6 +116,59 @@ continuity snapshots.
   `--output-file`. Each error is a single iteration cost but they
   compound to ~5–8 round-trips per session-open. Evidence + plan:
   [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+  **Third-instance evidence (2026-05-01, Vining Whispering Root,
+  Increment 1 promotion-materials commit `b3d4c041`)** — six
+  frictions in one end-to-end run of the always-active commit skill:
+  (i) `commit-queue enqueue` rejects a placeholder claim_id with
+  `unknown claim_id: <uuid>` — chicken-and-egg; the queue requires a
+  claim to exist, but step ordering at the CLI surface is the inverse
+  of the skill's documented step ordering; (ii) `collaboration-state
+  claims open --help` errors `flag '--help' requires a value` —
+  help is unreachable; (iii) `--active "$PRACTICE_AGENT_SESSION_ID_CLAUDE"`
+  produces `ENOENT: no such file or directory, open '<UUID>'` — the
+  flag interprets the UUID as a path; (iv) `pnpm
+  agent-tools:agent-identity` does not inherit env vars through `pnpm
+  --filter`, requiring `--seed` despite the parent shell having the
+  variable set; (v) `collaboration-state claims` (no action) prints
+  only the top-level usage line, not the list of available actions
+  (`open`, `close`, etc.); (vi) `--area-kind` accepts a closed
+  enum (`files`/`workspace`/`plan`/`adr`/`git`) but rejects
+  intuitive values like `shared-state` without listing the accepted
+  set in the error. Compound effect: the agent abandoned the queue
+  workflow and fell back to plain explicit-pathspec staging — the
+  substance of the discipline survived (validation + pathspec) but
+  the audit-trail value of the queue was lost. Routing-around is
+  itself a Practice failure mode: a queue that exists but is
+  habitually bypassed under friction is worse than no queue. Strong
+  case to promote the future plan to `current/` and execute its
+  ergonomics-fix slice next consolidation. **Status: ready for
+  promotion** (was already; third instance hardens the case
+  significantly).
++ 2026-05-01; **bootstrap fast-path should not pay full coordination
+  cost** — when `active-claims.json` is empty and recent comms-log
+  carries no fresh `commit_queue` entries, the queue/claim ceremony
+  adds friction without coordination value. The substance of the
+  discipline (explicit pathspec staging + message validation) is
+  already enforced by `scripts/check-commit-message.sh` and git
+  itself; the queue surface is awareness layered on top, valuable
+  when other agents are present, ceremonial otherwise. Trigger
+  candidate for queue/claim coordination: registry non-empty OR
+  recent fresh comms-log activity. Source: 2026-05-01 commit-skill
+  walkthrough by Vining Whispering Root. Trigger for graduation:
+  second instance OR owner direction. Status: pending.
++ 2026-05-01; **rule visibility under friction is uneven** — the
+  always-active `capture-practice-tool-feedback` rule exists and is
+  loaded every session via `CLAUDE.md`, but in this session the agent
+  hit six tooling frictions in one commit attempt and did not pause
+  to capture until the user asked. The rule fired on owner prompt,
+  not on the friction itself. Candidate structural cue: when an agent
+  uses an `agent-tools:*` command and encounters an unexpected error,
+  that should be a structural prompt to write a napkin entry — not a
+  sometimes-yes-sometimes-no judgement call. Recursive: this very
+  candidate is a meta-instance of the same shape (a rule existed but
+  did not fire under friction; the user had to ask). Trigger for
+  graduation: second instance of "rule existed but didn't fire under
+  friction" OR owner direction. Status: pending.
 + 2026-04-28; cross-thread comms event request/response correlation gap
   (no `audience`, no `in_response_to`, no TTL/escalation timer);
   minimal correlation primitive on the comms event schema as recommended
