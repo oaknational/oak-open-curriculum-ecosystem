@@ -23,6 +23,28 @@
       "expires_at": "2026-05-01T08:12:49.712Z",
       "phase": "abandoned",
       "notes": "Subject 110 chars exceeded 100-char header-max-length; re-enqueuing with shortened subject"
+    },
+    {
+      "intent_id": "119c47e1-d914-4f73-8b47-9dee826b6734",
+      "claim_id": "a704df55-9e4f-4414-86b1-86bbcaaac40b",
+      "agent_id": {
+        "agent_name": "Deep Navigating Stern",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c18f0a"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/pending-graduations.md"
+      ],
+      "commit_subject": "docs(memory): record fourth-instance CLI friction evidence and adjacent insight",
+      "queued_at": "2026-05-01T08:12:38.845Z",
+      "updated_at": "2026-05-01T08:17:40.625Z",
+      "expires_at": "2026-05-01T08:27:38.845Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "62b4d713f3c0aae9de3f19adce64dc19871fd703c8335c4b320af7557d89bb00",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/pending-graduations.md\nA\t.agent/memory/operational/quarantine/README.md\nA\t.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md\nA\t.agent/rules/read-before-asking.md\nA\t.agent/skills/undo-change/SKILL.md\nA\t.agents/rules/read-before-asking.md\nA\t.agents/skills/undo-change/SKILL.md\nA\t.claude/rules/read-before-asking.md\nM\t.claude/settings.json\nA\t.claude/skills/undo-change/SKILL.md\nA\t.cursor/rules/read-before-asking.mdc\nA\t.cursor/skills/undo-change/SKILL.md\n",
+      "notes": "Peer commit 186e578f landed first and bundled my staged napkin + pending-graduations content into their commit (per SKILL .agent paths-as-visibility-signals rule). My fourth-instance content is preserved at HEAD; abandoning this queue entry as the planned commit subject did not land but the substance did."
     }
   ],
   "claims": []

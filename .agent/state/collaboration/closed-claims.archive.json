@@ -6831,6 +6831,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "a704df55-9e4f-4414-86b1-86bbcaaac40b",
+      "agent_id": {
+        "agent_name": "Deep Navigating Stern",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c18f0a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-01T08:12:22Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit fourth-instance CLI friction evidence in napkin and register",
+      "intent_to_commit": "119c47e1-d914-4f73-8b47-9dee826b6734",
+      "archived_at": "2026-05-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-01T08:17:39Z",
+        "closed_by": {
+          "agent_name": "Deep Navigating Stern",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "c18f0a"
+        },
+        "summary": "Fourth-instance content swept into peer commit 186e578f; substance preserved at HEAD though under different commit subject. Queue intent 119c47e1 abandoned.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a704df55-9e4f-4414-86b1-86bbcaaac40b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
