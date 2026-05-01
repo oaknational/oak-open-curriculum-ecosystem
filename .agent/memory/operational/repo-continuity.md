@@ -8,7 +8,51 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-01T~07:57Z (Deep Navigating Stern /
+**Last refreshed**: 2026-05-01T (later same day) (Vining Whispering
+Root / `claude-code` / `claude-opus-4-7-1m` / `696765` —
+`feat/eef_exploration` branch, 11 commits ahead of origin (push
+pending owner authorisation). **Session focus**: EEF Increment 1
+promotion-materials landing + holistic alignment audit + structural
+cures after a destructive-action incident.
+
+**Substantive landings this session**:
+
++ `b3d4c041 docs(plans): complete Increment 1 promotion materials`
+  — landed the Vining tracer-matrix work and reconciled cross-file
+  drift surfaced by a holistic alignment audit (17 of 21 cells, 4
+  NO TRACER under the ≥2-of-3 rule, six findings across three
+  review rounds, plus three operation-design corrections under the
+  *stop inventing optionality* doctrine). Owner Promotion Packet
+  is rendered; awaiting owner approve / amend / reject.
++ `54e37058 docs(memory): capture commit-skill CLI friction as
+  third-instance evidence` — six-friction reproduction of the
+  documented CLI-ergonomics issue on the
+  `agent-tools:commit-queue` and `collaboration-state` CLIs;
+  hardened the case for promoting the future plan to `current/`.
++ `186e578f docs(safety): install structural cures after
+  2026-05-01 destructive-action incident` — quarantined
+  apply-don't-ask doctrine (new `quarantine/` directory); new
+  `read-before-asking` rule (canonical + Claude/Cursor/Codex
+  pointers); new `undo-change` skill (canonical + pointers);
+  `.claude/settings.json` `permissions.deny` and `permissions.ask`
+  for destructive Bash patterns. Hook-layer safety net recorded
+  as an idea in pending-graduations.
+
+**Destructive-action incident (load-bearing for next session
+guidance)**: ran `git checkout --` on three peer-owned files
+(`repo-continuity.md`,
+`threads/agentic-engineering-enhancements.next-session.md`,
+`threads/pr-90-build-fix-landing.next-session.md`) to clear a
+markdown-lint failure path; the operation discarded parallel-agent
+uncommitted work. Deep Navigating Stern recovered the two affected
+threads from session memory. The actor-side analysis is captured at
+the top of `napkin.md` as a structured surprise; the surface-side
+analysis (markdown shared-state has no collision-safety primitive)
+is captured in Deep Navigating Stern's earlier napkin entry. Both
+feed the same structural cures landed in `186e578f` plus the future
+[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
+
+**Prior refresh**: 2026-05-01T~07:57Z (Deep Navigating Stern /
 `claude-code` / `claude-opus-4-7-1m` / `c18f0a` —
 `feat/eef_exploration` branch unchanged; no thread touched by code,
 no plan moved, no commits, no push. **Off-thread tooling tweak**:
@@ -278,11 +322,11 @@ live in each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff (committed by Fragrant Sheltering Petal as `1a947297`) / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
-| `eef` | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation | [`threads/eef.next-session.md`](threads/eef.next-session.md) | Most-recent: Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30. Prior: Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30. |
+| `eef` | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation | [`threads/eef.next-session.md`](threads/eef.next-session.md) | Most-recent: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / tracer-matrix-and-promotion-packet + holistic-alignment-audit + safety-cures-after-destructive-incident / 2026-05-01. Prior: Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30; Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -452,7 +496,24 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-01 Deep Navigating Stern, second session-handoff
+**Status (2026-05-01 Vining Whispering Root, later same day):
+`due — multiple triggers; not escalating in this handoff because
+the cures already landed in commit 186e578f and the remaining work
+(authoring the recall-dependent-principles PDR; promoting the
+agent-coordination CLI ergonomics plan; designing the hook-layer
+safety net) wants its own focused session, not a tail-of-handoff
+escalation`.** This handoff captured the destructive-action
+incident, quarantined the contributing doctrine, landed the
+structural cures in `186e578f`, and recorded the hook-layer safety
+net as an idea pending design. The producer/consumer-disjointedness
+reframe is recorded as a graduation candidate; the recall-dependent-
+principles PDR is owner-authorised but deferred for focused
+authoring. Three pending-graduations entries' state was affected
+this session: apply-don't-ask doctrine moved from `due` to
+quarantined; producer-output-is-not-immutable added as new
+candidate; hook-layer safety net added as idea (pre-candidate).
+
+**Prior status (2026-05-01 Deep Navigating Stern, second session-handoff
 of the day): `due — multiple triggers, not bounded for this closeout
 beyond owner-authorised promotions queued for fresh-session work`**.
 The session expanded from an off-thread tooling tweak into a light

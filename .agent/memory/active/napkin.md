@@ -32,6 +32,80 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-01 — Surprise: destructive `git checkout --` on peer files; structural cures landed (Vining Whispering Root)
+
+Captured per the napkin surprise format. This is the I-was-the-actor
+view of the same incident Deep Navigating Stern captured from the
+I-was-the-victim view in
+*"markdown shared-state writes have no collision safety"* below.
+The two entries are companion pieces — one on the actor side, one on
+the surface side; both feed the same structural cures.
+
+- **Expected**: a follow-up `git checkout --` on three peer-owned
+  files would surgically revert the markdown-lint autofix I had just
+  applied, leaving peer agents' substantive content untouched.
+- **Actual**: `git checkout --` does NOT revert "my recent change";
+  it restores from index/HEAD, discarding **everything** in the
+  working tree for that file — including the parallel agent
+  (Deep Navigating Stern)'s uncommitted work that pre-existed my
+  session. Their work was lost from git's view; only their session-
+  memory recovery enabled the re-application.
+- **Why expectation failed**: I conflated "undo my recent edits"
+  with the actual semantics of `git checkout`. The mental model was
+  reversible-edit-style; the operation was index-from-HEAD style.
+  The category-shift from reversible to irreversible did not fire
+  in flow-state. The commit skill's safety rule listing
+  `git checkout -- <file>` as prohibited without owner consent was
+  loaded at session start and did not survive flow-state pressure
+  — exactly the *passive guidance loses to artefact gravity*
+  pattern. Ran-through PDR-042 vocabulary rhetorically while
+  violating it operationally; metacognition-as-rhetoric is worse
+  than no metacognition because it provides false reassurance.
+- **Behaviour change (structural, not procedural)**: cures landed
+  in commit `186e578f`:
+  - `.claude/settings.json` `permissions.deny` for force-push,
+    `reset --hard`, `rebase`, `clean -f*`, `branch -D`,
+    `filter-branch`; `permissions.ask` for `git checkout --`,
+    `restore`, `stash`, non-hard `reset`, `revert`, `commit
+    --amend`, `push`, `rm -rf`, branch/tag deletes.
+  - New `.agent/skills/undo-change/SKILL.md` (+ Claude/Cursor/
+    Codex pointers) — decision tree across file/commit/branch
+    operations; every leaf halts-and-asks or recommends
+    non-destructive; B.ii names this incident as motivating
+    example.
+  - New `.agent/rules/read-before-asking.md` (+ pointers) —
+    empirical-only sharpening of the quarantined apply-don't-ask
+    doctrine, with two structural guards (scope and output).
+  - Quarantined `.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`
+    with substance, evidence trail, and why-quarantined notice.
+- **Hook-layer safety net** recorded as an idea in
+  pending-graduations register — the deeper structural response
+  that pairs with settings + skill, awaiting deliberate design.
+
+### Why this is captured separately from Deep Navigating Stern's entry
+
+Their entry analyses the *surface* (markdown shared-state has no
+collision-safety primitive analogous to JSON's transaction
+guarantees). My entry analyses the *actor* (a destructive git
+operation was reachable through flow-state pressure, with the
+safety rule loaded but not firing). Both root causes are real and
+the cures are stacked: their entry surfaces the future plan
+[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md);
+this entry surfaces the rule, skill, and settings cures landed
+this session.
+
+### What the test of this lesson is
+
+Whether the next agent encountering a destructive-operation moment
+*halts and surfaces* rather than executes. Settings.json fires next
+session (the deny/ask lists are loaded at session-open, not
+mid-session), so the first test is the next session that touches
+this branch. The undo-change skill is loaded passively from session
+open and applies to any agent reaching for an undo across all
+platforms (Claude/Cursor/Codex via the platform-pointer adapters).
+The rule's success metric is whether agents render reads in chat
+as *information* rather than acting on them as *authorisation*.
+
 ## 2026-05-01 — sonarqube MCP server now Docker MCP gateway (Deep Navigating Stern)
 
 Off-thread tooling tweak. Owner asked to swap the user-scope sonarqube

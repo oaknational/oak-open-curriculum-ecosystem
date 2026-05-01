@@ -541,6 +541,7 @@ and
 | `Ethereal Threading Supernova` | `codex` | `GPT-5` | `019dd2` | `codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff` | 2026-04-28 | 2026-04-28 |
 | `Dewy Budding Sapling` | `claude-code` | `claude-opus-4-7-1m` | `7e8db7` | `cloudflare-plugin-investigation-and-canonical-first-skill-pack-ingestion-future-plan-drafting-and-discovery-surface-wiring` | 2026-04-30 | 2026-04-30 |
 | `Deep Navigating Stern` | `claude-code` | `claude-opus-4-7-1m` | `c18f0a` | `light-consolidate-docs-pass-with-owner-authorised-promotions-held-for-fresh-session-and-rush-impulse-metacognition-captured` | 2026-05-01 | 2026-05-01 |
+| `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `quarantine-of-apply-dont-ask-doctrine-after-destructive-checkout-incident; structural-cures-landed-settings-deny-and-ask-undo-change-skill-read-before-asking-rule; hook-layer-safety-net-idea-recorded` | 2026-05-01 | 2026-05-01 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
