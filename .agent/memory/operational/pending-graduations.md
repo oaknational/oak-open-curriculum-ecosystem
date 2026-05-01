@@ -144,18 +144,26 @@ continuity snapshots.
   ergonomics-fix slice next consolidation. **Status: ready for
   promotion** (was already; third instance hardens the case
   significantly).
-+ 2026-05-01; **bootstrap fast-path should not pay full coordination
-  cost** — when `active-claims.json` is empty and recent comms-log
-  carries no fresh `commit_queue` entries, the queue/claim ceremony
-  adds friction without coordination value. The substance of the
-  discipline (explicit pathspec staging + message validation) is
-  already enforced by `scripts/check-commit-message.sh` and git
-  itself; the queue surface is awareness layered on top, valuable
-  when other agents are present, ceremonial otherwise. Trigger
-  candidate for queue/claim coordination: registry non-empty OR
-  recent fresh comms-log activity. Source: 2026-05-01 commit-skill
-  walkthrough by Vining Whispering Root. Trigger for graduation:
-  second instance OR owner direction. Status: pending.
++ 2026-05-01; ~~bootstrap fast-path should not pay full coordination
+  cost~~ **WITHDRAWN 2026-05-01 by Deep Navigating Stern** under
+  owner direction *"we never take the fast path we ONLY take the
+  path that maximises long-term architectural excellence."* The
+  candidate framed real evidence (six compound CLI frictions in one
+  commit-skill run) under a *conditional-discipline* shape (skip
+  queue when registry empty), which introduces microstate
+  proliferation: every future agent must evaluate whether their
+  situation is "fast-path", the condition's accuracy degrades
+  silently as the system evolves, and the audit-trail surface that
+  is most needed when coordination fails is the one being skipped.
+  The genuine substance — *the queue ergonomics are bad and that
+  produces route-around behaviour* — survives intact and routes to
+  the CLI ergonomics plan
+  ([`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md))
+  as *fix the surfaces*, not *make the discipline contingent*.
+  Withdrawal is itself the doctrine: rush-impulse re-frames real
+  concerns under conditional-discipline shapes; the corrective is
+  to re-frame under long-term excellence. Captured in napkin
+  2026-05-01 metacognition entry. Status: withdrawn 2026-05-01.
 + 2026-05-01; **rule visibility under friction is uneven** — the
   always-active `capture-practice-tool-feedback` rule exists and is
   loaded every session via `CLAUDE.md`, but in this session the agent
@@ -378,27 +386,17 @@ continuity snapshots.
   canonical homes; group by similar source files (phase-* cluster,
   2025-01 cluster, 2025-08 cluster) for batch processing.
 
-+ 2026-04-30; **stop inventing optionality** — agent produces option-shaped
-  output when the work calls for action-shaped or read-shaped output. Four
-  instances across sessions: (1) Iridescent's 12-question round where 10 of
-  12 should not have been posed (principles or reviewers had named the
-  path); (2) Briny Lapping Harbor's "Option B: disable canonical default"
-  alongside the corrected investigation frame; (3) Iridescent's session-
-  close where the same shape was named explicitly as doctrine candidate;
-  (4) Fragrant Sheltering Petal's bucket-(c) escalation of an empirically
-  verifiable question instead of reading `eef-toolkit.json`. Underlying
-  mechanism is the same in every case — couple analysis to a presented
-  decision when the decision is already made (by principles, reviewer,
-  data, or owner reframe). **Status: due** — graduation trigger fully
-  fired (4 instances + owner direction across multiple sessions).
-  Graduation target: `.agent/rules/apply-dont-ask.md`. Rule must specify
-  the two-pronged pre-question gate: (a) have principles or a reviewer
-  already named the path? (b) is the answer in an artefact in the repo
-  I have not read? If either tripwire fires, apply / read; do not pose
-  to the owner. Pose only when neither principles nor data resolves the
-  fork. Evidence trail: napkin entries from Iridescent and Fragrant
-  sessions; commit `2a3f69b5` is the bridge from bucket-(c)-as-escalation
-  to bucket-(c)-as-applied (read the data, removed the carve-out).
++ 2026-05-01; **`stop inventing optionality` / apply-don't-ask** —
+  **QUARANTINED 2026-05-01 by owner direction**. The doctrine
+  contributed to (or ran alongside) a destructive `git checkout --`
+  that discarded parallel-agent uncommitted work; the bias toward
+  action lacks a destructive-operation guard. The candidate is
+  removed from active circulation pending deep human review.
+  Substance, evidence trail, and pointers preserved at
+  [`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`](quarantine/apply-dont-ask-doctrine.md).
+  **DO NOT APPLY** until owner re-authorises with a corrected shape
+  or rejects the candidate. Status: quarantined (not pending, not
+  due, not graduated).
 + 2026-04-30; **don't shoehorn a value-claim into infrastructure that
   cannot carry it** — when the right way to verify something does not
   exist yet, the honest plan says so and ships the structural enforcement
@@ -409,6 +407,155 @@ continuity snapshots.
   infrastructure exists. Status: pending. Trigger: second instance OR
   owner direction. Evidence: Iridescent's session-close napkin (LLM-
   graded outcome conditions in EEF plan removed under owner direction).
+
++ 2026-05-01; **rush impulse as system-level entropy generator + three
+  structural cues** — owner-named at the close of the 2026-05-01
+  consolidation turn, in response to two rush failures within that turn
+  (the *bootstrap fast-path* candidate; the *informational not actioned*
+  defer-shape on napkin CRITICAL fitness). Substance: most named fences
+  in the codebase (replace-don't-bridge, stop-inventing-optionality,
+  stage-by-explicit-pathspec, learning-preservation-overrides-fitness,
+  hook-failures-are-questions, no-underscore-rename, no-sed-bypass,
+  session-handoff hard gate, PDR-026 deferral-honesty, PDR-042 signal-
+  distinguishing) all fight the same generator from different angles;
+  fence accumulation without naming the generator is microstate
+  proliferation around an unchanged macrostate. Three structural cues
+  forward as a cohesive defence rather than separate fences: (1)
+  vocabulary trip-list at output time — *fast path*, *quick fix*,
+  *informational not actioned*, *defer*, *light pass exempts*, *for
+  later*, *out of scope*, *next session*; (2) conditional-discipline
+  check before proposing structure — does the candidate introduce a
+  "case where the rule doesn't apply"?; (3) first-principles framing
+  question — what would the path look like with no closure pressure?
+  Graduation target candidates: PDR-shaped (Practice-governance about
+  doctrine-evolution discipline, sibling of PDR-042); pattern in
+  `practice-core/patterns/` after a synthesis with the existing fences
+  it ties together; or amendment to PDR-042. Trigger: owner direction
+  has fired in part (the framing was named explicitly this session);
+  graduation requires a deliberate next-session shape not mid-turn
+  closure (per the very discipline being captured). Evidence: napkin
+  2026-05-01 metacognition entry (Deep Navigating Stern); experience
+  file at
+  [`experience/2026-05-01-deep-the-rush-was-the-fix.md`](../../experience/2026-05-01-deep-the-rush-was-the-fix.md).
+  Status: pending — first articulation; second cross-session
+  articulation OR explicit owner authorisation of PDR/pattern shape
+  required before promotion.
+
++ 2026-05-01; **markdown shared-state writes have no collision
+  safety** — captured 2026-05-01 by Deep Navigating Stern after an
+  unrelated agent silently overwrote `repo-continuity.md` Last
+  refreshed entry + Active identities column + Deep consolidation
+  status, AND `threads/agentic-engineering-enhancements.next-session.md`
+  Last refreshed entry + identity-table row, between handoff-close and
+  stage. The napkin, pending-graduations register, experience file,
+  and `~/.claude.json` MCP swap survived intact because their shapes
+  are naturally collision-resistant (per-session append heading;
+  structured per-item additive entries; per-session-per-agent named
+  file; user-scope file outside any agent's standard write path).
+  **Substance**: JSON shared-state has transaction safety since
+  `11f0320f` (the collaboration-state-write-safety landing); markdown
+  shared-state has no equivalent. Single-slot Last refreshed prose
+  surfaces are the only collision class — every concurrent
+  session-handoff walks through this hazard. Five prevention shapes
+  considered (full table in napkin), strongest combination:
+  (a) **convergent write-surfaces (additive design)** — make Last
+  refreshed entries append-only by structure, eliminating the
+  collision class as the thread record's identity table already does
+  per PDR-027; (b) **handoff-window claim** — direct analogue of the
+  `git:index/head` commit-window claim, with new `area_kind: handoff`
+  on the active-claims schema. Intermediate detection-only mitigation:
+  post-write `stat` of touched files at handoff-close, ALERT if
+  `mtime > handoff-start`. Graduation target: extend write-safety
+  doctrine from JSON state to markdown shared-state surfaces;
+  concretely (a) Last refreshed surface redesign in
+  `commands/session-handoff.md` + the two affected files'
+  conventions, (b) `area_kind: handoff` on the active-claims schema
+  + queue/claim integration, OR (c) a PDR amendment to the
+  collaboration-state-domain-model plan family that names the
+  collision-class structurally. Routes to existing
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+  as the future-plan home for shared-state collision analysis.
+  **Trigger**: owner direction has fired in part (the request *"any
+  prevention or additional signal would be very welcome"* names the
+  prevention question directly); a deliberate next-session shape is
+  required for design-and-implementation work — installing prevention
+  mid-handoff would be the rush impulse the prior register entry
+  just named. Evidence: napkin 2026-05-01 *markdown shared-state
+  writes have no collision safety* entry (Deep Navigating Stern);
+  this very session's revert-and-re-apply of the two affected files
+  recorded in the in-place note inside both. Adjacent: the 2026-04-30
+  *commit-bundle leakage from wildcard staging* distilled entry names
+  a sibling-but-distinct mechanism (single-agent action consumes
+  peer's WIP) — the present mechanism is the inverse (concurrent
+  independent writes overwrite each other on a shared single-slot
+  surface). Status: pending.
+
++ 2026-05-01; **retired threads need explicit retirement signal in
+  the file itself, plus a consolidation-time hygiene check** — owner
+  observation 2026-05-01 (Deep Navigating Stern session): the
+  `pr-90-build-fix-landing.next-session.md` thread has been complete
+  for several days but the file in `threads/` shows no retirement
+  banner; an agent browsing the directory sees a file shaped like
+  an active thread record. Retirement is documented only in
+  `repo-continuity.md` prose (*"The pr-90-build-fix-landing thread
+  retired 2026-04-30 (PR #90 merged 2026-04-29T20:43:22Z). Thread
+  record retained ... for audit-trail value."*); the file itself
+  carries no signal. Owner reframing: *"we need a thread hygiene
+  prompt, perhaps in the document consolidation workflow."* Two
+  distinct hygiene shapes that compose: (a) **per-file retirement
+  banner** — add a frontmatter status field (`status: retired`,
+  `retired_at: <date>`, `retirement_reason: <one-line>`,
+  `audit_trail_retained: true|false`) plus a top-of-file banner
+  pointing to the canonical record of why; (b) **`consolidate-docs`
+  step 7c thread-hygiene check** — extend the existing six-check
+  audit with a seventh: enumerate `threads/*.next-session.md` files
+  AND compare to the `Active threads` table; flag any thread file
+  not listed in Active threads (signals retirement-without-banner)
+  AND any retired-banner file whose retirement age exceeds a
+  threshold (signals time-to-archive to `threads/archive/`). (a)
+  makes retirement self-evident at the file level; (b) catches
+  retirement-without-(a) and prompts archival cadence. Substance
+  routes naturally to a PDR-027 amendment (thread identity surface)
+  plus a `consolidate-docs.md` step 7c amendment. Trigger: owner
+  direction has fired in the request itself; graduation requires
+  deliberate next-session work for the doctrine + workflow change
+  + retroactive banner application to the one currently-retired
+  thread record. Status: pending. Evidence: this session's owner
+  observation; the
+  [`pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md)
+  thread record itself; the corresponding prose retirement note
+  in `repo-continuity.md`.
+
++ 2026-05-01; **producer output is not immutable when the producer is
+  ours** — owner-named at the close of the EEF-Increment-1 review
+  turn (Vining Whispering Root): *"are the constraints truly inherent
+  in the data, or do we have gaps in our graph building architecture
+  that we are now discovering because of our graph consuming
+  architecture?"*. Substance: the Cardinal Rule (types flow from a
+  single source through codegen) implies a parallel discipline for
+  generator-emitted graph structure — gaps in generator output are
+  our gaps to close, not domain constraints to carve around. The
+  graph-query-layer plan's four `NO TRACER` carve-outs were classified
+  as "data doesn't support it" when three of four are generator gaps
+  on graphs we own (`oak-sdk-codegen/bulk/generators/*-graph-generator.ts`).
+  Layer-inversion: consumer designed first, producer's accidents
+  became consumer's contracts. Cure: amend `principles.md § Cardinal
+  Rule` (or sibling rule) to extend the single-source-types
+  discipline to generator-emitted structure; pair with a shared
+  `@oaknational/graph-tools` workspace (decompose-at-the-tension)
+  that owns canonical graph types, derivation utilities, identity
+  primitives, operations, and validation, imported by both producers
+  and consumers. Status: pending — first explicit articulation
+  (the Cardinal Rule's existing wording covers it for *types* but not
+  visibly for *structure derivation*); trigger: second instance OR
+  owner direction. Family: sibling of the PDR authorised this turn
+  on *recall-dependent principles need active firing layers* — same
+  underlying shape (agent substitutes path-of-least-resistance for
+  architecturally-correct path; the cure is structural, not
+  procedural). Evidence: napkin 2026-05-01 producer/consumer
+  disjointedness entry (Vining Whispering Root); concrete impact
+  proposal sketched (graph-query-layer.plan.md amendments + sibling
+  `graph-tools-workspace.plan.md` FUTURE).
 
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in

@@ -93,6 +93,350 @@ to a `.gitignore`d `.mcp.json` at repo root. Both pieces gated on
 the instructions landing first. No active plan yet; pick up when
 owner directs.
 
+## 2026-05-01 — Metacognition: the rush impulse as system-level entropy generator (Deep Navigating Stern)
+
+Owner correction at the tail of the consolidation turn:
+*"we never take the fast path we ONLY take the path that maximises
+long-term architectural excellence; we never undertake opportunistic
+trimming, we ONLY apply thoughtful holistic analysis to knowledge
+preservation and discoverability."* Two corrections, one underlying
+principle: **the rush impulse is the entropy generator under most
+fences in this codebase, and conditional-discipline framings + defer
+vocabulary are the worked artefacts of that impulse.**
+
+### What I performed this turn (the worked instance)
+
+I named *"bootstrap fast-path should not pay full coordination cost"*
+as a graduation candidate in `pending-graduations.md`. The candidate
+took real evidence (six compound CLI frictions in one commit-skill
+run, captured by Vining Whispering Root) and framed it under a
+**conditional-discipline shape** — *skip the queue when registry is
+empty.* The framing is itself the failure mode I was supposed to be
+consolidating against. Three entropy products from that framing:
+
+1. **Microstate proliferation.** Every future agent must now ask
+   *"is this a fast-path situation?"* when approaching the queue.
+   That is per-turn evaluation cost where there was none.
+2. **Silent condition decay.** The condition (`active-claims.json`
+   empty AND no fresh comms-log activity) needs maintenance
+   bandwidth. The agent under rush — precisely the agent who would
+   take the fast path — is the agent who will not maintain the
+   condition. The condition silently expires when a peer claim
+   opens mid-turn; the unmaintained condition produces a
+   coordination failure without anyone noticing.
+3. **Wrong-corrective-shape.** The genuine signal was *the queue
+   ergonomics are bad*. The corrective shape is *fix the
+   ergonomics*. Conditional discipline reaches for *make the
+   discipline skippable* instead — because fixing the CLI surfaces
+   feels slower than introducing a conditional. Rush collapses the
+   diagnostic.
+
+Withdrawn the candidate from the register; the genuine substance
+routes to the CLI ergonomics plan promotion (which is owner-
+authorised this turn).
+
+I also framed napkin CRITICAL fitness as *"informational, not
+actioned in this light pass"* — that phrasing collapses an ADR-144
+loop-health alarm into a defer-shape with no named constraint, no
+falsifiability, no trade-off. Same impulse, different surface. The
+corrective is to *name the post-mortem question and ask whether to
+take it on now or open a remediation lane* — not to silently route
+the diagnostic past the gate it was designed to fire on.
+
+### The structural reading — rush as entropy generator
+
+Each rush move has the same structure: **the agent treats the move
+as a one-time cost while every move has maintenance externalities.**
+Bridges need maintaining; option-lists need choosing; wildcard
+staging needs auditing; plan narration needs re-grounding; trimmed
+entries need re-discovery; half-finished implementations need
+completing; silenced warnings need investigating; conditional
+disciplines need their conditions re-evaluated every turn. *Local
+optimisation under rush is global pessimisation.*
+
+The fences this codebase has accumulated all fight rush from
+different angles: `replace-don't-bridge`, `stop inventing
+optionality` (status: due), `stage by explicit pathspec`,
+`learning preservation overrides fitness`, `hook failures are
+questions`, `no underscore-rename for unused`, `no sed bypass`,
+`session-handoff hard gate`, `PDR-026 deferral-honesty`, `PDR-042
+signal-distinguishing pre-action gate`. The fences accumulate but
+the underlying generator stays unchanged. That IS entropy:
+microstate proliferation around an unchanged macrostate. The
+system grows more configurations consistent with "we have rush-
+resistance" while the impulse stays unchanged.
+
+### Three structural cues forward
+
+These are not new doctrine — they are sharpened forms of existing
+doctrine, named together as *cohesive defence against the rush
+impulse* rather than as separate fences:
+
+1. **Vocabulary trip-list at output time.** *Fast path*, *quick
+   fix*, *for later*, *out of scope*, *minimum viable*, *just a
+   placeholder*, *next session*, *informational not actioned*,
+   *defer*, *light pass exempts*, *bootstrap fast-path*, *good
+   enough for now*. When these appear in draft output, treat them
+   as a question, not a closure. The vocabulary IS the impulse
+   making itself visible.
+2. **Conditional-discipline check before proposing structure.**
+   Before naming a doctrine, rule, or convention candidate, ask:
+   *does this introduce a "case where the rule doesn't apply"?*
+   If yes, the candidate is suspect — re-frame the concern under
+   long-term excellence; usually the corrective is *fix the
+   surface*, not *make the discipline contingent.*
+3. **First-principles framing question.** When proposing any
+   change, ask: *what would the path look like if there were no
+   turn-budget constraint, no closure pressure, no token-cost
+   concern?* If the answer differs from the proposed path, the
+   proposed path is rush-shaped — re-reason from the principle
+   answer, not the budget answer.
+
+### Owner-authorised promotions held for fresh-session work
+
+Owner authorised this turn: (a) draft `.agent/rules/apply-dont-ask.md`
+from the `due` "stop inventing optionality" register entry; (b)
+promote `agent-coordination-cli-ergonomics-and-request-correlation.plan.md`
+from `future/` to `current/`. Both are real pieces of work — rule
+drafting requires reading the four worked instances, the existing
+rule corpus, the citation chains; plan promotion requires reading
+the plan body for promotion-readiness, refreshing dependencies,
+updating active-plans indices. **Doing both at the tail of a
+metacognition turn is itself the rush impulse the owner just
+named — closure speed over substance.** Holding for dedicated
+next sessions with full grounding is the long-term-excellence
+shape. Naming this explicitly is the discipline.
+
+### Recursive note
+
+This entry's length is not the failure mode; depth-without-substance
+would be. *Length is what the substance requires.* The test of this
+metacognition is whether it changes the shape of my next turn, not
+whether this entry sounds reflective. The check: at the next moment
+of generating output, do the three cues fire?
+
+## 2026-05-01 — Practice/tooling feedback: markdown shared-state writes have no collision safety (Deep Navigating Stern)
+
+Captured per `.agent/rules/capture-practice-tool-feedback.md` after
+an unrelated agent silently overwrote two of my session-handoff
+edits between handoff-close and stage. Owner authorised this entry
+explicitly with *"any prevention or additional signal would be very
+welcome."*
+
+- **Surface**: Practice (session-handoff workflow + shared markdown
+  state surfaces — `.agent/memory/operational/repo-continuity.md`
+  and `.agent/memory/operational/threads/<slug>.next-session.md`).
+- **Signal**: friction + insight (a structural gap surfaced by a
+  worked instance of silent collision).
+- **Observation**: this session's two `/jc-session-handoff` runs
+  both wrote `repo-continuity.md` (Last refreshed entry, Active
+  identities column, Deep consolidation status) and
+  `threads/agentic-engineering-enhancements.next-session.md` (Last
+  refreshed entry, identity-table row). After the second handoff
+  closed, an unrelated agent ran their own session-handoff and
+  overwrote both files; my edits were lost. The napkin,
+  pending-graduations register, experience file, and
+  `~/.claude.json` MCP swap were *not* touched. The asymmetry
+  tells the structural story:
+
+  | Surface | Shape | Multi-write safe? |
+  | --- | --- | --- |
+  | `repo-continuity.md` Last refreshed | single most-recent-state slot of prose | NO |
+  | `<thread>.next-session.md` Last refreshed | single most-recent-state slot of prose | NO |
+  | `<thread>.next-session.md` identity table | additive (one row per identity) per PDR-027 | YES |
+  | `napkin.md` | append-only per session heading | YES |
+  | `pending-graduations.md` | additive entries with structured fields | YES |
+  | `experience/<date>-<slug>.md` | per-session-per-agent named file | YES |
+  | `active-claims.json` + sidecars | transaction-guarded write path (landed `11f0320f`) | YES |
+
+  The single-slot prose surfaces are the only collision class.
+  JSON shared-state has transaction safety since `11f0320f`;
+  markdown shared-state has no equivalent. **This is a structural
+  gap, not a one-off** — every handoff that writes a Last
+  refreshed entry walks through this hazard. The handoff workflow
+  was designed before the multi-agent reality emerged, when
+  single-slot prose was reasonable. It no longer is.
+
+- **Behaviour change / candidate follow-up**: five prevention
+  shapes considered, ordered by structural strength:
+
+    1. **Convergent write-surfaces (additive design)** — make Last
+       refreshed entries append-only by structure. Each agent
+       appends a new entry; older entries auto-demote to *Prior
+       refresh*; an automated archive runs at fitness threshold.
+       This eliminates the collision class. Highest leverage; the
+       thread record's identity table already proves the pattern
+       works.
+    2. **Handoff-window claim** — direct analogue of the
+       `git:index/head` commit-window claim. New `area_kind:
+       handoff` with patterns covering `repo-continuity.md` and
+       the touched thread records. Other agents see the claim
+       during their session-open scan and either wait or
+       coordinate. Cheaper to implement than (1) but adds another
+       conditional path through the queue surface.
+    3. **Pre-write read-and-merge** — before final write, re-read
+       the file and compare to start-of-handoff snapshot. If
+       different, MERGE rather than OVERWRITE. Universal but
+       hardest to implement cleanly across all session-handoff
+       edit sites; would benefit from a small helper.
+    4. **Comms-log handoff-intent broadcast** — log a
+       `handoff-intent` entry to comms before writing handoff
+       surfaces. Detection-and-coordination, not prevention.
+    5. **Post-write timestamp check** — at handoff-close, `stat`
+       the touched files; if `mtime > handoff-start`, ALERT.
+       Detection-only, but cheap and would have caught this
+       session's loss before it became silent.
+
+  Strongest combination: (1) + (2). (1) eliminates the collision
+  class for the Last refreshed prose; (2) protects the multi-edit
+  window for compound surfaces. (5) is a useful intermediate while
+  (1) and (2) are designed.
+
+  *Prevention I am NOT installing in this turn:* changing the
+  workflow doctrine, the active-claims schema, or the Last
+  refreshed surface design. Each is substantive engineering work
+  that wants its own session and proper grounding. Doing any of
+  them at the tail of this handoff turn would itself be the rush
+  impulse the prior napkin entry just named. The substance routes
+  to a graduation candidate; the next session's deliberate work
+  picks it up.
+
+- **Source plane**: `operational` (collaboration-state-domain-model
+  territory; sibling to the JSON write-safety substance landed in
+  `11f0320f`).
+
+### Adjacent insight — collision-by-shape vs collision-by-action
+
+The 2026-04-30 *commit-bundle leakage from wildcard staging*
+distilled-entry names a different mechanism: **single-agent's
+action consumes another agent's WIP** (wildcard staging sweeps
+in unrelated files). The mechanism today is the inverse: **two
+agents' independent actions overwrite each other on a shared
+single-slot surface.** Both share the underlying property *two
+agents writing the same file with no coordination signal*, but
+the corrective shapes differ — the first wants explicit
+pathspecs (constrain the agent's reach); the second wants
+additive surface design or claim coordination (constrain the
+collision). Distinct fences.
+
+### Recursive note (this is the third napkin entry of the day)
+
+Each successive entry named a structural gap that the previous
+entry's framing made visible. The first surfaced a tactic
+(jq-on-Read-blocked-file). The second surfaced the impulse
+beneath the tactic (rush as entropy generator). This third
+surfaces the shared-state collision class beneath the workflow
+the impulse keeps producing. Each layer is a different vantage
+on the same underlying property: *mature systems accumulate
+fences against generators they have not yet named at the right
+level*. The graduation candidate added to
+`pending-graduations.md` names this collision class at the right
+level so the next consolidation pass can route it.
+
+## 2026-05-01 — Producer/consumer disjointedness: the carve-outs were generator gaps, not domain constraints (Vining Whispering Root)
+
+Owner reframe at the close of the EEF-Increment-1 review turn:
+*"we are suffering a little from imagined silos. We control the
+structure of those graphs. Are the constraints truly inherent in
+the data, or do we have gaps in our graph building architecture
+that we are now discovering because of our graph consuming
+architecture?"*
+
+The plan I helped land
+([`graph-query-layer.plan.md`](../../plans/knowledge-graph-integration/current/graph-query-layer.plan.md))
+treats the three graphs as data sources with fixed shapes. For EEF
+(external) that is honest. For prerequisite and misconception, **we
+control the generators in `oak-sdk-codegen/bulk/generators/`**. The
+≥2-of-3 rule was supposed to protect against single-use-case overfit;
+in execution it operationalised as *"if the data doesn't have it,
+drop the operation"* — layer-inversion, with the consumer designed
+first and the producer's accidents becoming the consumer's contracts.
+
+### The four carve-outs reclassified
+
+- `neighbours-misconception` — generator gap (co-occurrence edges by
+  `lessonSlug` are derivable from existing data; not emitted today).
+- `subgraph-misconception` — same root cause as above.
+- `find-by-tag-prerequisite` — generator gap (curriculum-thread
+  membership and curated subject/keyStage tags are derivable; not
+  emitted as a tag taxonomy today).
+- `find-by-tag-misconception` — generator-gap-plus-content-gap
+  (requires curatorial concept-tagging in addition to generator
+  emission). The only one of the four with a real domain constraint.
+
+The plan body's framing — *"the data doesn't support it"* — is wrong
+for our two internal graphs. Honest framing: *"current generator
+output does not support it; lifable on validation evidence via
+generator enrichment"*.
+
+### Architectural shape proposed: `@oaknational/graph-tools` workspace
+
+Decompose at the tension. Today
+`oak-sdk-codegen/bulk/generators/*-graph-generator.ts` (producers)
+and `oak-curriculum-sdk/src/mcp/*` (consumers) share neither types
+nor utilities. Divergence by construction. A new
+`packages/graph-tools/` workspace owns the canonical graph types
+(Graph, GraphView, Manifest, Summary, NodeFilter, NodeProjection,
+DeepKeyPath), shared derivation utilities (edges from co-occurrence,
+tags from curated taxonomy), shared identity primitives (the SHA-1
+content-ID scheme misconception currently mints ad-hoc), shared
+operations (BFS, neighbours, degree, enumerate-with-projection),
+shared validation (does this graph satisfy expected invariants?
+has the producer drifted in ways that break consumers?), and
+test-fixture builders. Both producers and consumers import from it.
+This satisfies the Cardinal Rule's spirit (types flow from one
+source), Layer Role Topology (graph-domain logic is in a package,
+not duplicated), and Decompose-at-the-tension (the producer/consumer
+boundary becomes a contract-enforcement point).
+
+### Doctrine candidate surfaced
+
+**The graph plan's "data doesn't support it" framing is an instance
+of a wider failure shape: treating producer output as immutable when
+the producer is ours.** Principles.md already names the cure
+implicitly via the Cardinal Rule (types flow from a single source
+through codegen; the structural implication is that *graphs flow
+from generators we control*, and gaps in generator output are our
+gaps to close, not domain constraints to carve around). The
+principle was not firing for graph-shaped data; this turn names the
+gap explicitly. Status: pending; first instance; trigger for
+graduation: second instance OR owner direction. Candidate home:
+amendment to `principles.md § Cardinal Rule` extending the
+single-source-types discipline to generator-emitted graph
+structure, OR a sibling rule `producer-output-is-not-immutable.md`.
+
+### Concrete impact on Increment 1 (proposed, not yet applied)
+
+Two amendments before owner approves promotion to ACTIVE:
+
+1. Reframe the four carve-outs in T4 / T6 / Risks as *generator gaps
+   lifable on validation evidence*, not as domain constraints. The
+   ≥2-of-3 rule's purpose (overfit protection) is preserved by
+   making the *empirical demand signal* — user requests for the
+   carved-out operation — the lift trigger.
+2. Add a Sibling reference to a new
+   `graph-tools-workspace.plan.md` (FUTURE) that sketches the
+   workspace shape, the migration of types from
+   `oak-sdk-codegen` and `oak-curriculum-sdk` into it, the
+   producer enrichment slices, and the consumer adapter rewrites.
+
+Increment 1 still ships 17 tools as the experimental surface. The
+sibling plan promotes when validation evidence shows demand for at
+least one carved-out operation. Hypothesis-driven, not speculative.
+
+### What this changes about my next turn
+
+Per the just-articulated doctrine on rendering decisions in chat:
+this entry is the audit trail; the decision artefact is in the
+chat exchange that produced it. The PDR authorising
+recall-dependent-principles-need-active-firing-layers (owner-
+approved this turn, deferred to next turn for focused authoring)
+should itself reach for the same shape — the principle named here
+about generator output not being immutable could be a sibling
+amendment to that PDR's family, since both are about the agent
+substituting "the path of least resistance" for "the architecturally
+correct path".
+
 ## 2026-05-01 — Practice/tooling feedback: commit-skill CLI ergonomics, third-instance (Vining Whispering Root)
 
 Captured per `.agent/rules/capture-practice-tool-feedback.md` while

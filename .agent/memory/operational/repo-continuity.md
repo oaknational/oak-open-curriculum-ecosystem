@@ -8,7 +8,111 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-30T~17:00Z (Fragrant Sheltering Petal /
+**Last refreshed**: 2026-05-01T~07:57Z (Deep Navigating Stern /
+`claude-code` / `claude-opus-4-7-1m` / `c18f0a` —
+`feat/eef_exploration` branch unchanged; no thread touched by code,
+no plan moved, no commits, no push. **Off-thread tooling tweak**:
+user-scope `mcpServers.sonarqube` in `~/.claude.json` swapped from
+inline-secrets `docker run mcp/sonarqube` (with `SONARQUBE_TOKEN` /
+`SONARQUBE_URL` / `SONARQUBE_ORG` baked into `env`) to the Docker
+MCP Toolkit gateway form `docker mcp gateway run --profile
+sonarqube_oak`. Server key preserved as `sonarqube` so
+`mcp__sonarqube__*` tool prefixes (referenced by the
+`sonarqube@claude-plugins-official` plugin's skills and by the
+permission allowlist at `.claude/settings.local.json`) still
+resolve. Restart needed before the gateway connection picks up.
+Backup at `~/.claude.json.bak.20260501-075655`. **Deferred (owner
+gating)**: write Oak-repo-specific Docker MCP profile setup
+instructions before moving the config from user scope to a
+`.gitignore`d `.mcp.json` at repo root — gating order is owner
+direction. Surprise + insight + jq-on-Read-blocked-file workflow
+captured in this session's first napkin entry.
+
+**Then ran light `/jc-consolidate-docs`** focused on
+agentic-engineering graduation candidates. Surfaced two strong
+promotions: (a) `apply-dont-ask.md` rule from the `due` *stop
+inventing optionality* register entry (4 cross-session instances
+plus owner direction); (b) promote
+[`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+from `future/` to `current/` (third instance hardened the case —
+six compound CLI frictions on `b3d4c041` per Vining Whispering
+Root). **Owner authorised both 2026-05-01.** Both held for
+dedicated next-session work with full grounding — rule drafting
+requires reading the four worked instances, the existing rule corpus,
+and the citation chains; plan promotion requires plan-body
+promotion-readiness review, dependency refresh, and active-plans
+index update. *Doing either at the tail of this consolidation turn
+would be the rush impulse the owner explicitly named.*
+
+**Owner correction — load-bearing for next session:** *"we never
+take the fast path we ONLY take the path that maximises long-term
+architectural excellence; we never undertake opportunistic
+trimming, we ONLY apply thoughtful holistic analysis to knowledge
+preservation and discoverability."* I had named *bootstrap
+fast-path should not pay full coordination cost* as a graduation
+candidate during the consolidation pass — performing the rush
+failure mode I was supposed to be consolidating against. The
+candidate framed real evidence (queue ergonomics) under a
+**conditional-discipline shape** (skip queue when registry empty),
+which proliferates microstates: per-turn evaluation cost, silent
+condition decay under rush, wrong-corrective-shape (the right
+move is fix-the-ergonomics, not make-the-discipline-contingent).
+Withdrawn from the register with rationale; genuine substance
+routes to the CLI ergonomics plan promotion. I also framed napkin
+CRITICAL fitness as *"informational, not actioned in this light
+pass"* — same impulse different surface, collapsing an ADR-144
+loop-health alarm into a defer-shape without naming a constraint.
+Both corrections share one structure: rush converts a signal into
+a permission. Metacognition captured at full depth in napkin
+2026-05-01 entry; three structural cues forward — vocabulary
+trip-list, conditional-discipline check, first-principles framing
+question. Recursive observation: this very turn was at risk of
+producing rush-shaped responses; the test is whether the
+corrective changes the shape of the *next* turn. Subjective
+texture preserved at
+[`experience/2026-05-01-deep-the-rush-was-the-fix.md`](../../experience/2026-05-01-deep-the-rush-was-the-fix.md).
+
+**Napkin CRITICAL post-mortem (ADR-144 §Loop Health):**
+Q1 *why earlier zones did not fire* — they did; HARD/CRITICAL has
+been carried across multiple sessions because graduation work was
+gated on owner authorisation that landed only at the close of
+this turn. Q2 *is the hard limit set correctly* — yes; the
+napkin's 300-line limit is appropriate for a session-capture
+surface and the breach is substantive, not structural. Q3 *is the
+file a symptom of missing graduation elsewhere* — **yes**; the
+two authorised promotions ARE the missing graduations, plus the
+multi-instance Practice-governance and trinity-amendment items
+already at `pending`. Structural response: execute the authorised
+promotions in next sessions; do not trim the napkin in this turn.
+Knowledge preservation absolute.
+
+**Note (2026-05-01, post-handoff)**: an unrelated agent reverted
+`repo-continuity.md` and
+`threads/agentic-engineering-enhancements.next-session.md` after
+the handoff landed but before the changes were staged. The two
+files were re-applied from session memory under owner direction.
+The napkin, pending-graduations register, experience file, and
+`~/.claude.json` MCP swap survived the revert intact. Per owner
+direction *"any prevention or additional signal would be very
+welcome"* the friction was captured at depth in napkin
+([`markdown shared-state writes have no collision safety`](../active/napkin.md))
+and a new pending-graduations candidate was added with five
+prevention-shape analysis routing to the
+[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+future-plan home.
+
+**Third `/jc-session-handoff` of the day (Deep Navigating Stern,
+post-revert)** — re-applied the two reverted files from session
+memory; captured the markdown-shared-state-collision friction in
+napkin per `capture-practice-tool-feedback.md`; added the pending-
+graduations candidate (markdown shared-state writes have no
+collision safety; routes to `collaboration-state-domain-model-and-
+comms-reliability.plan.md`); no new commits, no plan body edits,
+no thread-identity churn beyond the row already added in the
+second handoff. The two owner-authorised promotions remain queued
+unchanged. Branch state unchanged.)
+
+**Prior refresh**: 2026-04-30T~17:00Z (Fragrant Sheltering Petal /
 `claude-code` / `claude-opus-4-7-1m` / `360064` —
 `feat/eef_exploration` branch / **PR #93 open**, 7 commits ahead of
 origin (4 unpushed at session-close; owner-authorised push window
@@ -174,7 +278,7 @@ live in each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff (committed by Fragrant Sheltering Petal as `1a947297`) / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
@@ -348,12 +452,29 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-04-30 Fragrant Sheltering Petal): `due — multiple
-triggers, not bounded for this closeout`**. Owner directed
-session-handoff only this turn ("this session is complete, please
+**Status (2026-05-01 Deep Navigating Stern, second session-handoff
+of the day): `due — multiple triggers, not bounded for this closeout
+beyond owner-authorised promotions queued for fresh-session work`**.
+The session expanded from an off-thread tooling tweak into a light
+`/jc-consolidate-docs` pass + owner-directed `/jc-metacognition` round.
+**Consolidation gate fired this turn**: light pass focused on
+agentic-engineering graduation candidates surfaced two strong
+promotions, both owner-authorised; deliberately held for dedicated
+fresh-session work because executing them mid-metacognition-turn
+would itself be the rush impulse the owner just named. **One
+candidate withdrawn** from the register (*bootstrap fast-path should
+not pay full coordination cost* — entropy-generating
+conditional-discipline framing). **One new candidate added** (*rush
+impulse as system-level entropy generator + three structural cues* —
+captured 2026-05-01 from owner direction; first articulation;
+graduation requires deliberate next-session shape). Triggers
+carrying forward, plus those affected this session, listed below.
+
+**Prior status (2026-04-30 Fragrant Sheltering Petal):** owner
+directed session-handoff only ("this session is complete, please
 update all appropriate plans and continuity surfaces, then run the
-session handoff workflow") — no escalation to `/jc-consolidate-docs`.
-Triggers carrying forward, plus those newly fired this session:
+session handoff workflow") — no escalation. Triggers carrying
+forward, plus those newly fired in that session:
 
 + **Repeated surprises suggest a new rule (4th instance, gradation
   trigger fully fired)**: *stop inventing optionality* — agent
