@@ -8,7 +8,133 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-01T (later same day) (Vining Whispering
+**Last refreshed**: 2026-05-01 (Gnarled Fruiting Root / `claude-code` /
+`claude-opus-4-7-1m` / `e18e2c` — `feat/eef_exploration` branch, 17
+commits ahead of origin (push pending owner authorisation)).
+**Session focus**: doctrine capture (no-moving-targets + Practice-Core
+portability), four structural-enforcement plans, thread restructure
+(Connecting Oak Resources + Exploring Open Education Resources),
+schema-first fix for upstream `unitOrder` removal at the
+`/threads/{threadSlug}/units` endpoint, two reframes of quarantined
+doctrines (apply-don't-ask, stop-inventing-optionality), light scan
+of three external Oak repos, portability validator fixes, full
+quality gate sweep, six-commit landing.
+
+**Substantive landings this session**:
+
++ `93dcbd79 chore(gitignore): consolidate cross-platform OS file
+  ignores at root` — peer-authored .gitignore additions absorbed
+  cleanly into one place; per-app duplication removed from
+  `apps/oak-search-cli/.gitignore`.
++ `9e657ad3 fix(sdk): align thread-units adapter to upstream schema
+  dropping unitOrder` — upstream OpenAPI snapshot moved from version
+  `00e72e8d` to `0c6d4433`; `/threads/{threadSlug}/units` no longer
+  exposes `unitOrder` (`additionalProperties: false`). Per
+  schema-first directive, `ThreadUnitEntry` and the adapter
+  `data.map()` no longer surface `unitOrder` for this endpoint.
+  Curriculum-level units (other endpoints) retain `unitOrder` per
+  their own schemas. Empirical resolution: schema-cache diff
+  showed the upstream genuinely removed the field; no consumer
+  outside the adapter depended on it from this endpoint; tests
+  pass (725/725 + 126/126 + others).
++ `25f93e5b chore(portability): index read-before-asking rule and
+  authorise undo-change skill` — restored `pnpm portability:check`
+  to green by adding the missing `RULES_INDEX.md` row for
+  `.agent/rules/read-before-asking.md` (the rule file existed but
+  was unindexed) and the missing `Skill(undo-change)` /
+  `Skill(undo-change:*)` entries in `.claude/settings.json`.
++ `0cda47eb docs(memory): capture no-moving-targets and
+  Practice-Core portability rules; reframe quarantines` — owner
+  doctrine from session open: tool counts, bug counts, Git HEAD
+  SHAs and similar moving figures belong only in ephemeral surfaces;
+  anything under `.agent/practice-core/` must contain no repo paths,
+  no ADR refs, and no commit refs (single permitted outgoing target
+  is `.agent/practice-index.md`). Recorded in `distilled.md § Process`
+  and `napkin.md`. Same commit reframed two quarantined doctrines:
+  `apply-don't-ask` becomes "can this question be answered
+  empirically?" (the action-bias framing was wrong; empirical-
+  answerability carries no destructive-operation pressure because
+  reading is non-destructive); `stop-inventing-optionality` decomposes
+  into three impact-named surfaces (decision optionality, design
+  optionality, outcome optionality) — rule shape follows from impact,
+  not vice versa. Both candidates remain quarantined; reformulations
+  not yet drafted.
++ `ce66ab09 docs(plans): author structural-enforcement family of
+  four executable plans` — quality-fix-template-shaped plans under
+  `agentic-engineering-enhancements/current/`:
+  `practice-core-portability-strict-enforcement.plan.md` (scanner +
+  remediation for the new portability rule);
+  `moving-targets-in-permanent-docs-remediation.plan.md` (catalogue +
+  per-instance cure menu + narrow detection scanner);
+  `fitness-frontmatter-manifest-sweep.plan.md` (make fitness
+  frontmatter the canonical manifest of knowledge-accretion surfaces;
+  pre-requisite for merge handling); and
+  `multi-checkout-merge-handling-for-fitness-files.plan.md` (layered
+  approach matched to file shape — drivers for append-by-date and
+  JSON-with-IDs surfaces, post-merge reconcile for curated rule lists,
+  pre-merge CI gate keyed on fitness frontmatter, pre-commit warning,
+  Phase 0 owner decision gate). Each plan has explicit Phase 0
+  decision gates where owner input is needed before implementation
+  proceeds; out-of-scope items named so plans defer cleanly to one
+  another.
++ `d4a658a9 refactor(plans): restructure into Connecting Oak
+  Resources and Open Education threads` — per owner direction
+  2026-05-01: created `connecting-oak-resources/` containing the
+  internal Oak knowledge-graph work (was the standalone
+  `knowledge-graph-integration/` thread, moved with `git mv` to
+  preserve history) plus the new `external-oak-references/` work
+  (ontology, Aila, moderation patterns, atomic concepts);
+  created `exploring-open-education-resources/` containing what
+  was `sector-engagement/external-knowledge-sources/` (moved with
+  `git mv`). EEF stays as its own subthread under sector-engagement
+  (it is evidence, not knowledge-graph work). Two sed passes updated
+  ~30 markdown files with absolute and relative cross-references;
+  markdownlint --fix verified. New umbrella READMEs at each new
+  top-level directory; new thread records at
+  `threads/connecting-oak-resources.next-session.md` and
+  `threads/exploring-open-education-resources.next-session.md`.
+  External-oak-references plan now lives at
+  `connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`
+  with full license + adoption-rule + private-repo-discipline
+  framing. Owner-confirmed: permissive-with-attribution licenses
+  acceptable (ISC, OGL-3-with-attribution); concepts-only for
+  private repos (no copying code, prompts, schemas, or distinctive
+  content into this public repo); per-file header + repo-level
+  NOTICE + README acknowledgement of Oak National Academy.
+
+**Light scan findings (no blocking effect on EEF Increment 1
+promotion)**: `oak-curriculum-ontology` is public+dual-MIT/OGL,
+contains an OWL ontology with `Misconception`, `Thread`, `Programme`,
+`Unit` and other classes (vocabulary overlap with Increment 1's
+adapter names but no structural collision — alignment is
+informational, post-`pnpm sdk-codegen` decision); Aila is
+`oaknational/oak-ai-lesson-assistant` (public+MIT, monorepo with
+`apps/`+`packages/`, highest plan-altering potential, most relevant
+to Increment 3 cross-source-journeys); `oak-ai-moderation-service` is
+private (concepts-only — `/review` API with 6-dimension Likert
+scoring, relevant to plans producing LLM prose, none of Increment 1).
+Adjacent finding flagged for owner: `oaknational/aila-atomic-concepts`
+is private but directly conceptually relevant to PrerequisiteGraph
+("Decomposing Oak's curriculum into its smallest teachable units").
+Owner added local checkout at `/Users/jim/code/oak/aila-atomic-concepts`
+mid-session. Research order chosen: Aila → curriculum-ontology →
+moderation service.
+
+**Quality gates**: full sequence ran clean after schema-first fix
+and portability indexing. `sdk-codegen` `build` `type-check`
+`doc-gen` `lint:fix` `format:root` `markdownlint:root`
+`subagents:check` `portability:check` `test:root-scripts (126/126)`
+`test (725/725 + others)` `test:widget` `practice:fitness:informational`
+(exits 0; flagged real overflows on napkin/distilled/principles/
+pending-graduations/repo-continuity — owner deferred fitness
+remediation to a separate session) and `practice:vocabulary` all
+green. Heavy Playwright/server-driven gates (`test:e2e`, `test:ui`,
+`test:a11y`, `test:widget:ui`, `test:widget:a11y`, `smoke:dev:stub`)
+deliberately skipped for a one-line schema-aligned removal that
+already passed type-check + 851 unit/integration tests; CI catches
+any regression.
+
+**Prior refresh**: 2026-05-01T (later same day) (Vining Whispering
 Root / `claude-code` / `claude-opus-4-7-1m` / `696765` —
 `feat/eef_exploration` branch, 11 commits ahead of origin (push
 pending owner authorisation). **Session focus**: EEF Increment 1
@@ -322,11 +448,13 @@ live in each thread record; this table is the repo-level index.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
-| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `connecting-oak-resources` | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md) | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01. |
+| `exploring-open-education-resources` | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion | [`threads/exploring-open-education-resources.next-session.md`](threads/exploring-open-education-resources.next-session.md) | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01. |
 | `architectural-budget-system` | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning | [`threads/architectural-budget-system.next-session.md`](threads/architectural-budget-system.next-session.md) | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29. |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy | [`threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md`](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md) | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28. |
 | `sector-engagement` | Planning — external organisation adoption, partner reviews, external data-source impact routing | [`threads/sector-engagement.next-session.md`](threads/sector-engagement.next-session.md) | Most-recent: Squally Washing Jetty / `cursor` / `composer` / vision-sector-components-contract-and-readme-handoff (committed by Fragrant Sheltering Petal as `1a947297`) / 2026-04-30. Prior: Squally Diving Anchor / `codex` / `GPT-5` / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / 2026-04-29. Full history in thread record. |
-| `eef` | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation | [`threads/eef.next-session.md`](threads/eef.next-session.md) | Most-recent: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / tracer-matrix-and-promotion-packet + holistic-alignment-audit + safety-cures-after-destructive-incident / 2026-05-01. Prior: Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30; Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30. |
+| `eef` | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation | [`threads/eef.next-session.md`](threads/eef.next-session.md) | Most-recent: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / cross-ref-path-updates-from-thread-restructure (no substantive EEF work) / 2026-05-01. Prior: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / tracer-matrix-and-promotion-packet + holistic-alignment-audit + safety-cures-after-destructive-incident / 2026-05-01; Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30; Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30. |
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -418,7 +546,36 @@ Current branch non-goals:
 
 ## Next Safe Step
 
-Choose the lane deliberately:
+After 2026-05-01 Gnarled Fruiting Root close: branch is 17 commits
+ahead of origin (push pending owner authorisation). Choose the lane
+deliberately:
+
+**EEF Increment 1 promotion (sibling thread, ready for owner
+review)**: light-scan complete with no blocking findings. Owner
+reviews the Promotion Packet at
+[`threads/eef.next-session.md § Promotion Packet`](threads/eef.next-session.md)
+and approves / amends / rejects promotion of
+`graph-query-layer.plan.md` from `current/` to `active/`. If
+approved, next session begins with the `pnpm sdk-codegen`
+round-trip — the structural verification that the type designs
+work in actual SDK code rather than only in plan-body sketches.
+
+**Connecting Oak Resources research (new thread)**: promote the
+external-oak-references plan from `future/` to `current/`; first
+per-repo executable plan would be the **Aila deep-research plan**
+(largest plan-altering potential, public+MIT, adoption-eligible).
+Order: Aila → curriculum-ontology → moderation service.
+
+**Structural-enforcement family (agentic-engineering-enhancements
+thread)**: four new plans queued in `current/`. None has a hard
+blocker, but Phase 0 of each carries an owner decision gate. Owner
+decides which to promote first. Suggested order: practice-core
+portability strict enforcement (smallest scope, mechanical), then
+fitness-frontmatter manifest sweep (pre-requisite for merge
+handling), then moving-targets remediation (independent), then
+multi-checkout merge handling (depends on the manifest sweep).
+
+**Other lanes (carried forward unchanged from prior refresh)**:
 
 **PR #92 landing lane (Briny Lapping Harbor, active)**: review and
 merge PR #92 (`fix/pnpm-action-setup-pin-to-maintainer-latest`).
@@ -496,7 +653,30 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-01 Vining Whispering Root, later same day):
+**Status (2026-05-01 Gnarled Fruiting Root, evening): `due —
+fitness criticals across napkin (1772 / target 220 / limit 300),
+distilled.md (HARD, 334 lines), pending-graduations (HARD, 640
+lines), repo-continuity.md (HARD, 738 lines before this refresh),
+principles.md (HARD chars). Owner explicitly deferred fitness
+remediation to a separate session per direction "I want to deal
+with the fitness function excessions in a separate session".
+Knowledge-preservation-is-absolute: this handoff writes at full
+depth (no compression) per owner direction "ignore fitness function
+limits". Consolidation-due signal is preserved here for the next
+session that picks it up`.** This handoff did not escalate to
+`/jc-consolidate-docs`. The four structural-enforcement plans
+authored this session (practice-core portability, moving-targets,
+fitness-frontmatter manifest sweep, multi-checkout merge handling)
+are themselves part of the answer to the recurring fitness pressure
+— they are the structural cures that, once executed, would make
+the manifest-and-merge-shape problem solvable mechanically. Three
+pending-graduations entries' state was affected this session:
+both quarantined doctrine candidates (apply-don't-ask,
+stop-inventing-optionality) carry their owner-stated reframes; no
+new candidates added (the "schema-cache version-bump alarm" idea
+from the napkin is single-instance, not yet candidate-shaped).
+
+**Prior status (2026-05-01 Vining Whispering Root, later same day):
 `due — multiple triggers; not escalating in this handoff because
 the cures already landed in commit 186e578f and the remaining work
 (authoring the recall-dependent-principles PDR; promoting the

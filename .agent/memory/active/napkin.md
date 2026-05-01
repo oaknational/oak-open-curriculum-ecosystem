@@ -32,6 +32,88 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-01 — Surprise: upstream OpenAPI silently dropped `unitOrder` from `/threads/{threadSlug}/units` (Gnarled Fruiting Root)
+
+Captured per the napkin surprise format. Schema-first directive
+explicitly forbids inventing concepts that don't flow from the
+schema; this surprise is the load-bearing instance for the session.
+
+- **Expected**: when running `pnpm sdk-codegen`, the regenerated
+  output would either match what the codegen had previously produced
+  (the working-tree codegen state from a peer run was current) or
+  produce an obvious diff for me to inspect. The thread-units
+  endpoint's `unitOrder` field, which the SDK's `ontology-data.ts`
+  describes as "Ordered: Units within a thread have unitOrder
+  showing conceptual progression" and `tool-guidance-workflows.ts`
+  treats as load-bearing ("Lower unitOrder = earlier in
+  progression"), would still be present.
+- **Observed**: the upstream OpenAPI snapshot version moved from
+  `0.6.0-00e72e8d3260acea8a6b5177272f2d523c8f69f5` to
+  `0.6.0-0c6d4433c5ad52e49b3b41fd99087612656424f5`, and the
+  `/threads/{threadSlug}/units` response schema dropped `unitOrder`
+  entirely. `additionalProperties: false` is set, meaning the field
+  is *not* tolerated either. The codegen output reflected this; the
+  consumer adapter at `apps/oak-search-cli/src/adapters/oak-adapter-threads.ts`
+  still claimed it; the lint error
+  ("Unsafe assignment of an error typed value") at line 93 was the
+  symptom.
+- **Why surprising**: `unitOrder` is structurally important for
+  curriculum reasoning — sequencing is the fundamental shape. The
+  field is *still* present on other endpoints (curriculum-level
+  units, ~16 other places in the schema). Only the simpler
+  thread-units endpoint had it removed. This is targeted, not a
+  schema-wide retreat from ordering.
+- **Empirical resolution path** (validated the new "can this
+  question be answered empirically?" reframe in the same turn):
+  1. `git diff` on `schema-cache/api-schema-original.json` showed
+     the version bump and the field removal.
+  2. `grep "unitOrder"` on the schema-cache showed the field still
+     present in 16 other places.
+  3. `grep -rEn "ThreadUnitEntry|getThreadUnits|.unitOrder"` on
+     `apps/` and `packages/` showed only the adapter itself
+     consumed `unitOrder` from this endpoint. Test mocks used empty
+     arrays. No downstream caller depended on the field.
+  4. The cure was therefore mechanical: align consumer with schema,
+     document the implication inline (ordering is implicit in array
+     sequence for this endpoint; curriculum-level units in other
+     endpoints retain `unitOrder` per their own schemas).
+- **Reframe validation**: the empirical-answerability shape carried
+  no destructive-operation pressure — every step above was a read
+  or a Yet-Another-Edit; nothing irreversible. Compare to the
+  apply-don't-ask doctrine that produced the destructive
+  `git checkout --` incident earlier the same day. The reframe is
+  doing the work the original framing could not.
+- **Structural cure (already in place)**: the upstream version is
+  baked into the schema-cache, so the next sdk-codegen run would
+  surface a similar drop again. The `additionalProperties: false`
+  closure is what makes the consumer break clean rather than rot
+  silently. Schema-first is structurally sound here; the only thing
+  missing is a mechanical surprise alarm when the upstream version
+  bumps. Idea, not graduation candidate yet — not multi-instance.
+
+Cross-references for the next-session reader: the schema-fix
+landed as commit `9e657ad3`. Preserved here (not only in the plan
+or commit body) because the *meta-observation* — that the
+empirical-answerability reframe carries no inherent destructive
+pressure — is the load-bearing learning, not the field removal
+itself.
+
+## 2026-05-01 — Surprise: peer-converged .gitignore (Gnarled Fruiting Root)
+
+Tiny surprise, worth one paragraph. At session-open, working tree
+contained `M .gitignore` and `M apps/oak-search-cli/.gitignore`
+that I had not produced. Inspection showed a peer agent had added
+sensible cross-platform OS file ignores at root (.AppleDouble,
+Thumbs.db variants, $RECYCLE.BIN, .directory) and removed the
+now-redundant per-app duplicates from search-cli. No conflict, no
+collision — just two agents converging on the right shape from
+different angles. Committed as a clean group with attribution to
+the substance ("consolidate cross-platform OS file ignores at
+root") rather than to me. The non-event is the point: when shared
+state has converging shape, multi-agent work is fine. The earlier
+destructive-action incident was about *diverging* shape colliding
+on the same surface; this is the inverse case.
+
 ## 2026-05-01 — Owner-stated doctrine: no moving targets in permanent docs; Practice-Core portability is by construction (Gnarled Fruiting Root)
 
 Two doctrinal points captured at session open via `/jc-start-right-quick`,
