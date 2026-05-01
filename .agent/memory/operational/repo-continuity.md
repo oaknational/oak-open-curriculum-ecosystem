@@ -546,9 +546,28 @@ Current branch non-goals:
 
 ## Next Safe Step
 
-After 2026-05-01 Gnarled Fruiting Root close: branch is 17 commits
-ahead of origin (push pending owner authorisation). Choose the lane
+After 2026-05-01 Gnarled Fruiting Root close: branch is 18 commits
+ahead of origin (push pending owner authorisation), with one
+freshly-captured investigation queued and one item-to-investigate
+that paused mid-turn due to tooling friction. Choose the lane
 deliberately:
+
+**Local dev Sentry boundary regression investigation (newly
+queued)**: `pnpm dev` from
+`apps/oak-curriculum-mcp-streamable-http` fails with
+"Git SHA is required for Sentry release resolution but
+VERCEL_GIT_COMMIT_SHA is not set". Owner direction is unambiguous:
+local dev MUST NOT require Sentry release identity. Either the
+completed `mcp-local-startup-release-boundary.plan.md` work has
+regressed, or the dev-server invocation path was not in its scope.
+Plan stub at
+[`.agent/plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md`](../../plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md)
+captures the reproduction, the throw-site location, the canonical
+config options to evaluate, the structural-enforcement question,
+and a Phase 0 entry checklist. The investigation paused at the
+trace-the-throw-site step due to tooling friction in this session;
+next session should re-ground on a fresh shell with no `SENTRY_*`
+env vars.
 
 **EEF Increment 1 promotion (sibling thread, ready for owner
 review)**: light-scan complete with no blocking findings. Owner

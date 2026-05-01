@@ -32,6 +32,62 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-01 — Surprise: `pnpm dev` from oak-curriculum-mcp-streamable-http demands a Vercel git SHA on local dev (Gnarled Fruiting Root)
+
+Captured per the napkin surprise format. Investigation paused —
+tooling friction made code-reading unreliable mid-turn — and the
+context was routed into a focused plan-stub at
+`.agent/plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md`
+for next session to pick up properly.
+
+- **Expected**: `cd apps/oak-curriculum-mcp-streamable-http && pnpm dev`
+  starts the local server. Local dev does not need Sentry release
+  identity (per the completed
+  `mcp-local-startup-release-boundary.plan.md` from 2026-04-25 which
+  explicitly decoupled local startup from deploy-only Sentry release
+  metadata).
+- **Observed**: widget build succeeds, then the server-side build path
+  fails with "Git SHA is required for Sentry release resolution but
+  VERCEL_GIT_COMMIT_SHA is not set" (exit 1).
+- **Why surprising**: a previous plan was named to fix exactly this.
+  Either it has regressed, or the dev-server invocation path was not
+  in its scope. The single-source-resolver plan
+  (`sentry-release-identifier-single-source-of-truth.plan.md`,
+  CURRENT) may have introduced a path that bypasses the local-dev
+  boundary.
+- **Owner direction**: "we don't want sentry to be configured on
+  local dev" — the load-bearing constraint for the cure. Owner
+  asked for the canonical config options and the architectural-
+  excellence work to bring this up to standard.
+- **Throw site (approximate)**:
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts:169`
+  has a similar wording ("Cannot register a Sentry release without
+  a git SHA. Set VERCEL_GIT_COMMIT_SHA or GIT_SHA_OVERRIDE"), but
+  the verbatim error wording from the dev-server is not identical
+  — the actual emitter is upstream of that result, probably in the
+  plugin's caller in the esbuild flow. Tracing this is the first
+  Phase 0 task in the plan-stub.
+- **Tooling friction noted**: this session hit LSP MCP disconnects,
+  cumulative file-modification staleness on Edit, and unrelated
+  system-reminder fan-out on unrelated reads. The investigation
+  was paused rather than pushed through — pushing through would
+  have produced a shallow diagnosis and likely missed the deeper
+  question of whether the previous plan regressed.
+
+Cross-references for next-session reader:
+
+- Plan stub:
+  `.agent/plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md`
+- Completed predecessor:
+  `.agent/plans/observability/archive/completed/mcp-local-startup-release-boundary.plan.md`
+- Active sibling:
+  `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+- Current sibling:
+  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
+- Owner-stated invariant: local dev MUST NOT require Sentry
+  release identity — recorded in the plan stub as the load-bearing
+  constraint.
+
 ## 2026-05-01 — Surprise: upstream OpenAPI silently dropped `unitOrder` from `/threads/{threadSlug}/units` (Gnarled Fruiting Root)
 
 Captured per the napkin surprise format. Schema-first directive
