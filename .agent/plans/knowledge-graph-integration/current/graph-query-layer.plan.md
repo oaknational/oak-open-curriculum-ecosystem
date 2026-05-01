@@ -252,6 +252,271 @@ Per-operation user-value lines:
 - **Architecture validation**: confirms tag indexing is worthwhile at
   graph-layer level rather than per-graph custom code.
 
+#### T1 Tracer Matrix (7 operations × 3 graphs, verified against real data)
+
+Each tracer entry below was drafted with the actual generator-source or
+data-file open. The shape:
+
+```text
+**{operation} × {graph}**
+- Teacher question: [concrete]
+- Expected response shape: [against real data]
+- Token budget: ≤ N tokens at default projection
+- Drops to graph mechanics? [yes/no — boundary check vs corpus layer]
+- Verified against: [file + node id or field path]
+```
+
+Two cells are explicitly **NO TRACER** under the ≥2-of-3 rule (see
+Phase B findings below the matrix). Operations with NO TRACER cells
+ship for the supported graphs and are explicitly carved out for the
+unsupported ones; they are not silently dropped.
+
+##### `manifest`
+
+**manifest × prerequisite**
+
+- Teacher question: "What's the version and scale of the prior-knowledge graph my AI tutor is using right now?"
+- Expected response shape: `{ node_count, edge_types: ['prerequisiteFor'], edge_count: stats.totalEdges, version, generatedAt, sourceVersion, schema_hash }`
+- Token budget: ≤300 tokens (small fixed-shape header)
+- Drops to graph mechanics? yes — pure metadata read from `PriorKnowledgeGraph` root
+- Verified against: `packages/sdks/oak-sdk-codegen/src/bulk/generators/prior-knowledge-graph-generator.ts` § `PriorKnowledgeGraph` + `PriorKnowledgeGraphStats { unitsWithPrerequisites, totalEdges, subjectsCovered }`
+
+**manifest × misconception**
+
+- Teacher question: "Is the misconception graph fresh and complete enough for a year-end review?"
+- Expected response shape: `{ node_count: stats.totalMisconceptions, edge_types: [], edge_count: 0, version, generatedAt, sourceVersion, schema_hash }`
+- Token budget: ≤300 tokens
+- Drops to graph mechanics? yes — pure metadata; honest about `edge_types: []`
+- Verified against: `misconception-graph-generator.ts` § `MisconceptionGraph` + `MisconceptionGraphStats { totalMisconceptions, bySubject, byKeyStage, subjectsCovered }`. The current generator emits no edges; manifest reports this honestly.
+
+**manifest × eef-strands**
+
+- Teacher question: "Which version of the EEF Toolkit am I querying, when was it last refreshed, and which strands have no relations to traverse?"
+- Expected response shape: `{ node_count: 30, edge_types: ['related_strand', 'related_guidance_report'], edge_count, version: meta.data_version, last_updated: meta.last_updated, schema_hash, strands_without_relations: readonly string[] }`. The `strands_without_relations` field is the list of strand IDs whose `related_strands` field is absent (per Phase B finding 5 and T5 sparse-relations surface) — front-loaded so agents avoid pointless `subgraph`/`neighbours` calls.
+- Token budget: ≤500 tokens (slightly larger than other manifests because of the 13-string list)
+- Drops to graph mechanics? yes — manifest reads `meta` block plus precomputed sparse-relations list
+- Verified against: `.agent/plans/sector-engagement/eef/reference/eef-toolkit.json` § `meta.data_version='0.2.0'`, `meta.last_updated='2026-04-02'`, `strands.length === 30`. Empirical check (`python3 -c "..."` against the reference data): 13 of 30 strands have `related_strands` absent (named in Phase B finding 5); the manifest list mirrors that count exactly.
+
+##### `summary`
+
+**summary × prerequisite**
+
+- Teacher question: "Which subjects and key stages have the densest prerequisite chains?"
+- Expected response shape: `{ totals: {nodes, edges}, bySubject: Record<subject, count>, byKeyStage: Record<keyStage, count>, topConnected: readonly [{unitSlug, inDegree, outDegree}, ...] }`
+- Token budget: ≤2000 tokens default; ≤500 tokens with `groupBy: 'subject'`
+- Drops to graph mechanics? yes — aggregation only, no scoring
+- Verified against: `PriorKnowledgeGraphStats { unitsWithPrerequisites, totalEdges, subjectsCovered }`. Note: `topConnected` is computed SDK-side from `edges[]` (not pre-aggregated in stats today); the adapter does the in/out degree count.
+
+**summary × misconception**
+
+- Teacher question: "What kinds of misconceptions exist in KS3 maths?"
+- Expected response shape: `{ totals: {nodes}, bySubject, byKeyStage, topByLesson }` reading precomputed `stats.bySubject` and `stats.byKeyStage`
+- Token budget: ≤1500 tokens default
+- Drops to graph mechanics? yes — pure aggregation, reads precomputed `stats`
+- Verified against: `misconception-graph-generator.ts § calculateStats` (`bySubject` + `byKeyStage` already present on stats)
+
+**summary × eef-strands**
+
+- Teacher question: "What's the distribution of impact and cost across the EEF strands at a glance?"
+- Expected response shape: `{ totals: {strands: 30}, byImpactBand, byCostBand, byEvidenceStrength, topImpact: readonly [...top-5] }`
+- Token budget: ≤1500 tokens
+- Drops to graph mechanics? yes — structural histogram. **NOT** ranking or recommendation; ranking carries user-context (school_context_relevance) and lives at corpus layer.
+- Verified against: eef-toolkit.json § `strands[].headline.{impact_months, cost_rating, evidence_strength_rating}` — derivable for all 30 strands; `null` impact handled per F5.
+
+##### `get_node`
+
+**get_node × prerequisite**
+
+- Teacher question: "What does Year-5 Fractions actually require students to know coming in?"
+- Expected response shape: `PriorKnowledgeNode` with default projection `['unitSlug', 'unitTitle']`; full includes `priorKnowledge[]`, `threadSlugs[]`.
+- Token budget: ≤300 tokens default; ≤1000 tokens full
+- Drops to graph mechanics? yes — single-node fetch by stable id (`unitSlug`)
+- Verified against: `PriorKnowledgeNode` interface (unitSlug as primary key)
+
+**get_node × misconception**
+
+- Teacher question: "Show me the full record for the 'students think 0.5 < 0.45 because more digits' misconception."
+- Expected response shape: `MisconceptionNode` with default projection `['lessonSlug', 'subject', 'keyStage']`; full adds `misconception` and `response` text.
+- Token budget: ≤500 tokens default; ≤1500 tokens full
+- Drops to graph mechanics? yes — single-record fetch
+- Verified against: `misconception-graph-generator.ts § MisconceptionNode`. **Adapter design point surfaced**: `MisconceptionNode` has no explicit ID field; the adapter must mint stable IDs. **Recommended scheme**: SHA-1 of `${lessonSlug}::${misconception}` truncated to 12 hex characters. The `misconception` field is the full natural-language sentence describing the incorrect belief, which makes the hash regeneration-stable as long as the source text is stable. **Index-based alternatives like `${lessonSlug}#${index}` are NOT viable** because the upstream extractor's ordering is not guaranteed to be deterministic across regenerations; the index would silently shift if the extractor's input order changed. This is a real Increment 1 work item, not deferred — recorded in Phase B findings.
+
+**get_node × eef-strands**
+
+- Teacher question: "Give me the metacognition-and-self-regulation strand."
+- Expected response shape: `EefStrand` with default projection `['id', 'name', 'slug', 'headline.impact_months']`; full includes `definition`, `key_findings`, `effectiveness`, `behind_the_average`.
+- Token budget: ≤400 tokens default; full projection ~3000 tokens (strands are large)
+- Drops to graph mechanics? yes — single-strand fetch by `id`
+- Verified against: eef-toolkit.json § `strands[].id` (e.g. `eef-tl-metacognition-and-self-regulation`). **Citation translation point surfaced**: data field is `id`; the Citation contract uses `strand_id`. The corpus-layer loader (Increment 2 § T2) maps `id → strand_id` at the corpus boundary; the graph layer treats `id` as the canonical node ID.
+
+##### `enumerate_nodes`
+
+**enumerate_nodes × prerequisite**
+
+- Teacher question: "List Year-6 mathematics units that have prior-knowledge requirements, paged."
+- Expected response shape: `{ items: PriorKnowledgeNode[], page: {number, size, total} }` filtered by `{subject: {equals: 'mathematics'}, keyStage: {equals: 'KS2'}, year: {equals: 6}}`, default projection.
+- Token budget: ≤2000 tokens at p95 (page_size 50, default projection)
+- Drops to graph mechanics? yes — typed filter + projection + pagination
+- Verified against: `PriorKnowledgeNode { subject, keyStage, year }` + `NodeFilter` shape (FieldPredicate equality covers all three)
+
+**enumerate_nodes × misconception**
+
+- Teacher question: "Show me secondary maths misconceptions."
+- Expected response shape: `{ items, page }` filtered by `{subject: {equals: 'mathematics'}, keyStage: {equals: 'KS3'}}`, default projection.
+- Token budget: ≤2000 tokens at p95
+- Drops to graph mechanics? yes
+- Verified against: `MisconceptionNode { subject, keyStage }`
+
+**enumerate_nodes × eef-strands**
+
+- Teacher question: "List EEF strands tagged 'primary' with at-least-moderate impact."
+- Expected response shape: filtered by `{ tags: { contains: 'primary' }, headline: { impact_months: { gte: 2 } } }`, default projection `['id', 'name', 'headline.impact_months']`.
+- Token budget: ≤1500 tokens (30-strand cap)
+- Drops to graph mechanics? yes — structural filter; no scoring
+- Verified against: eef-toolkit.json § `strands[].tags` (110 unique tags across 30 strands) + `strands[].headline.impact_months`. **NodeFilter extension surfaced**: the current `FieldPredicate` spec (T2) supports `equals`/`oneOf` and string `contains`/`startsWith` and number `gte`/`lte`, but does **not** define array-element-membership for fields whose type is `readonly string[]`. The `tags: { contains: 'primary' }` form requires a new `FieldPredicate` arm: `TFieldValue extends readonly (infer U)[] ? { readonly contains: U } : never`. Recorded as a Phase B finding for T2 update.
+
+##### `neighbours`
+
+**neighbours × prerequisite**
+
+- Teacher question: "What units come immediately after Year-5 Fractions in the prerequisite ordering?"
+- Expected response shape: `{ outgoing: readonly [{nodeId, edgeRel: 'prerequisiteFor', source}], incoming: readonly [...] }` with `direction: 'in' | 'out' | 'both'`, projected.
+- Token budget: ≤1000 tokens for typical 1-hop fanout
+- Drops to graph mechanics? yes — adjacency lookup
+- Verified against: `PriorKnowledgeEdge { from, to, rel: 'prerequisiteFor', source }`. Both directions traversable.
+
+**neighbours × misconception**
+
+- **NO TRACER** — reason: `MisconceptionGraph` has no edges. The current generator (`misconception-graph-generator.ts`) emits nodes only (no `edges` field on `MisconceptionGraph`). Adjacency would require either (a) synthesising edges from `lessonSlug` co-occurrence, or (b) extending the generator to emit explicit relations. Both are out of scope for Increment 1.
+- ≥2-of-3 rule applied: `neighbours` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly carved out** in MCP tool registration (no `neighbours-misconception` tool until misconception edges exist in the source data).
+
+**neighbours × eef-strands**
+
+- Teacher question: "Which strands are flagged as related to metacognition-and-self-regulation, and which guidance reports does it link to?"
+- Expected response shape: `{ outgoing: readonly [{nodeId, edgeRel: 'related_strand' | 'related_guidance_report', target}], ... }` derived from the `related_strands[]` and `related_guidance_reports[]` arrays on the strand. **Returns an empty result for strands where both fields are absent — see optionality below.**
+- Token budget: ≤500 tokens (related arrays are small)
+- Drops to graph mechanics? yes — derives edges from typed array fields on each strand
+- Verified against: eef-toolkit.json § `strands[].related_strands` — **17 of 30 strands have a non-empty array; 13 have the field absent entirely (no empty arrays in the data)**. Mean 1.2 and max 4 statistics treat absent as zero. `related_guidance_reports` present on **7 of 30 strands**; each entry is a `{title, url}` object, not a bare URL. Adapter behaviour for absent fields: treat as empty array, return empty edge set; this is well-defined, not a fault condition.
+
+##### `subgraph`
+
+**subgraph × prerequisite**
+
+- Teacher question: "Give me the depth-2 prerequisite neighbourhood around Year-5 Fractions for sequence-planning."
+- Expected response shape: `{ nodes: readonly [...], edges: readonly [...] }` bounded by `depth: 2` from `rootIds`, projected.
+- Token budget: ≤3000 tokens at depth 2 with default projection (bounded growth)
+- Drops to graph mechanics? yes — bounded BFS traversal
+- Verified against: `PriorKnowledgeGraph { nodes, edges }`. Prerequisite graph is the operation's strongest case; matches Risk #4's targeting of subgraph as "operation that buys most for prereq".
+
+**subgraph × misconception**
+
+- **NO TRACER** — reason: same as `neighbours × misconception`. No edges → no traversable subgraph.
+- ≥2-of-3 rule applied: `subgraph` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly carved out**.
+
+**subgraph × eef-strands**
+
+- Teacher question: "Show me the strand cluster around metacognition: itself, its related strands, and their related strands one hop further."
+- Expected response shape: bounded subgraph at `depth: 2` from one strand id; default `edgeType: 'related_strand'` (excludes `related_guidance_report` unless opt-in). **Subgraph rooted at a strand whose `related_strands` field is absent (13 of 30 strands) immediately terminates with `{ nodes: [root], edges: [] }`.**
+- Token budget: ≤2000 tokens at depth 2 with default projection (typical fanout for strands with related_strands: mean ≈2.1 — restated below)
+- Drops to graph mechanics? yes — bounded traversal over `related_strands[]`
+- Verified against: eef-toolkit.json § `strands[].related_strands` — 17 of 30 strands have non-empty `related_strands` (mean among those 17 is ≈2.1, max 4); 13 strands have no relations at all and produce a single-node subgraph at any depth. Behaviour is deterministic for both cases.
+
+##### `find_by_tag`
+
+**find_by_tag × prerequisite**
+
+- **NO TRACER** — reason: `PriorKnowledgeNode` has no `tags` field and the source data has no tag taxonomy. The synthetic-compound `${subject}-${keyStage}` initially drafted here was, in the plan body's own words, "architecturally equivalent to `enumerate_nodes` with a fixed-shape filter" — i.e., a different operation wearing the tag-search surface. Per the *stop inventing optionality* doctrine (assumptions-reviewer round, 2026-04-30): an agent that wants subject+keyStage filtering uses `enumerate_nodes` with `{subject: {equals: ...}, keyStage: {equals: ...}}` — that path already exists, ships, and is honest about what it does. Inventing a synthetic-tag wrapper is the surface-cohesion anti-pattern.
+- ≥2-of-3 rule applied: `find_by_tag` ships for **eef-strands ✓ only = 1-of-3** under this revised reading. Below the threshold; the operation does NOT ship for prerequisite or misconception.
+
+**find_by_tag × misconception**
+
+- **NO TRACER** — reason: same as `find_by_tag × prerequisite`. `MisconceptionNode` has no `tags` field; the synthetic compound was an enumerate_nodes-with-filter wearing the tag-search surface. The honest path is `enumerate_nodes`.
+- ≥2-of-3 rule applied: see above. `find_by_tag` ships for **eef-strands only**.
+
+**find_by_tag × eef-strands**
+
+- Teacher question: "What evidence-backed approaches involve metacognition?"
+- Expected response shape: strands where `'metacognition' ∈ tags`, default projection `['id', 'name', 'headline.impact_months']`.
+- Token budget: ≤1500 tokens (30-strand cap)
+- Drops to graph mechanics? yes — true tag-membership lookup against curated taxonomy (the only graph with one)
+- Verified against: eef-toolkit.json § `strands[].tags` (110 unique tags; `eef-tl-metacognition-and-self-regulation` carries `'metacognition'` among 12 tags).
+
+##### Phase B findings (first-principles check against real data)
+
+The following design points surfaced while verifying tracer shapes
+against the actual generator output and data files. They are recorded
+here because each is a real Increment 1 work item, not a punt.
+
+1. **MisconceptionNode lacks an explicit ID field.** The current
+   generator emits nodes keyed by the `(lessonSlug, misconception)`
+   pair. The `MisconceptionGraphView` adapter (T4) must mint a stable
+   ID. Recommended scheme: SHA-1 of `${lessonSlug}::${misconception}`
+   truncated to 12 hex characters. Index-based alternatives like
+   `${lessonSlug}#${index}` are NOT viable because the upstream
+   extractor's ordering is not guaranteed to be deterministic across
+   regenerations.
+2. **Citation contract uses `strand_id`; data field is `id`.** The
+   corpus-layer loader (Increment 2 § T2) is the natural place to map
+   `data.strands[].id → Citation.strand_id`. The graph layer treats
+   `id` as the canonical node ID; the rename happens at the
+   evidence-corpus boundary, not inside the graph adapter. Recorded
+   so Increment 2 implementation does not silently drift the field
+   name.
+3. **`NodeFilter.FieldPredicate` does not yet cover array-element
+   membership.** The EEF tracers require `{ tags: { contains: 'primary' } }`
+   over a `readonly string[]` field. The current T2 spec covers
+   string and number predicates but stops at the array boundary. The
+   T2 update (applied alongside T1 sign-off) adds an array-arm:
+   `TFieldValue extends readonly (infer U)[] ? { readonly contains: U } : never`.
+   Note: this arm shares the structural shape `{ contains }` with
+   the string-arm; semantic disambiguation lives in the predicate
+   dispatcher, not in the type system. See the "Semantic collision
+   note" alongside the FieldPredicate spec in Phase 2 § T2.
+4. **MisconceptionGraph has no edges.** Confirmed by reading the
+   generator. Two operations (`neighbours`, `subgraph`) are
+   explicitly carved out for misconception; the remaining five ship
+   for all three graphs. The carve-out is the structural enforcement
+   of the ≥2-of-3 rule and is named in the MCP tool registration.
+5. **`related_strands` is absent on 13 of 30 EEF strands.** The field
+   is missing entirely (not empty array) on `eef-tl-aspiration-interventions`,
+   `eef-tl-extending-school-time`, `eef-tl-homework`, `eef-tl-individualised-instruction`,
+   `eef-tl-learning-styles`, `eef-tl-mentoring`, `eef-tl-outdoor-adventure-learning`,
+   `eef-tl-parental-engagement`, `eef-tl-performance-pay`,
+   `eef-tl-physical-activity`, `eef-tl-reducing-class-size`,
+   `eef-tl-repeating-a-year`, `eef-tl-school-uniform`. The T5
+   adapter treats absent as empty and the `neighbours`/`subgraph`
+   operations return well-defined empty/single-node results for
+   these strands. The Zod loader at the corpus boundary
+   (Increment 2 § T2) must accept `related_strands` as optional with
+   a default of `[]` — it must NOT fail validation on the 13 strands
+   without the field.
+6. **`related_guidance_reports` data structure is `{title, url}` objects,
+   not bare URL strings.** Field is present on only 7 of 30 strands;
+   each entry is an object. The T5 adapter extracts `url` as the
+   edge target ID and preserves `title` in the edge metadata for
+   citation display. The Zod loader must validate as
+   `z.array(z.object({title: z.string(), url: z.string().url()})).optional()`
+   — not `z.array(z.string()).optional()`.
+
+##### T1 Tracer Matrix Summary
+
+- 21 cells = 7 operations × 3 graphs.
+- 17 tracer entries drafted with verification footnotes.
+- **4 NO TRACER cells** (`neighbours × misconception`, `subgraph × misconception`, `find_by_tag × prerequisite`, `find_by_tag × misconception`).
+- **17 MCP tools** register at runtime (not 21).
+  Carve-outs: `neighbours-misconception` (no edges), `subgraph-misconception` (no edges), `find-by-tag-prerequisite` (no tag taxonomy in source data), `find-by-tag-misconception` (no tag taxonomy in source data).
+  Per-graph: prerequisite 6 + misconception 4 + eef-strands 7 = 17.
+- 6 Phase B findings (above) feed forward into T2, T4, T5, and Increment 2 § T2 (loader must validate the optionality of `related_strands` and the object shape of `related_guidance_reports`).
+- The four carve-outs are the structural enforcement of the
+  ≥2-of-3 rule. Two were caught by the round-1 first-principles
+  check (`MisconceptionGraph` has no edges); two were caught by the
+  round-2 assumptions-reviewer check (no tag taxonomy in
+  prerequisite or misconception source data; the synthetic-compound
+  proxy was the *invented optionality* anti-pattern). Both rounds
+  found gaps the prior round had missed. Doctrine candidate
+  surfaced: first-principles checks must enumerate optionality
+  empirically, not sample.
+
 ### Phase 2: SDK shape (T2)
 
 **T2: GraphView interface** — `oak-curriculum-sdk/src/mcp/graph-views/`
@@ -308,12 +573,40 @@ type FieldPredicate<TFieldValue> =
       : never)
   | (TFieldValue extends number
       ? { readonly gte: number } | { readonly lte: number }
+      : never)
+  | (TFieldValue extends readonly (infer U)[]
+      ? { readonly contains: U }
       : never);
 
 type NodeFilter<TNode> = {
   readonly [K in keyof TNode]?: FieldPredicate<TNode[K]>;
 };
 ```
+
+The array-element `contains` arm is required by `enumerate_nodes ×
+eef-strands` (the `tags: { contains: 'primary' }` tracer). Without it
+the EEF tracer is forced to use `enumerate_nodes` and post-filter
+client-side, which contradicts the "filter at the graph layer" boundary
+that summary/find_by_tag rely on. Phase B verification surfaced this as
+a real gap; the arm is part of T2's signed-off shape.
+
+**Semantic collision note** — when `TFieldValue` is `string`, the
+string-arm produces `{ readonly contains: string }` meaning "substring
+match"; when `TFieldValue` is `readonly string[]`, the array-arm
+produces the same structural type `{ readonly contains: string }`
+meaning "element membership". The two arms do not fire simultaneously
+for any single `TFieldValue` (a value cannot be both `string` and
+`readonly string[]`), so there is no type-system ambiguity at any
+specific call site. However, the structural type is identical across
+the two semantics, which means a generic `FieldPredicate`-handling
+function cannot dispatch on predicate shape alone — it must also
+inspect the field's runtime value (array? then membership; string?
+then substring). Implementors of the adapter must encode this
+decision once, in the predicate dispatcher, and document it. If a
+future node type carries a field whose type is itself
+`string | readonly string[]`, a distinct predicate key
+(e.g. `includesElement`) will be required to disambiguate; until
+that need arises, the structural identity is acceptable.
 
 The implementation may extend this with combinator predicates (`and`,
 `or`, `not`) when a tracer use case demands it. Default is field-level
@@ -367,26 +660,87 @@ Each adapter is small (~150 LOC), implementing `GraphView` over the
 existing typed graph data. The adapters do not modify the underlying
 data; they read it and project it.
 
-**T3: PrerequisiteGraphView** — over the prior-knowledge-graph data.
-Edge types: `prerequisite_of`, `succeeds`. Tags: subject + key stage.
+**T3: PrerequisiteGraphView** — over the `priorKnowledgeGraph` data
+(generated by `prior-knowledge-graph-generator.ts`). Edge type:
+`prerequisiteFor` (one type, with `source: 'thread' | 'priorKnowledge'`
+preserved on the edge — direction-of-flow query handled by the
+`direction` parameter on `neighbours`/`subgraph`). **No tag
+taxonomy**: `PriorKnowledgeNode` has no `tags` field and `find_by_tag`
+is therefore not implemented for this graph. Subject+keyStage
+filtering is available via `enumerate_nodes`. Implements **6 of 7
+operations**: `manifest`, `summary`, `get_node`, `enumerate_nodes`,
+`neighbours`, `subgraph`.
 
-**T4: MisconceptionGraphView** — over the misconception-graph data.
-Edge types: `related_misconception`, `addressed_by_lesson`. Tags:
-subject + KS + misconception type.
+**T4: MisconceptionGraphView** — over the `misconceptionGraph` data.
+**Edge types: none in the current generator output.** The
+`MisconceptionGraph` interface has `nodes` only, no `edges` field.
+**No tag taxonomy**: `MisconceptionNode` has no `tags` field and
+`find_by_tag` is not implemented; subject+keyStage filtering uses
+`enumerate_nodes`. Consequently, this adapter implements **4 of 7
+operations**: `manifest`, `summary`, `get_node`, `enumerate_nodes`.
+The `neighbours`, `subgraph`, and `find_by_tag` operations are
+explicitly carved out under the ≥2-of-3 rule — none of the three
+will register as MCP tools for misconception until the source data
+gains edges (for `neighbours`/`subgraph`) or a tag taxonomy (for
+`find_by_tag`). ID discipline: misconception nodes have no explicit
+ID field; the adapter mints stable IDs via SHA-1 hash of
+`${lessonSlug}::${misconception}` truncated to 12 hex characters
+(see Phase B finding 1; index-based forms ruled out as not
+regeneration-stable).
 
 **T5: EefStrandsGraphView** — over the EEF strands data. Edge types:
-`related_strand` (from the `related_strands` field on each strand),
+`related_strand` (from the `related_strands` field on each strand;
+**field is absent on 13 of 30 strands**, treated as empty edge set —
+`neighbours`/`subgraph` from those strands return single-node results),
 `related_guidance_report` (from each entry of `related_guidance_reports`,
-preserving the data field name; edge target ID is the report URL). Tags:
-from the `tags` array on each strand.
+**field is absent on 23 of 30 strands**, treated as empty; each entry
+is a `{title, url}` object — the adapter extracts `url` as the edge
+target ID, preserving the title in edge metadata for citation
+display). Edge type names are deliberately singular by designer
+choice; the data field names are plural — implementors must not
+derive edge type names by removing the trailing `s`. Tags: from the
+`tags` array on each strand (curated taxonomy, 110 unique tags across
+30 strands as of `meta.data_version='0.2.0'`). Node ID: `strands[].id`
+(e.g. `eef-tl-metacognition-and-self-regulation`); the `id →
+strand_id` rename happens at the corpus boundary, not here.
+
+**Sparse-relations surface** (per assumptions-reviewer round,
+2026-04-30): the `manifest()` and `summary()` operations on this
+adapter MUST surface `strands_without_relations: readonly string[]` —
+the list of strand IDs whose `related_strands` field is absent
+(currently the 13 strands enumerated in Phase B finding 5). This
+front-loads the empty-edge knowledge so an agent can avoid pointless
+`subgraph`/`neighbours` calls on isolated strands. The list is
+data-version-stable (changes only when the upstream EEF data
+changes), so it has no per-call computation cost beyond a
+build-time precompute. Implements **all 7 operations** (the
+sparse-relations surface is additional manifest content, not a new
+operation).
 
 ### Phase 4: MCP tools (T6)
 
-**T6: 7 × 3 = 21 MCP tools** — one tool per operation per graph. Each
-tool's input schema is generated from the operation type. The internal
-implementation routes to the correct adapter. Tools follow the
-established naming convention: `{operation}-{graph}` (e.g.
+**T6: 17 MCP tools** — one tool per operation per graph, **minus the
+four NO-TRACER carve-outs surfaced by the T1 first-principles check
+(rounds 1 and 2)**:
+
+- `neighbours-misconception` — not registered (no edges in the
+  misconception graph).
+- `subgraph-misconception` — not registered (same).
+- `find-by-tag-prerequisite` — not registered (no tag taxonomy in
+  source data; agents wanting subject+keyStage filtering use
+  `enumerate-nodes-prerequisite`).
+- `find-by-tag-misconception` — not registered (same).
+
+Final count: prerequisite 6 + misconception 4 + eef-strands 7 = 17.
+Each tool's input schema is generated from the operation type;
+internal implementation routes to the correct adapter. Tools follow
+the established naming convention: `{operation}-{graph}` (e.g.
 `enumerate-nodes-eef-strands`).
+
+The four carve-outs are explicit — the registration code names
+each and links to the corresponding T1 tracer-matrix NO TRACER cell,
+so a future contributor reading the registration sees why the tools
+are absent rather than wondering whether to add them.
 
 ### Phase 5: Tests (T7)
 
@@ -472,13 +826,13 @@ T3-T5 are parallel. T6-T10 are mostly parallel after T5.
 
 | Component | Lines |
 |---|---|
-| GraphView interface + projection types | ~200 |
-| 3 adapters (~150 each) | ~450 |
-| 21 MCP tool definitions (mostly generated/derived) | ~250 |
+| GraphView interface + projection types | ~210 |
+| 3 adapters (prereq 6/7 ops, misconception 4/7 ops, eef-strands 7/7 + sparse-relations precompute) | ~410 |
+| 17 MCP tool definitions (mostly generated/derived; 21 cells minus 4 carve-outs) | ~205 |
 | Internal implementation (operation dispatchers, projection logic) | ~300 |
 | Tests | ~400 |
 | Documentation (ADR-123 update + TSDoc) | ~80 |
-| **Total new code** | **~1680 lines** |
+| **Total new code** | **~1605 lines** |
 
 No new dependencies. Reuses the SDK's existing typed-graph data files.
 Coexists with the existing factory and dump tools — does not replace them.
@@ -487,23 +841,38 @@ Coexists with the existing factory and dump tools — does not replace them.
 
 **Shape conditions** (necessary):
 
-1. 7 × 3 = 21 MCP tools registered and visible in `tools/list`.
-2. Each operation works against each adapter.
+1. **17 MCP tools** registered and visible in `tools/list`:
+   prerequisite 6 + misconception 4 + eef-strands 7. The four
+   carve-outs (`neighbours-misconception`, `subgraph-misconception`,
+   `find-by-tag-prerequisite`, `find-by-tag-misconception`) are
+   explicitly absent under the ≥2-of-3 rule applied during the T1
+   first-principles check (rounds 1 and 2).
+2. Each operation works against each adapter that registers it.
 3. Default projection bounds default response size.
 4. ADR-123 updated.
 5. `pnpm check` passes.
 
-**Outcome conditions** (also required):
+**Outcome condition — adoption evidence** (required, composite —
+either branch satisfies):
 
-6. After 4 weeks of release, at least one of: ratio of focused-query
-   calls to full-dump calls ≥50%, OR a documented analysis explaining
-   why adoption is lower than expected and what to do.
-7. At least one downstream consumer (the EEF corpus plan) successfully
-   uses the GraphView interface without special-casing.
+6. Within 4 weeks of release, at least one of:
+   - **Direct evidence** — ≥10 distinct sessions invoke any
+     focused-query tool (a low absolute threshold that survives
+     small-N sampling noise);
+   - **Composition evidence** — ≥1 downstream consumer (the EEF
+     corpus plan, or any other) successfully composes against the
+     `GraphView` interface without special-casing;
+   - **Honest analysis** — a documented analysis explaining why
+     adoption is lower than expected, naming the next move
+     (instrument differently / promote differently / sunset).
 
-The outcome conditions are deliberately load-bearing. A plan that ships
-all 21 tools but where no agent ever uses them did not achieve the
-user value the plan exists for.
+The composite shape — three branches, any one satisfies — replaces
+the earlier 50%-ratio gate that would have been dominated by
+sampling noise at the launch traffic levels typical for an MCP
+tool. The "honest analysis" branch makes the criterion non-fatal
+while preserving evidence-of-thought as a real bar. A plan that
+ships 17 tools and silently produces no evidence on any branch did
+not achieve the user value the plan exists for.
 
 ## Risks
 
@@ -525,10 +894,19 @@ user value the plan exists for.
    trigger documented (when adoption ratio of new tools >80% sustained
    for 8 weeks, deprecate dumps).
 
-5. **Tag-search semantics drift across graphs**: EEF tags are
-   curator-curated; misconception tags may be more ad hoc. Mitigation:
-   `find_by_tag` documents per-graph tag semantics; tests assert that
-   each graph's tags are stable over a sample of source-data versions.
+5. **Tag-search semantics — resolved structurally**: EEF tags are
+   a curator-curated taxonomy; prerequisite and misconception have
+   no `tags` field and no taxonomy. Earlier drafts of this plan
+   tried to bridge the gap with a synthetic-compound
+   `${subject}-${keyStage}` tag and a Risk-#5 mitigation requiring
+   tool descriptions to state "the parameter is not really a tag" —
+   classic invented-optionality / surface-cohesion shape.
+   Resolved (assumptions-reviewer round, 2026-04-30): `find_by_tag`
+   does NOT register for prerequisite or misconception. Agents
+   wanting subject+keyStage filtering on those graphs use
+   `enumerate_nodes`, which is honest about what it does. EEF
+   `find_by_tag` operates against the real curated taxonomy; tests
+   assert tag stability across data versions.
 
 ## Promotion Trigger from CURRENT to ACTIVE
 

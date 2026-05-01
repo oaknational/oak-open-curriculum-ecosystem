@@ -111,10 +111,10 @@ not reproduce them inline, it points back to the original via path.
 | Composite scoring algorithm (`40/30/20/10` weighting, context_relevance accumulation) | preserved verbatim in `eef-evidence-corpus.plan.md` T5 |
 | Null-impact strand IDs (4) | preserved verbatim in T5 docstring; cross-referenced in scoring engine source |
 | Focus enum (the 7 most teacher-relevant priorities) | preserved verbatim in T6 |
-| Note on `school_context_schema.properties` typing as `z.record(z.string(), z.unknown())` | preserved verbatim by reference to the predecessor (rationale unchanged) |
+| Note on `school_context_schema.properties` typing | **revised, not preserved verbatim**: the predecessor's `z.record(z.string(), z.unknown())` carve-out has been removed (commit `2a3f69b5`, 2026-04-30). The field is now typed concretely as `SchoolContextSchema` with 9 named properties, each a recursive `JsonSchemaProperty`. See §B F2 row for the strengthening rationale. |
 | Loader pattern (`createRequire(import.meta.url)` + `EefToolkitDataSchema.parse(rawData)`) | preserved in T2 implementation guidance |
-| Unit test cases (Zod parses, 30 strands, 4 null-impact, 17/30 with school_context, 9 caveats) | preserved in T19 (with the 8→9 caveat drift fixed in this session) |
-| ADR-123 row content (resources + tool entries) | preserved in T18; aggregated tool count update from 11→14 (was 11→12 in original) reflects two new tools (explain, compare) |
+| Unit test approach (Zod parses real EEF data without throwing) | **revised under owner direction (2026-04-30)**, not preserved verbatim: the predecessor's exact-count assertions (30 strands, 4 null-impact with named IDs, 17/30 with school_context, 9 caveats, 4 with implementation, 6 with behind_the_average) were judged to assert implementation properties of the upstream EEF dataset rather than Oak code behaviour, and would break loudly every time EEF legitimately publishes a new strand or caveat. T2 now tests one product behaviour: real EEF data parses through the Zod schema without throwing. Framework-surface questions ("does enumerate_nodes expose all nodes correctly?") are addressed by fixture-based integration tests, not exact counts on production data. See §J for the owner-direction removal log. |
+| ADR-123 row content (resources + tool entries) | preserved in T18; aggregated tool count update from 11→14 reflects three new tools (recommend, explain, compare) |
 
 ## F. Credits and attribution (load-bearing — must NOT be lost)
 
@@ -139,8 +139,14 @@ not reproduce them inline, it points back to the original via path.
 
 ## H. Exit criteria evolution
 
-The original had 8 shape conditions. The new plan keeps them and adds
-outcome conditions:
+The original had 8 shape conditions. The new plan keeps them and the
+draft also added three LLM-graded outcome conditions; under owner
+direction on 2026-04-30 those three were removed as
+infrastructure-shaped invention (no evaluation harness exists). The
+structural citation type (T12) is the load-bearing mechanism the
+plan ships and proves; whether downstream LLM prose preserves
+caveats is honestly out of scope until evaluation infrastructure
+exists.
 
 | Original condition | New treatment |
 |---|---|
@@ -152,9 +158,9 @@ outcome conditions:
 | 6. lesson-plan prompt in prompts/list | preserved + extended (PP-review prompt also required) |
 | 7. ADR-123 updated | preserved as shape condition |
 | 8. `pnpm check` passes | preserved as shape condition |
-| **NEW — outcome condition 1**: citation-presence rate ≥95% across N=50 sampled responses | added (closes the prose-prescription gap) |
-| **NEW — outcome condition 2**: recommendation latency p95 ≤500ms | added |
-| **NEW — outcome condition 3**: lesson-plan output preserves caveats in final text | added (closes the LLM-paraphrase risk) |
+| **NEW — outcome condition (initial draft)**: citation-presence rate ≥95% across N=50 LLM-graded sampled responses | **removed under owner direction (2026-04-30)** as fantasy infrastructure: no LLM-as-judge harness, sampling protocol, or rubric-review surface exists in the repo. Shoehorning a non-deterministic LLM-graded test into Vitest would be infrastructure-shaped invention. The structural citation type (T12) is what the plan ships and proves; LLM-paraphrasing verification is honestly out of scope until evaluation infrastructure exists. See §J for the full removal log. |
+| **NEW — outcome condition (initial draft)**: recommendation latency p95 ≤500ms-as-CI-gate | **removed under owner direction (2026-04-30)**: a latency CI gate without baseline measurements or an SLO contract is speculative. The honest operational signal is the Sentry telemetry seam (T14) which carries `latency_ms` per call; if a gate is later warranted, it can be built on real data. |
+| **NEW — outcome condition (initial draft)**: lesson-plan output preserves caveats in final text | **removed under owner direction (2026-04-30)**: same root cause as outcome condition 1 — testing LLM prose behaviour requires evaluation infrastructure that does not exist. The structural enforcement at T12 ships the load-bearing invariant (compile-time non-empty Citation tuple, runtime Zod `.min(1)`); whether agents paraphrase the caveats away in final user-facing prose is a separate concern that wants its own evaluation harness on its own cadence. |
 
 ## I. Key files (original → new)
 

@@ -1,13 +1,19 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-04-30 (Iridescent Soaring Planet / claude-code /
-claude-opus-4-7-1m / session seed `b38261` — created the EEF subthread,
-relocated four artefacts from `external-knowledge-sources/`, restructured
-the executable plan into evidence-corpus shape on top of a new graph-query
-foundation, designed cross-source journeys as Increment 3, embedded a
-mandatory user-value template across all new plans, and verified semantic
-preservation via an independent re-read pass that caught three real gaps
-in the conservation map).
+**Last refreshed**: 2026-04-30 (Vining Whispering Root / claude-code /
+claude-opus-4-7-1m / session seed `696765` — drafted the 7×3 T1
+tracer matrix into `graph-query-layer.plan.md § Phase 1` with
+verification footnotes against real generator output and data files;
+ran three review rounds (in-session first-principles, code-reviewer,
+assumptions-reviewer); applied 6 findings across rounds plus 3
+operation-design corrections (drop `find_by_tag` for prerequisite +
+misconception under the *stop inventing optionality* doctrine, add
+sparse-relations manifest surface, reframe outcome condition);
+verified Increment 2 parallel-readiness; assembled the Promotion
+Packet for owner sign-off. 17 of 21 tracer cells drafted; 4 NO TRACER
+under the ≥2-of-3 rule (`neighbours × misconception`,
+`subgraph × misconception`, `find_by_tag × prerequisite`,
+`find_by_tag × misconception`). Final MCP tool count: 17, not 21).
 
 ---
 
@@ -28,6 +34,7 @@ in the conservation map).
 | --- | --- | --- | --- | --- | --- | --- |
 | `Iridescent Soaring Planet` | `claude-code` | `claude-opus-4-7-1m` | `b38261` | `architecture-restructure-and-handoff` | 2026-04-30 | 2026-04-30 |
 | `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-reviewer-round` | 2026-04-30 | 2026-04-30 |
+| `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `tracer-matrix-and-promotion-packet` | 2026-04-30 | 2026-04-30 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -156,21 +163,18 @@ structural verification.
 
 ## First Task of Next Session
 
-**Promote Increment 1 (`graph-query-layer.plan.md`) toward ACTIVE.**
-Type-design portion of the promotion gate is now satisfied (this
-session, see Type-Reviewer Round Outcome above). Remaining gate
-conditions:
+**Owner: review the Promotion Packet (below) and approve / amend / reject promotion of Increment 1 (`graph-query-layer.plan.md`) to ACTIVE.**
 
-1. T1 tracer use cases (21 minimum, 7 ops × 3 graphs) — owner
-   sign-off pending.
-2. Plan-body first-principles check applied to tracer shapes against
-   the actual data files for prerequisite, misconception, and EEF
-   strands graphs. The third-graph-protection mechanism (≥2-of-3
-   tracer support before any operation ships) is the structural
-   guard against EEF-shaped over-fitting.
-3. EEF corpus plan (Increment 2) ready to start in parallel.
+Gates 2 and 3 of the promotion-gate set were satisfied in this
+session (Vining Whispering Root, 2026-04-30): the plan-body
+first-principles check ran against real data and surfaced 4
+findings (all applied to the plan body), and the EEF corpus plan
+(Increment 2) was verified parallel-ready. Gate 1 (T1 tracer
+sign-off) is now ready for owner review — the 7×3 matrix is drafted
+inline in `graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`
+with verification footnotes.
 
-If owner approves promotion, the natural next move is the
+If the owner approves promotion, the natural next move is the
 `pnpm sdk-codegen` round-trip — the round-trip is the next
 structural verification that the type designs work in actual SDK
 code, not just plan-body sketches.
@@ -180,6 +184,161 @@ optionality* to `.agent/rules/apply-dont-ask.md` per the
 pending-graduations register's `due` entry. Belongs to the
 `agentic-engineering-enhancements` thread, not `eef`; flagged here
 so the next EEF session does not re-trip on the pattern.
+
+---
+
+## Promotion Packet (Vining Whispering Root, 2026-04-30)
+
+### What the packet contains
+
+A concrete, owner-reviewable bundle of the work done this session
+to satisfy the three remaining promotion-gate conditions for
+Increment 1.
+
+### Gate 1 — T1 tracer use cases
+
+Status: **drafted, awaiting owner sign-off.**
+
+Result after two review rounds: **17 of 21 tracer cells drafted**
+(7 operations × 3 graphs), **4 cells explicitly marked NO TRACER**
+under the ≥2-of-3 rule:
+
+- `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
+- `subgraph × misconception` — same root cause (round-1 finding).
+- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-reviewer); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
+- `find_by_tag × misconception` — same root cause (round-2 finding).
+
+Final MCP tool count: **17**, not 21. Per-graph: prerequisite 6 +
+misconception 4 + eef-strands 7. The four carve-outs are explicit in
+the plan body and in T6 (registration code names each and links back
+to the NO TRACER cell, so the absence is visible to a future
+contributor).
+
+Each of the 19 tracers carries:
+
+- A concrete teacher question.
+- An expected response shape grounded in the actual data structure.
+- A token budget at default projection.
+- A boundary check (drops to graph mechanics, not corpus scoring).
+- A verification footnote (`Verified against: <file> + <field path>`).
+
+Inline location: `.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`.
+
+### Gate 2 — Plan-body first-principles check
+
+Status: **complete.**
+
+Each tracer was drafted with the actual generator-source or data file
+open. Initial pass surfaced four findings; a code-reviewer round
+(2026-04-30) caught two more genuine data-shape gaps that the initial
+pass had missed. All six findings have been applied to the plan body
+in this session:
+
+1. **MisconceptionNode lacks an explicit ID field** — `MisconceptionGraphView`
+   adapter (T4) must mint stable IDs. Recommended scheme: SHA-1 of
+   `${lessonSlug}::${misconception}` truncated to 12 hex characters.
+   Index-based alternatives are NOT viable (upstream extractor
+   ordering not guaranteed). Recorded inline in T4 and in Phase B
+   findings.
+2. **Citation contract uses `strand_id`; data field is `id`** — the
+   `id → strand_id` rename happens at the corpus boundary
+   (Increment 2 § T2 loader), not inside the graph adapter.
+3. **`NodeFilter.FieldPredicate` did not cover array-element membership** —
+   added the array arm:
+   `TFieldValue extends readonly (infer U)[] ? { readonly contains: U } : never`.
+   Required by `enumerate_nodes × eef-strands` (the
+   `tags: { contains: 'primary' }` tracer). Plan body T2 spec updated.
+   Includes a "Semantic collision note" naming the structural-vs-
+   semantic identity with the string-arm `contains`.
+4. **MisconceptionGraph has no edges** — the two NO TRACER carve-outs
+   above. T4 adapter description updated to reflect "5 of 7 operations".
+5. **`related_strands` is absent on 13 of 30 EEF strands** (caught by
+   reviewer round). The field is missing entirely on a named list of
+   13 strands — not empty arrays. T5 adapter, `neighbours × eef-strands`
+   tracer, and `subgraph × eef-strands` tracer all updated to name
+   the optionality and the well-defined behaviour for absent strands.
+   Increment 2 § T2 Zod loader must accept `related_strands` as
+   optional with default `[]`.
+6. **`related_guidance_reports` is `{title, url}` objects, not bare URLs**
+   (caught by reviewer round). Field present on only 7 of 30 strands;
+   each entry is an object. T5 adapter description updated:
+   adapter extracts `url` as edge target ID, preserves `title` in
+   edge metadata. Zod loader shape:
+   `z.array(z.object({title: z.string(), url: z.string().url()})).optional()`.
+
+Two additional plan-body corrections were applied while verifying
+the existing T3/T4 adapter descriptions against real data:
+
+- T3 PrerequisiteGraphView previously named edge types `prerequisite_of`,
+  `succeeds`. Real data: single edge type `prerequisiteFor` with a
+  `source: 'thread' | 'priorKnowledge'` discriminator. Corrected.
+- T4 MisconceptionGraphView previously named edge types
+  `related_misconception`, `addressed_by_lesson`. Real data: no edges
+  at all. Corrected (with carve-outs).
+
+### Gate 3 — Increment 2 parallel-readiness
+
+Status: **complete — PASS on all four checks.**
+
+Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`:
+
+1. ✓ Status `current`; `parent_plan` and all four `sibling_plans`
+   references resolve to existing files.
+2. ✓ T1, T2, T5, T8, T12 are in their post-type-reviewer form
+   (`EvidenceCorpus` wrapping shape with `Result<T, E>`; precise Zod
+   for `last_updated` and `data_version`; non-empty tuple types on
+   `caveats` and `citations`; `ComparisonDimension` literal union;
+   citation discipline at compile time + runtime).
+3. ✓ `EvidenceCorpus<TNode, TEdgeType extends string>` matches the
+   `GraphView<TNode, TEdgeType extends string>` signature exactly.
+   The corpus plan does not assume a `GraphView` shape this plan
+   does not provide.
+4. ✓ No new blocking ambiguities; the four Phase B findings above
+   feed forward into Increment 2 cleanly (findings #2 and #3 are
+   already accommodated; finding #1 is a T4 design point that does
+   not block Increment 2; finding #4 is the carve-out that is
+   already explicit in T6).
+
+### Plan-body diff summary (since type-reviewer round)
+
+Modifications to `.agent/plans/knowledge-graph-integration/current/graph-query-layer.plan.md`
+this session, across two review rounds:
+
+- Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
+- Extended `FieldPredicate<TFieldValue>` with the array-element `contains` arm (T2 spec) plus the "Semantic collision note" that names the string-vs-array structural identity for `{ contains }`.
+- Corrected T3 PrerequisiteGraphView edge-type description (`prerequisiteFor` only, with `source` discriminator); marked `find_by_tag` as not registered (no tag taxonomy in source data) — implements 6 of 7 operations.
+- Rewrote T4 MisconceptionGraphView description: 4-of-7 operations (no edges, no tag taxonomy), mints stable IDs (SHA-1-based; index-based forms ruled out).
+- Rewrote T5 EefStrandsGraphView description with concrete tag/edge counts, the `id → strand_id` rename note, the optionality of `related_strands` (absent on 13 of 30) and `related_guidance_reports` (absent on 23 of 30, present as `{title, url}` objects). Added a "Sparse-relations surface" subsection: `manifest()` and `summary()` expose `strands_without_relations: readonly string[]` to front-load the empty-edge knowledge.
+- Updated `manifest × eef-strands`, `neighbours × eef-strands`, and `subgraph × eef-strands` tracers to name the absent-field behaviour and the new manifest field.
+- Updated T6 description: 17 MCP tools (not 21), with the four carve-outs explicit.
+- Replaced Risk #5 ("tag-search semantics drift" mitigation) with a structural resolution: `find_by_tag` no longer ships for prerequisite or misconception, so the docstring-as-correction-of-surface-lie pattern is gone.
+- Updated Size Estimate table: 17 tools, ~1605 lines total.
+- Updated Exit Criteria § Shape conditions #1 to read "17 MCP tools".
+- **Reframed Exit Criteria § Outcome conditions** from a "ratio ≥50% in 4 weeks" gate (sampling-noise-dominated at expected launch volumes) to a composite "adoption evidence" gate with three branches (≥10 distinct sessions / ≥1 downstream consumer composing without special-casing / honest analysis).
+
+`eef-evidence-corpus.plan.md` is unchanged this session (Phase C verified
+no drift). However, the round-2 findings have a forward-impact for
+Increment 2: the Zod loader (T2 in that plan) must accept `related_strands`
+as optional and `related_guidance_reports` as `z.array(z.object({title, url})).optional()`,
+not bare strings. This is recorded here for the next execution
+session; the corpus plan body itself does not need editing because
+its T2 already says "Zod-validated loader for eef-toolkit.json"
+without specifying these field shapes.
+
+### Explicit ask
+
+**Approve promotion of Increment 1 (`graph-query-layer.plan.md`) to ACTIVE?**
+
+- **YES** → the plan moves from `current/` to `active/`; the next
+  execution session begins with the `pnpm sdk-codegen` round-trip
+  (verifying the type designs translate to working SDK code).
+- **AMEND** → name the gap; the plan is updated and the packet is
+  re-presented.
+- **NO** → name the blocker; the plan stays CURRENT and the blocker
+  becomes a new pre-promotion task.
+
+No menu of alternative shapes is offered; the doctrine is to apply
+the gate, not to invent optionality around it.
 
 ## Previous First Task (resolved)
 

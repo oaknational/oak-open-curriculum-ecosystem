@@ -32,6 +32,180 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-04-30 — Tracer matrix and promotion packet (Vining Whispering Root)
+
+EEF thread. Session opened on the primary task named in
+`eef.next-session.md § First Task`: promote Increment 1 toward ACTIVE.
+Three remaining gates were named (T1 tracer sign-off, plan-body
+first-principles check, Increment 2 readiness). Type-design gate had
+been satisfied by the previous session.
+
+> **Final state after three review rounds**: 17 of 21 tracer cells
+> drafted, 4 NO TRACER under the ≥2-of-3 rule, final MCP tool count
+> 17. The "What landed" / Round 1 / Round 2 entries below describe
+> the session's chronological arc; the round-by-round summary at
+> the end of this entry consolidates the final state. The
+> 19-of-21 / 19-tool numbers below are the Round-1 view, superseded
+> by Round 3.
+
+### What landed
+
+- 19 of 21 T1 tracer cells drafted inline in
+  `graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix` with
+  verification footnotes against the actual generator-source files
+  (`prior-knowledge-graph-generator.ts`, `misconception-graph-generator.ts`)
+  and the EEF data file (`.agent/plans/sector-engagement/eef/reference/eef-toolkit.json`).
+- 2 cells marked **NO TRACER** under the ≥2-of-3 rule: both
+  misconception cases for `neighbours` and `subgraph`. Root cause:
+  the misconception graph has no edges in its current generator.
+  `neighbours` and `subgraph` ship for prerequisite + eef-strands
+  with explicit misconception carve-outs in T6 registration.
+- Final tool count moves from 21 to **19**.
+
+### Phase B findings — first-principles check surfaced four real items
+
+1. `MisconceptionNode` has no explicit ID field; T4 adapter must
+   mint stable IDs.
+2. EEF data uses `id`, the Citation contract uses `strand_id`; the
+   rename happens at the corpus boundary (Increment 2 § T2 loader),
+   not inside the graph adapter.
+3. `NodeFilter.FieldPredicate` did not cover array-element membership;
+   added `TFieldValue extends readonly (infer U)[] ? { readonly contains: U } : never`
+   to T2 spec. Required by `enumerate_nodes × eef-strands`.
+4. `MisconceptionGraph` has no edges (the carve-outs above).
+
+Two adapter-description corrections applied while verifying real data:
+
+- T3 PrerequisiteGraphView: edge type was wrong (named
+  `prerequisite_of`, `succeeds`; real data has `prerequisiteFor` only
+  with a `source: 'thread' | 'priorKnowledge'` discriminator).
+- T4 MisconceptionGraphView: edge types were wrong (named
+  `related_misconception`, `addressed_by_lesson`; real data has none).
+
+Both corrections were the kind of thing only a first-principles read
+catches — the prior plan body was internally coherent but at variance
+with the generators.
+
+### Insight — the parallel-tracer protection earned its keep this session
+
+The ≥2-of-3 rule is what surfaced the misconception edge absence.
+Without three concrete graphs as forcing functions, the design would
+have happily assumed `neighbours` and `subgraph` worked everywhere
+because the EEF data has them. The rule made the gap empirical
+rather than speculative.
+
+### Doctrine reinforcement — apply, don't ask
+
+The plan written in plan mode for this session deliberately did not
+end with an AskUserQuestion menu of "should I draft tracers / verify
+data first / restructure the plan?" — the next-session record had
+already answered those questions. The doctrine candidate (*stop
+inventing optionality*, status `due`) was applied at session-open
+rather than waiting for a fifth tripping instance. The promotion
+packet's "Explicit ask" section follows the same pattern: yes /
+amend / no, no menu of alternative shapes.
+
+### Round 2 — code-reviewer caught two genuine first-principles gaps
+
+Code-reviewer was invoked on the round-1 work and surfaced two real
+data-shape gaps the round-1 first-principles check had missed:
+
+- `related_strands` is **absent** (not empty-array) on 13 of 30 EEF
+  strands: aspiration-interventions, extending-school-time, homework,
+  individualised-instruction, learning-styles, mentoring, outdoor-
+  adventure-learning, parental-engagement, performance-pay, physical-
+  activity, reducing-class-size, repeating-a-year, school-uniform.
+  The plan was implicitly assuming universal presence; T5 adapter
+  and `neighbours`/`subgraph` tracers needed to name the optionality
+  and the well-defined behaviour for absent strands.
+- `related_guidance_reports` is `{title, url}` objects, not bare URL
+  strings. Present on only 7 of 30 strands. The plan said "edge
+  target ID is the report URL" — true but glossed the object
+  structure. The Zod loader at the corpus boundary needed
+  `z.array(z.object({title, url})).optional()`, not bare strings.
+
+Insight: the round-1 first-principles check ran with the data file
+open, which caught four findings — but it sampled fields rather
+than enumerating optionality. A first-principles check that doesn't
+explicitly count present-vs-absent across all instances of a field
+will miss optionality gaps. The round-2 review caught both gaps by
+running the empirical check (`python3 -c "..."`) the round-1 check
+should have run from the start. Doctrine candidate to consider:
+**first-principles checks on optional or array fields require an
+empirical count, not a sample**. Adding to the napkin's pending
+graduation queue rather than applying mid-session.
+
+Both round-2 gaps applied to the plan body; Promotion Packet § Gate 2
+updated to record 6 findings (was 4); corpus plan T2 gained a
+"Strand-field optionality and shape" subsection with the concrete
+Zod shapes.
+
+### Specialist reviewer routing
+
+Code-reviewer recommended: invoke assumptions-reviewer focused on
+synthetic-tag semantics and sparse-data handling; do NOT re-invoke
+type-reviewer (already ran), architecture-reviewer-betty (boundary
+settled), mcp-reviewer (no implementation yet), or test-reviewer
+(no tests yet). Following the recommendation.
+
+### Round 3 — assumptions-reviewer caught the invented-optionality call
+
+Verdict: TARGETED REVISION NEEDED, no escalation to betty. Three
+applied changes:
+
+- **`find_by_tag` dropped for prerequisite + misconception** — the
+  reviewer cited the plan body's own admission that the synthetic-
+  compound `${subject}-${keyStage}` was "architecturally equivalent
+  to `enumerate_nodes` with a fixed-shape filter, offered as
+  `find_by_tag` for surface-cohesion." Surface cohesion via
+  invented optionality is the anti-pattern. Risk #5's mitigation
+  ("MCP tool descriptions must explicitly state the parameter is
+  not really a tag") was the docstring-as-correction-of-surface-
+  lie tell. Tool count: 19 → 17. Operations dropped: prerequisite
+  6/7, misconception 4/7, eef-strands 7/7.
+- **T5 `manifest`/`summary` surfaces `strands_without_relations`** —
+  13 of 30 strands have no `related_strands`. An agent calling
+  `subgraph` on those gets a single-node result. Front-load the
+  list in the manifest so agents avoid the pointless call. The
+  list is data-version-stable; precompute at build time.
+- **Outcome condition #6 reframed** from a ratio gate (sampling-
+  noise-dominated at MCP launch traffic) to a composite three-
+  branch evidence gate.
+
+### Insight — invented-optionality reaches into operation-shape
+
+The "stop inventing optionality" doctrine was applied at session-
+open to question framing (don't ask the user when the answer is in
+the repo). Round 3 showed the same pattern reaches into operation
+design: the synthetic-tag wrapper was inventing a `find_by_tag`
+operation where the source data has no tag concept, then patching
+the lie via docstring. The honest move is to drop the operation
+where the data doesn't support it — same shape as dropping
+`neighbours-misconception` because there are no edges. Both are
+applications of: *the absence in the data is a feature of the
+contract, not a bug to paper over*. Doctrine candidate to consider
+for graduation alongside "stop inventing optionality": the
+operation-design dual.
+
+### Three review rounds, three rounds of findings
+
+- Round 1 (in-session first-principles) — 4 findings, applied.
+- Round 2 (code-reviewer) — 2 findings, applied (`related_strands`
+  optionality + `related_guidance_reports` object shape).
+- Round 3 (assumptions-reviewer) — 3 findings, applied (drop
+  find_by_tag × {prereq, misconception}, sparse-relations surface,
+  outcome reframe).
+
+Each round caught what the prior round had missed. The pattern: a
+first-principles read sampled fields rather than enumerated; a code
+read sampled tracers for footnote-correctness rather than
+operation-applicability; an assumptions read sampled the invented-
+operation justification. Three different lenses, three different
+gaps. Each lens does its own job; layering them is what produces
+the corrected contract. Worth recording as a pattern: review-round
+layering — different reviewers see different gap-shapes; running
+them sequentially is not redundant work.
+
 ## 2026-04-30 — Post-mortem + fitness remediation lane (Verdant Sheltering Glade)
 
 Session opened on the owner-deferred housekeeping-with-intent lane

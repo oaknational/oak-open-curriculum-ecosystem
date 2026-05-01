@@ -356,6 +356,28 @@ Bare `z.string()` would let a malformed value (e.g. a free-text
 update note) parse cleanly and propagate into citation responses
 where it would mislead teachers about evidence currency.
 
+**Strand-field optionality and shape** (surfaced by the
+graph-query-layer first-principles check, 2026-04-30): the Zod
+schema MUST treat the following per-strand fields correctly,
+matching the actual shape of `eef-toolkit.json` rather than the
+shape the plan body might naively assume:
+
+- `related_strands` → `z.array(z.string()).optional()` — the field
+  is **absent** on 13 of 30 strands (not empty array). Marking it
+  required would cause module-load failure on every load; marking
+  it `z.array(z.string()).default([])` would also work. Either way,
+  bare-required is wrong.
+- `related_guidance_reports` → `z.array(z.object({title: z.string(),
+  url: z.string().url()})).optional()` — present on only 7 of 30
+  strands; each entry is a `{title, url}` object, NOT a bare URL
+  string. `z.array(z.string())` would silently fail to validate the
+  real data; `z.string()` for entries would crash module load.
+
+These two are the load-bearing examples; the principle is general —
+the loader's Zod schema must mirror the actual data shape including
+absent-field optionality, not an idealised "every strand has every
+field" shape.
+
 **Closed schema typing** (resolves the type-reviewer's bucket-(c)
 finding by reading the actual data): `school_context_schema` in
 `eef-toolkit.json` is itself a JSON Schema document with a known
