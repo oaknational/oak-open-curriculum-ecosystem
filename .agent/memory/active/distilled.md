@@ -147,6 +147,19 @@ expert triplet executes.
 Disposition-drift doctrine graduated 2026-04-28 to
 [PDR-018 §Disposition drift at phase boundaries][pdr-018].
 
+Rush-impulse-as-entropy-generator graduated 2026-05-02 to
+[principles.md § Architectural Excellence Over Expediency][excellence].
+Source: napkin entry "2026-05-01 — Metacognition: the rush impulse
+as system-level entropy generator (Deep Navigating Stern)" plus
+owner reinforcement 2026-05-02 (*"we always, ALWAYS, choose
+long-term architectural excellence over cheap or fast or good
+enough"*). Operational consequence: when surfacing options to
+the owner, the "cheap cure" / "quick fix" / "land it then
+iterate" frame is categorically excluded — only
+architectural-excellence shapes count as legitimate options.
+
+[excellence]: ../../directives/principles.md#architectural-excellence-over-expediency
+
 - **Learning before fitness — knowledge preservation is absolute**:
   writing to shared-state knowledge surfaces (napkin, distilled,
   patterns, thread records, repo-continuity, comms log, conversations,

@@ -26,14 +26,51 @@ expressions of this tenet.
 
 ## Architectural Excellence Over Expediency
 
-Always choose long-term architectural clarity over short-term
-convenience. If a shortcut creates duplication across architectural
-layers, it is not a shortcut — it is a debt that compounds silently.
-Copying a function "because it's faster" creates two implementations
-that drift apart. The cost of the drift is invisible until it
-manifests as a real bug (wrong search results, inconsistent
-behaviour, stale configuration). The correct response is always to
-fix the boundary, not to duplicate across it.
+We **always, ALWAYS** choose long-term architectural excellence
+over cheap, fast, or "good enough". This is absolute. The
+cheap-fast option is not a respectable third choice next to "do
+it right" — it is categorically excluded from consideration.
+Decide between architectural-excellence shapes only.
+
+This applies to design AND to how options are presented. When
+surfacing options to the owner or a peer agent, do not include a
+"cheap cure" / "quick fix" / "land it then iterate" option as
+if it were a legitimate trade-off; presenting it as one is
+itself the failure mode.
+
+Vocabulary that signals the impulse: _fast path_, _quick fix_,
+_cheap cure_, _good enough for now_, _minimum viable_, _just a
+placeholder_, _for later_, _next session_, _out of scope_,
+_defer_, _informational not actioned_, _light pass exempts_,
+_bootstrap fast-path_, _land it then refactor_, _we can always_.
+When any of these appear in draft output, treat them as a
+question, not a closure. The vocabulary IS the impulse making
+itself visible.
+
+Failure mode: cheap fixes silently kill the diagnostic. The
+genuine signal is usually _the surface is wrong_ — surface
+ergonomics, boundary, or contract. The cheap-fix shape reaches
+for _make the discipline skippable_ or _carve out this case_
+because fixing the surface feels slower than introducing a
+conditional. Local optimisation under rush is global
+pessimisation: every cheap move has maintenance externalities
+(bridges to maintain, conditions to re-evaluate, half-finished
+implementations to complete, silenced warnings to investigate).
+Fences accumulate; the underlying generator stays unchanged.
+This principle is the generator every quality-gate fence in the
+repo (`never-disable-checks`, `no-warning-toleration`,
+`replace-don't-bridge`, `dont-break-build-without-fix-plan`,
+`stop inventing optionality`, and adjacent rules) exists to
+defeat.
+
+Worked failure-mode example: if a shortcut creates duplication
+across architectural layers, it is not a shortcut — it is a
+debt that compounds silently. Copying a function "because it's
+faster" creates two implementations that drift apart. The cost
+of the drift is invisible until it manifests as a real bug
+(wrong search results, inconsistent behaviour, stale
+configuration). The correct response is always to fix the
+boundary, not to duplicate across it.
 
 ## Owner Direction Beats Plan
 
