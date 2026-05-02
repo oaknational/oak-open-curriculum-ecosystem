@@ -1,53 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "b0161235-9162-4ea9-8573-5f656ab5b2ab",
-      "agent_id": {
-        "agent_name": "Abyssal Diving Stern",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "87ccac"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": ["observability-multi-sink-and-fixtures-shape"]
-        },
-        {
-          "kind": "workspace",
-          "patterns": [
-            "@oaknational/observability",
-            "@oaknational/sentry-node",
-            "@oaknational/logger",
-            "@oaknational/env",
-            "@oaknational/env-resolution",
-            "@oaknational/oak-curriculum-mcp-streamable-http",
-            "@oaknational/oak-search-cli"
-          ]
-        },
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md",
-            ".agent/plans/observability/archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md",
-            ".agent/plans/observability/archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md",
-            ".agent/plans/observability/README.md",
-            ".agent/plans/observability/archive/superseded/README.md",
-            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
-          ]
-        },
-        {
-          "kind": "adr",
-          "patterns": ["116", "143", "162", "163", "165"]
-        }
-      ],
-      "claimed_at": "2026-05-02T09:26:36Z",
-      "freshness_seconds": 14400,
-      "intent": "WS0 prelude: promote observability multi-sink + fixtures plan into the repo, archive two superseded predecessors, register supersession mapping, update parent README + thread record. Multi-session plan; this session lands WS0 only and hands off WS1 (RED tests) to a future session.",
-      "notes": "Bootstrap fast-path: scanned active-claims.json — no other agents present. Worked instance of principles.md § Architectural Excellence Over Expediency (graduated 2026-05-02). Roadmap context: observability fixes → local proof → PR → preview proof per owner direction 2026-05-02."
-    }
-  ]
+  "claims": []
 }

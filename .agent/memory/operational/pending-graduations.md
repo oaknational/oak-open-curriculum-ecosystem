@@ -32,6 +32,41 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-02; observability multi-sink + fixtures plan WS10 — owner
+  doctrine *"for all significant documentation or Practice changes
+  — and this is always true — we need reviews from the documentation
+  reviewer and the onboarding reviewer"*; trigger condition: this
+  doctrine is now load-bearing for every plan that mutates docs or
+  Practice surfaces; graduation target: a permanent rule (likely
+  `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
+  OR an amendment block in `invoke-code-reviewers.md`) plus a
+  `distilled.md § Process` graduation pointer plus matrix update in
+  `invoke-code-reviewers.md`; queued as plan WS11.3 deliverable;
+  status: due (graduates when WS11.3 executes).
+
++ 2026-05-02; observability multi-sink + fixtures plan WS8.6 —
+  orthogonal axes shape (`OBSERVABILITY_SINKS` typed list +
+  `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
+  reusable architectural decision per PDR-019 (ADR scope by
+  reusability) — applies to every future sink and every future
+  capability that emits; graduation target:
+  `docs/architecture/architectural-decisions/165-observability-configuration-orthogonality.md`
+  (NEW); plus amendments to ADR-116 (warnings channel), ADR-143
+  (registry shape, fixture-as-tee), ADR-162 (Open Question close,
+  baseline-vs-numbered-sink language), ADR-163 (build-time scope
+  clarification); queued as plan WS8.6/WS8.7 deliverable; status:
+  due (graduates when plan executes).
+
++ 2026-05-02; observability multi-sink + fixtures plan WS0 —
+  near-miss surprise: almost spawned a duplicate
+  `cross-app-distributed-tracing-mcp-and-search-cli.plan.md` stub
+  before checking the existing `future/` directory; caught when
+  listing during WS0 promotion. Trigger: second instance of new-plan-
+  stub-spawn-without-future-survey; graduation target: distilled.md
+  § Process entry naming "directory survey before plan-stub spawning"
+  OR amendment to `consolidate-at-third-consumer.md`; status: pending
+  (single instance; capture-only until second instance accumulates).
+
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
   owner-direction "complex-with-tests must live in workspace"; 4 parallel

@@ -32,6 +32,71 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-02 — Surprise: I almost spawned a duplicate forward-pointing plan (Abyssal Diving Stern)
+
+Captured per the napkin surprise format.
+
+- **Expected**: when the owner asked me to add a forward-pointer note in
+  the Search CLI README about cross-app distributed tracing for when
+  Sentry emissions land in Search CLI, I'd need to spawn a new
+  `future/cross-app-distributed-tracing-mcp-and-search-cli.plan.md`
+  stub. I named that spawn in WS11.1 of the plan I was authoring.
+- **Observed**: while listing the `future/` plan directory contents
+  during WS0 promotion, I saw `cross-system-correlated-tracing.plan.md`
+  — which already covers MCP server ↔ curriculum SDK ↔ upstream API ↔
+  Elasticsearch trace correlation, including the Search CLI surface.
+  I had not surveyed `future/` thoroughly before authoring WS11.1.
+- **Why surprising**: the existing plan covers exactly the scope I was
+  about to spawn under a different name. Spawning would have created a
+  parallel-plan duplicate — direct violation of `consolidate-at-third-
+  consumer` and `replace-don't-bridge`. Caught at WS0-PRELUDE before any
+  duplicate was written; refined the plan body to cite the existing
+  plan from the README forward-pointer note instead.
+- **Generator**: incomplete survey of the existing plan estate before
+  authoring new plan stubs. Even with the dispatched Explore agents
+  (which DID survey ADR-162, ADR-163, ADR-143, and the multi-sink-
+  vendor-independence-conformance plan), I did not specifically ask
+  them to enumerate the full `future/` plan directory. The agents
+  reported what they were asked to report.
+- **Cure shape**: when authoring a new plan that includes "spawn a
+  forward-pointing plan", before naming the new plan, run a directory
+  listing of the relevant `future/` directory and grep for the topic
+  keywords. Treat plan-stub-spawning as routinely-needing-survey.
+  Candidate for distilled.md entry if a second instance occurs.
+
+## 2026-05-02 — Doctrine made explicit: rush-impulse → architectural-excellence absolute (Abyssal Diving Stern)
+
+Captured per the napkin surprise format. This is a *correction →
+graduation* event, not a surprise about repo state.
+
+- **Setup**: surfaced three options to the owner for the local-dev
+  Sentry boundary regression — (1) cheap cure: hard-code SENTRY_MODE=off
+  in dev mode; (2) architectural shape: orthogonal-axes refactor; (3)
+  cheap-cure-now-shape-next sequencing.
+- **Owner correction**: *"as per the principles.md (and if it isn't in
+  there it needs to be), we always, ALWAYS, choose long-term
+  architectural excellence over cheap or fast or good enough. That is a
+  core tenet of this project and must be remembered in all appropriate
+  surfaces."*
+- **Recognition**: the existing principle wording (*"Always choose
+  long-term architectural clarity over short-term convenience..."*)
+  framed the doctrine as a trade-off, leaving the cheap path as a
+  respectable third option. The owner's framing is absolute: cheap-fast
+  is categorically excluded, not weighed against quality. This is the
+  same impulse Deep Navigating Stern named on 2026-05-01 as the rush-
+  impulse-as-entropy-generator.
+- **Graduation**: principles.md § Architectural Excellence Over
+  Expediency rewritten to absolute framing (commit `9356779d`); added
+  the vocabulary trip-list (fast path, quick fix, cheap cure, good
+  enough for now, minimum viable, for later, defer, light pass exempts,
+  bootstrap fast-path, land it then refactor); failure-mode analysis
+  (cheap fixes silently kill the diagnostic); generator-vs-fence link
+  (this principle is the generator every quality-gate fence exists to
+  defeat). distilled.md § Process records the graduation pointer.
+- **Worked instance**: the observability multi-sink + fixtures plan
+  authored later in the session is itself the worked instance of the
+  graduated principle. Plan body cites it in Context.
+
 ## 2026-05-01 — Surprise: `pnpm dev` from oak-curriculum-mcp-streamable-http demands a Vercel git SHA on local dev (Gnarled Fruiting Root)
 
 Captured per the napkin surprise format. Investigation paused —

@@ -8,7 +8,80 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-01 (Gnarled Fruiting Root / `claude-code` /
+**Last refreshed**: 2026-05-02 (Abyssal Diving Stern / `claude-code` /
+`claude-opus-4-7-1m` / `87ccac` — `feat/eef_exploration` branch, 27
+commits ahead of `origin/main` (push pending owner authorisation per
+2026-05-02 broader roadmap)).
+**Session focus**: doctrine graduation (rush-impulse → `principles.md
+§ Architectural Excellence Over Expediency` absolute framing) plus WS0
+prelude of the new `observability-multi-sink-and-fixtures-shape.plan.md`
+(plan promotion + supersession routing for two predecessor plans).
+Plan-mode authoring with three Explore agents + one Plan agent;
+owner-approved via ExitPlanMode.
+
+**Substantive landings this session**:
+
++ `9356779d docs(memory): graduate rush-impulse-as-entropy doctrine
+  to architectural-excellence principle` — `principles.md §
+  Architectural Excellence Over Expediency` strengthened to absolute
+  framing per owner reinforcement *"we always, ALWAYS, choose
+  long-term architectural excellence over cheap or fast or good
+  enough"*. Vocabulary trip-list (fast path / quick fix / cheap cure
+  / good enough for now / minimum viable / for later / defer / light
+  pass exempts / bootstrap fast-path / land it then refactor) and
+  generator-vs-fence analysis lifted from Deep Navigating Stern's
+  2026-05-01 napkin entry. `distilled.md § Process` records the
+  graduation pointer.
++ `e1840631 docs(plans): promote observability multi-sink + fixtures
+  plan; archive superseded predecessors` — WS0 prelude of the new
+  executable plan replacing the conflated `SENTRY_MODE` switch with
+  two orthogonal axes (`OBSERVABILITY_SINKS` typed list +
+  `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean). Plan
+  authored in plan mode with three Explore agents + one Plan agent
+  pressure-test. Twelve design decisions resolved, eleven
+  workstreams (WS0-WS11) covering atomic rename across six
+  workspaces, new ADR-165 + amendments to ADR-116/143/162/163, full
+  documentation propagation (root README + both app READMEs + governance/
+  operations docs + TSDoc + .env.example), mandatory-always doc-and-
+  onboarding reviewer doctrine elevation, regression-guard E2E test.
+  Two predecessor plans archived to `archive/superseded/` with full
+  scope-routing tables in `archive/superseded/README.md`:
+  `observability-config-coherence.plan` (strategic brief; WS-A/B/C/D
+  become this plan's WS2/3/8/6) and
+  `local-dev-sentry-boundary-regression-investigation.plan` (wrong-
+  framed predecessor; structural cure makes the local-dev failure
+  impossible by construction). Active claim `b0161235` opened on
+  the multi-sink areas; bootstrap fast-path applied (no other agents
+  present at session open); two comms events recorded.
+
+**Active executable plan**:
+[`observability-multi-sink-and-fixtures-shape.plan.md`](../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md)
+in `current/`. WS0 prelude landed this session; WS1 (RED tests across
+all layers + outermost regression-guard E2E + verification read of
+`sentry-build-environment.ts` for D7a build-time orthogonality) is the
+next-session landing target.
+
+**Owner-stated broader roadmap (2026-05-02, load-bearing for sequencing
+across this and future sessions)**:
+
+1. Land vendor-neutrality fixes for observability (this plan, in
+   progress).
+2. Prove MCP server works locally — especially search and thread
+   functions touched by the unitOrder schema change (`9e657ad3`,
+   landed by Gnarled Fruiting Root 2026-05-01).
+3. Push branch + open PR.
+4. Prove MCP server works in Vercel preview build.
+
+Reviewer-subagent dispatch is mandatory throughout; the
+mandatory-always `docs-adr-reviewer` + `onboarding-reviewer` doctrine
+is queued for graduation in plan WS11.3 (an `.agent/rules/` entry).
+
+**Quality gates (this session)**: pre-commit gates passed both commits
+via full turbo cache (74 tasks cached, 74 successful). No new code
+written; no test runs needed. Heavy Playwright/server-driven gates
+deliberately not run for a docs-only landing.
+
+**Prior refresh**: 2026-05-01 (Gnarled Fruiting Root / `claude-code` /
 `claude-opus-4-7-1m` / `e18e2c` — `feat/eef_exploration` branch, 17
 commits ahead of origin (push pending owner authorisation)).
 **Session focus**: doctrine capture (no-moving-targets + Practice-Core
@@ -447,7 +520,7 @@ live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30; Abyssal Cresting Compass / `claude-code` / `claude-opus-4-7-1m` / pr-87-phase-2.0.5 / 2026-04-28; Luminous Waning Aurora / `cursor` / `composer` / preview-sentry-mcp-oauth-triage / 2026-04-28. Full history in thread record. |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Most-recent: Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02. Prior: Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30. Full history in thread record. |
 | `agentic-engineering-enhancements` | Practice — collaboration protocol, documentation roles, continuity surfaces | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | Most-recent: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `connecting-oak-resources` | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md) | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01. |
 | `exploring-open-education-resources` | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion | [`threads/exploring-open-education-resources.next-session.md`](threads/exploring-open-education-resources.next-session.md) | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01. |
@@ -546,28 +619,34 @@ Current branch non-goals:
 
 ## Next Safe Step
 
-After 2026-05-01 Gnarled Fruiting Root close: branch is 18 commits
-ahead of origin (push pending owner authorisation), with one
-freshly-captured investigation queued and one item-to-investigate
-that paused mid-turn due to tooling friction. Choose the lane
-deliberately:
+After 2026-05-02 Abyssal Diving Stern close: branch is 27 commits
+ahead of `origin/main` (push pending owner authorisation per the
+broader 2026-05-02 roadmap). The branch-primary lane has shifted
+from "investigation queued" to "WS0 prelude landed; WS1 RED-tests
+queued" on the new executable plan. Choose the lane deliberately:
 
-**Local dev Sentry boundary regression investigation (newly
-queued)**: `pnpm dev` from
-`apps/oak-curriculum-mcp-streamable-http` fails with
-"Git SHA is required for Sentry release resolution but
-VERCEL_GIT_COMMIT_SHA is not set". Owner direction is unambiguous:
-local dev MUST NOT require Sentry release identity. Either the
-completed `mcp-local-startup-release-boundary.plan.md` work has
-regressed, or the dev-server invocation path was not in its scope.
-Plan stub at
-[`.agent/plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md`](../../plans/observability/current/local-dev-sentry-boundary-regression-investigation.plan.md)
-captures the reproduction, the throw-site location, the canonical
-config options to evaluate, the structural-enforcement question,
-and a Phase 0 entry checklist. The investigation paused at the
-trace-the-throw-site step due to tooling friction in this session;
-next session should re-ground on a fresh shell with no `SENTRY_*`
-env vars.
+**Observability multi-sink + fixtures shape — WS1 (newly queued,
+branch-primary)**: WS0 prelude landed cleanly. Next-session work is
+WS1 — RED tests across all layers (env Zod schemas + `SinkRegistry`
+type + `ServerInstrumenter` port + cross-field `superRefine` +
+warnings channel + outermost regression-guard E2E + per-layer unit
+tests at env / sentry-node / HTTP composition / CLI composition +
+redaction-barrier extension for fixture-as-tee). WS1 begins with a
+verification read of
+`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts`
+end-to-end (D7a — confirm whether the build-time path consults
+`SENTRY_MODE` directly; determines whether build-time scope joins
+the rename or stays orthogonal). Plan body at
+[`.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md`](../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md);
+worked instance of `principles.md § Architectural Excellence Over
+Expediency` (graduated this session). Multi-session plan; broader
+2026-05-02 owner roadmap sequences observability fixes → local
+proof of search/thread functions (touched by `9e657ad3` unitOrder
+schema fix) → push + PR → preview proof. Reviewer-subagent dispatch
+mandatory throughout, including the now-elevated `docs-adr-reviewer`
+
++ `onboarding-reviewer` mandatory-always for documentation /
+Practice changes (queued for graduation in plan WS11.3).
 
 **EEF Increment 1 promotion (sibling thread, ready for owner
 review)**: light-scan complete with no blocking findings. Owner
@@ -672,7 +751,25 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-01 Gnarled Fruiting Root, evening): `due —
+**Status (2026-05-02 Abyssal Diving Stern, mid-day): `not due —
+focused single-thread session; doctrine graduation + WS0 prelude
+landed cleanly across two commits with full turbo cache pre-commit
+gates. No thread-crossing this session. Three new pending-graduations
+register entries added (mandatory-always doc-and-onboarding reviewer
+doctrine; ADR-165 + amendments to ADR-116/143/162/163; near-miss
+surprise on duplicate plan-stub spawning). Inherited fitness pressure
+from prior 2026-05-01 sessions persists (napkin / distilled /
+pending-graduations / repo-continuity / principles all over their
+limits) — owner-deferred to a separate session per the standing
+direction. Knowledge-preservation-is-absolute applied to this
+session's writes. Next session enters WS1 RED-tests with fresh
+context; consolidation can be revisited after the multi-session plan
+lands or earlier if fitness pressure becomes operationally
+blocking`.** This handoff did not escalate to `/jc-consolidate-docs`
+and explicitly does not narrow scope to defer the underlying fitness
+remediation; that lane awaits owner-directed dedicated session.
+
+**Prior status (2026-05-01 Gnarled Fruiting Root, evening): `due —
 fitness criticals across napkin (1772 / target 220 / limit 300),
 distilled.md (HARD, 334 lines), pending-graduations (HARD, 640
 lines), repo-continuity.md (HARD, 738 lines before this refresh),
