@@ -1,5 +1,40 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026)
+
+**Active executable plan**:
+[`.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md`](../../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md)
+— promoted 2026-05-02 by Abyssal Diving Stern. Multi-session plan
+covering WS0–WS11. WS0 (plan promotion + supersession routing) is
+landing this session; WS1 (RED tests across all layers) is the
+next-session landing target.
+
+**Owner-stated broader roadmap (2026-05-02)**:
+
+1. Land vendor-neutrality fixes for observability (this plan, in progress)
+2. Prove MCP server works locally — especially search and thread
+   functions touched by the unitOrder schema change (`9e657ad3`)
+3. Push branch + open PR
+4. Prove MCP server works in the Vercel preview build
+
+Reviewer-subagent dispatch is mandatory throughout — including
+`docs-adr-reviewer` + `onboarding-reviewer` automatically on every
+significant documentation/Practice change (doctrine landed in plan
+WS10 and queued for graduation to a permanent rule in WS11.3).
+
+**Superseded plans archived**:
+
+- `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
+  (strategic brief — its WS-A/B/C/D became this plan's WS2/3/8/6)
+- `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`
+  (wrong-framed predecessor — diagnosed the bug correctly but framed
+  the cure too narrowly; structural cure subsumes all four phases)
+
+Full scope-routing tables in
+[`archive/superseded/README.md`](../../../plans/observability/archive/superseded/README.md).
+
+---
+
 ## Participating agent identities
 
 This table is the canonical additive-identity register for the
@@ -35,6 +70,7 @@ matching `platform + model + agent_name` updates `last_session`.
 | Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code | 2026-04-28 | 2026-04-28 |
 | Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
 | Leafy Bending Dew | cursor | composer | `8d0db5` | MCP HTTP Sentry esbuild helpers: dedup `trimToUndefined`, explicit absent shapes (`undefined` vs post-trim `''`); Cursor handoff — **commit owned by Claude Code** | 2026-04-30 | 2026-04-30 |
+| Abyssal Diving Stern | claude-code | claude-opus-4-7-1m | `87ccac` | Doctrine graduation (rush-impulse → principles.md § Architectural Excellence Over Expediency); observability-multi-sink-and-fixtures-shape plan author + WS0 promotion + supersession routing | 2026-05-02 | 2026-05-02 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged

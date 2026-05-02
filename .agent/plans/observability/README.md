@@ -99,6 +99,26 @@ dated and informs either an ADR or a specific plan.
 
 ---
 
+## Substrate plans (cross-axis infrastructure)
+
+Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-plan.md):
+
+- [`current/observability-multi-sink-and-fixtures-shape.plan.md`](./current/observability-multi-sink-and-fixtures-shape.plan.md)
+  — Multi-sink + fixture orthogonality. Replaces `SENTRY_MODE` with
+  orthogonal `OBSERVABILITY_SINKS` (typed list) +
+  `OBSERVABILITY_FIXTURES` (boolean tee). Closes ADR-162's Open
+  Question on direct vendor imports; foundation for
+  `multi-sink-vendor-independence-conformance.plan.md` and the
+  three-sink topology (Sentry today, warehouse + PostHog post-MVP).
+  Worked instance of `principles.md § Architectural Excellence Over
+  Expediency` (graduated 2026-05-02). Authors new ADR-165 plus
+  amendments to ADR-116/143/162/163. Supersedes
+  `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
+  and
+  `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`.
+
+---
+
 ## Related
 
 - [`high-level-plan.md`](../high-level-plan.md) — repo-wide plan index.
