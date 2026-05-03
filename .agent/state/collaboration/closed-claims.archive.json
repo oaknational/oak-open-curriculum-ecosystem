@@ -7004,6 +7004,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1fee5cf0-2478-40e6-bd3c-c81d99f174d5",
+      "agent_id": {
+        "agent_name": "Woodland Sprouting Glade",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "978cba"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T09:20:38Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ARC B0 plan-body corrections to observability-multi-sink-and-fixtures-shape.plan.md per there-is-no-time-hashed-starfish §B0 corrections list (deletion timing, bridge removal, ESLint rule authoring, ADR number verification, betty amendments, WS9.5 pre-merge analysis section). Plus ADR number corrections to there-is-no-time §A4/§B0/§B7 (170/171 verified).",
+      "archived_at": "2026-05-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-03T09:53:21Z",
+        "closed_by": {
+          "agent_name": "Woodland Sprouting Glade",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "978cba"
+        },
+        "summary": "ARC B0 corrections landed at c0d17634: betty Q2-Q6 folded; ADR 170/171 verified; reviewer findings absorbed (assumptions+docs-adr+onboarding); cross-plan boundary explicit; pre-merge analysis canonical slot resolved to parent plan ARC C1.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1fee5cf0-2478-40e6-bd3c-c81d99f174d5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
