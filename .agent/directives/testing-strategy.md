@@ -269,9 +269,9 @@ explicitly authorises staged WIP.
   - Integration tests live next to the integration point file
     containing the integration points they test. They MUST end in
     `*.integration.test.ts`
-  - E2E tests are an exception and live in the `e2e-tests`
-    directory. This is because they test a running _system_ rather
-    than importing code to test. They MUST end in `*.e2e.test.ts`
+  - E2E tests live in the `e2e-tests` directory. They test a running
+    _system_ rather than importing product code, so they do not
+    co-locate with any product file. They MUST end in `*.e2e.test.ts`
 
 ## When Behaviour Changes
 

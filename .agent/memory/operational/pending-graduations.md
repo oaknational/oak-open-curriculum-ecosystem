@@ -214,50 +214,26 @@ continuity snapshots.
   protocol (iv)). Status: due (graduates with the next CLI
   ergonomics plan execution slice).
 
-+ 2026-05-03; Practice-Core portability Round 3 (Moonlit Drifting
-  Nebula) — CHANGELOG attribution headers
-  (`## [<host-repo>] DATE — TITLE`) and `provenance.yml` entries
-  identifying the source host repo of each Practice contribution
-  are **structurally-required attribution metadata**, distinct
-  from content leakage that the Practice-Core portability rule
-  forbids. Same shape as git commit author lines or semver
-  CHANGELOG version tags. Trigger condition: this carve-out was
-  applied implicitly during Round 3; explicit ratification is
-  needed if the same boundary surfaces in any future Core
-  portability review. Graduation target: `distilled.md`
-  amendment naming this as the third explicit carve-out (after
-  C6 Practice-canonical directory references, C7 external
-  http(s) citations) AND/OR Practice-Core portability rule
-  in `decision-records/README.md` extended with the carve-out;
-  status: pending (single instance; capture-only until second
-  instance — likely a docs-adr-reviewer round on a future
-  Core-touching change — confirms the boundary needs codification
-  rather than just consistent application).
++ 2026-05-03; **6 skipped test files violate the absolute
+  no-skipped-tests rule** in `testing-strategy.md` and must be
+  remediated by landing tests + consumer wiring together as
+  single units. Tests and code are one practice, written and
+  landed together, never separated across commits. Affected
+  files:
+  + `packages/libs/sentry-node/src/config-from-registry.unit.test.ts`
+  + `packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`
+  + `apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`
+  + `apps/oak-search-cli/src/observability/cli-observability.unit.test.ts`
+  + `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts`
+  + `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts`
 
-+ 2026-05-03; observability multi-sink + fixtures plan WS1 RED phase
-  (Moonlit Drifting Nebula) — multi-commit-TDD-arc skip register
-  pattern (`describe.skip` / `it.todo()` paired with file-header
-  `SKIP-UNTIL-WSn` comment + napkin §RED-arc skip register entry)
-  proved load-bearing for landing the WS1 RED tests while keeping
-  the trunk green. The pattern is the project's standard shape for
-  multi-commit TDD arcs but is enforced today by *header audit*
-  rather than by the type system (entry 1 uses `it.todo()` because
-  ESLint bans `@ts-expect-error`; entries 2-4 use `describe.skip`
-  whose unskip IS forced by the WS commit's intended consumer-
-  wiring edit). Trigger condition: second multi-commit-TDD arc
-  using the same shape (likely the Practice-Core portability
-  scanner future plan, or any other RED-then-GREEN cross-commit
-  arc); graduation target: a structural-enforcement scanner
-  workstream — CI gate that fails when an `it.todo` /
-  `describe.skip` paired with a `SKIP-UNTIL-WSn` header outlives
-  the named workstream's landing commit. Sketched in napkin
-  alongside the PDR-038 Practice-Core scanner; the two scanners
-  share a "named-deferral lives only as long as its named
-  resolver" structural pattern that may itself be a doctrine
-  candidate (`named-deferrals-must-name-their-resolver`); status:
-  pending (single instance — the WS1 RED-arc itself is the first;
-  WS2/WS3 unskip will be a real-world test of the audit
-  discipline).
+  The cure is to re-shape the workstreams that scheduled the
+  separated landings (observability multi-sink plan WS2-WS5;
+  smoke-harness plan ARC A2-A3) so each test lands with the
+  product code it proves. Trigger: owner direction OR the next
+  session that touches the affected workstreams. Status:
+  pending — escalates if any further test/code separation is
+  proposed.
 
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
@@ -698,6 +674,14 @@ continuity snapshots.
   owner direction. Evidence: Iridescent's session-close napkin (LLM-
   graded outcome conditions in EEF plan removed under owner direction).
 
++ **GRADUATED 2026-05-03** to PDR-043
+  (`.agent/practice-core/decision-records/PDR-043-rush-impulse-three-structural-cues.md`)
+  + ADR-172
+  (`docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md`)
+  + adoption surface in `principles.md § Architectural Excellence
+  Over Expediency` (the three-cues paragraph alongside the
+  vocabulary trip-list, which becomes cue 1).
+
 + 2026-05-01; **rush impulse as system-level entropy generator + three
   structural cues** — owner-named at the close of the 2026-05-01
   consolidation turn, in response to two rush failures within that turn
@@ -815,37 +799,6 @@ continuity snapshots.
   [`pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md)
   thread record itself; the corresponding prose retirement note
   in `repo-continuity.md`.
-
-+ 2026-05-01; **producer output is not immutable when the producer is
-  ours** — owner-named at the close of the EEF-Increment-1 review
-  turn (Vining Whispering Root): *"are the constraints truly inherent
-  in the data, or do we have gaps in our graph building architecture
-  that we are now discovering because of our graph consuming
-  architecture?"*. Substance: the Cardinal Rule (types flow from a
-  single source through codegen) implies a parallel discipline for
-  generator-emitted graph structure — gaps in generator output are
-  our gaps to close, not domain constraints to carve around. The
-  graph-query-layer plan's four `NO TRACER` carve-outs were classified
-  as "data doesn't support it" when three of four are generator gaps
-  on graphs we own (`oak-sdk-codegen/bulk/generators/*-graph-generator.ts`).
-  Layer-inversion: consumer designed first, producer's accidents
-  became consumer's contracts. Cure: amend `principles.md § Cardinal
-  Rule` (or sibling rule) to extend the single-source-types
-  discipline to generator-emitted structure; pair with a shared
-  `@oaknational/graph-tools` workspace (decompose-at-the-tension)
-  that owns canonical graph types, derivation utilities, identity
-  primitives, operations, and validation, imported by both producers
-  and consumers. Status: pending — first explicit articulation
-  (the Cardinal Rule's existing wording covers it for *types* but not
-  visibly for *structure derivation*); trigger: second instance OR
-  owner direction. Family: sibling of the PDR authorised this turn
-  on *recall-dependent principles need active firing layers* — same
-  underlying shape (agent substitutes path-of-least-resistance for
-  architecturally-correct path; the cure is structural, not
-  procedural). Evidence: napkin 2026-05-01 producer/consumer
-  disjointedness entry (Vining Whispering Root); concrete impact
-  proposal sketched (graph-query-layer.plan.md amendments + sibling
-  `graph-tools-workspace.plan.md` FUTURE).
 
 + 2026-05-01; **idea (pre-candidate): hook-layer safety net for
   destructive operations** — owner-recorded after the 2026-05-01

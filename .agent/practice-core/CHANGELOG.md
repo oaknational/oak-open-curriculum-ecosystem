@@ -4,6 +4,23 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-03 — rush-impulse three structural cues graduated to PDR-043
+
+Owner-directed corrective consolidation. Practice Core changes:
+
+- **Added**: `PDR-043 rush-impulse-three-structural-cues`. Three
+  output-time cues (vocabulary trip-list; conditional-discipline
+  check before proposing structure; first-principles framing
+  question) that compose into a cohesive defence against the
+  rush impulse. The cues operate upstream of fences: at output
+  drafting, before substance is committed.
+- **Removed**: an earlier draft pair on producer-output structure
+  that prescribed "carve out the operation; record the carve-out
+  as a domain constraint" with "honest framing for external
+  producers" hedging. Same shape as a withdrawn skip-register
+  pattern, different vocabulary. Deleted outright; no audit
+  trail of incorrect concepts.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-28 — disposition drift graduated into PDR-018
 
 Owner-directed deep consolidation after repeated PR-87 planning drift. Practice

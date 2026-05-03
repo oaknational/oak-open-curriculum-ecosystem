@@ -65,6 +65,27 @@ WS3A claim-history / decision-thread work was grounded in real harvest
 evidence; WS3B sidebar, timeout, and file-backed owner escalation remain
 promotion-gated until async decision threads prove insufficient.
 
+**Multi-agent collaboration cures are a hypothesis-under-test, not a
+design to ship** (Misty Ebbing Pier 2026-05-03 metacognition pivot).
+When a multi-agent session surfaces coordination cures (cure-vocabulary:
+*polling discipline*, *out-of-band ack*, *atomic isolated task offer*,
+*claim mode*, *heartbeat-or-die*, *event_id integrity*, *worker-on-
+empirical-surface*, etc.), route the candidates through the hypothesis
+layer at [`hypothesis.md`][n-agent-hypothesis] with per-primitive
+falsification criteria at [`falsification-criteria.md`][n-agent-falsify]
+and validation experiments at [`experiments.md`][n-agent-experiments].
+**Cures graduate to permanent doctrine after empirical validation at
+N≥3, not before.** The capture → distil → graduate pipeline is the
+default; for collaboration cures touching primitives in `hypothesis.md`,
+insert capture → hypothesis → empirical validation → graduate. The
+distinction is load-bearing: shipped-as-design they get defended;
+treated-as-hypothesis they get tested. Substrate validated at N=2 with
+shared `.git/` (Woodland Sprouting Glade + Prismatic Illuminating
+Eclipse 2026-05-03 ARC B0 + ARC A1 parallel landing); does not extend
+to N≥3 yet. P11 (housekeeping ownership at session end) and the
+worker-perspective addenda (vi)-(x) are first-instance candidates per
+the pending-graduations register.
+
 Tripwire-observable-artefacts entries graduated 2026-04-25 to
 [PDR-029 v2 amendment][pdr-029].
 
@@ -306,21 +327,23 @@ between Core files (e.g. `practice.md` → `practice-lineage.md`,
 PDR → PDR) are internal to the Core package and remain allowed; what
 is forbidden is leakage out of the Core into the host repo.
 
-**Two narrow carve-outs, ratified 2026-05-02 (Phase 1 Round 2
-remediation under owner direction)**:
+**Scope of "host leakage"**: the constraint targets host-repo
+internal paths (`apps/`, `packages/`, `src/`, `docs/`, etc.) and
+host-local identifiers (ADR numbers, commit SHAs, host-specific
+context). It does not apply to:
 
-1. **Practice-canonical directory references** describing the
-   Practice's own canonical layout (`.agent/skills/`, `.agent/rules/`,
-   `.agent/memory/`, `.agent/state/`, `.agent/practice-core/`, etc.)
-   are portable structural contract, not host leakage — `.agent/`
-   IS the Practice's canonical home per PDR-009 and the PDR-007
-   Core-package contract. Spirit reading: the constraint targets
-   *host-repo* paths (apps/, packages/, src/, docs/...), not
-   references to the Practice's own canonical surface.
-2. **External http(s) citations** to durable third-party material
-   (RFCs, vendor specifications, public standards) are permitted —
-   the constraint targets repo-internal leakage, not citation of
-   external standards.
+- The Practice's own canonical layout (`.agent/skills/`,
+  `.agent/rules/`, `.agent/memory/`, `.agent/state/`,
+  `.agent/practice-core/`) — `.agent/` IS the Practice's canonical
+  home per PDR-009 and the PDR-007 Core-package contract. References
+  to the Practice's own surface are not host leakage.
+- External http(s) citations to durable third-party material
+  (RFCs, vendor specifications, public standards) — these are not
+  host-repo paths and are not in the constraint's domain.
+
+The single permitted outgoing link from any file under
+`practice-core/` is to the stable bridge index at
+`.agent/practice-index.md`.
 
 Existing violations (PDRs 038/039/040/041/042 linking
 `../../../docs/architecture/architectural-decisions/...`; PDR-026
@@ -335,11 +358,10 @@ the post-2026-04-29 retirement model; ~30 §Host context note /
 links repaired (3 PDR-007 stale-name links + 1 machine-local path +
 PDR-011 markdown defect); bridge index references re-pointed to
 "(host adoption)" framing. The structural-enforcement scanner
-required by PDR-038 to prevent recurrence is captured as the next
-follow-on. This constraint is stricter than the prior ADR-124 /
-PDR-007 "Core self-containment" framing — it tightens the seam to a
-single permitted outgoing target plus the two carve-outs above.
-Owner stated 2026-05-01; carve-outs ratified 2026-05-02.
+required by PDR-038 to prevent recurrence is the next follow-on.
+This constraint is stricter than the prior ADR-124 / PDR-007 "Core
+self-containment" framing — it tightens the seam to the single
+permitted outgoing target. Owner stated 2026-05-01.
 
 ## Architecture (Agent Infrastructure)
 
@@ -380,3 +402,6 @@ Build-system entries graduated on 2026-04-24 to
 [pdr-033]: ../../practice-core/decision-records/PDR-033-vendor-doc-review-for-unknown-unknowns.md
 [pdr-034]: ../../practice-core/decision-records/PDR-034-test-fixtures-encode-production-shape.md
 [vendor-pattern]: patterns/vendor-doc-review-for-unknown-unknowns.md
+[n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
+[n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
+[n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md

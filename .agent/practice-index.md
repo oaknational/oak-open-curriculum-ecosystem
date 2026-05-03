@@ -112,6 +112,7 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-162](../docs/architecture/architectural-decisions/162-observability-first.md)                               | Product-observability five-axis model (Observability First) — host-side closure-property bridge between substrate-vs-axis convention (PDR-037) and quality-gate-dismissal application boundary (PDR-025) |
 | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)             | Agent-work Practice phenotype boundary for this repo's local implementation surfaces |
 | [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md)       | Pin GitHub Actions to maintainer-Latest SHA — host-side adoption of portable PDR-040 |
+| [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md)       | Rush-impulse three structural cues — host-side adoption of portable PDR-043 |
 
 ### Practice-Core concept ↔ ADR map
 
@@ -130,8 +131,9 @@ adoption from the Core concept name.
 | ADR-by-reusability (PDR-019) | [ADR-159](../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md) (proven instance) |
 | Substrate-vs-axis-plan categorisation (PDR-037) and quality-gate dismissal application boundary (PDR-025) | [ADR-162](../docs/architecture/architectural-decisions/162-observability-first.md) (closure-property bridge / application-boundary anchor) |
 | Pin to maintainer-Latest, not highest tag (PDR-040) | [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md) |
+| Rush-impulse three structural cues (PDR-043) | [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md) (three-cues paragraph in `principles.md` § Architectural Excellence Over Expediency) |
 | Agent-work Practice phenotype boundary (PDR-035 + Practice/repo split) | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md) |
-| Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint, including the C6 Practice-canonical surface and C7 external http(s) carve-outs ratified 2026-05-02) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side ratification of carve-outs); structural-enforcement scanner per PDR-038 captured as next follow-on |
+| Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side scope statement for the constraint); structural-enforcement scanner per PDR-038 is the next follow-on |
 
 ### Rules cited by Practice Core
 

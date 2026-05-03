@@ -9,8 +9,18 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03
-(Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` /
+**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03
+(Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a`
+session-handoff: corrective consolidation completed — deleted PDR-043
+producer-output + ADR-172 cardinal-rule-extension; renumbered
+rush-impulse pair to PDR-043/ADR-172; stripped carve-out / honest-
+framing / permitted-exception vocabulary from principles.md,
+distilled.md, practice-index.md, ADR README, pending-graduations.md,
+testing-strategy.md, napkin.md per owner reframings: tests + code = one
+practice; no special-case framing of any kind; always strict everywhere
+all the time. 6 skipped test files captured as a remaining
+no-skipped-tests violation pending workstream re-shape. Prior:
+Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` /
 `7402c9` session-handoff: ARC A1 commit `792c2cad` landed — canonical
 smoke harness module + RED skip-arc tests + smoke-context + smoke
 vitest config + plan-body §A1 refresh; 20 files / +1955/-24; full

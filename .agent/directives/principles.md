@@ -47,6 +47,33 @@ When any of these appear in draft output, treat them as a
 question, not a closure. The vocabulary IS the impulse making
 itself visible.
 
+Three structural cues at output time form a cohesive defence
+against the rush impulse, not three separate fences:
+
+1. **Vocabulary trip-list** (above) — when _fast path_, _quick
+   fix_, _land it then refactor_, _defer_, etc. appear in draft
+   output, treat them as a question, not a closure.
+2. **Conditional-discipline check before proposing structure** —
+   before naming a doctrine, rule, or convention candidate, ask:
+   _does this introduce a "case where the rule doesn't apply"?_
+   If yes, the candidate is suspect. The rush impulse reaches
+   for _make the discipline skippable_ or _carve out this case_
+   because fixing the underlying surface feels slower than
+   introducing a conditional. The corrective is _fix the surface_,
+   not _make the discipline contingent._
+3. **First-principles framing question** — when proposing any
+   change, ask: _what would the path look like if there were no
+   turn-budget constraint, no closure pressure, no token-cost
+   concern?_ If the answer differs from the proposed path, the
+   proposed path is rush-shaped — re-reason from the principle
+   answer, not the budget answer.
+
+The cues compose: cue 1 detects the impulse mid-output; cue 2
+blocks its expression in candidate-doctrine shape; cue 3 forces
+the architecturally-correct alternative into view. See ADR-172
+for the host architectural decision and PDR-043 for the portable
+form.
+
 Failure mode: cheap fixes silently kill the diagnostic. The
 genuine signal is usually _the surface is wrong_ — surface
 ergonomics, boundary, or contract. The cheap-fix shape reaches
@@ -60,8 +87,7 @@ Fences accumulate; the underlying generator stays unchanged.
 This principle is the generator every quality-gate fence in the
 repo (`never-disable-checks`, `no-warning-toleration`,
 `replace-don't-bridge`, `dont-break-build-without-fix-plan`,
-`stop inventing optionality`, and adjacent rules) exists to
-defeat.
+`read-before-asking`, and adjacent rules) exists to defeat.
 
 Worked failure-mode example: if a shortcut creates duplication
 across architectural layers, it is not a shortcut — it is a
@@ -390,15 +416,17 @@ paths, setup files) don't apply.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** — never use `as`, `any`, `!`,
-  `Record<string, unknown>`, `{ [key: string]: unknown }`,
-  `Object.*` methods, `Reflect.*` methods, `isObject` type
-  predicates, `z.unknown()` (where a concrete schema exists),
-  `z.record(z.string(), z.unknown())`, or hand-crafted Zod
-  schemas that duplicate generated shapes. They all disable the
-  type system. Preserve type information; never widen. `as const`
-  and `satisfies` are the only permitted exceptions — both are
-  compile-time constraints that narrow without overriding. When
+- **No type widening or destruction** — never use widening
+  casts (`as SomeType`), `any`, `!`, `Record<string, unknown>`,
+  `{ [key: string]: unknown }`, `Object.*` methods, `Reflect.*`
+  methods, `isObject` type predicates, `z.unknown()` (where a
+  concrete schema exists), `z.record(z.string(), z.unknown())`,
+  or hand-crafted Zod schemas that duplicate generated shapes.
+  They all disable the type system by widening or erasing type
+  information. Preserve type information; never widen. The
+  narrowing operators `as const` and `satisfies SomeType` operate
+  at compile time without widening; they tighten types rather
+  than disable them, and so are not in this rule's scope. When
   using external libraries, prefer official library types and
   error classes over local `*Like` shapes.
 - **`unknown` is type destruction** — `unknown`, `z.unknown()`,
