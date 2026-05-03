@@ -2,17 +2,20 @@
 name: "[Plan Title]"
 overview: "[One-line scope description]"
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): [Describe tests to write]. Tests MUST fail."
+  - id: ws1-cycle-1
+    content: "WS1 cycle 1: [test name] + [product code that makes it pass]. One commit. Tree green at end."
     status: pending
-  - id: ws2-green
-    content: "WS2 (GREEN): [Describe implementation]. All tests MUST pass."
+  - id: ws1-cycle-2
+    content: "WS1 cycle 2: [next test+code pair]. One commit. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): [Describe documentation, TSDoc, NL guidance, README updates]."
+  - id: ws2-cycle-1
+    content: "WS2 cycle 1: [test name] + [product code]. One commit. Tree green at end."
     status: pending
-  - id: ws4-quality-gates
-    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub)."
+  - id: ws3-doc-propagation
+    content: "WS3: TSDoc, README, NL guidance, ADR/directive updates for landed behaviour."
+    status: pending
+  - id: ws4-quality-gates-final
+    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub) on the integrated delivery."
     status: pending
   - id: ws5-adversarial-review
     content: "WS5: Adversarial specialist reviews. Document findings."
@@ -22,6 +25,21 @@ todos:
     status: pending
 isProject: false
 ---
+
+<!-- TDD shape (mandatory): every WS that lands product code is a
+     SEQUENCE of test+code CYCLES. Each cycle is one commit
+     containing the failing test + the product code that makes it
+     pass + any refactor — landed together. Tests and product code
+     never separate across commits. Higher-level tests (integration,
+     E2E) often need multiple lower-level cycles first; sequence
+     them so each commit ends with all tests passing. The
+     ws*-cycle-N todo IDs above are the unit of landing — replace
+     the example IDs with the real cycles for this plan and add
+     more rows as needed.
+
+     See .agent/plans/templates/components/tdd-phases.md for the
+     cycle definition and .agent/directives/testing-strategy.md
+     §"TDD = test + product code as PAIRS" for the directive. -->
 
 <!-- After copying this template, adjust component reference paths.
      From templates/ the paths use ../templates/components/.
@@ -163,39 +181,35 @@ These reviewers ask "is the landed state internally consistent?"
 
 ---
 
-## WS1 — [Test Specification] (RED)
+## WS1 — [Slice 1: short value-bearing description]
 
-All tests MUST FAIL at the end of WS1.
+> See [TDD Cycles component](../templates/components/tdd-phases.md)
 
-> See [TDD Phases component](../templates/components/tdd-phases.md)
+WS1 is a sequence of test+code cycles that together deliver
+[value-bearing slice 1]. Every cycle is one commit containing the
+failing test, the product code that makes it pass, and any
+refactor. The tree is green at the end of every commit.
 
-### 1.1: [Test Group]
+### Cycle 1.1: [Cycle name — what behaviour this cycle delivers]
 
-**Tests**:
+**Test** (Red):
 
 - `[test-file].unit.test.ts` — [What it asserts]
-- `[test-file].integration.test.ts` — [What it asserts]
 
-**Acceptance Criteria**:
+**Product code** (Green):
 
-1. Tests compile and run
-2. All new tests fail for the expected reason
-3. No existing tests broken
+- `[path/to/file.ts]` — [What changes; the minimal code to green
+  the test]
 
----
+**Refactor** (optional, in the same commit):
 
-## WS2 — [Implementation] (GREEN)
+- [Extract/rename/document changes that keep the test green]
 
-All tests MUST PASS at the end of WS2.
+**Acceptance**:
 
-### 2.1: [Implementation Task]
-
-**File**: `[path/to/file.ts]`
-
-**Changes**:
-
-- [Specific change 1]
-- [Specific change 2]
+1. The test runs and passes
+2. The whole tree is green (`pnpm test` exits 0; no skipped tests)
+3. The commit message names the cycle
 
 **Code Sketch** (include when the approach is known):
 
@@ -210,22 +224,65 @@ All tests MUST PASS at the end of WS2.
 **Deterministic Validation**:
 
 ```bash
-# [What this checks]
-[command]
-# Expected: [result]
+pnpm test --filter [workspace]
+# Expected: exit 0, all tests pass
+
+pnpm test
+# Expected: exit 0, no skipped tests, no failing tests
 ```
+
+### Cycle 1.2: [Next cycle name]
+
+[Same structure as 1.1: Red test, Green product code, Refactor,
+Acceptance, Validation. One commit per cycle.]
 
 ---
 
-## WS3 — [Documentation and Polish] (REFACTOR)
+## WS2 — [Slice 2: short value-bearing description]
+
+WS2 is a sequence of cycles delivering [value-bearing slice 2].
+For higher-level tests (integration, E2E) that need WS1's pieces
+first, sequence the cycles so each commit ends green.
+
+### Cycle 2.1: [E2E or integration cycle name]
+
+**Test** (Red):
+
+- `[test-file].integration.test.ts` or `[test-file].e2e.test.ts`
+  — [What system-level behaviour it asserts]
+
+**Product code** (Green):
+
+- The wiring/composition pieces that turn the test green.
+  If the test requires units that are not yet present, FIRST
+  add them as their own unit cycles in this WS or the prior WS,
+  then this cycle adds the integration/E2E test + the final
+  wiring in one commit.
+
+**Acceptance**:
+
+1. The test runs and passes
+2. The whole tree is green (`pnpm test` exits 0; no skipped tests)
+3. Lower-level tests proving the units are also present
+
+---
+
+## WS3 — Documentation and Cross-Surface Updates
+
+Pure documentation changes (TSDoc, README, ADR/directive prose
+updates) that do not require new product behaviour. These do not
+need test+code cycles because no behaviour changes; they are
+landed alongside the cycles whose behaviour they document, or as
+a final cleanup commit if the documentation is integrative.
 
 ### 3.1: TSDoc and NL guidance
 
-- [Tool descriptions, NL examples, workflow guidance]
+- [Tool descriptions, NL examples, workflow guidance for the
+  landed behaviour]
 
 ### 3.2: Documentation
 
-- [README updates, architecture docs]
+- [README updates, architecture docs, ADR amendments]
 
 ---
 

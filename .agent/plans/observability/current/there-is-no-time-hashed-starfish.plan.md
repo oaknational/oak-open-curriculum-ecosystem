@@ -12,32 +12,47 @@ overview: >
 status: current
 isProject: true
 todos:
-  - id: arc-a1-design-and-red
-    content: "ARC A1: design canonical smoke harness; author RED tests for env-builder, boot-signal parser, lifecycle wrapper; vitest.smoke.config.ts; smoke-context.ts. Reviewer dispatch: test-reviewer, architecture-reviewer-fred, architecture-reviewer-betty, mcp-reviewer."
+  - id: arc-a1-already-landed
+    content: "ARC A1: ALREADY LANDED at commit 792c2cad — canonical smoke harness module + vitest.smoke.config.ts + smoke-context.ts. The 2 skipped tests it left behind (run-smoke.unit.test.ts and run-smoke.integration.test.ts describe.skip blocks) are the cycle-pair starting point for ARC A2/A3 — each ARC A2/A3 cycle MUST unskip its describe block + add the product code that greens it in ONE commit."
+    status: done
+  - id: arc-a2-cycle-local-stub
+    content: "ARC A2 cycle 1: local-stub mode conversion. ONE COMMIT: pure env-builder + smoke-assertions converted to *.smoke.test.ts under smoke-tests/local-stub/ + run-smoke describe.skip for local-stub flipped to describe + tests pass + tree green at end."
     status: pending
-  - id: arc-a2-existing-modes-migration
-    content: "ARC A2: convert local-stub, local-stub-auth, local-live, local-live-auth, remote to new harness; convert smoke-assertions/* to *.smoke.test.ts; retire helpers/environment.ts process.env mutation; every existing pnpm smoke:dev:* still passes."
+  - id: arc-a2-cycle-local-stub-auth
+    content: "ARC A2 cycle 2: local-stub-auth mode conversion. ONE COMMIT: env-builder + auth helpers as test-helper imports + smoke tests + run-smoke unskip for local-stub-auth + tree green at end."
     status: pending
-  - id: arc-a3-no-observability-mode
-    content: "ARC A3: add local-no-observability mode + dev-server-operational.smoke.test.ts; smoke:dev:no-observability script; delete the misclassified e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts; stays RED through ARC B by harness boot-wait timeout."
+  - id: arc-a2-cycle-local-live
+    content: "ARC A2 cycle 3: local-live mode conversion. ONE COMMIT: env-builder + smoke tests + unskip + tree green at end."
+    status: pending
+  - id: arc-a2-cycle-local-live-auth
+    content: "ARC A2 cycle 4: local-live-auth mode conversion. ONE COMMIT: env-builder + smoke tests + unskip + tree green at end."
+    status: pending
+  - id: arc-a2-cycle-remote
+    content: "ARC A2 cycle 5: remote mode conversion. ONE COMMIT: client-side mode + smoke tests + unskip + tree green at end."
+    status: pending
+  - id: arc-a2-cleanup
+    content: "ARC A2 cleanup: ONE COMMIT — retire helpers/environment.ts process.env mutation + delete restoreEnv/captureEnvSnapshot pattern + update smoke:dev:* package.json scripts to invoke the harness CLI. All existing pnpm smoke:dev:* still pass."
+    status: pending
+  - id: arc-a3-no-observability-cycle
+    content: "ARC A3 cycle: ONE COMMIT — local-no-observability mode + dev-server-operational.smoke.test.ts + smoke:dev:no-observability script + delete misclassified e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts. The smoke run is expected to FAIL (the regression-guard's job) until ARC B3 makes it pass; this is acceptable because the test runs and fails on the deterministic boot-failure signal — it is not skipped. ARC B3 lands the product change that greens it as ONE cycle there."
     status: pending
   - id: arc-a4-docs-and-adr
-    content: "ARC A4: ADR canonicalising smoke harness shape (number verified pre-author); testing-strategy.md amendment for *.smoke.test.ts as third vitest category; smoke-tests/README.md operator guide."
+    content: "ARC A4: ADR canonicalising smoke harness shape (number verified pre-author); testing-strategy.md amendment for *.smoke.test.ts as third vitest category; smoke-tests/README.md operator guide. Pure documentation cycle — no test+code pair needed."
     status: pending
   - id: arc-b0-plan-body-corrections
     content: "ARC B0: edit observability-multi-sink-and-fixtures-shape.plan.md applying SentryEnvSchema deletion-timing correction (move to WS5 close), WS4→WS6 bridge removal, ESLint rule authoring as WS6 task, ADR number verification, six Moonlit Drifting Nebula amendments folded into WS slots."
     status: pending
   - id: arc-b1-sentry-node-registry
-    content: "ARC B1 (=WS2): @oaknational/sentry-node atomic rename; SentryMode deleted; FixtureSentryStore→FixtureCaptureStore; ParsedSentryConfig cross-product discriminated union; WS1 RED-arc skip register entries unskip."
+    content: "ARC B1 (=WS2): @oaknational/sentry-node cycle. ONE COMMIT — unskip the 2 skipped tests in packages/libs/sentry-node (config-from-registry.unit.test.ts + runtime-fixture-tee-redaction.unit.test.ts) AND add the product code that greens them: SentryMode deleted; FixtureSentryStore→FixtureCaptureStore; ParsedSentryConfig cross-product discriminated union from SinkRegistry consumption. Tree green at end."
     status: pending
   - id: arc-b2-env-layer
     content: "ARC B2 (=WS3): ObservabilityEnvSchema; warnings channel in resolveEnv Result; @deprecated tag on SentryEnvSchema (NOT deleted); rename-replacement error messages with explicit OBSERVABILITY_FILE_PATH naming."
     status: pending
   - id: arc-b3-http-mcp-rename
-    content: "ARC B3 (=WS4): HTTP MCP atomic rename (env, runtime-config, http-observability, observe-noauth carve-out deletion, sentry-build-environment type signature); logger additionalSinks migration explicit slot; pnpm smoke:dev:no-observability GREEN; core-endpoints.ts NOT touched (WS6 owns it)."
+    content: "ARC B3 (=WS4): HTTP MCP cycle. ONE COMMIT — unskip the skipped test in apps/oak-curriculum-mcp-streamable-http (http-observability.unit.test.ts) AND add the product code that greens it: HTTP MCP atomic rename (env, runtime-config, http-observability, observe-noauth removal, sentry-build-environment type signature); logger additionalSinks migration; pnpm smoke:dev:no-observability goes green here as the broader integration assertion. core-endpoints.ts NOT touched (WS6 owns it). Tree green at end."
     status: pending
   - id: arc-b4-search-cli-rename
-    content: "ARC B4 (=WS5): Search CLI atomic rename; FINAL deletion of packages/core/env/src/schemas/sentry.ts plus orphaned test file."
+    content: "ARC B4 (=WS5): Search CLI cycle. ONE COMMIT — unskip the skipped test in apps/oak-search-cli (cli-observability.unit.test.ts) AND add the product code that greens it: Search CLI atomic rename; FINAL deletion of packages/core/env/src/schemas/sentry.ts plus orphaned test file. Tree green at end."
     status: pending
   - id: arc-b5-server-instrumenter-port
     content: "ARC B5 (=WS6): ServerInstrumenter port + sentry-node implementation; HTTP MCP composition root vendor-import removal (index.ts, server.ts, core-endpoints.ts, scripts/server-harness.ts); AUTHOR no-vendor-observability-import ESLint rule + RuleTester unit tests + plugin registration."
@@ -70,10 +85,42 @@ todos:
 
 # There Is No Time — Hashed Starfish
 
-**Branch**: `feat/eef_exploration` (30 commits ahead of `origin/main`)
+**Branch**: `feat/eef_exploration`
 **Owner**: Jim Cresswell
 **Authoring session**: Pelagic Washing Anchor (claude-code, claude-opus-4-7-1m, `f730bd…`)
-**Status**: APPROVED 2026-05-03 — execution begins ARC A1; coordinating with Misty Ebbing Pier via comms log
+**Status**: ARC A1 LANDED (792c2cad); ARC A2 onwards is the active work, restructured 2026-05-03 as TDD cycle-pairs.
+
+---
+
+## TDD Shape — Cycles, not Phases (restructured 2026-05-03)
+
+This plan was originally authored under the now-deleted multi-commit-TDD
+shape (RED commits separate from GREEN commits, with skipped tests
+spanning multiple commits). That shape violates
+`testing-strategy.md` § "TDD = test + product code as PAIRS" and
+produced 6 skipped tests across the codebase that are now visible as
+no-skipped-tests violations.
+
+**Going forward, every remaining workstream is a CYCLE-PAIR landing**:
+each commit contains a failing test (or an unskip of an already-present
+test) AND the product code that makes it pass — together, in one
+landing. The tree is green at the end of every commit. No commit ends
+with a skipped or failing test.
+
+The ARC A1 RED-arc tests that were previously skipped are paired in
+the YAML todos with the ARC A2/A3 cycles that unskip and green them.
+The ARC B WS1 RED tests in `observability-multi-sink-and-fixtures-shape.plan.md`
+are similarly paired with ARC B1-B5 cycles. See the YAML todo
+descriptions for the explicit pairings.
+
+References in the body below to "WS1 RED-arc skip register",
+"SKIP-UNTIL-WSn / SKIP-UNTIL-An markers", "structural-enforcement
+scanner workstream", "named-deferral discipline", or "audit-at-resolver-
+landing" are obsolete — they pointed at the deleted multi-commit-TDD-
+skip-register PDR/ADR/pattern infrastructure. Treat them as removed.
+The substance (file paths, behaviour specifications, reviewer
+dispatches) is preserved; the cycle-pair shape replaces the
+multi-commit shape.
 
 ---
 
@@ -154,7 +201,7 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 - Read existing modes in full: `apps/oak-curriculum-mcp-streamable-http/smoke-tests/{smoke-suite.ts, helpers/environment.ts, helpers/local-server.ts, helpers/server-lifecycle.ts, modes/local-stub.ts, modes/local-stub-env.ts, modes/local-live.ts, modes/local-stub-auth.ts, modes/local-live-auth.ts, modes/remote.ts}`. Capture every assertion the existing tsx-scripted harness makes.
 - Author the canonical harness shape under `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/` (NEW). Per Misty Ebbing Pier's recon (comms event `claude-ba3961-misty-task-1-harness-recon-reply`) NO existing mode spawns `pnpm dev` as a child — all four `local-*` modes already boot in-process via `createApp + app.listen` (`smoke-tests/local-server.ts:49-82`). The canonical harness is therefore **uniform in-process for all modes**; the `pnpm dev` CLI surface remains an operational concern, not a CI gate. Modes that historically required `pnpm dev`-style env scrubbing apply that scrubbing inside their pure env-builder (the design shift that supersedes the prior child-spawn-or-in-process branching). The module decomposes as: `types.ts` (vendor-neutral public types: `SmokeModeConfig`, `BootOutcome`, `BootServer`, `SpawnVitest`, `Clock`); `boot-outcome.ts` (pure classifier — `envErrorOutcome`/`crashedOutcome`/`timeoutOutcome`/`listeningOutcome`/`isListening`); `run-smoke.ts` (orchestrator: build env via mode's pure env-builder → call DI-injected `bootServer` with `AbortSignal.timeout` enforcing `bootTimeoutMs` → on `kind === 'listening'` call DI-injected `spawnVitest` with the bound URL injected as `SMOKE_BASE_URL` → invoke cleanup on every termination path → return structured `SmokeRunResult`); `boot-server.ts` (production wirings — `createInProcessBootServer` for the four `local-*` modes; `createRemoteBootServer` for the `remote` mode resolving directly to a `listening`-shaped outcome from a mode-injected URL, keeping the orchestrator branch-free); `spawn-vitest.ts` (production `child_process.spawn` wiring; `child.on('error')` resolves with `exitCode: 1` so the orchestrator's "does not throw on test failure" contract holds); `modes.ts` (mode registry — empty at A1 landing, populated by A2/A3); `cli.ts` (tsx entrypoint — only permitted process-level composition root for ambient env reads).
 - Author `vitest.smoke.config.ts` at workspace root: standalone `defineConfig` (NOT extending `baseE2EConfig`, because Vitest's `mergeConfig` concatenates `setupFiles` arrays — extending would leave the no-network setup file active, breaking smoke tests that legitimately make network calls); `include: ['smoke-tests/**/*.smoke.test.ts']`; reads `process.env.SMOKE_BASE_URL` once at config load (composition-root permission per `testing-strategy.md` §"Smoke composition roots may read ambient env") and provides it to tests via Vitest's typed `provide` mechanism; `passWithNoTests: false` so silently-empty smoke runs cannot claim success. `vitest.smoke.config.ts` is added to the `eslint.config.ts` smoke composition-root exemption list alongside `esbuild.config.ts`, `src/server.ts`, `src/index.ts`, `scripts/**/*.ts`. ADR-170 amendment scheduled in A4 (number verified 2026-05-03).
-- Tests for the harness itself: `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts` (boot-outcome classifier — GREEN at A1 landing; mode-registry empty-state path — GREEN at A1 landing; per-mode obligations as `describe.skip` blocks with file-header `SKIP-UNTIL-A2` / `SKIP-UNTIL-A3` markers); `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts` (orchestration via DI fakes — every `BootOutcome` variant + non-zero spawn exit + `vitestConfigPath` threading; GREEN at A1 landing; A2 dispatch obligations as `describe.skip` blocks with `SKIP-UNTIL-A2` marker). Per the WS1 RED-arc skip register convention (napkin §RED-arc skip register entries 5+6), ARC A2/A3 atomic-landing-commits MUST flip `describe.skip` → `describe` once `modes.ts` registers the named modes; the assertions turn GREEN deterministically from registry change alone, no test-body edits required. The structural-enforcement scanner future plan (the napkin entry alongside the PDR-038 scanner) covers the audit-gate.
+- Tests for the harness itself: `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts` (boot-outcome classifier passing at A1 landing; mode-registry empty-state path passing at A1 landing; per-mode obligations are present as `describe.skip` blocks left behind by the prior multi-commit-TDD shape); `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts` (orchestration via DI fakes covering every `BootOutcome` variant + non-zero spawn exit + `vitestConfigPath` threading passing at A1 landing; A2 dispatch obligations present as `describe.skip` blocks). These skipped blocks are the violations captured in `pending-graduations.md` as no-skipped-tests violations; ARC A2/A3 cycle-pairs unskip each block in the SAME commit that adds the product code (the mode registration in `modes.ts`) which greens the test. Test+code together, one commit each. No commit ends with a skipped or failing test.
 - Add `vitest.config.ts` workspace include `'smoke-tests/**/*.integration.test.ts'` so the harness orchestration tests run in the workspace test lane (was previously `smoke-tests/**/*.unit.test.ts` only).
 - Add `SMOKE_BASE_URL` consumption helper at `smoke-tests/test-helpers/smoke-context.ts` (NEW): `getSmokeBaseUrl()` calls Vitest's `inject('smokeBaseUrl')` with a `declare module 'vitest' { interface ProvidedContext { smokeBaseUrl: string } }` augmentation. Test files NEVER touch `process.env`.
 
@@ -162,14 +209,14 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 
 **Acceptance** (refined 2026-05-03 by Prismatic Illuminating Eclipse — replaces the original "exits non-zero with expected RED messages" framing per the recon-driven design shift; surface acknowledgement at comms event `claude-7402c9-prismatic-a1-acceptance-criterion-shift`; endorsed by Woodland Sprouting Glade at `claude-978cba-woodland-a1-acceptance-shift-endorsement-and-coordination`):
 
-- `pnpm exec vitest run smoke-tests/harness/` exits 0 with the expected GREEN/skip distribution: orchestration via DI fakes + boot-outcome classifier + empty-registry path are GREEN; per-mode A2/A3 obligations are skipped with `SKIP-UNTIL-A2` / `SKIP-UNTIL-A3` headers (matching the WS1 RED-arc skip register pattern). The audit-trail mechanism mirrors WS1: napkin §RED-arc skip register entries name each skip and the unskip commit; ARC A2 / ARC A3 atomic-landing-commits include the unskip flips.
+- `pnpm exec vitest run smoke-tests/harness/` exits 0 (note: A1 already landed; this acceptance is historical). The skipped per-mode blocks left behind by A1's multi-commit shape are the violations now captured in `pending-graduations.md`; each ARC A2 / ARC A3 cycle-pair commit unskips its block AND adds the mode registration that greens it, in one landing. After A2/A3 complete, no skipped tests remain in this surface.
 - Workspace `pnpm test` for `@oaknational/oak-curriculum-mcp-streamable-http` exits 0 (trunk-green discipline preserved).
 - New harness module exports compile under `pnpm type-check`.
 - `pnpm lint` exits 0 with the smoke-composition-root exemption added for `vitest.smoke.config.ts`.
 - No edits to existing modes yet (A2 owns those).
 - Reviewer findings either implemented or rejected with written rationale.
 
-### A2 — GREEN: Existing-modes migration
+### A2 — Existing-modes migration (cycle-pair landings, one mode per commit)
 
 **Tasks** (one mode at a time, each commit individually type-checks):
 
@@ -200,7 +247,7 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 - Repo-root `package.json` adds `smoke:dev:no-observability` to the turbo dispatch.
 - Repo-root `package.json` `check` script (the PR-check pipeline lane) MUST be updated to invoke `smoke:dev:no-observability` alongside `smoke:dev:stub`. Without this update the regression-guard does not run in PR-check.
 - DELETE `apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts` (the test file the owner identified as misclassified).
-- Update napkin §RED-arc skip register entry naming the regression-guard's new home (the WS1→WS2 trip-wire shifts: it stays the boot-failure of `pnpm dev` under the legacy `SENTRY_MODE` flow; the harness reports the failure).
+- The boot-failure regression-guard remains a real failing assertion — `pnpm dev` under the legacy `SENTRY_MODE` flow fails to boot, the harness reports the failure, and the test correctly red. ARC B3 (=WS4) is the cycle-pair commit that unskips the matching observability-side test AND adds the product code that greens it.
 
 **Reviewer dispatch**: `test-reviewer` (validate the mode + smoke test shape against testing-strategy + PDR-039), `mcp-reviewer` (boot-path semantics), `code-reviewer` gateway, **mandatory-always** `docs-adr-reviewer` + `onboarding-reviewer` (testing infrastructure is Practice surface).
 
@@ -271,7 +318,7 @@ The plan body at `.agent/plans/observability/current/observability-multi-sink-an
 
 ### B1 (= WS2) — `@oaknational/sentry-node` registry consumption
 
-Per existing plan body §WS2. Atomic rename: delete `SentryMode` type; rewrite `config.ts`, `runtime.ts`, `runtime-sinks.ts` to consume `SinkRegistry`; rename `FixtureSentryStore` → `FixtureCaptureStore`, `FixtureSentryCapture*` → `FixtureCaptureRecord*`; recompose `ParsedSentryConfig` discriminated union from `(sinks.includes('sentry'), fixtures)` cross-product into `{ kind: 'sentry-disabled' | 'sentry-live' | 'sentry-live-with-tee' | 'fixture-only' }`. WS1 RED-arc skip register entries 1 and 2 unskip in this commit.
+Per existing plan body §WS2 (now restructured as a cycle-pair). One commit: unskip the 2 skipped tests in `packages/libs/sentry-node` (`config-from-registry.unit.test.ts` + `runtime-fixture-tee-redaction.unit.test.ts`) AND add the product code that greens them — atomic rename: delete `SentryMode` type; rewrite `config.ts`, `runtime.ts`, `runtime-sinks.ts` to consume `SinkRegistry`; rename `FixtureSentryStore` → `FixtureCaptureStore`, `FixtureSentryCapture*` → `FixtureCaptureRecord*`; recompose `ParsedSentryConfig` discriminated union from `(sinks.includes('sentry'), fixtures)` cross-product into `{ kind: 'sentry-disabled' | 'sentry-live' | 'sentry-live-with-tee' | 'fixture-only' }`. Tree green at end.
 
 **Reviewer dispatch**: `type-reviewer` (discriminated-union cross-product correctness; no `as`/`!`/`unknown`), `sentry-reviewer` (vendor semantics preserved; redaction barrier intact), `test-reviewer` (RED→GREEN signal; mocks remain simple), `code-reviewer` gateway, **mandatory-always** `docs-adr-reviewer` + `onboarding-reviewer` (TSDoc on every renamed export).
 

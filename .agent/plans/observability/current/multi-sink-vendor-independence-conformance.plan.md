@@ -16,15 +16,15 @@ blocked_on:
   - "observability-events-workspace.plan.md (emissions need schemas before persistence can be asserted — 2026-04-20: events-workspace is beta-gate, which makes WS2+ (emission-persistence test) beta-gate too; WS1 carve-out (no-vendor-observability-import ESLint rule) lands in alpha scope per the maximisation plan's restructure Phase 5 carve-out)"
 release_gate: "WS1 carve-out alpha; WS2+ emission-persistence beta"
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): emission-persistence integration test + no-vendor-observability-import RuleTester cases. Both fail initially."
+  - id: ws1-cycle-eslint-rule
+    content: "WS1 cycle 1: no-vendor-observability-import ESLint rule. ONE COMMIT — RuleTester unit tests + the rule implementation + plugin registration + root config wire-up. Allowlist contains exactly the adapter implementation file. Tree green at end."
     status: pending
     priority: next
-  - id: ws2-green
-    content: "WS2 (GREEN): emission-persistence harness + ESLint rule implementation; both test surfaces pass."
+  - id: ws1-cycle-emission-persistence
+    content: "WS1 cycle 2: emission-persistence integration test. ONE COMMIT — the integration test that runs the MCP server + widget + Search CLI in OBSERVABILITY_SINKS=[] mode and asserts structural event information persists via stdout/err with no loss beyond the network hop, AND the emission-persistence harness/wiring that makes it pass. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): document both tests in ADR-162 Enforcement section; runbook for on-failure triage."
+  - id: ws2-docs
+    content: "WS2 (docs): document both tests in ADR-162 Enforcement section; runbook for on-failure triage. Pure documentation cycle — no test+code pair needed."
     status: pending
   - id: ws4-quality-gates
     content: "WS4: pnpm check exit 0; ESLint rule runs in CI at warn; emission-persistence test runs in deploy pipeline (not PR check per ADR-161 unless network-free)."

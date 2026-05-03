@@ -23,22 +23,22 @@ todos:
     content: "WS0 (PRELUDE): copy this plan into .agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md; archive the wrong-shaped predecessor (local-dev-sentry-boundary-regression-investigation) and the superseded future-plan (observability-config-coherence) to archive/superseded/ with single-line linking notes; update active-plans index."
     status: done
   - id: ws1-red-types-and-regression-guard
-    content: "WS1 (RED): author OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES Zod schema + SinkRegistry type + fixture-as-tee fan-out + cross-field superRefine in @oaknational/observability and @oaknational/env. Author the outermost regression-guard E2E (`pnpm dev boots clean with no observability env vars`) and per-layer RED tests. Verify build-time orthogonality assumption by reading sentry-build-environment.ts end-to-end. All tests fail for the right reasons."
+    content: "WS1: ALREADY LANDED at commit a3a0222a — OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES Zod schema + SinkRegistry type + fixture-as-tee fan-out + cross-field superRefine in @oaknational/observability and @oaknational/env + outermost regression-guard E2E + per-layer tests. WS1 was committed under the now-deleted multi-commit-TDD shape and left 4 skipped tests in the tree (config-from-registry.unit.test.ts, runtime-fixture-tee-redaction.unit.test.ts, http-observability.unit.test.ts, cli-observability.unit.test.ts). Each of WS2/WS4/WS5 below is a CYCLE-PAIR commit that unskips the relevant test(s) AND adds the product code that greens them — together, in ONE landing."
     status: done
-  - id: ws2-green-sentry-node
-    content: "WS2 (GREEN): rewrite @oaknational/sentry-node internals to consume SinkRegistry. Delete SentryMode type. Rename FixtureSentryStore → FixtureCaptureStore (vendor-neutral). Recompose ParsedSentryConfig discriminated union from cross-product of (sinks.includes('sentry'), fixtures). All sentry-node tests pass."
+  - id: ws2-cycle-sentry-node-registry
+    content: "WS2 cycle: @oaknational/sentry-node SinkRegistry consumption. ONE COMMIT — unskip config-from-registry.unit.test.ts AND runtime-fixture-tee-redaction.unit.test.ts AND add the product code that greens them: rewrite sentry-node internals to consume SinkRegistry; delete SentryMode type; rename FixtureSentryStore → FixtureCaptureStore (vendor-neutral); recompose ParsedSentryConfig discriminated union from cross-product of (sinks.includes('sentry'), fixtures). Tree green at end."
     status: pending
-  - id: ws3-green-env-layer
-    content: "WS3 (GREEN): ship ObservabilityEnvSchema with sinks + fixtures + locality+DSN superRefine (file-sink-config-required-when-file-in-sinks names OBSERVABILITY_FILE_PATH explicitly). SinkRegistry placement at packages/core/observability/src/sink-registry.ts ratified (deviation from originally-planned types.ts location supports tree-shaking and clean export surface). Add @deprecated tag to SentryEnvSchema (NOT deleted at WS3; deletion deferred to WS5 close per dont-break-build-without-fix-plan — both apps still consume it until WS4/WS5 migrate). Add warnings field to resolveEnv Result. Hard error on legacy SENTRY_MODE with rename-replacement message. Fold MCP_LOGGER_FILE_* into the registry (file-sink as registry entry); old MCP_LOGGER_* env vars rejected. @oaknational/env tests pass."
+  - id: ws3-cycle-env-layer
+    content: "WS3 cycle: @oaknational/env / @oaknational/env-resolution. ONE COMMIT (or several smaller cycles if the env-layer slice is too big to land at once) — write the env-layer tests + ship the product code that greens them: ObservabilityEnvSchema with sinks + fixtures + locality+DSN superRefine (file-sink-config-required-when-file-in-sinks names OBSERVABILITY_FILE_PATH explicitly); SinkRegistry placement at packages/core/observability/src/sink-registry.ts; @deprecated tag on SentryEnvSchema (NOT deleted yet — deletion lands in WS5 because both apps still consume it until WS4/WS5 migrate); warnings field added to resolveEnv Result; hard error on legacy SENTRY_MODE with rename-replacement message; MCP_LOGGER_FILE_* folded into the registry (file-sink as registry entry); old MCP_LOGGER_* env vars rejected. Tree green at end of every commit (split into smaller cycles if a single commit is too large)."
     status: pending
-  - id: ws4-green-http-app-atomic-rename
-    content: "WS4 (GREEN): atomic rename across HTTP MCP server — env.ts, runtime-config.ts, observability/http-observability.ts (remove additionalSinks parallel mechanism), operations/development/http-dev-contract.ts (delete observe-noauth carve-out), build-scripts/sentry-build-environment.ts (drop SENTRY_MODE from inherited SentryConfigEnvironment shape), smoke-tests/modes/local-stub-env.ts, .env.example. WS4 does NOT touch app/core-endpoints.ts (WS6 owns composition-root vendor-import removal in full per replace-don't-bridge). Logger fan-out migration (sink-config.ts + unified-logger.ts) lands in this WS slice with completion gate, not just critical-files mention. The smoke regression-guard `pnpm smoke:dev:no-observability` (authored under ARC A3 of there-is-no-time-hashed-starfish.plan.md) goes GREEN at this commit."
+  - id: ws4-cycle-http-app-atomic-rename
+    content: "WS4 cycle: HTTP MCP atomic rename. ONE COMMIT — unskip http-observability.unit.test.ts AND add the product code that greens it: atomic rename across env.ts, runtime-config.ts, observability/http-observability.ts (remove additionalSinks parallel mechanism), operations/development/http-dev-contract.ts (delete observe-noauth special case), build-scripts/sentry-build-environment.ts (drop SENTRY_MODE from inherited SentryConfigEnvironment shape), smoke-tests/modes/local-stub-env.ts, .env.example. WS4 does NOT touch app/core-endpoints.ts (WS6 owns composition-root vendor-import removal in full per replace-don't-bridge). Logger fan-out migration (sink-config.ts + unified-logger.ts) lands in this WS slice with completion gate. The smoke regression-guard pnpm smoke:dev:no-observability goes green at this commit. Tree green at end."
     status: pending
-  - id: ws5-green-search-cli-atomic-rename
-    content: "WS5 (GREEN): atomic rename across Search CLI — observability/cli-observability.ts, bin/oaksearch.ts, src/lib/env.ts (+ tests), src/lib/logger.ts (registerAdditionalSink path), .env.example. FINAL acts of WS5: delete packages/core/env/src/schemas/sentry.ts AND delete packages/core/env/tests/schemas/sentry.unit.test.ts (orphaned by the rename). After WS5 close grep -rn 'SentryEnvSchema|SentryMode' packages/ returns zero matches."
+  - id: ws5-cycle-search-cli-atomic-rename
+    content: "WS5 cycle: Search CLI atomic rename. ONE COMMIT — unskip cli-observability.unit.test.ts AND add the product code that greens it: atomic rename across observability/cli-observability.ts, bin/oaksearch.ts, src/lib/env.ts (+ tests), src/lib/logger.ts (registerAdditionalSink path), .env.example. FINAL acts of WS5 (in the same commit): delete packages/core/env/src/schemas/sentry.ts AND delete packages/core/env/tests/schemas/sentry.unit.test.ts (orphaned by the rename). After WS5 close grep -rn 'SentryEnvSchema|SentryMode' packages/ returns zero matches. Tree green at end."
     status: pending
-  - id: ws6-green-server-instrumenter-port
-    content: "WS6 (GREEN): introduce ServerInstrumenter port in @oaknational/observability; sentry-node implements it; HTTP MCP composition root consumes injected port (removes wrapMcpServerWithSentry + setupExpressErrorHandler direct vendor imports across index.ts, server.ts, app/core-endpoints.ts, scripts/server-harness.ts). AUTHOR the no-vendor-observability-import ESLint rule (rule does not exist today; architecture-reviewer-betty Q4 falsification): packages/core/oak-eslint/src/rules/no-vendor-observability-import.ts + RuleTester unit tests + plugin registration in packages/core/oak-eslint/src/plugin.ts + root ESLint config wire-up. Allowlist contains exactly one entry: packages/libs/sentry-node/src/server-instrumenter.ts. ADR-162 §Open Question on direct vendor imports closed."
+  - id: ws6-cycle-server-instrumenter-port
+    content: "WS6 cycle: ServerInstrumenter port + ESLint rule. ONE COMMIT — write the port test + the port implementation + the ESLint rule's RuleTester unit tests + the rule itself + plugin registration + root ESLint config wire-up. Substance: introduce ServerInstrumenter port in @oaknational/observability; sentry-node implements it; HTTP MCP composition root consumes injected port (removes wrapMcpServerWithSentry + setupExpressErrorHandler direct vendor imports across index.ts, server.ts, app/core-endpoints.ts, scripts/server-harness.ts); AUTHOR the no-vendor-observability-import ESLint rule at packages/core/oak-eslint/src/rules/no-vendor-observability-import.ts + RuleTester tests + plugin registration in packages/core/oak-eslint/src/plugin.ts + root ESLint config wire-up; allowlist contains exactly one entry: packages/libs/sentry-node/src/server-instrumenter.ts; ADR-162 §Open Question on direct vendor imports closed. If the slice is too large for one commit, split into smaller cycles (port-test+port; rule-test+rule; composition-root-test+composition-root) and land each green. Tree green at end of every commit."
     status: pending
   - id: ws7-conformance-plan-body-update
     content: "WS7: edit body of multi-sink-vendor-independence-conformance.plan.md to reference OBSERVABILITY_SINKS=[] in place of SENTRY_MODE=off; cite no-vendor-observability-import as LANDED (not planned) per WS6; update .agent/plans/observability/high-level-observability-plan.md substrate inventory."
@@ -62,11 +62,39 @@ todos:
 
 # Observability Multi-Sink and Fixture Orthogonality
 
-**Last Updated**: 2026-05-03 (ARC B0 corrections applied by Woodland Sprouting Glade)
-**Status**: 🟡 IN PROGRESS — WS0 (`e1840631`) and WS1 RED phase
-(`a3a0222a`) landed; ARC B0 corrections from architecture-reviewer-betty
-findings Q2-Q6 applied 2026-05-03; WS2 (sentry-node `SinkRegistry`
-consumption) is the next-session landing target
+**Last Updated**: 2026-05-03 (TDD shape restructured to cycle-pairs)
+**Status**: 🟡 IN PROGRESS — WS0 (`e1840631`) and WS1 (`a3a0222a`)
+landed; ARC B0 corrections from architecture-reviewer-betty findings
+Q2-Q6 applied 2026-05-03; WS2 (sentry-node SinkRegistry consumption,
+restructured as a cycle-pair commit that unskips and greens the 2
+sentry-node tests in one landing) is the next-session landing target.
+
+## TDD Shape — Cycles, not Phases (restructured 2026-05-03)
+
+This plan was originally authored under the now-deleted multi-commit-
+TDD shape (RED commit followed by separate GREEN commits, with skipped
+tests left in the tree across multiple commits). That shape violates
+`testing-strategy.md` § "TDD = test + product code as PAIRS" and
+produced 4 of the 6 skipped tests now visible as no-skipped-tests
+violations across the codebase (config-from-registry.unit.test.ts;
+runtime-fixture-tee-redaction.unit.test.ts; http-observability.unit.test.ts;
+cli-observability.unit.test.ts).
+
+Going forward, every remaining workstream is a CYCLE-PAIR landing:
+each commit unskips the relevant test(s) AND adds the product code
+that makes them pass — together, in ONE landing. The tree is green
+at the end of every commit. No commit ends with a skipped or failing
+test. WS3 and WS6 may need to split into smaller sub-cycles if their
+slice is too large for a single commit; the cycle-per-commit
+discipline holds at every level.
+
+References below to "WS1 RED phase", "GREEN" suffixes on later WSs,
+"named-deferral discipline", "structural-enforcement scanner
+workstream", "RED-arc skip register", or "SKIP-UNTIL-WSn markers" are
+obsolete — they pointed at the deleted multi-commit-TDD-skip-register
+infrastructure. Treat them as removed. Substance (file paths,
+behaviour specifications, reviewer dispatches) is preserved; the
+cycle-pair shape replaces the multi-commit shape.
 **Lifecycle target**: `current/` → `active/` on WS2 commit (deferred from
 WS1; the RED-only WS1 was committed in `current/` because the executable
 work is now multi-session and the `active/` move is more meaningful when

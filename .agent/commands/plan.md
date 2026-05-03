@@ -68,12 +68,23 @@ Every strategic plan MUST define:
 Every executable plan MUST have:
 
 1. **YAML frontmatter** with machine-readable todos (id, content, status)
-2. **TDD phase structure** — RED (tests first, must fail), GREEN
-   (minimal implementation), REFACTOR (docs, cleanup)
-3. **Quality gates** after each phase — reference the
+2. **TDD cycles as the unit of landing** — every workstream is a
+   sequence of test+product-code PAIRS. Each cycle (Red → Green →
+   Refactor) is one landing unit (one commit): the failing test, the
+   product code that makes it pass, and any refactor land together.
+   Tests must NEVER be committed ahead of the product code that greens
+   them; product code must NEVER be committed ahead of the tests that
+   prove it. Both lag-shapes violate testing-strategy.md and produce
+   skipped or failing tests in the tree. Apply this at every level —
+   unit, integration, E2E — and where a higher-level test requires
+   several lower-level cycles, sequence those cycles and finish with
+   the commit that adds the final piece needed to green the
+   higher-level test. Every commit ends with all tests passing.
+3. **Quality gates** after every cycle — reference the
    quality-gates component (`.agent/plans/templates/components/quality-gates.md`)
 4. **Acceptance criteria** for every task — specific, checkable,
-   with deterministic validation commands
+   with deterministic validation commands. Acceptance for a TDD cycle
+   includes "all tests passing at every level" as a non-negotiable.
 5. **Risk assessment** — what could go wrong and how to mitigate
 6. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md

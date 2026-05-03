@@ -171,12 +171,14 @@ this way produces cleaner boundaries and simpler classification.
 ### Code Design and Architectural Principles
 
 - **TDD** - ALWAYS use TDD at ALL levels — unit, integration, AND
-  E2E. Write tests **FIRST**. Red (run the test to _prove it
-  fails_), Green (run the test to prove it passes, _because
-  product code exists now_), Refactor (improve the product code
-  implementation, now that the _behaviour_ at the interface will
-  remain proven by the test). If tests lag behind code at ANY
-  level, TDD was not followed.
+  E2E. Each cycle is one landing unit (one commit): write the
+  failing test (Red), write the product code that makes it pass
+  (Green), refactor with the test as the safety net (Refactor) —
+  all in the same commit. Test and product code travel together,
+  never separated across commits. If a test cannot be greened in
+  a single landing, the slice is too big — break it into smaller
+  test+code pairs. If tests lag behind code, or land ahead of
+  the code that greens them, TDD was not followed.
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards
   compatibility** - replace old approaches with new approaches,
