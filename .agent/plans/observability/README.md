@@ -103,16 +103,29 @@ dated and informs either an ADR or a specific plan.
 
 Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-plan.md):
 
-- [`current/observability-multi-sink-and-fixtures-shape.plan.md`](./current/observability-multi-sink-and-fixtures-shape.plan.md)
+- [`current/fix-dev-boot-release-resolution.plan.md`](./current/fix-dev-boot-release-resolution.plan.md)
+  — **BLOCKING — primary unblocker.** Surgical bug fix in
+  `packages/core/build-metadata/`: `resolveDevelopmentRelease` falls
+  through to a `local-dev` placeholder when both `VERCEL_BRANCH_URL`
+  and `VERCEL_GIT_COMMIT_SHA` are absent in development; preview and
+  production keep their hard-fail. ~10 lines product code plus paired
+  unit tests.
+- [`current/replace-sentry-mode-with-observability-sinks.plan.md`](./current/replace-sentry-mode-with-observability-sinks.plan.md)
   — Multi-sink + fixture orthogonality. Replaces `SENTRY_MODE` with
   orthogonal `OBSERVABILITY_SINKS` (typed list) +
-  `OBSERVABILITY_FIXTURES` (boolean tee). Closes ADR-162's Open
-  Question on direct vendor imports; foundation for
+  `OBSERVABILITY_FIXTURES` (boolean tee). Single atomic landing of
+  the producer (sentry-node) and all consumers (env package, HTTP MCP
+  app, Search CLI app) per Tidal Flowing Reef's cascade analysis;
+  cycles 2 (ADR-171) and 3 (READMEs + .env.example) are doc-only and
+  parallel-safe with cycle 1. Closes ADR-162's Open Question on
+  direct vendor imports; foundation for
   `multi-sink-vendor-independence-conformance.plan.md` and the
   three-sink topology (Sentry today, warehouse + PostHog post-MVP).
-  Worked instance of `principles.md § Architectural Excellence Over
-  Expediency` (graduated 2026-05-02). Authors new ADR-165 plus
-  amendments to ADR-116/143/162/163. Supersedes
+  Replaces the damaged
+  `observability-multi-sink-and-fixtures-shape.plan.md` (archived as
+  superseded 2026-05-03; its producer-first sequencing reintroduced
+  the multi-commit-TDD-skip-register pattern owner deleted in
+  `60b9ff4c`). Also supersedes
   `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
   and
   `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`.

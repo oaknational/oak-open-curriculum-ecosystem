@@ -40,10 +40,15 @@ todos:
 # N-Agent Collaboration Experiments
 
 **Last Updated**: 2026-05-03
-**Status**: 🟢 DECISION-COMPLETE / E1 ACTIVE
+**Status**: 🟢 DECISION-COMPLETE / **E1 CLOSED 2026-05-03**; E6 next
 **Scope**: validate or refute the candidate primitives of the N-agent
 collaboration hypothesis in parallel with real work on active threads.
-**Lifecycle**: `current/` — queued and ready, E1 active.
+**Lifecycle**: `current/` — queued and ready. E1 closed
+2026-05-03 by owner direction; closure write-up at
+`.agent/prompts/agentic-engineering/collaboration/experiments/E1/closure.md`.
+E6 (arc-level first-question application) is the next hypothesis;
+prompts and discipline updates not yet authored. E2-E5 remain queued
+opportunistic.
 
 ---
 
@@ -116,7 +121,7 @@ for the hypothesis. It does not govern:
 
 | Decision | Resolution |
 |---|---|
-| Activation order | E1 active now (prompts authored). E2-E5 queued; activated only when work produces their target conditions. |
+| Activation order | E1 ran across multiple agent-pairings 2026-05-03 and closed by owner direction; closure write-up at `.agent/prompts/agentic-engineering/collaboration/experiments/E1/closure.md`. E6 (arc-level first-question application) is the next hypothesis. E2-E5 remain queued; activated only when work produces their target conditions. |
 | E1 scope | Observe P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction during ARC A1 + ARC B0 work. |
 | Capture mechanism | `[E1]`-tagged napkin entries per session, structured surprise format, classified per falsification-criteria. |
 | Per-session analysis | At session-close, the agent classifies each observation as falsifying / weakening / strengthening which primitive. |
@@ -134,7 +139,8 @@ the structure stands.
 
 | ID | Targets | Status | When to run |
 |---|---|---|---|
-| **E1** | P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction, **P11 housekeeping ownership** (added 2026-05-03) | **active** | every session on observability-sentry-otel until E1 closes |
+| **E1** | P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction, **P11 housekeeping ownership** (added 2026-05-03) | **CLOSED 2026-05-03** | ran across Pelagic+Misty / Woodland+Prismatic / Salty+Tidal pairings; primitives confirmed; closure at `experiments/E1/closure.md` |
+| **E6** | arc-level first-question application; principle-vs-plan-following at multi-session arc scope | **next** | activates when prompts and discipline updates land; carries the lesson E1 surfaced as the separate concern (coordination is sound; arc-level principle re-application is the bottleneck) |
 | E2 | P5 directional context, cure (vi) wall-clock authority | queued | activates when **(a)** cure (vi) wall-clock authority accumulates at least one further weakening observation in an E1 session (current state: twice-witnessed-as-failure-mode 2026-05-03 morning, both as polling-discipline failures, neither as deliberate timestamp drift), OR **(b)** a session is explicitly scoped to validate it under simulated clock-drift conditions across agents. Authoring trigger: when (a) or (b) is imminent — author `experiments/E2/{brief.md, agent-1-*.md, agent-2-*.md}` per the per-experiment subfolder convention. Do NOT author speculatively. |
 | E3 | P5, P6, P9 at scale | queued | activates when researcher-time is allocated AND a synthetic event corpus is in scope. Authoring trigger: when a session is imminent. |
 | E4 | P10 self-correction, P7 bootstrap fast-path | queued | activates opportunistically when a real session-budget cut-off occurs naturally (do NOT engineer one). Authoring trigger: when a candidate cut-off session is imminent. |
