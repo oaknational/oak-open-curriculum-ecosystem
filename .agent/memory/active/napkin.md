@@ -32,6 +32,104 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-03 — Owner correction: the smoke-test harness is the wrong shape (Pelagic Washing Anchor)
+
+Captured per the napkin surprise format. This is the load-bearing
+architectural insight of this session.
+
+- **Setup**: working through the failing
+  `dev-server-boots-without-observability-config.e2e.test.ts` test
+  classification, I had landed on a Shape A proposal — extend the
+  existing tsx-script smoke harness with a new
+  `local-no-observability` mode that spawns `pnpm dev` and asserts on
+  stdout/stderr boot signals via a tsx assertion script. The
+  `test-reviewer` subagent confirmed Shape A as architecturally
+  correct vs Shape B (a `*.smoke.test.ts` vitest lane).
+- **Owner correction**: *"that sounds like the smoke test harness is
+  the wrong shape, it should be a simple harness that starts the
+  appropriate server and then invokes Vitest, and makes sure the
+  server is closed down again."*
+- **Recognition**: the existing tsx-script harness conflates server
+  lifecycle with assertion logic, mutates global `process.env`
+  (acknowledged debt at `smoke-tests/helpers/environment.ts:75-80`),
+  and forces every smoke claim into ad-hoc tsx scripts using
+  `node:assert/strict` rather than vitest. Shape A inherits the
+  wrong shape. The architecturally-correct shape decomposes the
+  harness from assertions: harness owns server lifecycle (spawn /
+  in-process create) + vitest invocation + cleanup; assertions
+  become first-class `*.smoke.test.ts` vitest tests reading
+  `SMOKE_BASE_URL` from harness-injected env.
+- **Generator**: I was reasoning *within* the existing harness's
+  shape rather than *about* the shape itself. Owner moved up one
+  layer of abstraction. Same pattern as the rush-impulse
+  graduation 2026-05-02 (architectural-excellence-as-absolute) —
+  the cheap-cure shape was *make the discipline skippable*; here
+  the cheap-cure shape was *extend the wrong harness with another
+  mode*. The architecturally-excellent shape was *fix the harness
+  surface*.
+- **Cure**: ARC A of the new plan
+  (`.agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md`)
+  is the harness redesign — four phases A1 (design + RED) through
+  A4 (ADR + testing-strategy amendment), with mandatory-always
+  doc-and-onboarding reviewers because testing infrastructure is
+  Practice surface. ARC A precedes ARC B (observability rename
+  WS2–WS11).
+- **Pattern shape**: this is the second instance of *fix the
+  surface, not the symptom* under the architectural-excellence
+  doctrine. First instance was the principles.md upgrade. Second
+  is this. Pattern: when an option set forces a workaround, the
+  question is whether the surface is wrong, not whether to extend
+  the workaround. Trigger for graduation: third instance OR owner
+  direction.
+
+Cross-references: plan body §Foundational Corrections;
+architecture-reviewer-betty findings Q1–Q6 (separate session,
+findings folded into ARC B0 corrections in the plan body).
+
+## 2026-05-03 — Surprise: three structural breaks in the prior session's plan body (Pelagic Washing Anchor)
+
+Captured during plan-validation phase (architecture-reviewer-betty
+dispatch). Findings:
+
+- **Q2 deletion timing**: WS3 of the prior plan body deletes
+  `SentryEnvSchema` at WS3 commit, but both apps consume it at
+  `apps/oak-curriculum-mcp-streamable-http/src/env.ts:7,31` and
+  `apps/oak-search-cli/src/env.ts:18,31`. WS3 deletion would
+  break two type-check targets simultaneously, in violation of
+  `dont-break-build-without-fix-plan`. `replace-don't-bridge`
+  forbids the obvious workaround (transitional re-export alias),
+  so the only compliant shape is to withhold deletion until both
+  app consumers migrate. Correction: deletion moves to WS5 close
+  as the FINAL act of the rename arc.
+- **Q3 bridge language**: WS4's task list contained
+  *"Update core-endpoints.ts to consume injected ServerInstrumenter
+  (work bridges to WS6)"* — this is exactly the language
+  `replace-don't-bridge` forbids. Injecting a port that doesn't
+  exist yet AND keeping the direct vendor import live is a
+  dual-path bridge. Correction: WS4 does NOT touch core-endpoints;
+  WS6 owns composition-root vendor-import removal in full.
+- **Q4 silent no-op**: WS6 was scheduled to *narrow* the
+  `no-vendor-observability-import` ESLint rule's allowlist by 3
+  entries. Recon confirmed the rule does NOT exist in
+  `packages/core/oak-eslint/src/plugin.ts` — the plugin exports
+  exactly four rules, none of them this one. Narrowing a
+  non-existent rule is a vacuous pass dressed as success.
+  Correction: WS6 AUTHORS the rule.
+- **Q5/Q6 secondary findings**: pre-merge divergence analysis
+  needs a named step (30-commit divergence vs origin/main); the
+  logger `additionalSinks` migration appears in critical-files
+  list with no completion gate.
+
+All five corrections fold into ARC B0 of the new plan as
+plan-body edits before WS2 starts. Generator: the prior session
+landed WS1 RED with confidence but the WS2-onwards body carried
+multi-day-old assumptions; the corrections are not bugs per se,
+they are accumulated drift between authored-Tuesday and
+executed-Saturday. Pattern: *plans age in proportion to gap
+between author session and execute session*. Already a graduated
+distilled.md entry (*plans encode world-state at authoring time
+and drift*); these corrections are a worked instance.
+
 ## 2026-05-02 — Surprise: I almost spawned a duplicate forward-pointing plan (Abyssal Diving Stern)
 
 Captured per the napkin surprise format.
@@ -2242,3 +2340,69 @@ scanner future plan (sketched alongside the PDR-038 scanner
 already captured): a CI gate that fails when an `it.todo` /
 `describe.skip` paired with a `SKIP-UNTIL-WSn` header outlives
 the named workstream's landing commit.
+
+### Four-reviewer cross-confirmation as scope-discipline tool (2026-05-03 surprise)
+
+WS1 dispatched four review subagents in parallel
+(`test-reviewer`, `docs-adr-reviewer`, `onboarding-reviewer`,
+`sentry-reviewer`) per the mandatory-always doc-and-onboarding
+doctrine + the observability-touched-implies-sentry-reviewer
+guidance. All four returned GO-WITH-CONDITIONS. The
+**cross-confirmation pattern** that emerged was not pre-planned
+but proved load-bearing for scope discipline:
+
+- **P1 / cross-confirmed** (any item raised by ≥2 reviewers
+  independently, or any single P1 from a domain specialist) →
+  in-scope for the WS1 commit. WS1 had ~8 such items including
+  the TSDoc misframing on `config-from-registry.unit.test.ts`
+  (sentry-reviewer P1 ↔ test-reviewer P3 phrasing match), the
+  WS4/WS5 contents-check obligations (test-reviewer P2-2 ↔
+  onboarding-reviewer P2 explicit contract surface), and the
+  E2E `NODE_ENV` determinism (test-reviewer P2-1 standalone).
+- **P2 / single-reviewer** (raised by exactly one reviewer) →
+  judged on diff cost. Cheap fixes landed in-WS1 (e.g., adding
+  ADR-143 `@see` citations); expensive fixes deferred to the
+  named follow-on phase (e.g., legacy `SentryEnvSchema`
+  `@deprecated` JSDoc tag → WS3 atomic rename;
+  `environment-variables.md` propagation → WS8.5).
+- **P3 / phrasing or style** → universally deferred unless the
+  fix was a sub-second edit.
+
+This avoided two failure modes the rush-impulse doctrine names:
+the "land it then refactor" trap (treating P2/P3 as P1 to ship a
+"complete" commit) and the "all noise, no signal" trap (treating
+P1 as P2 to ship anything at all). The cross-confirmation step
+is what makes the discipline applicable — **two independent
+reviewers seeing the same defect from different vantage points
+is evidence the defect matters more than either alone**. With a
+single reviewer, the same defect is one reviewer's preference.
+
+Candidate for graduation if the same shape recurs: PDR / rule
+candidate ("multi-reviewer cross-confirmation as scope-
+discipline filter for in-WS vs follow-on"). First instance this
+session; not yet candidate-ripe.
+
+### Sequential foreground after subagent timeouts (2026-05-03 meta-shape)
+
+Both worker subagents (Practice-Core remediation; observability
+WS1) timed out without committing — the PING-timeout failure mode
+mid-execution rather than at handoff. Owner direction: "Agreed,
+both in the foreground, both sequentially". Sequential foreground
+execution then landed both. Three notes:
+
+1. The subagents had partial state at timeout (file edits
+   made, gates partially run, no commit). Resumption-from-state
+   was viable for both because the work was file-level mechanical
+   plus reviewer-driven refinement, not a long inferential
+   computation.
+2. The sequential foreground shape recovered the work but
+   surrendered the parallelism. For mechanical-then-reviewer-
+   driven workstreams (Practice-Core sweep + observability RED
+   tests), the parallelism gain was modest — both ended up
+   reviewer-blocked anyway, and reviewer subagents are the real
+   parallel-execution surface, not the worker subagents.
+3. Generator for a possible PDR / rule candidate ("when the
+   work is mechanical-then-reviewer-driven, parallel worker
+   subagents trade away resumability without buying meaningful
+   parallelism — the reviewer subagents ARE the parallelism").
+   Single instance; not yet candidate-ripe.

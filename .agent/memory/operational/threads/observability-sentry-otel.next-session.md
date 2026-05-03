@@ -2,12 +2,67 @@
 
 ## Landing target (per PDR-026)
 
-**Active executable plan**:
+**Active executable plan (canonical)**:
+[`.agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md`](../../../plans/observability/current/there-is-no-time-hashed-starfish.plan.md)
+— promoted 2026-05-03 by Pelagic Washing Anchor. Three-arc execution
+sequencer: ARC A redesigns the smoke-test harness (owner-named
+correction this session: existing tsx-script harness is the wrong
+shape; canonical shape is thin start-server + invoke-vitest +
+cleanup wrapper). ARC B executes WS2–WS11 of the prior plan body
+with corrections to deletion timing, WS4→WS6 bridge language, ESLint
+rule authoring (architecture-reviewer-betty findings Q2/Q3/Q4
+folded into ARC B0). ARC C runs pre-merge divergence analysis,
+push, preview validation, merge.
+
+**Existing observability plan body**:
 [`.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md`](../../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md)
-— promoted 2026-05-02 by Abyssal Diving Stern. Multi-session plan
-covering WS0–WS11. WS0 (plan promotion + supersession routing) is
-landing this session; WS1 (RED tests across all layers) is the
-next-session landing target.
+remains the source of truth for WS2–WS11 substance. ARC B0 of the
+new plan is the explicit edit list to apply to that plan body
+before WS2 begins.
+
+**Next-session landing target**: **ARC A1 — design canonical smoke
+harness + author RED tests for env-builder, boot-signal parser,
+lifecycle wrapper; vitest.smoke.config.ts; smoke-context.ts.** Reviewer
+dispatch on completion: test-reviewer, architecture-reviewer-fred,
+architecture-reviewer-betty, mcp-reviewer. ARC A1's RED-arc skip
+register inherits the WS1 trip-wires (entries 1 + 2 in
+`runtime-fixture-tee-redaction.unit.test.ts` + `config-from-registry.unit.test.ts`)
+plus the new boot-failure trip-wire (the no-observability mode's
+harness boot-wait timeout becomes RED until ARC B3 / WS4 lands).
+
+**Coordination state**: Pelagic Washing Anchor (claude-code,
+`f730bd…`) is plan-author/orchestrator; Misty Ebbing Pier
+(parallel session, platform/seed TBD) is dispatched to atomic
+isolated reconnaissance task M1 — full structured map of the
+existing smoke-test harness — see comms event
+`claude-f730bd-pelagic-misty-task-1-harness-recon`. No active
+claims open at session-open; coordination is via comms log.
+
+**WS2 entry conditions**: WS1 RED-arc skip-register entries 1 and 2
+(in `.agent/memory/active/napkin.md`) name the four `it.todo()` design
+pins and the one `describe.skip` canary that WS2 must unskip as part
+of its landing diff. The canary file
+(`packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`)
+will type-fail the moment WS2 deletes `SENTRY_MODE` from
+`SentryConfigEnvironment` — that is the WS1 → WS2 trip-wire.
+
+**Plan-body amendments queued for next planning pass** (recorded by
+WS1 reviewer subagents — apply before WS8.6 starts on the ADR-165
+collision; apply at WS3 atomic rename for the others):
+
+- ADR-165 number collision (the plan body schedules
+  `165-observability-configuration-orthogonality.md` but ADR-165 is
+  already taken — must rename to next-available before WS8.6).
+- Legacy `SentryEnvSchema` `@deprecated` JSDoc tag at WS3 atomic
+  rename.
+- Plan body §WS3 should name `OBSERVABILITY_FILE_PATH` env var
+  explicitly.
+- Plan body §WS3 should ratify the `sink-registry.ts` placement
+  deviation from the planned `types.ts` location.
+- `docs/operations/environment-variables.md` propagation entry at
+  plan body §WS8.5.
+- `packages/core/observability/README.md` exports listing entry at
+  plan body §WS8.
 
 **Owner-stated broader roadmap (2026-05-02)**:
 
@@ -71,12 +126,50 @@ matching `platform + model + agent_name` updates `last_session`.
 | Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
 | Leafy Bending Dew | cursor | composer | `8d0db5` | MCP HTTP Sentry esbuild helpers: dedup `trimToUndefined`, explicit absent shapes (`undefined` vs post-trim `''`); Cursor handoff — **commit owned by Claude Code** | 2026-04-30 | 2026-04-30 |
 | Abyssal Diving Stern | claude-code | claude-opus-4-7-1m | `87ccac` | Doctrine graduation (rush-impulse → principles.md § Architectural Excellence Over Expediency); observability-multi-sink-and-fixtures-shape plan author + WS0 promotion + supersession routing | 2026-05-02 | 2026-05-02 |
+| Moonlit Drifting Nebula | cursor | claude-opus-4-7 | `92470a` | observability-multi-sink-and-fixtures-shape WS1 RED phase (env schemas + SinkRegistry types + warnings channel + outermost regression-guard E2E + per-layer RED tests with describe.skip / it.todo arc); D7a build-time orthogonality verification; four-reviewer round (test/docs-adr/onboarding/sentry) with cross-confirmed P1/P2 fixes addressed in-WS1; six deferred items recorded as plan-body amendment candidates | 2026-05-03 | 2026-05-03 |
+| Pelagic Washing Anchor | claude-code | claude-opus-4-7-1m | `f730bd` | plan-author / orchestrator: there-is-no-time-hashed-starfish.plan.md authored and landed in repo plan tree; smoke-harness-shape correction captured (owner-named; superseded prior Shape A proposal); architecture-reviewer-betty findings Q2/Q3/Q4 folded into ARC B0 corrections; coordinating Misty Ebbing Pier via comms log (atomic isolated tasks) | 2026-05-03 | 2026-05-03 |
+| Misty Ebbing Pier | TBD | TBD | `TBD` | parallel session; first task M1 dispatched via comms log (smoke-tests harness reconnaissance, read-only) | 2026-05-03 | 2026-05-03 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
 into this canonical register during the 2026-04-29 deep consolidation
 pass; older deeper-narrative session-close blocks below this header
 remain unchanged.)
+
+---
+
+**Session-close 2026-05-03 (Moonlit Drifting Nebula, cursor, claude-opus-4-7, session seed prefix `92470a`)** — Branch: `feat/eef_exploration` (30 commits ahead of `origin/main`, push pending owner authorisation per the broader 2026-05-02 owner roadmap). Two-phase sequential foreground execution after subagent timeouts (PING timeouts on both Practice-Core and observability-WS1 worker subagents; user directed sequential foreground finalisation).
+
+**Phase 1 landing — `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3`**: 43-file Practice-Core portability sweep across PDRs, trinity files (`README`, `practice.md`, `practice-bootstrap.md`, `practice-lineage.md`, `practice-verification.md`, `CHANGELOG.md`, `practice-index.md`), `decision-records/README.md`, and `distilled.md` amendment incorporating owner decisions C6 (Practice-canonical directory references as portable structural contract) and C7 (external http(s) citations permitted). Round-1 mechanical sweep (subagent) → Round-2 reviewer-driven refinement incorporating docs-adr-reviewer NO-GO/GO-WITH-CONDITIONS feedback (tightened Portability Constraint clause; deleted §Host context note sections; fixed PDR-007 broken-link cluster; abstracted host-repo names; generalised trinity files for the retirement model) → Round-3 inline host-anchoring sweep across 11 PDRs + fixture string abstraction in PDR-034 + recognition of CHANGELOG attribution headers + provenance.yml entries as structurally-required attribution metadata distinct from content leakage. Pre-existing fitness violations (practice.md, principles.md, etc.) flagged as graduation candidates per PDR-042 (Learning Preservation forbids compressing substance to meet size limits) — explicitly NOT compressed.
+
+**Phase 2 landing — `a3a0222a feat(observability): add WS1 multi-sink + fixtures axes scaffolding (RED)`**: 26 files / +2205/-62. Replaces single `SENTRY_MODE = off | fixture | sentry` switch with two orthogonal axes via Zod schemas + vendor-neutral runtime types + per-layer RED contract tests. New surfaces:
+
+- 4 env schema files: [`packages/core/env/src/schemas/observability{,-axes,-base,-refinements}.ts`](../../../../packages/core/env/src/schemas/observability.ts) — orthogonal axes, base shape, cross-field `superRefine` rules + legacy-rename rejection messages, public composition.
+- [`packages/core/observability/src/sink-registry.ts`](../../../../packages/core/observability/src/sink-registry.ts) — vendor-neutral `SinkRegistry` typed map (`{ readonly [K in ObservabilitySinkKind]?: ObservabilitySink<K> }`) + `ServerInstrumenter<TMcpServer, TExpressApp>` port closing ADR-162 §Open Questions on direct vendor imports (`wrapMcpServerWithSentry`, `setupExpressErrorHandler`). Zero `@sentry/*` imports.
+- [`packages/libs/env-resolution/src/types.ts`](../../../../packages/libs/env-resolution/src/types.ts) — structured warnings channel types (`EnvWarning` discriminated union including `ObservabilitySinksEmptyInPreviewWarning`).
+- [`apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts) — outermost regression-guard E2E. Spawned `pnpm dev` boots cleanly with NO observability env vars; `NODE_ENV: 'development'` pinned in child env per test-reviewer P2-1.
+
+RED-arc tests per [napkin §RED-arc skip register](../../active/napkin.md):
+
+1. [`packages/libs/sentry-node/src/config-from-registry.unit.test.ts`](../../../../packages/libs/sentry-node/src/config-from-registry.unit.test.ts) — four `it.todo()` design pins for the WS2 `SinkRegistry` consumption cross-product (`sentry-disabled`, `sentry-live`, `sentry-live-with-tee`, `fixture-only`). Adjacent block-comment bodies are copy-paste-uncomment-able. NOT a type-check canary — that role is covered by entry 2 below. Cleanup gate: header audit on `SKIP-UNTIL-WS2`.
+2. [`packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`](../../../../packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts) — ADR-160 closure-property invariant for fixture-as-tee. **WS1 type-check canary file** — body compiles against today's `SENTRY_MODE: 'fixture'` shape; WS2 deletion of `SENTRY_MODE` from `SentryConfigEnvironment` will type-fail it deterministically. WS2/WS3 unskip is coupled with three rewrite obligations enumerated in the file header (input shape, helper return-type discriminator, `FixtureSentryStore` rename).
+3. [`apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts) — WS4 `SinkRegistry` construction RED block + an `it.todo()` for the WS4 contents-check (registry entries are real `ObservabilitySink` instances driven by `OBSERVABILITY_SINKS`, not stubs).
+4. [`apps/oak-search-cli/src/observability/cli-observability.unit.test.ts`](../../../../apps/oak-search-cli/src/observability/cli-observability.unit.test.ts) — same shape for WS5.
+
+**D7a verification (read of [`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts) end-to-end)**: build-time path is structurally orthogonal to `SENTRY_MODE`. `resolveSentryRegistrationPolicy` drives off `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF` + override pair only. The dead `SENTRY_MODE` projection on `sentry-build-environment.ts:23` becomes a deterministic WS4 cleanup signal when WS2 deletes the field from `SentryConfigEnvironment`. No additional comment added today; the type-check at WS4 names the file.
+
+**Reviewer round (test-reviewer + docs-adr-reviewer + onboarding-reviewer + sentry-reviewer)**: all four returned GO-WITH-CONDITIONS. Cross-confirmed P1/P2 fixes addressed in-WS1:
+
+- TSDoc on `config-from-registry.unit.test.ts` rewritten to accurately describe its design-pinning role (was inaccurately claiming type-check canary status — sentry-reviewer P1-1 + P2-1; test-reviewer P3-4).
+- `NODE_ENV: 'development'` pinned in E2E child env so the spawned `pnpm dev` is hermetic across host shells and CI (test-reviewer P2-1).
+- WS4/WS5 contents-check `it.todo()` placeholders added so vitest's reporter surfaces the obligation (test-reviewer P2-2).
+- `ObservabilitySink` TSDoc gains an `@remarks` paragraph documenting the intentional narrow façade (capture-only at the registry surface; span / breadcrumb / log / transaction fan-out is adapter-internal) and the log fan-out path through sink-implementation-owned log adapters rather than via the registry (sentry-reviewer P2-2 + P2-3).
+
+**Quality gates this session**: full pre-commit pipeline passed for both commits (74-task turbo run × 2; type-check; lint; prettier; markdownlint; knip; depcruise — 2050 modules, 4443 dependencies, no violations; portability:check). Unit suites green: env (7/48), observability (6/63), env-resolution (4/29), sentry-node (9/120 + 4 todo + 2 skipped), MCP streamable-http (87/725 + 2 skipped + 1 todo), search-cli (101/1001 + 2 skipped + 1 todo). `practice:fitness` shows pre-existing critical-zone violations on `napkin.md`, `distilled.md`, `pending-graduations.md`, `repo-continuity.md`, `principles.md` — out of scope per PDR-042 and noted as graduation candidates.
+
+**ADR/PDR candidates (session-handoff §6b)**: structural-enforcement scanner for `SKIP-UNTIL-WSn` shape (CI gate that fails when an `it.todo` / `describe.skip` paired with that header outlives the named workstream's landing commit) — already named in the napkin §RED-arc skip register as a future-plan generator alongside the PDR-038 scanner. Captured to napkin; not promoted to register this session because the trigger (second instance of the failure mode) hasn't fired — first instance is the WS1 RED-arc itself.
+
+**Next safe step on this thread**: WS2 sentry-node `SinkRegistry` consumption — atomic rename. WS2's landing diff MUST grep for `SKIP-UNTIL-WS2` and unskip the matching test bodies (entry 1: uncomment four `it.todo()` adjacent block-comment bodies; entry 2: flip `describe.skip` → `describe` in `runtime-fixture-tee-redaction.unit.test.ts` and apply the three coupled rewrites named in the file header). Six plan-body amendment candidates listed in §Landing target above are due before WS3 (one — ADR-165 number collision — is due before WS8.6 specifically).
 
 ---
 

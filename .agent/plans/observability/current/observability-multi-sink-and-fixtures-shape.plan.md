@@ -19,10 +19,10 @@ isProject: true
 todos:
   - id: ws0-promote-and-archive
     content: "WS0 (PRELUDE): copy this plan into .agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md; archive the wrong-shaped predecessor (local-dev-sentry-boundary-regression-investigation) and the superseded future-plan (observability-config-coherence) to archive/superseded/ with single-line linking notes; update active-plans index."
-    status: pending
+    status: done
   - id: ws1-red-types-and-regression-guard
     content: "WS1 (RED): author OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES Zod schema + SinkRegistry type + fixture-as-tee fan-out + cross-field superRefine in @oaknational/observability and @oaknational/env. Author the outermost regression-guard E2E (`pnpm dev boots clean with no observability env vars`) and per-layer RED tests. Verify build-time orthogonality assumption by reading sentry-build-environment.ts end-to-end. All tests fail for the right reasons."
-    status: pending
+    status: done
   - id: ws2-green-sentry-node
     content: "WS2 (GREEN): rewrite @oaknational/sentry-node internals to consume SinkRegistry. Delete SentryMode type. Rename FixtureSentryStore → FixtureCaptureStore (vendor-neutral). Recompose ParsedSentryConfig discriminated union from cross-product of (sinks.includes('sentry'), fixtures). All sentry-node tests pass."
     status: pending
@@ -57,11 +57,18 @@ todos:
 
 # Observability Multi-Sink and Fixture Orthogonality
 
-**Last Updated**: 2026-05-02
-**Status**: 🔴 NOT STARTED — executable plan, awaiting WS0 promotion into the
-repo
-**Lifecycle target**: `current/` → `active/` (on WS1 commit)
-**Branch**: TBD on promotion (likely `feat/observability-multi-sink`)
+**Last Updated**: 2026-05-03
+**Status**: 🟡 IN PROGRESS — WS0 (`e1840631`) and WS1 RED phase
+(`a3a0222a`) landed; WS2 (sentry-node `SinkRegistry` consumption) is the
+next-session landing target
+**Lifecycle target**: `current/` → `active/` on WS2 commit (deferred from
+WS1; the RED-only WS1 was committed in `current/` because the executable
+work is now multi-session and the `active/` move is more meaningful when
+the first GREEN code lands)
+**Branch**: `feat/eef_exploration` (RED arc landed on the existing branch
+to stay aligned with the broader 2026-05-02 owner roadmap; future
+considerations of a dedicated `feat/observability-multi-sink` branch
+remain open per WS9 quality-gate breadth)
 **Thread**: `observability-sentry-otel`
 
 ---

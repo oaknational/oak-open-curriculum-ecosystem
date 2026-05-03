@@ -49,13 +49,21 @@ continuity snapshots.
   `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
   reusable architectural decision per PDR-019 (ADR scope by
   reusability) — applies to every future sink and every future
-  capability that emits; graduation target:
-  `docs/architecture/architectural-decisions/165-observability-configuration-orthogonality.md`
-  (NEW); plus amendments to ADR-116 (warnings channel), ADR-143
-  (registry shape, fixture-as-tee), ADR-162 (Open Question close,
-  baseline-vs-numbered-sink language), ADR-163 (build-time scope
-  clarification); queued as plan WS8.6/WS8.7 deliverable; status:
-  due (graduates when plan executes).
+  capability that emits; graduation target: a new
+  `docs/architecture/architectural-decisions/NNN-observability-configuration-orthogonality.md`
+  ADR (NEW). **2026-05-03 amendment (Moonlit Drifting Nebula)**:
+  the plan body originally scheduled this as ADR-165, but ADR-165
+  is already taken — the next available number must be chosen
+  before WS8.6 starts. Plus amendments to ADR-116 (warnings
+  channel), ADR-143 (registry shape, fixture-as-tee), ADR-162
+  (Open Question close on `ServerInstrumenter` port — partially
+  addressed in WS1 RED via the type definition; final closure
+  rides at WS6 when the HTTP composition root consumes the port),
+  ADR-163 (build-time scope clarification — D7a verification
+  confirmed structural orthogonality; WS4 cleanup is the
+  follow-on); queued as plan WS8.6/WS8.7 deliverable; status:
+  due (graduates when plan executes; ADR-number rename due before
+  WS8.6 starts).
 
 + 2026-05-02; observability multi-sink + fixtures plan WS0 —
   near-miss surprise: almost spawned a duplicate
@@ -66,6 +74,51 @@ continuity snapshots.
   § Process entry naming "directory survey before plan-stub spawning"
   OR amendment to `consolidate-at-third-consumer.md`; status: pending
   (single instance; capture-only until second instance accumulates).
+
++ 2026-05-03; Practice-Core portability Round 3 (Moonlit Drifting
+  Nebula) — CHANGELOG attribution headers
+  (`## [<host-repo>] DATE — TITLE`) and `provenance.yml` entries
+  identifying the source host repo of each Practice contribution
+  are **structurally-required attribution metadata**, distinct
+  from content leakage that the Practice-Core portability rule
+  forbids. Same shape as git commit author lines or semver
+  CHANGELOG version tags. Trigger condition: this carve-out was
+  applied implicitly during Round 3; explicit ratification is
+  needed if the same boundary surfaces in any future Core
+  portability review. Graduation target: `distilled.md`
+  amendment naming this as the third explicit carve-out (after
+  C6 Practice-canonical directory references, C7 external
+  http(s) citations) AND/OR Practice-Core portability rule
+  in `decision-records/README.md` extended with the carve-out;
+  status: pending (single instance; capture-only until second
+  instance — likely a docs-adr-reviewer round on a future
+  Core-touching change — confirms the boundary needs codification
+  rather than just consistent application).
+
++ 2026-05-03; observability multi-sink + fixtures plan WS1 RED phase
+  (Moonlit Drifting Nebula) — multi-commit-TDD-arc skip register
+  pattern (`describe.skip` / `it.todo()` paired with file-header
+  `SKIP-UNTIL-WSn` comment + napkin §RED-arc skip register entry)
+  proved load-bearing for landing the WS1 RED tests while keeping
+  the trunk green. The pattern is the project's standard shape for
+  multi-commit TDD arcs but is enforced today by *header audit*
+  rather than by the type system (entry 1 uses `it.todo()` because
+  ESLint bans `@ts-expect-error`; entries 2-4 use `describe.skip`
+  whose unskip IS forced by the WS commit's intended consumer-
+  wiring edit). Trigger condition: second multi-commit-TDD arc
+  using the same shape (likely the Practice-Core portability
+  scanner future plan, or any other RED-then-GREEN cross-commit
+  arc); graduation target: a structural-enforcement scanner
+  workstream — CI gate that fails when an `it.todo` /
+  `describe.skip` paired with a `SKIP-UNTIL-WSn` header outlives
+  the named workstream's landing commit. Sketched in napkin
+  alongside the PDR-038 Practice-Core scanner; the two scanners
+  share a "named-deferral lives only as long as its named
+  resolver" structural pattern that may itself be a doctrine
+  candidate (`named-deferrals-must-name-their-resolver`); status:
+  pending (single instance — the WS1 RED-arc itself is the first;
+  WS2/WS3 unskip will be a real-world test of the audit
+  discipline).
 
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
