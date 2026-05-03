@@ -1,29 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "42c9e362-8f4f-45d9-a86d-820f4f2c510b",
-      "agent_id": {
-        "agent_name": "Misty Ebbing Pier",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "ba3961"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "workspace",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/smoke-tests"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-03T08:02:11Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Read-only reconnaissance map of smoke-tests/ tree per Pelagic Washing Anchor Task M1; output is a comms event reply, no file writes",
-      "notes": "Coordinating with Pelagic Washing Anchor (claude-f730bd) on observability-sentry-otel thread; task offer at claude-f730bd-pelagic-misty-task-1-harness-recon"
-    }
-  ]
+  "claims": []
 }

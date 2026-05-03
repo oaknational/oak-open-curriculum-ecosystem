@@ -32,6 +32,114 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-03 — Inter-agent collaboration suggestions for next session (Pelagic Washing Anchor)
+
+Captured at session handoff per owner direction. The full reflection
+on this session's two-way coordination with Misty Ebbing Pier lives at
+`.agent/experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`
+(structural-cure analysis + N-agent scaling). This napkin entry is the
+*tactical* guidance for the immediate next session.
+
+**Concrete suggestions for next session (any thread, any orchestrator):**
+
+1. **Poll the comms log before any significant work boundary, not only
+   at task close.** Misty self-named this as the load-bearing
+   coordination failure mode this session: they read 41 files for
+   Task M1 between 08:02 and 08:25 without checking for replies, and
+   missed the pure-inline override that I had posted at 09:00:00Z
+   (timestamp ordering aside; the failure is "did not poll mid-task").
+   Cure shape for next session: any `claude-code` agent in coordination
+   mode should `ls -lat .agent/state/collaboration/comms/events/`
+   before each significant work boundary — at minimum at task-open,
+   at any `pnpm`-heavy step, at any commit boundary, and at task close.
+   Three-line ceremony, no tooling required.
+
+2. **Out-of-band brief acknowledgement.** When an agent acts on owner
+   direction received outside the comms log (the user briefed them
+   directly in chat), the agent's first comms event must cite the
+   out-of-band source explicitly. Example phrasing: *"per owner
+   direction at <approximate time>, taking task X."* This avoids the
+   confusing temporal anomaly we saw — Misty's claim and acceptance
+   event predated my task offer by 53 minutes because Misty was
+   briefed by the owner before I posted to comms log. The sequence
+   was actually correct, but the comms-log-only view of it looked
+   like a protocol violation.
+
+3. **Atomic isolated task offer template.** The shape that worked:
+   (a) clear scope; (b) explicit acceptance criteria; (c) output
+   format named (e.g. *"single comms event reply at <path>"*); (d)
+   word/scope cap; (e) **overflow protocol** — "if the spec is too
+   tight, do X; do not unilaterally Y." The overflow-protocol field
+   was missing from my Task M1 dispatch, which forced an extra
+   round-trip. Add it by default.
+
+4. **Read/write claim mode is a structural gap.** Misty's claim
+   covered `apps/oak-curriculum-mcp-streamable-http/smoke-tests`
+   (workspace-level) but their intent was read-only reconnaissance.
+   I had to defer my writes to `smoke-tests/harness/*` even though
+   the actual semantic conflict was zero. Cure: extend
+   `active-claims.json` schema with `mode: 'read' | 'write' |
+   'mutual-exclusive'`; non-conflicting modes coexist on the same
+   path. Until that lands, agents can manually disambiguate via the
+   claim's `intent` field — but the structural fix is owed.
+
+5. **Heartbeat-or-die on claim freshness.** If a claim's stated ETA
+   passes without a heartbeat event explaining the overrun, the
+   orchestrator should treat it as stale at `claimed_at +
+   ETA * 1.5` and either (a) reclaim and reassign, (b) open an
+   escalation, or (c) ask the owner. Manually for now;
+   structurally enforced when the CLI ergonomics plan promotes.
+
+6. **event_id integrity check.** Misty's override-acknowledgement
+   referenced `claude-f730bd-pelagic-task-1-output-shape-pure-inline`
+   as `in_response_to`, but the actual event_id was
+   `claude-f730bd-pelagic-task-1-output-shape-reply`. The mismatch
+   was small but real — agents must NOT infer event_ids from
+   titles; copy them verbatim from the source event's body. A
+   `comms reply` CLI subcommand would prevent this entirely.
+
+7. **For the immediate ARC A1 next-session start specifically:** the
+   design input is in place. Misty's recon at
+   `claude-ba3961-misty-task-1-harness-recon-reply` event names
+   that NO existing mode spawns `pnpm dev` as a child; all four
+   `local-*` modes boot in-process via `createApp + listen`. My
+   acknowledgement-and-design-shift event records the resulting
+   shape: harness uniform in-process; `local-no-observability`
+   env-builder applies dev-mode-equivalent env scrubbing in pure
+   form; `pnpm dev` CLI surface remains operational concern, not
+   CI gate. Read these two events end-to-end before designing the
+   harness module. Do NOT re-walk the existing harness — Misty's
+   recon is the design input.
+
+8. **Parallelism candidate**: ARC B0 (plan-body corrections to
+   `observability-multi-sink-and-fixtures-shape.plan.md`) is
+   independent of ARC A1 and can run in parallel if a second agent
+   is available. Atomic isolated task shape: edit named sections
+   per the corrections list in the active plan's `B0` workstream.
+   Single commit, plan-body only, no app code touched.
+
+9. **Pre-WS2 quick win**: ADR number verification for the
+   observability-orthogonality ADR (prior plan body said 165;
+   that's taken). One-line task: `ls
+   docs/architecture/architectural-decisions/ | sort -n | tail -5`
+   and pick the next available number. Update plan body §B0 with
+   the verified number. 30 seconds of work, removes a tripwire.
+
+10. **Misty's claim 42c9e362 may still be open** at next-session-
+    start. Check `.agent/state/collaboration/active-claims.json`
+    before any work in `smoke-tests/`. If still open, post a comms
+    event asking Misty whether they intend to close (per their
+    final statement *"closing my claim once this event lands"*) or
+    pick up additional work. If the claim has aged past `claimed_at +
+    14400s` without a heartbeat, treat as stale and unblock writes.
+
+**Generator across all 10 suggestions**: the protocol works
+*structurally* for atomic isolated tasks but degrades when discipline
+slips (polling, ETAs, event_id integrity). The structural cures are
+queued in pending-graduations; the immediate session-level cure is
+*explicit ceremony at known weak points*. Three-line discipline at
+each weak point > silent failure.
+
 ## 2026-05-03 — Owner correction: the smoke-test harness is the wrong shape (Pelagic Washing Anchor)
 
 Captured per the napkin surprise format. This is the load-bearing

@@ -75,6 +75,44 @@ continuity snapshots.
   OR amendment to `consolidate-at-third-consumer.md`; status: pending
   (single instance; capture-only until second instance accumulates).
 
++ 2026-05-03; **inter-agent collaboration protocol gaps surfaced
+  by Pelagic ↔ Misty Task M1 round-trip** — five structural cures
+  named in the session's reflection log
+  ([`experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`](../../experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md))
+  and a tactical 10-point next-session guide in napkin (same date,
+  Pelagic Washing Anchor). Specific candidates: (i) **out-of-band
+  brief acknowledgement** — when an agent acts on owner direction
+  received outside the comms log, first comms event must cite the
+  out-of-band source explicitly (cure for the temporal-anomaly
+  reading of Misty's pre-existing claim); (ii) **read/write claim
+  mode field** — extend `active-claims.json` schema with
+  `mode: 'read' | 'write' | 'mutual-exclusive'` so non-conflicting
+  modes coexist on overlapping paths (cure for the
+  smoke-tests-workspace path overlap); (iii) **heartbeat-or-die
+  enforcement** — claims past `claimed_at + ETA * 1.5` without
+  heartbeat are stale; orchestrator reclaims, escalates, or asks
+  owner (cure for the ETA decay observed); (iv) **overflow
+  protocol in task offers** — task issuers must include *"if the
+  spec is too tight, do X; do not unilaterally Y"* up front (cure
+  for the round-trip cost on Misty's hybrid-vs-inline question);
+  (v) **`comms` CLI ergonomics** — `comms reply` (auto-populates
+  `in_response_to`, inverts `audience`); `comms watch` (tail
+  events directory); `comms pending` (events awaiting my reply);
+  `comms heartbeat <claim_id>` (cure for event_id mismatch
+  Misty made when inferring from title rather than copying from
+  source body, plus the discipline failures naming inertia of
+  manual JSON authoring). Routes to the existing
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+  as concrete worked instances strengthening the existing
+  promotion case (already at fourth-instance evidence; this is a
+  fifth). Trigger: owner direction has fired in the request for
+  the reflection itself; CLI ergonomics plan promotion (already
+  named in `agentic-engineering-enhancements.next-session.md`)
+  is the natural carrier; the four protocol-amendment candidates
+  (i)-(iv) graduate to a single PDR or amendment to the existing
+  agent-collaboration directive at consolidation. Status: due
+  (graduates with the next CLI ergonomics plan execution slice).
+
 + 2026-05-03; Practice-Core portability Round 3 (Moonlit Drifting
   Nebula) — CHANGELOG attribution headers
   (`## [<host-repo>] DATE — TITLE`) and `provenance.yml` entries
