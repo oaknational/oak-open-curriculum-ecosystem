@@ -62,16 +62,50 @@ shape — test-commit-ahead-of-code-commit, or test-skipped-pending-
 later-unskip — is a violation of testing-strategy.md (see
 "No skipped tests" and "TDD = test + product code as PAIRS").
 
-## Parallel cycles
+## Atomic, independent cycles for parallel dispatch
 
-A delivery often needs cycles at several levels happening together,
-sometimes by different agents. Parallelisation is fine; the
-discipline is per-cycle, not per-delivery:
+Beyond being one commit each, cycles should be made independent
+of each other where the work shape allows. Two cycles are
+independent when completing one does not change what the other
+does or how it is verified. In practice each independent cycle:
 
-- Each cycle's commit contains its test and the code that greens it.
-- Each cycle's commit ends with the tree fully green.
-- Cycles can be sequenced or parallelised across workstreams; what
-  cannot happen is a cycle landing in two pieces.
+- Touches a separate file scope, OR overlaps with another cycle
+  only in additive ways (no mutual edits to the same lines)
+- Declares its starting state (typically: "branch HEAD at time
+  of dispatch")
+- Has executable acceptance criteria another agent can verify
+  without reading the rest of the plan
+- Carries a self-contained brief — no "ask the original author"
+  dependencies; the cycle description is enough for any agent
+  to pick it up and complete it
+
+Independent cycles can be dispatched to parallel agents:
+
+1. The orchestrator (or any agent that reaches the cycle) hands
+   the cycle's brief to a worker.
+2. The worker writes the test + product code + commits the
+   single landing.
+3. The orchestrator integrates the worker's commit on the next
+   pull, runs gates, and continues.
+
+Where cycles genuinely depend on each other — typically when a
+higher-level test needs lower-level cycles in place first, or
+when one cycle introduces an interface another cycle consumes —
+declare the dependency explicitly in the cycle description.
+Optionally add a `depends_on:` field to the YAML todo listing the
+prerequisite cycle ids. Dependent cycles are queued behind their
+prerequisites; they are not dispatched until the prerequisite
+has landed.
+
+The plan-author discipline: do not invent serial dependencies
+that the work shape does not require. Pick the natural
+decomposition the cycles already suggest — separate workspaces,
+separate modules, separate features. Where natural decomposition
+yields independent cycles, the cycles ARE parallel-safe; mark
+them so the orchestrator can dispatch them concurrently. A
+delivery is one commit per cycle, sequenced or parallel as the
+dependency graph dictates; what cannot happen is a cycle landing
+in two pieces.
 
 ## Both levels are required
 

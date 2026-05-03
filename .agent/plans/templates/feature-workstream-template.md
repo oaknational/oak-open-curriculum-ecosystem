@@ -5,24 +5,31 @@ todos:
   - id: ws1-cycle-1
     content: "WS1 cycle 1: [test name] + [product code that makes it pass]. One commit. Tree green at end."
     status: pending
+    # depends_on: []   # parallel-safe (no prerequisites)
   - id: ws1-cycle-2
     content: "WS1 cycle 2: [next test+code pair]. One commit. Tree green at end."
     status: pending
+    # depends_on: []   # parallel-safe with ws1-cycle-1 if file scopes don't overlap
   - id: ws2-cycle-1
     content: "WS2 cycle 1: [test name] + [product code]. One commit. Tree green at end."
     status: pending
+    depends_on: [ws1-cycle-1]   # example: this cycle consumes an interface ws1-cycle-1 introduces
   - id: ws3-doc-propagation
     content: "WS3: TSDoc, README, NL guidance, ADR/directive updates for landed behaviour."
     status: pending
+    depends_on: [ws1-cycle-1, ws1-cycle-2, ws2-cycle-1]
   - id: ws4-quality-gates-final
     content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub) on the integrated delivery."
     status: pending
+    depends_on: [ws3-doc-propagation]
   - id: ws5-adversarial-review
     content: "WS5: Adversarial specialist reviews. Document findings."
     status: pending
+    depends_on: [ws4-quality-gates-final]
   - id: ws6-doc-propagation
     content: "WS6: Propagate settled outcomes to canonical ADR/directive/reference docs and relevant READMEs."
     status: pending
+    depends_on: [ws5-adversarial-review]
 isProject: false
 ---
 
@@ -137,6 +144,58 @@ session-handoff, and consolidation touch points this plan will use.
 
 ---
 
+## Cycle Dependencies and Parallelisation
+
+> See [TDD Cycles component](../templates/components/tdd-phases.md)
+> §"Atomic, independent cycles for parallel dispatch"
+
+Where the work shape allows, structure cycles so they can be
+dispatched to parallel agents. For each cycle ask:
+
+1. Could this cycle land at a different time than another in the
+   plan without changing either's behaviour or verification?
+2. Does this cycle touch the same files as another? If yes, name
+   the overlap precisely (which lines / which symbols).
+3. Does this cycle's acceptance criterion depend on another
+   cycle's product code being present?
+
+Cycles that touch separate file scopes and have no acceptance
+dependency on other cycles are PARALLEL-SAFE — declare an empty
+`depends_on: []` (or omit the field) on the YAML todo. The
+orchestrator can dispatch them to separate agents simultaneously
+with self-contained briefs.
+
+Cycles that genuinely require other cycles to land first are
+SEQUENCED — declare `depends_on: [prerequisite-cycle-id, ...]`
+on the YAML todo. They are not dispatched until each prerequisite
+has landed.
+
+Plan-author discipline: do not invent serial dependencies. Pick
+the natural decomposition (separate workspaces, separate modules,
+separate features) the cycles already suggest. Where natural
+decomposition yields independence, the cycles ARE parallel-safe
+— declare them so.
+
+### Self-contained brief checklist (per cycle)
+
+A cycle is "ready to hand off to a parallel agent" when its
+description in this plan answers:
+
+- **What test to write**: file path + assertion shape
+- **What product code to write**: file path(s) + behaviour
+- **Starting state**: which branch / commit the cycle starts from
+- **File scope**: every file the cycle is permitted to touch
+- **Files NOT to touch**: the parallel-safety boundary
+- **Acceptance**: deterministic command(s) another agent can run
+- **Reviewer dispatch (optional)**: specialist reviewers for this
+  cycle's substance
+
+If any of these is missing, the cycle cannot be safely dispatched
+to a parallel agent and must be either reshaped or kept sequenced
+with the orchestrator.
+
+---
+
 ## Reviewer Scheduling (phase-aligned)
 
 Reviewers are scheduled in three phases, chosen by what they challenge:
@@ -192,6 +251,19 @@ refactor. The tree is green at the end of every commit.
 
 ### Cycle 1.1: [Cycle name — what behaviour this cycle delivers]
 
+**Parallel-safety**: [parallel-safe | sequenced after `<cycle-id>`]
+
+**Starting state**: [branch HEAD at dispatch | after `<cycle-id>` lands]
+
+**File scope** (this cycle is permitted to touch):
+
+- `[test-file].unit.test.ts` (NEW or MODIFIED)
+- `[path/to/file.ts]` (NEW or MODIFIED)
+
+**File scope NOT to touch** (parallel-safety boundary):
+
+- [files another concurrent cycle owns; e.g., `[other-file.ts]`]
+
 **Test** (Red):
 
 - `[test-file].unit.test.ts` — [What it asserts]
@@ -205,7 +277,8 @@ refactor. The tree is green at the end of every commit.
 
 - [Extract/rename/document changes that keep the test green]
 
-**Acceptance**:
+**Acceptance** (executable by another agent without reading the
+rest of the plan):
 
 1. The test runs and passes
 2. The whole tree is green (`pnpm test` exits 0; no skipped tests)
@@ -231,10 +304,16 @@ pnpm test
 # Expected: exit 0, no skipped tests, no failing tests
 ```
 
+**Reviewer dispatch (optional)**: [specialists for this cycle's
+substance — e.g., `type-reviewer`, `mcp-reviewer`]
+
 ### Cycle 1.2: [Next cycle name]
 
-[Same structure as 1.1: Red test, Green product code, Refactor,
-Acceptance, Validation. One commit per cycle.]
+[Same structure as 1.1: parallel-safety; starting state; file
+scope; files NOT to touch; Red test; Green product code;
+Refactor; Acceptance; Validation; Reviewer dispatch. One commit
+per cycle. Self-contained brief — another agent can pick it up
+and complete it without further coordination.]
 
 ---
 
