@@ -131,3 +131,64 @@ pending-graduations.
 **Original session intent**: complete consolidation, return to
 MCP/search tool fix-and-prove work in agent-collaboration-
 experiments context. Consolidation now done; back to the work.
+
+## 2026-05-03 — Templates can encode failure modes; TDD-as-pairs landed in surfaces and plans
+
+After the corrective deletions, two further sharpenings landed.
+
+**1. Templates and components can institutionalise the failure
+mode they were not designed to enforce.** The WS1=RED / WS2=GREEN /
+WS3=REFACTOR shape in `feature-workstream-template.md` and
+`tdd-phases.md` was the institutional source of every multi-
+commit-TDD-shaped plan in this repo. The principles directive
+already said "Red, Green, Refactor"; the template made that read
+as "RED commit, then GREEN commit, then REFACTOR commit". Six
+plans inherited that shape, and one of them (WS1 RED arc) left
+4 skipped tests in the tree. Fixing the directive without fixing
+the templates would have left the failure mode alive in every
+new plan derived from the template. Lesson: when a generator is
+named and a doctrine is sharpened, the templates the doctrine
+flows through MUST be updated in the same pass — passive
+guidance loses to artefact gravity (existing pattern, now with
+fresh evidence).
+
+**2. The "all hedging is the same failure" sharpening.** Owner
+direction: there is no semantic difference between *carve out*,
+*carve around*, *exception*, *honest framing for external X*,
+*permitted variant*, *for these arcs*, or any other wording that
+means "I know the rule always applies, but this situation is
+special". Every such wording is the same failure shape in
+different dressing. Cue 2 in PDR-043 names "case where the rule
+doesn't apply"; the sharpened reading: vocabulary is not the
+trigger — *intent* is. If the substance reads "the rule doesn't
+apply here", the candidate is suspect regardless of vocabulary.
+
+**3. Atomic, independent cycles for optional parallel-agent
+dispatch.** New planning discipline added on top of TDD-as-pairs:
+where the work shape allows, cycles should be made independent
+of each other (separate file scopes, executable acceptance,
+self-contained briefs) so each can be handed to a parallel
+agent without mid-work coordination. Declared via optional
+`depends_on: []` field on the YAML todo; cycles with no
+declared dependency are parallel-safe. Plan-author rule: do not
+invent serial dependencies the work shape does not require.
+Pick the natural decomposition (separate workspaces, separate
+modules, separate features) the cycles already suggest. Lands
+as the first explicit framing of agent-multiplexing as a
+plan-time concern rather than a runtime concern; future plans
+inherit the discipline through `/jc-plan`.
+
+**Active-plan inventory after this session**:
+
+- All six `current/` plans now express work as cycle-pairs (test
+  paired with product code in one commit). The 6 skipped tests
+  have named cycle-pair homes — each one paired with the WS that
+  will unskip and green it in one commit.
+- The plan command, the TDD cycles component, and the feature-
+  workstream template carry both disciplines (TDD-as-pairs and
+  atomic-independent-parallel cycles); future plans inherit
+  both automatically.
+
+Next session resumes at the WS2 cycle of the multi-sink plan
+(sentry-node `SinkRegistry` consumption — first paid-down
+skip-violation + first product slice).

@@ -214,6 +214,52 @@ continuity snapshots.
   protocol (iv)). Status: due (graduates with the next CLI
   ergonomics plan execution slice).
 
++ 2026-05-03; **PDR-043 cue 2 sharpening: vocabulary is not the
+  trigger, intent is** — owner direction this session: "there is
+  no semantic difference between *carve out*, *carve around*,
+  *exception*, *honest framing for external X*, *permitted
+  variant*, *for these arcs*, or any other wording that means 'I
+  know the rule always applies, but this situation is special'".
+  PDR-043 currently frames cue 2 around the vocabulary trip-list;
+  the sharpening: substance that reads "the rule doesn't apply
+  here" is the trigger, regardless of vocabulary. Substance:
+  amend PDR-043 §"Cue 2 — Conditional-discipline check before
+  proposing structure" to include the intent-based reading
+  alongside the vocabulary-based one. Trigger: second instance OR
+  owner direction. Status: pending. Captured: 2026-05-03 (Lush
+  Spreading Seed). Source surface: this session's iterative
+  cleanup, where multiple non-"carve" hedging shapes (`Permitted:
+  exception`, "honest framing for external", "exception for E2E
+  tests", "C7 carve-outs ratified") all needed removal.
+  Graduation target: PDR-043 amendment + principles.md three-cues
+  paragraph wording update.
+
++ 2026-05-03; **atomic, independent cycles for optional
+  parallel-agent dispatch** — new planning discipline landed this
+  session in `.agent/commands/plan.md` requirement 3,
+  `.agent/plans/templates/components/tdd-phases.md`
+  §"Atomic, independent cycles for parallel dispatch", and
+  `.agent/plans/templates/feature-workstream-template.md` §"Cycle
+  Dependencies and Parallelisation". Substance: where the work
+  shape allows, cycles should be made independent of each other
+  (separate file scopes, executable acceptance, self-contained
+  briefs) so each can be handed to a parallel agent without
+  mid-work coordination. Declared via optional `depends_on: []`
+  field on the YAML todo plus prose markers in the cycle body
+  (Parallel-safety, Starting state, File scope, File scope NOT
+  to touch). Plan-author discipline: do not invent serial
+  dependencies the work shape does not require. Trigger: second
+  Practice-bearing repo adopts the same discipline OR owner
+  direction. Status: pending (single-instance — graduates as a
+  PDR candidate when N≥2 host repos pick it up, or when owner
+  directs). Captured: 2026-05-03 (Lush Spreading Seed). Source
+  surface: this session's plan-template restructure following
+  the TDD-as-pairs landing. Graduation target: a new PDR in
+  `.agent/practice-core/decision-records/` covering atomic
+  cycles + dependency declaration + parallel dispatch as a
+  portable Practice-governance principle, with this repo's
+  adoption already evidenced in the planning-template surfaces.
+
 + 2026-05-03; **6 skipped test files violate the absolute
   no-skipped-tests rule** in `testing-strategy.md` and must be
   remediated by landing tests + consumer wiring together as
