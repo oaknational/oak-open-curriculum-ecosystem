@@ -7127,6 +7127,106 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "99717aca-1c2e-4838-8cd4-1dd9ca9db4c8",
+      "agent_id": {
+        "agent_name": "Tidal Flowing Reef",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "f879e0"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/sentry-node/src/types.ts",
+            "packages/libs/sentry-node/src/types-fixture.ts",
+            "packages/libs/sentry-node/src/config.ts",
+            "packages/libs/sentry-node/src/runtime.ts",
+            "packages/libs/sentry-node/src/runtime-sinks.ts",
+            "packages/libs/sentry-node/src/fixture.ts",
+            "packages/libs/sentry-node/src/index.ts",
+            "packages/libs/sentry-node/src/config-from-registry.unit.test.ts",
+            "packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts",
+            "packages/libs/sentry-node/src/config.unit.test.ts",
+            "packages/libs/sentry-node/src/runtime.unit.test.ts",
+            "packages/libs/sentry-node/src/runtime-sinks.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T18:20:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS2 cycle: @oaknational/sentry-node SinkRegistry consumption — atomic cycle-pair commit. Delete SentryMode; rewrite ParsedSentryConfig to four-kind union (sentry-disabled / sentry-live / sentry-live-with-tee / fixture-only) derived from OBSERVABILITY_SINKS.includes('sentry') × OBSERVABILITY_FIXTURES; rename FixtureSentryStore→FixtureCaptureStore + FixtureSentryCapture*→FixtureCaptureRecord*; rewrite runtime mode dispatch + runtime-sinks fan-out; unskip config-from-registry + runtime-fixture-tee-redaction tests with greening product code in same commit; TSDoc on every renamed export; pnpm test --filter @oaknational/sentry-node exits 0; grep -rn 'SENTRY_MODE|SentryMode' packages/libs/sentry-node/ returns zero.",
+      "notes": "Lane B per there-is-no-time-hashed-starfish.plan.md ARC B1 + observability-multi-sink-and-fixtures-shape.plan.md WS2 cycle. Salty Navigating Jetty (900b17) holds an uncommitted claim on Lane A (ARC A2 cycle 1: local-stub mode conversion); lanes are independent per plan. Tidal Flowing Reef takes Lane B.",
+      "archived_at": "2026-05-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-03T19:41:12Z",
+        "closed_by": {
+          "agent_name": "Tidal Flowing Reef",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "f879e0"
+        },
+        "summary": "Closed without product code. Session ran a full grounding pass on Lane B (WS2 sentry-node SinkRegistry consumption) and surfaced an empirical cascade finding: producer-first WS2-WS5 sequencing as written in observability-multi-sink-and-fixtures-shape.plan.md leaves ~10-15 app-level tests RED across commits while waiting for WS4/WS5 cure — same shape as the multi-commit-TDD-skip-register pattern deleted today (60b9ff4c). Owner direction: don't carry on with known-bad approach; reshape the work to adopt new insights. Session output: napkin entry under 2026-05-03 day capturing the cascade finding + framing-trap recognition; comms event claude-f879e0-tidal-step-back-and-cascade-finding addressed to Salty Navigating Jetty + thread; two platform-memory feedback entries (no-ritual-framing, question-shape-known-bad-vs-adopt). No commit, no product-code edits. Salty is now authoring fresh plans based in part on this feedback. Evidence: napkin.md 2026-05-03 Tidal entry; comms event claude-f879e0-tidal-step-back-and-cascade-finding.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "99717aca-1c2e-4838-8cd4-1dd9ca9db4c8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "25dd082e-b3e9-41b5-894b-43498b92af06",
+      "agent_id": {
+        "agent_name": "Salty Navigating Jetty",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "900b17"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/modes.ts",
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub.ts",
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/local-stub-env.ts",
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T18:15:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ARC A2 cycle 1: local-stub mode conversion to canonical harness — pure env-builder, *.smoke.test.ts conversion, modes.ts registration, replace pre-existing describe.skip blocks with active per-mode tests, smoke:dev:stub script update",
+      "notes": "Single agent (Salty Navigating Jetty); no peer present per active-claims.json + last comms event being prior session-close. Lane A from there-is-no-time-hashed-starfish.plan.md ARC A2 cycle 1.",
+      "archived_at": "2026-05-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-03T20:01:54Z",
+        "closed_by": {
+          "agent_name": "Salty Navigating Jetty",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "900b17"
+        },
+        "summary": "Closed without landing. Cycle 1 work was reverted via working-tree restore (the destructive operational error captured in claude-900b17-salty-destructive-revert-and-smoke-arc-halt event and the never-use-git-to-remove-work rule). Owner /jc-metacognition surfaced that the smoke-harness arc is needless complexity; local-stub smoke is duplicative of e2e-tests/stub-mode.e2e.test.ts and adjacent coverage. Three replacement plans authored: fix-dev-boot-release-resolution, replace-sentry-mode-with-observability-sinks, retire-smoke-tests-all-vitest-no-real-io. Old plans archived as DAMAGED. E1 closed; E6 framed. See claude-900b17-salty-handoff-three-plans-and-e1-closed for the full pickup brief.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "25dd082e-b3e9-41b5-894b-43498b92af06",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
