@@ -1,37 +1,66 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-## Landing target (per PDR-026)
+## Landing target (per PDR-026) — refreshed 2026-05-03 (Salty)
 
-**Active executable plan (canonical)**:
-[`.agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md`](../../../plans/observability/current/there-is-no-time-hashed-starfish.plan.md)
-— promoted 2026-05-03 by Pelagic Washing Anchor. Three-arc execution
-sequencer: ARC A redesigns the smoke-test harness (owner-named
-correction this session: existing tsx-script harness is the wrong
-shape; canonical shape is thin start-server + invoke-vitest +
-cleanup wrapper). ARC B executes WS2–WS11 of the prior plan body
-with corrections to deletion timing, WS4→WS6 bridge language, ESLint
-rule authoring (architecture-reviewer-betty findings Q2/Q3/Q4
-folded into ARC B0). ARC C runs pre-merge divergence analysis,
-push, preview validation, merge.
+**Three independent active plans replace the damaged
+`there-is-no-time-hashed-starfish` and
+`observability-multi-sink-and-fixtures-shape` plans** (archived to
+`.agent/plans/observability/archive/superseded/` with explicit
+"DAMAGED — superseded — not complete; we had to start again with
+simpler approaches" notices). The old plans should NOT be referenced
+for current work — read them only for forensic background.
 
-**Existing observability plan body**:
-[`.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md`](../../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md)
-remains the source of truth for WS2–WS11 substance. ARC B0 of the
-new plan is the explicit edit list to apply to that plan body
-before WS2 begins.
+**Active plans, in pickup order**:
 
-**Next-session landing target**: **ARC A2 — convert local-stub,
-local-stub-auth, local-live, local-live-auth, remote modes to the new
-canonical harness; convert smoke-assertions/* to *.smoke.test.ts;
-retire helpers/environment.ts process.env mutation; every existing
-pnpm smoke:dev:* still passes.** ARC A2 atomic-landing-commit MUST flip
-`describe.skip` → `describe` on the two skip blocks at
-`smoke-tests/harness/run-smoke.unit.test.ts` (mode registry — A2
-obligations, SKIP-UNTIL-A2 header) and
-`smoke-tests/harness/run-smoke.integration.test.ts` (runSmokeMode
-against real modes — A2 obligations, SKIP-UNTIL-A2 header). For
-`remote` mode use the `createRemoteBootServer` factory in
-`harness/boot-server.ts` rather than `createInProcessBootServer`.
+1. [`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`](../../../plans/observability/current/fix-dev-boot-release-resolution.plan.md)
+   — **BLOCKING — primary unblocker.** Single cycle, single function,
+   single test file in `packages/core/build-metadata/`. Fixes
+   `resolveDevelopmentRelease` to fall through to a `local-dev`
+   placeholder when both Vercel attribution vars are absent in dev;
+   preview + production keep their hard-fail. ~10 lines product code
+   plus paired unit tests.
+2. [`.agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md`](../../../plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md)
+   — DESIRABLE, parallel-safe with plan 3. Cycle 1 is a single
+   atomic ~30-file landing of the rename across sentry-node + env +
+   HTTP MCP + Search CLI + tests, per Tidal Flowing Reef's cascade
+   analysis (producer-first sequencing reintroduces the multi-commit-
+   TDD-skip-register pattern; `replace-don't-bridge` forbids the
+   transitional shims that would let WS2 land independently).
+   Cycles 2 (ADR-171) and 3 (READMEs + .env.example) are doc-only
+   and parallel-safe with cycle 1.
+3. [`.agent/plans/architecture-and-infrastructure/current/retire-smoke-tests-all-vitest-no-real-io.plan.md`](../../../plans/architecture-and-infrastructure/current/retire-smoke-tests-all-vitest-no-real-io.plan.md)
+   — DESIRABLE, parallel-safe with plan 2. Eleven cycles
+   (1a/1b/1c/1d + 2a–2f + 3) designed for maximum parallelism.
+   Retires `smoke-tests/` as duplicative of e2e + unit + integration
+   coverage; brings all tests under Vitest; bans real network calls
+   and disk access in tests outside ADR-078-permitted patterns.
+
+**Agent-pickup prompts** at
+[`.agent/prompts/handoff-2026-05-04/`](../../../prompts/handoff-2026-05-04/README.md)
+— one prompt per plan, ready to pick up and run with.
+
+**Independence**: all three plans are file-disjoint AND sequencing-
+independent at the plan-to-plan level. Within each plan, cycles are
+parallel-safe wherever the work shape allows; the explicit dependencies
+are named in each plan's §Independence section.
+
+**Soft cross-plan dependency**: plan 2 cycle 1's "boot with
+`OBSERVABILITY_SINKS=['sentry']`" acceptance exercises a code path
+that plan 1 fixes. With default `OBSERVABILITY_SINKS=[]`, plan 2 lands
+independently; sentry-enabled boot acceptance verifies after plan 1
+lands. Plan 3 is fully independent of both plan 1 and plan 2 (the
+earlier sequencing constraint with plan 1's regression-guard was
+resolved when the orphaned e2e test was deleted in commit `27983ef9`).
+
+**Bug status**: the `pnpm test:e2e` regression-guard
+`dev-server-boots-without-observability-config.e2e.test.ts` has been
+DELETED (commit `27983ef9`) as a damaged-plan artefact (multi-commit-
+TDD shape; spawning child process in violation of testing-strategy.md;
+written ahead of its WS4 cure that was archived as DAMAGED). Plan 1
+proves the underlying fix at unit level only; plan 3 cycle 1c lands
+the proper replacement test at unit/integration tier. There is no
+spawning automated test for the dev-boot invariant after this commit
+arc — that is intentional.
 
 **ARC A1 landed 2026-05-03 (Prismatic Illuminating Eclipse)**: harness
 module + RED-skip-arc tests + vitest.smoke.config.ts +

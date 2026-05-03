@@ -9,8 +9,42 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03
-(Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a`
+**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03
+(Salty Navigating Jetty / `claude-code` / `claude-opus-4-7-1m` /
+`900b17` session-handoff: six commits landed —
+`1d58061f` chore(safety) blocked working-tree-overwrite git commands
++ `never-use-git-to-remove-work` rule + principles.md bullet (the
+durable cure for the destructive-revert incident captured in comms
+event `claude-900b17-salty-destructive-revert-and-smoke-arc-halt`);
+`27983ef9` test(observability) deleted the orphaned
+`dev-server-boots-without-observability-config.e2e.test.ts` as a
+damaged-plan artefact (multi-commit-TDD shape; spawning child process
+in violation of testing-strategy.md, written ahead of its WS4 cure
+that was archived as DAMAGED); `ca58a225` docs(plans) archived
+`there-is-no-time-hashed-starfish.plan.md` and
+`observability-multi-sink-and-fixtures-shape.plan.md` as
+damaged-not-complete with explicit "started again with simpler
+approaches" notices; `c92ebf42` docs(plans) landed three replacement
+plans (`fix-dev-boot-release-resolution`,
+`replace-sentry-mode-with-observability-sinks`,
+`retire-smoke-tests-all-vitest-no-real-io`) — each independent at
+file and sequencing level, parallel-safe internally where the work
+shape allows, code-reviewer findings absorbed; `02ee44b8`
+docs(experiments) closed E1 collaboration experiment (primitives
+P1/P3/P5/P6/P10/P11 confirmed across N=2 and N=3 pairings;
+coordination is sound; arc-level principle-application surfaced as
+the separate concern E6 will probe) and framed E6 next hypothesis;
+`c9356cb3` chore(continuity) captured the session-arc napkin + thread
+record + closed claims + six comms events. Tidal Flowing Reef
+co-participant of the arc; their session-clean at the time of the
+revert per their own comms event; their cascade analysis is the
+load-bearing rationale for the atomic-rename shape of plan 2.
+**Three agent-pickup prompts** at
+`.agent/prompts/handoff-2026-05-04/{README,agent-plan-1-bug-fix,agent-plan-2-config-rename,agent-plan-3-smoke-retirement}.md`
+are the operative pickup surface for the next session(s); plan 1
+(BLOCKING) is the primary unblocker, plans 2 and 3 are parallel-safe.
+Prior:
+Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a`
 session-handoff: three commits landed — `60b9ff4c` corrective
 consolidation (deleted incorrect Cardinal Rule extension pair +
 multi-commit-TDD triple; renumbered rush-impulse pair to
