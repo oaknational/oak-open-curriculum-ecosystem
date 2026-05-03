@@ -20,15 +20,33 @@ remains the source of truth for WS2–WS11 substance. ARC B0 of the
 new plan is the explicit edit list to apply to that plan body
 before WS2 begins.
 
-**Next-session landing target**: **ARC A1 — design canonical smoke
-harness + author RED tests for env-builder, boot-signal parser,
-lifecycle wrapper; vitest.smoke.config.ts; smoke-context.ts.** Reviewer
-dispatch on completion: test-reviewer, architecture-reviewer-fred,
-architecture-reviewer-betty, mcp-reviewer. ARC A1's RED-arc skip
-register inherits the WS1 trip-wires (entries 1 + 2 in
-`runtime-fixture-tee-redaction.unit.test.ts` + `config-from-registry.unit.test.ts`)
-plus the new boot-failure trip-wire (the no-observability mode's
-harness boot-wait timeout becomes RED until ARC B3 / WS4 lands).
+**Next-session landing target**: **ARC A2 — convert local-stub,
+local-stub-auth, local-live, local-live-auth, remote modes to the new
+canonical harness; convert smoke-assertions/* to *.smoke.test.ts;
+retire helpers/environment.ts process.env mutation; every existing
+pnpm smoke:dev:* still passes.** ARC A2 atomic-landing-commit MUST flip
+`describe.skip` → `describe` on the two skip blocks at
+`smoke-tests/harness/run-smoke.unit.test.ts` (mode registry — A2
+obligations, SKIP-UNTIL-A2 header) and
+`smoke-tests/harness/run-smoke.integration.test.ts` (runSmokeMode
+against real modes — A2 obligations, SKIP-UNTIL-A2 header). For
+`remote` mode use the `createRemoteBootServer` factory in
+`harness/boot-server.ts` rather than `createInProcessBootServer`.
+
+**ARC A1 landed 2026-05-03 (Prismatic Illuminating Eclipse)**: harness
+module + RED-skip-arc tests + vitest.smoke.config.ts +
+smoke-context.ts. Workspace test suite green (740 pass / 13 skip / 1
+todo); lint clean; type-check clean. Acceptance criterion shifted from
+plan body literal "exits non-zero with expected RED messages" to the
+WS1-pattern skip-register (describe.skip + SKIP-UNTIL-An header) under
+trunk-green discipline; surface acknowledgement at comms event
+`claude-7402c9-prismatic-a1-acceptance-criterion-shift`. Four reviewers
+dispatched in parallel (test-reviewer, architecture-reviewer-fred,
+architecture-reviewer-betty, mcp-reviewer) all returned COMPLIANT
+with findings; absorbable findings implemented in-A1 (remote-mode
+factory, spawn error contract, vitest config inheritance fix, clock
+fake simplification, classification doc), deferred findings recorded
+in napkin §"ARC A1 landing" entry.
 
 **Coordination state**: Pelagic Washing Anchor (claude-code,
 `f730bd…`) is plan-author/orchestrator; Misty Ebbing Pier
@@ -128,7 +146,8 @@ matching `platform + model + agent_name` updates `last_session`.
 | Abyssal Diving Stern | claude-code | claude-opus-4-7-1m | `87ccac` | Doctrine graduation (rush-impulse → principles.md § Architectural Excellence Over Expediency); observability-multi-sink-and-fixtures-shape plan author + WS0 promotion + supersession routing | 2026-05-02 | 2026-05-02 |
 | Moonlit Drifting Nebula | cursor | claude-opus-4-7 | `92470a` | observability-multi-sink-and-fixtures-shape WS1 RED phase (env schemas + SinkRegistry types + warnings channel + outermost regression-guard E2E + per-layer RED tests with describe.skip / it.todo arc); D7a build-time orthogonality verification; four-reviewer round (test/docs-adr/onboarding/sentry) with cross-confirmed P1/P2 fixes addressed in-WS1; six deferred items recorded as plan-body amendment candidates | 2026-05-03 | 2026-05-03 |
 | Pelagic Washing Anchor | claude-code | claude-opus-4-7-1m | `f730bd` | plan-author / orchestrator: there-is-no-time-hashed-starfish.plan.md authored and landed in repo plan tree; smoke-harness-shape correction captured (owner-named; superseded prior Shape A proposal); architecture-reviewer-betty findings Q2/Q3/Q4 folded into ARC B0 corrections; coordinating Misty Ebbing Pier via comms log (atomic isolated tasks) | 2026-05-03 | 2026-05-03 |
-| Misty Ebbing Pier | claude-code | claude-opus-4-7-1m | `ba3961` | parallel session under owner direction; Task M1 (smoke-tests harness reconnaissance, read-only) executed and delivered (`claude-ba3961-misty-task-1-harness-recon-reply` event); polling-discipline self-correction (`claude-ba3961-override-acknowledgement` event); claim 42c9e362 closed cleanly; subjective reflection at `experience/2026-05-03-misty-two-agent-comms-reflection.md` | 2026-05-03 | 2026-05-03 |
+| Misty Ebbing Pier | claude-code | claude-opus-4-7-1m | `ba3961` | parallel session under owner direction; Task M1 (smoke-tests harness reconnaissance, read-only) executed and delivered (`claude-ba3961-misty-task-1-harness-recon-reply` event); polling-discipline self-correction (`claude-ba3961-override-acknowledgement` event); claim 42c9e362 closed cleanly; subjective reflection at `experience/2026-05-03-misty-two-agent-comms-reflection.md`; owner-prompted metacognition pivot reframing collaboration cures as N-agent hypothesis under test; produced four companion artefacts at `.agent/prompts/agentic-engineering/collaboration/` (hypothesis.md / falsification-criteria.md / experiments.md / README.md); next session running first-attempts.md prompts is effectively the first experiment | 2026-05-03 | 2026-05-03 |
+| Prismatic Illuminating Eclipse | claude-code | claude-opus-4-7-1m | `7402c9` | ARC A1 executor — designing canonical smoke harness module (run-smoke.ts, cli.ts, env-builder, boot-signal parser, lifecycle wrapper) + RED tests + vitest.smoke.config.ts + smoke-context.ts. Picking up from Pelagic Washing Anchor's plan; design input is Misty Ebbing Pier's harness recon (no mode spawns pnpm dev — uniform in-process boot path via createApp + app.listen). E1 observation point. | 2026-05-03 | 2026-05-03 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged

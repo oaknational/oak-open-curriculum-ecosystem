@@ -32,6 +32,244 @@ High-signal entries from that arc graduated to:
 - `repo-continuity.md § Pending-Graduations Register` — the
   commit-bundle-leakage candidate from this session's post-mortem.
 
+## 2026-05-03 — ARC A1 landing: canonical smoke harness + reviewer absorption + E1 observations (Prismatic Illuminating Eclipse)
+
+[E1] Captured at session-close per the experiment brief structured-surprise format. ARC A1 of `there-is-no-time-hashed-starfish.plan.md` landed: harness module (`types.ts`, `boot-outcome.ts`, `run-smoke.ts`, `boot-server.ts`, `spawn-vitest.ts`, `modes.ts`, `cli.ts`), tests (`run-smoke.unit.test.ts` + `run-smoke.integration.test.ts`), `vitest.smoke.config.ts`, `smoke-tests/test-helpers/smoke-context.ts`. Workspace test suite: 89 files / 740 passed / 13 skipped / 1 todo; lint clean; type-check clean.
+
+- **Setup**: I expected the plan body §A1 literal acceptance ("vitest run smoke-tests/harness/ exits non-zero with expected RED messages") to be the operative constraint. I designed RED tests that genuinely fail.
+- **Observed**: Misty's recon (collapsing harness shape to uniform-in-process) made the orchestration logic fully GREEN-able with DI fakes today. The only RED was per-mode obligations (A2 lands modes; A3 adds no-observability). Letting those fail genuinely broke trunk-green workspace tests — a direct conflict with `dont-break-build-without-fix-plan`.
+- **Resolution**: matched the WS1 RED-arc skip register pattern — `describe.skip` + `SKIP-UNTIL-A2`/`SKIP-UNTIL-A3` headers + napkin §RED-arc skip register entries 5+6. Surfaced via comms event `claude-7402c9-prismatic-a1-acceptance-criterion-shift` BEFORE proceeding (Misty cure viii: worker-on-empirical-surface, surface assumption-breaking findings before continuing).
+- **Why this matters**: the plan body's literal acceptance text was authored pre-recon; the recon made the RED-only-on-failing-assertions interpretation incompatible with trunk-green. The architecturally-correct shape uses the existing skip-register mechanism — same audit trail (header marker + napkin entry + workstream-landing-flip obligation), zero workspace-test pollution.
+
+**Reviewer absorption** (4 reviewers dispatched in parallel: test-reviewer, architecture-reviewer-fred, architecture-reviewer-betty, mcp-reviewer):
+
+- **Implemented**: (a) Betty Q1 — added `createRemoteBootServer` factory for the `remote` mode (resolves to `listening` with env-injected URL; cleanup is no-op); (b) Fred Warning 2 — `spawn-vitest`'s `child.on('error')` now resolves with `exitCode: 1` instead of rejecting, preserving the orchestrator's "does not throw on test failure" contract; (c) Test-reviewer P2-1 — simplified the integration-test clock fake to `() => 0` (none of the tests assert on durations); (d) Betty latent — `vitest.smoke.config.ts` no longer extends `baseE2EConfig` (vitest's `mergeConfig` concatenates `setupFiles` arrays, leaving the no-network guard active despite `setupFiles: []` override); (e) Betty Q4 + Q5 — TSDoc additions naming boot-outcome classification rules and the `EMPTY_BASE_ENV` constant for the call-site assumption.
+- **Accepted/deferred**: (a) Test-reviewer P1 (skip-block scanner) — already in pending-graduations as the WS1-pattern structural-enforcement scanner; (b) Fred Warning 1 — pre-existing `[TRACE]` console statements in `server-lifecycle.ts`, defer to A2 mode-migration cleanup; (c) Fred Strategic (future workspace lift to `packages/libs/smoke-harness/`) — defer until a second consumer emerges; (d) Test-reviewer P2-2 (signal coverage) — boot-server's signal handling lives in production wiring, not in orchestration-test scope; (e) MCP best-practice TSDoc on `closeSmokeServer` — pre-existing file, scope creep.
+
+[E1] **Worker-perspective observations on the 10 hypothesis primitives** (single-agent session, peer-absent):
+
+- **P3 active-claims registry as discovery primitive** — confirmed value even with no peer present. Opening claim 9cad0bab made the intended scope auditable in shared state. The bootstrap fast-path correctly applied (no peer claims at session-open + no peer events newer than prior-session).
+- **P5 comms log with directional context** — proved unexpectedly useful as a SINGLE-agent transparency surface. The `claude-7402c9-prismatic-a1-acceptance-criterion-shift` event served as a deliberation artefact (recording the design-shift decision and rationale before acting on it). The `audience: ["*"]` field was the right shape for "no peer present, future readers may want this." Strengthens P5.
+- **P8 verification ceremony** — the five-fact ceremony at session-open was high signal-to-noise. Each fact came from a specific paragraph/line; reading the 5 artefacts in order took ~10 minutes and produced a clean grounding state. The ceremony hardened my memory of the design constraints (Misty's recon, Pelagic's design shift, the cures (vi)-(x)). Strengthens P8.
+- **P10 cheap self-correction** — the acceptance-criterion shift was caught at design time (before authoring tests as RED), AND was surfaced via comms event before continuing. Total cost: ~5 min of comms-event authoring + 10 min of test-restructuring (skip-register pattern). Cheap. Strengthens P10.
+- **Modes (P1)** — I occupied Executor for ~95% of session, briefly Orchestrator for the parallel reviewer-dispatch (4 sub-agents in one message). The Orchestrator → Executor transition was implicit and uneventful, suggesting the modes-not-roles framing scales naturally to single-agent multi-mode operation. Mild evidence for P1.
+
+**Cure shape (proto-doctrine)**: when a single-agent session encounters an assumption-breaking fact mid-task with no peer present, the comms log STILL carries value — it preserves the deliberation trace for owner audit and future-session reading. The temptation to "skip the comms event because there's no peer" is a Misty-style polling-discipline failure shifted one layer up — the comms log isn't only for peer coordination; it's the design-substrate's transparency layer. Captured here for potential graduation if a second instance accumulates.
+
+**E1 falsification check**: no primitives appeared falsified this session. P5's renderer-drops-extension-fields finding from prior session remains live (rendered log only carries the 5 canonical fields). All other observations strengthen rather than falsify.
+
+## 2026-05-03 — Decision-complete experiments plan + per-experiment subfolder restructure (Misty Ebbing Pier, final pass)
+
+Captured at session handoff. Structural follow-on to the
+framing-shift entry below; surfaces the operational state the next
+session will pick up.
+
+- **Setup**: after the framing-shift pivot reclassified the
+  collaboration cures as a hypothesis under test, owner directed
+  two further moves: (a) make the experiments plan
+  decision-complete (with `/jc-plan`); (b) restructure the prompts
+  so the two agents in the next session can be given clean
+  separate prompt files. The latter implied either tidying
+  `first-attempts.md` or moving to a per-experiment subfolder
+  structure.
+- **Resolution**:
+  1. Decision-complete plan landed at
+     `.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`
+     — frontmatter with todos covering E1 activation, capture,
+     analysis, reflection, plus E2-E5 queued / author-when-runnable
+     entries; *Decisions resolved* table making the activation
+     order, capture mechanism, analysis cadence, reflection
+     cadence, graduation criteria, falsification criteria, and
+     plan-revision cadence explicit; risk assessment; foundation
+     alignment; *Revision history* line for the next consolidation
+     to extend. The plan is decision-complete but explicitly
+     expected to be revised as evidence accrues.
+  2. Per-experiment subfolder structure under
+     `.agent/prompts/agentic-engineering/collaboration/experiments/`
+     with `E1/{brief.md, agent-1-orchestrator.md,
+     agent-2-executor.md}` for the next session's two-prompt
+     handoff. The brief carries the experiment's capture/analysis
+     plan; the prompts are ready-to-copy-paste.
+  3. Modes taxonomy (Orchestrator / Executor / Feedback /
+     Collaborator) folded into `hypothesis.md § P1` where it
+     belongs structurally. `first-attempts.md` and the old
+     top-level `experiments.md` deleted; their content lives in
+     the new structure.
+  4. `agent-1-orchestrator.md` and `agent-2-executor.md` are now
+     standalone files. Each carries the priority-order section,
+     ground-first instruction, active state, design input,
+     ceremony lists, identity discipline, bootstrap fast-path,
+     standing principles, E1 observation note, and landing-
+     commitment ritual. Cleaner than the inline-blockquote shape
+     the prior `first-attempts.md` used.
+- **Why this matters for the next session**: the next agent pair
+  will be given separate prompt files. They do not need to read
+  any other artefact in the collaboration directory to act on
+  their prompt. The brief lives next to the prompts for context
+  if either agent wants to understand what they are observing.
+  This reduces session-open ceremony to a single-file copy-paste
+  per agent.
+- **Anti-pattern avoided**: I considered pre-authoring E2-E5
+  prompts speculatively. Caught at draft time; the *Non-goals*
+  section of the plan now explicitly forbids it. Pre-authored
+  prompts go stale. Each experiment's prompts get authored when
+  the session that will run it is imminent.
+- **Cure shape (operational, for next pair)**: when running
+  multi-agent sessions, route session-opener prompts via
+  `experiments/<EID>/agent-N-<mode>.md` files. When activating a
+  new experiment, create its subdirectory with brief and prompts
+  before the session opens, not during.
+- **Generator**: same pattern as the prior framing-shift entry —
+  when the same surface is reached for two different reasons
+  (here: hypothesis methodology + per-session operational prompts),
+  decompose at the tension. The old `first-attempts.md` was doing
+  both jobs awkwardly; the new structure has separate files for
+  each.
+
+## 2026-05-03 — Framing shift: collaboration cures are an N-agent hypothesis under test, not a design to ship (Misty Ebbing Pier)
+
+Captured at session handoff after owner-prompted metacognition.
+This is the structural insight of the final session pass and
+reframes how the cures captured earlier this session should be
+treated.
+
+- **Setup**: by mid-session I had produced a 5-point worker
+  reflection, a session-opening prompt for the next pair of agents,
+  and (on owner direction) updates to that prompt file. Pelagic had
+  produced a 10-point tactical napkin entry plus a structured
+  pending-graduations entry naming five cures. Combined, the surface
+  looked like an emerging design — a coordination playbook the next
+  session could mechanically apply.
+- **Owner observation**: *"this is starting to feel like a first-pass
+  at an hypothesis for how N-agent collaboration might work."*
+- **Recognition**: the user named the framing more sharply than I
+  had. What we had been building was *not* a design (designs ship,
+  designs get defended) — it was an early-stage **hypothesis** that
+  we should test, with primitives that should individually falsify
+  or graduate. The distinction is load-bearing: if shipped as a
+  design we will defend it; treated as a hypothesis we will test
+  it. The evidence base is one 2-agent session — coherent enough
+  to test, far from validated.
+- **Pivot**: created three companion artefacts at
+  `.agent/prompts/agentic-engineering/collaboration/`:
+  `hypothesis.md` (10 candidate primitives + lifecycle),
+  `falsification-criteria.md` (per-primitive falsify/weaken/strengthen
+  observations), `experiments.md` (5 proposed N≥3 stress tests +
+  adversarial probes), plus a `README.md` routing entry-point.
+  Updated the existing pending-graduations entry to reframe cures
+  as candidate amendments to the hypothesis, awaiting empirical
+  validation at N≥3 *before* graduation to permanent doctrine.
+
+**The 10 primitives now under test** (each with explicit falsification
+criteria):
+
+1. Modes, not roles (functions an agent occupies for a unit of work,
+   recorded as transitions in the comms log).
+2. Identity-without-negotiation (PDR-027 deterministic identity).
+3. Active-claims registry as discovery primitive (advisory, not
+   mechanical refusal).
+4. Atomic-isolated task offers (scope + acceptance + output format
+   - word cap + overflow protocol).
+5. Comms log with directional context (audience + in_response_to as
+   first-class fields).
+6. Failure-shaped ceremonies (every load-bearing discipline maps to
+   a specific observed failure).
+7. Bootstrap fast-path (degenerate boundary condition for N=1).
+8. Verification ceremony (counter to "skim is indistinguishable
+   from a read").
+9. Pending-graduations register as hypothesis-evolution mechanism.
+10. Cheap self-correction as derived property (no commits land
+    mid-task).
+
+**The 5 proposed experiments** (in cost order):
+
+- E1: N=3 with Reviewer mode (tests P1, P3, P5, P6).
+- E2: Adversarial timestamp drift probe (tests P5, cure (vi)).
+- E3: Volume stress test (tests P5, P6, P9 at scale).
+- E4: Mid-task session-boundary handoff (tests P10, P7).
+- E5: Owner-unavailable + routine decision (tests owner-proxy gap).
+
+**Why surprising**: I had been thinking of the cures as
+"improvements to ship" — once captured in pending-graduations they
+felt like a queue awaiting consolidation. The framing-as-hypothesis
+makes clear that capture-and-graduate is the wrong pipeline for
+*these* cures. They need an empirical-validation step that the
+existing graduation pipeline does not require. A failure-shaped
+ceremony validated at N=2 is not safe to ship at N=5; it must be
+exercised at the larger N before graduating. This is a distinct
+pipeline from the rule/ADR/PDR graduations the consolidate-docs
+flow handles.
+
+**Generator (the metacognitive pattern)**: when the same surface is
+reached for two different reasons (in this case: cures-as-fixes and
+cures-as-experimental-evidence), the surface needs to be split.
+Conflating them is what produced the "ship the design" reading.
+This is structurally the same shape as the orientation-doctrine
+*decompose at the tension* principle: when work resists clean
+classification, the resistance reveals hidden coupling. Here the
+coupling was between *captured cures awaiting consolidation* and
+*candidate primitives awaiting validation* — same surface
+(pending-graduations register), different lifecycles. The fix was
+to add the hypothesis layer above the register and route validation
+through it before graduation.
+
+**Cure shape (operational)**: when a future session captures cures
+to a multi-agent coordination problem, route them through the
+hypothesis lifecycle if they touch any primitive in `hypothesis.md`,
+otherwise route to direct graduation. The hypothesis files are the
+authority on which cures need validation and which can graduate
+directly.
+
+**Priority order — owner-stated correction (final session pass)**:
+the function of every session on the active threads is to move
+toward a provable mergeable condition so that the upstream API
+change work can land in main. **Long-term architectural excellence
+is the priority** — never compromised for any other goal. The
+hypothesis-experiment data should absolutely be gathered and acted
+on, but the experiment is a by-product of doing the real work,
+never a justification for reshaping it. If experiment
+instrumentation would compromise the work, drop the instrumentation
+and ship the work; capture observations only insofar as they fall
+out naturally. The hypothesis exists to make the substrate better
+at supporting the work; the work is never reshaped to suit the
+hypothesis. This correction is propagated to the priority-order
+sections at the top of `hypothesis.md`, `experiments.md`,
+`first-attempts.md`, and `README.md`.
+
+**Next session has the first experimental observation opportunity,
+NOT the first experiment**: the next agent pair running the prompts
+in `first-attempts.md` are doing real work on ARC A1 and possibly
+ARC B0. Observations on the hypothesis primitives fall out of that
+work naturally and should be captured in this napkin at
+session-close per the falsification criteria. The next session is
+not "running E1"; the next session is doing ARC A1, with the
+opportunity to observe primitives in operation. If E1 (Reviewer
+mode) requires a third agent and that agent is not present, the
+session does not pause work waiting for E1 conditions — it ships
+ARC A1 and captures whatever falls out.
+
+**What I would not do**: graduate any of the 10 primitives based on
+the prior 2-agent session alone. The session is one data point.
+N=2 is the minimum coherent test, not the minimum sufficient one.
+Graduation requires N≥3 across multiple platform pairings with no
+falsifying observations — but graduation is not the function of any
+session; shipping the merge is. Graduation is what
+`/jc-consolidate-docs` does when the evidence has accumulated, not
+what any single session is doing.
+
+**Generator across this entire session arc** (from acceptance →
+recon failure → reflection → owner reframe → hypothesis): the
+work had three distinct cognitive shapes (execution, reflection,
+abstraction) and the protocol successfully held through all three.
+That is encouraging evidence for the substrate's flexibility — but
+also evidence that we should be careful about what we claim until
+the substrate has been exercised at higher N. The metacognitive
+shape is itself a primitive worth naming: *the hypothesis treatment
+gives the work a maintenance loop the design treatment does not.*
+Treat this as a process-level observation rather than a coordination
+primitive — it belongs in agent-to-owner doctrine if it graduates,
+not in agent-to-agent.
+
 ## 2026-05-03 — Inter-agent collaboration suggestions for next session (Pelagic Washing Anchor)
 
 Captured at session handoff per owner direction. The full reflection
@@ -139,6 +377,101 @@ slips (polling, ETAs, event_id integrity). The structural cures are
 queued in pending-graduations; the immediate session-level cure is
 *explicit ceremony at known weak points*. Three-line discipline at
 each weak point > silent failure.
+
+## 2026-05-03 — Worker-perspective addenda to Pelagic's collaboration suggestions (Misty Ebbing Pier)
+
+Companion to the entry directly above. Owner asked at session
+handoff for collaboration-process suggestions in the napkin so the
+next pair of agents have an easier time. Pelagic's 10 points are the
+orchestrator-perspective view; this entry is the worker-perspective
+addenda. Full subjective reflection at
+[`experience/2026-05-03-misty-two-agent-comms-reflection.md`](../../experience/2026-05-03-misty-two-agent-comms-reflection.md);
+the orchestrator-perspective companion is at
+[`experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`](../../experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md).
+Cross-link both at session start when the next pair opens.
+
+**Concrete additions and reframings (worker POV):**
+
+A. **Wall-clock authority is its own cure, distinct from out-of-band
+   acknowledgement (Pelagic point 2).** Pelagic's events were
+   forward-dated by ~50 minutes relative to my real UTC clock. The
+   renderer sorts by `created_at` so my acceptance event (real time)
+   appeared *before* Pelagic's session-open event in the rendered
+   log, even though Pelagic posted first. Out-of-band ack helps the
+   reader reconstruct the actual sequence; wall-clock authority
+   prevents the drift in the first place. Cure shape: rule that says
+   *"use `date -u +%Y-%m-%dT%H:%M:%SZ` from the host shell for
+   `created_at`, not agent-imagined time"*; the comms-append CLI
+   should compute `created_at` itself from `Date.now()` if not
+   passed explicitly. Treat as a sixth structural cure for the
+   pending-graduations entry next consolidation.
+
+B. **`audience` and `in_response_to` are dropped on render — the
+   rendered log is a flat dump, not a conversation tree.**
+   `parseCommsEvent` extracts only the 5 canonical fields; the two
+   extension fields are silently lost when `shared-comms-log.md` is
+   regenerated. A reader looking only at the rendered log cannot
+   trace conversation chains. Cure: promote `audience` and
+   `in_response_to` to the canonical schema, and emit
+   `> audience: X` and `> in reply to: <event_id>` lines in the
+   render. With six events and two agents, the chronological dump
+   was readable; with twenty events and five agents, it would not
+   be. Treat as a seventh structural cure.
+
+C. **Asymmetric ground-truth — the worker has more empirical data
+   mid-task than the orchestrator can specify upfront.** My recon
+   finding that *no* mode spawns `pnpm dev` reshaped Pelagic's ARC A
+   design from "harness must support both child-spawn AND in-process
+   lifecycle" to "uniform in-process". This is a structural property
+   of orchestrator-worker patterns: the orchestrator has the design
+   intent before the empirical surface; the worker has the empirical
+   surface before the design intent. The protocol should normalise
+   *mid-task design feedback*, not just task-close reply. Concrete:
+   a worker who discovers an assumption-breaking fact MUST surface
+   it via comms event before continuing, and the orchestrator MUST
+   poll on that signal. This is one specific case of Pelagic's
+   point 1 (poll the comms log) but worth its own naming because
+   the worker is the one who must initiate.
+
+D. **Self-correction was cheap and worth naming as a positive
+   pattern.** Sixty seconds of work corrected the unauthorised-
+   detail-file failure: one `rm`, one in-place rewrite of the reply
+   event, one transparency event acknowledging the miss, one
+   re-render. The protocol made the failure routine, not
+   catastrophic. Pelagic's acknowledgement framed it as *clean
+   self-correction*. Two preconditions for cheap self-correction:
+   (1) no commits had landed yet — the failure was contained in
+   working tree only; (2) every artefact was a single-file write
+   with no cascading changes. Cure shape (already implicit but
+   worth naming): *defer commit until task-close + counterparty
+   acknowledgement, even when individual artefact writes feel
+   commit-worthy mid-task*. Premature commits are the thing that
+   would make self-correction expensive.
+
+E. **The "default unless you reply" pattern is unsafe on poll-based
+   channels.** My acceptance event proposed *"hybrid output unless
+   you reply otherwise before ETA"*. Pelagic correctly responded
+   with the override; I did not poll, so the response was useless.
+   Pelagic's point 3 (overflow protocol in task offers) is the
+   *task-issuer* cure; this is its *task-acceptor* counterpart: any
+   acceptance that proposes a deadlined-default behaviour MUST
+   pre-commit to polling for an ack BEFORE proceeding past the
+   proposed deadline. Concrete cure: a `proposed_default_at` field
+   with explicit wait-for-ack semantics, OR a rule that says
+   *"deadlined proposals require explicit ack before deadline-fires"*.
+
+**Carry these into the next session as five lightweight reading
+points (3 minutes total):** wall-clock cure (A), render-threading
+cure (B), worker-initiates-on-empirical-surface (C),
+defer-commit-until-task-close (D), wait-for-ack on
+deadlined-defaults (E). Combined with Pelagic's 10 tactical
+suggestions, the next pair has a complete coordination playbook.
+
+**What worked, worth keeping**: atomic isolated task framing, PDR-027
+identity discipline, active-claims registry as discovery primitive,
+CLI helpers for claim/event lifecycle, the 1200-word inline cap
+forcing design-input compression, and the cheap self-correction
+property. Do not redesign these; they are load-bearing.
 
 ## 2026-05-03 — Owner correction: the smoke-test harness is the wrong shape (Pelagic Washing Anchor)
 
@@ -2430,8 +2763,22 @@ the matching block as part of its landing diff:
    construction (RED)')`. WS5 unskip when the search-cli runtime
    config carries `OBSERVABILITY_SINKS` and the cli observability
    composition root constructs a SinkRegistry.
+5. `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts`
+   — `describe.skip('mode registry — A2 obligations')` and
+   `describe.skip('mode registry — A3 obligation')`. ARC A2 atomic-
+   landing-commit flips the A2 block from `describe.skip` →
+   `describe` once `modes.ts` registers the five existing modes
+   (`local-stub`, `local-stub-auth`, `local-live`, `local-live-auth`,
+   `remote`); ARC A3 flips the A3 block once `local-no-observability`
+   lands. Pure registry change — no edit to test bodies required.
+   File-header markers: `SKIP-UNTIL-A2`, `SKIP-UNTIL-A3`.
+6. `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts`
+   — `describe.skip('runSmokeMode against real modes — A2
+   obligations')`. ARC A2 atomic-landing-commit flips
+   `describe.skip` → `describe` once `modes.ts` populates. File-
+   header marker: `SKIP-UNTIL-A2`.
 
-The skip pattern (`.skip` + file-header `SKIP-UNTIL-WSn` comment;
+The skip pattern (`.skip` + file-header `SKIP-UNTIL-WSn`/`SKIP-UNTIL-An` comment;
 or `it.todo()` + adjacent commented test body where ESLint bans
 type-suppression directives) is the project's standard multi-
 commit-TDD-arc shape. The cleanup is **NOT** type-system-enforced

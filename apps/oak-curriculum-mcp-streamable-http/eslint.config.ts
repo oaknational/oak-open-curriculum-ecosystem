@@ -154,6 +154,14 @@ const config = defineConfigArray(
       // their composition contract. ADR-168 covers the all-TS-scripts
       // workspace rule and the runtime-only-scripts directory exception.
       'scripts/**/*.ts',
+      // Smoke vitest composition root invoked exclusively by the
+      // smoke harness CLI (`smoke-tests/harness/cli.ts`). Reads
+      // SMOKE_BASE_URL once at config-resolution time and injects it
+      // via vitest's typed `provide` mechanism so test files never
+      // touch process.env. See testing-strategy.md §"Smoke composition
+      // roots may read ambient env, validate it, and inject the
+      // result." and `there-is-no-time-hashed-starfish.plan.md` §A1.
+      'vitest.smoke.config.ts',
     ],
     rules: {
       'no-restricted-syntax': [
