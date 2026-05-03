@@ -7045,6 +7045,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0e2b190e-12b5-4591-a44e-716e73b461b3",
+      "agent_id": {
+        "agent_name": "Prismatic Illuminating Eclipse",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "7402c9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T09:55:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit ARC A1 — canonical smoke harness module + RED-skip-arc tests + vitest.smoke.config.ts + smoke-context.ts + plan-body §A1 refresh. Pathspecs explicit; gates green; peer claim 1fee5cf0 on plan area only.",
+      "archived_at": "2026-05-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-03T10:08:38Z",
+        "closed_by": {
+          "agent_name": "Prismatic Illuminating Eclipse",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7402c9"
+        },
+        "summary": "ARC A1 commit 792c2cad landed; pre-commit gates all green; commit window closed cleanly.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0e2b190e-12b5-4591-a44e-716e73b461b3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9cad0bab-e682-41d1-bc27-e5243554aaa7",
+      "agent_id": {
+        "agent_name": "Prismatic Illuminating Eclipse",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "7402c9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T09:18:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ARC A1 design canonical smoke harness module (run-smoke.ts, cli.ts, env-builder, boot-signal parser, lifecycle wrapper) + RED tests + vitest.smoke.config.ts + smoke-context.ts. Per active plan there-is-no-time-hashed-starfish.plan.md §A1.",
+      "archived_at": "2026-05-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-03T10:08:50Z",
+        "closed_by": {
+          "agent_name": "Prismatic Illuminating Eclipse",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7402c9"
+        },
+        "summary": "ARC A1 design and RED-skip-arc tests landed in commit 792c2cad. Reviewer matrix complete (test-reviewer, fred, betty, mcp); absorbable findings implemented in-A1, deferred findings tracked in napkin/pending-graduations. Next: ARC A2 mode-by-mode migration with SKIP-UNTIL-A2 unskip flips required by atomic-landing-commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9cad0bab-e682-41d1-bc27-e5243554aaa7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

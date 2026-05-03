@@ -9,12 +9,48 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 (Pelagic
-Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` —
-`feat/eef_exploration` branch, 32 commits ahead of `origin/main`,
-push pending owner authorisation per the broader 2026-05-02 roadmap).
-Most-recent prior: Moonlit Drifting Nebula / `cursor` /
-`claude-opus-4-7` / `92470a` / 2026-05-03.
+**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03
+(Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` /
+`7402c9` session-handoff: ARC A1 commit `792c2cad` landed — canonical
+smoke harness module + RED skip-arc tests + smoke-context + smoke
+vitest config + plan-body §A1 refresh; 20 files / +1955/-24; full
+pre-commit chain green (74 tasks cached); reviewer matrix complete
+(test-reviewer, architecture-reviewer-fred, architecture-reviewer-betty,
+mcp-reviewer all COMPLIANT with absorbable findings implemented in-A1);
+polling-discipline self-correction at session-open captured as E1
+observation; both my claims `9cad0bab` and `0e2b190e` closed with
+explicit closure summaries; coordinated parallel-lane landing with
+Woodland Sprouting Glade's ARC B0 (`c0d17634` + `23abeabe` +
+`e86af3e0`); critical-failure-near-miss on autonomous git-lock-wait
+loop captured to platform memory as
+`feedback_no_lock_wait_loops.md` per owner direction. Branch now 35
+commits ahead of `origin/main`, push pending owner authorisation per
+broader 2026-05-02 roadmap. Prior: Misty Ebbing Pier / `claude-code` /
+`claude-opus-4-7-1m` / `ba3961`
+session-handoff: Task M1 close + worker-perspective collab suggestions
+napkin entry + pending-graduations cure-set (vi)-(x) + owner-prompted
+metacognition pivot reframing the cures as an N-agent collaboration
+hypothesis under test + owner-directed priority correction making the
+work-first / experiment-by-product order absolute + decision-complete
+plan landed at
+[`.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`](../../plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md)
++ artefact restructure under
+`.agent/prompts/agentic-engineering/collaboration/` with per-experiment
+sub-folders: `experiments/E1/{brief.md, agent-1-orchestrator.md,
+agent-2-executor.md}` for the next session's two-prompt handoff;
+modes-taxonomy folded into `hypothesis.md § P1`; superseded
+`first-attempts.md` and `experiments.md` deleted. The next session
+running the E1 prompts is the first observation opportunity for E1
+during ARC A1 work; the function of that session is shipping ARC A1,
+not running the experiment. No commit; staged working-tree state on
+top of HEAD `0f2c7b62`. `feat/eef_exploration` branch, 32 commits
+ahead of `origin/main`, push pending owner authorisation per the
+broader 2026-05-02 roadmap). Prior: Pelagic Washing Anchor /
+`claude-code` / `claude-opus-4-7-1m` / `f730bd` / 2026-05-03 —
+plan-author/orchestrator + reflection log + Pelagic-Misty Task M1
+round-trip; commits `9dfc4e7f` and `0f2c7b62`. Most-recent prior:
+Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` /
+2026-05-03.
 
 **Pelagic Washing Anchor session-shape (planning + coordination,
 no app-code changes)**: approved an executable plan landing arc; the
@@ -597,8 +633,8 @@ live in each thread record; this table is the repo-level index.
 
 | Thread                                            | Purpose                                                                                                                                                                 | Next-session record                                                                                                                                  | Active identities                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel`                       | Product — Sentry/OTel public-alpha integration                                                                                                                          | `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`                                             | Most-recent: Pelagic Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` / there-is-no-time-hashed-starfish-plan-author-and-Misty-coordination / 2026-05-03; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / smoke-tests-harness-reconnaissance-Task-M1 / 2026-05-03 (claim 42c9e362 may still be open at next-session-start). Prior: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / observability-multi-sink-and-fixtures-shape-plan-WS1-RED-phase + Practice-Core-portability-Rounds-1+2+3 / 2026-05-03; Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02; Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30. Full history in thread record.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / Practice-Core-portability-Rounds-1+2+3-with-owner-decisions-C6-C7 / 2026-05-03; Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
+| `observability-sentry-otel`                       | Product — Sentry/OTel public-alpha integration                                                                                                                          | `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`                                             | Most-recent: Woodland Sprouting Glade / `claude-code` / `claude-opus-4-7-1m` / `978cba` / orchestrator: ARC-B0-plan-body-corrections-and-ADR-number-verification (parallel-lane to Prismatic A1; reviewer dispatch absorbed; first-claim-wins coordination) / 2026-05-03; Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` / `7402c9` / executor: ARC-A1-canonical-smoke-harness + RED-skip-arc + §A1-plan-body-refresh / 2026-05-03; Pelagic Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` / there-is-no-time-hashed-starfish-plan-author-and-Misty-coordination / 2026-05-03; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / smoke-tests-harness-reconnaissance-Task-M1 + worker-perspective-collab-suggestions + N-agent-collaboration-hypothesis-artefacts / 2026-05-03. Prior: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / observability-multi-sink-and-fixtures-shape-plan-WS1-RED-phase + Practice-Core-portability-Rounds-1+2+3 / 2026-05-03; Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02; Leafy Bending Dew / `cursor` / `composer` / trim-to-undefined-dedup-explicit-empty-vs-undefined / 2026-04-30; Vining Ripening Leaf / `claude-code` / `claude-opus-4-7-1m` / observability-config-coherence-plan-and-substrate-convention / 2026-04-30. Full history in thread record. |
+| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / N-agent-collaboration-hypothesis-decision-complete-plan + per-experiment-subfolder-restructure / 2026-05-03; Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / Practice-Core-portability-Rounds-1+2+3-with-owner-decisions-C6-C7 / 2026-05-03; Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30; Nebulous Illuminating Satellite / `claude-code` / `claude-opus-4-7-1m` / doctrine-sharpening + deeper-convergence + retirement + pattern graduations + trinity extensions / 2026-04-29; Pearly Swimming Atoll / `codex` / `GPT-5` / repo-goal-narrative-refresh / 2026-04-29; Squally Diving Anchor / `codex` / `GPT-5` / pr-lifecycle-skill-need-capture / 2026-04-29. Full history in thread record. |
 | `connecting-oak-resources`                        | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | `[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md)`                                               | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `exploring-open-education-resources`              | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion                               | `[threads/exploring-open-education-resources.next-session.md](threads/exploring-open-education-resources.next-session.md)`                           | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `architectural-budget-system`                     | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning                                                                  | `[threads/architectural-budget-system.next-session.md](threads/architectural-budget-system.next-session.md)`                                         | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -623,6 +659,31 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-03 (Woodland Sprouting Glade + Prismatic Illuminating Eclipse, Claude Code, parallel two-agent execution, completed)**:
+ARC B0 + ARC A1 landed concurrently on the observability-sentry-otel
+thread. Woodland (Orchestrator) pivoted from primary ARC A1 lane to
+ARC B0 (parallelisable) when Prismatic's claim 9cad0bab was visible at
+preflight (first-claim-wins coordination). Two coordinated commits
+landed on each side without conflict: `c0d17634` (B0 plan-body
+corrections per architecture-reviewer-betty Q2-Q6 + ADR number
+verification 170/171 + reviewer findings absorbed from
+assumptions/docs-adr/onboarding) → `23abeabe` (claim close + B0
+disclosure event) → `e86af3e0` (E1 observations event); peer landed
+`792c2cad` (canonical smoke harness + RED skip-arc + §A1 plan-body
+refresh per design-shift). Coordination cost ~10 round-trips of comms
+events; substrate held under stress. Branch now at `792c2cad`,
+**HEAD-after-handoff TBD** with the handoff continuity bundle. Three
+reviewers dispatched in parallel for B0 (assumptions, docs-adr,
+onboarding); 16 findings total; all implemented or rejected with
+written rationale. New experiment observation captured at owner
+direction: **housekeeping ownership at session end** — agent-specific
+work (own observations, identity rows, claim close) vs not-agent-specific
+work (shared continuity surfaces, prior-session leftover commits)
+needs explicit ownership to avoid the "everyone assumes someone else
+owns it" failure mode. Orchestrator owns shared housekeeping by
+default; codified in napkin §Worked-instance + experiment plan as
+P11 candidate primitive.
 
 **2026-04-30 (Fragrant Sheltering Petal, Claude Code, completed)**:
 EEF type-reviewer round on plan estate. 11 reviewer findings, 10
@@ -696,12 +757,33 @@ evidence.
 
 ## Next Safe Step
 
-After 2026-05-03 Pelagic Washing Anchor close: branch is 32 commits
-ahead of `origin/main` (push pending owner authorisation per the
-broader 2026-05-02 roadmap). Branch-primary lane shifted from
-*"WS1 RED landed; WS2 queued"* to *"executable plan landed; ARC A1
-queued — design canonical smoke harness + RED tests"*. The plan
-sequences ARC A (smoke-harness redesign) before ARC B (the WS2-WS11
+After 2026-05-03 Woodland Sprouting Glade + Prismatic Illuminating
+Eclipse parallel close: ARC A1 (canonical smoke harness, `792c2cad`)
+and ARC B0 (plan-body corrections + ADR-170/171 verified, `c0d17634` +
+`23abeabe` + `e86af3e0`) BOTH LANDED. Branch is 35 commits ahead of
+`origin/main` (push pending owner authorisation per the broader
+2026-05-02 roadmap). Branch-primary lane shifted from
+*"executable plan landed; ARC A1 queued"* to *"ARC A1 + ARC B0 landed;
+ARC A2 + ARC B1/WS2 queued (parallelisable)"*.
+
+**Next executable lanes** (from `there-is-no-time-hashed-starfish.plan.md`):
+
+- **ARC A2 — Existing-modes migration** (mode-by-mode conversion of
+  local-stub, local-stub-auth, local-live, local-live-auth, remote
+  to the new canonical harness; convert smoke-assertions/* to
+  *.smoke.test.ts; retire helpers/environment.ts process.env mutation;
+  every existing pnpm smoke:dev:* still passes). Atomic-landing-commit
+  must flip describe.skip → describe on the SKIP-UNTIL-A2 blocks at
+  `harness/run-smoke.unit.test.ts` and `harness/run-smoke.integration.test.ts`.
+  For `remote` mode use `createRemoteBootServer` factory.
+- **ARC B1 (= WS2) — sentry-node SinkRegistry consumption** (atomic
+  rename: `SentryMode` deleted; `FixtureSentryStore` →
+  `FixtureCaptureStore`; `ParsedSentryConfig` cross-product
+  discriminated union; WS1 RED-arc skip register entries 1+2 unskip).
+  Independent of ARC A2; parallelisable.
+
+**Prior plan and amendment notes preserved below for context:**
+The plan sequences ARC A (smoke-harness redesign) before ARC B (the WS2-WS11
 observability rename with B0 corrections). Choose the lane deliberately:
 
 **Active executable plan**:
@@ -881,7 +963,9 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-03 Pelagic Washing Anchor, evening): `not due — focused planning + coordination session; no app-code changes; two commits landed cleanly through full pre-commit gates (markdownlint --fix re-applied once during the first commit; all subsequent gates exit 0). Plan landed in repo (there-is-no-time-hashed-starfish.plan.md, 18-todo three-arc execution sequencer); reflection log delivered per owner directive; coordination round-trip with Misty Ebbing Pier preserved (Task M1 reconnaissance complete). One thread touched (observability-sentry-otel; agentic-engineering-enhancements lightly touched via the inter-agent collaboration suggestions napkin entry that adds a fifth-instance worked example to the agent-coordination-CLI-ergonomics plan promotion case). Inherited fitness pressure from prior sessions persists (napkin grew further this session by ~140 lines from the smoke-harness-correction surprise, the Q2/Q3/Q4 plan-body breaks surprise, and the inter-agent collaboration suggestions block; principles, distilled, pending-graduations, repo-continuity all still over their limits) — owner-deferred to a separate session per the standing direction. Knowledge-preservation-is-absolute applied to this session's writes. Next session enters ARC A1 (canonical smoke-harness module + RED tests) with full design input from Misty's Task M1 reply; alternatively ARC B0 (plan-body corrections) is parallelisable. Misty's claim 42c9e362 may still be open at next-session-start; check active-claims.json before any work in apps/oak-curriculum-mcp-streamable-http/smoke-tests/. Consolidation can be revisited after the multi-session plan lands or earlier if fitness pressure becomes operationally blocking.`** This handoff did not escalate to `/jc-consolidate-docs` and explicitly does not narrow scope to defer the underlying fitness remediation; that lane awaits owner-directed dedicated session.
+**Status (2026-05-03 Woodland Sprouting Glade + Prismatic Illuminating Eclipse, parallel two-agent close): `not due — successful parallel-lane execution; both lanes landed within ~1 hour with no conflicts; substrate held under stress. Three commits on Woodland's B0 lane (c0d17634, 23abeabe, e86af3e0), one large commit on Prismatic's A1 lane (792c2cad). Three reviewers dispatched on B0 in parallel (assumptions, docs-adr, onboarding); 16 findings; all implemented or rejected with written rationale. Four reviewers on A1 (test, architecture-fred, architecture-betty, mcp). One thread touched (observability-sentry-otel; agentic-engineering-enhancements lightly touched via experiment-plan housekeeping-ownership primitive add). Prior-session leftover continuity files (pending-graduations, repo-continuity, agentic-engineering thread record + plan/prompts) committed in this handoff per orchestrator-owns-shared-housekeeping rule. Inherited fitness pressure from prior sessions persists (napkin grew further in this session by E1 observations + worked-instance entries; principles, distilled, pending-graduations, repo-continuity all still over their limits) — owner-deferred to a separate session per the standing direction. Knowledge-preservation-is-absolute applied. Next session enters ARC A2 (mode-by-mode harness migration) or ARC B1/WS2 (sentry-node SinkRegistry consumption) — parallelisable; either order works. Consolidation can be revisited after multi-session plan lands or earlier if fitness pressure becomes operationally blocking.`** This handoff did not escalate to `/jc-consolidate-docs` and explicitly does not narrow scope to defer the underlying fitness remediation; that lane awaits owner-directed dedicated session.
+
+**Prior status (2026-05-03 Pelagic Washing Anchor, evening): `not due — focused planning + coordination session; no app-code changes; two commits landed cleanly through full pre-commit gates (markdownlint --fix re-applied once during the first commit; all subsequent gates exit 0). Plan landed in repo (there-is-no-time-hashed-starfish.plan.md, 18-todo three-arc execution sequencer); reflection log delivered per owner directive; coordination round-trip with Misty Ebbing Pier preserved (Task M1 reconnaissance complete). One thread touched (observability-sentry-otel; agentic-engineering-enhancements lightly touched via the inter-agent collaboration suggestions napkin entry that adds a fifth-instance worked example to the agent-coordination-CLI-ergonomics plan promotion case). Inherited fitness pressure from prior sessions persists (napkin grew further this session by ~140 lines from the smoke-harness-correction surprise, the Q2/Q3/Q4 plan-body breaks surprise, and the inter-agent collaboration suggestions block; principles, distilled, pending-graduations, repo-continuity all still over their limits) — owner-deferred to a separate session per the standing direction. Knowledge-preservation-is-absolute applied to this session's writes. Next session enters ARC A1 (canonical smoke-harness module + RED tests) with full design input from Misty's Task M1 reply; alternatively ARC B0 (plan-body corrections) is parallelisable. Misty's claim 42c9e362 may still be open at next-session-start; check active-claims.json before any work in apps/oak-curriculum-mcp-streamable-http/smoke-tests/. Consolidation can be revisited after the multi-session plan lands or earlier if fitness pressure becomes operationally blocking.`** This handoff did not escalate to `/jc-consolidate-docs` and explicitly does not narrow scope to defer the underlying fitness remediation; that lane awaits owner-directed dedicated session.
 
 **Prior status (2026-05-03 Moonlit Drifting Nebula, late evening): `not due — focused two-phase sequential foreground session (Practice-Core portability remediation Rounds 1+2+3, then observability multi-sink + fixtures plan WS1 RED phase); both phases landed cleanly through full pre-commit gates (74-task turbo run × 2; 87/725 + 101/1001 + 9/120 + 7/48 + 6/63 + 4/29 unit suites green; depcruise 2050 modules clean). Two threads touched (observability-sentry-otel, agentic-engineering-enhancements). Six deferred items captured as plan-body amendment candidates from the four-reviewer cross-confirmed P2/P3 set (test-reviewer + docs-adr-reviewer + onboarding-reviewer + sentry-reviewer). The WS1 RED-arc skip-register documents the multi-commit-TDD-arc shape and is named as a future-plan generator for a structural-enforcement scanner (CI gate that fails when an it.todo / describe.skip paired with a SKIP-UNTIL-WSn header outlives the named workstream landing commit). Inherited fitness pressure from prior sessions persists (napkin grew further during this session by ~70 lines from the RED-arc skip register entry, with authoritative substance preserved per PDR-042; distilled / pending-graduations / repo-continuity / principles all over their limits) — owner-deferred to a separate session per the standing direction. Knowledge-preservation-is-absolute applied to this session's writes. Next session enters WS2 sentry-node SinkRegistry consumption with fresh context; the WS1 RED canary (runtime-fixture-tee-redaction.unit.test.ts) is the type-check trip-wire for the WS2 atomic rename. Consolidation can be revisited after the multi-session plan lands or earlier if fitness pressure becomes operationally blocking.`** This handoff did not escalate to `/jc-consolidate-docs` and explicitly does not narrow scope to defer the underlying fitness remediation; that lane awaits owner-directed dedicated session.
 

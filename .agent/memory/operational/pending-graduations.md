@@ -32,6 +32,70 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-03; **autonomous .git/index.lock interaction is forbidden,
+  including wait loops** (Prismatic Illuminating Eclipse, owner
+  intervention mid-A1-commit): the existing 2026-04-30 distilled.md
+  entry "Never delete .git/index.lock" addressed the destructive
+  shape (`rm` on a foreign lock). This session surfaced a softer
+  failure mode that compounds in the same direction: an autonomous
+  polling wait loop (`until [ ! -e .git/index.lock ]; do sleep 2;
+  done && echo "lock cleared"`). Even though the loop only OBSERVED
+  the lock disappearing (Woodland's parallel commit completed
+  naturally), the "lock cleared" echo conditioned the agent to treat
+  lock-clearing as an action it takes rather than a state it
+  observes, and any future evolution of the loop (timeout-then-rm
+  fallback) would be a small step away from the catastrophic action.
+  Owner direction: any contact with `.git/index.lock` requires owner
+  authorisation, including the wait shape; surface foreign locks to
+  the user with diagnostic + wait-vs-handoff options rather than
+  running a wait loop. **Graduation target**: extend the existing
+  distilled.md "Never delete .git/index.lock" entry to "Never
+  autonomously interact with .git/index.lock at all — including wait
+  loops"; consider promoting to a `.agent/rules/` rule given the
+  destructive-blast-radius of the failure mode. Status: pending —
+  owner direction has fired in part (specific incident this
+  session); deliberate next-session shape required for the
+  distilled.md amendment + rule-authoring decision (PDR-038
+  structural-enforcement reasoning applies here too). Captured to
+  platform memory at
+  `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_no_lock_wait_loops.md`
+  for immediate effect; doctrine-level capture queued here for
+  graduation through the proper consolidation pipeline. Companion
+  entry: 2026-04-30 `feedback_no_delete_git_lock` is the destructive
+  shape; this is the autonomous-observation shape; both are
+  instances of *avoid actions that compound silently in destructive
+  directions even when each individual step looks safe*.
+
++ 2026-05-03; **session-close housekeeping ownership** (Woodland
+  Sprouting Glade + Prismatic Illuminating Eclipse parallel-lane
+  session, owner-stated experiment observation): at session-close some
+  housekeeping is **agent-specific** (own observations in napkin,
+  identity-row last_session, claim close, subjective experience file)
+  and can ONLY be done by the originating agent — no other agent has
+  the in-memory context. Other housekeeping is **NOT agent-specific**
+  (refresh repo-continuity.md, refresh pending-graduations register,
+  sweep platform entry points, commit prior-session leftover continuity
+  files, run consolidation gate) — any agent could do it, which means
+  without explicit ownership none of them does and work is lost or
+  stale. **Cure shape**: when an Orchestrator role is assigned for a
+  session, the Orchestrator owns shared / not-agent-specific
+  housekeeping. When no Orchestrator is assigned, the
+  **last-to-leave** rule applies (final committing agent picks up the
+  shared housekeeping). Agent-specific housekeeping remains the
+  originating agent's responsibility regardless. **First instance
+  (live)**: this 2026-05-03 handoff — the prior Pelagic session ended
+  with five continuity files modified-but-uncommitted; without the
+  rule, every subsequent agent assumed someone else owned them. Owner
+  direction at session-handoff fixed it. Source-surface: napkin §"E1
+  Parallel two-agent execution" 2026-05-03 + experiment-plan §P11
+  candidate; graduation-target: P11 in N-agent collaboration
+  hypothesis (`hypothesis.md`) plus a Practice-Core PDR amendment to
+  PDR-018 (Planning discipline) or a new dedicated PDR if the cure
+  shape stabilises across N≥3; trigger-condition: validation across
+  N≥3 sessions with no falsifying observation; status: candidate
+  (single instance; not yet graduation-ripe; falsification criteria
+  named in napkin entry).
+
 + 2026-05-02; observability multi-sink + fixtures plan WS10 — owner
   doctrine *"for all significant documentation or Practice changes
   — and this is always true — we need reviews from the documentation
@@ -61,9 +125,15 @@ continuity snapshots.
   rides at WS6 when the HTTP composition root consumes the port),
   ADR-163 (build-time scope clarification — D7a verification
   confirmed structural orthogonality; WS4 cleanup is the
-  follow-on); queued as plan WS8.6/WS8.7 deliverable; status:
-  due (graduates when plan executes; ADR-number rename due before
-  WS8.6 starts).
+  follow-on); queued as plan WS8.6/WS8.7 deliverable. **2026-05-03
+  ADR-number resolved (Woodland Sprouting Glade ARC B0, c0d17634)**:
+  ARC A4 ADR is **170** (smoke harness shape, parent plan); orthogonality
+  ADR is **171** (this plan, WS8.6). Verified by
+  `ls docs/architecture/architectural-decisions/ | sort -n | tail -5`
+  — 165-169 already present, 170/171 next available. All cross-plan
+  references updated; re-verify pre-authoring guards added at three
+  locations. Status: due (ADR-number question resolved; ADR authoring
+  + amendments graduate when plan WS8.6/WS8.7 execute).
 
 + 2026-05-02; observability multi-sink + fixtures plan WS0 —
   near-miss surprise: almost spawned a duplicate
@@ -76,7 +146,21 @@ continuity snapshots.
   (single instance; capture-only until second instance accumulates).
 
 + 2026-05-03; **inter-agent collaboration protocol gaps surfaced
-  by Pelagic ↔ Misty Task M1 round-trip** — five structural cures
+  by Pelagic ↔ Misty Task M1 round-trip** — **status reframed
+  2026-05-03 (Misty session-handoff metacognition)**: these cures
+  are now structured as candidate amendments to the N-agent
+  collaboration hypothesis at
+  [`.agent/prompts/agentic-engineering/collaboration/hypothesis.md`](../../prompts/agentic-engineering/collaboration/hypothesis.md),
+  with per-cure falsification criteria at
+  [`falsification-criteria.md`](../../prompts/agentic-engineering/collaboration/falsification-criteria.md)
+  and proposed validation experiments at
+  [`experiments.md`](../../prompts/agentic-engineering/collaboration/experiments.md).
+  Cures graduate to permanent doctrine **after** empirical validation
+  at N≥3, not before. The CLI ergonomics plan remains the natural
+  carrier for cure (v) tooling work, but the four protocol-amendment
+  cures (i)-(iv) and the five worker-perspective addenda (vi)-(x)
+  graduate via the hypothesis-evolution loop, not via direct
+  promotion to PDR. The original five structural cures
   named in the session's reflection log
   ([`experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`](../../experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md))
   and a tactical 10-point next-session guide in napkin (same date,
@@ -110,8 +194,25 @@ continuity snapshots.
   named in `agentic-engineering-enhancements.next-session.md`)
   is the natural carrier; the four protocol-amendment candidates
   (i)-(iv) graduate to a single PDR or amendment to the existing
-  agent-collaboration directive at consolidation. Status: due
-  (graduates with the next CLI ergonomics plan execution slice).
+  agent-collaboration directive at consolidation. **Worker-
+  perspective addenda from Misty Ebbing Pier (2026-05-03 napkin
+  entry "Worker-perspective addenda to Pelagic's collaboration
+  suggestions")** — five additional cures: (vi) **wall-clock
+  authority** (`date -u` from host shell as the canonical source
+  of `created_at`, distinct from the out-of-band-ack cure (i)
+  which addresses sequence reconstruction by readers); (vii)
+  **render conversation threading** (promote `audience` and
+  `in_response_to` to canonical schema and surface in render so
+  the log is a conversation tree, not flat dump); (viii)
+  **asymmetric ground-truth — worker initiates on empirical
+  surface** (assumption-breaking discoveries mid-task MUST surface
+  via comms event before worker continues; orchestrator MUST poll
+  that signal); (ix) **defer commit until task-close + counterparty
+  acknowledgement** (premature commits would have made this
+  session's self-correction expensive); (x) **wait-for-ack on
+  deadlined-defaults** (task-acceptor counterpart to overflow
+  protocol (iv)). Status: due (graduates with the next CLI
+  ergonomics plan execution slice).
 
 + 2026-05-03; Practice-Core portability Round 3 (Moonlit Drifting
   Nebula) — CHANGELOG attribution headers
