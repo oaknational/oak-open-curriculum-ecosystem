@@ -135,10 +135,10 @@ the structure stands.
 | ID | Targets | Status | When to run |
 |---|---|---|---|
 | **E1** | P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction, **P11 housekeeping ownership** (added 2026-05-03) | **active** | every session on observability-sentry-otel until E1 closes |
-| E2 | P5 directional context, cure (vi) wall-clock authority | queued | a session specifically scoped to test cure (vi); not during ARC A1/B0 work |
-| E3 | P5, P6, P9 at scale | queued | researcher-time, offline; synthetic event corpus |
-| E4 | P10 self-correction, P7 bootstrap fast-path | queued | opportunistic; observe natural mid-task session boundaries |
-| E5 | open question — owner-proxy mode | queued | requires explicit owner direction |
+| E2 | P5 directional context, cure (vi) wall-clock authority | queued | activates when **(a)** cure (vi) wall-clock authority accumulates at least one further weakening observation in an E1 session (current state: twice-witnessed-as-failure-mode 2026-05-03 morning, both as polling-discipline failures, neither as deliberate timestamp drift), OR **(b)** a session is explicitly scoped to validate it under simulated clock-drift conditions across agents. Authoring trigger: when (a) or (b) is imminent — author `experiments/E2/{brief.md, agent-1-*.md, agent-2-*.md}` per the per-experiment subfolder convention. Do NOT author speculatively. |
+| E3 | P5, P6, P9 at scale | queued | activates when researcher-time is allocated AND a synthetic event corpus is in scope. Authoring trigger: when a session is imminent. |
+| E4 | P10 self-correction, P7 bootstrap fast-path | queued | activates opportunistically when a real session-budget cut-off occurs naturally (do NOT engineer one). Authoring trigger: when a candidate cut-off session is imminent. |
+| E5 | open question — owner-proxy mode | queued | activates only when owner explicitly signals readiness to scope. Authoring trigger: explicit owner direction. |
 
 Per-experiment briefs:
 
