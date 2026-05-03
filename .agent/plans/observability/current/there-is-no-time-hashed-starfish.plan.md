@@ -123,9 +123,15 @@ These corrections are not workstreams — they reshape how every workstream is s
 ```text
 ARC A — Smoke-harness redesign            (this branch, this session-arc)
    ↓
-ARC B — Observability rename WS2–WS11     (this branch, this session-arc)
+ARC B — Observability rename WS2–WS11     (this branch, this session-arc;
+                                           substance lives in
+                                           observability-multi-sink-and-fixtures-shape.plan.md)
    ↓
 ARC C — Pre-merge analysis + push + preview validation + merge
+                                          (canonical execution slot for
+                                           pre-merge divergence analysis;
+                                           multi-sink §WS9.5 is
+                                           cross-reference only)
    ↓
 ARC D — Graph-thread continuation         (separate sessions; thread record `eef.next-session.md`)
 ARC E — Practice debt slice               (separate sessions; thread record `agentic-engineering-enhancements.next-session.md`)
@@ -137,7 +143,7 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 
 ## ARC A — Smoke-Harness Redesign
 
-**Outcome**: A canonical smoke-test harness that starts the appropriate server, invokes Vitest, and cleans up. Smoke tests become first-class `*.smoke.test.ts` vitest files. Global `process.env` mutation retires. The `dev-server-boots-without-observability-config` regression-guard moves home and stays RED through WS1–WS3 by virtue of the harness's boot-wait timeout. ADR-178 (NEW) records the canonical shape; testing-strategy.md is amended to canonicalise the third vitest category.
+**Outcome**: A canonical smoke-test harness that starts the appropriate server, invokes Vitest, and cleans up. Smoke tests become first-class `*.smoke.test.ts` vitest files. Global `process.env` mutation retires. The `dev-server-boots-without-observability-config` regression-guard moves home and stays RED through WS1–WS3 by virtue of the harness's boot-wait timeout. ADR-170 (NEW) records the canonical shape; testing-strategy.md is amended to canonicalise the third vitest category.
 
 **Branch posture**: lands on `feat/eef_exploration` as a coherent prefix of the broader arc.
 
@@ -189,6 +195,7 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 - New `*.smoke.test.ts` at `apps/oak-curriculum-mcp-streamable-http/smoke-tests/local-no-observability/dev-server-operational.smoke.test.ts`: minimal vitest assertions against the running server (`GET /healthz` returns 200 with the canonical `{status: 'ok', mode: 'streamable-http', auth: 'required-for-post'}` body; `GET /healthz` is the universal boot proof per the existing harness pattern). The boot success itself is the load-bearing assertion; vitest's job is to confirm the server is operational once up.
 - New pnpm script `smoke:dev:no-observability`: `pnpm exec tsx smoke-tests/harness/cli.ts local-no-observability`.
 - Repo-root `package.json` adds `smoke:dev:no-observability` to the turbo dispatch.
+- Repo-root `package.json` `check` script (the PR-check pipeline lane) MUST be updated to invoke `smoke:dev:no-observability` alongside `smoke:dev:stub`. Without this update the regression-guard does not run in PR-check.
 - DELETE `apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts` (the test file the owner identified as misclassified).
 - Update napkin §RED-arc skip register entry naming the regression-guard's new home (the WS1→WS2 trip-wire shifts: it stays the boot-failure of `pnpm dev` under the legacy `SENTRY_MODE` flow; the harness reports the failure).
 
@@ -207,13 +214,13 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 
 **Tasks**:
 
-- New ADR at `docs/architecture/architectural-decisions/178-canonical-smoke-test-harness-shape.md` (NUMBER VERIFIED — see verification below) documenting: harness responsibilities (server lifecycle, vitest invocation, cleanup); mode-config shape (pure env-builder + `*.smoke.test.ts` set); env-mutation prohibition; ADR-078 application; relationship to ADR-161 (network-free PR-check vs full-IO smoke).
+- New ADR at `docs/architecture/architectural-decisions/170-canonical-smoke-test-harness-shape.md` (NUMBER VERIFIED 2026-05-03 — `ls docs/architecture/architectural-decisions/ | sort -n | tail -5` showed 169 as last present) documenting: harness responsibilities (server lifecycle, vitest invocation, cleanup); mode-config shape (pure env-builder + `*.smoke.test.ts` set); env-mutation prohibition; ADR-078 application; relationship to ADR-161 (network-free PR-check vs full-IO smoke).
 - Amend `.agent/directives/testing-strategy.md`: canonicalise smoke as the third vitest category; add "Smoke harness invocation IS the composition root" clarification to the §"Smoke composition roots ... may read ambient env" block; add `*.smoke.test.ts` to Canonical Vitest Configuration §Workspaces.
 - Author `apps/oak-curriculum-mcp-streamable-http/smoke-tests/README.md`: operator and contributor guide for the harness, mode contract, adding a new mode, the env-mutation prohibition.
 - Update `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`: ARC A landing outcome.
 - Update `.agent/memory/operational/pending-graduations.md`: graduate the testing-strategy `*.smoke.test.ts` canonicalisation entry.
 
-**ADR number verification before authoring**: `ls docs/architecture/architectural-decisions/ | sort -n | tail -5` to confirm next available number. The pre-existing pending-graduation entry naming "ADR-165 collision" applies to the observability-orthogonality ADR in ARC B; ARC A's ADR is independent. Number prediction is 178 but verify before writing.
+**ADR number verification (verified 2026-05-03 by Woodland Sprouting Glade)**: `ls docs/architecture/architectural-decisions/ | sort -n | tail -5` returned 165, 166, 167, 168, 169 as the last five — next available is **170** (this ARC A ADR). The observability-orthogonality ADR in ARC B is **171**. Re-verify with the same command immediately before writing each ADR in case a parallel landing has consumed the slot.
 
 **Reviewer dispatch**: **mandatory-always** `docs-adr-reviewer` + `onboarding-reviewer`; `assumptions-reviewer` (reviewers blocking-legitimacy of the harness shape being canonicalised).
 
@@ -228,7 +235,7 @@ ARCs D and E are explicitly sequenced as separate session-arcs with their own la
 
 ## ARC B — Observability Rename (WS2–WS11, corrected)
 
-**Outcome**: vendor-neutral observability config surface lands across both apps; the regression-guard `pnpm smoke:dev:no-observability` goes GREEN at WS4 (HTTP atomic rename); ADR-NNN (number verified pre-authoring) is the canonical record for orthogonal-axes; the `no-vendor-observability-import` ESLint rule is real and enforces the vendor-port boundary.
+**Outcome**: vendor-neutral observability config surface lands across both apps; the regression-guard `pnpm smoke:dev:no-observability` goes GREEN at WS4 (HTTP atomic rename); ADR-171 (number verified 2026-05-03; re-verify immediately pre-authoring) is the canonical record for orthogonal-axes; the `no-vendor-observability-import` ESLint rule is real and enforces the vendor-port boundary.
 
 The plan body at `.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md` is the source of truth; this section captures the corrections that must be applied before execution and the workstream-level reviewer matrix.
 
@@ -236,7 +243,7 @@ The plan body at `.agent/plans/observability/current/observability-multi-sink-an
 
 **Tasks** (single commit, plan body edits only):
 
-- Verify next-available ADR number for observability-orthogonality (the prior plan body said 165; that's taken). Predict 179 but verify with `ls docs/architecture/architectural-decisions/ | sort -n | tail -5` after ARC A4 lands.
+- ADR number verified 2026-05-03 by Woodland Sprouting Glade: observability-orthogonality ADR is **171** (after ARC A4's ADR-170 lands). Re-verify with `ls docs/architecture/architectural-decisions/ | sort -n | tail -5` immediately before authoring in case a parallel landing has consumed the slot.
 - Edit plan body §WS3: tasks include adding `@deprecated` JSDoc to `SentryEnvSchema` BEFORE deletion; deletion is moved out of WS3 entirely and into WS5 close (the FINAL act of the rename arc, after both apps migrate).
 - Edit plan body §WS3 to name `OBSERVABILITY_FILE_PATH` env var explicitly in the `superRefine` cross-field rules (file-sink-config-required-when-file-in-sinks).
 - Edit plan body §WS3 to ratify `packages/core/observability/src/sink-registry.ts` placement (deviation from the originally-planned `types.ts` location; the deviation is sound — placement supports tree-shaking and clean export surface).
@@ -307,7 +314,7 @@ Per existing plan body §WS7. Citing the new rule as landed; `multi-sink-vendor-
 
 ### B7 (= WS8) — Documentation propagation + ADRs
 
-Per existing plan body §WS8 (8.1 TSDoc, 8.2 workspace READMEs, 8.3 root + app READMEs with cross-app-tracing forward-pointer, 8.4 governance/operations docs, 8.5 .env.example files + `docs/operations/environment-variables.md`, 8.6 ADR-NNN authoring, 8.7 ADR-116/143/162/163 amendments). ADR number verified against repo state pre-authoring per B0.
+Per existing plan body §WS8 (8.1 TSDoc, 8.2 workspace READMEs, 8.3 root + app READMEs with cross-app-tracing forward-pointer, 8.4 governance/operations docs, 8.5 .env.example files + `docs/operations/environment-variables.md`, 8.6 ADR-171 authoring (orthogonal-axes), 8.7 ADR-116/143/162/163 amendments). ADR number verified 2026-05-03; re-verify immediately pre-authoring per B0.
 
 **Reviewer dispatch**: **mandatory-always** `docs-adr-reviewer` + `onboarding-reviewer` (full audit pass on documentation surfaces); `assumptions-reviewer` (ADR claims hold against landed implementation).
 
@@ -414,7 +421,7 @@ Owner: `agentic-engineering-enhancements.next-session.md`. Sequenced steps (NOT 
 - `apps/oak-curriculum-mcp-streamable-http/smoke-tests/{smoke-dev-stub.ts, smoke-dev-auth.ts, smoke-dev-live.ts, smoke-dev-live-auth.ts, smoke-remote.ts}` — REWRITE (delegate to harness CLI)
 - `apps/oak-curriculum-mcp-streamable-http/package.json` — script updates
 - `package.json` (root) — `smoke:dev:no-observability` script + turbo dispatch
-- `docs/architecture/architectural-decisions/178-canonical-smoke-test-harness-shape.md` (NUMBER VERIFY) — NEW (A4)
+- `docs/architecture/architectural-decisions/170-canonical-smoke-test-harness-shape.md` (NUMBER VERIFIED 2026-05-03; re-verify immediately pre-authoring) — NEW (A4)
 - `.agent/directives/testing-strategy.md` — amend (A4)
 
 ### ARC B (per existing plan body §Critical Files To Modify, with B0 corrections)
@@ -497,7 +504,7 @@ git merge --abort                                   # reset for the actual PR me
 | WS4 attempts to inject port that doesn't exist (architecture-reviewer-betty Q3) | High → Mitigated | High | B0 correction strips composition-root work from WS4; WS6 owns full vendor-import removal |
 | `no-vendor-observability-import` rule does not exist; WS6 narrows nothing (architecture-reviewer-betty Q4) | High → Mitigated | High | B0 correction makes WS6 author the rule; conformance plan body cites it as landed |
 | 30-commit divergence at merge produces silent post-merge breaks (architecture-reviewer-betty Q5) | Medium | High | ARC C1 named pre-merge divergence analysis; type-check on resolved tree; release-readiness-reviewer GO required |
-| ADR number collision (165 already taken; predicted 178/179 may also be taken) | Low | Low | B0 + A4 require number verification with `ls docs/architecture/architectural-decisions/ \| sort -n \| tail -5` immediately before authoring |
+| ADR number collision (165 already taken; original prediction 178/179 was wrong) | Mitigated | Low | Verified 2026-05-03 by Woodland Sprouting Glade: ARC A4 ADR is **170**, ARC B7/§B0 orthogonal-axes ADR is **171**; B0 + A4 still re-verify immediately pre-authoring against parallel landings |
 | Smoke harness redesign retires the existing `smoke:dev:stub` lane mid-arc, breaking CI | Low | High | A2 mode-by-mode conversion preserves green for each mode at every commit; root-script `smoke:dev:stub` continues to work because the underlying CLI path is preserved by the new harness |
 | Logger `additionalSinks` migration was a critical-files-list-only mention with no completion gate (architecture-reviewer-betty Q6) | Mitigated | Medium | B0 correction adds explicit slot in WS4 with reviewer dispatch |
 | Practice surfaces touched without mandatory-always reviewers firing | Mitigated | High | Mandatory-always reviewer pair (`docs-adr-reviewer` + `onboarding-reviewer`) named in EVERY workstream that mutates docs or Practice |

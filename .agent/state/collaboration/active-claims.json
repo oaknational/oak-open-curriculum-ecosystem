@@ -1,5 +1,50 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "9cad0bab-e682-41d1-bc27-e5243554aaa7",
+      "agent_id": {
+        "agent_name": "Prismatic Illuminating Eclipse",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "7402c9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T09:18:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ARC A1 design canonical smoke harness module (run-smoke.ts, cli.ts, env-builder, boot-signal parser, lifecycle wrapper) + RED tests + vitest.smoke.config.ts + smoke-context.ts. Per active plan there-is-no-time-hashed-starfish.plan.md §A1."
+    },
+    {
+      "claim_id": "1fee5cf0-2478-40e6-bd3c-c81d99f174d5",
+      "agent_id": {
+        "agent_name": "Woodland Sprouting Glade",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "978cba"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-03T09:20:38Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ARC B0 plan-body corrections to observability-multi-sink-and-fixtures-shape.plan.md per there-is-no-time-hashed-starfish §B0 corrections list (deletion timing, bridge removal, ESLint rule authoring, ADR number verification, betty amendments, WS9.5 pre-merge analysis section). Plus ADR number corrections to there-is-no-time §A4/§B0/§B7 (170/171 verified)."
+    }
+  ]
 }
