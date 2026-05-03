@@ -10,9 +10,17 @@
         "git rebase -i",
         "git --no-verify",
         "git --no-gpg-sign",
-        "git clean -fd"
+        "git clean -fd",
+        "git checkout --",
+        "git checkout HEAD",
+        "git checkout -- .",
+        "git restore",
+        "git restore --worktree",
+        "git restore --staged",
+        "git stash drop",
+        "git stash clear"
       ],
-      "description": "Block shell commands that bypass safety guardrails or destroy history."
+      "description": "Block shell commands that bypass safety guardrails, destroy history, or overwrite live working-tree edits. Working-tree-overwrite commands (checkout/restore variants) are blocked because they silently throw away in-flight edits — including peer-agent edits in parallel sessions — and `git fsck --lost-found` cannot recover them. We never use git to remove work; forward-going filesystem changes only. See `.agent/rules/never-use-git-to-remove-work.md`."
     },
     "preToolUseContent": {
       "blocked_patterns": [

@@ -271,6 +271,18 @@ this way produces cleaner boundaries and simpler classification.
   make old code work with new contracts. Replace the old code. If
   the replacement is not ready, leave the old code disabled — do
   not bridge it.
+- **Never use git to remove work** — We move forward via filesystem
+  changes (Edit, Write, `rm`); git is for committed history only.
+  Working-tree-overwrite commands (`git checkout HEAD -- <path>`,
+  `git checkout -- <path>`, `git restore`, `git stash drop` /
+  `clear`) silently wipe in-flight edits — yours AND any peer
+  agent's edits to the same files in a parallel session — and
+  `git fsck --lost-found` cannot recover them. Reach for Edit,
+  Write, or `rm` instead. When you remove work, capture the
+  realisation that drove the removal in the napkin in the same
+  session — without it the next agent re-creates what you removed.
+  See `.agent/rules/never-use-git-to-remove-work.md`. The repo's
+  `PreToolUse` Bash blocked-patterns hook enforces this.
 
 ### Refactoring
 
