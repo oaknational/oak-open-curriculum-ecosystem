@@ -51,10 +51,10 @@ against each other).
     goal, not the goal. Re-read the goal at every commit boundary
     and at every reviewer dispatch.
 
-  Instance pattern:
-  [`scope-as-goal.md`](../../memory/active/patterns/scope-as-goal.md).
-  Cross-reference under PDR-018 amendment of the same date for the
-  planning-discipline framing.
+  Instance pattern: `scope-as-goal` (host-local pattern file; bridged
+  via the practice-index Pattern instances section). Cross-reference
+  under PDR-018 amendment of the same date for the planning-discipline
+  framing.
 
 - **2026-04-26 amendment — parallel reviewer dispatch and structural-
   then-pre-landing review phasing (Frolicking Toast / claude-code /
@@ -522,23 +522,3 @@ Alternatives rejected:
   avoided rework.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-015`:
-
-- `.agent/memory/active/patterns/domain-specialist-final-say.md` — Sentry
-  canonical alignment plan (2026-04-12); architecture generalists
-  made assumptions about Sentry scope behaviour that the Sentry
-  specialist corrected against official SDK documentation.
-- `.agent/memory/active/patterns/route-reviewers-by-abstraction-layer.md` —
-  Sentry OTel integration hygiene closure (2026-04-17); three
-  reviewers on the same lane produced disjoint findings when routed
-  by layer.
-- `.agent/memory/active/patterns/reviewer-widening-is-always-wrong.md` —
-  session 2026-04-06; type-reviewer recommended `z.unknown()` to
-  satisfy a rule forbidding `Record<string, unknown>`; fix was
-  wrong despite valid rule citation.
-- `.agent/memory/active/patterns/review-intentions-not-just-code.md` —
-  WS3 Phase 4 brand banner; 5 specialist reviewers invoked
-  before implementation.

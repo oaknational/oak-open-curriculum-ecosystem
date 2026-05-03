@@ -35,10 +35,10 @@ aspirations).
     safety contract, CI gates, type checkers, and validators. The fix
     is one of three valid responses (understand-and-address,
     understand-and-dismiss-with-rationale, understand-and-stop) — never
-    skip-understanding. Instance patterns:
-    [`tool-error-as-question.md`](../../memory/active/patterns/tool-error-as-question.md),
-    [`hook-as-question-not-obstacle.md`](../../memory/active/patterns/hook-as-question-not-obstacle.md),
-    [`ground-before-framing.md`](../../memory/active/patterns/ground-before-framing.md).
+    skip-understanding. Instance patterns: `tool-error-as-question`,
+    `hook-as-question-not-obstacle`, `ground-before-framing`
+    (host-local pattern files; bridged via the practice-index Pattern
+    instances section).
   - **Reviewer scope equals prompted scope.** A reviewer's verdict is
     scoped to the prompt that briefed them; "GO WITH CONDITIONS" reads
     as a green merge signal only when the reviewer's brief matches the
@@ -46,9 +46,10 @@ aspirations).
     with the full merge-gate criteria (zero failing gates, no warning
     toleration, all merge conditions named), not just the arc you are
     working on. Failure mode: instrumental work treated as terminal
-    because the work-list was full. Instance pattern:
-    [`scope-as-goal.md`](../../memory/active/patterns/scope-as-goal.md).
-    Cross-reference under PDR-015 amendment of the same date.
+    because the work-list was full. Instance pattern: `scope-as-goal`
+    (host-local pattern file; bridged via the practice-index Pattern
+    instances section). Cross-reference under PDR-015 amendment of
+    the same date.
 
 - **2026-04-28 amendment — disposition drift under context pressure
   (Coastal Mooring Atoll / codex / GPT-5; owner-directed deep
@@ -300,18 +301,3 @@ Alternatives rejected:
   pressure rose.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-018`:
-
-- `.agent/memory/active/patterns/end-goals-over-means-goals.md` —
-  originated from knip-triage planning where "close 96 unused
-  exports" was the means-framed plan; the end-goal-framed
-  rewrite was materially smaller and more targeted.
-- `.agent/memory/active/patterns/repair-workflow-contract-clarity.md` —
-  originated from repair workflows using ambiguous verbs that
-  produced divergent outcomes across artefacts.
-- `distilled.md` entry "Drift recurs while authoring the enforcement of
-  the principle it violates" — graduated 2026-04-28 into this PDR as
-  §Disposition drift at phase boundaries.

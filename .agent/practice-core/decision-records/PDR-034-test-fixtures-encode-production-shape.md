@@ -24,14 +24,14 @@ fixture and the production code agree on the *wrong* contract.
 When fixture and code share an incorrect understanding, the test
 suite passes and the bug ships.
 
-Empirical instance (2026-04-26 on
-oak-open-curriculum-ecosystem): Vercel's `VERCEL_BRANCH_URL`
+Empirical instance (2026-04-26; host-local identifiers omitted
+from this portable record): Vercel's `VERCEL_BRANCH_URL`
 environment variable was assumed by both production code and test
-fixtures to be a full URL with scheme
-(`https://feat-x-poc-oak.vercel.thenational.academy`). Production
-code called `new URL(branchUrl).hostname` and test fixtures
-provided URL-shaped strings. Both agreed; tests passed; the
-preview build silently broke for ~5 commits because the real
+fixtures to be a full URL with scheme (a representative branch
+URL of the form `https://<feature-branch>.<vendor-host>`).
+Production code called `new URL(branchUrl).hostname` and test
+fixtures provided URL-shaped strings. Both agreed; tests passed;
+the preview build silently broke for ~5 commits because the real
 Vercel value is **hostname only** (no scheme), and `new URL()`
 threw on the bare hostname at runtime. The test suite could not
 catch this because the fixture encoded the code's
@@ -69,7 +69,7 @@ date the documentation was checked.
 ```typescript
 // Vercel docs (https://vercel.com/docs/environment-variables/system-environment-variables, 2026-04-26):
 // VERCEL_BRANCH_URL is a hostname only, no scheme.
-const VERCEL_BRANCH_URL_FIXTURE = 'feat-x-poc-oak.vercel.thenational.academy';
+const VERCEL_BRANCH_URL_FIXTURE = '<feature-branch>-<host-app>.<custom-domain>';
 ```
 
 ### Captured anchor
@@ -79,8 +79,8 @@ the fixture is captured from a real deployment. The fixture's
 TSDoc comment names the deployment ID and the date of capture.
 
 ```typescript
-// Captured from Vercel deployment dpl_FtjdEbwRN2qwM1m78hzoQoEDG95R (2026-04-25):
-const SENTRY_RELEASE_FIXTURE = 'poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements';
+// Captured from Vercel deployment <deployment-id> (2026-04-25):
+const SENTRY_RELEASE_FIXTURE = '<host-app-slug>-git-<feature-branch-slug>';
 ```
 
 ### Forbidden
@@ -93,7 +93,7 @@ prevent.
 ```typescript
 // FORBIDDEN — no documentation anchor, no capture anchor; encodes
 // the code's expectation rather than the vendor's reality.
-const VERCEL_BRANCH_URL_FIXTURE = 'https://feat-x-poc-oak.vercel.thenational.academy';
+const VERCEL_BRANCH_URL_FIXTURE = 'https://<feature-branch>-<host-app>.<custom-domain>';
 ```
 
 ## Consequences
@@ -150,6 +150,3 @@ date-stamped citation" discipline is invariant.
   `fixture` / `_FIXTURE` constant in test files MUST have a
   preceding TSDoc with either a URL or a deployment ID); tracked
   as a pending-graduations register candidate.
-- The captured `VERCEL_BRANCH_URL` instance is reflected in
-  `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`
-  fixture comments after the 2026-04-26 fix.

@@ -96,15 +96,15 @@ Layer 3: Entry Points          (root-level files per platform)
 All substantive artefact content lives platform-agnostically. Typical
 locations:
 
-| Artefact | Canonical location |
+| Artefact | Canonical location (typical Practice-bearing repo) |
 |---|---|
-| Rules / directives (authoritative policies) | `.agent/directives/` |
-| Rules (enforceable extractions) | `.agent/rules/` |
-| Skills | `.agent/skills/<skill-id>/` |
-| Commands | `.agent/commands/` |
-| Sub-agent templates | `.agent/sub-agents/templates/` |
-| Sub-agent components | `.agent/sub-agents/components/` |
-| Plan templates | `.agent/plans/templates/` |
+| Rules / directives (authoritative policies) | The Practice's directives surface |
+| Rules (enforceable extractions) | The Practice's canonical rule surface |
+| Skills | The Practice's canonical skills surface (one subdirectory per skill id) |
+| Commands | The Practice's canonical commands surface |
+| Sub-agent templates | The Practice's sub-agents surface (`templates/` subdirectory) |
+| Sub-agent components | The Practice's sub-agents surface (`components/` subdirectory) |
+| Plan templates | The Practice's plan surface (`templates/` subdirectory) |
 
 Location names adapt per repo convention; the invariant is that the
 substance lives in one platform-agnostic place. An edit to an artefact
@@ -123,7 +123,8 @@ containing thin wrappers. A thin wrapper contains ONLY:
 - **A short description** — sufficient for platform-native discovery
   surfaces.
 - **A pointer to the canonical content path** — the wrapper's one
-  substantive statement is "read and follow `.agent/<path>`".
+  substantive statement is "read and follow the canonical
+  Practice-surface artefact".
 - **Platform-specific invocation syntax** — where the canonical form
   cannot express a platform's native mechanism (e.g. `@file` mentions,
   argument-substitution placeholders, skill-invocation syntax).
@@ -136,7 +137,8 @@ canonical content describes **what** to do; the wrapper describes
 Concretely: a wrapper file longer than ~10 content lines (excluding
 frontmatter) is a red flag that substance has leaked into the wrapper.
 
-Cross-platform standard directories, such as `.agents/`, are adapter
+Cross-platform standard directories (e.g. a portable per-agent
+adapter directory shared across multiple platforms) are adapter
 targets under this model, not canonical locations. A vendor tool may
 install full content there, but the Practice-bearing repo must
 canonicalise that content back into Layer 1 and replace the platform
@@ -152,15 +154,12 @@ inside platform directories.
 
 Root-level files direct each platform's agent to the canonical
 Practice. Each platform reads its own entry point; each entry point
-redirects to the single canonical directive (typically
-`.agent/directives/AGENT.md` or equivalent). Examples at time of
-authoring:
-
-- `CLAUDE.md` → canonical directives
-- `AGENTS.md` → canonical directives
-- `GEMINI.md` → canonical directives
-- (Cursor uses always-on rules via its own mechanism; the entry
-  point is implicit)
+redirects to the single canonical agent directive on the Practice
+surface. Examples at time of authoring (per agent platform): a
+single file at the repo root for each agent platform that
+nominates the canonical agent directive as the canonical entry,
+plus implicit equivalents for platforms that load always-on rules
+via a different mechanism.
 
 An entry point file is itself a thin wrapper: platform-native frontmatter
 or content requirements plus a pointer to the canonical directive.
@@ -169,9 +168,10 @@ or content requirements plus a pointer to the canonical directive.
 
 Rules have two conceptually separate layers:
 
-1. **Authoritative policy** — the canonical substance defining what must
-   be done. Lives at Layer 1 (e.g. `.agent/directives/principles.md`,
-   `.agent/rules/<specific-rule>.md`). This is substantive content.
+1. **Authoritative policy** — the canonical substance defining what
+   must be done. Lives at Layer 1 (e.g. the principles directive
+   or a specific rule on the canonical rule surface). This is
+   substantive content.
 2. **Activation trigger** — the platform-specific mechanism deciding
    _when_ and _how_ a policy surfaces (always-on, glob-scoped, agent-
    selected, path-scoped, entry-point-inherited). Lives at Layer 2.
@@ -370,8 +370,10 @@ pointers with optional fallback.
 
 ### Relationship to PDR-007
 
-PDR-007 established first-class `practice-core/patterns/` and
-`practice-core/decision-records/` directories. This PDR extends the
+PDR-007 established the first-class `practice-core/decision-records/`
+Core directory (the previous `practice-core/patterns/` Core directory
+was retired by PDR-007 amendment 2026-04-29; universal patterns now
+graduate as PDRs with `pdr_kind: pattern`). This PDR extends the
 canonical-first discipline outward: the same principle that lives
 inside the Core (portable substance travels; non-portable content
 stays local) governs the whole agent-artefact surface. Practice
@@ -394,23 +396,6 @@ This PDR's substance is eventually a candidate for graduation into
 When the architecture has stabilised across multiple cross-platform
 hydrations, the graduation would mark this PDR as `Superseded by
 <Core section>` and retain it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring, the repo where this PDR was written carries:
-
-- Platforms: Cursor, Claude Code, Codex, Gemini CLI.
-- Canonical location: `.agent/` for all substantive content.
-- Adapter directories: `.cursor/`, `.claude/`, `.agents/`
-  (cross-platform skills/rules surface), `.gemini/`, plus `.codex/`
-  for Codex config.
-- Entry points: `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, plus
-  `.cursor/rules/*` for Cursor's always-on mechanism.
-- Validation: `scripts/validate-portability.mjs` (wrapper presence
-  per canonical artefact), `scripts/validate-subagents.mjs`
-  (sub-agent adapter coverage).
-- Specific counts (artefacts, wrappers, ADR references) live in the
-  host ADR record that this PDR's substance extracts from.
 
 ## Amendment Log
 

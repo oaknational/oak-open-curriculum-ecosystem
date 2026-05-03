@@ -123,14 +123,3 @@ PDR-003 (Sub-Agent Protection of Foundational Practice Docs).
 PDR-003 operates on the permissions dimension (who may edit);
 PDR-002 operates on the substance dimension (what the content
 should look like). Together they close the loop.
-
-### Host-local context (this repo only, not part of the decision)
-
-In the repo where this PDR was authored, the foundational documents
-referenced are `.agent/directives/AGENT.md` (the agent entry
-point), `.agent/directives/principles.md`, and
-`.agent/directives/testing-strategy.md`. The specific fitness
-thresholds on those files, and any repo-local decision to raise
-them in support of this doctrine, are host-local concerns and
-belong in a host-repo ADR or the host repo's fitness-function
-notes. They are not part of this PDR's substance.

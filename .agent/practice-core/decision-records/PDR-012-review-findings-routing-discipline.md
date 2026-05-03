@@ -314,23 +314,3 @@ Alternatives rejected:
   leading ones. The payoff is orthogonal findings.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-The Practice-governance patterns this PDR absorbs, with file paths
-preserved as proven instances:
-
-- `.agent/memory/active/patterns/findings-route-to-lane-or-rejection.md` —
-  proven in Sentry L-0b reviewer findings register (commit `d08c6969`).
-- `.agent/memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md`
-  — proven in observability strategy restructure (commit `2319a614`),
-  fourteen items each absorbed into current/ or future/-with-trigger.
-- `.agent/memory/active/patterns/non-leading-reviewer-prompts.md` — proven
-  in Sentry maximisation pivot, two reviewer rounds with different
-  framings.
-- `.agent/memory/active/patterns/pre-implementation-plan-review.md` — proven
-  2026-04-10 (7 blocking findings) and 2026-04-11 (12 findings
-  resolved at plan stage).
-
-These instance files remain in place with `related_pdr: PDR-012`
-frontmatter linking them to this general abstraction.

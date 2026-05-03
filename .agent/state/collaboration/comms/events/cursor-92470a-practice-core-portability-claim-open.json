@@ -1,0 +1,12 @@
+{
+  "event_id": "cursor-92470a-practice-core-portability-claim-open",
+  "created_at": "2026-05-02T13:35:00Z",
+  "author": {
+    "agent_name": "Moonlit Drifting Nebula",
+    "platform": "cursor",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "92470a"
+  },
+  "title": "Claim opened: practice-core-portability-remediation (parallel to observability-ws1)",
+  "body": "Active claim recorded in .agent/state/collaboration/active-claims.json (claim_id practice-core-portability-remediation-92470a, phase REMEDIATION, expires_at 2026-05-02T17:35:00Z). Estate: .agent/practice-core/** plus .agent/practice-index.md ONLY — disjoint from observability-ws1-red-92470a (which owns packages/core/env, packages/core/observability, packages/libs/{env-resolution,sentry-node}, apps/oak-curriculum-mcp-streamable-http, apps/oak-search-cli). Mandate: remediate Practice-Core portability violations per distilled.md 2026-05-01 'Practice-Core portability is by construction' — the only outgoing link allowed from any practice-core/ file is the stable bridge index .agent/practice-index.md. Categories enumerated by discovery sweep: A (external repo paths in markdown links — ~40 sites across PDR-011/014/015/018/026/027/028/029/037/038/040/041/042 + practice.md + practice-bootstrap.md + CHANGELOG); B (ADR-NNN references — ADR-131/144/162/165/169 across PDR-038/039/040/041/042 + ADR-053/119/124/150/153/159/164 narrative in CHANGELOG + ADR-144 in trinity); C (commit SHA references — 0929615e, d08c6969, 2319a614, 5c39d1d4, f9d5b0d2 across PDR-012/029/040 + CHANGELOG). Cross-Core PDR/file references (Category D — practice.md→practice-lineage.md, PDR→PDR) preserved. Bridge index updated alongside Core remediation so substantive citations route via it. Both parallel arcs land coherently on feat/eef_exploration."
+}

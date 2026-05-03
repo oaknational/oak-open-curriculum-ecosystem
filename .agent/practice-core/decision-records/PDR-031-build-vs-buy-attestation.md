@@ -123,8 +123,8 @@ This makes the absence-of-buy claim falsifiable at review time.
 
 ### Where the attestation lands
 
-For plans authored in `.agent/plans/`, the attestation is a
-section in the plan body, surfacing immediately after the plan's
+For plans authored in the host's plan surface, the attestation is
+a section in the plan body, surfacing immediately after the plan's
 context/scope section and before its task breakdown. For plans
 authored in tools that surface a discrete planning-mode artefact
 (e.g. Claude Code's plan-mode), the attestation lives in the
@@ -218,22 +218,3 @@ This PDR's substance is a candidate for eventual graduation into
 discipline has been exercised across multiple cross-repo
 hydrations. Graduation marks the PDR `Superseded by <Core
 section>` and retains it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring:
-
-- Plans live in `.agent/plans/`. The attestation section MUST
-  appear after `## Context` (or equivalent scope-setting section)
-  and before the first task or phase section.
-- Sub-agent reviewers used to assess plans against this PDR include
-  `assumptions-reviewer` (broader plan assumptions audit) and the
-  domain-specialist reviewer most relevant to the proposed build
-  (e.g. `architecture-reviewer-*` for structural builds).
-- Originating instance: 2026-04-21 mid-Session-4 owner direction
-  retracting an earlier build-mode plan when the existence of a
-  suitable off-the-shelf alternative surfaced post-plan-approval.
-  Captured in the retracted standing-decisions register entry
-  `build-vs-buy-attestation-required-pre-exitplanmode` and
-  graduated to this PDR in 2026-04-21 Session 5 per the
-  decomposition arc.

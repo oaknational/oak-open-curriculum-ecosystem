@@ -426,27 +426,3 @@ graduation into `practice-bootstrap.md` as a "How to add new domain
 expertise" section, or into `practice-lineage.md` as a Learned
 Principle about capability growth. Graduation marks the PDR
 `Superseded by <Core section>` and retains it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring, the repo where this PDR was written
-carries:
-
-- Reviewers following the standard hierarchy: code-reviewer,
-  architecture reviewers (multiple), test-reviewer, type-reviewer,
-  config-reviewer, security-reviewer, docs-adr-reviewer,
-  mcp-reviewer, elasticsearch-reviewer, clerk-reviewer,
-  sentry-reviewer, design-system-reviewer,
-  react-component-reviewer, accessibility-reviewer.
-- Reviewer following the inverted hierarchy:
-  assumptions-reviewer.
-- Process executors: subagent-architect; Practice executors (run
-  infrequently).
-- Specialists: narrow agents for specific automation tasks.
-- Operational tooling present: the search CLI's admin commands
-  for Elasticsearch; upstream Clerk CLI under evaluation for the
-  Clerk specialist.
-
-Specific reviewer counts, agent names, and operational-tooling
-command lists live in the host ADR record this PDR's substance
-extracts from.

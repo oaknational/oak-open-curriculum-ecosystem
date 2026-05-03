@@ -78,13 +78,13 @@ unit).
   for the cross-PDR rationale.
 - **2026-04-25 — live coordination state recognised as a sibling
   artefact class to memory.** WS0 of the multi-agent collaboration
-  protocol installed `.agent/state/` as the *live, ephemeral,
-  signal-like* surface where multiple agents on the same repo
-  coordinate via the shared communication log (`state/collaboration/shared-comms-log.md`)
-  and, from WS1, structured claims. The state-vs-memory boundary —
-  *state is truth-of-now; memory is truth-across-time* — is named
-  in [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md)
-  and `.agent/state/README.md`. State is **not a fourth continuity
+  protocol installed a *live, ephemeral, signal-like* coordination
+  state surface where multiple agents on the same repo coordinate
+  via a shared communication log and, from WS1, structured claims.
+  The state-vs-memory boundary — *state is truth-of-now; memory
+  is truth-across-time* — is named in the host's
+  agent-collaboration directive and the host's collaboration-state
+  README (host-local files; bridged via the practice-index). State is **not a fourth continuity
   type**; it is a sibling artefact class distinct from memory, used
   for cross-agent coordination signal rather than cross-session
   learning. The capture → distil → graduate → enforce pipeline,
@@ -343,17 +343,17 @@ Memory and state are sibling artefact classes:
 
 | Class | Lifecycle | Truth scope | Examples |
 |---|---|---|---|
-| **`.agent/memory/`** | Durable; entries survive across sessions | Truth-across-time (lessons-learned) | Napkin, distilled, patterns, threads, executive cards |
-| **`.agent/state/`** | Ephemeral; entries archive or expire | Truth-of-now (signal-like) | Shared communication log, structured claims (WS1+), conversation files (WS3+) |
+| **Memory** | Durable; entries survive across sessions | Truth-across-time (lessons-learned) | Napkin, distilled, patterns, threads, executive cards |
+| **State** | Ephemeral; entries archive or expire | Truth-of-now (signal-like) | Shared communication log, structured claims (WS1+), conversation files (WS3+) |
 
 The state class is introduced for **cross-agent coordination signal**
 — what is happening *now* in the working tree across multiple
 parallel agent sessions — distinct from memory's role of preserving
 cross-session learning. The state-vs-memory boundary is enforced by
-two READMEs (`.agent/state/README.md` and `.agent/memory/`'s
-existing structure) and operationalised by the
-[`agent-collaboration.md`](../../directives/agent-collaboration.md)
-directive.
+the two surfaces' README contracts (the collaboration-state README
+and the memory directory's existing structure) and operationalised
+by the host's agent-collaboration directive (host-local file;
+bridged via the practice-index).
 
 State surfaces feed memory: live coordination signals generate
 evidence; that evidence is captured in the napkin and graduates into
@@ -533,12 +533,15 @@ Alternatives rejected:
 
 ### Relationship to PDR-007
 
-PDR-007 established the new Core contract including
-`decision-records/` and `patterns/` as first-class surfaces. PDR-011
-relies on that contract: graduated learnings from the surprise
-pipeline land in `practice-core/decision-records/` (as PDRs) or
-`practice-core/patterns/` (as universal patterns), alongside the
-host-repo's ADR folder for repo-specific architectural decisions.
+PDR-007 established the Core-package contract with
+`decision-records/` as a first-class Core directory (the
+`patterns/` Core directory and `practice-context/` peer companion
+were retired by PDR-007 amendment 2026-04-29 — universal patterns
+now graduate as PDRs with `pdr_kind: pattern`, and engineering
+patterns live host-side). PDR-011 relies on that contract:
+graduated learnings from the surprise pipeline land in
+`practice-core/decision-records/` (as PDRs) alongside the
+host-repo's ADR surface for repo-specific architectural decisions.
 The continuity machinery is the pipeline that feeds those surfaces.
 
 ### Relationship to PDR-009 and PDR-010
@@ -556,58 +559,3 @@ This PDR's substance is a candidate for eventual graduation into
 self-reinforcing loop section) once the split-loop model has been
 exercised across multiple cross-repo hydrations. Graduation marks
 the PDR `Superseded by <Core section>` and retains it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of the 2026-04-20 amendment, the repo where this PDR was
-authored carries a **split-surface host**:
-
-- Canonical continuity contract: `.agent/memory/operational/repo-continuity.md`
-  (portable minimum fields + "Current session focus" when distinct
-  from branch-primary).
-- Per-thread next-session records: `.agent/memory/operational/threads/<slug>.next-session.md`
-  (identity table per PDR-027 + landing target + `Lane state`
-  substructure carrying owning plan(s), current objective, current
-  state, blockers, next safe step, active track links, promotion
-  watchlist). *2026-04-21 Session 5*: this surface absorbed the
-  retired `.agent/memory/operational/workstreams/<slug>.md`
-  per-lane resumption briefs.
-- Single-writer tactical track cards:
-  `.agent/memory/operational/tracks/<thread>--<agent>--<branch>.md`
-  (git-tracked; collaborative tracks create multiple cards
-  disambiguated by filename; the `<scope>` token defaults to the
-  thread slug post-Session-5, with optional lane qualifier
-  `<thread>-<lane>` if the thread exercises multi-lane scope).
-- Session-handoff workflow: canonical in `.agent/commands/` with
-  platform adapters.
-- Consolidate-docs workflow: canonical in `.agent/commands/` with
-  platform adapters.
-- Ephemeral memory: `.agent/memory/active/napkin.md` (rotates at ~500
-  lines).
-- Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
-- Live coordination state: `.agent/state/` (introduced 2026-04-25 by
-  WS0 of multi-agent collaboration protocol). Currently:
-  `state/collaboration/shared-comms-log.md` (shared communication log,
-  schema-less append-only discovery narrative),
-  `state/collaboration/active-claims.json` (structured claims registry plus
-  root advisory `commit_queue`), `state/collaboration/closed-claims.archive.json`
-  (durable claim history), `state/collaboration/conversations/` (per-topic
-  decision threads, sidebars, joint decisions, and evidence), and
-  `state/collaboration/escalations/` (owner-escalation surface). State
-  timestamps are UTC ISO 8601 with trailing `Z`. State surfaces are governed by
-  [`.agent/directives/agent-collaboration.md`](../../directives/agent-collaboration.md).
-- Experience records: `.agent/experience/`.
-- Mid-session re-grounding: canonical `GO` skill with platform
-  adapters.
-- Behavioural entry surface: the `start-right-quick` skill
-  (`.agent/skills/start-right-quick/`) carries grounding read order
-  and the landing-target ritual at session open; `session-handoff`
-  carries the landing-evidence ritual at session close. The prior
-  `.agent/prompts/session-continuation.prompt.md` was dissolved
-  (2026-04-20); its doctrine graduated to
-  [PDR-026](PDR-026-per-session-landing-commitment.md) and its
-  layering content to `.agent/directives/orientation.md`.
-
-Specific field formats, exact file locations, and the current
-state of each surface live in the host ADR record this PDR's
-substance extracts from.

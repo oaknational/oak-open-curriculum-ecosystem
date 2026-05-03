@@ -69,10 +69,10 @@ address each other.
 The absence of any one vital integration produces the same failure
 mode: the Practice is **structurally present but inert**. Present
 because the files are on disk; inert because the flows that would
-make the files matter are broken. Practice Maturity Level 1 per
-`.agent/practice-context/outgoing/practice-maturity-framework.md`
-names this state: "Files present, references resolve — looks right,
-nothing works."
+make the files matter are broken. The Practice Maturity Framework
+(future PDR candidate, currently described in this PDR's §Notes)
+names this state at its lowest level: "Files present, references
+resolve — looks right, nothing works."
 
 Underlying cause: integration surfaces are a distinct design
 concern from the Core's own content. A correct trinity, a complete
@@ -84,23 +84,25 @@ silently because nothing in the repo looks wrong.
 
 ## Amendment 2026-04-29 — Core-pattern routing and Practice Context outbound exchange retired
 
-PDR-007's 2026-04-29 amendment retires `.agent/practice-core/patterns/`
-and `.agent/practice-context/` as live Core surfaces. This PDR's
-"vital integration surfaces" set is updated accordingly:
+PDR-007's 2026-04-29 amendment retires the previous `patterns/`
+Core directory and the `practice-context/` peer companion as live
+Core surfaces. This PDR's "vital integration surfaces" set is
+updated accordingly:
 
-- **Pattern discovery skill**: routes only to `.agent/memory/active/patterns/`
-  for repo-grounded engineering instances; Practice-governance
-  patterns route to PDR-shaped artefacts (PDRs with
-  `pdr_kind: pattern` frontmatter, or PDR amendments). The previous
-  "Core-pattern lookup" path is removed; there is no Core-pattern
-  destination.
-- **Ephemeral exchange (outbound)**: `practice-context/outgoing/` is
-  removed as an integration surface. Outbound substance routes by
-  shape — Practice-governance to PDRs in
-  `practice-core/decision-records/`; general abstract patterns to
-  PDRs with `pdr_kind: pattern`; engineering instances to
-  `.agent/memory/active/patterns/`; host-local reference material to
-  `.agent/reference/`; exploratory material to `.agent/research/`.
+- **Pattern discovery skill**: routes only to the host's pattern
+  memory surface for repo-grounded engineering instances;
+  Practice-governance patterns route to PDR-shaped artefacts (PDRs
+  with `pdr_kind: pattern` frontmatter, or PDR amendments). The
+  previous "Core-pattern lookup" path is removed; there is no
+  Core-pattern destination.
+- **Ephemeral exchange (outbound)**: the previous Practice-Context
+  outgoing channel is removed as an integration surface. Outbound
+  substance routes by shape — Practice-governance to PDRs in the
+  Core's `decision-records/`; general abstract patterns to PDRs
+  with `pdr_kind: pattern`; engineering instances to the host's
+  pattern memory surface; host-local reference material to the
+  host's reference surface; exploratory material to the host's
+  research surface.
 - **Inbound Practice exchange**: continues to use
   `.agent/practice-core/incoming/` (preserved).
 
@@ -133,12 +135,12 @@ start, artefact search, and workflow invocation.
 
 | Surface | Role | Typical host form |
 |---|---|---|
-| **Entry-point chain** | Repo-facing files direct each agent platform to the canonical Practice directives | `CLAUDE.md`, `AGENTS.md`, `GEMINI.md` at repo root, each pointing at `.agent/directives/AGENT.md`; AGENT.md chains to `principles.md` + `testing-strategy.md` + trinity |
-| **Practice-index bridge** | The one permitted Core→local external link; bridges portable Core substance to the host repo's local artefacts | `.agent/practice-index.md` (per ADR-124 / retained by PDR-007) |
+| **Entry-point chain** | Repo-facing files direct each agent platform to the canonical Practice directives | Per-platform repo-root entry files (one per agent platform) each pointing at the host's canonical AGENT directive, which chains into principles, testing strategy, and the trinity |
+| **Practice-index bridge** | The one permitted Core→local external link; bridges portable Core substance to the host repo's local artefacts | A single host-local bridge index (typically `practice-index.md` adjacent to the Core) per the host's practice-propagation-model ADR / retained by PDR-007 — see practice-index Concept ↔ ADR map |
 | **Start-flow skills** | Session-start workflows that orient agents to the Practice before work begins | Canonical `start-right-quick` / `start-right-thorough` skills with platform adapters (per PDR-009) |
 | **Collaboration-state consultation** | Session-start workflows expose live agent-to-agent coordination state before mutation | Host-local state for Practice-owned shared log, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations |
-| **Pattern discovery skill** | Consulted when agents face recurring design problems; routes to the correct pattern surface | Canonical `patterns` skill pointing at `practice-core/patterns/` (general abstractions) and `memory/active/patterns/` (instances) |
-| **Rule activation** | Canonical rules activated via platform-native triggers (always-on, glob-scoped, agent-selected) | `.agent/rules/` canonical + per-platform triggers (`.cursor/rules/*.mdc`, `.claude/rules/*.md`, etc.) per PDR-009 |
+| **Pattern discovery skill** | Consulted when agents face recurring design problems; routes to the correct pattern surface | Canonical `patterns` skill pointing at the Practice-governance PDR surface (general abstractions / governance patterns) and the host's pattern memory surface (engineering instances) |
+| **Rule activation** | Canonical rules activated via platform-native triggers (always-on, glob-scoped, agent-selected) | A canonical rule directory in the Practice surface plus per-platform trigger directories (one per agent platform) per PDR-009 |
 
 #### Category B — Repo → Core (feedback)
 
@@ -151,8 +153,8 @@ these, the Practice stagnates.
 | **Refinement surface** | Settled rules distilled from captures (distilled.md or equivalent) — read at session start |
 | **Graduation workflow** | Consolidate-docs or equivalent — the workflow that moves substance from ephemeral to permanent surfaces (PDRs, patterns, trinity amendments) |
 | **Upstream Core review** | The consolidate-docs step that reads existing Core content against current practice and surfaces refinement candidates (contradictions, extensions, refinements, supersessions, drift) |
-| **Practice Box (inbound)** | `practice-core/incoming/` — transient receiver for inbound Core packages from other repos in the network |
-| **Ephemeral exchange (outbound)** | `practice-context/outgoing/` — ephemeral sender→receiver notes (sharpened by PDR-007 to ephemeral-only) |
+| **Practice Box (inbound)** | The Core's `incoming/` directory — transient receiver for inbound Core packages from other repos in the network |
+| **Ephemeral exchange (outbound)** | The host's outbound ephemeral channel — sender→receiver notes (sharpened by PDR-007 to ephemeral-only) |
 
 #### Category C — Bootstrap / Hydration / Transplantation
 
@@ -162,7 +164,7 @@ if and only if the vital surfaces end up present in the result.
 | Surface | Role |
 |---|---|
 | **Cold-start hydration** | New repo reads the Core package; hydrating agent grows the vital surfaces per `practice-bootstrap.md` templates |
-| **Plasmid integration** | Incoming Core arrives in `practice-core/incoming/`; Integration Flow (per `practice-lineage.md`) merges concepts bidirectionally; vital surfaces updated/retained |
+| **Plasmid integration** | Incoming Core arrives in the Core's `incoming/` directory; Integration Flow (per `practice-lineage.md`) merges concepts bidirectionally; vital surfaces updated/retained |
 | **Wholesale transplantation** | Fully-applied Practice from a source repo is transplanted per PDR-005; transplant manifest classifies every source artefact by portability gradient; vital surfaces verified at four-audit close |
 
 #### Category D — Cross-cutting canonical contracts
@@ -175,7 +177,7 @@ across the Practice network.
 | **Canonical agent artefact architecture** | PDR-009 | Three-layer canonical/adapter/entry-point; thin-wrapper contract; activation triggers distinct from policies |
 | **Canonical quality-gate naming** | PDR-008 | Stable `clean` / `build` / `format` / `format:fix` / `lint` / `lint:fix` / `typecheck` / `test` / `check` / `check:fix` / `check:ci` / `fix` / `dev` across ecosystems; per-ecosystem adaptation rule; CI invokes `check:ci` |
 | **Domain specialist capability pattern** | PDR-010 | Four-layer triplet + optional operational tooling; classification taxonomy; modes; inverted-hierarchy variant |
-| **Continuity surfaces + surprise pipeline** | PDR-011 (+ ADR-150 locally) | Three continuity types; split-loop handoff/consolidate; named continuity contract; capture→distil→graduate→enforce |
+| **Continuity surfaces + surprise pipeline** | PDR-011 (host adopters record their host-side companion ADR via the practice-index Concept ↔ ADR map) | Three continuity types; split-loop handoff/consolidate; named continuity contract; capture→distil→graduate→enforce |
 | **Dev tooling per ecosystem** | PDR-006 | Leading-edge reference repos; ecosystem-by-ecosystem nomination/supersession |
 
 #### Category E — Defensive / safety integrations
@@ -255,11 +257,12 @@ verifying only at routine consolidation misses bootstrap gaps. The
 three points cover the lifecycle.
 
 **Why "the Practice ensures its own integrations exist".** This is
-the self-referential property (ADR-131): a Practice that cannot
-govern its own integration surfaces is subject to the same drift it
-governs elsewhere. Verification mechanisms make the Practice's
-integration contract enforceable; without them, the contract is
-aspirational.
+the self-referential property of the self-reinforcing-improvement
+loop (host adopters record the host-side companion ADR via the
+practice-index Concept ↔ ADR map): a Practice that cannot govern its
+own integration surfaces is subject to the same drift it governs
+elsewhere. Verification mechanisms make the Practice's integration
+contract enforceable; without them, the contract is aspirational.
 
 **Why reference existing PDRs rather than re-specify.** Each
 vital-surface category already has a codifying PDR (or multiple).
@@ -323,14 +326,16 @@ Alternatives rejected:
 
 ## Notes
 
-### Relationship to Practice Maturity Framework
+### Relationship to the Practice Maturity Framework
 
-The maturity framework in
-`.agent/practice-context/outgoing/practice-maturity-framework.md`
-(future PDR candidate, currently ephemeral) describes Practice
-instances as Level 1 (structural), 2 (operational), 3 (self-
-correcting), 4 (evolving). PDR-024 makes Level 2 the **minimum**
-for a Practice-bearing repo: every vital surface must exist and be
+The Practice Maturity Framework (a future PDR candidate; currently
+exists only in design-space form pending graduation) describes
+Practice instances on a four-level scale: Level 1 (structural —
+files present, flows broken), Level 2 (operational — flows work),
+Level 3 (self-correcting — gaps surface and are closed), Level 4
+(evolving — substance flows back to Core through the surprise
+pipeline). PDR-024 makes Level 2 the **minimum** for a
+Practice-bearing repo: every vital surface must exist and be
 operational. An instance stuck at Level 1 (files present, flows
 broken) fails PDR-024's verification.
 
@@ -350,72 +355,3 @@ This PDR is itself a candidate for eventual graduation into
 integration surfaces, with `practice-verification.md` carrying the
 enumerated checklist. The graduation would mark PDR-024 as
 `Superseded by <Core section>` and retain it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring, the repo where this PDR was written
-carries the following specific implementations of each vital
-surface. These paths are host-local; the PDR's substance names the
-roles, not these paths.
-
-Category A (Core → Repo):
-
-- Entry-point chain: `CLAUDE.md`, `AGENTS.md`, `GEMINI.md` at repo
-  root → `.agent/directives/AGENT.md` → `principles.md` → other
-  directives + trinity.
-- Practice-index bridge: `.agent/practice-index.md`.
-- Start-flow skills: `.agent/skills/start-right-quick/SKILL.md`,
-  `.agent/skills/start-right-thorough/SKILL.md`, plus platform
-  adapters. Codex additionally has a soft `SessionStart` hook adapter that
-  injects the canonical PDR-027 identity context when hook input is available;
-  the start-flow skill and identity preflight command remain authoritative.
-- Collaboration-state consultation:
-  `.agent/state/collaboration/shared-comms-log.md`,
-  `.agent/state/collaboration/active-claims.json`,
-  `.agent/state/collaboration/closed-claims.archive.json`, and
-  `.agent/state/collaboration/conversations/` plus
-  `.agent/state/collaboration/escalations/`; the active-claims registry
-  carries the advisory `commit_queue`. The host-local tooling also exposes
-  `collaboration-state identity preflight` and report-only
-  `collaboration-state identity audit` commands for deterministic identity
-  registration and anonymous-identity review.
-- Pattern discovery skill: `.agent/skills/patterns/SKILL.md` (updated
-  this session to point at both Core and memory pattern surfaces).
-- Rule activation: `.agent/rules/*` canonical + `.cursor/rules/*.mdc`,
-  `.claude/rules/*.md`, etc.
-
-Category B (Repo → Core):
-
-- Capture: `.agent/memory/active/napkin.md`.
-- Refinement: `.agent/memory/active/distilled.md`.
-- Graduation workflow: `.agent/commands/consolidate-docs.md`
-  (updated this session to wire in PDRs and practice-core/patterns).
-- Upstream Core review: step 8 of consolidate-docs (added this
-  session).
-- Practice Box (inbound): `.agent/practice-core/incoming/`.
-- Ephemeral exchange (outbound): `.agent/practice-context/outgoing/`
-  (sharpened per PDR-007 this session).
-
-Category D (cross-cutting contracts):
-
-- Canonical agent artefact architecture: validated via
-  `scripts/validate-portability.mjs` + `scripts/validate-subagents.mjs`.
-- Canonical quality-gate naming: partially adopted (see PDR-008
-  Notes for the host-local rename plan).
-- Domain specialist capability pattern: validated via reviewer
-  roster + triplet presence.
-- Continuity surfaces: `.agent/memory/operational/repo-continuity.md`
-  hosts the continuity contract (split-surface host per PDR-011;
-  prior prompt-hosted shape dissolved 2026-04-20 — see PDR-026 +
-  `.agent/directives/orientation.md`).
-- Dev tooling per ecosystem: this repo is the TypeScript leading-
-  edge reference per PDR-006.
-
-Category E (defensive):
-
-- Owner-edited foundations: enforced by
-  `.agent/rules/subagent-practice-core-protection.md` (updated this
-  session).
-- Pedagogical reinforcement: enforced by reviewer discipline against
-  mechanical deduplication.
-- Explorations tier: `docs/explorations/` (established by PDR-004).

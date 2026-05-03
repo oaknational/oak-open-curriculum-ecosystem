@@ -160,14 +160,3 @@ Alternatives rejected:
   assertion quality.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instance retained with `related_pdr: PDR-020`:
-
-- `.agent/memory/active/patterns/check-driven-development.md` —
-  originated from SDK canonical-descriptor unit tests
-  (2026-03-26) where runtime property-existence checks were
-  initially written to avoid breaking type-check; refactored to
-  use the type checker as the direct assertion after owner
-  correction.

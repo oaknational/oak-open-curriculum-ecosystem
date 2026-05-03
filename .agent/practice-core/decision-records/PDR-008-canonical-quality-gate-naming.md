@@ -367,27 +367,3 @@ always run by someone who understands they are running the
 local gate, and the CI-safe form (`check:ci`) remains one suffix
 away. The exception is worth its cost; it is not an invitation
 to add further aliases.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring, the repo where this PDR was written
-partially matches the canonical set. Specific divergences:
-
-| Canonical | Current in this repo | Disposition |
-|---|---|---|
-| `format` (verify) | `format-check:root` | Rename |
-| `format:fix` | `format:root` | Rename |
-| `lint` (verify) | `lint` | Already canonical |
-| `lint:fix` | `lint:fix` | Already canonical |
-| `typecheck` | `type-check` | Rename |
-| `check` (alias for `check:fix`) | `check` (mutating) | Keep; document as alias for the new canonical `check:fix` |
-| `check:fix` | (absent — substance lives in `check`) | Add as the explicit mutating-aggregate name; `check` aliases to it |
-| `check:ci` | (absent) | Add as non-mutating CI form |
-| `fix` | `fix` | Already canonical in name and role (subset of `check:fix`) |
-
-A migration within this repo renames the divergent scripts,
-splits the current `check`, updates CI invocations, updates
-pre-commit hooks, and sweeps internal documentation. That
-migration is **not** part of accepting PDR-008 — it is a
-follow-on execution task. Accepting PDR-008 fixes the names;
-realising them locally is a scheduled change.

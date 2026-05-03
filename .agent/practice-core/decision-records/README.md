@@ -30,10 +30,11 @@ Core package alone:
 `decision-records/` is inside the Core package; PDRs travel with
 the Core by construction. The previous `patterns/` Core directory
 and `practice-context/` peer companion were retired 2026-04-29
-(PDR-007 amendment); patterns live at `.agent/memory/active/patterns/`
-(engineering instances) or as PDRs with `pdr_kind: pattern`
-(governance). Inbound Practice exchange uses `incoming/`; outbound
-substance routes by shape per PDR-024 amendment 2026-04-29.
+(PDR-007 amendment); patterns now live host-side as engineering
+instances (in the host's pattern memory surface) or as PDRs with
+`pdr_kind: pattern` (governance). Inbound Practice exchange uses
+`incoming/`; outbound substance routes by shape per PDR-024
+amendment 2026-04-29.
 
 ## Intended Evolution
 
@@ -84,14 +85,40 @@ Each PDR follows a stable shape inherited from the ADR convention:
 
 PDRs are portable content. They MUST NOT depend on host-repo
 specifics (no host ADR numbers, no host file paths as substance, no
-host-repo names as the carrier of meaning). Concept-level references
-only. This matches the "concepts are the unit of exchange"
-principle from the Practice Core (see `practice.md` Philosophy).
+host-repo names as the carrier of meaning, no commit SHAs or
+commit-subject citations). Concept-level references only. This
+matches the "concepts are the unit of exchange" principle from the
+Practice Core (see `practice.md` Philosophy).
 
 A host repo that hydrates this PDR directory should find every PDR
-immediately usable without translation. Cross-references to
-host-repo artefacts are allowed only in **Notes** sections, clearly
-marked as host-local context and not carrying decision substance.
+immediately usable without translation. The only outgoing link
+allowed from any PDR is to the stable bridge index
+`.agent/practice-index.md` (or its host equivalent at the same
+location). Cross-Core references (PDR↔PDR within this directory,
+links to the trinity files `practice.md`, `practice-lineage.md`,
+and `practice-bootstrap.md`) remain — they are internal connective
+tissue, not host leakage.
+
+Host-specific worked instances may motivate a PDR but MUST NOT be
+recorded inside it as host-local context, host-local notes, or
+"this repo only" sections. The host-side adoption is recorded in
+the host's bridge index and ADR surface, not in the PDR.
+
+Two narrow carve-outs (the host's distilled-doctrine entry on
+Practice-Core portability ratifies both — see the bridge index
+[Practice-Core concept ↔ ADR map](../../practice-index.md#practice-core-concept--adr-map)):
+
+1. **Practice-canonical directory references** describing the
+   Practice's own canonical layout (`.agent/skills/`, `.agent/rules/`,
+   `.agent/memory/`, `.agent/state/`, etc.) are portable structural
+   contract, not host leakage — `.agent/` IS the Practice's
+   canonical home per [PDR-009](PDR-009-canonical-first-cross-platform-architecture.md)
+   and the [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+   Core-package contract.
+2. **External http(s) citations** to durable third-party material
+   (RFCs, vendor specifications, public standards) are permitted —
+   the constraint targets repo-internal leakage, not citation of
+   external standards.
 
 ## Index
 
@@ -132,3 +159,10 @@ marked as host-local context and not carrying decision substance.
 | [PDR-033](PDR-033-vendor-doc-review-for-unknown-unknowns.md) | Vendor-Doc Review for Unknown Unknowns in Third-Party Platform Plans | Accepted |
 | [PDR-034](PDR-034-test-fixtures-encode-production-shape.md) | Test Fixtures Encode Production Shape, Not the Code's Expectation | Accepted |
 | [PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md) | Agent Work Capabilities Belong to the Practice | Accepted |
+| [PDR-036](PDR-036-friction-as-structural-finding.md) | Friction as Structural Finding | Accepted |
+| [PDR-037](PDR-037-substrate-vs-axis-plan-categorisation.md) | Substrate-vs-Axis Plan Categorisation | Accepted |
+| [PDR-038](PDR-038-stated-principles-require-structural-enforcement.md) | Stated Principles Require Structural Enforcement | Accepted |
+| [PDR-039](PDR-039-external-findings-reveal-local-detection-gaps.md) | External Findings Reveal Local Detection Gaps | Accepted |
+| [PDR-040](PDR-040-pin-to-maintainer-latest-not-highest-version.md) | Pin to Maintainer-Latest, Not Highest Version | Accepted |
+| [PDR-041](PDR-041-composition-obscurity-investigation-methodology.md) | Composition-Obscurity Investigation Methodology | Accepted |
+| [PDR-042](PDR-042-signal-distinguishing-pre-action-gate.md) | Signal-Distinguishing Pre-Action Gate | Accepted |

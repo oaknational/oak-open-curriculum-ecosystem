@@ -27,9 +27,10 @@ single layer is wrong; the composition fails. Investigation that
 attacks any single layer in isolation will produce a fix-that-doesn't-
 fix, because the composition keeps reassembling the failure.
 
-Empirical instance (2026-04-29 + 2026-04-30, this repo): Vercel
-production was failing on every `chore(release)` commit since 1.6.1.
-Four layers composed badly:
+Empirical instance (2026-04-29 + 2026-04-30, host-local
+identifiers omitted from this portable record): Vercel production
+was failing on every `chore(release)` commit since the most recent
+patch release. Four layers composed badly:
 
 1. `pnpm/action-setup@v6.0.2` was pinned by highest tag, not
    maintainer-Latest (sensible default of "use the newest version");
@@ -148,11 +149,16 @@ A session has applied this PDR when:
 
 ## Evidence
 
-- Triggering instances: 2026-04-29 Verdant Regrowing Pollen Surprise 1
-  (lockfile-corruption diagnosis discipline; first instance);
-  2026-04-30 Briny Lapping Harbor (full session as second instance,
-  PR #92).
-- Subjective experience: [`experience/2026-04-30-briny-the-frame-was-the-fix.md`](../../experience/2026-04-30-briny-the-frame-was-the-fix.md).
-- Future plan: [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md)
-  (documents methodology as supporting insurance to the structural
-  pin-to-Latest surface).
+- Triggering instances: 2026-04-29 Verdant Regrowing Pollen
+  Surprise 1 (lockfile-corruption diagnosis discipline; first
+  instance); 2026-04-30 Briny Lapping Harbor (full session as
+  second instance; host-local PR identifier omitted from this
+  portable record).
+- Subjective experience: a `2026-04-30-briny-the-frame-was-the-fix`
+  experience record (host-local; bridged via the practice-index
+  Experience records section).
+- Future plan: a `build-pipeline-composition-safeguards` plan in
+  the host's architecture-and-infrastructure plan collection
+  (host-local; bridged via the practice-index Plans section). The
+  plan documents methodology as supporting insurance to the
+  structural pin-to-Latest surface.

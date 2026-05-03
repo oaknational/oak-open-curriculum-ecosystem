@@ -215,38 +215,20 @@ Four reasons this convention is worth codifying.
 
 ## Notes
 
-### Host-local context (this repo only, not part of the decision)
+### Hydration-of-this-PDR-across-a-network
 
-At the time of authoring, the owner's Practice network has the
-following leading-edge state:
-
-| Ecosystem | Leading-edge repo | Status |
-|-----------|-------------------|--------|
-| TypeScript / Node.js | `oak-open-curriculum-ecosystem` (this repo) | Current |
-| Python | `~/code/personal/algo-experiments` | Current |
-| Rust | (none) | Gap — waiting for first Rust repo in the network |
-| SQL tooling | (none) | Gap — decisions currently distributed across leading-edge repos |
-| Infrastructure-as-code | (none) | Gap — Vercel-specific deploy config currently lives in this repo |
-| Container / orchestration | (none) | Gap |
-| Shell / POSIX tooling | (none) | Gap |
-| Vercel deployment pipeline | `oak-open-curriculum-ecosystem` (this repo) | Current; incidentally carried |
-
-Gaps named above should be treated as candidates for exploration
-during the next relevant repo hydration.
-
-### Hydration-of-this-PDR-across-the-network
-
-For this PDR to have effect in the owner's Practice network:
+For this PDR to have effect across a Practice network:
 
 1. Each currently-leading-edge repo should add a `docs/dev-tooling.md`
    (or equivalent) if one does not already exist.
 2. The cross-repo nomination registry can live in any host-repo
-   surface the owner prefers — this repo's `practice-index.md`,
-   a dedicated directory, or a network-level README outside any
+   surface the network owner prefers — the host's bridge index, a
+   dedicated directory, or a network-level README outside any
    single repo.
-3. When a new Rust or IaC or SQL-leading repo is nominated, its
-   hydration should produce the `docs/dev-tooling.md` before the
-   nomination is considered settled.
+3. When a new repo is nominated as leading-edge for a previously
+   unowned ecosystem, its hydration should produce the
+   `docs/dev-tooling.md` before the nomination is considered
+   settled.
 
 ### Relationship to Practice Core adaptation guidance
 

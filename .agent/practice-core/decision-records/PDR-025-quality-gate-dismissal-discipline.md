@@ -172,9 +172,10 @@ is unrealistic at any non-greenfield scale.
   or session closure.
 - CI exception entries without a linked remediation lane.
 - ESLint rules at `warn` severity for new zero-violation patterns
-  (per `.agent/memory/active/patterns/warning-severity-is-off-severity.md`;
-  `warn` is permitted as a migration mechanic with a named
-  flip-to-error trigger, not as a default).
+  (per the warning-severity-is-off-severity pattern bridged via
+  the practice-index Pattern instances section; `warn` is permitted
+  as a migration mechanic with a named flip-to-error trigger, not
+  as a default).
 
 ### Accepted cost
 
@@ -188,28 +189,15 @@ is unrealistic at any non-greenfield scale.
 
 ## Notes
 
-### Host-local context (this repo only)
-
-Proven application surfaces:
-
-- Distilled entry (now pruned) — `"All gates blocking, no
-  'pre-existing' exceptions"` — the instance form that graduated
-  to this PDR.
-- Pattern `.agent/memory/active/patterns/warning-severity-is-off-severity.md`
-  — companion discipline on ESLint severity as a migration
-  mechanic. PDR-025 §Forbidden restates the pattern's invariant.
-- PDR-008 §Canonical Gate Naming defines the gate surface this
-  PDR operates on. The `check`/`check:ci`/`check:fix` triplet is
-  the gate the discipline gates against.
-
 ### Application boundary
 
 This PDR governs **quality gates in the engineering sense** —
 type-check, lint, test, dead-code, dependency-graph, format,
 coverage, knip, depcruise, and similar. It does NOT govern:
 
-- Product-observability gates (those are ADR-162's five-axis
-  domain).
+- Product-observability gates (those are the host's
+  product-observability five-axis-model domain — see practice-index
+  Concept ↔ ADR map).
 - Review-finding dispositions (those are PDR-012's domain).
 - Workaround hygiene in code (that is PDR-017's domain).
 

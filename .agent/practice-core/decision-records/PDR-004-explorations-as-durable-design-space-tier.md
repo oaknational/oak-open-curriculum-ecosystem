@@ -29,16 +29,14 @@ would sometimes carry load-bearing reasoning in prose that belonged in
 a sibling artefact, making the plan heavier than it should have been
 and making the reasoning harder to cite.
 
-The receiving session in 2026-04-18 (host repo
-`oak-open-curriculum-ecosystem`) surfaced this gap explicitly while
-reframing a single-branch Sentry observability expansion into a
-project-wide five-axis observability principle. The reframe produced
-substantial option-weighing (Sentry-as-PaaS-exploration-thesis,
-PostHog-vs-Sentry capability matrix, accessibility observability at
-runtime, event schema shape for curriculum analytics) that would
-inform multiple ADRs but itself did not commit to them. A new tier
-was introduced: `docs/explorations/`. The receiving session's own
-rationale became the inaugural entry.
+The receiving session in 2026-04-18 surfaced this gap explicitly
+while reframing a single-vendor observability expansion into a
+project-wide multi-axis observability principle. The reframe
+produced substantial option-weighing across competing vendors,
+accessibility observability at runtime, and event-schema shape that
+would inform multiple ADRs but itself did not commit to them. A new
+tier was introduced: `docs/explorations/`. The receiving session's
+own rationale became the inaugural entry.
 
 ## Decision
 
@@ -140,11 +138,11 @@ a host-repo convention.
    insufficient evidence to commit. Without a named home, the
    reasoning trail evaporates. This isn't a host-specific need.
 
-2. **The shape is portable.** Unlike host-specific artefacts
-   (curriculum-data schemas, MCP tool registrations, Oak-specific
-   plans), the document shape of an exploration — problem, options,
-   research questions, informs, references — transfers unchanged
-   across repos.
+2. **The shape is portable.** Unlike host-domain-specific
+   artefacts (data schemas, integration registrations, host-domain
+   plans), the document shape of an exploration — problem,
+   options, research questions, informs, references — transfers
+   unchanged across repos.
 
 3. **It fills a real gap, not an imagined one.** The gap was observed
    empirically: a session's option-weighing work was about to be lost
@@ -188,21 +186,12 @@ a host-repo convention.
 
 ## Notes
 
-### Relationship to `.agent/research/` (if present in a host)
+### Relationship to a research surface (if present in a host)
 
-Some host repos may already have `.agent/research/` for research
-artefacts. The distinction: `.agent/research/` is typically
+Some host repos may already have a research surface for research
+artefacts. The distinction: a research surface is typically
 agent-facing and session-ephemeral (pre-decision exploration that
-may get consumed during consolidation); `docs/explorations/` is
+may get consumed during consolidation); the explorations tier is
 human-and-agent facing and durable. If a host has only one of the
 two and the semantics align, using the existing location is
-acceptable — name the choice in `practice-index.md`.
-
-### Host-local context (this repo only, not part of the decision)
-
-In the repo where this PDR was authored (`oak-open-curriculum-ecosystem`),
-the explorations directory is `docs/explorations/` with its own README,
-and the inaugural entry is
-`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`.
-The directory was created in the same session that surfaced the need
-for the tier, validating the approach end-to-end.
+acceptable — name the choice in the practice-index.

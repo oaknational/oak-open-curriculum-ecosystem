@@ -5,15 +5,19 @@ It is a reusable plain-text framework for agentic-first engineering: agents from
 
 This directory is the Practice Core, the self-contained heart of the system. The Core is transferable to other repos, see below. The Core integrates into a specific repo via a stable link to the `practice-index.md` file.
 
-The Core is a **bounded package of files plus required directories**: the plasmid trinity (practice, lineage, bootstrap), verification, entry points (this README, index), changelog, provenance, plus three required directories — `decision-records/` (Practice Decision Records — portable governance), `patterns/` (general ecosystem-agnostic abstract patterns), and `incoming/` (the Practice Box). The contract is the **set of surfaces and their roles**, not a file count; growth by explicit decision only.
+The Core is a **bounded package of files plus required directories**: the plasmid trinity (practice, lineage, bootstrap), verification, entry points (this README, index), changelog, provenance, plus two required directories — `decision-records/` (Practice Decision Records — portable governance, including universal patterns recorded as PDRs with `pdr_kind: pattern`) and `incoming/` (the Practice Box). The contract is the **set of surfaces and their roles**, not a file count; growth by explicit decision only.
 
-The Core has one optional peer companion: `.agent/practice-context/` (sender-maintained ephemeral exchange context). Under PDR-007, PDRs and patterns previously held as peer directories are now first-class inside Core.
+The previous `patterns/` Core directory and `practice-context/` peer
+companion were retired 2026-04-29 by [PDR-007](decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+amendment; universal patterns now travel as PDRs and there is no
+peer-companion option.
 
 The Practice is the integrated local application of the Core within a specific repo, and the Core-informed quality gates, rules, commands, optional reviewer/domain-expert agents, skills, and other artefacts that are used to enforce the principles and guardrails.
 
-When a repo supports multiple agent platforms, keep the portable Core concise
-and record supported versus unsupported local surface mappings in a local
-reference such as `.agent/memory/executive/cross-platform-agent-surface-matrix.md`.
+When a repo supports multiple agent platforms, keep the portable Core
+concise and record supported versus unsupported local surface mappings
+in a local reference (e.g. a cross-platform agent-surface matrix on
+the host's executive-memory surface, bridged via the practice-index).
 
 The Practice will naturally evolve over time; using it will cause it to adapt to suit the context of its current repo.
 
@@ -27,12 +31,11 @@ This was inspired by the concept of [genetic plasmid exchange](https://en.wikipe
 
 ### Bringing the Practice to a New Repo
 
-To bring the Practice to a new repo, transfer the Practice Core package: the plasmid trinity (practice, lineage, bootstrap), verification, two entry points (this README + the agent-facing index), changelog, provenance, and the three required directories (`decision-records/` with its PDRs, `patterns/` with any general abstract patterns, `incoming/` empty). The `.agent/practice-context/` directory is an optional companion for ephemeral exchange context. To hydrate into a new repository:
+To bring the Practice to a new repo, transfer the Practice Core package: the plasmid trinity (practice, lineage, bootstrap), verification, two entry points (this README + the agent-facing index), changelog, provenance, and the two required directories (`decision-records/` with its PDRs and `incoming/` empty). To hydrate into a new repository:
 
-1. Create a directory: `.agent/practice-core/` (or `practice_core` if you prefer underscores).
-2. Drop the Core package into it — the eight files + the three directories.
-3. Check `.agent/practice-context/README.md` and `incoming/` if they exist (ephemeral exchange context).
-4. Ask your agent to read and understand the Core package, explain what it is all about, and tell you what should happen next.
+1. Create a Practice-Core directory at the host's chosen location (e.g. `practice-core/` or `practice_core/`, conventionally under the host's agent-artefact surface).
+2. Drop the Core package into it — the eight files plus the two required directories.
+3. Ask your agent to read and understand the Core package, explain what it is all about, and tell you what should happen next.
 
 The agent will survey your repo's existing tooling, standards, and norms, then adapt the Practice to fit -- the Practice enables excellence; it does not replace what you already have. See [practice-lineage.md](practice-lineage.md) for the full story of how the Practice propagates and evolves.
 

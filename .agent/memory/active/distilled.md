@@ -288,29 +288,58 @@ reports, generated indexes), not hand-maintained prose. Owner stated
 
 **Practice-Core portability is by construction.** Anything under
 `.agent/practice-core/` (the trinity, entry points, CHANGELOG,
-provenance, `decision-records/`, `patterns/`, `incoming/`) must be
-repo-independent. No repo paths (`docs/...`, `src/...`,
+provenance, `decision-records/`, `incoming/` — note that the
+former `patterns/` Core directory and the `practice-context/`
+peer companion were retired 2026-04-29 by PDR-007 amendment) must
+be repo-independent. No repo paths (`docs/...`, `src/...`,
 `packages/...`, `apps/...`, `../../skills/`, `../../commands/`,
 `../../memory/`, `../../plans/`, `../../experience/`, `../../rules/`,
 etc.). No ADR references (no `ADR-NNN`, no links into
 `docs/architecture/architectural-decisions/`). No commit references
-(no SHAs, no commit subjects, no `commit abcdef0` citations). The
+(no SHAs, no commit subjects, no `commit abcdef0` citations). No
+host-local context sections, host-context notes, or "this repo
+only" sections inside any PDR — host-side adoption is recorded in
+the host's bridge index and ADR surface, not in the PDR. The
 only outgoing link allowed from any file under `practice-core/` is to
 the stable bridge index `.agent/practice-index.md`. Cross-references
 between Core files (e.g. `practice.md` → `practice-lineage.md`,
 PDR → PDR) are internal to the Core package and remain allowed; what
-is forbidden is leakage out of the Core into the host repo. Existing
-violations (PDRs 038/039/040/041/042 linking
+is forbidden is leakage out of the Core into the host repo.
+
+**Two narrow carve-outs, ratified 2026-05-02 (Phase 1 Round 2
+remediation under owner direction)**:
+
+1. **Practice-canonical directory references** describing the
+   Practice's own canonical layout (`.agent/skills/`, `.agent/rules/`,
+   `.agent/memory/`, `.agent/state/`, `.agent/practice-core/`, etc.)
+   are portable structural contract, not host leakage — `.agent/`
+   IS the Practice's canonical home per PDR-009 and the PDR-007
+   Core-package contract. Spirit reading: the constraint targets
+   *host-repo* paths (apps/, packages/, src/, docs/...), not
+   references to the Practice's own canonical surface.
+2. **External http(s) citations** to durable third-party material
+   (RFCs, vendor specifications, public standards) are permitted —
+   the constraint targets repo-internal leakage, not citation of
+   external standards.
+
+Existing violations (PDRs 038/039/040/041/042 linking
 `../../../docs/architecture/architectural-decisions/...`; PDR-026
 linking `../../skills/`, `../../commands/`, `../../memory/`,
 `../../plans/observability/`; PDR-041 linking `../../experience/...`
 and `../../plans/...`; `practice.md` / `practice-lineage.md` /
-`CHANGELOG.md` / `practice-bootstrap.md` mentioning `ADR-NNN`) are
-critical-architectural-failure-shaped prior art, not nitpicks; remediation
-is in scope for a future session, not necessarily the session of
-discovery. This constraint is stricter than the prior ADR-124 / PDR-007
-"Core self-containment" framing — it tightens the seam to a single
-permitted outgoing target. Owner stated 2026-05-01.
+`CHANGELOG.md` / `practice-bootstrap.md` mentioning `ADR-NNN`) were
+critical-architectural-failure-shaped prior art. The first wave of
+remediation landed 2026-05-02 (Phase 1 Round 2): trinity migrated to
+the post-2026-04-29 retirement model; ~30 §Host context note /
+§Host-local context sections deleted across PDRs; broken cross-Core
+links repaired (3 PDR-007 stale-name links + 1 machine-local path +
+PDR-011 markdown defect); bridge index references re-pointed to
+"(host adoption)" framing. The structural-enforcement scanner
+required by PDR-038 to prevent recurrence is captured as the next
+follow-on. This constraint is stricter than the prior ADR-124 /
+PDR-007 "Core self-containment" framing — it tightens the seam to a
+single permitted outgoing target plus the two carve-outs above.
+Owner stated 2026-05-01; carve-outs ratified 2026-05-02.
 
 ## Architecture (Agent Infrastructure)
 

@@ -9,17 +9,18 @@ fitness_line_length: 100
 # The Practice
 
 The Practice is the self-reinforcing system of principles, structures, agents,
-and tooling that governs how work happens in this repository. It creates the
-conditions for safe, high-quality human-AI collaboration. The Practice is what
-produces the repo's deliverables — but it is not the deliverables themselves.
-It is deliberately plain text and vendor-portable: agents from major platforms
-can collaborate, continually learn and adapt, and preserve institutional and
-operational knowledge where future work can inspect it.
+and tooling that governs how work happens in a Practice-bearing repository. It
+creates the conditions for safe, high-quality human-AI collaboration. The
+Practice is what produces the host repo's deliverables — but it is not the
+deliverables themselves. It is deliberately plain text and vendor-portable:
+agents from major platforms can collaborate, continually learn and adapt, and
+preserve institutional and operational knowledge where future work can inspect
+it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
-links to this repo's directives, ADRs, and tools,
+links to the host repo's directives, ADRs, and tools,
 see [practice-index.md](../practice-index.md) — the bridge between the portable Core and the
-local repo.
+host repo.
 
 ## Three Layers
 
@@ -180,8 +181,9 @@ simply moves the accumulation problem downstream.
   high-signal patterns, archive the rest
 - **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled
   entries to permanent docs, not compression
-- **Permanent docs** → each file declares four fitness fields (three-zone model,
-  ADR-144): `fitness_line_target` (soft), `fitness_line_limit` (hard),
+- **Permanent docs** → each file declares four fitness fields (three-zone fitness
+  model — host-side adoption recorded in the practice-index Concept ↔ ADR map):
+  `fitness_line_target` (soft), `fitness_line_limit` (hard),
   `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100). Each
   metric lands in one of four zones: `healthy` → `soft` → `hard` → `critical`,
   where `critical` is `hard limit × 1.5`. All zones are signals. `hard` and
@@ -214,17 +216,21 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 - **Napkin** — `.agent/memory/active/napkin.md` — written continuously during every session
 - **Distilled** — `.agent/memory/active/distilled.md` — curated rulebook, read at session start
 - **Pattern instances (repo-local)** — `.agent/memory/active/patterns/` — specific,
-  ecosystem-grounded instances of engineering patterns proven in this repo
-- **General patterns (portable)** — `.agent/practice-core/patterns/` —
-  ecosystem-agnostic abstract patterns synthesised from multiple instances;
-  travel with the Core
+  ecosystem-grounded instances of engineering patterns proven in the host repo
 - **Practice Decision Records (portable)** — `.agent/practice-core/decision-records/`
-  — portable governance decisions about the Practice itself; travel with the Core
+  — portable governance decisions about the Practice itself, including
+  universal patterns recorded as PDRs with `pdr_kind: pattern`; travel with the Core
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
 - **Explorations** — `docs/explorations/` (or host-repo equivalent) —
   durable design-space documents; cited by ADRs and plans
+
+The previous `practice-core/patterns/` and `practice-context/`
+surfaces were retired 2026-04-29 (PDR-007 amendment). Universal
+patterns now graduate as PDRs; engineering patterns live host-side
+at `.agent/memory/active/patterns/`. Inbound exchange uses
+`decision-records/incoming/`; outbound routes by shape per PDR-024.
 
 ## The Review System
 
@@ -319,20 +325,20 @@ graph LR
 | Location                                                                   | What lives there                                                                                                                                                |
 | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `.agent/directives/`                                                       | Principles, rules, and operational directives                                                                                                                   |
-| `.agent/practice-core/`                                                    | Practice Core package: plasmid trinity, entry points, changelog, provenance, and required directories (`decision-records/` for portable Practice governance / PDRs, `patterns/` for general abstract patterns, `incoming/` for the Practice Box) |
+| `.agent/practice-core/`                                                    | Practice Core package: plasmid trinity, entry points, changelog, provenance, and required directories (`decision-records/` for portable Practice governance / PDRs / universal patterns, `incoming/` for the Practice Box) |
 | `.agent/plans/`                                                            | Work planning — active, paused, archived, research, and optional supporting templates                                                                           |
-| `.agent/memory/`                                                           | Institutional memory in three modes (see [`memory/README.md`](../memory/README.md)): `active/` — learning loop (napkin, distilled, patterns); continuous during sessions; read at session start. `operational/` — continuity (repo-continuity, threads, tracks); refreshed per session; read at session resume. `executive/` — organisational contract (artefact inventory, reviewer catalogue, platform-surface matrix); refreshed only when artefact architecture evolves; ad-hoc lookup when taking a governed action. |
+| `.agent/memory/`                                                           | Institutional memory in three modes (see the host repo's `memory/` README via the practice-index): `active/` — learning loop (napkin, distilled, patterns); continuous during sessions; read at session start. `operational/` — continuity (repo-continuity, threads, tracks); refreshed per session; read at session resume. `executive/` — organisational contract (artefact inventory, reviewer catalogue, platform-surface matrix); refreshed only when artefact architecture evolves; ad-hoc lookup when taking a governed action. |
 | `.agent/state/`                                                            | Live host-local state for operational coordination; collaboration state records shared log entries, active claims, advisory commit queue, closed claim history, decision threads, sidebars, joint decisions, and escalations. |
 | `.agent/experience/`                                                       | Experiential records across sessions                                                                                                                            |
 | `.agent/skills/`                                                           | Canonical skills — session workflows and passive capabilities (platform-agnostic)                                                                               |
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |
 | `.agent/commands/`                                                         | Canonical commands (platform-agnostic)                                                                                                                          |
 | `.agent/prompts/`                                                          | Domain-specific handover prompts — stateful session context (local adaptation)                                                                                  |
-| `.agent/research/`                                                         | Research documents and analysis. May contain a transient `notes/` holding bay (see [`research/README.md`](../research/README.md))                                |
+| `.agent/research/`                                                         | Research documents and analysis. May contain a transient `notes/` holding bay (see the host repo's `research/` README via the practice-index)                   |
 | `docs/explorations/` (or host equivalent)                                  | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
 | `.agent/reference/` (or equivalent)                                        | Curated library tier — owner-vetted, evergreen, deliberately-promoted read-to-learn material. Promotion-gated per [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md) (substantiate / justify / owner-vet). |
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
-| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [practice-index](../practice-index.md))                                                      |
+| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [`practice-index`](../practice-index.md))                                                    |
 
 ### Minimum Operational Estate
 
@@ -374,10 +380,12 @@ as the **Practice Core package**: a bounded set of files plus required
 directories in `.agent/practice-core/`. The contract comprises the
 plasmid trinity (this file, practice-lineage, practice-bootstrap),
 the verification companion, two entry points (README for humans, index
-for agents), the changelog, the provenance file, and three required
+for agents), the changelog, the provenance file, and two required
 directories: `decision-records/` (portable Practice-governance decisions
-as PDRs), `patterns/` (general ecosystem-agnostic abstract patterns),
-and `incoming/` (the Practice Box).
+as PDRs, including universal patterns recorded with `pdr_kind: pattern`)
+and `incoming/` (the Practice Box). The previous `patterns/` Core
+directory and `practice-context/` peer companion were retired
+2026-04-29 (PDR-007 amendment).
 
 The Core contract is the **set of surfaces and their roles**, not a
 file count. Growth by explicit decision (future PDR); no accretion.
@@ -391,12 +399,13 @@ and the four fitness thresholds described in §Fitness Functions above.
 The provenance file always travels with the Core package.
 
 The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both
-the reference for how exchange works and the source template for outbound propagation. Optional
-exchange context may travel separately in `.agent/practice-context/`, sharpened under PDR-007 to
-ephemeral sender-maintained `outgoing/` material copied into receiver-side `incoming/` when
-needed. Portable patterns and governance decisions travel as **Core content** (in
-`practice-core/patterns/` and `practice-core/decision-records/` respectively), not via separate
-transport surfaces.
+the reference for how exchange works and the source template for outbound propagation. Portable
+governance decisions and universal patterns travel as **Core content** in
+`practice-core/decision-records/` (the latter as PDRs with `pdr_kind: pattern`).
+The previous `practice-context/` ephemeral exchange surface was retired
+2026-04-29 (PDR-007 amendment); inbound substance now arrives via
+`decision-records/incoming/` and outbound substance routes by shape per
+PDR-024.
 
 **Self-containment**: all travelling content must carry the concept
 itself — what it is, how it works, why it matters — never a pointer to
@@ -451,8 +460,8 @@ Level 4 (evolving). Hydration completeness requires operational
 verification: the claimed/installed/activated audit. See
 [practice-verification.md](practice-verification.md).
 
-If you are new to this repository, start with `.agent/directives/AGENT.md`. Follow the links. The
-Practice will teach itself.
+If you are new to a Practice-bearing repository, start with `.agent/directives/AGENT.md`. Follow
+the links. The Practice will teach itself.
 
 ## Sustainability and Scaling
 

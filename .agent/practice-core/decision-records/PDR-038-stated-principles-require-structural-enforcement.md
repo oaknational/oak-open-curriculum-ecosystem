@@ -15,43 +15,46 @@ incomplete);
 [PDR-039](PDR-039-external-findings-reveal-local-detection-gaps.md)
 (external-system findings as signals of local detection gaps — sibling
 PDR addressing the response-time discipline);
-[ADR-131](../../../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
-(self-referential property — the system that names a class of bug
-will eventually catch its own author).
+the host's self-reinforcing-improvement-loop concept (see
+practice-index Concept ↔ ADR map) — the self-referential property:
+the system that names a class of bug will eventually catch its own
+author.
 
 ## Context
 
-A principle named in `principles.md`, a directive, an ADR, or a PDR is
-a stated intention. Without a structural enforcement surface — a rule
-file, a validator script, an ESLint rule, a type guard, schema
-validation, a CI gate — the principle relies on every contributor
-remembering it at the moment of authorship. Memory is unreliable; the
-principle eventually catches its own author.
+A principle named in a host's `principles.md`, a directive, an ADR,
+or a PDR is a stated intention. Without a structural enforcement
+surface — a rule file, a validator script, an ESLint rule, a type
+guard, schema validation, a CI gate — the principle relies on every
+contributor remembering it at the moment of authorship. Memory is
+unreliable; the principle eventually catches its own author.
 
-Empirical instances on `oak-open-curriculum-ecosystem`:
+Empirical instances from the originating repo (host-local
+identifiers omitted from this portable record; see the host repo's
+commit history and the practice-index Rules section for the worked
+mappings):
 
-- **No-absolute-paths in `principles.md`** (months-stable) caught its
-  own author 2026-04-29 when `breadth-as-evasion.md` lines 105–106 were
-  found containing reference-style markdown links pointing into
-  `../../../.claude/projects/-Users-jim-code-oak-...` — a per-user
-  Claude memory directory that does not exist for any other
-  contributor and hardcodes the original author's username. The
+- **No-absolute-paths principle** (months-stable) caught its own
+  author when an active pattern-library file was found containing
+  reference-style markdown links pointing into a per-user
+  platform-cache directory that does not exist for any other
+  contributor and hardcoded the original author's username. The
   principle was sharpened to "no machine-local paths" and
-  operationalised via `.agent/rules/no-machine-local-paths.md` with
-  thin platform adapters and a `RULES_INDEX.md` entry. The structural
-  surface is what closed the loop.
-- **Gate-off-fix-gate-on** was named in plan prose for weeks before the
-  owner-directed graduation 2026-04-29 elevated it from
-  pattern-candidate to anti-pattern doctrine, with
-  [`.agent/rules/never-disable-checks.md`](../../rules/never-disable-checks.md)
-  plus a `principles.md` §Code Quality amendment closing the gap.
-- **Validation-scripts-are-not-tests** was named in
-  `testing-strategy.md §Test Types` as a single paragraph and was
-  bypassed during PR-90 closure when an integration test of repo state
-  was authored alongside five sibling drift instances. The structural
-  surface (the worked example in
-  [`testing-tdd-recipes.md § Validator Script vs Integration Test`](../../../docs/engineering/testing-tdd-recipes.md#validator-script-vs-integration-test))
-  was added 2026-04-30 to close the gap.
+  operationalised via a `no-machine-local-paths` rule with thin
+  platform adapters and an entry in the host's rules index. The
+  structural surface is what closed the loop.
+- **Gate-off-fix-gate-on** was named in plan prose for weeks before
+  an owner-directed graduation elevated it from pattern-candidate
+  to anti-pattern doctrine, with a `never-disable-checks` rule
+  (host-local; bridged via the practice-index Rules section) plus a
+  `principles.md` §Code Quality amendment closing the gap.
+- **Validation-scripts-are-not-tests** was named in the host's
+  testing-strategy directive as a single paragraph and was bypassed
+  during a PR closure when an integration test of repo state was
+  authored alongside five sibling drift instances. The structural
+  surface (a worked example in the host's testing-TDD-recipes
+  document under §Validator Script vs Integration Test) was added
+  to close the gap.
 
 The cross-instance shape: stated principles are necessary but not
 sufficient. The mechanical enforcement surface — a rule, a validator,
@@ -97,28 +100,29 @@ The discipline has three concrete moves:
   of closing the gap after the principle has caught its own author is
   larger (the principle must now be sharpened *plus* enforced; two
   edits instead of one).
-- **`.agent/rules/RULES_INDEX.md` evolves alongside principles.** Each
-  new rule file added under this discipline updates the index so the
-  enforcement surface is discoverable.
+- **The host's rules index evolves alongside principles.** Each
+  new rule file added under this discipline updates the host's rules
+  index so the enforcement surface is discoverable.
 - **Pending register entries get a stricter shape.** Bare "PDR
   candidate" entries are not self-contained — the candidate
   enforcement surface must be named (e.g. "trigger: second instance;
-  surface: `.agent/rules/<slug>.md`").
+  surface: a host-local rule file under the host's canonical rules
+  path").
 
 ## Implementation Notes
 
 The principle is recursive: this PDR is a stated principle. Its
-enforcement surface is the consolidate-docs §7a graduation scan
-(which already asks "is this PDR-shaped?") plus the
+enforcement surface is the host's `consolidate-docs` graduation
+scan step (which already asks "is this PDR-shaped?") plus the
 Pending-Graduations Register's `surface:` field convention introduced
-above. A future amendment may add a validator that scans
-`principles.md` and named directives for prose-stated rules and flags
-those without a citation back to a rule file or validator.
+above. A future amendment may add a validator that scans the host's
+principles directive and named directives for prose-stated rules and
+flags those without a citation back to a rule file or validator.
 
 ## Compliance Triggers
 
-- A principle is stated in `principles.md`, a directive, an ADR, or a
-  PDR with no enforcement surface named.
+- A principle is stated in the host's principles directive, another
+  directive, an ADR, or a PDR with no enforcement surface named.
 - A reviewer agent finds a principle that has caught its own author —
   evidence that the gap exists and needs closing.
 - An external system (SonarCloud, Copilot, Cursor Bugbot) catches
@@ -127,10 +131,13 @@ those without a citation back to a rule file or validator.
 
 ## Worked Instances
 
-Three instances on this repo (2026-04-29 / 2026-04-30):
-no-machine-local-paths, never-disable-checks, validation-scripts-are-not-tests.
+Three instances on the originating repo (2026-04-29 / 2026-04-30):
+the no-machine-local-paths principle and rule, the
+never-disable-checks principle and rule, and the
+validation-scripts-are-not-tests principle and worked example.
 Each illustrates the same shape: prose alone was insufficient; a
-structural surface closed the loop.
+structural surface closed the loop. Host-local instance files are
+bridged via the practice-index Rules section.
 
 ## Amendment Log
 

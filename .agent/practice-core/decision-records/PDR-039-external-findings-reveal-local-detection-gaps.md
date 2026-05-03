@@ -15,9 +15,9 @@ response-time discipline);
 (per-session landing commitment — deferral honesty discipline;
 external findings either close gaps in the current arc or are
 explicitly deferred with named triggers);
-[ADR-131](../../../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
-(self-reinforcing improvement loop — external findings are inputs to
-the loop, not just one-off bug reports).
+the host's self-reinforcing-improvement-loop concept (see
+practice-index Concept ↔ ADR map) — external findings are inputs
+to the loop, not just one-off bug reports.
 
 ## Context
 
@@ -27,15 +27,16 @@ deployment-platform warnings (Vercel, etc.) — sometimes catch issues
 that the local quality gates did not. The traditional response is to
 fix the issue. That is a fix; it is not a learning.
 
-Empirical instance (2026-04-29 PR-90 closure on this repo): Cursor
-Bugbot found a duplicate H2 heading in the rotated archive napkin
-file. The fix was straightforward (rename one heading). The
+Empirical instance (PR closure 2026-04-29 on the originating repo):
+Cursor Bugbot found a duplicate H2 heading in a rotated archive
+napkin file. The fix was straightforward (rename one heading). The
 investigation behind the fix surfaced that markdownlint MD024 was
-globally disabled in `.markdownlint.json` — a stronger gap than the
-single instance suggested. Phase 5 of PR-90 enabled MD024 with
-`siblings_only: true`, which surfaced exactly three genuine
-duplicates across the whole repo. The external finding was the
-visible tip of a class-of-bug invisible locally.
+globally disabled in the host's markdownlint configuration — a
+stronger gap than the single instance suggested. A subsequent phase
+of the same PR enabled MD024 with `siblings_only: true`, which
+surfaced exactly three genuine duplicates across the whole repo.
+The external finding was the visible tip of a class-of-bug
+invisible locally.
 
 The principle is recursively useful: applying the principle generates
 its own meta-instances. Cursor Bugbot finding the duplicate heading
@@ -79,9 +80,10 @@ The discipline has three concrete moves:
   either closes a local-detection gap or names the gap as a
   candidate. The local quality gates catch more over time.
 - **External systems become inputs to the improvement loop.** Per
-  ADR-131, the self-reinforcing loop consumes feedback from authoring,
-  reviewing, and operating. This PDR adds an explicit edge for
-  external-quality-system findings.
+  the host's self-reinforcing-improvement-loop concept (see
+  practice-index Concept ↔ ADR map), the loop consumes feedback
+  from authoring, reviewing, and operating. This PDR adds an
+  explicit edge for external-quality-system findings.
 - **Cross-PR follow-up plans become routine.** Pre-existing findings
   surfaced by external review (independent of the current PR's
   scope) belong in follow-up plans, not inline fixes that smuggle
@@ -98,10 +100,10 @@ The discipline has three concrete moves:
 
 Reviewer agents and pre-merge analysis should explicitly run the
 local-detection-gap question for each external-system finding. The
-pre-merge-analysis flow (see `docs/engineering/pre-merge-analysis.md`)
-is the natural enforcement surface for the response-time discipline,
-mirroring how `consolidate-docs §7a` is the surface for PDR-038's
-authoring-time discipline.
+host's pre-merge-analysis engineering document (or equivalent) is
+the natural enforcement surface for the response-time discipline,
+mirroring how the host's `consolidate-docs` graduation-scan step is
+the surface for PDR-038's authoring-time discipline.
 
 The `effort/risk/ROI` columns for deferred candidates use the
 Practice's standard sizing: effort in arc-fractions ("phase",
@@ -122,10 +124,12 @@ detection-gap class to the local-cost of closing it.
 
 ## Worked Instance
 
-PR-90 closure 2026-04-29: Cursor Bugbot finding (duplicate heading)
-→ MD024 globally disabled discovered → rule re-enabled with
-`siblings_only: true` → three additional duplicates surfaced and
-fixed. Single external finding closed a class-of-bug gap.
+PR closure 2026-04-29 on the originating repo: Cursor Bugbot finding
+(duplicate heading) → discovery that markdownlint MD024 was
+globally disabled in the host's markdownlint configuration → rule
+re-enabled with `siblings_only: true` → three additional duplicates
+surfaced and fixed. Single external finding closed a class-of-bug
+gap.
 
 ## Amendment Log
 

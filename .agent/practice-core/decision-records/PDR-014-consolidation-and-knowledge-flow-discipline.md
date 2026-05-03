@@ -54,18 +54,18 @@ but corrodes the flow over time.
 
 ## Amendment 2026-04-29 — Pattern routing follows PDR-007 retirement
 
-PDR-007's 2026-04-29 amendment retires `.agent/practice-core/patterns/`
-as a Core directory. This PDR's "Knowledge artefact roles" table is
-updated accordingly: the `pattern` row's "Typical home" column lists
-`.agent/memory/active/patterns/` for engineering instances and
-**PDR-shaped artefacts** (PDRs with `pdr_kind: pattern` frontmatter,
-or PDR amendments) for Practice-governance patterns. There is no
-`practice-core/patterns/` destination.
+PDR-007's 2026-04-29 amendment retires the previous `patterns/`
+Core directory. This PDR's "Knowledge artefact roles" table is
+updated accordingly: the `pattern` row's "Typical home" column
+lists the host's pattern memory surface for engineering instances
+and **PDR-shaped artefacts** (PDRs with `pdr_kind: pattern`
+frontmatter, or PDR amendments) for Practice-governance patterns.
+There is no Core-pattern destination.
 
 The bidirectional flow described in §"Bidirectional flow" still
 operates; the only change is that the "general pattern abstraction"
 output of cross-instance synthesis lands as a PDR (with
-`pdr_kind: pattern`) rather than in the retired `practice-core/patterns/`
+`pdr_kind: pattern`) rather than in the retired Core-pattern
 directory.
 
 ## Decision
@@ -173,15 +173,15 @@ make the primary role explicit.
 
 | Role | Purpose | Typical home |
 |---|---|---|
-| `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | `.agent/directives/`, `docs/governance/` |
-| `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | `docs/engineering/*-patterns.md`, focused recipe docs |
-| `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | `docs/operations/troubleshooting.md`, runbooks |
-| `pattern` | Empirical behaviour or solution shape proven by recurring practice | `.agent/memory/active/patterns/` (engineering instances); Practice-governance patterns take PDR shape with `pdr_kind: pattern` (per PDR-007 amendment 2026-04-29) |
-| `rule` | Always-applied obligation that must fire at a decision point | `.agent/rules/`, platform rule adapters |
-| `command rubric` | Workflow step that operationalises doctrine at a named command boundary | `.agent/commands/` |
+| `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | The host's directive surface or a governance-docs surface |
+| `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | A focused engineering-patterns or recipe surface in the host's docs |
+| `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | The host's operations or runbooks surface |
+| `pattern` | Empirical behaviour or solution shape proven by recurring practice | The host's pattern memory surface (engineering instances); Practice-governance patterns take PDR shape with `pdr_kind: pattern` (per PDR-007 amendment 2026-04-29) |
+| `rule` | Always-applied obligation that must fire at a decision point | The Practice's canonical rule surface plus per-platform rule adapters |
+| `command rubric` | Workflow step that operationalises doctrine at a named command boundary | The Practice's canonical commands surface |
 | `scanner or gate` | Executable enforcement for high-confidence obligations | scripts, hooks, CI, quality gates |
 | `decision record` | Durable decision, trade-off, and consequence history | ADRs for repo architecture; PDRs for Practice governance |
-| `operational state` | Current live state and next action, not settled doctrine | `.agent/memory/operational/` |
+| `operational state` | Current live state and next action, not settled doctrine | The host's operational memory surface |
 
 When consolidating, first identify the candidate's current role, then
 ask whether that role is still correct. Over-exampled doctrine may
@@ -193,16 +193,16 @@ once the durable recipe or runbook exists.
 
 | Surface | Holds |
 |---|---|
-| `pattern` (`.agent/memory/active/patterns/`) | Failure-mode or behaviour shape with concrete instances; recipe-shaped capture |
+| `pattern` (host pattern memory surface) | Failure-mode or behaviour shape with concrete instances; recipe-shaped capture |
 | `PDR` (new) | Portable Practice-governance decision in novel scope |
 | `PDR amendment` | Extension of an existing PDR's scope (preserves provenance via Amendment Log) |
 | `ADR` (or amendment) | Architectural decision: technology, structure, boundary; see [PDR-019](PDR-019-adr-scope-by-reusability.md) for ADR↔PDR boundary |
-| `rule` (`.agent/rules/`) | Always-applied procedural step requiring per-session/per-handoff firing; platform parity required per [PDR-029](PDR-029-perturbation-mechanism-bundle.md) |
-| `principle line` (`principles.md`) | Foundation invariant; cardinal, repo-wide, short; typically composed with an operationalising rule or PDR |
-| `command rubric` (`.agent/commands/<workflow>.md`) | Operationalises a doctrine at the firing point inside a workflow step |
+| `rule` (canonical rule surface) | Always-applied procedural step requiring per-session/per-handoff firing; platform parity required per [PDR-029](PDR-029-perturbation-mechanism-bundle.md) |
+| `principle line` (host principles directive) | Foundation invariant; cardinal, repo-wide, short; typically composed with an operationalising rule or PDR |
+| `command rubric` (canonical commands surface, one file per workflow) | Operationalises a doctrine at the firing point inside a workflow step |
 | `plan-body` | Plan-local meta-decision (scope, sequencing, fitness tolerance, deferrals) — not portable beyond the plan |
-| `practice-md` (`.agent/practice-core/practice.md`) | Visible Artefact Map presence; cross-cuts other surfaces |
-| `distilled entry` (`.agent/memory/active/distilled.md`) | Hard-won single-sentence rule-of-thumb that changes behaviour |
+| `practice-md` (the trinity's `practice.md`) | Visible Artefact Map presence; cross-cuts other surfaces |
+| `distilled entry` (host's refined-memory file) | Hard-won single-sentence rule-of-thumb that changes behaviour |
 | `register entry` | Captured candidate awaiting trigger — not yet graduated |
 
 ### Routing decision (run in order; first match wins, then check composition)
@@ -243,9 +243,9 @@ not force a single choice:
 
 | Composition | When to use | Example |
 |---|---|---|
-| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + [`documentation-hygiene`](../../rules/documentation-hygiene.md) |
+| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + a `documentation-hygiene` rule (canonical rule file is host-local; see practice-index) |
 | `PDR` + `command rubric` | Doctrine ratified portably; fires at a specific workflow step | [PDR-026 §Landing target definition](PDR-026-per-session-landing-commitment.md) + `/session-handoff` close ritual |
-| `pattern` + `rule` | Empirical capture + active prevention at firing point | [`inherited-framing-without-first-principles-check`](../../memory/active/patterns/inherited-framing-without-first-principles-check.md) + [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md) |
+| `pattern` + `rule` | Empirical capture + active prevention at firing point | The `inherited-framing-without-first-principles-check` pattern instance + a `plan-body-first-principles-check` rule (both host-local; see practice-index Pattern instances and Rules sections) |
 | `pattern` + `PDR` | Empirical observation + durable portable governance response | `passive-guidance-loses-to-artefact-gravity` + PDR-029 |
 | `principle` + `PDR amendment` | Foundation invariant + extension of existing scope | *Owner Direction Beats Plan* + future operationalisation |
 
@@ -325,8 +325,9 @@ Alternatives rejected:
 - Promotion to `current/` verifies both decision-readiness and
   session-entry-readiness before the promotion completes.
 - Fitness metric overruns triggered by substance-first writing are
-  handled per the fitness model (four-zone; ADR-144 or equivalent
-  per host repo), not by post-hoc concept trimming.
+  handled per the fitness model (four-zone; the host's three-zone
+  fitness-model ADR or equivalent — see practice-index Concept ↔
+  ADR map), not by post-hoc concept trimming.
 
 ### Forbidden
 
@@ -350,21 +351,6 @@ Alternatives rejected:
   step, not a status toggle.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-014`:
-
-- `.agent/memory/active/patterns/cross-session-pattern-emergence.md` —
-  WS3 SDK adoption (4 sessions: investigation → planning → Phase
-  1 → Phase 2); the "workaround debt compounds" pattern was only
-  visible across all four.
-- `.agent/memory/active/patterns/substance-before-fitness.md` — proven
-  during Practice Core authoring (2026-04-05); also cited directly
-  in `practice.md` §Learning before fitness.
-- `.agent/memory/active/patterns/current-plan-promotion.md` — statistical
-  roadmap review plus observational tranche promotion (2026-03-22,
-  algo-experiments).
 
 ## Amendment Log
 
@@ -399,8 +385,9 @@ pattern guidance.
    per [PDR-027 §Amendment Log 2026-04-21](PDR-027-threads-sessions-and-agent-identity.md)).
 
 **Class A.1 firing** (plan-body first-principles check, the
-[`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
-always-applied rule). Three clauses passed: shape (PDR-amendment,
+host-local `plan-body-first-principles-check` always-applied rule;
+canonical rule file is host-specific — see practice-index Rules
+section). Three clauses passed: shape (PDR-amendment,
 not pattern/rule/distilled), landing-path (PDR-014 tooling
 contract is established; substance-first per its own §Substance
 before fitness), vendor-literal (N/A; internal vocabulary). No

@@ -9,13 +9,15 @@ pdr_kind: governance
 **Related**:
 [PDR-038](PDR-038-stated-principles-require-structural-enforcement.md)
 (stated principles require structural enforcement — this PDR's
-companion ADR records the structural enforcement for this repo);
+companion host ADR records the structural enforcement for the
+originating repo);
 [PDR-039](PDR-039-external-findings-reveal-local-detection-gaps.md)
 (external system findings reveal local detection gaps — Vercel's
 build log carried the load-bearing signal for two sessions before
 local discipline caught up);
-[ADR-169](../../../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md)
-(host-side adoption of this principle for this repo's CI workflows).
+the host's pin-GitHub-Actions-to-maintainer-Latest ADR (see
+practice-index Concept ↔ ADR map — host-side adoption of this
+principle for the originating repo's CI workflows).
 
 ## Context
 
@@ -43,15 +45,16 @@ equivalent of GitHub's Latest marker, with the same semantic) silently
 violate this principle. The substrate of the failure class is invisible
 to the consumer until something downstream breaks.
 
-Empirical instance (2026-04-30, this repo): `pnpm/action-setup` was
-pinned to v6.0.2 (highest tag at the time). GitHub's `/releases/latest`
-returned **v5.0.0**. The maintainers had held the Latest marker on
-v5.0.0 throughout an active four-release stability saga (issue
+Empirical instance (2026-04-30, host-local identifiers omitted from
+this portable record): `pnpm/action-setup` was pinned to v6.0.2
+(highest tag at the time). GitHub's `/releases/latest` returned
+**v5.0.0**. The maintainers had held the Latest marker on v5.0.0
+throughout an active four-release stability saga (issue
 [pnpm/action-setup#228](https://github.com/pnpm/action-setup/issues/228)
-open, multi-doc lockfile bug). v6.0.x installed pnpm 11 as the launcher
-and wrote multi-document `pnpm-lock.yaml` files that pnpm 10's
-fresh-state install rejected on Vercel — taking production deploys to
-ERROR for four consecutive `chore(release)` commits.
+open, multi-doc lockfile bug). v6.0.x installed pnpm 11 as the
+launcher and wrote multi-document `pnpm-lock.yaml` files that
+pnpm 10's fresh-state install rejected on Vercel — taking production
+deploys to ERROR for four consecutive `chore(release)` commits.
 
 The local fix was to re-pin to v5.0.0's SHA. The general principle
 the failure exposed is the subject of this PDR.
@@ -90,11 +93,12 @@ Practice-bearing repo regardless of host stack. The next contributor
 to any Practice repo would re-derive this discipline if the principle
 is not recorded.
 
-The companion ADR-169 records the **host-specific adoption** for this
-repo's CI workflows: which mechanism enforces the principle, where the
+The companion host ADR (see practice-index Concept ↔ ADR map)
+records the **host-specific adoption** for the originating repo's
+CI workflows: which mechanism enforces the principle, where the
 validator lives, how Dependabot is configured, and which artefacts
-are subject to the rule. ADR-169 is re-derived per repo; this PDR
-travels with the Practice Core.
+are subject to the rule. The host ADR is re-derived per repo; this
+PDR travels with the Practice Core.
 
 ## Consequences
 
@@ -132,10 +136,15 @@ A repo has adopted this PDR when:
 
 ## Evidence
 
-- Triggering investigation: 2026-04-30 Briny Lapping Harbor session.
-- Fix commit: `0929615e fix(build): pin pnpm/action-setup to maintainer-Latest v5.0.0`.
-- Future plan covering the host-side enforcement work:
-  [`build-pipeline-composition-safeguards.plan.md`](../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md).
+- Triggering investigation: 2026-04-30 Briny Lapping Harbor session
+  on the originating repo.
+- Fix landing: a same-session build-fix commit re-pinned
+  `pnpm/action-setup` to the maintainer-Latest v5.0.0 SHA. Concrete
+  commit identifier captured in the host repo's git history.
+- Future plan covering the host-side enforcement work: a
+  `build-pipeline-composition-safeguards` plan in the host's
+  architecture-and-infrastructure plan collection (host-local;
+  bridged via the practice-index Plans section).
 - Upstream context:
   [pnpm/action-setup#228](https://github.com/pnpm/action-setup/issues/228),
   [pnpm/pnpm#11264](https://github.com/pnpm/pnpm/issues/11264),

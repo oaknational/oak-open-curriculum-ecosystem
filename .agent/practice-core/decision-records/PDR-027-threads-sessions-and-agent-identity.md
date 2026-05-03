@@ -67,16 +67,16 @@ rather than passive guidance).
   multiple workstreams"* and *"workstream briefs are scoped to
   threads"* — this framing remains valid as abstract vocabulary,
   but at current scale no active thread has exercised the 1:N
-  relationship and the workstream-brief artefact surface (files
-  under `.agent/memory/operational/workstreams/`) paid a
+  relationship and the workstream-brief artefact surface (a
+  retired host-side directory under operational memory) paid a
   coordination cost without delivering structural value.
   Session 5 retires the workstream-brief surface; lane state
   folds into each thread's next-session record directly. The
   conceptual "workstream" remains as a descriptor for scope
   within a thread, but it no longer has a dedicated operational-
-  memory artefact. See [`.agent/memory/operational/workstreams/README.md`](../../memory/operational/workstreams/README.md)
-  for the retirement rationale and where previous brief
-  content migrated.
+  memory artefact. The host repo's retired-surface README (where
+  it exists) records the retirement rationale and where previous
+  brief content migrated.
 
   **Semantic position**: threads still map 1:many to workstreams
   *in principle* (the body retains this); the change is
@@ -93,8 +93,8 @@ rather than passive guidance).
   only the thread slug carries operational-memory weight.
 
   **Track-naming scope** (also raised as a Session 5
-  first-principles question): tactical track-card filenames under
-  `.agent/memory/operational/tracks/` remain `<scope>--<agent>--<branch>.md`.
+  first-principles question): tactical track-card filenames in the
+  host's operational tracks surface remain `<scope>--<agent>--<branch>.md`.
   With the workstream layer retired, `<scope>` is typically the
   thread slug; for a thread exercising multi-lane scope, the
   `<scope>` token may carry a lane qualifier
@@ -266,16 +266,19 @@ it uses a full identity block, not a display name alone:
 | `session_id_prefix` | First 6 characters of the harness session id if available; `unknown` otherwise |
 | `seed_source` | The source used to derive the session identity seed |
 
-For Codex in this repo, the canonical full-interface command is:
+For Codex in a Practice-bearing host repo, the canonical
+full-interface command shape is (host-local script names omitted
+from this portable record — host repos surface their canonical
+invocation in the bridge index):
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+<host-local agent-tools script> -- identity preflight --platform codex --model <model>
 ```
 
-`pnpm agent-tools:agent-identity` remains a name-only convenience. Platform
-display surfaces, status lines, and hooks may repeat or inject the full block,
-but correctness rests on the canonical identity block and the additive-identity
-rule above.
+A name-only convenience invocation may exist alongside it.
+Platform display surfaces, status lines, and hooks may repeat or
+inject the full block, but correctness rests on the canonical
+identity block and the additive-identity rule above.
 
 ### Thread scope and the landing commitment
 
@@ -392,10 +395,11 @@ running multiple agents across sessions faces the same gap and
 needs the same shape to fill it. A host-local convention cannot
 serve a cross-repo Practice.
 
-The three-mode memory taxonomy (per Standing decision, this repo,
-2026-04-21) is also portable and decoupled from this PDR:
-threads live in operational memory, but the threads concept does
-not commit any host to a particular memory layout.
+The three-mode memory taxonomy (per Standing decision, host-local
+identifier omitted from this portable record, 2026-04-21) is also
+portable and decoupled from this PDR: threads live in operational
+memory, but the threads concept does not commit any host to a
+particular memory layout.
 
 ### Alternatives rejected
 
@@ -497,33 +501,3 @@ continuity section) once threads and identity discipline have
 been exercised across multiple cross-repo hydrations. Graduation
 marks the PDR `Superseded by <Core section>` and retains it as
 provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring:
-
-- Thread records are hosted at `.agent/memory/operational/threads/<slug>.next-session.md`
-  with a convention README at `.agent/memory/operational/threads/README.md`.
-- The identity-registration rule (session-open) and
-  identity-update gate (session-close) are scheduled for
-  installation in Session 4 of the
-  [Staged Doctrine Consolidation and Graduation](../../plans/agentic-engineering-enhancements/archive/completed/staged-doctrine-consolidation-and-graduation.plan.md)
-  (archived 2026-04-22 Session 8)
-  plan, Tasks 4.2.a and 4.2.b.
-- The stale-identity health probe is scheduled for Session 4
-  Task 4.2.c.
-- The legacy singular next-session file at
-  `.agent/memory/operational/next-session-opener.md` (currently
-  carrying the `observability-sentry-otel` thread) migrates to
-  `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
-  as part of Session 4 close.
-- The agent-names registry (owner direction 2026-04-21:
-  ~1000 well-distributed public-domain names, no
-  LLM-generation) is captured in
-  `.agent/memory/operational/repo-continuity.md § Deep
-  consolidation status` as an infrastructure graduation target
-  consumed by Session 4 Task 4.2.
-- Retroactive identity attribution for prior sessions is
-  acknowledged as a gap; attribution starts forward from
-  2026-04-22 per the Standing decisions section of
-  `repo-continuity.md`.

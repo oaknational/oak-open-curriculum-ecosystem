@@ -190,18 +190,3 @@ Alternatives rejected:
   detecting debt before it compounds.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-017`:
-
-- `.agent/memory/active/patterns/fix-at-source-not-consumer.md` — originated
-  from multiple-consumer workaround attempts failing until the
-  producer's type was corrected.
-- `.agent/memory/active/patterns/re-evaluate-removal-conditions.md` —
-  originated from workarounds whose removal conditions had been
-  met but never re-evaluated.
-- `.agent/memory/active/patterns/workaround-debt-compounds-through-rationalisation.md`
-  — originated from discovered rationalisation vocabulary
-  ("different purposes") covering a coupling that had in fact
-  become a debt surface.

@@ -106,9 +106,9 @@ was in use but un-enumerated.)
   surface that was the prior canonical home was retired and lane
   state folded into thread next-session records.)
 - **Applies to**: lane-level operational surfaces — the
-  `Lane state` section of
-  `.agent/memory/operational/threads/<thread>.next-session.md`
-  recording an operational → executive cross-plane impact.
+  `Lane state` section of the host's per-thread next-session
+  record recording an operational → executive cross-plane
+  impact.
 - **Read by**: consolidation workflow's cross-plane scan step
   (PDR-028's feedback-loop channel); routes the signal to the
   affected executive surface for amendment at next
@@ -336,22 +336,3 @@ owner accepted the recommendation and directed that the
 vocabulary be codified in the same bundle rather than deferred.
 This note is retained for historical provenance; the Rationale
 above stands on its own merits.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring:
-
-- The origin tag `Source plane: executive` lands on
-  `.agent/memory/active/napkin.md` as part of the Phase 3
-  installs of the memory-feedback execution plan.
-- The span tag `cross_plane: true` lands as a frontmatter
-  field on `.agent/memory/active/patterns/` per the Phase 5
-  installs of the memory-feedback execution plan.
-- The plane taxonomy in force is the three-mode arrangement
-  (active / operational / executive) ratified as a Standing
-  decision on 2026-04-21.
-- The amendment-required discipline for new plane tags is
-  enforced by the pending-graduations register at
-  `.agent/memory/operational/repo-continuity.md` — any
-  plane-tag proposal becomes a register item with a PDR
-  amendment as its graduation target.
