@@ -1,3 +1,50 @@
+# DAMAGED PLAN — superseded 2026-05-03
+
+**Status**: SUPERSEDED — DAMAGED. Not complete; we had to start again
+with simpler approaches.
+
+**Why damaged**: this plan was the product of a 3-day session-arc that
+spiralled into elaboration without applying principles.md §First
+Question (could it be simpler?) at the arc level. Plan-following
+dominated principle-following. Specific failures:
+
+- **ARC A** (smoke-harness redesign + per-mode conversion + ADR-170)
+  was infrastructure built to support work that didn't need it —
+  smoke-test modes are duplicative of e2e + unit + integration
+  coverage; the residual distinct value reduces to "test that Express
+  listens", textbook third-party-framework testing.
+- **ARCs B0 + B1–B10** sequenced the multi-sink rename as
+  WS2→WS3→WS4→WS5 producer-first, which produces the multi-commit-TDD-
+  skip-register cascade pattern that owner deleted in commit
+  `60b9ff4c`. The rename has exactly one architecturally-correct shape
+  under TDD-as-pairs + replace-don't-bridge: a single atomic landing.
+
+**Replacement plans** (all under `.agent/plans/`):
+
+- `observability/current/fix-dev-boot-release-resolution.plan.md`
+  fixes the actual blocking bug (release-resolution being too strict
+  in dev). One cycle, one function, one test file.
+- `observability/current/replace-sentry-mode-with-observability-sinks.plan.md`
+  finishes the multi-sink rename as one atomic landing per Tidal
+  Flowing Reef's cascade analysis.
+- `architecture-and-infrastructure/current/retire-smoke-tests-all-vitest-no-real-io.plan.md`
+  retires the smoke-tests directory as duplicative coverage; brings
+  all tests into Vitest; bans real network/disk in tests.
+
+**Lessons captured** (graduated to `.agent/memory/active/napkin.md`
+2026-05-03 entries; rules added to `.agent/rules/`):
+
+- Plan-following can hide rush-impulse if the first-question is not
+  re-applied at every elaboration boundary — the principle does not
+  bottom-out at task scope, it applies at arc and plan scope too.
+- Testing third-party systems is an absolute anti-pattern.
+- `git checkout HEAD --` is amnesia; we never use git to remove work.
+
+**Original content below kept verbatim for forensic reference. Do not
+execute.**
+
+---
+
 ---
 name: "There Is No Time — Hashed Starfish (smoke-harness redesign + observability rename + push/preview/merge)"
 overview: >

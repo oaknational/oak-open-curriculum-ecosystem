@@ -1,3 +1,47 @@
+# DAMAGED PLAN — superseded 2026-05-03
+
+**Status**: SUPERSEDED — DAMAGED. Not complete; we had to start again
+with simpler approaches.
+
+**Why damaged**: this plan sequenced the rename as WS2 (sentry-node) →
+WS3 (env package) → WS4 (HTTP MCP) → WS5 (Search CLI) — producer-first
+across multiple commits. Per Tidal Flowing Reef's cascade analysis
+2026-05-03 (comms event `claude-f879e0-tidal-step-back-and-cascade-finding`):
+once sentry-node ignores `SENTRY_MODE` at WS2 close, ~10–15 app tests
+in HTTP MCP and Search CLI fail because their typed fixtures still
+build `SENTRY_MODE: 'sentry'`-driven `RuntimeConfig`. Apps' test
+suites are RED across WS2→WS5 commits. That is the multi-commit-TDD-
+skip-register pattern owner deleted in commit `60b9ff4c`.
+
+`replace-don't-bridge` (principles.md §Refactoring) forbids transitional
+shims that would let WS2 land independently. The architecturally-
+correct shape under TDD-as-pairs + replace-don't-bridge is one atomic
+landing of producer + consumers + tests together.
+
+**Replacement plan**:
+`.agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md`
+(one cycle = atomic landing of ~30 files; cycles 2–3 are doc updates,
+parallel-safe with cycle 1; ESLint rule and `ServerInstrumenter` port
+moved to separate concerns out of scope).
+
+**Lessons captured** (graduated to `.agent/memory/active/napkin.md`
+2026-05-03 entries):
+
+- Producer-first sequencing across packages with type-system-enforced
+  contracts produces the cascade pattern even when each WS body looks
+  internally coherent.
+- Cycle-pair TDD discipline is not just per-cycle — it applies at the
+  cross-package atomic-rename level too. A "WS = one cycle" framing
+  fails when the WSes themselves form a cascade.
+- The framing-trap: when grounding reveals two variants of a now-
+  forbidden pattern (WS2 strict vs WS2 expanded), the answer is never
+  one of the variants — it is reshape the work shape.
+
+**Original content below kept verbatim for forensic reference. Do not
+execute.**
+
+---
+
 ---
 name: "Observability Multi-Sink and Fixture Orthogonality"
 overview: >
