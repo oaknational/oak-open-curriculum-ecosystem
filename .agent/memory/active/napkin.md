@@ -2175,17 +2175,45 @@ level comments. The WS commit that wires the consumer MUST unskip
 the matching block as part of its landing diff:
 
 1. `packages/libs/sentry-node/src/config-from-registry.unit.test.ts`
-   — `describe.skip('createSentryConfig — WS2 SinkRegistry
-   consumption (RED)')` plus four `// @ts-expect-error WS2 widens
-   SentryConfigEnvironment ...` directives. WS2 unskip: remove
-   `.skip` from describe + remove all four `@ts-expect-error`
-   directives (TS will fail-on-unused-suppression once the type
-   widens, auto-validating the cleanup).
+   — four `it.todo(...)` placeholders inside
+   `describe('createSentryConfig — WS2 SinkRegistry consumption
+   (RED)')`. NOTE: the original Round-3 attempt used `describe.skip`
+   - four `@ts-expect-error` directives; ESLint
+   (`@oaknational/no-eslint-disable`) bans all TypeScript
+   suppression directives, so the shape was changed to `it.todo()`
+   placeholders backed by inlined commented-out test bodies (one
+   `/* ... */` block per case immediately above each `it.todo(...)`,
+   wrapping a fully-formed copy-paste-uncomment-able test
+   implementation). WS2 unskip: replace each `it.todo(...)` with
+   the corresponding `it(...)` body by uncommenting the adjacent
+   `/* ... */` block. The bodies cite the new
+   `OBSERVABILITY_SINKS` / `OBSERVABILITY_FIXTURES` input shape and
+   the four `kind` discriminators (`sentry-disabled`, `sentry-live`,
+   `sentry-live-with-tee`, `fixture-only`) on `ParsedSentryConfig`.
+   The cleanup gate is the absence of any `it.todo` after WS2 lands
+   (rather than the type system, since the suppression-directive
+   route is closed by repo lint policy).
 2. `packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`
    — `describe.skip('Fixture tee observes only post-redaction
-   events (WS1 RED contract)')`. WS2/WS3 unskip when fixture sink
-   subscribes after the redaction barrier (per ADR-160 §The
-   Closure Property).
+   events (WS1 RED contract)')`. WS2/WS3 unskip is COUPLED with
+   three additional rewrite obligations:
+   (a) `createFixtureModeConfigForTee` helper (lines 78-97) uses
+       legacy `SENTRY_MODE: 'fixture'` input — replace with
+       `OBSERVABILITY_SINKS: []` + `OBSERVABILITY_FIXTURES: true`
+       once the input shape widens (WS2);
+   (b) the `Extract<ParsedSentryConfig, { readonly mode: 'fixture' }>`
+       type assertion on the helper's return type (lines 78-81)
+       must move to the new discriminator
+       `Extract<ParsedSentryConfig, { readonly kind: 'fixture-only' }>`
+       (or whichever `kind` shape WS2 lands);
+   (c) the `FixtureSentryStore` import (line 5) — plan body §WS2
+       schedules the rename to `FixtureCaptureStore`; the import +
+       any in-file references must follow the rename.
+   The TEE invariant per ADR-160 §The Closure Property is the
+   substantive contract; the three rewrites above are
+   compile-fix obligations that travel WITH the unskip flip,
+   otherwise the test stays RED for the wrong reason (input-shape
+   mismatch instead of fixture-tee-not-redacting).
 3. `apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`
    — `describe.skip('createHttpObservability — WS4 SinkRegistry
    construction (RED)')`. WS4 unskip when `RuntimeConfig` carries
@@ -2197,11 +2225,20 @@ the matching block as part of its landing diff:
    config carries `OBSERVABILITY_SINKS` and the cli observability
    composition root constructs a SinkRegistry.
 
-The skip pattern (`.skip` + file-header `SKIP-UNTIL-WSn` comment)
-is the project's standard multi-commit-TDD-arc shape. The cleanup
-is self-validating: WS2's type widening removes the
-`@ts-expect-error` directives (compiler enforces); each WS commit's
-unskip is a contract obligation visible in the file header. If a
-WS commit lands without unskipping, the test stays silently
-disabled — generator for a structural-enforcement scanner future
-plan (sketched alongside the PDR-038 scanner already captured).
+The skip pattern (`.skip` + file-header `SKIP-UNTIL-WSn` comment;
+or `it.todo()` + adjacent commented test body where ESLint bans
+type-suppression directives) is the project's standard multi-
+commit-TDD-arc shape. The cleanup is **NOT** type-system-enforced
+on entry 1 — `it.todo()` does not raise type errors when the
+underlying API changes shape — so the cleanup gate is a *header
+audit*: each WS commit's landing diff MUST grep its own header
+comment (`SKIP-UNTIL-WSn`) and either unskip / inline the
+commented body, or extend the deferral with a fresh rationale
+recorded here. Entries 2-4 use `describe.skip` and so the
+unskip IS a forced edit when WS2/WS3/WS4/WS5 land. If a WS
+commit lands without performing the audit, the test stays
+silently disabled — generator for the structural-enforcement
+scanner future plan (sketched alongside the PDR-038 scanner
+already captured): a CI gate that fails when an `it.todo` /
+`describe.skip` paired with a `SKIP-UNTIL-WSn` header outlives
+the named workstream's landing commit.
