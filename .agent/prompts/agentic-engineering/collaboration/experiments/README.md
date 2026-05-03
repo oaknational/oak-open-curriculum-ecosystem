@@ -28,11 +28,21 @@ observe.
 
 | ID | Targets | Status | Directory |
 |---|---|---|---|
-| E1 | P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction | **active** — prompts authored, ready to run | [`E1/`](E1/) |
+| E1 | P1 modes, P3 claims, P5 audience, P6 ceremonies, P10 self-correction | **CLOSED 2026-05-03** — see [`E1/closure.md`](E1/closure.md) | [`E1/`](E1/) |
 | E2 | P5 directional context, cure (vi) wall-clock authority | queued — adversarial probe; activate when a session is specifically scoped to test it | not yet authored |
 | E3 | P5, P6, P9 at scale | queued — synthetic, offline; activate when a researcher has time to author the synthetic corpus | not yet authored |
 | E4 | P10 self-correction, P7 bootstrap fast-path | queued — opportunistic; observe when a real session-budget cut-off occurs mid-task; do not engineer one | not yet authored |
 | E5 | open question — owner-proxy mode | queued — requires owner-stated unavailability for routine decision; not yet scheduled | not yet authored |
+| E6 | **NEW** — first-question application at arc and plan scope; principle-vs-plan failure mode; goal-alignment under elaboration pressure | **next** — see [hypothesis below](#e6---next-hypothesis-arc-level-first-question-application) | not yet authored |
+
+## E1 closure summary
+
+E1 ran across multiple agent-pairings on the
+`observability-sentry-otel` thread (Pelagic+Misty, Woodland+Prismatic,
+Salty+Tidal). Closed 2026-05-03 by owner direction. Detailed write-up
+at [`E1/closure.md`](E1/closure.md). Headline result: **the primitives
+work; coordination is not the bottleneck. The bottleneck is principle-
+application at arc scope, which is what E6 will probe.**
 
 ## Selection criteria
 
@@ -42,11 +52,42 @@ detour. The priority order above is enforced by this rule:
 selection that compromises the work shape is selection of the
 wrong experiment.
 
-E1 is the natural experiment for any session on the
-observability-sentry-otel thread for the foreseeable future, because
-the primitives it observes (modes, claims, audience routing,
-ceremonies, self-correction) fall out of any agent-pair coordination
-during ARC A1 + ARC B0 work. E2-E5 are opportunistic.
+E6 is the natural next experiment because the lesson E1 surfaced —
+plan-following can mask rush-impulse at arc scope even with sound
+coordination — applies to every multi-session arc. E2-E5 remain
+opportunistic.
+
+## E6 — next hypothesis: arc-level first-question application
+
+**Hypothesis**: in multi-session work arcs, principles.md §First
+Question (*could it be simpler without compromising quality?*) needs
+to be re-applied at every elaboration boundary — not only at
+task scope. Without that re-application, plan-following accretes
+instrument-vs-goal confusion: the work becomes internally coherent
+but goal-misaligned, and the misalignment is invisible to the agents
+participating because it lives at the arc level, above the cycle and
+plan they are executing.
+
+**Falsifiable prediction**: if every plan-promotion-to-current AND
+every cycle-completion event includes an explicit re-application of
+the first-question to the *whole arc* (not just the next task), the
+incidence of "session-spiral" episodes (3+ days of well-formed work
+with no goal-aligned product progress) will fall to zero across the
+next quarter of multi-session arcs. If session-spirals continue to
+occur despite the re-application, the hypothesis is falsified — the
+mechanism is structural, not procedural, and a different cure is
+needed.
+
+**Observation surface**: every multi-session arc on any thread
+becomes an E6 datapoint. No special prompts; the discipline lives
+inside `start-right-quick` and `jc-plan` (both already touch the
+first-question at task scope; E6 extends them to arc scope).
+
+**Activation gate**: prompts and discipline updates are part of E6
+authoring — to be done in a follow-on session. Until then, agents
+running real work apply the first-question at arc scope manually,
+referring to napkin entries on plan-following-vs-principle-following
+and the rollback-is-amnesia learning.
 
 ## Per-experiment artefacts
 
