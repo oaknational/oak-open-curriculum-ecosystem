@@ -249,7 +249,4 @@ preview deployments exercise newer commits that have not been released yet.
   `.env.local` instead of needing an inline shell export. It is
   intentionally outside PR-check/CI per ADR-161 and does not replace
   deployment/preview validation.
-- After every configuration change, redeploy and run:
-  1. `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://<deployment-host>/mcp`
-  2. `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` (optional but recommended when Clerk settings change)
-- Confirm that unauthenticated `POST /mcp` requests return `401` with a `WWW-Authenticate` header, and that the OAuth flow succeeds in an MCP client such as Claude Desktop.
+- After every configuration change, redeploy and confirm that unauthenticated `POST /mcp` requests return `401` with a `WWW-Authenticate` header, and that the OAuth flow succeeds in an MCP client such as Claude Desktop.

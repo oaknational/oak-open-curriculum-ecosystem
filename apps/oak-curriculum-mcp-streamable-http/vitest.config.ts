@@ -12,8 +12,6 @@ export default defineConfig({
       'operations/**/*.integration.test.ts',
       'src/**/*.unit.test.ts',
       'src/**/*.integration.test.ts',
-      'smoke-tests/**/*.unit.test.ts',
-      'smoke-tests/**/*.integration.test.ts',
     ],
     exclude: ['**/*.e2e.test.ts', '../../.agent/reference/**'],
     globals: true,

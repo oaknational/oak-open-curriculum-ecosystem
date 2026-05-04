@@ -39,7 +39,6 @@ const config = defineConfigArray(
       '.widget-build/**',
       '.logs/**',
       'temp-secrets/**',
-      'smoke-tests/auth/**',
       '../../.agent/reference/**',
     ],
   },
@@ -126,7 +125,6 @@ const config = defineConfigArray(
       '**/*.test.ts',
       '**/*.spec.ts',
       'operations/**',
-      'smoke-tests/**',
       'e2e-tests/**',
       // Runtime composition root for Vercel's request handler import
       // contract. Like `src/index.ts`, this boundary legitimately
@@ -208,15 +206,6 @@ const config = defineConfigArray(
     },
   },
   {
-    // Smoke tests are explicitly permitted real IO per ADR-161 (on-demand
-    // pipeline, out of CI). The hermetic-test restrictions do not apply.
-    files: ['smoke-tests/**/*.test.ts', '**/*.smoke.test.ts'],
-    rules: {
-      'no-restricted-syntax': 'off',
-      'no-restricted-properties': 'off',
-    },
-  },
-  {
     // Test-ceremony migration backlog (per
     // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`).
     // Each file listed here is a known violation of the hermetic-test
@@ -277,7 +266,7 @@ const config = defineConfigArray(
     // class as `build-scripts/**/*.{js,mjs}` (already exempted below)
     // and the search-cli's `scripts/**/*.ts` block. ADR-168 records
     // the workspace-script tier.
-    files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
+    files: ['scripts/**/*.ts'],
     rules: {
       'no-console': 'off',
       complexity: 'off',

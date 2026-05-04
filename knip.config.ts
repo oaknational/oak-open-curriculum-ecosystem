@@ -60,7 +60,6 @@ const config: KnipConfig = {
         'runtime-only-scripts/**/*.mjs',
         'widget/src/main.tsx',
         'widget/src/vite-env.d.ts',
-        'smoke-tests/**/*.ts',
         'e2e-tests/**/*.ts',
       ],
       project: [
@@ -71,7 +70,6 @@ const config: KnipConfig = {
         'scripts/**/*.ts',
         'runtime-only-scripts/**/*.mjs',
         'tests/**/*.ts',
-        'smoke-tests/**/*.ts',
         'widget/src/**/*.{ts,tsx,css}',
       ],
       ignoreDependencies: [
