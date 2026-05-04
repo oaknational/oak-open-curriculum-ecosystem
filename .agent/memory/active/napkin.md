@@ -14,6 +14,95 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-04 — Doctrine without enforcement: benefit early, cost at maturity
+
+Owner sharpening of PDR-038, stated mid-session: *once a system
+starts to mature, doctrine without enforcement is a cost rather than
+benefit; in very early-stage systems collecting intent is beneficial,
+but that value falls off fairly quickly.* This refines PDR-038 along
+a maturity axis. Early-stage: doctrine collection is *learning the
+shape of the system* — every PDR is a probe, even un-enforced
+prose has signal value because the system is discovering its own
+invariants. Mature-stage: the patterns are known; the un-enforced
+PDR adds context noise, recall burden, drift risk, and the
+specific failure mode the rush-impulse PDR names (recall-dependent
+rules fail under flow-state pressure). At maturity, *each new piece
+of un-enforced doctrine is a net liability*.
+
+Practical consequence at the current maturity of this Practice:
+authoring a PDR or principle without landing the enforcement
+infrastructure in the same arc is a negative-value act. PDR-038's
+existing framing ("principles need enforcement") read as
+*incomplete-without*; the maturity-aware reading is
+*negative-value-without*. The gate at PDR-authoring-time tightens:
+*is the enforcement surface landed in this arc, or is this doctrine
+a net cost at this stage?* Authoring this turn graduates to PDR-038
+2026-05-04 amendment §"Doctrine-without-enforcement is benefit-
+then-cost across maturity".
+
+This insight itself follows the same shape as the immune-system
+metaphor sharpened earlier this turn: an immune system that
+catalogues every potential pathogen without producing antibodies is
+not a healthy system; it is a system burning cognitive cycles on
+recognition without the capacity to respond.
+
+## 2026-05-04 — Insight capture degrades exponentially after the moment of occurrence
+
+Owner stance, stated mid-session while authorising option (c) for the
+post-`/insights` reflection round: *the only valid time to capture an
+insight is when it occurs; every moment after that degrades
+exponentially.* Operational consequence: when an insight surfaces in
+conversation — owner-named pattern, agent-named meta-finding, mutual
+sharpening of an existing principle — the napkin/PDR/plan capture is
+done in the same turn. "I'll capture that later" is itself a failure
+shape; later means *degraded copy of an insight that was once whole*.
+This is the active-memory analogue of architectural-excellence-over-
+expediency: the cheap answer ("note it for next session") burns the
+load-bearing detail; the architecturally correct answer (capture now,
+where the insight is sharp and the surrounding context is live) costs
+minutes and preserves the substance. Generator: closure pressure +
+"this conversation is moving fast, I'll come back to that". Cure:
+when an insight surfaces, the next move is the capture, not the next
+turn. Candidate for graduation to a principles-level addition; for
+now the napkin holds the stance and the PDR-018 amendment + immune-
+system PDR + plans-pair authored this turn are the worked instances.
+
+## 2026-05-04 — Beneficial prerequisites become structural blocks: three observed instances
+
+Owner-named pattern surfaced during option-(c) authorisation. The
+agent-roster taxonomy rename was treated as a prerequisite for
+shipping the practice trio agents (`practice`, `practice-applied`,
+`practice-core`). The rename is a good idea; it is not a *blocking*
+prerequisite for new additive agents. The trio could ship without
+the rename of the existing 17 agents. The "blocking" framing came
+from the rename being authored as a coordinated multi-platform
+change, which made the trio appear gated behind that coordination.
+Owner observation: *the blocking relationship on renaming is not
+real; it is a good idea, but clearly it became a good idea that was
+never the highest priority and ended blocking work that would have
+provided even higher benefit.*
+
+Two prior instances of the same shape, surfaced during cross-
+referencing in this session: (a) the smoke-harness redesign treated
+as prerequisite for the multi-sink rename, when an existing E2E
+regression-guard already served the role; (b) plans-creating-plans
+for three days (2026-05-01 through 2026-05-03) without a single
+line of substantive product code moving — each plan internally
+coherent as prerequisite for the next, none of them blocking in
+the sense the framing implied.
+
+Pattern: a prerequisite that is *beneficial* (the dependent work
+ships better with it) gets framed as *blocking* (the dependent
+work cannot start without it). The dependent work — usually the
+higher-value capability — stalls behind a lower-leverage refinement.
+The cure is at plan-time: every prerequisite carries a one-word
+classification (`blocking` vs `beneficial`); beneficial prerequisites
+must explicitly state the dependent work's minimum shippable shape
+without them; the additive shape (add the new capability, defer the
+migration of the existing one) is the default, the integrated
+migration is the optimisation. Graduated this turn to PDR-018
+2026-05-04 amendment §"Beneficial prerequisites must not block".
+
 The previous active napkin was archived during the 2026-05-03
 deep-consolidation pass at
 [`archive/napkin-2026-05-03.md`](archive/napkin-2026-05-03.md). It

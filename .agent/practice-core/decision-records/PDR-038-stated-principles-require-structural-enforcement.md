@@ -119,6 +119,73 @@ above. A future amendment may add a validator that scans the host's
 principles directive and named directives for prose-stated rules and
 flags those without a citation back to a rule file or validator.
 
+## Doctrine-without-enforcement is benefit-then-cost across maturity (2026-05-04 amendment)
+
+The relationship between doctrine and enforcement changes shape as a
+system matures.
+
+**Early stage** — the system is still discovering its own invariants.
+What counts as a load-bearing principle is itself uncertain. Authoring
+PDRs and principles without immediate enforcement infrastructure has
+positive value: each PDR is a probe; the un-enforced prose surfaces
+the candidate invariant; iteration teaches whether the invariant
+holds. The cost of un-enforced doctrine is bounded because the
+doctrine surface is small enough that contributors can hold it in
+working memory.
+
+**Maturity** — the patterns are known. The doctrine surface has grown
+to a point where no contributor or agent can hold it all in working
+memory. New un-enforced doctrine adds:
+
+1. **Context noise** — every grounding step loads more prose; the
+   relevant principle for the work at hand is harder to find.
+2. **Recall burden** — the principle relies on every contributor
+   retrieving it at the right moment, against an expanding inventory.
+3. **Drift risk** — un-enforced rules are silently broken; each
+   silent breach erodes trust in the corpus.
+4. **Rush-impulse interaction** — under flow-state pressure (deadline,
+   closure pressure, momentum), recall-dependent rules fail
+   predictably, and the un-enforced corpus is exactly the surface
+   that fails first.
+
+At maturity, **un-enforced doctrine is a net liability**, not a net
+asset. The gate at PDR-authoring time tightens:
+
+- *Is the enforcement surface landed in this same arc?* If yes,
+  proceed.
+- If no, **default to not authoring the PDR** until the enforcement
+  surface is also in scope.
+- "Capture the intent now, enforce later" is the early-stage answer
+  and is wrong at maturity.
+
+**How to know which stage applies.** A system has reached the
+maturity inflection when one of these is true:
+
+- The doctrine surface (PDRs + principles + directives + rules) no
+  longer fits in a single contributor's working memory at session
+  open.
+- Recall-dependent rule failures recur across sessions despite the
+  doctrine being correctly authored.
+- New principles are predominantly *sharpenings* of existing
+  doctrine rather than identifications of novel invariants.
+- The cost of authoring a new PDR (review, integration, citation,
+  cross-reference) exceeds the cost of authoring the enforcement
+  surface for an existing principle.
+
+When any of these holds, the maturity gate applies. The
+PDR-authoring rate intentionally slows; the enforcement-authoring
+rate intentionally rises. The corpus does not stop growing — it
+grows along the enforcement axis instead of the doctrine axis.
+
+**Practical consequence for PDR authors at maturity.** A PDR that
+sharpens existing doctrine without naming or landing the enforcement
+surface is a candidate for *deferral*, not for landing. The deferral
+shape is: capture the substance in the napkin or pending-graduations
+register; the PDR is authored when the enforcement surface is also
+ready to land. The exception is owner-direction: the owner may
+explicitly authorise capture-now-enforce-later when the insight is
+load-bearing for in-flight work, but the default is paired-or-deferred.
+
 ## Compliance Triggers
 
 - A principle is stated in the host's principles directive, another
@@ -141,4 +208,19 @@ bridged via the practice-index Rules section.
 
 ## Amendment Log
 
-None yet.
+- **2026-05-04 amendment — doctrine without enforcement is benefit-
+  then-cost across maturity stages (Verdant Sprouting Leaf /
+  claude-code / claude-opus-4-7-1m; owner-stated mid-session during
+  the post-`/insights` reflection round).** The original PDR framed
+  un-enforced principles as *incomplete*. The amendment sharpens
+  this along a maturity axis: in early-stage systems, doctrine
+  collection is genuinely beneficial (the system is discovering its
+  own invariants; even un-enforced prose carries learning value).
+  At maturity, the value inverts: each new piece of un-enforced
+  doctrine becomes a net liability — context noise, recall burden,
+  drift risk, and the rush-impulse failure mode (recall-dependent
+  rules failing under flow-state pressure). The PDR-authoring gate
+  tightens correspondingly: at maturity, *is the enforcement surface
+  landed in this same arc?* is the test, and "later" is the wrong
+  answer in any tier-1 system. New §"Doctrine-without-enforcement
+  is benefit-then-cost across maturity" formalises the framing.

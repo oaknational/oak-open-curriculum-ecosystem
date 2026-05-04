@@ -179,6 +179,8 @@ work where portable doctrine is being exercised. Plans live under
 | [`build-pipeline-composition-safeguards.plan.md`](plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md) | PDR-040 §Evidence + PDR-041 §Evidence | Future plan covering host-side enforcement of pin-to-Latest |
 | [`what-the-system-emits-today.md`](plans/observability/what-the-system-emits-today.md) | PDR-026 (host adoption) (observability matrix) | Observability matrix tracked at session-by-session granularity |
 | [`substrate-vs-axis-plans` plan-collection component](plans/templates/components/substrate-vs-axis-plans.md) | PDR-037 §Decision (canonical artefact) | Reusable plan-collection component capturing the substrate-vs-axis convention |
+| [`doctrine-enforcement-quick-wins.plan.md`](plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md) | PDR-044 §Worked Instances + PDR-038 §2026-05-04 amendment + PDR-018 §Beneficial prerequisites | Innate-immunity layer host adoption — six structural enforcement surfaces against named pathogens |
+| [`memetic-immune-system-and-progressive-disclosure.plan.md`](plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md) | PDR-044 §Implementation Notes | Strategic roadmap for adaptive-immunity layer, practice trio additive activation, doctrine-scanner CLI consolidation, and triggered rule loading pilot |
 
 ### Experience records cited by Practice Core
 
