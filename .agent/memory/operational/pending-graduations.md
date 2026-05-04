@@ -82,6 +82,35 @@ continuity snapshots.
   second instance OR owner direction. Status: pending — first
   instance.
 
++ 2026-05-04; **frontmatter-limit revision is the substance-led cure
+  when graduation lands new substance at a receiving doc whose
+  limits were sized for an earlier configuration** (Ferny Spreading
+  Petal, Layer-2 second pass — applied to two surfaces in the same
+  session). PDR-046 §Move 3 says "graduate substance upward, not
+  by compression"; this pattern is the next move after the
+  graduation lands: the receiving doc's `fitness_line_limit` /
+  `fitness_char_limit` may need to grow to reflect the doc's new
+  role. Two surfaces in this session: `pending-graduations.md`
+  (1000/1400/90000 from 350/500/40000) absorbed continuing
+  candidate registration as the register's actual sustainable
+  size; `development-practice.md` (200/280/16000 from 150/200/12000)
+  absorbed gate-taxonomy + worked failure-mode example relocated
+  from `principles.md`. The pattern is distinct from Move 3 itself
+  (which is about graduation direction) — this names the
+  consequence at the receiving end. Per `consolidate-docs §9e`,
+  only the owner can raise hard limits; this pattern names what
+  to surface for owner authorisation when the substance-led cure
+  requires it. Source surfaces: this session's commits 54560f84
+  + c73bf9f8 (the latter for the experience file capturing the
+  pattern's logic). Graduation-target options: (a) PDR-046
+  amendment (§Move 3 sub-rule on at-rest receiving-doc limits);
+  (b) entry in `consolidate-docs.md §9` naming the receiving-doc
+  limit revision as a substance-led structural fix; (c) standalone
+  PDR if the pattern generalises beyond consolidation flow.
+  Trigger-condition: second instance OR owner direction. Status:
+  pending — first instance (two surfaces in one session count as
+  one instance of the pattern, since they're the same arc).
+
 + 2026-05-04; **host-local consolidate-docs extension to point at
   PDR-046 as the orchestration rule** (Ferny Spreading Petal,
   Layer-2 second pass): the host's per-write rule
@@ -145,22 +174,27 @@ continuity snapshots.
 + 2026-05-04; **structural enforcers must exclude the documents
   that catalogue their own pathogens (recursive-exclusion
   pattern)** (Vining Spreading Seed, captured during WS3 trip-list
+  authoring; second instance Ferny Spreading Petal during PDR-047
   authoring). Adding the hedging-vocabulary trip-list to
   `policy.json` `preToolUseContent.scoped_blocks` required
   excluding `principles.md`, `distilled.md`, PDR-043, and PDR-044
   — the documents that *catalogue* the trip-list — so they could
   reference its members without self-tripping. The same shape
-  should be expected for any future structural enforcer that
-  names its own pathogen vocabulary or fingerprint. Source
-  surface: napkin "trip-list-defines-itself paradox" entry.
+  recurred verbatim during PDR-047 (rule-applies-always
+  doctrine-authoring) drafting: the file's first write attempt
+  was correctly blocked by the hedging-vocabulary hook (the file
+  catalogues that exact vocabulary by definition); the cure was
+  identical — extend the `exclude_paths` list to include PDR-047.
+  Two independent first-instances, same shape, same cure, two
+  consecutive sessions. Source surfaces: napkin
+  "trip-list-defines-itself paradox" entry (Vining, archived);
+  PDR-047 Notes section + experience file
+  `2026-05-04-ferny-the-gate-was-the-curation-prompt.md` (Ferny).
   Graduation-target: pattern file at
   `.agent/memory/active/patterns/structural-enforcer-recursive-
-  exclusion.md` (Process category). Trigger-condition:
-  second-instance observed (the trip-list and the SHA regex
-  both already exhibit this shape; a third instance would
-  confirm pattern-shape). Status: `pending` (single first-class
-  instance so far, plus the SHA regex's similar-but-distinct
-  exclusion of doctrine-defining surfaces).
+  exclusion.md` (Process category). Trigger-condition: second
+  instance observed (Ferny's PDR-047 fire). Status: `due` —
+  trigger condition fired; ready for graduation in next pass.
 
 + 2026-05-04; **`git commit -- <pathspec>` is the cure for
   peer-staged work in a shared index** (Vining Spreading Seed,
