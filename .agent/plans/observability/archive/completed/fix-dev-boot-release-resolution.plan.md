@@ -7,18 +7,18 @@ overview: >
   createSentryConfig and kills `pnpm dev`. Cure: in dev, fall through to
   ok with a stable placeholder release identifier ('local-dev') instead
   of erroring. Production and preview behaviour unchanged.
-status: current
+status: completed
 isProject: false
 todos:
   - id: cycle-1-resolveDevelopmentRelease-fallthrough
     content: "ONE COMMIT (test+code together): (1) edit packages/core/build-metadata/src/release-internals.ts resolveDevelopmentRelease — when no usable release identifier remains in development (no branch URL or branch URL malformed, AND no VERCEL_GIT_COMMIT_SHA), return ok({value:'local-dev', source:RELEASE_SOURCES.local_dev, environment:'development'}) instead of err. (2) Add RELEASE_SOURCES.local_dev='local-dev' entry (snake_case key, consistent with existing entries). (3) Invert the existing test in packages/core/build-metadata/tests/release.unit.test.ts:478-486 to expect ok local-dev. Add new test cases: empty ReleaseInput in development → ok local-dev; malformed VERCEL_BRANCH_URL with no SHA in development → ok local-dev. Existing tests at lines 205-219 and 299-313 act as the environment-boundedness regression-guards (preview→missing_branch_url_in_preview; production→missing_application_version). (4) STRUCTURAL: rename packages/libs/sentry-node/src/config.unit.test.ts → config.integration.test.ts (createSentryConfig is a composition root; tests through it are integration by directive definition). (5) In the renamed file, invert the two cases that depend on the new behaviour — 'keeps live mode strict when deploy release metadata is absent' and 'fails closed in development when no git SHA is available' — both now assert ok local-dev. (6) DEAD-CODE DELETION: remove RELEASE_ERROR_KINDS.missing_git_sha entry and all consumers (sentry-node config-resolution.ts switch case, runtime-error.ts switch case, types.ts union member) — no producer remains after step 1. (7) DELETE THE NONSENSE: delete packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts and config-from-registry.unit.test.ts entirely (skipped/todo placeholders); strip describe.skip blocks from run-smoke.unit.test.ts, run-smoke.integration.test.ts, http-observability.unit.test.ts, cli-observability.unit.test.ts; fix inaccurate documentation that referenced the deleted artefacts (napkin, threads, plans, pending-graduations, repo-continuity)."
-    status: pending
+    status: completed
 ---
 
 # Fix Dev-Boot Release Resolution
 
-**Last Updated**: 2026-05-03
-**Status**: 🔴 NOT STARTED
+**Last Updated**: 2026-05-04 (archived as completed)
+**Status**: ✅ COMPLETED — Cycle 1 landed on `feat/eef_exploration`. Verified by Fronded Climbing Thicket boot probe: `pnpm dev` with `SENTRY_MODE=sentry` and no Vercel env vars reaches "Oak Curriculum MCP Server listening on port 3333" in ~142ms; `missing_git_sha` no longer raised in `build-metadata`.
 
 ## Context
 

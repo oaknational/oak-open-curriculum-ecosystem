@@ -24,8 +24,8 @@ todos:
 
 # Replace SENTRY_MODE with OBSERVABILITY_SINKS
 
-**Last Updated**: 2026-05-03
-**Status**: 🔴 NOT STARTED
+**Last Updated**: 2026-05-04
+**Status**: 🟡 IN PROGRESS — WS1 landed (commit `a3a0222a`); atomic Cycle 1 of producer + consumer rename pending.
 
 ## Context
 
@@ -41,12 +41,17 @@ the new types in `core/`:
   union for the warnings channel.
 
 The four `describe.skip` / `it.todo` "RED-arc" placeholders that WS1
-authored to pin future cycles were deleted (see
-`fix-dev-boot-release-resolution.plan.md` §Cycle 1 step 7) under the
-binary `no-skipped-tests` rule. The obligations they encoded (sentry-
-node four-kind cross-product, fixture-tee closure-property, HTTP/CLI
-SinkRegistry construction) will be re-spec'd as proper TDD test+code
-pairs at the moment the producer code lands in this cycle, not before.
+authored to pin future cycles were deleted upstream (commit `2a2d1b05`,
+plan 1 §Cycle 1 step 7) under the binary `no-skipped-tests` rule. The
+obligations they encoded (sentry-node four-kind cross-product,
+fixture-tee closure-property, HTTP/CLI SinkRegistry construction) are
+re-spec'd as proper TDD test+code pairs in this cycle.
+
+Plan 1 (`archive/completed/fix-dev-boot-release-resolution.plan.md`)
+landed at commit `2a2d1b05`: `resolveDevelopmentRelease` falls through
+to `local-dev` in development when no Vercel attribution is available.
+This means the `OBSERVABILITY_SINKS=["sentry"]` boot path (acceptance
+criterion below) no longer carries a cross-plan dependency.
 
 Old `SENTRY_MODE` shape is still consumed everywhere: `sentry-node`'s
 `config.ts` / `runtime.ts` / `runtime-sinks.ts`, both apps' env types
@@ -145,13 +150,9 @@ authoring; the count is approximate):
 - `pnpm dev` boots in HTTP MCP and Search CLI workspaces with
   `OBSERVABILITY_SINKS=[]` (default).
 - `pnpm dev` with `OBSERVABILITY_SINKS=["sentry"]` and valid DSN boots
-  cleanly **provided plan 1 has landed** — the sentry-enabled boot
-  path still routes through `resolveDevelopmentRelease`, which fails on
-  missing `VERCEL_GIT_COMMIT_SHA` until plan 1 introduces the
-  `local-dev` fall-through. If plan 1 has not landed yet, this
-  acceptance criterion is conditional and the verification is deferred
-  to whichever ordering is chosen at execution time. (See §Independence
-  for cross-plan ordering options.)
+  cleanly. Plan 1 (`local-dev` release fall-through) has landed in
+  commit `2a2d1b05`, so the sentry-enabled dev-boot path no longer
+  carries an external blocker; verification is unconditional.
 
 **Validation**:
 
@@ -283,22 +284,19 @@ After plan close, run `/jc-consolidate-docs`.
 
 ## Independence
 
-This plan is **file-level** independent of plan 1 (dev-boot bug fix)
-and plan 3 (smoke-test retirement). It does not touch
-`packages/core/build-metadata/` (plan 1) or `apps/.../smoke-tests/` /
-`apps/.../e2e-tests/dev-server-boots-*.test.ts` (plan 3).
+This plan is **file-level** independent of plan 3 (smoke-test
+retirement). It does not touch `apps/.../smoke-tests/`. Plan 1
+(`archive/completed/fix-dev-boot-release-resolution.plan.md`) has
+landed in commit `2a2d1b05`; the previously-soft dependency on plan 1
+is now historical, and the `OBSERVABILITY_SINKS=["sentry"]` boot
+acceptance criterion can be verified directly.
 
-**Soft cross-plan dependency on plan 1**: cycle 1's "boot with
-`OBSERVABILITY_SINKS=["sentry"]` and valid DSN" acceptance criterion
-exercises a code path (release resolution) that plan 1 fixes. With
-default `OBSERVABILITY_SINKS=[]`, this plan can land independently;
-with the sentry sink enabled, plan 1's `local-dev` fall-through is
-required. Either land plan 1 first, or accept that plan 2's
-sentry-enabled-boot acceptance is verified after plan 1 lands.
-
-**No direct file conflict with plan 3**: even though plan 3 deletes
-`smoke-tests/modes/local-stub-env.ts`, this plan's cycle 1 does not
-touch `smoke-tests/`. The file lists explicitly exclude it.
+**No direct file conflict with plan 3**: although plan 3 deletes
+`smoke-tests/modes/local-stub-env.{ts,unit.test.ts}` (which currently
+references `SENTRY_MODE`), this plan's cycle 1 does not touch
+`smoke-tests/`. If plan 3 lands first, those files vanish and this
+plan's file list shrinks; if this plan lands first, the renamed file
+is then deleted by plan 3. Either order is safe.
 
 ## Supersession
 

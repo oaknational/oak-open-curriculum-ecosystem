@@ -103,13 +103,13 @@ dated and informs either an ADR or a specific plan.
 
 Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-plan.md):
 
-- [`current/fix-dev-boot-release-resolution.plan.md`](./current/fix-dev-boot-release-resolution.plan.md)
-  — **BLOCKING — primary unblocker.** Surgical bug fix in
-  `packages/core/build-metadata/`: `resolveDevelopmentRelease` falls
-  through to a `local-dev` placeholder when both `VERCEL_BRANCH_URL`
-  and `VERCEL_GIT_COMMIT_SHA` are absent in development; preview and
-  production keep their hard-fail. ~10 lines product code plus paired
-  unit tests.
+- [`archive/completed/fix-dev-boot-release-resolution.plan.md`](./archive/completed/fix-dev-boot-release-resolution.plan.md)
+  — ✅ **COMPLETED** (Cycle 1 landed on `feat/eef_exploration`).
+  `resolveDevelopmentRelease` falls through to a `local-dev`
+  placeholder in development when both `VERCEL_BRANCH_URL` and
+  `VERCEL_GIT_COMMIT_SHA` are absent; preview and production retain
+  their hard-fail. `missing_git_sha` error kind and orphaned skipped/
+  todo tests were deleted as part of the same landing.
 - [`current/replace-sentry-mode-with-observability-sinks.plan.md`](./current/replace-sentry-mode-with-observability-sinks.plan.md)
   — Multi-sink + fixture orthogonality. Replaces `SENTRY_MODE` with
   orthogonal `OBSERVABILITY_SINKS` (typed list) +
