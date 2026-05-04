@@ -489,11 +489,16 @@ paths, setup files) don't apply.
 ### Testing
 
 Tests prove runtime behaviour. TypeScript proves types; ESLint and
-static analysis prove structural rules. For full definitions, examples,
-and recipes, see [Testing Strategy][testing],
-[Testing TDD Recipes][tdd-recipes], and
+static analysis prove structural rules. **Foundationally, a test
+describes a system state and product code is the path that guides the
+system into that state — they are two halves of one act of design,
+not two outputs of two acts.** See [TDD as Design][tdd-as-design] for
+the load-bearing definition and the atomic-landing invariant. For
+test-type taxonomy, full rules, examples, and recipes, see
+[Testing Strategy][testing], [Testing TDD Recipes][tdd-recipes], and
 [ADR-078: Dependency Injection for Testability][di].
 
+[tdd-as-design]: tdd-as-design.md
 [testing]: testing-strategy.md
 [tdd-recipes]: ../../docs/engineering/testing-tdd-recipes.md
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
@@ -512,8 +517,11 @@ Universal testing principles:
 - smoke composition roots — the Vitest runner config or spawn invocation — may
   read ambient env, validate it, and inject the result. Test files and setup
   files must not read or mutate `process.env`;
-- no skipped tests, complex mocks, complex test logic, or process spawning in
-  in-process tests.
+- no skipped tests, no conditional tests, no complex mocks, no complex test
+  logic, and no process spawning in in-process tests. Conditional tests of
+  any kind are a symptom of architectural failure: remove the conditional,
+  fix the ambiguity in product code, and write deterministic
+  behaviour-proving tests that do not constrain implementation.
 
 ### Developer Experience
 

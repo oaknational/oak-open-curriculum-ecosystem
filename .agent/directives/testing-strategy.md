@@ -8,13 +8,28 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
 
 # Testing and Development Strategy
 
+> Foundational definition (see [tdd-as-design.md](tdd-as-design.md)): a test
+> describes a system state, product code guides the system into it. They are
+> two halves of one act of design. This directive defines the test-type
+> taxonomy and shape rules; `tdd-as-design.md` defines *why* tests exist and
+> the atomic-landing invariant.
+
 ## Tooling
 
 - Vitest
 - React Testing Library
 - Supertest
 - Playwright
-- Stryker
+
+Mutation testing (Stryker) is **meta-quality** — it audits the test surface,
+not the product, and is the constraint that makes coverage meaningful (a test
+that executes code without checking behaviour scores the same as one that
+describes it). Rollout sequencing: [mutation-testing plan][mutation-plan].
+Formal home: forthcoming `validation-strategy.md` per [doctrine restructure
+plan][doctrine-plan].
+
+[mutation-plan]: ../plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md
+[doctrine-plan]: ../plans/agentic-engineering-enhancements/current/validation-and-tdd-doctrine-restructure.plan.md
 
 ## Philosophy
 
@@ -51,8 +66,8 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
   too big — break it into smaller test+code pairs and land each
   as its own cycle. Every commit ends with all tests passing.
 - **Test real behaviour, not implementation details** - We should
-  be able to change _how_ something works without breaking the test
-  that proves _that_ it works.
+  be able to change *how* something works without breaking the test
+  that proves *that* it works.
 - **Test to interfaces, not internals** - Tests should be written
   to the interfaces, not the internals. Closely related to test
   behaviour not implementation.
@@ -72,13 +87,27 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
   no complex logic in mocks, or we risk testing the mocks rather
   than the code. Complex mocks are a signal that we need to step
   back and simplify the code or our approach.
-- **No skipped tests** - Fix it or delete it. NEVER use `it.skip`,
-  `describe.skip`, `it.skipIf`, or any other skipping mechanism.
-  Skipped tests are silent failures waiting to happen. If a test
-  cannot run (e.g., missing API key), the test MUST fail fast with
-  a helpful error message explaining what is needed. Validation
-  scripts that require external resources should be standalone
-  scripts, not tests.
+- **No skipped tests** - Fix it or delete it. Skipping mechanisms
+  (`it.skip`, `describe.skip`, `test.todo`, `it.todo`, `xit`,
+  `xdescribe`) are forbidden outright. External-resource tests must
+  fail fast with a helpful error, never silently skip. Validation
+  scripts requiring external resources are standalone scripts, not
+  tests. Full rule: [`no-skipped-tests.md`][no-skip].
+- **No conditional tests** - Conditional execution of any kind is a
+  symptom of architectural failure: `skipIf`, `runIf`, conditional
+  registration, runtime branching in test bodies, conditional
+  assertions, fixtures that vary with ambient state. The diagnosis
+  is always product-code ambiguity (multi-mode functions,
+  runtime-detected configuration, env-coupled behaviour). The
+  corrective is to remove the conditional, fix the ambiguity at the
+  source, and write deterministic behaviour-proving tests that do
+  not constrain implementation. `it.each` over a literal dataset is
+  NOT conditional — it is deterministic enumeration. Full rule:
+  [`no-conditional-tests.md`][no-cond].
+
+[no-skip]: ../rules/no-skipped-tests.md
+[no-cond]: ../rules/no-conditional-tests.md
+
 - **No ambient global state access** - Tests MUST NOT read or mutate
   `process.env`, use `vi.stubGlobal`, use `vi.mock`, or use
   `vi.doMock`. If a function needs configuration, refactor it to
@@ -95,7 +124,7 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
   instantiate tools that internally spawn processes (e.g.
   programmatic ESLint with TypeScript project service). This
   excludes vitest's own configured pool — the restriction is on
-  what _test code_ does, not the runner. Process spawning creates
+  what *test code* does, not the runner. Process spawning creates
   handles that prevent clean worker exit, causes CI hangs, and
   violates the principle of using the right tool for the job. Use
   the right tool: ESLint for boundary enforcement, Playwright for
@@ -146,8 +175,8 @@ SYSTEMS.
 
 #### Out-of-process tests
 
-Out-of-process tests are tests that validate a running _system_,
-the tests and the system run in _separate processes_. They are
+Out-of-process tests are tests that validate a running *system*,
+the tests and the system run in *separate processes*. They are
 slower, are less specific in the causes of issues but cast a wider
 net, and may produce side effects locally and in external systems.
 
@@ -287,7 +316,7 @@ the slicing was wrong.
     containing the integration points they test. They MUST end in
     `*.integration.test.ts`
   - E2E tests live in the `e2e-tests` directory. They test a running
-    _system_ rather than importing product code, so they do not
+    *system* rather than importing product code, so they do not
     co-locate with any product file. They MUST end in `*.e2e.test.ts`
 
 ## When Behaviour Changes

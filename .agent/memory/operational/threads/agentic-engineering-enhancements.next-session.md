@@ -1,5 +1,21 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Validation and TDD Doctrine Restructure
+
+**Index plan**: [`validation-and-tdd-doctrine-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/validation-and-tdd-doctrine-restructure.plan.md)
+— landed 2026-05-04 (Dewy Shedding Glade). Single index for the multi-plan
+arc that splits `testing-strategy.md` into three single-responsibility
+directives (`validation-strategy.md` umbrella, `testing-strategy.md` slimmed,
+`tdd-as-design.md` foundational) and uses the test-reviewer as the carrier
+of the deepened doctrine. Session deliverables S1–S4 land in the same
+session as the index. Future plans P1–P6 are sequenced in the index
+with explicit `depends_on` edges. Foundational reframing (load-bearing
+for the entire arc): *a test does not verify code; a test describes a
+system state, and product code is the path that guides the system into
+that state. Test and product code are two halves of one act of design.*
+
+---
+
 **Last refreshed**: 2026-05-01 (Deep Navigating Stern / claude-code /
 claude-opus-4-7-1m / c18f0a — light `/jc-consolidate-docs` + owner-
 directed `/jc-metacognition` round on `feat/eef_exploration` branch.

@@ -34,11 +34,13 @@ files below are the source of truth for always-on repository rule doctrine.
 - `.agent/rules/invoke-sentry-reviewer.md`
 - `.agent/rules/lint-after-edit.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
+- `.agent/rules/no-conditional-tests.md`
 - `.agent/rules/no-global-state-in-tests.md`
 - `.agent/rules/no-skipped-tests.md`
 - `.agent/rules/no-type-shortcuts.md`
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
 - `.agent/rules/never-disable-checks.md`
+- `.agent/rules/never-use-git-to-remove-work.md`
 - `.agent/rules/no-machine-local-paths.md`
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/plan-body-first-principles-check.md`

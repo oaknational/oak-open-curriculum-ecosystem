@@ -54,9 +54,15 @@ state.
   [`no-warning-toleration.md`](no-warning-toleration.md) §Scope
   discipline: narrowing the gate to dodge a warning is a doctrine
   violation. Expanding the gate is the normal way doctrine spreads.
-- **Skipping a test** with `it.skip`, `describe.skip`, `test.todo`,
-  or `xit`. Either the test proves something and runs, or it does
-  not exist. See [`testing-strategy.md`](../directives/testing-strategy.md).
+- **Skipping or conditioning a test** with `it.skip`,
+  `describe.skip`, `test.todo`, `it.todo`, `xit`, `xdescribe`,
+  `it.skipIf`, `describe.skipIf`, `it.runIf`, `describe.runIf`,
+  conditional `it`/`describe` registration, or runtime if-gating
+  inside a test body. Either the test proves something and runs
+  deterministically, or it does not exist. See
+  [`testing-strategy.md`](../directives/testing-strategy.md),
+  [`no-skipped-tests.md`](no-skipped-tests.md), and
+  [`no-conditional-tests.md`](no-conditional-tests.md).
 - **Using `--no-verify`** without fresh per-invocation owner
   authorisation. See
   [`no-verify-requires-fresh-authorisation.md`](no-verify-requires-fresh-authorisation.md).

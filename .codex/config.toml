@@ -20,7 +20,7 @@ description = "Gateway reviewer for non-trivial changes."
 config_file = "agents/code-reviewer.toml"
 
 [agents."test-reviewer"]
-description = "Test quality and TDD compliance reviewer."
+description = "Carrier of the foundational TDD doctrine: describes-vs-audits screen, atomic-landing invariant, and structural compliance."
 config_file = "agents/test-reviewer.toml"
 
 [agents."type-reviewer"]

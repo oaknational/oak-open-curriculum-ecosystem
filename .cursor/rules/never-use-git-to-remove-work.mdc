@@ -1,0 +1,6 @@
+---
+description: Never use git to remove work. Move forward via filesystem changes; git is for committed history only.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/never-use-git-to-remove-work.md`.

@@ -24,9 +24,10 @@ is the plan-body first-principles-check rule).**
 
 1. @.agent/directives/AGENT.md — operational entry point and index
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
-3. @.agent/directives/testing-strategy.md — TDD at all levels
-4. @.agent/directives/schema-first-execution.md — types flow from schema
-5. @.agent/directives/orientation.md — layering contract and authority order
+3. @.agent/directives/tdd-as-design.md — **FOUNDATIONAL DEFINITION** of TDD: a test describes a system state, product code is the path that guides the system into it
+4. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
+5. @.agent/directives/schema-first-execution.md — types flow from schema
+6. @.agent/directives/orientation.md — layering contract and authority order
 
 ### 2. Start-here ADRs
 
