@@ -1,13 +1,13 @@
 ---
 name: "Doctrine Enforcement Quick Wins"
-overview: "Five small structural enforcement additions that catch the highest-frequency doctrine-violation patterns named in the post-/insights reflection round."
+overview: "Six small structural enforcement additions that catch the highest-frequency doctrine-violation patterns named in the post-/insights reflection round."
 todos:
   - id: ws1-eslint-disabled-tests
     content: "WS1: vitest/no-disabled-tests + vitest/no-focused-tests at error severity in shared eslint strict config."
-    status: pending
+    status: completed
   - id: ws2-eslint-ts-expect-error
     content: "WS2: @typescript-eslint/ban-ts-comment with allow-with-description at error severity."
-    status: pending
+    status: completed
   - id: ws3-hedging-vocabulary
     content: "WS3: hedging-vocabulary trip-list added to check-blocked-content.ts via policy.json."
     status: pending
@@ -16,7 +16,7 @@ todos:
     status: pending
   - id: ws5-fitness-pre-commit
     content: "WS5: practice:fitness:strict-hard and practice:vocabulary promoted to commit-skill gates."
-    status: pending
+    status: completed
   - id: ws6-git-add-wildcard-block
     content: "WS6: git add -A and git add . added to policy.json blocked_patterns."
     status: pending
@@ -25,7 +25,7 @@ todos:
 # Doctrine Enforcement Quick Wins
 
 **Last Updated**: 2026-05-04
-**Status**: 🔴 NOT STARTED
+**Status**: 🟡 PARTIAL — WS1, WS2, WS5 landed; WS3, WS4, WS6 pending
 **Scope**: Five structural enforcement additions that catch the highest-frequency doctrine-violation patterns at write-time and commit-time, using existing infrastructure (`@oaknational/eslint-plugin-standards`, `.agent/hooks/policy.json`, `scripts/check-blocked-content.ts`, `scripts/check-blocked-patterns.ts`, the commit skill).
 
 ---
