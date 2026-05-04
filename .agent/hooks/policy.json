@@ -346,7 +346,7 @@
           "excludes_lines_with": [
             "(historical reference)"
           ],
-          "citation": "distilled.md §Moving targets do not belong in permanent docs (feedback_no_moving_targets_in_permanent_docs)"
+          "citation": "Moving targets do not belong in permanent docs (feedback_no_moving_targets_in_permanent_docs; rule graduation pending — see pending-graduations.md)"
         }
       ],
       "description": "Block agents from writing user-approved markers into file content (only the project owner can approve eslint-disable approvals with the JC: prefix). The path-scoped scoped_blocks are write-time fingerprints per PDR-044 §Innate immunity. Two kinds: (literal) the hedging-vocabulary trip-list — language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043 and PDR-044 may catalogue the words they forbid; (regex) the SHA-in-permanent-doc fingerprint — 7- to 40-character hex tokens with at least one a-f character on permanent-doc paths (ADRs, practice-core, principles.md, testing-strategy.md), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded so the discipline 'moving targets do not belong in permanent docs' (distilled.md) is enforced at write-time without tripping intentional code-block examples or explicit historical citations. PDR-044 names false positives as a design property of the innate layer."
