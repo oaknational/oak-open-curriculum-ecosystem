@@ -1,15 +1,33 @@
 # Rules Index
 
-This file is the Codex project-doc fallback index for canonical repository
-behaviour rules.
+This file is the canonical, platform-independent enumeration of the
+always-applied repository rules. It is the discoverability surface for
+agents and humans alike, and the project-doc resolution path for
+platforms (such as Codex) that do not auto-load `.agent/rules/`.
 
-Before substantive work in this repository, read and apply every canonical rule
-listed below. Treat these files as behavioural modifiers for the session. If a
-rule points to a directive, ADR, PDR, skill, command, or other canonical file,
-follow that pointer before acting in the affected area.
+Before substantive work in this repository, read and apply every canonical
+rule listed below. Treat these files as behavioural modifiers for the
+session. If a rule points to a directive, ADR, PDR, skill, command, or
+other canonical file, follow that pointer before acting in the affected
+area.
 
-Platform adapters, slash commands, and skills may route to these rules, but the
-files below are the source of truth for always-on repository rule doctrine.
+Each rule has three on-disk forms:
+
+- `.agent/rules/<name>.md` — canonical content (the source of truth).
+- `.claude/rules/<name>.md` — Claude Code platform forwarder (one-line
+  pointer to the canonical file).
+- `.cursor/rules/<name>.mdc` — Cursor platform forwarder (frontmatter
+  with `alwaysApply: true` plus a pointer to the canonical file).
+
+Platforms that auto-load their adapter tier (Claude, Cursor) pick up
+the canonical content via the forwarder. Platforms that do not
+auto-load (Codex, Gemini, and any other non-loader runtime) MUST read
+the canonical files in `.agent/rules/` directly. This index enumerates
+those canonical files; keeping the three on-disk forms aligned is part
+of the rule-authoring contract.
+
+When adding a new rule, land all three forms plus an entry in this
+index in the same commit.
 
 ## Canonical Rules
 
@@ -34,14 +52,16 @@ files below are the source of truth for always-on repository rule doctrine.
 - `.agent/rules/invoke-sentry-reviewer.md`
 - `.agent/rules/lint-after-edit.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
+- `.agent/rules/never-disable-checks.md`
+- `.agent/rules/never-use-git-to-remove-work.md`
 - `.agent/rules/no-conditional-tests.md`
 - `.agent/rules/no-global-state-in-tests.md`
+- `.agent/rules/no-hedging-vocabulary.md`
+- `.agent/rules/no-machine-local-paths.md`
+- `.agent/rules/no-moving-targets-in-permanent-docs.md`
 - `.agent/rules/no-skipped-tests.md`
 - `.agent/rules/no-type-shortcuts.md`
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
-- `.agent/rules/never-disable-checks.md`
-- `.agent/rules/never-use-git-to-remove-work.md`
-- `.agent/rules/no-machine-local-paths.md`
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/pre-merge-divergence-analysis.md`
@@ -53,6 +73,7 @@ files below are the source of truth for always-on repository rule doctrine.
 - `.agent/rules/replace-dont-bridge.md`
 - `.agent/rules/respect-active-agent-claims.md`
 - `.agent/rules/sonarqube-mcp-instructions.md`
+- `.agent/rules/stage-by-explicit-pathspec.md`
 - `.agent/rules/strict-validation-at-boundary.md`
 - `.agent/rules/subagent-practice-core-protection.md`
 - `.agent/rules/tdd-for-refactoring.md`

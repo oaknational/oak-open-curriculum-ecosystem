@@ -88,9 +88,12 @@ Read [principles.md](./principles.md); reflect on it, apply it, and follow it
 at all times.
 
 The always-applied rule tier lives in [`.agent/rules/`](../rules/). Rules
-operationalise principles, ADRs, and PDRs. Claude and Cursor load their adapter
-tiers automatically; Codex, Gemini, and any other non-loader platform MUST read
-every canonical `.agent/rules/*.md` file at session open.
+operationalise principles, ADRs, and PDRs. The canonical, platform-independent
+enumeration is [`RULES_INDEX.md`](../../RULES_INDEX.md) at the repo root —
+single source of truth for which files belong to the always-applied tier.
+Claude and Cursor load their adapter tiers automatically; Codex, Gemini, and
+any other non-loader platform MUST read every canonical `.agent/rules/*.md`
+file listed in `RULES_INDEX.md` at session open.
 
 ## Reviewers And Tools
 
