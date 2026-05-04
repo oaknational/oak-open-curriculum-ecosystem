@@ -122,12 +122,101 @@ export function resolveContentPair(change, readPriorContent) {
 /**
  * @typedef {{
  *   pattern: string,
- *   kind?: 'literal',
+ *   kind?: 'literal' | 'regex',
  *   include_paths: readonly string[],
  *   exclude_paths?: readonly string[],
+ *   excludes_inline_code?: boolean,
+ *   excludes_lines_with?: readonly string[],
  *   citation: string,
  * }} ScopedContentBlock
  */
+
+/**
+ * Strip inline-code spans (backticked text) from a single line.
+ *
+ * Used by the regex matcher so that a SHA wrapped in backticks
+ * (e.g. `abc1234`) is treated as a code reference and not as a
+ * load-bearing literal token in the prose.
+ *
+ * @param {string} line
+ * @returns {string}
+ */
+function stripInlineCodeSpans(line) {
+  return line.replace(/`[^`]+`/gu, '');
+}
+
+/**
+ * Scan content line-by-line for a regex match that respects fenced
+ * code blocks, inline code (when configured), and explicit
+ * historical-reference markers.
+ *
+ * - Lines inside fenced code blocks (delimited by `​`​`​`) are skipped.
+ * - When `excludes_inline_code` is true, inline-code spans are
+ *   stripped from each line before the regex test.
+ * - Lines containing any `excludes_lines_with` marker are skipped.
+ *
+ * @param {string} content
+ * @param {ScopedContentBlock} block
+ * @returns {boolean}
+ */
+function scanLinesForRegex(content, block) {
+  const regex = new RegExp(block.pattern, 'iu');
+  const excludesInlineCode = block.excludes_inline_code ?? false;
+  const excludeMarkers = block.excludes_lines_with ?? [];
+  let inFence = false;
+
+  for (const rawLine of content.split('\n')) {
+    if (rawLine.trimStart().startsWith('```')) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) {
+      continue;
+    }
+    if (excludeMarkers.some((marker) => rawLine.includes(marker))) {
+      continue;
+    }
+    const probeLine = excludesInlineCode ? stripInlineCodeSpans(rawLine) : rawLine;
+    if (regex.test(probeLine)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Decide whether a literal pattern is being added — present in new content
+ * but absent from prior content, ignoring case.
+ *
+ * @param {string} newContent
+ * @param {string} priorContent
+ * @param {ScopedContentBlock} block
+ * @returns {boolean}
+ */
+function literalMatchAdded(newContent, priorContent, block) {
+  const lowerNew = newContent.toLowerCase();
+  const lowerPrior = priorContent.toLowerCase();
+  const lowerPattern = block.pattern.toLowerCase();
+  return lowerNew.includes(lowerPattern) && !lowerPrior.includes(lowerPattern);
+}
+
+/**
+ * Decide whether a regex pattern is being added — matched in new content
+ * (after fence/inline-code/marker exclusions) but unmatched in prior
+ * content under the same exclusion rules.
+ *
+ * @param {string} newContent
+ * @param {string} priorContent
+ * @param {ScopedContentBlock} block
+ * @returns {boolean}
+ */
+function regexMatchAdded(newContent, priorContent, block) {
+  if (!scanLinesForRegex(newContent, block)) {
+    return false;
+  }
+  return !scanLinesForRegex(priorContent, block);
+}
 
 /**
  * Check whether a blocked pattern is being ADDED — present in new content
@@ -204,15 +293,15 @@ export function isPathInScope(filePath, includePaths, excludePaths = []) {
  * @returns {ScopedContentBlock | null}
  */
 export function findAddedScopedBlock(newContent, priorContent, filePath, scopedBlocks) {
-  const lowerNew = newContent.toLowerCase();
-  const lowerPrior = priorContent.toLowerCase();
-
   for (const block of scopedBlocks) {
     if (!isPathInScope(filePath, block.include_paths, block.exclude_paths)) {
       continue;
     }
-    const lowerPattern = block.pattern.toLowerCase();
-    if (lowerNew.includes(lowerPattern) && !lowerPrior.includes(lowerPattern)) {
+    const matched =
+      block.kind === 'regex'
+        ? regexMatchAdded(newContent, priorContent, block)
+        : literalMatchAdded(newContent, priorContent, block);
+    if (matched) {
       return block;
     }
   }
@@ -307,8 +396,25 @@ function isValidScopedBlockEntry(entry) {
   if (!('citation' in entry) || typeof entry.citation !== 'string') {
     return false;
   }
-  if ('kind' in entry && entry.kind !== 'literal') {
+  if ('kind' in entry && entry.kind !== 'literal' && entry.kind !== 'regex') {
     return false;
+  }
+  if ('excludes_inline_code' in entry && typeof entry.excludes_inline_code !== 'boolean') {
+    return false;
+  }
+  if (
+    'excludes_lines_with' in entry &&
+    (!Array.isArray(entry.excludes_lines_with) ||
+      !entry.excludes_lines_with.every((marker) => typeof marker === 'string'))
+  ) {
+    return false;
+  }
+  if (entry.kind === 'regex') {
+    try {
+      new RegExp(entry.pattern, 'u');
+    } catch {
+      return false;
+    }
   }
   return true;
 }

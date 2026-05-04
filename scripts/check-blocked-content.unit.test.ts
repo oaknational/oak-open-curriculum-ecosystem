@@ -276,6 +276,97 @@ describe('findAddedScopedBlock', () => {
   });
 });
 
+describe('findAddedScopedBlock — regex with context-aware exclusions (WS4)', () => {
+  const shaBlock = {
+    pattern: '\\b[a-f0-9]{7,40}\\b',
+    kind: /** @type {'regex'} */ 'regex',
+    include_paths: ['docs/architecture/architectural-decisions/', '.agent/practice-core/'],
+    exclude_paths: [],
+    excludes_inline_code: true,
+    excludes_lines_with: ['(historical reference)'],
+    citation: 'distilled.md §Moving targets do not belong in permanent docs',
+  };
+
+  it('returns the block when a 7-character hex SHA is added on a permanent-doc path', () => {
+    expect(
+      findAddedScopedBlock(
+        'See commit abc1234 for the change.',
+        'See some commit for the change.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toStrictEqual(shaBlock);
+  });
+
+  it('returns the block when a 40-character SHA is added on a permanent-doc path', () => {
+    const fortyCharSha = '0123456789abcdef0123456789abcdef01234567';
+    expect(
+      findAddedScopedBlock(
+        `See commit ${fortyCharSha} for the change.`,
+        'See some commit for the change.',
+        '/repo/.agent/practice-core/PDR-x.md',
+        [shaBlock],
+      ),
+    ).toStrictEqual(shaBlock);
+  });
+
+  it('does not detect a SHA wrapped in inline code (excludes_inline_code: true)', () => {
+    expect(
+      findAddedScopedBlock(
+        'See commit `abc1234` for the change.',
+        'See some commit for the change.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toBeNull();
+  });
+
+  it('does not detect a SHA on a line containing the historical-reference marker', () => {
+    expect(
+      findAddedScopedBlock(
+        'See commit abc1234 for the change. (historical reference)',
+        'See some commit for the change.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toBeNull();
+  });
+
+  it('does not detect a SHA inside a fenced code block', () => {
+    const newContent = ['Some prose introducing context.', '```', 'abc1234', '```'].join('\n');
+    expect(
+      findAddedScopedBlock(
+        newContent,
+        'Some prose introducing context.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toBeNull();
+  });
+
+  it('returns null when the SHA already existed in prior content (not a new addition)', () => {
+    expect(
+      findAddedScopedBlock(
+        'See commit abc1234 — and another mention of abc1234.',
+        'See commit abc1234 was the original.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toBeNull();
+  });
+
+  it('does not detect a SHA on out-of-scope paths', () => {
+    expect(
+      findAddedScopedBlock(
+        'See commit abc1234 for the change.',
+        'See some commit for the change.',
+        '/repo/src/index.ts',
+        [shaBlock],
+      ),
+    ).toBeNull();
+  });
+});
+
 describe('parseScopedContentBlocks', () => {
   it('returns an empty array when scoped_blocks is omitted', () => {
     expect(
@@ -332,6 +423,60 @@ describe('parseScopedContentBlocks', () => {
                 pattern: 'carve out',
                 kind: 'magic',
                 include_paths: ['.agent/'],
+                citation: 'x',
+              },
+            ],
+          },
+        },
+      }),
+    ).toThrow('hooks.preToolUseContent.scoped_blocks was malformed');
+  });
+
+  it('accepts a regex block with excludes_inline_code and excludes_lines_with', () => {
+    const regexBlock = {
+      pattern: '\\b[a-f0-9]{7,40}\\b',
+      kind: 'regex',
+      include_paths: ['docs/architecture/architectural-decisions/'],
+      excludes_inline_code: true,
+      excludes_lines_with: ['(historical reference)'],
+      citation: 'distilled.md §Moving targets do not belong in permanent docs',
+    };
+    expect(
+      parseScopedContentBlocks({
+        hooks: { preToolUseContent: { scoped_blocks: [regexBlock] } },
+      }),
+    ).toStrictEqual([regexBlock]);
+  });
+
+  it('throws when a regex block has an unparseable pattern', () => {
+    expect(() =>
+      parseScopedContentBlocks({
+        hooks: {
+          preToolUseContent: {
+            scoped_blocks: [
+              {
+                pattern: '[unclosed',
+                kind: 'regex',
+                include_paths: ['docs/'],
+                citation: 'x',
+              },
+            ],
+          },
+        },
+      }),
+    ).toThrow('hooks.preToolUseContent.scoped_blocks was malformed');
+  });
+
+  it('throws when excludes_inline_code is not a boolean', () => {
+    expect(() =>
+      parseScopedContentBlocks({
+        hooks: {
+          preToolUseContent: {
+            scoped_blocks: [
+              {
+                pattern: 'x',
+                include_paths: ['docs/'],
+                excludes_inline_code: 'yes',
                 citation: 'x',
               },
             ],

@@ -229,8 +229,9 @@ describe('canonical policy: hedging-vocabulary trip-list (WS3)', () => {
 
   it('the canonical policy registers a hedging-vocabulary trip-list scoped to doctrine surfaces', async () => {
     const blocks = await loadScopedContentBlocks();
+    const literalBlocks = blocks.filter((block) => (block.kind ?? 'literal') === 'literal');
 
-    const patterns = blocks.map((block) => block.pattern);
+    const patterns = literalBlocks.map((block) => block.pattern);
     expect(patterns).toEqual(
       expect.arrayContaining([
         'carve out',
@@ -248,9 +249,130 @@ describe('canonical policy: hedging-vocabulary trip-list (WS3)', () => {
       ]),
     );
 
-    for (const block of blocks) {
+    for (const block of literalBlocks) {
       expect(block.citation).toBe(expectedCitation);
       expect(block.include_paths.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
+  it('registers a regex scoped block detecting 7- to 40-char hex with code-block and historical-reference exclusions', async () => {
+    const blocks = await loadScopedContentBlocks();
+    const regexBlocks = blocks.filter((block) => block.kind === 'regex');
+
+    expect(regexBlocks.length).toBeGreaterThanOrEqual(1);
+    const shaBlock = regexBlocks.find((block) => /\[0-9a-f\]/u.test(block.pattern));
+    expect(shaBlock).toBeDefined();
+    expect(shaBlock?.excludes_inline_code).toBe(true);
+    expect(shaBlock?.excludes_lines_with).toEqual(
+      expect.arrayContaining(['(historical reference)']),
+    );
+    expect(shaBlock?.include_paths).toEqual(
+      expect.arrayContaining([
+        'docs/architecture/architectural-decisions/',
+        '.agent/practice-core/',
+      ]),
+    );
+    expect(shaBlock?.citation).toContain('Moving targets');
+  });
+
+  it('the wired-up guard denies a SHA added on a permanent-doc path and surfaces the citation', async () => {
+    const stdoutChunks: string[] = [];
+    const stderrChunks: string[] = [];
+
+    async function* stdin(): AsyncGenerator<Buffer> {
+      yield Buffer.from(
+        JSON.stringify({
+          tool_input: {
+            new_string: 'See commit abc1234 for context.',
+            old_string: 'See an unspecified commit for context.',
+            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          },
+        }),
+      );
+    }
+
+    const result = await runPreToolUseContentGuard({
+      stdin: stdin(),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: {
+        write: (text: string) => {
+          stderrChunks.push(text);
+        },
+      },
+      blockedPatterns: [],
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    expect(stderrChunks).toStrictEqual([]);
+    const denyPayload = JSON.parse(stdoutChunks.join(''));
+    expect(denyPayload.hookSpecificOutput.permissionDecision).toBe('deny');
+    expect(denyPayload.hookSpecificOutput.permissionDecisionReason).toContain('Citation:');
+    expect(denyPayload.hookSpecificOutput.permissionDecisionReason).toContain('Moving targets');
+  });
+
+  it('the wired-up guard does NOT deny an all-decimal token on a permanent-doc path (no a-f hex char)', async () => {
+    const stdoutChunks: string[] = [];
+
+    async function* stdin(): AsyncGenerator<Buffer> {
+      yield Buffer.from(
+        JSON.stringify({
+          tool_input: {
+            new_string: 'The metric reading was 1765098000000 last quarter.',
+            old_string: 'The metric reading was unspecified last quarter.',
+            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          },
+        }),
+      );
+    }
+
+    const result = await runPreToolUseContentGuard({
+      stdin: stdin(),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: { write: () => {} },
+      blockedPatterns: [],
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    expect(stdoutChunks).toStrictEqual([]);
+  });
+
+  it('the wired-up guard does NOT deny a SHA wrapped in inline code on a permanent-doc path', async () => {
+    const stdoutChunks: string[] = [];
+
+    async function* stdin(): AsyncGenerator<Buffer> {
+      yield Buffer.from(
+        JSON.stringify({
+          tool_input: {
+            new_string: 'See commit `abc1234` for context.',
+            old_string: 'See an unspecified commit for context.',
+            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          },
+        }),
+      );
+    }
+
+    const result = await runPreToolUseContentGuard({
+      stdin: stdin(),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: { write: () => {} },
+      blockedPatterns: [],
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    expect(stdoutChunks).toStrictEqual([]);
   });
 });
