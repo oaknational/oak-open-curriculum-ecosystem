@@ -37,8 +37,8 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.5.2",
-    "eslint": "^10.2.0",
-    "globals": "^17.4.0",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
     "openapi3-ts": "^4.5.0",
     "tsup": "^8.5.1",
     "typescript": "^6",
