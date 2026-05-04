@@ -94,6 +94,34 @@ session-unique delta only?" The passive knowledge of where the
 durable homes lived did not fire against the gravity of the
 request to "write a session opener."
 
+### Instance 4 — Plan templates encoded the multi-commit-TDD failure mode the directive forbade (2026-05-03)
+
+The principles directive said "Red, Green, Refactor" as a
+discipline shape; the
+`feature-workstream-template.md` and `tdd-phases.md` template
+component represented the same shape as `WS1=RED commit, WS2=GREEN
+commit, WS3=REFACTOR commit` — a per-workstream-per-commit layout.
+Plans inheriting that template produced multi-commit-TDD-skip-
+register shapes (RED tests committed first; GREEN code committed
+later; tests skipped or failing in the interval). The directive
+prose was correct; the template was the load-bearing artefact and
+the template encoded the wrong shape. Fixing the directive without
+fixing the template would have left the failure mode alive in
+every new plan derived from the template. Lesson: when a generator
+is named and a doctrine is sharpened, the templates the doctrine
+flows through MUST be updated in the same pass. Six plans had
+already inherited the mis-shape; one (WS1 RED arc) left 4 skipped
+tests in the tree until binary deletion under the
+`no-skipped-tests` rule. **Generalisable observation**: passive
+guidance loses not only to ad-hoc artefacts (Instances 1-3) but
+also to *generative* artefacts — templates, scaffolds, plan
+patterns — that propagate the failure shape to every new plan
+derived from them. Templates are higher-leverage failure surfaces
+than individual plans because they multiply the shape they encode.
+Source: napkin 2026-05-03 §"Templates and components can
+institutionalise the failure mode they were not designed to
+enforce" (cleanup pass after the named-deferrals corrective).
+
 ## Anti-pattern
 
 Responding to a repeated failure mode by **documenting** a

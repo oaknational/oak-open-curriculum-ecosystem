@@ -9,8 +9,37 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-04
-(Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` /
+**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-04 → 2026-05-04
+(Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` /
+`63a0e0` session-handoff: one commit landed — `192b6965`
+docs(practice) land memetic immune system pdr, pdr amendments, and
+enforcement quick-wins plans (9 files, +1580/-1). Post-/insights
+reflection round on `agentic-engineering-enhancements` thread.
+Three owner-named insights captured at moment of occurrence
+(insight-capture-degrades-exponentially principle stated mid-session;
+doctrine-without-enforcement-at-maturity sharpening of PDR-038;
+beneficial-prerequisites-must-not-block pattern named with three
+host instances). Doctrine landed: PDR-044 (new) memetic immune
+system with innate (deterministic) + adaptive (cognitive) layers and
+citation discipline as autoimmunity safeguard; PDR-018 §"Beneficial
+prerequisites must not block" amendment; PDR-038 §"Doctrine-without-
+enforcement is benefit-then-cost across maturity" amendment. Plans
+landed: `current/doctrine-enforcement-quick-wins.plan.md` (six TDD
+cycle-pair workstreams: vitest disabled/focused-tests rules;
+ban-ts-comment with description; hedging-vocabulary trip-list at
+write-time; SHA-in-permanent-doc regex; fitness/vocabulary as
+commit-skill gates; git-add-wildcard blocking) — innate-immunity
+host adoption of PDR-044; `future/memetic-immune-system-and-
+progressive-disclosure.plan.md` (strategic roadmap for adaptive-
+immunity surveillance, practice trio additive activation ungated
+from rename, scanner CLI consolidation, triggered rule loading
+pilot) — each scope item promotes independently with named
+triggers. Discovery surface refreshed (practice-index plus
+current/future README indexes). User-stated intent for next
+session(s): land Tier 1 quick wins + immune-system PDR umbrella
+before returning to local-dev fix work; structural-foundation-first
+discipline. **Prior**:
+Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` /
 `13ae71` session-handoff + consolidate-docs: one commit landed —
 `b2ef7992` docs(testing) split TDD as foundational directive +
 refresh test-reviewer as carrier (23 files, +1159/-235). Doctrinal
@@ -719,7 +748,7 @@ live in each thread record; this table is the repo-level index.
 | Thread                                            | Purpose                                                                                                                                                                 | Next-session record                                                                                                                                  | Active identities                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `observability-sentry-otel`                       | Product — Sentry/OTel public-alpha integration                                                                                                                          | `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`                                             | Most-recent: Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a` / corrective consolidation + TDD-as-pairs framing in directives/templates/plans + atomic-independent-parallel cycles for optional parallel-agent dispatch (3 commits: `60b9ff4c`, `797766c0`, `755811ac`) / 2026-05-03; Woodland Sprouting Glade / `claude-code` / `claude-opus-4-7-1m` / `978cba` / orchestrator: ARC-B0-plan-body-corrections-and-ADR-number-verification (parallel-lane to Prismatic A1; reviewer dispatch absorbed; first-claim-wins coordination) / 2026-05-03; Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` / `7402c9` / executor: ARC-A1-canonical-smoke-harness + skip-arc + §A1-plan-body-refresh / 2026-05-03; Pelagic Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` / there-is-no-time-hashed-starfish-plan-author-and-Misty-coordination / 2026-05-03; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / smoke-tests-harness-reconnaissance-Task-M1 + worker-perspective-collab-suggestions + N-agent-collaboration-hypothesis-artefacts / 2026-05-03. Prior: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / observability-multi-sink-and-fixtures-shape-plan-WS1 + Practice-Core-portability-Rounds-1+2+3 / 2026-05-03; Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02. Full history in thread record. |
-| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` / `13ae71` / validation-and-tdd-doctrine-restructure-arc-S1-through-S4 + tdd-as-design-foundational-directive + test-reviewer-as-doctrine-carrier + no-conditional-tests-rule + Stryker-meta-quality-reframe + index-plan-with-S1-S4-and-P1-P6 (commit `b2ef7992`, 23 files) / 2026-05-04. Prior: Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / N-agent-collaboration-hypothesis-decision-complete-plan + per-experiment-subfolder-restructure / 2026-05-03; Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / Practice-Core-portability-Rounds-1+2+3-with-owner-decisions-C6-C7 / 2026-05-03; Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30. Full history in thread record. |
+| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` / `63a0e0` / post-/insights-reflection-round + PDR-044-memetic-immune-system + PDR-018/038-amendments + current/doctrine-enforcement-quick-wins.plan.md + future/memetic-immune-system-and-progressive-disclosure.plan.md + practice-index-and-readme-discovery-updates (commit `192b6965`, 9 files) / 2026-05-04. Prior: Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` / `13ae71` / validation-and-tdd-doctrine-restructure-arc-S1-through-S4 + tdd-as-design-foundational-directive + test-reviewer-as-doctrine-carrier + no-conditional-tests-rule + Stryker-meta-quality-reframe + index-plan-with-S1-S4-and-P1-P6 (commit `b2ef7992`, 23 files) / 2026-05-04; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / N-agent-collaboration-hypothesis-decision-complete-plan + per-experiment-subfolder-restructure / 2026-05-03; Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / Practice-Core-portability-Rounds-1+2+3-with-owner-decisions-C6-C7 / 2026-05-03; Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / structural-enforcement-family-plans + doctrine-reframes / 2026-05-01; Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / quarantine-of-apply-dont-ask-doctrine + structural-cures-landed + hook-layer-safety-net-idea / 2026-05-01; Deep Navigating Stern / `claude-code` / `claude-opus-4-7-1m` / light-consolidate-docs + owner-authorised-promotions-queued + rush-impulse-metacognition / 2026-05-01; Dewy Budding Sapling / `claude-code` / `claude-opus-4-7-1m` / canonical-first-skill-pack-ingestion-future-plan-and-discovery-surface-wiring / 2026-04-30. Full history in thread record. |
 | `connecting-oak-resources`                        | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | `[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md)`                                               | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `exploring-open-education-resources`              | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion                               | `[threads/exploring-open-education-resources.next-session.md](threads/exploring-open-education-resources.next-session.md)`                           | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `architectural-budget-system`                     | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning                                                                  | `[threads/architectural-budget-system.next-session.md](threads/architectural-budget-system.next-session.md)`                                         | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -744,6 +773,42 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-04 (Verdant Sprouting Leaf, Claude Code, completed)**:
+post-/insights reflection round on `agentic-engineering-enhancements`
+thread. Owner shared the latest /insights report and asked for
+reflection comparing report findings to existing structures, with
+candid feedback aimed at the user. Three insights surfaced and were
+captured in same turn per the newly-stated principle that
+*the only valid time to capture an insight is when it occurs; every
+moment after that degrades exponentially*. Insights:
+(a) doctrine without enforcement is benefit early, cost at maturity
+(maturity-axis sharpening of PDR-038); (b) beneficial prerequisites
+must not block the work they were meant to enable (with three host
+instances: agent-roster taxonomy rename gating practice trio
+agents; smoke-harness redesign treated as prereq for multi-sink
+rename; plans-creating-plans for three days without product code);
+(c) the memetic immune system as the structural shape for
+operationalising PDR-038 at write-time and commit-time. Doctrine
+landed in same arc: PDR-018 amendment §"Beneficial prerequisites
+must not block"; PDR-038 amendment §"Doctrine-without-enforcement
+is benefit-then-cost across maturity"; PDR-044 (new) memetic
+immune system with innate (deterministic) + adaptive (cognitive)
+layers and citation discipline as autoimmunity safeguard. Plans:
+`current/doctrine-enforcement-quick-wins.plan.md` (six TDD
+cycle-pair workstreams that operationalise PDR-044 §innate
+immunity at the surfaces where the highest-frequency violations
+recur — vitest disabled/focused tests; ban-ts-comment with
+description; hedging vocabulary trip-list; SHA-in-permanent-doc
+regex; fitness/vocabulary commit-skill gates; git-add-wildcard
+blocking); `future/memetic-immune-system-and-progressive-
+disclosure.plan.md` (strategic roadmap with named promotion
+triggers for adaptive-immunity surveillance, practice trio
+additive activation ungated from rename, doctrine-scanner CLI
+consolidation, triggered rule loading pilot). Commit `192b6965`
+(9 files, +1580/-1). Owner-stated direction: do not rush local-
+dev fix work; structural-foundation-first discipline; Tier 1 quick
+wins + immune-system PDR umbrella before resuming local-dev fix.
 
 **2026-05-03 (Woodland Sprouting Glade + Prismatic Illuminating Eclipse, Claude Code, parallel two-agent execution, completed)**:
 ARC B0 + ARC A1 landed concurrently on the observability-sentry-otel
@@ -841,6 +906,34 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-04 Verdant Sprouting Leaf close (post-/insights
+reflection round; PDR-044 + PDR-018/038 amendments + two new plans
+landed as `192b6965`)**: owner-directed sequencing places structural
+enforcement before any return to local-dev fix work. The next
+session on the `agentic-engineering-enhancements` thread should pick
+up the freshly-landed
+[`current/doctrine-enforcement-quick-wins.plan.md`](../../plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md)
+at WS1 (vitest disabled/focused-tests rules — smallest workstream,
+one cycle pair, strict-config audit + escalation) or any of WS2-WS6
+(all atomic-independent and parallel-safe per the plan's
+`depends_on: []` declarations). The plan's six workstreams together
+land PDR-044's innate-immunity layer with six structural fingerprints,
+each carrying a doctrinal citation. Plan body is decision-complete.
+
+After the quick-wins plan lands all six workstreams green, the
+companion strategic plan
+[`future/memetic-immune-system-and-progressive-disclosure.plan.md`](../../plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md)
+identifies four scope items each with named promotion triggers
+(adaptive-immunity surveillance agent, practice trio additive
+activation ungated from rename, doctrine-scanner CLI consolidation,
+triggered rule loading pilot). Each promotes independently; owner
+direction at promotion supersedes the recommended sequencing.
+
+Lower-priority alternative: continue
+[`validation-and-tdd-doctrine-restructure.plan.md`](../../plans/agentic-engineering-enhancements/current/validation-and-tdd-doctrine-restructure.plan.md)
+at P1 (validation-strategy umbrella directive) per prior session's
+sequencing; P1/P2 are independently promotable.
 
 **After 2026-05-04 Dewy Shedding Glade close (validation-and-tdd-doctrine-restructure
 arc S1-S4 landed as `b2ef7992`)**: the next session on the
@@ -1078,7 +1171,10 @@ Visible owner-appetite items, not blockers for the active lanes:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-04 Dewy Shedding Glade, claude-code, opus-4-7-1m, `13ae71`, owner-directed `/jc-session-handoff` followed by `/jc-consolidate-docs`):
+**Status (2026-05-04 Verdant Sprouting Leaf, claude-code, opus-4-7-1m, `63a0e0`, owner-directed `/jc-session-handoff` followed by `/jc-consolidate-docs`):
+`completed this handoff — owner explicit invocation; the trigger is owner direction. The doctrine-and-plans bundle (PDR-044 memetic immune system + PDR-018/038 amendments + current/doctrine-enforcement-quick-wins.plan.md + future/memetic-immune-system-and-progressive-disclosure.plan.md) landed as commit 192b6965 (9 files, +1580/-1). Knowledge-preservation-is-absolute applied: napkin received three new entries (insight-degrades-exponentially, doctrine-without-enforcement-at-maturity, beneficial-prerequisites-with-three-host-instances) without compression. Consolidation-time graduation pass focused on the current napkin and the 2026-05-03 + 2026-03-28 archives per owner direction: three 2026-05-04 substance entries graduated this session (PDR-018 amendment, PDR-038 amendment, PDR-044 new); one 2026-05-03 substance entry (templates can encode failure modes — multi-commit-TDD shape in feature-workstream-template) graduated as Instance 4 in patterns/passive-guidance-loses-to-artefact-gravity.md; two new pending-graduations candidates registered (insight-capture-degrades-exponentially as principles.md addition; first-question-at-every-elaboration-boundary as PDR-043 / PDR-018 amendment). Other 2026-05-03 archive substance found already graduated (rush-impulse to principles.md; PDR-040/041/042; producer-output entry intentionally deleted as hedging-shaped). 2026-03-28 archive is heavily Sentry/OTel tactical work, no graduation candidates surfaced. Fitness pressure on napkin (now 691 lines / critical 450), pending-graduations (947 lines / critical 750), distilled.md (401 lines / hard 275), principles.md (561 lines / hard 525) acknowledged and not acted on per owner direction (fitness does not influence what gets written or where this pass).`**
+
+**Prior status (2026-05-04 Dewy Shedding Glade, claude-code, opus-4-7-1m, `13ae71`, owner-directed `/jc-session-handoff` followed by `/jc-consolidate-docs`):
 `completed this handoff — owner explicitly invoked /jc-consolidate-docs; the trigger is owner direction, not the trigger checklist. This session landed a doctrinal arc (validation-and-tdd-doctrine-restructure) with one commit b2ef7992 (23 files, +1159/-235) covering S1-S4: index plan + tdd-as-design.md foundational directive + no-conditional-tests rule (with 3 platform adapters + RULES_INDEX entry) + test-reviewer refresh as doctrine-carrier + Stryker meta-quality reframe + drift fix for never-use-git-to-remove-work adapters. Three PDR/pattern candidates surfaced and registered: tests-describe-system (PDR-shaped, owner-led foundational reframing), reviewers-carry-doctrine (PDR-shaped, single instance), forcing-function-read-path (pattern-shaped, single instance). Skipped-tests register entry graduated to GRADUATED state (resolved by other agent's commit 2a2d1b05 deleting the offending test files via the dev-boot release-resolution plan). One thread touched substantively (agentic-engineering-enhancements; observability-sentry-otel touched only via the deleted skipped-tests pending-graduations entry, which sat in repo-level state). Fitness pressure (4 files in HARD/CRITICAL — principles.md, distilled.md, napkin.md, pending-graduations.md) and Practice Core review (consolidate-docs step 8) **analysed and flagged for owner direction**, not deferred — see §Open Owner-Decision Items. Owner correction this session: prior-session fitness-deferral was session-scoped, not standing; "owner attention required" means analyse-report-flag, not skip. Next safe step: pick up next session per index plan; P1 (validation-strategy umbrella) is the natural promotion candidate, or owner addresses fitness/Practice findings first.`**
 
 **Prior status (2026-05-03 Woodland Sprouting Glade + Prismatic Illuminating Eclipse, parallel two-agent close): `not due — successful parallel-lane execution; both lanes landed within ~1 hour with no conflicts; substrate held under stress. Three commits on Woodland's B0 lane (c0d17634, 23abeabe, e86af3e0), one large commit on Prismatic's A1 lane (792c2cad). Three reviewers dispatched on B0 in parallel (assumptions, docs-adr, onboarding); 16 findings; all implemented or rejected with written rationale. Four reviewers on A1 (test, architecture-fred, architecture-betty, mcp). One thread touched (observability-sentry-otel; agentic-engineering-enhancements lightly touched via experiment-plan housekeeping-ownership primitive add). Prior-session leftover continuity files (pending-graduations, repo-continuity, agentic-engineering thread record + plan/prompts) committed in this handoff per orchestrator-owns-shared-housekeeping rule. Inherited fitness pressure from prior sessions persists (napkin grew further in this session by E1 observations + worked-instance entries; principles, distilled, pending-graduations, repo-continuity all still over their limits) — owner-deferred to a separate session per the standing direction. Knowledge-preservation-is-absolute applied. Next session enters ARC A2 (mode-by-mode harness migration) or ARC B1/WS2 (sentry-node SinkRegistry consumption) — parallelisable; either order works. Consolidation can be revisited after multi-session plan lands or earlier if fitness pressure becomes operationally blocking.`** This handoff did not escalate to `/jc-consolidate-docs` and explicitly does not narrow scope to defer the underlying fitness remediation; that lane awaits owner-directed dedicated session.

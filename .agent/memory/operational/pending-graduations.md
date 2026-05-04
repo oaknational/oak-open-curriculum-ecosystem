@@ -32,6 +32,111 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **first-question at every elaboration boundary, not
+  only at plan-author time** (Verdant Sprouting Leaf, surfaced
+  during /jc-consolidate-docs napkin extraction; substance from Salty
+  Navigating Jetty 2026-05-03 session-spiral diagnosis): PDR-043 cue 3
+  ("first-principles framing question — what would the path look like
+  with no closure pressure?") is currently scoped to "when proposing
+  any change". The sharpening from Salty's session: the cue must fire
+  at *every elaboration boundary* — plans-creating-plans, arc-
+  justifying-arcs, prerequisite-justifying-prerequisites. The three-
+  day observability spiral (2026-05-01 through 2026-05-03) was
+  internally coherent at every plan-authoring step but never re-asked
+  the first-question at the level of *should this whole arc exist?*.
+  Salty's diagnosis: *plan-following can disguise rush-impulse if
+  the principles' first-question is not re-applied at every
+  elaboration boundary*. Source-surface: napkin 2026-05-03 (Salty)
+  §"Session-spiral diagnosis"; complementary to PDR-018 §Beneficial
+  prerequisites must not block (which provides the prerequisite-
+  classification cure) and PDR-043 cue 3 (which provides the per-
+  change cure but not the per-elaboration-boundary cure). Graduation-
+  target: PDR-043 amendment §"Cue 3 fires at every elaboration
+  boundary" OR PDR-018 amendment §"First-question discipline at
+  elaboration boundaries". Trigger-condition: second instance OR
+  owner direction. Salty's session is the first instance; Tidal
+  Flowing Reef's "framing-trap" entry on the same date is closely
+  related but expresses the same shape (option A vs option B between
+  two violations is the wrong frame; the question is *how do we adopt
+  our new insights?*). Status: pending — awaiting second instance or
+  owner direction. **Enforcement note (per PDR-038 §2026-05-04
+  amendment)**: at maturity, doctrine without enforcement is
+  liability. The structural enforcement candidate for this principle
+  is a planning-discipline check at plan-authoring time + plan-
+  reviewer dispatch — both of which would naturally extend the
+  doctrine-scanner CLI work proposed in
+  `future/memetic-immune-system-and-progressive-disclosure.plan.md`.
+
++ 2026-05-04; **insight capture degrades exponentially after the
+  moment of occurrence** (Verdant Sprouting Leaf, owner-stated
+  mid-session principle): *the only valid time to capture an insight
+  is when it occurs; every moment after that degrades exponentially.*
+  Stated in the post-/insights reflection round mid-authoring of
+  option (c). This is the active-memory analogue of architectural-
+  excellence-over-expediency: the cheap answer ("note it for next
+  session") burns the load-bearing detail; the architecturally
+  correct answer (capture now in napkin / PDR / plan) costs minutes
+  and preserves the substance. Source-surface: napkin 2026-05-04
+  entry. Graduation-target: addition to
+  `.agent/directives/principles.md` as a one-line principle, with
+  the napkin/PDR/plan capture pipeline as its own structural
+  enforcement (the principle is self-enforcing — its enforcement
+  surface is the act of capture itself, which already exists as
+  infrastructure). The discipline formalises what was already done
+  in this session; promotion is recording what is true. Trigger-
+  condition: second instance OR owner direction. The owner-stated
+  framing is itself the first instance and is load-bearing for the
+  three insights captured in same turn during this session. Status:
+  pending — awaiting second instance or owner direction.
+
++ 2026-05-04; **memetic immune system structure** (Verdant Sprouting
+  Leaf, post-/insights reflection round): two-layer immune system as
+  the structural shape for operationalising PDR-038 at write-time
+  and commit-time. **Already graduated this session as PDR-044**:
+  innate (deterministic, fast, broad) + adaptive (cognitive,
+  contextual, learning) layers; citation discipline as autoimmunity
+  safeguard; allowlist usage as calibration signal. Source-surface:
+  napkin 2026-05-04 entry derived from /insights report observation
+  that doctrine-enforcement-pre-commit-hooks would catch the
+  recurring violations. Graduation-target: GRADUATED to
+  `practice-core/decision-records/PDR-044-memetic-immune-system.md`
+  on 2026-05-04 in commit `192b6965`. Innate-immunity layer host
+  adoption: `current/doctrine-enforcement-quick-wins.plan.md`. Status:
+  graduated.
+
++ 2026-05-04; **beneficial prerequisites must not block the work
+  they were meant to enable** (Verdant Sprouting Leaf, owner-named
+  pattern with three host instances surfaced in same turn): a
+  prerequisite that is `beneficial` (the dependent work ships better
+  with it) must not be expressed as `blocking` (the dependent work
+  cannot start without it). Three host instances: agent-roster
+  taxonomy rename gating practice trio agents (the rename is
+  beneficial, the trio can ship additively); smoke-harness redesign
+  treated as prereq for multi-sink rename (regression-guard already
+  served the role); plans-creating-plans for three days without
+  product code. **Already graduated this session as PDR-018 §
+  "Beneficial prerequisites must not block" amendment** in commit
+  `192b6965`. Source-surface: napkin 2026-05-04 entry.
+  Graduation-target: GRADUATED to PDR-018 amendment log + new
+  Decision section. Status: graduated.
+
++ 2026-05-04; **doctrine without enforcement: benefit early, cost
+  at maturity** (Verdant Sprouting Leaf, owner sharpening of
+  PDR-038 mid-session): *once a system starts to mature, doctrine
+  without enforcement is a cost rather than benefit; in very
+  early-stage systems collecting intent is beneficial, but that
+  value falls off fairly quickly.* Maturity-axis sharpening of
+  PDR-038. **Already graduated this session as PDR-038 §
+  "Doctrine-without-enforcement is benefit-then-cost across
+  maturity" amendment** in commit `192b6965`. Source-surface:
+  napkin 2026-05-04 entry. Graduation-target: GRADUATED to PDR-038
+  amendment log + new Decision section, with explicit maturity
+  inflection signals (doctrine surface exceeding contributor
+  working memory; recurring recall-dependent failures; new
+  principles predominantly sharpenings rather than novel
+  identifications; PDR-authoring cost exceeding enforcement-surface
+  cost). Status: graduated.
+
 + 2026-05-04; **tests describe the system to itself** (Dewy Shedding
   Glade, owner-led doctrinal arc): foundational reframing of TDD
   landed in `tdd-as-design.md`. *A test does not verify code; a test
