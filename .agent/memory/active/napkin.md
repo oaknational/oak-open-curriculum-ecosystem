@@ -389,6 +389,25 @@ targets, even in its own source-landing footer. The fix was simple
 (name the WS, name the date, omit the SHA); the discovery was the
 implementation/spirit gap.
 
+**Owner correction (2026-05-04, end of session): the
+session-handoff command's §6d "canonical-pointer-only" rule is
+prompting incorrect removals.** The command names
+*"heading + a one-line pointer to AGENT.md"* as the canonical
+shape and labels anything else as drift. Applied literally
+during this session's handoff, I tried to strip the
+`See [RULES_INDEX.md](RULES_INDEX.md) for the canonical rules
+list.` line from `AGENTS.md` as drift. Owner correction: the
+line is there on purpose (deliberate Codex/AGENTS-platform
+discoverability aid). The rule prompting the removal needs
+updating — `.agent/commands/session-handoff.md §6d` should be
+softened to distinguish *canonical-pointer-only must* from
+*deliberate, owner-blessed additional pointers to canonical
+surfaces are allowed*. Graduation candidate registered in
+`pending-graduations.md` (status `pending`, awaiting
+amendment authoring). Without that softening, the next agent
+running `/jc-session-handoff` will encounter the same
+incorrect prompt and risk the same removal attempt.
+
 **Owner direction (2026-05-04, end of session): the hook should be
 tightened.** The "either tighten or rely on the rule" framing in
 `no-moving-targets-in-permanent-docs.md` is incorrect optionality —

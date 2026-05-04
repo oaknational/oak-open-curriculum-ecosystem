@@ -32,6 +32,87 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **hook tightening for no-moving-targets-in-permanent-docs:
+  distinguish prose-narrative from code-block backtick contexts**
+  (Vining Spreading Seed, owner-directed at session close after
+  the WS3/WS4/WS6 + rules-and-index landing arc). The WS4
+  scoped_block's `excludes_inline_code` rule strips backticked
+  spans from each line before the regex test, which correctly
+  excludes data-shape SHAs in YAML/JSON code blocks but
+  incorrectly excludes prose-context backticked SHAs (the
+  *"see commit `abc1234`"* shape). The repo's permission system
+  surfaced this gap by rejecting the first-draft rule files,
+  which themselves embedded backticked session-commit SHAs.
+  Owner direction is to tighten the hook, not accept the
+  rule-vs-hook gap as optionality. Implementation cue:
+  distinguish *code-block data context* (line is inside a
+  fenced block, or the line is predominantly code-shaped) from
+  *prose-narrative context* (a backticked token inside a
+  sentence — should fire). Source surface: napkin §
+  "Owner direction (2026-05-04, end of session)". Graduation-
+  target: refinement workstream extending
+  `scripts/check-blocked-content.ts` regex matcher and updating
+  `.agent/rules/no-moving-targets-in-permanent-docs.md` to
+  remove the now-stale "either/or" framing. Trigger-condition:
+  ready now (owner-directed). Status: `due`.
+
++ 2026-05-04; **session-handoff §6d "canonical-pointer-only" rule
+  is too absolute for AGENTS.md** (Vining Spreading Seed,
+  owner-corrected mid-session). The session-handoff command's
+  step 6d names "heading + one-line pointer to AGENT.md" as the
+  canonical entry-point shape and labels anything else as drift.
+  Applied literally this session, I attempted to strip the
+  `See [RULES_INDEX.md](RULES_INDEX.md) for the canonical rules
+  list.` line from `AGENTS.md` as drift. Owner correction: the
+  line is there on purpose (deliberate Codex/AGENTS-platform
+  discoverability aid). The §6d rule needs softening to
+  distinguish *canonical-pointer-only* (must) from *carefully-
+  curated additional pointers to canonical surfaces* (allowed
+  with explicit owner-blessed content). Source surface:
+  in-session owner correction. Graduation-target: amendment to
+  `.agent/commands/session-handoff.md §6d`. Trigger-condition:
+  amendment authored next session. Status: `pending`.
+
++ 2026-05-04; **structural enforcers must exclude the documents
+  that catalogue their own pathogens (recursive-exclusion
+  pattern)** (Vining Spreading Seed, captured during WS3 trip-list
+  authoring). Adding the hedging-vocabulary trip-list to
+  `policy.json` `preToolUseContent.scoped_blocks` required
+  excluding `principles.md`, `distilled.md`, PDR-043, and PDR-044
+  — the documents that *catalogue* the trip-list — so they could
+  reference its members without self-tripping. The same shape
+  should be expected for any future structural enforcer that
+  names its own pathogen vocabulary or fingerprint. Source
+  surface: napkin "trip-list-defines-itself paradox" entry.
+  Graduation-target: pattern file at
+  `.agent/memory/active/patterns/structural-enforcer-recursive-
+  exclusion.md` (Process category). Trigger-condition:
+  second-instance observed (the trip-list and the SHA regex
+  both already exhibit this shape; a third instance would
+  confirm pattern-shape). Status: `pending` (single first-class
+  instance so far, plus the SHA regex's similar-but-distinct
+  exclusion of doctrine-defining surfaces).
+
++ 2026-05-04; **`git commit -- <pathspec>` is the cure for
+  peer-staged work in a shared index** (Vining Spreading Seed,
+  worked instance during WS6 commit). Fronded Flowering Thicket
+  had a rename pre-staged (`napkin.md → archive/...`) before
+  this session opened. My subsequent `git add scripts/...`
+  combined with the already-staged rename, so a default
+  `git commit` would have bundled peer work into my commit.
+  The cure is `git commit -- <pathspec>` to commit only the
+  listed paths regardless of what else sits in the index;
+  documented in `stage-by-explicit-pathspec.md §Peer-Index
+  Note`. Source surface: napkin "Peer-staged renames in the
+  index bleed into your staging area via `git add`" entry.
+  Graduation-target: candidate for elevation from peer-index
+  note to a first-class section in `stage-by-explicit-pathspec`
+  rule, OR a small dedicated rule on shared-index discipline.
+  Trigger-condition: second instance of peer-staged-work-bleed
+  observed. Status: `pending` (single first-class instance so
+  far; cure is documented inline in the rule's peer-index note,
+  which may suffice).
+
 + 2026-05-04; **layered processing of knowledge: preserve first,
   restructure second** (Fronded Flowering Thicket, owner-stated
   mid-pass): *pick a layer, fully process it without worry about

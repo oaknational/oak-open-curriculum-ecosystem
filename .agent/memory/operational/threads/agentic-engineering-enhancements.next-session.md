@@ -1,5 +1,100 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Doctrine enforcement + rules and index integration (closed 2026-05-04)
+
+**Last refreshed**: 2026-05-04 (Vining Spreading Seed / claude-code /
+claude-opus-4-7-1m / `11429f`). Closed the
+`doctrine-enforcement-quick-wins.plan` (WS3, WS4, WS6 landed as
+atomic TDD-cycle commits) and the rules-and-index integration
+that the plan's "Documentation Propagation Commitment" required.
+
+**Landings:**
+
+- WS6 — Bash hook now blocks `git add -A` / `--all` / `.` with
+  per-pattern citations surfaced in the deny payload. Schema
+  extended: `preToolUse.blocked_patterns` accepts string-or-object
+  entries; matcher returns the matched `BlockedEntry`.
+- WS3 — `preToolUseContent.scoped_blocks` carries thirteen
+  hedging-vocabulary literals scoped to PDRs / plans / ADRs /
+  governance, with recursive exclusion of the documents that
+  catalogue the trip-list (principles.md, distilled.md, PDR-043,
+  PDR-044). Path-scope mechanism: substring includes plus
+  `**/*.suffix` endsWith.
+- WS4 — `kind: "regex"` scoped block with three line-level
+  exclusions (fenced code blocks, inline-code spans,
+  `(historical reference)` markers) plus a hex-with-letter
+  lookahead so pure-decimal tokens do not trip the matcher.
+  Initial citation referenced a distilled.md section that
+  Fronded's parallel layer-2 rotation removed in the same arc;
+  citation repaired in the same session.
+- Plan status flipped to COMPLETE.
+- Three rule files authored as canonical-plus-adapters triples
+  (`stage-by-explicit-pathspec`, `no-hedging-vocabulary`,
+  `no-moving-targets-in-permanent-docs`). `RULES_INDEX.md`
+  preamble reframed from Codex-only fallback to canonical
+  platform-independent enumeration; `AGENT.md §Rules` wired to
+  point at it as single source of truth for the always-applied
+  rule tier.
+
+**Self-violation discovery (worked instance for the new
+no-moving-targets rule):** the first attempt at authoring the
+rule files embedded backticked commit SHAs in the rule prose.
+The repo's permission system rejected the write — I had just
+authored a rule against moving targets in permanent docs and was
+about to violate it on the rule file itself. The discovery: the
+WS4 hook's inline-code exclusion strips backticked spans before
+the regex test, so backticked SHAs in narrative prose pass the
+hook silently — but the rule's spirit is stricter. The
+inline-code exclusion was meant for code blocks where the SHA is
+data, not for prose-references-with-backticks. **Owner direction
+at session close: the hook should be tightened**, not "either/or
+optionality" with the rule. Refinement candidate captured for a
+follow-up workstream.
+
+**Worked-instance lessons surfaced (graduation candidates,
+recorded in napkin):**
+
+- Peer-staged renames in the index bleed into your staging area
+  via `git add`; cure is `git commit -- <pathspec>` to
+  commit-by-path regardless of index state.
+- Pre-commit hooks scan the whole working tree, not just the
+  staged set; mechanical formatting fixes to peer-WIP files are
+  documented gate-honest unblocking, not interference.
+- The trip-list-defines-itself recursion: any structural
+  enforcer that names its own pathogen must exclude the
+  documents that define the pathogen.
+- Hex-class regexes match decimals; `(?=[0-9a-f]*[a-f])`
+  lookahead is the cure when SHA-shape detection is wanted.
+- `agent-tools:collaboration-state` CLI flag conventions
+  (`--file` singular, `--area-kind`, `--active`, `--now`,
+  `comms append --events-dir`/`--title`/`--body`/`--created-at`).
+
+**Concurrent context:** Fronded Flowering Thicket (`7c8381`)
+remained active throughout on the layer-2 napkin/distilled
+rotation; no claim overlap; their commit `c9a5c3e4` (PDR-045
+graduation) interleaved cleanly between my fourth and fifth
+session commits.
+
+**Next safe step:** the strategic roadmap in
+[`future/memetic-immune-system-and-progressive-disclosure.plan.md`](../../plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md)
+becomes the natural promotion sequence. The most immediately
+actionable item from this session is the **hook-tightening
+graduation candidate**: extend
+`preToolUseContent.scoped_blocks` regex matching to distinguish
+prose-narrative-context backticked SHAs from code-block-data-
+context backticks, plus update
+`.agent/rules/no-moving-targets-in-permanent-docs.md` to remove
+the now-stale "either/or" framing. The other graduation
+candidates listed above are captured in the napkin and
+pending-graduations register; each promotes when its trigger
+fires.
+
+In parallel, Fronded's layer-2 PDR/ADR continuation work
+(eight PDR-shaped candidates, one ADR refresh) remains the
+owner-directed fresh-session priority on this thread.
+
+---
+
 ## Active arc — Layered knowledge processing (Layer-2 graduation pass in flight)
 
 **Last refreshed**: 2026-05-04 (Fronded Flowering Thicket /
@@ -661,6 +756,7 @@ and
 | `Verdant Sprouting Leaf` | `claude-code` | `claude-opus-4-7-1m` | `63a0e0` | `post-/insights-reflection-round; three-owner-named-insights-captured-at-moment-of-occurrence; PDR-018-amendment-beneficial-prerequisites-must-not-block; PDR-038-amendment-doctrine-without-enforcement-at-maturity; PDR-044-new-memetic-immune-system; current/doctrine-enforcement-quick-wins.plan.md-six-workstreams-innate-immunity; future/memetic-immune-system-and-progressive-disclosure.plan.md-strategic-roadmap; practice-index-and-current-future-README-discovery-updates; commit-192b6965-9-files-+1580/-1` | 2026-05-04 | 2026-05-04 |
 | `Pearly Snorkelling Reef` | `claude-code` | `claude-opus-4-7-1m` | `6db5ac` | `parallel-isolation-worktree-dispatch-attempt-of-doctrine-enforcement-quick-wins; two-of-three-workers-spawned-on-wrong-base-improvised-and-violated-worktree-boundary-by-writing-to-main-repo-scripts; main-repo-script-and-tests-restored-from-clean-worktree; salvage-path-cherry-pick-WS1-91232df6-port-WS2-eacb05f2-port-WS5-design-767ee23a; plan-marked-PARTIAL-WS3-WS4-WS6-pending; continuity-commit-79ef671c-worker-comms-events-prior-session-claim-closure; durable-lesson-saved-feedback_worktree_isolation_unreliable-md-in-personal-memory` | 2026-05-04 | 2026-05-04 |
 | `Fronded Flowering Thicket` | `claude-code` | `claude-opus-4-7-1m` | `7c8381` | `owner-directed-layered-knowledge-processing-pass-Layer-0-then-Layer-1-then-Layer-2; napkin-rotation-785-to-105-lines-archived-as-napkin-2026-05-04; distilled-merge-and-prune-401-to-308-lines-net-93-no-compression; three-patterns-created-parallel-worktree-dispatch-unreliable-templates-encode-failure-modes-plan-as-artefact-gravity; PDR-045-workspace-first-investigation-discipline-authored-three-moves-artefact-search-shared-package-survey-live-state-check; three-host-rules-cite-PDR-045-validate-full-target-estate-read-diagnostic-artefacts-in-full-consolidate-at-third-consumer; pre-existing-PDR-016-stale-filename-fixed-in-passing; PDR-README-index-drift-fixed-PDR-043-PDR-044-PDR-045; Practice-CHANGELOG-entry; layered-processing-methodology-itself-captured-as-graduation-candidate-PDR-and-consolidate-docs-amendment; eight-PDR-shaped-candidates-surfaced-for-fresh-session-continuation` | 2026-05-04 | 2026-05-04 |
+| `Vining Spreading Seed` | `claude-code` | `claude-opus-4-7-1m` | `11429f` | `doctrine-enforcement-quick-wins-WS3-hedging-vocabulary-scoped-trip-list-c256f325; WS4-SHA-in-permanent-doc-regex-with-context-exclusions-8b0fe826-citation-fix-aa6e37d5; WS6-git-add-wildcard-block-with-citation-infrastructure-0fffc55e; plan-marked-COMPLETE-07249f09; rules-and-RULES_INDEX-integration-7e295693-three-rule-files-stage-by-explicit-pathspec-no-hedging-vocabulary-no-moving-targets-in-permanent-docs-each-with-canonical-plus-claude-plus-cursor-adapters-and-RULES_INDEX-preamble-reframed-from-Codex-fallback-to-canonical-platform-independent-enumeration-and-AGENT.md-rules-section-wired-to-it; napkin-updates-c8f8e7dc-and-2a0da4d2-and-d3d2bb95-worked-instance-lessons-and-self-violation-discovery-via-permission-system-rejecting-backticked-SHAs-in-rule-files-themselves-and-owner-direction-to-tighten-the-hook-to-distinguish-prose-narrative-from-code-block-backtick-contexts; concurrent-with-Fronded-Flowering-Thicket-no-claim-overlap-one-peer-staged-rename-interaction-cured-via-git-commit-pathspec` | 2026-05-04 | 2026-05-04 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
