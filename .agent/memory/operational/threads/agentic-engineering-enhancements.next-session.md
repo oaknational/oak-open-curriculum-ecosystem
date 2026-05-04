@@ -95,7 +95,98 @@ owner-directed fresh-session priority on this thread.
 
 ---
 
-## Active arc — Layered knowledge processing (Layer-2 graduation pass in flight)
+## Active arc — Layered knowledge processing (highest-leverage trio LANDED 2026-05-04)
+
+**Last refreshed**: 2026-05-04 (Ferny Spreading Petal /
+claude-code / claude-opus-4-7-1m / `d0d13f`). Layer-2 second pass
+complete. The three highest-leverage candidates from the Fronded
+handoff are now Practice-Core doctrine, landed in commit `54560f84`:
+
+- **PDR-046 (layered knowledge processing — preserve first,
+  restructure second)** — three Moves: process layers bottom-up;
+  suspend in-process form-keeping on the active layer; address
+  residual fitness pressure by graduating substance upward, not by
+  compression.
+- **PDR-047 (rule applies always — doctrine-authoring discipline)**
+  — three tests at authorship time: substance test (clause-by-
+  clause for "rule does not apply here" intent); vocabulary test
+  (host hedging trip-list); re-frame test (ban the bad shape).
+- **PDR-048 (insight capture at moment of occurrence)** — three
+  moves: capture before closure; capture between primary actions;
+  capture the partial form.
+
+**Companion remediation work landed in the same commit:**
+
+- Pending-graduations.md substance-led prune: ten already-graduated
+  entries archived to `archive/repo-continuity-session-history-2026-05-04.md`.
+  Three new candidates added (substance from this session's drafting,
+  captured at moment of occurrence per PDR-048). Frontmatter limits
+  raised under owner authorisation to reflect the register's
+  sustainable size.
+- Napkin rotation under owner-directed curation-first priority:
+  full archive to `napkin-2026-05-04-evening.md` (no compression).
+  Worked-instance lessons from PDR-046 drafting graduated to
+  PDR-046 Notes section + three new pending-graduations candidates.
+- Principles.md extraction: §Architectural Excellence Over
+  Expediency three-cues elaboration moved to PDR-043 + ADR-172
+  pointers; worked failure-mode example relocated to
+  `docs/governance/development-practice.md § Architecture Level`;
+  TSDoc syntax detail referenced via existing governance docs;
+  `unknown` is type destruction permitted/forbidden list moved to
+  `.agent/rules/unknown-is-type-destruction.md`; gate taxonomy
+  moved to `development-practice.md § Quality Gates`.
+- Hook `policy.json` extended to include PDR-047 in
+  trip-list-defines-itself exclusion lists (the structural cure
+  from Briny's WS3 worked instance, applied for the new file).
+
+**Open candidates from the original Layer-2 list (deliberately
+deferred to next pass)**:
+
+- **5 PDR-shaped candidates** not yet drafted: tests-describe-the-
+  system (Dewy session — owner-led foundational reframing);
+  reviewers-carry-doctrine; plan-vs-principle; question-shape;
+  multi-agent-cures-as-hypothesis formalisation.
+- **1 ADR-shaped candidate**: validation-strategy-as-umbrella
+  (ADR-121 refresh, sequenced behind P1 of the
+  validation-and-tdd-doctrine-restructure index plan).
+- **3 rule candidates** gated on underlying decision records.
+- **4 stable-but-no-natural-home items** requiring owner
+  conversation: ADR/PDR citation discipline; sequenced-deferral
+  discipline (PDR-026 amendment, sequenced behind enforcement
+  infrastructure); hash-recompute-drift (workspace TSDoc);
+  Practice-Core portability is by construction (PDR-007 amendment
+  or new dedicated PDR).
+
+**Three follow-ups specifically queued by this session**:
+
+1. Host-local `.agent/commands/consolidate-docs.md § Learning
+   Preservation Overrides Fitness Pressure` extension to point up
+   to PDR-046 as the orchestration rule the per-write rule composes
+   with. Status `due` in pending-graduations; not bundled with this
+   commit.
+2. *PDR shape forces rationale to surface* — single-instance
+   observation from PDR-046 drafting; PDR-014 amendment or new
+   pattern; trigger: second instance OR owner direction.
+3. *Cross-Core PDR↔PDR connective tissue is load-bearing* —
+   single-instance observation from PDR-046 drafting; PDR-007
+   amendment or decision-records README extension; trigger: second
+   instance OR owner direction.
+
+**Next safe step for fresh session**: open `pending-graduations.md`
+and identify any candidate whose trigger condition has fired since
+the previous register state, OR pick up one of the five remaining
+PDR-shaped candidates from the Layer-2 list above (each is
+substance-ready in the archived napkin / distilled / experience
+files), OR begin the consolidate-docs extension follow-up. The
+napkin is at 104 lines (well within target). distilled.md is at
+278 lines (cleared hard after PDR-046/047/048 substance graduated
+out). principles.md is at ~528 lines (cleared hard chars after
+extraction). pending-graduations.md is at 1209 lines under raised
+limits (well within target 1000 / limit 1400). All gates green.
+
+---
+
+## Earlier arc — Layered knowledge processing (Layer-2 first pass, Fronded Flowering Thicket)
 
 **Last refreshed**: 2026-05-04 (Fronded Flowering Thicket /
 claude-code / claude-opus-4-7-1m / `7c8381`). Owner articulated a

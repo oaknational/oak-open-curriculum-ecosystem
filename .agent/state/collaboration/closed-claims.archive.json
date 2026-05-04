@@ -7486,6 +7486,96 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8d892f1c-0790-443a-9005-079929bd9abd",
+      "agent_id": {
+        "agent_name": "Ferny Spreading Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d0d13f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T14:54:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PDR-046 layered-knowledge-processing graduation bundle.",
+      "notes": "Pathspecs: PDR-046 file + README index + CHANGELOG + pending-graduations + napkin + thread record + claim/comms shared-state. Gates: type-check, lint, tests run separately. Peer claims: none (commit_queue empty, only own files-claim e17a04dd active).",
+      "archived_at": "2026-05-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-04T16:06:23Z",
+        "closed_by": {
+          "agent_name": "Ferny Spreading Petal",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "d0d13f"
+        },
+        "summary": "commit-window claim closed: bundle landed as 54560f84",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8d892f1c-0790-443a-9005-079929bd9abd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e17a04dd-fbd8-448a-843b-291f660c7155",
+      "agent_id": {
+        "agent_name": "Ferny Spreading Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d0d13f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T14:35:05Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Layer-2 second pass: draft highest-leverage PDR trio (layered processing methodology / rule-applies-always / insight-capture-at-moment-of-occurrence). Per PDR-003 main agent drafts; owner reviews each Practice Core diff. Fitness in target permanent surfaces relaxed per layered-processing methodology.",
+      "archived_at": "2026-05-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-04T16:06:23Z",
+        "closed_by": {
+          "agent_name": "Ferny Spreading Petal",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "d0d13f"
+        },
+        "summary": "Layer-2 second pass closed: PDR-046, PDR-047, PDR-048 trio landed in commit 54560f84 with full pending-graduations remediation, napkin rotation, principles.md extraction, and frontmatter limit revisions",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e17a04dd-fbd8-448a-843b-291f660c7155",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
