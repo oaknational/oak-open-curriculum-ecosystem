@@ -29,6 +29,28 @@
       "staged_bundle_fingerprint": "bd2355188133d359d252f5a8f198554fa4388fbc138fbed08e7272b134691201",
       "staged_name_status": "M\t.agent/directives/principles.md\nM\t.agent/hooks/policy.json\nA\t.agent/memory/active/archive/napkin-2026-05-04-evening.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-04.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/practice-core/CHANGELOG.md\nA\t.agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md\nA\t.agent/practice-core/decision-records/PDR-047-rule-applies-always-doctrine-authoring.md\nA\t.agent/practice-core/decision-records/PDR-048-insight-capture-at-moment-of-occurrence.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/rules/unknown-is-type-destruction.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/f098343f-86cb-4dcb-9278-365970357574.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tdocs/governance/development-practice.md\n",
       "notes": "scope expanded under owner direction (PDR-047/048 + principles.md + dev-practice + frontmatter revisions + remediation lane); re-enqueuing with full bundle"
+    },
+    {
+      "intent_id": "65447569-7bd0-460e-8419-3e9f8026691a",
+      "claim_id": "e2ab1d72-4604-4672-8a07-6f2d8d0d5f9d",
+      "agent_id": {
+        "agent_name": "Pelagic Diving Atoll",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6814a4"
+      },
+      "files": [
+        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/0167bbf1-67fa-451c-80c1-6c7c1281cc7e.json"
+      ],
+      "commit_subject": "docs(plan): unified eef completion plan absorbs round-1 + round-2 review findings",
+      "queued_at": "2026-05-04T19:11:40.867Z",
+      "updated_at": "2026-05-04T19:11:48.645Z",
+      "expires_at": "2026-05-04T19:26:40.867Z",
+      "phase": "staging"
     }
   ],
   "claims": [
@@ -63,6 +85,59 @@
       "sidebar_open": false,
       "intent": "Retire smoke-tests directory + vitest.smoke.config.ts + smoke:* scripts (cycles 1a-1d); add proper unit/integration replacement for dev-server-boots coverage (cycle 1c); claim cycle 2 audit areas separately at start; author no-real-io-in-tests ESLint rule (cycle 3, root-config wire-up gated on cycle 2 close).",
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
+    },
+    {
+      "claim_id": "1c0622d4-4c68-468e-a3be-b3c44fd05227",
+      "agent_id": {
+        "agent_name": "Pelagic Diving Atoll",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6814a4"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/*.json",
+            ".agent/memory/active/napkin.md",
+            ".remember/now.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T18:36:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Unified-plan execution opener: hygiene-first under no-speed-pressure (thread-record refresh + identity register + claim) then architecture-led review pass over plan body AND code surface. Reviewer dispatch: code-reviewer (gateway) + architecture-reviewer-{barney,betty,fred,wilma} + assumptions-reviewer over (a) feat-eef-exploration-completion.plan.md, (b) commits fd4eabaa..b226670d delta, (c) .agent/rules/no-speed-pressure.md, (d) observability/env package areas the plan touches. Specialists escalated by findings, not pre-dispatched. Cycle 2/3 file areas will be claimed separately at execution time.",
+      "notes": "Co-active with Moonlit Shimmering Comet claim 8ed6386d (smoke-tests retire / cycle 1a-1d landed; freshness window ~16:43Z + 4h likely expired). Plan body claim is non-overlapping with Moonlit's smoke-tests areas. Branch feat/eef_exploration HEAD b539c7c5; clean tree at session-open."
+    },
+    {
+      "claim_id": "e2ab1d72-4604-4672-8a07-6f2d8d0d5f9d",
+      "agent_id": {
+        "agent_name": "Pelagic Diving Atoll",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6814a4"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T19:11:14Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit step-2 refined plan body absorbing Round 1 + Round 2 architecture-led review findings (12-step unified plan)",
+      "notes": "Pathspecs: plan body + thread record + active-claims + shared-comms-log + new comms-event. Gates state: clean working tree apart from these 5 files. Peer claims: Moonlit Shimmering Comet 8ed6386d (smoke-tests retire areas, file-disjoint); Pelagic files claim 1c0622d4 (this session, files kind, non-overlapping with git:index/head).",
+      "intent_to_commit": "65447569-7bd0-460e-8419-3e9f8026691a"
     }
   ]
 }

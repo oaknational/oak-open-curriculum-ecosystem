@@ -1,118 +1,112 @@
 ---
-name: "feat/eef_exploration completion: smoke-test cycle 2+3, reviewer backfill, no-speed-pressure rule, MCP tools verified, merge"
+name: "feat/eef_exploration completion: rule integration, reviewer backfill, no-real-io enforcement (capture-not-clean), MCP tools verified, merge"
 overview: >
-  Single linear unified plan to complete and merge feat/eef_exploration.
-  Replaces the parallel pair (eef-branch-merge-readiness.plan.md and
-  smoke-test-retirement-recovery-and-completion.plan.md) with one
-  comprehensive sequence. Step 1 dispatches a comprehensive sub-agent
-  review; step 2 applies findings while preserving simple-linear shape.
-  Steps 3–13 complete the smoke-test retirement substrate (no-speed-
-  pressure rule integration, reviewer backfill on landed commits,
-  cycle 2 per-workspace real-IO audits, cycle 3 ESLint rule). Steps
-  14–17 run gates green, exercise MCP tools live, analyse divergence,
-  and declare merge-ready.
+  Single linear plan to complete and merge feat/eef_exploration.
+  Owner direction (2026-05-04): keep the plan strictly linear; do
+  NOT audit and remediate every existing real-IO violation; DO
+  install the no-real-io-in-tests ESLint rule so no NEW violations
+  enter the codebase; capture the current real-IO inventory as a
+  named record, not as a fix-list. Twelve steps after Round 2
+  collapse. Steps 1–2 review and refine this plan body. Step 3
+  integrates no-speed-pressure across the rule estate. Steps 4–5
+  backfill scoped reviewer dispatch on the four already-landed
+  plan-3 commits. Steps 6–8 author the no-real-io-in-tests ESLint
+  rule (step 6), atomically capture existing violations to this
+  plan body's §IO Inventory and freeze the rule's path-allowlist
+  in eslint.config.ts (step 7), and wire the rule into root config
+  at error severity (step 8). Steps 9–12 run gates green, exercise
+  MCP tools live with ordered specialist dispatch, analyse
+  divergence, and declare merge-ready.
 status: current
 isProject: true
 todos:
-  - id: 01-comprehensive-plan-review
-    content: "Dispatch a comprehensive sub-agent review of THIS plan body in parallel where reviewers are independent. Reviewers: assumptions-reviewer (proportionality, blocking legitimacy), architecture-reviewer-barney (simplification), architecture-reviewer-betty (cohesion + change cost), architecture-reviewer-fred (ADR/principles compliance), architecture-reviewer-wilma (failure modes), code-reviewer (gateway), config-reviewer (cycle 3 ESLint rule prescription), test-reviewer (cycle 2 + cycle 3a RuleTester correctness), mcp-reviewer (step 15 protocol probe sufficiency), security-reviewer (step 15 auth path), clerk-reviewer (Clerk middleware coverage), sentry-reviewer (SENTRY_MODE=sentry boot path), onboarding-reviewer (plan readability), docs-adr-reviewer (cross-references), release-readiness-reviewer (step 17 evidence bundle shape). Capture findings in §Plan Review Findings."
+  - id: 01-comprehensive-plan-review-round-1
+    content: "DONE 2026-05-04 (Pelagic Diving Atoll). Architecture-led review pass dispatched in parallel: code-reviewer (gateway) + architecture-reviewer-{barney,betty,fred,wilma} + assumptions-reviewer. Six reviewers ran on plan body AND code surface (commits fd4eabaa..b226670d, no-speed-pressure rule, observability/env package areas). Findings captured in §Plan Review Findings (Round 1)."
+    status: completed
+  - id: 02-apply-round-1-findings-and-second-review
+    content: "Apply Round 1 findings to refine this plan body. Then dispatch a second review round on the revised plan body (same six reviewers; owner-directed pre-execution gate). Apply any Round 2 findings. Commit the refined plan via full commit-skill protocol (single atomic commit with code-reviewer dispatch at close). After this step the plan body is the contract for the rest of execution. Findings explicitly rejected get written rationale per principles.md."
     status: pending
-  - id: 02-apply-review-findings
-    content: "Apply reviewer recommendations to refine this plan body. Discipline: amendments must preserve comprehensive-simple-linear-straightforward shape; findings that fragment, branch, or complicate the sequence are recorded under §Out-of-Scope Follow-ups instead of absorbed. Findings explicitly rejected get written rationale per principles.md. After this step the plan body is the contract for the rest of execution. Land plan-body changes via full commit-skill protocol."
-    status: pending
-    depends_on: [01-comprehensive-plan-review]
+    depends_on: [01-comprehensive-plan-review-round-1]
   - id: 03-integrate-no-speed-pressure-rule
-    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.md, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry naming it; write user-memory feedback files feedback_no_speed_pressure.md (the rule itself), feedback_performed_grounding_vs_practised.md (read-at-session-open ≠ apply-through-decisions), feedback_rule_conflict_is_signal.md (lint-or-test-rule-failure-treated-as-personal-refactor failure mode), feedback_auto_mode_is_not_permission_slip.md (auto-mode-misread-as-skip-ceremony failure mode), updating MEMORY.md index for each. Land via full commit-skill protocol with code-reviewer gateway."
+    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.md, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.md`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-reviewer dispatch."
     status: pending
-    depends_on: [02-apply-review-findings]
-  - id: 04-reviewer-backfill-landed-commits
-    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (commit range fd4eabaa..b226670d covering 8fa339f4 cycle 1d, 7620fefd cycle 1b, d4fb9a8f cycle 1a, b226670d cycle 1c). Invoke in parallel: code-reviewer (gateway across the range; nominate further specialists from the delta), test-reviewer (b226670d new test against test-immediate-fails.md 22 items + describe-vs-audit lens), config-reviewer (eslint.config.ts/tsconfig*.json/vitest.config.ts/turbo.json/knip.config.ts deltas across 8fa339f4 + d4fb9a8f), architecture-reviewer-fred (cycle-1a deletion footprint + cycle-1c test placement; particular focus on import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js' boundary-crossing), docs-adr-reviewer (TESTING.md + dev-server-management.md + vercel-environment-config.md + playwright.config.ts comment drift). Capture all findings."
+    depends_on: [02-apply-round-1-findings-and-second-review]
+  - id: 04-reviewer-backfill-scoped-by-commit-risk
+    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-reviewer gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-reviewer gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-reviewer gateway + docs-adr-reviewer for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-reviewer gateway + test-reviewer (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-reviewer-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings."
     status: pending
     depends_on: [03-integrate-no-speed-pressure-rule]
   - id: 05-apply-backfill-findings
-    content: "For each reviewer finding from step 04: implement the fix (own atomic commit per finding via full commit-skill protocol) OR record explicit written rejection rationale in this plan body. Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation."
+    content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-reviewer-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-reviewer (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation."
     status: pending
-    depends_on: [04-reviewer-backfill-landed-commits]
-  - id: 06-cycle-2a-audit-packages-core
-    content: "Cycle 2a — audit packages/core/* test files for real-IO violations using `grep -rn 'spawn\\|child_process\\|fs\\.\\|readFile\\|writeFile\\|process\\.env\\s*=\\|process\\.env\\[' packages/core/ --include=*.test.ts`. Classify each match: composition root (vitest config / setup file) — permitted; designated DI fake helper file — permitted; real IO elsewhere — violation. Each violation fixed in its own atomic commit (test + fake + product-code edit landed together) via full commit-skill protocol with test-reviewer dispatch. Open per-batch sub-claim before grep; close after batch. Acceptance: post-batch grep returns only composition-root and DI-fake matches; pnpm test --filter @oaknational/<core-workspaces> exits 0."
+    depends_on: [04-reviewer-backfill-scoped-by-commit-risk]
+  - id: 06-author-no-real-io-in-tests-rule
+    content: "Author packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts as the structural guard against NEW real-IO in tests. **Severity: error** (not warn) — per no-warning-toleration; pnpm lint must exit non-zero on any new violation. Trigger surface: any *.test.ts | *.spec.ts file (matching ESLint's existing test glob), excluding allowlist below. **Denylist (comprehensive Node.js IO surface)**: (i) child_process: spawn, exec, fork, execFile, spawnSync, execSync, execFileSync; (ii) worker_threads: Worker constructor; (iii) fs: ALL named imports (readFile, writeFile, readFileSync, writeFileSync, mkdtemp, stat, etc.) AND default imports (`import fs from 'fs'` / `import fs from 'node:fs'`) AND fs/promises module (`import { readFile } from 'fs/promises'`) AND dynamic forms (`await import('fs')`, `await import('node:fs')`, `await import('fs/promises')`, `require('fs')`); (iv) process: read OR mutation of process.env (also `globalThis.process.env`), process.cwd(), process.chdir(); (v) network: fetch() / http.* / https.* / net.* / dgram.* to non-localhost. **Both** unprefixed (`fs`) AND `node:`-prefixed (`node:fs`) specifiers must be caught. **Allowlist (path-shape only, NOT 'designated' adjective)**: vitest.config.ts | vitest.*.config.ts | vitest.setup.ts at workspace roots; **/test-helpers/** | **/test-fakes/** structurally-marked directories. Pair with no-real-io-in-tests.unit.test.ts (RuleTester cases) — RuleTester MUST cover negative cases for every denylist sub-form above (one negative case per Sync variant; one per fs API entry point; one per node: prefix; one for default import; one for fs/promises; one for globalThis.process.env; one per child_process factory; one for Worker constructor) AND positive cases for every allowlist sub-glob. Plugin registration in plugin.ts. **Do NOT yet wire into root eslint.config.ts.** Land via full commit-skill protocol with config-reviewer dispatch (allowlist-shape correctness) + test-reviewer dispatch (RuleTester describe-vs-audit shape AND surface coverage exhaustiveness against Node.js IO API enumeration). Acceptance: pnpm test --filter @oaknational/eslint-plugin-standards exits 0; the rule is registered but inactive at root."
     status: pending
     depends_on: [05-apply-backfill-findings]
-  - id: 07-cycle-2b-audit-packages-libs
-    content: "Cycle 2b — same audit + fix discipline as 2a, scoped to packages/libs/*. Acceptance per-batch as 2a."
+  - id: 07-capture-inventory-and-freeze-allowlist
+    content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in eslint.config.ts at the repo root, listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory completeness + cross-reference discipline) dispatch."
     status: pending
-    depends_on: [06-cycle-2a-audit-packages-core]
-  - id: 08-cycle-2c-audit-packages-sdks
-    content: "Cycle 2c — same audit + fix discipline as 2a, scoped to packages/sdks/*. Acceptance per-batch as 2a."
+    depends_on: [06-author-no-real-io-in-tests-rule]
+  - id: 08-wire-rule-into-root-config
+    content: "Wire no-real-io-in-tests into eslint.config.ts at the repo root (the rule's options block from step 07 is already in place). Acceptance: `pnpm lint` exits 0 across the entire monorepo (the allowlist absorbs the §IO Inventory; nothing else fires). Discipline note: any future PR that adds a path to the allowlist option must cite either a §IO Inventory entry (frozen at this branch's merge) or a named follow-up plan; PR review enforces this discipline (no structural lint gate). Land via full commit-skill protocol with config-reviewer dispatch. After this step the rule is active and any new test-IO not on the allowlist is a hard build failure."
     status: pending
-    depends_on: [07-cycle-2b-audit-packages-libs]
-  - id: 09-cycle-2d-audit-apps-mcp
-    content: "Cycle 2d — same audit + fix discipline as 2a, scoped to apps/oak-curriculum-mcp-streamable-http/. Aware: cycle 1c already deleted the spawning e2e regression-guard in this workspace; audit covers what remains. Acceptance per-batch as 2a."
+    depends_on: [07-capture-inventory-and-freeze-allowlist]
+  - id: 09-pnpm-check-green
+    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan."
     status: pending
-    depends_on: [08-cycle-2c-audit-packages-sdks]
-  - id: 10-cycle-2e-audit-apps-search-cli
-    content: "Cycle 2e — same audit + fix discipline as 2a, scoped to apps/oak-search-cli/. Note: this workspace has its own vitest.smoke.config.ts; if cycle uncovers retire-or-keep questions, fold them in or fork a follow-up plan per scope. Acceptance per-batch as 2a."
+    depends_on: [08-wire-rule-into-root-config]
+  - id: 10-mcp-server-live-exercise
+    content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-reviewer over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-reviewer (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-reviewer return: invoke security-reviewer (auth path coverage), clerk-reviewer (Clerk middleware), sentry-reviewer (observability surface) in parallel; accessibility-reviewer conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
     status: pending
-    depends_on: [09-cycle-2d-audit-apps-mcp]
-  - id: 11-cycle-2f-audit-agent-tools
-    content: "Cycle 2f — same audit + fix discipline as 2a, scoped to agent-tools/. Acceptance per-batch as 2a."
+    depends_on: [09-pnpm-check-green]
+  - id: 11-pre-merge-divergence-analysis
+    content: "Per .agent/rules/pre-merge-divergence-analysis.md: `git fetch origin main`; `git log --oneline origin/main..HEAD`; `git log --oneline HEAD..origin/main`; `git diff --stat origin/main...HEAD`. Inspect any cross-cutting changes (root config files, lockfile, CI surfaces) for conflict potential. If 100+ files diverged or 10+ conflicts predicted, follow .agent/skills/complex-merge/SKILL.md. Surface findings to owner before merge proposal."
     status: pending
-    depends_on: [10-cycle-2e-audit-apps-search-cli]
-  - id: 12-cycle-3a-author-eslint-rule
-    content: "Cycle 3a — author packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts. Triggers on *.test.ts outside allowlisted composition-root files. Flags: child_process.spawn/exec, direct fs.* calls, process.env mutation, process.cwd() reads, fetch() to non-localhost. Allowlist: vitest config files at workspace roots; designated DI fake helper files. Pair with no-real-io-in-tests.unit.test.ts (RuleTester cases) + plugin registration in plugin.ts. Land via full commit-skill protocol with config-reviewer dispatch. **Do NOT yet wire into root eslint.config.ts** — that is step 13. Acceptance: pnpm test --filter @oaknational/eslint-plugin-standards exits 0; the rule is registered but inactive at root."
+    depends_on: [10-mcp-server-live-exercise]
+  - id: 12-merge-readiness-declaration
+    content: "Owner-gated merge readiness declaration. Required evidence bundle: Round 1 + Round 2 review findings + applied amendments (steps 1–2), no-speed-pressure rule integration with four-adapter-path verification (step 3), reviewer-backfill findings + fixes (steps 4–5), no-real-io-in-tests rule + IO Inventory + frozen allowlist + wired (steps 6–8), pnpm check green at HEAD (step 9), MCP server live exercise log (step 10), divergence analysis (step 11). Invoke release-readiness-reviewer over the bundle to synthesise GO / GO-WITH-CONDITIONS / NO-GO recommendation. Owner reviews and authorises the merge action. Merge mechanics (PR open, squash-or-merge-commit, target branch) are owner-directed; this plan does not pre-decide them."
     status: pending
-    depends_on: [11-cycle-2f-audit-agent-tools]
-  - id: 13-cycle-3b-wire-rule-into-root-config
-    content: "Cycle 3b — wire no-real-io-in-tests into eslint.config.ts at the repo root. Hard sequencing point: only after cycle 2 fully closed (steps 6–11) and cycle 3a authored (step 12). Wiring earlier breaks the build. Land via full commit-skill protocol with config-reviewer dispatch. Acceptance: pnpm lint exits 0 across the entire monorepo; the rule fires only on intentional violations (none should remain after cycle 2)."
-    status: pending
-    depends_on: [12-cycle-3a-author-eslint-rule]
-  - id: 14-pnpm-check-green
-    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. All gates must exit 0. This is the load-bearing proof that the smoke-test retirement substrate is complete and the branch is structurally green. Document the result with HEAD SHA in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with named highest-priority recovery plan."
-    status: pending
-    depends_on: [13-cycle-3b-wire-rule-into-root-config]
-  - id: 15-mcp-server-live-exercise
-    content: "Boot the dev server locally, exercise the MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~5s. Note: the legacy SENTRY_MODE consumer path is the live contract; the rename is paused (see future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md). (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (get-key-stages or search), one MCP-app/UI tool, one prompt or sequence tool. Each call returns a structurally-valid response (no SDK or transport errors); capture exchanges to the same log. (d) SIGTERM the dev server; confirm port 3333 free. Acceptance: `listening` log line present; tools/list returns >0 tools; three tools/call exchanges return successful responses."
-    status: pending
-    depends_on: [14-pnpm-check-green]
-  - id: 16-pre-merge-divergence-analysis
-    content: "Per .agent/rules/pre-merge-divergence-analysis.md, perform a pre-merge divergence analysis between feat/eef_exploration and main: `git fetch origin main`; `git log --oneline origin/main..HEAD`; `git log --oneline HEAD..origin/main`; `git diff --stat origin/main...HEAD`. Inspect any cross-cutting changes (root config files, lockfile, CI surfaces) for conflict potential. If 100+ files diverged or 10+ conflicts predicted, follow .agent/skills/complex-merge/SKILL.md. Surface findings to owner before merge proposal."
-    status: pending
-    depends_on: [15-mcp-server-live-exercise]
-  - id: 17-merge-readiness-declaration
-    content: "Owner-gated merge readiness declaration. Required evidence bundle: review findings + applied amendments (steps 1–2), no-speed-pressure rule integration (step 3), reviewer-backfill findings + fixes (steps 4–5), cycle 2a–2f green (steps 6–11), cycle 3a–3b green with rule active (steps 12–13), pnpm check green at HEAD (step 14), MCP server live exercise log (step 15), divergence analysis (step 16). Invoke release-readiness-reviewer over the bundle to synthesise GO / GO-WITH-CONDITIONS / NO-GO recommendation. Owner reviews and authorises the merge action. Merge mechanics (PR open, squash-or-merge-commit, target branch) are owner-directed; this plan does not pre-decide them."
-    status: pending
-    depends_on: [16-pre-merge-divergence-analysis]
+    depends_on: [11-pre-merge-divergence-analysis]
 ---
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-04
-**Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel plans
+**Last Updated**: 2026-05-04 (Pelagic Diving Atoll, post-Round-2 review)
+**HEAD at refresh**: `b539c7c5`
+**Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
+plans, refined post-Round-1 architecture-led review.
 
 ## Intent
 
-Single linear sequence to complete and merge `feat/eef_exploration`. Replaces
-two separately-authored predecessor plans whose verification work overlapped
-duplicatively and whose coordination introduced friction. The work is the
-same; the seams are removed.
+Single linear sequence to complete and merge `feat/eef_exploration`.
+Replaces two separately-authored predecessor plans whose verification work
+overlapped duplicatively and whose coordination introduced friction. The
+work is the same; the seams are removed.
 
-After this plan: the smoke-test retirement substrate is complete (real-IO
-audit closed, ESLint rule active), the no-speed-pressure rule is integrated
-across the rule estate, reviewer dispatch is current on every landed
-commit, the dev server boots locally with MCP tools verified live,
-divergence vs `main` is analysed, and an owner-authorised merge can land.
+After this plan: the no-speed-pressure rule is integrated across the rule
+estate, scoped reviewer dispatch is current on the four already-landed
+plan-3 commits, the `no-real-io-in-tests` ESLint rule is active and blocks
+new real-IO in tests, the existing real-IO surface is captured as a frozen
+§IO Inventory rather than fixed in this branch, the dev server boots
+locally with MCP tools verified live against the tool catalogue, divergence
+vs `main` is analysed, and an owner-authorised merge can land.
 
-This plan is **simple, linear, straightforward, and comprehensive** by
-owner direction (2026-05-04). It supersedes:
+This plan is **strictly linear** (owner direction 2026-05-04).
+Parallelisation of cycles or steps is not in scope; the only genuinely
+load-bearing sequencing edge is `06 → 07 → 08` (the rule must exist
+before its dry-run can capture violations and freeze the allowlist;
+the rule + allowlist must be in place before wire-up). Other steps run
+sequentially because the plan is sequential, not because each edge is
+technically required.
 
-- `archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`
-  (was `observability/current/eef-branch-merge-readiness.plan.md`).
-- `../../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`
-  (was
-  `architecture-and-infrastructure/current/smoke-test-retirement-recovery-and-completion.plan.md`).
+It supersedes:
+
+- `archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`.
+- `../../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`.
 
 ## Context
 
-Branch state at authoring (`feat/eef_exploration` HEAD `b226670d`):
+Branch state at refresh (`feat/eef_exploration` HEAD `b539c7c5`):
 
 - **Plan 1** (`fix-dev-boot-release-resolution`): ✅ landed at commit
   `2a2d1b05`. Archived to `observability/archive/completed/`.
@@ -121,18 +115,16 @@ Branch state at authoring (`feat/eef_exploration` HEAD `b226670d`):
   `observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`.
   Owner direction: foundational tension unnamed; do not resume until
   named in PDR/ADR. Legacy `SENTRY_MODE` consumer path is the live
-  contract through this branch's merge.
+  contract through this branch's merge. ADR-171 cited inside that paused
+  plan is a forward reference (no extant ADR yet); this unified plan
+  does not depend on its eventual number or text.
 - **Plan 3 (original)** (`retire-smoke-tests-all-vitest-no-real-io`):
   cycles 1a–1d landed in commits `8fa339f4`, `7620fefd`, `d4fb9a8f`,
   `b226670d`. Damaged execution (commit-skill protocol bypassed,
-  reviewer dispatch not invoked, plan-body freshness not maintained).
-  Plan archived to
-  `architecture-and-infrastructure/archive/superseded/retire-smoke-tests-all-vitest-no-real-io.plan.md`.
-  The cycles' substance landed cleanly; the discipline gap is what
-  needs recovery.
+  reviewer dispatch not invoked). The cycles' substance landed
+  cleanly; the discipline gap is what needs recovery.
 - **`.agent/rules/no-speed-pressure.md`**: rule already authored
-  2026-05-04 by Moonlit Shimmering Comet's session. Integration
-  pending (step 3 of this plan).
+  2026-05-04. Integration pending (step 3 of this plan).
 
 ## Foundation Alignment
 
@@ -143,128 +135,371 @@ Branch state at authoring (`feat/eef_exploration` HEAD `b226670d`):
   step uses the full commit-skill protocol; no skip-doctrine paths.
   The no-speed-pressure rule (integrated in step 3) is the codified
   guard against the failure mode that damaged plan-3 execution.
-- **principles.md §Owner Direction Beats Plan**: owner directed the
-  unification.
-- **testing-strategy.md §TDD-as-pairs**: cycles 2a–2f and 3a–3b each
-  land test + product code together in one commit. No skipped or
-  failing tests across commits.
-- **never-disable-checks**: every gate is blocking; none weakened.
-- **no-warning-toleration**: any new warning surfaced by step 14 is
-  fixed at source in the same work-item.
+- **principles.md §Owner Direction Beats Plan**: owner directed both
+  the unification and the capture-not-clean shape of steps 6–9.
+- **principles.md §Replace, don't bridge**: legacy `SENTRY_MODE=sentry`
+  through merge is NOT a bridge — there is no compatibility shim, the
+  contract is single, the paused plan's `core/` types are inert
+  scaffolding rather than active code paths.
+- **never-disable-checks**: every gate is blocking; none weakened. The
+  rule's path-allowlist (configured at step 7, wired at step 8) is
+  configuration, not check-disablement; per-file ESLint-disable
+  comments are forbidden.
+- **no-warning-toleration**: rule wires at error severity (step 6); any
+  new warning surfaced by step 9 (`pnpm check`) is fixed at source in
+  the same work-item.
+- **TDD-as-pairs (atomic-landing invariant)**: each step that authors
+  code (3, 5, 6, 7, 8) lands test + product code together in one
+  commit. No skipped or failing tests across commits.
 
 ## Discipline (applies to every step)
 
 - **Commit-skill protocol**: every commit goes through
-  `claim → queue (enqueue) → stage by pathspec → record-staged →
-  check-commit-skill-gates.ts → verify-staged → phase pre_commit →
-  git commit -F <msg> -- <pathspec> → complete → close window`. No
-  exceptions. See `.agent/skills/commit/SKILL.md`.
+  `.agent/skills/commit/SKILL.md` under
+  `.agent/rules/no-speed-pressure.md`. The substrate is the deliverable;
+  do not restate its mechanics here, the rule and skill are the
+  authority.
 - **Stage by explicit pathspec**: `git add <each path>` then
   `git commit -F <msg> -- <pathspec>` to filter peer-staged work
   out of the index. Hook policy blocks `git add -A`/`-all`/`.`. The
   predecessor plan-3 execution failed this discipline at commit
-  `8fa339f4`; do not repeat.
-- **Reviewer dispatch**: invoke `code-reviewer` as gateway after
-  every non-trivial change; let it nominate specialists per the
-  delta. Reviewer findings are action items by default; explicit
-  rejection requires written rationale.
+  `8fa339f4`; do not repeat. **Peer-index cure**: if `git status`
+  shows peer-staged work in the index, the cure is
+  `git commit -F <msg> -- <pathspec>` — never `git reset HEAD <peer-files>`
+  (would disturb peer's view).
+- **Reviewer dispatch**: invoke the reviewers named in each step's
+  brief; reviewer findings are action items by default; explicit
+  rejection requires written rationale. Reviewer-dispatch enforcement
+  is owner-cadence, not lint-gated; no structural gate exists yet.
 - **Plan-body freshness**: update todo status as each step closes;
   refresh `Last Updated`; record commit SHAs against completed
   steps in this plan body.
 - **No invented urgency**: per `.agent/rules/no-speed-pressure.md`,
   any urge to skip ceremony is the diagnostic. Apply the ceremony.
 - **Owner-attention discipline**: when a step requires owner
-  judgement (step 17), pause and surface; do not proceed past a
+  judgement (step 12), pause and surface; do not proceed past a
   doctrine-flagged decision point on own analysis.
 
-## Plan Review Findings
+## Plan Review Findings (Round 1, 2026-05-04 Pelagic Diving Atoll)
 
-Populated by step 1. Until then this section is empty by design.
+Six reviewers ran in parallel: code-reviewer (gateway),
+architecture-reviewer-{barney,betty,fred,wilma}, assumptions-reviewer.
+Specialist nominations driven by findings, not pre-dispatched.
 
-## Out-of-Scope Follow-ups (populated by step 2 if needed)
+**Cross-reviewer consensus (≥2 reviewers):**
 
-Reviewer findings that are valid but would fragment or complicate the
-seventeen-step sequence are recorded here as named follow-ups, not
-absorbed into the sequence:
+- **C1 (P1)** Boundary-crossing import:
+  `apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts:7`
+  imports from `../e2e-tests/helpers/upstream-metadata-fixture.js`. `src/`
+  reaching into `e2e-tests/` is an architectural violation (ADR-041,
+  Layer Role Topology). Six pre-existing consumers of the same import
+  path. **Step 5 MUST close (not "may close").** Resolution shape:
+  relocate `upstream-metadata-fixture.ts` to `src/test-helpers/`, update
+  consumers. *(code-reviewer P1, betty P1, fred P1-2)*
+- **C2 (P1)** §Discipline previously restated the no-speed-pressure
+  substrate (`claim → queue → skill-gates → verify-staged → commit`),
+  creating a second authority that drifts. **Applied in this revision**:
+  §Discipline now references `commit/SKILL.md` and
+  `no-speed-pressure.md` rather than restating their mechanics.
+  *(barney P1, fred adjacent)*
+- **C3 (P1)** Step 1's reviewer set originally front-loaded execution-step
+  specialists (config / mcp / security / clerk / sentry / release-readiness).
+  **Applied**: those specialists moved into the steps where they have
+  work to review (config-reviewer at steps 6, 7, 8; mcp / security /
+  clerk / sentry / accessibility at step 10; release-readiness at
+  step 12; step numbers reflect post-Round-2 collapse). The plan-meta
+  dispatch is the architecture-quartet + code +
+  assumptions, with onboarding/docs-adr available for plan-readability
+  if needed at Round 2. *(barney P1, assumptions critical-#2)*
+- **C4 (P3)** Step 3's four user-memory feedback files were plan-time
+  invention from one observed instance. Three are speculative
+  failure-mode names. **Applied**: step 3 reduced to one feedback file
+  (`feedback_no_speed_pressure.md`); the other three graduate when a
+  second instance is observed. *(fred P3-1, assumptions critical-#4)*
+- **C5 (P2)** Plan body HEAD SHA was stale (`b226670d`); actual is
+  `b539c7c5`. **Applied**: refreshed in §Context and the front-matter
+  `Last Updated`. *(code-reviewer P2)*
+- **C6 (P2)** `e2e-tests/helpers/test-config.ts` sits at the intersection
+  of cycle-2 real-IO surface AND the paused SENTRY_MODE rename's WS4–WS5
+  file list. Under the new capture-not-clean shape this file's IO (if
+  any) lands on the §IO Inventory; resumption of the paused rename will
+  consume the Inventory entry. **Applied**: §Risk Register row added.
+  *(betty Q3, wilma adjacent)*
 
-- *(none yet — populated when step 2 runs)*
+**Single-reviewer high-priority:**
 
-## Sequence Summary
+- **F1 (P1)** *fred*: Step 6's rule allowlist must be **path-shape only**
+  ("designated DI fake helper" is unimplementable in ESLint).
+  **Applied**: step 6 brief specifies path-glob allowlist
+  (`vitest.config.ts | vitest.*.config.ts | vitest.setup.ts` + `**/test-helpers/**`
+  - `**/test-fakes/**`); structurally-marked, lint-checkable.
+- **F2 (P1)** *fred*: ADR-171 is a forward reference inside the paused
+  plan, not an extant ADR. **Applied**: §Context names this explicitly;
+  unified plan does not depend on it.
+- **W1 (P1)** *wilma*: Step 11 must validate `tools/call` responses
+  against the tool catalogue (ADR-123) schema, not just HTTP 200.
+  **Applied**: step 10 brief updated (was step 11 pre-collapse).
+- **W2 (P1)** *wilma*: Step 9 (rule wiring) must be preceded by step 7's
+  capture pass (rule run in dry-run) so the allowlist already absorbs
+  legitimate infra. **Applied**: this is the steps 7→8→9 ordering by
+  construction; the dry-run IS step 7.
+- **W3 (P1)** *wilma*: Audit grep was missing dynamic-import forms
+  (`await import('fs')`, `require('fs')`). **Applied**: step 6 rule
+  denylist explicitly includes dynamic-import forms; the rule itself
+  catches what a grep would miss.
+- **W4 (P2)** *wilma*: `packages/design/*` was missing from the
+  per-workspace cycle 2 audit. **Applied**: under capture-not-clean
+  the rule runs over the entire estate via ESLint glob — no
+  per-workspace enumeration required; design/* covered by construction.
+- **W5 (P2)** *wilma*: Cross-platform adapter asymmetry risk on rule
+  integration (Cursor / Codex don't auto-load adapters). **Applied**:
+  step 3 brief instructs verification of all four adapter paths
+  post-commit; §Risk Register row added.
+- **W6 (P3)** *wilma*: Step 13's evidence bundle does not include
+  Clerk release-tag integrity. **Recorded** in §Risk Register and
+  §Out-of-Scope Follow-ups for post-merge staging validation; not in
+  scope of this branch.
+- **CR1 (P1)** *code-reviewer*: Conditional-branch test-immediate-fail
+  in `dev-boot-without-observability.integration.test.ts:57-59, 70-72`:
+  `if (!result.ok) return;` early-returns silently. Item 16 of
+  test-immediate-fails. **Applied**: step 5 closes this as a NAMED
+  test-immediate-fail (test-reviewer dispatch in step 4(d)).
+- **CR2 (P2)** *code-reviewer*: `apps/.../TESTING.md:134-135` references
+  `pnpm qg` (no such script). **Applied**: step 4(c) docs-adr-reviewer
+  brief + step 5 closure.
+- **CR3 (P2)** *code-reviewer*: `apps/.../docs/vercel-environment-config.md:26`
+  retains "smoke harness diagnostics" note. **Applied**: same as CR2.
+- **A1** *assumptions-reviewer*: Reviewer-backfill regress lacks a stop
+  rule. **Applied**: step 4 scopes specialist dispatch by per-commit
+  risk surface (gateway-only on mechanical retirements; specialists on
+  substantive commits).
 
-The full linear sequence is in the frontmatter `todos` array. Summary:
+**Owner direction folded in (2026-05-04 turn):**
 
-| # | Step | Output |
-|---|------|--------|
-| 1 | Comprehensive sub-agent review of plan | Reviewer findings under §Plan Review Findings |
-| 2 | Apply review findings | Plan body refined; out-of-scope follow-ups recorded |
-| 3 | Integrate no-speed-pressure rule across estate | RULES_INDEX entry, 3 adapters, principles cross-ref, distilled entry, 4 memory files |
-| 4 | Reviewer backfill on commits `fd4eabaa..b226670d` | Findings from 5 specialist reviewers |
-| 5 | Apply backfill findings | Per-finding atomic commits or written rejections |
-| 6–11 | Cycles 2a–2f real-IO audit per workspace | Per-batch grep clean; per-batch tests green |
-| 12 | Cycle 3a author no-real-io-in-tests rule | Rule + RuleTester + plugin registration; not yet wired |
-| 13 | Cycle 3b wire rule into root config | Rule active; pnpm lint green across monorepo |
-| 14 | `pnpm check` green at HEAD | One-line note with SHA in plan body |
-| 15 | Dev boot + MCP tool exercise + shutdown | `/tmp/dev-boot.log`; `/tmp/mcp-tool-exercise.log`; port 3333 free |
-| 16 | Pre-merge divergence analysis vs `origin/main` | Commit-list diffs; conflict-potential findings |
-| 17 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-reviewer call; owner authorisation |
+- Plan must be strictly linear; no parallelism. *(applied throughout)*
+- Do NOT audit all IO; install rule + capture inventory only.
+  *(steps 6–9 rewritten)*
+- Must not introduce new IO. *(rule denylist is the gate)*
+- Note any IO found. *(§IO Inventory is the noting surface)*
+
+## Plan Review Findings (Round 2, 2026-05-04 Pelagic Diving Atoll)
+
+Six reviewers ran in parallel over the revised plan body and code surface:
+code-reviewer (gateway), architecture-reviewer-{barney,betty,fred,wilma},
+assumptions-reviewer.
+
+**Verdicts:**
+
+- **code-reviewer**: absorption-clean / absorption-defects-named (all 21
+  Round 1 findings absorbed correctly; new defects named).
+- **barney**: simpler-than-Round-1 (conditional on step 7+8 collapse).
+- **betty**: cohesive (two P2 items; one closes before step 7).
+- **fred**: COMPLIANT-WITH-CONDITIONS (single residual P2; path-allowlist
+  survives §Strict-and-Complete + never-disable-checks scrutiny as a
+  frozen-debt gate, not a fallback option).
+- **wilma**: more-robust (Round 1 six absorbed; three new structural gaps
+  named: denylist completeness, allowlist mutability, Inventory drift).
+- **assumptions-reviewer**: PROPORTIONATE (one Round 2 pass sufficient;
+  no Round 3).
+
+**Findings absorbed into this revision:**
+
+- **R2-1 (P1)** *wilma + assumptions*: Step 6 denylist must cover full
+  Node.js IO surface — `*Sync` variants, `node:` prefix specifiers,
+  default imports, `fs/promises`, `globalThis.process.env`,
+  `worker_threads`. **Applied**: step 6 brief enumerates all sub-forms;
+  RuleTester required to cover each negative case.
+- **R2-2 (P1)** *barney*: Steps 7 + 8 are "the same data viewed two
+  ways" — collapse into one atomic landing. **Applied**: collapsed into
+  step 7 (capture inventory + freeze allowlist atomically); plan now
+  has 12 steps, not 13.
+- **R2-3 (P1)** *wilma + fred + code*: Step 5 NAMED VIOLATIONS closing
+  commits need re-review by the specialist who identified the violation,
+  not gateway alone. **Applied**: step 5 brief names fred for C1
+  closure, test-reviewer for CR1 closure.
+- **R2-4 (P1)** *code*: Step 6 must specify rule wired as `error`
+  severity (not `warn`) per no-warning-toleration. **Applied**: step 6
+  brief names "Severity: error" explicitly.
+- **R2-5 (P1)** *wilma*: Allowlist mutability gate — without one, future
+  PRs can drift the allowlist away from the §IO Inventory. **Applied**:
+  step 7 places the allowlist in `eslint.config.ts` rule-options block
+  (PR-reviewed); step 8 names the comment-discipline ("any future PR
+  adding a path must cite an Inventory entry or named follow-up plan");
+  per-file `eslint-disable` comments stay forbidden.
+- **R2-6 (P2)** *wilma + betty*: Inventory canonical vs allowlist
+  canonical must be clarified — they start identical but diverge as
+  migrations land. **Applied**: step 7 brief states allowlist is the
+  canonical live enforcement surface; §IO Inventory is the historical
+  snapshot at merge time, NOT updated by post-merge migrations.
+- **R2-7 (P2)** *wilma*: Step 7 capture-process needs output-format
+  spec + count validation + spot-check. **Applied**: step 7 brief
+  specifies `--format json` capture, count cross-check, 5-entry
+  spot-check; re-run if either fails.
+- **R2-8 (P2)** *betty*: `e2e-tests/helpers/test-config.ts`
+  cross-reference instruction missing from step 7 (Risk Register row
+  C6 had the mitigation but step 7 had no instruction to act on it).
+  **Applied**: step 7 brief adds explicit instruction to update the
+  paused plan's resumption preconditions if `test-config.ts` is in
+  the captured set.
+- **R2-9 (P2)** *wilma*: Step 4(a) gateway-only review on `8fa339f4`
+  may miss commit-skill discipline failure (peer-stage absorption
+  was a discipline failure, not a code miss). **Applied**: step 4(a)
+  brief adds "read commit message + stage log to verify commit-skill
+  protocol shape" to the gateway dispatch.
+- **R2-10 (P2)** *betty*: Step 11 (now step 10) reviewer-dispatch
+  ordering ambiguity — five reviewers in one step. **Applied**: step 10
+  brief specifies dispatch order (mcp-reviewer first; halt on P1;
+  security/clerk/sentry parallel on clean; accessibility last on
+  captured payloads).
+- **R2-11 (P2)** *code + fred*: §Sub-agent Reviewers table did not
+  include fred at step 5 for C1 closure. **Applied**: §Sub-agent
+  Reviewers table updated; step 5 brief explicitly names
+  fred + test-reviewer.
+- **R2-12 (P2)** *code*: §Acceptance missing four-adapter-path
+  verification criterion for step 3. **Applied**: §Acceptance updated.
+- **R2-13 (P3)** *code*: §Sequence Summary said "3 adapters"; should
+  read 4. **Applied**: corrected.
+- **R2-14 (P3)** *code*: §Intent's `09→08→07→06` sequencing notation
+  read reversed relative to execution order. **Applied**: notation now
+  reads `06 → 07 → 08` in execution order.
+
+**Findings recorded but not absorbed (deferred):**
+
+- **R2-15 (P3)** *barney*: §Plan Review Findings (Round 1) is
+  approaching artefact gravity (~110 lines); archive to a sibling file
+  post-step-2 to compress the plan body. **Deferred** to post-merge
+  consolidation (Learning Loop) — archiving now adds an extra artefact
+  during active execution; the plan body's size remains workable.
+- **R2-16 (P3)** *barney*: Step 2 is three concealed sub-steps; could
+  split into 2a/2b for symmetry with step 1. **Deferred** — Round 2 is
+  happening within step 2 as authored; splitting now is retroactive
+  bookkeeping with no execution gain.
+
+## IO Inventory (populated by step 7)
+
+The §IO Inventory captures the frozen real-IO surface present in tests
+at this branch's merge time. Format per entry:
+
+```text
+- path: <absolute path>
+  kind: spawn | exec-sync | fs | fs-promises | dynamic-import-fs | process-env | process-cwd | fetch | worker
+  rationale: <one sentence on why the IO is currently present>
+  disposition: in-scope-of <plan slug> | structural-ambiguity-to-investigate | accept-and-document
+```
+
+Empty until step 7 runs. The Inventory and the rule's allowlist (also
+landed in step 7) start identical; the **allowlist is the canonical live
+enforcement surface** going forward, the **§IO Inventory is the
+historical snapshot** at merge time and is NOT updated by post-merge
+migrations (follow-up plans remove paths only from the allowlist).
 
 ## Out of Scope
 
 - The SENTRY_MODE → OBSERVABILITY_SINKS rename (paused; see
   `future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`).
+  ADR-171 cited inside that paused plan is a forward reference; this
+  unified plan does not depend on it.
+- Removing pre-existing real-IO from tests. The §IO Inventory documents
+  the surface; migration of legacy violations is a follow-up plan, not
+  this plan.
+- Mutation testing meta-quality. Tracked separately per
+  `mutation-testing-implementation.plan.md`.
+- Clerk release-tag integrity validation under live Clerk credentials
+  (recorded for post-merge staging validation; not exercised here).
+- Graph-wiring work on `eef` thread (post-merge, separate branch).
 - New observability or auth work — this plan is verification +
   completion only.
-- Graph-wiring work (post-merge, separate branch).
-- TESTING.md scope-rewrite triage from the predecessor plan-3
-  recovery (was an owner-decision step in that plan; no clear
-  re-emergence trigger here — fold in only if step 4 reviewer
-  backfill surfaces it as material).
+
+## Out-of-Scope Follow-ups
+
+Reviewer findings that are valid but would fragment or complicate the
+linear sequence are recorded here. Three-bucket discipline at apply
+time (step 5): valid + scope-appropriate → applied; valid + out-of-scope
+→ recorded here as named follow-up; rejected → written rationale.
+Named follow-ups become candidate plans at the post-merge Learning Loop
+consolidation pass.
+
+- Migration of pre-existing real-IO test files captured in §IO Inventory.
+  Per-workspace or per-violation-class follow-up plans, scoped to remove
+  Inventory entries one batch at a time. Each migration removes paths
+  from the rule's allowlist (the live canonical surface), not from the
+  §IO Inventory in this plan body (the historical snapshot).
+- Clerk release-tag integrity exercise under real Clerk credentials in
+  staging, post-merge.
+- Reviewer-dispatch structural enforcement gate (currently owner-cadence;
+  no lint or pre-commit hook enforces it).
+- Allowlist-ADD structural enforcement (a lint or pre-commit gate that
+  refuses any allowlist-path-ADD that does not cite an Inventory entry
+  or a named follow-up plan). Currently PR-review enforces this
+  discipline; structuralisation is a future Practice item.
+
+## Sequence Summary
+
+| # | Step | Output |
+|---|------|--------|
+| 1 | Round 1 architecture-led review | DONE — Round 1 findings under §Plan Review Findings (Round 1) |
+| 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE for application; commit pending; Round 2 findings under §Plan Review Findings (Round 2) |
+| 3 | Integrate no-speed-pressure rule across estate | RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; post-commit four-adapter-path verification |
+| 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | Findings under §Backfill Findings; gateway+commit-skill discipline check on `8fa339f4`; specialists on substantive commits |
+| 5 | Apply backfill findings | Per-finding atomic commits or written rejections; named violations C1 + CR1 closed with **specialist re-review on closing commits** |
+| 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | Rule + RuleTester (full Node.js IO surface coverage) + plugin registration; not yet wired |
+| 7 | Capture inventory + freeze allowlist atomically | §IO Inventory populated AND allowlist option configured in eslint.config.ts in one commit; structured-output capture; count + spot-check validation; `test-config.ts` cross-reference if present |
+| 8 | Wire rule into root config | Rule active (error severity); `pnpm lint` exits 0; allowlist-discipline note for future PR additions |
+| 9 | `pnpm check` green at HEAD | One-line note with SHA and gate-set cross-checked against §Gate Taxonomy |
+| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free |
+| 11 | Pre-merge divergence analysis vs `origin/main` | Commit-list diffs; conflict-potential findings |
+| 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-reviewer call; owner authorisation |
 
 ## Risk Register
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Step 1's reviewer findings collectively complicate the plan beyond simple-linear | Medium | Medium | Discipline: findings that fragment the sequence become out-of-scope follow-ups, not new steps |
-| Step 14 surfaces a real test failure that did not show in iterative dev | Medium | Medium | Fix at source per never-disable-checks; if larger than mechanical, surface as named highest-priority recovery |
-| Step 15's MCP tool exercise reveals a regression in a tool's response shape | Low | High | Regression is a merge blocker; route to owner; either fix in-branch or revert the responsible commit |
-| Step 16 reveals unmergeable conflicts vs `main` | Low | Medium | Per `.agent/skills/complex-merge/SKILL.md`, structured workflow if 100+ files diverged or 10+ conflicts |
-| Cycle 2 audit (steps 6–11) surfaces a non-trivial real-IO violation requiring product-code refactor | Medium | Medium | Each violation is its own small commit; if a single violation explodes in scope, fork a follow-up plan |
-| The shared-index foreign-stage-absorption that damaged commit `8fa339f4` recurs | Low | Medium | Mandatory `git commit -- <pathspec>` filter on every commit per §Discipline; no other parallel session is active on this branch |
+| Round 2 reviewer findings collectively complicate the plan beyond simple-linear | Medium | Medium | Discipline: findings that fragment the sequence become §Out-of-Scope Follow-ups, not new steps |
+| Step 7's rule run surfaces a violation pattern the rule was not designed to catch (false negative in denylist) | Medium | Medium | Step 6 RuleTester cases must include negative cases for dynamic imports; if step 7 finds an unanticipated form, return to step 6 to extend denylist |
+| Step 8's wire-up surfaces a legitimate infra file the path-allowlist did not anticipate | Medium | Medium | Step 7 IS the dry-run AND the allowlist freeze (atomic); if step 8 fails despite step 7's allowlist, the gap is in path-glob shape; tighten allowlist (re-run step 7) before wiring; do not exempt via per-file disable comments |
+| Step 10 surfaces a real test failure that did not show in iterative dev | Medium | Medium | Fix at source per never-disable-checks; if larger than mechanical, surface as named highest-priority recovery plan |
+| Step 11's MCP tool exercise reveals a regression in a tool's response shape | Low | High | Schema-validation against tool catalogue catches this; regression is a merge blocker; route to owner; either fix in-branch or revert the responsible commit |
+| Step 11 fails on Sentry-network unavailability (legacy SENTRY_MODE consumer hangs on DSN) | Low | Low | Boot-timeout guard at 10s; record as named operational-evidence note; not strictly merge-blocking |
+| Step 12 reveals unmergeable conflicts vs `main` | Low | Medium | Per `.agent/skills/complex-merge/SKILL.md`, structured workflow if 100+ files diverged or 10+ conflicts |
+| The shared-index foreign-stage-absorption that damaged commit `8fa339f4` recurs | Low | Medium | Mandatory `git commit -- <pathspec>` filter on every commit per §Discipline; peer-index cure named in §Discipline |
+| Step 3 cross-platform adapter asymmetry (Claude/Cursor/Codex don't auto-load adapters) | Medium | Low | Post-commit verification of all four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`); §Discipline note that adapter loading is platform-cadence, not lint-gated |
+| `e2e-tests/helpers/test-config.ts` sits at intersection of capture-not-clean §IO Inventory AND paused rename's WS4–WS5 file list | Low | Low | If file appears on §IO Inventory at step 7, resumption of paused rename will consume the Inventory entry; record in paused plan's resumption preconditions if observed |
+| Step 5's NAMED VIOLATIONS (C1 boundary-crossing import + CR1 conditional-branch) are not actually closed under the apply discipline | Low | High | Acceptance gate: step 5 cannot mark complete until both NAMED violations have closing commits referenced in this plan body, AND each closing commit is specialist-reviewed by the originator of the finding (fred for C1, test-reviewer for CR1) |
+| Step 5's closing commit for C1 introduces a NEW architectural violation while closing the named one | Low | Medium | Specialist re-review on closing commits (R2-3) catches this; fred reviews the relocate target's boundary shape, not just the absence of the original violation |
+| Step 6 denylist misses a real-IO form (e.g. `execSync`, `node:fs` prefix) so step 7's dry-run is a false-negative | Medium | High | Step 6 brief enumerates the comprehensive Node.js IO surface; RuleTester required to cover each sub-form (R2-1); test-reviewer dispatch at step 6 validates exhaustiveness |
+| Allowlist drifts post-merge — a developer adds a path without citing an Inventory entry or follow-up plan | Medium | Medium | Allowlist lives in `eslint.config.ts` (PR-reviewed); step 8 names the comment-discipline; per-file `eslint-disable` stays forbidden; structural lint-gate for ADDs is a future Practice item recorded in §Out-of-Scope Follow-ups |
+| §IO Inventory and live allowlist drift apart over time as follow-up plans land migrations | High (over time) | Low | Documented separation: allowlist is canonical live enforcement; §IO Inventory is historical snapshot at merge time, not updated post-merge; migration plans touch only the allowlist |
+| Step 7 capture process is lossy (rule output ambiguous; entries missed) | Low | Medium | Structured-output capture (`--format json`); count cross-check; 5-entry spot-check; re-run if either fails (R2-7) |
 
-## Sub-agent Reviewers (step 1 brief)
+## Sub-agent Reviewers
 
-The reviewer set covers plan-phase scrutiny across simplification,
-systems-thinking, principles-compliance, adversarial failure-modes,
-config correctness, test discipline, MCP protocol, security, auth,
-observability surface, plan readability, doc alignment, and release
-readiness.
+The reviewer roster below names the lens for each invocation. Plan-meta
+dispatch (steps 1, 2) is the architecture-quartet + code + assumptions;
+specialists dispatch in the steps where they have work.
 
-| Reviewer | Lens | Brief |
+| Reviewer | Lens | Step(s) where invoked |
 |---|---|---|
-| `assumptions-reviewer` | Proportionality, blocking legitimacy, assumption validity | Are the seventeen steps proportionate? Is the dependency chain (each step depends on the previous) genuinely load-bearing? Any invented blocking? |
-| `architecture-reviewer-barney` | Simplification-first | Can steps collapse without losing quality? Are cycles 2a–2f genuinely six separate batches, or could a single audit step suffice? |
-| `architecture-reviewer-betty` | Systems thinking, change-cost trade-offs | Does the linear-sequenced shape introduce hidden change-cost vs running cycle 2 audits in parallel? Is the no-speed-pressure rule integration shape stable for future arcs? |
-| `architecture-reviewer-fred` | ADR / principles compliance | Step 15's auth path: which mode? Does it respect ADR-160 redaction barrier and ADR-158 multi-layer security? Does running with legacy `SENTRY_MODE` through merge violate any principle now that plan 2 is paused? |
-| `architecture-reviewer-wilma` | Adversarial / failure modes | What failure modes does step 15 miss? What if dev server boots but a single tool's response shape is wrong — is that caught? What if cycle 3b wires the rule and a previously-unaudited test fails? |
-| `code-reviewer` | Gateway | Plan-phase: are there obvious quality concerns in the plan body itself? Will be re-invoked per execution step. |
-| `config-reviewer` | Tooling-config correctness | Cycle 3a's rule prescription: are the trigger globs and allowlists correctly scoped? Will the rule fire on legitimate test infrastructure files? |
-| `test-reviewer` | Test discipline integrity | Cycle 2a–2f audit: does the proposed grep + classify + fix-with-DI-fake pattern preserve TDD-as-pairs? Cycle 3a's RuleTester cases: are they describe-shaped or audit-shaped? |
-| `mcp-reviewer` | MCP protocol expertise | Is step 15's tools/list + tools/call exercise sufficient? Should it cover MCP App resources, prompts, sequence tools, resources/list? Brief includes ADR-123 tool catalogue. |
-| `security-reviewer` | Auth + trust-boundary | Step 15's auth path: DANGEROUSLY_DISABLE_AUTH or real OAuth? Coverage of auth trust boundary? Is sensitive material captured in `/tmp/mcp-tool-exercise.log`? |
-| `clerk-reviewer` | Clerk middleware behaviour | Step 15's exercise correctly covers Clerk's request-isolation-scope behaviour? Should it include a deliberate auth-failure tool call? |
-| `sentry-reviewer` | Observability surface | Step 15 boots with `SENTRY_MODE=sentry`. Is the observability path proven by boot alone, or should the exercise verify a captured event surface? Any redaction-barrier checks missing? |
-| `onboarding-reviewer` | Plan readability | Will a future agent picking up this plan from `current/` understand the seventeen-step sequence without back-references? |
-| `docs-adr-reviewer` | Plan-body docs alignment | Are cross-references accurate (paths, commit SHAs, related-plans links)? Does any in-flight ADR need updating? |
-| `release-readiness-reviewer` | GO / GO-WITH-CONDITIONS / NO-GO synthesis | Plan-phase: does the seventeen-step evidence bundle constitute sufficient release readiness? Step 17: synthesise the actual evidence. |
-
-The four architecture reviewers (`barney`, `betty`, `fred`, `wilma`) are
-the proven quartet for plan-phase scrutiny across simplification,
-systems-thinking, principles-compliance, and adversarial failure-modes.
+| `code-reviewer` | Gateway | Steps 1, 2, 3, 4, 5, every commit's pre-commit gate |
+| `architecture-reviewer-barney` | Simplification-first | Steps 1, 2 (plan-meta, both rounds) |
+| `architecture-reviewer-betty` | Cohesion + change-cost | Steps 1, 2 (plan-meta, both rounds) |
+| `architecture-reviewer-fred` | ADR/principles compliance | Steps 1, 2 (plan-meta, both rounds), 4(d) (boundary-crossing import identification), 5 (C1 closing commit re-review) |
+| `architecture-reviewer-wilma` | Adversarial / failure modes | Steps 1, 2 (plan-meta, both rounds) |
+| `assumptions-reviewer` | Proportionality, blocking legitimacy | Steps 1, 2 (plan-meta, both rounds) |
+| `test-reviewer` | Test discipline integrity | Steps 4(d) (b226670d conditional-branch identification), 5 (CR1 closing commit re-review), 6 (RuleTester describe-vs-audit + Node.js IO API surface coverage) |
+| `config-reviewer` | Tooling-config correctness | Steps 6 (allowlist shape), 7 (allowlist config), 8 (wire-up) |
+| `docs-adr-reviewer` | Doc alignment | Steps 4(c) (stranded references), 7 (Inventory completeness + cross-reference discipline) |
+| `mcp-reviewer` | MCP protocol | Step 10 (first in dispatch order; halt on P1) |
+| `security-reviewer` | Auth + trust-boundary | Step 10 (parallel with clerk + sentry on clean mcp return) |
+| `clerk-reviewer` | Clerk middleware | Step 10 (parallel) |
+| `sentry-reviewer` | Observability surface | Step 10 (parallel) |
+| `accessibility-reviewer` | a11y over UI/widget responses | Step 10 (last; conditional on UI/widget content in captured payloads) |
+| `onboarding-reviewer` | Plan readability | Step 2 if Round 2 surfaces readability concern (none did) |
+| `release-readiness-reviewer` | GO/GO-WITH-CONDITIONS/NO-GO synthesis | Step 12 |
 
 ## Quality Gates
 
-After every cycle 2 batch (steps 6–11) and every cycle 3 step (12–13),
-per `.agent/plans/templates/components/quality-gates.md`:
+After steps that author code (3, 5, 6, 7, 8, 9), per
+`.agent/plans/templates/components/quality-gates.md`:
 
 ```bash
 pnpm sdk-codegen
@@ -275,34 +510,48 @@ pnpm format:root
 pnpm test
 ```
 
-Step 14 runs the full canonical chain:
+Step 10 runs the full canonical chain:
 
 ```bash
 pnpm check
 ```
 
-This expands to the full nine-layer gate taxonomy per
-`docs/governance/development-practice.md §Gate Taxonomy`. All exit 0.
+This expands to the gate taxonomy per
+`docs/governance/development-practice.md §Gate Taxonomy`. Step 10
+captures the actual gate set and cross-checks against the taxonomy
+documentation. All exit 0.
 
 ## Acceptance
 
-- All seventeen steps closed with commit SHAs (or explicit no-op
+- All twelve steps closed with commit SHAs (or explicit no-op
   notes) recorded in this plan body.
-- `pnpm check` exits 0 at the repo root (step 14).
+- `pnpm check` exits 0 at the repo root (step 9).
 - Dev server boots locally with `SENTRY_MODE=sentry` and reaches
-  `listening` (step 15a).
+  `listening` (or records named operational-evidence note for
+  Sentry-network unavailability) (step 10a).
 - MCP tools exercise via protocol succeeds: `tools/list` returns >0
-  tools, three `tools/call` exchanges return successful responses
-  (step 15b/c).
-- Pre-merge divergence analysis clean (step 16).
-- `no-real-io-in-tests` ESLint rule wired into root config and
-  passing across all workspaces (step 13).
+  tools; three `tools/call` exchanges return tool-catalogue-schema-valid
+  responses (step 10b/c).
+- If any tool response surfaces UI/widget content, accessibility-reviewer
+  pass clean (step 10d).
+- Pre-merge divergence analysis clean (step 11).
+- `no-real-io-in-tests` ESLint rule wired into root config at **error
+  severity** and passing across all workspaces; rule's allowlist
+  exactly matches §IO Inventory's path set at merge time (step 8).
+- §IO Inventory populated at step 7 with one entry per discovered
+  violation; each entry has path, kind, rationale, disposition; entry
+  count cross-checked against rule's structured output count.
 - No-speed-pressure rule integrated across `RULES_INDEX.md`,
-  Claude/Cursor/Codex adapters, `principles.md` cross-ref,
-  `distilled.md`, and four user-memory feedback files (step 3).
-- Reviewer-backfill findings on commits `fd4eabaa..b226670d`
-  applied or rejected with rationale (steps 4–5).
-- Owner authorises merge (step 17).
+  Claude/Cursor/Codex/`.agents` adapters (4 paths total), `principles.md`
+  cross-ref, `distilled.md`, and one user-memory feedback file (step 3);
+  post-commit four-adapter-path verification clean.
+- Reviewer-backfill findings on commits `fd4eabaa..b226670d` applied
+  per-commit-scope or rejected with rationale (steps 4–5); NAMED
+  VIOLATIONS C1 (boundary-crossing import) and CR1 (conditional-branch
+  test-immediate-fail) closed with commit references in this plan body
+  AND specialist re-review on the closing commits (fred for C1;
+  test-reviewer for CR1).
+- Owner authorises merge (step 12).
 
 ## Plan Exit
 
@@ -314,36 +563,33 @@ This expands to the full nine-layer gate taxonomy per
 
 Per `.agent/plans/templates/components/lifecycle-triggers.md`:
 
-- **Plan promotion**: this plan is `current/` at authoring; promote to
-  `active/` when step 1 begins execution.
+- **Plan promotion**: this plan is `current/` at refresh; promote to
+  `active/` when step 2's commit lands.
 - **ADR/PDR creation**: none required by this plan; the no-speed-pressure
-  rule is already authored. If step 1's reviewer pass surfaces a
-  PDR-worthy pattern, record under §Out-of-Scope Follow-ups.
-- **Memory graduation**: step 3 graduates four feedback observations to
+  rule is already authored. If Round 2 surfaces a PDR-worthy pattern,
+  record under §Out-of-Scope Follow-ups.
+- **Memory graduation**: step 3 graduates one feedback observation to
   user-memory; one entry to `distilled.md`.
-- **Pattern extraction**: post-merge consolidation (see Learning Loop)
-  may extract patterns from this plan's execution.
+- **Pattern extraction**: post-merge consolidation may extract patterns
+  from this plan's execution.
 - **Plan archive**: post-merge, this plan moves to `archive/completed/`
   with closure note linking to the merge commit on `main`.
 
 ## Learning Loop
 
 After plan close (post-merge), run `/jc-consolidate-docs` per the
-session-handoff convention. Likely candidates for consolidation:
+session-handoff convention. Likely consolidation candidates:
 the no-speed-pressure rule (graduate to PDR if a second instance
-surfaces), the stage-by-explicit-pathspec discipline (named instance
-count incremented), the foreign-stage-absorption pattern (capture if
-not already recorded).
+surfaces); the capture-not-clean shape for forward-only enforcement
+(graduate to a PDR if a second arc adopts it); the foreign-stage
+absorption pattern (capture if not already recorded); the
+boundary-crossing-import-as-named-violation discipline (graduate if
+recurrent).
 
 ## Related Plans
 
 - `archive/completed/fix-dev-boot-release-resolution.plan.md` — plan 1,
   landed.
 - `future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`
-  — plan 2, paused-superseded.
-- `archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`
-  — predecessor merge-readiness plan, superseded by this plan.
-- `../../architecture-and-infrastructure/archive/superseded/retire-smoke-tests-all-vitest-no-real-io.plan.md`
-  — plan 3 (original), damaged-superseded.
-- `../../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`
-  — predecessor recovery plan, superseded by this plan.
+  — plan 2, paused-superseded; this unified plan ships through merge
+  with legacy `SENTRY_MODE` as the live contract.
