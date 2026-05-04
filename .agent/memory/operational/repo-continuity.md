@@ -827,13 +827,15 @@ ARC A2 + ARC B1/WS2 queued (parallelisable)"*.
   to the new canonical harness; convert smoke-assertions/* to
   *.smoke.test.ts; retire helpers/environment.ts process.env mutation;
   every existing pnpm smoke:dev:* still passes). Atomic-landing-commit
-  must flip describe.skip → describe on the SKIP-UNTIL-A2 blocks at
-  `harness/run-smoke.unit.test.ts` and `harness/run-smoke.integration.test.ts`.
-  For `remote` mode use `createRemoteBootServer` factory.
+  adds new TDD test+code pairs covering each mode's registration
+  (the prior `describe.skip` SKIP-UNTIL-A2/A3 placeholders were
+  deleted under the binary `no-skipped-tests` rule). For `remote`
+  mode use `createRemoteBootServer` factory.
 - **ARC B1 (= WS2) — sentry-node SinkRegistry consumption** (atomic
   rename: `SentryMode` deleted; `FixtureSentryStore` →
   `FixtureCaptureStore`; `ParsedSentryConfig` cross-product
-  discriminated union; WS1 RED-arc skip register entries 1+2 unskip).
+  discriminated union; new TDD test+code pairs cover the four-kind
+  cross-product and the fixture-as-tee closure-property invariant).
   Independent of ARC A2; parallelisable.
 
 **Prior plan and amendment notes preserved below for context:**
@@ -874,11 +876,7 @@ from re-walking the existing harness.
 Original lane state preserved below for context:
 
 **Observability multi-sink + fixtures shape — WS2 (newly queued,
-branch-primary)**: WS1 RED phase landed cleanly (`a3a0222a`). The
-WS1 type-check canary is `runtime-fixture-tee-redaction.unit.test.ts`
-— its `describe.skip`'d body compiles against today's
-`SENTRY_MODE: 'fixture'` shape, and WS2 deleting `SENTRY_MODE` from
-`SentryConfigEnvironment` will type-fail it deterministically. WS2
+branch-primary)**: WS1 RED phase landed cleanly (`a3a0222a`). WS2
 work: rewrite `createSentryConfig` to consume `SinkRegistry` directly
 (replacing the `SENTRY_MODE` mode-string switch); widen
 `SentryConfigEnvironment` to carry `OBSERVABILITY_SINKS` and
@@ -887,18 +885,13 @@ work: rewrite `createSentryConfig` to consume `SinkRegistry` directly
 `sentry-live-with-tee`, `fixture-only`); rewire `runtime-sinks.ts`
 to wire the fixture tee separately from the live Sentry sink (per
 ADR-160 closure-property — fixture tee observes only post-redaction
-events). WS2's landing diff MUST grep for `SKIP-UNTIL-WS2` and
-unskip the matching test bodies (entry 1: uncomment four `it.todo()`
-adjacent block-comment bodies in
-`packages/libs/sentry-node/src/config-from-registry.unit.test.ts`;
-entry 2: flip `describe.skip` → `describe` in
-`runtime-fixture-tee-redaction.unit.test.ts` and apply the three
-coupled rewrites named in the file header — input shape, helper
-return-type discriminator, `FixtureSentryStore` rename). Plan body
-at
-[`.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md`](../../plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md);
-the napkin §RED-arc skip register is the canonical departure
-register for the multi-commit-TDD-arc shape used in WS1.
+events). New TDD test+code pairs cover the four-kind cross-product
+and the fixture-tee closure-property invariant; the prior WS1 RED-
+arc placeholders that pinned these obligations were deleted under
+the binary `no-skipped-tests` rule, so re-spec lands with the
+producer change per `testing-strategy.md` §When Behaviour Changes.
+Plan body at
+[`.agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md`](../../plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md).
 
 **Plan-body amendments queued for next planning pass** (recorded by
 WS1 reviewer subagents as deferred items): ADR-165 number collision

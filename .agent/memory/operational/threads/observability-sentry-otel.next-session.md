@@ -85,13 +85,16 @@ existing smoke-test harness — see comms event
 `claude-f730bd-pelagic-misty-task-1-harness-recon`. No active
 claims open at session-open; coordination is via comms log.
 
-**WS2 entry conditions**: WS1 RED-arc skip-register entries 1 and 2
-(in `.agent/memory/active/napkin.md`) name the four `it.todo()` design
-pins and the one `describe.skip` canary that WS2 must unskip as part
-of its landing diff. The canary file
-(`packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`)
-will type-fail the moment WS2 deletes `SENTRY_MODE` from
-`SentryConfigEnvironment` — that is the WS1 → WS2 trip-wire.
+**WS2 entry conditions**: the WS1 RED-arc `describe.skip` /
+`it.todo` placeholders that previously pinned the WS2 cross-product
+obligations and the fixture-tee closure-property invariant were
+deleted under the binary `no-skipped-tests` rule (see
+`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`
+§Cycle 1 step 7). The obligations re-enter the test estate as proper
+TDD test+code pairs at the moment WS2's atomic rename lands its
+producer + consumers, per `testing-strategy.md` §When Behaviour
+Changes. There is no "trip-wire canary"; there is the rename's own
+type-system feedback when `SENTRY_MODE` leaves `SentryConfigEnvironment`.
 
 **Plan-body amendments queued for next planning pass** (recorded by
 WS1 reviewer subagents — apply before WS8.6 starts on the ADR-165
@@ -201,12 +204,15 @@ remain unchanged.)
 - [`packages/libs/env-resolution/src/types.ts`](../../../../packages/libs/env-resolution/src/types.ts) — structured warnings channel types (`EnvWarning` discriminated union including `ObservabilitySinksEmptyInPreviewWarning`).
 - [`apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts) — outermost regression-guard E2E. Spawned `pnpm dev` boots cleanly with NO observability env vars; `NODE_ENV: 'development'` pinned in child env per test-reviewer P2-1.
 
-RED-arc tests per [napkin §RED-arc skip register](../../active/napkin.md):
-
-1. [`packages/libs/sentry-node/src/config-from-registry.unit.test.ts`](../../../../packages/libs/sentry-node/src/config-from-registry.unit.test.ts) — four `it.todo()` design pins for the WS2 `SinkRegistry` consumption cross-product (`sentry-disabled`, `sentry-live`, `sentry-live-with-tee`, `fixture-only`). Adjacent block-comment bodies are copy-paste-uncomment-able. NOT a type-check canary — that role is covered by entry 2 below. Cleanup gate: header audit on `SKIP-UNTIL-WS2`.
-2. [`packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`](../../../../packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts) — ADR-160 closure-property invariant for fixture-as-tee. **WS1 type-check canary file** — body compiles against today's `SENTRY_MODE: 'fixture'` shape; WS2 deletion of `SENTRY_MODE` from `SentryConfigEnvironment` will type-fail it deterministically. WS2/WS3 unskip is coupled with three rewrite obligations enumerated in the file header (input shape, helper return-type discriminator, `FixtureSentryStore` rename).
-3. [`apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts) — WS4 `SinkRegistry` construction RED block + an `it.todo()` for the WS4 contents-check (registry entries are real `ObservabilitySink` instances driven by `OBSERVABILITY_SINKS`, not stubs).
-4. [`apps/oak-search-cli/src/observability/cli-observability.unit.test.ts`](../../../../apps/oak-search-cli/src/observability/cli-observability.unit.test.ts) — same shape for WS5.
+**RED-arc test artefacts (subsequently deleted)**: WS1 originally
+landed four `describe.skip` / `it.todo` placeholders intended to pin
+WS2/WS4/WS5 obligations (sentry-node four-kind cross-product;
+fixture-as-tee closure-property invariant; HTTP/CLI SinkRegistry
+construction). Those placeholders were deleted under the binary
+`no-skipped-tests` rule (see
+`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`
+§Cycle 1 step 7). Re-spec lands as proper TDD test+code pairs at the
+moment each workstream's product code lands, not before.
 
 **D7a verification (read of [`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts) end-to-end)**: build-time path is structurally orthogonal to `SENTRY_MODE`. `resolveSentryRegistrationPolicy` drives off `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF` + override pair only. The dead `SENTRY_MODE` projection on `sentry-build-environment.ts:23` becomes a deterministic WS4 cleanup signal when WS2 deletes the field from `SentryConfigEnvironment`. No additional comment added today; the type-check at WS4 names the file.
 
@@ -219,9 +225,9 @@ RED-arc tests per [napkin §RED-arc skip register](../../active/napkin.md):
 
 **Quality gates this session**: full pre-commit pipeline passed for both commits (74-task turbo run × 2; type-check; lint; prettier; markdownlint; knip; depcruise — 2050 modules, 4443 dependencies, no violations; portability:check). Unit suites green: env (7/48), observability (6/63), env-resolution (4/29), sentry-node (9/120 + 4 todo + 2 skipped), MCP streamable-http (87/725 + 2 skipped + 1 todo), search-cli (101/1001 + 2 skipped + 1 todo). `practice:fitness` shows pre-existing critical-zone violations on `napkin.md`, `distilled.md`, `pending-graduations.md`, `repo-continuity.md`, `principles.md` — out of scope per PDR-042 and noted as graduation candidates.
 
-**ADR/PDR candidates (session-handoff §6b)**: structural-enforcement scanner for `SKIP-UNTIL-WSn` shape (CI gate that fails when an `it.todo` / `describe.skip` paired with that header outlives the named workstream's landing commit) — already named in the napkin §RED-arc skip register as a future-plan generator alongside the PDR-038 scanner. Captured to napkin; not promoted to register this session because the trigger (second instance of the failure mode) hasn't fired — first instance is the WS1 RED-arc itself.
+**ADR/PDR candidates (session-handoff §6b)**: structural-enforcement scanner for `SKIP-UNTIL-WSn` shape (CI gate that fails when an `it.todo` / `describe.skip` paired with that header outlives the named workstream's landing commit) — captured here as a note. (The artefacts that would have been the first instance — WS1 RED-arc placeholders — have since been deleted under the binary `no-skipped-tests` rule; whether that affects this candidate's relevance is a graduation-track decision, not noted here.)
 
-**Next safe step on this thread**: WS2 sentry-node `SinkRegistry` consumption — atomic rename. WS2's landing diff MUST grep for `SKIP-UNTIL-WS2` and unskip the matching test bodies (entry 1: uncomment four `it.todo()` adjacent block-comment bodies; entry 2: flip `describe.skip` → `describe` in `runtime-fixture-tee-redaction.unit.test.ts` and apply the three coupled rewrites named in the file header). Six plan-body amendment candidates listed in §Landing target above are due before WS3 (one — ADR-165 number collision — is due before WS8.6 specifically).
+**Next safe step on this thread**: WS2 sentry-node `SinkRegistry` consumption — atomic rename per `replace-sentry-mode-with-observability-sinks.plan.md`. New TDD test+code pairs land alongside the producer change (no pre-authored RED placeholders to consume; those were deleted under the binary `no-skipped-tests` rule). Six plan-body amendment candidates listed in §Landing target above are due before WS3 (one — ADR-165 number collision — is due before WS8.6 specifically).
 
 ---
 

@@ -131,20 +131,25 @@ describe('createSentryConfig', () => {
     expect('releaseSource' in result.value).toBe(false);
   });
 
-  it('keeps live mode strict when deploy release metadata is absent', () => {
-    expect(
-      createSentryConfig({
-        SENTRY_MODE: 'sentry',
-        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
-        SENTRY_TRACES_SAMPLE_RATE: '0.5',
-        APP_VERSION: '1.5.0',
-        APP_VERSION_SOURCE: 'root_package_json',
-      }),
-    ).toEqual({
-      ok: false,
-      error: {
-        kind: 'missing_git_sha',
-      },
+  it('permits live mode in development with the local-dev placeholder when deploy release metadata is absent', () => {
+    const result = createSentryConfig({
+      SENTRY_MODE: 'sentry',
+      SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+      SENTRY_TRACES_SAMPLE_RATE: '0.5',
+      APP_VERSION: '1.5.0',
+      APP_VERSION_SOURCE: 'root_package_json',
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value).toMatchObject({
+      mode: 'sentry',
+      environment: 'development',
+      release: 'local-dev',
+      releaseSource: 'local-dev',
     });
   });
 
@@ -267,18 +272,23 @@ describe('createSentryConfig', () => {
     });
   });
 
-  it('fails closed in development when no git SHA is available', () => {
-    expect(
-      createSentryConfig({
-        SENTRY_MODE: 'sentry',
-        SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
-        SENTRY_TRACES_SAMPLE_RATE: '0.5',
-      }),
-    ).toEqual({
-      ok: false,
-      error: {
-        kind: 'missing_git_sha',
-      },
+  it('falls through to local-dev in development when no git SHA is available', () => {
+    const result = createSentryConfig({
+      SENTRY_MODE: 'sentry',
+      SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
+      SENTRY_TRACES_SAMPLE_RATE: '0.5',
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value).toMatchObject({
+      mode: 'sentry',
+      environment: 'development',
+      release: 'local-dev',
+      releaseSource: 'local-dev',
     });
   });
 

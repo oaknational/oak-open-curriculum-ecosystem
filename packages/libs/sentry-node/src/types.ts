@@ -167,7 +167,6 @@ export type ObservabilityConfigError =
   | { readonly kind: 'invalid_traces_sample_rate'; readonly value: string }
   | { readonly kind: 'send_default_pii_forbidden' }
   | { readonly kind: 'invalid_git_sha'; readonly value: string }
-  | { readonly kind: 'missing_git_sha' }
   | { readonly kind: 'invalid_release_override'; readonly value: string }
   | { readonly kind: 'invalid_build_identity'; readonly value: string }
   | { readonly kind: 'missing_branch_url_in_preview' }

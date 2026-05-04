@@ -12,7 +12,7 @@ status: current
 isProject: true
 todos:
   - id: cycle-1-atomic-rename
-    content: "ONE COMMIT (atomic rename, all tests green at end): sentry-node + env package + HTTP MCP app + Search CLI app + tests. Delete SentryMode type. Recompose ParsedSentryConfig as four-kind discriminated union (sentry-disabled / sentry-live / sentry-live-with-tee / fixture-only) derived from (sinks.includes('sentry'), fixtures) cross-product. Rename FixtureSentryStore → FixtureCaptureStore + FixtureSentryCapture* → FixtureCaptureRecord*. SentryEnvSchema gains @deprecated tag, NOT deleted (deletion is the final hunk of this same commit, after both apps' env shapes flip). Apps' env types extend ObservabilityEnvSchema instead of SentryEnvSchema. HTTP MCP http-observability.ts and Search CLI cli-observability.ts consume the new ParsedSentryConfig kind discriminator. e2e-tests/helpers/test-config.ts createMockRuntimeConfig migrates to OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES inputs. The 4 currently-skipped WS1 RED tests (config-from-registry.unit.test.ts; runtime-fixture-tee-redaction.unit.test.ts; http-observability.unit.test.ts; cli-observability.unit.test.ts) are unskipped and greened in this commit. Acceptance: tree green at end (full pnpm test + pnpm test:e2e); grep -rn 'SENTRY_MODE\\|SentryMode\\|SentryEnvSchema' packages/ apps/ --exclude-dir=archive returns zero matches outside historical doc references."
+    content: "ONE COMMIT (atomic rename, all tests green at end): sentry-node + env package + HTTP MCP app + Search CLI app + tests. Delete SentryMode type. Recompose ParsedSentryConfig as four-kind discriminated union (sentry-disabled / sentry-live / sentry-live-with-tee / fixture-only) derived from (sinks.includes('sentry'), fixtures) cross-product. Rename FixtureSentryStore → FixtureCaptureStore + FixtureSentryCapture* → FixtureCaptureRecord*. SentryEnvSchema gains @deprecated tag, NOT deleted (deletion is the final hunk of this same commit, after both apps' env shapes flip). Apps' env types extend ObservabilityEnvSchema instead of SentryEnvSchema. HTTP MCP http-observability.ts and Search CLI cli-observability.ts consume the new ParsedSentryConfig kind discriminator. e2e-tests/helpers/test-config.ts createMockRuntimeConfig migrates to OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES inputs. New TDD test+code pairs (per testing-strategy §When Behaviour Changes) cover the four-kind cross-product (sinks=[]+fixtures=false→sentry-disabled; sinks=[sentry]+fixtures=false→sentry-live; sinks=[sentry]+fixtures=true→sentry-live-with-tee; sinks=[]+fixtures=true→fixture-only) and the WS4/WS5 SinkRegistry-construction obligations on http-observability and cli-observability composition roots. Acceptance: tree green at end (full pnpm test + pnpm test:e2e); grep -rn 'SENTRY_MODE\\|SentryMode\\|SentryEnvSchema' packages/ apps/ --exclude-dir=archive returns zero matches outside historical doc references."
     status: pending
   - id: cycle-2-adr-171
     content: "ONE COMMIT (parallel-safe with cycle 1): author docs/architecture/architectural-decisions/171-observability-configuration-orthogonality.md as the canonical decision record for the orthogonal-axes shape. Re-verify the number 171 is still next-available with `ls docs/architecture/architectural-decisions/ | sort -n | tail -3` immediately before authoring. If cycle 1's commit SHA is not yet available at authoring time, leave a `<!-- TODO: insert cycle-1 SHA -->` placeholder in §History and fill it in a follow-on commit AFTER cycle 1 lands; the cycle is not blocked on cycle 1's commit."
@@ -40,16 +40,13 @@ the new types in `core/`:
 - `packages/libs/env-resolution/src/types.ts` — `EnvWarning` discriminated
   union for the warnings channel.
 
-Plus 4 RED tests pinning the future cycles:
-
-- `packages/libs/sentry-node/src/config-from-registry.unit.test.ts`
-  (4 `it.todo`).
-- `packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`
-  (`describe.skip`).
-- `apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`
-  (`describe.skip`).
-- `apps/oak-search-cli/src/observability/cli-observability.unit.test.ts`
-  (`describe.skip`).
+The four `describe.skip` / `it.todo` "RED-arc" placeholders that WS1
+authored to pin future cycles were deleted (see
+`fix-dev-boot-release-resolution.plan.md` §Cycle 1 step 7) under the
+binary `no-skipped-tests` rule. The obligations they encoded (sentry-
+node four-kind cross-product, fixture-tee closure-property, HTTP/CLI
+SinkRegistry construction) will be re-spec'd as proper TDD test+code
+pairs at the moment the producer code lands in this cycle, not before.
 
 Old `SENTRY_MODE` shape is still consumed everywhere: `sentry-node`'s
 `config.ts` / `runtime.ts` / `runtime-sinks.ts`, both apps' env types
@@ -101,13 +98,12 @@ authoring; the count is approximate):
   `SentryMode`, recompose `ParsedSentryConfig` as four-kind discriminated
   union), `types-fixture.ts`, `fixture.ts`, `config.ts` (rewrite
   `parseMode` and dispatch), `runtime.ts`, `runtime-sinks.ts`,
-  `runtime-error.ts` (drop `missing_git_sha` from sentry-node-side
-  surface — it lives in build-metadata still, but sentry-node no longer
-  raises it because release resolution doesn't fire when sinks is `[]`),
-  `index.ts` (export updates), plus 6 test files including unskipping
-  `config-from-registry.unit.test.ts` and `runtime-fixture-tee-redaction.unit.test.ts`.
-  Rename `FixtureSentryStore` → `FixtureCaptureStore`,
-  `FixtureSentryCapture*` → `FixtureCaptureRecord*`.
+  `index.ts` (export updates), plus existing test files updated for the
+  new shape and new TDD test+code pairs added for the four-kind cross-
+  product. (`runtime-error.ts` already lost the `missing_git_sha` branch
+  in `fix-dev-boot-release-resolution.plan.md`.) Rename
+  `FixtureSentryStore` → `FixtureCaptureStore`, `FixtureSentryCapture*`
+  → `FixtureCaptureRecord*`.
 - **`packages/core/env`** (~5 files): `src/schemas/sentry.ts` gains
   `@deprecated` JSDoc and is DELETED at the end of this same commit
   (after both apps flip); `src/schemas/index.ts` removes the
@@ -122,13 +118,15 @@ authoring; the count is approximate):
   `src/runtime-config.ts` / `src/runtime-config-from-validated-env.ts`
   (consume new shape), `src/observability/http-observability.ts` (kind
   discriminator switch), `src/observability/http-observability.unit.test.ts`
-  (unskip `describe.skip`), `src/observability/http-observability.integration.test.ts`,
+  (new test+code pairs covering SinkRegistry construction from
+  `OBSERVABILITY_SINKS`), `src/observability/http-observability.integration.test.ts`,
   `build-scripts/sentry-build-environment.ts` (drop `SENTRY_MODE` from
   the inherited `SentryConfigEnvironment` type), `e2e-tests/helpers/test-config.ts`
   (`createMockRuntimeConfig` migrates inputs).
 - **`apps/oak-search-cli`** (~5 files): `src/observability/cli-observability.ts`
-  - `cli-observability.unit.test.ts` (unskip), `src/lib/env.ts` + tests,
-  `src/lib/logger.ts` (`registerAdditionalSink` path).
+  - `cli-observability.unit.test.ts` (new test+code pairs covering
+  SinkRegistry construction from `OBSERVABILITY_SINKS`), `src/lib/env.ts`
+  - tests, `src/lib/logger.ts` (`registerAdditionalSink` path).
 
 **Acceptance criteria**:
 

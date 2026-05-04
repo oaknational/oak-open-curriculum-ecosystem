@@ -36,6 +36,12 @@
  * - `development_short_sha` — `dev-<shortSha>`, derived from
  *   `VERCEL_GIT_COMMIT_SHA`. Used for local builds without a Vercel
  *   branch URL.
+ * - `local_dev` — stable placeholder `'local-dev'`, used when
+ *   development environment has no Vercel attribution at all (no
+ *   branch URL, no commit SHA). Release attribution is meaningless
+ *   without Vercel context locally; the placeholder lets `pnpm dev`
+ *   boot cleanly without forcing operators to set
+ *   `SENTRY_RELEASE_OVERRIDE` for routine local work.
  * - `build_identity` — projected from the `AppBuildIdentity` injected
  *   by the composition root.
  */
@@ -44,6 +50,7 @@ export const RELEASE_SOURCES = {
   application_version: 'application_version',
   vercel_branch_url: 'vercel_branch_url',
   development_short_sha: 'development_short_sha',
+  local_dev: 'local-dev',
   build_identity: 'build_identity',
 } as const;
 
@@ -165,7 +172,6 @@ export const RELEASE_ERROR_KINDS = {
   missing_application_version: 'missing_application_version',
   invalid_application_version: 'invalid_application_version',
   missing_branch_url_in_preview: 'missing_branch_url_in_preview',
-  missing_git_sha: 'missing_git_sha',
   invalid_build_identity: 'invalid_build_identity',
 } as const;
 

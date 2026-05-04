@@ -5,22 +5,12 @@
  * These tests exercise `runSmokeMode` end-to-end with simple
  * dependency-injection fakes per ADR-078. The fakes are pure data
  * structures plus closures over a small in-memory call log; no real
- * server is started, no child process is spawned. These tests are
- * GREEN at landing of ARC A1 and prove the orchestration shape is
- * sound before ARC A2 wires real modes.
- *
- * The skipped block at the bottom is the RED-arc skip register
- * entry for ARC A2: each test exercises the dispatch path with a
- * real mode-name through resolveSmokeMode. SKIP-UNTIL-A2 (header
- * audit) — A2's atomic-landing-commit flips `describe.skip` to
- * `describe` once `modes.ts` registers the five existing modes; no
- * edit to test bodies required.
+ * server is started, no child process is spawned.
  *
  * @packageDocumentation
  */
 
 import { describe, expect, it } from 'vitest';
-import { resolveSmokeMode } from './modes.js';
 import { runSmokeMode } from './run-smoke.js';
 import type {
   BootOutcome,
@@ -252,31 +242,5 @@ describe('runSmokeMode — orchestration with DI fakes', () => {
     });
 
     expect(ctx.log.spawnCalls[0]?.configPath).toBe('custom.smoke.config.ts');
-  });
-});
-
-// SKIP-UNTIL-A2: ARC A2's atomic-landing-commit flips this `describe.skip`
-// to `describe` once `modes.ts` registers the five existing modes via the
-// `resolveSmokeMode` lookup path. The assertions turn GREEN
-// deterministically; no body edit required.
-describe.skip('runSmokeMode against real modes — A2 obligations', () => {
-  it('local-stub resolves to a real mode config', () => {
-    expect(() => resolveSmokeMode('local-stub')).not.toThrow();
-  });
-
-  it('local-stub-auth resolves to a real mode config', () => {
-    expect(() => resolveSmokeMode('local-stub-auth')).not.toThrow();
-  });
-
-  it('local-live resolves to a real mode config', () => {
-    expect(() => resolveSmokeMode('local-live')).not.toThrow();
-  });
-
-  it('local-live-auth resolves to a real mode config', () => {
-    expect(() => resolveSmokeMode('local-live-auth')).not.toThrow();
-  });
-
-  it('remote resolves to a real mode config', () => {
-    expect(() => resolveSmokeMode('remote')).not.toThrow();
   });
 });

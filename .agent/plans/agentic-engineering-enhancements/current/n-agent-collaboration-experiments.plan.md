@@ -358,15 +358,17 @@ remain canonical with two minor refinements applied via
   to the new canonical harness; convert smoke-assertions/*to
   *.smoke.test.ts; retire `helpers/environment.ts` process.env mutation;
   every existing `pnpm smoke:dev:*` still passes. Atomic-landing-commit
-  must flip `describe.skip` → `describe` on the SKIP-UNTIL-A2 blocks
-  in `harness/run-smoke.unit.test.ts` and
-  `harness/run-smoke.integration.test.ts`. For `remote` mode use
-  `createRemoteBootServer` factory.
+  adds new TDD test+code pairs covering each mode's registration in
+  `harness/run-smoke.unit.test.ts` and `harness/run-smoke.integration.test.ts`
+  (the prior `describe.skip` SKIP-UNTIL-A2/A3 placeholders were deleted
+  under the binary `no-skipped-tests` rule; re-spec lands with the
+  product code per `testing-strategy.md` §When Behaviour Changes). For
+  `remote` mode use `createRemoteBootServer` factory.
 - **ARC B1 (= WS2) — sentry-node SinkRegistry consumption**: atomic
   rename — `SentryMode` deleted; `FixtureSentryStore` →
   `FixtureCaptureStore`; `ParsedSentryConfig` cross-product
-  discriminated union; WS1 RED-arc skip register entries 1+2
-  unskip. Independent of ARC A2; parallelisable.
+  discriminated union. New TDD test+code pairs cover the four-kind
+  cross-product. Independent of ARC A2; parallelisable.
 
 Either order works; both can run in parallel as Orchestrator + Executor
 lanes (mirroring this session's shape). If only one agent is available,

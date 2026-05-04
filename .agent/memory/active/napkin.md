@@ -270,22 +270,14 @@ re-applied at every elaboration boundary.
 
 **Strict-reading observation Salty drafted and lost (reconstructed
 from transcript).** When scoping ARC A2 cycle 1, hit a tension
-between the YAML todo wording ("`describe.skip` for local-stub
-flipped to describe") and the actual file shape (one multi-mode
-`describe.skip` block in `run-smoke.unit.test.ts:105-125` covering
-all five A2 modes; no per-mode block exists). Naive read = "flip
-the multi-mode block to active in cycle 1" → fails because only
-local-stub would register; the other 4 `toContain` assertions go
-RED. Per-mode-split read = "split into 5 per-mode blocks; cycle 1
-unskips local-stub's; the others stay `describe.skip`" → violates
-`no-skipped-tests` and napkin "no commit ends with a skipped or
-failing test" because 4 blocks remain skipped after cycle 1.
-Resolution drafted: replace the multi-mode skip block with an
-active local-stub-only block; cycles 2–5 ADD their per-mode test
-alongside their product code. The resolution was correct under
-the cycle-pair shape that was authored. The *deeper* finding is
-that the cycle-pair shape itself was the wrong abstraction
-because the modes it cycles over should not exist as smoke targets.
+between the YAML todo wording and the per-mode `describe.skip`
+placeholders in `run-smoke.unit.test.ts`. The deeper finding was
+that the cycle-pair shape itself was the wrong abstraction because
+the modes it cycled over should not exist as smoke targets. The
+`describe.skip` placeholders that produced the tension have since
+been deleted under the binary `no-skipped-tests` rule; A2's atomic
+landing-commit will write fresh test+code pairs per
+`testing-strategy.md` §When Behaviour Changes.
 
 **Operational impact captured here.** No commit landed this
 session. Cycle 1 drafts reverted (with the collateral loss above).
@@ -406,16 +398,13 @@ continuity in case scope shifts).**
    — `OBSERVABILITY_SINK_KINDS = ['sentry', 'file'] as const` is the
    source-of-truth tuple for `ObservabilitySinkKind` and
    `SinkRegistry`.
-4. `packages/libs/sentry-node/src/config-from-registry.unit.test.ts:79-175`
-   — describe block with four `it.todo(...)` placeholders backed by
-   adjacent `/* … */` block-commented bodies; SKIP-UNTIL-WS2 header
-   names three obligations.
-5. `packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts:99-127`
-   — `describe.skip` block with three coupled rewrites: (a) helper
-   input shape `OBSERVABILITY_SINKS: []` + `OBSERVABILITY_FIXTURES:
-   true`, (b) helper return-type `Extract<...,{kind:'fixture-only'}>`,
-   (c) `createFixtureSentryStore` import + references follow the
-   `FixtureSentryStore`→`FixtureCaptureStore` rename.
+4. (deleted under binary no-skipped-tests rule) — was the
+   `config-from-registry.unit.test.ts` four-`it.todo` placeholder set
+   tracking the WS2 cross-product obligations.
+5. (deleted under binary no-skipped-tests rule) — was the
+   `runtime-fixture-tee-redaction.unit.test.ts` `describe.skip` block
+   tracking ADR-160 closure-property invariant + three coupled
+   rewrites for the `SENTRY_MODE` deletion landing.
 
 **State of play at this entry.** Claim 99717aca (Tidal, Lane B / WS2
 sentry-node) still open in `active-claims.json`. No commit landed.
