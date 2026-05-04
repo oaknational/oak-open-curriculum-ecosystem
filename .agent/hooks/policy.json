@@ -18,9 +18,21 @@
         "git restore --worktree",
         "git restore --staged",
         "git stash drop",
-        "git stash clear"
+        "git stash clear",
+        {
+          "pattern": "git add -A",
+          "citation": "distilled.md §Stage by explicit pathspec"
+        },
+        {
+          "pattern": "git add --all",
+          "citation": "distilled.md §Stage by explicit pathspec"
+        },
+        {
+          "pattern": "git add .",
+          "citation": "distilled.md §Stage by explicit pathspec"
+        }
       ],
-      "description": "Block shell commands that bypass safety guardrails, destroy history, or overwrite live working-tree edits. Working-tree-overwrite commands (checkout/restore variants) are blocked because they silently throw away in-flight edits — including peer-agent edits in parallel sessions — and `git fsck --lost-found` cannot recover them. We never use git to remove work; forward-going filesystem changes only. See `.agent/rules/never-use-git-to-remove-work.md`."
+      "description": "Block shell commands that bypass safety guardrails, destroy history, or overwrite live working-tree edits. Working-tree-overwrite commands (checkout/restore variants) are blocked because they silently throw away in-flight edits — including peer-agent edits in parallel sessions — and `git fsck --lost-found` cannot recover them. Wildcard staging commands (`git add -A` / `--all` / `.`) are blocked under the explicit-pathspec discipline (distilled.md §Stage by explicit pathspec) so a continuity-deferral commit cannot accidentally bundle parallel-thread plan work or unrelated plugin enables. We never use git to remove work; forward-going filesystem changes only. See `.agent/rules/never-use-git-to-remove-work.md`."
     },
     "preToolUseContent": {
       "blocked_patterns": [

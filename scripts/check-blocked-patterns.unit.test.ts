@@ -12,10 +12,12 @@ describe('findBlockedPattern', () => {
   it('matches dangerous git flags even when arguments appear between tokens', () => {
     const blockedPatterns = ['git push --force', 'git reset --hard'];
 
-    expect(findBlockedPattern('git push origin HEAD --force', blockedPatterns)).toBe(
-      'git push --force',
-    );
-    expect(findBlockedPattern('git reset HEAD~1 --hard', blockedPatterns)).toBe('git reset --hard');
+    expect(findBlockedPattern('git push origin HEAD --force', blockedPatterns)).toStrictEqual({
+      pattern: 'git push --force',
+    });
+    expect(findBlockedPattern('git reset HEAD~1 --hard', blockedPatterns)).toStrictEqual({
+      pattern: 'git reset --hard',
+    });
   });
 
   it('returns null when no blocked pattern matches', () => {
@@ -23,10 +25,28 @@ describe('findBlockedPattern', () => {
   });
 
   it('limits guardrail-bypass flags to git commands when the policy requires git', () => {
-    expect(findBlockedPattern('git commit --no-verify', ['git --no-verify'])).toBe(
-      'git --no-verify',
-    );
+    expect(findBlockedPattern('git commit --no-verify', ['git --no-verify'])).toStrictEqual({
+      pattern: 'git --no-verify',
+    });
     expect(findBlockedPattern('pnpm publish --no-verify', ['git --no-verify'])).toBeNull();
+  });
+
+  it('carries the citation through when the entry is an object', () => {
+    expect(
+      findBlockedPattern('git add .', [
+        { pattern: 'git add .', citation: 'distilled.md §Stage by explicit pathspec' },
+      ]),
+    ).toStrictEqual({
+      pattern: 'git add .',
+      citation: 'distilled.md §Stage by explicit pathspec',
+    });
+  });
+
+  it('does not match `git add .` against explicit-pathspec staging', () => {
+    const wildcardPattern = 'git add .';
+    expect(findBlockedPattern('git add packages/core/foo.ts', [wildcardPattern])).toBeNull();
+    expect(findBlockedPattern('git add ./packages/core/foo.ts', [wildcardPattern])).toBeNull();
+    expect(findBlockedPattern('git add .gitignore', [wildcardPattern])).toBeNull();
   });
 });
 
@@ -81,6 +101,48 @@ describe('parseBlockedPatternPolicy', () => {
     ).toStrictEqual(['git push --force', 'git --no-verify']);
   });
 
+  it('accepts entries that pair a pattern with a doctrinal citation', () => {
+    expect(
+      parseBlockedPatternPolicy({
+        hooks: {
+          preToolUse: {
+            blocked_patterns: [
+              'git push --force',
+              { pattern: 'git add .', citation: 'distilled.md §Stage by explicit pathspec' },
+            ],
+          },
+        },
+      }),
+    ).toStrictEqual([
+      'git push --force',
+      { pattern: 'git add .', citation: 'distilled.md §Stage by explicit pathspec' },
+    ]);
+  });
+
+  it('throws when an object entry omits the pattern field', () => {
+    expect(() =>
+      parseBlockedPatternPolicy({
+        hooks: {
+          preToolUse: {
+            blocked_patterns: [{ citation: 'orphan citation' }],
+          },
+        },
+      }),
+    ).toThrow('The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.');
+  });
+
+  it('throws when an object entry has a non-string citation', () => {
+    expect(() =>
+      parseBlockedPatternPolicy({
+        hooks: {
+          preToolUse: {
+            blocked_patterns: [{ pattern: 'git add .', citation: 42 }],
+          },
+        },
+      }),
+    ).toThrow('The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.');
+  });
+
   it('throws when policy data has no blocked_patterns array', () => {
     expect(() => parseBlockedPatternPolicy({ hooks: {} })).toThrow(
       'The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.',
@@ -90,12 +152,28 @@ describe('parseBlockedPatternPolicy', () => {
 
 describe('buildPreToolUseDenyResponse', () => {
   it('returns the structured deny payload Claude expects', () => {
-    expect(buildPreToolUseDenyResponse('git push --force')).toStrictEqual({
+    expect(buildPreToolUseDenyResponse({ pattern: 'git push --force' })).toStrictEqual({
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
         permissionDecisionReason:
           'Blocked by repo hook policy: matched dangerous pattern "git push --force".',
+      },
+    });
+  });
+
+  it('appends the doctrinal citation to the reason when present', () => {
+    expect(
+      buildPreToolUseDenyResponse({
+        pattern: 'git add .',
+        citation: 'distilled.md §Stage by explicit pathspec',
+      }),
+    ).toStrictEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason:
+          'Blocked by repo hook policy: matched dangerous pattern "git add .". Citation: distilled.md §Stage by explicit pathspec.',
       },
     });
   });
