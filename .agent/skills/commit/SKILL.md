@@ -30,14 +30,27 @@ closes that exposure window.
 
 ## Tooling
 
-One active script makes this skill actionable end-to-end:
+These scripts make this skill actionable end-to-end:
 
+- **`scripts/check-commit-skill-gates.ts`** — orchestrates the full
+  pre-`git commit` validation sequence as a single composed gate: practice
+  fitness (`practice:fitness:strict-hard`), practice vocabulary
+  (`practice:vocabulary`), then the commit-message check
+  (`scripts/check-commit-message.sh`). Exits with the first non-zero exit
+  code. **Use BEFORE every `git commit`.** Run via
+  `pnpm exec tsx scripts/check-commit-skill-gates.ts` and forward the same
+  arguments you would pass to `check-commit-message.sh` (`-F file`, `-F -`,
+  `-m "subject"`, etc.). Doctrinal anchors: PDR-038 §2026-05-04 amendment
+  (un-enforced doctrine at maturity is liability), PDR-044 (memetic immune
+  system, innate-immunity layer), ADR-144 (vocabulary consistency).
 - **`scripts/check-commit-message.sh`** — validates a commit message against
   this repo's commitlint config in isolation from the rest of the pre-commit /
   commit-msg hook chain. Mirrors `git commit` message intake (`-m` repeats,
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates, 2 invalid usage. Catches
   `header-max-length`, `body-max-line-length`, and case violations in ~1s
-  before the ~34s pre-commit cycle. **Use BEFORE every `git commit`.**
+  before the ~34s pre-commit cycle. The orchestrator above invokes this
+  script as the third (message) gate; call it directly only when iterating
+  on a draft message in isolation from the tree-state gates.
 - **`pnpm agent-tools:commit-queue --`** — runs the `agent-tools` TypeScript
   commit-queue CLI for advisory `commit_queue` entries in
   `active-claims.json` v1.3.0. Use it to enqueue the intended file bundle
@@ -177,11 +190,11 @@ the advisory queue and the short-lived git transaction claim:
    pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```
 
-8. Validate the message and verify the staged bundle immediately before
-   committing:
+8. Run the commit-skill gate orchestrator and verify the staged bundle
+   immediately before committing:
 
    ```bash
-   ./scripts/check-commit-message.sh -F .git/COMMIT_EDITMSG
+   pnpm exec tsx scripts/check-commit-skill-gates.ts -F .git/COMMIT_EDITMSG
    pnpm agent-tools:commit-queue -- verify-staged \
      --intent-id "<intent-id>" \
      --commit-subject "<draft subject>"
@@ -269,9 +282,12 @@ The wait is not coordination. It complements, but never replaces, the
 5. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
    `bulk-downloads/`. Review each file staged and record its fingerprint.
 6. **Draft the message** against the enumerated constraints.
-7. **Validate the message via `scripts/check-commit-message.sh` BEFORE
-   invoking `git commit`** (see below). If validation fails, rewrite and
-   re-validate — do not let the `commit-msg` hook be your first check.
+7. **Run the commit-skill gate orchestrator
+   (`pnpm exec tsx scripts/check-commit-skill-gates.ts`) BEFORE invoking
+   `git commit`** (see below). The orchestrator runs the practice fitness
+   gate, the practice vocabulary gate, and the commit-message check in
+   sequence. If any gate fails, fix the underlying issue and re-run — do
+   not let the live hooks be your first check.
 8. **Verify the staged bundle** via `pnpm agent-tools:commit-queue -- verify-staged`.
    Do not commit if verification fails.
 9. **Commit** using the HEREDOC template below so multi-line body formatting
@@ -284,12 +300,13 @@ The wait is not coordination. It complements, but never replaces, the
 
 ## Pre-Commit Validation (replaces the manual format-check)
 
-Run the helper script against the drafted message. It exits 0 if the message
-conforms to the active commitlint config; 1 if it violates; 2 on invalid
-usage.
+Run the gate orchestrator against the drafted message. It runs the practice
+fitness gate (`practice:fitness:strict-hard`), the practice vocabulary gate
+(`practice:vocabulary`), and the commit-message check in sequence and exits
+with the first non-zero exit code.
 
 ```bash
-./scripts/check-commit-message.sh -F - <<'EOF'
+pnpm exec tsx scripts/check-commit-skill-gates.ts -F - <<'EOF'
 type(scope): short subject starting lowercase
 
 Body paragraph explaining motivation and context. Wrap at ~100 chars
@@ -303,16 +320,24 @@ Or pass via `-m` (repeats join paragraphs with blank lines, identical to
 `git commit -m … -m …`):
 
 ```bash
-./scripts/check-commit-message.sh \
+pnpm exec tsx scripts/check-commit-skill-gates.ts \
   -m "type(scope): short subject" \
   -m "Body paragraph one." \
   -m "Body paragraph two."
 ```
 
-If the script reports a violation, rewrite the message and re-run before
-attempting `git commit`. The script runs `commitlint` from the repo root
-with the canonical config — same rules as the live `commit-msg` hook,
-without the rest of the ~34s pre-commit chain.
+If the orchestrator reports a violation, identify the failing gate from the
+`commit-skill gate "<gate>" failed` line on stderr, fix the underlying tree
+or message issue, and re-run before attempting `git commit`. The orchestrator
+runs the same fitness, vocabulary, and commitlint configurations as the live
+gates — same rules as the post-commit hook, without the rest of the ~34s
+pre-commit chain.
+
+The fitness and vocabulary gates inspect the working tree, not the staged
+set; pre-existing fitness or vocabulary violations are catalogued at the
+appropriate consolidation pass per the `doctrine-enforcement-quick-wins`
+plan (WS5) and not blocked retroactively. New violations introduced by the
+current change are blocked at this gate.
 
 ## Commit Message Template
 
