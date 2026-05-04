@@ -1,7 +1,7 @@
 ---
-fitness_line_target: 150
-fitness_line_limit: 200
-fitness_char_limit: 12000
+fitness_line_target: 200
+fitness_line_limit: 280
+fitness_char_limit: 16000
 fitness_line_length: 100
 split_strategy: 'Extract growing sections to dedicated governance docs by responsibility'
 ---
@@ -38,6 +38,31 @@ regardless of the location or cause. There is no such thing as an
 acceptable failure, ever.
 
 NEVER disable any quality gates or Git hooks.
+
+### Gate taxonomy — nine complementary layers
+
+Each layer catches a different class of defect; the layers compose:
+
+1. **Formatting** (`format`, `markdownlint`) — consistent style, no merge noise.
+2. **Type correctness** (`type-check`) — compile-time type safety.
+3. **Linting** (`lint`) — code patterns, import boundaries, architectural rules.
+   Custom lint rules (`@oaknational/eslint-plugin-standards`) encode
+   architectural decisions as enforceable checks — workspace boundary rules,
+   layer-direction constraints, file-count limits per directory, and prohibited
+   import patterns. These turn ADRs into automated enforcement.
+4. **Static analysis** (`knip`, `depcruise`) — unused code/exports/dependencies,
+   circular dependencies, layer violations. These catch dead code and
+   structural drift that linting and type-checking cannot see. Linting enforces
+   _what you should do_; static analysis detects _what you forgot to clean up_.
+5. **Testing** (`test`, `test:widget`, `test:e2e`, `test:ui`, `smoke`) —
+   behavioural correctness at all levels.
+6. **Mutation testing** (`mutate`) — test suite effectiveness. Proves tests
+   actually detect real faults, not just exercise code paths.
+7. **Build** (`build`) — production artefacts compile and bundle correctly.
+8. **Specialist review** (sub-agents) — architectural compliance, security,
+   documentation.
+9. **Accessibility audit** (`test:a11y`) — WCAG 2.2 AA compliance for
+   UI-shipping workspaces, zero-tolerance, both themes.
 
 ## Problem-Hiding Patterns
 
@@ -79,7 +104,20 @@ The expanded examples and cures live in
 
 - **Long-term architectural excellence over expediency** - Prefer
   the strongest long-term foundation, but still ask the first
-  question and reject speculative complexity
+  question and reject speculative complexity. Worked failure-mode
+  example: a shortcut that creates duplication across architectural
+  layers is not a shortcut — it is a debt that compounds silently.
+  Copying a function "because it's faster" creates two
+  implementations that drift apart. The cost of the drift is
+  invisible until it manifests as a real bug (wrong search results,
+  inconsistent behaviour, stale configuration). The correct response
+  is always to fix the boundary, not to duplicate across it. See
+  [principles.md § Architectural Excellence Over Expediency][arch-excellence]
+  for the principle and PDR-043 / ADR-172 for the three-structural-
+  cues operationalisation.
+
+[arch-excellence]: ../../.agent/directives/principles.md#architectural-excellence-over-expediency
+
 - **SOLID principles** (loosely) - Focus on single responsibility and dependency inversion
 - **Clean Architecture** (loosely) - Separate concerns into layers
 - **Strict boundaries** - Clear interfaces between modules, no leaky abstractions

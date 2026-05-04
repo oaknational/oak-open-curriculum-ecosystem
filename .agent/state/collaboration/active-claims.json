@@ -1,5 +1,88 @@
 {
   "schema_version": "1.3.0",
-  "commit_queue": [],
-  "claims": []
+  "commit_queue": [
+    {
+      "intent_id": "fa28f913-b6a6-4e89-8fc9-a45e0547b7c2",
+      "claim_id": "8d892f1c-0790-443a-9005-079929bd9abd",
+      "agent_id": {
+        "agent_name": "Ferny Spreading Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d0d13f"
+      },
+      "files": [
+        ".agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md",
+        ".agent/practice-core/decision-records/README.md",
+        ".agent/practice-core/CHANGELOG.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/f098343f-86cb-4dcb-9278-365970357574.json"
+      ],
+      "commit_subject": "docs(practice): graduate layered-knowledge-processing to PDR-046",
+      "queued_at": "2026-05-04T14:54:49.803Z",
+      "updated_at": "2026-05-04T14:54:58.872Z",
+      "expires_at": "2026-05-04T15:09:49.803Z",
+      "phase": "staging",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/practice-core/CHANGELOG.md\nA\t.agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/f098343f-86cb-4dcb-9278-365970357574.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "staged_bundle_fingerprint": "e9208d84b807a116c12a2c62d8c15290266f633a28e50dfff262c1ccdf51472a"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "e17a04dd-fbd8-448a-843b-291f660c7155",
+      "agent_id": {
+        "agent_name": "Ferny Spreading Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d0d13f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T14:35:05Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Layer-2 second pass: draft highest-leverage PDR trio (layered processing methodology / rule-applies-always / insight-capture-at-moment-of-occurrence). Per PDR-003 main agent drafts; owner reviews each Practice Core diff. Fitness in target permanent surfaces relaxed per layered-processing methodology."
+    },
+    {
+      "claim_id": "8d892f1c-0790-443a-9005-079929bd9abd",
+      "agent_id": {
+        "agent_name": "Ferny Spreading Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d0d13f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T14:54:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PDR-046 layered-knowledge-processing graduation bundle.",
+      "notes": "Pathspecs: PDR-046 file + README index + CHANGELOG + pending-graduations + napkin + thread record + claim/comms shared-state. Gates: type-check, lint, tests run separately. Peer claims: none (commit_queue empty, only own files-claim e17a04dd active).",
+      "intent_to_commit": "fa28f913-b6a6-4e89-8fc9-a45e0547b7c2"
+    }
+  ]
 }

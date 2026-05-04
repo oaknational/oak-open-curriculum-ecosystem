@@ -130,25 +130,6 @@ boundary.
 - **Dry-run multi-step workflows against accumulated state** before
   committing to the recipe; produces *proceed* or *stage differently*.
 
-**The rule applies, always — no hedging, no carve-outs, no
-exceptions.** Owner correction across the 2026-05-03 corrective
-consolidation (Pearly Snorkelling Reef arc): there is no semantic
-difference between *carve out*, *carve around*, *exception*,
-*honest framing for external X*, *permitted variant*, *for these
-arcs*, or any other wording that means "I know the rule applies,
-but this situation is special". Every such wording is the same
-failure shape in different dressing. Vocabulary is not the trigger
-— *intent* is. If the substance reads "the rule doesn't apply
-here", the candidate is suspect regardless of vocabulary.
-*Strict-and-complete covers every rule, not just types. Always
-strict, everywhere, all the time.* Operationalises principles.md §
-Architectural Excellence Over Expediency vocabulary trip-list.
-Worked corrective: PDR-043 + ADR-172 + multi-commit-TDD skip-
-register triple deleted; "carve-out the operation, record the
-carve-out as a domain constraint" pattern deleted; principles.md
-"no type shortcuts" rewritten to name the ban (widening) rather
-than grant exceptions for narrowing operators.
-
 **Plan-following is not principle-following — re-apply the
 first-question at every elaboration boundary.** Owner-named pattern
 across the 2026-05-01 → 2026-05-03 EEF observability arc. The
@@ -183,23 +164,6 @@ need many low-level cycles either do that composition (multi-cycle
 but each cycle green) or don't need to exist because the low-level
 coverage is sufficient. Captured in platform memory
 `feedback_question_shape_known_bad_vs_adopt`.
-
-**Insight capture happens at the moment of occurrence — every
-later moment is a degraded copy.** Owner stance 2026-05-04: when
-an insight surfaces in conversation (owner-named pattern,
-agent-named meta-finding, mutual sharpening of an existing
-principle), the napkin/PDR/plan capture is done in the same turn.
-"I'll capture that later" is itself a failure shape; later means
-*degraded copy of an insight that was once whole*. This is the
-active-memory analogue of architectural-excellence-over-expediency:
-the cheap answer ("note it for next session") burns the
-load-bearing detail; the architecturally correct answer (capture
-now, where the insight is sharp and the surrounding context is
-live) costs minutes and preserves the substance. Generator:
-closure pressure + "this conversation is moving fast, I'll come
-back to that". Cure: when an insight surfaces, the next move is
-the capture, not the next turn. Candidate for graduation to a
-principles-level addition.
 
 **Sequenced-deferral discipline — every deferral points to a plan +
 phase, or to a sequenced decision point.** Owner sharpening

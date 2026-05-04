@@ -38,65 +38,41 @@ surfacing options to the owner or a peer agent, do not include a
 if it were a legitimate trade-off; presenting it as one is
 itself the failure mode.
 
-Vocabulary that signals the impulse: _fast path_, _quick fix_,
-_cheap cure_, _good enough for now_, _minimum viable_, _just a
-placeholder_, _for later_, _next session_, _out of scope_,
-_defer_, _informational not actioned_, _light pass exempts_,
-_bootstrap fast-path_, _land it then refactor_, _we can always_.
-When any of these appear in draft output, treat them as a
-question, not a closure. The vocabulary IS the impulse making
-itself visible.
+The doctrine is operationalised through composing structural
+defences:
 
-Three structural cues at output time form a cohesive defence
-against the rush impulse, not three separate fences:
+- **The three structural cues at output time** — vocabulary
+  trip-list, conditional-discipline check before proposing
+  structure, and first-principles framing question. See
+  [ADR-172][adr-172] for the host adoption and the portable form
+  at PDR-043. The hedging-vocabulary trip-list itself lives in the
+  innate-immunity hook (`.agent/hooks/policy.json`); cataloguing
+  it in this file would duplicate it.
+- **Doctrine-authoring discipline** — at the moment a rule,
+  principle, ADR, PDR, or governance document is authored or
+  amended, the three tests of PDR-047 (substance / vocabulary /
+  re-frame) catch self-violating clauses upstream of the
+  enforcement scanner.
+- **Memetic immune system** — the innate-immunity layer at
+  write-time and the adaptive-immunity layer at consolidation-time
+  enforce the principle structurally. See PDR-044.
+- **Quality-gate fences** — `never-disable-checks`,
+  `no-warning-toleration`, `replace-don't-bridge`,
+  `dont-break-build-without-fix-plan`, `read-before-asking`, and
+  adjacent rules each exist to defeat one expression of the
+  rush impulse. The principle is their common generator.
 
-1. **Vocabulary trip-list** (above) — when _fast path_, _quick
-   fix_, _land it then refactor_, _defer_, etc. appear in draft
-   output, treat them as a question, not a closure.
-2. **Conditional-discipline check before proposing structure** —
-   before naming a doctrine, rule, or convention candidate, ask:
-   _does this introduce a "case where the rule doesn't apply"?_
-   If yes, the candidate is suspect. The rush impulse reaches
-   for _make the discipline skippable_ or _carve out this case_
-   because fixing the underlying surface feels slower than
-   introducing a conditional. The corrective is _fix the surface_,
-   not _make the discipline contingent._
-3. **First-principles framing question** — when proposing any
-   change, ask: _what would the path look like if there were no
-   turn-budget constraint, no closure pressure, no token-cost
-   concern?_ If the answer differs from the proposed path, the
-   proposed path is rush-shaped — re-reason from the principle
-   answer, not the budget answer.
+The failure-mode shape (cheap fixes silently kill the diagnostic;
+local optimisation under rush is global pessimisation; fences
+accumulate while the generator stays unchanged) plus a worked
+failure-mode example (shortcut-via-duplication) live at
+[development-practice.md § Architecture Level][dev-arch].
 
-The cues compose: cue 1 detects the impulse mid-output; cue 2
-blocks its expression in candidate-doctrine shape; cue 3 forces
-the architecturally-correct alternative into view. See ADR-172
-for the host architectural decision and PDR-043 for the portable
-form.
-
-Failure mode: cheap fixes silently kill the diagnostic. The
-genuine signal is usually _the surface is wrong_ — surface
-ergonomics, boundary, or contract. The cheap-fix shape reaches
-for _make the discipline skippable_ or _carve out this case_
-because fixing the surface feels slower than introducing a
-conditional. Local optimisation under rush is global
-pessimisation: every cheap move has maintenance externalities
-(bridges to maintain, conditions to re-evaluate, half-finished
-implementations to complete, silenced warnings to investigate).
-Fences accumulate; the underlying generator stays unchanged.
-This principle is the generator every quality-gate fence in the
-repo (`never-disable-checks`, `no-warning-toleration`,
-`replace-don't-bridge`, `dont-break-build-without-fix-plan`,
-`read-before-asking`, and adjacent rules) exists to defeat.
-
-Worked failure-mode example: if a shortcut creates duplication
-across architectural layers, it is not a shortcut — it is a
-debt that compounds silently. Copying a function "because it's
-faster" creates two implementations that drift apart. The cost
-of the drift is invisible until it manifests as a real bug
-(wrong search results, inconsistent behaviour, stale
-configuration). The correct response is always to fix the
-boundary, not to duplicate across it.
+[dev-arch]: ../../docs/governance/development-practice.md#architecture-level
+[adr-172]: ../../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md
+[ts-practice]: ../../docs/governance/typescript-practice.md
+[dev-doc]: ../../docs/governance/development-practice.md#documentation-practice
+[dev-gates]: ../../docs/governance/development-practice.md#gate-taxonomy--nine-complementary-layers
 
 ## Owner Direction Beats Plan
 
@@ -171,14 +147,10 @@ this way produces cleaner boundaries and simpler classification.
 ### Code Design and Architectural Principles
 
 - **TDD** - ALWAYS use TDD at ALL levels — unit, integration, AND
-  E2E. Each cycle is one landing unit (one commit): write the
-  failing test (Red), write the product code that makes it pass
-  (Green), refactor with the test as the safety net (Refactor) —
-  all in the same commit. Test and product code travel together,
-  never separated across commits. If a test cannot be greened in
-  a single landing, the slice is too big — break it into smaller
-  test+code pairs. If tests lag behind code, or land ahead of
-  the code that greens them, TDD was not followed.
+  E2E. Test and product code are two halves of one act of design;
+  they land together as one atomic commit. See
+  [tdd-as-design.md](tdd-as-design.md) for the foundational
+  definition and atomic-landing invariant.
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards
   compatibility** - replace old approaches with new approaches,
@@ -225,39 +197,22 @@ this way produces cleaner boundaries and simpler classification.
   lose the ability to debug the problem.
 - **No empty catch blocks** - Never use empty catch blocks, always
   handle errors explicitly and using the `Result<T, E>` pattern.
-- **Document Everywhere** - ALL files, modules, functions, data
-  structures, classes, constants, and type information MUST have
-  exhaustive, comprehensive TSDoc annotations that can be compiled
-  by `typedoc`. All public API surfaces MUST be documented with
-  examples and usage patterns. All major engineering or
-  architectural decisions MUST be documented with ADRs. All use
-  cases, public APIs, CLIs, troubleshooting and other concerns
-  must be covered in authored markdown documentation in the
-  appropriate directories, default to the README.md for the current
-  workspace. Observe progressive disclosure, starting with the
-  most general information and working towards the most specific.
-  DO NOT create summary documents of each piece of work. **TSDoc
-  syntax**: open every TSDoc block with a plain-language summary
-  sentence (not a tag); put supporting detail in `@remarks`; only
-  use tags supported by `tsdoc.json`; use `@packageDocumentation`
-  for file-level docs (never `@module` or `@fileoverview`); escape
-  literal braces as `\{` and `\}` for clean `tsdoc/syntax`; use
-  TSDoc to explain intent and trade-offs, not to narrate obvious
-  code.
-- **Onboarding** - We must have a clear onboarding path for new
-  developers and AI agents, from the root README.md, to detailed
-  documentation in the appropriate directories, to specialised
-  documentation in the docs/ directory, to TSDoc annotations and
-  ADRs. Observe progressive disclosure, starting with the most
-  general information and working towards the most specific.
+- **Document Everywhere** - ALL code, all decisions, all use
+  cases MUST be documented: TSDoc on every file/module/function/
+  data structure/class/constant/type; ADRs for major engineering
+  or architectural decisions; markdown for use cases, public
+  APIs, CLIs, troubleshooting. Observe progressive disclosure;
+  do NOT create summary documents of each piece of work. TSDoc
+  syntax detail and the documentation-structure discipline live
+  at [docs/governance/typescript-practice.md][ts-practice] and
+  [development-practice.md § Documentation Practice][dev-doc].
+- **Onboarding** - Clear onboarding path from root README to
+  workspace docs to TSDoc and ADRs, observing progressive
+  disclosure throughout.
 - **No machine-local paths** — Paths in version-controlled files
-  MUST resolve identically on every machine. Forbidden: literal
-  absolute paths; relative paths escaping the repo into per-user
-  surfaces (`..` reaching `~/.claude/`); hardcoded usernames or
-  flattened-project-id segments. Use repo-relative paths in-repo,
-  templated placeholders (`<project>`) for per-user surfaces, and
-  platform variables (`${CLAUDE_PROJECT_DIR}`) for runtime paths.
-  See `.agent/rules/no-machine-local-paths.md`.
+  MUST resolve identically on every machine. See
+  [`.agent/rules/no-machine-local-paths.md`](../rules/no-machine-local-paths.md)
+  for the forbidden / permitted shapes.
 - **No symlinks** — Symlinks are forbidden. Structure workspaces
   properly and use the pnpm workspace dependency graph. Any
   discovered symlinks must be removed immediately as highest
@@ -273,16 +228,10 @@ this way produces cleaner boundaries and simpler classification.
   not bridge it.
 - **Never use git to remove work** — We move forward via filesystem
   changes (Edit, Write, `rm`); git is for committed history only.
-  Working-tree-overwrite commands (`git checkout HEAD -- <path>`,
-  `git checkout -- <path>`, `git restore`, `git stash drop` /
-  `clear`) silently wipe in-flight edits — yours AND any peer
-  agent's edits to the same files in a parallel session — and
-  `git fsck --lost-found` cannot recover them. Reach for Edit,
-  Write, or `rm` instead. When you remove work, capture the
-  realisation that drove the removal in the napkin in the same
-  session — without it the next agent re-creates what you removed.
-  See `.agent/rules/never-use-git-to-remove-work.md`. The repo's
-  `PreToolUse` Bash blocked-patterns hook enforces this.
+  Working-tree-overwrite commands silently wipe in-flight edits;
+  reach for Edit, Write, or `rm` instead. See
+  [`.agent/rules/never-use-git-to-remove-work.md`](../rules/never-use-git-to-remove-work.md)
+  for the full rule and the `PreToolUse` hook enforcement.
 
 ### Refactoring
 
@@ -389,35 +338,12 @@ paths, setup files) don't apply.
   binding. See
   [Problem-Hiding Patterns](../../docs/governance/problem-hiding-patterns.md).
 - **Quality gates** - Run ALL gates after changes. The gate
-  taxonomy has complementary layers, each catching a different
-  class of defect:
-  1. **Formatting** (`format`, `markdownlint`) — consistent style,
-     no merge noise
-  2. **Type correctness** (`type-check`) — compile-time type safety
-  3. **Linting** (`lint`) — code patterns, import boundaries,
-     architectural rules. Custom lint rules
-     (`@oaknational/eslint-plugin-standards`) encode architectural
-     decisions as enforceable checks — workspace boundary rules,
-     layer-direction constraints, file-count limits per directory,
-     and prohibited import patterns. These turn ADRs into
-     automated enforcement.
-  4. **Static analysis** (`knip`, `depcruise`) — unused
-     code/exports/dependencies, circular dependencies, layer
-     violations. These catch dead code and structural drift that
-     linting and type-checking cannot see. Linting enforces _what
-     you should do_; static analysis detects _what you forgot to
-     clean up_.
-  5. **Testing** (`test`, `test:widget`, `test:e2e`, `test:ui`, `smoke`) —
-     behavioural correctness at all levels
-  6. **Mutation testing** (`mutate`) — test suite effectiveness.
-     Proves tests actually detect real faults, not just exercise
-     code paths.
-  7. **Build** (`build`) — production artefacts compile and bundle
-     correctly
-  8. **Specialist review** (sub-agents) — architectural compliance,
-     security, documentation
-  9. **Accessibility audit** (`test:a11y`) — WCAG 2.2 AA compliance
-     for UI-shipping workspaces, zero-tolerance, both themes
+  taxonomy has nine complementary layers (formatting, type
+  correctness, linting, static analysis, testing, mutation
+  testing, build, specialist review, accessibility audit), each
+  catching a different class of defect. Full taxonomy with the
+  per-layer scope and tooling lives at
+  [development-practice.md § Quality Gates][dev-gates].
 - **No unused code** - If a function is not used, delete it. If
   product code is only used in tests, delete it. If a file is not
   used, delete it. Delete dead code. Static analysis tools (knip,
@@ -445,18 +371,10 @@ paths, setup files) don't apply.
   error classes over local `*Like` shapes.
 - **`unknown` is type destruction** — `unknown`, `z.unknown()`,
   and `Record<string, unknown>` erase structural type information.
-  **Permitted**: function parameter at an incoming external
-  boundary from a third-party system (data genuinely has no known
-  shape yet); `z.unknown()` only when the upstream schema
-  genuinely declares no structure (e.g. polymorphic aggregation
-  buckets from Elasticsearch). **Forbidden**: replacing a concrete
-  type with `unknown` to avoid a type error; using `z.unknown()`
-  where a concrete Zod schema exists or can be generated; using
-  `z.record(z.string(), z.unknown())` as a stand-in for a known
-  object shape; hand-crafting a Zod schema that approximates a
-  generated shape. **The test**: if the type information exists
-  anywhere in the pipeline — the OpenAPI spec, the generated
-  types, a library's exported types — it MUST be preserved.
+  Permitted only at named external boundaries; forbidden as a
+  stand-in for a known shape. See
+  [`.agent/rules/unknown-is-type-destruction.md`](../rules/unknown-is-type-destruction.md)
+  for the permitted/forbidden list and the preservation test.
 - **Preserve type information** — NEVER widen types by assigning to
   broader types like `string` or `number`. If you have a literal
   type `'/api/path'`, keep it as that literal, don't accept it as
@@ -512,16 +430,12 @@ Universal testing principles:
 - unit tests are pure, in-process, and mock-free;
 - integration tests import code directly and use only simple DI fakes;
 - E2E tests prove running-system behaviour;
-- tests must not read or mutate `process.env`, global objects, module cache,
-  ambient env files, or `process.cwd()`;
-- smoke composition roots — the Vitest runner config or spawn invocation — may
-  read ambient env, validate it, and inject the result. Test files and setup
-  files must not read or mutate `process.env`;
+- tests must never read or mutate `process.env`, global objects, module cache,
+  ambient env files, or `process.cwd()` — smoke composition roots only;
 - no skipped tests, no conditional tests, no complex mocks, no complex test
-  logic, and no process spawning in in-process tests. Conditional tests of
-  any kind are a symptom of architectural failure: remove the conditional,
-  fix the ambiguity in product code, and write deterministic
-  behaviour-proving tests that do not constrain implementation.
+  logic, no process spawning in in-process tests. Conditional tests are an
+  architectural-failure symptom — remove them, fix the ambiguity in product
+  code, write deterministic behaviour-proving tests.
 
 ### Developer Experience
 

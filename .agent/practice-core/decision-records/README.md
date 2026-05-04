@@ -169,3 +169,6 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-043](PDR-043-rush-impulse-three-structural-cues.md) | Rush-Impulse Three Structural Cues | Accepted |
 | [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted |
 | [PDR-045](PDR-045-workspace-first-investigation-discipline.md) | Workspace-First Investigation Discipline | Accepted |
+| [PDR-046](PDR-046-layered-knowledge-processing.md) | Layered Knowledge Processing — Preserve First, Restructure Second | Accepted |
+| [PDR-047](PDR-047-rule-applies-always-doctrine-authoring.md) | The Rule Applies, Always — Doctrine-Authoring Discipline | Accepted |
+| [PDR-048](PDR-048-insight-capture-at-moment-of-occurrence.md) | Insight Capture at the Moment of Occurrence | Accepted |

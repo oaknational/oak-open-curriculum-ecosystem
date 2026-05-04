@@ -4,6 +4,76 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-04 — insight-capture-at-moment-of-occurrence graduated to PDR-048
+
+Layer-2 second pass continuation. The active-memory discipline
+that governs *when* an insight is written down is now codified as
+its own Practice-governance decision record. Practice Core
+changes:
+
+- **Added**: `PDR-048 insight-capture-at-moment-of-occurrence`.
+  Three moves applied at the moment an insight surfaces:
+  capture before closure (resist closure-pressure deferral);
+  capture between primary actions, not after them (resist
+  flow-state deferral); capture the partial form and let the
+  whole emerge through writing (resist substance-not-yet-fully-
+  formed deferral). Adopter scope: every Practice-bearing repo
+  where insights surface in conversation. Composes with
+  PDR-011 (continuity surfaces — this PDR governs the entry
+  point), PDR-014 (consolidation — captures here are the
+  substrate the flow operates on), PDR-046 (layered-processing —
+  captures preserved here are what graduates upward layer-by-
+  layer), and PDR-047 (rule-applies-always — companion
+  deliverable: this PDR governs *when* a rule is written;
+  PDR-047 governs *how* it is written).
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-048 row.
+
+## [oak-open-curriculum-ecosystem] 2026-05-04 — rule-applies-always doctrine-authoring discipline graduated to PDR-047
+
+Layer-2 second pass continuation. The doctrine-authoring half of
+the rule-applies-always pair (the structural-enforcement half
+lives at PDR-038) is now codified as its own Practice-governance
+decision record. Practice Core changes:
+
+- **Added**: `PDR-047 rule-applies-always-doctrine-authoring`.
+  Three tests applied at the moment a rule is authored or
+  amended: substance test (read clause-by-clause for "the rule
+  does not apply here" intent); vocabulary test (cross-check
+  against the host's hedging trip-list as cheap detection); and
+  re-frame test (when either fires, re-frame the rule to ban the
+  bad shape rather than grant exceptions; if a re-frame is
+  impossible, split the rule). Adopter scope: every
+  Practice-bearing repo where rules, principles, ADRs, PDRs, or
+  governance documents are authored or amended. Composes with
+  PDR-038 (structural-enforcement scanner downstream of authoring),
+  PDR-043 (rush-impulse cue 1 vocabulary trip-list at general
+  output time), and PDR-044 (innate-immunity layer at write-time
+  is the runtime form of Test 1's substance check).
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-047 row.
+
+## [oak-open-curriculum-ecosystem] 2026-05-04 — layered knowledge processing graduated to PDR-046
+
+Layer-2 second pass under the owner-stated layered-processing
+methodology (preserve first, restructure second). The methodology
+itself is now codified as a Practice-governance decision record.
+Practice Core changes:
+
+- **Added**: `PDR-046 layered-knowledge-processing`. Generalises
+  the per-write learning-preservation rule into a layer-orchestration
+  discipline. Three moves: process layers bottom-up without
+  interrupting a lower layer to remediate an upper layer; suspend
+  in-process form-keeping on any layer currently being processed;
+  address a layer's residual fitness pressure by graduating
+  substance upward, not by compression. Adopter scope: every
+  Practice-bearing repo with multi-layer knowledge surfaces and a
+  fitness-style diagnostic. The PDR self-applies — the methodology
+  is what produced it; PDR-045 was the first deliverable of the
+  pass that surfaced the rule, this PDR-046 is the second.
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-046 row.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-04 — workspace-first investigation discipline graduated to PDR-045
 
 Layer-2 graduation pass under the owner-stated layered-processing
