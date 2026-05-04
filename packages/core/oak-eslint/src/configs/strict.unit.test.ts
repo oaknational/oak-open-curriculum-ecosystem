@@ -144,3 +144,99 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
     expect(ruleIds).not.toContain('vitest/no-focused-tests');
   });
 });
+
+/**
+ * @typescript-eslint/ban-ts-comment with `'ts-expect-error':
+ * 'allow-with-description'` is the standard structural surface for the
+ * principle that escape hatches must carry a substantive justification,
+ * never a bare suppression. The strict config also documents a
+ * `minimumDescriptionLength` so trivial annotations ("TODO", "fix") do
+ * not satisfy the gate. Per `principles.md` § Compiler Time Types and
+ * Runtime Validation (no type-information destruction; substantive
+ * rationale required for any preserved widening), and per the WS2
+ * acceptance criteria of the doctrine-enforcement-quick-wins plan
+ * (§Issue 2), bare `@ts-expect-error` MUST error and a descriptively
+ * annotated `@ts-expect-error` with a substantive note MUST pass.
+ *
+ * The companion custom rule `@oaknational/no-eslint-disable` continues
+ * to ban bare `@ts-expect-error`, `@ts-ignore`, and `@ts-nocheck`. It
+ * is loosened in this same workstream to permit
+ * `@ts-expect-error -- <substantive description>` since the
+ * `ban-ts-comment` rule then enforces the substantive-rationale
+ * contract structurally with `minimumDescriptionLength`. Two-rule
+ * defence is intentional: the custom rule covers the universal "no
+ * bare suppression" gate, the typescript-eslint rule encodes the
+ * description-length contract that the broader ecosystem expects.
+ */
+describe('@oaknational/eslint-plugin-standards strict config: TS-suppression directives', () => {
+  it('reports an error for bare @ts-expect-error', () => {
+    const code = [
+      '// @ts-expect-error',
+      'const value: number = "string";',
+      'export { value };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).toContain('@typescript-eslint/ban-ts-comment');
+  });
+
+  it('reports an error for @ts-expect-error with a too-short description', () => {
+    const code = [
+      '// @ts-expect-error: fix',
+      'const value: number = "string";',
+      'export { value };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).toContain('@typescript-eslint/ban-ts-comment');
+  });
+
+  it('does not report ban-ts-comment for @ts-expect-error with a substantive description', () => {
+    const code = [
+      '// @ts-expect-error: temporary widening for upstream library mismatch',
+      'const value: number = "string";',
+      'export { value };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).not.toContain('@typescript-eslint/ban-ts-comment');
+  });
+
+  it('does not flag @ts-expect-error with a substantive description under any rule', () => {
+    const code = [
+      '// @ts-expect-error: temporary widening for upstream library mismatch',
+      'const value: number = "string";',
+      'export { value };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).not.toContain('@typescript-eslint/ban-ts-comment');
+    expect(ruleIds).not.toContain('@oaknational/no-eslint-disable');
+  });
+
+  it('continues to ban @ts-ignore unconditionally via the custom no-eslint-disable rule', () => {
+    const code = [
+      '// @ts-ignore -- whatever',
+      'const value: number = "string";',
+      'export { value };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).toContain('@oaknational/no-eslint-disable');
+  });
+
+  it('continues to ban @ts-nocheck unconditionally via the custom no-eslint-disable rule', () => {
+    const code = ['// @ts-nocheck', 'const value: number = "string";', 'export { value };'].join(
+      '\n',
+    );
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).toContain('@oaknational/no-eslint-disable');
+  });
+});

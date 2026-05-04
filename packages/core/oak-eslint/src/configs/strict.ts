@@ -22,6 +22,23 @@ import { recommended, RECOMMENDED_RESTRICTED_TYPES } from './recommended.js';
  * net liability at maturity; this config is the structural reciprocation
  * for the stated principle.
  */
+/**
+ * Minimum length for the substantive description that must accompany a
+ * `@ts-expect-error` directive. The threshold is matched against the
+ * `@typescript-eslint/ban-ts-comment` rule's `minimumDescriptionLength`
+ * option.
+ *
+ * Ten characters is sufficient to filter trivial annotations ("TODO",
+ * "fix", "later") while permitting genuine one-sentence rationales such
+ * as "upstream type mismatch" or "schema regen pending". The contract
+ * is exercised by `strict.unit.test.ts`.
+ *
+ * Anchors: PDR-044 (Memetic Immune System) §Innate immunity;
+ * principles.md §Compiler Time Types and Runtime Validation; the
+ * doctrine-enforcement-quick-wins plan §Issue 2.
+ */
+const TS_EXPECT_ERROR_MINIMUM_DESCRIPTION_LENGTH = 10;
+
 export const strict = tseslint.config(
   recommended,
   {
@@ -31,6 +48,16 @@ export const strict = tseslint.config(
     rules: {
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-expect-error': 'allow-with-description',
+          'ts-ignore': true,
+          'ts-nocheck': true,
+          'ts-check': false,
+          minimumDescriptionLength: TS_EXPECT_ERROR_MINIMUM_DESCRIPTION_LENGTH,
+        },
+      ],
     },
   },
   {
