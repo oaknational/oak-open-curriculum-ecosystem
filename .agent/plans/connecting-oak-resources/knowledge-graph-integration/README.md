@@ -33,9 +33,10 @@ under [sector-engagement/](../sector-engagement/).
 
 | File | Description |
 |------|-------------|
+| [current/graph-stack.plan.md](current/graph-stack.plan.md) | **Topology decision + foundation increment.** Eight active workspaces plus one deferred for the standards-based graph capability; reserves a workspace home for every layer in `.agent/research/graph-iibrary.md`. **Graph workspaces are MCP-agnostic** — surfacing (MCP, CLI, HTTP, JSON-LD export) is a consumer-side decision tracked separately. Foundation increment ingests the NC knowledge taxonomy end-to-end (in-process; no surfacing). Subsumes the *substrate* path of `nc-knowledge-taxonomy-surface.plan.md` and the *substrate* path of `graph-query-layer.plan.md`; their MCP-surfacing concerns remain independent. |
 | [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records |
 | [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities |
-| [current/graph-query-layer.plan.md](current/graph-query-layer.plan.md) | Increment 1 of EEF graph-and-corpus delivery: 7-operation polymorphic query layer over prerequisite + misconception + EEF strands, with progressive disclosure (manifest → summary → detail → edge) and mandatory projection. Foundation for [`../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). |
+| [current/graph-query-layer.plan.md](current/graph-query-layer.plan.md) | Increment 1 of EEF graph-and-corpus delivery: 7-operation polymorphic query layer over prerequisite + misconception + EEF strands, with progressive disclosure (manifest → summary → detail → edge) and mandatory projection. Foundation for [`../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). **Coordination note**: the *substrate* (GraphView interface, 7-operation surface, projection discipline) migrates into `graph-corpus-sdk` under the graph-stack spine; the *MCP exposure* (17 tools) becomes a separate consumer-side decision unrelated to the substrate. |
 
 ## Strategy and Research
 
@@ -57,21 +58,23 @@ under [sector-engagement/](../sector-engagement/).
 
 ## Read Order
 
-1. **Current formal synthesis**:
+1. **Topology spine (read first if touching graph code)**:
+   [current/graph-stack.plan.md](current/graph-stack.plan.md)
+2. **Current formal synthesis**:
    [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
-2. **Direct-use versus platform comparison**:
+3. **Direct-use versus platform comparison**:
    [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
-3. **Ontology workspace reassessment**:
+4. **Ontology workspace reassessment**:
    [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md)
-4. **Ontology source strategy**:
+5. **Ontology source strategy**:
    [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
-5. **Fresh-perspective follow-on**:
+6. **Fresh-perspective follow-on**:
    [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md)
-6. **Search-adjacent graph strategy**:
+7. **Search-adjacent graph strategy**:
    [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md)
-7. **Platform research note**:
+8. **Platform research note**:
    [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
-8. **External knowledge sources**:
+9. **External knowledge sources**:
    [../sector-engagement/external-knowledge-sources/README.md](../sector-engagement/external-knowledge-sources/README.md)
 
 ## Document Roles (DRY)

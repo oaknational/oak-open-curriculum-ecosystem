@@ -1,13 +1,33 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-01 (Gnarled Fruiting Root / claude-code /
-claude-opus-4-7-1m / session seed `e18e2c` — created the thread by
-owner direction. The thread contains the internal Oak knowledge-graph
-work previously under `.agent/plans/knowledge-graph-integration/`
-plus the just-authored external Oak references work
-(`external-oak-references/`). Light scan of the three external Oak
-repos done this session; no blocking findings for Increment 1
-graph-query-layer promotion.)
+**Last refreshed**: 2026-05-04 (Cosmic Glowing Dawn / claude-code /
+claude-opus-4-7-1m / `d11500` — authored
+[`graph-stack.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+in `current/` as the topology-decision-plus-foundation-increment
+spine plan for graph work. Eight active workspaces plus one deferred
+(`graph-future`); reserves a workspace home for every layer in
+`.agent/research/graph-iibrary.md`. Foundation increment ingests the
+NC knowledge taxonomy end-to-end via SKOS-on-`graph-core`; no
+surfacing in the increment (graph workspaces are MCP-agnostic per
+owner direction; surfacing is consumer-side, at most one workspace
+per transport). Plan is `current` — owner explicitly stated no
+promotion now. Substrate-path supersession declared for
+`nc-knowledge-taxonomy-surface.plan.md` and `graph-query-layer.plan.md`
+in coordination map; their MCP-surfacing concerns remain independent
+owner decisions. Collection README updated to register the spine plan
+and reflect substrate-vs-surfacing split. Transport-agnostic-substrate
+principle saved to platform memory
+(`feedback_infrastructure_workspaces_transport_agnostic.md`); also a
+PDR candidate (see ADR/PDR candidates below). No commits this session.
+**Foreign stage observed**: `Ferny Spreading Petal` (`d0d13f`,
+agentic-engineering-enhancements thread) has files staged from a
+commit window that expired at 15:09:49Z (~40 min before this handoff)
+without committing; underlying claim still fresh until 18:35:05Z.
+Surfaced for owner attention. **Prior**: 2026-05-01 — Gnarled
+Fruiting Root / claude-code / claude-opus-4-7-1m / `e18e2c` — created
+the thread by owner direction; light scan of the three external Oak
+repos; no blocking findings for Increment 1 graph-query-layer
+promotion.)
 
 ---
 
@@ -35,6 +55,7 @@ graph-query-layer promotion.)
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `thread-bootstrap-and-light-scan` | 2026-05-01 | 2026-05-01 |
+| `Cosmic Glowing Dawn` | `claude-code` | `claude-opus-4-7-1m` | `d11500` | `graph-stack-spine-plan-author` | 2026-05-04 | 2026-05-04 |
 
 ## Plan Locations
 
@@ -105,6 +126,12 @@ Owner-decided. Candidates:
 3. Do a deep read of `oak-curriculum-ontology` to extract the
    vocabulary alignment opportunities for the post-promotion graph
    adapters.
+4. **Topology approval for `graph-stack.plan.md`** — owner-gated
+   review of the eight-workspace topology before any execution.
+   Plan-phase reviewers named in the spine: `assumptions-reviewer`,
+   `architecture-reviewer-betty`, `architecture-reviewer-fred`,
+   `architecture-reviewer-barney`. No promotion until all four have
+   run.
 
 ## References
 
