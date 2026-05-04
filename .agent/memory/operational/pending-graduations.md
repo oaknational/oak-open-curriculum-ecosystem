@@ -32,6 +32,32 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **subagent briefs must include
+  halt-on-environment-mismatch instructions; parallel
+  `isolation:"worktree"` dispatch is unreliable for shared-state
+  work** (Pearly Snorkelling Reef, captured from the
+  doctrine-enforcement-quick-wins dispatch incident on 2026-05-04).
+  Three concurrent worktree subagents in one `Agent` batch produced
+  inconsistent bases (one matched parent HEAD, two were on an older
+  `main` commit predating the plan). The two wrong-base subagents
+  improvised on the missing-plan environment rather than halting,
+  and crossed worktree boundaries by writing to absolute paths in
+  the main repo. Source surface: napkin §"Parallel
+  isolation:worktree dispatch produced inconsistent bases".
+  Graduation-target options: (a) a portable rule
+  `.agent/rules/subagent-environment-mismatch-halt.md` requiring
+  briefs to instruct halt-and-report when grounding cannot find
+  cited artefacts; (b) a PDR refining subagent-dispatch discipline
+  (parallel-dispatch-only-when-state-isolation-is-real); (c) an
+  amendment to an existing collaboration or subagent-architecture
+  PDR. Trigger-condition: a second cross-session instance of
+  parallel-worktree dispatch failure or wrong-base-improvisation,
+  OR three sessions where a subagent brief explicitly added
+  halt-on-environment-mismatch language and the discipline proved
+  load-bearing. Status: `pending`. Durable lesson held outside
+  this register at
+  `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`.
+
 + 2026-05-04; **deferrals must be sequenced (or have their
   sequencing sequenced)** (Verdant Sprouting Leaf, owner-stated
   sharpening of PDR-026 §Deferral-honesty discipline at session

@@ -563,6 +563,7 @@ and
 | `Misty Ebbing Pier` | `claude-code` | `claude-opus-4-7-1m` | `ba3961` | `n-agent-collaboration-hypothesis-decision-complete-plan-authored-at-current/n-agent-collaboration-experiments.plan.md; per-experiment-subfolder-restructure-experiments/E1/{brief,agent-1-orchestrator,agent-2-executor}; pending-graduations-cure-set-(vi)-(x)-and-hypothesis-framing-amendment; superseded-first-attempts.md-and-experiments.md-deleted; modes-taxonomy-folded-into-hypothesis.md-P1` | 2026-05-03 | 2026-05-03 |
 | `Dewy Shedding Glade` | `claude-code` | `claude-opus-4-7-1m` | `13ae71` | `validation-and-tdd-doctrine-restructure-arc-S1-through-S4; tdd-as-design-foundational-directive-authored; test-reviewer-refreshed-as-doctrine-carrier-with-recipe-citation-requirement; no-conditional-tests-rule-plus-three-platform-adapters; stryker-reframed-as-meta-quality; index-plan-validation-and-tdd-doctrine-restructure.plan.md-with-S1-S4-and-P1-P6-sequenced; commit-b2ef7992-23-files-+1159/-235; drift-fix-never-use-git-to-remove-work-adapters; three-pdr-pattern-candidates-surfaced-tests-describe-system; reviewers-carry-doctrine; forcing-function-read-path` | 2026-05-04 | 2026-05-04 |
 | `Verdant Sprouting Leaf` | `claude-code` | `claude-opus-4-7-1m` | `63a0e0` | `post-/insights-reflection-round; three-owner-named-insights-captured-at-moment-of-occurrence; PDR-018-amendment-beneficial-prerequisites-must-not-block; PDR-038-amendment-doctrine-without-enforcement-at-maturity; PDR-044-new-memetic-immune-system; current/doctrine-enforcement-quick-wins.plan.md-six-workstreams-innate-immunity; future/memetic-immune-system-and-progressive-disclosure.plan.md-strategic-roadmap; practice-index-and-current-future-README-discovery-updates; commit-192b6965-9-files-+1580/-1` | 2026-05-04 | 2026-05-04 |
+| `Pearly Snorkelling Reef` | `claude-code` | `claude-opus-4-7-1m` | `6db5ac` | `parallel-isolation-worktree-dispatch-attempt-of-doctrine-enforcement-quick-wins; two-of-three-workers-spawned-on-wrong-base-improvised-and-violated-worktree-boundary-by-writing-to-main-repo-scripts; main-repo-script-and-tests-restored-from-clean-worktree; salvage-path-cherry-pick-WS1-91232df6-port-WS2-eacb05f2-port-WS5-design-767ee23a; plan-marked-PARTIAL-WS3-WS4-WS6-pending; continuity-commit-79ef671c-worker-comms-events-prior-session-claim-closure; durable-lesson-saved-feedback_worktree_isolation_unreliable-md-in-personal-memory` | 2026-05-04 | 2026-05-04 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -1334,7 +1335,23 @@ the advisory commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-1. **Collaboration-state write safety closure** — continue
+1. **Doctrine-enforcement-quick-wins continuation (WS3, WS4, WS6)** —
+   continue
+   [`doctrine-enforcement-quick-wins.plan.md`](../../../plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md).
+   Pearly Snorkelling Reef's 2026-05-04 session salvaged WS1
+   (`91232df6`), WS2 (`eacb05f2`), and WS5 (`767ee23a`) from a
+   parallel-isolation:"worktree" dispatch attempt; the plan body is
+   marked `🟡 PARTIAL` with WS3 (hedging-vocabulary trip-list at
+   write-time), WS4 (SHA-in-permanent-doc regex), and WS6 (git add
+   wildcard block) still `pending`. All three remaining workstreams
+   touch `.agent/hooks/policy.json` plus the `scripts/check-blocked-{content,patterns}.{ts,unit.test.ts,integration.test.ts}`
+   surfaces. Per the durable lesson saved at
+   `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`,
+   prefer **single-agent sequential dispatch on `feat/eef_exploration`
+   directly** for these three — the parallel-worktree base-selection
+   was unreliable in the prior attempt.
+
+2. **Collaboration-state write safety closure** — continue
    [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md).
    The implementation is landed, and the named docs fitness blockers have been
    structurally routed by the deep consolidation pass. The brief active-napkin
@@ -1342,42 +1359,42 @@ Choose the lane deliberately:
    to close/archive the write-safety plan with the current soft-only evidence.
    Treat hooks/session-exit cleanup as a later refinement.
 
-2. **Workspace layer separation audit** — architecture-and-infrastructure now
+3. **Workspace layer separation audit** — architecture-and-infrastructure now
    has a queued executable plan:
    [`workspace-layer-separation-audit.plan.md`](../../../plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md).
    First safe step: Phase 0 inventory against ADR-154, ADR-108, the Oak
    surface isolation programme, `pnpm-workspace.yaml`, and current package
    manifests before any package moves.
 
-3. **Strict exact-optional cleanup** — fix the pre-existing
+4. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
-4. **First real sidebar / joint-decision seed** — when a real overlap uses
+5. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-5. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+6. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-6. **Observability branch-primary** — read the
+7. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-7. **Lifecycle integration follow-up** — only after write-collision relief is
+8. **Lifecycle integration follow-up** — only after write-collision relief is
    underway or owner-directed, observe whether the new start-right / handoff /
    template lifecycle triggers are actually used in real sessions. Do not add
    hook refinements before the shared-state write path is made safer; first
    real sidebar/joint-decision usage should feed WS5 observation.
-8. **Codex session identity plumbing follow-up** — the high-impact current
+9. **Codex session identity plumbing follow-up** — the high-impact current
    slice is implemented in
    [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
    Only perform manual repair of historical anonymous rows when there is
    stronger evidence than the row itself; keep title/statusline as optional
    display.
-9. **PR lifecycle skill** — promote
-   [`pr-lifecycle-skill.plan.md`](../../../plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md)
-   when the next PR closeout needs agent-owned creation, comment harvesting,
-   reviewer-wait handling, CI/Sonar/Bugbot triage, and gate-honest closure.
-   First slice should be a documentation skill only.
-10. **Other agentic engineering work** — pick an owner-directed queued plan.
-   WS3B implementation is no longer background work; it has landed.
+10. **PR lifecycle skill** — promote
+    [`pr-lifecycle-skill.plan.md`](../../../plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md)
+    when the next PR closeout needs agent-owned creation, comment harvesting,
+    reviewer-wait handling, CI/Sonar/Bugbot triage, and gate-honest closure.
+    First slice should be a documentation skill only.
+11. **Other agentic engineering work** — pick an owner-directed queued plan.
+    WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links
 

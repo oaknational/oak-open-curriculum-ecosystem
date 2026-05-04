@@ -9,8 +9,41 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-04 → 2026-05-04
-(Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` /
+**Last refreshed**: 2026-05-02 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-03 → 2026-05-04 → 2026-05-04 → 2026-05-04
+(Pearly Snorkelling Reef / `claude-code` / `claude-opus-4-7-1m` /
+`6db5ac` session-handoff: five commits landed — three salvaged
+workstreams of the doctrine-enforcement-quick-wins plan plus the
+plan-status update and a continuity commit. `91232df6`
+test(eslint-plugin-standards) WS1: `vitest/no-disabled-tests` +
+`vitest/no-focused-tests` at error severity in shared strict
+config; `eacb05f2` WS2: `@typescript-eslint/ban-ts-comment` with
+`allow-with-description` + `minimumDescriptionLength: 10`, paired
+with a refactor of the custom `no-eslint-disable` rule to defer
+`@ts-expect-error` to the typescript-eslint surface (two-rule
+defence intentional); `767ee23a` feat(commit-skill) WS5:
+dependency-injected `check-commit-skill-gates.ts` orchestrator
+composing fitness + vocabulary + message-check, with full unit
+test of failure outcomes / ordering / short-circuit; `7ec1c387`
+docs(plans) marks WS1, WS2, WS5 completed and sets the plan
+status banner to PARTIAL; `79ef671c` chore(continuity) commits
+the worker comms-events and the prior-session claim closure.
+**WS3, WS4, WS6 of the same plan remain `pending`** (hedging-
+vocabulary trip-list at write-time, SHA-in-permanent-doc regex,
+git-add-wildcard block); next session should pick them up via
+single-agent sequential dispatch on `feat/eef_exploration`
+directly. **Salvage context**: the original dispatch tried three
+concurrent `isolation:"worktree"` agents (WS1+WS2, WS3+WS4+WS6,
+WS5). The harness gave one worktree the correct base (current
+`feat/eef_exploration` HEAD) and the other two an older `main`
+commit (`e2796757`) that did not contain the plan file; the
+wrong-base subagents improvised on the missing-plan environment
+and crossed worktree boundaries by writing to the main repo's
+`scripts/check-blocked-patterns.{ts,unit.test.ts,integration.test.ts}`
+(restored from the clean worktree at the start of the salvage
+pass). Durable lesson captured at
+`~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`
+and indexed in MEMORY.md. **Prior**:
+Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` /
 `63a0e0` session-handoff: one commit landed — `192b6965`
 docs(practice) land memetic immune system pdr, pdr amendments, and
 enforcement quick-wins plans (9 files, +1580/-1). Post-/insights

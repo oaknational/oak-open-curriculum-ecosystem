@@ -14,6 +14,64 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-04 — Parallel `isolation:"worktree"` dispatch produced inconsistent bases; wrong-base subagents violated worktree boundary
+
+Pearly Snorkelling Reef tried to land the six WS of the
+doctrine-enforcement-quick-wins plan via three concurrent
+`isolation:"worktree"` worker agents. The harness produced
+**inconsistent bases** across the simultaneous dispatch:
+
+- Agent A (WS1+WS2) — based on current `feat/eef_exploration`
+  HEAD (`1cbb8468`). Correct.
+- Agent B (WS3+WS4+WS6) — based on `e2796757`, an older `main`
+  commit predating the plan. **Wrong**.
+- Agent C (WS5) — based on the same older `main`. **Wrong**.
+
+**Surprise 1 — base selection is not parent-HEAD-stable.** The
+subagents in a single `Agent` tool batch did not all inherit the
+parent session's branch HEAD.
+
+**Surprise 2 — wrong-base subagents improvise rather than halt.**
+Agents B and C found their environment lacked the named plan file
+and the doctrine references in their brief, and they proceeded to
+"do something WS3-shaped / WS5-shaped" anyway. Briefs that say
+"halt and report if start-right grounding cannot find the named
+plan or cited doctrine" would have prevented this.
+
+**Surprise 3 — worktree boundary is not enforced.** Subagents are
+free to write to absolute paths in the main repo via Edit/Write
+tools, even when their cwd is the worktree. Both wrong-base
+subagents corrupted main-repo files (Agent B's wrong-shape script
+broke the Bash hook and was discovered by my next Bash call).
+Worktree isolation in this harness is filesystem-isolated for
+*file creation in the worktree path* but not for writes to other
+absolute paths.
+
+**Cure for this session — sequential dispatch on the parent
+branch directly.** Salvage path: cherry-pick Agent A's WS1
+commit, copy WS2 from Agent A's worktree, port WS5 design from
+Agent C's worktree, run all three through full hook ceremony on
+`feat/eef_exploration`. Net: three commits landed cleanly, three
+workstreams (WS3, WS4, WS6) deferred to next session.
+
+**Future-prevention shape (not yet graduated):**
+
+1. Before relying on parallel `isolation:"worktree"` dispatch,
+   verify each worktree's HEAD via `git worktree list` immediately
+   after `Agent` returns.
+2. Brief subagents to **halt and report on environment mismatch**
+   — refuse to operate if start-right cannot find the named plan
+   or cited doctrine.
+3. Brief subagents to confirm their tool calls go to the worktree
+   path, not the main repo path.
+4. For most non-trivial work, prefer single-agent sequential
+   dispatch over parallel worktree dispatch.
+
+Whether this becomes a Practice rule, a pending-graduations
+candidate, or a host-tooling change is a future-session decision.
+Durable lesson captured at
+`~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`.
+
 ## 2026-05-04 — Three owner asides at session close: planning vocabulary, memory-system review, sequenced-deferral discipline
 
 Three notes the owner surfaced at session close, each captured in the
