@@ -28,8 +28,8 @@ todos:
     status: pending
     depends_on: [01-comprehensive-plan-review-round-1]
   - id: 03-integrate-no-speed-pressure-rule
-    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.md, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.md`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-reviewer dispatch."
-    status: pending
+    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.mdc, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.mdc`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-reviewer dispatch. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit SHA recorded in §Sequence Summary post-commit."
+    status: completed
     depends_on: [02-apply-round-1-findings-and-second-review]
   - id: 04-reviewer-backfill-scoped-by-commit-risk
     content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-reviewer gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-reviewer gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-reviewer gateway + docs-adr-reviewer for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-reviewer gateway + test-reviewer (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-reviewer-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings."
@@ -71,8 +71,8 @@ todos:
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-04 (Pelagic Diving Atoll, post-Round-2 review)
-**HEAD at refresh**: `b539c7c5`
+**Last Updated**: 2026-05-04 (Lacustrine Navigating Rudder, step-03 close)
+**HEAD at refresh**: `75dbcdb6`
 **Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
 plans, refined post-Round-1 architecture-led review.
 
@@ -439,7 +439,7 @@ consolidation pass.
 |---|------|--------|
 | 1 | Round 1 architecture-led review | DONE — Round 1 findings under §Plan Review Findings (Round 1) |
 | 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE for application; commit pending; Round 2 findings under §Plan Review Findings (Round 2) |
-| 3 | Integrate no-speed-pressure rule across estate | RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; post-commit four-adapter-path verification |
+| 3 | Integrate no-speed-pressure rule across estate | DONE — RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; commit SHA recorded post-landing; post-commit four-adapter-path verification |
 | 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | Findings under §Backfill Findings; gateway+commit-skill discipline check on `8fa339f4`; specialists on substantive commits |
 | 5 | Apply backfill findings | Per-finding atomic commits or written rejections; named violations C1 + CR1 closed with **specialist re-review on closing commits** |
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | Rule + RuleTester (full Node.js IO surface coverage) + plugin registration; not yet wired |

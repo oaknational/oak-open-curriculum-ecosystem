@@ -14,6 +14,106 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`) — Step 3 no-speed-pressure rule integration
+
+**Observation 1 — most of step 3 was already done at session-open.**
+The handoff prompt enumerated: canonical rule + 3 adapters
+(`.claude/`, `.cursor/`, `.agents/`) + RULES_INDEX entry. A check
+showed all four (canonical + 3 adapters) plus the index entry were
+already in place. The remaining work was the documentation/memory
+surface (principles cross-ref + distilled entry + user-memory
+feedback file) plus plan/thread bookkeeping. The handoff prompt
+correctly identified this as a small focused commit, not a
+multi-cycle arc. *Read state before assuming scope* held: the
+canonical content was authored 2026-05-04 18:34Z and the four
+adapters at 19:21Z (per `ls -la`), so step-3-as-described had
+already partially executed during Pelagic's hygiene-first opener.
+
+**Observation 2 — `.cursor/` adapters use `.mdc` extension, not
+`.md`.** The plan body's adapter-path enumeration listed
+`.cursor/rules/no-speed-pressure.md` (the others use `.md`). A
+literal check showed `.cursor/rules/no-speed-pressure.mdc`
+existed — different extension. Plan body and §Acceptance both
+need the `.mdc` shape recorded; corrected at step-3-close edit
+to plan body todo content. The four-adapter-path verification
+acceptance criterion remains intact (canonical + three adapters
+all resolve to the same content).
+
+**Observation 3 — collaboration-state CLI flag inconsistency.**
+`claims open` accepts `--file` (singular, repeatable, parsed via
+explicit `files: string[]` accumulator) for files arrays, but
+my muscle memory used `--area-pattern` (overwrite-last via
+generic `values: Map`). The CLI silently took the last
+`--area-pattern` and produced a single-pattern claim. Recovery:
+direct Edit to `active-claims.json` to fix the patterns array;
+JSON validity verified post-edit. Behaviour-shape capture: when
+a CLI helper API has irregular flag semantics (some keys
+repeatable, some not), reading the parser before the first run
+prevents silent narrowing. Not a graduation candidate at single
+instance; record for second-instance check.
+
+**Observation 4 — pnpm subshell does not inherit
+`PRACTICE_AGENT_SESSION_ID_CLAUDE` from `$CLAUDE_ENV_FILE`.** The
+SessionStart hook wrote the env var to the file per its
+contract, but `pnpm agent-tools:agent-identity` ran in a fresh
+subshell that did not source it. Workaround: pass `--seed
+"<session-id>"` explicitly. Persisted output's session ID prefix
+(`dd239f`) gave me the seed value. Not a doctrine concern;
+recorded as platform-mechanics observation.
+
+## 2026-05-04 (Pelagic Diving Atoll, `6814a4`) — Two-round architecture-led plan refinement, capture-not-clean shape
+
+**Surprise 1 — "what the rule shape protects" became visible only at
+Round 2.** Round 1 absorbed a clean architecture-led pass over the
+unified plan (six reviewers in parallel: code, barney, betty, fred,
+wilma, assumptions); the path-allowlist for the no-real-io-in-tests
+rule looked obviously correct in Round 1. Round 2 — same six over the
+revised plan — surfaced a non-obvious structural pressure: is the
+allowlist a check-disablement in disguise? Fred's analysis settled it:
+allowlist is configuration declaring a frozen exception set; the
+check fires on every file, including allowlisted; entries carry written
+disposition; the set is shrink-only as follow-up plans migrate. That
+makes it a frozen-debt gate, not a fallback option. The Round 1 reviewer
+read the shape; Round 2 read the principle. Two passes were not
+redundant — they were complementary.
+
+**Surprise 2 — owner direction "linear" overrode assumption-reviewer's
+parallelisation finding correctly.** Assumptions-reviewer's Round 1
+finding said cycles 2a-2f were parallel-safe by construction (disjoint
+workspaces); only step 13→cycle-2-closure was load-bearing.
+Mathematically true. But owner direction (2026-05-04 turn) said: *plan
+must be linear*. AND: *we don't need to audit all IO; install rule and
+note IO found.* The combination collapsed cycles 2a-2f entirely, made
+the parallelisation question moot, and replaced "audit-and-fix" with
+"capture-not-clean" — a different shape that preserves linearity while
+honouring strict-and-complete (the rule fires hard on new IO; existing
+IO is documented, not fixed). The cure was not "parallelise" but
+"reshape so the parallelisation question disappears". §Owner Direction
+Beats Plan in real time.
+
+**Surprise 3 — denylist completeness as load-bearing.** Under capture-
+not-clean the rule's denylist IS the structural prevention; audit is
+gone. Wilma's Round 2 P1 found that the original Round 1 denylist
+(`spawn`, `exec`, `fork`, `fs.*`, `process.env`, `process.cwd`,
+`fetch`) misses `*Sync` variants, `node:` prefix specifiers, default
+imports, `fs/promises` module, `globalThis.process.env`, and
+`worker_threads.Worker`. Without comprehensive coverage the dry-run
+capture in step 7 produces a false-negative Inventory; the rule wires
+green at step 8; future tests using missed forms slip through. The
+RuleTester at step 6 must enumerate every sub-form. The capture-not-
+clean shape's load-bearing primitive is denylist exhaustiveness, not
+allowlist precision. **Captured in step 6 brief + step 6 §Sub-agent
+Reviewers + Risk Register row.**
+
+**No new ADR/PDR candidates** — Round 2 absorption is in-doctrine; the
+capture-not-clean shape itself could graduate to a pattern if a second
+arc adopts it (recorded in plan body §Learning Loop), but single
+instance is not yet pattern-shaped.
+
+**Out of scope this session**: step 3 onward (rule integration,
+backfill, capture, wire). Resumes next session per the opening
+statement.
+
 ## 2026-05-04 (Fronded Climbing Thicket, `8da3d3`) — Three-plan arc descope + unification
 
 **Surprise 1 — "atomic, NOT parallelisable" misread as "single commit"**.
@@ -60,11 +160,11 @@ critical?*
 
 **ADR/PDR candidates** (not yet captured to register):
 
-- The "atomic single-commit vs atomic-landing-per-cycle"
++ The "atomic single-commit vs atomic-landing-per-cycle"
   ambiguity in plan-body framings is a documentation pattern
   worth naming; could be a PDR or a rule extension to
   `testing-strategy.md` distinguishing the two.
-- The "unnamed foundational tension" diagnostic on plan 2 is
++ The "unnamed foundational tension" diagnostic on plan 2 is
   itself a meta-pattern: when a plan keeps causing issues
   during execution, the right move is *pause + name the
   tension* rather than push through. Could graduate to a PDR
@@ -107,14 +207,14 @@ direction).
 
 High-signal entries graduated this rotation:
 
-- `PDR-046 § Notes` — *Layer-1 pre-processing made Layer-2
++ `PDR-046 § Notes` — *Layer-1 pre-processing made Layer-2
   graduation cheap* worked instance added as the second Notes
   bullet, sharpening the existing self-application observation.
   The capture surface that became PDR-046's source preserved the
   failure-mode triad and two of three cures verbatim across the
   session boundary; Layer-2 drafting was largely a structural
   lift. The methodology validates itself in miniature.
-- `pending-graduations.md` — three new candidate entries opened:
++ `pending-graduations.md` — three new candidate entries opened:
   (a) *the PDR shape forces the rationale to surface that the
   capture surface did not have to* (PDR-014 amendment or new
   pattern; trigger: second instance); (b) *cross-Core PDR↔PDR
@@ -135,7 +235,7 @@ reference the archive directly.
 
 ### Quality-gate state at rotation (continuation of in-flight pass)
 
-- `pending-graduations.md` after this rotation's three additive
++ `pending-graduations.md` after this rotation's three additive
   entries: ~1180 lines / ~73000 chars (estimate; was 1140 / 71206
   at remediation close, +~40 lines from three new candidates).
   Remains in critical zone. Owner has held fitness pressure on
@@ -143,9 +243,9 @@ reference the archive directly.
   per PDR-046 §Move 3 the residual is structural feedback for
   Layer 3 (the file's own size targets / split strategy is the
   next pass's subject), not in-process material to compress.
-- `napkin.md` (this fresh file): well under target — by
++ `napkin.md` (this fresh file): well under target — by
   construction, since the rotation just happened.
-- `principles.md`, `distilled.md`: unchanged from session-open;
++ `principles.md`, `distilled.md`: unchanged from session-open;
   pre-existing hard pressure, owner-relaxed throughout the arc.
 
 ### Layered-processing methodology in continued application

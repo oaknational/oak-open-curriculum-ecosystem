@@ -61,6 +61,10 @@ defences:
   `dont-break-build-without-fix-plan`, `read-before-asking`, and
   adjacent rules each exist to defeat one expression of the
   rush impulse. The principle is their common generator.
+- **Invented-urgency guard** — [`no-speed-pressure`](../rules/no-speed-pressure.md)
+  names the failure mode where the agent supplies its own urgency
+  to justify skipping the doctrine substrate; the urge is the
+  diagnostic, not friction to refactor around.
 
 The failure-mode shape (cheap fixes silently kill the diagnostic;
 local optimisation under rush is global pessimisation; fences

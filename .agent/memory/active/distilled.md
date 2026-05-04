@@ -98,6 +98,24 @@ good enough*. Operationalises [principles.md § Architectural
 Excellence Over Expediency][excellence] at the option-surfacing
 boundary.
 
+**There is no speed pressure — the urge to skip ceremony is the
+diagnostic.** Cycle landings, parallel agents, auto-mode framing,
+branch closure, plan progress, owner waiting, hook latency, gate
+run time — none are urgency signals; none imply the doctrine
+substrate (commit skill, queue protocol, claims, reviewer dispatch,
+stage-by-pathspec, plan-body freshness) can be skipped. The urgency
+that justifies a skip is supplied by the agent, not by the work.
+The doctrine substrate IS what success looks like; running every
+cycle through claim → queue → skill-gates → verify-staged → review
+→ commit *is the work*, not friction on top of it. When the urge
+appears, *that is the signal*; treat it the way a unit-test
+failure is treated — evidence requiring investigation, not friction
+to refactor around. The urge passes the moment ceremony is
+applied; the cycle that seemed urgent five minutes ago lands
+cleanly under full protocol. Operationalised at
+[`no-speed-pressure`](../../rules/no-speed-pressure.md); upstream
+principle is [§Architectural Excellence Over Expediency][excellence].
+
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).

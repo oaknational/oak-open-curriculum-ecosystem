@@ -1,5 +1,38 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026) — refreshed 2026-05-04 (Lacustrine Navigating Rudder)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— unified 12-step linear sequence to complete and merge
+`feat/eef_exploration` (post Round-2 collapse from 17 steps; HEAD
+`75dbcdb6`). Steps 01–02 closed at `75dbcdb6` (Pelagic Diving
+Atoll: Round 1 + Round 2 architecture-led review with
+six-reviewer dispatch each round; capture-not-clean shape adopted
+under owner direction 2026-05-04).
+
+**Current step**: step 03 — integrate `.agent/rules/no-speed-pressure.md`
+across the rule estate via single atomic commit. Canonical rule
+authored, four adapter paths (`.agent/`, `.claude/`, `.cursor/`,
+`.agents/`) and `RULES_INDEX.md` entry already in place at session-open;
+this commit adds principles.md cross-reference, distilled.md entry,
+user-memory feedback file `feedback_no_speed_pressure.md` (Claude
+per-user MEMORY.md index update), plus plan-body status update +
+this thread-record refresh + identity row. Three speculative
+failure-mode feedback files (performed-grounding, rule-conflict-is-signal,
+auto-mode-not-permission-slip) are NOT authored at this step —
+graduate only when a second instance is observed. Post-commit:
+verify all four adapter paths exist and resolve identically.
+Reviewer dispatch at commit close: code-reviewer (gateway).
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the
+just-landed rule the unified plan exists to operationalise.
+Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec,
+and plan-body freshness are non-optional through every remaining
+step.
+
+---
+
 ## Landing target (per PDR-026) — refreshed 2026-05-04 (Pelagic Diving Atoll)
 
 **Active plan**:
@@ -218,6 +251,7 @@ matching `platform + model + agent_name` updates `last_session`.
 | Salty Navigating Jetty | claude-code | claude-opus-4-7-1m | `900b17` | session-open as ARC A2 cycle 1 executor (local-stub mode conversion to canonical harness). Bootstrap fast-path (Tidal Flowing Reef opened a coexisting claim ~5 min after Salty; lanes disjoint per plan). Drafted env-builder refactor + 5 `*.smoke.test.ts` files + harness/modes.ts registration. Owner /jc-metacognition challenge mid-session surfaced that local-stub smoke is duplicative coverage of `e2e-tests/stub-mode.e2e.test.ts` + tool-call-success/validation-failure/multi-request-session/auth-bypass e2e tests; residual distinct value reduces to "Express listens" — testing the framework, textbook anti-pattern. Owner direction: delete the needless complexity, contemplate what should actually be done. Salty's first move was `git checkout HEAD --` rollback — owner correction: rollback is amnesia, the right shape is forward Edit/Write removal of needless code while capturing realisations. NO COMMIT LANDED. Lost two doc edits to working-tree-only revert (this row + a napkin entry on strict-reading interpretation of TDD-as-pairs). Reconstructing from transcript. | 2026-05-03 | 2026-05-03 |
 | Tidal Flowing Reef | claude-code | claude-opus-4-7-1m | `f879e0` | session-open Lane B / WS2 (sentry-node SinkRegistry consumption per multi-sink plan §WS2). Honoured Salty's Lane A claim at preflight; pivoted to disjoint Lane B. Posted session-open verification event `claude-f879e0-tidal-session-open-and-verification` reading 5 facts from sentry-node + observability source. Claim 99717aca opened on 12 sentry-node files. Survived Salty's `git checkout HEAD --` revert untouched (had no in-flight napkin/thread-record edits at the time; comms event was untracked). Grounding revealed empirical cascade: WS2 plan-body strict scope (sentry-node only) leaves ~10-15 app-level tests RED awaiting WS4/WS5 — the multi-commit-TDD-skip-register shape deleted earlier today (`60b9ff4c`). Surfaced framing-trap (asking "A vs B between violations" is itself the failure; reshape work to adopt new insights). Posted step-back comms event `claude-f879e0-tidal-step-back-and-cascade-finding` recommending plan-body restructure to collapse WS2+WS3+WS4+WS5 into one atomic landing per replace-don't-bridge + TDD-as-pairs. Empirically verified `dev-server-boots-without-observability-config.e2e.test.ts` RED today via `pnpm test:e2e` (1 failed/154 passed) — multi-sink rename arc IS load-bearing for branch-push, distinct from the smoke-harness arc Salty halted. Napkin Tidal entry under 2026-05-03 day captures cascade finding + framing-trap + arc-level first-question. Two platform-memory feedback entries authored: `feedback_no_ritual_framing` and `feedback_question_shape_known_bad_vs_adopt`. Claim 99717aca closed cleanly at session-close. NO COMMIT, no product code authored. Salty now drafting fresh plans based in part on this feedback. | 2026-05-03 | 2026-05-03 |
 | Pelagic Diving Atoll | claude-code | claude-opus-4-7-1m | `6814a4` | unified-plan execution opener: hygiene-first under no-speed-pressure (thread-record refresh + identity registration + active claim) followed by architecture-led review pass over plan body AND code surface (commits `fd4eabaa..b226670d`, `.agent/rules/no-speed-pressure.md`, observability/env package areas). | 2026-05-04 | 2026-05-04 |
+| Lacustrine Navigating Rudder | claude-code | claude-opus-4-7-1m | `dd239f` | step 3 executor — integrate `.agent/rules/no-speed-pressure.md` across the rule estate via single atomic commit. Canonical rule + four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`) + `RULES_INDEX.md` entry already present at session-open; this commit adds principles.md cross-reference (§Architectural Excellence Over Expediency), distilled.md entry (sibling to "cheap cure framing"), user-memory feedback file `feedback_no_speed_pressure.md` with `MEMORY.md` index update, plan-body status update for step 03, and bundles inherited handoff working-tree state (napkin/repo-continuity/active-claims/closed-claims-archive) per Pelagic's direction. Post-commit: verify all four adapter paths exist and resolve identically. Reviewer dispatch: code-reviewer at commit close. | 2026-05-04 | 2026-05-04 |
 | Fronded Climbing Thicket | claude | claude-opus-4-7-1m | `8da3d3` | dev-server-proof three-plan arc descope and reframe. Audit found plan 1 (fix-dev-boot-release-resolution) already landed in commit `2a2d1b05`; archived to `observability/archive/completed/`. Boot probe verified server reaches `listening` on port 3333 in ~142ms with `SENTRY_MODE=sentry` and no Vercel env. Plan 2 (SENTRY_MODE → OBSERVABILITY_SINKS rename) closed and moved to `observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md` per owner direction (foundational tension unnamed; rename concept paused, requires PDR/ADR before re-attempt). Authored `observability/current/eef-branch-merge-readiness.plan.md` (7 steps) parallel to Moonlit Shimmering Comet's `architecture-and-infrastructure/current/smoke-test-retirement-recovery-and-completion.plan.md` (41 steps) — plans had overlapping verification work; owner directed unification. Result: `observability/current/feat-eef-exploration-completion.plan.md` (17 linear steps; comprehensive sub-agent review as step 1; integrate `no-speed-pressure` rule across estate; backfill reviewer dispatch on commits `fd4eabaa..b226670d`; cycles 2a–2f real-IO audits; cycles 3a–3b ESLint rule; `pnpm check` green; dev boot + MCP tool exercise via protocol; pre-merge divergence; owner-gated merge declaration). Both predecessor plans archived to their respective `archive/superseded/` with `superseded-by-unified-2026-05-04` suffix. Foreign-stage absorption observed twice during session (Moonlit's `git commit` without `--only` swept Fronded's staged files into commit `8fa339f4`; recurrence prevention codified in unified plan §Discipline as mandatory `git commit -- <pathspec>` filter). Three comms events authored: `e28b0985-...` arc-opening, `461457ad-...` plan-2 close + new plan announcement, `cb209019-...` unification + archive announcement. Claim `f2cabfad-...` closed via `owner_forced` kind. NO product code in this session; planning + descope + unification only. | 2026-05-04 | 2026-05-04 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
