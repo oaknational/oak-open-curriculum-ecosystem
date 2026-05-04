@@ -389,6 +389,26 @@ targets, even in its own source-landing footer. The fix was simple
 (name the WS, name the date, omit the SHA); the discovery was the
 implementation/spirit gap.
 
+**Owner direction (2026-05-04, end of session): the hook should be
+tightened.** The "either tighten or rely on the rule" framing in
+`no-moving-targets-in-permanent-docs.md` is incorrect optionality —
+the cure is to extend the hook so backticked SHAs in narrative
+prose are caught, not just unwrapped/code-block SHAs. Specifically:
+the inline-code exclusion should distinguish between *code-block
+data context* (YAML keys, JSON values, code-fence content — keep
+excluded) and *prose-narrative context* (a backticked SHA inside a
+sentence — should fire). The simplest implementation cue: only
+strip inline-code spans when the surrounding line content is
+itself code-shaped (e.g. inside a fenced block, or the line is
+predominantly code-like); in narrative prose, do not strip the
+backticks before regex evaluation. Refinement is a follow-up
+workstream — capture as a graduation candidate now, land the
+hook tightening when picked up.
+
+The rule file itself still carries the now-incorrect "either/or"
+language; updating that text to reflect the owner-directed
+direction is part of the same follow-up.
+
 ### Quality-gate state at session close
 
 - `pnpm type-check`, `pnpm lint`, `pnpm test` (1001+),
