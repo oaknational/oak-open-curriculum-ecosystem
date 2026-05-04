@@ -335,13 +335,21 @@ Landed all three remaining workstreams of
 
 ### Audit findings (post-WS landing)
 
-- **No `.agent/rules/README.md` index exists.** The plan's "rules
-  index" reference is best read as "do new structural surfaces
-  warrant rule files?" — answer: WS3 and WS4 substance is already
-  documented (distilled, personal-memory feedback). WS6's
-  "stage by explicit pathspec" rule is on Fronded's deferred-rule
-  list and graduates with the explicit-pathspec discipline.
-- **WS4 citation drift, repaired in `aa6e37d5`.** My initial
+- **`RULES_INDEX.md` discoverability gap, repaired in this session.**
+  Initial audit incorrectly concluded *"no rules index exists"* —
+  I only inspected `.agent/rules/` and missed the repo-root
+  `RULES_INDEX.md` that owner pointed to. The index *did* exist
+  but was framed as a Codex project-doc fallback, not referenced
+  from `AGENT.md`, and not updated when new rules graduated.
+  Repaired by: (a) authoring three rule files corresponding to
+  WS3/WS4/WS6 with the canonical-plus-adapters triple
+  (`.agent/rules/`, `.claude/rules/`, `.cursor/rules/`); (b)
+  reframing `RULES_INDEX.md` as the canonical, platform-independent
+  enumeration of always-applied rules with the three-form on-disk
+  contract named explicitly; (c) wiring `AGENT.md §Rules` to point
+  at `RULES_INDEX.md` as the single source of truth for which files
+  belong to the always-applied tier.
+- **WS4 citation drift, repaired in this session.** Initial
   citation referenced `distilled.md §Moving targets do not belong
   in permanent docs`, but Fronded's layer-2 rotation removed that
   section in the same arc. Updated the citation to drop the stale
@@ -349,9 +357,37 @@ Landed all three remaining workstreams of
   plus a forward reference to `pending-graduations.md`.
 - **`never-use-git-to-remove-work.md`** scope is destructive
   history + working-tree overwrite. WS6's wildcard-staging block
-  is a different class (accidental bundling, not removal) and
-  doesn't fit that rule. A separate rule will graduate when the
-  explicit-pathspec discipline lands.
+  is a different class (accidental bundling, not removal). The
+  separate rule `stage-by-explicit-pathspec.md` landed in this
+  session as its own entry in the index.
+
+### Self-violation discovery: hook spirit > hook implementation
+
+The first attempt at authoring the no-moving-targets rule files
+embedded backticked commit SHAs in the rule prose
+(`commit \`abc1234\` landed X`-shape narrative). The repo's
+permission system rejected the write, naming the anti-pattern: I
+had just authored a rule against moving targets in permanent docs,
+and was immediately about to violate it on the rule file itself.
+
+The discovery: the WS4 hook's inline-code exclusion strips
+backticked spans before the regex test, so backticked SHAs in
+narrative prose pass the hook silently. But the rule's spirit is
+stricter — bare backticked SHAs in prose are still moving targets,
+because the backticks treat the SHA as a code-shaped token while
+the prose still ties the doc's claim to a transient instance. The
+inline-code exclusion was meant for code blocks where the SHA is
+data (YAML examples, JSON snippets), not for prose-references-
+with-backticks. The rule file now names this gap explicitly and
+treats it as a refinement candidate (either tighten the hook to
+detect prose-context SHAs even inside backticks, or leave the hook
+as-is and rely on the rule for the stricter case).
+
+This is also a worked instance for *the rule applies, always — no
+hedging*: a rule against moving targets cannot embed moving
+targets, even in its own source-landing footer. The fix was simple
+(name the WS, name the date, omit the SHA); the discovery was the
+implementation/spirit gap.
 
 ### Quality-gate state at session close
 
