@@ -49,19 +49,27 @@ function resolveInput(hookInput) {
 }
 
 /**
- * Extract incoming content and prior-content references from a Claude Edit or
- * Write tool payload.
+ * Extract incoming content, prior-content references, and the target file path
+ * from a Claude Edit or Write tool payload.
  *
- * For Edit: `new_string` is the incoming content; `old_string` is the prior.
- * For Write: `content` is the incoming content; `file_path` is returned as an
- * optional prior-content reference. The extraction step never reads the file.
+ * For Edit: `new_string` is the incoming content; `old_string` is the prior;
+ * `file_path` (when present) anchors path-scoped checks.
+ *
+ * For Write: `content` is the incoming content; `file_path` is both the
+ * scope anchor AND the prior-content reference. The extraction step never
+ * reads the file itself — the read is delegated to the caller.
  *
  * The hook blocks patterns that are being ADDED — present in the new content
  * but absent from the prior content. This allows edits that preserve an
  * already-present pattern without blocking.
  *
  * @param {unknown} hookInput
- * @returns {{ newContent: string, priorContent: string, priorFilePath?: string }}
+ * @returns {{
+ *   newContent: string,
+ *   priorContent: string,
+ *   filePath?: string,
+ *   priorFilePath?: string,
+ * }}
  */
 export function extractContentChange(hookInput) {
   const input = resolveInput(hookInput);
@@ -70,13 +78,22 @@ export function extractContentChange(hookInput) {
   if ('new_string' in input && typeof input.new_string === 'string') {
     const prior =
       'old_string' in input && typeof input.old_string === 'string' ? input.old_string : '';
-    return { newContent: input.new_string, priorContent: prior };
+    const filePathInfo =
+      'file_path' in input && typeof input.file_path === 'string'
+        ? { filePath: input.file_path }
+        : {};
+    return { newContent: input.new_string, priorContent: prior, ...filePathInfo };
   }
 
   // Write tool: content vs existing file
   if ('content' in input && typeof input.content === 'string') {
     if ('file_path' in input && typeof input.file_path === 'string') {
-      return { newContent: input.content, priorContent: '', priorFilePath: input.file_path };
+      return {
+        newContent: input.content,
+        priorContent: '',
+        filePath: input.file_path,
+        priorFilePath: input.file_path,
+      };
     }
     return { newContent: input.content, priorContent: '' };
   }
@@ -103,6 +120,16 @@ export function resolveContentPair(change, readPriorContent) {
 }
 
 /**
+ * @typedef {{
+ *   pattern: string,
+ *   kind?: 'literal',
+ *   include_paths: readonly string[],
+ *   exclude_paths?: readonly string[],
+ *   citation: string,
+ * }} ScopedContentBlock
+ */
+
+/**
  * Check whether a blocked pattern is being ADDED — present in new content
  * but absent from prior content.
  *
@@ -126,9 +153,81 @@ export function findAddedBlockedContent(newContent, priorContent, blockedPattern
 }
 
 /**
+ * Match a single path-scope entry against a file path.
+ *
+ * - Entries beginning with `**​/​*` are treated as a suffix match
+ *   (e.g. `**​/​*.plan.md` matches any path ending in `.plan.md`).
+ * - All other entries are treated as substring matches against the
+ *   file path, which works equivalently for absolute and relative
+ *   forms because the path always contains its own directory prefix.
+ *
+ * @param {string} filePath
+ * @param {string} scope
+ * @returns {boolean}
+ */
+function matchesPathScope(filePath, scope) {
+  if (scope.startsWith('**/*')) {
+    return filePath.endsWith(scope.slice(4));
+  }
+  return filePath.includes(scope);
+}
+
+/**
+ * Determine whether a file path is in scope for a `ScopedContentBlock` —
+ * matches at least one include and no excludes.
+ *
+ * @param {string | undefined} filePath
+ * @param {readonly string[]} includePaths
+ * @param {readonly string[]} excludePaths
+ * @returns {boolean}
+ */
+export function isPathInScope(filePath, includePaths, excludePaths = []) {
+  if (filePath === undefined) {
+    return false;
+  }
+  const matchesInclude = includePaths.some((scope) => matchesPathScope(filePath, scope));
+  if (!matchesInclude) {
+    return false;
+  }
+  return !excludePaths.some((scope) => matchesPathScope(filePath, scope));
+}
+
+/**
+ * Find a path-scoped doctrine block whose pattern is being ADDED — present
+ * in new content but absent from prior content — when the target file
+ * matches the block's include/exclude paths.
+ *
+ * @param {string} newContent
+ * @param {string} priorContent
+ * @param {string | undefined} filePath
+ * @param {readonly ScopedContentBlock[]} scopedBlocks
+ * @returns {ScopedContentBlock | null}
+ */
+export function findAddedScopedBlock(newContent, priorContent, filePath, scopedBlocks) {
+  const lowerNew = newContent.toLowerCase();
+  const lowerPrior = priorContent.toLowerCase();
+
+  for (const block of scopedBlocks) {
+    if (!isPathInScope(filePath, block.include_paths, block.exclude_paths)) {
+      continue;
+    }
+    const lowerPattern = block.pattern.toLowerCase();
+    if (lowerNew.includes(lowerPattern) && !lowerPrior.includes(lowerPattern)) {
+      return block;
+    }
+  }
+
+  return null;
+}
+
+/**
  * Build the structured deny payload Claude expects for `PreToolUse`.
  *
+ * The optional citation surfaces the doctrinal anchor in the deny reason
+ * so the agent learns *why* the pattern is forbidden, not only *that* it is.
+ *
  * @param {string} blockedPattern
+ * @param {string} [citation]
  * @returns {{
  *   hookSpecificOutput: {
  *     hookEventName: string,
@@ -137,12 +236,14 @@ export function findAddedBlockedContent(newContent, priorContent, blockedPattern
  *   },
  * }}
  */
-export function buildPreToolUseDenyResponse(blockedPattern) {
+export function buildPreToolUseDenyResponse(blockedPattern, citation) {
+  const baseReason = `Blocked by repo hook policy: content contains forbidden pattern "${blockedPattern}". Only the project owner can use this pattern.`;
+  const reason = citation === undefined ? baseReason : `${baseReason} Citation: ${citation}.`;
   return {
     hookSpecificOutput: {
       hookEventName: PRE_TOOL_USE_EVENT_NAME,
       permissionDecision: 'deny',
-      permissionDecisionReason: `Blocked by repo hook policy: content contains forbidden pattern "${blockedPattern}". Only the project owner can use this pattern.`,
+      permissionDecisionReason: reason,
     },
   };
 }
@@ -176,6 +277,84 @@ export function parseBlockedContentPolicy(policy) {
 }
 
 /**
+ * Validate a single scoped block entry shape.
+ *
+ * @param {unknown} entry
+ * @returns {boolean}
+ */
+function isValidScopedBlockEntry(entry) {
+  if (entry === null || typeof entry !== 'object') {
+    return false;
+  }
+  if (!('pattern' in entry) || typeof entry.pattern !== 'string') {
+    return false;
+  }
+  if (
+    !('include_paths' in entry) ||
+    !Array.isArray(entry.include_paths) ||
+    entry.include_paths.length === 0 ||
+    !entry.include_paths.every((scope) => typeof scope === 'string')
+  ) {
+    return false;
+  }
+  if (
+    'exclude_paths' in entry &&
+    (!Array.isArray(entry.exclude_paths) ||
+      !entry.exclude_paths.every((scope) => typeof scope === 'string'))
+  ) {
+    return false;
+  }
+  if (!('citation' in entry) || typeof entry.citation !== 'string') {
+    return false;
+  }
+  if ('kind' in entry && entry.kind !== 'literal') {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Parse path-scoped doctrine blocks from already-loaded policy data.
+ *
+ * Returns an empty array when the policy omits the optional
+ * `scoped_blocks` section, so callers do not have to special-case
+ * legacy policy files.
+ *
+ * @param {unknown} policy
+ * @returns {readonly ScopedContentBlock[]}
+ */
+export function parseScopedContentBlocks(policy) {
+  if (
+    policy === null ||
+    typeof policy !== 'object' ||
+    !('hooks' in policy) ||
+    policy.hooks === null ||
+    typeof policy.hooks !== 'object' ||
+    !('preToolUseContent' in policy.hooks) ||
+    policy.hooks.preToolUseContent === null ||
+    typeof policy.hooks.preToolUseContent !== 'object'
+  ) {
+    return [];
+  }
+
+  const section = policy.hooks.preToolUseContent;
+  if (!('scoped_blocks' in section)) {
+    return [];
+  }
+
+  if (
+    !Array.isArray(section.scoped_blocks) ||
+    !section.scoped_blocks.every(isValidScopedBlockEntry)
+  ) {
+    throw new Error(
+      'The canonical hook policy hooks.preToolUseContent.scoped_blocks was malformed.',
+    );
+  }
+
+  return section.scoped_blocks;
+}
+
+/**
  * Load blocked content patterns from the canonical hook policy.
  *
  * @param {URL} policyUrl
@@ -185,6 +364,18 @@ export async function loadBlockedContentPatterns(policyUrl = POLICY_URL) {
   const policyText = await fs.readFile(policyUrl, 'utf8');
   const policy = JSON.parse(policyText);
   return parseBlockedContentPolicy(policy);
+}
+
+/**
+ * Load path-scoped doctrine blocks from the canonical hook policy.
+ *
+ * @param {URL} policyUrl
+ * @returns {Promise<readonly ScopedContentBlock[]>}
+ */
+export async function loadScopedContentBlocks(policyUrl = POLICY_URL) {
+  const policyText = await fs.readFile(policyUrl, 'utf8');
+  const policy = JSON.parse(policyText);
+  return parseScopedContentBlocks(policy);
 }
 
 /**
@@ -220,12 +411,20 @@ export async function readStreamText(stdin) {
 /**
  * Execute the content guard using Claude's stdin/stdout contract.
  *
+ * Two layers of detection are run, in order:
+ *   1. Flat `blocked_patterns` — universal, path-agnostic block.
+ *   2. `scoped_blocks` — path-scoped, citation-bearing doctrine blocks
+ *      (the trip-list at write-time).
+ *
+ * The first match wins; only one deny payload is written.
+ *
  * @param {{
  *   stdin?: AsyncIterable<string | Buffer>,
  *   stdout?: { write: (text: string) => void },
  *   stderr?: { write: (text: string) => void },
  *   policyUrl?: URL,
  *   blockedPatterns?: readonly string[],
+ *   scopedBlocks?: readonly ScopedContentBlock[],
  *   readPriorContent?: (path: string) => string | null,
  * }} options
  * @returns {Promise<{ exitCode: number }>}
@@ -237,21 +436,32 @@ export async function runPreToolUseContentGuard(options = {}) {
     stderr = process.stderr,
     policyUrl = POLICY_URL,
     blockedPatterns,
+    scopedBlocks,
     readPriorContent = readPriorFileContent,
   } = options;
 
   try {
     const inputText = await readStreamText(stdin);
     const hookInput = parseHookInput(inputText);
-    const { newContent, priorContent } = resolveContentPair(
-      extractContentChange(hookInput),
-      readPriorContent,
-    );
+    const change = extractContentChange(hookInput);
+    const { newContent, priorContent } = resolveContentPair(change, readPriorContent);
     const patterns = blockedPatterns ?? (await loadBlockedContentPatterns(policyUrl));
     const blockedPattern = findAddedBlockedContent(newContent, priorContent, patterns);
 
     if (blockedPattern !== null) {
       stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedPattern))}\n`);
+      return { exitCode: 0 };
+    }
+
+    const blocks = scopedBlocks ?? (await loadScopedContentBlocks(policyUrl));
+    const matchedBlock = findAddedScopedBlock(newContent, priorContent, change.filePath, blocks);
+
+    if (matchedBlock !== null) {
+      stdout.write(
+        `${JSON.stringify(
+          buildPreToolUseDenyResponse(matchedBlock.pattern, matchedBlock.citation),
+        )}\n`,
+      );
     }
 
     return { exitCode: 0 };

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildPreToolUseDenyResponse, runPreToolUseContentGuard } from './check-blocked-content.js';
+import {
+  buildPreToolUseDenyResponse,
+  loadScopedContentBlocks,
+  runPreToolUseContentGuard,
+} from './check-blocked-content.js';
 
 describe('runPreToolUseContentGuard', () => {
   it('writes a deny payload when new content introduces a blocked pattern', async () => {
@@ -132,5 +136,121 @@ describe('runPreToolUseContentGuard', () => {
     expect(result).toStrictEqual({ exitCode: 2 });
     expect(stderrChunks.length).toBe(1);
     expect(stderrChunks[0]).toContain('Claude PreToolUse hook input was not valid JSON:');
+  });
+
+  it('writes a scoped-block deny payload when hedging vocabulary is added on a doctrine path', async () => {
+    const stdoutChunks: string[] = [];
+    const stderrChunks: string[] = [];
+
+    async function* stdin(): AsyncGenerator<Buffer> {
+      yield Buffer.from(
+        JSON.stringify({
+          tool_input: {
+            new_string: 'we will carve out an allowance for this case',
+            old_string: 'we will not yet decide',
+            file_path: '/repo/.agent/plans/example.plan.md',
+          },
+        }),
+      );
+    }
+
+    const result = await runPreToolUseContentGuard({
+      stdin: stdin(),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: {
+        write: (text: string) => {
+          stderrChunks.push(text);
+        },
+      },
+      blockedPatterns: [],
+      scopedBlocks: [
+        {
+          pattern: 'carve out',
+          include_paths: ['**/*.plan.md'],
+          citation: 'PDR-044; principles.md §Architectural Excellence Over Expediency',
+        },
+      ],
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    expect(stderrChunks).toStrictEqual([]);
+    expect(JSON.parse(stdoutChunks.join(''))).toStrictEqual(
+      buildPreToolUseDenyResponse(
+        'carve out',
+        'PDR-044; principles.md §Architectural Excellence Over Expediency',
+      ),
+    );
+  });
+
+  it('does not deny scoped-block hedging vocabulary on out-of-scope paths', async () => {
+    const stdoutChunks: string[] = [];
+
+    async function* stdin(): AsyncGenerator<Buffer> {
+      yield Buffer.from(
+        JSON.stringify({
+          tool_input: {
+            new_string: 'we will carve out an allowance for this case',
+            old_string: 'we will not yet decide',
+            file_path: '/repo/src/index.ts',
+          },
+        }),
+      );
+    }
+
+    const result = await runPreToolUseContentGuard({
+      stdin: stdin(),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: { write: () => {} },
+      blockedPatterns: [],
+      scopedBlocks: [
+        {
+          pattern: 'carve out',
+          include_paths: ['**/*.plan.md', '.agent/practice-core/'],
+          citation: 'PDR-044',
+        },
+      ],
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    expect(stdoutChunks).toStrictEqual([]);
+  });
+});
+
+describe('canonical policy: hedging-vocabulary trip-list (WS3)', () => {
+  const expectedCitation = 'PDR-044; principles.md §Architectural Excellence Over Expediency';
+
+  it('the canonical policy registers a hedging-vocabulary trip-list scoped to doctrine surfaces', async () => {
+    const blocks = await loadScopedContentBlocks();
+
+    const patterns = blocks.map((block) => block.pattern);
+    expect(patterns).toEqual(
+      expect.arrayContaining([
+        'carve out',
+        'carve-out',
+        'carve around',
+        'an exception to',
+        'with the exception of',
+        'for these arcs',
+        'honest framing for',
+        'permitted variant',
+        'land it then iterate',
+        'cheap cure',
+        'good enough',
+        'quick fix',
+      ]),
+    );
+
+    for (const block of blocks) {
+      expect(block.citation).toBe(expectedCitation);
+      expect(block.include_paths.length).toBeGreaterThan(0);
+    }
   });
 });
