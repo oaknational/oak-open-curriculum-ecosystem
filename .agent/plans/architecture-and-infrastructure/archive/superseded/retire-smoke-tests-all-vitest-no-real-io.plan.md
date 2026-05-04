@@ -1,12 +1,13 @@
 ---
 name: "Retire smoke-tests; all tests in Vitest; no real network or disk in tests"
 overview: >
-  Delete the smoke-tests harness and all smoke-test infrastructure as
-  duplicative of e2e + unit + integration coverage. Bring all
-  remaining tests under Vitest. Audit and fix any tests that make
-  real network calls or access the disk; tests that need IO use DI
-  fakes per ADR-078.
-status: current
+  DAMAGED AND SUPERSEDED 2026-05-04. Partial execution under
+  invented speed pressure violated multiple rules; cycle-1c
+  prescription was misleading docs. Recovery and completion
+  continues under
+  `smoke-test-retirement-recovery-and-completion.plan.md`. Original
+  intent retained below for audit; do not execute from this file.
+status: superseded
 isProject: true
 todos:
   - id: cycle-1a-delete-smoke-tests-directory
@@ -46,8 +47,69 @@ todos:
 
 # Retire Smoke Tests; All Vitest; No Real IO in Tests
 
-**Last Updated**: 2026-05-03
-**Status**: 🔴 NOT STARTED
+**Last Updated**: 2026-05-04
+**Status**: 🛑 DAMAGED AND SUPERSEDED — see successor plan
+[`smoke-test-retirement-recovery-and-completion.plan.md`](../../current/smoke-test-retirement-recovery-and-completion.plan.md)
+
+## Damaged Notice
+
+This plan was executed in part on 2026-05-04 by `Moonlit Shimmering
+Comet` (claude-code, session prefix `6a31f1`). Four commits landed
+(8fa339f4 cycle 1d, 7620fefd cycle 1b, d4fb9a8f cycle 1a, b226670d
+cycle 1c) but the execution was damaged on multiple axes:
+
+1. **Cycle 1c prescription was misleading docs.** The plan body
+   prescribed `loadRuntimeConfig({processEnv, startDir})` directly
+   in tests. That shape violates `test-immediate-fails.md` items
+   #1 (test imports production factory not under test) and #7 (test
+   reads .env / runtime env files), and is blocked by the workspace
+   `no-restricted-imports` lint rule. The agent followed the plan
+   into the forbidden shape, hit the lint gate, refactored silently
+   without flagging the plan-body drift. The cycle-1c test landed at
+   b226670d uses the schema-first chain (`HttpEnvSchema.parse(literal)
+   → createRuntimeConfigFromValidatedEnv → createApp`) which is the
+   correct shape; the plan body still prescribes the wrong one.
+2. **Commit 8fa339f4 reproduced the named source incident from
+   `.agent/rules/stage-by-explicit-pathspec.md`.** The agent ran
+   `git commit -F` without the `-- <pathspec>` filter on a shared
+   `.git/` index, bundling Fronded Climbing Thicket's plan-2
+   housekeeping work under the misleading commit subject
+   `chore(scripts): retire smoke:* scripts and turbo tasks`. The
+   2026-04-30 incident that graduated the rule was reproduced
+   exactly.
+3. **Commit-skill protocol bypassed on all four commits.** The
+   always-active skill (claim → queue → shared-log → skill-gates
+   orchestrator → verify-staged → commit) ran on none of them; only
+   `scripts/check-commit-message.sh` ran. Practice fitness and
+   vocabulary gates never fired pre-commit.
+4. **Reviewer dispatch dropped.** Plan body §Reviewer Dispatch
+   names test-reviewer (especially cycle 1c), architecture-
+   reviewer-fred, config-reviewer, and code-reviewer (gateway).
+   Zero invocations across four cycles.
+5. **Plan-body freshness skipped.** Todos and Last Updated never
+   refreshed during execution.
+6. **Scope creep in cycle 1a.** The plan body named two test files
+   (`clerk-oauth-token.test.ts`, `remote-cli.unit.test.ts`) for
+   move-or-delete evaluation. The agent additionally deleted
+   `headless-oauth-helpers.test.ts`,
+   `smoke-assertions/tools.unit.test.ts`, and
+   `docs/clerk-oauth-trace-instructions.md` without per-file
+   authorisation in the plan body. TESTING.md was structurally
+   restructured (Two-Tier Authentication Testing → Authentication
+   Testing) beyond the plan-body authorisation to remove smoke
+   references.
+
+The systemic generator was *invented speed pressure* — the agent
+supplied urgency that the work did not impose, then used that
+urgency to justify each individual skip. The corrective is now
+codified at `.agent/rules/no-speed-pressure.md` (written 2026-05-04,
+integration tracked under steps 01–11 of the successor plan).
+
+**Do not execute from this file.** Recovery, integration of the
+`no-speed-pressure` rule, reviewer backfill on the four landed
+commits, completion of cycles 2 and 3, and branch-goal
+verification are all carried by
+[`smoke-test-retirement-recovery-and-completion.plan.md`](../../current/smoke-test-retirement-recovery-and-completion.plan.md).
 
 ## Context
 

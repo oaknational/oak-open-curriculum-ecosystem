@@ -29,31 +29,6 @@
       "staged_bundle_fingerprint": "bd2355188133d359d252f5a8f198554fa4388fbc138fbed08e7272b134691201",
       "staged_name_status": "M\t.agent/directives/principles.md\nM\t.agent/hooks/policy.json\nA\t.agent/memory/active/archive/napkin-2026-05-04-evening.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-04.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/practice-core/CHANGELOG.md\nA\t.agent/practice-core/decision-records/PDR-046-layered-knowledge-processing.md\nA\t.agent/practice-core/decision-records/PDR-047-rule-applies-always-doctrine-authoring.md\nA\t.agent/practice-core/decision-records/PDR-048-insight-capture-at-moment-of-occurrence.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/rules/unknown-is-type-destruction.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/f098343f-86cb-4dcb-9278-365970357574.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tdocs/governance/development-practice.md\n",
       "notes": "scope expanded under owner direction (PDR-047/048 + principles.md + dev-practice + frontmatter revisions + remediation lane); re-enqueuing with full bundle"
-    },
-    {
-      "intent_id": "6a9b5c77-1d83-4e35-984f-acfe13c698e5",
-      "claim_id": "07a19fd1-f06f-48fa-8f27-3b50579a7dab",
-      "agent_id": {
-        "agent_name": "Fronded Climbing Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8da3d3"
-      },
-      "files": [
-        ".agent/plans/observability/README.md",
-        ".agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md",
-        ".agent/plans/observability/archive/completed/fix-dev-boot-release-resolution.plan.md",
-        ".agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/e28b0985-289b-4c7b-91a3-ed42af4be070.json",
-        ".agent/state/collaboration/comms-events/d3016d95-100b-4e2e-8596-c4c927f7959e.json"
-      ],
-      "commit_subject": "docs(plans): archive plan-1 and refresh plan-2 freshness for parallel-execution arc",
-      "queued_at": "2026-05-04T16:51:16.157Z",
-      "updated_at": "2026-05-04T16:51:29.000Z",
-      "expires_at": "2026-05-04T17:06:16.157Z",
-      "phase": "staging"
     }
   ],
   "claims": [
@@ -88,79 +63,6 @@
       "sidebar_open": false,
       "intent": "Retire smoke-tests directory + vitest.smoke.config.ts + smoke:* scripts (cycles 1a-1d); add proper unit/integration replacement for dev-server-boots coverage (cycle 1c); claim cycle 2 audit areas separately at start; author no-real-io-in-tests ESLint rule (cycle 3, root-config wire-up gated on cycle 2 close).",
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
-    },
-    {
-      "claim_id": "f2cabfad-a6d2-406f-8570-84e342f78481",
-      "agent_id": {
-        "agent_name": "Fronded Climbing Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8da3d3"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/libs/sentry-node/**",
-            "packages/core/env/**",
-            "packages/core/observability/**",
-            "packages/libs/env-resolution/src/types.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/env.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/runtime-config*.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/observability/**",
-            "apps/oak-curriculum-mcp-streamable-http/src/lib/env.ts",
-            "apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts",
-            "apps/oak-curriculum-mcp-streamable-http/.env.example",
-            "apps/oak-curriculum-mcp-streamable-http/README.md",
-            "apps/oak-search-cli/src/observability/**",
-            "apps/oak-search-cli/src/lib/env.ts",
-            "apps/oak-search-cli/src/lib/logger.ts",
-            "apps/oak-search-cli/.env.example",
-            "apps/oak-search-cli/README.md",
-            ".agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md",
-            ".agent/plans/observability/archive/completed/fix-dev-boot-release-resolution.plan.md",
-            ".agent/plans/observability/README.md",
-            "docs/architecture/architectural-decisions/171-*.md"
-          ]
-        },
-        {
-          "kind": "plan",
-          "patterns": [
-            "replace-sentry-mode-with-observability-sinks"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-04T16:45:30Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Plan-2 atomic SENTRY_MODE → OBSERVABILITY_SINKS rename across producer (sentry-node), env, both apps, plus Cycle 2 ADR-171 and Cycle 3 README/.env.example updates. Planning hygiene already complete in working tree (plan 1 archived, plan 2 freshness refreshed).",
-      "notes": "Boot probe verified plan 1's outcome holds (server listening reached at ~142ms with SENTRY_MODE=sentry and no Vercel env). Parallel session: Moonlit Shimmering Comet on plan 3 (claim 8ed6386d) — file-level disjoint per Moonlit's notes. Soft potential overlap on apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.{unit,integration}.test.ts: I will modify these as part of plan 2 cycle 1; Moonlit's broad src/**/*.test.ts glob covers cycle 1c (NEW test file, not the observability ones) and cycle 2d audit (read-only unless violations found). If overlap surfaces I'll ping via comms event."
-    },
-    {
-      "claim_id": "07a19fd1-f06f-48fa-8f27-3b50579a7dab",
-      "agent_id": {
-        "agent_name": "Fronded Climbing Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8da3d3"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-04T16:50:00Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit plan-1 archive + plan-2 freshness + comms event + claim addition.",
-      "notes": "Pathspecs: .agent/plans/observability/{README.md,current/fix-dev-boot-release-resolution.plan.md (D),archive/completed/fix-dev-boot-release-resolution.plan.md (A),current/replace-sentry-mode-with-observability-sinks.plan.md}, .agent/state/collaboration/{active-claims.json,shared-comms-log.md,comms-events/e28b0985-...json,comms-events/d3016d95-...json}. Gates: post-edit, pre-commit-check pending. Peer claims: Moonlit's plan-3 (claim 8ed6386d) is parallel-safe; their package.json/turbo.json/apps-mcp-package.json edits will not be staged in this commit.",
-      "intent_to_commit": "6a9b5c77-1d83-4e35-984f-acfe13c698e5"
     }
   ]
 }

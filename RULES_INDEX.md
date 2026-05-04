@@ -13,11 +13,12 @@ area.
 
 Each rule has three on-disk forms:
 
-- `.agent/rules/<name>.md` — canonical content (the source of truth).
-- `.claude/rules/<name>.md` — Claude Code platform forwarder (one-line
+- canonical content lives under `.agent/rules/` (the source of truth).
+- Claude Code platform forwarder lives under `.claude/rules/` (one-line
   pointer to the canonical file).
-- `.cursor/rules/<name>.mdc` — Cursor platform forwarder (frontmatter
-  with `alwaysApply: true` plus a pointer to the canonical file).
+- Cursor platform forwarder lives under `.cursor/rules/` (with `.mdc`
+  extension; frontmatter sets `alwaysApply: true` plus a pointer to the
+  canonical file).
 
 Platforms that auto-load their adapter tier (Claude, Cursor) pick up
 the canonical content via the forwarder. Platforms that do not
@@ -60,6 +61,7 @@ index in the same commit.
 - `.agent/rules/no-machine-local-paths.md`
 - `.agent/rules/no-moving-targets-in-permanent-docs.md`
 - `.agent/rules/no-skipped-tests.md`
+- `.agent/rules/no-speed-pressure.md`
 - `.agent/rules/no-type-shortcuts.md`
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
 - `.agent/rules/no-warning-toleration.md`

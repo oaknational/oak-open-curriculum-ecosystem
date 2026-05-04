@@ -8,7 +8,7 @@ overview: >
   consumption in one commit; tree green at end. Docs and ADRs land
   alongside as separate commits; they are parallel-safe with the
   rename commit.
-status: current
+status: paused
 isProject: true
 todos:
   - id: cycle-1-atomic-rename
@@ -22,10 +22,78 @@ todos:
     status: pending
 ---
 
-# Replace SENTRY_MODE with OBSERVABILITY_SINKS
+# Replace SENTRY_MODE with OBSERVABILITY_SINKS — DAMAGED, PAUSED, SUPERSEDED
 
 **Last Updated**: 2026-05-04
-**Status**: 🟡 IN PROGRESS — WS1 landed (commit `a3a0222a`); atomic Cycle 1 of producer + consumer rename pending.
+**Status**: 🛑 DAMAGED — PAUSED — SUPERSEDED. Owner-directed pause and descope from `feat/eef_exploration` merge-readiness arc.
+
+## Owner Direction (2026-05-04, Fronded Climbing Thicket)
+
+> *close plan 2, it keeps causing issues, clearly there is some foundational
+> tension in it that has not yet been named, move it to paused and move it to
+> a future folder.*
+>
+> *create a new plan to finish the remaining actual work, keep it simple,
+> linear, straightforward and comprehensive. mark the old plan as damaged and
+> superseded.*
+
+**Superseded for the current branch arc by**:
+[`current/eef-branch-merge-readiness.plan.md`](../current/eef-branch-merge-readiness.plan.md)
+— covers what was actually needed to ship `feat/eef_exploration`: green
+gates, dev-server boot probe, MCP tool exercise, merge readiness.
+
+## Why this plan is damaged-paused
+
+This plan repeatedly created friction during execution attempts and the
+underlying cause is **foundational and unnamed**:
+
+- Multi-commit landings raced foreign-stage absorption (peer agents
+  committed before the rename's atomic landing could complete).
+- The "atomic, not parallelisable" framing got conflated with
+  "single commit", which over-constrained the decomposition options
+  available; smaller TDD-correct cycles each landing green were always
+  permissible per `tdd-as-design.md` but were not visible from the plan
+  body's framing.
+- The rename mixes two structurally-different changes — a
+  cosmetic-shaped rename (`mode` → `kind`, `FixtureSentryStore` →
+  `FixtureCaptureStore`) and a substantive type-shape change (3-kind
+  union → 4-kind discriminated union) — and these have different
+  sequencing characteristics that the plan body did not separate.
+- WS1's already-landed schemas + sink-registry types coexist in tree
+  with the legacy `SENTRY_MODE` consumer flow without a forcing
+  function; the dev server functions either way, so the rename has
+  no functional gate driving it forward.
+
+The substance — moving from `SENTRY_MODE` to
+`OBSERVABILITY_SINKS × OBSERVABILITY_FIXTURES` orthogonal axes — is
+real future work. The framing in this plan body is not yet ready for
+a clean re-attempt; resuming it would inherit the same friction.
+
+**Do not pick this plan up as-is.** Before resuming the rename concept,
+the foundational tension must be named (likely as a PDR or an ADR
+amendment) and the plan body must be re-shaped accordingly. The four
+suspected-but-unnamed candidates above are starting points, not
+conclusions.
+
+## Resumption preconditions
+
+1. The foundational tension is named in a durable artefact (PDR, ADR,
+   or pattern record).
+2. The rename is re-decomposed into clean TDD cycles, each landing
+   green, with the cosmetic-vs-structural-change axis separated.
+3. The current branch (`feat/eef_exploration`) is merged so the rename
+   doesn't race other branch closure work.
+4. Owner explicitly re-opens the work.
+
+## Original Plan Body (preserved below for the substance content)
+
+The remainder of this file is the original plan body as it was authored
+2026-05-03 and lightly refreshed 2026-05-04. Field shapes, file
+inventories, design choices in §Cycles are still substantively useful
+when the rename is resumed; the framing is what's damaged, not the
+detailed substance.
+
+---
 
 ## Context
 

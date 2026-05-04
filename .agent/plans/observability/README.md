@@ -110,22 +110,36 @@ Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-
   `VERCEL_GIT_COMMIT_SHA` are absent; preview and production retain
   their hard-fail. `missing_git_sha` error kind and orphaned skipped/
   todo tests were deleted as part of the same landing.
-- [`current/replace-sentry-mode-with-observability-sinks.plan.md`](./current/replace-sentry-mode-with-observability-sinks.plan.md)
-  — Multi-sink + fixture orthogonality. Replaces `SENTRY_MODE` with
-  orthogonal `OBSERVABILITY_SINKS` (typed list) +
-  `OBSERVABILITY_FIXTURES` (boolean tee). Single atomic landing of
-  the producer (sentry-node) and all consumers (env package, HTTP MCP
-  app, Search CLI app) per Tidal Flowing Reef's cascade analysis;
-  cycles 2 (ADR-171) and 3 (READMEs + .env.example) are doc-only and
-  parallel-safe with cycle 1. Closes ADR-162's Open Question on
-  direct vendor imports; foundation for
-  `multi-sink-vendor-independence-conformance.plan.md` and the
-  three-sink topology (Sentry today, warehouse + PostHog post-MVP).
-  Replaces the damaged
+- [`current/feat-eef-exploration-completion.plan.md`](./current/feat-eef-exploration-completion.plan.md)
+  — 🟢 **CURRENT.** Unified seventeen-step linear plan to complete and
+  merge `feat/eef_exploration`. Step 1 comprehensive sub-agent review;
+  step 2 applies findings; step 3 integrates `no-speed-pressure` rule
+  across the rule estate; steps 4–5 backfill reviewer dispatch on the
+  four landed plan-3 commits; steps 6–11 cycle 2 per-workspace real-IO
+  audits; steps 12–13 cycle 3 `no-real-io-in-tests` ESLint rule
+  (author + wire to root); step 14 `pnpm check` green; step 15 dev
+  boot + MCP tool exercise + clean shutdown; step 16 pre-merge
+  divergence analysis; step 17 owner-gated merge readiness with
+  release-readiness-reviewer synthesis. Supersedes two predecessor
+  plans:
+  [`archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`](./archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md)
+  and
+  [`../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`](../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md)
+  whose verification work overlapped duplicatively.
+- [`future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`](./future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md)
+  — 🛑 **DAMAGED — PAUSED — SUPERSEDED.** Multi-sink + fixture
+  orthogonality rename (`SENTRY_MODE` → `OBSERVABILITY_SINKS` +
+  `OBSERVABILITY_FIXTURES`). Owner-directed pause 2026-05-04: the
+  rename concept is real future work but its current plan body has
+  unnamed foundational tension; resumption requires naming the tension
+  in a durable artefact (PDR or ADR amendment) and re-shaping the
+  plan body. WS1 of the rename (commit `a3a0222a`) already landed —
+  observability schemas + sink-registry types coexist with the legacy
+  `SENTRY_MODE` consumer flow under the pause. ADR-171 (was cycle 2)
+  and the READMEs/.env.example updates (was cycle 3) are deferred
+  with the rename. Earlier supersession heritage:
   `observability-multi-sink-and-fixtures-shape.plan.md` (archived as
-  superseded 2026-05-03; its producer-first sequencing reintroduced
-  the multi-commit-TDD-skip-register pattern owner deleted in
-  `60b9ff4c`). Also supersedes
+  superseded 2026-05-03) plus
   `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
   and
   `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`.

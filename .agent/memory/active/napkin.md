@@ -14,6 +14,66 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-04 (Fronded Climbing Thicket, `8da3d3`) — Three-plan arc descope + unification
+
+**Surprise 1 — "atomic, NOT parallelisable" misread as "single commit"**.
+Plan 2's `Atomic, NOT parallelisable` framing got conflated with
+"the whole rename in one commit". The real meaning was *no
+producer-first sequencing leaving RED consumer tests across
+commits* — clean TDD cycles each landing green were always
+permissible per `tdd-as-design.md`. Owner correction:
+*you are making things up and then treating them as blockers*.
+Cure: re-ground in `tdd-as-design.md`'s atomic-landing-per-cycle
+definition (test + product code in same commit) before treating
+plan-body imperatives as universal constraints.
+
+**Surprise 2 — foreign-stage absorption recurrence**.
+Moonlit's `git commit` (without `--only`) on a shared `.git/`
+index swept Fronded's staged files into commit `8fa339f4` —
+exact instance of `stage-by-explicit-pathspec.md`'s named
+failure mode. Substance landed but under a misleading commit
+subject. Cure for this branch's remaining commits is codified
+in the unified plan §Discipline: every `git commit` MUST use
+`-- <pathspec>` filter; every commit goes through commit-skill
+protocol.
+
+**Surprise 3 — verification overlap as coordination cost**.
+Two parallel plans (mine + Moonlit's) each owned dev-boot, MCP
+tool exercise, divergence analysis. Coordination on the overlap
+introduced more friction than the work itself. Owner direction:
+*turn the two plans into one simple, linear, comprehensive,
+straightforward plan that actually makes sense*. Cure: when
+two plans share verification scope, unify; do not coordinate
+duplicate work across sessions.
+
+**Surprise 4 — first-question discipline applied to scope, not
+just shape**. Owner asked *what is the intent of this session,
+what value is it trying to create, what complexity can we
+remove?* — the meta-question that exposed plan 2 (SENTRY_MODE
+rename) as wasted critical-path work. Plan 2 was real future
+work but not a merge prerequisite; the dev server boots fine
+with legacy `SENTRY_MODE`. Owner identified an unnamed
+foundational tension and directed pause. Cure: at every
+plan-execution boundary, re-ask *is this on the actual
+critical path, or is it adjacent work I'm treating as
+critical?*
+
+**ADR/PDR candidates** (not yet captured to register):
+
+- The "atomic single-commit vs atomic-landing-per-cycle"
+  ambiguity in plan-body framings is a documentation pattern
+  worth naming; could be a PDR or a rule extension to
+  `testing-strategy.md` distinguishing the two.
+- The "unnamed foundational tension" diagnostic on plan 2 is
+  itself a meta-pattern: when a plan keeps causing issues
+  during execution, the right move is *pause + name the
+  tension* rather than push through. Could graduate to a PDR
+  on plan-quality lifecycle.
+
+**Out of scope this session**: capturing the above to
+`pending-graduations.md` register — owner directed brief
+session-handoff, not deep consolidation.
+
 ## 2026-05-04 (Ferny Spreading Petal, `d0d13f`) — Curation-first napkin rotation
 
 Owner directed napkin rotation mid-session after the PDR-046
