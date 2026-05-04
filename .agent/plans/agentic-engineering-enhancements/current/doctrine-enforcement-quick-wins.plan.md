@@ -10,22 +10,22 @@ todos:
     status: completed
   - id: ws3-hedging-vocabulary
     content: "WS3: hedging-vocabulary trip-list added to check-blocked-content.ts via policy.json."
-    status: pending
+    status: completed
   - id: ws4-sha-in-permanent-doc
     content: "WS4: SHA-in-permanent-doc regex added to check-blocked-content.ts via policy.json."
-    status: pending
+    status: completed
   - id: ws5-fitness-pre-commit
     content: "WS5: practice:fitness:strict-hard and practice:vocabulary promoted to commit-skill gates."
     status: completed
   - id: ws6-git-add-wildcard-block
     content: "WS6: git add -A and git add . added to policy.json blocked_patterns."
-    status: pending
+    status: completed
 ---
 
 # Doctrine Enforcement Quick Wins
 
 **Last Updated**: 2026-05-04
-**Status**: 🟡 PARTIAL — WS1, WS2, WS5 landed; WS3, WS4, WS6 pending
+**Status**: 🟢 COMPLETE — WS1, WS2, WS3, WS4, WS5, WS6 all landed
 **Scope**: Five structural enforcement additions that catch the highest-frequency doctrine-violation patterns at write-time and commit-time, using existing infrastructure (`@oaknational/eslint-plugin-standards`, `.agent/hooks/policy.json`, `scripts/check-blocked-content.ts`, `scripts/check-blocked-patterns.ts`, the commit skill).
 
 ---
