@@ -32,6 +32,85 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **tests describe the system to itself** (Dewy Shedding
+  Glade, owner-led doctrinal arc): foundational reframing of TDD
+  landed in `tdd-as-design.md`. *A test does not verify code; a test
+  describes a system state, and product code is the path that guides
+  the system into that state. Test and product code are two halves
+  of one act of design. Writing them separately, in either order, is
+  a category error.* Adopter scope: every Practice-bearing repo —
+  this is a Practice-governance decision about the role of tests, not
+  a host-repo architectural choice. Source-surface: napkin
+  2026-05-04 entry; current home: `tdd-as-design.md` directive.
+  Graduation-target: PDR in `practice-core/decision-records/`
+  capturing the load-bearing definition + the atomic-landing
+  invariant + the describe-vs-audit blade as portable Practice
+  governance. The host directive `tdd-as-design.md` already operates
+  the host-local consequence; the PDR records the decision so it
+  travels with the Core. Trigger-condition: second instance OR
+  owner direction (owner-led arc this session is the first instance;
+  the framing is stable and load-bearing for the entire
+  validation-and-tdd-doctrine-restructure arc). Status: pending —
+  awaiting either second instance or owner direction.
+
++ 2026-05-04; **reviewers carry doctrine, not just audit it** (Dewy
+  Shedding Glade, owner direction §6 of the arc): the test-reviewer
+  refresh elevated the reviewer from structural auditor to doctrinal
+  carrier with mandatory recipe/pattern read path and citation
+  requirement on every suggestion. The shift is measurable: the
+  reviewer's *first question* is now "does this test describe an
+  interface or audit one?" rather than "does it pass". Source-surface:
+  `.agent/sub-agents/templates/test-reviewer.md` rewrite; companion
+  surfaces `.claude/agents/test-reviewer.md`,
+  `.cursor/agents/test-reviewer.md`, `.codex/agents/test-reviewer.toml`.
+  Graduation-target: PDR in `practice-core/decision-records/`
+  capturing reviewer-as-doctrine-carrier as a general
+  reviewer-authority discipline (sibling to PDR-007 reviewer
+  lineage). Trigger-condition: second instance — when one further
+  reviewer (architecture-reviewer-fred is already shaped this way;
+  candidates are type-reviewer, security-reviewer, sentry-reviewer)
+  is similarly upgraded to the doctrine-carrier shape. Status:
+  pending — first instance landed this session.
+
++ 2026-05-04; **forcing-function read path: reviewer carries the
+  recipes the doctrine cites** (Dewy Shedding Glade, derived from §5
+  of the arc): the test-reviewer's mandatory read path now includes
+  `docs/engineering/testing-tdd-recipes.md` and
+  `docs/engineering/testing-patterns.md`, with a citation requirement
+  on every suggestion (cite recipe/pattern by section heading).
+  The general shape: when a doctrine references companion recipes
+  or patterns, the reviewer that operationalises the doctrine becomes
+  the forcing function that keeps the recipes load-bearing. Without
+  this forcing function, recipes drift from doctrine because no one
+  reads them. Source-surface: test-reviewer template Reading
+  Requirements + Step 7 (suggestion mode); companion surface: the
+  recipe and pattern files themselves. Graduation-target: pattern in
+  `.agent/memory/active/patterns/` capturing the
+  reviewer-as-forcing-function shape; promote to general
+  Practice-Core pattern (`practice-core/patterns/`) once a second
+  reviewer-recipe pairing follows in another domain. Trigger-condition:
+  second instance — security-reviewer citing security-review-recipes,
+  type-reviewer citing type-flow-patterns, etc. Status: pending —
+  first instance landed this session.
+
++ 2026-05-04; **validation strategy as umbrella; testing strategy as
+  one leaf** (Dewy Shedding Glade, owner direction §2 of the arc):
+  host-repo architectural decision about the directive topology.
+  The current sprawling `testing-strategy.md` mixes test-type
+  taxonomy, TDD methodology, recipe-level configuration, and
+  cross-cutting validation surfaces. The arc proposes a three-document
+  split: `validation-strategy.md` (umbrella; right-tool-for-each-job;
+  gate inventory), `testing-strategy.md` (slimmed to test types and
+  multi-level interaction), `tdd-as-design.md` (foundational TDD
+  doctrine, landed this session). Source-surface: index plan
+  `validation-and-tdd-doctrine-restructure.plan.md`. Graduation-target:
+  ADR-121 refresh (P4 in the index plan) — the existing "Quality
+  Gate Surfaces" ADR is the natural carrier for the topology
+  decision once the new umbrella exists. Trigger-condition: P1
+  (validation-strategy umbrella) lands; ADR refresh happens
+  immediately afterwards. Status: pending — sequenced behind P1
+  in the index plan.
+
 + 2026-05-03; **autonomous .git/index.lock interaction is forbidden,
   including wait loops** (Prismatic Illuminating Eclipse, owner
   intervention mid-A1-commit): the existing 2026-04-30 distilled.md
@@ -261,25 +340,17 @@ continuity snapshots.
   adoption already evidenced in the planning-template surfaces.
 
 + 2026-05-03; **6 skipped test files violate the absolute
-  no-skipped-tests rule** in `testing-strategy.md` and must be
-  remediated by landing tests + consumer wiring together as
-  single units. Tests and code are one practice, written and
-  landed together, never separated across commits. Affected
-  files:
-  + `packages/libs/sentry-node/src/config-from-registry.unit.test.ts`
-  + `packages/libs/sentry-node/src/runtime-fixture-tee-redaction.unit.test.ts`
-  + `apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`
-  + `apps/oak-search-cli/src/observability/cli-observability.unit.test.ts`
-  + `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.unit.test.ts`
-  + `apps/oak-curriculum-mcp-streamable-http/smoke-tests/harness/run-smoke.integration.test.ts`
-
-  The cure is to re-shape the workstreams that scheduled the
-  separated landings (observability multi-sink plan WS2-WS5;
-  smoke-harness plan ARC A2-A3) so each test lands with the
-  product code it proves. Trigger: owner direction OR the next
-  session that touches the affected workstreams. Status:
-  pending — escalates if any further test/code separation is
-  proposed.
+  no-skipped-tests rule** — **GRADUATED 2026-05-04 by other agent's
+  commit `2a2d1b05`** (`fix(observability): dev boot falls through to
+  local-dev; delete dead error kind and skipped tests`). All 6 files
+  were either deleted entirely (the two `.unit.test.ts` placeholder
+  files in `packages/libs/sentry-node/src/`) or had their `describe.skip`
+  blocks stripped (the four remaining files). The cure landed via the
+  dev-boot release-resolution plan rather than the originally-proposed
+  workstream re-shape, because the affected blocks were
+  multi-commit-TDD artefacts whose paired product code never arrived.
+  Status: graduated; entry held for one consolidation pass before
+  archive.
 
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /

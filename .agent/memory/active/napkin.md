@@ -414,3 +414,165 @@ session-open-and-verification. Owner halted ARC A2 (smoke-harness)
 explicitly; Lane B (sentry-node rename) is not yet halted but the
 same first-question pressure applies. This entry is the "step back"
 that owner directed before any further product-code work.
+
+## 2026-05-04 (Dewy Shedding Glade, claude-code, opus-4-7-1m, `13ae71`) — TDD reframed as a design discipline; tests describe the system to itself
+
+Owner-led doctrinal arc. Started as a "tighten skipped-tests rule
+plus add a no-conditional-tests rule" task; the conversation
+escalated through three owner reflections into a multi-plan
+restructure of the testing-and-validation directive surface.
+
+**The load-bearing reframing** (owner-confirmed wording):
+
+> A test does not verify code. A test describes a system state, and
+> product code is the path that guides the system into that state.
+> Test and product code are two halves of one act of design.
+> Writing them separately, in either order, is a category error.
+
+Three corollaries that fall out of it:
+
+1. TDD's primary output is good interfaces; quality validation is
+   the by-product, not the goal.
+2. The atomic-landing rule is a TDD *invariant*, not a process
+   step. Test and product code are co-defined; a split commit
+   treats one act of design as two outputs.
+3. A unit test alone never proves value delivery — scales are
+   complementary, not substitutional. All scales, all the time, in
+   parallel cycles.
+
+**The owner-named immediate failure mode**: TDD simply isn't
+happening, and when tests do appear they are written separately
+from product code and are audit-shaped (derived mechanically from
+the code rather than describing it). The cure is not "more
+discipline" — it is replacing the framing in the doctrine and
+making the test-reviewer the local carrier of the new stance.
+
+**Three doctrinal moves for future work**:
+
+- **Validation strategy as umbrella, testing strategy as one
+  leaf, TDD as foundational sibling.** Owner direction: split
+  the current sprawling `testing-strategy.md` into three
+  single-responsibility directives. Mutation testing (Stryker)
+  is meta-quality, not a test runner — without it, line coverage
+  is a perverse incentive. Browser proof surfaces are a *mechanism*
+  not a class of validation; the spectrum (whole-system → UI
+  element → emergent a11y) gets distributed by what they
+  validate, not collected by access surface.
+- **Test-reviewer as carrier of the doctrine, not just an
+  auditor of structure.** The reviewer's first question is now
+  "does this test describe an interface or audit one?" — not
+  "does it pass". The reviewer reads the recipes and patterns
+  files on every invocation and must cite a recipe/pattern
+  section heading in every suggestion. Citation requirement
+  forces the recipes to be load-bearing; it converts a lazy-load
+  reference into a forcing-function read path.
+- **The describe-vs-audit blade.** A test that describes could
+  plausibly have been written before the product code; its name
+  is in user/domain terms; it survives any reasonable refactor;
+  it constrains *what* the system does. A test that audits
+  could be derived mechanically from the product code; its name
+  is in implementation terms; it breaks under refactor; it
+  constrains *how*. Audit-shaped tests have zero design value;
+  they are the dominant friction surface in refactoring; they
+  are the predictable shape produced when tests are written
+  after product code.
+
+**What landed this session** (commit `b2ef7992`, 23 files,
++1159/-235):
+
+- New directive `tdd-as-design.md` carrying the load-bearing
+  definition and the atomic-landing invariant.
+- New rule `no-conditional-tests.md` (+ 3 platform adapters) —
+  conditional execution of any kind is an architectural-failure
+  signal; corrective lives in product code.
+- Refreshed test-reviewer template + Claude/Cursor/Codex adapters
+  with the new stance, the describe-vs-audit screen, and
+  mandatory recipe/pattern read path with citation requirement.
+- Stryker reframed in `testing-strategy.md` as meta-quality.
+- principles.md, start-right-quick, start-right-thorough updated
+  to load `tdd-as-design.md` as foundational reading ahead of
+  testing-strategy.
+- Index plan
+  `validation-and-tdd-doctrine-restructure.plan.md` covering
+  session deliveries S1–S4 and sequenced future plans P1–P6
+  (validation-strategy umbrella, full TDD playbook,
+  testing-strategy refactor, ADR-121 refresh, reference
+  migration, test-reviewer Round 2).
+- Drift fix: missing platform adapters and RULES_INDEX entry
+  for `never-use-git-to-remove-work.md`.
+
+**Method observation** (worth keeping). The user broke the work
+into three numbered thoughts ("I have some thoughts"); after each
+exchange they refined the framing themselves and arrived at the
+"three documents" decision before I had to argue for it. My role
+was to *surface boundary risks* (where do browser proof surfaces
+live? how does the migration sequence work? does ADR-121 need
+refresh?) rather than to advocate the structure. The plan-of-plans
+I drafted then reflected the owner's settled framing, with the
+session-scope deliverables (S1–S4) explicitly distinguished from
+the deferred plans (P1–P6). The single-index format proved clean
+and honest — the deferred plans get their own files only at
+promotion; the index is the single source of truth for the arc.
+This is the right shape for plan-shaped doctrinal work where most
+of the cost is sequencing and most of the risk is reference drift.
+
+**Candidates surfaced** (route to step 6b/7a):
+
+- `candidate: PDR` — *Tests describe the system to itself.* This
+  is a Practice-governance decision about the role of tests, not
+  a host-repo architectural decision. Adopter scope: every
+  Practice-bearing repo. The portable form belongs as a PDR;
+  the host-local consequence already lives in
+  `tdd-as-design.md`. Trigger condition: this session's landing
+  is the first instance; promote on second instance OR on owner
+  direction since the framing is stable and load-bearing.
+- `candidate: PDR` — *Reviewers carry doctrine, not just
+  audit it.* The test-reviewer refresh elevates the reviewer
+  from structural auditor to doctrinal carrier with mandatory
+  read-path citation. This is reviewer-authority discipline
+  applicable to other reviewers (architecture-reviewer-fred is
+  already shaped this way; type-reviewer and security-reviewer
+  are not). PDR-shaped per PDR-007 reviewer-authority lineage.
+  Trigger condition: second instance (when one other reviewer
+  is similarly upgraded).
+- `candidate: ADR` — *Validation strategy as umbrella; testing
+  strategy as one leaf.* This is a host-repo architectural
+  decision about the directive topology and the gate inventory.
+  ADR-121 refresh (P4 in the index plan) is the natural carrier;
+  no separate ADR needed if the refresh absorbs the topology
+  decision.
+- `candidate: pattern` — *Forcing-function read path: a
+  reviewer is the right carrier of doctrine the recipes describe.*
+  Repeats: the test-reviewer refresh is one instance. If
+  another reviewer-recipe pairing follows (e.g., security-reviewer
+  citing security-review-recipes.md), this is a graduation
+  candidate to `.agent/memory/active/patterns/`.
+
+**No fitness-pressure mid-session writes**: this entry adds
+~80 lines to napkin.md. Pre-write line count was 416; post-write
+~496, still under the 500 rotation threshold and the 525 hard
+limit. Routing to consolidation step 6 if rotation threshold is
+hit on the next consolidation pass.
+
+**Owner correction recorded at session-close (durable to memory)**:
+two new feedback memories saved this session:
+
+1. *Owner-direction scope is session-scoped.* A direction given in
+   one session does NOT carry forward as a standing rule unless
+   the owner explicitly states it is standing. I had been treating
+   the prior session's "deal with fitness in a separate session"
+   direction as standing across multiple later sessions and using
+   it to defer fitness analysis on every consolidation pass. That
+   was wrong. (`~/.claude/.../memory/feedback_owner_direction_scope.md`)
+2. *User attention required ≠ skip; it means analyse, report,
+   flag for feedback.* When an action requires user attention
+   (Practice Core edits, fitness remediation, owner-approval-gated
+   doctrine graduation), the correct move is to do the analysis,
+   surface findings, and flag for direction — never silently
+   skip or defer. I had been writing "skipped per owner standing
+   direction" instead of doing the analysis. That was wrong.
+   (`~/.claude/.../memory/feedback_user_attention_means_analyse_report_flag.md`)
+
+Both memories now live in platform memory and are referenced from
+`MEMORY.md`. The corrections rebuild the analysis-and-flag work
+into the rest of this consolidation pass.
