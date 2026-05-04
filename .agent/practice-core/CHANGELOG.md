@@ -4,6 +4,27 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-04 — workspace-first investigation discipline graduated to PDR-045
+
+Layer-2 graduation pass under the owner-stated layered-processing
+methodology (preserve first, restructure second). Practice Core
+changes:
+
+- **Added**: `PDR-045 workspace-first-investigation-discipline`.
+  Three structurally similar failure modes (diagnostic retry of
+  remote tooling when local artefacts exist; parallel infrastructure
+  proposals when shared packages already cover the contract;
+  acting on stale brief enumerations instead of querying live state)
+  share one shape and one fix: exhaust the workspace's existing
+  inventory before reaching for external tooling, before authoring
+  new shared infrastructure, and before treating any brief's
+  enumeration as authoritative. The discipline composes with
+  PDR-033 (vendor-doc review is the vendor-platform-specific case
+  of the same shape).
+- **Index drift fix**: `decision-records/README.md` index updated
+  to include PDR-043, PDR-044, and PDR-045 (PDR-043 and PDR-044
+  were authored but not indexed; this entry catches up the index).
+
 ## [oak-open-curriculum-ecosystem] 2026-05-03 — rush-impulse three structural cues graduated to PDR-043
 
 Owner-directed corrective consolidation. Practice Core changes:

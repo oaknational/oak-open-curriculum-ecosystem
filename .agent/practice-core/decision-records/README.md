@@ -166,3 +166,6 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-040](PDR-040-pin-to-maintainer-latest-not-highest-version.md) | Pin to Maintainer-Latest, Not Highest Version | Accepted |
 | [PDR-041](PDR-041-composition-obscurity-investigation-methodology.md) | Composition-Obscurity Investigation Methodology | Accepted |
 | [PDR-042](PDR-042-signal-distinguishing-pre-action-gate.md) | Signal-Distinguishing Pre-Action Gate | Accepted |
+| [PDR-043](PDR-043-rush-impulse-three-structural-cues.md) | Rush-Impulse Three Structural Cues | Accepted |
+| [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted |
+| [PDR-045](PDR-045-workspace-first-investigation-discipline.md) | Workspace-First Investigation Discipline | Accepted |

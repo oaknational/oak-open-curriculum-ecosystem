@@ -1155,3 +1155,39 @@ Owner has approved three independent replacement plans on the observability-sent
 - Plan 2 and plan 3 progress in parallel; plan 3's cycle 1c waits for plan 1's acceptance to verify; plan 3's cycle 3 waits for cycles 2a–2f to close.
 - All work on `feat/eef_exploration`. Push and PR after the three plans close.
 - The three plans REPLACE the damaged ones; do not resurrect content from the archive.
+
+---
+
+## 2026-05-04T09:30:46Z — `Lunar Gliding Dawn` / `claude-code` / `claude-opus-4-7-1m` / `abd832` — WS3/WS4/WS6 doctrine-enforcement quick-wins — registry empty, bootstrap fast-path
+
+Dispatched by parent session Pearly Snorkelling Reef (6db5ac) to land WS3 (hedging-vocabulary trip-list), WS4 (SHA-in-permanent-doc regex), and WS6 (git add wildcard block) of doctrine-enforcement-quick-wins.plan.md. Working in worktree .claude/worktrees/agent-abd83261354b753f1 on branch worktree-agent-abd83261354b753f1. Active-claims registry empty other than this entry — bootstrap fast-path applies. Files claimed: .agent/hooks/policy.json, scripts/check-blocked-content.{ts,unit.test.ts,integration.test.ts}, scripts/check-blocked-patterns.{ts,unit.test.ts,integration.test.ts}. Three commits expected, one per workstream, sequential within this worktree.
+
+---
+
+## 2026-05-04T12:04:09Z — `Fronded Flowering Thicket` / `claude` / `Opus 4.7 (1M)` / `7c8381` — Napkin processing pass — owner-directed, fitness in target surfaces relaxed
+
+Opened claim f8a90a57-6d0d-49a2-a309-dcbe8b93296e under thread practice-fitness. Owner directed a full napkin distillation pass and explicitly relaxed fitness pressure in distilled.md / archive surfaces for this pass: preserve learning first, route resulting fitness pressure to step 9. Plan: read napkin (785 lines) and distilled (407 lines) in full, extract behaviour-changing entries, merge into distilled.md, prune entries already in permanent docs, archive napkin-2026-05-04.md, restart fresh napkin, re-run pnpm practice:fitness:informational, hand back to owner for next-target decision.
+
+---
+
+## 2026-05-04T12:12:21Z — `Fronded Flowering Thicket` / `claude` / `Opus 4.7 (1M)` / `7c8381` — Napkin rotation complete; distilled refreshed; pending-graduations untouched
+
+Closed claim f8a90a57-6d0d-49a2-a309-dcbe8b93296e. Outcome: 791-line napkin archived as napkin-2026-05-04.md; fresh napkin at 105 lines; distilled.md ended at 458 lines (above hard limit, owner-relaxed for this pass). New entries added to distilled: rule-applies-always (no hedging/carve-outs), plan-following-vs-principle-following, question-shape (carry-on-with-known-bad vs adopt), insight-capture-at-moment-of-occurrence, sequenced-deferral discipline (PDR-026 sharpening), templates-can-institutionalise-failure-modes, parallel-worktree-dispatch unreliability. Pruned graduation-only breadcrumbs (PDR-029/PDR-026/PDR-015/PDR-018/PDR-034/PDR-038/PDR-039/ADR-153/ADR-164/PDR-009-ADR-125/testing-tdd-recipes graduation pointers; the cheap-cure operational consequence of the rush-impulse graduation kept). Pending-graduations.md (1128 lines, critical) and principles.md (561 lines, hard) intentionally untouched in this pass — owner choosing next target. Peer claim 9b2b67e2 (Briny Sailing Lagoon, agentic-engineering-enhancements, doctrine-enforcement WS3/4/6) noted at close; no overlap.
+
+---
+
+## 2026-05-04T12:26:13Z — `Fronded Flowering Thicket` / `claude` / `Opus 4.7 (1M)` / `7c8381` — Layer 2 processing: distilled → permanent doctrine, owner-directed layered methodology
+
+Opened claim 59715e2d-3c2e-4714-b650-1a29dec6afa3 after closing the Layer-1 (napkin → distilled) claim. Owner articulated a load-bearing methodology: 'pick a layer, fully process it without worry about the fitness functions in the targets, then move up a layer and process the next layer without worry about the fitness in the targets... until all knowledge is preserved first and the fitness constraints are met second.' Captured the principle in active napkin (its own first worked instance) and surfaced two graduation candidates (consolidate-docs amendment + PDR). This Layer-2 claim covers distilled.md as source and the standard permanent doctrine homes (principles, ADRs, PDRs, governance, READMEs, rules, patterns) as targets. Fitness in target permanent surfaces is relaxed for this pass. Process: walk distilled top-to-bottom, apply consolidate-docs §7a/§7b graduation criteria, surface ADR-shaped and PDR-shaped candidates as two numbered lists for owner decision before any new doctrine file creation. Owner-approval-gated edits within Practice Core respect PDR-003.
+
+---
+
+## 2026-05-04T12:44:17Z — `Briny Sailing Lagoon` / `claude` / `Opus 4.7 (1M)` / `11429f` — doctrine-enforcement-quick-wins.plan COMPLETE — WS3, WS4, WS6 landed
+
+Landed WS3 (hedging-vocabulary scoped trip-list, c256f325), WS4 (SHA-in-permanent-doc regex with fence + inline-code + historical-marker exclusions, 8b0fe826), WS6 (git add wildcard block with citations, 0fffc55e), plus the plan-completion docs update (07249f09). doctrine-enforcement-quick-wins.plan now COMPLETE (WS1 through WS6). Each WS landed as one atomic TDD-cycle commit with explicit-pathspec staging; pre-commit gates green throughout (one Prettier + two markdownlint mechanical fixes to peer-WIP files to unblock; no peer index/head ownership taken). Quality gates green: type-check, lint, test (1001+), test:root-scripts (174), practice:vocabulary. Pre-existing fitness pressure on distilled / napkin / pending-graduations is Fronded Flowering Thicket's parallel napkin-rotation thread, not introduced by these workstreams.
+
+---
+
+## 2026-05-04T13:46:56Z — `Fronded Flowering Thicket` / `claude` / `Opus 4.7 (1M)` / `7c8381` — Layer-2 first deliverable landed: PDR-045 graduated; session handoff for fresh continuation
+
+Closed claim 59715e2d. Layer-2 first deliverable: PDR-045 (Workspace-First Investigation Discipline) authored under owner direction. Three host-rules now cite PDR-045 (validate-full-target-estate Move 1, read-diagnostic-artefacts-in-full Move 1, consolidate-at-third-consumer Move 2). PDR README index drift-fixed (PDR-043/PDR-044/PDR-045 added). Practice CHANGELOG entry added. Distilled.md Workspace-first section removed (substance at PDR-045); distilled.md at 308 lines (down from 458 at Layer-2 start). Three patterns landed earlier: parallel-worktree-dispatch-unreliable, templates-encode-failure-modes, plan-as-artefact-gravity. Owner-directed handoff to fresh session. Open work: 8 remaining PDR-shaped candidates (highest-leverage trio = layered-processing methodology, the-rule-applies-always, insight-capture-at-moment-of-occurrence), 1 ADR refresh (validation-strategy-as-umbrella → ADR-121), 3 rule candidates gated on underlying decision records, 4 stable-but-no-natural-home items requiring owner discussion (ADR/PDR citation discipline; sequenced-deferral; hash-recompute-drift; Practice-Core portability). Per layered-processing methodology, residual hard fitness on distilled and principles is structural feedback for Layer 3, not for compression. No peer overlaps; Briny Sailing Lagoon claim 9b2b67e2 still active and disjoint.

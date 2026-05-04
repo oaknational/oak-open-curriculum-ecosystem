@@ -32,6 +32,34 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **layered processing of knowledge: preserve first,
+  restructure second** (Fronded Flowering Thicket, owner-stated
+  mid-pass): *pick a layer, fully process it without worry about
+  the fitness functions in the targets, then move up a layer and
+  process the next layer without worry about the fitness in the
+  targets, and so on, until all knowledge is preserved first and
+  the fitness constraints are met second.* Generalises the existing
+  per-write rule at `consolidate-docs.md § Learning Preservation
+  Overrides Fitness Pressure` into a layer-orchestration discipline:
+  fitness has no jurisdiction during processing of any layer; it
+  becomes a measurement of the resting system after all processing
+  completes, not a constraint on in-process work. The rule
+  self-applied during this session's pass — Layer 1 (napkin →
+  distilled), then Layer 2 (distilled → permanent doctrine, with
+  PDR-045 as the first deliverable). Source surface: napkin §
+  "Layered processing: knowledge preservation first, fitness
+  second". Graduation-target options: (a) new PDR (highest-leverage
+  candidate; would self-apply); (b) amendment to PDR-026 §Deferral-
+  honesty discipline; (c) amendment to PDR-038 (doctrine-without-
+  enforcement-at-maturity is closely related); (d) `consolidate-
+  docs.md § Learning Preservation Overrides Fitness Pressure`
+  extension (host-local). My read: distinct-enough-to-warrant-new-
+  PDR, with the consolidate-docs amendment as the host-side
+  operational hook. Trigger-condition: owner direction (this is
+  the highest-leverage Layer-2 candidate from the 2026-05-04 pass;
+  fresh session is set up to draft this PDR first per the
+  agentic-engineering-enhancements thread record). Status: `due`.
+
 + 2026-05-04; **subagent briefs must include
   halt-on-environment-mismatch instructions; parallel
   `isolation:"worktree"` dispatch is unreliable for shared-state
@@ -599,7 +627,15 @@ continuity snapshots.
 + 2026-04-26; workspace-first failure cluster; rule or
   recurrence-prevention amendment for workspace inventory before external
   tooling/new infra; trigger: second cross-session instance or owner
-  direction; status: pending.
+  direction; status: **graduated 2026-05-04** to
+  [PDR-045 Workspace-First Investigation Discipline](../../practice-core/decision-records/PDR-045-workspace-first-investigation-discipline.md)
+  (Fronded Flowering Thicket). Three structurally-similar failure modes
+  consolidated into three moves (artefact search before remote retry;
+  shared-package survey before parallel infrastructure; live-state check
+  before brief enumeration). Composes with PDR-033 (vendor-platform
+  variant of Move 2). Three host-rules updated to cite PDR-045:
+  `validate-full-target-estate` Move 1, `read-diagnostic-artefacts-in-full`
+  Move 1, `consolidate-at-third-consumer` Move 2.
 + 2026-04-26; OpenAPI/OOC issues boundary; rule with teeth for API-only
   consumer data boundary; trigger: second near-violation or owner
   direction; status: pending.

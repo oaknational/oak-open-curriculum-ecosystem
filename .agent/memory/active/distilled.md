@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-28.md`
-(sessions 2026-02-10 to 2026-04-25).
+`napkin-2026-02-16.md` through `napkin-2026-05-04.md`
+(sessions 2026-02-10 to 2026-05-04).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -28,10 +28,6 @@ context with no natural permanent home.
 - Plans must be **discoverable** (linked from README, roadmap,
   AND session prompt) AND **actionable** (status tracking tables,
   completion checklists, resolved open questions).
-
-Collaboration-specific entries formerly in this section graduated
-to the [user-collaboration directive][user-collaboration] on 2026-04-24.
-The merge-blocking simplification preference also lives there now.
 
 ## Multi-agent collaboration
 
@@ -65,35 +61,15 @@ WS3A claim-history / decision-thread work was grounded in real harvest
 evidence; WS3B sidebar, timeout, and file-backed owner escalation remain
 promotion-gated until async decision threads prove insufficient.
 
-**Multi-agent collaboration cures are a hypothesis-under-test, not a
-design to ship** (Misty Ebbing Pier 2026-05-03 metacognition pivot).
-When a multi-agent session surfaces coordination cures (cure-vocabulary:
-*polling discipline*, *out-of-band ack*, *atomic isolated task offer*,
-*claim mode*, *heartbeat-or-die*, *event_id integrity*, *worker-on-
-empirical-surface*, etc.), route the candidates through the hypothesis
-layer at [`hypothesis.md`][n-agent-hypothesis] with per-primitive
-falsification criteria at [`falsification-criteria.md`][n-agent-falsify]
-and validation experiments at [`experiments.md`][n-agent-experiments].
-**Cures graduate to permanent doctrine after empirical validation at
-N≥3, not before.** The capture → distil → graduate pipeline is the
-default; for collaboration cures touching primitives in `hypothesis.md`,
-insert capture → hypothesis → empirical validation → graduate. The
-distinction is load-bearing: shipped-as-design they get defended;
-treated-as-hypothesis they get tested. Substrate validated at N=2 with
-shared `.git/` (Woodland Sprouting Glade + Prismatic Illuminating
-Eclipse 2026-05-03 ARC B0 + ARC A1 parallel landing); does not extend
-to N≥3 yet. P11 (housekeeping ownership at session end) and the
-worker-perspective addenda (vi)-(x) are first-instance candidates per
-the pending-graduations register.
-
-Tripwire-observable-artefacts entries graduated 2026-04-25 to
-[PDR-029 v2 amendment][pdr-029].
-
-Owner-directed pause as a load-bearing planning move graduated
-2026-04-26 to [PDR-026 amendment][pdr-026].
-
-Parallel reviewer dispatch and structural-then-pre-landing review
-phasing graduated 2026-04-26 to [PDR-015 amendment][pdr-015].
+**Multi-agent collaboration cures route through the hypothesis layer
+before graduating to doctrine.** Substance lives at
+[`hypothesis.md`][n-agent-hypothesis] (per-primitive coordination
+cures), [`falsification-criteria.md`][n-agent-falsify] (per-primitive
+falsifiability), and [`experiments.md`][n-agent-experiments]
+(empirical validation at N≥3). Capture → hypothesis → empirical
+validation → graduate. Treated-as-hypothesis they get tested;
+shipped-as-design they get defended. Substrate validated at N=2
+2026-05-03 (shared `.git/`, parallel landing); not yet at N≥3.
 
 ADR/PDR citation discipline remains live-distilled until enough
 evidence accumulates to graduate to a PDR amendment or a rule:
@@ -101,63 +77,10 @@ when citing an ADR or PDR by number, verify the filename and the
 substance against the live decision-record file rather than
 inheriting plan-body shorthand.
 
-**Shared-state files are ALWAYS writable and ALWAYS commit-includable
-regardless of any active claim.** Full coverage list, rationale, and
-the surgical-edit guidance graduated 2026-04-29 to
-[`respect-active-agent-claims` § Shared-state always writable][respect-shared-state-rule].
-
 When an apparently orphaned active claim is found, archive it only through a
 deliberate governance pass or owner-forced close. If another session is
 already performing that cleanup, let the natural claim lifecycle finish rather
 than deleting unilaterally.
-
-## Workspace-first before external tooling or new infrastructure
-
-Three failure modes share one shape and one fix. Before reaching for
-external tools or proposing new code, exhaust workspace inventory:
-
-- **Diagnostic failure investigation**: when remote tooling truncates
-  (Vercel MCP, Sentry MCP, GitHub API), search the workspace for
-  owner-provided artefacts (`vercel_logs/`, `test-results/`,
-  `coverage/`) BEFORE retrying the same tool with bigger limits.
-  The owner may have downloaded the complete artefact locally.
-- **Brief enumeration of failing checks**: a brief listing failing PR
-  checks is a snapshot from when the prior session closed. Run
-  `gh pr checks <PR>` first; cross-check against the brief. Pre-existing
-  red gates the brief omitted are still blocking — *all gate failures
-  are blocking at all times, regardless of cause or location*
-  (principles.md §Code Quality).
-- **Infrastructure proposals**: before adding new Zod schemas /
-  validation pipelines / helper modules, survey existing `core/` and
-  `libs/` packages. `@oaknational/env` already has shared schema
-  contracts; `@oaknational/env-resolution` already has the
-  schema-validate-then-narrow flow; `@oaknational/build-metadata`
-  already has the constant-type-predicate pattern in place. Extending
-  existing infrastructure beats parallel implementations every time.
-- **Vendor-platform plans**: see [PDR-033][pdr-033] and the pattern
-  instance at [`patterns/vendor-doc-review-for-unknown-unknowns.md`][vendor-pattern].
-  Vendor-doc review at plan time finds capability gaps;
-  vendor-specialist reviewer dispatch at implementation time catches
-  contract violations. Both review acts are routine, not exceptional.
-- **Cross-system observability claims**: before investigating one system's
-  behaviour, align all relevant artefacts first. For Vercel / Sentry /
-  GitHub validation, compare local HEAD, origin, PR head, latest Vercel
-  deployment SHA, and Sentry deploy/release metadata. If they disagree,
-  establish which artefact is being tested before making runtime claims.
-
-Captured in `feedback_workspace_first_for_diagnostics`,
-`feedback_gh_pr_checks_over_brief`, and
-`feedback_check_workspace_packages_before_proposing` (2026-04-26
-session).
-
-Test-fixtures-encode-production-shape doctrine graduated 2026-04-26
-to [PDR-034][pdr-034].
-
-Constant-type-predicate call-site uptake clause graduated 2026-04-26
-to [ADR-153 amendment][adr-153] as Step 5 of the pattern.
-
-Config-load-side-effects discipline graduated 2026-04-26 to
-[ADR-164][adr-164].
 
 ## Process
 
@@ -165,36 +88,16 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
-Disposition-drift doctrine graduated 2026-04-28 to
-[PDR-018 §Disposition drift at phase boundaries][pdr-018].
+**The "cheap cure" framing is categorically excluded.** When
+surfacing options to the owner, "cheap cure" / "quick fix" / "land
+it then iterate" / "good enough for now" shapes do not count as
+legitimate options — only architectural-excellence shapes are
+surfaced. Owner reinforcement 2026-05-02: *we always, ALWAYS,
+choose long-term architectural excellence over cheap or fast or
+good enough*. Operationalises [principles.md § Architectural
+Excellence Over Expediency][excellence] at the option-surfacing
+boundary.
 
-Rush-impulse-as-entropy-generator graduated 2026-05-02 to
-[principles.md § Architectural Excellence Over Expediency][excellence].
-Source: napkin entry "2026-05-01 — Metacognition: the rush impulse
-as system-level entropy generator (Deep Navigating Stern)" plus
-owner reinforcement 2026-05-02 (*"we always, ALWAYS, choose
-long-term architectural excellence over cheap or fast or good
-enough"*). Operational consequence: when surfacing options to
-the owner, the "cheap cure" / "quick fix" / "land it then
-iterate" frame is categorically excluded — only
-architectural-excellence shapes count as legitimate options.
-
-[excellence]: ../../directives/principles.md#architectural-excellence-over-expediency
-
-- **Learning before fitness — knowledge preservation is absolute**:
-  writing to shared-state knowledge surfaces (napkin, distilled,
-  patterns, thread records, repo-continuity, comms log, conversations,
-  escalations, claims) is NEVER blocked by fitness limits. Two valid
-  responses when a write would push past target/limit: (a) write in
-  full and flag the file for attention, or (b) thoughtful holistic
-  promotion of mature concepts to a permanent home (ADR/PDR/governance/
-  rule/principle/README/TSDoc) via the consolidate-docs §7 graduation
-  scan. Naive cutting, compression, summarisation, or skipping the
-  write are all forbidden. Fitness pressure routes to consolidate-docs
-  §9 as structural follow-up, never as retroactive permission to have
-  written less. See [napkin SKILL § Knowledge Preservation Is
-  Absolute][napkin-skill-preservation] and [consolidate-docs §
-  Learning Preservation][consolidate-docs-preservation].
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).
@@ -226,56 +129,91 @@ architectural-excellence shapes count as legitimate options.
   Shared preview infra ≠ shared plan ownership.
 - **Dry-run multi-step workflows against accumulated state** before
   committing to the recipe; produces *proceed* or *stage differently*.
-- **Plan-as-artefact gravity**: when a remediation plan grows multiple
-  session-history sections, re-grounding tables, and re-classification
-  amendments while the gates it targets remain red, the plan body has
-  become an artefact rather than an execution document. Symptoms:
-  inline "Session 1 / Session 2 / Session 2.0.5" prose; verification
-  tables of stale assertions; a 12-phase scope mixing different signal
-  classes (e.g. CodeQL + Sonar + duplications + micro-clusters);
-  per-session re-grounding cost exceeding per-session closure rate.
-  Cure: archive the plan body (preserve as `*.superseded-by-*.md`),
-  port load-bearing evidence files (security reviews, sink-trace
-  findings) but not prose, write a one-page replacement scoped to a
-  single signal class with one row per finding and a structural cure
-  (or owner-authorised dismissal-with-evidence) per row, no inline
-  history. Witnessed on `pr-87-architectural-cleanup.plan.md` →
-  superseded 2026-04-28 by `pr-87-codeql-alerts.plan.md`.
 
-Non-planning process entries graduated on 2026-04-24 to:
-`validate-full-target-estate`, `read-diagnostic-artefacts-in-full`,
-`consolidate-at-third-consumer`, `generator-first-mindset`,
-`documentation-hygiene`, reviewer doctrine, build-system doctrine,
-practice verification, and the collaboration directive.
+**The rule applies, always — no hedging, no carve-outs, no
+exceptions.** Owner correction across the 2026-05-03 corrective
+consolidation (Pearly Snorkelling Reef arc): there is no semantic
+difference between *carve out*, *carve around*, *exception*,
+*honest framing for external X*, *permitted variant*, *for these
+arcs*, or any other wording that means "I know the rule applies,
+but this situation is special". Every such wording is the same
+failure shape in different dressing. Vocabulary is not the trigger
+— *intent* is. If the substance reads "the rule doesn't apply
+here", the candidate is suspect regardless of vocabulary.
+*Strict-and-complete covers every rule, not just types. Always
+strict, everywhere, all the time.* Operationalises principles.md §
+Architectural Excellence Over Expediency vocabulary trip-list.
+Worked corrective: PDR-043 + ADR-172 + multi-commit-TDD skip-
+register triple deleted; "carve-out the operation, record the
+carve-out as a domain constraint" pattern deleted; principles.md
+"no type shortcuts" rewritten to name the ban (widening) rather
+than grant exceptions for narrowing operators.
 
-**Stated principles require structural enforcement.** Graduated
-2026-04-30 to [PDR-038][pdr-038]. Three worked instances
-(no-machine-local-paths, never-disable-checks,
-validation-scripts-are-not-tests) preserved in the PDR.
+**Plan-following is not principle-following — re-apply the
+first-question at every elaboration boundary.** Owner-named pattern
+across the 2026-05-01 → 2026-05-03 EEF observability arc. The
+principles' first-question — *could it be simpler without
+compromising quality?* — is implicitly assumed-asked at plan-time
+and is then never re-asked at the level of "should this whole arc
+exist?". Symptoms: plans-creating-plans for days without product
+code moving; ARC-supporting infrastructure built to support work
+that didn't need it; "internally coherent" elaboration that
+doesn't advance the actual goal. Worked instance: smoke-harness
+redesign (ARC A1, `792c2cad`) framed as prerequisite for the
+multi-sink rename when the existing
+`dev-server-boots-without-observability-config.e2e.test.ts`
+already served the regression-guard role. PDR-039 (behaviour-shape
+classification) was applied once and triggered an entire
+infrastructure rebuild; the simpler answer was *keep the test
+where it is, PDR-039 is a guideline at test-design time not a
+forcing function for an infrastructure project*. Cure: the
+first-question is re-asked at every elaboration boundary, not
+once at plan-start.
 
-**External-system findings tell you about your local detection
-gap.** Graduated 2026-04-30 to [PDR-039][pdr-039]. Worked instance
-(Cursor Bugbot duplicate heading → MD024 globally-disabled discovery
-→ class-of-bug gap closed) preserved in the PDR.
+**The question is never "carry on with known bad" — it is
+always "how do we adopt the new insight".** Owner correction
+during the WS2 cascade investigation 2026-05-03 (Tidal Flowing
+Reef): when a doctrine sharpens mid-execution, framing options as
+"strict-old-shape vs expanded-old-shape" presupposes the old
+shape is the only shape. Both options violate the new doctrine in
+slightly different ways; neither adopts it. *The reshape is the
+work.* Higher-level test cycles need to be COMPOSED from
+low-level cycle pairs that each land green; high-level tests that
+need many low-level cycles either do that composition (multi-cycle
+but each cycle green) or don't need to exist because the low-level
+coverage is sufficient. Captured in platform memory
+`feedback_question_shape_known_bad_vs_adopt`.
 
-**Validation scripts are not tests.** Worked example + contrast pattern
-graduated 2026-04-30 to [testing-tdd-recipes § Validator Script vs
-Integration Test][tdd-validator-recipe]. The scripts/-tier workspace
-migration follow-on lives in
-[`current/scripts-validator-family-workspace-migration.plan.md`][validator-migration-plan].
+**Insight capture happens at the moment of occurrence — every
+later moment is a degraded copy.** Owner stance 2026-05-04: when
+an insight surfaces in conversation (owner-named pattern,
+agent-named meta-finding, mutual sharpening of an existing
+principle), the napkin/PDR/plan capture is done in the same turn.
+"I'll capture that later" is itself a failure shape; later means
+*degraded copy of an insight that was once whole*. This is the
+active-memory analogue of architectural-excellence-over-expediency:
+the cheap answer ("note it for next session") burns the
+load-bearing detail; the architecturally correct answer (capture
+now, where the insight is sharp and the surrounding context is
+live) costs minutes and preserves the substance. Generator:
+closure pressure + "this conversation is moving fast, I'll come
+back to that". Cure: when an insight surfaces, the next move is
+the capture, not the next turn. Candidate for graduation to a
+principles-level addition.
 
-**Stage by explicit pathspec, not wildcard.** A non-empty index or
-working-tree-files-outside-the-named-intent at commit time is a
-coordination event (peer's WIP), not an inconvenience. The cure is
-structural: the commit skill enqueues the intended bundle before
-staging; staging uses explicit pathspecs from that queued list, never
-`git add -A`; and the verify-staged-fingerprint step rejects any file
-outside the intent. Surfaced 2026-04-30 by the `75ac6b75` post-mortem
-where a continuity-deferral commit accidentally bundled 372 lines of
-parallel Practice-thread plan work plus an unrelated `.claude/settings.json`
-plugin enable. Companion to 2026-04-29 Pearly Swimming Atoll's index-
-ownership lesson: ownership transitions are made visible via shared
-comms, then proceed.
+**Sequenced-deferral discipline — every deferral points to a plan +
+phase, or to a sequenced decision point.** Owner sharpening
+2026-05-04 of PDR-026 §Deferral-honesty discipline. Three modes:
+(1) **sequenced deferral** (preferred) — "we will do X after Y,
+per plan Z phase N"; (2) **sequencing-sequenced deferral** (rare)
+— "we will decide when to do X at decision point Y, per plan Z
+phase N"; (3) **hidden declaration of non-action** (forbidden) —
+"we'll do X later" without structural placement, which conceals
+the choice. Non-action can be the architecturally correct answer;
+it must be visible, explicit, and sometimes discussed. PDR-026
+amendment is itself sequenced behind enforcement infrastructure
+(doctrine-scanner CLI extension) — authoring it without the
+enforcement would be the failure mode the amendment names.
 
 **Hash presence without recompute is silent drift.** Any validator
 that *stores* a content hash in a lock or manifest but does *not*
@@ -363,45 +301,14 @@ This constraint is stricter than the prior ADR-124 / PDR-007 "Core
 self-containment" framing — it tightens the seam to the single
 permitted outgoing target. Owner stated 2026-05-01.
 
-## Architecture (Agent Infrastructure)
-
-<!-- "Implicit architectural intent is not enforced principle" graduated
-2026-04-19 — codified as ADR-162 (Observability-First), now Accepted. -->
-
-Agent-infrastructure portability entries graduated on 2026-04-24 to PDR-009
-and ADR-125. Live counts are enforced by `pnpm portability:check`, not
-repeated here.
-
 ## Repo-Specific Rules
 
 The `src/bulk/generators/` / `vocab-gen/generators/` duplication is
 deferred to the SDK codegen decomposition plan for a separate session:
 `plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`.
 
-## Build System (Domain-Specific)
-
-Build-system entries graduated on 2026-04-24 to
-[`docs/engineering/build-system.md`][build-system].
-
-[user-collaboration]: ../../directives/user-collaboration.md
 [agent-collaboration]: ../../directives/agent-collaboration.md
-[build-system]: ../../../docs/engineering/build-system.md
-[respect-shared-state-rule]: ../../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable
-[napkin-skill-preservation]: ../../skills/napkin/SKILL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
-[consolidate-docs-preservation]: ../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure
-[adr-153]: ../../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md#amendment-log
-[adr-164]: ../../../docs/architecture/architectural-decisions/164-config-load-side-effects.md
-[tdd-validator-recipe]: ../../../docs/engineering/testing-tdd-recipes.md#validator-script-vs-integration-test
-[validator-migration-plan]: ../../plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md
-[pdr-038]: ../../practice-core/decision-records/PDR-038-stated-principles-require-structural-enforcement.md
-[pdr-039]: ../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md
-[pdr-015]: ../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log
-[pdr-018]: ../../practice-core/decision-records/PDR-018-planning-discipline.md#disposition-drift-at-phase-boundaries-2026-04-28-amendment
-[pdr-026]: ../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log
-[pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md#amendment-log
-[pdr-033]: ../../practice-core/decision-records/PDR-033-vendor-doc-review-for-unknown-unknowns.md
-[pdr-034]: ../../practice-core/decision-records/PDR-034-test-fixtures-encode-production-shape.md
-[vendor-pattern]: patterns/vendor-doc-review-for-unknown-unknowns.md
+[excellence]: ../../directives/principles.md#architectural-excellence-over-expediency
 [n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
 [n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md

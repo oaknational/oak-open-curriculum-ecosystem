@@ -7353,6 +7353,139 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f8a90a57-6d0d-49a2-a309-dcbe8b93296e",
+      "agent_id": {
+        "agent_name": "Fronded Flowering Thicket",
+        "platform": "claude",
+        "model": "Opus 4.7 (1M)",
+        "session_id_prefix": "7c8381"
+      },
+      "thread": "practice-fitness",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T12:04:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Full napkin processing pass per owner direction; rotate napkin into archive, merge behaviour-changing entries into distilled.md, prune permanent-doc duplicates; learning preservation overrides fitness pressure for this pass.",
+      "notes": "Owner explicitly relaxed fitness in target surfaces for this pass. Post-rotation fitness re-check then handed back to owner for next-target decision.",
+      "archived_at": "2026-05-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-04T12:12:21Z",
+        "closed_by": {
+          "agent_name": "Fronded Flowering Thicket",
+          "platform": "claude",
+          "model": "Opus 4.7 (1M)",
+          "session_id_prefix": "7c8381"
+        },
+        "summary": "Napkin rotation complete: 791-line napkin archived to napkin-2026-05-04.md; new napkin at 105 lines; distilled.md +new entries (rule-applies-always, plan-vs-principle, question-shape, insight-capture-now, sequenced-deferral, templates-encode-failure-modes, parallel-worktree-dispatch) and -breadcrumb prunings, ending at 458 lines (above hard limit per owner relaxation). Post-rotation fitness re-run: napkin/distilled hard/critical pressures expected; pending-graduations and principles untouched. Hand back to owner for next-target decision.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f8a90a57-6d0d-49a2-a309-dcbe8b93296e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9b2b67e2-849f-4fea-973b-9de008123c4c",
+      "agent_id": {
+        "agent_name": "Briny Sailing Lagoon",
+        "platform": "claude",
+        "model": "Opus 4.7 (1M)",
+        "session_id_prefix": "11429f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/hooks/policy.json",
+            "scripts/check-blocked-content.ts",
+            "scripts/check-blocked-content.unit.test.ts",
+            "scripts/check-blocked-content.integration.test.ts",
+            "scripts/check-blocked-patterns.ts",
+            "scripts/check-blocked-patterns.unit.test.ts",
+            "scripts/check-blocked-patterns.integration.test.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T12:10:26Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Land WS3 hedging-vocabulary scoped trip-list, WS4 SHA-in-permanent-doc regex with exclusions, WS6 git add wildcard block of doctrine-enforcement-quick-wins.plan.",
+      "notes": "Surfaces: policy.json + scripts/check-blocked-{content,patterns}.{ts,unit.test.ts,integration.test.ts} + plan file. No overlap with Fronded Flowering Thicket napkin claim.",
+      "archived_at": "2026-05-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-04T12:43:37Z",
+        "closed_by": {
+          "agent_name": "Briny Sailing Lagoon",
+          "platform": "claude",
+          "model": "Opus 4.7 (1M)",
+          "session_id_prefix": "11429f"
+        },
+        "summary": "Landed WS3 (hedging-vocabulary scoped trip-list, c256f325), WS4 (SHA-in-permanent-doc regex with context exclusions, 8b0fe826), WS6 (git add wildcard block, 0fffc55e), and the plan-completion update (07249f09). doctrine-enforcement-quick-wins.plan now COMPLETE. Quality gates green; pre-existing fitness pressure owned by Fronded's parallel napkin-rotation thread.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9b2b67e2-849f-4fea-973b-9de008123c4c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "59715e2d-3c2e-4714-b650-1a29dec6afa3",
+      "agent_id": {
+        "agent_name": "Fronded Flowering Thicket",
+        "platform": "claude",
+        "model": "Opus 4.7 (1M)",
+        "session_id_prefix": "7c8381"
+      },
+      "thread": "practice-fitness",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T12:26:13Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Layer 2 processing: distilled.md → permanent doctrine homes (principles, ADRs, PDRs, governance, READMEs, rules, patterns, TSDoc). Owner-directed layered methodology: fitness in target permanent surfaces relaxed for this pass. Will surface ADR-shaped and PDR-shaped candidates as numbered lists for owner decision before any new ADR/PDR creation; per-doc edits within Practice Core require owner approval per PDR-003. Includes graduating the layered-processing principle itself (just captured in napkin) into consolidate-docs.md and a candidate PDR.",
+      "notes": "Continues practice-fitness thread directly after claim f8a90a57 (Layer 1, napkin → distilled). Peer claim 9b2b67e2 (Briny Sailing Lagoon, agentic-engineering-enhancements WS3/4/6) is non-overlapping.",
+      "archived_at": "2026-05-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-04T13:46:56Z",
+        "closed_by": {
+          "agent_name": "Fronded Flowering Thicket",
+          "platform": "claude",
+          "model": "Opus 4.7 (1M)",
+          "session_id_prefix": "7c8381"
+        },
+        "summary": "Layer-2 (distilled → permanent doctrine) first deliverable: PDR-045 (Workspace-First Investigation Discipline) authored covering three structurally-similar failure modes (artefact-search-vs-remote-retry; shared-package-survey-vs-parallel-infra; live-state-check-vs-brief-enumeration). Three host-rules updated to cite PDR-045 (validate-full-target-estate, read-diagnostic-artefacts-in-full, consolidate-at-third-consumer); pre-existing stale PDR-016 filename fixed in passing. PDR README index drift-fixed (PDR-043, PDR-044, PDR-045 added). Practice CHANGELOG entry added. Distilled.md Workspace-first section removed (substance at PDR-045); distilled.md ended at 308 lines (from 458 at Layer-2 start; net -150 from start of full pass). Three patterns created earlier in pass: parallel-worktree-dispatch-unreliable, templates-encode-failure-modes, plan-as-artefact-gravity. Owner-directed: continue work in fresh session. Open: 8 PDR-shaped candidates, 1 ADR refresh, 3 rule candidates, 4 stable-no-home items.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "59715e2d-3c2e-4714-b650-1a29dec6afa3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

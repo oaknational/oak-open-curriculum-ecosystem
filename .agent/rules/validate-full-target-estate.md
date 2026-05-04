@@ -1,7 +1,8 @@
 # Validate the Full Target Estate
 
-Operationalises [PDR-020 (Check-Driven Development)](../practice-core/decision-records/PDR-020-check-driven-development.md)
-and the root-gate doctrine in
+Operationalises [PDR-020 (Check-Driven Development)](../practice-core/decision-records/PDR-020-check-driven-development.md),
+[PDR-045 (Workspace-First Investigation Discipline)](../practice-core/decision-records/PDR-045-workspace-first-investigation-discipline.md)
+§Move 1, and the root-gate doctrine in
 [`docs/engineering/build-system.md`](../../docs/engineering/build-system.md).
 
 Validation claims must cover the estate they name. If the target estate
