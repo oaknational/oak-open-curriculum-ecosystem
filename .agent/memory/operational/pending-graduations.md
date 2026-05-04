@@ -32,6 +32,66 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-04; **deferrals must be sequenced (or have their
+  sequencing sequenced)** (Verdant Sprouting Leaf, owner-stated
+  sharpening of PDR-026 §Deferral-honesty discipline at session
+  close): *deferrals must either be explicitly sequenced in a plan
+  (strongly preferred), or have their sequencing sequenced in a
+  plan (acceptable only in very unusual cases). Anything else is
+  a declaration that something will not happen, wrapped in
+  obscuring language which hides a useful signal. Sometimes not
+  doing something is the best possible option, but it needs to be
+  visible, and in some cases discussed.* The existing PDR-026
+  §Deferral-honesty rule forbids convenience phrasings (*for
+  later*, *next session*, *ran out of time*); this sharpening adds
+  the positive form: a legitimate deferral points to a specific
+  plan + phase, or to a decision point sequenced in a specific
+  plan + phase. Three modes: (1) sequenced deferral (preferred),
+  (2) sequencing-sequenced deferral (rare), (3) hidden declaration
+  of non-action (forbidden — it conceals the choice). Non-action
+  can be the architecturally correct answer; it must be visible,
+  explicit, and sometimes discussed. Source-surface: napkin
+  2026-05-04 §"Three owner asides at session close". Graduation-
+  target: PDR-026 amendment §"Sequenced-deferral discipline" with
+  positive-form requirement. Trigger-condition: enforcement
+  surface ready (per the PDR-038 §2026-05-04 maturity gate). The
+  natural enforcement candidate is a doctrine-scanner fingerprint
+  detecting deferrals lacking plan + phase pointers, plus a plan-
+  reviewer check at promotion time. Both extend the
+  doctrine-scanner CLI work proposed in
+  `future/memetic-immune-system-and-progressive-disclosure.plan.md`.
+  Status: pending — PDR-026 amendment defers to post-quick-wins
+  lane until enforcement surface lands; an amendment landed without
+  enforcement would itself be the failure mode the amendment
+  describes (un-enforced sharpening = visibility-only, no
+  structural cure for the recurring shape). The deferral of *this*
+  amendment is itself sequenced — it lands when the doctrine-
+  scanner CLI lands.
+
++ 2026-05-04; **memory classifications and systems review**
+  (Verdant Sprouting Leaf, owner-flagged future-session item at
+  session close): assess the three memory planes (`active/`,
+  `operational/`, `executive/`) plus their sub-surfaces (napkin,
+  distilled, patterns, threads, comms, claims, escalations,
+  conversations, pending-graduations) for what works well, what
+  can be improved, gaps, and beneficial restructure options. The
+  seam-review concept exists in PDR-029 Family-B Layer-1 as a
+  `taxonomy-review` candidate trigger; ≥3 such candidates in a
+  single consolidation or ≥5 across consecutive consolidations
+  signal a full taxonomy-review session is owed. Source-surface:
+  napkin 2026-05-04 §"Three owner asides at session close".
+  Graduation-target: dedicated taxonomy-review session with
+  output: a memory-architecture audit report + any reorganisation
+  proposals as PDR candidates against PDR-007/PDR-024/PDR-028. The
+  assessment is multi-session in scope and benefits from the
+  structural-foundation work landing first (the doctrine-scanner
+  quick wins + practice trio activation create natural
+  observation points for what the memory system *enables* vs
+  *obstructs*). Trigger-condition: post-quick-wins evidence + owner
+  direction, OR ≥2 additional taxonomy-review candidates
+  accumulating before then. Status: pending — first instance, awaiting
+  evidence base.
+
 + 2026-05-04; **first-question at every elaboration boundary, not
   only at plan-author time** (Verdant Sprouting Leaf, surfaced
   during /jc-consolidate-docs napkin extraction; substance from Salty

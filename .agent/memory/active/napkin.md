@@ -14,6 +14,72 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-04 — Three owner asides at session close: planning vocabulary, memory-system review, sequenced-deferral discipline
+
+Three notes the owner surfaced at session close, each captured in the
+moment of occurrence per the principle stated earlier this session.
+
+**Aside 1 — Planning vocabulary needs canonical definition.** The
+terms *arc*, *thread*, *roadmap*, *plan*, *workstream*, *cycle*,
+*phase*, *collection* are used throughout the Practice but defined
+across multiple surfaces (PDR-018, PDR-027, ADR-117, threads/README,
+collection-roadmap-template, plan command). A canonical glossary
+with explicit relationships (thread contains arcs, arcs span plans,
+plans decompose into workstreams, etc.) and a nominated entrypoint
+for planning discipline would reduce friction. Owner direction: *if
+low effort do it now*. Action this session: add Planning Vocabulary
+section to `.agent/plans/templates/README.md` (host-local since
+vocabulary refers to host-local lifecycle conventions), citing
+PDR-018 as the doctrinal anchor and `/jc-plan` as the operational
+entrypoint.
+
+**Aside 2 — Memory classifications and systems need review.**
+Future-session item: assess the three memory planes (`active/`,
+`operational/`, `executive/`) plus their sub-surfaces (napkin,
+distilled, patterns, threads, comms, claims, escalations,
+conversations, pending-graduations) for what works well, what can
+be improved, gaps, beneficial restructure options. The seam-review
+concept exists in PDR-029 Family-B Layer-1 as a `taxonomy-review`
+candidate trigger; a single seam-review accumulates this kind of
+observation, and ≥3 such candidates in a single consolidation or
+≥5 across consecutive consolidations signal a full taxonomy-review
+session is owed. Capturing here as a register entry rather than
+acting; the assessment is multi-session in scope and benefits from
+the structural-foundation work landing first (the doctrine-scanner
+quick wins + practice trio activation create natural observation
+points for what the memory system *enables* vs *obstructs*).
+
+**Aside 3 — Deferrals must be sequenced (or have their sequencing
+sequenced).** Owner-stated sharpening of PDR-026 §Deferral-honesty
+discipline: *deferrals must either be explicitly sequenced in a plan
+(strongly preferred), or have their sequencing sequenced in a plan
+(acceptable only in very unusual cases). Anything else is a
+declaration that something will not happen, wrapped in obscuring
+language which hides a useful signal. Sometimes not doing something
+is the best possible option, but it needs to be visible, and in
+some cases discussed.* The existing PDR-026 §Deferral-honesty rule
+forbids convenience phrasings (*for later*, *next session*, *ran
+out of time*); this sharpening adds the positive form: a legitimate
+deferral points to a specific plan + phase, or to a decision point
+sequenced in a specific plan + phase. Anything else collapses into
+"this won't happen" with the visibility removed. Three modes:
+(1) **sequenced deferral** (preferred) — "we will do X after Y, per
+plan Z phase N"; (2) **sequencing-sequenced deferral** (rare) — "we
+will decide when to do X at decision point Y, per plan Z phase N";
+(3) **hidden declaration of non-action** (forbidden) — "we'll do X
+later" without structural placement, which conceals the choice.
+Non-action can be the architecturally correct answer; it must be
+visible, explicit, and sometimes discussed. Per the maturity gate
+(PDR-038 §2026-05-04 amendment), the enforcement candidate for
+this is at plan-reviewer dispatch + consolidate-docs deferral
+audit; the doctrine-scanner CLI in
+`future/memetic-immune-system-and-progressive-disclosure.plan.md`
+naturally extends to detect "deferral without sequencing" as a
+fingerprint in pending-graduations / plan bodies. Captured here +
+register; PDR-026 amendment defers to post-quick-wins lane (the
+amendment without enforcement would itself be the failure mode the
+amendment names).
+
 ## 2026-05-04 — Doctrine without enforcement: benefit early, cost at maturity
 
 Owner sharpening of PDR-038, stated mid-session: *once a system
