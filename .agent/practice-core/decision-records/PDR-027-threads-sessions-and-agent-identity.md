@@ -27,6 +27,18 @@ rather than passive guidance).
 
 ## Amendment Log
 
+- **2026-05-05 — session-level resolved-name cache.**
+  Platform session-start hooks may derive an agent display name once from the
+  session id and store that resolved name in `OAK_AGENT_IDENTITY_OVERRIDE`
+  alongside the relevant Practice session-id seed
+  (`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`, or
+  `PRACTICE_AGENT_SESSION_ID_CODEX`). This is a session cache: it prevents an
+  already-started session from being renamed by later wordlist edits without
+  adding old/new wordlist compatibility routing. When both values are present,
+  the seed remains the source for `seedDigest`, and the override supplies the
+  display name and slug. The operational contract is documented in
+  `agent-tools/docs/agent-identity.md`.
+
 - **2026-04-28 — full identity block is the shared thread and state
   contract.** Codex identity plumbing now uses the same PDR-027 identity block
   for thread registration guidance and shared-state writes:
@@ -39,9 +51,10 @@ rather than passive guidance).
 - **2026-04-27 — Codex thread id accepted as a seed source.**
   Codex shell commands expose the active thread id as `CODEX_THREAD_ID`.
   The deterministic identity CLI now reads that value after
-  `CLAUDE_SESSION_ID` and before `OAK_AGENT_SEED`, allowing Codex sessions
-  to derive their session display name without owner-supplied manual seed
-  entry.
+  `PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`, and
+  `PRACTICE_AGENT_SESSION_ID_CODEX`, allowing Codex sessions to derive their
+  session display name without owner-supplied manual seed entry when no
+  Practice session-id seed is available.
 
 - **2026-04-26 — deterministic derived identity default.**
   The repo now provides `pnpm agent-tools:agent-identity` as the
@@ -247,11 +260,14 @@ portable agent-tools CLI with an explicit stable seed:
 pnpm agent-tools:agent-identity --seed "<stable-session-seed>" --format display
 ```
 
-Seed precedence is explicit `--seed`, then `CLAUDE_SESSION_ID`,
-then `CODEX_THREAD_ID`, then `OAK_AGENT_SEED`; missing seed is a
-bad-usage error. There is no personal-email fallback. The derived value helps fill
-`agent_name`; it does not change the additive-identity rule, the
-identity key, or the historical record.
+Seed precedence is explicit `--seed`, then
+`PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
+`PRACTICE_AGENT_SESSION_ID_CURSOR`, then
+`PRACTICE_AGENT_SESSION_ID_CODEX`, then `CODEX_THREAD_ID`; missing seed is a
+bad-usage error. `OAK_AGENT_IDENTITY_OVERRIDE` supplies a resolved display name
+only when a seed is also available; it is not itself a seed. There is no
+personal-email fallback. The derived value helps fill `agent_name`; it does not
+change the additive-identity rule, the identity key, or the historical record.
 
 ### Full identity block for coordination state
 

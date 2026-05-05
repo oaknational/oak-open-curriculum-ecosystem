@@ -1,5 +1,7 @@
 import { deriveIdentity } from '../core/agent-identity/index.js';
 
+const SHELL_SINGLE_QUOTE_ESCAPE = String.raw`'\''`;
+
 /**
  * Environment inputs consumed by the Claude `SessionStart` identity hook.
  *
@@ -83,7 +85,9 @@ export function planClaudeSessionIdentityHook(
     hookOutput,
     envFileWrite: {
       absolutePath: envFile,
-      appendLine: `export PRACTICE_AGENT_SESSION_ID_CLAUDE=${sessionId}\n`,
+      appendLine:
+        `export PRACTICE_AGENT_SESSION_ID_CLAUDE=${shellSingleQuote(sessionId)}\n` +
+        `export OAK_AGENT_IDENTITY_OVERRIDE=${shellSingleQuote(displayName)}\n`,
     },
   };
 }
@@ -142,4 +146,8 @@ function nonEmpty(value: string | undefined): string | undefined {
   }
   const trimmed = value.trim();
   return trimmed.length === 0 ? undefined : trimmed;
+}
+
+function shellSingleQuote(value: string): string {
+  return `'${value.replaceAll("'", SHELL_SINGLE_QUOTE_ESCAPE)}'`;
 }

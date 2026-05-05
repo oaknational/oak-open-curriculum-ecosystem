@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 
 import { HELP_TEXT, runAgentIdentityCli } from '../../src/bin/agent-identity-cli';
+import { agentIdentityCliEnvironmentFromProcessEnv } from '../../src/bin/agent-identity-cli-environment';
 
 describe('agent identity CLI planning', () => {
   it('prints help without requiring a seed', () => {
@@ -150,6 +151,36 @@ describe('agent identity CLI planning', () => {
       slug: 'frolicking-toast',
       seedDigest: createHash('sha256').update('any').digest('hex'),
       override: 'Frolicking Toast',
+    });
+  });
+
+  it('uses a Practice session seed with the session-level resolved-name cache', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-session-seed',
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Cached Session Name',
+      },
+    });
+
+    expect(JSON.parse(result.stdout)).toEqual({
+      kind: 'override',
+      displayName: 'Cached Session Name',
+      slug: 'cached-session-name',
+      seedDigest: createHash('sha256').update('cursor-session-seed').digest('hex'),
+      override: 'Cached Session Name',
+    });
+  });
+
+  it('maps the executable process environment into CLI input', () => {
+    expect(
+      agentIdentityCliEnvironmentFromProcessEnv({
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-session-seed',
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Cached Session Name',
+      }),
+    ).toStrictEqual({
+      PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-session-seed',
+      OAK_AGENT_IDENTITY_OVERRIDE: 'Cached Session Name',
     });
   });
 });

@@ -61,8 +61,9 @@ describe('planClaudeSessionIdentityHook', () => {
     expect(additionalContext).toContain('Do not auto-rename');
   });
 
-  it('emits an env-file write line with the session id when CLAUDE_ENV_FILE is set', () => {
+  it('emits env-file write lines with the session id and resolved display name', () => {
     const sessionId = '22e83599-a627-4427-b23c-fe6ce046e859';
+    const displayName = deriveIdentity(sessionId).displayName;
     const plan = planClaudeSessionIdentityHook({
       stdinText: JSON.stringify({ session_id: sessionId }),
       environment: { CLAUDE_ENV_FILE: '/tmp/claude-env-file-abc' },
@@ -70,7 +71,9 @@ describe('planClaudeSessionIdentityHook', () => {
 
     expect(plan.envFileWrite).toStrictEqual({
       absolutePath: '/tmp/claude-env-file-abc',
-      appendLine: `export PRACTICE_AGENT_SESSION_ID_CLAUDE=${sessionId}\n`,
+      appendLine:
+        `export PRACTICE_AGENT_SESSION_ID_CLAUDE='${sessionId}'\n` +
+        `export OAK_AGENT_IDENTITY_OVERRIDE='${displayName}'\n`,
     });
   });
 
