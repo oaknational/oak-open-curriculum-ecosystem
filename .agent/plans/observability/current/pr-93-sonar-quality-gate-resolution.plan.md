@@ -22,22 +22,27 @@ todos:
 # PR 93 Sonar Quality Gate Resolution
 
 **Last Updated**: 2026-05-05
-**Status**: LOCAL COMPLETE; UPSTREAM RE-ANALYSIS PENDING
+**Status**: SONAR ISSUE DISPOSITION COMPLETE; DUPLICATION DEFERRED
 **Scope**: PR 93 Sonar findings that do not touch paused Claude-owned
 `oak-eslint` files.
 
 ## Context
 
-Sonar PR 93 currently reports 11 open issues, 3 security hotspots, and a
+Sonar PR 93 initially reported 11 open issues, 3 security hotspots, and a
 16.4% duplicated-lines density on new code. Silvered Hiding Silhouette's
-fresh claim `588160cf-d8c7-41b7-b7ac-ecaa870acfa6` owns
+claim `588160cf-d8c7-41b7-b7ac-ecaa870acfa6` owned
 `packages/core/oak-eslint/src/configs/strict.unit.test.ts` and adjacent
-step-07 work, so the `oak-eslint` TODO-comment findings are intentionally
+step-07 work, so the `oak-eslint` TODO-comment findings were intentionally
 split to
 [`../future/pr-93-sonar-oak-eslint-claim-overlap.plan.md`](../future/pr-93-sonar-oak-eslint-claim-overlap.plan.md).
 
 Generated SDK duplication is not hand-fixed in PR 93. It is routed to
 [`../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md).
+
+Owner direction on 2026-05-05 dispositioned the three remaining
+`oak-eslint` S1135 findings as false positives: each occurrence is
+documentation/test text describing the gate that catches TODO-like
+suppression or pending-test markers, not outstanding work.
 
 ## Resolution Plan
 
@@ -101,10 +106,17 @@ ad-hoc `pnpm exec eslint <root script files>` invocation is not a valid
 root-script lint path in this repo because the root flat config requires
 typed parser services for those files when invoked this way.
 
-Remote Sonar/GitHub re-query on 2026-05-05 still reflects remote head
-`cdcde955` before these local changes: Sonar remains failed with the same
-11 issues, 3 hotspots, and 16.4% new-code duplication until this branch is
-pushed and re-analysed.
+Remote verification on 2026-05-05 after branch sync to
+`b929a022079876119fcd631e546f442896f78b72`:
+
+- `new_violations=0` after marking the three remaining `oak-eslint`
+  S1135 findings false positive in Sonar.
+- Security hotspots: 0.
+- Sonar quality gate remains `ERROR` only because
+  `new_duplicated_lines_density=16.0` exceeds the threshold of 3.
+- Duplication remediation is deferred to the existing future codegen plan;
+  this session does not hand-edit generated SDK files or solve the broader
+  duplicated-file list.
 
 ## Acceptance Criteria
 

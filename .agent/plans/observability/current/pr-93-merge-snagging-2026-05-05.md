@@ -102,33 +102,18 @@ Source: SonarQube Cloud PR analysis for PR 93.
 
 The Quality Gate is failing on:
 
-- 11 open new issues.
-- 3 security hotspots requiring review.
-- 16.4% duplication on new code in the PR comment.
+- 16.0% duplication on new code after the latest PR 93 analysis.
 
-Open issues reported by Sonar:
+Resolved issue/hotspot state after 2026-05-05 disposition:
 
-| Key | Severity | File | Line | Message |
-| --- | --- | --- | --- | --- |
-| `AZ3z3KsgDfG0f886A-h-` | MAJOR | `scripts/check-blocked-content.integration.test.ts` | 322 | Move async generator function `stdin` to the outer scope. |
-| `AZ3z3KsgDfG0f886A-h_` | MAJOR | `scripts/check-blocked-content.integration.test.ts` | 352 | Move async generator function `stdin` to the outer scope. |
-| `AZ3z3KtEDfG0f886A-iA` | MINOR | `scripts/check-blocked-content.ts` | 145 | Prefer `String#replaceAll()` over `String#replace()`. |
-| `AZ3z3KtjDfG0f886A-iC` | MINOR | `scripts/check-blocked-content.unit.test.ts` | 281 | `String.raw` should be used to avoid escaping `\`. |
-| `AZ3z3KtjDfG0f886A-iD` | MINOR | `scripts/check-blocked-content.unit.test.ts` | 437 | `String.raw` should be used to avoid escaping `\`. |
-| `AZ3z3KsgDfG0f886A-h9` | MAJOR | `scripts/check-blocked-content.integration.test.ts` | 192 | Move async generator function `stdin` to the outer scope. |
-| `AZ3z3KojDfG0f886A-h6` | INFO | `packages/core/oak-eslint/src/configs/strict.ts` | 31 | Complete the task associated to this `TODO` comment. |
-| `AZ3z3Ko0DfG0f886A-h8` | INFO | `packages/core/oak-eslint/src/configs/strict.unit.test.ts` | 153 | Complete the task associated to this `TODO` comment. |
-| `AZ3z3Ko0DfG0f886A-h7` | INFO | `packages/core/oak-eslint/src/configs/strict.unit.test.ts` | 20 | Complete the task associated to this `TODO` comment. |
-| `AZ3z3Kn1DfG0f886A-h2` | MINOR | `packages/core/env/src/schemas/observability.ts` | 42 | Use `export...from` to re-export `OBSERVABILITY_FIXTURES_SCHEMA`. |
-| `AZ3z3Kn1DfG0f886A-h3` | MINOR | `packages/core/env/src/schemas/observability.ts` | 42 | Use `export...from` to re-export `OBSERVABILITY_SINKS_SCHEMA`. |
+- Open issues: 0.
+- Security hotspots: 0.
+- `new_violations`: 0.
 
-Security hotspots requiring review:
-
-| Key | File | Line | Message |
-| --- | --- | --- | --- |
-| `AZ3z3KoHDfG0f886A-h4` | `packages/core/env/src/schemas/observability.unit.test.ts` | 165 | Make sure publicly writable directories are used safely here. |
-| `AZ3z3KoHDfG0f886A-h5` | `packages/core/env/src/schemas/observability.unit.test.ts` | 253 | Make sure publicly writable directories are used safely here. |
-| `AZ3z3KtjDfG0f886A-iB` | `scripts/check-blocked-content.unit.test.ts` | 64 | Make sure publicly writable directories are used safely here. |
+The three remaining `oak-eslint` S1135 findings were marked false positive in
+Sonar after owner direction: they are documentation/test examples describing
+the strict gate that catches TODO-like suppression rationales and pending-test
+markers, not outstanding work items.
 
 Duplication pressure is broad. Sonar's duplicated-file list is large; top
 contributors include generated SDK files, HTTP MCP E2E tests, agent identity
@@ -145,9 +130,8 @@ wordlist files, and custom ESLint rule tests. Notable entries:
 - `packages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts`
   with 333 duplicated lines.
 
-Action: fix the concrete Sonar issues where straightforward, review or fix the
-hotspots with per-site rationale, and keep generated SDK duplication routed to
-the codegen roadmap rather than product-code refactoring in PR 93.
+Action: keep duplication remediation deferred to the codegen roadmap rather
+than product-code refactoring in PR 93.
 
 ### Resolved: PR Description Was Materially Stale
 
@@ -194,19 +178,13 @@ The owner path is the existing future codegen plan
 [`../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md),
 scheduled for an upcoming codegen session.
 
-Action for PR 93: after non-generated Sonar issues and hotspots are resolved,
-document whether the remaining Sonar duplication signal is generated-SDK-only.
-If it is, treat it as routed roadmap debt rather than product-code refactoring
-inside this PR.
+Action for PR 93: no duplication remediation in this session. The owner has
+accepted deferral to a future codegen session.
 
-### P1: Hotspots Need Review Records
+### Resolved: Hotspots Need Review Records
 
-All three security hotspots are low-probability public-writable-directory
-findings in tests. They still block the Sonar security-hotspot review condition
-until reviewed or fixed.
-
-Action: either remove the public-writable-directory usage, or review each
-hotspot with a site-specific rationale. Do not apply a broad rule-level disable.
+All three public-writable-directory-looking hotspot literals were removed from
+the tested source surface. Sonar PR 93 now reports 0 hotspots.
 
 ### P2: Local Checkout Contains Non-PR Work
 
@@ -222,10 +200,10 @@ of the PR update path.
 
 ## Proposed Closure Order
 
-1. Fix or disposition the 11 Sonar issues.
-2. Fix or review the 3 Sonar security hotspots.
-3. Confirm any remaining duplication signal is generated-SDK-only or otherwise
-   route non-generated duplication to a concrete fix.
+1. Done: fix or disposition the 11 Sonar issues.
+2. Done: fix or review the 3 Sonar security hotspots.
+3. Done: confirm duplication remediation is deferred to the future codegen
+   session for this PR closeout.
 4. Keep generated/built SDK duplication on the codegen roadmap; do not
    hand-refactor generated files in PR 93.
 5. Rerun or wait for SonarCloud and confirm the Quality Gate status or the

@@ -1,60 +1,62 @@
 ---
 name: "PR 93 Sonar oak-eslint Claim-Overlap Follow-Up"
-status: strategic-brief
+status: completed
 overview: >
-  Resolve the PR 93 Sonar TODO-comment findings in oak-eslint only after
-  Silvered Hiding Silhouette's paused claim is unpaused, closed, or
-  explicitly coordinated.
+  Disposition the PR 93 Sonar TODO-comment findings in oak-eslint after
+  owner direction clarified they are false positives over gate
+  documentation, not outstanding work.
 depends_on:
   - "../current/pr-93-sonar-quality-gate-resolution.plan.md"
-promotion_trigger: >
-  Silvered Hiding Silhouette claim 588160cf-d8c7-41b7-b7ac-ecaa870acfa6
-  is closed, the paused Claude session is unpaused and coordinates the
-  change, or the owner explicitly authorises another agent to work in
-  the claimed oak-eslint area.
+completion_evidence: >
+  Owner authorised false-positive disposition on 2026-05-05; Sonar PR 93
+  re-query reported new_violations=0 after the three issue keys were marked
+  false positive.
 ---
 
 # PR 93 Sonar oak-eslint Claim-Overlap Follow-Up
 
-**Status**: Strategic - blocked on paused-claim coordination
+**Status**: Completed - false-positive disposition applied in Sonar
 **Last Updated**: 2026-05-05
 
 ## Why this plan exists
 
-PR 93 Sonar reports three `typescript:S1135` findings in the `oak-eslint`
+PR 93 Sonar reported three `typescript:S1135` findings in the `oak-eslint`
 configuration area. Two are in
 `packages/core/oak-eslint/src/configs/strict.unit.test.ts`, which is
-currently owned by Silvered Hiding Silhouette's fresh paused claim for
-step-07 real-IO inventory work. The main PR 93 Sonar plan therefore leaves
-these findings untouched and records this separate follow-up.
+currently owned by Silvered Hiding Silhouette's paused claim for step-07
+real-IO inventory work. The main PR 93 Sonar plan therefore left these
+findings untouched and recorded this separate follow-up.
+
+Owner direction on 2026-05-05 classified all three findings as false
+positives. The flagged tokens are not outstanding TODOs; they are
+documentation/test examples describing how the strict ESLint gate catches
+TODO-like suppression rationales and pending-test mechanisms.
 
 ## Scope
 
 - `packages/core/oak-eslint/src/configs/strict.ts`
 - `packages/core/oak-eslint/src/configs/strict.unit.test.ts`
 
-## Intended Fix
+## Sonar Disposition
 
-Reword the comments/examples that use the exact TODO-like token Sonar flags,
-without changing rule behavior or test intent.
+The following Sonar issues were marked false positive:
 
-Expected shape:
+- `AZ3z3KojDfG0f886A-h6` —
+  `packages/core/oak-eslint/src/configs/strict.ts`.
+- `AZ3z3Ko0DfG0f886A-h8` —
+  `packages/core/oak-eslint/src/configs/strict.unit.test.ts`.
+- `AZ3z3Ko0DfG0f886A-h7` —
+  `packages/core/oak-eslint/src/configs/strict.unit.test.ts`.
 
-- Replace the strict config documentation example with neutral wording such
-  as "placeholder", "fix", and "later".
-- Reword the strict unit-test comments that mention the Vitest pending-test
-  spelling or the literal blocked marker so Sonar does not classify the
-  comments as work items.
+Rationale: these occurrences are gate documentation/fixtures. They describe
+the exact token class the strict config rejects, rather than recording work
+to be completed.
 
 ## Validation
 
-```bash
-pnpm --filter @oaknational/eslint-plugin-standards test
-pnpm --filter @oaknational/eslint-plugin-standards type-check
-```
-
-After this lands, re-query Sonar PR 93 and confirm the three `oak-eslint`
-issues are gone or record any remaining finding with the new line number.
+No code change was made. Sonar PR 93 was re-queried after disposition:
+`new_violations=0`, security hotspots `0`; the remaining quality-gate failure
+is duplicated-lines density.
 
 ## Non-Goals
 

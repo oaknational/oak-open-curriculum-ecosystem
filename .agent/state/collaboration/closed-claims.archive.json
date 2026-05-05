@@ -9751,6 +9751,171 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b0abea91-0945-4fcf-aba5-d85ec2202993",
+      "agent_id": {
+        "agent_name": "Opalescent Glowing Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            "pr-93-remote-sonar-github-verification"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T20:25:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Push current feat/eef_exploration HEAD and verify PR 93 Sonar/GitHub gates; no source edits expected.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T20:38:49Z",
+        "closed_by": {
+          "agent_name": "Opalescent Glowing Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df9"
+        },
+        "summary": "PR 93 remote verification completed on head 5ed92747. Branch synced after remote had already advanced; Sonar QG remains ERROR on three expected oak-eslint TODO findings plus duplication density; hotspots zero; GitHub checks green except SonarCloud.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b0abea91-0945-4fcf-aba5-d85ec2202993",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "12ea5b6f-79f7-489c-af1e-5684f80f0fd7",
+      "agent_id": {
+        "agent_name": "Opalescent Glowing Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            "pr-93-remote-sonar-github-verification"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T20:39:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Push new local head b929a022 and refresh PR 93 Sonar/GitHub gates; no source edits expected.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T20:46:22Z",
+        "closed_by": {
+          "agent_name": "Opalescent Glowing Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df9"
+        },
+        "summary": "PR 93 refreshed remote verification completed on head b929a022. Branch synced; Sonar QG remains ERROR on three expected oak-eslint TODO findings plus duplication density; hotspots zero; GitHub checks green except SonarCloud.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12ea5b6f-79f7-489c-af1e-5684f80f0fd7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e1fe7ce7-08df-47af-8267-012c10d1879c",
+      "agent_id": {
+        "agent_name": "Riverine Fishing Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "b89da0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T20:45:03Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "stage-and-commit-step-1-of-three-step-graduation-pass",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T20:48:00Z",
+        "closed_by": {
+          "agent_name": "Riverine Fishing Rudder",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "b89da0"
+        },
+        "summary": "step-1-committed-307f7f13-napkin-drained-per-PDR-046-Move-3-archive-verbatim-F-12-F-13-frictions-added",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e1fe7ce7-08df-47af-8267-012c10d1879c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e29dc1d6-c218-4366-a6db-1961584a73c9",
+      "agent_id": {
+        "agent_name": "Opalescent Glowing Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T21:15:10Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 93 Sonar disposition handoff.",
+      "intent_to_commit": "f585c152-5c2e-4d61-9bd9-c7ebfbad1a7e",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T21:16:23Z",
+        "closed_by": {
+          "agent_name": "Opalescent Glowing Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df9"
+        },
+        "summary": "PR 93 Sonar disposition handoff bundle staged for commit. Sonar new_violations=0/hotspots=0 after false-positive disposition; duplication deferred.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e29dc1d6-c218-4366-a6db-1961584a73c9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

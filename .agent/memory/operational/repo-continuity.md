@@ -9,6 +9,20 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-05 — Opalescent Glowing Constellation /
+`codex` / GPT-5 / `019df9`)**: PR 93 Sonar closeout completed after
+owner direction. Branch `feat/eef_exploration` is synced to
+`b929a022`. The three remaining `oak-eslint` S1135 findings were marked
+false positive in Sonar because they document/test the strict gate that
+catches TODO-like suppression rationales and pending-test mechanisms; they
+are not outstanding work items. Sonar re-query reports open issues 0,
+hotspots 0, and `new_violations=0`; the quality gate remains red only on
+duplicated-lines density (`16.0`, threshold `3`). Duplication remediation
+is deferred to the existing future codegen workspace-decomposition plan.
+**Next safe step**: no more PR 93 Sonar issue/hotspot work in this
+session; any future duplication remediation belongs to the codegen plan,
+not hand-edits to generated SDK files.
+
 **Session close (2026-05-05 — Glassy Drifting Dock / `codex` /
 GPT-5 / `019df8`)**: PR 93 Sonar remediation session landed locally in
 commit `da4288cd` (`chore(agent): land staged sonar and tooling docs`)
@@ -913,7 +927,10 @@ Glassy Drifting Dock / `codex` / `GPT-5` / `019df8` as the latest session
 for PR 93 Sonar remediation (`da4288cd` local commit; remote reanalysis
 still pending), and Deep Rolling Archipelago / `cursor` / `GPT-5.5` /
 `02f5f5` for PR 93 merge-readiness snagging and remote PR-description
-refresh.
+refresh. Opalescent Glowing Constellation / `codex` / `GPT-5` / `019df9`
+then completed the PR 93 Sonar remote disposition: three `oak-eslint`
+S1135 findings marked false positive, Sonar open issues 0, hotspots 0,
+`new_violations=0`, duplication deferred.
 The table row above is already beyond practical line-fitness; the matching
 canonical identity row is in
 `threads/observability-sentry-otel.next-session.md`.
@@ -935,6 +952,16 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-05 (Opalescent Glowing Constellation, Codex, GPT-5, `019df9`,
+observability-sentry-otel thread, PR 93 Sonar disposition closeout)**:
+Updated Sonar itself for the three remaining `oak-eslint` S1135 findings
+after owner direction: all three are false positives over gate
+documentation/fixtures, not actionable TODOs. Re-query now shows Sonar
+open issues 0, hotspots 0, `new_violations=0`; the only remaining red
+quality-gate condition is duplicated-lines density. Duplication
+remediation is deferred to the future codegen workspace-decomposition
+plan, so this session is complete after handoff and commit.
 
 **2026-05-05 (Glassy Drifting Dock, Codex, GPT-5, `019df8`,
 observability-sentry-otel thread, PR 93 Sonar remediation)**:
@@ -1161,6 +1188,14 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-05 Opalescent Glowing Constellation close (PR 93 Sonar
+disposition)**: PR 93 has no remaining Sonar open issues or hotspots.
+The only remaining Sonar quality-gate failure is duplicated-lines density,
+which the owner explicitly deferred to a future codegen session. Do not
+hand-edit generated SDK files on this PR. If PR 93 proceeds before that
+future work, the required decision is owner acceptance of the documented
+duplication deferral / SonarCloud red state.
 
 **After 2026-05-05 Twilit Beaming Aurora → Ashen Banking Bellows (`7cf730`) close (step-06 author + 7-agent coordinator role)**: the unified `feat-eef-exploration-completion` plan now has steps 01–06 closed. Step 06 substance landed at `368e5aff` under coordinator-driven landing of Asteroid's expired-queue takeover bundle (29 files / 3287 insertions / 307 deletions; full attribution in commit body to Twilit, Threading Nebula, Asteroid). Two additional commits landed on this session's coordinator watch: `c1a63a81` (Forest, Cursor status-line shim, independent) and `33aeec40` (Fronded's collaboration-cli-gaps bundle, coordinator-landed under owner-directed handoff). Pelagic Swimming Rudder is still active on the `identity-wordlist` thread (separate concern; agent-tools wordlist refactor) and has not committed at handoff time. **Next pickup is step 07 (capture inventory + freeze allowlist atomically)**: run the new `no-real-io-in-tests` rule across the monorepo with `--format json`, populate §IO Inventory in plan body with one entry per violation (path, kind, rationale, follow-up disposition), spot-check 5 random entries, configure `allowlistPathShapes` option in root `eslint.config.ts` with exactly the captured paths, append cross-reference into `replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md` if `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set. Land via full commit-skill protocol with config-reviewer + docs-adr-reviewer dispatch. Plan-body §Sequence Summary row 6 has a residual placeholder text 'closing commit SHA recorded post-commit' that needs replacement with `368e5aff` — bundle this into step-07's plan-body touch.
 
@@ -1498,6 +1533,17 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-05 Opalescent Glowing Constellation, codex, GPT-5,
+`019df9`, owner-directed `/jc-session-handoff` after PR 93 Sonar
+disposition): `not due — focused external Sonar disposition and handoff
+refresh on observability-sentry-otel. One product thread touched; no code
+changed; three Sonar false-positive dispositions applied with owner
+rationale; duplication remediation explicitly deferred to future codegen
+work. No new ADR/PDR candidate surfaced. Napkin capture was skipped because
+Riverine Fishing Rudder held a fresh claim on napkin.md; the live
+correction is captured in the thread record, plans, snagging note, and
+comms event instead.`**
 
 **Status (2026-05-05 Glassy Drifting Dock, codex, GPT-5, `019df8`,
 owner-directed `/jc-session-handoff` after PR 93 Sonar remediation):

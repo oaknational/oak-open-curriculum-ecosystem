@@ -413,8 +413,8 @@
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nA\t.agent/state/collaboration/comms-events/512682-session-handoff-close-2026-05-05.json\nA\t.agent/state/collaboration/comms-events/fe12b590-d0ce-40b5-99c8-629a0f22f432.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
     },
     {
-      "intent_id": "3f862b85-9fcc-4ff9-838f-040c887d0a97",
-      "claim_id": "e1fe7ce7-08df-47af-8267-012c10d1879c",
+      "intent_id": "acc5a973-d17c-40ef-89e1-dd317a9b921e",
+      "claim_id": "014db173-b0d8-49f3-a01b-83c13dac9237",
       "agent_id": {
         "agent_name": "Riverine Fishing Rudder",
         "platform": "claude-code",
@@ -423,19 +423,13 @@
       },
       "files": [
         ".agent/memory/active/napkin.md",
-        ".agent/memory/active/archive/napkin-2026-05-06.md",
-        ".agent/plans/agent-tooling/frictions-register.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/comms-events/7b69c329-f2c7-4443-bf16-22be98a45f15.json"
+        ".agent/state/collaboration/active-claims.json"
       ],
-      "commit_subject": "docs(napkin): drain Layer 0 per PDR-046; archive verbatim; add F-12 F-13",
-      "queued_at": "2026-05-05T20:45:18.361Z",
-      "updated_at": "2026-05-05T20:46:29.410Z",
-      "expires_at": "2026-05-05T21:00:18.361Z",
-      "phase": "pre_commit",
-      "staged_bundle_fingerprint": "84bacd0bf9c03c6d87e6e322116ec1f303b798aa4a4414bbd271d3bae3bb87e0",
-      "staged_name_status": "A\t.agent/memory/active/archive/napkin-2026-05-06.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agent-tooling/frictions-register.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/7b69c329-f2c7-4443-bf16-22be98a45f15.json\n"
+      "commit_subject": "docs(napkin): step 2 mirror comms-events corpus into structured surprises",
+      "queued_at": "2026-05-05T20:57:06.470Z",
+      "updated_at": "2026-05-05T20:57:06.470Z",
+      "expires_at": "2026-05-05T21:12:06.470Z",
+      "phase": "queued"
     }
   ],
   "claims": [
@@ -466,7 +460,7 @@
       "intent": "full-napkin-and-comms-graduation-pass-three-step-pipeline"
     },
     {
-      "claim_id": "e1fe7ce7-08df-47af-8267-012c10d1879c",
+      "claim_id": "014db173-b0d8-49f3-a01b-83c13dac9237",
       "agent_id": {
         "agent_name": "Riverine Fishing Rudder",
         "platform": "claude-code",
@@ -482,11 +476,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-05T20:45:03Z",
+      "claimed_at": "2026-05-05T20:57:04Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "stage-and-commit-step-1-of-three-step-graduation-pass",
-      "intent_to_commit": "3f862b85-9fcc-4ff9-838f-040c887d0a97"
+      "intent": "stage-and-commit-step-2-of-three-step-graduation-pass",
+      "intent_to_commit": "acc5a973-d17c-40ef-89e1-dd317a9b921e"
     }
   ]
 }
