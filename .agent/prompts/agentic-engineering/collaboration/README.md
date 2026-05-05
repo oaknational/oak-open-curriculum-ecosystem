@@ -44,7 +44,7 @@ For the next session that is currently scheduled:
    would falsify, weaken, or strengthen each primitive.
 3. [`experiments/README.md`](experiments/README.md) — register of
    E1–E5 with status, plus the per-experiment subdirectories.
-4. [`.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`](../../../plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md)
+4. [`.agent/plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md`](../../../plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md)
    — the decision-complete plan with the methodology, ordering
    decisions, capture cadence, analysis cadence, and reflection
    cadence.
@@ -85,7 +85,7 @@ collaboration/
 ```
 
 The decision-complete plan that drives this directory lives at
-[`.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`](../../../plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md).
+[`.agent/plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md`](../../../plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md).
 
 Future experiments (E2–E5) get their own subdirectories when their
 prompts are authored — that happens when the work shape produces

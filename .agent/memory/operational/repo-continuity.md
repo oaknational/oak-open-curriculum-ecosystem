@@ -9,6 +9,20 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-05 — Glassy Drifting Dock / `codex` /
+GPT-5 / `019df8`)**: PR 93 Sonar remediation session landed locally in
+commit `da4288cd` (`chore(agent): land staged sonar and tooling docs`)
+after owner direction to stage and commit all touched/staged files.
+Main unclaimed Sonar fixes are committed; generated/built SDK duplication
+is explicitly non-blocking for PR 93 and routed to the future codegen
+workspace-decomposition plan; `oak-eslint` TODO-comment findings remain
+split into the paused-claim overlap plan until Silvered Hiding
+Silhouette's claim is unpaused, closed, or explicitly coordinated.
+**Next safe step**: push/sync the branch so PR 93 re-analyses, then
+re-query Sonar quality gate/open issues/hotspots/duplications and GitHub
+checks; if only test-string hotspots remain, review them as `SAFE` with
+a site-specific rationale.
+
 **Session close (2026-05-05 — Deciduous Budding Stamen / `cursor` /
 GPT-5.5 / `512682`)**: Continuity-only close after landmark comms +
 plan precursor + thread-record arc (no commits this micro-session).
@@ -895,8 +909,11 @@ live in each thread record; this table is the repo-level index.
 | `eef`                                             | Sector-engagement subthread — EEF Teaching and Learning Toolkit as evidence corpus on graph foundation                                                                  | `[threads/eef.next-session.md](threads/eef.next-session.md)`                                                                                         | Most-recent: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / cross-ref-path-updates-from-thread-restructure (no substantive EEF work) / 2026-05-01. Prior: Vining Whispering Root / `claude-code` / `claude-opus-4-7-1m` / tracer-matrix-and-promotion-packet + holistic-alignment-audit + safety-cures-after-destructive-incident / 2026-05-01; Fragrant Sheltering Petal / `claude-code` / `claude-opus-4-7-1m` / type-reviewer-round / 2026-04-30; Iridescent Soaring Planet / `claude-code` / `claude-opus-4-7-1m` / architecture-restructure-and-handoff / 2026-04-30.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 Active-identities delta, 2026-05-05: `observability-sentry-otel` also has
-Deep Rolling Archipelago / `cursor` / `GPT-5.5` / `02f5f5` as the latest
-session for PR 93 merge-readiness snagging and remote PR-description refresh.
+Glassy Drifting Dock / `codex` / `GPT-5` / `019df8` as the latest session
+for PR 93 Sonar remediation (`da4288cd` local commit; remote reanalysis
+still pending), and Deep Rolling Archipelago / `cursor` / `GPT-5.5` /
+`02f5f5` for PR 93 merge-readiness snagging and remote PR-description
+refresh.
 The table row above is already beyond practical line-fitness; the matching
 canonical identity row is in
 `threads/observability-sentry-otel.next-session.md`.
@@ -918,6 +935,22 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-05 (Glassy Drifting Dock, Codex, GPT-5, `019df8`,
+observability-sentry-otel thread, PR 93 Sonar remediation)**:
+Implemented the main executable PR 93 Sonar plan for unclaimed files and
+landed it locally at `da4288cd`. Fixed the repeated stdin helper shape,
+`replaceAll`, `String.raw`/non-public example paths, direct
+observability schema re-exports, and non-public env log examples. Added
+the current Sonar plan plus the future `oak-eslint` claim-overlap plan;
+updated PR 93 snagging/roadmap surfaces so generated/built SDK
+duplication is acknowledged as non-blocking PR 93 roadmap debt routed to
+the future codegen workspace-decomposition plan. The separate overlap
+plan still owns the three `oak-eslint` TODO-comment findings until the
+paused Silvered Hiding Silhouette claim is coordinated. **Next safe
+step**: push/sync `da4288cd`, trigger PR 93 Sonar reanalysis, then
+re-query Sonar quality gate/open issues/hotspots/duplications and GitHub
+checks.
 
 **2026-05-05 (Deep Rolling Archipelago, Cursor, GPT-5.5, `02f5f5`,
 observability-sentry-otel thread, PR 93 merge-readiness closeout)**:
@@ -1465,6 +1498,19 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-05 Glassy Drifting Dock, codex, GPT-5, `019df8`,
+owner-directed `/jc-session-handoff` after PR 93 Sonar remediation):
+`not due — focused PR-quality remediation close on observability-sentry-otel.
+One product thread touched, with narrow script/env/doc fixes plus plan and
+roadmap routing. No new ADR/PDR candidate surfaced beyond a behavioural
+correction already reflected in repo policy: shared state may be committed
+by any agent at any time when the owner directs a staged commit, because
+that trade-off avoids blocking commits. The generated/built SDK duplication
+roadmap routing is documentation hygiene, not doctrine graduation. Next
+session should verify remote Sonar/GitHub state after branch sync before
+deciding whether hotspot review or the paused-claim overlap plan is the
+remaining blocker.`**
 
 **Status (2026-05-05 Glittering Waning Galaxy, claude-code,
 `claude-opus-4-7-1m`, `3cff70`, owner-directed `/jc-session-handoff`

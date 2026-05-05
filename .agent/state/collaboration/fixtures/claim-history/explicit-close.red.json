@@ -15,7 +15,7 @@
           "kind": "files",
           "patterns": [
             ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
             ".agent/state/collaboration/shared-comms-log.md",
             ".agent/state/collaboration/active-claims.json"
           ]

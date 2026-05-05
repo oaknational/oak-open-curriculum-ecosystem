@@ -1,0 +1,29 @@
+# Future Plans — Agent Tooling
+
+Deferred strategic backlog for later milestones and exploratory capability
+work in the agent tooling substrate.
+
+Promote an item to [`../current/`](../current/) when prerequisites,
+ownership, and the next execution slice are clear.
+
+## Plans
+
+| Horizon | Plan | Scope | Prerequisites |
+| --- | --- | --- | --- |
+| Later | [agent-coordination-cli-ergonomics-and-request-correlation.plan.md](agent-coordination-cli-ergonomics-and-request-correlation.plan.md) | Reduce first-touch friction on the collaboration-state CLI; correlate cross-thread requests with responses so coordination signals do not rot silently; emit session-open liveness as a baseline. Complementary to the domain-model brief; this brief covers agent-facing ergonomics and the request/response correlation gap | Second instance of a silently-rotted cross-thread request, OR a claims-overlap collision in a parallel session, OR a second session reporting CLI first-touch friction, OR owner-direct promotion |
+| Later | [collaboration-state-domain-model-and-comms-reliability.plan.md](collaboration-state-domain-model-and-comms-reliability.plan.md) | Broader collaboration-state domain model after the write-safety slice; attention routing, rolling archive policy, and hook polish remain here | First slice promoted to [`../current/collaboration-state-write-safety.plan.md`](../current/collaboration-state-write-safety.plan.md) on 2026-04-28 |
+| Later | [cross-vendor-session-sidecars.plan.md](cross-vendor-session-sidecars.plan.md) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters; not the baseline portability substrate, which already must remain cross-vendor | Confirm a concrete sidecar use-case, schema, and owning workflow |
+| Later | [hooks-portability.plan.md](hooks-portability.plan.md) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`, `.claude/`, and `.gemini/` | ADR-125 portability hardening complete |
+| Later | [intent-to-commit-and-session-counter.plan.md](intent-to-commit-and-session-counter.plan.md) | Residual `session_counter` primitive only. The queue-backed intent bundle slice is complete and archived; do not make session-count TTL load-bearing unless a real primitive is deliberately implemented later. | Queue execution completed 2026-04-27 and archived as [`intent-to-commit-queue.execution.plan.md`](../../agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md); promote only on explicit owner direction for the session-counter slice |
+| Later | [codex-session-identity-plumbing.plan.md](codex-session-identity-plumbing.plan.md) | Residual Codex identity plumbing follow-ups (the high-impact slice was promoted and completed 2026-04-28; this brief retains the longer-tail work) | Owner-direct promotion when residual scope becomes execution-ready |
+| Later | [joint-agent-decision-protocol.plan.md](joint-agent-decision-protocol.plan.md) | Add a discuss, decide, record, act protocol with explicit recorder/actor assignment for multi-agent decisions | Implemented 2026-04-26 with WS3B sidebars/escalation; brief retained as reference for any further protocol expansion |
+| Later | [agent-classification-taxonomy.plan.md](agent-classification-taxonomy.plan.md) | Comprehensive agent reclassification, rename, and mode composition work | Downstream consumers ready for rename and mode-composition changes |
+| Later | [agent-infrastructure-coherence-audit.plan.md](agent-infrastructure-coherence-audit.plan.md) | Audit command/skill/rule/adapter coherence and identify single-consumer abstractions or drift | Visible coherence debt or adapter drift justifies a dedicated audit pass |
+| Later | [canonical-first-skill-pack-ingestion-tooling.plan.md](canonical-first-skill-pack-ingestion-tooling.plan.md) | Vendor-agnostic CLI that ingests any external skill pack into the canonical-first three-layer model: stage → normalise → write `.agent/skills/` → generate thin wrappers → update `skills-lock.json` → `pnpm portability:check`. Closes Phase 6 mitigation option 1 of the portability-remediation plan. | Second canonicalisation friction instance, OR external pack request blocked on Cursor/Codex uptake, OR validator drift miss, OR fourth Layer-2 surface, OR owner-direct promotion. Promotion is **gated on PASS from the deep sub-agent review set**. |
+| Later | [adapter-generation.plan.md](adapter-generation.plan.md) | Manifest-driven platform adapter generation to replace many manual wrapper files | Adapter structure stable enough to encode in a single manifest |
+
+## Related
+
+- Collection root: [../README.md](../README.md)
+- Frictions register: [../frictions-register.md](../frictions-register.md)
+- Current execution: [../current/README.md](../current/README.md)

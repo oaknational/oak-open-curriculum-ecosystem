@@ -16,7 +16,7 @@ that primitive.
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [Multi-Agent Collaboration Protocol](../current/multi-agent-collaboration-protocol.plan.md) — extends WS1 (active claims) and the WS3A schema family
 **Related**:
-[`archive/completed/intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md);
+[`archive/completed/intent-to-commit-queue.execution.plan.md`](../../agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md);
 [`agent-collaboration.md`](../../../directives/agent-collaboration.md);
 [`active-claims.schema.json`](../../../state/collaboration/active-claims.schema.json);
 [`closed-claims.schema.json`](../../../state/collaboration/closed-claims.schema.json);
@@ -597,7 +597,7 @@ landing commit.
   — parent plan; this is an extension of WS1's claims registry.
 - [Sidebar and Escalation (WS3B, paused)](../current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
   — independent; intents do not promote WS3B mechanics.
-- [WS3A Decision Thread + Claim History (archived completed)](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+- [WS3A Decision Thread + Claim History (archived completed)](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   — schema lineage; v1.3.0 builds on v1.2.0's `git` area kind.
 
 ---
@@ -607,7 +607,7 @@ landing commit.
 Queue slice outcome:
 
 - [x] Promoted into `current/`, implemented, and archived as
-      [`intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md).
+      [`intent-to-commit-queue.execution.plan.md`](../../agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md).
 - [x] Resolved Phase 0 owner gates for queue file/root location, default
       explicit expiry, areas vs files, and session-counter exclusion.
 - [x] Added RED/GREEN coverage for the schema bump and queue lifecycle in the

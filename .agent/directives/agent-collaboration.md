@@ -249,7 +249,7 @@ and [escalations][escalations-dir]. Operational companions:
 [`agent-collaboration-channels.md`][channels-card], and
 [`threads/README.md`][threads-readme].
 
-[p]: ../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
+[p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md

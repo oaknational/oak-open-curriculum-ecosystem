@@ -361,13 +361,13 @@ Adjacent:
 ### Adjacent — Multi-Agent Collaboration Protocol (MAC)
 
 - Strategic plan:
-  [multi-agent-collaboration-protocol.plan.md](current/multi-agent-collaboration-protocol.plan.md)
+  [multi-agent-collaboration-protocol.plan.md](../agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 - Split execution plans:
   - [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
     — WS3A: evidence provision, protocol observability, durable
     claim-closure history, and lightweight decision threads; complete
     and archived 2026-04-26
-  - [multi-agent-collaboration-sidebar-and-escalation.plan.md](current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+  - [multi-agent-collaboration-sidebar-and-escalation.plan.md](../agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
     — WS3B: sidebar, timeout, and owner-escalation mechanics;
     implemented 2026-04-26 alongside joint-decision integration
 - Goal:
@@ -441,13 +441,13 @@ Adjacent:
   - this is a structural doctrine plan, not another expert-capability plan
   - Phase 2 is the reconciliation point with the Planning specialist capability
   - Phase 3 depends on
-    [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+    [agent-infrastructure-portability-remediation.plan.md](../agent-tooling/current/agent-infrastructure-portability-remediation.plan.md)
     Phase 5
 
 ### Adjacent — Agent Infrastructure Portability Remediation
 
 - Strategic plan:
-  [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+  [agent-infrastructure-portability-remediation.plan.md](../agent-tooling/current/agent-infrastructure-portability-remediation.plan.md)
 - Goal:
   - canonicalise vendor-installed skills into `.agent/skills/`
   - add missing thin wrappers across `.agents/`, `.claude/`, and `.cursor/`
@@ -529,7 +529,7 @@ Adjacent:
 ### Adjacent — Cross-Vendor Session Sidecars
 
 - Strategic plan:
-  [cross-vendor-session-sidecars.plan.md](future/cross-vendor-session-sidecars.plan.md)
+  [cross-vendor-session-sidecars.plan.md](../agent-tooling/future/cross-vendor-session-sidecars.plan.md)
 - Goal:
   - define a local-first canonical sidecar model for structured session
     metadata across hook, wrapper, and importer adapters
@@ -840,7 +840,7 @@ Adjacent:
 ### Adjacent — Canonical-First Skill Pack Ingestion Tooling (CSPI)
 
 - Strategic plan:
-  [canonical-first-skill-pack-ingestion-tooling.plan.md](future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  [canonical-first-skill-pack-ingestion-tooling.plan.md](../agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
 - Goal:
   - vendor-agnostic CLI under `agent-tools/` that ingests any external skill
     pack into the canonical-first three-layer model
@@ -864,7 +864,7 @@ Adjacent:
 ### Adjacent — Manifest-Driven Adapter Generation (AGN)
 
 - Strategic plan:
-  [adapter-generation.plan.md](future/adapter-generation.plan.md)
+  [adapter-generation.plan.md](../agent-tooling/future/adapter-generation.plan.md)
 - Goal:
   - replace manual platform adapter maintenance with a manifest-driven
     generation script
@@ -883,7 +883,7 @@ Adjacent:
 ### Adjacent — Agent Classification Taxonomy
 
 - Strategic plan:
-  [agent-classification-taxonomy.plan.md](future/agent-classification-taxonomy.plan.md)
+  [agent-classification-taxonomy.plan.md](../agent-tooling/future/agent-classification-taxonomy.plan.md)
 - ADR: [ADR-135](../../../docs/architecture/architectural-decisions/135-agent-classification-taxonomy.md)
 - Goal:
   - introduce `classification` field (`domain_expert`, `process_executor`, `specialist`) to all agents

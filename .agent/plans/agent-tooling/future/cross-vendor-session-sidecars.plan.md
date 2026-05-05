@@ -3,7 +3,7 @@
 **Status**: NOT STARTED
 **Domain**: Agentic Engineering Enhancements
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-**Related**: [Hooks Portability Plan](./hooks-portability.plan.md), [Manifest-Driven Adapter Generation — Strategic Plan](./adapter-generation.plan.md), [Continuity and Surprise Practice Adoption](../archive/completed/continuity-and-surprise-practice-adoption.plan.md)
+**Related**: [Hooks Portability Plan](./hooks-portability.plan.md), [Manifest-Driven Adapter Generation — Strategic Plan](./adapter-generation.plan.md), [Continuity and Surprise Practice Adoption](../../agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md)
 
 ## Portability Clarification
 
@@ -197,7 +197,7 @@ The sidecar contract itself must exist before generation is worth automating.
 
 ### Continuity practice
 
-[Continuity and Surprise Practice Adoption](../archive/completed/continuity-and-surprise-practice-adoption.plan.md)
+[Continuity and Surprise Practice Adoption](../../agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md)
 defines repo-local continuity surfaces. Session sidecars complement that work by
 providing durable structured session metadata, but they do not replace the
 existing continuity contract, prompts, or handoff workflow.

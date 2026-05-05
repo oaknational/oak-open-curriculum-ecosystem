@@ -61,7 +61,7 @@ ad-hoc field to an existing surface.
   — decision-thread schema authority.
 - [`escalation.schema.json`](../state/collaboration/escalation.schema.json)
   — owner-escalation schema authority.
-- [`collaboration-state-write-safety.plan.md`](../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
+- [`collaboration-state-write-safety.plan.md`](../plans/agent-tooling/current/collaboration-state-write-safety.plan.md)
   — current comms-event and transaction-helper implementation plan.
 
 ## Identity

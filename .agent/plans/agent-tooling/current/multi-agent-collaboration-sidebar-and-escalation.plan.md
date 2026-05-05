@@ -32,7 +32,7 @@ joint-decision workflow integration in one coordination pass.
 **Parent Plan**:
 [`multi-agent-collaboration-protocol.plan.md`](multi-agent-collaboration-protocol.plan.md)
 **Prerequisite Plan**:
-[`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+[`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
 
 ## Context
 

@@ -559,7 +559,7 @@ excellence direction):
    candidate, Fragrant Sheltering Petal's bucket-(c) escalation of an
    empirically verifiable question).
 2. **Promote
-   [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+   [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
    from `future/` to `current/`** — third-instance evidence landed
    2026-05-01 (six compound CLI frictions in one end-to-end commit-skill
    run on `b3d4c041` per Vining Whispering Root). Promotion requires
@@ -618,7 +618,7 @@ friction was captured at depth in napkin (*markdown shared-state
 writes have no collision safety*) with a five-prevention-shape
 analysis, and a new pending-graduations candidate was added that
 routes to this thread's existing future-plan home
-[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
+[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
 The candidate names the structural gap: JSON shared-state has
 transaction safety since `11f0320f`, markdown shared-state has no
 equivalent; single-slot Last refreshed prose is the collision class.
@@ -690,7 +690,7 @@ previous commit blocker no longer reproduced; `pnpm --filter
 **Prior refresh**: 2026-04-28 (Woodland Creeping Petal / codex / GPT-5 /
 019dd3 — in-progress collaboration-state write-safety implementation.
 Promoted the strategic brief to
-[`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md);
+[`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md);
 added deterministic Codex identity preflight, immutable comms event tooling,
 transaction-guarded JSON writes for shared collaboration state, TTL archive
 baseline, and commit-queue transaction reuse. Hooks remain a later refinement.)
@@ -722,7 +722,7 @@ preservation. Added portable Practice/tool feedback capture guidance and
 platform adapters, surfaced the communication-channel register, refreshed UTC
 timestamp convention docs, amended Practice/PDR/ADR collaboration-state
 surfaces, and created the strategic future plan
-[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
+[`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
 Owner clarified the real active agents are Codex, Estuarine, and Prismatic;
 any live `Luminous Dancing Quasar` registry entry is a stale/phantom claim or
 identity mismatch unless a sub-agent explicitly registered it. Formal sidebar
@@ -894,7 +894,7 @@ workstream is now two split plan files: WS3A
 [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
 for evidence provision, protocol observability, durable claim-closure
 history, and lightweight decision threads; WS3B
-[`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+[`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
 for sidebar / timeout / owner-escalation mechanics. Its promotion gate is
 satisfied as of 2026-04-26; implementation has not started. Parent plan,
 current README, roadmap,
@@ -1004,7 +1004,7 @@ targeted markdownlint, `pnpm markdownlint-check:root`, Prettier check, and
 
 **Prior refresh**: 2026-04-25 (Jazzy / claude-code / claude-sonnet-4-6
 — authored the
-[`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+[`multi-agent-collaboration-protocol.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 to install structural infrastructure for parallel agents working on
 the same repo without clashing. Plan is 1349 lines, six workstreams
 (WS0–WS5), Wilma-reviewed adversarially with 14 findings absorbed
@@ -1097,6 +1097,7 @@ and
 | `Opalescent Threading Nebula` | `claude-code` | `claude-opus-4-7-1m` | `4c1773` | `Layer-0-to-Layer-1-napkin-rotation-1513474e-per-PDR-046-Move-1; ADR-vs-PDR-vs-both-decision-discipline-applied-to-due-items-per-owner-direction; promotion-bundle-authored-orchestrator-vs-quality-gate-clarification-in-commit-SKILL-plus-cure-asymmetry-section-in-stage-by-explicit-pathspec-plus-eager-rounding-off-on-partial-structures-anti-pattern-host-pattern-with-polarity-discipline-plus-distilled-additions-plus-four-pending-graduations-entries; reviewer-dispatch-docs-adr-plus-code-reviewer-with-P1-P2-findings-absorbed; thread-record-and-pending-graduations-portion-landed-via-Riverine-53fffe74-with-explicit-pathspec; full-promotion-bundle-landed-via-coordinator-mediated-Asteroid-takeover-368e5aff-with-body-attribution-paragraph-per-Lacustrine-to-Gnarled-pattern; multi-agent-coordination-with-Ashen-Banking-Bellows-acting-as-coordinator-during-six-agent-convergence; eager-rounding-off-pattern-fired-on-its-own-author-via-misidentification-of-comms-event-recipient-fourth-instance-self-corrected; agents-decide-what-to-ask-sharpening-captured-as-standing-direction; async-vs-sync-sidebar-distinction-captured; inbound-polling-discipline-gap-discovered-after-missing-Twilit-first-message-at-11-53Z; fresh-session-opener-authored-at-2026-05-06-five-layer-restart-opener-md` | 2026-05-05 | 2026-05-05 |
 | `Riverine Navigating Sextant` | `cursor` | `GPT-5.5` | `740c80` | `archive-scale-historical-napkin-synthesis-cadence-landed-as-PDR-014-amendment-plus-consolidate-docs-triggered-step-plus-pending-graduations-status-flip; processed-marker-ledger-and-report-shape-specified; pdr_kind-pattern-routing-drift-corrected; docs-adr-reviewer-and-code-reviewer-findings-addressed` | 2026-05-05 | 2026-05-05 |
 | `Deciduous Budding Stamen` | `cursor` | `GPT-5.5` | `512682` | `oak-local-MCP-landmark-comms; feat-eef-step-10-precursor-plan-body; thread-record-arc; jc-session-handoff-close` | 2026-05-05 | 2026-05-05 |
+| `Glittering Waning Galaxy` | `claude-code` | `claude-opus-4-7-1m` | `3cff70` | `new-agent-tooling-plan-collection-spun-out-of-agentic-engineering-enhancements; nineteen-plans-git-mv-eight-to-current-eleven-to-future; frictions-register-seeded-with-eleven-entries-from-napkin-Surprise-7-and-comms-events-2dbd74f6-a1cf45a2-dfdea3f7-and-Stamen-CLI-flag-rejection; cross-references-rewritten-in-twenty-four-active-surfaces-directives-memory-threads-research-analysis-prompts-rules-state-fixtures; archive-refs-in-moved-plans-repointed-from-broken-agent-tooling-archive-to-correct-agentic-engineering-enhancements-archive; scope-boundary-clarification-added-across-three-READMEs-distinguishing-implementation-level-workspace-from-practice-level-broader-with-when-in-doubt-test-could-this-plan-exist-if-agent-tools-did-not; bootstrap-fast-path-comms-event-d1cc1290-at-session-open-no-active-claim-opened-none-to-close` | 2026-05-05 | 2026-05-05 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -1117,7 +1118,7 @@ new sessions add rows; matching platform/model/agent_name updates
   `pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged at the
   close of the portability-remediation plan.
 - Drafted vendor-agnostic future strategic plan
-  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
   — never names a delivery vendor; ecosystems referenced as illustrative
   only (Anthropic / Vercel / Cloudflare / Clerk / ModelContextProtocol /
   Cursor / Codex / future-not-yet-authored). Plan body forbids
@@ -1203,7 +1204,7 @@ Flowering Blossom):**
 (2026-04-28 Woodland Creeping Petal):**
 
 - promoted the collaboration-state domain-model/comms-reliability brief into
-  [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md);
+  [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md);
 - added `pnpm agent-tools:collaboration-state -- ...` for identity preflight,
   comms append/render, claims open/heartbeat/close/archive-stale,
   conversation append, escalation open/close, and state checks;
@@ -1605,7 +1606,7 @@ nl -ba .agent/directives/AGENT.md
 ### Owning Plans
 
 - Primary (active multi-workstream lane):
-  [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+  [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
   `293742cd`. WS3 is split: WS3A is complete and archived, WS3B sidebar /
   escalation is implemented, WS4A lifecycle integration is complete, and WS5
@@ -1615,14 +1616,14 @@ nl -ba .agent/directives/AGENT.md
   — WS3A evidence provision, protocol observability, durable claim-closure
   history, and lightweight decision threads.
 - Implemented sibling plan:
-  [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
+  [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
   — WS3B sidebar, timeout, owner-escalation, and joint-decision mechanics.
 - Completed identity plan:
   [`agent-identity-derivation.plan.md`](../../../plans/architecture-and-infrastructure/archive/completed/agent-identity-derivation.plan.md)
   — repo-owned core/CLI/docs landed in `3a5e3d81`+`ed256e6f`; Phase 8
   Claude Code statusline wiring landed in this session; archived 2026-04-27.
 - Fitness remediation:
-  [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md)
+  [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md)
   — implemented in the working tree; validate/land separately from queue
   work.
 - Completed queue implementation plan:
@@ -1630,11 +1631,11 @@ nl -ba .agent/directives/AGENT.md
   — landed in `5c39d1d4`, self-applied the queue, graduated governance to
   PDR-029 Family A Class A.3, and is now archived.
 - Strategic source / follow-up:
-  [`intent-to-commit-and-session-counter.plan.md`](../../../plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md)
+  [`intent-to-commit-and-session-counter.plan.md`](../../../plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md)
   — queue slice complete; residual `session_counter` work remains future-only
   unless a real primitive is deliberately promoted later.
 - Strategic source / follow-up:
-  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   — preserves the shared-log collision analysis, the requirement that all
   shared inter-agent state records get multi-agent-safe write paths after the
   domain boundaries are named, log/claims/conversation responsibility split,
@@ -1643,7 +1644,7 @@ nl -ba .agent/directives/AGENT.md
   2026-04-28: promotion trigger is satisfied; clashing writes to shared state
   are pressing, while hooks/session-exit cleanup are refinements.
 - Implemented current slice:
-  [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md)
+  [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md)
   — landed as `11f0320f` with immutable comms events, transaction-guarded
   JSON state writes, Codex identity preflight, and TTL archival baseline.
   Closure remains pending the documented hard-fitness disposition.
@@ -1661,7 +1662,7 @@ nl -ba .agent/directives/AGENT.md
 - Context:
   [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
 - Strategic source / future (drafted 2026-04-30):
-  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
   — vendor-agnostic CLI for ingesting any external skill pack into the
   canonical-first three-layer model; closes the unbuilt mitigation option 1
   of the portability-remediation plan (`pnpm agent-tools:canonicalise-vendor-skills`).
@@ -1763,7 +1764,7 @@ validation.
 - Collaboration-state timestamps are documented as UTC ISO 8601 with trailing
   `Z`; Europe/London belongs in prose context, not state clocks.
 - Strategic future plan
-  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   is the durable holding point for shared-log collision analysis, sidebar
   polling/attention/push questions, identity preflight, and stale/phantom
   active-participant reconciliation. Its promotion trigger is satisfied by
@@ -1887,7 +1888,7 @@ Choose the lane deliberately:
    was unreliable in the prior attempt.
 
 2. **Collaboration-state write safety closure** — continue
-   [`collaboration-state-write-safety.plan.md`](../../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md).
+   [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md).
    The implementation is landed, and the named docs fitness blockers have been
    structurally routed by the deep consolidation pass. The brief active-napkin
    hard pressure from final handoff was also rotated, so the next safe step is
@@ -1971,7 +1972,7 @@ Choose the lane deliberately:
   inclusion and the manual flow blocks Cursor/Codex uptake, OR drift is
   detected in a vendored canonical skill that the current validator does not
   catch, OR a fourth Layer-2 surface is introduced — promote
-  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agentic-engineering-enhancements/future/canonical-first-skill-pack-ingestion-tooling.plan.md).
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md).
   Promotion remains gated on PASS from assumptions-reviewer +
   architecture-reviewer-fred|betty|barney|wilma. The plan body must not
   acquire any vendor-keyed conditional (PDR-009 vendor-agnostic rule).

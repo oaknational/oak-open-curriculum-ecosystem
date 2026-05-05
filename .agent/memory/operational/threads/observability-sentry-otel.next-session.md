@@ -1,5 +1,45 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Glassy Drifting Dock)
+
+**Immediate PR 93 Sonar state**: local commit `da4288cd`
+(`chore(agent): land staged sonar and tooling docs`) contains the
+executable unclaimed Sonar remediation plan and docs/roadmap routing.
+Remote GitHub/Sonar had not re-analysed this commit at session close.
+
+**Next safe step**: push/sync `feat/eef_exploration` so PR 93 gets a fresh
+SonarCloud analysis, then re-query:
+
++ Sonar quality gate, open issues, hotspots, and duplicated files for PR 93.
++ GitHub PR 93 check state, especially SonarCloud Code Analysis.
+
+**Expected after reanalysis**: the eight unclaimed issues fixed in
+`scripts/check-blocked-content*` and `packages/core/env/src/schemas/*`
+should clear. The three `oak-eslint` `typescript:S1135` TODO-comment
+findings remain intentionally out of the main plan because paused Claude
+work claimed that surface; use
+[`pr-93-sonar-oak-eslint-claim-overlap.plan.md`](../../../plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md)
+only after Silvered Hiding Silhouette's claim is unpaused, closed, or
+explicitly coordinated.
+
+**Non-blocking duplication routing**: generated/built SDK duplication is
+acknowledged and non-blocking for PR 93. Do not hand-edit generated SDK
+files in this PR; the roadmap routes that debt to
+[`sdk-codegen-workspace-decomposition.md`](../../../plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md).
+
+**Hotspot disposition**: env-schema test examples were changed away from
+public `/tmp` paths in `da4288cd`. If Sonar still reports only test-string
+literal hotspots after reanalysis, review them as `SAFE` with a
+site-specific test-fixture rationale; otherwise remediate the live source.
+
+**Validation already run locally**: `pnpm test:root-scripts`,
+`pnpm --filter @oaknational/env test`,
+`pnpm --filter @oaknational/env type-check`, scoped markdownlint,
+`git diff --check`, collaboration-state check, and the full pre-commit
+hook during `da4288cd` all passed. A direct ad-hoc root `eslint` invocation
+against the scripts was invalid because the flat config requires typed
+parser services; do not treat that as a code failure.
+
 ## Landing target (per PDR-026) — refreshed 2026-05-05 (Twilit Beaming Aurora)
 
 **Active plan**:
@@ -386,6 +426,7 @@ matching `platform + model + agent_name` updates `last_session`.
 | Twilit Beaming Aurora | claude-code | claude-opus-4-7-1m | `7cf730` | step-06 executor — author `packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at `error` severity with comprehensive Node.js IO denylist (child_process / worker_threads / fs / fs-promises / http / https / net / dgram across static, dynamic, and require import forms; both unprefixed and `node:`-prefixed specifiers) + process surface (env reads/writes including `globalThis.process.env`; cwd/chdir calls) + non-localhost fetch literal-arg detection. Hardcoded allowlist defaults: `**/test-helpers/**`, `**/test-fakes/**`, `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`. Optional `allowlistPathShapes: string[]` rule schema for step-07 IO-Inventory additions. Pair with `no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for every denylist sub-form, positive for every allowlist sub-glob). Plugin registration in `plugin.ts`. Do NOT yet wire into root `eslint.config.ts` (that is step 08). Reviewer dispatch at commit close (parallel): code-reviewer (gateway) + config-reviewer (allowlist shape correctness + rule-options schema) + test-reviewer (RuleTester describe-vs-audit shape + Node.js IO API surface coverage exhaustiveness). | 2026-05-05 | 2026-05-05 |
 | Opalescent Eclipsing Asteroid | cursor | GPT-5.5 | `0c263b` | owner-directed step-06 takeover executor after Twilit Beaming Aurora and Opalescent Threading Nebula hit usage limits. Completed gate blockers and landed review hardening: Knip CSS/Vite coverage, public rule-options type export through the package API, URL-parser localhost hardening against lookalike hostnames, `global.process` process-surface coverage, paired RuleTester regressions, reviewer re-checks, and commit/index coordination through the high-intensity sync. | 2026-05-05 | 2026-05-05 |
 | Deep Rolling Archipelago | cursor | GPT-5.5 | `02f5f5` | PR 93 merge-readiness closeout support — fetched GitHub comments/statuses/reviews, compared stale PR body with actual `feat/eef_exploration` branch contents, wrote `pr-93-merge-snagging-2026-05-05.md`, updated PR 93's remote description to lead with the blocking `thread-units` / `unitOrder` upstream API-shape fix, and posted comms events before/completion/session-close. | 2026-05-05 | 2026-05-05 |
+| Glassy Drifting Dock | codex | GPT-5 | `019df8` | PR 93 Sonar remediation — implemented and committed the main unclaimed findings (`da4288cd`), created the future paused-claim overlap plan for `oak-eslint` TODO-comment findings, kept generated SDK duplication non-blocking and routed to future codegen workspace-decomposition, and refreshed handoff surfaces for the remote reanalysis step. | 2026-05-05 | 2026-05-05 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged

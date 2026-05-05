@@ -11,7 +11,7 @@ related_rule: ../../rules/dont-break-build-without-fix-plan.md
 # Parallel-Track Pre-Commit Gate Coupling
 
 The pattern that motivated the entire
-[`multi-agent-collaboration-protocol`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+[`multi-agent-collaboration-protocol`](../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan. Founding entry of the collaboration-patterns memory class.
 
 ## Failure shape
@@ -74,7 +74,7 @@ response is:
 ## Structural fix
 
 This pattern is the motivating evidence for the entire
-[`multi-agent-collaboration-protocol`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+[`multi-agent-collaboration-protocol`](../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan. The protocol's WS0 installed:
 
 - the [`agent-collaboration.md`](../../directives/agent-collaboration.md)

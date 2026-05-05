@@ -16,7 +16,7 @@ agent decisions were already proven necessary; implementation proceeded.
 [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
 (WS3B sidebar — provides the discussion surface this plan builds decision
 semantics on top of);
-[`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+[`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
 (WS3A — async decision threads, the substrate kind list);
 [`intent-to-commit-and-session-counter.plan.md`](intent-to-commit-and-session-counter.plan.md)
 (commit-window queue; complementary defence against the same clash

@@ -1320,7 +1320,7 @@ continuity snapshots.
   Misty made when inferring from title rather than copying from
   source body, plus the discipline failures naming inertia of
   manual JSON authoring). Routes to the existing
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
   as concrete worked instances strengthening the existing
   promotion case (already at fourth-instance evidence; this is a
   fifth). Trigger: owner direction has fired in the request for
@@ -1477,7 +1477,7 @@ continuity snapshots.
   `adr`/`git` are accepted); `comms render` uses `--output` not
   `--output-file`. Each error is a single iteration cost but they
   compound to ~5–8 round-trips per session-open. Evidence + plan:
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
   **Third-instance evidence (2026-05-01, Vining Whispering Root,
   Increment 1 promotion-materials commit `b3d4c041`)** — six
   frictions in one end-to-end run of the always-active commit skill:
@@ -1547,7 +1547,7 @@ continuity snapshots.
   The genuine substance — *the queue ergonomics are bad and that
   produces route-around behaviour* — survives intact and routes to
   the CLI ergonomics plan
-  ([`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md))
+  ([`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md))
   as *fix the surfaces*, not *make the discipline contingent*.
   Withdrawal is itself the doctrine: rush-impulse re-frames real
   concerns under conditional-discipline shapes; the corrective is
@@ -1680,7 +1680,7 @@ continuity snapshots.
   audit-trail role for WS5 evidence harvest); status: pending. Evidence:
   displaced-doctrine sub-agent report from 2026-04-29 deep consolidation
   pass; child plan at
-  [`multi-agent-collaboration-protocol-concept-home-refinement.plan.md`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol-concept-home-refinement.plan.md).
+  [`multi-agent-collaboration-protocol-concept-home-refinement.plan.md`](../../plans/agent-tooling/current/multi-agent-collaboration-protocol-concept-home-refinement.plan.md).
 + 2026-04-29; trinity Active Principles + bootstrap structural
   extensions for the five 2026-04-29 doctrine sharpenings (knowledge-
   preservation absolute, shared-state always-writable, tool-error-as-
@@ -1856,7 +1856,7 @@ continuity snapshots.
   + queue/claim integration, OR (c) a PDR amendment to the
   collaboration-state-domain-model plan family that names the
   collision-class structurally. Routes to existing
-  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   as the future-plan home for shared-state collision analysis.
   **Trigger**: owner direction has fired in part (the request *"any
   prevention or additional signal would be very welcome"* names the

@@ -38,7 +38,7 @@ It does not create new experts itself. It must track:
   may create new review signals.
 - [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md)
   as the platform-adapter and validator scaling lane for the expert estate.
-- [agent-classification-taxonomy.plan.md](../future/agent-classification-taxonomy.plan.md)
+- [agent-classification-taxonomy.plan.md](../../agent-tooling/future/agent-classification-taxonomy.plan.md)
   as the naming/tier/mode contract that will eventually reshape gateway output.
 
 ## What Changes

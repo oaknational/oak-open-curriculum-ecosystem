@@ -383,9 +383,9 @@ queued for promotion in ARC E of the active session-arc plan
 - Active plan:
   `.agent/plans/observability/current/there-is-no-time-hashed-starfish.plan.md`
 - Existing CLI-ergonomics plan:
-  `.agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md`
+  `.agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md`
 - Existing collaboration-state plan:
-  `.agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md`
+  `.agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md`
 - Pre-existing markdown shared-state collision-safety pending-graduation
   entry (2026-05-01) anticipates the same class of issues this
   reflection enumerates.

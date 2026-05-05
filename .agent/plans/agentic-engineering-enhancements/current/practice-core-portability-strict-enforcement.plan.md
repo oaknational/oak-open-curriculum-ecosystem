@@ -908,7 +908,7 @@ does enforcing it structurally matter?
 - Scanner code: `scripts/validate-portability.ts` and
   `scripts/validate-portability-helpers.ts`.
 - Existing portability plan (completed):
-  `.agent/plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md`.
+  `.agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md`.
 - Practice-index bridge: `.agent/practice-index.md`.
 - Foundation documents:
   - `.agent/directives/principles.md`

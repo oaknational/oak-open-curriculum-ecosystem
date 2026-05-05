@@ -1,7 +1,7 @@
 # Experiment E1 — Brief
 
 **Status**: ready to run, prompts authored.
-**Plan**: see [`.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`](../../../../../plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md).
+**Plan**: see [`.agent/plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md`](../../../../../plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md).
 
 ## Priority order — absolute
 

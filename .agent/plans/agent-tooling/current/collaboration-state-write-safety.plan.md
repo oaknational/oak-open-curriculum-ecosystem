@@ -87,7 +87,7 @@ exists. New Codex shared-state writes must carry a deterministic
 `agent_name`, `platform`, `model`, and `session_id_prefix`.
 
 The high-impact Codex-wide identity parity slice is complete in
-[`../archive/completed/codex-session-identity-plumbing.plan.md`](../archive/completed/codex-session-identity-plumbing.plan.md).
+[`../../agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md`](../../agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
 Residual broader collaboration-state domain modelling remains in
 [`../future/collaboration-state-domain-model-and-comms-reliability.plan.md`](../future/collaboration-state-domain-model-and-comms-reliability.plan.md).
 This write-safety plan fixes the safe shared-state write path; the follow-up

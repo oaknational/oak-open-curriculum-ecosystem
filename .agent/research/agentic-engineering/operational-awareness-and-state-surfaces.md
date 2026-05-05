@@ -37,7 +37,7 @@ repository.
 
 - [continuity-and-surprise-practice-adoption.plan.md](../../../plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md)
 - [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md)
-- [cross-vendor-session-sidecars.plan.md](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
+- [cross-vendor-session-sidecars.plan.md](../../../plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md)
 
 ## Current Synthesis
 
@@ -135,5 +135,5 @@ This deep dive recommends a narrower sequence:
 - [continuity-and-knowledge-flow.md](./continuity-and-knowledge-flow.md)
 - [research continuity lane](../../../research/agentic-engineering/continuity-memory-and-knowledge-flow/README.md)
 - [analysis evidence lane](../../../analysis/README.md)
-- [future sidecars plan](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
+- [future sidecars plan](../../../plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md)
 - [hub README](../README.md)

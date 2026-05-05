@@ -107,5 +107,5 @@ belongs to the learning loop, not to this runtime surface.
 - Not a plan replacement or a thread-record replacement.
 - Not a sidecar store. If markdown-first track cards prove
   insufficient under real concurrency, the adjacent
-  [cross-vendor-session-sidecars.plan.md](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
+  [cross-vendor-session-sidecars.plan.md](../../../plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md)
   is the forward path.

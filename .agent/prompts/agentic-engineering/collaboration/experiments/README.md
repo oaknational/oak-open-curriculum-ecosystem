@@ -4,7 +4,7 @@
 [`../falsification-criteria.md`](../falsification-criteria.md).
 
 **Decision-complete plan**:
-[`.agent/plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md`](../../../../plans/agentic-engineering-enhancements/current/n-agent-collaboration-experiments.plan.md).
+[`.agent/plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md`](../../../../plans/agent-tooling/current/n-agent-collaboration-experiments.plan.md).
 
 ## Priority order — absolute
 

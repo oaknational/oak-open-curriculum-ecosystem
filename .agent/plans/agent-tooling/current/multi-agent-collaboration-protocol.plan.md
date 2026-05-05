@@ -26,7 +26,7 @@ todos:
     split_plan: multi-agent-collaboration-decision-thread-and-claim-history.plan.md
     split_on: 2026-04-26
     completed_on: 2026-04-26
-    archived_plan: ../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md
+    archived_plan: ../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md
     split_reason: >
       Owner-directed WS5 evidence harvest found that the evidence
       threshold appears met, but full sidebar implementation is not the
@@ -77,12 +77,12 @@ WS0 (`63c66c88`), WS1 (`a5d33519`), and WS2 (`293742cd`) have landed.
 WS3 has been split under owner direction after the WS5 evidence harvest:
 
 - **WS3A** (complete, archived):
-  [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+  [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   owns evidence provision, protocol observability, durable claim-closure
   history, and a lightweight conversation / decision-thread surface.
   All WS3A slices closed on 2026-04-26 and the completed split plan now
   lives in
-  [`../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
+  [`../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
 - **WS3B**:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](multi-agent-collaboration-sidebar-and-escalation.plan.md)
   implements sidebar, timeout, and owner-escalation design as a sibling
@@ -100,7 +100,7 @@ The 2026-04-26 owner-directed commit-window refinement is complete:
 committing, and the commit skill closes the claim on success, failure, or
 abort. The 2026-04-27 `2ccefad4` turn-race then showed that visibility is not
 ordering. Queue-first follow-up completed in
-[`intent-to-commit-queue.execution.plan.md`](../archive/completed/intent-to-commit-queue.execution.plan.md):
+[`intent-to-commit-queue.execution.plan.md`](../../agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md):
 schema v1.3.0 adds an ordered advisory `commit_queue`, and the local
 helper verifies staged file equality, staged fingerprint, and commit subject
 before a commit is allowed to make history durable. The durable governance home
@@ -897,7 +897,7 @@ next automatic implementation.
 
 Authoritative split plans:
 
-- [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
+- [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   owns completed WS3A: evidence provision, protocol observability, durable
   claim-closure history, and a lightweight conversation /
   decision-thread surface.
