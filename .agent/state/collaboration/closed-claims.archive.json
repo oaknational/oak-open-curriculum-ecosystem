@@ -9449,6 +9449,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "6aa840c3-9524-4385-bf22-324d5cce0cef",
+      "agent_id": {
+        "agent_name": "Vining Growing Meadow",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "92cb10"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T14:17:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit Vining session-handoff opener + claim closures + orphan Ashen session-close event + Vining ack event.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T14:20:18Z",
+        "closed_by": {
+          "agent_name": "Vining Growing Meadow",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "92cb10"
+        },
+        "summary": "Commit 8021b25b landed (session-handoff opener + claim closures + orphan session-close events). Index/head released. Vining Growing Meadow session closing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6aa840c3-9524-4385-bf22-324d5cce0cef",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

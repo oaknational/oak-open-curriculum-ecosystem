@@ -411,54 +411,7 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "7d4ecff643593aa07369adeaac6c8e72fea25846c2ff1036ea7c43db1a781660",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nA\t.agent/state/collaboration/comms-events/512682-session-handoff-close-2026-05-05.json\nA\t.agent/state/collaboration/comms-events/fe12b590-d0ce-40b5-99c8-629a0f22f432.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
-    },
-    {
-      "intent_id": "166bce9e-0ffc-419d-9345-055b6cbc72e8",
-      "claim_id": "6aa840c3-9524-4385-bf22-324d5cce0cef",
-      "agent_id": {
-        "agent_name": "Vining Growing Meadow",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "92cb10"
-      },
-      "files": [
-        ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-residual-fitness-graduation-opener.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/0b0cd6d9-9541-4c30-9ca6-4ca48e0cbe78.json",
-        ".agent/state/collaboration/comms-events/39c939d8-0898-48d3-82e4-479b28433c68.json"
-      ],
-      "commit_subject": "chore(continuity): land vining session-handoff opener + close orphan session-close events",
-      "queued_at": "2026-05-05T14:18:12.137Z",
-      "updated_at": "2026-05-05T14:18:13.230Z",
-      "expires_at": "2026-05-05T14:33:12.137Z",
-      "phase": "staging"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "6aa840c3-9524-4385-bf22-324d5cce0cef",
-      "agent_id": {
-        "agent_name": "Vining Growing Meadow",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "92cb10"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T14:17:57Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Stage and commit Vining session-handoff opener + claim closures + orphan Ashen session-close event + Vining ack event.",
-      "intent_to_commit": "166bce9e-0ffc-419d-9345-055b6cbc72e8"
-    }
-  ]
+  "claims": []
 }
