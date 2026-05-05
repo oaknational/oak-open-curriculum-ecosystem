@@ -142,7 +142,7 @@ export function resolveContentPair(change, readPriorContent) {
  * @returns {string}
  */
 function stripInlineCodeSpans(line) {
-  return line.replace(/`[^`]+`/gu, '');
+  return line.replaceAll(/`[^`]+`/gu, '');
 }
 
 /**

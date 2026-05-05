@@ -162,7 +162,7 @@ describe('ObservabilityEnvSchema cross-field superRefine — five rules + negati
     it('rejects MCP_LOGGER_FILE_PATH with the rename-replacement message', () => {
       const result = ObservabilityEnvSchema.safeParse({
         OBSERVABILITY_SINKS: '[]',
-        MCP_LOGGER_FILE_PATH: '/tmp/mcp.log',
+        MCP_LOGGER_FILE_PATH: '/workspace/logs/mcp.log',
       });
       expect(result.success).toBe(false);
       if (result.success) {
@@ -250,7 +250,7 @@ describe('ObservabilityEnvSchema cross-field superRefine — five rules + negati
     it('accepts sinks containing "file" with a non-empty OBSERVABILITY_FILE_PATH', () => {
       const result = ObservabilityEnvSchema.safeParse({
         OBSERVABILITY_SINKS: '["file"]',
-        OBSERVABILITY_FILE_PATH: '/tmp/oak-mcp.log',
+        OBSERVABILITY_FILE_PATH: '/workspace/logs/oak-mcp.log',
       });
       expect(result.success).toBe(true);
     });

@@ -9572,6 +9572,141 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b825252a-1748-455a-b6ae-0b9b0afa0245",
+      "agent_id": {
+        "agent_name": "Glassy Drifting Dock",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df8"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/observability/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T16:28:46Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Link PR 93 Sonar resolution plans from the observability collection index for discoverability.",
+      "notes": "Supplementary discoverability claim after planning inspection found no observability current/future README indexes. Scanned registry: only Silvered 588160cf overlaps observability completion/oak-eslint paths; this README link does not modify Silvered-claimed plan files.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T16:33:29Z",
+        "closed_by": {
+          "agent_name": "Glassy Drifting Dock",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df8"
+        },
+        "summary": "Observability README discoverability links for PR 93 Sonar current/future plans added; generated SDK duplication route and paused oak-eslint follow-up visible from the collection index.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b825252a-1748-455a-b6ae-0b9b0afa0245",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "37519aaf-bb6e-491e-a4b7-89ef19a4b136",
+      "agent_id": {
+        "agent_name": "Glassy Drifting Dock",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df8"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+            ".agent/plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md",
+            ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+            ".agent/plans/architecture-and-infrastructure/roadmap.md",
+            "scripts/check-blocked-content.integration.test.ts",
+            "scripts/check-blocked-content.ts",
+            "scripts/check-blocked-content.unit.test.ts",
+            "packages/core/env/src/schemas/observability.ts",
+            "packages/core/env/src/schemas/observability.unit.test.ts",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T16:25:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Resolve PR 93 unclaimed Sonar script/env findings, document generated SDK duplication disposition, and create post-unpause oak-eslint overlap plan.",
+      "notes": "Scanned registry: 1 fresh active claim (Silvered 588160cf) on oak-eslint strict.unit.test/recommended and observability completion plan. No overlap with files claimed here; oak-eslint Sonar TODO findings intentionally split to future plan and claimed files will not be edited.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T16:33:29Z",
+        "closed_by": {
+          "agent_name": "Glassy Drifting Dock",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df8"
+        },
+        "summary": "Local PR 93 unclaimed Sonar script/env fixes and generated SDK duplication disposition completed. Targeted gates passed; remote Sonar pending commit/push/re-analysis; oak-eslint findings split to post-unpause plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "37519aaf-bb6e-491e-a4b7-89ef19a4b136",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ea0083c2-ed94-4b9b-8c7b-378366ece342",
+      "agent_id": {
+        "agent_name": "Glassy Drifting Dock",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019df8"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T18:47:42Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage Glassy PR 93 Sonar-resolution file bundle by explicit pathspec.",
+      "notes": "Owner asked to stage all files I touched. Existing staged unrelated agent-tooling bundle is already in the index; this claim covers only my additional explicit-pathspec git add.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T18:47:56Z",
+        "closed_by": {
+          "agent_name": "Glassy Drifting Dock",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019df8"
+        },
+        "summary": "Staged Glassy PR 93 Sonar-resolution files by explicit pathspec per owner request.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ea0083c2-ed94-4b9b-8c7b-378366ece342",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

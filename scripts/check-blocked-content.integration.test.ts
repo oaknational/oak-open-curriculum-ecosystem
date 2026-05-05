@@ -6,24 +6,26 @@ import {
   runPreToolUseContentGuard,
 } from './check-blocked-content.js';
 
+async function* stdinFromJson(payload: unknown): AsyncGenerator<Buffer> {
+  yield Buffer.from(JSON.stringify(payload));
+}
+
+async function* stdinFromText(text: string): AsyncGenerator<Buffer> {
+  yield Buffer.from(text);
+}
+
 describe('runPreToolUseContentGuard', () => {
   it('writes a deny payload when new content introduces a blocked pattern', async () => {
     const stdoutChunks: string[] = [];
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'code with secret-marker added',
-            old_string: 'original code without marker',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'code with secret-marker added',
+          old_string: 'original code without marker',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -48,19 +50,13 @@ describe('runPreToolUseContentGuard', () => {
     const stdoutChunks: string[] = [];
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'code with existing-marker still',
-            old_string: 'code with existing-marker here',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'code with existing-marker still',
+          old_string: 'code with existing-marker here',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -83,19 +79,13 @@ describe('runPreToolUseContentGuard', () => {
     const stdoutChunks: string[] = [];
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            content: 'code with existing-marker still',
-            file_path: '/repo/src/example.ts',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          content: 'code with existing-marker still',
+          file_path: '/repo/src/example.ts',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -118,12 +108,8 @@ describe('runPreToolUseContentGuard', () => {
   it('returns exitCode 2 and writes to stderr on error', async () => {
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from('not valid json {{{');
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromText('not valid json {{{'),
       stdout: { write: () => {} },
       stderr: {
         write: (text: string) => {
@@ -142,20 +128,14 @@ describe('runPreToolUseContentGuard', () => {
     const stdoutChunks: string[] = [];
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'we will carve out an allowance for this case',
-            old_string: 'we will not yet decide',
-            file_path: '/repo/.agent/plans/example.plan.md',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'we will carve out an allowance for this case',
+          old_string: 'we will not yet decide',
+          file_path: '/repo/.agent/plans/example.plan.md',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -189,20 +169,14 @@ describe('runPreToolUseContentGuard', () => {
   it('does not deny scoped-block hedging vocabulary on out-of-scope paths', async () => {
     const stdoutChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'we will carve out an allowance for this case',
-            old_string: 'we will not yet decide',
-            file_path: '/repo/src/index.ts',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'we will carve out an allowance for this case',
+          old_string: 'we will not yet decide',
+          file_path: '/repo/src/index.ts',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -281,20 +255,14 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
     const stdoutChunks: string[] = [];
     const stderrChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'See commit abc1234 for context.',
-            old_string: 'See an unspecified commit for context.',
-            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'See commit abc1234 for context.',
+          old_string: 'See an unspecified commit for context.',
+          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -319,20 +287,14 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
   it('the wired-up guard does NOT deny an all-decimal token on a permanent-doc path (no a-f hex char)', async () => {
     const stdoutChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'The metric reading was 1765098000000 last quarter.',
-            old_string: 'The metric reading was unspecified last quarter.',
-            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'The metric reading was 1765098000000 last quarter.',
+          old_string: 'The metric reading was unspecified last quarter.',
+          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);
@@ -349,20 +311,14 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
   it('the wired-up guard does NOT deny a SHA wrapped in inline code on a permanent-doc path', async () => {
     const stdoutChunks: string[] = [];
 
-    async function* stdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from(
-        JSON.stringify({
-          tool_input: {
-            new_string: 'See commit `abc1234` for context.',
-            old_string: 'See an unspecified commit for context.',
-            file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
-          },
-        }),
-      );
-    }
-
     const result = await runPreToolUseContentGuard({
-      stdin: stdin(),
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'See commit `abc1234` for context.',
+          old_string: 'See an unspecified commit for context.',
+          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+        },
+      }),
       stdout: {
         write: (text: string) => {
           stdoutChunks.push(text);

@@ -30,7 +30,6 @@
  */
 
 import type { z } from 'zod';
-import { OBSERVABILITY_FIXTURES_SCHEMA, OBSERVABILITY_SINKS_SCHEMA } from './observability-axes.js';
 import { ObservabilityEnvBaseSchema } from './observability-base.js';
 import {
   refineLegacyLoggerKeys,
@@ -39,7 +38,7 @@ import {
   refineSinkConditionalRequirements,
 } from './observability-refinements.js';
 
-export { OBSERVABILITY_FIXTURES_SCHEMA, OBSERVABILITY_SINKS_SCHEMA };
+export { OBSERVABILITY_FIXTURES_SCHEMA, OBSERVABILITY_SINKS_SCHEMA } from './observability-axes.js';
 
 /**
  * Composed environment-variable contract for the orthogonal-axes

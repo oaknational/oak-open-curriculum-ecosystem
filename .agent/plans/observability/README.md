@@ -126,6 +126,15 @@ Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-
   and
   [`../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`](../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md)
   whose verification work overlapped duplicatively.
+- [`current/pr-93-sonar-quality-gate-resolution.plan.md`](./current/pr-93-sonar-quality-gate-resolution.plan.md)
+  — 🟢 **CURRENT.** PR 93 Sonar resolution lane for unclaimed script/env
+  findings, hotspot cleanup, and generated SDK duplication disposition.
+  Generated/built SDK duplication is explicitly routed to the architecture
+  codegen future plan and is not hand-fixed in PR 93.
+- [`future/pr-93-sonar-oak-eslint-claim-overlap.plan.md`](./future/pr-93-sonar-oak-eslint-claim-overlap.plan.md)
+  — 🔵 **FUTURE.** Claim-overlap follow-up for the remaining `oak-eslint`
+  Sonar TODO-comment findings once Silvered Hiding Silhouette's paused
+  claim is unpaused, closed, or explicitly coordinated.
 - [`future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`](./future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md)
   — 🛑 **DAMAGED — PAUSED — SUPERSEDED.** Multi-sink + fixture
   orthogonality rename (`SENTRY_MODE` → `OBSERVABILITY_SINKS` +

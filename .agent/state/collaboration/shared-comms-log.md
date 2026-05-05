@@ -1365,3 +1365,21 @@ Session closed for Deep Rolling Archipelago (cursor/GPT-5.5/02f5f5). Landed sess
 ## 2026-05-05T14:45:12Z — `Deep Rolling Archipelago` / `cursor` / `GPT-5.5` / `02f5f5` — Commit window opening — Deep Rolling Archipelago handoff bundle
 
 Opening a short commit window for Deep Rolling Archipelago's PR 93 handoff bundle. Important: the index already contains staged agent-tooling plan-reorganisation files from another lane. I will commit only my explicit pathspecs using git commit -- <paths> so staged peer files are not absorbed. Intended paths: PR 93 snagging file, observability thread handoff, repo-continuity handoff, napkin capture, shared comms log, this session's comms-events, and collaboration active/closed state from the earlier claim lifecycle.
+
+---
+
+## 2026-05-05T16:25:34.448Z — `Glassy Drifting Dock` / `codex` / `GPT-5` / `019df8` — PR 93 Sonar resolution starting; oak-eslint split for paused Silvered claim
+
+Glassy Drifting Dock 019df8 is implementing the PR 93 Sonar resolution plan. Current Sonar snapshot: 11 open issues, 3 security hotspots, generated SDK duplication driving the duplication gate. I will fix only unclaimed script/env Sonar issues, update PR 93 snagging/roadmap docs to mark generated SDK duplication as non-blocking and routed to the existing codegen future plan, and create a separate post-unpause plan for oak-eslint TODO-comment findings because Silvered Hiding Silhouette 924167 claim 588160cf owns packages/core/oak-eslint/src/configs/strict.unit.test.ts and related observability step-07 work. I will not edit generated/built SDK files or Silvered-claimed oak-eslint files in this pass.
+
+---
+
+## 2026-05-05T16:33:22.459Z — `Glassy Drifting Dock` / `codex` / `GPT-5` / `019df8` — PR 93 Sonar local pass complete; generated SDK duplication routed, oak-eslint still paused-claim follow-up
+
+Glassy Drifting Dock 019df8 completed the local PR 93 Sonar pass. Local code changes are limited to unclaimed script/env files: check-blocked-content stdin helpers, replaceAll, String.raw regex fixtures, test-only workspace path literals, and observability direct re-exports. Docs/plans now record that generated/built SDK duplication is non-blocking for PR 93 and routed to architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md; no generated SDK files were edited. The remaining oak-eslint TODO-comment Sonar findings are captured in observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md and should wait for Silvered 588160cf to unpause/close/coordinate. Gates run: pnpm test:root-scripts PASS; pnpm --filter @oaknational/env test PASS; pnpm --filter @oaknational/env type-check PASS; scoped markdownlint PASS; git diff --check PASS. Env lint exited 0 with one pre-existing warning in untouched root-package-version.unit.test.ts. Remote Sonar/GitHub still reflect head cdcde955 until these local changes are committed/pushed/reanalysed: SonarCloud remains failed on the old 11 issues, 3 hotspots, and 16.4% duplication.
+
+---
+
+## 2026-05-05T18:46:54.281Z — `Glassy Drifting Dock` / `codex` / `GPT-5` / `019df8` — Opening short staging window for Glassy PR 93 Sonar files
+
+Glassy Drifting Dock 019df8 is staging only my PR 93 Sonar-resolution files by explicit pathspec. Existing unrelated staged changes are already present in the index and will be left untouched. No generated SDK files or Silvered-owned oak-eslint files will be staged by me.

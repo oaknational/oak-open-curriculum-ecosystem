@@ -54,15 +54,15 @@ describe('extractContentChange', () => {
     const hookInput = {
       tool_input: {
         content: 'file content here',
-        file_path: '/tmp/check-blocked-content-test.ts',
+        file_path: '/workspace/check-blocked-content-test.ts',
       },
     };
 
     expect(extractContentChange(hookInput)).toStrictEqual({
       newContent: 'file content here',
       priorContent: '',
-      filePath: '/tmp/check-blocked-content-test.ts',
-      priorFilePath: '/tmp/check-blocked-content-test.ts',
+      filePath: '/workspace/check-blocked-content-test.ts',
+      priorFilePath: '/workspace/check-blocked-content-test.ts',
     });
   });
 
@@ -278,7 +278,7 @@ describe('findAddedScopedBlock', () => {
 
 describe('findAddedScopedBlock — regex with context-aware exclusions (WS4)', () => {
   const shaBlock = {
-    pattern: '\\b[a-f0-9]{7,40}\\b',
+    pattern: String.raw`\b[a-f0-9]{7,40}\b`,
     kind: /** @type {'regex'} */ 'regex',
     include_paths: ['docs/architecture/architectural-decisions/', '.agent/practice-core/'],
     exclude_paths: [],
@@ -434,7 +434,7 @@ describe('parseScopedContentBlocks', () => {
 
   it('accepts a regex block with excludes_inline_code and excludes_lines_with', () => {
     const regexBlock = {
-      pattern: '\\b[a-f0-9]{7,40}\\b',
+      pattern: String.raw`\b[a-f0-9]{7,40}\b`,
       kind: 'regex',
       include_paths: ['docs/architecture/architectural-decisions/'],
       excludes_inline_code: true,

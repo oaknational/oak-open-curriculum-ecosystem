@@ -16,11 +16,17 @@ Local checkout is one commit ahead of the PR head (`84879230`) and has an
 unstaged `.agent/commands/session-handoff.md` edit; those local-only changes are
 not part of this PR comparison.
 
+Update 2026-05-05 16:28 UTC by Glassy Drifting Dock: the GitHub PR body now
+opens with the merge-blocking `thread-units` / `unitOrder` upstream API-shape
+fix and current branch scope. The stale-description snag is retained below as
+resolved history, not a live PR 93 blocker.
+
 ## Merge Readiness Summary
 
 **Not merge-ready yet.** The branch contains the blocking upstream API-shape fix,
 and the core GitHub/Vercel/CodeQL/test surfaces are green, but SonarCloud is
-failing and the PR description is materially stale.
+still failing. The PR description drift called out in the original snapshot has
+been resolved remotely.
 
 The blocking fix is present in the PR as commit `9e657ad3`
 `fix(sdk): align thread-units adapter to upstream schema dropping unitOrder`.
@@ -60,10 +66,10 @@ It updates:
 - SonarCloud Code Analysis: failure.
 - GitHub merge state: `UNSTABLE`.
 
-## Description Drift
+## Resolved Description Drift
 
-The PR body still opens as if the PR is the original four-commit, plans-only EEF
-restructure:
+The original snapshot found that the PR body still opened as if the PR was the
+original four-commit, plans-only EEF restructure:
 
 - It says **"No code changed"**.
 - It says **"plans-only architectural restructure across 27 files"**.
@@ -83,9 +89,10 @@ The PR branch currently contains:
 - Observability/env package changes.
 - Agent-tooling, rule, hook, Practice, planning, and continuity changes.
 
-The Cursor summary appended to the body is newer than the original description,
-but it still does not describe the blocking upstream API-shape fix or the full
-merge-critical state.
+Deep Rolling Archipelago subsequently replaced the PR body. A 2026-05-05
+16:28 UTC `gh pr view` check confirmed the body now leads with the
+`thread-units` schema change, generated SDK artefacts, search adapter update,
+remote head `cdcde955`, and base `e2796757`.
 
 ## Current Snag List
 
@@ -139,17 +146,17 @@ wordlist files, and custom ESLint rule tests. Notable entries:
   with 333 duplicated lines.
 
 Action: fix the concrete Sonar issues where straightforward, review or fix the
-hotspots with per-site rationale, and decide whether generated-code duplication
-needs Sonar scoping rather than product-code refactoring.
+hotspots with per-site rationale, and keep generated SDK duplication routed to
+the codegen roadmap rather than product-code refactoring in PR 93.
 
-### P0: PR Description Is Materially Stale
+### Resolved: PR Description Was Materially Stale
 
-The PR description no longer communicates the branch that would be merged. This
-is a merge-readiness problem because reviewers and approvers will miss the real
-risk surface: the branch now includes the blocking upstream API-shape fix and a
-large body of runtime/tooling/test/doctrine changes.
+The original PR description no longer communicated the branch that would be
+merged. This was a merge-readiness problem because reviewers and approvers would
+miss the real risk surface: the branch now includes the blocking upstream
+API-shape fix and a large body of runtime/tooling/test/doctrine changes.
 
-Action: replace the PR body before merge. The new body should lead with:
+Resolution: the remote PR body now leads with:
 
 - Blocking fix: upstream `thread-units` schema dropped `unitOrder`; branch
   updates generated SDK artefacts and the search adapter.
@@ -181,11 +188,16 @@ output by hand would violate the schema-first rule; if the duplication is real
 and harmful, the generator owns the fix. If it is an unsuitable Sonar signal for
 generated artefacts, the disposition must be explicit and per project policy.
 
-Action: decide between:
+Disposition: the generated/built SDK duplication is acknowledged but is not a
+PR 93 code-change blocker. Do not hand-refactor generated SDK files on this PR.
+The owner path is the existing future codegen plan
+[`../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md),
+scheduled for an upcoming codegen session.
 
-- generator/template improvement that reduces duplicated generated output; or
-- Sonar configuration that treats generated files as generated, with rationale
-  tied to the schema-first codegen contract.
+Action for PR 93: after non-generated Sonar issues and hotspots are resolved,
+document whether the remaining Sonar duplication signal is generated-SDK-only.
+If it is, treat it as routed roadmap debt rather than product-code refactoring
+inside this PR.
 
 ### P1: Hotspots Need Review Records
 
@@ -212,11 +224,12 @@ of the PR update path.
 
 1. Fix or disposition the 11 Sonar issues.
 2. Fix or review the 3 Sonar security hotspots.
-3. Resolve duplication gate failure, with special care around generated SDK
-   files.
-4. Rerun or wait for SonarCloud and confirm the Quality Gate passes.
-5. Rewrite the PR description to describe the actual branch and the blocking
-   upstream API-shape fix.
+3. Confirm any remaining duplication signal is generated-SDK-only or otherwise
+   route non-generated duplication to a concrete fix.
+4. Keep generated/built SDK duplication on the codegen roadmap; do not
+   hand-refactor generated files in PR 93.
+5. Rerun or wait for SonarCloud and confirm the Quality Gate status or the
+   documented owner disposition.
 6. Re-check PR statuses and comments immediately before merge.
 
 ## Evidence Commands Used

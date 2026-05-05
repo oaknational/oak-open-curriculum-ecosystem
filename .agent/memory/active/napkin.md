@@ -449,3 +449,47 @@ former. Information gap was zero; the rounding still happened.
 The pattern names exactly this shape; landing it in the same
 session it fires on its author is a strong empirical signal but
 not yet a promotion trigger by itself.
+
+---
+
+## 2026-05-05 (Glassy Drifting Dock, `019df8`) — PR 93 Sonar split-resolve lane
+
+### What Was Done
+
+- Confirmed GitHub access is via `gh` in this session and Sonar MCP is
+  functional: PR 93 Sonar still reports 11 issues, 3 hotspots, and 16.4%
+  new-code duplication on the remote analysis.
+- Registered claim `37519aaf` for the unclaimed PR 93 script/env Sonar
+  fixes and claim `b825252a` for observability README discoverability.
+- Posted a comms event before code/docs edits, explicitly telling paused
+  agents that the `oak-eslint` Sonar findings are split out because
+  Silvered Hiding Silhouette's fresh claim owns `strict.unit.test.ts`.
+- Patched the unclaimed local code sites: hoisted repeated stdin generator
+  fixtures, changed the inline-code stripper to `replaceAll`, converted
+  escaped regex fixtures to `String.raw`, changed test-only `/tmp`-style
+  string literals to workspace paths, and made observability schema
+  re-exports direct.
+- Created the main PR 93 Sonar plan plus a separate post-unpause
+  `oak-eslint` overlap plan. Updated the PR 93 snagging note,
+  observability README, and architecture roadmap to route generated/built
+  SDK duplication to the existing codegen future plan rather than
+  hand-refactoring generated files on PR 93.
+
+### Pattern to Remember
+
+- When Sonar reports generated SDK duplication on a schema-first branch, the
+  useful split is "generated output as roadmap/codegen debt" versus
+  "non-generated Sonar findings as PR-local fixes." Trying to reduce
+  generated duplication by hand in the generated files would violate the
+  generator-first rule; the PR-local work is to make that disposition
+  explicit and then reduce the real source/test findings.
+
+### Mistake Made
+
+- I closed two of my own collaboration claims with parallel tool calls even
+  though both commands mutate `active-claims.json` and
+  `closed-claims.archive.json`. The transaction helper preserved both
+  closures this time, but the calls should have been sequential because they
+  operate on the same shared-state files. Behaviour change: never batch
+  mutating collaboration-state commands against the same JSON files in
+  `multi_tool_use.parallel`.
