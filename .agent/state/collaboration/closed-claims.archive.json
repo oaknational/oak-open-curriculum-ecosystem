@@ -8858,6 +8858,515 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d86cc17f-1858-4d10-bea4-96f9badf8309",
+      "agent_id": {
+        "agent_name": "Ashen Banking Bellows",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "7cf730"
+      },
+      "thread": "takeover-gate-completion",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:02:03Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Owner-authorised coordinator landing of Asteroid 0c263b's expired-queue 30-file bundle. Subject: feat(oak-eslint): add no-real-io-in-tests rule and clear gate blockers. Substance authored by Twilit Beaming Aurora (oak-eslint rule), Opalescent Threading Nebula (practice promotion), Opalescent Eclipsing Asteroid (security hardening + cross-lane repairs). Coordinator landing only; not a substance contribution from 7cf730. Authorised by owner 2026-05-05 13:00Z.",
+      "notes": "Bundle: Asteroid's exact 30-file staged_name_status from queue entry c461a9ca (verified bit-match against current git diff --staged). Mandatory git commit -- <pathspec> filter applied. Owner-authorised cross-claim landing.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:06:52Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Coordinator landing of Asteroid 0c263b expired-queue takeover bundle landed at 368e5aff per owner authorisation 13:00Z. 29 files, all hooks passed (full turbo cache). Substance attribution preserved in commit body.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d86cc17f-1858-4d10-bea4-96f9badf8309",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0c263b00-1111-4a11-8111-111111111111",
+      "agent_id": {
+        "agent_name": "Opalescent Eclipsing Asteroid",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "0c263b"
+      },
+      "thread": "takeover-gate-completion",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts",
+            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts",
+            "packages/core/oak-eslint/src/plugin.ts",
+            "knip.config.ts",
+            ".agent/skills/commit/SKILL.md",
+            ".agent/rules/stage-by-explicit-pathspec.md",
+            ".agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md",
+            ".agent/memory/active/patterns/README.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T12:15:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-directed takeover of stalled Twilit and Opalescent bundles: fix Knip blockers, validate, review, and commit with explicit pathspecs.",
+      "notes": "Owner stated Twilit Beaming Aurora and Opalescent Threading Nebula cannot act due to usage allowance exhaustion and authorised another agent to cancel claims and complete the gate-blocking work. Scope includes oak-eslint rule bundle, practice-promotion bundle, collaboration-state takeover notes, and knip.config.ts CSS/Vite coverage.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:07:06Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Owner-forced close: Opalescent Eclipsing Asteroid 0c263b session no longer resolvable post-wordlist-refactor (owner-stated 13:05Z). Their takeover-gate-completion bundle was landed by coordinator at 368e5aff with full substance attribution. Files-area claim archived.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0c263b00-1111-4a11-8111-111111111111",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0c263b00-2222-4a22-8222-222222222222",
+      "agent_id": {
+        "agent_name": "Opalescent Eclipsing Asteroid",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "0c263b"
+      },
+      "thread": "takeover-gate-completion",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T12:25:56Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit owner-directed takeover gate completion bundle.",
+      "notes": "Explicit pathspec staging only. Excludes unrelated agent-tools wordlist/CLI work, .cursor plan files, PDR-014/consolidate-docs historical synthesis work, and other unstaged peer edits.",
+      "intent_to_commit": "08666194-270a-4bad-8523-ba278fd1d785",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:07:06Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Owner-forced close: Asteroid 0c263b session no longer resolvable post-wordlist-refactor. Their git:index/head claim is moot — bundle landed at 368e5aff under coordinator landing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0c263b00-2222-4a22-8222-222222222222",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8ed6386d-6867-4794-9c6a-7423fce890ff",
+      "agent_id": {
+        "agent_name": "Moonlit Shimmering Comet",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "6a31f1"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/**",
+            "apps/oak-curriculum-mcp-streamable-http/vitest.smoke.config.ts",
+            "apps/oak-curriculum-mcp-streamable-http/package.json",
+            "package.json",
+            "turbo.json",
+            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.*",
+            "packages/core/oak-eslint/src/plugin.ts",
+            "packages/core/oak-eslint/index.ts",
+            "eslint.config.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/**/*.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-04T16:43:44Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Retire smoke-tests directory + vitest.smoke.config.ts + smoke:* scripts (cycles 1a-1d); add proper unit/integration replacement for dev-server-boots coverage (cycle 1c); claim cycle 2 audit areas separately at start; author no-real-io-in-tests ESLint rule (cycle 3, root-config wire-up gated on cycle 2 close).",
+      "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:07:25Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Owner-forced close per coordinator authority: Moonlit Shimmering Comet 6a31f1 session has been closed for >24h; underlying plan smoke-test-retirement was archived as superseded 2026-05-04 when Fronded Climbing Thicket unified plans into feat-eef-exploration-completion. The cycle 3 substance Moonlit's claim covered (no-real-io-in-tests rule + plugin registration) has now landed at 368e5aff with full attribution. Owner-confirmed via Threading Nebula's reply event 86527d7c (12:54Z): 'Moonlit's session has been closed for a while; their claim is now STALE per the freshness check'.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8ed6386d-6867-4794-9c6a-7423fce890ff",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "686bfd12-0515-4f14-8a3e-5c0ffee00001",
+      "agent_id": {
+        "agent_name": "Fronded Climbing Pollen",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "686bfd"
+      },
+      "thread": "collaboration-cli-gaps",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:12:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit collaboration CLI ergonomics.",
+      "notes": "Coordinator go-signal from Ashen after 368e5aff; explicit pathspecs limited to collaboration-state and commit-queue ergonomics files.",
+      "intent_to_commit": "686bfd13-0515-4f14-8a3e-5c0ffee00002",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:13:00Z",
+        "closed_by": {
+          "agent_name": "Fronded Climbing Pollen",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "686bfd"
+        },
+        "summary": "Commit window released without commit. Targeted collaboration-cli-gaps gates and test-review were clean, but commit-skill preflight failed on repo-wide practice fitness critical/hard failures outside this bundle; queue intent 686bfd13 abandoned and staged files unstaged.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "686bfd12-0515-4f14-8a3e-5c0ffee00001",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "686bfd14-0515-4f14-8a3e-5c0ffee00003",
+      "agent_id": {
+        "agent_name": "Fronded Climbing Pollen",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "686bfd"
+      },
+      "thread": "collaboration-cli-gaps",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:16:44Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit collaboration CLI ergonomics after advisory-gate clarification.",
+      "notes": "Ashen event 89cdd9de clarified practice fitness pre-screen is advisory, not live hook gate; explicit pathspecs limited to collaboration-cli-gaps agent-tools files.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:24:29Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Fronded Climbing Pollen 686bfd's collaboration-cli-gaps bundle landed at 33aeec40 (17 files, 933 insertions, 70 deletions; all hooks passed full turbo cache). Owner-directed coordinator landing per Fronded's session-complete handoff event d03101a9. Files-area claim 686bfd00 also still open; closing separately.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "686bfd14-0515-4f14-8a3e-5c0ffee00003",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "686bfd00-7bb2-4ec8-9e6f-6b9f7c1f6a10",
+      "agent_id": {
+        "agent_name": "Fronded Climbing Pollen",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "686bfd"
+      },
+      "thread": "collaboration-cli-gaps",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli.ts",
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/src/collaboration-state/cli-claim-commands.ts",
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/src/collaboration-state/state-io.ts",
+            "agent-tools/src/collaboration-state/state-parsers.ts",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/args.ts",
+            "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T12:23:29Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement Collaboration CLI Ergonomics Plan first slice: claim query commands, structured claim IDs, queue status, help diagnostics, comms send, docs and tests.",
+      "notes": "scanned registry: active claims present; no overlap with agent-tools collaboration-state or commit-queue files. Tried collaboration-state CLI first; unrelated wordlists.ts duplication in another active claim currently prevents the CLI from booting, so this claim was recorded by surgical JSON patch.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:24:52Z",
+        "closed_by": {
+          "agent_name": "Ashen Banking Bellows",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "7cf730"
+        },
+        "summary": "Fronded Climbing Pollen 686bfd files-area claim closed post-collaboration-cli-gaps commit 33aeec40. Session complete; coordinator handoff.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "686bfd00-7bb2-4ec8-9e6f-6b9f7c1f6a10",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6c6e7da5-5528-4316-9cb9-fa77877053e1",
+      "agent_id": {
+        "agent_name": "Pelagic Swimming Rudder",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "9a249c"
+      },
+      "thread": "identity-wordlist",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:45:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit identity wordlists and session cache.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:49:00Z",
+        "closed_by": {
+          "agent_name": "Pelagic Swimming Rudder",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "9a249c"
+        },
+        "summary": "Committed identity wordlists and session cache at ea7d3e01.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6c6e7da5-5528-4316-9cb9-fa77877053e1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5b195e49-ddb0-42f6-b5bc-9ca236718e5d",
+      "agent_id": {
+        "agent_name": "Pelagic Swimming Rudder",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "9a249c"
+      },
+      "thread": "identity-wordlist",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/core/agent-identity/derive.ts",
+            "agent-tools/src/core/agent-identity/wordlists.ts",
+            "agent-tools/src/core/agent-identity/wordlists-aerial.ts",
+            "agent-tools/src/core/agent-identity/wordlists-botanical.ts",
+            "agent-tools/src/core/agent-identity/wordlists-celestial.ts",
+            "agent-tools/src/core/agent-identity/wordlists-ember.ts",
+            "agent-tools/src/core/agent-identity/wordlists-maritime.ts",
+            "agent-tools/src/core/agent-identity/wordlists-nocturnal.ts",
+            "agent-tools/src/claude/session-identity-hook.ts",
+            "agent-tools/src/cursor/oak-session-identity-hook.ts",
+            "agent-tools/tests/agent-identity/derive.unit.test.ts",
+            "agent-tools/tests/claude/session-identity-hook.unit.test.ts",
+            "agent-tools/tests/cursor/oak-session-identity-hook.unit.test.ts",
+            "agent-tools/docs/agent-identity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:30:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Land identity wordlist expansion with session-level identity cache.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:49:00Z",
+        "closed_by": {
+          "agent_name": "Pelagic Swimming Rudder",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "9a249c"
+        },
+        "summary": "Identity wordlist expansion and session cache committed at ea7d3e01.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5b195e49-ddb0-42f6-b5bc-9ca236718e5d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1ce94f20-e3fe-4b54-ad32-967be62a89b3",
+      "agent_id": {
+        "agent_name": "Pelagic Swimming Rudder",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "9a249c"
+      },
+      "thread": "identity-wordlist",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md",
+            "agent-tools/src/bin/agent-identity.ts",
+            "agent-tools/tests/agent-identity/cli.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:35:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Document PDR-027 session-level identity cache decision.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:49:00Z",
+        "closed_by": {
+          "agent_name": "Pelagic Swimming Rudder",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "9a249c"
+        },
+        "summary": "PDR-027 identity cache documentation committed at ea7d3e01.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1ce94f20-e3fe-4b54-ad32-967be62a89b3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "18bba235-fe41-44f1-b6fc-1a13f7bb99cf",
+      "agent_id": {
+        "agent_name": "Pelagic Swimming Rudder",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "9a249c"
+      },
+      "thread": "identity-wordlist",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/agent-identity-cli-environment.ts",
+            "agent-tools/tests/agent-identity/session-cache.integration.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T13:42:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cover session cache integration and CLI env adapter.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T13:49:00Z",
+        "closed_by": {
+          "agent_name": "Pelagic Swimming Rudder",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "9a249c"
+        },
+        "summary": "Session cache integration coverage committed at ea7d3e01.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "18bba235-fe41-44f1-b6fc-1a13f7bb99cf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

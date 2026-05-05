@@ -351,252 +351,65 @@
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/active/patterns/README.md\nA\t.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md\nM\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/rules/stage-by-explicit-pathspec.md\nM\t.agent/skills/commit/SKILL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/03d82141-3ab4-4f1c-a91e-b499f239e4f0.json\nA\t.agent/state/collaboration/comms-events/104474ce-2ffa-42a3-ab4e-4184c7eec7f9.json\nA\t.agent/state/collaboration/comms-events/52bd33fe-87f9-40ef-985e-6fd3df03df5c.json\nA\t.agent/state/collaboration/comms-events/53f0d9a0-e75a-44da-837c-44554cd2e6ab.json\nA\t.agent/state/collaboration/comms-events/87b0d32e-41d0-4ccf-a5c9-40eec8cc61fb.json\nA\t.agent/state/collaboration/comms-events/9a249c-tooling-feedback-standing-note.json\nA\t.agent/state/collaboration/comms-events/c7fa7c4c-4c31-46ec-9aac-dc2a7e7a8280.json\nA\t.agent/state/collaboration/comms-events/c9dff8f1-c7e4-4711-b3ec-ca8a5ab1d7a1.json\nA\t.agent/state/collaboration/comms-events/cb2e805b-49d7-46dc-b2c0-bd5c7b2ee357.json\nM\t.agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json\nA\t.agent/state/collaboration/comms-events/d7bf9198-4cd6-49bd-9bb5-b2da6bee3dc4.json\nA\t.agent/state/collaboration/comms-events/e124599b-abaa-4510-8bf0-15e8fbaefde7.json\nM\t.agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tknip.config.ts\nM\tpackages/core/oak-eslint/src/index.ts\nM\tpackages/core/oak-eslint/src/plugin.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts\n"
     },
     {
-      "intent_id": "2166d6ec-d8ea-4b5a-8bd4-9b78058e1ef1",
-      "claim_id": "d86cc17f-1858-4d10-bea4-96f9badf8309",
-      "agent_id": {
-        "agent_name": "Twilit Beaming Aurora",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "7cf730"
-      },
-      "files": [
-        ".agent/memory/active/distilled.md",
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/active/patterns/README.md",
-        ".agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md",
-        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
-        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
-        ".agent/rules/stage-by-explicit-pathspec.md",
-        ".agent/skills/commit/SKILL.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/comms-events/03d82141-3ab4-4f1c-a91e-b499f239e4f0.json",
-        ".agent/state/collaboration/comms-events/104474ce-2ffa-42a3-ab4e-4184c7eec7f9.json",
-        ".agent/state/collaboration/comms-events/52bd33fe-87f9-40ef-985e-6fd3df03df5c.json",
-        ".agent/state/collaboration/comms-events/53f0d9a0-e75a-44da-837c-44554cd2e6ab.json",
-        ".agent/state/collaboration/comms-events/87b0d32e-41d0-4ccf-a5c9-40eec8cc61fb.json",
-        ".agent/state/collaboration/comms-events/9a249c-tooling-feedback-standing-note.json",
-        ".agent/state/collaboration/comms-events/c7fa7c4c-4c31-46ec-9aac-dc2a7e7a8280.json",
-        ".agent/state/collaboration/comms-events/c9dff8f1-c7e4-4711-b3ec-ca8a5ab1d7a1.json",
-        ".agent/state/collaboration/comms-events/cb2e805b-49d7-46dc-b2c0-bd5c7b2ee357.json",
-        ".agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json",
-        ".agent/state/collaboration/comms-events/d7bf9198-4cd6-49bd-9bb5-b2da6bee3dc4.json",
-        ".agent/state/collaboration/comms-events/e124599b-abaa-4510-8bf0-15e8fbaefde7.json",
-        ".agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        "knip.config.ts",
-        "packages/core/oak-eslint/src/index.ts",
-        "packages/core/oak-eslint/src/plugin.ts",
-        "packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts",
-        "packages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts"
-      ],
-      "commit_subject": "feat(oak-eslint): add no-real-io-in-tests rule and clear gate blockers",
-      "queued_at": "2026-05-05T13:02:23.810Z",
-      "updated_at": "2026-05-05T13:02:46.914Z",
-      "expires_at": "2026-05-05T13:17:23.810Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/active/patterns/README.md\nA\t.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md\nM\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/rules/stage-by-explicit-pathspec.md\nM\t.agent/skills/commit/SKILL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/03d82141-3ab4-4f1c-a91e-b499f239e4f0.json\nA\t.agent/state/collaboration/comms-events/104474ce-2ffa-42a3-ab4e-4184c7eec7f9.json\nA\t.agent/state/collaboration/comms-events/52bd33fe-87f9-40ef-985e-6fd3df03df5c.json\nA\t.agent/state/collaboration/comms-events/53f0d9a0-e75a-44da-837c-44554cd2e6ab.json\nA\t.agent/state/collaboration/comms-events/87b0d32e-41d0-4ccf-a5c9-40eec8cc61fb.json\nA\t.agent/state/collaboration/comms-events/9a249c-tooling-feedback-standing-note.json\nA\t.agent/state/collaboration/comms-events/c7fa7c4c-4c31-46ec-9aac-dc2a7e7a8280.json\nA\t.agent/state/collaboration/comms-events/c9dff8f1-c7e4-4711-b3ec-ca8a5ab1d7a1.json\nA\t.agent/state/collaboration/comms-events/cb2e805b-49d7-46dc-b2c0-bd5c7b2ee357.json\nM\t.agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json\nA\t.agent/state/collaboration/comms-events/d7bf9198-4cd6-49bd-9bb5-b2da6bee3dc4.json\nA\t.agent/state/collaboration/comms-events/e124599b-abaa-4510-8bf0-15e8fbaefde7.json\nM\t.agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tknip.config.ts\nM\tpackages/core/oak-eslint/src/index.ts\nM\tpackages/core/oak-eslint/src/plugin.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts\n",
-      "staged_bundle_fingerprint": "8d3db22c3bb0d22a6905657af3fbef68cbeec184980ed2a98ec3372a1be66dfd"
-    },
-    {
-      "intent_id": "08666194-270a-4bad-8523-ba278fd1d785",
-      "claim_id": "0c263b00-2222-4a22-8222-222222222222",
-      "agent_id": {
-        "agent_name": "Opalescent Eclipsing Asteroid",
-        "platform": "cursor",
-        "model": "GPT-5.5",
-        "session_id_prefix": "0c263b"
-      },
-      "files": [
-        ".agent/memory/active/distilled.md",
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/active/patterns/README.md",
-        ".agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md",
-        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
-        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
-        ".agent/rules/stage-by-explicit-pathspec.md",
-        ".agent/skills/commit/SKILL.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/comms-events/03d82141-3ab4-4f1c-a91e-b499f239e4f0.json",
-        ".agent/state/collaboration/comms-events/104474ce-2ffa-42a3-ab4e-4184c7eec7f9.json",
-        ".agent/state/collaboration/comms-events/52bd33fe-87f9-40ef-985e-6fd3df03df5c.json",
-        ".agent/state/collaboration/comms-events/53f0d9a0-e75a-44da-837c-44554cd2e6ab.json",
-        ".agent/state/collaboration/comms-events/87b0d32e-41d0-4ccf-a5c9-40eec8cc61fb.json",
-        ".agent/state/collaboration/comms-events/9a249c-tooling-feedback-standing-note.json",
-        ".agent/state/collaboration/comms-events/c7fa7c4c-4c31-46ec-9aac-dc2a7e7a8280.json",
-        ".agent/state/collaboration/comms-events/c9dff8f1-c7e4-4711-b3ec-ca8a5ab1d7a1.json",
-        ".agent/state/collaboration/comms-events/cb2e805b-49d7-46dc-b2c0-bd5c7b2ee357.json",
-        ".agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json",
-        ".agent/state/collaboration/comms-events/d7bf9198-4cd6-49bd-9bb5-b2da6bee3dc4.json",
-        ".agent/state/collaboration/comms-events/e124599b-abaa-4510-8bf0-15e8fbaefde7.json",
-        ".agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        "knip.config.ts",
-        "packages/core/oak-eslint/src/index.ts",
-        "packages/core/oak-eslint/src/plugin.ts",
-        "packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts",
-        "packages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts"
-      ],
-      "commit_subject": "feat(oak-eslint): add no-real-io-in-tests rule and clear gate blockers",
-      "queued_at": "2026-05-05T13:02:27.200Z",
-      "updated_at": "2026-05-05T13:02:59.370Z",
-      "expires_at": "2026-05-05T13:17:27.200Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/active/patterns/README.md\nA\t.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md\nM\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/rules/stage-by-explicit-pathspec.md\nM\t.agent/skills/commit/SKILL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/03d82141-3ab4-4f1c-a91e-b499f239e4f0.json\nA\t.agent/state/collaboration/comms-events/104474ce-2ffa-42a3-ab4e-4184c7eec7f9.json\nA\t.agent/state/collaboration/comms-events/52bd33fe-87f9-40ef-985e-6fd3df03df5c.json\nA\t.agent/state/collaboration/comms-events/53f0d9a0-e75a-44da-837c-44554cd2e6ab.json\nA\t.agent/state/collaboration/comms-events/87b0d32e-41d0-4ccf-a5c9-40eec8cc61fb.json\nA\t.agent/state/collaboration/comms-events/9a249c-tooling-feedback-standing-note.json\nA\t.agent/state/collaboration/comms-events/c7fa7c4c-4c31-46ec-9aac-dc2a7e7a8280.json\nA\t.agent/state/collaboration/comms-events/c9dff8f1-c7e4-4711-b3ec-ca8a5ab1d7a1.json\nA\t.agent/state/collaboration/comms-events/cb2e805b-49d7-46dc-b2c0-bd5c7b2ee357.json\nM\t.agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json\nA\t.agent/state/collaboration/comms-events/d7bf9198-4cd6-49bd-9bb5-b2da6bee3dc4.json\nA\t.agent/state/collaboration/comms-events/e124599b-abaa-4510-8bf0-15e8fbaefde7.json\nM\t.agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tknip.config.ts\nM\tpackages/core/oak-eslint/src/index.ts\nM\tpackages/core/oak-eslint/src/plugin.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.ts\nA\tpackages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts\n",
-      "staged_bundle_fingerprint": "e668d529094b6a0bf88aa052985c0d0bfc09f7294c3c109dfffd13b6b1fda85a"
-    }
-  ],
-  "claims": [
-    {
-      "claim_id": "8ed6386d-6867-4794-9c6a-7423fce890ff",
-      "agent_id": {
-        "agent_name": "Moonlit Shimmering Comet",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "6a31f1"
-      },
-      "thread": "retire-smoke-tests-all-vitest-no-real-io",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/smoke-tests/**",
-            "apps/oak-curriculum-mcp-streamable-http/vitest.smoke.config.ts",
-            "apps/oak-curriculum-mcp-streamable-http/package.json",
-            "package.json",
-            "turbo.json",
-            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.*",
-            "packages/core/oak-eslint/src/plugin.ts",
-            "packages/core/oak-eslint/index.ts",
-            "eslint.config.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/**/*.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-04T16:43:44Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Retire smoke-tests directory + vitest.smoke.config.ts + smoke:* scripts (cycles 1a-1d); add proper unit/integration replacement for dev-server-boots coverage (cycle 1c); claim cycle 2 audit areas separately at start; author no-real-io-in-tests ESLint rule (cycle 3, root-config wire-up gated on cycle 2 close).",
-      "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
-    },
-    {
-      "claim_id": "0c263b00-1111-4a11-8111-111111111111",
-      "agent_id": {
-        "agent_name": "Opalescent Eclipsing Asteroid",
-        "platform": "cursor",
-        "model": "GPT-5.5",
-        "session_id_prefix": "0c263b"
-      },
-      "thread": "takeover-gate-completion",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts",
-            "packages/core/oak-eslint/src/rules/no-real-io-in-tests.unit.test.ts",
-            "packages/core/oak-eslint/src/plugin.ts",
-            "knip.config.ts",
-            ".agent/skills/commit/SKILL.md",
-            ".agent/rules/stage-by-explicit-pathspec.md",
-            ".agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md",
-            ".agent/memory/active/patterns/README.md",
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/shared-comms-log.md",
-            ".agent/state/collaboration/comms-events"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T12:15:27Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Owner-directed takeover of stalled Twilit and Opalescent bundles: fix Knip blockers, validate, review, and commit with explicit pathspecs.",
-      "notes": "Owner stated Twilit Beaming Aurora and Opalescent Threading Nebula cannot act due to usage allowance exhaustion and authorised another agent to cancel claims and complete the gate-blocking work. Scope includes oak-eslint rule bundle, practice-promotion bundle, collaboration-state takeover notes, and knip.config.ts CSS/Vite coverage."
-    },
-    {
-      "claim_id": "686bfd00-7bb2-4ec8-9e6f-6b9f7c1f6a10",
+      "intent_id": "686bfd13-0515-4f14-8a3e-5c0ffee00002",
+      "claim_id": "686bfd12-0515-4f14-8a3e-5c0ffee00001",
       "agent_id": {
         "agent_name": "Fronded Climbing Pollen",
         "platform": "cursor",
         "model": "GPT-5.5",
         "session_id_prefix": "686bfd"
       },
-      "thread": "collaboration-cli-gaps",
+      "files": [
+        "agent-tools/README.md",
+        "agent-tools/src/collaboration-state/claim-reports.ts",
+        "agent-tools/src/collaboration-state/cli-claim-commands.ts",
+        "agent-tools/src/collaboration-state/cli-claim-query-commands.ts",
+        "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+        "agent-tools/src/collaboration-state/cli-options.ts",
+        "agent-tools/src/collaboration-state/cli-specs.ts",
+        "agent-tools/src/collaboration-state/cli.ts",
+        "agent-tools/src/collaboration-state/state-io.ts",
+        "agent-tools/src/commit-queue/args.ts",
+        "agent-tools/src/commit-queue/cli.ts",
+        "agent-tools/src/commit-queue/index.ts",
+        "agent-tools/src/commit-queue/options.ts",
+        "agent-tools/src/commit-queue/status.ts",
+        "agent-tools/src/commit-queue/types.ts",
+        "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+        "agent-tools/tests/commit-queue.unit.test.ts"
+      ],
+      "commit_subject": "feat(agent-tools): improve collaboration cli ergonomics",
+      "queued_at": "2026-05-05T13:12:04Z",
+      "updated_at": "2026-05-05T13:13:00Z",
+      "expires_at": "2026-05-05T13:27:04.000Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "43b3bc9c6cde53888e53afeaaaa79bf7a0b6c770edfd9f949bc294e350c3627f",
+      "staged_name_status": "M\tagent-tools/README.md\nA\tagent-tools/src/collaboration-state/claim-reports.ts\nM\tagent-tools/src/collaboration-state/cli-claim-commands.ts\nA\tagent-tools/src/collaboration-state/cli-claim-query-commands.ts\nM\tagent-tools/src/collaboration-state/cli-comms-commands.ts\nM\tagent-tools/src/collaboration-state/cli-options.ts\nA\tagent-tools/src/collaboration-state/cli-specs.ts\nM\tagent-tools/src/collaboration-state/cli.ts\nM\tagent-tools/src/collaboration-state/state-io.ts\nM\tagent-tools/src/commit-queue/args.ts\nM\tagent-tools/src/commit-queue/cli.ts\nM\tagent-tools/src/commit-queue/index.ts\nA\tagent-tools/src/commit-queue/options.ts\nA\tagent-tools/src/commit-queue/status.ts\nM\tagent-tools/src/commit-queue/types.ts\nM\tagent-tools/tests/collaboration-state/collaboration-state.unit.test.ts\nM\tagent-tools/tests/commit-queue.unit.test.ts\n",
+      "notes": "Commit-skill preflight failed before git commit: practice:fitness:strict-hard has repo-wide practice/memory critical/hard failures outside the collaboration-cli-gaps staged bundle. No git commit run."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "1478bd9b-b3e1-4157-a2d4-6ffeb1e9cfa1",
+      "agent_id": {
+        "agent_name": "Vining Growing Meadow",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "92cb10"
+      },
+      "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            "agent-tools/src/collaboration-state/cli.ts",
-            "agent-tools/src/collaboration-state/cli-options.ts",
-            "agent-tools/src/collaboration-state/cli-claim-commands.ts",
-            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
-            "agent-tools/src/collaboration-state/state-io.ts",
-            "agent-tools/src/collaboration-state/state-parsers.ts",
-            "agent-tools/src/commit-queue/cli.ts",
-            "agent-tools/src/commit-queue/args.ts",
-            "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
-            "agent-tools/tests/commit-queue.unit.test.ts",
-            "agent-tools/README.md"
+            ".agent/memory/active/distilled.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-05T12:23:29Z",
+      "claimed_at": "2026-05-05T13:57:20Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Implement Collaboration CLI Ergonomics Plan first slice: claim query commands, structured claim IDs, queue status, help diagnostics, comms send, docs and tests.",
-      "notes": "scanned registry: active claims present; no overlap with agent-tools collaboration-state or commit-queue files. Tried collaboration-state CLI first; unrelated wordlists.ts duplication in another active claim currently prevents the CLI from booting, so this claim was recorded by surgical JSON patch."
-    },
-    {
-      "claim_id": "0c263b00-2222-4a22-8222-222222222222",
-      "agent_id": {
-        "agent_name": "Opalescent Eclipsing Asteroid",
-        "platform": "cursor",
-        "model": "GPT-5.5",
-        "session_id_prefix": "0c263b"
-      },
-      "thread": "takeover-gate-completion",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T12:25:56Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit owner-directed takeover gate completion bundle.",
-      "notes": "Explicit pathspec staging only. Excludes unrelated agent-tools wordlist/CLI work, .cursor plan files, PDR-014/consolidate-docs historical synthesis work, and other unstaged peer edits.",
-      "intent_to_commit": "08666194-270a-4bad-8523-ba278fd1d785"
-    },
-    {
-      "claim_id": "d86cc17f-1858-4d10-bea4-96f9badf8309",
-      "agent_id": {
-        "agent_name": "Ashen Banking Bellows",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "7cf730"
-      },
-      "thread": "takeover-gate-completion",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T13:02:03Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Owner-authorised coordinator landing of Asteroid 0c263b's expired-queue 30-file bundle. Subject: feat(oak-eslint): add no-real-io-in-tests rule and clear gate blockers. Substance authored by Twilit Beaming Aurora (oak-eslint rule), Opalescent Threading Nebula (practice promotion), Opalescent Eclipsing Asteroid (security hardening + cross-lane repairs). Coordinator landing only; not a substance contribution from 7cf730. Authorised by owner 2026-05-05 13:00Z.",
-      "notes": "Bundle: Asteroid's exact 30-file staged_name_status from queue entry c461a9ca (verified bit-match against current git diff --staged). Mandatory git commit -- <pathspec> filter applied. Owner-authorised cross-claim landing.",
-      "intent_to_commit": "2166d6ec-d8ea-4b5a-8bd4-9b78058e1ef1"
+      "intent": "Layer 1 graduation pass — remove distilled.md entries whose substance is already operationalised at non-directive permanent homes (rules / PDRs / READMEs). Bounded scope: no edits to napkin/pending-graduations/principles.md or other directives. Ashen-coordinated: distilled.md is parallel-safe per dfdea3f7."
     }
   ]
 }

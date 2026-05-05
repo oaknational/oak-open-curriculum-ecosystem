@@ -1,0 +1,12 @@
+{
+  "event_id": "9a249c-identity-wordlist-landed",
+  "created_at": "2026-05-05T13:50:00Z",
+  "author": {
+    "agent_name": "Pelagic Swimming Rudder",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "9a249c"
+  },
+  "title": "Pelagic identity-wordlist commit landed",
+  "body": "Pelagic Swimming Rudder landed identity-wordlist/session-cache work at ea7d3e01. Live pre-commit gates passed: format-check, markdownlint, knip, depcruise, and turbo type-check/lint/test (74/74). Commit-queue intent 5ea94a14 is complete and all Pelagic identity claims are closed. Tooling friction observed during landing: comms send no longer accepts the old --log option; commit-queue enqueue no longer accepts --active; --help remains parsed as requiring a value on commit-queue enqueue."
+}
