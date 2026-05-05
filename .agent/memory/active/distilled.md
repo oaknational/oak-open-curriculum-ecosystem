@@ -117,34 +117,6 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
-**The "cheap cure" framing is categorically excluded.** When
-surfacing options to the owner, "cheap cure" / "quick fix" / "land
-it then iterate" / "good enough for now" shapes do not count as
-legitimate options — only architectural-excellence shapes are
-surfaced. Owner reinforcement 2026-05-02: *we always, ALWAYS,
-choose long-term architectural excellence over cheap or fast or
-good enough*. Operationalises [principles.md § Architectural
-Excellence Over Expediency][excellence] at the option-surfacing
-boundary.
-
-**There is no speed pressure — the urge to skip ceremony is the
-diagnostic.** Cycle landings, parallel agents, auto-mode framing,
-branch closure, plan progress, owner waiting, hook latency, gate
-run time — none are urgency signals; none imply the doctrine
-substrate (commit skill, queue protocol, claims, reviewer dispatch,
-stage-by-pathspec, plan-body freshness) can be skipped. The urgency
-that justifies a skip is supplied by the agent, not by the work.
-The doctrine substrate IS what success looks like; running every
-cycle through claim → queue → skill-gates → verify-staged → review
-→ commit *is the work*, not friction on top of it. When the urge
-appears, *that is the signal*; treat it the way a unit-test
-failure is treated — evidence requiring investigation, not friction
-to refactor around. The urge passes the moment ceremony is
-applied; the cycle that seemed urgent five minutes ago lands
-cleanly under full protocol. Operationalised at
-[`no-speed-pressure`](../../rules/no-speed-pressure.md); upstream
-principle is [§Architectural Excellence Over Expediency][excellence].
-
 **Severity is not urgency.** Owner sharpening 2026-05-05 of the
 no-speed-pressure doctrine: severity-tier labels (`CRITICAL`, `HARD`,
 `P1`, `P2`, etc.) name *importance*, not *urgency*. The correct
@@ -159,37 +131,8 @@ mean rush, if anything even more care and thoughtfulness is
 needed"*. Cure: when a severity-tier label fires, treat it the
 same way as the urge-to-skip-ceremony — slow down, apply the
 doctrine substrate, do the work properly. Severity tiers calibrate
-the *care* applied; they do not calibrate the *speed*.
-
-**Quality gates are always blocking; the orchestrator is advisory.**
-Two distinct enforcer roles, two distinct authorities. **Quality
-gates** (`.husky/pre-commit` chain — format / markdownlint / knip /
-depcruise / type-check / lint / test, plus the `commit-msg` hook
-running `prevent-accidental-major-version` then commitlint) are
-blocking, always. They run at `git commit`
-time on the actual working-tree state and refuse the commit on
-failure. **The commit-skill orchestrator**
-(`scripts/check-commit-skill-gates.ts`, invoked voluntarily before
-`git commit`) runs `practice:fitness:strict-hard`,
-`practice:vocabulary`, and the message check — its purpose is to
-surface important advisory signals (whole-tree fitness shape,
-vocabulary drift, message-format issues) early enough to act on,
-but its non-zero exit is **not** a commit-gate verdict. Conflating
-the two — reading an orchestrator HARD signal as a blocking
-condition — produces false-positive escape-valve framings
-(proposing `--no-verify`, splitting an atomic commit, or otherwise
-distorting the substance-led shape of the work to satisfy advisory
-output). Cure: when *any* enforcer fires, name *which* enforcer is
-firing on *which* surface and *with what authority*. Owner-stated
-2026-05-05: *"all quality gates are blocking always, the
-orchestrator is not a quality gate, it surfaces very important but
-advisory signals"*. The orchestrator's HARD signals are read,
-recorded, and acted on per the substance-led path (e.g. PDR-046
-§Move 3 graduation upward when the signal flags a layer at rest);
-they do not gate the commit. Composes with
-`feedback_hook_failures_are_questions` (the prior-art rule covers
-hook-tier; this entry names the advisory-vs-blocking authority
-distinction).
+the *care* applied; they do not calibrate the *speed*. Operationalised
+at [`no-speed-pressure`](../../rules/no-speed-pressure.md).
 
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
@@ -432,7 +375,6 @@ deferred to the SDK codegen decomposition plan for a separate session:
 `plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`.
 
 [agent-collaboration]: ../../directives/agent-collaboration.md
-[excellence]: ../../directives/principles.md#architectural-excellence-over-expediency
 [n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
 [n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
