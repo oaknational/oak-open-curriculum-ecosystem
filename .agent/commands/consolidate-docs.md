@@ -72,6 +72,19 @@ held over).
 
 ## Learning Preservation Overrides Fitness Pressure
 
+This section is the **per-write rule**: it governs the moment of
+individual capture or graduation. The companion **layer-orchestration
+rule** is
+[PDR-046 (Layered Knowledge Processing — Preserve First, Restructure
+Second)](../practice-core/decision-records/PDR-046-layered-knowledge-processing.md),
+which governs how the per-write rule composes when work intentionally
+traverses multiple layers (capture → distillation → permanent doctrine
+→ permanent-doctrine internal restructuring) in a single pass. Read
+PDR-046 alongside this section. Together they form one discipline:
+substance is never compressed (per-write rule); fitness applies at
+rest, not in-process; the staircase is walked bottom-up until
+knowledge has reached its durable home (PDR-046 §Decision).
+
 **Writing to shared-state records of knowledge is NEVER blocked by
 fitness limits.** Fitness signals — including SOFT, HARD, and CRITICAL
 — are health indicators about the destination file's structure; they
@@ -109,6 +122,16 @@ permanent home, write it there at full weight. Resulting fitness
 pressure routes to step 9 as follow-up structure work — refine,
 split, graduate, or adjust limits — never as retroactive permission
 to have written less.
+
+When residual fitness pressure persists at rest after a layer's
+processing completes, the default response is **graduation upward, not
+compression** ([PDR-046 §Move 3](../practice-core/decision-records/PDR-046-layered-knowledge-processing.md#move-3--a-layers-fitness-pressure-is-addressed-by-processing-the-next-layer-up-not-by-compression)).
+Substance ready for its durable home leaves the layer to that home;
+the source layer's shape relaxes naturally. Refinement / split /
+target-revision becomes the appropriate response **only** when no
+substance remains ready to graduate. This is the structural cure for
+"the destination is full" reasoning at consolidation: the layer is
+not full of substance to remove, it is full of substance to graduate.
 
 ## Plan supersession discipline
 

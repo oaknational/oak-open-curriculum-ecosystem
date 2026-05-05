@@ -374,8 +374,13 @@ continuity snapshots.
   Overrides Fitness Pressure` adding the upward pointer.
   Host-local; does not propagate to other Practice adopters
   (each host carries its own per-write rule surface). Trigger-
-  condition: PDR-046 lands. Status: due (paired with PDR-046
-  landing in this session's commit bundle).
+  condition: PDR-046 lands. Status: graduated 2026-05-05 (Ethereal
+  Transiting Comet — the section now opens with a paragraph naming
+  PDR-046 as the layer-orchestration rule and closes with a
+  PDR-046 §Move 3 reference describing graduation-upward as the
+  default response to residual fitness pressure at rest; landed in
+  same atomic commit as the structural-enforcer recursive-exclusion
+  pattern entry).
 
 + 2026-05-04; **hook tightening for no-moving-targets-in-permanent-docs:
   distinguish prose-narrative from code-block backtick contexts**
@@ -440,8 +445,26 @@ continuity snapshots.
   Graduation-target: pattern file at
   `.agent/memory/active/patterns/structural-enforcer-recursive-
   exclusion.md` (Process category). Trigger-condition: second
-  instance observed (Ferny's PDR-047 fire). Status: `due` —
-  trigger condition fired; ready for graduation in next pass.
+  instance observed (Ferny's PDR-047 fire). Status: graduated
+  2026-05-05 (Ethereal Transiting Comet — pattern landed at
+  `.agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md`
+  with PDR-044 as `related_pdr`, **agent-tier** category (paired
+  with `governance-claim-needs-a-scanner` after assumptions-reviewer
+  challenge to the initial process-tier framing), two worked
+  instances captured in detail with substance-distinctness
+  argument for the ≥2-instance bar, three concrete mechanism
+  shapes named (explicit `exclude_paths`; per-line context
+  exclusion; self-exclusion by placement), structural composition
+  with PDR-047 §Test 3 named explicitly to distinguish
+  exclusion-list-as-mechanism from hedge-as-substance,
+  generalisation table covering ESLint / CI scanners / markdown
+  linters / trip-list documentation; patterns/README.md index
+  updated to Agent (8); `.agent/rules/no-hedging-vocabulary.md`
+  §Excluded Surfaces extended with forward link to the pattern;
+  PDR-047 §Notes intentionally NOT back-amended — Practice-Core
+  portability rule prevents Core → host-pattern references; landed
+  in same atomic commit as the consolidate-docs §Learning-Preservation
+  upward-pointer extension).
 
 + 2026-05-04; **`git commit -- <pathspec>` is the cure for
   peer-staged work in a shared index** (Vining Spreading Seed,

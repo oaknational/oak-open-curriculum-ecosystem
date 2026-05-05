@@ -62,7 +62,12 @@ The list is not exhaustive. New shapes graduate when observed.
 
 The recursive-exclusion pattern is structural: any structural
 enforcer that names its own pathogen must exclude the documents
-that define the pathogen.
+that define the pathogen. The general form lives at
+[`structural-enforcer-recursive-exclusion.md`](../memory/active/patterns/structural-enforcer-recursive-exclusion.md)
+(agent-tier pattern), which names two further mechanism shapes
+beyond `exclude_paths` (per-line context exclusion;
+self-exclusion by placement) and the structural distinction from
+PDR-047 §Test 3 hedge-as-substance.
 
 ## False Positives Are A Design Property
 

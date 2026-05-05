@@ -208,7 +208,7 @@ surface that makes later governance or enforcement honest.
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (7)
+### Agent (8)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
 - **Governance Claim Needs a Scanner** -- Use this when: an ADR or governance document asserts a universal property across a set of live surfaces (one vocabulary, a required citation, a mandatory field, platform-adapter parity) and prose alone is the only enforcement. → [governance-claim-needs-a-scanner.md](governance-claim-needs-a-scanner.md)
@@ -216,4 +216,5 @@ surface that makes later governance or enforcement honest.
 - **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
 - **Platform Configuration Is Infrastructure** -- Use this when: AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored. → [platform-config-is-infrastructure.md](platform-config-is-infrastructure.md)
 - **Route Reviewers by Abstraction Layer, Not File Scope** -- Use this when: dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke. → [route-reviewers-by-abstraction-layer.md](route-reviewers-by-abstraction-layer.md)
+- **Structural Enforcer Recursive Exclusion** -- Use this when: designing a structural enforcer (hook, scanner, lint rule, regex matcher) that scans for a pathogen across a path scope; the cataloguing documents and tests inside that scope will trip the enforcer on themselves unless explicitly excluded. → [structural-enforcer-recursive-exclusion.md](structural-enforcer-recursive-exclusion.md)
 - **Parallel `isolation:"worktree"` Dispatch Is Unreliable** -- Use this when: considering a parallel `Agent` batch with `isolation:"worktree"` for non-trivial work that depends on a specific branch HEAD or specific repo state. → [parallel-worktree-dispatch-unreliable.md](parallel-worktree-dispatch-unreliable.md)
