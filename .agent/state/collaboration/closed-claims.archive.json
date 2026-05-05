@@ -8005,6 +8005,148 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:32:28Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit step-05 doc-cleanup bundle (BF-2/3/4/5/6/7/8): 15 files removing stale references to retired smoke-tests harness, plus 3 .agent/state/ coordination files.",
+      "notes": "Pathspecs: README.md; apps/oak-curriculum-mcp-streamable-http/{README,TESTING,docs/vercel-environment-config,e2e-tests/{auth-bypass,enum-validation-failure,validation-failure}.e2e.test}; docs/architecture/architectural-decisions/{121,147,083,063}-*.md; docs/operations/{troubleshooting,elasticsearch-ingest-lifecycle,sentry-deployment-runbook}.md; agent-tools/docs/agent-support-tools-specification.md; .agent/state/collaboration/{active-claims.json,closed-claims.archive.json,shared-comms-log.md}. Peer claims: Moonlit 8ed6386d (smoke-tests scope, file-disjoint), Gnarled f6cb8eb1 (.agent/analysis paths, file-disjoint). Gnarled's three pre-staged files NOT in my pathspec — will remain staged after my commit.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T08:59:50Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Navigating Rudder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "dd239f"
+        },
+        "summary": "Step-05 commit window closed cleanly. Four chunks landed: 434cf6f6 (doc-cleanup BF-2/3/4/5/6/7/8 + state files), a1c95cd9 (Gnarled's practice-context-cost baseline + post-handoff continuity), 46da1325 (step-05 comms events + queue residual), 2d8b9b77 (Gnarled's second experience capture). Owner direction 'commit all files in sensible chunks' executed; tree clean except residual queue-churn in active-claims.json which closes with this claim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "037d0290-3c1c-4eb2-848f-383f4a916033",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-sonnet-4-6",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".husky/pre-push",
+            ".github/workflows/ci.yml",
+            "apps/oak-curriculum-mcp-streamable-http/README.md",
+            "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/**/*.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/**/*.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:05:18Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Step 05: apply backfill findings. Fix BF-1a/b (pre-push+CI smoke:dev:stub), BF-5 (dead link), C1 (boundary-crossing import relocation), CR1 (conditional-branch test-immediate-fail), P2 doc fixes. Each fix is its own atomic commit.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T08:59:50Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Navigating Rudder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "dd239f"
+        },
+        "summary": "Step-05 partial: doc-cleanup portion (BF-1a/b at ef593be9; BF-2 through BF-8 at 434cf6f6) landed under this session. Remaining named violations C1 (boundary-crossing import relocation; 13 consumers), CR1 (conditional-branch test-immediate-fail in 2 integration tests), BF-T1 (duplicated assertions), BF-9/T2/T3 (P3 dispositions), and BF-C1-ESLint guard remain pending for the continuation session that owner indicated they would start. This session is closing under owner direction 'commit all files in sensible chunks'.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "037d0290-3c1c-4eb2-848f-383f4a916033",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8a492900-f37e-426f-921a-1f6933e525c9",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            "apps/oak-curriculum-mcp-streamable-http/TESTING.md",
+            "apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md",
+            "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
+            "docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md",
+            "docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md",
+            "docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md",
+            "docs/operations/troubleshooting.md",
+            "docs/operations/elasticsearch-ingest-lifecycle.md",
+            "docs/operations/sentry-deployment-runbook.md",
+            "agent-tools/docs/agent-support-tools-specification.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:21:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Step 05 doc-cleanup: BF-2 (ADR-121, ADR-147 stale gate matrix), BF-3 (root README jq line), BF-4 (ops docs + ADRs 083/063 + agent-tools spec stale smoke refs), BF-7 (TESTING.md pnpm qg), BF-8 (vercel-config LOG_LEVEL). Doc files outside step-05 claim 037d0290's pathspecs.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T09:00:16Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Navigating Rudder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "dd239f"
+        },
+        "summary": "Doc-cleanup scope (BF-2/3/4/5/6/7/8) landed at 434cf6f6. All eleven doc files in the claim pathspec covered.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8a492900-f37e-426f-921a-1f6933e525c9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
