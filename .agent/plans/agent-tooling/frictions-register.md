@@ -264,6 +264,54 @@ dedicated plan that this entry points to.
   `feat(agent-tools): improve collaboration cli ergonomics` bundle
   whether the gap is closed; if not, list as open.
 
+### F-12 — `claims open --area-kind` accepted values not discoverable
+
+- **Source**: napkin 2026-05-05 (Deep Rolling Archipelago, `02f5f5`) Surprise
+  on PR-93 PR-description claim attempt with `--area-kind external`; second
+  worked instance Riverine Fishing Rudder (`b89da0`) 2026-05-05 reaching for
+  `--area-kind file` (singular) before discovering the canonical value is
+  `files` (plural)
+- **Surface**: `pnpm agent-tools:collaboration-state -- claims open`
+- **Observed**: Help text shows `--area-kind <kind>` without enumerating the
+  accepted values. Agents reach for intuitive shapes (`external`, `file`,
+  `shared-state`) and hit `unsupported area kind: <value>` without any hint
+  of the canonical set. Discovery requires source-grep against
+  `parseAreaKind` in
+  `agent-tools/src/collaboration-state/cli-claim-commands.ts`. The accepted
+  set is `files | workspace | plan | adr | git`.
+- **Expected**: Help text enumerates accepted `--area-kind` values inline.
+  Error path on unsupported value lists the accepted set.
+  Full-help-on-invalid-flag (F-09) composes with this.
+- **Candidate cure**: Inline enumeration in CLI help (e.g.
+  `--area-kind <files|workspace|plan|adr|git>`) AND on-error message that
+  lists accepted values. Same pattern applies to other closed enums in
+  `cli-options.ts` — generalise as a discoverability convention.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`
+  and `cli-options.ts`
+- **Status**: open
+- **Owner direction**: standing (full-help-on-invalid-flags, F-09)
+
+### F-13 — `comms send` does not print event-id and path on success
+
+- **Source**: comms event `bdf1c973` (Vining Growing Meadow, `92cb10`,
+  2026-05-05 session-close note); reaffirmed 2026-05-05 by
+  Riverine Fishing Rudder (`b89da0`) needing `ls -lt comms-events/` to
+  confirm landing
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms send`
+- **Observed**: Successful invocation produces no observable confirmation
+  that the event was written or where. Agents fall back to listing the
+  events directory by mtime to verify the write landed. Failure messages
+  are also frequently truncated by the shell pipeline (echo of long --body
+  argument visually consumes the error tail).
+- **Expected**: A single line on success printing the event id and the
+  written path, e.g. `Wrote event <event_id> to <events_dir>/<event_id>.json`.
+  Owner-flagged shape suggested at session close: discoverability of write
+  outcome should be loop-closing.
+- **Candidate cure**: Print the success line. Composes with F-09 (full
+  help on invalid flags) and the broader CLI-discoverability theme.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
+- **Status**: open
+
 ---
 
 ## Mitigated / Addressed Frictions
