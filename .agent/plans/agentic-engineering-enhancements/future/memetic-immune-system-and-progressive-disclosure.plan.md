@@ -178,7 +178,10 @@ A given workstream promotes from `future/` to `current/` when:
 
 ### For the triggered rule loading pilot
 
-- A baseline measurement of session-open context cost exists.
+- A baseline measurement of session-open context cost exists. **First
+  baseline captured 2026-05-05** at
+  [`practice-context-cost-baseline.md`](../../../analysis/practice-context-cost-baseline.md);
+  refinement targets named in §Refinement Targets of that file.
 - An owner direction confirms a small reversible pilot is
   acceptable (the calibration risk is real per PDR-044 §autoimmunity
   safeguard).
@@ -312,6 +315,82 @@ miss, expand. If silent misses appear, retreat.
 
 ---
 
+## Scope Expansion Register
+
+Items deliberately deferred from the first measurement pass. Recorded
+here so the scope is visible and not absorbed silently into adjacent
+work. Each item is gated on baseline-driven evidence before promoting
+to executable scope; the first baseline is at
+[`practice-context-cost-baseline.md`](../../../analysis/practice-context-cost-baseline.md).
+
+### 1. Agent-tools CLI for passive harvest + token estimation
+
+**Substance**: a vendor-agnostic CLI (likely
+`pnpm agent-tools:context-cost` or similar) wrapping the passive-harvest
+methodology described in the baseline file. Inputs: a session JSONL
+path or directory, optional date range, optional file-glob for the
+always-on tier estimate. Outputs: structured per-file + aggregate
+token estimate.
+
+**Promotion gate**: a second consumer of the harvest logic emerges
+(cross-platform aggregation, automated baseline refresh, or CI
+fitness-pass extension). Until then the bash one-liner in the baseline
+methodology is sufficient.
+
+**Eventual home**: `agent-tools/` workspace.
+
+### 2. Token-estimate fields in standard fitness frontmatter
+
+**Substance**: extend the fitness frontmatter schema to include
+`fitness_token_target` and `fitness_token_limit`, mirroring the
+existing `fitness_line_target` / `fitness_line_limit` /
+`fitness_char_limit` shape. Surfaces the meaningful unit (tokens)
+alongside the proxy units (lines, chars).
+
+**Promotion gate**: owner direction confirmed (2026-05-05); schedule
+to be set by owner.
+
+**Eventual home**: fitness validator schema and all files currently
+carrying fitness frontmatter.
+
+### 3. Fitness reporter renders tokens alongside chars
+
+**Substance**: extend the fitness report
+(`pnpm practice:fitness:informational` and the strict-hard variant) to
+surface estimated token counts in the per-file rows. Token counts
+derive from `chars / 4` until a more accurate estimator is wired in.
+
+**Promotion gate**: depends on §2 (fields exist in schema) for
+target/limit comparison. The informational figure can land
+independently before targets are authored per file.
+
+**Eventual home**: the fitness reporter implementation.
+
+### 4. Fitness frontmatter mandation across agent guidance files
+
+**Substance**: extend the existing fitness-frontmatter convention to
+include all agent guidance files: rules (`.agent/rules/*.md`), skills
+(`.agent/skills/**/SKILL.md`), commands (`.agent/commands/*.md`),
+practice-core surfaces. Entry points (`CLAUDE.md`, `AGENT.md`) remain
+exempt — they are already simple pointers under existing discipline.
+
+**Promotion gate**: baseline data (refinement targets ⇒ multi-session
+aggregation) identifies guidance files whose size warrants per-file
+targets/limits rather than uniform treatment; three+ files showing
+meaningful divergence from a uniform default justifies the cross-cutting
+mandate.
+
+**Eventual home**: rule, skill, command, and practice-core file
+authoring conventions; documented in
+[`extending.md`](../../../../docs/engineering/extending.md) or successor.
+
+---
+
+These four items collectively are the in-scope expansion enabled by
+the first baseline pass. They are NOT promoted by this baseline; they
+are recorded so subsequent owner direction can sequence them against
+empirical evidence.
+
 ## References
 
 - [PDR-044 — Memetic Immune System](../../../practice-core/decision-records/PDR-044-memetic-immune-system.md)
@@ -319,6 +398,9 @@ miss, expand. If silent misses appear, retreat.
 - [PDR-018 §Beneficial prerequisites must not block](../../../practice-core/decision-records/PDR-018-planning-discipline.md)
 - [PDR-039 — external findings reveal local detection gaps](../../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md)
 - [ADR-135 — Agent classification taxonomy](../../../../docs/architecture/architectural-decisions/135-agent-classification-taxonomy.md)
+- [practice-context-cost-baseline.md](../../../analysis/practice-context-cost-baseline.md)
+  — first baseline measurement (2026-05-05); evidence surface for the
+  Workstream 4 promotion gate.
 - [doctrine-enforcement-quick-wins.plan.md](../current/doctrine-enforcement-quick-wins.plan.md)
 - [agent-classification-taxonomy.plan.md](agent-classification-taxonomy.plan.md)
   (the existing taxonomy-rename plan; this strategic plan does *not*

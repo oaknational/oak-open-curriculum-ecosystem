@@ -33,6 +33,15 @@ and practice questions.
     (Slice A governance projects, Slice B practice-methodology primitives,
     Slice C cross-lane survey, Slice D adjacent enablers). Pairs with the
     governance-concepts baseline above.
+- `practice-context-cost-baseline.md`
+  - First baseline of context-window consumption from Practice artefacts
+    (always-on rule tier + entry-point graph + illustrative session journey
+    from the Lacustrine session of 2026-05-04). Captured by passive harvest
+    of existing Claude Code session JSONLs. Supplies the empirical evidence
+    named at
+    [`memetic-immune-system-and-progressive-disclosure.plan.md`](../plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md)
+    §Success Signals as a promotion gate for Workstream 4 (triggered rule
+    loading / progressive disclosure).
 
 Promoted audits and formal syntheses belong in
 [`.agent/reports/agentic-engineering/`](../reports/agentic-engineering/README.md).

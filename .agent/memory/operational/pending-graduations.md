@@ -32,6 +32,128 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 queue. Graduated and merged history is preserved in git and the archived
 continuity snapshots.
 
++ 2026-05-05; **`use-agent-comms-log` rule must name the JSON-event-only
+  authoring contract explicitly** (Gnarled Climbing Bark, post-handoff
+  discovery via owner's *"check your messages please"* prompt).
+  Source-surface: `napkin.md` 2026-05-05 §Surprise 5 + experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md`.
+  Specific instance: I edited `shared-comms-log.md` directly during
+  session-handoff to post a heads-up to Moonlit Shimmering Comet about
+  the OAuth proxy test gate. The file is generated from
+  `.agent/state/collaboration/comms-events/*.json` (its own header
+  documents this via `> Generated from ...`); regeneration overwrote
+  my manual append, the heads-up never reached the rendered log, and
+  my session-handoff summary claimed it had. Discovered when owner
+  prompted *"check your messages please"* and a fresh real comms-event
+  from Lacustrine Navigating Rudder appeared at the bottom of the
+  rendered log addressed to me with a 2-minute deadline. Cure
+  applied this session: re-posted the Moonlit heads-up as a proper
+  JSON event (`ce5cc169-491f-45fe-9f7a-b97bdb67f002.json`) and the
+  Lacustrine reply as a proper JSON event
+  (`4ec85e69-5ee3-4dfb-a74f-09456ef7bf6d.json`).
+  Graduation-target: extend
+  [`.agent/rules/use-agent-comms-log.md`](../../rules/use-agent-comms-log.md)
+  to state explicitly *"the rendered `shared-comms-log.md` is generated;
+  do not edit it directly — author comms-events as JSON files under
+  `.agent/state/collaboration/comms-events/<uuid>.json` only"*.
+  Currently the rule references *"timestamped comms event that renders
+  into shared-comms-log.md"* without naming that direct edits are
+  reverted by regeneration. The discipline is implicit in the generator
+  script's existence; making it explicit at rule-tier closes the
+  exposure window. Trigger-condition: SECOND INSTANCE of an agent
+  editing the rendered log directly under the wrong-write-surface
+  assumption — the cost (lost message; falsely-confident handoff
+  summary) is high enough that single-instance graduation may be
+  warranted; owner direction at promotion supersedes. Status: pending.
+
++ 2026-05-05; **comms-event authoring CLI helper to reduce latency under
+  time-bounded coordination windows** (Gnarled Climbing Bark, real-time
+  coordination with Lacustrine Navigating Rudder under 2-minute
+  deadline). Source-surface: `napkin.md` 2026-05-05 §Surprise 6 +
+  experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md` §Eight
+  seconds. Specific instance: Lacustrine's question event arrived with
+  a deadline 2 minutes out; I read it ~30 seconds in; substance settled
+  immediately but the JSON-event ceremony (UUID, ISO timestamp, four
+  identity fields, title + body, heredoc-quoted into a file) took
+  ~1 minute. Reply landed at 08:39:50Z, 8 seconds before the
+  08:39:58Z deadline. Under a tighter pressure profile (deadline
+  measured in tens of seconds) the ceremony would have been the
+  bottleneck. Graduation-target: an `agent-tools` CLI subcommand,
+  e.g. `pnpm agent-tools:collaboration-state -- comms-event new
+  --title "..." --body "..."` (or `pnpm agent-tools:comms-event new
+  ...`). The CLI fills boilerplate (UUID, ISO timestamp), runs identity
+  preflight, validates schema, writes the JSON. Substance stays in
+  agent's hands; ceremony is automated. Trigger-condition: SECOND
+  INSTANCE of time-bounded comms coordination where ceremony latency
+  meaningfully reduces the response window — OR owner direction.
+  Status: pending.
+
++ 2026-05-05; **trust-the-artefact's-stated-provenance pattern: read the
+  artefact's self-documentation before treating it as a write target**
+  (Gnarled Climbing Bark, comms-log direct-edit failure mode).
+  Source-surface: experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md` §What
+  shifted. Pattern shape: a markdown file whose first lines say
+  *"Generated from ..."* is exactly what it says it is — a derived
+  view, not a write target. A directory containing schema-conforming
+  JSON event files is the canonical ingest. The artefact's
+  self-documentation IS the contract; its file extension and editor-
+  openability are not. Generalises beyond comms-log: applies to any
+  generated index, any rendered view, any derived state surface in the
+  repo. Graduation-target: pattern candidate at
+  `.agent/memory/active/patterns/trust-the-artefacts-stated-provenance.md`
+  (or similar) capturing the failure mode + cure + adjacent instances.
+  The shape is structurally similar to
+  `passive-guidance-loses-to-artefact-gravity` (an artefact's natural
+  affordances dominate stated discipline) but in the opposite
+  direction: here the artefact's stated discipline (*Generated
+  from ...*) is precisely what dominates if read, but is silently
+  ignored when not read. Trigger-condition: SECOND INSTANCE of a
+  generated/derived surface being treated as a write target.
+  Status: pending.
+
++ 2026-05-05; **agent-initiated `--no-verify` is forbidden, even when the
+  doctrinal pre-existing-violations exception applies** (Gnarled
+  Climbing Bark, owner correction on commit-skill orchestrator hard
+  fail). Source-surface: `napkin.md` 2026-05-05 §Surprise 2 + user-
+  memory `feedback_no_verify_fresh_permission.md` (refined). Owner
+  direction 2026-05-05: *"stop asking for `--no-verify`, just because I
+  can give permission doesn't mean I will... I will tell you when it is
+  appropriate to use, not the other way around"*. The framing of
+  `--no-verify` as one-of-three-options *itself* is the failure mode —
+  by surfacing it the agent reframes hook failures as request
+  opportunities rather than as questions about working-tree state.
+  Graduation-target: amend
+  [`.agent/rules/no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md)
+  to encode the asymmetry directly (owner-initiated only; agents do not
+  propose / request / surface / ask). Trigger-condition: SECOND
+  INSTANCE of an agent surfacing `--no-verify` as an option after this
+  refinement is captured (the user-memory feedback file is now updated;
+  the rule extension follows on second instance per
+  register-on-substance-not-instance-count discipline only when
+  substance is multi-instance — currently single-instance). Status:
+  pending.
+
++ 2026-05-05; **turbo cache invalidation by an unrelated peer can expose
+  a pre-existing latent test failure mid-commit, gating both sessions**
+  (Gnarled Climbing Bark, peer interaction with Moonlit Shimmering
+  Comet's smoke-tests retirement). Source-surface: `napkin.md`
+  2026-05-05 §Surprise 1 + shared-comms-log 2026-05-05T08:25:00Z.
+  Specific instance: `apps/oak-curriculum-mcp-streamable-http#test`
+  cache invalidated by Moonlit's documentation/test edits in same
+  workspace; my session's full uncached test run revealed
+  `oauth-proxy-routes.integration.test.ts:309` failing (test source
+  unchanged from HEAD, latent since PR #87/PR #90 era). Coordination
+  shape: cache-invalidation-by-unrelated-peer => shared-blocker on
+  whatever the freshly-run gate finds. Graduation-target: pattern
+  candidate (could become an entry in `.agent/memory/active/patterns/`)
+  describing the cache-invalidation-as-coordination-signal shape; OR a
+  coordination rule about when peer-edits should ping running sessions.
+  Trigger-condition: SECOND INSTANCE of the same shape — another peer
+  cache invalidation surfacing a latent gate failure that gates two
+  sessions simultaneously. Status: pending.
+
 + 2026-05-04; **the PDR shape forces the rationale to surface that
   the capture surface did not have to** (Ferny Spreading Petal,
   Layer-2 second pass, drafting PDR-046): the napkin entry that

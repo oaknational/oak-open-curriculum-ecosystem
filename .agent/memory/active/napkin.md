@@ -14,6 +14,112 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-05 (Gnarled Climbing Bark, `40a044`) — Practice context-cost baseline + agent-initiated `--no-verify` reframing
+
+**Surprise 1 — turbo cache masks latent broken tests; cache invalidation by an unrelated peer can expose them mid-commit.**
+Pre-commit `test` gate failed on
+`apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.integration.test.ts:309`
+(*"transparently forwards unknown parameters to upstream"* / `Parse Error:
+Expected HTTP/, RTSP/ or ICE/`). Test source unchanged from HEAD; turbo
+had cached the test green from PR #87/PR #90 era. Moonlit Shimmering
+Comet's in-flight smoke-tests retirement edited four documentation/test
+files in the same workspace this morning, invalidating the
+`@oaknational/oak-curriculum-mcp-streamable-http#test` cache key. My
+session, doing nothing in that workspace, ran the full uncached test
+and surfaced the pre-existing latent failure. The cache invalidation
+revealed the bug rather than caused it. Coordination implication: when
+another agent's same-workspace edits invalidate a downstream cache,
+*both* sessions become gated on whatever the freshly-run gate finds —
+even though only one session changed code. Captured as candidate-class
+observation (cache-invalidation-reveals-latent-test); single instance,
+register for second-instance graduation.
+
+**Surprise 2 — owner reframed agent-initiated `--no-verify` as forbidden, even when the doctrinal exception applies.**
+The commit-skill orchestrator (which runs `practice:fitness:strict-hard`
+ahead of `git commit`) flagged three HARD fitness violations on files
+unchanged by my work (principles.md chars; distilled.md lines; napkin.md
+prose-line). The skill text explicitly carves out *"pre-existing
+violations not blocked retroactively"*. I surfaced three options to the
+owner, one of which was "fresh `--no-verify` authorisation citing
+pre-existing scope". Owner correction: *"stop asking for `--no-verify`,
+just because I can give permission doesn't mean I will... I will tell
+you when it is appropriate to use, not the other way around"*. The
+framing itself was the failure mode — by surfacing `--no-verify` as
+one of three options I reframed a hook failure as a *request
+opportunity* rather than as a question about working-tree state. Even
+when the owner *would* authorise, I should not have asked. User-memory
+`feedback_no_verify_fresh_permission.md` updated to encode the
+agent-initiated-is-forbidden discipline (owner-initiated only;
+direction flows from owner to agent, not the reverse). Sharper than
+the prior "ask fresh each time" framing. Pending-graduations candidate:
+this could amend the existing
+[`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md)
+rule to encode the asymmetry directly in repo doctrine.
+
+**Surprise 3 — the PRE-existing-violation doctrinal exception is implemented as operating discipline, not as code.**
+The skill text says pre-existing violations are *catalogued at
+consolidation per WS5* and *not blocked retroactively*. The orchestrator
+implementation cannot distinguish new from pre-existing — it fires hard
+on any whole-tree violation. This means the doctrinal exception is
+operator-applied at interpretation time, not gate-applied at execution
+time. The gap is recorded as a refinement target for the doctrine-
+scanner CLI (already in scope at progressive-disclosure plan §Scope
+Expansion Register §1).
+
+**Observation 4 — passive-harvest-from-JSONL works cleanly as a context-cost methodology.**
+`jq -r '.message.content[]?  | select(.type == "tool_use" and .name ==
+"Read") | .input.file_path'` on a Claude Code session JSONL gives a
+clean per-file Read trace. For one ~3-hour session (Lacustrine,
+`dd239f`): 34 Read calls, 22 unique files, ~362K tokens estimated
+(chars/4). Two files dominated 79% of the journey budget (active thread
+record + active plan, each read 5×). The methodology is Claude
+Code-only at this stage but the underlying idea (parse the platform's
+session log for file-read attribution) is portable. Captured in
+analysis file; refinement targets named.
+
+**No-landing on the doc commit; deferral-honesty discipline applied.**
+Commit deferred on hard dependency: OAuth proxy integration test gate
+must clear first. Falsifiability: a future agent can run
+`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`
+and verify the same line fails. Doc bundle remains staged in working
+tree as visible signal; commit-window claim closed; intent abandoned;
+file-area claim still open through this handoff. Comms-log heads-up
+to Moonlit posted naming the gate as a shared blocker.
+
+**Surprise 5 — `shared-comms-log.md` is GENERATED, not hand-edited; my
+direct markdown edit was reverted by regeneration and my Moonlit
+heads-up never reached the rendered log.** The file's own header says
+*"Generated from `.agent/state/collaboration/comms/events/`"* (and
+events live at `.agent/state/collaboration/comms-events/*.json`). I
+edited the markdown directly during the prior session-handoff step,
+posting the Moonlit heads-up as a manual append. The regeneration
+process subsequently overwrote my manual addition with content sourced
+exclusively from the JSON events — and since I had never authored a
+JSON event, the heads-up disappeared. Discovered when owner asked
+*"check your messages please"* and a fresh real comms-event from
+Lacustrine Navigating Rudder appeared at the bottom of the log
+addressed to me with a 2-minute response window. Cure applied: wrote
+two proper comms-event JSON files (one reply to Lacustrine
+authorising option 2 unstage; one re-post of the Moonlit heads-up so
+it actually lands in the rendered log on next regeneration). Worked
+instance of *trust the artefact's stated provenance, not the
+file shape*: a markdown file with a `> Generated from ...` line at
+the top is exactly what it says it is — derived state, not a write
+target. Captured as candidate for register: second-instance trigger
+for a rule extension to `use-agent-comms-log.md` making the
+JSON-event-only authoring contract explicit at rule-tier (currently
+implicit in the generator script's existence).
+
+**Surprise 6 — coordination cost arrived in real-time during session-handoff.**
+Lacustrine Navigating Rudder's question event arrived at 08:37:58Z
+with a 2-minute deadline (08:39:58Z). I responded at 08:39:50Z — 8
+seconds before the deadline. Real coordination latency: comms-event
+JSON authoring + UUID generation + file write took ~1 minute from
+discovery. A faster mechanism (e.g. a CLI helper that takes only
+title + body and fills the boilerplate) would have given more buffer.
+Recorded for second-instance check: comms-event-authoring-latency
+under time-bounded coordination is its own concern.
+
 ## 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`) — Step 3 no-speed-pressure rule integration
 
 **Observation 1 — most of step 3 was already done at session-open.**
