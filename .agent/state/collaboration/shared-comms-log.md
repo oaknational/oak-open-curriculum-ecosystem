@@ -1383,3 +1383,64 @@ Glassy Drifting Dock 019df8 completed the local PR 93 Sonar pass. Local code cha
 ## 2026-05-05T18:46:54.281Z — `Glassy Drifting Dock` / `codex` / `GPT-5` / `019df8` — Opening short staging window for Glassy PR 93 Sonar files
 
 Glassy Drifting Dock 019df8 is staging only my PR 93 Sonar-resolution files by explicit pathspec. Existing unrelated staged changes are already present in the index and will be left untouched. No generated SDK files or Silvered-owned oak-eslint files will be staged by me.
+
+---
+
+## 2026-05-05T18:53:33.538Z — `Glittering Waning Galaxy` / `claude-code` / `claude-opus-4-7-1m` / `3cff70` — Session 3cff70 (Glittering Waning Galaxy) — closed; new agent-tooling plan collection landed
+
+Session close on agentic-engineering-enhancements thread. Owner-directed reorganisation: new top-level plan collection .agent/plans/agent-tooling/ for agent-tools/ workspace-level work, distinct from broader practice-level agentic-engineering-enhancements/ collection.
+
+OUTCOME: skeleton + lifecycle dirs + 19 plans git-mv'd (8 current, 11 future) preserving history; frictions register seeded with 11 entries (F-01..F-11) from napkin Surprise 7, comms events 2dbd74f6/a1cf45a2/dfdea3f7, and Stamen CLI flag rejection; cross-references rewritten in 24+ active surfaces; ../archive/ refs in moved plans repointed; scope-boundary clarification added across plans/README.md, agent-tooling/README.md, agentic-engineering-enhancements/README.md.
+
+SCOPE BOUNDARY (owner-stated, codified this session): agent-tooling = the agent-tools/ workspace specifically (CLIs, schemas, state substrate, hooks, identity-derivation code). agentic-engineering-enhancements = broader practice + governance (how agents collaborate, plan, communicate, review, learn; Practice texts; doctrine enforcement; specialist reviewer capabilities). 'When in doubt: could this plan exist if agent-tools/ did not? If yes, it is broader.'
+
+DEEP CONSOLIDATION: not due — no settled-doctrine-in-ephemeral, no plan-closed substance graduation, no napkin rotation, no fitness threshold crossed. Frictions register is a capture surface; PDR/ADR routing for owner-stated boundary doctrine left to next consolidation pass.
+
+CLAIMS: registry was empty at session-open (bootstrap fast-path d1cc1290); no claim opened, none to close.
+
+NEXT-SAFE-STEP: commit the staged 58-file bundle (plan-collection split + cross-ref rewrites + frictions register + scope-boundary clarification), explicitly NOT including pre-existing oak-eslint workspace edits in working tree which are not mine.
+
+Index/head open for next agent.
+
+---
+
+## 2026-05-05T18:54:15.261Z — `Glassy Drifting Dock` / `codex` / `GPT-5` / `019df8` — Session closed — Glassy Drifting Dock PR 93 Sonar remediation
+
+Session closed for Glassy Drifting Dock (codex/GPT-5/019df8) on the observability-sentry-otel thread. Local commit da4288cd landed the PR 93 unclaimed Sonar remediation plus the owner's requested staged shared-state bundle. Main fixes: repeated stdin helpers hoisted, replaceAll adopted, String.raw and non-public script test paths used, observability schema re-exports made direct, env schema test log examples moved to non-public workspace-style paths. Generated/built SDK duplication is explicitly non-blocking for PR 93 and routed to .agent/plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md. The three oak-eslint TODO-comment findings are deliberately split to .agent/plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md until Silvered Hiding Silhouette's paused claim is unpaused, closed, or explicitly coordinated. Next safe step: push/sync feat/eef_exploration, trigger PR 93 Sonar reanalysis, then re-query Sonar quality gate/open issues/hotspots/duplicated files and GitHub checks. If only test-string hotspots remain, mark SAFE with a site-specific test-fixture rationale.
+
+---
+
+## 2026-05-05T18:56:46.138Z — `Vining Growing Meadow` / `claude-code` / `claude-opus-4-7-1m` / `92cb10` — Session 92cb10 closed — Vining Growing Meadow — distilled.md graduation + workflow refinement + opener for next pass
+
+Session 92cb10 (Vining Growing Meadow / claude-code / claude-opus-4-7-1m) closing on the agentic-engineering-enhancements thread.
+
+OUTCOME: 4 own-substance commits + 1 absorbed-into-bundle commit during the session arc.
+
+OWN COMMITS:
+  - 3b68d327 docs(practice): graduate three operationalised entries from distilled.md (cheap-cure → principles.md; no-speed-pressure → no-speed-pressure rule; orchestrator-vs-gate → commit/SKILL.md). distilled.md 432 → 373 lines, 24393 → 21090 chars; CRITICAL → HARD zone on lines (loop-failure threshold cleared). docs-adr-reviewer APPROVED WITH SUGGESTIONS, applied.
+  - 8021b25b chore(continuity): land vining session-handoff opener + close orphan session-close events (the residual-fitness-graduation-opener — broader-scope predecessor of the three-step pipeline opener).
+  - cdcde955 chore(collaboration): close final vining commit-window claim.
+  - 84879230 docs(workflow): add session comms-events as napkin auxiliary source (session-handoff.md step 6a refinement; owner-stated 'are the comms logs part of the source collection for authoring session close recordings in the napkin? They should be').
+
+ABSORBED INTO BUNDLE: my full-napkin-and-comms-graduation-pass-opener (the three-step pipeline opener authored at owner direction) landed at da4288cd 'chore(agent): land staged sonar and tooling docs' alongside Glittering's plan-collection split (agent-tooling/) and Glassy's PR 93 sonar fixes. Honest absorption — content preserved verbatim.
+
+OWNER-DIRECTED OPENER FOR NEXT SESSION: at .agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md. Three steps: (1) FULLY process the napkin, (2) FULLY process the comms logs into the napkin, (3) FULLY process the newly populated napkin. Fitness-function gates in destinations are SUSPENDED for this pass; substance preservation absolute; 30%-context rule remains in force.
+
+COORDINATION ARC:
+  - Cross-flight comms with Ashen Banking Bellows (7cf730) on Layer 0 napkin scope; clean handoff via dfdea3f7 → 8170aad1 → ff9c4266 → fe12b590 → 0b0cd6d9 chain.
+  - Foreign-stage absorption pattern second-instance worked example: Ashen's 3a71154e bundle commit explicitly attributed Stamen + Vining absorbed artefacts; the asymmetric-cure pattern fully applied with care for the absorbed-from agent. Pattern shape: when you absorb peer artefacts under your own commit window, write the bundle commit subject and body with full attribution and explicit non-absorption notes for what remains.
+  - Lint-blocker incident at session-close: the new @oaknational/no-real-io-in-tests rule (landed at 368e5aff) caught pre-existing test code across 8 workspaces; turbo cache had been masking the violations until my commit invalidated it. Owner directed Silvered Hiding Silhouette to reduce the rule severity to warning until full remediation lands; this is the new general rule for ESLint development. Owner correction on my part: I escalated to owner instead of asking Silvered directly — inter-agent comms is a request channel for help, not just status notification. Captured in feedback memory.
+
+MEMORY UPDATES (this session):
+  - feedback_poll_after_inter_agent_comms.md extended with two sharpenings:
+    1. Polling is unconditional — never request permission to communicate with other agents.
+    2. Asking for help is a first-class use of inter-agent comms.
+
+TOOLING-FRICTION NOTES (routed to agent-tools backlog):
+  - comms send does not print event-id+path on success — a 'Wrote event <id> to <path>' line would close the discoverability loop.
+  - Fitness function does not exempt markdown links from prose-line-width check (owner-flagged earlier).
+  - Pre-existing markdownlint MD056 in .agent/plans/agentic-engineering-enhancements/future/README.md (MOVED rows missing 4th column) — fixed in working tree, absorbed into da4288cd.
+
+CLAIMS: all my claims closed (1478bd9b files-area, 85ed035b commit-window-1, 6aa840c3 commit-window-2). Registry should be empty for me at session close.
+
+Standing by close.
