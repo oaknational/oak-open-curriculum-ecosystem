@@ -91,7 +91,7 @@
       "staged_name_status": "M\t.agent/analysis/README.md\nA\t.agent/analysis/practice-context-cost-baseline.md\nM\t.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tREADME.md\nM\tagent-tools/docs/agent-support-tools-specification.md\nM\tapps/oak-curriculum-mcp-streamable-http/README.md\nM\tapps/oak-curriculum-mcp-streamable-http/TESTING.md\nM\tapps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts\nM\tdocs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md\nM\tdocs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md\nM\tdocs/operations/elasticsearch-ingest-lifecycle.md\nM\tdocs/operations/sentry-deployment-runbook.md\nM\tdocs/operations/troubleshooting.md\n"
     },
     {
-      "intent_id": "d342518f-9441-4bc2-be9b-8f2cf46944e0",
+      "intent_id": "298e20b9-3d61-40fd-86fe-66c972d0601f",
       "claim_id": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
       "agent_id": {
         "agent_name": "Lacustrine Navigating Rudder",
@@ -100,32 +100,18 @@
         "session_id_prefix": "dd239f"
       },
       "files": [
-        "README.md",
-        "apps/oak-curriculum-mcp-streamable-http/README.md",
-        "apps/oak-curriculum-mcp-streamable-http/TESTING.md",
-        "apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md",
-        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts",
-        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts",
-        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts",
-        "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
-        "docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md",
-        "docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md",
-        "docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md",
-        "docs/operations/troubleshooting.md",
-        "docs/operations/elasticsearch-ingest-lifecycle.md",
-        "docs/operations/sentry-deployment-runbook.md",
-        "agent-tools/docs/agent-support-tools-specification.md",
         ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/shared-comms-log.md"
+        ".agent/state/collaboration/comms-events/aaa282e6-d474-40c1-8db2-aefdc2f188d6.json",
+        ".agent/state/collaboration/comms-events/4ec85e69-5ee3-4dfb-a74f-09456ef7bf6d.json",
+        ".agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json"
       ],
-      "commit_subject": "docs: remove stale references to retired smoke testing harness",
-      "queued_at": "2026-05-05T08:43:54.731Z",
-      "updated_at": "2026-05-05T08:44:19.671Z",
-      "expires_at": "2026-05-05T08:58:54.731Z",
+      "commit_subject": "chore(collaboration): land step-05 comms events and queue residual",
+      "queued_at": "2026-05-05T08:57:04.309Z",
+      "updated_at": "2026-05-05T08:57:06.423Z",
+      "expires_at": "2026-05-05T09:12:04.309Z",
       "phase": "staging",
-      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tREADME.md\nM\tagent-tools/docs/agent-support-tools-specification.md\nM\tapps/oak-curriculum-mcp-streamable-http/README.md\nM\tapps/oak-curriculum-mcp-streamable-http/TESTING.md\nM\tapps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts\nM\tdocs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md\nM\tdocs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md\nM\tdocs/operations/elasticsearch-ingest-lifecycle.md\nM\tdocs/operations/sentry-deployment-runbook.md\nM\tdocs/operations/troubleshooting.md\n",
-      "staged_bundle_fingerprint": "3288d836b393fda5dddf93a4fd2648ad58760ede2b503bc668373c88ebd6dcd0"
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/4ec85e69-5ee3-4dfb-a74f-09456ef7bf6d.json\nA\t.agent/state/collaboration/comms-events/aaa282e6-d474-40c1-8db2-aefdc2f188d6.json\nA\t.agent/state/collaboration/comms-events/ce5cc169-491f-45fe-9f7a-b97bdb67f002.json\n",
+      "staged_bundle_fingerprint": "970a39024f4532d5a840c535a344cdc8ffa286ec80fdc8c7022d8c2aecf7e1d2"
     }
   ],
   "claims": [
@@ -245,7 +231,7 @@
       "sidebar_open": false,
       "intent": "Stage and commit step-05 doc-cleanup bundle (BF-2/3/4/5/6/7/8): 15 files removing stale references to retired smoke-tests harness, plus 3 .agent/state/ coordination files.",
       "notes": "Pathspecs: README.md; apps/oak-curriculum-mcp-streamable-http/{README,TESTING,docs/vercel-environment-config,e2e-tests/{auth-bypass,enum-validation-failure,validation-failure}.e2e.test}; docs/architecture/architectural-decisions/{121,147,083,063}-*.md; docs/operations/{troubleshooting,elasticsearch-ingest-lifecycle,sentry-deployment-runbook}.md; agent-tools/docs/agent-support-tools-specification.md; .agent/state/collaboration/{active-claims.json,closed-claims.archive.json,shared-comms-log.md}. Peer claims: Moonlit 8ed6386d (smoke-tests scope, file-disjoint), Gnarled f6cb8eb1 (.agent/analysis paths, file-disjoint). Gnarled's three pre-staged files NOT in my pathspec — will remain staged after my commit.",
-      "intent_to_commit": "d342518f-9441-4bc2-be9b-8f2cf46944e0"
+      "intent_to_commit": "298e20b9-3d61-40fd-86fe-66c972d0601f"
     }
   ]
 }
