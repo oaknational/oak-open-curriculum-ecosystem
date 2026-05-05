@@ -152,25 +152,6 @@
       "staged_bundle_fingerprint": "18e1caa257e5a85fe65005782ca625d007dd1bdc0fb41b0c3b730b8a0a4af0c5",
       "staged_name_status": "M\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/2e2bfb5a-017a-42c2-82a4-ae02de215c1a.json\nA\t.agent/state/collaboration/comms-events/b649b716-266c-47f4-81d1-da161a929ea5.json\nM\tapps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts\n",
       "notes": "Pre-existing fitness violations on peer-authored files (.agent/directives/principles.md hard chars; .agent/memory/active/distilled.md hard lines; .agent/memory/active/napkin.md critical lines+chars+max-prose; .agent/memory/operational/pending-graduations.md hard lines+chars) block the practice:fitness:strict-hard gate orchestrator. None of these files are in my staged set (CR1 fix + plan body + thread record + 2 comms events + 2 collaboration-state files). This is the same structural gap Lacustrine documented in their napkin Surprise 3 (orchestrator has no staged-set awareness). Per feedback_no_verify_fresh_permission, agent does not propose --no-verify; surfacing to owner for direction."
-    },
-    {
-      "intent_id": "79145635-c161-4ea9-8bde-c5c18daa585d",
-      "claim_id": "bac442c6-98f5-4ab3-b162-d2a1681c8f42",
-      "agent_id": {
-        "agent_name": "Dawnlit Transiting Galaxy",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "0ddc89"
-      },
-      "files": [
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json"
-      ],
-      "commit_subject": "chore(collaboration): close session-handoff commit-window claim",
-      "queued_at": "2026-05-05T11:20:42.365Z",
-      "updated_at": "2026-05-05T11:20:52.647Z",
-      "expires_at": "2026-05-05T11:35:42.365Z",
-      "phase": "staging"
     }
   ],
   "claims": [
@@ -235,30 +216,6 @@
       "sidebar_open": false,
       "intent": "Layer 0 → 1 napkin rotation per consolidate-docs §6: archive full napkin to archive/napkin-2026-05-05.md (no compression), extract behaviour-changing distillations into distilled.md, start fresh napkin keyed on this session. PDR-046 §Move 1/2/3 traversal.",
       "notes": "No conflict with Dawnlit (observability files) or Moonlit (smoke-tests retirement files). All target files are governance/memory surfaces on the agentic-engineering-enhancements thread."
-    },
-    {
-      "claim_id": "bac442c6-98f5-4ab3-b162-d2a1681c8f42",
-      "agent_id": {
-        "agent_name": "Dawnlit Transiting Galaxy",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "0ddc89"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T11:20:40Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Stage and commit session-handoff git-window claim closure entries.",
-      "notes": "Two-line follow-up to the handoff commit absorbing the post-commit claim-closure index modification.",
-      "intent_to_commit": "79145635-c161-4ea9-8bde-c5c18daa585d"
     }
   ]
 }
