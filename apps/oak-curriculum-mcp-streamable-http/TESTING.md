@@ -131,8 +131,8 @@ it('logs include correlation ID', async () => {
 
 ## Quality Gates
 
-- Run `pnpm qg` at the workspace root after documentation or code changes.
-- Before shipping, repeat `pnpm qg` at the repo root to ensure no other workspaces regressed.
+- Run `pnpm check` at the workspace root after documentation or code changes.
+- Before shipping, repeat `pnpm check` at the repo root to ensure no other workspaces regressed.
 
 ## Troubleshooting
 

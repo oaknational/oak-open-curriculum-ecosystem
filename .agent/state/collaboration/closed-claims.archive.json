@@ -7836,6 +7836,175 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8f165724-2040-4310-a056-fb5a32509fa9",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-sonnet-4-6",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T07:53:55Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit step-04 findings: plan body §Backfill Findings + step 02/04 status updates + thread file.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T07:59:06Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Navigating Rudder",
+          "platform": "claude",
+          "model": "claude-sonnet-4-6",
+          "session_id_prefix": "dd239f"
+        },
+        "summary": "Commit-window claim for step-04 commit. Landed 6c1880c8 clean through full pre-commit chain.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f165724-2040-4310-a056-fb5a32509fa9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7dd8329f-6ca5-4629-8848-f5e7b35631a9",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-sonnet-4-6",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:05:35Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit BF-1a/b fix: remove smoke:dev:stub from pre-push and ci.yml.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T08:06:51Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Navigating Rudder",
+          "platform": "claude",
+          "model": "claude-sonnet-4-6",
+          "session_id_prefix": "dd239f"
+        },
+        "summary": "BF-1a/b commit ef593be9: removed smoke:dev:stub from pre-push and ci.yml.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7dd8329f-6ca5-4629-8848-f5e7b35631a9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77e52443-0ca6-44c8-8491-dc5883f5854f",
+      "agent_id": {
+        "agent_name": "Gnarled Climbing Bark",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40a044"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:15:26Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit practice-context-cost baseline + plan scope register",
+      "notes": "Pathspecs: .agent/analysis/practice-context-cost-baseline.md, .agent/analysis/README.md, .agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md. Pre-existing peer changes (Moonlit smoke-tests scope; Lacustrine claim closure) intentionally NOT staged.",
+      "intent_to_commit": "b151ab5f-78fe-49e1-84ed-07a873b8b15e",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T08:24:41Z",
+        "closed_by": {
+          "agent_name": "Gnarled Climbing Bark",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40a044"
+        },
+        "summary": "Commit aborted: pre-commit hook failed on unrelated latent OAuth proxy integration test (oauth-proxy-routes.integration.test.ts L309 forwards-unknown-params). Test source unchanged from HEAD; revealed by turbo-cache invalidation from peer doc edits. Doc bundle remains staged in working tree; awaiting owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77e52443-0ca6-44c8-8491-dc5883f5854f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f6cb8eb1-82a2-4953-930c-bea944b3ca3b",
+      "agent_id": {
+        "agent_name": "Gnarled Climbing Bark",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40a044"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/analysis/practice-context-cost-baseline.md",
+            ".agent/analysis/README.md",
+            ".agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:07:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Land practice-context-cost baseline (always-on rules + illustrative session journey from Lacustrine dd239f, ~362K tokens) under .agent/analysis/, plus plan-body update with baseline link + scope-expansion register (CLI, fitness frontmatter token fields, frontmatter mandation across guidance files, fitness reporter token rendering). Out-of-scope from EEF arc; lands on agentic-engineering-enhancements thread.",
+      "notes": "File-disjoint from active claims; analysis + plan body only",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T08:33:36Z",
+        "closed_by": {
+          "agent_name": "Gnarled Climbing Bark",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40a044"
+        },
+        "summary": "Doc bundle authored complete: practice-context-cost-baseline.md (new analysis), README.md (listing), memetic-immune-system-and-progressive-disclosure.plan.md (success-signals link + four-item Scope Expansion Register). Doc commit deferred per owner direction on unrelated OAuth proxy integration test gate (oauth-proxy-routes.integration.test.ts:309 Parse Error). Heads-up to Moonlit Shimmering Comet posted to shared-comms-log 2026-05-05T08:25:00Z. Bundle remains staged in working tree as visible signal. Re-attempt next session after OAuth gate is unblocked. See repo-continuity.md §Next Safe Step + agentic-engineering-enhancements.next-session.md §Lane State §Next Safe Step lane 0 + napkin 2026-05-05 entry.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f6cb8eb1-82a2-4953-930c-bea944b3ca3b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

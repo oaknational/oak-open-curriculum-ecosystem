@@ -245,16 +245,16 @@ contract for troubleshooting:
    production deploys of the same version (one release → many
    deploys).
 
-## Step 4: Deploy and Smoke Test
+## Step 4: Deploy and Verify
 
 1. Deploy with the new environment variables.
-2. Run the remote smoke test:
-
-   ```bash
-   pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http \
-     smoke:remote --remote-base-url https://<deployment-host>/mcp
-   ```
-
+2. Verify the deployment by issuing a `GET /healthz` (or equivalent
+   liveness check exposed by the MCP server) against the deployment
+   host and confirming a `200` response. Automated post-deploy
+   verification previously scripted via `pnpm smoke:remote` was retired
+   alongside the smoke-tests harness (see ADR-121 change log entry
+   2026-05-04); reattach the verification step to whichever post-deploy
+   workflow the workspace's current operational doctrine designates.
 3. Check Sentry UI for:
    - **Issues**: no new issues from normal operation
    - **Performance**: traces under the correct service name and release

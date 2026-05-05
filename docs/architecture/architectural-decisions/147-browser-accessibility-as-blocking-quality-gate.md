@@ -62,8 +62,8 @@ Both levels are required; neither is sufficient alone.
 
 ### Gate Position
 
-`test:a11y` runs after `test:ui` and before `smoke:dev:stub` in the
-canonical gate sequence. See ADR-121 for the coverage matrix amendment.
+`test:a11y` runs after `test:ui` in the canonical gate sequence
+(`pnpm check`-only). See ADR-121 for the coverage matrix.
 
 ## Rationale
 

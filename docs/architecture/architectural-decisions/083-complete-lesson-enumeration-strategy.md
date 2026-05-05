@@ -247,7 +247,10 @@ pnpm es:status
 # Expected: oak_lessons: ~650+ (was: 314)
 
 # Re-measure MRR baseline
-pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
+# (The hard-query-baseline assertion was previously run via a retired
+# Vitest smoke configuration. Re-attach this measurement under the
+# workspace's current testing strategy when the replacement runner is
+# in place.)
 ```
 
 ## Related Work

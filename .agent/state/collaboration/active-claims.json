@@ -31,27 +31,101 @@
       "notes": "scope expanded under owner direction (PDR-047/048 + principles.md + dev-practice + frontmatter revisions + remediation lane); re-enqueuing with full bundle"
     },
     {
-      "intent_id": "e5125616-fc59-4bc2-b370-e4bd40856d5e",
-      "claim_id": "8f165724-2040-4310-a056-fb5a32509fa9",
+      "intent_id": "b151ab5f-78fe-49e1-84ed-07a873b8b15e",
+      "claim_id": "77e52443-0ca6-44c8-8491-dc5883f5854f",
+      "agent_id": {
+        "agent_name": "Gnarled Climbing Bark",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40a044"
+      },
+      "files": [
+        ".agent/analysis/practice-context-cost-baseline.md",
+        ".agent/analysis/README.md",
+        ".agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md"
+      ],
+      "commit_subject": "docs(practice): land practice-context-cost baseline and scope register",
+      "queued_at": "2026-05-05T08:15:36.475Z",
+      "updated_at": "2026-05-05T08:24:42.960Z",
+      "expires_at": "2026-05-05T08:30:36.475Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "64aadf4f7b7237a61a18a870a5ee3a8e1a324eb3abed192463bb5ab7390284bb",
+      "staged_name_status": "M\t.agent/analysis/README.md\nA\t.agent/analysis/practice-context-cost-baseline.md\nM\t.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md\n",
+      "notes": "Pre-commit hook failed on apps/oak-curriculum-mcp-streamable-http test 'oauth-proxy-routes.integration.test.ts > POST /oauth/token > transparently forwards unknown parameters to upstream' with 'Parse Error: Expected HTTP/, RTSP/ or ICE/'. Test file unchanged from HEAD; cache invalidated by peer doc edits in same workspace exposed latent failure. Out of scope for doc commit. Surfacing for owner direction."
+    },
+    {
+      "intent_id": "a8dd70b5-6288-4423-a7e5-60f1fba2fe23",
+      "claim_id": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
       "agent_id": {
         "agent_name": "Lacustrine Navigating Rudder",
         "platform": "claude",
-        "model": "claude-sonnet-4-6",
+        "model": "claude-opus-4-7-1m",
         "session_id_prefix": "dd239f"
       },
       "files": [
-        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+        "README.md",
+        "apps/oak-curriculum-mcp-streamable-http/README.md",
+        "apps/oak-curriculum-mcp-streamable-http/TESTING.md",
+        "apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts",
+        "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
+        "docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md",
+        "docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md",
+        "docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md",
+        "docs/operations/troubleshooting.md",
+        "docs/operations/elasticsearch-ingest-lifecycle.md",
+        "docs/operations/sentry-deployment-runbook.md",
+        "agent-tools/docs/agent-support-tools-specification.md",
         ".agent/state/collaboration/active-claims.json",
         ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+        ".agent/state/collaboration/shared-comms-log.md"
       ],
-      "commit_subject": "docs(plan): record backfill findings for plan-3 commits; close steps 02+04",
-      "queued_at": "2026-05-05T07:54:10.422Z",
-      "updated_at": "2026-05-05T07:54:26.697Z",
-      "expires_at": "2026-05-05T08:09:10.422Z",
+      "commit_subject": "docs: remove stale references to retired smoke testing harness",
+      "queued_at": "2026-05-05T08:33:00.578Z",
+      "updated_at": "2026-05-05T08:34:06.004Z",
+      "expires_at": "2026-05-05T08:48:00.578Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "33217adc8a328edfd4e73648b095d731e44d31b3a0a169a62882739f13472386",
+      "staged_name_status": "M\t.agent/analysis/README.md\nA\t.agent/analysis/practice-context-cost-baseline.md\nM\t.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tREADME.md\nM\tagent-tools/docs/agent-support-tools-specification.md\nM\tapps/oak-curriculum-mcp-streamable-http/README.md\nM\tapps/oak-curriculum-mcp-streamable-http/TESTING.md\nM\tapps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts\nM\tdocs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md\nM\tdocs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md\nM\tdocs/operations/elasticsearch-ingest-lifecycle.md\nM\tdocs/operations/sentry-deployment-runbook.md\nM\tdocs/operations/troubleshooting.md\n"
+    },
+    {
+      "intent_id": "d342518f-9441-4bc2-be9b-8f2cf46944e0",
+      "claim_id": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "dd239f"
+      },
+      "files": [
+        "README.md",
+        "apps/oak-curriculum-mcp-streamable-http/README.md",
+        "apps/oak-curriculum-mcp-streamable-http/TESTING.md",
+        "apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts",
+        "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
+        "docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md",
+        "docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md",
+        "docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md",
+        "docs/operations/troubleshooting.md",
+        "docs/operations/elasticsearch-ingest-lifecycle.md",
+        "docs/operations/sentry-deployment-runbook.md",
+        "agent-tools/docs/agent-support-tools-specification.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "docs: remove stale references to retired smoke testing harness",
+      "queued_at": "2026-05-05T08:43:54.731Z",
+      "updated_at": "2026-05-05T08:44:19.671Z",
+      "expires_at": "2026-05-05T08:58:54.731Z",
       "phase": "staging",
-      "staged_name_status": "M\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
-      "staged_bundle_fingerprint": "7a7a9b1a2d0ecf296c8f8582d3b5bf2811b66823648b78730fbc60f83ceae08b"
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tREADME.md\nM\tagent-tools/docs/agent-support-tools-specification.md\nM\tapps/oak-curriculum-mcp-streamable-http/README.md\nM\tapps/oak-curriculum-mcp-streamable-http/TESTING.md\nM\tapps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts\nM\tdocs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md\nM\tdocs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md\nM\tdocs/operations/elasticsearch-ingest-lifecycle.md\nM\tdocs/operations/sentry-deployment-runbook.md\nM\tdocs/operations/troubleshooting.md\n",
+      "staged_bundle_fingerprint": "3288d836b393fda5dddf93a4fd2648ad58760ede2b503bc668373c88ebd6dcd0"
     }
   ],
   "claims": [
@@ -88,11 +162,73 @@
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
     },
     {
-      "claim_id": "8f165724-2040-4310-a056-fb5a32509fa9",
+      "claim_id": "037d0290-3c1c-4eb2-848f-383f4a916033",
       "agent_id": {
         "agent_name": "Lacustrine Navigating Rudder",
         "platform": "claude",
         "model": "claude-sonnet-4-6",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".husky/pre-push",
+            ".github/workflows/ci.yml",
+            "apps/oak-curriculum-mcp-streamable-http/README.md",
+            "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/**/*.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/**/*.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:05:18Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Step 05: apply backfill findings. Fix BF-1a/b (pre-push+CI smoke:dev:stub), BF-5 (dead link), C1 (boundary-crossing import relocation), CR1 (conditional-branch test-immediate-fail), P2 doc fixes. Each fix is its own atomic commit."
+    },
+    {
+      "claim_id": "8a492900-f37e-426f-921a-1f6933e525c9",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "dd239f"
+      },
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            "apps/oak-curriculum-mcp-streamable-http/TESTING.md",
+            "apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md",
+            "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
+            "docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md",
+            "docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md",
+            "docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md",
+            "docs/operations/troubleshooting.md",
+            "docs/operations/elasticsearch-ingest-lifecycle.md",
+            "docs/operations/sentry-deployment-runbook.md",
+            "agent-tools/docs/agent-support-tools-specification.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T08:21:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Step 05 doc-cleanup: BF-2 (ADR-121, ADR-147 stale gate matrix), BF-3 (root README jq line), BF-4 (ops docs + ADRs 083/063 + agent-tools spec stale smoke refs), BF-7 (TESTING.md pnpm qg), BF-8 (vercel-config LOG_LEVEL). Doc files outside step-05 claim 037d0290's pathspecs."
+    },
+    {
+      "claim_id": "ab874504-8766-4f27-b0e3-6c1f686b22fb",
+      "agent_id": {
+        "agent_name": "Lacustrine Navigating Rudder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
         "session_id_prefix": "dd239f"
       },
       "thread": "retire-smoke-tests-all-vitest-no-real-io",
@@ -104,11 +240,12 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-05T07:53:55Z",
+      "claimed_at": "2026-05-05T08:32:28Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Stage and commit step-04 findings: plan body §Backfill Findings + step 02/04 status updates + thread file.",
-      "intent_to_commit": "e5125616-fc59-4bc2-b370-e4bd40856d5e"
+      "intent": "Stage and commit step-05 doc-cleanup bundle (BF-2/3/4/5/6/7/8): 15 files removing stale references to retired smoke-tests harness, plus 3 .agent/state/ coordination files.",
+      "notes": "Pathspecs: README.md; apps/oak-curriculum-mcp-streamable-http/{README,TESTING,docs/vercel-environment-config,e2e-tests/{auth-bypass,enum-validation-failure,validation-failure}.e2e.test}; docs/architecture/architectural-decisions/{121,147,083,063}-*.md; docs/operations/{troubleshooting,elasticsearch-ingest-lifecycle,sentry-deployment-runbook}.md; agent-tools/docs/agent-support-tools-specification.md; .agent/state/collaboration/{active-claims.json,closed-claims.archive.json,shared-comms-log.md}. Peer claims: Moonlit 8ed6386d (smoke-tests scope, file-disjoint), Gnarled f6cb8eb1 (.agent/analysis paths, file-disjoint). Gnarled's three pre-staged files NOT in my pathspec — will remain staged after my commit.",
+      "intent_to_commit": "d342518f-9441-4bc2-be9b-8f2cf46944e0"
     }
   ]
 }

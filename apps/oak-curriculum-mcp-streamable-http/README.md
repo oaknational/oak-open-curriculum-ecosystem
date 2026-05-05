@@ -314,7 +314,7 @@ When configuring MCP clients (like Claude Desktop), they will automatically:
 3. Redirect users to Clerk for authentication
 4. Store and use the resulting access token
 
-See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentation.
+See `docs/dev-server-management.md` for local development and OAuth server setup guidance.
 
 ## Troubleshooting
 
