@@ -90,6 +90,10 @@ export interface CommitQueueCliInput {
   readonly command: string | undefined;
   readonly options: CommitQueueCliOptions;
   readonly repoRoot: string;
+  readonly readRegistry?: (registryPath: string) => Promise<CommitQueueRegistry>;
+  readonly stdout?: {
+    write(chunk: string): void;
+  };
 }
 
 export function isActiveCommitQueuePhase(value: unknown): value is ActiveCommitQueuePhase {

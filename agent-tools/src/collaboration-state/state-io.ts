@@ -17,6 +17,13 @@ import { type ClosedClaimsArchive, type CollaborationRegistry, type CommsEvent }
 export { parseClosedClaimsArchive, parseCollaborationRegistry } from './state-parsers.js';
 
 /**
+ * Read and parse the active claims registry.
+ */
+export async function readActiveClaimsFile(activePath: string): Promise<CollaborationRegistry> {
+  return parseCollaborationRegistry(await readFile(activePath, 'utf8'));
+}
+
+/**
  * Append an immutable communication event by exclusive file create.
  */
 export async function writeCommsEvent(input: {
@@ -41,7 +48,9 @@ export async function readCommsEvents(eventsDir: string): Promise<readonly Comms
   const filenames = await readdir(eventsDir);
   const events: CommsEvent[] = [];
 
-  for (const filename of filenames.filter((entry) => entry.endsWith('.json')).toSorted()) {
+  for (const filename of filenames
+    .filter((entry) => entry.endsWith('.json'))
+    .toSorted((left, right) => left.localeCompare(right))) {
     events.push(parseCommsEvent(await readFile(join(eventsDir, filename), 'utf8')));
   }
 

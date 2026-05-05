@@ -5,6 +5,35 @@ export interface Options {
   readonly files: readonly string[];
 }
 
+const KNOWN_OPTION_KEYS = new Set([
+  'active',
+  'area-kind',
+  'area-pattern',
+  'body',
+  'body-json',
+  'claim-id',
+  'closed',
+  'created-at',
+  'entry-json',
+  'event-id',
+  'events-dir',
+  'file',
+  'help',
+  'intent',
+  'model',
+  'notes',
+  'now',
+  'output',
+  'platform',
+  'repo-root',
+  'shared-log',
+  'summary',
+  'thread',
+  'thread-record',
+  'title',
+  'ttl-seconds',
+]);
+
 export function parseOptions(argv: readonly string[]): Options {
   const normalizedArgv = argv[0] === '--' ? argv.slice(1) : argv;
   const [command, possibleTopic] = normalizedArgv;
@@ -13,18 +42,8 @@ export function parseOptions(argv: readonly string[]): Options {
   const values = new Map<string, string>();
   const files: string[] = [];
 
-  for (let index = 0; index < rest.length; index += 1) {
-    const token = rest[index];
-    const next = rest[index + 1];
-    if (token === '--file') {
-      files.push(requireFlagValue(token, next));
-      index += 1;
-    } else if (token.startsWith('--')) {
-      values.set(token.slice(2), requireFlagValue(token, next));
-      index += 1;
-    } else {
-      throw new Error(`unknown argument: ${token}`);
-    }
+  for (let index = 0; index < rest.length; ) {
+    index = parseToken({ rest, index, values, files });
   }
 
   return { command, topic, values, files };
@@ -53,4 +72,41 @@ function requireFlagValue(flag: string, value: string | undefined): string {
   }
 
   return value;
+}
+
+function parseToken(input: {
+  readonly rest: readonly string[];
+  readonly index: number;
+  readonly values: Map<string, string>;
+  readonly files: string[];
+}): number {
+  const token = input.rest[input.index] ?? '';
+  const next = input.rest[input.index + 1];
+
+  if (token === '--help') {
+    input.values.set('help', 'true');
+    return input.index + 1;
+  }
+  if (token === '--file') {
+    input.files.push(requireFlagValue(token, next));
+    return input.index + 2;
+  }
+  if (token.startsWith('--')) {
+    parseValueOption({ token, next, values: input.values });
+    return input.index + 2;
+  }
+
+  throw new Error(`unknown argument: ${token}`);
+}
+
+function parseValueOption(input: {
+  readonly token: string;
+  readonly next: string | undefined;
+  readonly values: Map<string, string>;
+}): void {
+  const key = input.token.slice(2);
+  if (!KNOWN_OPTION_KEYS.has(key)) {
+    throw new Error(`unknown option: ${input.token}`);
+  }
+  input.values.set(key, requireFlagValue(input.token, input.next));
 }

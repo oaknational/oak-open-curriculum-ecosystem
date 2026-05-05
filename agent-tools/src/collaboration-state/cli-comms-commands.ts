@@ -1,12 +1,17 @@
 import { randomUUID } from 'node:crypto';
+import { existsSync } from 'node:fs';
+import { dirname, join, parse } from 'node:path';
 
 import { renderSharedCommsLog } from './comms.js';
 import { resolveIdentity } from './cli-identity.js';
-import { required, valueOrDefault, type Options } from './cli-options.js';
+import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { validateSharedStateAgentId } from './identity.js';
 import { readCommsEvents, writeCommsEvent } from './state-io.js';
 import { writeTextFileAtomically } from './transaction.js';
 import { type CollaborationStateEnvironment } from './types.js';
+
+const DEFAULT_EVENTS_DIR = '.agent/state/collaboration/comms-events';
+const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 export async function appendComms(
   options: Options,
@@ -41,4 +46,61 @@ export async function renderComms(options: Options): Promise<string> {
   });
 
   return '';
+}
+
+export async function sendComms(
+  options: Options,
+  env: CollaborationStateEnvironment,
+): Promise<string> {
+  const nowIso = optional(options, 'now') ?? new Date().toISOString();
+  const eventId = valueOrDefault(options, 'event-id', randomUUID());
+  const defaults = commsSendDefaults(options, nowIso, eventId);
+  await appendComms(withDefaults(options, defaults), env);
+  await renderComms(withDefaults(options, defaults));
+
+  return '';
+}
+
+export function commsSendDefaults(
+  options: Options,
+  nowIso: string,
+  eventId: string,
+): Readonly<Record<string, string>> {
+  const repoRoot = collaborationRepoRoot(options);
+  return {
+    'events-dir': join(repoRoot, DEFAULT_EVENTS_DIR),
+    now: nowIso,
+    'created-at': nowIso,
+    'event-id': eventId,
+    output: join(repoRoot, DEFAULT_SHARED_LOG),
+  };
+}
+
+function collaborationRepoRoot(options: Options): string {
+  return optional(options, 'repo-root') ?? findCollaborationRepoRoot(process.cwd());
+}
+
+function findCollaborationRepoRoot(start: string): string {
+  let current = start;
+  const root = parse(start).root;
+  while (true) {
+    if (existsSync(join(current, '.agent', 'state', 'collaboration'))) {
+      return current;
+    }
+    if (current === root) {
+      return start;
+    }
+    current = dirname(current);
+  }
+}
+
+function withDefaults(options: Options, defaults: Readonly<Record<string, string>>): Options {
+  const values = new Map(options.values);
+  for (const key in defaults) {
+    if (!values.has(key)) {
+      values.set(key, defaults[key] ?? '');
+    }
+  }
+
+  return { ...options, values };
 }

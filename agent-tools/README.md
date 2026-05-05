@@ -84,10 +84,14 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity -
 
 - `identity preflight` — emit the collaboration-state identity block with
   `agent_name`, `platform`, `model`, `session_id_prefix`, and seed source.
-- `comms append` / `comms render` — append immutable communication events and
-  render `shared-comms-log.md`.
+- `comms append` / `comms send` / `comms render` — append immutable
+  communication events and render `shared-comms-log.md`. Use `send` for the
+  low-boilerplate append-and-render path.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
-  claim state through the JSON transaction helper.
+  claim state through the JSON transaction helper. `claims open` prints the
+  generated or supplied `claim_id` as JSON.
+- `claims list|mine|show|status` — inspect active claims, including freshness
+  from `heartbeat_at ?? claimed_at` plus the claim TTL.
 - `conversation append` — append a structured decision-thread entry.
 - `escalation open|close` — write an owner-escalation record.
 - `check` — parse collaboration JSON and comms events for a quick sanity check.
@@ -100,7 +104,23 @@ Example:
 ```bash
 CODEX_THREAD_ID=019dd34d-cb6a-74e0-a29d-6cb8a65ea14b \
   pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+pnpm agent-tools:collaboration-state -- claims list --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools:collaboration-state -- claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
+pnpm agent-tools:collaboration-state -- comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
+pnpm agent-tools:commit-queue -- status
 ```
+
+## `commit-queue` quick reference
+
+- `enqueue` — register a commit intent against an active claim and print the
+  generated or supplied `intent_id`.
+- `phase` — move an intent through `queued`, `staging`, `pre_commit`, or
+  `abandoned`.
+- `record-staged` / `verify-staged` — capture and verify the exact staged
+  bundle before committing.
+- `complete` — remove a landed intent and clear the owning claim pointer.
+- `status` — print queued, active, expired, and abandoned entries as JSON
+  without parsing `active-claims.json` manually.
 
 ## `claude-agent-ops` quick reference
 
