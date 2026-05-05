@@ -4,7 +4,7 @@ import { type Env } from './env.js';
 import { HttpEnvSchema } from './env.js';
 import { createRuntimeConfigFromValidatedEnv } from './runtime-config-from-validated-env.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 
 /**
  * Replacement coverage for the retired

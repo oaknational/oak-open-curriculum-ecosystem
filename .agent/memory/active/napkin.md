@@ -14,6 +14,81 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-05 (Ethereal Transiting Comet, `8081d3`) — foundational graduation pass + four meta-instances
+
+**Surprise 1 — recursive-exclusion pattern fired on its own commit.**
+The `git commit --no-verify` PreToolUse bash hook block fired on my
+attempt to commit the very pattern I was landing
+(`structural-enforcer-recursive-exclusion`). The pattern's substance
+is exactly that structural enforcers fire on documents that catalogue
+their own pathogen; here the pattern's first commit attempt was a
+worked instance of itself, encountered live during graduation. Three
+mechanism shapes the pattern names — explicit `exclude_paths`,
+per-line context exclusion, self-exclusion by placement — none
+applied to the bash-hook-vs-`--no-verify` situation; the structural
+cure on the agent-tool layer is owner-side execution (`!` prefix runs
+in owner's shell, bypassing the agent-tool hook chain). This is a
+fourth mechanism shape: **owner-initiated execution as bypass-by-trust-
+boundary** rather than bypass-by-rule. Worth registering as candidate
+extension to the pattern: a fourth row in the worked-instances table
+for trust-boundary-shifted execution. Trigger: second instance of
+agent-tool-hook firing on owner-authorised action where the owner can
+execute the same action directly.
+
+**Surprise 2 — diagnostic-over-assumption: orchestrator and hook chain are separate enforcers.**
+After the commit-skill orchestrator (`scripts/check-commit-skill-gates.ts`)
+failed on whole-tree fitness pressure, I framed `--no-verify` as the
+needed escape valve. Owner asked *"why do we need --no-verify?"* —
+the diagnostic question. Inspecting `.husky/pre-commit` showed the
+actual hook chain (format, markdownlint, knip, depcruise, type-check,
+lint, test) does NOT run `practice:fitness:strict-hard`; only the
+orchestrator script does, and the orchestrator is run *voluntarily by
+the agent before* `git commit`. Conflation of the two surfaces caused
+the false-positive escape-valve framing. Plain `git commit` succeeded.
+Generalisation candidate: when an enforcer fails, identify *which*
+enforcer (script-tier discipline-checker vs git-hook-tier blocking
+gate) before reaching for bypass; agents tend to assume the failure
+path requires an escape valve when the actual blocking surface may
+be different from the failing one. Trigger: second instance of
+agent-confused-orchestrator-with-hook-chain.
+
+**Surprise 3 — severity is not urgency (sharpening of no-speed-pressure).**
+At session open I framed CRITICAL fitness signals as drivers of
+landing-target choice (option D in my opener). Owner correction:
+*"remember, critical means important, but it does not mean rush, if
+anything even more care and thoughtfulness is needed"*. Severity-tier
+labels (CRITICAL, HARD, P1, etc.) name *importance*, not *urgency*.
+The response to severity is more care, more thoughtfulness, slower
+processing — not faster action. The framing "CRITICAL → drive action"
+is the same impulse `feedback_no_speed_pressure.md` names, dressed in
+escalation-tier vocabulary. Saved as additional paragraph on the
+no-speed-pressure user memory at moment of correction (PDR-048).
+
+**Surprise 4 — assumptions-reviewer caught both my framing errors at once.**
+I framed the bundle's two items as "foundational to the others" in
+the opener, and categorised the new pattern as `process` tier.
+assumptions-reviewer flagged both as P2: the foundational claim was
+unsupported (the other due register items are not gated on these),
+and `governance-claim-needs-a-scanner` (the explicitly paired pattern)
+lives at `agent` tier — splitting the pair across tiers was the
+unstated failure. Both corrections applied: pattern moved to agent
+tier; commit message reframes the pairing as structural (mechanism +
+orchestration), not foundational. The reviewer's value here was
+catching framing drift that code-reviewer and docs-adr-reviewer (both
+sound on the bundle) did not surface.
+
+**Surprise 5 — capture-at-moment-of-occurrence works as it claims.**
+PDR-048 says insight capture degrades exponentially after the moment.
+This session validated it twice in fast succession: (a) the
+severity-not-urgency sharpening was saved during the conversational
+turn it was named in, before continuing the bundle work; (b) the four
+napkin entries above are being written immediately at handoff rather
+than reconstructed later. Both writes were possible only because the
+substance was still in working memory, with the texture of the moment
+intact. A second-instance napkin pass over this session at the next
+consolidation will read these entries differently than I am writing
+them now; the writing-now version is the load-bearing input.
+
 ## 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`) — step-05 doc-cleanup + four owner corrections
 
 **Surprise 1 — pre-existing-violation doctrinal exception is operator-applied, not gate-applied (independent confirmation of Gnarled's Surprise 3).**

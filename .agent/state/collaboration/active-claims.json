@@ -91,28 +91,37 @@
       "staged_name_status": "M\t.agent/analysis/README.md\nA\t.agent/analysis/practice-context-cost-baseline.md\nM\t.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tREADME.md\nM\tagent-tools/docs/agent-support-tools-specification.md\nM\tapps/oak-curriculum-mcp-streamable-http/README.md\nM\tapps/oak-curriculum-mcp-streamable-http/TESTING.md\nM\tapps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-bypass.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/enum-validation-failure.e2e.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/e2e-tests/validation-failure.e2e.test.ts\nM\tdocs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md\nM\tdocs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md\nM\tdocs/operations/elasticsearch-ingest-lifecycle.md\nM\tdocs/operations/sentry-deployment-runbook.md\nM\tdocs/operations/troubleshooting.md\n"
     },
     {
-      "intent_id": "c36ace0f-dd02-4134-a58d-6d9468d00b44",
-      "claim_id": "b657602e-9097-42f0-9d17-58ad00a81ba5",
+      "intent_id": "9305c2fb-7db6-4243-96ac-c0e7877c7d60",
+      "claim_id": "eb5b3638-1e0e-4951-8670-88f57d9f01a3",
       "agent_id": {
-        "agent_name": "Ethereal Transiting Comet",
-        "platform": "claude",
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8081d3"
+        "session_id_prefix": "0ddc89"
       },
       "files": [
-        ".agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md",
-        ".agent/memory/active/patterns/README.md",
-        ".agent/commands/consolidate-docs.md",
-        ".agent/memory/operational/pending-graduations.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/rules/no-hedging-vocabulary.md",
+        "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rotating-xff-bypass.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/mcp-rate-limit.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-di.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/public-resource-auth-bypass.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/header-redaction.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/web-security-selective.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/application-routing.e2e.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
         ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/comms-events/2a8a6b2a-1877-4943-b854-91696ae7c9f8.json"
+        ".agent/state/collaboration/comms-events/f1f3ae61-c665-492c-aefd-17a6ecc3b1e6.json"
       ],
-      "commit_subject": "docs(practice): graduate recursive-exclusion pattern + consolidate-docs PDR-046 pointer",
-      "queued_at": "2026-05-05T10:03:41.833Z",
-      "updated_at": "2026-05-05T10:03:47.736Z",
-      "expires_at": "2026-05-05T10:18:41.833Z",
+      "commit_subject": "refactor(http-mcp): relocate upstream-metadata-fixture to src/test-helpers (close C1)",
+      "queued_at": "2026-05-05T10:44:00.855Z",
+      "updated_at": "2026-05-05T10:44:13.372Z",
+      "expires_at": "2026-05-05T10:59:00.855Z",
       "phase": "staging"
     }
   ],
@@ -150,53 +159,67 @@
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
     },
     {
-      "claim_id": "07b0c842-1913-4adb-9629-bbd0bcb9234e",
+      "claim_id": "7a841c19-3074-4138-9745-14ab80f7da70",
       "agent_id": {
-        "agent_name": "Ethereal Transiting Comet",
-        "platform": "claude",
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8081d3"
+        "session_id_prefix": "0ddc89"
       },
-      "thread": "agentic-engineering-enhancements",
+      "thread": "observability-sentry-otel",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md",
-            ".agent/memory/active/patterns/README.md",
-            ".agent/commands/consolidate-docs.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rotating-xff-bypass.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/mcp-rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-di.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/public-resource-auth-bypass.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/header-redaction.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/web-security-selective.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/application-routing.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.unit.test.ts",
+            ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-05T09:47:05Z",
+      "claimed_at": "2026-05-05T10:33:32Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Author structural-enforcer-recursive-exclusion pattern + extend consolidate-docs Learning-Preservation section to point at PDR-046 (graduates two due register items)"
+      "intent": "Step 05 final closure: close C1 (relocate upstream-metadata-fixture.ts from e2e-tests/helpers to src/test-helpers + update 12 consumers + own internal import) and CR1 (refactor two if(!result.ok) return early-returns to typed unwrapOk helper) as two separate atomic commits. Reviewers: code-reviewer + architecture-reviewer-fred (commit 1); code-reviewer + test-reviewer (commit 2)."
     },
     {
-      "claim_id": "b657602e-9097-42f0-9d17-58ad00a81ba5",
+      "claim_id": "eb5b3638-1e0e-4951-8670-88f57d9f01a3",
       "agent_id": {
-        "agent_name": "Ethereal Transiting Comet",
-        "platform": "claude",
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8081d3"
+        "session_id_prefix": "0ddc89"
       },
-      "thread": "agentic-engineering-enhancements",
+      "thread": "observability-sentry-otel",
       "areas": [
         {
           "kind": "git",
           "patterns": [
-            "git:index/head"
+            "index/head"
           ]
         }
       ],
-      "claimed_at": "2026-05-05T10:03:24Z",
+      "claimed_at": "2026-05-05T10:43:23Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Commit window for atomic landing: structural-enforcer-recursive-exclusion pattern + consolidate-docs PDR-046 pointer (graduates two due register items)",
-      "intent_to_commit": "c36ace0f-dd02-4134-a58d-6d9468d00b44"
+      "intent": "Stage and commit C1 closure: relocate upstream-metadata-fixture from e2e-tests/helpers to src/test-helpers; update 12 consumers + own internal import; identity row + file-area claim sweep.",
+      "notes": "Pathspecs: 12 consumer test files + relocated fixture pair + thread record + active-claims.json. Gates: workspace lint/type/test green pre-claim. Peer claims: no overlap (Moonlit stale; Ethereal closed at 74dcd145).",
+      "intent_to_commit": "9305c2fb-7db6-4243-96ac-c0e7877c7d60"
     }
   ]
 }

@@ -1,10 +1,10 @@
-import type { UpstreamAuthServerMetadata } from '../../src/oauth-proxy/index.js';
+import type { UpstreamAuthServerMetadata } from '../oauth-proxy/index.js';
 
 /**
- * Test fixture providing upstream AS metadata for E2E tests.
+ * Test fixture providing upstream AS metadata for integration and E2E tests.
  *
  * Represents what Clerk's `/.well-known/oauth-authorization-server` returns.
- * E2E tests inject this via `CreateAppOptions.upstreamMetadata` so no network
+ * Tests inject this via `CreateAppOptions.upstreamMetadata` so no network
  * calls to Clerk are needed. The endpoint URLs are Clerk-shaped but never
  * contacted — the proxy rewrites them to self-origin before serving.
  */

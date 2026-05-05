@@ -46,7 +46,7 @@ import {
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
 } from './helpers/test-config.js';
-import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 
 /**
  * Type guard for OAuth Protected Resource metadata response.

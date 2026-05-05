@@ -8189,6 +8189,92 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b657602e-9097-42f0-9d17-58ad00a81ba5",
+      "agent_id": {
+        "agent_name": "Ethereal Transiting Comet",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8081d3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T10:03:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit window for atomic landing: structural-enforcer-recursive-exclusion pattern + consolidate-docs PDR-046 pointer (graduates two due register items)",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T10:32:25Z",
+        "closed_by": {
+          "agent_name": "Ethereal Transiting Comet",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8081d3"
+        },
+        "summary": "Atomic landing 74dcd145: structural-enforcer-recursive-exclusion pattern + consolidate-docs PDR-046 pointer (graduates two due register items).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b657602e-9097-42f0-9d17-58ad00a81ba5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "07b0c842-1913-4adb-9629-bbd0bcb9234e",
+      "agent_id": {
+        "agent_name": "Ethereal Transiting Comet",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8081d3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md",
+            ".agent/memory/active/patterns/README.md",
+            ".agent/commands/consolidate-docs.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T09:47:05Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author structural-enforcer-recursive-exclusion pattern + extend consolidate-docs Learning-Preservation section to point at PDR-046 (graduates two due register items)",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T10:32:34Z",
+        "closed_by": {
+          "agent_name": "Ethereal Transiting Comet",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8081d3"
+        },
+        "summary": "Files-area work complete; pattern + rule extension landed in 74dcd145.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07b0c842-1913-4adb-9629-bbd0bcb9234e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

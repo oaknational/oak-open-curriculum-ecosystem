@@ -27,7 +27,7 @@ import {
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
 } from './helpers/test-config.js';
-import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 

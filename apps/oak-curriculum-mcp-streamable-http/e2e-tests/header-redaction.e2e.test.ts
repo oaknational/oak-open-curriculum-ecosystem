@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 import {
   createMockObservability,
   createMockRuntimeConfig,

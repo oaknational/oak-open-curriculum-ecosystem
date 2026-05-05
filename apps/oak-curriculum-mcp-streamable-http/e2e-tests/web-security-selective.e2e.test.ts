@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
 import { createFakeHttpObservability } from '../src/test-helpers/observability-fakes.js';
-import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
 const mockRuntimeConfig: RuntimeConfig = {

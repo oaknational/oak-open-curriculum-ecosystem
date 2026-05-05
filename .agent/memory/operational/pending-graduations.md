@@ -31,6 +31,88 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 `trigger-condition`, `status`. `consolidate-docs` uses this as the live
 queue. Graduated and merged history is preserved in git and the archived
 
++ 2026-05-05; **commit-skill orchestrator vs git-hook-chain are
+  separate enforcers; agents conflate them under failure pressure**
+  (Ethereal Transiting Comet, this date — diagnostic instance during
+  graduation pass commit attempt). The commit-skill orchestrator
+  (`scripts/check-commit-skill-gates.ts`) is a script the agent runs
+  voluntarily before `git commit`; it includes
+  `practice:fitness:strict-hard`. The git-hook-chain (`.husky/pre-commit`)
+  is what `git commit` actually fires; it runs format, markdownlint,
+  knip, depcruise, type-check, lint, test — but NOT
+  `practice:fitness:strict-hard`. When the orchestrator fails, the
+  failure-mode framing reaches for `--no-verify` as escape valve
+  even though the actual blocking surface (the hook chain) may not
+  be running the failing gate. Cure: inspect which enforcer is
+  blocking BEFORE reaching for bypass. Substance distinct from
+  Lacustrine's §Surprise 1 (orchestrator's lack of staged-set
+  awareness; same orchestrator, different lacuna). Source surface:
+  napkin §Surprise 2 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`.
+  Graduation-target: pattern entry at
+  `.agent/memory/active/patterns/identify-which-enforcer-before-bypass.md`
+  (process or agent tier — TBD at second instance) OR amendment to
+  `.agent/skills/commit/SKILL.md` naming the orchestrator-vs-hook
+  distinction explicitly so agents do not conflate them. Trigger:
+  second instance of agent-confused-orchestrator-with-hook-chain in
+  any commit/release/closure surface. Status: `pending` —
+  single-instance, but substance is sharp and substance-trigger
+  (not instance-count-trigger) per the
+  register-on-substance-not-instance-count discipline may be
+  applicable; owner direction at promotion supersedes.
+
++ 2026-05-05; **owner-initiated execution as bypass-by-trust-boundary
+  is a fourth mechanism shape for the structural-enforcer recursive-
+  exclusion pattern** (Ethereal Transiting Comet, encountered during
+  graduation pass commit attempt). The `git --no-verify`
+  PreToolUse bash hook block fired on the very pattern being
+  landed; agent-tool layer cannot bypass the hook even with owner
+  authorisation, but owner-side execution via the `!` prefix runs
+  in owner's shell, bypassing the agent-tool hook chain. This is
+  distinct from the three mechanism shapes the pattern's
+  worked-instances table now names (explicit `exclude_paths`;
+  per-line context exclusion; self-exclusion by placement) — those
+  cure the enforcer's path-scope problem; this fourth shape cures
+  via shifted-execution-trust-boundary. Source surface: napkin
+  §Surprise 1 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`,
+  pattern file `structural-enforcer-recursive-exclusion.md` (table
+  carries three mechanism shapes; this would be the fourth row).
+  Graduation-target: amendment to the pattern's worked-instances
+  table adding the trust-boundary-shifted-execution row, OR
+  separate dedicated pattern if the trust-boundary shape recurs in
+  non-`--no-verify` contexts (e.g. owner-side credential reads,
+  owner-side destructive operations gated by deny-list, owner-side
+  network actions blocked from agent-tool layer). Trigger: second
+  instance of agent-tool-hook firing on owner-authorised action
+  where owner can execute the same action directly. Status:
+  `pending` — single-instance.
+
++ 2026-05-05; **severity is not urgency** (Ethereal Transiting Comet,
+  owner-corrected at session open). Owner direction: *"remember,
+  critical means important, but it does not mean rush, if anything
+  even more care and thoughtfulness is needed"*. Severity-tier
+  labels (CRITICAL, HARD, P1, escalation-tier any other system)
+  name importance, not urgency. The response to severity is more
+  care, more thoughtfulness, slower processing — not faster action.
+  Sharpening of `feedback_no_speed_pressure.md` saved at moment of
+  correction. Substance: the failure mode is "CRITICAL → drive
+  action" framing, which is the same impulse no-speed-pressure
+  names dressed in escalation-tier vocabulary. Source surface:
+  user-memory `feedback_no_speed_pressure.md` (refined this date),
+  napkin §Surprise 3 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`
+  §Three things I am taking from this. Graduation-target: amendment
+  to `.agent/rules/no-speed-pressure.md` adding the severity-vs-
+  urgency distinction with worked instance, OR PDR amendment if
+  the framing crosses repos (severity-vs-urgency conflation is
+  unlikely to be host-specific). Trigger: SECOND INSTANCE of an
+  agent framing an escalation-tier label as a haste driver in any
+  context. Status: `pending` — single first-class instance with
+  user-memory refinement; rule extension follows on second instance
+  per register-on-substance-not-instance-count discipline only when
+  substance is multi-instance.
+
 + 2026-05-05; **Inter-agent communication is a first-class coordination
   primitive** (Lacustrine Navigating Rudder, owner-named after the
   Gnarled-Lacustrine sub-2-min-roundtrip resolution).
