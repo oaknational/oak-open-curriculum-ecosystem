@@ -55,11 +55,23 @@ queue. Graduated and merged history is preserved in git and the archived
   `.agent/skills/commit/SKILL.md` naming the orchestrator-vs-hook
   distinction explicitly so agents do not conflate them. Trigger:
   second instance of agent-confused-orchestrator-with-hook-chain in
-  any commit/release/closure surface. Status: `pending` —
-  single-instance, but substance is sharp and substance-trigger
-  (not instance-count-trigger) per the
-  register-on-substance-not-instance-count discipline may be
-  applicable; owner direction at promotion supersedes.
+  any commit/release/closure surface. Status: `due` (status flipped
+  2026-05-05) — second instance observed: Dawnlit Transiting Galaxy
+  (`0ddc89`) on observability-sentry-otel thread reached for
+  `--no-verify` after orchestrator-pre-screen failure on pre-existing
+  peer fitness violations, despite `.husky/pre-commit` not including
+  the failing fitness gate. Owner caught the framing ("Why do you
+  need --no-verify?"); the conflation surfaced when articulated. CR1
+  commit subsequently landed with standard `git commit` (no
+  --no-verify) through the live hook chain cleanly. Same shape as
+  Ethereal's first instance: the orchestrator's name and shared
+  configurations let agents round it off to the live hook under
+  failure pressure. Cure now sharpest as a permanent-doc clarification
+  in `commit/SKILL.md` distinguishing the pre-screen orchestrator
+  (advisory; agent-invoked; includes fitness/vocabulary gates) from
+  the live hook (blocking; git-invoked; format/markdown/knip/depcruise/type/lint/test).
+  Owner direction at promotion supersedes; substance-trigger
+  fired (sharp + instance-count = 2).
 
 + 2026-05-05; **owner-initiated execution as bypass-by-trust-boundary
   is a fourth mechanism shape for the structural-enforcer recursive-
@@ -548,25 +560,46 @@ continuity snapshots.
   in same atomic commit as the consolidate-docs §Learning-Preservation
   upward-pointer extension).
 
-+ 2026-05-04; **`git commit -- <pathspec>` is the cure for
-  peer-staged work in a shared index** (Vining Spreading Seed,
-  worked instance during WS6 commit). Fronded Flowering Thicket
-  had a rename pre-staged (`napkin.md → archive/...`) before
-  this session opened. My subsequent `git add scripts/...`
-  combined with the already-staged rename, so a default
-  `git commit` would have bundled peer work into my commit.
-  The cure is `git commit -- <pathspec>` to commit only the
-  listed paths regardless of what else sits in the index;
-  documented in `stage-by-explicit-pathspec.md §Peer-Index
-  Note`. Source surface: napkin "Peer-staged renames in the
-  index bleed into your staging area via `git add`" entry.
-  Graduation-target: candidate for elevation from peer-index
-  note to a first-class section in `stage-by-explicit-pathspec`
-  rule, OR a small dedicated rule on shared-index discipline.
-  Trigger-condition: second instance of peer-staged-work-bleed
-  observed. Status: `pending` (single first-class instance so
-  far; cure is documented inline in the rule's peer-index note,
-  which may suffice).
++ 2026-05-04 (status flipped 2026-05-05); **`git commit --
+  <pathspec>` cure is asymmetric — one-sided application does
+  not prevent absorption by peers who do not apply it; three
+  observed instances of foreign-stage absorption now justify
+  structural enforcement** (Vining Spreading Seed initial;
+  Lacustrine→Moonlit `8fa339f4` 2026-05-04 second; Ethereal→Dawnlit
+  `36102937` 2026-05-05 third). The cure as currently written
+  is operator-applied prose at `stage-by-explicit-pathspec.md
+  §Peer-Index Note`. Each instance: a peer's `git commit`
+  without `-- <pathspec>` filter swept staged content authored
+  by another agent into the peer's commit. Substance preserved
+  in all cases; commit-message attribution distorted; reviewer
+  evidence (when present) applies to the absorbed diff. The
+  third instance (Ethereal→Dawnlit) was particularly clean: the
+  absorbed-from agent had reviewer chain on the diff
+  pre-absorption (architecture-reviewer-fred CLEAN +
+  code-reviewer APPROVED WITH SUGGESTIONS); review evidence
+  intact; only the commit subject misleads. Asymmetry insight
+  (added 2026-05-05): a cure that protects the agent who
+  applies it but does not prevent the failure mode in agents
+  who don't apply it is not really a structural cure — it is a
+  behavioural commitment one side keeps on the other side's
+  behalf. Source surfaces: napkin "Peer-staged renames in the
+  index bleed into your staging area via `git add`" entry
+  (2026-05-04); Ethereal's comms-event acknowledgement at
+  2e2bfb5a (2026-05-05); Dawnlit's experience file
+  `2026-05-05-dawnlit-the-screen-and-the-gate.md` (2026-05-05).
+  Graduation-target: structural enforcement candidate for owner
+  direction. Candidate shapes: (a) pre-commit hook refuses
+  `git commit` without explicit pathspec when staged set
+  contains files outside the agent's queued bundle; (b)
+  commit-queue layer detects fingerprint-of-staged-set diverging
+  from queued-intent and aborts at `verify-staged`; (c) shared
+  pre-commit gate requiring `--include` or pathspec matching
+  the active commit-queue intent. Each is a distinct design
+  decision; owner-direction-shaped, not consolidation-shaped.
+  Trigger-condition: third instance now observed; promotes to
+  due. Status: `due` (3 instances; cure asymmetry confirmed;
+  awaiting owner direction on which structural enforcement
+  shape).
 
 + 2026-05-04; **layered processing of knowledge: preserve first,
   restructure second** (Fronded Flowering Thicket, owner-stated

@@ -154,25 +154,26 @@
       "notes": "Pre-existing fitness violations on peer-authored files (.agent/directives/principles.md hard chars; .agent/memory/active/distilled.md hard lines; .agent/memory/active/napkin.md critical lines+chars+max-prose; .agent/memory/operational/pending-graduations.md hard lines+chars) block the practice:fitness:strict-hard gate orchestrator. None of these files are in my staged set (CR1 fix + plan body + thread record + 2 comms events + 2 collaboration-state files). This is the same structural gap Lacustrine documented in their napkin Surprise 3 (orchestrator has no staged-set awareness). Per feedback_no_verify_fresh_permission, agent does not propose --no-verify; surfacing to owner for direction."
     },
     {
-      "intent_id": "e4605028-204d-4327-9167-466a08b551c2",
-      "claim_id": "d4365767-8572-4119-8828-f9df513367eb",
+      "intent_id": "93fc6d6e-6d6b-4624-9e65-46fbd86792e5",
+      "claim_id": "0676772c-6320-4d5b-9a7f-73fecff1ce6e",
       "agent_id": {
-        "agent_name": "Opalescent Threading Nebula",
+        "agent_name": "Dawnlit Transiting Galaxy",
         "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "4c1773"
+        "session_id_prefix": "0ddc89"
       },
       "files": [
+        ".agent/memory/operational/repo-continuity.md",
         ".agent/memory/active/napkin.md",
-        ".agent/memory/active/distilled.md",
-        ".agent/memory/active/archive/napkin-2026-05-05.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/state/collaboration/active-claims.json"
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/experience/2026-05-05-dawnlit-the-screen-and-the-gate.md"
       ],
-      "commit_subject": "docs(memory): rotate napkin layer 0 to 1 per pdr-046",
-      "queued_at": "2026-05-05T11:09:21.648Z",
-      "updated_at": "2026-05-05T11:09:26.405Z",
-      "expires_at": "2026-05-05T11:24:21.648Z",
+      "commit_subject": "chore(continuity): session-handoff for 2026-05-05 Dawnlit step-05-closure session",
+      "queued_at": "2026-05-05T11:18:51.938Z",
+      "updated_at": "2026-05-05T11:18:58.677Z",
+      "expires_at": "2026-05-05T11:33:51.938Z",
       "phase": "staging"
     }
   ],
@@ -210,45 +211,6 @@
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
     },
     {
-      "claim_id": "7a841c19-3074-4138-9745-14ab80f7da70",
-      "agent_id": {
-        "agent_name": "Dawnlit Transiting Galaxy",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "0ddc89"
-      },
-      "thread": "observability-sentry-otel",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rotating-xff-bypass.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/mcp-rate-limit.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-di.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/public-resource-auth-bypass.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/header-redaction.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/web-security-selective.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/application-routing.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.unit.test.ts",
-            ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
-            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T10:33:32Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Step 05 final closure: close C1 (relocate upstream-metadata-fixture.ts from e2e-tests/helpers to src/test-helpers + update 12 consumers + own internal import) and CR1 (refactor two if(!result.ok) return early-returns to typed unwrapOk helper) as two separate atomic commits. Reviewers: code-reviewer + architecture-reviewer-fred (commit 1); code-reviewer + test-reviewer (commit 2)."
-    },
-    {
       "claim_id": "b204403a-a6c7-4d08-a085-dd69ed96b46d",
       "agent_id": {
         "agent_name": "Opalescent Threading Nebula",
@@ -279,14 +241,14 @@
       "notes": "No conflict with Dawnlit (observability files) or Moonlit (smoke-tests retirement files). All target files are governance/memory surfaces on the agentic-engineering-enhancements thread."
     },
     {
-      "claim_id": "d4365767-8572-4119-8828-f9df513367eb",
+      "claim_id": "0676772c-6320-4d5b-9a7f-73fecff1ce6e",
       "agent_id": {
-        "agent_name": "Opalescent Threading Nebula",
+        "agent_name": "Dawnlit Transiting Galaxy",
         "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "4c1773"
+        "session_id_prefix": "0ddc89"
       },
-      "thread": "agentic-engineering-enhancements",
+      "thread": "observability-sentry-otel",
       "areas": [
         {
           "kind": "git",
@@ -295,12 +257,12 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-05T11:08:53Z",
-      "freshness_seconds": 900,
+      "claimed_at": "2026-05-05T11:18:49Z",
+      "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Stage and commit Layer 0 → 1 napkin rotation: archive/napkin-2026-05-05.md, distilled.md (4 cross-session refinements), fresh napkin.md, thread record (active arc + identity row), active-claims.json (this and the file-area claim).",
-      "notes": "Pathspecs: .agent/memory/active/{napkin,distilled}.md, .agent/memory/active/archive/napkin-2026-05-05.md, .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md, .agent/state/collaboration/active-claims.json. Pre-existing peer changes (Dawnlit observability files, closed-claims.archive.json, comms-events) NOT in scope; will not be staged.",
-      "intent_to_commit": "e4605028-204d-4327-9167-466a08b551c2"
+      "intent": "Stage and commit session-handoff bundle: repo-continuity.md refresh, napkin entries, pending-graduations updates, experience file, claim closures.",
+      "notes": "Strict pathspec filter. No active peer claims at git:index/head; Opalescent commit landed 1513474e.",
+      "intent_to_commit": "93fc6d6e-6d6b-4624-9e65-46fbd86792e5"
     }
   ]
 }

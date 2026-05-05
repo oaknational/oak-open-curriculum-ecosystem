@@ -8361,6 +8361,148 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T11:02:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit CR1 closure: replace conditional-branch early-return with unwrap from @oaknational/result; bundle plan body + thread record + comms events + collaboration state. Owner-cleared to proceed; Opalescent owns fitness-limit work as separate lane.",
+      "notes": "Standard 'git commit' (no --no-verify). Pre-commit hook does NOT include fitness gate (only the orchestrator pre-screen does). Targeted gates clean: format, lint, type, 722 tests.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T11:05:16Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Transiting Galaxy",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "0ddc89"
+        },
+        "summary": "CR1 closure landed at f6c73f4a. Step 05 of feat-eef-exploration-completion plan now complete. Reviewer chain: code-reviewer APPROVED + test-reviewer CLEAN. Pre-commit hooks green (turbo full cache). Orchestrator pre-screen flagged pre-existing peer-fitness violations (Opalescent's lane); advisory only, noted and moved on per owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d4365767-8572-4119-8828-f9df513367eb",
+      "agent_id": {
+        "agent_name": "Opalescent Threading Nebula",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4c1773"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T11:08:53Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Layer 0 → 1 napkin rotation: archive/napkin-2026-05-05.md, distilled.md (4 cross-session refinements), fresh napkin.md, thread record (active arc + identity row), active-claims.json (this and the file-area claim).",
+      "notes": "Pathspecs: .agent/memory/active/{napkin,distilled}.md, .agent/memory/active/archive/napkin-2026-05-05.md, .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md, .agent/state/collaboration/active-claims.json. Pre-existing peer changes (Dawnlit observability files, closed-claims.archive.json, comms-events) NOT in scope; will not be staged.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T11:14:35Z",
+        "closed_by": {
+          "agent_name": "Opalescent Threading Nebula",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4c1773"
+        },
+        "summary": "git:index/head window closed; commit 1513474e landed Layer 0→1 napkin rotation per PDR-046; quality gates green (format/markdownlint/knip/depcruise/turbo type-check+lint+test)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d4365767-8572-4119-8828-f9df513367eb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7a841c19-3074-4138-9745-14ab80f7da70",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rotating-xff-bypass.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/mcp-rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-di.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/public-resource-auth-bypass.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/header-redaction.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/web-security-selective.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/application-routing.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/result-test-helpers.unit.test.ts",
+            ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T10:33:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Step 05 final closure: close C1 (relocate upstream-metadata-fixture.ts from e2e-tests/helpers to src/test-helpers + update 12 consumers + own internal import) and CR1 (refactor two if(!result.ok) return early-returns to typed unwrapOk helper) as two separate atomic commits. Reviewers: code-reviewer + architecture-reviewer-fred (commit 1); code-reviewer + test-reviewer (commit 2).",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T11:18:31Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Transiting Galaxy",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "0ddc89"
+        },
+        "summary": "Step 05 final closure complete — C1 substance at 36102937 (foreign-stage absorption; reviewer chain intact pre-landing); CR1 at f6c73f4a (clean, code-reviewer APPROVED + test-reviewer CLEAN). Plan body §Sequence Summary row 5 flipped to DONE; §Backfill Findings entries record closing SHAs and reviewer chains; §Out-of-Scope Follow-ups names BF-C1-ESLint guard + foreign-stage absorption recurring-pattern as structural-enforcement candidates. Files-area claim closing at session handoff.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7a841c19-3074-4138-9745-14ab80f7da70",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
