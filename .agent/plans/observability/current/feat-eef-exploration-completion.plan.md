@@ -13,8 +13,12 @@ overview: >
   plan-3 commits. Steps 6–8 author the no-real-io-in-tests ESLint
   rule (step 6), atomically capture existing violations to this
   plan body's §IO Inventory and freeze the rule's path-allowlist
-  in eslint.config.ts (step 7), and wire the rule into root config
-  at error severity (step 8). Steps 9–12 run gates green, exercise
+  in the shared `recommended` config every workspace inherits
+  (step 7), and verify the rule is active with the discipline note
+  for future allowlist additions in place (step 8). Severity is
+  `warn` through this branch's merge per the new-eslint-rules-start-warn
+  principle; escalation to `error` is a separate post-merge decision.
+  Steps 9–12 run gates green, exercise
   MCP tools live with ordered specialist dispatch, analyse
   divergence, and declare merge-ready.
 status: current
@@ -47,14 +51,14 @@ todos:
     content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in `packages/core/oak-eslint/src/configs/recommended.ts` (the shared config every workspace inherits via `configs.strict` / `configs.recommended`), listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). Owner direction (2026-05-05) supersedes the original R2-4 finding: rule wires at `warn` severity during its development phase per the new-eslint-rules-start-warn principle (recorded in user-memory `feedback_new_eslint_rules_start_warn.md`); escalation to `error` is a separate post-merge decision. (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory completeness + cross-reference discipline) dispatch. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`); architecture-reviewer-fred + architecture-reviewer-betty dispatched on the wiring-location design (Option A: shared `recommended.ts`) — both verdicts Option A, citing principles.md §Tooling, ADR-121 §Design Principles #5, and the established peer-rule precedent (`no-eslint-disable`, `no-dynamic-import`); 24 violations across 23 unique files; `e2e-tests/helpers/test-config.ts` NOT in captured set (no cross-reference needed); allowlist absorbs all violations; `pnpm lint` exits 0; closing commit SHA recorded in §Sequence Summary row 7 post-commit."
     status: completed
     depends_on: [06-author-no-real-io-in-tests-rule]
-  - id: 08-wire-rule-into-root-config
-    content: "Wire no-real-io-in-tests into eslint.config.ts at the repo root (the rule's options block from step 07 is already in place). Acceptance: `pnpm lint` exits 0 across the entire monorepo (the allowlist absorbs the §IO Inventory; nothing else fires). Discipline note: any future PR that adds a path to the allowlist option must cite either a §IO Inventory entry (frozen at this branch's merge) or a named follow-up plan; PR review enforces this discipline (no structural lint gate). Land via full commit-skill protocol with config-reviewer dispatch. After this step the rule is active and any new test-IO not on the allowlist is a hard build failure."
+  - id: 08-verify-rule-active-and-discipline-recorded
+    content: "Verify the no-real-io-in-tests rule is active with the discipline for future allowlist additions in place. Step 07 already wired the rule (in the shared `packages/core/oak-eslint/src/configs/recommended.ts`, which every workspace inherits via `configs.strict` / `configs.recommended`) and populated the §IO Inventory + allowlist atomically; step 08's narrower remit is verification + discipline declaration. Acceptance: (a) `pnpm lint` exits 0 across the entire monorepo (the allowlist absorbs the §IO Inventory; nothing else fires); (b) the comment block above the rule activation in `recommended.ts` names the allowlist-ADD discipline (any future PR adding a path must cite either a §IO Inventory entry or a named follow-up plan; PR review enforces this discipline; no structural lint gate); (c) reviewer findings from step 07 are absorbed (any P2 prose-drift on stale severity / location wording cleaned up). Severity remains `warn` through this branch's merge per the new-eslint-rules-start-warn principle; escalation to `error` is a separate post-merge decision once the rule is stable, NOT in scope of this branch. After this step the rule is live in advisory mode: a new test-IO not on the allowlist is a `warn` (visible in lint output and PR review), not a hard build failure. Land via full commit-skill protocol with config-reviewer dispatch."
     status: pending
     depends_on: [07-capture-inventory-and-freeze-allowlist]
   - id: 09-pnpm-check-green
     content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan."
     status: pending
-    depends_on: [08-wire-rule-into-root-config]
+    depends_on: [08-verify-rule-active-and-discipline-recorded]
   - id: 10-mcp-server-live-exercise
     content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-reviewer over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-reviewer (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-reviewer return: invoke security-reviewer (auth path coverage), clerk-reviewer (Clerk middleware), sentry-reviewer (observability surface) in parallel; accessibility-reviewer conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
     status: pending
@@ -142,12 +146,19 @@ Branch state at refresh (`feat/eef_exploration` HEAD `b539c7c5`):
   contract is single, the paused plan's `core/` types are inert
   scaffolding rather than active code paths.
 - **never-disable-checks**: every gate is blocking; none weakened. The
-  rule's path-allowlist (configured at step 7, wired at step 8) is
-  configuration, not check-disablement; per-file ESLint-disable
-  comments are forbidden.
-- **no-warning-toleration**: rule wires at error severity (step 6); any
-  new warning surfaced by step 9 (`pnpm check`) is fixed at source in
-  the same work-item.
+  rule's path-allowlist (configured + activated at step 7 in the shared
+  `recommended` config; verified active at step 8) is configuration,
+  not check-disablement; per-file ESLint-disable comments are forbidden.
+- **no-warning-toleration with bounded development-phase exception**:
+  the standing principle is zero tolerated warnings, AND a general
+  named exception applies during the development phase of any new
+  ESLint rule (recorded in user-memory `feedback_new_eslint_rules_start_warn.md`):
+  new rules wire at `warn` first to avoid blocking unrelated work
+  while the rule is iterated and the existing-violation surface is
+  captured. Escalation to `error` is a separate post-merge decision
+  once the rule is stable. The `no-real-io-in-tests` rule is
+  currently inside this exception; any other new warning surfaced
+  by step 9 (`pnpm check`) is fixed at source in the same work-item.
 - **TDD-as-pairs (atomic-landing invariant)**: each step that authors
   code (3, 5, 6, 7, 8) lands test + product code together in one
   commit. No skipped or failing tests across commits.
@@ -322,10 +333,16 @@ assumptions-reviewer.
   brief names "Severity: error" explicitly.
 - **R2-5 (P1)** *wilma*: Allowlist mutability gate — without one, future
   PRs can drift the allowlist away from the §IO Inventory. **Applied**:
-  step 7 places the allowlist in `eslint.config.ts` rule-options block
-  (PR-reviewed); step 8 names the comment-discipline ("any future PR
-  adding a path must cite an Inventory entry or named follow-up plan");
-  per-file `eslint-disable` comments stay forbidden.
+  step 7 places the allowlist in the shared
+  `packages/core/oak-eslint/src/configs/recommended.ts` rule-options block
+  (PR-reviewed; the location was upgraded from the originally-specified
+  root `eslint.config.ts` after architecture-reviewer-fred and
+  architecture-reviewer-betty both verdicted Option A on the wiring-location
+  design — root-only would not have propagated to per-workspace lint runs);
+  the comment-discipline above the rule activation block names the
+  allowlist-ADD requirement ("any PR adding a path must cite an Inventory
+  entry or named follow-up plan"); per-file `eslint-disable` comments
+  stay forbidden.
 - **R2-6 (P2)** *wilma + betty*: Inventory canonical vs allowlist
   canonical must be clarified — they start identical but diverge as
   migrations land. **Applied**: step 7 brief states allowlist is the
@@ -803,7 +820,7 @@ consolidation pass.
 | 5 | Apply backfill findings | DONE 2026-05-05 — BF-1a/b CI hook + workflow at commit `ef593be9` (Lacustrine Navigating Rudder, `dd239f`); BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6` (Lacustrine, `dd239f`); C1 boundary-crossing import substance at commit `36102937` (Dawnlit Transiting Galaxy, `0ddc89` — substance landed at peer commit via foreign-stage absorption; architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; substance correct under misleading peer-subject; documented foreign-stage absorption recurrence to surface to owner); CR1 conditional-branch test-immediate-fail × 2 integration tests at this commit (Dawnlit, `0ddc89` — test-reviewer CLEAN + code-reviewer APPROVED, used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that this shape is "strictly better"). Out-of-scope follow-ups (recorded in §Out-of-Scope Follow-ups, not closed in this branch): BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary. |
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | DONE 2026-05-05 — rule + RuleTester (78 cases covering full Node.js IO surface incl. node:-prefixed network family, dynamic + require + bracket-notation forms, localhost lookalike hostnames, and `global.process` aliases) + plugin registration; not yet wired (Twilit Beaming Aurora, `7cf730`; Opalescent Eclipsing Asteroid, `0c263b` takeover hardening); closing commit SHA recorded post-commit; reviewer dispatch parallel (code-reviewer APPROVED WITH SUGGESTIONS + config-reviewer ISSUES FOUND no-P1 + test-reviewer ISSUES FOUND P1-gating); P1 + P2 findings closed in same commit (test gaps, bracket-notation hardening, plan-citation removal, defence-in-depth allowlist comment); P3 dispositions deferred (config-reviewer dual-enforcement with `testRules` is step-08 territory; schema `minItems: 1` is informational-only, not adopted) |
 | 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — closing commit `483a9e32`; §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-reviewer-fred + architecture-reviewer-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0 |
-| 8 | Wire rule into root config | Rule active (error severity); `pnpm lint` exits 0; allowlist-discipline note for future PR additions |
+| 8 | Verify rule active + discipline recorded | Rule active at `warn` severity per step 07's supersession of R2-4 (escalation to `error` is a separate post-merge decision, NOT in scope of this branch); `pnpm lint` exits 0; allowlist-ADD discipline named in the comment block above the rule activation in `recommended.ts`; step 07 reviewer P2 findings absorbed |
 | 9 | `pnpm check` green at HEAD | One-line note with SHA and gate-set cross-checked against §Gate Taxonomy |
 | 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free — **does not include** the Cursor oak-local precursor in § Step 10 precursor (that milestone is preparatory only) |
 | 11 | Pre-merge divergence analysis vs `origin/main` | Commit-list diffs; conflict-potential findings |
@@ -844,7 +861,7 @@ step 10 todo body.
 | Step 5's NAMED VIOLATIONS (C1 boundary-crossing import + CR1 conditional-branch) are not actually closed under the apply discipline | Low | High | Acceptance gate: step 5 cannot mark complete until both NAMED violations have closing commits referenced in this plan body, AND each closing commit is specialist-reviewed by the originator of the finding (fred for C1, test-reviewer for CR1) |
 | Step 5's closing commit for C1 introduces a NEW architectural violation while closing the named one | Low | Medium | Specialist re-review on closing commits (R2-3) catches this; fred reviews the relocate target's boundary shape, not just the absence of the original violation |
 | Step 6 denylist misses a real-IO form (e.g. `execSync`, `node:fs` prefix) so step 7's dry-run is a false-negative | Medium | High | Step 6 brief enumerates the comprehensive Node.js IO surface; RuleTester required to cover each sub-form (R2-1); test-reviewer dispatch at step 6 validates exhaustiveness |
-| Allowlist drifts post-merge — a developer adds a path without citing an Inventory entry or follow-up plan | Medium | Medium | Allowlist lives in `eslint.config.ts` (PR-reviewed); step 8 names the comment-discipline; per-file `eslint-disable` stays forbidden; structural lint-gate for ADDs is a future Practice item recorded in §Out-of-Scope Follow-ups |
+| Allowlist drifts post-merge — a developer adds a path without citing an Inventory entry or follow-up plan | Medium | Medium | Allowlist lives in shared `packages/core/oak-eslint/src/configs/recommended.ts` (PR-reviewed); the comment block above the rule activation names the allowlist-ADD discipline (step 7 landed it); per-file `eslint-disable` stays forbidden; structural lint-gate for ADDs is a future Practice item recorded in §Out-of-Scope Follow-ups |
 | §IO Inventory and live allowlist drift apart over time as follow-up plans land migrations | High (over time) | Low | Documented separation: allowlist is canonical live enforcement; §IO Inventory is historical snapshot at merge time, not updated post-merge; migration plans touch only the allowlist |
 | Step 7 capture process is lossy (rule output ambiguous; entries missed) | Low | Medium | Structured-output capture (`--format json`); count cross-check; 5-entry spot-check; re-run if either fails (R2-7) |
 
@@ -912,9 +929,12 @@ documentation. All exit 0.
 - If any tool response surfaces UI/widget content, accessibility-reviewer
   pass clean (step 10d).
 - Pre-merge divergence analysis clean (step 11).
-- `no-real-io-in-tests` ESLint rule wired into root config at **error
-  severity** and passing across all workspaces; rule's allowlist
-  exactly matches §IO Inventory's path set at merge time (step 8).
+- `no-real-io-in-tests` ESLint rule wired into the shared
+  `packages/core/oak-eslint/src/configs/recommended.ts` config at **`warn`
+  severity** (per the new-eslint-rules-start-warn principle; escalation
+  to `error` is a separate post-merge decision) and passing across all
+  workspaces; rule's allowlist exactly matches §IO Inventory's path set
+  at merge time (step 8 verifies; step 7 wired).
 - §IO Inventory populated at step 7 with one entry per discovered
   violation; each entry has path, kind, rationale, disposition; entry
   count cross-checked against rule's structured output count.

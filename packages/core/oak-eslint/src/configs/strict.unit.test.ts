@@ -246,15 +246,17 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
  * across the strict config surface for `*.test.ts` files outside the
  * structural allowlist. The companion rule's own `RuleTester` cases exercise
  * the rule logic in isolation; these tests describe the system state that
- * matters at the config-activation boundary: the rule is wired at error
- * severity in the shared `recommended` config (which `strict` composes), and
- * therefore every workspace inheriting these standards gains the same
- * structural guard against new real IO entering tests.
+ * matters at the config-activation boundary: the rule is wired in the shared
+ * `recommended` config (which `strict` composes), and therefore every
+ * workspace inheriting these standards gains the same structural guard
+ * against new real IO entering tests. Severity is intentionally not asserted
+ * here: severity moves through `warn` (development phase) and `error` (post-
+ * stabilisation) by separate, deliberate decisions; these tests check that
+ * the rule fires at all, which is the load-bearing config-activation invariant.
  *
- * Anchors: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
- * step 07 (capture-not-clean shape); `.agent/rules/no-real-io-in-tests.md` doctrine
- * referenced by the rule's `messageId` strings; ADR-078 (dependency injection
- * for testability).
+ * Anchors: ADR-078 (dependency injection for testability); the rule code at
+ * `../rules/no-real-io-in-tests.ts`; `.agent/rules/test-immediate-fails.md`
+ * referenced by the rule's `messageId` strings.
  */
 describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-tests activation', () => {
   it('reports @oaknational/no-real-io-in-tests for static fs imports in *.test.ts', () => {
