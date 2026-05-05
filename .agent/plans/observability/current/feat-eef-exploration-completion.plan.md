@@ -56,8 +56,8 @@ todos:
     status: completed
     depends_on: [07-capture-inventory-and-freeze-allowlist]
   - id: 09-pnpm-check-green
-    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan."
-    status: pending
+    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`) — `pnpm check` exit 0 at HEAD `5ed92747`; full output captured at `/tmp/pnpm-check-step09.log`; gate-set cross-check below in §Step 09 evidence."
+    status: completed
     depends_on: [08-verify-rule-active-and-discipline-recorded]
   - id: 10-mcp-server-live-exercise
     content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-reviewer over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-reviewer (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-reviewer return: invoke security-reviewer (auth path coverage), clerk-reviewer (Clerk middleware), sentry-reviewer (observability surface) in parallel; accessibility-reviewer conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
@@ -75,7 +75,7 @@ todos:
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-05 (Silvered Hiding Silhouette, step-08 close: rule verified active at `warn`, `pnpm lint` clean, allowlist-ADD discipline in place — no separate code commit required)
+**Last Updated**: 2026-05-05 (Silvered Hiding Silhouette, step-09 close: `pnpm check` exits 0 at HEAD `5ed92747`; gate-set cross-check against §Gate Taxonomy in §Step 09 evidence)
 **HEAD at refresh**: `75dbcdb6`
 **Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
 plans, refined post-Round-1 architecture-led review.
@@ -821,10 +821,51 @@ consolidation pass.
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | DONE 2026-05-05 — rule + RuleTester (78 cases covering full Node.js IO surface incl. node:-prefixed network family, dynamic + require + bracket-notation forms, localhost lookalike hostnames, and `global.process` aliases) + plugin registration; not yet wired (Twilit Beaming Aurora, `7cf730`; Opalescent Eclipsing Asteroid, `0c263b` takeover hardening); closing commit SHA recorded post-commit; reviewer dispatch parallel (code-reviewer APPROVED WITH SUGGESTIONS + config-reviewer ISSUES FOUND no-P1 + test-reviewer ISSUES FOUND P1-gating); P1 + P2 findings closed in same commit (test gaps, bracket-notation hardening, plan-citation removal, defence-in-depth allowlist comment); P3 dispositions deferred (config-reviewer dual-enforcement with `testRules` is step-08 territory; schema `minItems: 1` is informational-only, not adopted) |
 | 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — closing commit `483a9e32`; §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-reviewer-fred + architecture-reviewer-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0 |
 | 8 | Verify rule active + discipline recorded | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — no separate code commit required; rule active at `warn` severity per step 07's supersession of R2-4 (escalation to `error` is a separate post-merge decision, NOT in scope of this branch); `pnpm lint` exits 0 (owner-confirmed); allowlist-ADD discipline in the comment block above the rule activation in `recommended.ts` (commit `483a9e32`); step 07 reviewer P2 findings absorbed (commit `6dc7a622`) |
-| 9 | `pnpm check` green at HEAD | One-line note with SHA and gate-set cross-checked against §Gate Taxonomy |
+| 9 | `pnpm check` green at HEAD | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — exit 0 at HEAD `5ed92747`; gate-set cross-check in §Step 09 evidence; covers seven of nine §Gate Taxonomy layers (formatting, type, lint, static analysis, testing, build, accessibility); layers 6 (mutation testing, separate `pnpm mutate`) and 8 (specialist review, dispatched per-step) deliberately out of scope of `pnpm check` |
 | 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free — **does not include** the Cursor oak-local precursor in § Step 10 precursor (that milestone is preparatory only) |
 | 11 | Pre-merge divergence analysis vs `origin/main` | Commit-list diffs; conflict-potential findings |
 | 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-reviewer call; owner authorisation |
+
+### Step 09 evidence — `pnpm check` green at HEAD (2026-05-05)
+
+| Field | Record |
+| --- | --- |
+| When | 2026-05-05 |
+| Agent | Silvered Hiding Silhouette (`924167`, Claude Code, Opus 4.7-1m) |
+| Branch HEAD | `5ed92747` (`docs(plan): close step 08 as state declaration`) |
+| Command | `pnpm check` |
+| Exit code | 0 |
+| Captured output | `/tmp/pnpm-check-step09.log` (ephemeral, not committed) |
+
+**Script chain executed by `pnpm check`** (composed from `package.json`):
+
+1. `pnpm secrets:scan` — secrets / credential leak scan (in addition to taxonomy)
+2. `pnpm clean` — cache hygiene (in addition to taxonomy)
+3. `pnpm test:root-scripts` — root-level scripts test suite (19 tasks)
+4. `turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y` (88 tasks)
+5. `pnpm lint:shell` — shell-script syntax check (in addition to taxonomy)
+6. `pnpm subagents:check` — sub-agent definition validity (in addition to taxonomy)
+7. `pnpm portability:check` — platform-surface portability (in addition to taxonomy)
+8. `pnpm knip` — unused exports / dependencies static analysis
+9. `pnpm depcruise` — dependency-cruise circular-dependency / layer-violation check
+10. `pnpm markdownlint:root` — markdown formatting
+11. `pnpm format:root` — Prettier formatting
+
+**Cross-check against §Gate Taxonomy (nine layers, `docs/governance/development-practice.md`):**
+
+| # | Layer | `pnpm check` coverage | Status |
+| --- | --- | --- | --- |
+| 1 | Formatting (`format`, `markdownlint`) | `pnpm format:root` + `pnpm markdownlint:root` | ✅ green |
+| 2 | Type correctness (`type-check`) | `turbo run type-check` | ✅ green |
+| 3 | Linting (`lint`) | `turbo run lint:fix` (includes `@oaknational/no-real-io-in-tests` at `warn`) | ✅ green |
+| 4 | Static analysis (`knip`, `depcruise`) | `pnpm knip` + `pnpm depcruise` | ✅ green |
+| 5 | Testing (`test`, `test:widget`, `test:e2e`, `test:ui`, `smoke`) | `turbo run test test:widget test:e2e test:ui test:widget:ui` | ✅ green |
+| 6 | Mutation testing (`mutate`) | NOT in `pnpm check`; separate `pnpm mutate` per `mutation-testing-implementation.plan.md` | ⏭ out of scope |
+| 7 | Build (`build`) | `turbo run build` | ✅ green |
+| 8 | Specialist review (sub-agents) | NOT in `pnpm check`; dispatched per-step (steps 1, 4, 5, 6, 7, 10, 12 in this plan) | ⏭ out of scope |
+| 9 | Accessibility audit (`test:a11y`) | `turbo run test:a11y test:widget:a11y` | ✅ green |
+
+Seven of nine layers green; layers 6 and 8 are deliberately not part of `pnpm check`'s scope (mutation runs separately as a meta-quality gate; specialist review is a per-change reviewer-dispatch concern, exercised in this plan at steps 1, 4, 5, 6, 7 (already), 10 (pending), and 12 (release-readiness, pending)).
 
 ### Step 10 precursor — Cursor `oak-local` MCP verified (2026-05-05)
 
