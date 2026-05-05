@@ -525,6 +525,121 @@ continuity snapshots.
   substance is multi-instance — currently single-instance). Status:
   pending.
 
++ 2026-05-05; **PDR-027 amendment — identity routing must use (name, prefix) pair**
+  (Twilit Beaming Aurora → Ashen Banking Bellows session, `7cf730`,
+  observability-sentry-otel coordinator role). Owner-stated:
+  *"the name might change, but the session prefix will not, maybe the
+  routing should use them as a pair. They are not 1:1, the name can change
+  without the prefix changing, and the prefix can change if an identity is
+  preserved across multiple sessions... but still, we have additional
+  information we could use to at least request further information or
+  discuss options"*. Same prefix + different name = drift signal, name
+  attribution suspect. Same name + different prefix = returning agent under
+  same identity. Different both = standard new identity. Source-surface:
+  `feedback_identity_routing_uses_name_and_prefix_pair.md` plus napkin
+  Surprise 3 (live drift this session). Graduation-target: amendment to
+  PDR-027 (threads-sessions-and-agent-identity) adding §Identity Routing
+  rules; possibly companion amendment to `register-identity-on-thread-join`
+  rule. Trigger-condition: drafting slot reached (substance is single-
+  instance live but generalisable). Status: pending.
+
++ 2026-05-05; **PDR candidate — coordinator role as named pattern**
+  (Twilit Beaming Aurora → Ashen Banking Bellows session, full-time
+  coordinator role under owner direction *"I need all sessions to complete
+  their work, this has been going on far too long"* + observation
+  *"the introduction of a full time coordinator agent (you) unblocked
+  progress, it did not render the process smooth or efficient, that is
+  not criticism, it is an observation on the limits of the current
+  approaches"*). The role emerged from substrate gaps: 7-agent session
+  exceeded current tooling capacity; the coordinator pattern is a
+  proportionate behavioural cure for what should be substrate-level
+  affordances. Source-surface: experience file `2026-05-05-twilit-ashen-
+  coordinator-7agent-arc.md` plus napkin Surprises 1, 2, 9. Graduation-
+  target: PDR (a) defining when a coordinator role is appropriate;
+  (b) naming coordinator authority (cross-claim landing under owner
+  authorisation; peer-claim archival under owner-forced-close;
+  doctrine-coaching of stuck peers); (c) naming when coordinator-role is
+  the right cure vs when substrate work is the right cure (the latter
+  reduces the former). Trigger-condition: single instance with rich
+  texture; second instance would be diagnostic. Status: pending —
+  observe whether next multi-agent session needs a coordinator;
+  graduate to PDR if yes.
+
++ 2026-05-05; **PDR candidate — orchestrator-vs-gate structural cure**
+  (5 instances today across 4 distinct agents: Ethereal Transiting Comet,
+  Dawnlit Transiting Galaxy, Opalescent Threading Nebula, Twilit Beaming
+  Aurora, Fronded Climbing Pollen). Distilled.md addition just landed at
+  `368e5aff` (advisory-vs-blocking authority distinction). The pattern
+  fires under failure pressure regardless of agents having read the
+  doctrine — Threading Nebula authored the cure pattern AND fired the
+  cure pattern same session; Fronded fired it AFTER my landing of the
+  doctrine into HEAD. Reading does not inoculate; structural cure
+  required. Cure shapes: (a) rename `scripts/check-commit-skill-gates.ts`
+  → `scripts/check-commit-skill-advisories.ts` (sever the
+  linguistic invariant); (b) banner `[ADVISORY ONLY — NOT A COMMIT GATE]`
+  at top of every script invocation output; (c) SKILL.md clarification
+  in commit skill that lists the actual blocking hooks
+  (`.husky/pre-commit` chain) explicitly without the fitness gate. Source-
+  surface: distilled.md just-landed plus napkin Surprise 2. Graduation-
+  target: PDR + companion ADR + cure-implementation commit. Trigger:
+  graduation-ready (5 instances >= threshold for behaviour-changing
+  structural cure). Status: due.
+
++ 2026-05-05; **PDR candidate — cross-lane repair pattern (do-the-repair-
+  leave-unstaged-post-heads-up)**. Source: Asteroid → Fronded interaction
+  during the takeover-bundle commit attempt; Asteroid hit lint failures in
+  Fronded's collaboration-cli-gaps lane (Fronded-owned files), did the
+  minimal fix (split file to clear max-lines, shape adjustment, Prettier),
+  explicitly DID NOT stage the repair, posted heads-up event `c9dff8f1`
+  so Fronded could absorb. Cure-asymmetric counterpart to foreign-stage
+  absorption: protects the lane being repaired by leaving it owner-able.
+  Source-surface: napkin Surprise 5. Graduation-target: pattern file at
+  `.agent/memory/active/patterns/cross-lane-repair-leave-unstaged.md`;
+  possibly amendment to `stage-by-explicit-pathspec.md` rule's cure-
+  asymmetry section. Trigger: pattern-shaped (single rich instance with
+  named cure); second-instance preferred but not required given the
+  shape clarity. Status: pending.
+
++ 2026-05-05; **PDR candidate — owner-authorised coordinator-driven
+  cross-claim landing**. Named precedent at `368e5aff`: coordinator
+  re-enqueued under own intent_id citing peer's identity, verified
+  staged_bundle_fingerprint matched peer's recorded fingerprint exactly,
+  committed via explicit pathspec filter with body attributing substance
+  to original authors. Authorised by owner statement *"authorised"* in
+  reply to coordinator escalation event. Continuity action; preserves
+  substance under correct attribution rather than abandoning bundle.
+  Source-surface: napkin Surprise 4 + commit `368e5aff` body. Graduation-
+  target: PDR (a) naming when this action is appropriate (peer queue
+  expired, peer non-responsive, ready bundle); (b) naming the
+  authorisation requirement (explicit owner statement, not implied);
+  (c) naming the discipline (fingerprint verification, explicit pathspec,
+  attribution body). Trigger: drafting slot reached. Status: pending.
+
++ 2026-05-05; **PDR/ADR candidate — agent-tools CLI affordance set + build
+  isolation**. Friction observed throughout the 7-agent coordinator
+  session: (a) no `comms list/show/watch` commands; (b) no `claims
+  list/show` filtered by prefix/name/thread/kind; (c) no `commit-queue
+  list/show` filtered by phase or agent; (d) flag-name discoverability
+  (`--summary` not `--closure-summary` for `claims close`; `--file`
+  vs `--area-pattern` ambiguity for `claims open`); (e) `comms render`
+  fragile — single malformed event JSON blocks regeneration repo-wide;
+  (f) build-on-each-CLI-invocation creates identity drift under in-flight
+  tooling refactor; (g) help-on-flag-failure not consistently applied.
+  Owner standing direction: *"all invocations of ALL agent tools with
+  improper flags MUST print the FULL help text"*. Owner cure: *"all
+  agents use only the built agent tools, so that development work can
+  happen on them without causing this issue again"*. Owner suggestion:
+  optional non-blocking `comms watch` streaming CLI for platforms with
+  background services; bare polling JSON list for platforms without.
+  Source-surface: napkin Surprise 7 + feedback memories
+  `feedback_use_built_agent_tools_only`,
+  `feedback_agent_tool_help_on_invalid_flags`,
+  `feedback_periodic_comms_check`. Graduation-target: ADR (build
+  isolation discipline), PDR (CLI affordance set + non-blocking-by-design
+  + portable substrate), and a concrete agent-tools enhancement plan.
+  Trigger: graduation-ready (multiple worked instances + owner-stated
+  cures). Status: due.
+
 + 2026-05-05; **turbo cache invalidation by an unrelated peer can expose
   a pre-existing latent test failure mid-commit, gating both sessions**
   (Gnarled Climbing Bark, peer interaction with Moonlit Shimmering
