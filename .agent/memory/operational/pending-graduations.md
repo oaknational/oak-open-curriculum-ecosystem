@@ -30,6 +30,131 @@ HARD fitness state). Doctrine references that previously pointed to
 Schema: `captured-date`, `source-surface`, `graduation-target`,
 `trigger-condition`, `status`. `consolidate-docs` uses this as the live
 queue. Graduated and merged history is preserved in git and the archived
+
++ 2026-05-05; **Inter-agent communication is a first-class coordination
+  primitive** (Lacustrine Navigating Rudder, owner-named after the
+  Gnarled-Lacustrine sub-2-min-roundtrip resolution).
+  Source-surface: user-memory `feedback_inter_agent_comms_first_class.md`,
+  napkin §Surprise 4 (this date).
+  Graduation-target: extend [`.agent/rules/use-agent-comms-log.md`](../../rules/use-agent-comms-log.md)
+  to make explicit the workflow ("when another agent's state blocks
+  yours and they may still be active: post comms-event with deadline
+  + default-action; poll briefly; escalate to owner only if no
+  response inside the deadline window"). Possible PDR candidate
+  encoding the more general principle: agent-to-agent coordination
+  is direct unless the decision is owner-owned. Possibly an ADR
+  amendment to ADR-150 (Continuity Surfaces) since comms-events live
+  in that surface.
+  Trigger-condition: second instance of agent-to-agent coordination
+  resolving without owner mediation (this Gnarled-Lacustrine round
+  is the worked example; second instance graduates from feedback to
+  rule).
+  Status: `pending`.
+
++ 2026-05-05; **ADRs are permanent and outlive plans; plans cite ADRs,
+  never the reverse** (Lacustrine Navigating Rudder, owner correction
+  during BF-2/BF-4 doc cleanup).
+  Source-surface: user-memory `feedback_adrs_permanent_plans_ephemeral.md`,
+  napkin §Surprise 3 (this date).
+  Graduation-target: extend
+  [`.agent/rules/no-moving-targets-in-permanent-docs.md`](../../rules/no-moving-targets-in-permanent-docs.md)
+  with the directionality principle (currently the rule covers SHAs
+  / counts / tool versions; the directionality "permanent ↛ ephemeral"
+  is a coarser-grained framing that subsumes the SHA case). Could
+  alternatively be a new rule
+  `.agent/rules/no-ephemeral-pointers-in-permanent-docs.md` if the
+  framing benefits from its own surface. Possible PDR candidate on
+  the broader directionality principle ("permanent records cite
+  permanent records; ephemeral records may cite up").
+  Trigger-condition: rule-text update at next doctrine-enforcement
+  pass on the no-moving-targets rule, OR second instance of the
+  ADR↛plan reverse-citation failure mode in a separate ADR/runbook.
+  Status: `pending`.
+
++ 2026-05-05; **Entry-point contract: default + named extensions
+  framing is forward-compatible by design** (Lacustrine Navigating
+  Rudder, owner-named during AGENTS.md drift incident).
+  Source-surface: `.agent/commands/session-handoff.md` step 6d (this
+  date), napkin entries on this session.
+  Graduation-target: pattern-tier — the design move generalises:
+  *write the default contract such that a new participant joining
+  without specific accommodation gets compatible behaviour first,
+  then add named extensions only where the participant's behaviour
+  requires it*. Possible pattern entry at
+  `.agent/memory/active/patterns/default-plus-named-extensions-for-forward-compatibility.md`
+  applicable beyond entry-point files (e.g. config schemas, plugin
+  contracts, multi-platform adapter pairs, even API design).
+  Trigger-condition: second instance of the pattern (recognise it
+  in another design context — e.g. in MCP transport adapters, or in
+  a config-schema decision — graduates from session-local note to
+  pattern entry).
+  Status: `pending`.
+
++ 2026-05-05; **Commit-queue `record-staged` + `verify-staged`
+  fingerprint protocol is non-trivially recursive when state files
+  self-modify** (Lacustrine Navigating Rudder, second instance).
+  Source-surface: napkin §Surprise 6 (this date); same observation
+  recorded in earlier session summary as the "fingerprint mismatch
+  incident" (first instance — see commit `2b78aa93`'s session arc).
+  Graduation-target: CLI hint inside `agent-tools:commit-queue --
+  record-staged` printing *"do not re-stage active-claims.json
+  after this command — the fingerprint write is metadata-only and
+  the index does not need it"*; OR doc note in
+  [`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)
+  step 7's record-staged paragraph; OR redesign the
+  `staged_bundle_fingerprint` to exclude the fingerprint-field
+  itself when computing (currently it includes the whole patch).
+  Trigger-condition: second instance now confirms (the earlier
+  Lacustrine session and this session both hit it). Promote to
+  CLI / doc / impl change at next commit-queue tooling pass.
+  Status: `due`.
+
++ 2026-05-05; **Moments of correction are high-bandwidth signals
+  worth capturing regardless of whether the correction is technical
+  or relational** (Lacustrine Navigating Rudder, surfaced by reading
+  Gnarled's two 2026-05-05 experience files together, per
+  consolidate-docs §4c emergent-cross-experience scan).
+  Source-surface: `.agent/experience/2026-05-05-gnarled-the-header-was-the-contract.md`
+  + `.agent/experience/2026-05-05-gnarled-the-asymmetry-was-the-path.md`
+  read as a pair.
+  Graduation-target: pattern-tier — both files capture the texture
+  of a *being-corrected* moment; the first is technical
+  (markdown-direct vs JSON-event contract), the second is relational
+  (receiving an apology across the asymmetric agent/human boundary).
+  The pattern observation: the correction itself, regardless of
+  domain, is the high-leverage signal — and the experience surface
+  is precisely where it lands rather than dispersing as
+  unstructured affect. Possible pattern entry at
+  `.agent/memory/active/patterns/correction-as-experience-signal.md`
+  OR a PDR amendment to PDR-048 (insight-capture-at-moment-of-occurrence)
+  noting that *correction* is a specific shape of insight-moment that
+  deserves named capture.
+  Trigger-condition: second cross-experience pair surfacing the
+  same correction-as-signal observation (likely on a different
+  thread or platform) graduates from session-local register
+  observation to pattern entry / PDR amendment.
+  Status: `pending`.
+
++ 2026-05-05; **Two-tier authorisation chain for sensitive index
+  actions** (Lacustrine Navigating Rudder, observed during option-2
+  unstage of Gnarled's pre-staged files).
+  Source-surface: napkin §Surprise 5 (this date).
+  Graduation-target: pattern entry
+  `.agent/memory/active/patterns/two-tier-authorisation-claim-holder-plus-owner.md`
+  capturing: when an action affects another agent's claimed state,
+  obtaining the affected agent's authorisation (e.g. via comms
+  reply) is necessary but not sufficient if the original deferral
+  was owner-directed; the owner's separate authorisation is also
+  required. Affects the
+  [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md)
+  rule's interaction model. Possible PDR amendment if the principle
+  surfaces in second-instance form.
+  Trigger-condition: second instance of two-tier-authorisation in a
+  different context (e.g. another agent's branch / config / shared
+  state) graduates from session-local pattern candidate to pattern
+  entry.
+  Status: `pending`.
+
 continuity snapshots.
 
 + 2026-05-05; **`use-agent-comms-log` rule must name the JSON-event-only
