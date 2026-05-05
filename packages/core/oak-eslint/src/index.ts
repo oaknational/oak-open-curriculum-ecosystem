@@ -1,4 +1,3 @@
-// import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver } from 'eslint-plugin-import-x';
 import { oakPlugin } from './plugin.js';
@@ -8,8 +7,8 @@ import type { Linter } from 'eslint';
  * Re-exports boundary rules and helpers from the boundary module.
  *
  * @remarks
- * TODO: For now, we are exporting the raw logic as we did in eslint-rules.
- * We should aim to expose them as proper configs or rules.
+ * This package still exports the raw boundary-rule factories used by existing
+ * consumers while the bundled configs provide the primary ESLint entry points.
  */
 export {
   coreBoundaryRules,
@@ -20,6 +19,7 @@ export {
   appArchitectureRules,
 } from './rules/boundary.js';
 
+export type { NoRealIoInTestsOptions } from './rules/no-real-io-in-tests.js';
 export { oakRuleModules as rules } from './plugin.js';
 
 import { recommended } from './configs/recommended.js';

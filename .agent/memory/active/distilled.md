@@ -165,7 +165,8 @@ the *care* applied; they do not calibrate the *speed*.
 Two distinct enforcer roles, two distinct authorities. **Quality
 gates** (`.husky/pre-commit` chain — format / markdownlint / knip /
 depcruise / type-check / lint / test, plus the `commit-msg` hook
-running commitlint) are blocking, always. They run at `git commit`
+running `prevent-accidental-major-version` then commitlint) are
+blocking, always. They run at `git commit`
 time on the actual working-tree state and refuse the commit on
 failure. **The commit-skill orchestrator**
 (`scripts/check-commit-skill-gates.ts`, invoked voluntarily before
@@ -300,6 +301,48 @@ the session of discovery. Cure when count itself is the point: route
 to a generated/scriptable surface (`pnpm portability:check`, fitness
 reports, generated indexes), not hand-maintained prose. Owner stated
 2026-05-01.
+
+**Directive-file work requires <30% context budget; otherwise queue
+a fresh session.** Owner-stated 2026-05-05 with explicit standing
+authority (*"this is always true"*). Files under `.agent/directives/`
+(principles.md, AGENT.md, orientation.md, tdd-as-design.md,
+testing-strategy.md, schema-first-execution.md) are deep, dense, and
+structurally load-bearing — every agent reads them at every session
+open; mistakes compound across the entire Practice. The error rate
+of editing operations rises sharply under context pressure, and the
+disposition that produces *"I'll just be careful"* under context
+pressure is exactly the rounding-off failure mode the
+[`eager-rounding-off-on-partial-structures`](../../memory/active/patterns/eager-rounding-off-on-partial-structures.md)
+pattern names. The cure is structural, not behavioural: directive-
+file work is sequenced as the final step of any consolidation pass
+(napkin → other capture surfaces → distilled → pending-graduations
+→ directives, in that order); at the boundary before directive
+work, the context-usage check fires; if context is at or above 30%,
+finish current-step work, write a session-handoff opener, and
+queue the directive work for a fresh session. The 30% threshold is
+load-bearing — it leaves headroom for full-depth file reading,
+existing-structure comprehension, and editing without crowding-out.
+
+**Cyclical learning-loop maintenance is a full-time process even
+at small N.** Owner-named meta-observation 2026-05-05 (after
+Opalescent's pass and Dawnlit's parallel session both contributed
+substance to the same napkin in <2 hours): *"the cyclical nature,
+even with only two agents running, managing the learning loop is a
+full time process"*. The full loop is napkin (capture) → other
+sources → distilled (refinement) → pending-graduations (queue) →
+directives (permanent doctrine), then restart from napkin against
+the new ground. Each pass through the loop produces both new
+substance (the work itself) AND new substance about the loop (this
+observation is itself an instance). The loop is self-feeding by
+design and does not asymptote — every consolidation pass discovers
+new candidate-substance that requires future passes. Operational
+implication: the loop is not "consolidation work that happens
+sometimes between feature work"; it is the substrate that future
+feature work runs on, and its maintenance cost is *baseline*, not
+overhead. At N=2 agents producing substance, the maintenance cost
+is already a full-time process; this scales superlinearly with N
+because cross-agent coordination substance accumulates faster than
+any single agent's substance graduates upward.
 
 **Plans cite ADRs, never the reverse — ADRs are permanent and
 outlive plans.** Owner sharpening 2026-05-05 of the moving-targets

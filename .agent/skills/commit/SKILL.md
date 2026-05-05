@@ -451,6 +451,67 @@ commitlint config *before* `git commit` is invoked. The live hook is still the
 ground truth — this skill does not replace it — but the rework loop is closed
 at draft time rather than commit-invocation time.
 
+## Quality Gates Are Always Blocking; the Orchestrator Is Advisory
+
+Two distinct enforcer roles operate around `git commit`. They share rule
+configurations and are easily conflated under failure pressure. They are not
+the same authority and must not be treated as such. Owner-stated 2026-05-05:
+*"all quality gates are blocking always, the orchestrator is not a quality
+gate, it surfaces very important but advisory signals, there is no conflict
+here"*.
+
+**Quality gates — blocking, always.** The `.husky/pre-commit` hook chain
+(format / markdownlint / knip / depcruise / type-check / lint / test) and the
+`.husky/commit-msg` hook (`prevent-accidental-major-version` + commitlint)
+are the **blocking enforcer tier**. They run automatically when `git commit`
+is invoked, they refuse the commit on failure, and their authority is
+absolute. Bypassing them requires explicit per-commit owner authorisation
+(`--no-verify`), which is owner-initiated only — never agent-proposed.
+
+**The commit-skill orchestrator — advisory, always.** The
+`scripts/check-commit-skill-gates.ts` script (and its sub-checks
+`practice:fitness:strict-hard`, `practice:vocabulary`,
+`scripts/check-commit-message.sh`) is the **advisory pre-screen tier**.
+Agents invoke it voluntarily before `git commit` to surface important
+signals (whole-tree fitness shape, vocabulary drift, message-format issues)
+early enough to act on. A non-zero orchestrator exit is **not** a commit
+verdict; it is a discipline-checker output to read, record, and act on per
+the substance-led path (e.g. PDR-046 §Move 3 graduation upward when the
+signal flags a layer at rest, or fitness diagnostics on layers being
+processed during a multi-layer pass).
+
+**The conflation failure mode.** Three observed instances on 2026-05-05:
+agents under failure pressure round the orchestrator's identity into the
+hook chain's identity ("`check-commit-skill-gates.ts` has 'gates' in the
+name → it must be a blocking gate") and reach for `--no-verify` as the
+escape valve, despite the actual blocking surface (the hook chain) running
+a different rule set than the failing pre-screen. Two of the three
+instances reached `--no-verify` proposal before owner correction; the
+third (Opalescent Threading Nebula's rotation commit) constructed a false
+doctrinal collision between SKILL §Pre-Commit Validation and PDR-046 §Move
+2 to justify proceeding past the orchestrator's HARD signal — same
+underlying rounding-off, different framing. In every instance plain `git
+commit` succeeded because `.husky/pre-commit` does not run
+`practice:fitness:strict-hard`.
+
+**Diagnostic discipline.** When *any* enforcer fires, before proposing any
+response, name *which* enforcer is firing on *which* surface and *with
+what authority*. The questions to ask:
+
+- Is this an advisory pre-screen output (orchestrator script invoked by
+  me before `git commit`) or a blocking-gate refusal (hook chain refusing
+  the commit)?
+- If advisory: what substance-led action does this signal point to?
+  Graduation upward? Substance preservation per PDR-046? Capture for next
+  pass?
+- If blocking: what is the underlying tree-state issue, and how is it
+  fixed at root?
+
+The orchestrator's signals are *important*. They surface the consolidation
+work that needs doing. They are not gates. The deeper disposition driving
+the conflation is captured at
+[`.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`](../../memory/active/patterns/eager-rounding-off-on-partial-structures.md).
+
 ## Related Surfaces
 
 - Pattern: [`.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)

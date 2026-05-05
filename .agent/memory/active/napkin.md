@@ -136,3 +136,229 @@ rest.
 - `git commit -- <pathspec>` will filter the commit by explicit
   paths per `stage-by-explicit-pathspec` discipline (third-instance
   worked example from 2026-05-05 still load-bearing).
+
+## 2026-05-05 (Opalescent Threading Nebula, `4c1773`) — orchestrator-vs-hook conflation third instance + eager-rounding-off disposition surfaced
+
+**Surprise — the same conflation Ethereal flagged this morning and
+Dawnlit relived in their step-05 closure I just relived in real
+time at the rotation commit-gate.** When the commit-skill
+orchestrator (`scripts/check-commit-skill-gates.ts`) reported HARD
+fitness violations on the staged set — three of which were
+pre-existing peer-state and one of which was the new substance
+landed by THIS rotation in `distilled.md` — I framed three options
+to the owner including one that was effectively "honour PDR-046
+§Move 2 over the orchestrator's signal" and surfaced the tension
+as a doctrinal collision between SKILL.md (block new violations)
+and PDR-046 §Move 2 (suspend active-layer fitness during the
+pass). Owner correction with zero ambiguity: *"all quality gates
+are blocking always, the orchestrator is not a quality gate, it
+surfaces very important but advisory signals, there is no conflict
+here"*. The tension I had constructed was not real — I was reading
+an advisory pre-screen as if it were a blocking gate, and rounding
+the doctrinal collision into a place where it doesn't exist.
+
+**Third-instance convergence on the orchestrator-vs-hook
+conflation pattern.** The same shape fired three times today
+across three distinct sessions:
+
+1. **Ethereal Transiting Comet** (morning): proposed `--no-verify`
+   when commit-skill orchestrator failed on whole-tree fitness;
+   owner asked *"why do we need --no-verify?"* and inspection
+   showed `.husky/pre-commit` does not include `practice:fitness:
+   strict-hard`. Plain `git commit` succeeded.
+2. **Dawnlit Transiting Galaxy** (around midday, captured in
+   their napkin entries above mine): orchestrator failed on
+   pre-existing peer fitness; surfaced three options including
+   `--no-verify` authorisation; owner correction *"I did not
+   approve it, I need to explicitly state approval for that with
+   absolutely zero ambiguity, and that did not happen. Why do you
+   need --no-verify?"*; CR1 landed at `f6c73f4a` cleanly.
+3. **Me** (just now, this rotation): orchestrator failed on the
+   four refinements I had landed in distilled.md (NEW + valid per
+   PDR-046 §Move 2); surfaced three options including reshape-the-
+   commit and pause-and-split; owner correction *"all quality gates
+   are blocking always, the orchestrator is not a quality gate, it
+   surfaces very important but advisory signals, there is no
+   conflict here"*. Plain `git commit` landed at `1513474e`
+   through the actual quality gates (full turbo cache).
+
+**The deeper disposition Dawnlit named — and why my variant
+sharpens it.** Dawnlit's surprise 2 named *eager-rounding-off-on-
+partial-structures under failure pressure*: the orchestrator's
+`check-commit-skill-gates` filename has "gates" in it; under
+failure pressure, "gates" rounds to "the gates", which absorbs the
+live hook into the orchestrator's identity. My instance sharpens
+the disposition: I had read both the orchestrator AND the
+`.husky/pre-commit` chain in this same session. The information
+gap was zero. The rounding still happened — but at a different
+seam: I rounded *advisory pre-screen* into *gate*, then rounded
+*gate* into *blocking gate*, then *invented* a doctrinal collision
+to explain why proceeding past a "gate" was permitted. The
+rounding-off compounds: each layer of rounding manufactures the
+problem the next layer pretends to solve. The cure is not "read
+more carefully"; the cure is recognising the failure-pressure
+disposition itself and naming what part of which structure is
+being rounded off.
+
+**Implication for graduation.** The advisory-vs-blocking
+distinction is now in distilled.md (committed at `1513474e`).
+Three observed instances of the same conflation across three
+sessions on the same day make this **graduation-ready substance
+under repo-pattern-recognition heuristics** (≥2 instances,
+behaviour-changing, structural rather than incidental). The
+candidate Layer 2 home is one of:
+
+- An extension to the commit `SKILL.md` clarifying the advisory
+  authority of `check-commit-skill-gates.ts` vs the blocking
+  authority of `.husky/pre-commit` and `.husky/commit-msg` —
+  surface-level cure for the artefact-gravity problem (the
+  filename pulls toward "gate").
+- A new pattern under `.agent/memory/active/patterns/`
+  (host-local) capturing eager-rounding-off-on-partial-structures
+  as a behavioural disposition with three worked instances and a
+  named diagnostic ("what part of which structure am I rounding
+  off?").
+- A deeper graduation to Practice Core if the disposition is
+  ecosystem-agnostic — the rounding-off-under-failure-pressure
+  shape is plausibly general across Practice-bearing repos with
+  layered enforcement, but evidence is currently single-repo. Best
+  routed to Layer 2 as host-local pattern first; Practice-Core
+  synthesis follows if a second repo surfaces the same disposition.
+
+**Out of scope this commit; routed to next pass.** This entry
+records the substance for next-session graduation. The active
+landing target was the Layer 0 → 1 rotation, which committed
+cleanly. Dawnlit's three surprises above this entry remain owned
+by Dawnlit; my entry adds the convergence reading and the
+sharpened disposition diagnosis without claiming Dawnlit's
+substance.
+
+## 2026-05-05 (Opalescent Threading Nebula, `4c1773`) — Promotion pass + ADR-vs-PDR active decisions + standing rules
+
+**Owner direction: active ADR-vs-PDR-vs-both decisions, every
+candidate.** *"We need to make sure we are making active decisions
+on whether a concept belongs in an ADR, a PDR, or both. I am
+seeing a lot of PDRs, but maybe that is because we are discovering
+a lot of general principles."* The discipline I'm applying: the
+test from `consolidate-docs §7a` — ADR adopter is the next
+contributor in *this* repo; PDR adopter is the next *Practice-
+bearing repo* hydrating the Core. Single-context evidence (e.g.
+three instances all in this repo's commit flow) is *not* equivalent
+to ecosystem-portable Practice governance, even when the substance
+*looks* general-shaped. The pattern in real-time: orchestrator-vs-
+hook conflation today fired three times across three sessions —
+all in commit flow on this repo — and the deeper rounding-off
+disposition is plausibly Practice-portable but evidence is
+single-context. Cure: host-pattern first; promotion to Practice
+Core after a second-context manifestation outside the original
+flow. This avoids the *everything-looks-PDR-shaped-at-capture-time*
+failure mode the owner is naming.
+
+**Decision matrix applied this pass** (substance-led, not
+default-led):
+
+| Candidate | ADR? | PDR? | Decision |
+| --- | --- | --- | --- |
+| Orchestrator-vs-hook clarification (3 instances today) | No | Plausibly portable but single-context evidence | Host SKILL.md amendment now; PDR candidate at second-context manifestation |
+| Foreign-stage absorption asymmetry (3 instances) | Eventually (host structural-enforcement shape choice) | Eventually (asymmetric-cure principle) | Both, sequenced: host rule extension now; ADR pending owner direction; PDR pending second-context manifestation |
+| Eager-rounding-off-on-partial-structures disposition | No | Plausibly portable; single-context evidence | Host pattern in `memory/active/patterns/`; promote to Practice Core (PDR with `pdr_kind: pattern`, since the former Core patterns directory was retired 2026-04-29) after second-context manifestation OR owner direction |
+| 30% context budget for directive processing | No | Yes — Practice governance about high-stakes editing under context pressure | User-memory + distilled.md now; PDR candidate trigger fired (owner stated standing); but landing PDR itself is directive-shaped work — queue for fresh restart session |
+| Cyclical-loop is full-time process even at N=2 | No | Plausibly | Distilled.md now; pending-graduations entry; substance grows across more passes |
+
+**Standing rule captured (PDR-049 candidate): 30% context budget
+for directive-file work.** Owner direction with explicit standing
+authority (*"this is always true"*). Captured in user-memory
+[`feedback_30_percent_context_for_directives.md`](file:///Users/jim/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_30_percent_context_for_directives.md)
+and distilled.md. The rule says: directive-file work
+(principles.md, AGENT.md, orientation.md, tdd-as-design.md,
+testing-strategy.md, schema-first-execution.md) requires session
+context usage under 30% — otherwise queue a fresh session. Why:
+directive substance has the longest reach; the disposition that
+produces *"I'll just be careful"* under pressure is exactly the
+rounding-off failure mode this session named live.
+
+**Meta-observation captured: cyclical learning-loop is a full-time
+process even at small N.** Owner-stated *"note the cyclical
+nature, even with only two agents running, managing the learning
+loop is a full time process"*. Today's evidence: my session and
+Dawnlit's session both contributed substance to the same napkin
+within <2 hours; both surfaced the same orchestrator-vs-hook
+conflation; both required owner-correction; the substance produced
+*about the loop* (this observation) accumulated alongside the
+substance produced *by the loop* (the rotation, the closures, the
+graduations). The loop does not asymptote — every pass discovers
+new candidate-substance for future passes. Captured in distilled.md
+under §Process; pending-graduations entry follows.
+
+**Restart sequencing: napkin → other sources → distilled → pending-
+graduations → directives.** Owner direction for the next pass
+shape, with the explicit qualifier *"likely the starting again
+will need to happen in a fresh session"*. The five-layer expanded
+view (vs. the three-layer napkin/distilled/permanent of PDR-046)
+makes "other sources" (the .remember/ buffers, archived napkins,
+experience files, comms-events) and "pending-graduations" each
+their own processing pass. Directive files are step 5 of 5 and
+gated by the 30% context rule. This session lands the promotion
+work and the standing-rule capture, then closes — directive-level
+substance is queued for the fresh session per owner direction.
+
+**Three due items being promoted in the atomic commit following
+this entry:**
+
+1. **commit/SKILL.md** extended with §Orchestrator Authority vs
+   Quality-Gate Authority section: distinguishes advisory pre-screen
+   (orchestrator) from blocking gate (hook chain), with the 3-instance
+   evidence trail and the rounding-off diagnostic discipline.
+2. **stage-by-explicit-pathspec.md** rule extended with §Cure
+   Asymmetry — One-Sided Application Does Not Prevent Absorption:
+   3-instance evidence table, asymmetric-cure principle, three
+   named structural-enforcement candidate shapes pending owner
+   direction.
+3. **memory/active/patterns/eager-rounding-off-on-partial-structures.md**:
+   new host pattern with three worked instances, the rounding-off
+   chain decomposition, and the diagnostic discipline (*"what part
+   of which structure am I rounding off?"*). Promotion to Practice
+   Core deferred until second-context manifestation.
+
+Plus pending-graduations status flips and distilled.md additions
+for the standing rules.
+
+Reviewer dispatch: docs-adr-reviewer + code-reviewer in parallel
+on the staged bundle, per owner direction *"use the document
+reviewer and code reviewer to help"*.
+
+**Worked-instance addendum (4th instance of eager-rounding-off,
+self-firing on the pattern's author at the moment of authoring).**
+Mid-session, while preparing to commit the promotion bundle, I
+inspected the live commit-queue and observed an entry at
+`pre_commit` phase containing seven files including three under
+`packages/core/oak-eslint/...`. I rounded off "eslint files in the
+staged set" → "Moonlit Shimmering Comet's claim covers eslint
+paths" → "this must be Moonlit". I sent a comms-event to Moonlit
+flagging the staged-set scope concern. The queue entry's
+`agent_id.agent_name` was *Twilit Beaming Aurora* — present in the
+JSON the entire time; I never read the field. Owner reminder
+about the parallel-default for messaging surfaced the issue
+because I was framing the comms-event around the wrong recipient.
+Cure: corrective comms-event sent to Twilit (correct recipient);
+clearing comms-event sent to Moonlit naming the misidentification.
+The disposition was identical to the orchestrator-vs-hook three
+instances earlier today — a fragment of evidence (eslint paths in
+scope) rounded into a whole conclusion (must be Moonlit), skipping
+the verification step (read the `agent_id` field). Different
+*surface* (recipient identification rather than enforcer
+framing); same *disposition family* (rounding-off-partial-
+structures-under-pressure). This may be a second-context
+manifestation of the eager-rounding-off pattern — the trigger I
+named in the pattern's Promotion Section as required for
+Practice-Core promotion. Self-cited evidence is fragile; deferring
+the promotion-trigger evaluation to next pass with owner
+direction. The capture itself is the first move; the diagnostic
+("what part of which structure am I rounding off?") is the cure;
+I did not apply the diagnostic before sending the wrong-recipient
+comms-event because I had read both the queue entry's `agent_id`
+field AND the eslint paths and let the latter overwrite the
+former. Information gap was zero; the rounding still happened.
+The pattern names exactly this shape; landing it in the same
+session it fires on its author is a strong empirical signal but
+not yet a promotion trigger by itself.
