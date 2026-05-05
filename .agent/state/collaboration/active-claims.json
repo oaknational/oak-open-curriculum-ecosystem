@@ -120,8 +120,62 @@
       ],
       "commit_subject": "refactor(http-mcp): relocate upstream-metadata-fixture to src/test-helpers (close C1)",
       "queued_at": "2026-05-05T10:44:00.855Z",
-      "updated_at": "2026-05-05T10:44:13.372Z",
+      "updated_at": "2026-05-05T10:46:16.766Z",
       "expires_at": "2026-05-05T10:59:00.855Z",
+      "phase": "abandoned",
+      "notes": "Foreign-stage absorption: substance (12 consumer edits + fixture relocation + identity row + comms event + active-claims claim) landed at peer commit 36102937 (Ethereal Transiting Comet) under misleading subject 'chore(continuity): handoff + metacognition'. Fred + code-reviewer dispatched on the diff before landing (CLEAN + APPROVED WITH SUGGESTIONS); review evidence intact. C1 boundary-violation grep audit: zero matches at HEAD. Substance gain; ceremony loss. Coordination cure named in §Discipline (git commit -- pathspec) was applied on my side but not by Ethereal."
+    },
+    {
+      "intent_id": "dc826ac6-57b7-471c-a331-f8d5ebc52775",
+      "claim_id": "5ac8618c-26d1-46ce-a51c-1a59558ba8a3",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "files": [
+        "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts",
+        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-events/b649b716-266c-47f4-81d1-da161a929ea5.json",
+        ".agent/state/collaboration/comms-events/2e2bfb5a-017a-42c2-82a4-ae02de215c1a.json"
+      ],
+      "commit_subject": "refactor(http-mcp): replace conditional Result early-return with unwrap (close CR1; close step 05)",
+      "queued_at": "2026-05-05T10:54:12.784Z",
+      "updated_at": "2026-05-05T10:55:36.329Z",
+      "expires_at": "2026-05-05T11:09:12.784Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "18e1caa257e5a85fe65005782ca625d007dd1bdc0fb41b0c3b730b8a0a4af0c5",
+      "staged_name_status": "M\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/2e2bfb5a-017a-42c2-82a4-ae02de215c1a.json\nA\t.agent/state/collaboration/comms-events/b649b716-266c-47f4-81d1-da161a929ea5.json\nM\tapps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts\nM\tapps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts\n",
+      "notes": "Pre-existing fitness violations on peer-authored files (.agent/directives/principles.md hard chars; .agent/memory/active/distilled.md hard lines; .agent/memory/active/napkin.md critical lines+chars+max-prose; .agent/memory/operational/pending-graduations.md hard lines+chars) block the practice:fitness:strict-hard gate orchestrator. None of these files are in my staged set (CR1 fix + plan body + thread record + 2 comms events + 2 collaboration-state files). This is the same structural gap Lacustrine documented in their napkin Surprise 3 (orchestrator has no staged-set awareness). Per feedback_no_verify_fresh_permission, agent does not propose --no-verify; surfacing to owner for direction."
+    },
+    {
+      "intent_id": "b1d8e165-4203-463c-a72e-8bbbdc9f1378",
+      "claim_id": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "files": [
+        "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts",
+        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-events/b649b716-266c-47f4-81d1-da161a929ea5.json",
+        ".agent/state/collaboration/comms-events/2e2bfb5a-017a-42c2-82a4-ae02de215c1a.json"
+      ],
+      "commit_subject": "refactor(http-mcp): replace conditional Result early-return with unwrap (close CR1; close step 05)",
+      "queued_at": "2026-05-05T11:02:49.076Z",
+      "updated_at": "2026-05-05T11:02:59.124Z",
+      "expires_at": "2026-05-05T11:17:49.076Z",
       "phase": "staging"
     }
   ],
@@ -198,7 +252,37 @@
       "intent": "Step 05 final closure: close C1 (relocate upstream-metadata-fixture.ts from e2e-tests/helpers to src/test-helpers + update 12 consumers + own internal import) and CR1 (refactor two if(!result.ok) return early-returns to typed unwrapOk helper) as two separate atomic commits. Reviewers: code-reviewer + architecture-reviewer-fred (commit 1); code-reviewer + test-reviewer (commit 2)."
     },
     {
-      "claim_id": "eb5b3638-1e0e-4951-8670-88f57d9f01a3",
+      "claim_id": "b204403a-a6c7-4d08-a085-dd69ed96b46d",
+      "agent_id": {
+        "agent_name": "Opalescent Threading Nebula",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4c1773"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-05-05.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms-events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T11:01:08Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Layer 0 → 1 napkin rotation per consolidate-docs §6: archive full napkin to archive/napkin-2026-05-05.md (no compression), extract behaviour-changing distillations into distilled.md, start fresh napkin keyed on this session. PDR-046 §Move 1/2/3 traversal.",
+      "notes": "No conflict with Dawnlit (observability files) or Moonlit (smoke-tests retirement files). All target files are governance/memory surfaces on the agentic-engineering-enhancements thread."
+    },
+    {
+      "claim_id": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
       "agent_id": {
         "agent_name": "Dawnlit Transiting Galaxy",
         "platform": "claude-code",
@@ -214,12 +298,12 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-05T10:43:23Z",
+      "claimed_at": "2026-05-05T11:02:33Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Stage and commit C1 closure: relocate upstream-metadata-fixture from e2e-tests/helpers to src/test-helpers; update 12 consumers + own internal import; identity row + file-area claim sweep.",
-      "notes": "Pathspecs: 12 consumer test files + relocated fixture pair + thread record + active-claims.json. Gates: workspace lint/type/test green pre-claim. Peer claims: no overlap (Moonlit stale; Ethereal closed at 74dcd145).",
-      "intent_to_commit": "9305c2fb-7db6-4243-96ac-c0e7877c7d60"
+      "intent": "Stage and commit CR1 closure: replace conditional-branch early-return with unwrap from @oaknational/result; bundle plan body + thread record + comms events + collaboration state. Owner-cleared to proceed; Opalescent owns fitness-limit work as separate lane.",
+      "notes": "Standard 'git commit' (no --no-verify). Pre-commit hook does NOT include fitness gate (only the orchestrator pre-screen does). Targeted gates clean: format, lint, type, 722 tests.",
+      "intent_to_commit": "b1d8e165-4203-463c-a72e-8bbbdc9f1378"
     }
   ]
 }

@@ -36,8 +36,8 @@ todos:
     status: completed
     depends_on: [03-integrate-no-speed-pressure-rule]
   - id: 05-apply-backfill-findings
-    content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-reviewer-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-reviewer (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation."
-    status: pending
+    content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-reviewer-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-reviewer (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`; Dawnlit Transiting Galaxy, `0ddc89`); commit SHAs recorded in §Sequence Summary row 5 and §Backfill Findings entries."
+    status: completed
     depends_on: [04-reviewer-backfill-scoped-by-commit-risk]
   - id: 06-author-no-real-io-in-tests-rule
     content: "Author packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts as the structural guard against NEW real-IO in tests. **Severity: error** (not warn) — per no-warning-toleration; pnpm lint must exit non-zero on any new violation. Trigger surface: any *.test.ts | *.spec.ts file (matching ESLint's existing test glob), excluding allowlist below. **Denylist (comprehensive Node.js IO surface)**: (i) child_process: spawn, exec, fork, execFile, spawnSync, execSync, execFileSync; (ii) worker_threads: Worker constructor; (iii) fs: ALL named imports (readFile, writeFile, readFileSync, writeFileSync, mkdtemp, stat, etc.) AND default imports (`import fs from 'fs'` / `import fs from 'node:fs'`) AND fs/promises module (`import { readFile } from 'fs/promises'`) AND dynamic forms (`await import('fs')`, `await import('node:fs')`, `await import('fs/promises')`, `require('fs')`); (iv) process: read OR mutation of process.env (also `globalThis.process.env`), process.cwd(), process.chdir(); (v) network: fetch() / http.* / https.* / net.* / dgram.* to non-localhost. **Both** unprefixed (`fs`) AND `node:`-prefixed (`node:fs`) specifiers must be caught. **Allowlist (path-shape only, NOT 'designated' adjective)**: vitest.config.ts | vitest.*.config.ts | vitest.setup.ts at workspace roots; **/test-helpers/** | **/test-fakes/** structurally-marked directories. Pair with no-real-io-in-tests.unit.test.ts (RuleTester cases) — RuleTester MUST cover negative cases for every denylist sub-form above (one negative case per Sync variant; one per fs API entry point; one per node: prefix; one for default import; one for fs/promises; one for globalThis.process.env; one per child_process factory; one for Worker constructor) AND positive cases for every allowlist sub-glob. Plugin registration in plugin.ts. **Do NOT yet wire into root eslint.config.ts.** Land via full commit-skill protocol with config-reviewer dispatch (allowlist-shape correctness) + test-reviewer dispatch (RuleTester describe-vs-audit shape AND surface coverage exhaustiveness against Node.js IO API enumeration). Acceptance: pnpm test --filter @oaknational/eslint-plugin-standards exits 0; the rule is registered but inactive at root."
@@ -485,7 +485,7 @@ coherent.
 
 **Architecture findings (architecture-reviewer-fred):**
 
-- **C1 (P1, NAMED VIOLATION — must close in step 05)**: Line 7:
+- **C1 (P1, NAMED VIOLATION — CLOSED at commit `36102937`)**: Line 7:
   `import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js'`
   — `src/` integration test reaching into `e2e-tests/helpers/`. Violates
   boundary per `testing-strategy.md` §"E2E tests live in the e2e-tests
@@ -495,10 +495,18 @@ coherent.
   domain constant with one `import type` from `../../src/oauth-proxy/index.js`;
   no E2E machinery. **Resolution (fred-confirmed)**: relocate
   `e2e-tests/helpers/upstream-metadata-fixture.ts` →
-  `src/test-helpers/upstream-metadata-fixture.ts`; update 13 consumers
-  (7 `src/` + 6 `e2e-tests/`; note two `src/rate-limiting/` files use
-  `../../e2e-tests/` depth — both variants must be caught). Step 05 closing
-  commit reviewed by fred.
+  `src/test-helpers/upstream-metadata-fixture.ts`; update 12 consumer files
+  (6 `src/` + 6 `e2e-tests/`; note two `src/rate-limiting/` files use
+  `../../e2e-tests/` depth — both variants caught). Substance landed at
+  commit `36102937` via foreign-stage absorption (peer commit subject
+  reads `chore(continuity): handoff + metacognition` rather than the
+  authored `refactor(http-mcp): relocate upstream-metadata-fixture to
+  src/test-helpers`). Reviewer chain: architecture-reviewer-fred CLEAN
+  on diff pre-landing — "C1 closes per Round 1 resolution shape"; also
+  code-reviewer APPROVED WITH SUGGESTIONS (informational only). Boundary
+  grep audit clean at HEAD: zero matches for the old `e2e-tests/helpers/upstream-metadata-fixture`
+  path. Foreign-stage absorption pattern recurrence (second instance after
+  Lacustrine→Moonlit `8fa339f4` on 2026-05-04) surfaced for owner direction.
 - **BF-C1-ESLint (P2, new finding from fred)**: No ESLint guard exists
   preventing `src/**/*.ts` from importing relative paths into `../e2e-tests/`.
   The seven-consumer recurrence happened without structural enforcement. Add a
@@ -509,17 +517,22 @@ coherent.
 
 **Test findings (test-reviewer):**
 
-- **CR1 (P2, downgraded from P1, NAMED VIOLATION — must close in step 05)**:
+- **CR1 (P2, downgraded from P1, NAMED VIOLATION — CLOSED at this commit)**:
   Lines 57-59 and 70-72: `if (!result.ok) { return; }` after
   `expect(result.ok).toBe(true)`. Test-reviewer confirmed Vitest throws on the
   `toBe(true)` assertion failure before the guard is reached, so this is **dead
   code, not a silent-pass**. However, it is a categorical immediate-fail per
   `test-immediate-fails.md` item 16 (runtime branching in test body) regardless
-  of reachability. The correct shape is `if (!result.ok) { throw new Error(...); }`
-  which preserves TypeScript narrowing, removes the branching violation, and
-  provides a diagnostic message. The identical pattern exists in sibling
-  `runtime-config.integration.test.ts:21-23` — fix both in the same commit.
-  Step 05 closing commit reviewed by test-reviewer.
+  of reachability. **Resolution applied** (this commit): substituted the canonical
+  `unwrap` from `@oaknational/result` for both occurrences in
+  `dev-boot-without-observability.integration.test.ts` and the matching pattern at
+  `runtime-config.integration.test.ts:21-23`. Test-reviewer at closing review
+  confirmed the substitution is "strictly better than the inline shape I
+  originally named" — DRY, project-canonical, throws with stringified Err
+  diagnostic, preserves TypeScript narrowing via `T` return, removes the
+  conditional entirely. Reviewer chain: test-reviewer CLEAN, code-reviewer
+  APPROVED. Conditional-pattern grep audit clean: zero matches for
+  `if (!result.ok` or `if (!runtimeConfig.ok` in either file.
 - **BF-T1 (P2)**: Test 2 asserts `result.value.useStubTools` and
   `result.value.version` — passthrough assertions already covered by
   `runtime-config.integration.test.ts:29`. Duplicated proof; per
@@ -555,13 +568,13 @@ in commit messages); substance is correct for each cycle.
 
 ### Named Violations Confirmed for Step 05 Mandatory Close
 
-| ID | Finding | Closing commit specialist re-review |
-|---|---|---|
-| C1 | `src/dev-boot-without-observability.integration.test.ts:7` boundary-crossing import | architecture-reviewer-fred |
-| CR1 | `src/dev-boot-without-observability.integration.test.ts:57-59,70-72` conditional-branch test-immediate-fail (also `runtime-config.integration.test.ts:21-23`) | test-reviewer |
-| BF-1a | `.husky/pre-push:73` retired turbo task | code-reviewer |
-| BF-1b | `.github/workflows/ci.yml:79` retired turbo task | code-reviewer |
-| BF-5 | `apps/oak-curriculum-mcp-streamable-http/README.md:317` dead link | code-reviewer |
+| ID | Finding | Closing commit | Specialist re-review |
+|---|---|---|---|
+| C1 | `src/dev-boot-without-observability.integration.test.ts:7` boundary-crossing import | `36102937` (peer-commit absorption; substance correct) | architecture-reviewer-fred CLEAN |
+| CR1 | `src/dev-boot-without-observability.integration.test.ts:57-59,70-72` conditional-branch test-immediate-fail (also `runtime-config.integration.test.ts:21-23`) | this commit | test-reviewer CLEAN |
+| BF-1a | `.husky/pre-push:73` retired turbo task | `ef593be9` | code-reviewer |
+| BF-1b | `.github/workflows/ci.yml:79` retired turbo task | `ef593be9` | code-reviewer |
+| BF-5 | `apps/oak-curriculum-mcp-streamable-http/README.md:317` dead link | `434cf6f6` | code-reviewer |
 
 ## Out of Scope
 
@@ -594,6 +607,32 @@ consolidation pass.
   Inventory entries one batch at a time. Each migration removes paths
   from the rule's allowlist (the live canonical surface), not from the
   §IO Inventory in this plan body (the historical snapshot).
+- **BF-C1-ESLint** structural guard preventing `src/**/*.ts` from importing
+  relative paths into `../e2e-tests/`. Fred's Round-1 finding observed seven
+  `src/` consumers crossing the boundary (six pre-existing + the dev-boot
+  file at `b226670d`); recurrence happened without a structural fence. The
+  C1 closure removed all current violations but did not author the guard.
+  Add a `no-restricted-imports`-style rule in
+  `@oaknational/eslint-plugin-standards` (companion to step 06's
+  `no-real-io-in-tests`); wired at error severity per
+  `no-warning-toleration`. Plan-time consensus: scope it as a separate
+  post-merge follow-up rather than expanding step 05 — the immediate cure
+  (relocate the fixture) is sufficient to close the named violation without
+  the guard, and the guard itself merits its own atomic plan-cycle (rule
+  authoring + RuleTester + path-allowlist freeze) modelled on step 06–08's
+  shape.
+- **Foreign-stage absorption recurring pattern** (procedural concern).
+  Twice now (Lacustrine→Moonlit on `8fa339f4` 2026-05-04; Ethereal→Dawnlit
+  on `36102937` 2026-05-05) parallel-session commits have absorbed peer
+  staged content because the absorbing agent did not apply the mandatory
+  `git commit -- <pathspec>` filter from §Discipline. Substance preserved
+  in both cases; commit-message attribution distorted. Cure as currently
+  written (prose §Discipline rule) is operator-applied, not gate-applied.
+  Candidate follow-up: structural enforcement (pre-commit hook that
+  refuses `git commit` without an explicit pathspec when peer-staged
+  content is present in the index, or at the queue layer when
+  `verify-staged` fingerprint diverges from the commit-time fingerprint).
+  Recorded for owner direction.
 - Clerk release-tag integrity exercise under real Clerk credentials in
   staging, post-merge.
 - Reviewer-dispatch structural enforcement gate (currently owner-cadence;
@@ -611,7 +650,7 @@ consolidation pass.
 | 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE — commit 75dbcdb6; Round 2 findings under §Plan Review Findings (Round 2) |
 | 3 | Integrate no-speed-pressure rule across estate | DONE — commit `2b78aa93`; RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; post-commit four-adapter-path verification clean |
 | 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | DONE 2026-05-05 — full findings under §Backfill Findings; 5 MUST-CLOSE violations (C1, CR1, BF-1a, BF-1b, BF-5) + 8 P2 items + 4 P3 items |
-| 5 | Apply backfill findings | PARTIAL 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`) — BF-1a/b CI hook + workflow at commit `ef593be9`; BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6`. Remaining for continuation session: named violations C1 (boundary-crossing import × 13 consumers) + CR1 (conditional-branch test-immediate-fail × 2 integration tests) with specialist re-review on closing commits, BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint guard. |
+| 5 | Apply backfill findings | DONE 2026-05-05 — BF-1a/b CI hook + workflow at commit `ef593be9` (Lacustrine Navigating Rudder, `dd239f`); BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6` (Lacustrine, `dd239f`); C1 boundary-crossing import substance at commit `36102937` (Dawnlit Transiting Galaxy, `0ddc89` — substance landed at peer commit via foreign-stage absorption; architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; substance correct under misleading peer-subject; documented foreign-stage absorption recurrence to surface to owner); CR1 conditional-branch test-immediate-fail × 2 integration tests at this commit (Dawnlit, `0ddc89` — test-reviewer CLEAN + code-reviewer APPROVED, used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that this shape is "strictly better"). Out-of-scope follow-ups (recorded in §Out-of-Scope Follow-ups, not closed in this branch): BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary. |
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | Rule + RuleTester (full Node.js IO surface coverage) + plugin registration; not yet wired |
 | 7 | Capture inventory + freeze allowlist atomically | §IO Inventory populated AND allowlist option configured in eslint.config.ts in one commit; structured-output capture; count + spot-check validation; `test-config.ts` cross-reference if present |
 | 8 | Wire rule into root config | Rule active (error severity); `pnpm lint` exits 0; allowlist-discipline note for future PR additions |

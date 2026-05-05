@@ -8275,6 +8275,92 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "eb5b3638-1e0e-4951-8670-88f57d9f01a3",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T10:43:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit C1 closure: relocate upstream-metadata-fixture from e2e-tests/helpers to src/test-helpers; update 12 consumers + own internal import; identity row + file-area claim sweep.",
+      "notes": "Pathspecs: 12 consumer test files + relocated fixture pair + thread record + active-claims.json. Gates: workspace lint/type/test green pre-claim. Peer claims: no overlap (Moonlit stale; Ethereal closed at 74dcd145).",
+      "intent_to_commit": "9305c2fb-7db6-4243-96ac-c0e7877c7d60",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T10:46:45Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Transiting Galaxy",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "0ddc89"
+        },
+        "summary": "Commit-window opened 10:43:23Z for C1 closure; staged 17 files at 10:43:24Z; peer commit 36102937 absorbed staged content at 10:43:37Z (14s window). Substance landed correctly under misleading peer-subject; C1 grep audit clean at HEAD. Reviewers (fred CLEAN, code-reviewer APPROVED WITH SUGGESTIONS) had reviewed the diff pre-absorption. Foreign-stage absorption pattern recurrence; surfacing to owner.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eb5b3638-1e0e-4951-8670-88f57d9f01a3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5ac8618c-26d1-46ce-a51c-1a59558ba8a3",
+      "agent_id": {
+        "agent_name": "Dawnlit Transiting Galaxy",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "0ddc89"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T10:53:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit CR1 closure: replace if(!result.ok) return early-returns with unwrap from @oaknational/result; update plan body and thread record; reply to Ethereal's absorption heads-up; close step 05 of feat-eef-exploration-completion plan.",
+      "notes": "Pathspecs strictly filtered via 'git commit -- <pathspec>' per §Discipline. Pre-commit gates green: lint, type-check, 722 tests. Reviewers CR1: code-reviewer APPROVED, test-reviewer CLEAN. No active peer claims at git:index/head; previous Ethereal git claim closed via 36102937.",
+      "intent_to_commit": "dc826ac6-57b7-471c-a331-f8d5ebc52775",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T10:59:32Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Transiting Galaxy",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "0ddc89"
+        },
+        "summary": "CR1 commit blocked at gate orchestrator on pre-existing fitness violations in peer-authored files (principles.md/distilled.md/napkin.md/pending-graduations.md). None in staged set. Same structural gap Lacustrine flagged 2026-05-05 (napkin Surprise 3). Index unstaged; working-tree state preserved. Surfaced to owner; awaiting direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5ac8618c-26d1-46ce-a51c-1a59558ba8a3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

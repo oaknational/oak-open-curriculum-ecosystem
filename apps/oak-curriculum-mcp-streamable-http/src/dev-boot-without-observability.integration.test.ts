@@ -1,3 +1,4 @@
+import { unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 import { createApp } from './application.js';
 import { type Env } from './env.js';
@@ -51,28 +52,19 @@ describe('dev server boots without observability or Vercel deploy env', () => {
 
   it('createRuntimeConfigFromValidatedEnv returns ok for the minimal-env input', () => {
     const validatedEnv = HttpEnvSchema.parse(minimalLocalDevEnv) satisfies Env;
-    const result = createRuntimeConfigFromValidatedEnv(validatedEnv);
+    const runtimeConfig = unwrap(createRuntimeConfigFromValidatedEnv(validatedEnv));
 
-    expect(result.ok).toBe(true);
-    if (!result.ok) {
-      return;
-    }
-
-    expect(result.value.dangerouslyDisableAuth).toBe(true);
-    expect(result.value.useStubTools).toBe(true);
-    expect(result.value.version).toBe('1.2.3-test');
+    expect(runtimeConfig.dangerouslyDisableAuth).toBe(true);
+    expect(runtimeConfig.useStubTools).toBe(true);
+    expect(runtimeConfig.version).toBe('1.2.3-test');
   });
 
   it('createApp instantiates without throwing on the minimal-env runtime config', async () => {
     const validatedEnv = HttpEnvSchema.parse(minimalLocalDevEnv) satisfies Env;
-    const result = createRuntimeConfigFromValidatedEnv(validatedEnv);
-    expect(result.ok).toBe(true);
-    if (!result.ok) {
-      return;
-    }
+    const runtimeConfig = unwrap(createRuntimeConfigFromValidatedEnv(validatedEnv));
 
     const app = await createApp({
-      runtimeConfig: result.value,
+      runtimeConfig,
       observability: createFakeHttpObservability(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,

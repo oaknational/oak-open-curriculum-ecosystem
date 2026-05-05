@@ -1,5 +1,57 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Dawnlit Transiting Galaxy)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— 12-step linear sequence to complete and merge `feat/eef_exploration`.
+Steps 01–05 closed.
+
+**Current step**: step 06 — author
+`packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at error
+severity, with comprehensive Node.js IO denylist (child_process,
+worker_threads, fs (named/default/`fs/promises`/dynamic), process
+(env reads + writes + cwd + chdir), network to non-localhost) and
+path-shape allowlist (`vitest.config.ts | vitest.*.config.ts |
+vitest.setup.ts` at workspace roots; `**/test-helpers/**` |
+`**/test-fakes/**` structurally-marked directories). Pair with
+`no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for
+each denylist sub-form, positive for each allowlist sub-glob).
+Plugin registration in `plugin.ts`. **Do NOT yet wire into root
+eslint.config.ts** — that is step 08. Reviewer dispatch at commit
+close: code-reviewer (gateway) + config-reviewer (allowlist shape) +
+test-reviewer (RuleTester describe-vs-audit + Node.js IO API surface
+coverage exhaustiveness).
+
+**Step 05 closing summary**: BF-1a/b CI hook + workflow at commit
+`ef593be9` (Lacustrine, `dd239f`); BF-2/3/4/5/6/7/8 stale-smoke-reference
+doc cleanup at commit `434cf6f6` (Lacustrine); C1 boundary-crossing
+import (relocate `upstream-metadata-fixture.ts` from
+`e2e-tests/helpers/` to `src/test-helpers/`; update 12 consumers +
+own internal type import) substance at commit `36102937` (Dawnlit,
+`0ddc89` — substance correct under misleading peer-subject due to
+foreign-stage absorption; architecture-reviewer-fred CLEAN +
+code-reviewer APPROVED WITH SUGGESTIONS pre-landing); CR1
+conditional-branch test-immediate-fail × 2 integration tests at this
+commit (Dawnlit; test-reviewer CLEAN + code-reviewer APPROVED, used
+`unwrap` from `@oaknational/result` rather than inline throw per
+test-reviewer's confirmation that the substitution is "strictly
+better"). Step 05 §Sequence Summary row flipped to DONE.
+**Out-of-scope follow-ups recorded** (not closed in this branch):
+BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3),
+BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary,
+foreign-stage absorption recurring-pattern structural enforcement
+candidate.
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the
+just-landed rule the unified plan exists to operationalise.
+Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec
+(MANDATORY at commit time per §Discipline `git commit -- <pathspec>`
+filter), and plan-body freshness are non-optional through every
+remaining step.
+
+---
+
 ## Landing target (per PDR-026) — refreshed 2026-05-04 (Lacustrine Navigating Rudder)
 
 **Active plan**:
