@@ -276,7 +276,7 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md"
           ]
         }
       ],
@@ -448,7 +448,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
             ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
@@ -580,7 +580,7 @@
             ".agent/memory/executive/agent-collaboration-channels.md",
             ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/memory/active/napkin.md",
@@ -697,7 +697,7 @@
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
             ".agent/plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/memory/active/napkin.md",
             ".agent/memory/active/distilled.md",
@@ -912,7 +912,7 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md"
           ]
         }
       ],
@@ -935,7 +935,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             "summary": "Parent plan records WS4A lifecycle integration as complete while WS3B and hook reminders remain evidence-gated."
           },
           {
@@ -969,7 +969,7 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/plans/agentic-engineering-enhancements/documentation-sync-log.md"
           ]
@@ -1007,7 +1007,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             "summary": "Parent plan records WS4A complete, distinguishes completed WS3 evidence harvest from remaining post-WS4A WS5 observation, and keeps WS3B evidence-gated."
           },
           {
@@ -1151,7 +1151,7 @@
             ".agent/memory/operational/collaboration-state-conventions.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/practice-index.md",
             ".agent/memory/active/napkin.md"
           ]
@@ -1180,7 +1180,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             "summary": "Current protocol plan records the owner-directed commit-window refinement and its non-WS3B scope."
           },
           {
@@ -1362,7 +1362,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
@@ -1393,7 +1393,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Future plan now treats wrong-intent commit capture as a promotion signal and adds staged-set ownership verification."
           },
           {
@@ -1465,7 +1465,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             ".agent/memory/active/napkin.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
@@ -1498,7 +1498,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Promotion signal now names substitution, disappearance, and accretion as staged-bundle integrity failures."
           },
           {
@@ -1524,7 +1524,7 @@
           "patterns": [
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
@@ -1557,7 +1557,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             "summary": "Parent plan now says WS3B gate is satisfied and implementation has not started."
           },
           {
@@ -2104,8 +2104,8 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/joint-agent-decision-protocol.plan.md"
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+            ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md"
           ]
         }
       ],
@@ -2138,7 +2138,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
             "summary": "WS3B plan marked implemented with schema and workflow result."
           },
           {
@@ -2326,7 +2326,7 @@
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
             ".agent/state/collaboration/shared-comms-log.md"
@@ -2367,7 +2367,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
             "summary": "Queued remediation plan created for hard practice-fitness findings in collaboration documentation."
           },
           {
@@ -2391,10 +2391,10 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md"
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md"
           ]
         }
       ],
@@ -2417,12 +2417,12 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Added an implementation-boundary section distinguishing completed git:index/head commit-window claims from future intent_to_commit/session_counter work."
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md",
             "summary": "Added portability clarification that baseline collaboration infrastructure must remain cross-vendor and sidecars are a narrower future metadata layer."
           },
           {
@@ -2574,7 +2574,7 @@
             ".agent/memory/operational/collaboration-state-conventions.md",
             ".agent/memory/operational/collaboration-state-lifecycle.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json"
           ]
@@ -2599,7 +2599,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/current/collaboration-doc-fitness-remediation.plan.md",
+            "ref": ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
             "summary": "Plan todos completed with validation caveat recorded for the out-of-scope shared-log vocabulary finding."
           },
           {
@@ -2839,7 +2839,7 @@
             ".agent/memory/operational/collaboration-state-lifecycle.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md"
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md"
           ]
         }
       ],
@@ -2867,7 +2867,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Plan status updated to owner-directed and corrected to make the commit queue first-class."
           }
         ]
@@ -2989,8 +2989,8 @@
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
             ".agent/state/collaboration/shared-comms-log.md",
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md"
           ]
         }
       ],
@@ -3018,7 +3018,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Plan surface now states queue-first implementation and keeps session-count TTL separate unless its primitive lands deliberately."
           },
           {
@@ -3170,7 +3170,7 @@
             ".agent/memory/active/napkin.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
             ".agent/state/collaboration/shared-comms-log.md"
@@ -3196,7 +3196,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
             "summary": "Plan now lists the 2026-04-27 turn-race collision as clash type D evidence for queue order."
           },
           {
@@ -3343,7 +3343,7 @@
           "kind": "plan",
           "patterns": [
             ".agent/plans/agentic-engineering-enhancements/current/intent-to-commit-queue.execution.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/intent-to-commit-and-session-counter.plan.md"
+            ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md"
           ]
         }
       ],
@@ -3913,7 +3913,7 @@
             "docs/architecture/architectural-decisions/124-practice-propagation-model.md",
             "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             ".agent/memory/active/napkin.md"
           ]
         },
@@ -3955,7 +3955,7 @@
           },
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             "summary": "Strategic preservation plan for shared-log reliability, domain responsibilities, sidebar attention mechanics, push/poll questions, and UTC validation."
           },
           {
@@ -3984,7 +3984,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
             ".agent/state/collaboration/shared-comms-log.md"
@@ -4015,7 +4015,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             "summary": "Plan now includes Luminous/Prismatic sidebar evidence and identity-preflight requirements."
           },
           {
@@ -4039,7 +4039,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
@@ -4071,7 +4071,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             "summary": "Plan now distinguishes claim existence from reachable participant existence."
           },
           {
@@ -4177,7 +4177,7 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md"
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md"
           ]
         },
         {
@@ -4208,7 +4208,7 @@
         "evidence": [
           {
             "kind": "plan",
-            "ref": ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            "ref": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
             "summary": "Plan now states the write-safety requirement across claims, queue entries, conversations, sidebars, escalations, closures, generated read models, and future event files."
           },
           {
@@ -4346,9 +4346,9 @@
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/practice-index.md",
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/practice-core/CHANGELOG.md",
             ".agent/practice-core/practice.md",
@@ -4488,9 +4488,9 @@
             ".agent/memory/operational/collaboration-state-conventions.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md",
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/plans/architecture-and-infrastructure/**",
             ".agent/practice-core/CHANGELOG.md",
@@ -4940,10 +4940,10 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/plans/agentic-engineering-enhancements/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/future/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+            ".agent/plans/agent-tooling/future/codex-session-identity-plumbing.plan.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
             ".agent/memory/executive/agent-collaboration-channels.md",
@@ -5328,7 +5328,7 @@
             "agent-tools/tests/collaboration-state/identity-audit.unit.test.ts",
             ".codex/config.toml",
             ".codex/hooks/practice-session-identity.mjs",
-            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agent-tooling/current/codex-session-identity-plumbing.plan.md",
             ".agent/skills/start-right-quick/shared/start-right.md",
             ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
             ".agent/rules/register-identity-on-thread-join.md"
@@ -5513,7 +5513,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agent-tooling/current/codex-session-identity-plumbing.plan.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/active/napkin.md",
@@ -5666,7 +5666,7 @@
             ".agent/plans/agentic-engineering-enhancements/README.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
             ".agent/plans/agentic-engineering-enhancements/roadmap.md",
-            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
             ".agent/plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md"
           ]
         }
@@ -5713,7 +5713,7 @@
             ".agent/memory/active/distilled.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agent-tooling/current/codex-session-identity-plumbing.plan.md",
             "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
             "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md",
             ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
@@ -5765,12 +5765,12 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/codex-session-identity-plumbing.plan.md",
+            ".agent/plans/agent-tooling/current/codex-session-identity-plumbing.plan.md",
             ".agent/plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md",
             ".agent/plans/agentic-engineering-enhancements/current/README.md",
             ".agent/plans/agentic-engineering-enhancements/README.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
-            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/state/collaboration/active-claims.json",
@@ -6100,7 +6100,7 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md",
+            ".agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md",
             ".agent/plans/agentic-engineering-enhancements/future/README.md",
             ".agent/memory/active/napkin.md"
           ]
@@ -9486,6 +9486,88 @@
           {
             "kind": "claim",
             "ref": "6aa840c3-9524-4385-bf22-324d5cce0cef",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "29fbe4e0-8b19-4290-ba69-19e7f564422d",
+      "agent_id": {
+        "agent_name": "Deep Rolling Archipelago",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "02f5f5"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T14:33:15Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Create PR 93 merge snagging file from GitHub comments/statuses and branch diff",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T14:35:55Z",
+        "closed_by": {
+          "agent_name": "Deep Rolling Archipelago",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "02f5f5"
+        },
+        "summary": "Created PR 93 merge snagging file at .agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md from GitHub comments/statuses, PR description comparison, branch diff, and SonarQube PR findings.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "29fbe4e0-8b19-4290-ba69-19e7f564422d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0a707b75-d71d-4def-a1ad-e48ed7efff04",
+      "agent_id": {
+        "agent_name": "Deep Rolling Archipelago",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "02f5f5"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-05T14:45:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 93 handoff bundle with explicit pathspecs only.",
+      "archived_at": "2026-05-05",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-05T14:46:15Z",
+        "closed_by": {
+          "agent_name": "Deep Rolling Archipelago",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "02f5f5"
+        },
+        "summary": "Commit window used explicit pathspec plan because peer agent-tooling files were already staged; closing before commit so active-claims lands in a closed-state bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0a707b75-d71d-4def-a1ad-e48ed7efff04",
             "summary": "Claim explicitly closed by owning session."
           }
         ]

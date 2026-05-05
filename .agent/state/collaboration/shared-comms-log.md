@@ -1335,3 +1335,33 @@ RESIDUAL STATE FOR NEXT SESSION (per my pre-committed default in ff9c4266):
   - distilled.md (HARD — 373 lines / 21090 chars): further graduation passes need rule extensions first (moving-targets / plans-cite-ADRs case extensions) before the remaining entries can be safely removed.
 
 Opener authoring next. Standing by close.
+
+---
+
+## 2026-05-05T14:23:29.883Z — `Glittering Waning Galaxy` / `claude-code` / `claude-opus-4-7-1m` / `3cff70` — Session 3cff70 (Glittering Waning Galaxy) — opening on .agent/plans/ reorganisation: new agent-tooling collection
+
+Bootstrap fast-path: claims registry empty; no overlap with .agent/plans/. Owner direction: create new top-level plan collection for agent tooling, migrate current agent-tooling-shaped plans from agentic-engineering-enhancements/{current,future}, and capture frictions from napkin + comms logs into a frictions register. Will update plans/README.md collection table.
+
+---
+
+## 2026-05-05T14:38:50Z — `Deep Rolling Archipelago` / `cursor` / `GPT-5.5` / `02f5f5` — PR 93 description update in progress
+
+Owner asked me to update PR 93's GitHub description from the snagging evidence and to communicate while working. I am only touching the remote PR description and the collaboration comms event surface; I am not editing or staging any peer-owned code or plan lanes. Current evidence: test/CodeQL/Bugbot/Vercel green, SonarCloud failing, PR body stale against the 118-commit branch that includes the blocking thread-units unitOrder schema fix.
+
+---
+
+## 2026-05-05T14:39:38Z — `Deep Rolling Archipelago` / `cursor` / `GPT-5.5` / `02f5f5` — PR 93 description update completed
+
+PR 93's GitHub description is now updated to lead with the blocking thread-units unitOrder schema fix, the actual 118-commit/569-file branch scope, current check status, and the remaining SonarCloud merge snags. I did not edit or stage peer-owned lanes; local file changes from me are the snagging file and collaboration-state/comms artefacts only.
+
+---
+
+## 2026-05-05T14:44:50Z — `Deep Rolling Archipelago` / `cursor` / `GPT-5.5` / `02f5f5` — Session closed — Deep Rolling Archipelago PR 93 merge-readiness
+
+Session closed for Deep Rolling Archipelago (cursor/GPT-5.5/02f5f5). Landed session outcome: PR 93 snagging file created and the GitHub PR description updated so it now leads with the blocking thread-units/unitOrder upstream API-shape fix, actual branch scope, current checks, and remaining SonarCloud snags. We are now in the final stretches before merge. Reducing the PR Sonar issues, security hotspots, and duplication blockers to zero is the priority before the final status re-check and merge decision. No product code changed in this session; local artefacts are handoff/napkin/thread/repo-continuity, snagging file, and collaboration comms/state.
+
+---
+
+## 2026-05-05T14:45:12Z — `Deep Rolling Archipelago` / `cursor` / `GPT-5.5` / `02f5f5` — Commit window opening — Deep Rolling Archipelago handoff bundle
+
+Opening a short commit window for Deep Rolling Archipelago's PR 93 handoff bundle. Important: the index already contains staged agent-tooling plan-reorganisation files from another lane. I will commit only my explicit pathspecs using git commit -- <paths> so staged peer files are not absorbed. Intended paths: PR 93 snagging file, observability thread handoff, repo-continuity handoff, napkin capture, shared comms log, this session's comms-events, and collaboration active/closed state from the earlier claim lifecycle.

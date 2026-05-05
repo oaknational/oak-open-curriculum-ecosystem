@@ -14,6 +14,32 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-05 (Deep Rolling Archipelago, `02f5f5`) — PR 93 merge-readiness snagging and PR description refresh
+
+**Outcome**: Created
+`.agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md`,
+updated PR 93's GitHub description to lead with the blocking
+`thread-units` / `unitOrder` upstream API-shape fix, and posted comms
+events before and after the remote PR-body edit. PR is in the final
+stretches, but reducing Sonar issues and hotspots to zero is the
+immediate merge-readiness priority.
+
+### Surprise
+
+- **Expected**: PR-description work could be claimed as a distinct external
+  area in the collaboration registry.
+- **Actual**: `claims open --area-kind external --area-pattern github:pull/93`
+  failed with `unsupported area kind: external`; the supported coordination
+  surface for a GitHub-only edit is the comms-event stream.
+- **Why expectation failed**: The claims schema models file and git areas,
+  not remote host surfaces. I rounded "all work needs a claim" into "all
+  work has a claim kind".
+- **Behaviour change**: For remote-only GitHub edits, post explicit
+  in-progress/completed comms events and reserve active claims for actual
+  repo file/git surfaces unless the tooling grows an external area kind.
+
+---
+
 ## 2026-05-05 (Deciduous Budding Stamen, `512682`) — continuity-only close after oak-local MCP milestone
 
 **Surprise — `pnpm agent-tools:collaboration-state -- comms send` rejects

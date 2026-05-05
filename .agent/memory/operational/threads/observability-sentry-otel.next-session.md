@@ -385,12 +385,34 @@ matching `platform + model + agent_name` updates `last_session`.
 | Dawnlit Transiting Galaxy | claude-code | claude-opus-4-7-1m | `0ddc89` | step-05 final closure executor — close C1 (boundary-crossing import: relocate `upstream-metadata-fixture.ts` from `e2e-tests/helpers/` to `src/test-helpers/` with all 12 consumer paths updated) and CR1 (conditional-branch test-immediate-fail: refactor two `it()` blocks in `dev-boot-without-observability.integration.test.ts` to use a typed `unwrapOk` helper) as two separate atomic commits. Commit 1 reviewed by code-reviewer + architecture-reviewer-fred (the specialist who identified C1). Commit 2 reviewed by code-reviewer + test-reviewer (the specialist who identified CR1). After this session, step 05 flips to `completed` in the plan body and the next pickup is step 06 (author `no-real-io-in-tests` ESLint rule). | 2026-05-05 | 2026-05-05 |
 | Twilit Beaming Aurora | claude-code | claude-opus-4-7-1m | `7cf730` | step-06 executor — author `packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at `error` severity with comprehensive Node.js IO denylist (child_process / worker_threads / fs / fs-promises / http / https / net / dgram across static, dynamic, and require import forms; both unprefixed and `node:`-prefixed specifiers) + process surface (env reads/writes including `globalThis.process.env`; cwd/chdir calls) + non-localhost fetch literal-arg detection. Hardcoded allowlist defaults: `**/test-helpers/**`, `**/test-fakes/**`, `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`. Optional `allowlistPathShapes: string[]` rule schema for step-07 IO-Inventory additions. Pair with `no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for every denylist sub-form, positive for every allowlist sub-glob). Plugin registration in `plugin.ts`. Do NOT yet wire into root `eslint.config.ts` (that is step 08). Reviewer dispatch at commit close (parallel): code-reviewer (gateway) + config-reviewer (allowlist shape correctness + rule-options schema) + test-reviewer (RuleTester describe-vs-audit shape + Node.js IO API surface coverage exhaustiveness). | 2026-05-05 | 2026-05-05 |
 | Opalescent Eclipsing Asteroid | cursor | GPT-5.5 | `0c263b` | owner-directed step-06 takeover executor after Twilit Beaming Aurora and Opalescent Threading Nebula hit usage limits. Completed gate blockers and landed review hardening: Knip CSS/Vite coverage, public rule-options type export through the package API, URL-parser localhost hardening against lookalike hostnames, `global.process` process-surface coverage, paired RuleTester regressions, reviewer re-checks, and commit/index coordination through the high-intensity sync. | 2026-05-05 | 2026-05-05 |
+| Deep Rolling Archipelago | cursor | GPT-5.5 | `02f5f5` | PR 93 merge-readiness closeout support — fetched GitHub comments/statuses/reviews, compared stale PR body with actual `feat/eef_exploration` branch contents, wrote `pr-93-merge-snagging-2026-05-05.md`, updated PR 93's remote description to lead with the blocking `thread-units` / `unitOrder` upstream API-shape fix, and posted comms events before/completion/session-close. | 2026-05-05 | 2026-05-05 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
 into this canonical register during the 2026-04-29 deep consolidation
 pass; older deeper-narrative session-close blocks below this header
 remain unchanged.)
+
+---
+
+**Session-close 2026-05-05 (Deep Rolling Archipelago, cursor, GPT-5.5,
+session seed prefix `02f5f5`)** — PR 93 merge-readiness closeout support
+on the final stretch before merge. Landed outcome: structured snagging
+artefact at
+[`pr-93-merge-snagging-2026-05-05.md`](../../../plans/observability/current/pr-93-merge-snagging-2026-05-05.md)
+and updated GitHub PR 93 description. Evidence: `gh pr view 93` confirms
+the PR body now opens with the `thread-units` / `unitOrder` upstream
+API-shape fix and names remaining SonarCloud failure. Current state:
+`test`, CodeQL, Cursor Bugbot, and Vercel are green; SonarCloud remains
+failing; GitHub merge state is `UNSTABLE`. Priority for the next merge-
+readiness pass: reduce PR Sonar issues, hotspots, and duplication blockers
+to zero, then re-check statuses immediately before merge. No product code
+changed by this session.
+
+**ADR/PDR candidates (session-handoff §6b)**: no new ADR/PDR candidate.
+The only session-scoped surprise is tooling-shaped: GitHub-only work has
+no supported `external` active-claim kind, so coordination used comms
+events rather than a misleading claim. Captured in `napkin.md`.
 
 ---
 
@@ -501,7 +523,7 @@ moment each workstream's product code lands, not before.
 **Session-close 2026-04-28T~12:50Z (Choppy Lapping Rudder, claude-code, claude-opus-4-7-1m, session seed `d73d0b...`)** — Phase 2 PRE-PHASE complete, scope EXPANDED. PR-87 head at session-close = origin = `c601d515`. Four commits landed and pushed in this session:
 
 + `c1677d84` — `chore(state): open Cluster A claim and post cross-thread S5443 request`. Coordination state for the Cluster A claim (87fb2797) plus two comms events (S5443 cross-thread regression request to agentic-engineering-enhancements + arrival liveness on this thread).
-+ `ca7e6e4b` — `docs(plans): add future plan for agent coordination CLI ergonomics and request correlation`. Strategic future brief at `.agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md` capturing live evidence from this session's protocol use.
++ `ca7e6e4b` — `docs(plans): add future plan for agent coordination CLI ergonomics and request correlation`. Strategic future brief at `.agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md` capturing live evidence from this session's protocol use.
 + `6a2b4e54` — `docs(napkin): capture γ-execution coordination-protocol observations`. Four structured surprise/learning entries.
 + `c601d515` — `chore(sweep): land prior-session codex identity, adapter repair, coord state, docs`. Owner-staged sweep landing in-flight working tree from prior closed Codex sessions (Mossy identity plumbing, Estuarine adapter repair, coordination state churn, docs).
 
@@ -1564,7 +1586,7 @@ three new parallel plans.
 3. **Three new parallel plans** are active alongside this thread —
    none block release-identifier work, but the next session should
    know they exist so cross-plan coordination is deliberate:
-   + [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
+   + [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md)
      — three-layer artefact-model audit + remediation. Touches
      `.agents/skills/`, `.claude/skills/`, ADR-125, vendor skill
      installations. **Coordination flag**: this plan's Phase 1
