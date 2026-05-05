@@ -141,6 +141,21 @@ asks for more, this command must not trigger:
    surface is a read-source for extraction, not a surface we
    maintain.
 
+   **Auxiliary input: session comms-events.** The session's own
+   comms-events under `.agent/state/collaboration/comms-events/`
+   (and the regenerated `shared-comms-log.md`) carry
+   coordination-context substance: owner-direction-captured-inline,
+   inter-agent surprises, tooling friction discovered during
+   cross-agent work, the timeline of decisions made through the
+   parallel comms-default channel, and worked instances of
+   coordination-cure patterns. Scan events authored by your session
+   AND events addressed to your session at session close; mirror any
+   entry that would change next-session behaviour into `napkin.md`
+   using the structured surprise format. Do not rewrite or delete
+   the events themselves — they are durable coordination records,
+   not a buffer surface. This is a read-source for extraction.
+   Owner-stated standing 2026-05-05.
+
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a
