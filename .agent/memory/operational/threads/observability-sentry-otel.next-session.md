@@ -31,6 +31,16 @@ Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec,
 and plan-body freshness are non-optional through every remaining
 step.
 
+**Step 03 closing commit**: `2b78aa93` (HEAD of `feat/eef_exploration`
+post-step-03). All eight bundled files landed clean through the full
+pre-commit chain (prettier check, markdownlint, knip, depcruise,
+turbo gates — full cache hit). Code-reviewer dispatch returned
+CLEAN-WITH-FINDINGS: one plan-body hygiene gap — §Sequence Summary
+row 3 promises commit SHA recording but the actual SHA `2b78aa93`
+was not inserted (reviewer judged this not worth an isolated
+commit; bundles naturally with step 04's plan-body touch). Step 04
+must absorb this insertion when its own commit lands.
+
 ---
 
 ## Landing target (per PDR-026) — refreshed 2026-05-04 (Pelagic Diving Atoll)

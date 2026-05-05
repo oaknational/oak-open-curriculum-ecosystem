@@ -31,31 +31,27 @@
       "notes": "scope expanded under owner direction (PDR-047/048 + principles.md + dev-practice + frontmatter revisions + remediation lane); re-enqueuing with full bundle"
     },
     {
-      "intent_id": "426d716a-8e87-4b3e-9082-09a1c92238ad",
-      "claim_id": "c31ff09c-d630-4fa7-8344-09340148100b",
+      "intent_id": "e5125616-fc59-4bc2-b370-e4bd40856d5e",
+      "claim_id": "8f165724-2040-4310-a056-fb5a32509fa9",
       "agent_id": {
         "agent_name": "Lacustrine Navigating Rudder",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
+        "platform": "claude",
+        "model": "claude-sonnet-4-6",
         "session_id_prefix": "dd239f"
       },
       "files": [
-        ".agent/directives/principles.md",
-        ".agent/memory/active/distilled.md",
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/operational/repo-continuity.md",
-        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
         ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
         ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json"
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md"
       ],
-      "commit_subject": "docs(rules): integrate no-speed-pressure across estate (principles, distilled, MEMORY)",
-      "queued_at": "2026-05-04T19:44:44.356Z",
-      "updated_at": "2026-05-04T19:45:14.040Z",
-      "expires_at": "2026-05-04T19:59:44.356Z",
+      "commit_subject": "docs(plan): record backfill findings for plan-3 commits; close steps 02+04",
+      "queued_at": "2026-05-05T07:54:10.422Z",
+      "updated_at": "2026-05-05T07:54:26.697Z",
+      "expires_at": "2026-05-05T08:09:10.422Z",
       "phase": "staging",
-      "staged_name_status": "M\t.agent/directives/principles.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
-      "staged_bundle_fingerprint": "cef0dad8e183f28b7581dcbad413f598882441c1d31ca7c50ce6087a55d75e02"
+      "staged_name_status": "M\t.agent/memory/operational/threads/observability-sentry-otel.next-session.md\nM\t.agent/plans/observability/current/feat-eef-exploration-completion.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
+      "staged_bundle_fingerprint": "7a7a9b1a2d0ecf296c8f8582d3b5bf2811b66823648b78730fbc60f83ceae08b"
     }
   ],
   "claims": [
@@ -92,42 +88,27 @@
       "notes": "Parallel-safe with Fronded Climbing Thicket (plan 2 SENTRY_MODE rename). File-level independent — no overlap with packages/core/env/, packages/core/observability/, packages/libs/sentry-node/, packages/libs/env-resolution/, or apps/*/src/observability/, apps/*/src/env.ts, apps/*/src/lib/env.ts, apps/*/src/runtime-config*.ts. Cycle 2 audit areas (packages/core, libs, sdks, apps/oak-search-cli, agent-tools) will be claimed separately at cycle 2 start."
     },
     {
-      "claim_id": "c31ff09c-d630-4fa7-8344-09340148100b",
+      "claim_id": "8f165724-2040-4310-a056-fb5a32509fa9",
       "agent_id": {
         "agent_name": "Lacustrine Navigating Rudder",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
+        "platform": "claude",
+        "model": "claude-sonnet-4-6",
         "session_id_prefix": "dd239f"
       },
-      "thread": "observability-sentry-otel",
+      "thread": "retire-smoke-tests-all-vitest-no-real-io",
       "areas": [
         {
-          "kind": "files",
+          "kind": "git",
           "patterns": [
-            ".agent/rules/no-speed-pressure.md",
-            ".claude/rules/no-speed-pressure.md",
-            ".cursor/rules/no-speed-pressure.mdc",
-            ".agents/rules/no-speed-pressure.md",
-            "RULES_INDEX.md",
-            ".agent/directives/principles.md",
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/operational/repo-continuity.md",
-            ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
-            ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/shared-comms-log.md",
-            ".agent/state/collaboration/comms-events/*.json"
+            "index/head"
           ]
         }
       ],
-      "claimed_at": "2026-05-04T19:38:46Z",
-      "freshness_seconds": 14400,
+      "claimed_at": "2026-05-05T07:53:55Z",
+      "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Step 3: integrate no-speed-pressure rule across rule estate via single atomic commit. RULES_INDEX entry + four adapter paths already in place; this commit adds principles.md cross-ref, distilled.md entry, user-memory feedback file, plan-body status update, thread-record refresh, identity row, claims/comms bookkeeping. Post-commit four-adapter-path verification.",
-      "notes": "Co-active with Moonlit Shimmering Comet 8ed6386d (smoke-tests; freshness expired ~20:43Z 2026-05-04; file-disjoint). Inherits handoff working-tree state (napkin/repo-continuity/active-claims/closed-claims-archive); bundles per Pelagic Diving Atoll's handoff direction.",
-      "intent_to_commit": "426d716a-8e87-4b3e-9082-09a1c92238ad"
+      "intent": "Stage and commit step-04 findings: plan body §Backfill Findings + step 02/04 status updates + thread file.",
+      "intent_to_commit": "e5125616-fc59-4bc2-b370-e4bd40856d5e"
     }
   ]
 }

@@ -24,16 +24,16 @@ todos:
     content: "DONE 2026-05-04 (Pelagic Diving Atoll). Architecture-led review pass dispatched in parallel: code-reviewer (gateway) + architecture-reviewer-{barney,betty,fred,wilma} + assumptions-reviewer. Six reviewers ran on plan body AND code surface (commits fd4eabaa..b226670d, no-speed-pressure rule, observability/env package areas). Findings captured in §Plan Review Findings (Round 1)."
     status: completed
   - id: 02-apply-round-1-findings-and-second-review
-    content: "Apply Round 1 findings to refine this plan body. Then dispatch a second review round on the revised plan body (same six reviewers; owner-directed pre-execution gate). Apply any Round 2 findings. Commit the refined plan via full commit-skill protocol (single atomic commit with code-reviewer dispatch at close). After this step the plan body is the contract for the rest of execution. Findings explicitly rejected get written rationale per principles.md."
-    status: pending
+    content: "Apply Round 1 findings to refine this plan body. Then dispatch a second review round on the revised plan body (same six reviewers; owner-directed pre-execution gate). Apply any Round 2 findings. Commit the refined plan via full commit-skill protocol (single atomic commit with code-reviewer dispatch at close). After this step the plan body is the contract for the rest of execution. Findings explicitly rejected get written rationale per principles.md. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit 75dbcdb6."
+    status: completed
     depends_on: [01-comprehensive-plan-review-round-1]
   - id: 03-integrate-no-speed-pressure-rule
     content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.mdc, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.mdc`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-reviewer dispatch. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit SHA recorded in §Sequence Summary post-commit."
     status: completed
     depends_on: [02-apply-round-1-findings-and-second-review]
   - id: 04-reviewer-backfill-scoped-by-commit-risk
-    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-reviewer gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-reviewer gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-reviewer gateway + docs-adr-reviewer for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-reviewer gateway + test-reviewer (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-reviewer-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings."
-    status: pending
+    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-reviewer gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-reviewer gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-reviewer gateway + docs-adr-reviewer for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-reviewer gateway + test-reviewer (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-reviewer-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`); full findings under §Backfill Findings."
+    status: completed
     depends_on: [03-integrate-no-speed-pressure-rule]
   - id: 05-apply-backfill-findings
     content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-reviewer-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-reviewer (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation."
@@ -71,7 +71,7 @@ todos:
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-04 (Lacustrine Navigating Rudder, step-03 close)
+**Last Updated**: 2026-05-05 (Lacustrine Navigating Rudder, step-04 close)
 **HEAD at refresh**: `75dbcdb6`
 **Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
 plans, refined post-Round-1 architecture-led review.
@@ -393,6 +393,176 @@ enforcement surface** going forward, the **§IO Inventory is the
 historical snapshot** at merge time and is NOT updated by post-merge
 migrations (follow-up plans remove paths only from the allowlist).
 
+## Backfill Findings (step 04, 2026-05-05 Lacustrine Navigating Rudder)
+
+Reviewers dispatched: code-reviewer (gateway, all four commits),
+docs-adr-reviewer (d4fb9a8f), test-reviewer (b226670d),
+architecture-reviewer-fred (b226670d). Four parallel agent runs.
+
+### Commit `8fa339f4` — chore(scripts): retire smoke:* scripts and turbo tasks
+
+**Discipline finding (not a code issue):** Commit was produced without
+`git commit -- <pathspec>` filter. Peer-staged files from Fronded Climbing
+Thicket (claim 07a19fd1, staging phase) were swept into this commit:
+`.agent/plans/observability/README.md`, plan files, `active-claims.json`
+diff, comms events `e28b0985`/`d3016d95`. Substance of both sets of work
+landed correctly; misattribution is under Moonlit's commit subject. This is
+the named foreign-stage absorption failure mode. Cure codified in §Discipline;
+no code action needed on this finding.
+
+**Code findings (code-reviewer):**
+
+- **BF-1a (P1)**: `.husky/pre-push:73` — `turbo run ... smoke:dev:stub`
+  still present. `smoke:dev:stub` task was deleted from `turbo.json`; this
+  hook line causes every `git push` to fail with a turbo "unknown task" error.
+  **Step 05 MUST close.**
+- **BF-1b (P1)**: `.github/workflows/ci.yml:79` — `turbo run sdk-codegen
+  build type-check lint test test:e2e test:ui smoke:dev:stub`. Same retired
+  task. Every PR and push to `main` fails CI.
+  **Step 05 MUST close.**
+- **BF-2 (P2)**: `docs/architecture/architectural-decisions/121-quality-gate-surfaces.md`
+  lines 64, 150, 155 — gate matrix row and prose still describe `smoke:dev:stub`
+  as an active gate. ADR-147:65 also has a `test:a11y` sequencing note
+  referencing the retired task. Must be updated.
+- **BF-3 (P2)**: Root `README.md:139` — references removed
+  `smoke:oauth-curl` script (`jq` prerequisite sentence). Must be removed.
+- **BF-4 (P2)**: Multiple live ops/architecture docs still reference retired
+  scripts: `docs/operations/troubleshooting.md:78,84,237` (`smoke:dev:stub`,
+  `smoke:dev:live`); `docs/operations/elasticsearch-ingest-lifecycle.md:283`
+  (`smoke:dev:stub`); `docs/operations/sentry-deployment-runbook.md:255`
+  (`smoke:remote`); ADR-083:250, ADR-063:163,222,232 (`vitest run -c
+  vitest.smoke.config.ts`); `agent-tools/docs/agent-support-tools-specification.md:567`
+  (`smoke:dev:stub`). Must be updated.
+- **BF-1c (clean)**: `lint:shell:syntax` change is safe — surviving
+  `scripts/*.sh` glob covers remaining shell files; no shell file loses
+  checking.
+- **BF-1d (clean)**: `check` script chain is structurally sound after
+  removing `smoke:dev:stub`.
+
+### Commit `7620fefd` — chore(test-config): retire vitest.smoke.config.ts
+
+**Code findings (code-reviewer):** Clean. Deletion is correct and complete:
+file gone, corresponding ESLint process.env allowlist entry removed,
+`vitest.config.ts` has no dependency on the deleted file. No stranded
+references to `vitest.smoke.config.ts` remain in surviving workspace files.
+The ESLint `no-restricted-syntax` block remains coherent.
+
+### Commit `d4fb9a8f` — chore(test-infra): retire smoke-tests directory and all references
+
+**Code findings (code-reviewer):** All four questions clean — remaining
+workspace configs free of `smoke-tests/` paths; `commander`/`dotenv`
+devDependencies correctly removed (no surviving imports); `playwright` correctly
+retained (still consumed by `tests/` Playwright suites, smoke description in
+commit message was imprecise); `eslint.config.ts` no-restricted-syntax block
+coherent.
+
+- **BF-5 (P1)**: `apps/oak-curriculum-mcp-streamable-http/README.md:317`
+  — `See \`docs/clerk-oauth-trace-instructions.md\` for detailed OAuth flow
+  documentation.` That file was deleted by this commit. Dead link.
+  **Step 05 MUST close.**
+
+**Docs findings (docs-adr-reviewer, combined with pre-confirmed items):**
+
+- **BF-6 (P2)**: Three e2e test files contain stale `smoke-dev-auth`
+  references in inline comments:
+  `e2e-tests/auth-bypass.e2e.test.ts:21`,
+  `e2e-tests/validation-failure.e2e.test.ts:11`,
+  `e2e-tests/enum-validation-failure.e2e.test.ts:23`.
+  Comments say "…and smoke-dev-auth" after `auth-enforcement.e2e.test.ts`.
+  Non-blocking but misleads coverage reasoning. Must update.
+- **BF-7 (P2, pre-confirmed as CR2)**: `TESTING.md:134-135` — `pnpm qg`
+  references; no such script exists. Must be replaced with actual gate command.
+- **BF-8 (P2, pre-confirmed)**: `docs/vercel-environment-config.md:26` —
+  `LOG_LEVEL` description still reads "Useful for smoke harness diagnostics".
+  Smoke harness is gone. Must update.
+- **BF-9 (P3)**: `e2e-tests/vercel-ignore-runtime.e2e.test.ts:24` —
+  `@remarks` says "E2E or smoke"; with smoke tier retired, "smoke" is stale
+  vocabulary. Low severity.
+- **BF-5-clean**: Archive docs (`docs/archive/`) contain historical smoke
+  references intentionally; no cleanup required.
+
+### Commit `b226670d` — test(http-mcp): replace retired dev-boot e2e with in-process invariant
+
+**Architecture findings (architecture-reviewer-fred):**
+
+- **C1 (P1, NAMED VIOLATION — must close in step 05)**: Line 7:
+  `import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js'`
+  — `src/` integration test reaching into `e2e-tests/helpers/`. Violates
+  boundary per `testing-strategy.md` §"E2E tests live in the e2e-tests
+  directory" + ADR-041 (Layer Role Topology) + principles.md §Layer Role Topology.
+  Seven total `src/` consumers found (six pre-existing + this new file);
+  six intra-tree `e2e-tests/` consumers are legitimate. Fixture is a trivial
+  domain constant with one `import type` from `../../src/oauth-proxy/index.js`;
+  no E2E machinery. **Resolution (fred-confirmed)**: relocate
+  `e2e-tests/helpers/upstream-metadata-fixture.ts` →
+  `src/test-helpers/upstream-metadata-fixture.ts`; update 13 consumers
+  (7 `src/` + 6 `e2e-tests/`; note two `src/rate-limiting/` files use
+  `../../e2e-tests/` depth — both variants must be caught). Step 05 closing
+  commit reviewed by fred.
+- **BF-C1-ESLint (P2, new finding from fred)**: No ESLint guard exists
+  preventing `src/**/*.ts` from importing relative paths into `../e2e-tests/`.
+  The seven-consumer recurrence happened without structural enforcement. Add a
+  guard in the `@oaknational/eslint-plugin-standards` rules (same fix-up plan
+  or a named follow-up). Per `consolidate-at-third-consumer.md`, seven consumers
+  is well past the threshold for structural enforcement. Fred recommends in-scope
+  of the same step-05 pass. Recorded here; disposition decided at step-05 apply.
+
+**Test findings (test-reviewer):**
+
+- **CR1 (P2, downgraded from P1, NAMED VIOLATION — must close in step 05)**:
+  Lines 57-59 and 70-72: `if (!result.ok) { return; }` after
+  `expect(result.ok).toBe(true)`. Test-reviewer confirmed Vitest throws on the
+  `toBe(true)` assertion failure before the guard is reached, so this is **dead
+  code, not a silent-pass**. However, it is a categorical immediate-fail per
+  `test-immediate-fails.md` item 16 (runtime branching in test body) regardless
+  of reachability. The correct shape is `if (!result.ok) { throw new Error(...); }`
+  which preserves TypeScript narrowing, removes the branching violation, and
+  provides a diagnostic message. The identical pattern exists in sibling
+  `runtime-config.integration.test.ts:21-23` — fix both in the same commit.
+  Step 05 closing commit reviewed by test-reviewer.
+- **BF-T1 (P2)**: Test 2 asserts `result.value.useStubTools` and
+  `result.value.version` — passthrough assertions already covered by
+  `runtime-config.integration.test.ts:29`. Duplicated proof; per
+  `testing-strategy.md §Rules` repeated proofs are fragile. Remove
+  `useStubTools` and `version` assertions from test 2; retain
+  `dangerouslyDisableAuth` (the auth-mode discriminant, primary factory logic).
+- **BF-T2 (P3)**: Lines 48-49 — `toBeUndefined()` assertions on optional
+  fields absent from input. Tautological under Zod's optional semantics;
+  limited design value. Consider replacing with a positive assertion on a
+  load-bearing field (`VERCEL_ENV` is `undefined` implies Vercel-runtime path
+  not taken) or removing.
+- **BF-T3 (P3, informational)**: Atomic-landing root cause — the product
+  code (`createRuntimeConfigFromValidatedEnv`, `createApp`) pre-existed without
+  paired integration tests. This commit is the legitimate repair under a
+  plan-controlled backfill cycle, not a new violation. TDD compliance record
+  notes the original breach at commits `05f994c0` et al.
+
+### Step 04 Discipline Summary
+
+Commit-skill protocol shape for `8fa339f4` (Moonlit Shimmering Comet, cycle 1d):
+
+- Claim was open (`8ed6386d`) covering the correct files ✓
+- Commit message describes cycle 1d content accurately ✓
+- `git commit` was executed WITHOUT `-- <pathspec>` filter ✗ → peer-staged
+  files from Fronded's `07a19fd1` staging-phase commit swept in
+- Substance of both sets of work landed; no code regression
+- Discipline gap is codified in §Discipline; recurrence prevented by the
+  `stage-by-explicit-pathspec.md` rule and the no-speed-pressure rule
+
+For remaining three commits (7620fefd, d4fb9a8f, b226670d): commit-skill
+protocol shape unverifiable from commit content alone (no claim IDs recorded
+in commit messages); substance is correct for each cycle.
+
+### Named Violations Confirmed for Step 05 Mandatory Close
+
+| ID | Finding | Closing commit specialist re-review |
+|---|---|---|
+| C1 | `src/dev-boot-without-observability.integration.test.ts:7` boundary-crossing import | architecture-reviewer-fred |
+| CR1 | `src/dev-boot-without-observability.integration.test.ts:57-59,70-72` conditional-branch test-immediate-fail (also `runtime-config.integration.test.ts:21-23`) | test-reviewer |
+| BF-1a | `.husky/pre-push:73` retired turbo task | code-reviewer |
+| BF-1b | `.github/workflows/ci.yml:79` retired turbo task | code-reviewer |
+| BF-5 | `apps/oak-curriculum-mcp-streamable-http/README.md:317` dead link | code-reviewer |
+
 ## Out of Scope
 
 - The SENTRY_MODE → OBSERVABILITY_SINKS rename (paused; see
@@ -438,9 +608,9 @@ consolidation pass.
 | # | Step | Output |
 |---|------|--------|
 | 1 | Round 1 architecture-led review | DONE — Round 1 findings under §Plan Review Findings (Round 1) |
-| 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE for application; commit pending; Round 2 findings under §Plan Review Findings (Round 2) |
-| 3 | Integrate no-speed-pressure rule across estate | DONE — RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; commit SHA recorded post-landing; post-commit four-adapter-path verification |
-| 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | Findings under §Backfill Findings; gateway+commit-skill discipline check on `8fa339f4`; specialists on substantive commits |
+| 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE — commit 75dbcdb6; Round 2 findings under §Plan Review Findings (Round 2) |
+| 3 | Integrate no-speed-pressure rule across estate | DONE — commit `2b78aa93`; RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; post-commit four-adapter-path verification clean |
+| 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | DONE 2026-05-05 — full findings under §Backfill Findings; 5 MUST-CLOSE violations (C1, CR1, BF-1a, BF-1b, BF-5) + 8 P2 items + 4 P3 items |
 | 5 | Apply backfill findings | Per-finding atomic commits or written rejections; named violations C1 + CR1 closed with **specialist re-review on closing commits** |
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | Rule + RuleTester (full Node.js IO surface coverage) + plugin registration; not yet wired |
 | 7 | Capture inventory + freeze allowlist atomically | §IO Inventory populated AND allowlist option configured in eslint.config.ts in one commit; structured-output capture; count + spot-check validation; `test-config.ts` cross-reference if present |
