@@ -240,3 +240,64 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
     expect(ruleIds).toContain('@oaknational/no-eslint-disable');
   });
 });
+
+/**
+ * Behavioural tests guaranteeing `@oaknational/no-real-io-in-tests` fires
+ * across the strict config surface for `*.test.ts` files outside the
+ * structural allowlist. The companion rule's own `RuleTester` cases exercise
+ * the rule logic in isolation; these tests describe the system state that
+ * matters at the config-activation boundary: the rule is wired at error
+ * severity in the shared `recommended` config (which `strict` composes), and
+ * therefore every workspace inheriting these standards gains the same
+ * structural guard against new real IO entering tests.
+ *
+ * Anchors: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
+ * step 07 (capture-not-clean shape); `.agent/rules/no-real-io-in-tests.md` doctrine
+ * referenced by the rule's `messageId` strings; ADR-078 (dependency injection
+ * for testability).
+ */
+describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-tests activation', () => {
+  it('reports @oaknational/no-real-io-in-tests for static fs imports in *.test.ts', () => {
+    const code = [
+      "import { readFileSync } from 'node:fs';",
+      "const contents = readFileSync('whatever', 'utf8');",
+      'export { contents };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('@oaknational/no-real-io-in-tests');
+  });
+
+  it('reports @oaknational/no-real-io-in-tests for process.env access in *.test.ts', () => {
+    const code = ['const apiKey = process.env.API_KEY;', 'export { apiKey };'].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('@oaknational/no-real-io-in-tests');
+  });
+
+  it('does not report @oaknational/no-real-io-in-tests on non-test files', () => {
+    const code = [
+      "import { readFileSync } from 'node:fs';",
+      "const contents = readFileSync('whatever', 'utf8');",
+      'export { contents };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).not.toContain('@oaknational/no-real-io-in-tests');
+  });
+
+  it('does not report @oaknational/no-real-io-in-tests on structurally allowlisted test-helpers paths', () => {
+    const code = [
+      "import { readFileSync } from 'node:fs';",
+      "const contents = readFileSync('whatever', 'utf8');",
+      'export { contents };',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'apps/x/src/test-helpers/loader.test.ts');
+
+    expect(ruleIds).not.toContain('@oaknational/no-real-io-in-tests');
+  });
+});

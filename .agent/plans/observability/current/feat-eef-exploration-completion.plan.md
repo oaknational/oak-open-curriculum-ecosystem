@@ -44,8 +44,8 @@ todos:
     status: completed
     depends_on: [05-apply-backfill-findings]
   - id: 07-capture-inventory-and-freeze-allowlist
-    content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in eslint.config.ts at the repo root, listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory completeness + cross-reference discipline) dispatch."
-    status: pending
+    content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in `packages/core/oak-eslint/src/configs/recommended.ts` (the shared config every workspace inherits via `configs.strict` / `configs.recommended`), listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). Owner direction (2026-05-05) supersedes the original R2-4 finding: rule wires at `warn` severity during its development phase per the new-eslint-rules-start-warn principle (recorded in user-memory `feedback_new_eslint_rules_start_warn.md`); escalation to `error` is a separate post-merge decision. (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory completeness + cross-reference discipline) dispatch. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`); architecture-reviewer-fred + architecture-reviewer-betty dispatched on the wiring-location design (Option A: shared `recommended.ts`) — both verdicts Option A, citing principles.md §Tooling, ADR-121 §Design Principles #5, and the established peer-rule precedent (`no-eslint-disable`, `no-dynamic-import`); 24 violations across 23 unique files; `e2e-tests/helpers/test-config.ts` NOT in captured set (no cross-reference needed); allowlist absorbs all violations; `pnpm lint` exits 0; closing commit SHA recorded in §Sequence Summary row 7 post-commit."
+    status: completed
     depends_on: [06-author-no-real-io-in-tests-rule]
   - id: 08-wire-rule-into-root-config
     content: "Wire no-real-io-in-tests into eslint.config.ts at the repo root (the rule's options block from step 07 is already in place). Acceptance: `pnpm lint` exits 0 across the entire monorepo (the allowlist absorbs the §IO Inventory; nothing else fires). Discipline note: any future PR that adds a path to the allowlist option must cite either a §IO Inventory entry (frozen at this branch's merge) or a named follow-up plan; PR review enforces this discipline (no structural lint gate). Land via full commit-skill protocol with config-reviewer dispatch. After this step the rule is active and any new test-IO not on the allowlist is a hard build failure."
@@ -71,7 +71,7 @@ todos:
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-05 (Twilit Beaming Aurora, step-06 close; Deciduous Budding Stamen, § Step 10 precursor comms + plan body)
+**Last Updated**: 2026-05-05 (Silvered Hiding Silhouette, step-07 close: §IO Inventory populated + allowlist frozen at `warn` severity in shared `recommended.ts`)
 **HEAD at refresh**: `75dbcdb6`
 **Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
 plans, refined post-Round-1 architecture-led review.
@@ -375,23 +375,173 @@ assumptions-reviewer.
   happening within step 2 as authored; splitting now is retroactive
   bookkeeping with no execution gain.
 
-## IO Inventory (populated by step 7)
+## IO Inventory (populated 2026-05-05 by Silvered Hiding Silhouette, step 07)
 
 The §IO Inventory captures the frozen real-IO surface present in tests
 at this branch's merge time. Format per entry:
 
 ```text
-- path: <absolute path>
+- path: <repo-relative path>
   kind: spawn | exec-sync | fs | fs-promises | dynamic-import-fs | process-env | process-cwd | fetch | worker
   rationale: <one sentence on why the IO is currently present>
   disposition: in-scope-of <plan slug> | structural-ambiguity-to-investigate | accept-and-document
 ```
 
-Empty until step 7 runs. The Inventory and the rule's allowlist (also
-landed in step 7) start identical; the **allowlist is the canonical live
-enforcement surface** going forward, the **§IO Inventory is the
-historical snapshot** at merge time and is NOT updated by post-merge
-migrations (follow-up plans remove paths only from the allowlist).
+The Inventory and the rule's allowlist (configured in
+`packages/core/oak-eslint/src/configs/recommended.ts` rule-options block) start
+identical; the **allowlist is the canonical live enforcement surface** going
+forward, the **§IO Inventory is the historical snapshot** at merge time and is
+NOT updated by post-merge migrations (follow-up plans remove paths only from the
+allowlist).
+
+**Capture method (2026-05-05):** rule wired in shared `recommended.ts` at
+`warn` severity (per the new-eslint-rules-start-warn principle); ESLint
+invoked per-workspace with `--format json` against the eight workspaces that
+declare a `lint` script and contain test files; JSON output aggregated and
+deduplicated to 24 violations across 23 unique files; full structured capture
+in `/tmp/eslint-@oaknational_*.json` and human-readable summary in
+`/tmp/no-real-io-lint-full.log`.
+
+**`e2e-tests/helpers/test-config.ts` cross-reference check:** that file does
+NOT appear in the captured violation set; no cross-reference into the paused
+SENTRY_MODE rename plan's resumption preconditions is needed at this step.
+
+**Sequencing note:** step 07's brief specified `error` severity at wire-up
+(R2-4). Owner direction 2026-05-05 superseded that with the general
+new-eslint-rules-start-warn principle (recorded in user-memory
+`feedback_new_eslint_rules_start_warn.md`); escalation to `error` is a
+separate, deliberate post-merge decision once the rule is stable.
+
+### Inventory entries (24 violations across 23 unique files)
+
+```text
+- path: agent-tools/tests/codex-project-agents.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real Codex project-agents JSON files to verify project-discovery behaviour
+  disposition: in-scope-of agent-tools test-fakes migration plan (post-merge follow-up)
+
+- path: agent-tools/tests/codex-reviewer-resolve.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real Codex reviewer config files to verify reviewer-resolution behaviour
+  disposition: in-scope-of agent-tools test-fakes migration plan (post-merge follow-up)
+
+- path: agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts
+  kind: fs-promises
+  rationale: Collaboration-state CLI test exercises real fs to validate end-to-end claim/comms file operations
+  disposition: in-scope-of agent-tools test-fakes migration plan (post-merge follow-up)
+
+- path: agent-tools/tests/runtime-agent-index.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real runtime agent-index files to verify discovery
+  disposition: in-scope-of agent-tools test-fakes migration plan (post-merge follow-up)
+
+- path: apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts
+  kind: spawn
+  rationale: E2E test spawns a child process to invoke the Vercel ignore-runtime script and assert exit codes
+  disposition: in-scope-of HTTP-MCP e2e-fakes migration plan (post-merge follow-up)
+
+- path: apps/oak-search-cli/src/lib/indexing/field-readback-audit-parse-ledger.integration.test.ts
+  kind: fs-promises
+  rationale: Integration test reads real field-readback audit ledger files to verify parser
+  disposition: in-scope-of search-cli test-fakes migration plan (post-merge follow-up)
+
+- path: apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real gap-ledger files to verify task-0.0 indexing behaviour
+  disposition: in-scope-of search-cli test-fakes migration plan (post-merge follow-up)
+
+- path: packages/core/build-metadata/tests/git-sha.unit.test.ts
+  kind: fs
+  rationale: Unit test reads real .git directory metadata to verify SHA extraction
+  disposition: structural-ambiguity-to-investigate (testing fs-coupled SHA-extraction is itself the design tension; migration plan needs to decide whether the SUT is reshaped to take a path-resolver or whether the test stays integration-shaped)
+
+- path: packages/core/env/tests/root-package-version.unit.test.ts
+  kind: fs
+  rationale: Unit test reads real root package.json to verify version-extraction
+  disposition: in-scope-of env package test-fakes migration plan (post-merge follow-up)
+
+- path: packages/core/observability/src/no-node-only-imports.unit.test.ts
+  kind: fs
+  rationale: Unit test reads real bundle output files to assert no node-only imports leaked into browser bundles
+  disposition: structural-ambiguity-to-investigate (the test is itself the lint-equivalent for bundle output; this is a meta-test verifying build artefacts and may legitimately need real-fs access — investigate whether to keep on allowlist permanently)
+
+- path: packages/libs/env-resolution/tests/app-root.integration.test.ts
+  kind: fs
+  rationale: Integration test walks real fs upward to find app-root marker
+  disposition: in-scope-of env-resolution test-fakes migration plan (post-merge follow-up)
+
+- path: packages/libs/env-resolution/tests/repo-root.integration.test.ts
+  kind: fs
+  rationale: Integration test walks real fs upward to find repo-root marker
+  disposition: in-scope-of env-resolution test-fakes migration plan (post-merge follow-up)
+
+- path: packages/libs/env-resolution/tests/resolve-env.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real .env files to verify env resolution chain
+  disposition: in-scope-of env-resolution test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/code-generation/codegen-core-file-operations.integration.test.ts
+  kind: fs
+  rationale: Integration test exercises codegen file operations against real fs
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.integration.test.ts
+  kind: fs
+  rationale: Integration test verifies JSON asset copy operations on real fs
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/code-generation/schema-cache.integration.test.ts
+  kind: fs
+  rationale: Integration test exercises schema cache reads against real fs
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/upstream-param-description-overrides.unit.test.ts
+  kind: fs
+  rationale: Unit test reads upstream override JSON files to verify override merging
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/validate-canonical-urls.integration.test.ts
+  kind: fs
+  rationale: Integration test reads URL routing data files to verify canonical-URL validation
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/e2e-tests/generators/write-json-graph-file.e2e.test.ts
+  kind: spawn
+  rationale: E2E test spawns child process to drive graph-file generator end-to-end
+  disposition: in-scope-of sdk-codegen e2e-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/e2e-tests/generators/write-json-graph-file.e2e.test.ts
+  kind: fs-promises
+  rationale: Same E2E reads/writes generated graph files to verify output shape
+  disposition: in-scope-of sdk-codegen e2e-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/e2e-tests/scripts/codegen-core.e2e.test.ts
+  kind: fs
+  rationale: E2E test reads codegen artefact files to verify the codegen-core script
+  disposition: in-scope-of sdk-codegen e2e-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.integration.test.ts
+  kind: fs
+  rationale: Integration test reads real bulk data files for synonym-mining behaviour
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.integration.test.ts
+  kind: fs-promises
+  rationale: Integration test writes JSON datasets to real fs and reads them back
+  disposition: in-scope-of sdk-codegen test-fakes migration plan (post-merge follow-up)
+
+- path: packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts
+  kind: fs-promises
+  rationale: Integration test writes JSON graph files to real fs and reads them back
+  disposition: in-scope-of sdk-codegen e2e-fakes migration plan (post-merge follow-up)
+```
+
+**Validation (per step 07 brief):**
+
+- Inventory entry count: 24 (matches `--format json` aggregate count from `/tmp/eslint-@oaknational_*.json`).
+- Allowlist entry count: 23 unique path patterns (one fewer than Inventory because `write-json-graph-file.e2e.test.ts` has two distinct violations on different lines/imports — the allowlist exempts the file once; the Inventory records the two violations separately to keep the historical signal honest).
+- Spot-check: 5 random Inventory entries verified line-by-line against `/tmp/no-real-io-lint-full.log` — all match (rule, file, kind).
+- `pnpm lint` exits 0 with the allowlist absorbing every captured violation.
 
 ## Backfill Findings (step 04, 2026-05-05 Lacustrine Navigating Rudder)
 
@@ -652,7 +802,7 @@ consolidation pass.
 | 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | DONE 2026-05-05 — full findings under §Backfill Findings; 5 MUST-CLOSE violations (C1, CR1, BF-1a, BF-1b, BF-5) + 8 P2 items + 4 P3 items |
 | 5 | Apply backfill findings | DONE 2026-05-05 — BF-1a/b CI hook + workflow at commit `ef593be9` (Lacustrine Navigating Rudder, `dd239f`); BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6` (Lacustrine, `dd239f`); C1 boundary-crossing import substance at commit `36102937` (Dawnlit Transiting Galaxy, `0ddc89` — substance landed at peer commit via foreign-stage absorption; architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; substance correct under misleading peer-subject; documented foreign-stage absorption recurrence to surface to owner); CR1 conditional-branch test-immediate-fail × 2 integration tests at this commit (Dawnlit, `0ddc89` — test-reviewer CLEAN + code-reviewer APPROVED, used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that this shape is "strictly better"). Out-of-scope follow-ups (recorded in §Out-of-Scope Follow-ups, not closed in this branch): BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary. |
 | 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | DONE 2026-05-05 — rule + RuleTester (78 cases covering full Node.js IO surface incl. node:-prefixed network family, dynamic + require + bracket-notation forms, localhost lookalike hostnames, and `global.process` aliases) + plugin registration; not yet wired (Twilit Beaming Aurora, `7cf730`; Opalescent Eclipsing Asteroid, `0c263b` takeover hardening); closing commit SHA recorded post-commit; reviewer dispatch parallel (code-reviewer APPROVED WITH SUGGESTIONS + config-reviewer ISSUES FOUND no-P1 + test-reviewer ISSUES FOUND P1-gating); P1 + P2 findings closed in same commit (test gaps, bracket-notation hardening, plan-citation removal, defence-in-depth allowlist comment); P3 dispositions deferred (config-reviewer dual-enforcement with `testRules` is step-08 territory; schema `minItems: 1` is informational-only, not adopted) |
-| 7 | Capture inventory + freeze allowlist atomically | §IO Inventory populated AND allowlist option configured in eslint.config.ts in one commit; structured-output capture; count + spot-check validation; `test-config.ts` cross-reference if present |
+| 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 — §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-reviewer-fred + architecture-reviewer-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0; closing commit SHA to be recorded post-commit |
 | 8 | Wire rule into root config | Rule active (error severity); `pnpm lint` exits 0; allowlist-discipline note for future PR additions |
 | 9 | `pnpm check` green at HEAD | One-line note with SHA and gate-set cross-checked against §Gate Taxonomy |
 | 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free — **does not include** the Cursor oak-local precursor in § Step 10 precursor (that milestone is preparatory only) |
