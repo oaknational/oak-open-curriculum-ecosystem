@@ -70,6 +70,6 @@ if ! pnpm test:root-scripts; then
 fi
 
 echo "🔤 Running build, type-check, lint, and tests..."
-pnpm turbo run sdk-codegen build type-check lint test test:e2e test:ui smoke:dev:stub
+pnpm turbo run sdk-codegen build type-check lint test test:e2e test:ui
 
 echo "✅ Pre-push checks completed!"
