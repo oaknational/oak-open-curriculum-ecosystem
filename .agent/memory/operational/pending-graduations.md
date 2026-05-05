@@ -31,6 +31,156 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 `trigger-condition`, `status`. `consolidate-docs` uses this as the live
 queue. Graduated and merged history is preserved in git and the archived
 
++ 2026-05-05; **archive-scale historical napkin synthesis is a distinct
+  learning-loop cadence, not just current-rotation cross-session
+  consolidation** (Owner-stated aside during Riverine Navigating Sextant's
+  start-right / metacognition pass). Current doctrine already requires
+  cross-session reading across recent sessions and the current rotation
+  window, but the owner named the missing historical move: reread current and
+  archived napkins holistically after prior per-napkin processing has already
+  happened, asking what the archive now knows as a corpus that no individual
+  pass could have known at the time. Benefits: long-wave failure modes become
+  visible; learning-loop throughput problems become inspectable; PDR
+  candidates can cite historical arcs rather than only recent recurrence; and
+  archived napkins remain an evidence corpus rather than cold storage. Source
+  surface: owner message 2026-05-05. Graduation-target: amendment to
+  PDR-014 (distinguish recent-thread cross-session consolidation from
+  archive-scale historical synthesis) plus `consolidate-docs` command
+  refinement (trigger, bounded corpus selection, synthesis report / processed
+  window marker, and routing outputs). Trigger: owner direction to implement
+  the plan now. Status: `graduated 2026-05-05` — PDR-014 amendment plus
+  `consolidate-docs` command refinement landed in the same documentation
+  bundle.
+
++ 2026-05-05; **pattern surface needs polarity discipline — every
+  pattern entry must be explicit about whether it is a pattern to
+  repeat, an anti-pattern to avoid, or whether the substance is a
+  recurring observation that does not yet have an actionable shape
+  and belongs elsewhere** (Owner-asked aside during Opalescent
+  Threading Nebula's promotion pass, 2026-05-05). The existing
+  `patterns/README.md` taxonomy splits by category (code /
+  architecture / process / testing / agent) but not by polarity.
+  The `prevents_recurring_mistake` frontmatter criterion implicitly
+  covers anti-patterns without distinguishing them from patterns
+  to repeat — the freshly-authored
+  `eager-rounding-off-on-partial-structures.md` is type
+  *anti-pattern* but reads as if it could be either at first
+  glance. Recurring observations that are neither directly
+  repeatable nor failure modes to avoid (e.g. *"the cyclical
+  learning-loop is a full-time process"*) belong in distilled.md
+  (cross-session refinements) or pending-graduations (queued
+  candidates) rather than in patterns/. Source surface: owner
+  message during this session's promotion pass; immediate fix
+  applied to `eager-rounding-off-on-partial-structures.md` (added
+  `polarity: anti-pattern` frontmatter field + explicit POLARITY
+  blockquote in the body). Graduation-target options: (a)
+  amendment to `.agent/memory/active/patterns/README.md` adding
+  polarity discipline to the taxonomy and frontmatter schema with
+  the three categories explicit *(landed in this same commit;
+  status partially graduated)*; (b) sweep over existing pattern
+  files to backfill polarity markers *(deferred to fresh restart
+  session — bulk edit across ~70 files exceeds current session's
+  context budget)*; (c) Practice-Core promotion (PDR-014
+  amendment to the routing discipline naming polarity as a
+  required field at pattern-graduation time) after the host
+  operational form stabilises and a second Practice-bearing repo
+  surfaces the same recording-shape question. Note: PDR-014
+  rather than PDR-007, because polarity is a routing concern (how
+  substance is classified into the patterns surface) rather than
+  a Core-pattern-shape concern (the former Core patterns directory
+  was retired 2026-04-29 per PDR-007 amendment, so PDR-007 cannot
+  carry polarity-of-Core-patterns substance).
+  Trigger: owner direction in this turn (do this in the same
+  promotion pass) OR queue for fresh restart session if scope
+  exceeds context budget. Status: `due` (owner-direction trigger
+  fired; substance-led cure named; immediate-fix applied to one
+  pattern file; full sweep + README amendment is the graduation
+  target).
+
++ 2026-05-05; **30% context budget for directive-file processing
+  is a standing rule, not a session-scoped suggestion** (Owner-
+  stated during Opalescent Threading Nebula's promotion pass with
+  explicit "this is always true"). Files under
+  `.agent/directives/` (principles.md, AGENT.md, orientation.md,
+  tdd-as-design.md, testing-strategy.md, schema-first-execution.md)
+  are deep, dense, and structurally load-bearing — every agent
+  reads them at every session open; mistakes compound across the
+  entire Practice. The error rate of editing operations rises
+  sharply under context pressure; the disposition that produces
+  *"I'll just be careful"* under pressure is the rounding-off
+  failure mode named at
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`.
+  The 30% threshold leaves headroom for full-depth file reading,
+  existing-structure comprehension, and editing without
+  crowding-out. The cure is structural: directive-file work is
+  sequenced as the FINAL step of any consolidation pass (napkin →
+  other capture surfaces → distilled → pending-graduations →
+  directives, in that order); at the boundary before directive
+  work, the context-usage check fires; if context is at or above
+  30%, finish current-step work, write a session-handoff opener,
+  and queue the directive work for a fresh session. Source
+  surface: owner direction this session; user-memory
+  `feedback_30_percent_context_for_directives.md`; distilled.md
+  §Process entry. Graduation-target: PDR in
+  `practice-core/decision-records/` covering high-stakes-editing
+  context-budget discipline (adopter scope: every Practice-bearing
+  repo with directive files; the rule is portable). Trigger: owner
+  direction has fired ("this is always true" = standing).
+  **Status: due — but PDR landing is itself directive-shaped work
+  that requires <30% context**, which this session does not have.
+  Queued for the fresh restart session per owner direction
+  *"likely the starting again will need to happen in a fresh
+  session"*. Self-applying graduation: the rule queues itself for
+  the session where it can be safely landed.
+
++ 2026-05-05; **cyclical learning-loop maintenance is a full-time
+  process even at small N** (Owner-stated meta-observation during
+  Opalescent Threading Nebula's promotion pass): *"note the
+  cyclical nature, even with only two agents running, managing
+  the learning loop is a full time process"*. Today's evidence:
+  Opalescent's session and Dawnlit's session both contributed
+  substance to the same napkin in <2 hours; both surfaced the
+  same orchestrator-vs-hook conflation; both required owner
+  correction; substance produced *about the loop* accumulated
+  alongside substance produced *by the loop*. The loop does not
+  asymptote — every pass discovers new candidate-substance for
+  future passes. Operational implication: loop maintenance is the
+  substrate that future feature work runs on; its cost is
+  *baseline*, not overhead. At N=2 the cost is already a full-time
+  process; scales superlinearly with N because cross-agent
+  coordination substance accumulates faster than any single
+  agent's substance graduates. Source surface: owner direction
+  this session; distilled.md §Process entry. Graduation-target
+  options: (a) PDR in `practice-core/decision-records/` covering
+  Practice operational scaling (adopter scope: every multi-agent
+  Practice-bearing repo); (b) amendment to PDR-014 (consolidation
+  flow) naming the loop's full-time-baseline character. Trigger:
+  second instance OR owner direction. Status: pending — single
+  observation today; substance grows across more passes.
+
++ 2026-05-05; **eager rounding-off on partial structures under
+  failure pressure** (Opalescent Threading Nebula, host pattern
+  authored 2026-05-05): the deeper disposition that drives the
+  orchestrator-vs-hook conflation. Under failure pressure, agents
+  round partial structures into whole structures and act on the
+  rounded-off whole; the information gap is often zero. Five-step
+  rounding chain: pre-screen → gate → blocking gate → commit
+  refused → bypass needed. Three observed instances all in this
+  repo's commit flow on 2026-05-05 (Ethereal, Dawnlit, Opalescent).
+  Source surface:
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`
+  (host pattern, anti-pattern polarity, agent-tier). Graduation-
+  target: promotion to Practice-Core PDR with `pdr_kind: pattern`
+  or amendment to an existing PDR after second-context
+  manifestation outside commit flow (release pipeline, deploy
+  pipeline, schema migration gate, or any other layered enforcement
+  context). Trigger: second-context manifestation OR owner
+  direction. Status: pending — single-context evidence (all 3
+  instances are orchestrator-vs-hook conflation in commit flow);
+  promoting to Practice Core on single-context evidence would be
+  generalising from one context, exactly the rounding-off failure
+  the pattern names.
+
 + 2026-05-05; **commit-skill orchestrator vs git-hook-chain are
   separate enforcers; agents conflate them under failure pressure**
   (Ethereal Transiting Comet, this date — diagnostic instance during
@@ -71,7 +221,28 @@ queue. Graduated and merged history is preserved in git and the archived
   (advisory; agent-invoked; includes fitness/vocabulary gates) from
   the live hook (blocking; git-invoked; format/markdown/knip/depcruise/type/lint/test).
   Owner direction at promotion supersedes; substance-trigger
-  fired (sharp + instance-count = 2).
+  fired (sharp + instance-count = 2). **Status: graduated 2026-05-05**
+  (Opalescent Threading Nebula). Third instance observed live during
+  Opalescent's Layer 0 → 1 napkin rotation commit attempt — same
+  rounding-off chain, different surface manifestation (constructed a
+  doctrinal collision between SKILL §Pre-Commit Validation and
+  PDR-046 §Move 2 instead of proposing `--no-verify`). Owner
+  correction: *"all quality gates are blocking always, the
+  orchestrator is not a quality gate, it surfaces very important but
+  advisory signals, there is no conflict here"*. Graduation
+  destinations: (a) `.agent/skills/commit/SKILL.md § Quality Gates
+  Are Always Blocking; the Orchestrator Is Advisory` — new section
+  distinguishing the two authorities with the 3-instance evidence
+  trail and the diagnostic discipline; (b)
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`
+  — new host pattern naming the deeper disposition under failure
+  pressure (rounding-off-partial-structures-into-whole-structures,
+  with three worked instances). Both landed in same atomic commit.
+  Practice-Core promotion (PDR with `pdr_kind: pattern`, since the
+  former Core patterns directory was retired 2026-04-29) deferred
+  until second-context manifestation outside commit flow (release
+  pipeline, deploy pipeline, schema migration gate, etc.) — current
+  evidence is single-context.
 
 + 2026-05-05; **owner-initiated execution as bypass-by-trust-boundary
   is a fourth mechanism shape for the structural-enforcer recursive-
@@ -597,9 +768,30 @@ continuity snapshots.
   the active commit-queue intent. Each is a distinct design
   decision; owner-direction-shaped, not consolidation-shaped.
   Trigger-condition: third instance now observed; promotes to
-  due. Status: `due` (3 instances; cure asymmetry confirmed;
-  awaiting owner direction on which structural enforcement
-  shape).
+  due. Status: `partially graduated 2026-05-05` (Opalescent
+  Threading Nebula). Asymmetric-cure observation graduated to
+  `.agent/rules/stage-by-explicit-pathspec.md § Cure Asymmetry —
+  One-Sided Application Does Not Prevent Absorption` with the
+  3-instance evidence table and the three named candidate shapes.
+  Two follow-ups remain queued:
+  + **ADR-shaped follow-up** (host structural-enforcement choice):
+    pending owner direction on which of the three candidate shapes
+    (pre-commit hook refusal of implicit pathspec; commit-queue
+    fingerprint-divergence detection; shared pre-commit pathspec-
+    matching gate) to implement. The choice is host-architectural
+    (trades off friction, false-positive rate, operational
+    complexity); ADR is the right home for the decision once
+    direction lands.
+  + **PDR-shaped follow-up** (Practice-governance principle):
+    "asymmetric-cure failure mode — a cure that protects only the
+    applier is not really a structural cure" is plausibly portable
+    Practice governance. Promotion to PDR awaits a second-context
+    manifestation of the same asymmetric-cure shape outside `git
+    commit -- <pathspec>` (e.g. shared lockfile discipline,
+    shared-state-file write discipline, shared-comms-log authoring
+    discipline). Single-context evidence (3 instances all `git
+    commit`) is insufficient for Practice-Core promotion per
+    consolidate-docs §7a (PDR adopter test).
 
 + 2026-05-04; **layered processing of knowledge: preserve first,
   restructure second** (Fronded Flowering Thicket, owner-stated
@@ -835,7 +1027,7 @@ continuity snapshots.
   recipe and pattern files themselves. Graduation-target: pattern in
   `.agent/memory/active/patterns/` capturing the
   reviewer-as-forcing-function shape; promote to general
-  Practice-Core pattern (`practice-core/patterns/`) once a second
+  Practice-Core PDR with `pdr_kind: pattern` once a second
   reviewer-recipe pairing follows in another domain. Trigger-condition:
   second instance — security-reviewer citing security-review-recipes,
   type-reviewer citing type-flow-patterns, etc. Status: pending —
@@ -1504,9 +1696,9 @@ continuity snapshots.
   "case where the rule doesn't apply"?; (3) first-principles framing
   question — what would the path look like with no closure pressure?
   Graduation target candidates: PDR-shaped (Practice-governance about
-  doctrine-evolution discipline, sibling of PDR-042); pattern in
-  `practice-core/patterns/` after a synthesis with the existing fences
-  it ties together; or amendment to PDR-042. Trigger: owner direction
+  doctrine-evolution discipline, sibling of PDR-042); PDR with
+  `pdr_kind: pattern` after a synthesis with the existing fences it
+  ties together; or amendment to PDR-042. Trigger: owner direction
   has fired in part (the framing was named explicitly this session);
   graduation requires a deliberate next-session shape not mid-turn
   closure (per the very discipline being captured). Evidence: napkin

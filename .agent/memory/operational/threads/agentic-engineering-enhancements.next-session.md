@@ -1,5 +1,54 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Archive-scale historical napkin synthesis cadence (landed 2026-05-05)
+
+**Last refreshed**: 2026-05-05 (Riverine Navigating Sextant /
+cursor / GPT-5.5 / `740c80`). Owner asked whether the originally
+described holistic reread of current and archived napkins had drifted
+out of the learning loop. The session used metacognition, then landed
+the approved documentation-only first pass.
+
+**Landings**:
+
+- **PDR-014 amendment**:
+  `.agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md`
+  now names archive-scale historical synthesis as a distinct
+  consolidation cadence, separate from ordinary current-rotation
+  cross-session scans.
+- **Command workflow**: `.agent/commands/consolidate-docs.md` now has
+  a triggered step after napkin rotation for archive-scale synthesis,
+  with bounded corpus selection, report shape, processed-marker
+  ledger, and routing rules.
+- **Register status**:
+  `.agent/memory/operational/pending-graduations.md` captured the
+  candidate from the owner message and marked it `graduated
+  2026-05-05` against the PDR-014 and `consolidate-docs` landing.
+- **Routing hygiene**: stale `practice-core/patterns/` destination
+  references in the touched surfaces were aligned to PDRs with
+  `pdr_kind: pattern` for ecosystem-agnostic Practice patterns.
+
+**Validation**:
+
+- `ReadLints` clean after markdown style fixes.
+- `docs-adr-reviewer` and `code-reviewer` reviewed the doctrine
+  changes; critical and important findings were addressed, including
+  marker persistence, ordering after napkin rotation, corpus alignment,
+  and pattern-routing drift.
+- Claim `fa89cc58-0fb9-454e-8c8b-db28f41950f4` was explicitly closed
+  after implementation; final commit was delayed by an unrelated
+  pre-existing staged takeover bundle in the shared git index.
+
+**Next safe step for fresh session**: run the next archive-scale
+historical synthesis only when an explicit trigger fires: owner asks
+for a historical napkin synthesis, or consolidation finds the same
+learning-loop failure family spanning multiple archived rotations and
+no existing PDR / rule names the deeper mechanism. The ordinary
+agentic-engineering thread next step remains the Layer 1 → 2
+distilled.md pass described below; archive-scale synthesis is now a
+triggered cadence, not default session-handoff work.
+
+---
+
 ## Active arc — Layer 0 → 1 napkin rotation per PDR-046 (landed 2026-05-05)
 
 **Last refreshed**: 2026-05-05 (Opalescent Threading Nebula /
@@ -1011,6 +1060,7 @@ and
 | `Lacustrine Navigating Rudder` | `claude` | `claude-opus-4-7-1m` | `dd239f` | `cross-thread-landing-of-Gnarled's-deferred-bundle-under-owner-direction-commit-all-files-in-sensible-chunks; chunk-2-of-five-was-Gnarled's-substance-practice-context-cost-baseline-plus-progressive-disclosure-plan-update-plus-experience-file-plus-napkin-surprises-1-through-6-plus-pending-graduations-three-entries-plus-thread-records-on-both-threads-plus-repo-continuity; chunk-4-was-Gnarled's-second-experience-capture-on-asymmetric-minds; substance-attributed-to-Gnarled-in-commit-bodies; this-row-records-cross-thread-participation-per-session-handoff-7c-hard-gate; substantive-work-on-observability-sentry-otel-thread-step-04-backfill-review-plus-step-05-doc-cleanup` | 2026-05-05 | 2026-05-05 |
 | `Ethereal Transiting Comet` | `claude-code` | `claude-opus-4-7-1m` | `8081d3` | `fitness-reflection-and-governance-graduation-pass-on-foundational-due-items; pattern-A-structural-enforcer-recursive-exclusion-authored-process-tier-with-two-worked-instances-WS3-trip-list-and-PDR-047-self-fire; rule-extension-B-consolidate-docs-Learning-Preservation-section-extended-with-upward-pointer-to-PDR-046-layer-orchestration-discipline; severity-is-not-urgency-sharpening-saved-to-no-speed-pressure-feedback-memory; reviewer-dispatch-code-reviewer-plus-docs-adr-reviewer-plus-assumptions-reviewer` | 2026-05-05 | 2026-05-05 |
 | `Opalescent Threading Nebula` | `claude-code` | `claude-opus-4-7-1m` | `4c1773` | `Layer-0-to-Layer-1-napkin-rotation-per-consolidate-docs-section-6-and-PDR-046-layered-knowledge-processing; archived-six-session-entries-from-2026-05-04-Lacustrine-Pelagic-Fronded-Ferny-and-2026-05-05-Ethereal-Lacustrine-to-archive-napkin-2026-05-05-md-no-compression; extracted-cross-session-refinements-into-distilled-md-severity-is-not-urgency-and-diagnostic-over-assumption-on-enforcer-conflation-and-capture-at-moment-of-occurrence-validation-and-inter-agent-comms-as-first-class-primitive-and-ADRs-permanent-plans-ephemeral-and-shared-comms-log-is-generated-not-hand-edited; fresh-napkin-keyed-on-this-session; layer-1-fitness-pressure-resolution-deferred-to-subsequent-pass-per-PDR-046-Move-3` | 2026-05-05 | 2026-05-05 |
+| `Riverine Navigating Sextant` | `cursor` | `GPT-5.5` | `740c80` | `archive-scale-historical-napkin-synthesis-cadence-landed-as-PDR-014-amendment-plus-consolidate-docs-triggered-step-plus-pending-graduations-status-flip; processed-marker-ledger-and-report-shape-specified; pdr_kind-pattern-routing-drift-corrected; docs-adr-reviewer-and-code-reviewer-findings-addressed` | 2026-05-05 | 2026-05-05 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

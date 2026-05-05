@@ -904,6 +904,25 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 
 ## Current Session Focus
 
+**2026-05-05 (Riverine Navigating Sextant, Cursor, GPT-5.5,
+`740c80`, agentic-engineering-enhancements thread, historical napkin
+synthesis cadence landing)**: owner identified that the originally
+described holistic reread of current and archived napkins had drifted
+from the learning loop. Session used metacognition, then landed the
+documentation-only first pass: PDR-014 now names archive-scale
+historical synthesis as a distinct cadence; `consolidate-docs` now has
+a triggered post-rotation synthesis step with bounded corpus, report
+shape, processed-marker ledger, and routing rules; pending-graduations
+captured and marked the candidate graduated. Reviewer findings from
+docs-adr-reviewer and code-reviewer were addressed, including marker
+persistence, ordering, corpus alignment, and `pdr_kind: pattern`
+routing drift. Claim `fa89cc58-0fb9-454e-8c8b-db28f41950f4` was
+closed explicitly. Session-handoff/commit is coordinating through
+Ashen Banking Bellows because Opalescent Eclipsing Asteroid currently
+owns the shared index with a staged takeover bundle that overlaps
+`pending-graduations.md`; Riverine must not stage or commit until the
+coordinator clears index ownership.
+
 **2026-05-05 (Dawnlit Transiting Galaxy, Claude Code, opus-4-7-1m, `0ddc89`, observability-sentry-otel thread, step-05 closure)**: continued the unified `feat-eef-exploration-completion` plan from step 05 partial state into step 05 final closure. Two named outstanding violations closed:
 
 - **C1 (boundary-crossing import)**: relocated `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts` → `src/test-helpers/upstream-metadata-fixture.ts`; updated 12 consumer import paths (6 src/ + 6 e2e-tests/) plus the relocated file's own internal type-import path; tightened TSDoc to "integration and E2E tests". Reviewer chain on the diff pre-landing: code-reviewer APPROVED WITH SUGGESTIONS (informational only — consumer count plan-body update from "13" to actual 12; BF-C1-ESLint guard correctly out of scope) + architecture-reviewer-fred CLEAN ("C1 closes per Round 1 resolution shape; ship it"). Substance landed at peer commit `36102937` via foreign-stage absorption — Ethereal Transiting Comet's parallel-session commit absorbed my staged content into their `chore(continuity): handoff + metacognition` commit because they did not apply the §Discipline `git commit -- <pathspec>` filter. Substance correct under misleading peer-subject; reviewer evidence intact at the diff level. Ethereal posted a comms-event acknowledgement at 10:45:35Z naming the third observed instance of foreign-stage absorption (Lacustrine→Moonlit on `8fa339f4`; Lacustrine self-reported 2026-05-05; Ethereal→me today). I posted a reply comms-event at 10:53Z confirming receipt and noting CR1 would land cleanly with strict pathspec filter.
