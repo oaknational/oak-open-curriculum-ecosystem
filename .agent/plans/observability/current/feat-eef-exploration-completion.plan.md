@@ -71,7 +71,7 @@ todos:
 
 # `feat/eef_exploration` Completion
 
-**Last Updated**: 2026-05-05 (Twilit Beaming Aurora, step-06 close)
+**Last Updated**: 2026-05-05 (Twilit Beaming Aurora, step-06 close; Deciduous Budding Stamen, § Step 10 precursor comms + plan body)
 **HEAD at refresh**: `75dbcdb6`
 **Status**: 🟢 CURRENT — owner-directed unified replacement of two parallel
 plans, refined post-Round-1 architecture-led review.
@@ -655,9 +655,27 @@ consolidation pass.
 | 7 | Capture inventory + freeze allowlist atomically | §IO Inventory populated AND allowlist option configured in eslint.config.ts in one commit; structured-output capture; count + spot-check validation; `test-config.ts` cross-reference if present |
 | 8 | Wire rule into root config | Rule active (error severity); `pnpm lint` exits 0; allowlist-discipline note for future PR additions |
 | 9 | `pnpm check` green at HEAD | One-line note with SHA and gate-set cross-checked against §Gate Taxonomy |
-| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free |
+| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | `/tmp/dev-boot.log`, `/tmp/mcp-tool-exercise.log`, port 3333 free — **does not include** the Cursor oak-local precursor in § Step 10 precursor (that milestone is preparatory only) |
 | 11 | Pre-merge divergence analysis vs `origin/main` | Commit-list diffs; conflict-potential findings |
 | 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-reviewer call; owner authorisation |
+
+### Step 10 precursor — Cursor `oak-local` MCP verified (2026-05-05)
+
+This section records **preparatory evidence** only. It **does not** close step 10
+above: merge-blocking acceptance still requires dev boot, HTTP MCP `tools/list`
+and `tools/call` to `http://localhost:3333/mcp`, schema validation against the
+tool catalogue, ordered specialist reviewer dispatch, and clean shutdown per the
+step 10 todo body.
+
+| Field | Record |
+| --- | --- |
+| When | 2026-05-05 |
+| Agent | Deciduous Budding Stamen (`512682`, Cursor, GPT-5.5) |
+| Transport | Cursor MCP server `project-0-oak-open-curriculum-ecosystem-oak-local` |
+| Method | MCP tool calls only — no repository application-code reads |
+| Tools exercised | `get-curriculum-model`; thread surface (`get-threads`, `get-threads-units`, `fetch` with thread ids, `get-thread-progressions`, `get-prior-knowledge-graph`); discovery (`search` for threads and lessons with `threadSlug`, `explore-topic`); App-oriented (`user-search`, `user-search-query`); resource `curriculum://thread-progressions` |
+| Outcome | All calls succeeded; large graphs spilled to agent-tools temp files as expected. Minor catalogue-shape observations only (for example `unitCount` for `algebra` differed between `get-threads` and the thread-progressions resource) — upstream consistency, not a transport failure. |
+| Immutable comms | Event id `512682-oak-local-mcp-landmark-2026-05-05` under `.agent/state/collaboration/comms-events/` |
 
 ## Risk Register
 

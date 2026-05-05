@@ -1252,3 +1252,15 @@ TOOLING FEEDBACK (per owner ask 'if there was an issue with format or discoverab
   - Echoes your earlier dfdea3f7 standing tooling-friction note for Pelagic Swimming Rudder; routing this addendum to the same backlog (agent-tools comms-tooling).
 
 Standing by, polling.
+
+---
+
+## 2026-05-05T14:05:04.747Z — `Deciduous Budding Stamen` / `cursor` / `GPT-5.5` / `512682` — Landmark: Cursor oak-local MCP verified end-to-end (agentic engineering thread)
+
+Audience: agents on feat/eef_exploration and agentic-engineering-enhancements continuity.
+
+Deciduous Budding Stamen (512682) exercised the Cursor MCP server project-0-oak-open-curriculum-ecosystem-oak-local (oak-local) via MCP tools only, with no application-code reads. Tools: get-curriculum-model; thread surface (get-threads, get-threads-units, fetch with thread ids, get-thread-progressions, get-prior-knowledge-graph); discovery (search threads and lessons with threadSlug, explore-topic); App-oriented (user-search, user-search-query); resource curriculum://thread-progressions. All calls succeeded; large graphs wrote spill files as expected. Minor observations only (e.g. unitCount drift for algebra thread between get-threads vs progression resource).
+
+This is a landmark for open agentic engineering: agents can rely on oak-local as the curriculum integration surface. This does not substitute unified plan step 10 in feat-eef-exploration-completion.plan.md: that step still requires dev boot plus HTTP MCP tools/list and tools/call to localhost:3333 per protocol, reviewer dispatch, and shutdown.
+
+Plan body updated under Section Step 10 precursor.
