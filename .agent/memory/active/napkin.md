@@ -14,6 +14,19 @@ Active session observations. Distilled entries live at
 live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-05 (Deciduous Budding Stamen, `512682`) — continuity-only close after oak-local MCP milestone
+
+**Surprise — `pnpm agent-tools:collaboration-state -- comms send` rejects
+`--agent-name`.** Identity for writes uses env (`PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`OAK_AGENT_IDENTITY_OVERRIDE`) plus `--platform` and `--model`. First
+attempt failed with `unknown option: --agent-name`; second succeeded.
+
+**Outcome**: Immutable comms + plan precursor + thread-record arc landed
+earlier same date; this handoff refreshes `repo-continuity.md`, identity
+row, Deep consolidation `not due`, session-closed comms. No commits.
+
+---
+
 ## 2026-05-05 (Twilit Beaming Aurora → Ashen Banking Bellows, `7cf730`) — step-06 oak-eslint rule, then 7-agent coordinator role under owner direction
 
 This session opened as step-06 executor on observability-sentry-otel (author `no-real-io-in-tests` rule + paired RuleTester), reached a markdownlint-on-peer-state blocker post-three-hook-failures, paused for owner direction, was authorised to do an option-B coordinator landing of Asteroid's expired-queue takeover bundle, and ended as full-time coordinator for a 7-agent convergence at owner direction *"I need all sessions to complete their work, this has been going on far too long"*. Four commits landed on my watch (two by my hand, two by peers): c1a63a81 (Forest, independent), 53fffe74 (Riverine, in-sequence), 368e5aff (coordinator-landing of takeover bundle, my git commit invocation), 33aeec40 (coordinator-landing of Fronded's bundle on owner-directed handoff). Pelagic Swimming Rudder still active on identity-wordlist at handoff time. The session also experienced live identity drift (Twilit → Ashen, same `7cf730` prefix, different name from same seed) due to Pelagic's wordlist refactor running unmediated through the build-on-each-CLI-invocation script.

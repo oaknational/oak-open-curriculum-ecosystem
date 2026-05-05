@@ -20,6 +20,12 @@ GPT-5.5 / `512682`).
   requires dev boot, HTTP MCP `tools/list` and `tools/call` to
   `http://localhost:3333/mcp`, tool-catalogue schema validation, ordered
   specialist reviewer dispatch, and clean shutdown.
+- **Session handoff** (same date, owner `/jc-session-handoff`): immutable
+  comms `512682-session-handoff-close-2026-05-05`; `repo-continuity.md`
+  Session close paragraph, Last refreshed chain, Active threads cell,
+  Current Session Focus lead entry, Deep consolidation status `not due`;
+  Participating identities row `last_session` 2026-05-05; napkin stub
+  (`comms send` has no `--agent-name`).
 
 **Next safe step for fresh session**: informational milestone — no
 follow-up on this arc unless an agent is tracing continuity. Resume the
@@ -1090,6 +1096,7 @@ and
 | `Ethereal Transiting Comet` | `claude-code` | `claude-opus-4-7-1m` | `8081d3` | `fitness-reflection-and-governance-graduation-pass-on-foundational-due-items; pattern-A-structural-enforcer-recursive-exclusion-authored-process-tier-with-two-worked-instances-WS3-trip-list-and-PDR-047-self-fire; rule-extension-B-consolidate-docs-Learning-Preservation-section-extended-with-upward-pointer-to-PDR-046-layer-orchestration-discipline; severity-is-not-urgency-sharpening-saved-to-no-speed-pressure-feedback-memory; reviewer-dispatch-code-reviewer-plus-docs-adr-reviewer-plus-assumptions-reviewer` | 2026-05-05 | 2026-05-05 |
 | `Opalescent Threading Nebula` | `claude-code` | `claude-opus-4-7-1m` | `4c1773` | `Layer-0-to-Layer-1-napkin-rotation-1513474e-per-PDR-046-Move-1; ADR-vs-PDR-vs-both-decision-discipline-applied-to-due-items-per-owner-direction; promotion-bundle-authored-orchestrator-vs-quality-gate-clarification-in-commit-SKILL-plus-cure-asymmetry-section-in-stage-by-explicit-pathspec-plus-eager-rounding-off-on-partial-structures-anti-pattern-host-pattern-with-polarity-discipline-plus-distilled-additions-plus-four-pending-graduations-entries; reviewer-dispatch-docs-adr-plus-code-reviewer-with-P1-P2-findings-absorbed; thread-record-and-pending-graduations-portion-landed-via-Riverine-53fffe74-with-explicit-pathspec; full-promotion-bundle-landed-via-coordinator-mediated-Asteroid-takeover-368e5aff-with-body-attribution-paragraph-per-Lacustrine-to-Gnarled-pattern; multi-agent-coordination-with-Ashen-Banking-Bellows-acting-as-coordinator-during-six-agent-convergence; eager-rounding-off-pattern-fired-on-its-own-author-via-misidentification-of-comms-event-recipient-fourth-instance-self-corrected; agents-decide-what-to-ask-sharpening-captured-as-standing-direction; async-vs-sync-sidebar-distinction-captured; inbound-polling-discipline-gap-discovered-after-missing-Twilit-first-message-at-11-53Z; fresh-session-opener-authored-at-2026-05-06-five-layer-restart-opener-md` | 2026-05-05 | 2026-05-05 |
 | `Riverine Navigating Sextant` | `cursor` | `GPT-5.5` | `740c80` | `archive-scale-historical-napkin-synthesis-cadence-landed-as-PDR-014-amendment-plus-consolidate-docs-triggered-step-plus-pending-graduations-status-flip; processed-marker-ledger-and-report-shape-specified; pdr_kind-pattern-routing-drift-corrected; docs-adr-reviewer-and-code-reviewer-findings-addressed` | 2026-05-05 | 2026-05-05 |
+| `Deciduous Budding Stamen` | `cursor` | `GPT-5.5` | `512682` | `oak-local-MCP-landmark-comms; feat-eef-step-10-precursor-plan-body; thread-record-arc; jc-session-handoff-close` | 2026-05-05 | 2026-05-05 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
