@@ -1,5 +1,73 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Layer 0 → 1 napkin rotation per PDR-046 (landed 2026-05-05)
+
+**Last refreshed**: 2026-05-05 (Opalescent Threading Nebula /
+claude-code / claude-opus-4-7-1m / `4c1773`). Rotation pass per
+consolidate-docs §6 driven by PDR-046 §Move 1 (lowest layer with
+unprocessed substance is the active layer).
+
+**Landings**:
+
+- **Archive**: full pre-rotation napkin preserved verbatim at
+  `.agent/memory/active/archive/napkin-2026-05-05.md` (463 lines,
+  six session entries: 4× 2026-05-04 Lacustrine-Step-3 / Pelagic /
+  Fronded / Ferny; 2× 2026-05-05 Ethereal / Lacustrine).
+- **Distilled.md additions** (4 cross-session refinements): severity
+  is not urgency (sharpens no-speed-pressure block); diagnose
+  enforcer-tier before reaching for bypass (script-tier discipline-
+  checker vs git-hook-tier blocking gate); inter-agent comms is a
+  first-class coordination primitive (route through lowest-authority
+  resolver); plans cite ADRs never the reverse (sharpens moving-
+  targets rule at coarser granularity). Distilled grew from 296 →
+  386 lines; resolution deferred to Move 3 pass.
+- **Fresh napkin** keyed on this session, recording the rotation
+  itself plus the explicit deferral of items not yet ready for
+  distilled (capture-at-moment-validates-PDR-048 empirical
+  confirmation; recursive-exclusion fourth-mechanism-shape
+  candidate; pre-existing-violation operator-vs-gate gap;
+  two-tier authorisation chain; commit-queue fingerprint recursion
+  due-for-Layer-2; shared-comms-log generated-not-hand-edited
+  awaiting second instance; turbo cache masks latent test;
+  comms-event-authoring-latency; Pelagic Round-1-shape /
+  Round-2-principle held for second arc; most 2026-05-04 substance
+  already graduated during the 2026-05-04 layered-processing arc).
+
+**Discipline applied**:
+
+- PDR-027 identity row added to thread record at session open.
+- Active claim opened on rotation files; no overlap with Dawnlit
+  (observability) or Moonlit (smoke-tests retirement).
+- PDR-046 §Move 2 honoured: no in-pass form-keeping on the active
+  layer; Layer 1 fitness pressure (distilled growth) deliberately
+  not addressed in this pass.
+- PDR-046 §Move 3 honoured: substance graduation upward, not
+  compression of existing entries.
+- Substance preservation absolute: archive is verbatim; new
+  entries land at full weight.
+- `git commit -- <pathspec>` for the rotation commit (third-
+  instance worked example of `stage-by-explicit-pathspec`).
+
+**Next safe step for fresh session**: a Layer 1 → 2 pass per
+PDR-046 §Move 1 — distilled.md is now the active layer (carrying
+the four fresh refinements plus prior accumulated substance, 386
+lines / 275 limit). Walk distilled.md entry-by-entry; for each:
+graduation-ready → graduate to permanent home (rule extension,
+PDR Notes, principles.md section, ADR, README) and remove from
+distilled; not-yet-stable → leave in place. The four refinements
+landed this pass each have natural Layer 2 destinations identified
+(severity-is-not-urgency → no-speed-pressure rule extension or
+principles entry; diagnose-enforcer-tier → companion to
+hook-failures-are-questions; inter-agent-comms-first-class →
+use-agent-comms-log rule extension or new follow-collaboration
+adapter; plans-cite-ADRs-never-reverse →
+no-moving-targets-in-permanent-docs rule extension to encode the
+plan-citation case). Layer 2 fitness pressure on principles.md and
+pending-graduations.md remains addressable only after Layer 1
+reaches rest.
+
+---
+
 ## Active arc — Foundational graduation pass: recursive-exclusion pattern + consolidate-docs PDR-046 pointer (landed 2026-05-05)
 
 **Last refreshed**: 2026-05-05 (Ethereal Transiting Comet / claude-code /
@@ -942,6 +1010,7 @@ and
 | `Gnarled Climbing Bark` | `claude` | `claude-opus-4-7-1m` | `40a044` | `practice-context-cost-baseline-authored-at-.agent-analysis-practice-context-cost-baseline-md; passive-harvest-method-claude-code-only-jsonl-plus-context-slash-command-triangulation; always-on-rule-tier-figures-52-canonical-168500-chars-42K-tokens-soft-load-vs-50-adapter-3606-chars-900-tokens-harness-hard-injected; entry-point-graph-92908-chars-23K-tokens; memory-surface-187388-chars-46K-tokens-repo-continuity-md-dominates-at-137442-chars-34K-tokens; illustrative-session-journey-Lacustrine-dd239f-34-Read-calls-22-unique-files-362K-tokens-thread-record-and-EEF-plan-account-for-79-percent; progressive-disclosure-plan-success-signals-baseline-link-added-and-four-item-scope-expansion-register-added-CLI-fitness-frontmatter-token-fields-fitness-reporter-token-rendering-frontmatter-mandation-across-guidance-files; analysis-README-listing-added; user-memory-feedback_no_verify_fresh_permission-md-refined-agent-initiated-no-verify-is-forbidden-owner-directs-when-not-the-reverse; doc-commit-deferred-pre-commit-test-gate-failed-on-unrelated-oauth-proxy-routes-integration-test-line-309-Parse-Error-Expected-HTTP-RTSP-or-ICE-test-source-unchanged-from-HEAD-cache-invalidated-by-peer-Moonlit-doc-edits-exposed-latent-failure; heads-up-comms-log-entry-posted-to-Moonlit-Shimmering-Comet-2026-05-05T08-25-00Z; commit-window-claim-77e52443-closed-intent-b151ab5f-abandoned; doc-bundle-three-files-staged-in-working-tree-as-visible-signal-pending-OAuth-gate-unblock; POST-HANDOFF-coordination-arc-after-owner-check-your-messages-prompt-discovered-Moonlit-heads-up-was-direct-edit-to-generated-shared-comms-log-md-overwritten-by-regeneration-and-Lacustrine-Navigating-Rudder-dd239f-question-event-aaa282e6-with-2-minute-deadline-08-39-58Z-blocked-by-my-three-abandoned-staged-files-replied-event-4ec85e69-at-08-39-50Z-authorising-option-2-unstage-to-commit-and-re-stage-after-and-re-posted-Moonlit-heads-up-as-event-ce5cc169-three-pending-graduations-entries-added-comms-log-rule-extension-and-comms-event-CLI-helper-and-trust-the-artefacts-stated-provenance-pattern-candidate-experience-file-2026-05-05-gnarled-the-header-was-the-contract-md-authored` | 2026-05-05 | 2026-05-05 |
 | `Lacustrine Navigating Rudder` | `claude` | `claude-opus-4-7-1m` | `dd239f` | `cross-thread-landing-of-Gnarled's-deferred-bundle-under-owner-direction-commit-all-files-in-sensible-chunks; chunk-2-of-five-was-Gnarled's-substance-practice-context-cost-baseline-plus-progressive-disclosure-plan-update-plus-experience-file-plus-napkin-surprises-1-through-6-plus-pending-graduations-three-entries-plus-thread-records-on-both-threads-plus-repo-continuity; chunk-4-was-Gnarled's-second-experience-capture-on-asymmetric-minds; substance-attributed-to-Gnarled-in-commit-bodies; this-row-records-cross-thread-participation-per-session-handoff-7c-hard-gate; substantive-work-on-observability-sentry-otel-thread-step-04-backfill-review-plus-step-05-doc-cleanup` | 2026-05-05 | 2026-05-05 |
 | `Ethereal Transiting Comet` | `claude-code` | `claude-opus-4-7-1m` | `8081d3` | `fitness-reflection-and-governance-graduation-pass-on-foundational-due-items; pattern-A-structural-enforcer-recursive-exclusion-authored-process-tier-with-two-worked-instances-WS3-trip-list-and-PDR-047-self-fire; rule-extension-B-consolidate-docs-Learning-Preservation-section-extended-with-upward-pointer-to-PDR-046-layer-orchestration-discipline; severity-is-not-urgency-sharpening-saved-to-no-speed-pressure-feedback-memory; reviewer-dispatch-code-reviewer-plus-docs-adr-reviewer-plus-assumptions-reviewer` | 2026-05-05 | 2026-05-05 |
+| `Opalescent Threading Nebula` | `claude-code` | `claude-opus-4-7-1m` | `4c1773` | `Layer-0-to-Layer-1-napkin-rotation-per-consolidate-docs-section-6-and-PDR-046-layered-knowledge-processing; archived-six-session-entries-from-2026-05-04-Lacustrine-Pelagic-Fronded-Ferny-and-2026-05-05-Ethereal-Lacustrine-to-archive-napkin-2026-05-05-md-no-compression; extracted-cross-session-refinements-into-distilled-md-severity-is-not-urgency-and-diagnostic-over-assumption-on-enforcer-conflation-and-capture-at-moment-of-occurrence-validation-and-inter-agent-comms-as-first-class-primitive-and-ADRs-permanent-plans-ephemeral-and-shared-comms-log-is-generated-not-hand-edited; fresh-napkin-keyed-on-this-session; layer-1-fitness-pressure-resolution-deferred-to-subsequent-pass-per-PDR-046-Move-3` | 2026-05-05 | 2026-05-05 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

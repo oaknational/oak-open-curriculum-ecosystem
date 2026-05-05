@@ -82,6 +82,35 @@ deliberate governance pass or owner-forced close. If another session is
 already performing that cleanup, let the natural claim lifecycle finish rather
 than deleting unilaterally.
 
+**Inter-agent comms is a first-class coordination primitive — not
+all coordination needs owner-mediation.** When another agent's
+state blocks mine and they may still be active, the correct first
+move is a direct comms-event to that agent (with a deadline + a
+named default action if no response), brief poll for reply, then
+escalate to owner only if no response by deadline. The reverse
+order — surface options to the owner first — over-uses owner
+mediation for coordination the agents can resolve between
+themselves. Worked instance 2026-05-05: Lacustrine Navigating
+Rudder's doc-cleanup `verify-staged` blocked on Gnarled Climbing
+Bark's three pre-staged-but-deferred files. Initial options
+surfaced to the owner were all owner-mediated (you authorise me to
+unstage; you commit Gnarled's first; I wait). Owner direction:
+*"please send a message to Gnarled and see if they acknowledge,
+inter-agent communication is an option in these circumstances.
+They may or may not still be active, so you should probably
+include an amount of time you will wait in the message, maybe two
+minutes"*. Coordination resolved between the two agents within the
+2-minute window with 8-second margin. Owner-stated principle on
+close: *"the communication between you and Gnarled was extremely
+effective, and communicating with the other agents is always an
+option, not all communication needs to be mediated through me"*.
+Operating shape: bounded-deadline + default-action format on the
+comms-event; agent posts, polls briefly, acts on default if silent.
+Owner-mediation remains the right channel for owner-owned
+decisions (authorisation chain lifts on owner-directed deferrals;
+strategic redirection; cross-thread scope changes). The discipline
+is: route through the lowest-authority resolver that can decide.
+
 ## Process
 
 Planning-discipline entries in this section remain routed to the
@@ -115,6 +144,51 @@ applied; the cycle that seemed urgent five minutes ago lands
 cleanly under full protocol. Operationalised at
 [`no-speed-pressure`](../../rules/no-speed-pressure.md); upstream
 principle is [§Architectural Excellence Over Expediency][excellence].
+
+**Severity is not urgency.** Owner sharpening 2026-05-05 of the
+no-speed-pressure doctrine: severity-tier labels (`CRITICAL`, `HARD`,
+`P1`, `P2`, etc.) name *importance*, not *urgency*. The correct
+response to a severity signal is *more care, more thoughtfulness,
+slower processing* — never faster action. The framing "CRITICAL →
+drive action" is the same impulse no-speed-pressure names, dressed
+in escalation-tier vocabulary. Worked instance: at session open a
+fitness signal was framed as a driver of landing-target choice
+("CRITICAL prose-line on napkin → must address now"). Owner
+correction: *"remember, critical means important, but it does not
+mean rush, if anything even more care and thoughtfulness is
+needed"*. Cure: when a severity-tier label fires, treat it the
+same way as the urge-to-skip-ceremony — slow down, apply the
+doctrine substrate, do the work properly. Severity tiers calibrate
+the *care* applied; they do not calibrate the *speed*.
+
+**Quality gates are always blocking; the orchestrator is advisory.**
+Two distinct enforcer roles, two distinct authorities. **Quality
+gates** (`.husky/pre-commit` chain — format / markdownlint / knip /
+depcruise / type-check / lint / test, plus the `commit-msg` hook
+running commitlint) are blocking, always. They run at `git commit`
+time on the actual working-tree state and refuse the commit on
+failure. **The commit-skill orchestrator**
+(`scripts/check-commit-skill-gates.ts`, invoked voluntarily before
+`git commit`) runs `practice:fitness:strict-hard`,
+`practice:vocabulary`, and the message check — its purpose is to
+surface important advisory signals (whole-tree fitness shape,
+vocabulary drift, message-format issues) early enough to act on,
+but its non-zero exit is **not** a commit-gate verdict. Conflating
+the two — reading an orchestrator HARD signal as a blocking
+condition — produces false-positive escape-valve framings
+(proposing `--no-verify`, splitting an atomic commit, or otherwise
+distorting the substance-led shape of the work to satisfy advisory
+output). Cure: when *any* enforcer fires, name *which* enforcer is
+firing on *which* surface and *with what authority*. Owner-stated
+2026-05-05: *"all quality gates are blocking always, the
+orchestrator is not a quality gate, it surfaces very important but
+advisory signals"*. The orchestrator's HARD signals are read,
+recorded, and acted on per the substance-led path (e.g. PDR-046
+§Move 3 graduation upward when the signal flags a layer at rest);
+they do not gate the commit. Composes with
+`feedback_hook_failures_are_questions` (the prior-art rule covers
+hook-tier; this entry names the advisory-vs-blocking authority
+distinction).
 
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
@@ -226,6 +300,31 @@ the session of discovery. Cure when count itself is the point: route
 to a generated/scriptable surface (`pnpm portability:check`, fitness
 reports, generated indexes), not hand-maintained prose. Owner stated
 2026-05-01.
+
+**Plans cite ADRs, never the reverse — ADRs are permanent and
+outlive plans.** Owner sharpening 2026-05-05 of the moving-targets
+rule at coarser granularity: permanent docs (ADRs, runbooks,
+principles, READMEs in stable docs trees) MUST NOT cite plan names,
+plan paths, or plan section identifiers. Plans are by construction
+ephemeral — they archive when complete, get renamed during scope
+shifts, get split or merged. A permanent doc that cites a plan name
+becomes a dead pointer the moment that plan archives. The
+directionality is one-way: *plans reference ADRs* (ADRs are the
+source of truth a plan executes against); ADRs never reference
+plans. Worked instance: doc-cleanup commit added prose like *"...is
+tracked in the `retire-smoke-tests-all-vitest-no-real-io` plan's IO
+Inventory cycle"* across ADR-121, ADR-083, ADR-063, and the
+sentry-deployment runbook. Owner correction: *"plans are ephemeral!
+ADRs are permanent. The ADRs are the source of truth, plans
+reference THEM"*. Cure: rewrite affected sites self-contained —
+describe WHAT changed and what reattaches when, without naming the
+plan. Subsumes the prior "no SHAs in permanent docs" rule under the
+broader directionality principle: same family of failure (permanent
+→ ephemeral citation), different granularities (SHAs / plan names
+/ workstream identifiers / track-card paths). Operationalised at
+[`no-moving-targets-in-permanent-docs`](../../rules/no-moving-targets-in-permanent-docs.md);
+rule extension to encode the plan-citation case explicitly is a
+pending Layer 2 graduation candidate.
 
 **Practice-Core portability is by construction.** Anything under
 `.agent/practice-core/` (the trinity, entry points, CHANGELOG,

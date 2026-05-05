@@ -154,28 +154,25 @@
       "notes": "Pre-existing fitness violations on peer-authored files (.agent/directives/principles.md hard chars; .agent/memory/active/distilled.md hard lines; .agent/memory/active/napkin.md critical lines+chars+max-prose; .agent/memory/operational/pending-graduations.md hard lines+chars) block the practice:fitness:strict-hard gate orchestrator. None of these files are in my staged set (CR1 fix + plan body + thread record + 2 comms events + 2 collaboration-state files). This is the same structural gap Lacustrine documented in their napkin Surprise 3 (orchestrator has no staged-set awareness). Per feedback_no_verify_fresh_permission, agent does not propose --no-verify; surfacing to owner for direction."
     },
     {
-      "intent_id": "b1d8e165-4203-463c-a72e-8bbbdc9f1378",
-      "claim_id": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
+      "intent_id": "e4605028-204d-4327-9167-466a08b551c2",
+      "claim_id": "d4365767-8572-4119-8828-f9df513367eb",
       "agent_id": {
-        "agent_name": "Dawnlit Transiting Galaxy",
+        "agent_name": "Opalescent Threading Nebula",
         "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "0ddc89"
+        "session_id_prefix": "4c1773"
       },
       "files": [
-        "apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/runtime-config.integration.test.ts",
-        ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
-        ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/comms-events/b649b716-266c-47f4-81d1-da161a929ea5.json",
-        ".agent/state/collaboration/comms-events/2e2bfb5a-017a-42c2-82a4-ae02de215c1a.json"
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/archive/napkin-2026-05-05.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/state/collaboration/active-claims.json"
       ],
-      "commit_subject": "refactor(http-mcp): replace conditional Result early-return with unwrap (close CR1; close step 05)",
-      "queued_at": "2026-05-05T11:02:49.076Z",
-      "updated_at": "2026-05-05T11:02:59.124Z",
-      "expires_at": "2026-05-05T11:17:49.076Z",
+      "commit_subject": "docs(memory): rotate napkin layer 0 to 1 per pdr-046",
+      "queued_at": "2026-05-05T11:09:21.648Z",
+      "updated_at": "2026-05-05T11:09:26.405Z",
+      "expires_at": "2026-05-05T11:24:21.648Z",
       "phase": "staging"
     }
   ],
@@ -282,14 +279,14 @@
       "notes": "No conflict with Dawnlit (observability files) or Moonlit (smoke-tests retirement files). All target files are governance/memory surfaces on the agentic-engineering-enhancements thread."
     },
     {
-      "claim_id": "c10c4518-a0ca-4e65-b36b-1c312bba6327",
+      "claim_id": "d4365767-8572-4119-8828-f9df513367eb",
       "agent_id": {
-        "agent_name": "Dawnlit Transiting Galaxy",
+        "agent_name": "Opalescent Threading Nebula",
         "platform": "claude-code",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "0ddc89"
+        "session_id_prefix": "4c1773"
       },
-      "thread": "observability-sentry-otel",
+      "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "git",
@@ -298,12 +295,12 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-05T11:02:33Z",
-      "freshness_seconds": 14400,
+      "claimed_at": "2026-05-05T11:08:53Z",
+      "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Stage and commit CR1 closure: replace conditional-branch early-return with unwrap from @oaknational/result; bundle plan body + thread record + comms events + collaboration state. Owner-cleared to proceed; Opalescent owns fitness-limit work as separate lane.",
-      "notes": "Standard 'git commit' (no --no-verify). Pre-commit hook does NOT include fitness gate (only the orchestrator pre-screen does). Targeted gates clean: format, lint, type, 722 tests.",
-      "intent_to_commit": "b1d8e165-4203-463c-a72e-8bbbdc9f1378"
+      "intent": "Stage and commit Layer 0 → 1 napkin rotation: archive/napkin-2026-05-05.md, distilled.md (4 cross-session refinements), fresh napkin.md, thread record (active arc + identity row), active-claims.json (this and the file-area claim).",
+      "notes": "Pathspecs: .agent/memory/active/{napkin,distilled}.md, .agent/memory/active/archive/napkin-2026-05-05.md, .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md, .agent/state/collaboration/active-claims.json. Pre-existing peer changes (Dawnlit observability files, closed-claims.archive.json, comms-events) NOT in scope; will not be staged.",
+      "intent_to_commit": "e4605028-204d-4327-9167-466a08b551c2"
     }
   ]
 }
