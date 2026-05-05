@@ -1,5 +1,34 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Cursor oak-local MCP verified + `feat/eef_exploration` Step 10 precursor recorded (2026-05-05)
+
+**Last refreshed**: 2026-05-05 (Deciduous Budding Stamen / cursor /
+GPT-5.5 / `512682`).
+
+**Landings**:
+
+- **Comms**: immutable event `512682-oak-local-mcp-landmark-2026-05-05`
+  under `.agent/state/collaboration/comms-events/`; rendered into
+  `shared-comms-log.md`.
+- **Plan**: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
+  gained § Step 10 precursor — end-to-end Cursor MCP exercise against
+  `project-0-oak-open-curriculum-ecosystem-oak-local` (thread tools,
+  discovery search, progression / prior-knowledge graphs, resources).
+  Sequence Summary row 10 states explicitly that this precursor does **not**
+  satisfy step 10 acceptance.
+- **Boundary**: preparatory evidence only. Unified plan step 10 still
+  requires dev boot, HTTP MCP `tools/list` and `tools/call` to
+  `http://localhost:3333/mcp`, tool-catalogue schema validation, ordered
+  specialist reviewer dispatch, and clean shutdown.
+
+**Next safe step for fresh session**: informational milestone — no
+follow-up on this arc unless an agent is tracing continuity. Resume the
+primary arcs below (distilled Layer 1 → 2, archive-scale synthesis
+triggers, `feat/eef_exploration` linear steps 07–10 when owned by that
+lane).
+
+---
+
 ## Active arc — Archive-scale historical napkin synthesis cadence (landed 2026-05-05)
 
 **Last refreshed**: 2026-05-05 (Riverine Navigating Sextant /
