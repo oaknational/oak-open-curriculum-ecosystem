@@ -61,11 +61,11 @@ not invent derived word slots.
 
 ## Platform Wrapper Status
 
-| Platform    | Status                                            | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ----------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Wired (statusline + SessionStart)                 | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
-| Cursor      | Wired (code-renamed; live re-test pending)        | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). Terminal may not inherit hook `env`; use injected context for registration when needed. **Future work:** live-test in a Cursor composer session after the env-var rename to confirm the renamed surface still flows end-to-end; once verified, optionally rename the file from `oak-session-identity.mjs` to `practice-session-identity.mjs` for naming consistency.                                                                                                                                                                      |
-| Codex       | Wired (SessionStart context + thread id fallback) | Project `SessionStart` hook `.codex/hooks/practice-session-identity.mjs` delegates to `agent-tools/dist/src/bin/codex-session-identity-hook.js`. The adapter parses Codex stdin `session_id` and emits `hookSpecificOutput.additionalContext` with the PDR-027 identity block plus the canonical preflight command. Codex shell commands also receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. Title/statusline text remains optional display convenience, not identity correctness.                                                                                                                                                                                                                                                                             |
+| Platform    | Status                                                                     | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired (statusline + SessionStart)                                          | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `export PRACTICE_AGENT_SESSION_ID_CLAUDE=<id>` to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
+| Cursor      | Wired (sessionStart + statusline implementation; user CLI config required) | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` from the composer `session_id` and injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). The repo-owned status-line shim `.cursor/scripts/statusline-identity.mjs` delegates to `agent-tools/dist/src/cursor/statusline-identity.js`, but Cursor CLI loads `statusLine` from user-level `~/.cursor/cli-config.json`, so activation requires the one-time config documented below. Terminal may not inherit hook `env`; use injected context for registration when needed.                                                                                                                                                          |
+| Codex       | Wired (SessionStart context + thread id fallback)                          | Project `SessionStart` hook `.codex/hooks/practice-session-identity.mjs` delegates to `agent-tools/dist/src/bin/codex-session-identity-hook.js`. The adapter parses Codex stdin `session_id` and emits `hookSpecificOutput.additionalContext` with the PDR-027 identity block plus the canonical preflight command. Codex shell commands also receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. Title/statusline text remains optional display convenience, not identity correctness.                                                                                                                                                                                                                                                                             |
 
 ### Cursor `sessionStart` wiring
 
@@ -81,6 +81,40 @@ Authoritative behaviour and JSON shapes are defined in Cursor’s **[Hooks](http
   2. **`.cursor/oak-composer-session.local.json`** — gitignored mirror with `suggestedComposerTabTitle`, `displayName`, `composerSessionId`, and `sessionIdPrefix` for copy/paste rename or tooling. Written when the derived name is available; set `OAK_SKIP_COMPOSER_SESSION_MIRROR=1` to skip (e.g. tests).
 
 For OS-level or editor-level title surfaces, parity with Codex’s `terminal_title` / `status_line` in `~/.codex/config.toml` is a **different product** integration; Cursor would need a future hook field or API for true automatic tab rename.
+
+### Cursor CLI status-line wiring
+
+The Cursor CLI status line is a user-level setting. The repo owns the command
+implementation, but activation belongs in `~/.cursor/cli-config.json` on the
+machine running Cursor CLI:
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node /absolute/path/to/oak-open-curriculum-ecosystem/.cursor/scripts/statusline-identity.mjs",
+    "padding": 2
+  }
+}
+```
+
+The wiring after activation is:
+
+1. `~/.cursor/cli-config.json` points `statusLine.command` at the repo shim.
+2. `.cursor/scripts/statusline-identity.mjs` resolves the built adapter path
+   under `agent-tools/dist/src/cursor/`. If the build artefact is missing it
+   exits 0 silently rather than disrupting the session.
+3. `agent-tools/dist/src/cursor/statusline-identity.js` (built from
+   `agent-tools/src/cursor/statusline-identity.ts`) parses the stdin JSON,
+   extracts `session_id`, and synchronously invokes the built `agent-identity`
+   CLI with `--seed <session_id> --format display`.
+4. The CLI prints the deterministic name to stdout, which Cursor CLI renders in
+   the status line.
+
+The adapter is a soft surface: missing input, missing build artefact,
+unparseable JSON, or any spawn failure exits 0 with empty stdout. The
+`OAK_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when the
+operator sets it.
 
 ### Claude Code statusline wiring
 
