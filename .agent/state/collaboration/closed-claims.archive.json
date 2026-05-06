@@ -10044,6 +10044,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "bd37b2fd-29dc-4f18-a6cc-9e2db6d63bc4",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T08:47:52Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "careful processing of napkin (archive rotation entry) and distilled.md (graduate moving-targets entry; assess partial-operationalisation entries)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T08:48:55Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "incomplete pattern list; CLI silently drops repeated --area-pattern; reopening with --file",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bd37b2fd-29dc-4f18-a6cc-9e2db6d63bc4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

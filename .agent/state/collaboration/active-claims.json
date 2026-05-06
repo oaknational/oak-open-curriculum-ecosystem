@@ -411,7 +411,80 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "7d4ecff643593aa07369adeaac6c8e72fea25846c2ff1036ea7c43db1a781660",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nA\t.agent/state/collaboration/comms-events/512682-session-handoff-close-2026-05-05.json\nA\t.agent/state/collaboration/comms-events/fe12b590-d0ce-40b5-99c8-629a0f22f432.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "e82f6b51-41e2-493f-a363-70f303837dcb",
+      "claim_id": "82A0E0F5-72A8-428D-A75B-07EA97EC8CF0",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/archive/napkin-2026-05-06-evening.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(napkin): archive rotation entry; reset napkin to clean state",
+      "queued_at": "2026-05-06T08:52:31.165Z",
+      "updated_at": "2026-05-06T08:53:08.180Z",
+      "expires_at": "2026-05-06T09:07:31.165Z",
+      "phase": "staging",
+      "staged_name_status": "A\t.agent/memory/active/archive/napkin-2026-05-06-evening.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
+      "staged_bundle_fingerprint": "65266dcef1d50808743aa12f2635f2dd3a8f43418bc0c3b35eac1750b6d608ea"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "492d90a5-4913-4ced-8947-95f836bf0472",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-05-06-evening.md",
+            ".agent/rules/no-moving-targets-in-permanent-docs.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T08:49:04Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "careful processing of napkin (archive rotation entry) and distilled.md (graduate moving-targets entry)"
+    },
+    {
+      "claim_id": "82A0E0F5-72A8-428D-A75B-07EA97EC8CF0",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T08:52:23Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "commit window: archive napkin rotation entry; reset napkin to clean state",
+      "intent_to_commit": "e82f6b51-41e2-493f-a363-70f303837dcb"
+    }
+  ]
 }
