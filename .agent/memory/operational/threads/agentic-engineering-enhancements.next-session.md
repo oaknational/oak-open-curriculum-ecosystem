@@ -1,5 +1,93 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Pending-graduations recalibration + access-rhythm insight (landed 2026-05-07)
+
+**Last refreshed**: 2026-05-07 (Pelagic Rolling Harbour /
+claude-code / claude-opus-4-7-1m / `58a9ad`).
+
+**Session arc continuation**: same session as the dedicated drain
+arc below. After surfacing Phase 3's "HARD persists" residual
+shape for owner direction, the owner reframed the diagnosis: the
+HARD limit was *arbitrarily calibrated* against a frame that
+doesn't fit this register's lifecycle. `principles.md` is loaded
+every session by every agent — small *is* the quality signal.
+`pending-graduations.md` is accessed at consolidation passes only
+and grows with cross-session-wait substance — its limits should
+reflect a queue lifecycle, not a permanent-doc shape. The
+substance > destination boundary applied: when limits don't fit
+the lifecycle, recalibrate the limits, don't elide substance.
+
+Two atomic commits in this arc:
+
+- `b0b7cec3` — recalibration. Frontmatter line target 1000→2000,
+  line limit 1400→2500, char limit 90000→150000, line length
+  200→300 (per-entry tag lines are machine-readable, not prose).
+  Three new descriptive frontmatter fields (`lifecycle_model`,
+  `access_pattern`, `fitness_rationale`) explicitly name the
+  access-rhythm distinction. Per-entry metadata schema authored
+  in preamble: inline tag-line shape `[captured | source | target
+  | trigger | size | status]` with closed vocabularies plus
+  `+`-joined composite-value convention and parenthetical
+  qualifiers. Structured index added (TOC by status: `due` /
+  `vaporware-gated` (trigger-facet sub-grouping under `due`) /
+  `partially-graduated` / `quarantined` / `pending`) with
+  line-number hints + entry-counts table. Inline tags applied to
+  12 high-touch entries (the new metacognition entry plus all
+  `due` / `vaporware-gated` / `partially-graduated` /
+  `quarantined`). Pre-2026-05-07 `pending` entries deferred to
+  Phase B backfill sweep. New `pending` entry captures the
+  access-rhythm-as-fitness-axis insight with graduation target =
+  ADR-144 amendment + possible cross-repo PDR.
+- `b1a8536b` — claim close. Recalibration claim closed with
+  evidence summary in `closed-claims.archive.json`.
+
+**Reviewer dispatch outcome (execution-legitimacy framing)**:
+
+- `docs-adr-reviewer` — COMPLIANT, 3 P2 (target-vocabulary
+  extensibility for `multi:` lists, composite-value convention
+  for `source`/`trigger`, quarantine-target sentinel undefined).
+  All addressed in same commit.
+- `code-reviewer` — APPROVED WITH SUGGESTIONS, 1 P1 (missing
+  `## Entries` heading after the index leaving entry list inside
+  the `## Index` section; fixed) plus the same `target` /
+  composite-value notes; 2 nits on count-table alignment and
+  `~85`/`~86` reconciliation (both fixed). All addressed in same
+  commit.
+
+**Validation gate state (post-session)**:
+
+- `pnpm practice:fitness:informational` —
+  `pending-graduations.md` HARD cleared. Now SOFT (2070 lines,
+  10 over target 2000, well under hard 2500). The substance >
+  destination boundary held: no truncation; the recalibration
+  was the structural fix.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
+
+**Metacognitive insight captured (not landed in-band)**: every
+fitness-tracked file implicitly encodes an access-rhythm theory
+in its limit shape; the schema currently makes that theory
+implicit (line/char numbers only). Making it explicit
+(`lifecycle_model: loaded-every-session | read-on-demand |
+consolidation-pass-only | archive-only` plus `access_pattern`
+frontmatter) would make recalibration principled rather than
+ad-hoc, and would let fitness output classify violations by
+whether the limit is structurally appropriate or just stale.
+Captured as a new `pending` entry with explicit graduation target.
+
+**Next-session candidates (this arc)**:
+
+- **Phase B backfill sweep** — apply inline metadata tag lines to
+  the ~76 pre-2026-05-07 `pending` entries. Mechanical,
+  drainable opportunistically, no dedicated session needed.
+- **ADR-144 amendment** for access-rhythm axis — substance
+  available now from this session's recalibration evidence;
+  graduation gated on second-instance OR owner-direction.
+- **Cross-repo PDR candidate** for fitness-limit-as-access-rhythm
+  doctrine — gated on emergence of the same access-rhythm
+  miscalibration pattern in a second Practice-bearing repo.
+
 ## Active arc — Pending-graduations dedicated drain (landed 2026-05-07)
 
 **Last refreshed**: 2026-05-07 (Pelagic Rolling Harbour /
@@ -1580,6 +1668,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Pelagic Rolling Harbour` | `claude-code` | `claude-opus-4-7-1m` | `58a9ad` | `pending-graduations-dedicated-drain-and-recalibration; phase-1-archive-Lacustrine-F-15-and-mark-polarity-discipline-partially-graduated; phase-1.5-vaporware-trigger-flagging-three-entries; phase-3-residual-shape-surfacing-three-options-for-owner-direction; owner-directed-reframe-fitness-limits-encode-implicit-access-rhythm-theory; recalibration-frontmatter-2000-2500-150000-300-plus-three-descriptive-fields-lifecycle-model-access-pattern-fitness-rationale; per-entry-metadata-schema-inline-tag-line-with-closed-vocabularies-plus-composite-value-convention; structured-index-TOC-by-status-with-line-hints-and-counts-table; twelve-high-touch-entries-tagged-pending-sweep-deferred-to-phase-B; new-pending-entry-captures-access-rhythm-as-fitness-axis-insight-graduation-target-ADR-144-amendment-plus-cross-repo-PDR; reviewer-dispatch-docs-adr-and-code-reviewer-three-P2-and-one-P1-and-two-nits-all-addressed; four-commits-cc084c67-177b9298-b0b7cec3-b1a8536b` | 2026-05-07 | 2026-05-07 |
 | `Clouded Lifting Aerie` | `claude-code` | `claude-opus-4-7-1m` | `1e2244` | `napkin-and-pending-graduations-processing-opener-execution; three-new-patterns-consolidation-output-shape-and-audit-rule-body-on-prohibition-extension-and-in-session-contract-authoring-conditions; F-15-commit-queue-fingerprint-recursion-friction-added; F-14-and-F-09-and-F-05-evidence-appended; markdown-prose-acceptance-criteria-doctrine-landed-in-development-practice; napkin-archived-382-to-119-lines; pending-graduations-7-graduated-or-withdrawn-entries-archived-and-Lacustrine-commit-queue-marked-graduated-and-doctor-not-shell-gate-pending-added-2054-to-1876-lines; reviewer-dispatch-docs-adr-and-code-reviewer-approved-with-P1-SHA-typo-fixed; three-commits-d12912dc-b4d7ddff-d2e2bfe5` | 2026-05-06 | 2026-05-06 |
 | `Embered Melting Kiln` | `claude-code` | `claude-opus-4-7-1m` | `4044d1` | `phase-2-collaboration-state-surface-restructure-five-commits-13e2db28-through-40f7da45; substance-trim-anti-pattern-caught-by-owner-correction-and-restored; full-fitness-limit-audit-32-files; two-function-driven-limit-calibrations-agent-collaboration-md-and-continuity-practice-md-commit-ca0794fc; opener-authored-for-napkin-and-pending-graduations-processing` | 2026-05-06 | 2026-05-06 |
 | `Briny Plumbing Fjord` | `claude-code` | `claude-opus-4-7-1m` | `fd36cf` | `phase-1-collaboration-state-surface-restructure-placement-contract-authored-and-plan-body-and-opener-supersession-commit-c014ad2a; phase-2-opener-authored-commit-be7c1fd6` | 2026-05-06 | 2026-05-06 |

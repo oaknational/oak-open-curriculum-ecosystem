@@ -1065,6 +1065,17 @@ for urgent skill-load pressure relief Phase 1 implementation
 row is in
 `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Pelagic Rolling
+Harbour / `claude-code` / `claude-opus-4-7-1m` / `58a9ad` for the
+dedicated pending-graduations drain (commits `cc084c67`/`177b9298`)
+followed by an owner-directed reframe of the file's fitness limits as
+encoding an implicit access-rhythm theory (commits `b0b7cec3`/`b1a8536b`:
+recalibrated frontmatter + per-entry metadata schema + structured
+index + 12 high-touch entries tagged + new pending entry capturing
+the access-rhythm-as-fitness-axis insight). Canonical identity row is
+in `threads/agentic-engineering-enhancements.next-session.md`.
+
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -1393,6 +1404,28 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-07 Pelagic Rolling Harbour close (pending-graduations
+drain + recalibration + access-rhythm insight capture)**: the
+dedicated drain opener is consumed. The recalibration cleared HARD on
+`pending-graduations.md` (now SOFT, 10 lines over target with hard
+headroom to 2500). Three follow-ups remain:
+
+1. **Phase B sweep** — backfill inline metadata tags on the ~76
+   pre-2026-05-07 `pending` entries; mechanical, low-stakes.
+2. **Sequenced-deferral entries waiting on context budget** — four
+   PDR/ADR/hook-tightening graduations flagged with concrete phase
+   pointers in their entry bodies; each needs a dedicated session.
+3. **Access-rhythm-as-fitness-axis insight** — captured as new
+   `pending` entry; graduation target is ADR-144 amendment to declare
+   `lifecycle_model` and `access_pattern` as recommended fitness
+   frontmatter fields with a closed vocabulary, plus a possible
+   cross-repo PDR if the doctrine generalises. Trigger is
+   `second-instance OR owner-direction at promotion`.
+
+Adjacent calibration signal: `practice-lineage.md` at 833/830 lines —
+pre-existing breach, not touched this session, flagged for next
+calibration audit.
 
 **After 2026-05-06 Embered Melting Kiln close (Phase 2 collaboration-state
 surface restructure + fitness-limit audit + napkin/pending-graduations
@@ -1784,6 +1817,31 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Pelagic Rolling Harbour, claude-code,
+claude-opus-4-7-1m, `58a9ad`, dedicated pending-graduations
+drain plus owner-directed recalibration plus insight capture
+plus `/jc-session-handoff`): `due — but not well-bounded for
+this closeout`**. Trigger conditions: (i) the dedicated-drain opener
+plan closed (its work executed end-to-end across four commits);
+(ii) repeated surprises suggest a new cross-repo PDR candidate
+(fitness-limits-as-implicit-access-rhythm-theory). Both triggers
+hold per `consolidate-docs.md §Trigger Checklist`. The triggered
+work is not well-bounded for this closeout because (a) the
+metacognitive insight is captured as a fresh `pending` entry with
+explicit graduation target gated on `second-instance OR
+owner-direction at promotion`; (b) the four sequenced-deferral
+PDR/ADR/hook-tightening entries each name a dedicated session as
+their next move; (c) the Phase B backfill sweep on ~76 pending
+entries is mechanical but volume-heavy and benefits from a fresh
+context budget. Deferral honesty: constraint is *task-shape size*
+(each named follow-up is itself a single-session unit of work);
+evidence is the per-entry phase-pointer text in
+pending-graduations.md and the new entry's graduation-target
+clause; falsifiability is whether a future agent in a single
+session can land any of the four sequenced-deferral entries (each
+of which records concrete phases). No `consolidate-docs` run this
+session.
 
 **Status (2026-05-06 Embered Melting Kiln, claude-code,
 claude-opus-4-7-1m, `4044d1`, Phase 2 collaboration-state surface

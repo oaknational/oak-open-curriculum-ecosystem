@@ -118,3 +118,82 @@ batch land cleanly before the larger pending-graduations walk
 begins. Step 2 may not fully drain in this session — that is
 honest output per the opener; the residual queue substance
 becomes the next audit's input rather than this session's brake.
+
+## 2026-05-07 — Pelagic Rolling Harbour / claude-code / opus-4-7-1m / `58a9ad`
+
+### Surprise 1 — fitness limits encode access-rhythm theory
+
+**Expectation**: HARD on `pending-graduations.md` was load-bearing;
+my job was to drain or surface the queue size for owner direction.
+
+**What happened**: surfaced three Phase 3 options (enlarge / split /
+cadence). Owner reframed: the limit was *arbitrarily calibrated*
+against a frame that doesn't fit the file's lifecycle.
+`principles.md` is loaded every session by every agent — small *is*
+the quality signal. `pending-graduations.md` is accessed at
+consolidation passes only and grows with cross-session-wait
+substance; its limits should reflect a queue lifecycle, not a
+permanent-doc shape.
+
+**Insight**: every fitness-tracked file implicitly encodes an
+access-rhythm theory in its limit shape. The schema currently
+makes this implicit (line/char numbers only). Making it explicit
+(`lifecycle_model: loaded-every-session | read-on-demand |
+consolidation-pass-only | archive-only` plus `access_pattern`
+frontmatter) would make recalibration principled rather than
+ad-hoc, and let fitness output classify violations by whether the
+limit is structurally appropriate or just stale. **Captured as a
+new `pending` entry in pending-graduations.md** with explicit
+graduation target (ADR-144 amendment + possible cross-repo PDR);
+not landed in-band per no-speed-pressure.
+
+**Behaviour change**: when surfacing fitness signals as
+load-bearing, ask first whether the limit's access-rhythm theory
+matches the file's actual lifecycle. If it doesn't, recalibration
+is the substance-led structural fix; the alternative options
+(split, cadence) are not equivalent.
+
+### Surprise 2 — reviewer conflated opener procedural text with diff content
+
+**Expectation**: docs-adr-reviewer's P2 finding ("four citations
+to a not-yet-existent PDR-026 §Sequenced-deferral discipline")
+was a real issue with my diff.
+
+**What happened**: verified my actual diff via `git diff | grep`.
+My edits cite `distilled.md §Sequenced-Deferral Discipline`
+(correct current home), not PDR-026. The reviewer read the
+opener's procedural text — which DID say "per PDR-026
+§Sequenced-deferral discipline" — and conflated it with the diff
+content.
+
+**Insight**: when reviewer findings cite specific text that the
+diff doesn't actually contain, *verify against the diff before
+applying the fix*. The reviewer's analysis can be load-bearing in
+substance even when the textual claim is wrong; in this case the
+substance was a false positive (the reviewer noted distilled.md
+IS the correct home, which my diff already used). Trust-but-
+verify on textual claims; a `git diff | grep` check is cheap.
+
+**Behaviour change**: when a reviewer cites text-string evidence,
+spot-check it before applying corrections. Saves wrong-direction
+edits when the reviewer drifted from the diff to surrounding context.
+
+### Surprise 3 — markdownlint MD004 fires when mixing `+` and `-` list markers
+
+**Expectation**: adding a TOC index using `-` bullets to a file
+that uses `+` bullets for entries would be cosmetically fine
+since markdownlint normally accepts any consistent style.
+
+**What happened**: 4 MD004 errors fired immediately after adding
+the index with `-` markers; the file's `+` convention became
+the "expected" style and all `-` markers in my new index errored.
+
+**Insight**: markdownlint MD004 enforces consistency *within* a
+file based on the first marker seen, not a global preference.
+When extending a file, match the existing bullet style or expect
+errors at every new marker.
+
+**Behaviour change**: when adding sections to existing markdown
+files, grep the file for existing list-marker style before
+authoring new lists. One-line check that prevents a
+markdownlint-fix loop.
