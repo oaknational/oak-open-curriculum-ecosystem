@@ -51,7 +51,7 @@ in this session to acknowledge the vaporware-citation issue
 explicitly; the PDR-026 amendment now graduates without the
 vaporware gating in the next directive-edit session.
 
-### Surprise: cyclical-learning-loop framing was inherent-cost when it should have been artefactual-cost
+### Surprise: learning-loop framing was inherent-cost not artefactual-cost
 
 **What I expected**: graduate the entry "Cyclical learning-loop
 maintenance is a full-time process even at small N" to
