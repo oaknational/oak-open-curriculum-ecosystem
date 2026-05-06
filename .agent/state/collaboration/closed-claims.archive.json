@@ -11114,6 +11114,55 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "18752b47-e97b-4a97-98d3-e9087459a0c3",
+      "agent_id": {
+        "agent_name": "Secret Slipping Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            "docs/governance/typescript-practice.md",
+            "docs/governance/development-practice.md",
+            ".agent/rules/no-type-shortcuts.md",
+            ".agent/rules/strict-validation-at-boundary.md",
+            ".agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:55:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Extract compiler-time TypeScript operational detail from principles.md into typescript-practice.md, retarget rule pointers, update narrow plan notes, validate, and commit.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:58:55Z",
+        "closed_by": {
+          "agent_name": "Secret Slipping Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Implemented compiler-time types extraction and validation. Commit not attempted because commit-skill orchestrator failed before staging on inherited repo-wide strict-hard fitness debt in distilled.md and pending-graduations.md; no hook bypass used.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "18752b47-e97b-4a97-98d3-e9087459a0c3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

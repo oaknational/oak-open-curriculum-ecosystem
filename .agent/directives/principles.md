@@ -360,53 +360,8 @@ paths, setup files) don't apply.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type widening or destruction** — never use widening
-  casts (`as SomeType`), `any`, `!`, `Record<string, unknown>`,
-  `{ [key: string]: unknown }`, `Object.*` methods, `Reflect.*`
-  methods, `isObject` type predicates, `z.unknown()` (where a
-  concrete schema exists), `z.record(z.string(), z.unknown())`,
-  or hand-crafted Zod schemas that duplicate generated shapes.
-  They all disable the type system by widening or erasing type
-  information. Preserve type information; never widen. The
-  narrowing operators `as const` and `satisfies SomeType` operate
-  at compile time without widening; they tighten types rather
-  than disable them, and so are not in this rule's scope. When
-  using external libraries, prefer official library types and
-  error classes over local `*Like` shapes.
-- **`unknown` is type destruction** — `unknown`, `z.unknown()`,
-  and `Record<string, unknown>` erase structural type information.
-  Permitted only at named external boundaries; forbidden as a
-  stand-in for a known shape. See
-  [`.agent/rules/unknown-is-type-destruction.md`](../rules/unknown-is-type-destruction.md)
-  for the permitted/forbidden list and the preservation test.
-- **Preserve type information** — NEVER widen types by assigning to
-  broader types like `string` or `number`. If you have a literal
-  type `'/api/path'`, keep it as that literal, don't accept it as
-  `string`. Type information flows from data structures with
-  `as const` through to usage. Every `: string` or `: number`
-  parameter destroys type information irreversibly.
-- **Single source of truth for types** — define types ONCE,
-  preferably from the API spec or an external library, and then do
-  not allow them to widen. Never redefine them later as
-  approximations.
-- **Use library types directly where possible** — don't make up a
-  type when you can use a library type.
-- **Prefer library-native error and response types** — when parsing
-  third-party SDK outputs (e.g. Elasticsearch), use official
-  exported types/classes first; only introduce local shapes when
-  the library does not expose what is needed.
-- **Validate external signals** — parse and/or validate external
-  signals (e.g. API responses, read from files, etc), official
-  SDKs count as validation, use Zod where appropriate. See
-  `.agent/rules/strict-validation-at-boundary.md`.
-- **Type imports must be labelled with `type`** — e.g.
-  `import type { Type } from 'package'` or
-  `import { type Type } from 'package'`.
-- **Don't use type aliases, use good naming** — type aliases are a
-  source of entropy.
-- **Reviewer findings are action items by default** — implement all
-  reviewer findings unless explicitly rejected as incorrect with a
-  written rationale.
+Type precision is one expression of strict, complete, schema-driven practice.
+Operational detail lives in [TypeScript Practice][ts-practice].
 
 ### Testing
 
