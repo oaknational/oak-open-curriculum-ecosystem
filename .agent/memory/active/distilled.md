@@ -117,23 +117,6 @@ Planning-discipline entries in this section remain routed to the
 `planning-specialist-capability.plan.md` plan until the Planning
 expert triplet executes.
 
-**Severity is not urgency.** Owner sharpening 2026-05-05 of the
-no-speed-pressure doctrine: severity-tier labels (`CRITICAL`, `HARD`,
-`P1`, `P2`, etc.) name *importance*, not *urgency*. The correct
-response to a severity signal is *more care, more thoughtfulness,
-slower processing* — never faster action. The framing "CRITICAL →
-drive action" is the same impulse no-speed-pressure names, dressed
-in escalation-tier vocabulary. Worked instance: at session open a
-fitness signal was framed as a driver of landing-target choice
-("CRITICAL prose-line on napkin → must address now"). Owner
-correction: *"remember, critical means important, but it does not
-mean rush, if anything even more care and thoughtfulness is
-needed"*. Cure: when a severity-tier label fires, treat it the
-same way as the urge-to-skip-ceremony — slow down, apply the
-doctrine substrate, do the work properly. Severity tiers calibrate
-the *care* applied; they do not calibrate the *speed*. Operationalised
-at [`no-speed-pressure`](../../rules/no-speed-pressure.md).
-
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).

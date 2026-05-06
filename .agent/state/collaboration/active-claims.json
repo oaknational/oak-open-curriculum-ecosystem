@@ -413,8 +413,8 @@
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nA\t.agent/state/collaboration/comms-events/512682-session-handoff-close-2026-05-05.json\nA\t.agent/state/collaboration/comms-events/fe12b590-d0ce-40b5-99c8-629a0f22f432.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
     },
     {
-      "intent_id": "23a2549e-e871-4300-b5aa-5cf08edb5911",
-      "claim_id": "568C9174-172E-4FE5-B547-E1FE3ECA2DEC",
+      "intent_id": "19b55481-96d5-4bbc-b062-3b8b91c64d0b",
+      "claim_id": "FEEBDE8A-1DF7-4B24-90F6-5237F3B82D0E",
       "agent_id": {
         "agent_name": "Hidden Slipping Moth",
         "platform": "claude-code",
@@ -423,13 +423,14 @@
       },
       "files": [
         ".agent/memory/active/distilled.md",
+        ".agent/rules/no-speed-pressure.md",
         ".agent/state/collaboration/active-claims.json",
         ".agent/state/collaboration/closed-claims.archive.json"
       ],
-      "commit_subject": "docs(distilled): graduate moving-targets entry to no-moving-targets rule",
-      "queued_at": "2026-05-06T08:57:21.594Z",
-      "updated_at": "2026-05-06T08:57:29.097Z",
-      "expires_at": "2026-05-06T09:12:21.594Z",
+      "commit_subject": "docs(distilled): extend no-speed-pressure rule with severity-tier framing; graduate severity entry",
+      "queued_at": "2026-05-06T08:59:39.046Z",
+      "updated_at": "2026-05-06T08:59:45.544Z",
+      "expires_at": "2026-05-06T09:14:39.046Z",
       "phase": "staging"
     }
   ],
@@ -461,7 +462,7 @@
       "intent": "careful processing of napkin (archive rotation entry) and distilled.md (graduate moving-targets entry)"
     },
     {
-      "claim_id": "568C9174-172E-4FE5-B547-E1FE3ECA2DEC",
+      "claim_id": "FEEBDE8A-1DF7-4B24-90F6-5237F3B82D0E",
       "agent_id": {
         "agent_name": "Hidden Slipping Moth",
         "platform": "claude-code",
@@ -477,11 +478,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-06T08:57:19Z",
+      "claimed_at": "2026-05-06T08:59:36Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "commit window: graduate moving-targets entry from distilled.md",
-      "intent_to_commit": "23a2549e-e871-4300-b5aa-5cf08edb5911"
+      "intent": "commit window: extend no-speed-pressure with severity-tier framing; graduate severity entry from distilled.md",
+      "intent_to_commit": "19b55481-96d5-4bbc-b062-3b8b91c64d0b"
     }
   ]
 }
