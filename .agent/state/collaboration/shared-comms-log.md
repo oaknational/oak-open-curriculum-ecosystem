@@ -1547,3 +1547,33 @@ Masked Stalking Veil is running the owner-requested jc-session-handoff followed 
 ## 2026-05-06T10:34:00Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — session handoff plus light consolidation complete
 
 Masked Stalking Veil completed the owner-requested handoff and light consolidation pass. Continuity/thread/napkin surfaces now record the two landed commits, clean claim state, clean entrypoint/track/escalation scans, green vocabulary check, and inherited HARD fitness pressure remaining as a separate deep-consolidation lane.
+
+---
+
+## 2026-05-06T14:07:11Z — `Moonless Vanishing Lantern` / `codex` / `GPT-5` / `019dfd` — Main Sonar remediation executor decision reopened
+
+No live active claims found at session open. Moonless Vanishing Lantern (codex/GPT-5/019dfd) is joining main-critical-sonar-remediation on fix/sonar-fixes-20260506 for an evaluation/decision pass only: inspect the generated MCP executor stop point, reproduce/understand the sdk-codegen build failure, and discuss whether to roll back or reshape the current generated executor changes before further implementation. Scope boundary: generated MCP executor/generator and evidence; do not touch core MCP ToolDescriptor / ToolClientForName / ToolArgsForName aliases without owner involvement.
+
+---
+
+## 2026-05-06T14:21:51Z — `Moonless Vanishing Lantern` / `codex` / `GPT-5` / `019dfd` — Generated-files quality-surface decision recorded
+
+Owner decision for main-critical-sonar-remediation: generated files are shipped code and must remain inside local and remote quality-gate scanning. Excluding generated files from Sonar or local SonarJS lint is not an acceptable route; it disables fast feedback and violates no-disabled-checks/root-cause doctrine. Current session will roll back only the generic invoker-map executor abstraction, preserve unrelated generator fixes, restore pnpm --filter @oaknational/sdk-codegen build green, then pause for fresh-session continuation of the literal-preserving complexity cure.
+
+---
+
+## 2026-05-06T14:23:25Z — `Moonless Vanishing Lantern` / `codex` / `GPT-5` / `019dfd` — Generated executor build-green rollback complete
+
+Moonless Vanishing Lantern completed the agreed narrow rollback on main-critical-sonar-remediation. Updated plan/thread/napkin/comms first to record owner decision: generated files stay inside quality scanning. Then rolled back only the generic invoker-map generator abstraction, preserved unrelated generator fixes, ran pnpm --filter @oaknational/sdk-codegen sdk-codegen (PASS) and pnpm --filter @oaknational/sdk-codegen build (PASS). Pausing here per owner direction; fresh session should solve the remaining generated runtime/execute.ts cognitive-complexity issue with a generator-owned literal-preserving shape, not generated-file exclusion or core MCP type broadening.
+
+---
+
+## 2026-05-06T14:47:23Z — `Moonless Vanishing Lantern` / `codex` / `GPT-5` / `019dfd` — main-critical-sonar-remediation local gate green
+
+Moonless Vanishing Lantern closed the generated MCP executor stop point. The generator now emits concrete per-tool invocation helpers with literal switch delegation, generated files remain inside lint/Sonar surfaces, core MCP tool aliases were not touched, response-map type contract extraction removed the depcruise cycle, plan/thread/napkin surfaces are updated, and full root pnpm check passed after the surface updates. Pausing for fresh-session continuation.
+
+---
+
+## 2026-05-06T15:08:56Z — `Ethereal Ascending Twilight` / `codex` / `GPT-5` / `019dfd` — main-critical-sonar-remediation session open
+
+Ethereal Ascending Twilight opening on main-critical-sonar-remediation. Active claims registry has no live entries and no active commit queue entries, so no other agents are present. Intent: preserve the inherited green staged Sonar remediation bundle, re-run pnpm check, commit with explicit pathspec/commit-queue discipline, push fix/sonar-fixes-20260506, open a draft PR, then use PR-scoped Sonar evidence for remaining closure.

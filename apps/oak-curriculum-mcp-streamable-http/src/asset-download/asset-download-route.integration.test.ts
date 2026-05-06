@@ -18,7 +18,7 @@ function createStubLogger(): AssetDownloadRouteDeps['logger'] {
     fatal: vi.fn(),
     trace: vi.fn(),
     child: vi.fn((context) => {
-      void context;
+      expect(context).toBeDefined();
       return logger;
     }),
   };

@@ -106,7 +106,7 @@ export function extractThreadsFromBulkFiles(
       slug,
       title: data.title,
       unitCount: data.unitSlugs.size,
-      subjectSlugs: Array.from(data.subjectSlugs).sort(),
+      subjectSlugs: Array.from(data.subjectSlugs).sort((a, b) => a.localeCompare(b)),
     });
   }
 

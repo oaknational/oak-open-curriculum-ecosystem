@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 import {
   LESSONS_INDEX_FIELDS,
   UNITS_INDEX_FIELDS,
@@ -156,8 +157,8 @@ function createIndexDocumentsModule(): string {
   );
 }
 
-export function generateSearchIndexDocumentModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchIndexDocumentModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchIndexDocumentModules');
   return {
     '../search/index-documents.ts': createIndexDocumentsModule(),
     '../../../../docs/_typedoc_src/types/search-index.ts': createIndexDocumentsDocsModule(),

@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**
  * GENERATED FILE - DO NOT EDIT
@@ -31,8 +32,8 @@ function createScopesModule(): string {
   );
 }
 
-export function generateSearchScopeModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchScopeModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchScopeModules');
   return {
     '../search/scopes.ts': createScopesModule(),
   };

@@ -10677,23 +10677,290 @@
         },
         "summary": "Owner-requested session handoff plus light consolidation closeout completed; repo-continuity, thread record, napkin, and comms surfaces updated; deep consolidation remains due for inherited fitness pressure.",
         "evidence": [
+          {
+            "kind": "claim",
+            "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
+            "summary": "Claim explicitly closed by owning session."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
+          },
+          {
+            "kind": "continuity",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "F06910FC-FFB1-4B87-8542-0308E8CF9936",
+      "agent_id": {
+        "agent_name": "Silvered Masking Owl",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
         {
-          "kind": "claim",
-          "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
-          "summary": "Claim explicitly closed by owning session."
-        },
-        {
-          "kind": "thread_record",
-          "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-          "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
-        },
-        {
-          "kind": "continuity",
-          "ref": ".agent/memory/operational/repo-continuity.md",
-          "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
         }
-      ]
+      ],
+      "claimed_at": "2026-05-06T12:42:55Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage/commit the rebuild plan artefact by exact pathspec before implementation edits.",
+      "intent_to_commit": "510a2841-db50-4df3-ae42-115ab833e479",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:43:36Z",
+        "closed_by": {
+          "agent_name": "Silvered Masking Owl",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Commit window closed without commit: pre-commit skill gate failed on pre-existing Practice fitness HARD state outside this plan. No bypass used; implementation will carry the staged plan as first branch artefact until owner/fitness lane resolves commit gate.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "F06910FC-FFB1-4B87-8542-0308E8CF9936",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3054A9F0-6760-4527-8ECF-5174A13B66DF",
+      "agent_id": {
+        "agent_name": "Silvered Masking Owl",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md",
+            ".agent/plans/architecture-and-infrastructure/evidence/main-sonar-remediation-rebuild",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:41:49Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement current-main Sonar Quality Gate remediation on fix/sonar-fixes-20260506: commit rebuild plan, refresh evidence, enable targeted detectors, fix comparator/new-violation/generator/complexity/duplication/hotspot blockers, and run specialist reviews before closure.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:44:14Z",
+        "closed_by": {
+          "agent_name": "Silvered Masking Owl",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Session handoff: implementation stopped at generated MCP executor decision point; next session must restore sdk-codegen build before continuing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3054A9F0-6760-4527-8ECF-5174A13B66DF",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8F139973-DBA7-4BA2-B8C9-D0DC5D3CD2F7",
+      "agent_id": {
+        "agent_name": "Silvered Masking Owl",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/oak-eslint/**",
+            "packages/libs/search-contracts/**",
+            "apps/oak-search-cli/**",
+            "agent-tools/**",
+            "packages/sdks/oak-sdk-codegen/**",
+            "apps/oak-curriculum-mcp-streamable-http/**",
+            "packages/libs/logger/**",
+            "packages/core/observability/**",
+            "packages/sdks/oak-curriculum-sdk/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:42:24Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Source implementation surfaces for current-main Sonar remediation; companion claim to 3054A9F0-6760-4527-8ECF-5174A13B66DF because repeated --area-pattern is scalar in the helper.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:44:14Z",
+        "closed_by": {
+          "agent_name": "Silvered Masking Owl",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Session handoff: source-surface claim closed with implementation paused at generated MCP executor decision point.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8F139973-DBA7-4BA2-B8C9-D0DC5D3CD2F7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "67dc1d4f-59b7-46b8-a61b-29db4c94b481",
+      "agent_id": {
+        "agent_name": "Moonless Vanishing Lantern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
+            ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md",
+            "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts",
+            "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:07:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Evaluate generated MCP executor stop point and discuss rollback/reshape decision before implementation",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T14:24:37Z",
+        "closed_by": {
+          "agent_name": "Moonless Vanishing Lantern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Updated plan/thread/napkin/comms with generated-files quality-surface correction; rolled back only the generic generated MCP executor invoker-map; preserved unrelated generator fixes; regenerated sdk-codegen outputs; verified pnpm --filter @oaknational/sdk-codegen sdk-codegen and build pass; pausing for fresh session before remaining Sonar complexity remediation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "67dc1d4f-59b7-46b8-a61b-29db4c94b481",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4ABD69A0-9059-4BAC-A221-016925A60C35",
+      "agent_id": {
+        "agent_name": "Moonless Vanishing Lantern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:29:48Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Claim sdk-codegen area for canonical gate remediation after generated executor rollback; no generated-file exclusion and no core MCP type broadening.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T14:47:23Z",
+        "closed_by": {
+          "agent_name": "Moonless Vanishing Lantern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Resolved sdk-codegen generated MCP executor stop point with generator-owned concrete per-tool invocation helpers, preserved flat generated MCP args and core MCP tool types, extracted response-map entry contract to remove depcruise cycle, and verified with full pnpm check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4ABD69A0-9059-4BAC-A221-016925A60C35",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "441DA431-6E83-480D-AA17-FAD8F1F4DF69",
+      "agent_id": {
+        "agent_name": "Moonless Vanishing Lantern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:29:48Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Run canonical quality gates after sdk-codegen build-only pause was insufficient; reproduce and fix lint/test failures without excluding generated files or touching core MCP tool types.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T14:47:23Z",
+        "closed_by": {
+          "agent_name": "Moonless Vanishing Lantern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Updated plan, thread handoff, and napkin surfaces with generated-files-stay-gated correction, local gate evidence, and fresh-session continuation target; full pnpm check is green after surface updates.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "441DA431-6E83-480D-AA17-FAD8F1F4DF69",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
-  }
   ]
 }

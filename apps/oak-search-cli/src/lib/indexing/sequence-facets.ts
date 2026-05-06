@@ -2,6 +2,7 @@ import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types
 import type { SearchSequenceFacetsIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 import { generateSequenceOakUrl } from '@oaknational/curriculum-sdk';
+import { compareCurriculumYears } from './year-ordering';
 
 /** Input-agnostic parameters for creating a sequence facet document (DRY). */
 export interface CreateSequenceFacetDocParams {
@@ -30,7 +31,7 @@ export function createSequenceFacetDoc(
     key_stage_title: params.keyStageTitle,
     phase_slug: params.phaseSlug,
     phase_title: params.phaseTitle,
-    years: [...params.years].sort(),
+    years: [...params.years].sort(compareCurriculumYears),
     unit_slugs: [...params.unitSlugs],
     unit_titles: [...params.unitTitles],
     unit_count: params.unitSlugs.length,

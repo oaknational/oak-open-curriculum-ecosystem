@@ -44,7 +44,7 @@ describe('field readback audit retry helpers', () => {
       },
       3,
       1,
-      async () => Promise.resolve(),
+      async () => undefined,
     );
 
     expect(result).toBe('ok');
@@ -59,7 +59,7 @@ describe('field readback audit retry helpers', () => {
         },
         3,
         1,
-        async () => Promise.resolve(),
+        async () => undefined,
       ),
     ).rejects.toThrow('Bad request');
   });
@@ -74,7 +74,7 @@ describe('field readback audit retry helpers', () => {
         },
         3,
         1,
-        async () => Promise.resolve(),
+        async () => undefined,
       ),
     ).rejects.toThrow('Still failing');
     expect(attemptsMade).toBe(3);
@@ -92,7 +92,7 @@ describe('field readback audit retry helpers', () => {
       },
       2,
       1,
-      async () => Promise.resolve(),
+      async () => undefined,
     );
 
     expect(result).toBe('ok');

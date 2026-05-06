@@ -48,6 +48,8 @@ const TYPED_RULES_OFF = {
   '@typescript-eslint/no-deprecated': 'off',
   '@typescript-eslint/consistent-return': 'off',
   '@typescript-eslint/consistent-type-exports': 'off',
+  'sonarjs/no-alphabetical-sort': 'off',
+  'sonarjs/void-use': 'off',
 } as const;
 
 const TYPED_RULES_OVERRIDE: TSESLint.FlatConfig.Config = {
@@ -71,6 +73,44 @@ function lint(code: string, filename: string): LintResult {
 
   return { ruleIds, messages };
 }
+
+function collectFinalRuleSettings(): ReadonlyMap<string, unknown> {
+  const settings = new Map<string, unknown>();
+  for (const config of strict) {
+    for (const [ruleName, setting] of Object.entries(config.rules ?? {})) {
+      settings.set(ruleName, setting);
+    }
+  }
+  return settings;
+}
+
+function isEnabledRuleSetting(setting: unknown): boolean {
+  const severity = Array.isArray(setting) ? setting[0] : setting;
+
+  return severity !== undefined && severity !== 'off' && severity !== 0;
+}
+
+describe('@oaknational/eslint-plugin-standards strict config: targeted SonarJS activation', () => {
+  it('activates only the Sonar Quality-Gate remediation rules needed for this slice', () => {
+    const settings = collectFinalRuleSettings();
+    const enabledSonarRules = [...settings]
+      .filter(
+        ([ruleName, setting]) => ruleName.startsWith('sonarjs/') && isEnabledRuleSetting(setting),
+      )
+      .map(([ruleName]) => ruleName);
+
+    expect(enabledSonarRules).toStrictEqual([
+      'sonarjs/cognitive-complexity',
+      'sonarjs/no-alphabetical-sort',
+      'sonarjs/no-nested-functions',
+      'sonarjs/void-use',
+    ]);
+    expect(settings.get('sonarjs/cognitive-complexity')).toStrictEqual(['error', 15]);
+    expect(settings.get('sonarjs/no-alphabetical-sort')).toBe('error');
+    expect(settings.get('sonarjs/no-nested-functions')).toStrictEqual(['error', { threshold: 4 }]);
+    expect(settings.get('sonarjs/void-use')).toBe('error');
+  });
+});
 
 describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabling pathogens', () => {
   it('reports vitest/no-disabled-tests for it.skip(...)', () => {

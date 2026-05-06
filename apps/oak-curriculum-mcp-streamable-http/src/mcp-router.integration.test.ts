@@ -20,8 +20,8 @@ describe('createMcpRouter (Integration)', () => {
 
   beforeEach(() => {
     mockAuthMw = vi.fn((req: Request, res: Response, next: NextFunction) => {
-      void req;
-      void res;
+      expect(req).toBeDefined();
+      expect(res).toBeDefined();
       next();
     });
     mockNext = vi.fn();

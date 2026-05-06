@@ -17,6 +17,7 @@
 export type { SitemapCategorisation } from './sitemap-scanner-types.js';
 
 import type { SitemapCategorisation } from './sitemap-scanner-types.js';
+import { compareCodeUnits } from './code-unit-order.js';
 
 /** Optional sub-page suffix shared across lesson route patterns */
 const SUB_PAGE = '(?:\\/(?:downloads|media|share))?\\/??$';
@@ -46,7 +47,9 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/lessons/{slug}[/downloads|media|share]
   {
     pattern: new RegExp(`^\\/teachers\\/lessons\\/([^/]+)${SUB_PAGE}`),
-    handle: (m, acc) => void acc.lessonSlugs.add(m[1]),
+    handle: (m, acc) => {
+      acc.lessonSlugs.add(m[1]);
+    },
   },
   // /teachers/programmes/{p}/units/{u}/lessons/{l}[/sub-page]
   {
@@ -70,7 +73,9 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/programmes/{p}/units (canonical programme listing page)
   {
     pattern: /^\/teachers\/programmes\/([^/]+)\/units\/?$/,
-    handle: (m, acc) => void acc.programmeSlugs.add(m[1]),
+    handle: (m, acc) => {
+      acc.programmeSlugs.add(m[1]);
+    },
   },
   // /teachers/key-stages/{ks}/subjects/{subj}/programmes
   {
@@ -90,12 +95,16 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/curriculum/{slug}/units (sequence listing)
   {
     pattern: /^\/teachers\/curriculum\/([^/]+)\/units\/?$/,
-    handle: (m, acc) => void acc.sequenceSlugs.add(m[1]),
+    handle: (m, acc) => {
+      acc.sequenceSlugs.add(m[1]);
+    },
   },
   // /teachers/curriculum/{slug}/... (catch-all deeper paths)
   {
     pattern: /^\/teachers\/curriculum\/([^/]+)\/.+$/,
-    handle: (m, acc) => void acc.sequenceSlugs.add(m[1]),
+    handle: (m, acc) => {
+      acc.sequenceSlugs.add(m[1]);
+    },
   },
   // /teachers/specialist/programmes/{p}[/...]
   {
@@ -122,7 +131,9 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/beta/lessons/{slug}[/downloads|media]
   {
     pattern: /^\/teachers\/beta\/lessons\/([^/]+)(?:\/(?:downloads|media))?\/?$/,
-    handle: (m, acc) => void acc.lessonSlugs.add(m[1]),
+    handle: (m, acc) => {
+      acc.lessonSlugs.add(m[1]);
+    },
   },
 ];
 
@@ -180,10 +191,10 @@ export function categoriseTeacherPaths(paths: readonly string[]): SitemapCategor
     }
   }
 
-  const sorted = (s: Set<string>) => [...s].sort();
+  const sorted = (s: Set<string>) => [...s].sort((a, b) => a.localeCompare(b));
 
   return {
-    teacherPaths: [...paths].sort(),
+    teacherPaths: [...paths].sort(compareCodeUnits),
     totals: {
       teacherUrls: paths.length,
       lessons: acc.lessonSlugs.size,

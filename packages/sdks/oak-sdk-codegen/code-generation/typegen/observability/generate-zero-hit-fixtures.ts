@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Zero-hit telemetry fixtures derived from SDK-owned schema definitions.\n */\n\n`;
 
@@ -188,8 +189,8 @@ export type {
   );
 }
 
-export function generateZeroHitFixtureModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateZeroHitFixtureModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateZeroHitFixtureModules');
   return {
     '../observability/zero-hit-fixtures.ts': createZeroHitFixturesModule(),
     '../observability/index.ts': createZeroHitIndexModule(),

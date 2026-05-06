@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Admin stream fixtures derived from SDK-owned schema definitions.\n */\n\n`;
 
@@ -152,8 +153,8 @@ export type {
   );
 }
 
-export function generateAdminStreamFixtureModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateAdminStreamFixtureModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateAdminStreamFixtureModules');
   return {
     '../admin/stream-fixtures.ts': createAdminFixturesModule(),
     '../admin/index.ts': createAdminIndexModule(),

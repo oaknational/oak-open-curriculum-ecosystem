@@ -121,3 +121,60 @@ audits and grow.
   or an explicit duplicate-flag rejection if single-pattern is intentional.
   Behaviour change: after using the collaboration-state CLI for a multi-file
   claim, inspect the claim JSON before relying on it as evidence.
+
+## 2026-05-06 — Silvered Masking Owl / codex / GPT-5 / `019dfd`
+
+### Surprise: generated executor complexity invited type-system overreach
+
+- **Expected**: The generated MCP executor's SonarJS cognitive-complexity
+  finding could be reduced by extracting the repeated validation/invocation
+  body behind a generic helper while preserving the existing schema-first
+  descriptor contract.
+- **Actual**: The helper/invoker-map attempt made
+  `pnpm --filter @oaknational/sdk-codegen build` fail because TypeScript could
+  not preserve literal tool-name correlations through generic indexed access.
+  The local lint problem started as generated file shape, not as a core
+  descriptor type problem.
+- **Why expectation failed**: I treated repeated generated code like ordinary
+  application duplication. In this area the repetition is also carrying
+  literal type narrowing, so abstracting it can collapse distinct tool
+  contracts into unions/intersections.
+- **Behaviour change**: When a generated/type-heavy Sonar fix reaches core MCP
+  execution types, stop at the first type-system resistance and reframe with
+  the owner. Generated files are still shipped code and must stay inside local
+  and remote quality scanning; do not propose excluding them from Sonar or lint.
+  Prefer generated per-tool literal modules or literal switch delegation before
+  touching `ToolDescriptor`, `ToolClientForName`, `ToolArgsForName`, or adjacent
+  aliases.
+  Source plane: active
+
+### Owner correction: generated files stay inside quality gates
+
+- **Expected**: Excluding generated files from the newly enabled local SonarJS
+  rules might be a legitimate way to avoid hand-shaping generated output around
+  local lint findings.
+- **Actual**: Owner rejected that direction. Generated files are still our code;
+  disabling Sonar/lint coverage for them directly conflicts with fast feedback,
+  root-cause repair, no-disabled-checks doctrine, and long-term architectural
+  excellence.
+- **Behaviour change**: For generated-code findings, fix the generator and the
+  generated output. Do not route around the gate. If the generator cannot yet
+  produce checked code cleanly, pause for a design decision rather than reducing
+  the quality surface.
+  Source plane: active
+
+### Gate recovery: stale tests and extracted type contracts
+
+- **Expected**: Once `@oaknational/sdk-codegen build` was green, the remaining
+  gate surface would mainly be lint.
+- **Actual**: Root `pnpm check` exposed stale curriculum-sdk tests still passing
+  nested `{ params: {} }` into the generated MCP execution boundary. The
+  schema-first contract says `ToolArgsForName` is flat; the test was wrong, not
+  a reason to add an authored normalisation bridge. After that, `depcruise`
+  found a cycle where a new wildcard response-map helper imported
+  `ResponseMapEntry` from the builder that imported the helper.
+- **Behaviour change**: For generated runtime fixes, prove the full gate before
+  declaring green. If a helper split creates a type-only import cycle, extract
+  the shared shape to a sibling contract module rather than importing back from
+  the orchestrating builder.
+  Source plane: active

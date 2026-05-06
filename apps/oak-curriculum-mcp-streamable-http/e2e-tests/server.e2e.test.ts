@@ -133,7 +133,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'user-search-query',
     ];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
-    expect(names.sort()).toEqual(expectedToolNames.sort());
+    expect(names.sort((a, b) => a.localeCompare(b))).toEqual(
+      expectedToolNames.sort((a, b) => a.localeCompare(b)),
+    );
   });
 
   it('rejects missing Accept header with 406', async () => {

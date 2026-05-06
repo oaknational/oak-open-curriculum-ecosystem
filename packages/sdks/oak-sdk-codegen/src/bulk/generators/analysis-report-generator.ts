@@ -131,34 +131,21 @@ function extractSynonymsFromDefinition(
   definition: string,
 ): SynonymCandidate | undefined {
   const synonyms: string[] = [];
-  let pattern = '';
+  const labels = new Set<string>();
 
-  // Check for "also known as" pattern
-  const akaMatches = definition.matchAll(SYNONYM_PATTERNS.alsoKnownAs);
-  for (const match of akaMatches) {
-    if (match[1]) {
-      synonyms.push(match[1].trim().toLowerCase());
-      pattern = 'also known as';
-    }
-  }
-
-  // Check for "sometimes called" pattern
-  const scMatches = definition.matchAll(SYNONYM_PATTERNS.sometimesCalled);
-  for (const match of scMatches) {
-    if (match[1]) {
-      synonyms.push(match[1].trim().toLowerCase());
-      pattern = pattern ? `${pattern}, sometimes called` : 'sometimes called';
-    }
-  }
-
-  // Check for "or" pattern (only if preceded by comma)
-  const orMatches = definition.matchAll(SYNONYM_PATTERNS.orPattern);
-  for (const match of orMatches) {
-    if (match[1]) {
-      synonyms.push(match[1].trim().toLowerCase());
-      pattern = pattern ? `${pattern}, or` : 'or';
-    }
-  }
+  collectSynonymCandidates(
+    definition.matchAll(SYNONYM_PATTERNS.alsoKnownAs),
+    synonyms,
+    labels,
+    'also known as',
+  );
+  collectSynonymCandidates(
+    definition.matchAll(SYNONYM_PATTERNS.sometimesCalled),
+    synonyms,
+    labels,
+    'sometimes called',
+  );
+  collectSynonymCandidates(definition.matchAll(SYNONYM_PATTERNS.orPattern), synonyms, labels, 'or');
 
   if (synonyms.length === 0) {
     return undefined;
@@ -167,8 +154,23 @@ function extractSynonymsFromDefinition(
   return {
     term,
     synonyms,
-    pattern,
+    pattern: Array.from(labels).join(', '),
   };
+}
+
+function collectSynonymCandidates(
+  matches: IterableIterator<RegExpMatchArray>,
+  synonyms: string[],
+  labels: Set<string>,
+  label: string,
+): void {
+  for (const match of matches) {
+    if (!match[1]) {
+      continue;
+    }
+    synonyms.push(match[1].trim().toLowerCase());
+    labels.add(label);
+  }
 }
 
 /**

@@ -102,7 +102,7 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   }
   const result: SubagentSummary[] = [];
   const metaFiles = readdirSync(subagentsDir).filter((name) => name.endsWith('.meta.json'));
-  for (const metaFile of metaFiles.sort()) {
+  for (const metaFile of metaFiles.sort((a, b) => a.localeCompare(b))) {
     const agentId = metaFile.replace('.meta.json', '');
     if (shouldSkipCompactAgent(agentId)) {
       continue;

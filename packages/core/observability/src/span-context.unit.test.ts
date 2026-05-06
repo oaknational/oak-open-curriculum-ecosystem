@@ -88,15 +88,19 @@ function resolveSpanCallback<T>(
 
 class TestTracer implements Tracer {
   private readonly span: Span;
+  readonly startedSpans: {
+    readonly name: string;
+    readonly options?: SpanOptions;
+    readonly activeContext?: Context;
+  }[] = [];
+  readonly activeSpanNames: string[] = [];
 
   constructor(span: Span) {
     this.span = span;
   }
 
   startSpan(name: string, options?: SpanOptions, activeContext?: Context): Span {
-    void name;
-    void options;
-    void activeContext;
+    this.startedSpans.push({ name, options, activeContext });
     return this.span;
   }
 
@@ -114,7 +118,7 @@ class TestTracer implements Tracer {
     contextOrFn?: Context | ((span: Span) => T),
     fn?: (span: Span) => T,
   ): T {
-    void name;
+    this.activeSpanNames.push(name);
     const callback = resolveSpanCallback(optionsOrFn, contextOrFn, fn);
     return callback(this.span);
   }
@@ -172,6 +176,7 @@ describe('withActiveSpan', () => {
     expect(setAttributes).toHaveBeenCalledWith({
       phase: 'test',
     });
+    expect(tracer.activeSpanNames).toStrictEqual(['oak.manual']);
     expect(setStatus).toHaveBeenCalledWith({
       code: 1,
     });

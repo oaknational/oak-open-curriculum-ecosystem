@@ -89,7 +89,7 @@ function extractSubjects(thread: ExtractedThread): readonly string[] {
   if (subjects.size === 0) {
     return ['unknown'];
   }
-  return [...subjects].sort();
+  return [...subjects].sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -105,7 +105,7 @@ function collectSubjects(threads: readonly ExtractedThread[]): readonly string[]
       subjects.add(unit.subject);
     }
   }
-  return [...subjects].sort();
+  return [...subjects].sort((a, b) => a.localeCompare(b));
 }
 
 /**

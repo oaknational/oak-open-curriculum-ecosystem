@@ -12,6 +12,7 @@ import {
   SEARCH_INDEX_KINDS,
   resolveVersionedIndexName,
 } from '../internal/index.js';
+import { compareCodeUnits } from './code-unit-order.js';
 import { extractVersionFromIndexName } from './lifecycle-version-identity.js';
 
 /** Re-export pure functions and types for consumers that imported from this module. */
@@ -69,7 +70,7 @@ async function cleanupKindGenerations(
   }
   // Version strings are fixed-width (vYYYY-MM-DD-HHmmss), so lexicographic sort equals chronological sort.
   // protectedVersions guards the rollback target when orphaned indexes inflate the count.
-  const sorted = [...listResult.value].sort();
+  const sorted = [...listResult.value].sort(compareCodeUnits);
   const candidates = sorted.slice(0, Math.max(0, sorted.length - MAX_GENERATIONS));
   const toDelete =
     protectedVersions && protectedVersions.size > 0

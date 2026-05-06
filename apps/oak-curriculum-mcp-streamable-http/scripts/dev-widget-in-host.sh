@@ -67,7 +67,7 @@ echo "MCP server is running."
 # Version should track @modelcontextprotocol/ext-apps in package.json
 EXT_APPS_VERSION="v1.5.0"
 
-if [ -d "${EXT_APPS_DIR}" ]; then
+if [[ -d "${EXT_APPS_DIR}" ]]; then
   echo "Using existing ext-apps at ${EXT_APPS_DIR}"
 else
   echo "Cloning modelcontextprotocol/ext-apps@${EXT_APPS_VERSION}..."

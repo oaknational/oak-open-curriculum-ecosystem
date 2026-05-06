@@ -26,7 +26,7 @@ describe('buildFlatMcpZodObject', () => {
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
       // Assert: Should generate flat Zod object string with .describe() for documented params
-      expect(result).toContain('z.object({');
+      expect(result).toContain('z.strictObject({');
       expect(result).toContain('q: z.string().describe("Search query")');
       expect(result).toContain('limit: z.number().optional()');
       expect(result).not.toContain('params');
@@ -84,7 +84,7 @@ describe('buildFlatMcpZodObject', () => {
 
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
-      expect(result).toBe('z.object({})');
+      expect(result).toBe('z.strictObject({})');
     });
 
     it('normalises Slug-suffixed path params in flat Zod schema', () => {

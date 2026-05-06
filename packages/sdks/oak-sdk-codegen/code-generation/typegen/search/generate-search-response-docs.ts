@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const DOC_HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Documentation-friendly re-exports for search response schemas.\n */\n\n`;
 
@@ -50,8 +51,8 @@ export const SubjectSequenceResponseSchema = curriculumSchemas.SubjectSequenceRe
   );
 }
 
-export function generateSearchResponseDocsModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchResponseDocsModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchResponseDocsModules');
   return {
     '../../../../docs/_typedoc_src/types/search-response-schemas.ts': createResponseDocsModule(),
   };

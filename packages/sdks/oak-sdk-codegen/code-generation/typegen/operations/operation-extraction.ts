@@ -184,5 +184,5 @@ export function extractUniqueMethods(operations: ExtractedOperation[]): string[]
   for (const op of operations) {
     methods.add(op.method);
   }
-  return Array.from(methods).sort();
+  return Array.from(methods).sort((a, b) => a.localeCompare(b));
 }

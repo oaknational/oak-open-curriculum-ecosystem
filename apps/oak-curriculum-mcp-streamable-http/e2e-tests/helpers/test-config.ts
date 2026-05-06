@@ -23,25 +23,31 @@ import { createFakeHttpObservability } from '../../src/test-helpers/observabilit
  * @see ADR-078 for the dependency injection rationale
  */
 export function createNoOpClerkMiddleware(): () => RequestHandler {
-  return () => (req, res, next) => {
-    void res;
-    // Simulate clerkMiddleware() which sets req.auth via Object.assign.
-    // Uses the same mechanism Clerk uses at runtime — no type augmentation needed.
-    Object.assign(req, {
-      auth: () => ({
-        id: null,
-        subject: null,
-        scopes: null,
-        userId: null,
-        clientId: null,
-        getToken: async () => null,
-        has: () => false,
-        debug: () => ({}),
-        tokenType: 'oauth_token',
-        isAuthenticated: false,
-      }),
-    });
-    next();
+  return () => noOpClerkMiddleware;
+}
+
+const noOpClerkMiddleware: RequestHandler = (req, res, next) => {
+  // Simulate clerkMiddleware() which sets req.auth via Object.assign.
+  // Uses the same mechanism Clerk uses at runtime — no type augmentation needed.
+  Object.assign(req, {
+    auth: createUnauthenticatedAuth,
+  });
+  res.locals.clerkAuthSimulation = 'unauthenticated';
+  next();
+};
+
+function createUnauthenticatedAuth() {
+  return {
+    id: null,
+    subject: null,
+    scopes: null,
+    userId: null,
+    clientId: null,
+    getToken: async () => null,
+    has: () => false,
+    debug: () => ({}),
+    tokenType: 'oauth_token',
+    isAuthenticated: false,
   };
 }
 
@@ -109,23 +115,21 @@ export function createMockRuntimeConfig(
  * @remarks **Interface-conformance retention.** The `runtimeConfig`
  * parameter is intentionally retained to mirror the production factory's
  * call signature so tests can swap factories without changing call sites,
- * even though the fake is independent of runtime config. The
- * `void runtimeConfig;` statement signals "I see this parameter, the fake
- * intentionally does not use it" rather than introducing a leading-
- * underscore rename (which would silence the unused-parameter signal
- * without carrying the rationale forward). Tests do not exercise
+ * even though the fake is independent of runtime config. The helper records
+ * the auth-mode part of runtime config in fake observability context, keeping
+ * the parameter as an explicit conformance input rather than a hidden unused
+ * binding. Tests do not exercise
  * observability behaviour via this helper; if a test needs to assert on
  * observability interactions it should import {@link createFakeHttpObservability}
  * directly and spy on the returned object. The production factory
  * `createHttpObservabilityOrThrow` is deliberately NOT imported here so
  * tests do not pull in production observability wiring as incidental
  * infrastructure.
- *
- * Sonar `typescript:S3735` (Remove this use of the "void" operator) is
- * dismissed-with-rationale on this site: the void here is the intentional
- * unused-parameter signal pinned by this comment, not a Promise discard.
  */
 export function createMockObservability(runtimeConfig?: RuntimeConfig): HttpObservability {
-  void runtimeConfig;
-  return createFakeHttpObservability();
+  const observability = createFakeHttpObservability();
+  observability.setContext('mock_runtime_config', {
+    authDisabled: runtimeConfig?.dangerouslyDisableAuth === true,
+  });
+  return observability;
 }

@@ -121,7 +121,7 @@ describe('createLibBoundaryRules', () => {
     const blockedLibs = zones
       .filter((zone) => zone.from.startsWith('../') && !zone.from.startsWith('../../../'))
       .map((zone) => zone.from)
-      .sort();
+      .sort((a, b) => a.localeCompare(b));
 
     expect(blockedLibs).toEqual([
       '../env-resolution/**',
@@ -143,7 +143,7 @@ describe('createLibBoundaryRules', () => {
     const blockedImports = patterns
       .flatMap((pattern) => pattern.group)
       .filter((group) => blockedLibPrefixes.some((prefix) => group.startsWith(prefix)))
-      .sort();
+      .sort((a, b) => a.localeCompare(b));
 
     expect(blockedImports).toEqual([
       '@oaknational/env-resolution',
@@ -181,7 +181,7 @@ describe('createLibBoundaryRules', () => {
     const blockedImports = patterns
       .flatMap((pattern) => pattern.group)
       .filter((group) => group.startsWith('@oaknational/sentry-node'))
-      .sort();
+      .sort((a, b) => a.localeCompare(b));
 
     expect(blockedImports).toEqual([]);
   });

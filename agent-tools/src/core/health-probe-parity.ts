@@ -80,7 +80,9 @@ function evaluateReviewerAdapterParity(repoRoot: string): HealthCheckResult {
   const cursorAgents = listBasenames(repoRoot, CURSOR_AGENTS_DIR, '.md');
   const claudeAgents = listBasenames(repoRoot, CLAUDE_AGENTS_DIR, '.md');
   const codexAgents = listBasenames(repoRoot, CODEX_AGENTS_DIR, '.toml');
-  const allAgentNames = [...new Set([...cursorAgents, ...claudeAgents, ...codexAgents])].sort();
+  const allAgentNames = [...new Set([...cursorAgents, ...claudeAgents, ...codexAgents])].sort(
+    (a, b) => a.localeCompare(b),
+  );
   const details = collectReviewerAdapterParityDetails(allAgentNames, {
     cursorAgents,
     claudeAgents,

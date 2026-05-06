@@ -22,6 +22,18 @@ const defaultIO: ZodgenIO = {
   generateZodSchemasFromOpenAPI,
 };
 
+interface OperationLike {
+  operationId?: unknown;
+
+  responses?: ResponsesObject;
+}
+
+function isOperationLike(value: unknown): value is OperationLike {
+  return (
+    typeof value === 'object' && value !== null && 'operationId' in value && 'responses' in value
+  );
+}
+
 /**
  * Generates Zod endpoint definitions with parameter schemas from an OpenAPI document.
  * Uses the default template to generate complete endpoint definitions including request parameters.
@@ -51,47 +63,16 @@ export async function generateZodSchemas(
   const primaryStatusByOperationId = new Map<string, string>();
 
   // openapi3-ts exposes path entries via loose index signatures; inspect dynamically with runtime guards.
-  const pathEntries = Object.entries(openApiDocWithPaths.paths);
-  interface OperationLike {
-    operationId?: unknown;
-
-    responses?: ResponsesObject;
-  }
-  function isOperationLike(value: unknown): value is OperationLike {
-    return (
-      typeof value === 'object' && value !== null && 'operationId' in value && 'responses' in value
-    );
-  }
-  for (const [rawPath, pathItem] of pathEntries) {
+  for (const [rawPath, pathItem] of Object.entries(openApiDocWithPaths.paths)) {
     if (!pathItem) {
       continue;
     }
-    const operationEntries = Object.entries(pathItem);
-    for (const [method, operation] of operationEntries) {
-      if (!operation || typeof operation !== 'object') {
-        continue;
-      }
-      if (!isOperationLike(operation)) {
-        throw new TypeError(`Invalid operation: ${JSON.stringify(operation)}`);
-      }
-      const operationCandidate = operation;
-      if (typeof operationCandidate.operationId !== 'string') {
-        continue;
-      }
-      const sanitisedPath = rawPath.replace(/\{([^}]+)\}/g, ':$1');
-      const methodKey = method.toLowerCase();
-      methodAndPathToOperationId.set(
-        `${methodKey} ${sanitisedPath}`,
-        operationCandidate.operationId,
-      );
-
-      const responsesCandidate = operationCandidate.responses;
-      const statusKeys = responsesCandidate ? Object.keys(responsesCandidate) : [];
-      const primaryStatus = statusKeys.find((status) => status.startsWith('2')) ?? statusKeys[0];
-      if (primaryStatus) {
-        primaryStatusByOperationId.set(operationCandidate.operationId, primaryStatus);
-      }
-    }
+    collectOperationLookups(
+      rawPath,
+      Object.entries(pathItem),
+      methodAndPathToOperationId,
+      primaryStatusByOperationId,
+    );
   }
 
   const { output } = await io.generateZodSchemasFromOpenAPI({
@@ -303,4 +284,37 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
   logger.info('Writing to file', { path: outFile });
 
   io.writeFileSync(outFile, sanitizedContent);
+}
+
+function collectOperationLookups(
+  rawPath: string,
+  operationEntries: readonly [string, unknown][],
+  methodAndPathToOperationId: Map<string, string>,
+  primaryStatusByOperationId: Map<string, string>,
+): void {
+  for (const [method, operation] of operationEntries) {
+    if (!operation || typeof operation !== 'object') {
+      continue;
+    }
+    if (!isOperationLike(operation)) {
+      throw new TypeError(`Invalid operation: ${JSON.stringify(operation)}`);
+    }
+    if (typeof operation.operationId !== 'string') {
+      continue;
+    }
+    methodAndPathToOperationId.set(
+      `${method.toLowerCase()} ${rawPath.replace(/\{([^}]+)\}/g, ':$1')}`,
+      operation.operationId,
+    );
+
+    const primaryStatus = getPrimaryStatus(operation.responses);
+    if (primaryStatus) {
+      primaryStatusByOperationId.set(operation.operationId, primaryStatus);
+    }
+  }
+}
+
+function getPrimaryStatus(responses: ResponsesObject | undefined): string | undefined {
+  const statusKeys = responses ? Object.keys(responses) : [];
+  return statusKeys.find((status) => status.startsWith('2')) ?? statusKeys[0];
 }
