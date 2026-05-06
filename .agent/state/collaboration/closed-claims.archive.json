@@ -10945,6 +10945,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "2bdca82d-553c-4e94-b486-7d2c8980a886",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:33:26Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit urgent skill-load pressure relief closeout",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:36:02Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Committed urgent skill-load pressure relief closeout at 07cdddf0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2bdca82d-553c-4e94-b486-7d2c8980a886",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
