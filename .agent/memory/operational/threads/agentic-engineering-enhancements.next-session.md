@@ -1,5 +1,79 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Skills/artefact standardisation: portability audit + decision-complete remediation plans (2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Umbral Cloaking Silhouette / claude-code /
+claude-opus-4-7-1m / `a70b57`).
+
+**Landings**:
+
+- **Audit report**:
+  `.agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md`
+  — durable analytical artefact. Contract source-of-truth pointers
+  (PDR-009 + ADR-125 + validator + agentskills.io spec); findings
+  P0–P4 with conform-vs-diverge breakdown; root-cause analysis
+  ("design surface governed; operational surface ungoverned"); three
+  graduation-candidate patterns; metacognition reflection.
+- **Urgent companion plan**:
+  `.agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md`
+  — decision-complete; 13 cycles; disable
+  `mcp-apps@mcp-apps` + `cloudflare@claude-plugins-official` +
+  `linear@claude-plugins-official` (−12 skills); Vercel triage
+  recorded as friction. Highest-impact single item: Phase 1.2
+  (cloudflare removal, −8 skills).
+- **Strategic remediation plan**:
+  `.agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md`
+  — decision-complete; 30 cycles across 9 phases; supersedes
+  `future/canonical-first-skill-pack-ingestion-tooling.plan.md`. The
+  CLI wraps `npx skills` (vercel-labs/skills) as dev dependency under
+  `agent-tools/`; the canonicalisation post-step is the value-add.
+  Includes inventory CLI, verify migration with explicit
+  `runVerify(opts)` injection, authoring CLI for skills/rules/commands/hooks,
+  spec compliance checks, skill-load budget (rule: `claude /doctor` × 0.85),
+  plugin-audit, ADR-125 amendment.
+- **Reviewer dispatch (this session)**: docs-adr-reviewer +
+  code-reviewer (P1 fixes applied: machine-local path, per-cycle
+  YAML, build-ordering, helper-cycle independence, plugin-audit
+  signal expansion, risk register additions, predecessor-link
+  current-vs-future, etc.); assumptions-reviewer (verdict reached
+  "reshape" but partly via brief-scope error — see
+  `feedback_reviewer_brief_respects_decided_scope.md`; substantive
+  finding accepted: `npx skills` already ships full lifecycle, plan
+  re-positioned as wrapper around it).
+- **Memory captures (user-memory, not in repo)**:
+  - `feedback_skill_load_budget.md` — active-skill discovery has a
+    measurable context budget; `claude /doctor` is the authoritative
+    measurement source.
+  - `project_vendor_plugin_redundancy_after_canonicalisation.md` —
+    default = remove plugin once content canonicalised + locked.
+  - `feedback_reviewer_brief_respects_decided_scope.md` — never
+    re-open closed decisions via reviewer questions.
+  - Updated existing `feedback_no_moving_targets_in_permanent_docs.md`
+    with the explicit "plans are an acceptable home for moving
+    targets" nuance (owner clarification this session).
+- **Pending-graduations**: new entry `inventory-as-output, not
+  as-document` registered as a PDR-009 amendment candidate (Phase 8
+  of the strategic plan is the trigger).
+- **Skill-discovery measurement**: owner confirmed `claude /doctor`
+  is the truth source; the budget is a measured ceiling, not a
+  hypothesis.
+
+**Validation**:
+
+- `pnpm portability:check` green throughout (12 commands, 37 skills,
+  52 rules, 22 reviewers, 40 command adapters).
+- No code changed; only plan/report/memory text added.
+
+**Next safe step for fresh session**: execute the urgent plan's
+recommended bundle (Phase 0.1 + 0.2 + 1.1 + 1.2 + 1.3 + 1.4) in a
+single ~30 min session. The bundle removes 12 skills with zero
+functional loss and brings the active-skill count below the
+`claude /doctor` ceiling. If only one item is to be executed,
+**Phase 1.2 (cloudflare removal)** is the highest-impact single
+item.
+
+---
+
 ## Active arc — Cursor oak-local MCP verified + `feat/eef_exploration` Step 10 precursor recorded (2026-05-05)
 
 **Last refreshed**: 2026-05-05 (Deciduous Budding Stamen / cursor /

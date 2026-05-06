@@ -2028,6 +2028,26 @@ continuity snapshots.
   OR owner direction.
   Status: pending — single first-class instance.
 
++ **Inventory-as-output, not as-document** — captured-date 2026-05-06.
+  Source-surface: `agent-artefact-portability-audit-2026-05-06.report.md`
+  §6 graduation-candidate list; live evidence: ADR-125 inventory
+  tables drifted by +17 rules / +17 Cursor triggers / +1 skill since
+  2026-04-28 amendment despite no contract change. The pattern: count
+  tables in permanent docs decay; the right shape is to emit counts
+  from a verifier and reference the regenerable inventory, not to
+  embed counts. Refines the existing
+  no-moving-targets-in-permanent-docs memory rule with the structural
+  observation that **emission-vs-embedding** is the load-bearing
+  distinction (the rule already names plans as an acceptable home for
+  moving counts).
+  Graduation-target: PDR-009 amendment under
+  §"Many-to-one trigger consolidation" or a new §"Inventory emission"
+  block; OR ADR-125 amendment paired with the count-table strip.
+  Trigger-condition: Phase 8 of `agent-artefact-lifecycle-cli.plan.md`
+  reaches ADR-125 amendment; OR a second permanent-doc count drift
+  surfaces independently of this audit.
+  Status: pending — first-class instance with structural justification.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

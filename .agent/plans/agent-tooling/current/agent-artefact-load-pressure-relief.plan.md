@@ -1,0 +1,451 @@
+---
+name: "Agent Artefact Load Pressure Relief — Urgent Plugin and Skill Pruning"
+overview: >-
+  Drop active-skill discovery count below Claude Code's effective discovery
+  budget by disabling redundant/unused plugins and triaging the Vercel skill
+  set. Companion to the strategic agent-artefact-lifecycle-cli plan.
+todos:
+  - id: 0-1-baseline-capture
+    content: "0.1 Capture pre-pruning baseline (validator output + active-skill count) into Baselines table."
+    status: pending
+    depends_on: []
+  - id: 0-2-settings-backup
+    content: "0.2 Backup .claude/settings.json out-of-tree (e.g. /tmp/) for safe rollback."
+    status: pending
+    depends_on: []
+  - id: 1-1-remove-mcp-apps
+    content: "1.1 Remove mcp-apps@mcp-apps from .claude/settings.json enabledPlugins."
+    status: pending
+    depends_on: [0-1-baseline-capture, 0-2-settings-backup]
+  - id: 1-2-remove-cloudflare
+    content: "1.2 Remove cloudflare@claude-plugins-official from enabledPlugins."
+    status: pending
+    depends_on: [0-1-baseline-capture, 0-2-settings-backup]
+  - id: 1-3-remove-linear
+    content: "1.3 Remove linear@claude-plugins-official from enabledPlugins."
+    status: pending
+    depends_on: [0-1-baseline-capture, 0-2-settings-backup]
+  - id: 1-4-phase-1-gate
+    content: "1.4 Run portability:check, subagents:check, type-check; fresh session recount."
+    status: pending
+    depends_on: [1-1-remove-mcp-apps, 1-2-remove-cloudflare, 1-3-remove-linear]
+  - id: 2-1-vercel-inventory
+    content: "2.1 Inventory active vs parked Vercel skills; classify each in plan body."
+    status: pending
+    depends_on: [1-4-phase-1-gate]
+  - id: 2-2-vercel-friction
+    content: "2.2 Append Vercel friction entry to frictions-register.md (defer removal to strategic plan)."
+    status: pending
+    depends_on: [2-1-vercel-inventory]
+  - id: 3-1-validator-green
+    content: "3.1 portability:check + subagents:check green; fresh session active-skill count captured."
+    status: pending
+    depends_on: [2-2-vercel-friction]
+  - id: 3-2-functional-spotcheck
+    content: "3.2 Verify canonical mcp-apps skills still surface; MCP grants intact."
+    status: pending
+    depends_on: [3-1-validator-green]
+  - id: 4-1-record-outcome
+    content: "4.1 Fill in Outcome section with pre/post counts and any anomalies."
+    status: pending
+    depends_on: [3-2-functional-spotcheck]
+  - id: 4-2-continuity-update
+    content: "4.2 Light continuity update (comms-log + thread record refresh)."
+    status: pending
+    depends_on: [4-1-record-outcome]
+isProject: false
+---
+
+# Agent Artefact Load Pressure Relief — Urgent Plugin and Skill Pruning
+
+**Last Updated**: 2026-05-06
+**Status**: 🔴 NOT STARTED (decision-complete 2026-05-06)
+**Decision-completion seal**: All decisions recorded inline; no item
+awaits owner sign-off. Execution can begin at Phase 0.1 without
+re-opening any question.
+**Scope**: Reduce the active-skill discovery surface so Claude Code stops
+silently truncating skill metadata in long sessions.
+**Companion**: [`agent-artefact-lifecycle-cli.plan.md`](agent-artefact-lifecycle-cli.plan.md)
+**Source report**: [`agent-artefact-portability-audit-2026-05-06.report.md`](agent-artefact-portability-audit-2026-05-06.report.md)
+
+---
+
+## Next-session execution — highest-impact item
+
+The highest-impact single item in this plan is **Phase 1.2: remove
+`cloudflare@claude-plugins-official` plugin (−8 skills)**. It is also
+the largest reversible delta with zero functional loss in this
+project (no Cloudflare workspaces, no MCP grants, no `.agent/`
+references).
+
+**Recommended execution shape for the next session** (single bundled
+unit of work, ~30 min):
+
+1. Phase 0.1 — capture pre-prune baseline (`pnpm portability:check`
+   + `claude /doctor` skill count + system reminder skill list).
+2. Phase 0.2 — out-of-tree settings backup.
+3. Phase 1.1 — remove `mcp-apps@mcp-apps` (−4 skills).
+4. **Phase 1.2 — remove `cloudflare@claude-plugins-official` (−8 skills, the highest-impact single item).**
+5. Phase 1.3 — remove `linear@claude-plugins-official` (no skills,
+   plugin metadata only; trivial cleanup).
+6. Phase 1.4 — gate (`pnpm portability:check`, `pnpm subagents:check`,
+   `pnpm type-check`); fresh-session active-skill recount.
+
+If only one item is to be executed, do **Phase 1.2 alone** preceded
+by Phases 0.1 + 0.2 (baseline + backup are required preconditions).
+Phase 2 (Vercel triage), Phase 3 (verify), Phase 4 (handoff) can be
+scheduled independently in a follow-up session.
+
+Order within Phase 1 is operationally arbitrary — the three plugin
+removals are independent edits to `.claude/settings.json`. The
+recommended order above is purely cognitive (smallest commit first;
+largest impact second; cleanup third).
+
+---
+
+## Context
+
+The audit on 2026-05-06 (see source report) confirmed three plugins are
+either redundant (their content is canonicalised and locked) or unused.
+The Vercel plugin loads 25 skills, only some of which are exercised.
+Disabling redundant plugins is fully reversible, owner-authorised by
+this plan, and removes ~12 skills from the discovery surface immediately
+with zero functional loss.
+
+This plan is **urgent and tightly scoped**: it does not touch the
+canonical artefact tree, does not modify ADRs, and does not refactor any
+validator code. It moves only `.claude/settings.json` and (per Vercel
+phase) per-skill enablement state. Any architectural improvement is
+the remit of the companion strategic plan.
+
+### Issue 1: Redundant `mcp-apps@mcp-apps` plugin
+
+The four `mcp-apps:*` skills (`add-app-to-server`, `convert-web-app`,
+`create-mcp-app`, `migrate-oai-app`) duplicate canonical skills already
+present at `.agent/skills/<name>/SKILL.md` and recorded in
+`skills-lock.json` with computed-hashes. Removing the plugin keeps the
+canonical surface and removes the duplicate-namespace risk.
+
+**Evidence**: `skills-lock.json` source = `modelcontextprotocol/ext-apps`
+for all four; canonical SKILL.md present and checked by
+`pnpm portability:check`.
+
+**Root cause**: ADR-125 amendment 2026-04-24 permits canonicalisation but
+does not state policy on whether the source plugin should remain
+installed. The plugin is the upstream content source; removing it shifts
+update-cadence ownership to the canonical lock entry.
+
+### Issue 2: Unused `cloudflare@claude-plugins-official` plugin
+
+The plugin loads 8 skills (`cloudflare:agents-sdk`,
+`cloudflare:durable-objects`, `cloudflare:workers-best-practices`, etc.).
+
+**Evidence**: zero `cloudflare`/`workers`/`wrangler` references in
+`.agent/`; zero `mcp__plugin_cloudflare_*` grants in either
+`.claude/settings.json` or `.claude/settings.local.json`; no
+Cloudflare-deployed workspaces in this monorepo.
+
+**Root cause**: enabled at some prior point; never exercised in this
+project's domain.
+
+### Issue 3: Unused `linear@claude-plugins-official` plugin
+
+The plugin contributes commands and an MCP server but no surfaced
+skills (per the live skill list). Its presence is metadata noise.
+
+**Evidence**: zero `linear` references in `.agent/`; zero
+`mcp__plugin_linear_*` grants in either settings file.
+
+### Issue 4: Vercel plugin breadth
+
+`vercel@claude-plugins-official` loads 25 skills covering AI SDK,
+chat-SDK, agent, sandbox, marketplace, AI gateway, runtime cache,
+Turbopack, Next.js Cache Components, knowledge-update, etc. Many are
+unrelated to Oak's deployed surface (Vercel-hosted MCP server, Vercel
+Functions, env vars, deployments).
+
+**Evidence**: skill list inspected during audit. Likely-used:
+`bootstrap`, `deploy`, `env`, `env-vars`, `deployments-cicd`,
+`vercel-cli`, `vercel-functions`, `verification`, `nextjs`,
+`vercel-storage`, `routing-middleware`, `knowledge-update`. Likely-unused
+in current scope: `chat-sdk`, `ai-sdk`, `ai-gateway`, `vercel-sandbox`,
+`shadcn`, `react-best-practices`, `next-forge`, `next-cache-components`,
+`next-upgrade`, `runtime-cache`, `turbopack`, `marketplace`,
+`vercel-agent`, `auth`, `workflow`.
+
+**Root cause**: plugin loads its full skill catalogue; Claude Code
+exposes no per-skill disable mechanism in user-facing settings. Any
+narrowing must be done by the plugin or by removing the plugin and
+selecting an alternative integration. Phase 2 captures the audit and
+documents the gap; the strategic plan codifies a measurable
+skill-budget.
+
+---
+
+## Quality Gate Strategy
+
+After each phase, run:
+
+```bash
+pnpm portability:check    # contract still passes
+pnpm subagents:check      # reviewer adapters still consistent
+pnpm type-check           # no settings parse breakage
+```
+
+After Phase 3, also:
+
+```bash
+pnpm test:root-scripts    # repo-script smoke
+```
+
+A new session must be opened after each plugin disable to re-measure
+the active-skill discovery surface (the system-reminder skill list).
+
+---
+
+## Phase 0: Baseline
+
+### 0.1 Capture pre-pruning state
+
++ **Action**: Record the live `pnpm portability:check` output and the
+  active-skill list (system-reminder block) at session open.
++ **Output**: Append the baseline counts to this plan's "Baselines"
+  section below. Do NOT embed in any permanent doc.
++ **Acceptance**: validator green; baseline counts captured here.
+
+### 0.2 Backup settings
+
++ **Action**: copy `.claude/settings.json` to an **out-of-tree** location
+  (e.g. `/tmp/oak-claude-settings.pre-prune-2026-05-06.json`) for
+  rollback. Do NOT place the backup in the repo working tree — the
+  `.gitignore` does not currently cover `*.pre-prune-*` suffixes and an
+  in-tree backup risks accidental staging.
++ **Acceptance**: backup file exists at the out-of-tree path; the path
+  is recorded in the Outcome section for retention.
+
+---
+
+## Phase 1: Redundant plugins
+
+The three removals here are **non-destructive**:
+
+1. **`mcp-apps@mcp-apps`** — content already canonicalised + locked.
+2. **`cloudflare@claude-plugins-official`** — no functional dependency.
+3. **`linear@claude-plugins-official`** — no skills, no MCP grants in
+   use; commands surface only.
+
+### 1.1 Remove `mcp-apps@mcp-apps` plugin
+
++ **Action**: Edit `.claude/settings.json` `enabledPlugins`; remove the
+  `mcp-apps@mcp-apps` entry.
++ **Action**: Optionally `claude plugin uninstall mcp-apps@mcp-apps`
+  (project scope) to drop the cache directory.
++ **Owner-confirmation gate**: this is reversible and authorised by
+  this plan; proceed without further prompt.
++ **Acceptance**:
+  + `pnpm portability:check` passes (canonical skills are unaffected).
+  + New session shows the four `mcp-apps:*` skills no longer in the
+    system reminder.
+  + Bare-name skills `add-app-to-server`, `convert-web-app`,
+    `create-mcp-app`, `migrate-oai-app` continue to load (they are
+    canonical).
+
+### 1.2 Remove `cloudflare@claude-plugins-official` plugin
+
++ **Action**: Same shape as 1.1.
++ **Acceptance**: 8 `cloudflare:*` skills no longer in the new-session
+  reminder; no failed MCP tool grants.
+
+### 1.3 Remove `linear@claude-plugins-official` plugin
+
++ **Action**: Same shape as 1.1.
++ **Acceptance**: no `linear` plugin presence in new-session reminder;
+  GitHub plugin (user-scope) is unaffected.
+
+### 1.4 Phase-1 gate
+
++ Run quality gates (above).
++ Open a fresh session; recount active-skill list.
++ Expected: skill discovery surface drops by ~12 (4 mcp-apps + 8 cloudflare).
++ Record the post-Phase-1 count in the "Baselines" section.
+
+---
+
+## Phase 2: Vercel triage
+
+The Vercel plugin loads 25 skills. We use Vercel for hosting; we use a
+narrow subset of skills.
+
+### 2.1 Inventory active Vercel usage
+
++ **Action**: Read every `vercel:*` skill description from the active
+  surface (already shown in the system reminder); classify into:
+  + `keep` — directly relevant to this monorepo's Vercel usage.
+  + `parked` — unused in current scope; remove or document.
++ **Output**: Add a table to this plan listing each skill's verdict
+  with one-line justification. (Plans are ephemeral; counts and per-skill
+  verdicts are appropriate here, not in permanent docs.)
++ **Acceptance**: 25 skills classified; ≥10 marked `parked`.
+
+### 2.2 Resolve `parked` Vercel skills
+
+Claude Code does not expose a per-skill disable in user-visible
+settings. Two options:
+
++ **Option A (preferred)**: open an upstream issue or local override
+  asking the Vercel plugin to expose its skill catalogue as
+  user-selectable. Track in `.agent/plans/agent-tooling/frictions-register.md`.
++ **Option B**: remove the Vercel plugin and replace with a curated
+  internal `vercel-deploy-expert` canonical skill plus the project's
+  existing Vercel MCP. Out-of-scope for this urgent plan; deferred to
+  the strategic plan.
+
+This phase **records** the gap and the proposed remediation; it does
+not yet remove the plugin.
+
++ **Action**: Append a friction entry (`F-XX: Vercel plugin skill catalogue
+  unbounded`) to `frictions-register.md`.
++ **Acceptance**: friction recorded; strategic plan references it as
+  input.
+
+---
+
+## Phase 3: Verify
+
+### 3.1 Validator and gates
+
++ **Action**: `pnpm portability:check` — must pass.
++ **Action**: `pnpm subagents:check` — must pass.
++ **Action**: Open a fresh Claude Code session in this repo and capture
+  the active-skill list from the system reminder.
++ **Acceptance**: post-prune active-skill count is at least 12 below
+  baseline; no skill discovery truncation visible (full list arrives in
+  the system reminder).
+
+### 3.2 Functional spot-check
+
++ **Action**: Verify the four canonical mcp-apps skills still surface
+  by bare name in the new-session reminder.
++ **Action**: Verify the project's MCP grants for sentry, sonarqube,
+  github, oak, vercel still resolve (no broken `mcp__*` references in
+  `.claude/settings.local.json`).
++ **Acceptance**: zero functional regression; canonical skills behave
+  identically; the only change is the removal of duplicate / unused
+  plugin surfaces.
+
+---
+
+## Phase 4: Handoff
+
+### 4.1 Record outcome
+
++ **Action**: Update the urgent plan's "Outcome" section below with
+  pre/post counts and any anomalies.
++ **Action**: Note the remaining Vercel-plugin pressure in the strategic
+  plan's input list.
+
+### 4.2 Update continuity surfaces
+
++ **Action**: Light continuity-update on close (`mid-session-light-update`
+  pattern): comms-log entry; thread record refresh.
++ **Acceptance**: the next session reads the outcome via the standard
+  continuity surfaces.
+
+### 4.3 Promote strategic CLI plan if owner agrees
+
++ The strategic plan
+  [`agent-artefact-lifecycle-cli.plan.md`](agent-artefact-lifecycle-cli.plan.md)
+  is the durable answer to the underlying drift. This urgent plan is
+  the immediate relief; the strategic plan is the structural fix.
++ No promotion needed unless owner directs.
+
+---
+
+## Acceptance criteria (overall)
+
+1. `pnpm portability:check` passes after every phase.
+2. Active-skill list in a fresh session drops by ≥12 (mcp-apps:4 +
+   cloudflare:8) compared to pre-prune baseline.
+3. No `mcp__*` grant in `.claude/settings.local.json` is broken.
+4. Vercel friction recorded in `frictions-register.md`.
+5. Outcome section in this plan filled in.
+
+---
+
+## Risks and mitigations
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| Removing `mcp-apps` breaks an in-progress workflow that was using the namespaced form | Low | Bare-name canonical equivalents exist; spot-check Phase 3.2 |
+| Removing `cloudflare` plugin removes a planned-but-unstarted Cloudflare evaluation | Low | Plan was never started; reinstall is one CLI command if needed |
+| Vercel triage reveals the project uses more vercel:* skills than estimated | Medium | Phase 2 stops at "record and classify"; no removal until strategic plan |
+| Plugin uninstall removes MCP server registration that another tool depends on | Low | Spot-check 3.2 enumerates MCP grants; rollback via `settings.json.pre-prune-*` backup |
+
+---
+
+## Foundation alignment
+
++ **PDR-009**: canonical-first three-layer model preserved (Layer 1
+  unchanged; Layer 2 wrappers unchanged; Layer 3 entry-points unchanged).
++ **ADR-125**: thin-wrapper contract preserved; this plan operates on
+  enabled-plugin set only.
++ **agentskills.io spec**: surface description format unchanged.
++ **No-moving-targets-in-permanent-docs**: counts are recorded in this
+  plan body (ephemeral) and not in any permanent doc.
+
+---
+
+## Non-goals (YAGNI)
+
++ Building any new agent-tools CLI command (strategic plan).
++ Amending ADR-125 (strategic plan).
++ Removing canonical skills (strategic plan, after audit).
++ Refactoring the validator (strategic plan).
++ Touching `.cursor/`, `.gemini/`, `.codex/`, `.agents/` adapter files
+  (no changes needed).
+
+---
+
+## Baselines
+
+*Filled in during Phase 0. Counts here are deliberately ephemeral.*
+
+| Metric | Pre-prune | Post-Phase-1 | Post-Phase-2 | Post-Phase-3 |
+|---|---|---|---|---|
+| `pnpm portability:check` | — | — | — | — |
+| Approx. active-skill count (system reminder) | — | — | — | — |
+| `mcp-apps:*` skills present | 4 | 0 | 0 | 0 |
+| `cloudflare:*` skills present | 8 | 0 | 0 | 0 |
+| `linear` plugin present | yes | no | no | no |
+| `vercel:*` skills present | 25 | 25 | 25 (no removal — see 2.2) | 25 |
+| Vercel skills classified `parked` (Phase 2) | n/a | n/a | recorded in plan body | unchanged |
+
+---
+
+## Outcome
+
+*Filled in at Phase 4 close.*
+
+---
+
+## Learning loop
+
+After Phase 3.1 passes:
+
++ If unexpected behaviour appeared, append it to the napkin
+  (`.agent/memory/active/napkin.md`) per the standard capture flow.
++ If a pattern emerged worth graduating, surface it in
+  `.remember/now.md` for the next consolidation pass.
+
+---
+
+## Lifecycle triggers
+
+Per `.agent/plans/templates/components/lifecycle-triggers.md`:
+
++ **Pre-edit**: register active claim on `.claude/settings.json` via
+  the collaboration-state helper.
++ **Post-edit**: light continuity update; refresh thread record (per
+  the mid-session light update memory rule).
++ **Plan close**: update Outcome; do not archive — leave for owner
+  review of the strategic plan kickoff.
