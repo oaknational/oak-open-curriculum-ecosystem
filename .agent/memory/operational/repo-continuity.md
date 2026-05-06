@@ -9,25 +9,37 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Session close (2026-05-06 — Stormy Drifting Harbour / `claude-code` /
-`claude-opus-4-7-1m` / `228bc5`)**: main-critical-sonar-remediation
-thread, four commits landed and pushed on `fix/sonar-fixes-20260506`
-(`5f6a7ae2`, `68529ac6`, `9551e2d9`, `f4b2dc2b`). Sonar
-`security_hotspots_reviewed` moved 7.1% → **100%** (154/154); zero
-TO_REVIEW remaining. New governance artefact:
-`docs/governance/sonar-disposition-policy.md` — class-level
-disposition policies for nine hotspot rule classes with three-step
-expansion-discipline gate. New mechanical encoding in
-`sonar-project.properties` for S5443/S5332/S1313 against test-file
-path globs only — production code paths and other rules unaffected.
-New regression-guard E2E test pins `X-Powered-By` absence at the
-application layer. 143 hotspots dispositioned this session with
-site-specific rationales. Activity-bias diagnostic captured in napkin
-(rotation not due). HIGH-issue backlog (133 OPEN) is overwhelmingly
-zombie findings against stale main analysis; pushing this branch
-triggers CI re-analysis expected to auto-resolve most/all. **Next
-safe step**: monitor SonarCloud PR re-analysis on PR #97; once
-analysis completes, mark PR ready for review if CI is clean.
+**Session close (2026-05-06 evening — Stormy Drifting Harbour /
+`claude-code` / `claude-opus-4-7-1m` / `228bc5`, mid-session vendor
+switch under quota constraint)**: main-critical-sonar-remediation
+thread; six commits pushed plus one local-only PDR commit
+(`6b2b972c` PDR-049 memory/state merge semantics, **NOT YET
+PUSHED**). Substantive Sonar work completed cleanly:
+`security_hotspots_reviewed` reached 100%, 143 hotspots
+dispositioned with site-specific rationales, S7781 fixed, length
+guard added to synonym-miner regexes. PR #97 (DRAFT, OPEN) CI: 3
+checks pass, 2 fail — SonarCloud (only
+`new_duplicated_lines_density: 39.3%`, the pre-existing
+codegen-duplication concern, out of scope) and CodeQL (2 HIGH
+`js/polynomial-redos` still open after the runtime length-guard fix;
+CodeQL needs a static-shape regex change). Merge from `origin/main`
+started and aborted; 5 conflict files identified matching the
+structural pattern PDR-049 names. PDR-049 authored *before* the
+merge resolution per PDR-047 doctrine-authoring discipline. Full
+handoff with diagnosed merge structure, per-class metadata
+inventory, and PR-comment cures lives in the
+[main-critical-sonar-remediation thread record][thread-handoff].
+
+[thread-handoff]: threads/main-critical-sonar-remediation.next-session.md
+
+**Next safe step**: pick up on a different vendor system at HEAD
+`6b2b972c` on branch `fix/sonar-fixes-20260506`; read PDR-049;
+complete the merge per the recommended process in the thread
+record; address two PR-comment findings (CodeQL ReDoS regex shape
+change in `synonym-miner.ts:140,148`; zodgen-core type-comparison
+investigation at `zodgen-core.ts:33`); push when ready. Local
+PDR-049 commit must be pushed at some point — either as part of the
+merge work or before it.
 
 **Session close (2026-05-06 — Masked Stalking Veil / `codex` /
 GPT-5 / `019dfc`)**: owner-directed quota-recovery and closeout

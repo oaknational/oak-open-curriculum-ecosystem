@@ -18,16 +18,209 @@ Primary plan:
 
 ## Landing Target For Next Session
 
-Target: `apply Sonar Disposition Policy to remaining hotspots and any
-post-re-analysis residual` — after the push from session 2026-05-06,
-SonarCloud re-analysis runs against the current branch HEAD; the
-zombie HIGH-issue backlog (133 OPEN) is expected to auto-resolve to
-FIXED for code that `457fa1f0` already fixed. Next session reviews the
-post-re-analysis residual, applies the new
-[`docs/governance/sonar-disposition-policy.md`](../../../../docs/governance/sonar-disposition-policy.md)
-to the 22 S1313 still TO_REVIEW (deferred from this session), and
-addresses any genuine remaining HIGH issues with TDD fixes per the
-two-outcome rule.
+Target: **complete the vendor-switch handoff opened 2026-05-06 by
+Stormy Drifting Harbour** — finish the in-progress `origin/main` merge
+(currently *aborted*, ready to re-initiate; doctrine and diagnostics
+preserved below), address two unresolved PR #97 review-bot findings,
+then continue with the original Sonar-policy application work.
+
+This is a **mid-session vendor switch under quota constraint**. The
+substantive Sonar work landed cleanly in 6 commits on the branch; an
+unmerged 7th commit (PDR-049) is local-only and unpushed. The handoff
+preserves all in-flight findings so the next agent (any platform) can
+resume without re-deriving anything.
+
+## Vendor-Switch Handoff Snapshot (2026-05-06 Stormy Drifting Harbour)
+
+### Branch state
+
+- **Branch**: `fix/sonar-fixes-20260506`
+- **HEAD**: `6b2b972c docs(practice): land PDR-049 memory and state file merge semantics`
+- **Pushed**: up to `5b5b9d4a` (one commit ahead of origin)
+- **Working tree**: clean (merge aborted)
+- **Open PR**: #97 (DRAFT)
+
+### Local commits ahead of origin
+
+| SHA | Subject | Pushed? |
+|---|---|---|
+| `6b2b972c` | `docs(practice): land PDR-049 memory and state file merge semantics` | **NO — push when ready** |
+
+Everything earlier (`5b5b9d4a` and back) is on `origin/fix/sonar-fixes-20260506`.
+
+### In-progress merge (currently aborted)
+
+A `git merge --no-commit --no-ff origin/main` was started this session
+to integrate ~19 commits from main, then **aborted** to leave the
+working tree clean for the vendor switch. The merge auto-resolves
+most files; **5 files conflict** and require manual resolution per
+[PDR-049 (Memory and State File Merge Semantics)][pdr-049]:
+
+[pdr-049]: ../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md
+
+| File | `merge_class` per PDR-049 | Diagnosed | Action |
+|---|---|---|---|
+| `.agent/state/collaboration/closed-claims.archive.json` | `append-only-structured-by-claim_id` | **Clean union** — 9 ours-added + 25 theirs-added; **zero duplicate `claim_id` values** (per `comm -12` of the diff). No legitimate-concurrent-archival case. | Pure JSON-array union by `claim_id`; preserve top-level `schema_version` |
+| `.agent/state/collaboration/shared-comms-log.md` | `append-only-narrative` | Both sides appended timestamped event entries (ours +36 lines, theirs +48); newest-first ordering convention | Union by entry identity (timestamp + agent prefix in heading); chronological sort |
+| `.agent/memory/active/napkin.md` | `append-only-narrative` | Ours added the Stormy entry at top (+180 lines); theirs added a Pelagic entry + archive split (+76 lines) | Union; both sides' new H2 sections survive; preserve archive pointer edits |
+| `.agent/memory/operational/pending-graduations.md` | `mostly-append-register` | Ours +18 lines (no register-entry edits this session), theirs +25 lines (drain-due-queue + recalibrate-for-queue-lifecycle commits on main) | Theirs likely supersedes; verify entries my session referenced still exist; per-entry investigation if any same-entry edits |
+| `.agent/memory/operational/repo-continuity.md` | `index-narrative-tables` | Largest delta (ours +81, theirs +224). Both sides edited active-threads table, session-close note, current-session-focus, deep-consolidation-status. | Section-by-section reconciliation: tables merge row-by-row by thread name; status fields prefer most-recent-timestamped |
+
+**Important note on `repo-continuity.md`**: the file has a *malformed
+YAML frontmatter on this branch* (line 3 reads `## fitness_line_target: 400`
+as an H2 instead of a YAML key; closing `---` missing). This is
+pre-existing damage to the frontmatter, NOT the conflict markers.
+The next agent should consider whether to fix the frontmatter as
+part of the merge resolution or leave for a separate cleanup. If
+fixing, it has to interleave with theirs' significant edits to other
+sections.
+
+### Recommended merge process
+
+```bash
+git merge --no-commit --no-ff origin/main
+# Resolve each UU file per the table above and PDR-049 §Per-file-class merge semantics
+# After each file:
+#   1. Verify the merged file end-to-end by reading it (per PDR-049 step 3)
+#   2. Run validators (markdownlint for *.md; jq parse + node -e for JSON)
+git add <each-file>
+git commit  # default merge commit message is fine; reference PDR-049 in body
+```
+
+For `closed-claims.archive.json` specifically, `jq` makes the union easy:
+
+```bash
+MB=$(git merge-base origin/main HEAD)
+F=.agent/state/collaboration/closed-claims.archive.json
+jq -s '
+  {
+    schema_version: .[0].schema_version,
+    claims: ([.[].claims[]] | unique_by(.claim_id))
+  }
+' <(git show :2:$F) <(git show :3:$F) > $F
+git add $F
+```
+
+### Custom git config — not yet needed
+
+PDR-049 §Investment Staircase commits the Practice to **level 1
+(codify only)**. Custom git merge drivers (level 3) are an
+architectural option but require driver authoring + per-checkout
+`git config` registration + ongoing maintenance. **No git config
+changes are needed for this merge.** Consider promoting to level 3
+only after evidence at N≥3 hosts or ≥5 collisions on this host.
+
+### `merge_class:` metadata application — pending
+
+PDR-049 §File-Level Metadata Contract names the per-file metadata
+mechanism. Application to in-scope files in this repo was started
+this session but interrupted before any edits landed. Next agent
+should fold metadata application into the merge resolution itself —
+when reading napkin/pending-graduations/etc. for the merge, add the
+`merge_class:` frontmatter at the same time.
+
+In-scope inventory:
+
+| File | Proposed `merge_class:` |
+|---|---|
+| `.agent/memory/active/napkin.md` | `append-only-narrative` |
+| `.agent/state/collaboration/shared-comms-log.md` | `append-only-narrative` |
+| `.agent/state/collaboration/closed-claims.schema.json` (`$merge_class`) | `append-only-structured-by-claim_id` |
+| `.agent/state/collaboration/conversation.schema.json` (`$merge_class`) | `append-only-structured-by-entry_id` |
+| `.agent/state/collaboration/escalation.schema.json` (`$merge_class`) | `append-only-structured-by-escalation_id` |
+| `.agent/memory/operational/pending-graduations.md` | `mostly-append-register` |
+| `.agent/memory/operational/repo-continuity.md` | `index-narrative-tables` |
+| `.agent/memory/operational/threads/*.next-session.md` (10 files) | `index-narrative-tables` |
+| `.agent/state/collaboration/comms-events/README.md` (does not exist; create) | `exclusive-create-fragments` |
+
+### Open PR #97 review-bot findings (post-`5b5b9d4a` push)
+
+CI rolled five checks; three pass, two fail. Each failure has been
+diagnosed; both need a code fix in the next session.
+
+#### CodeQL — 2 HIGH `js/polynomial-redos` (still OPEN)
+
+| # | Location | Status |
+|---|---|---|
+| 87 | `packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts:140` (`alsoKnownAs` regex pattern) | Still open after `5b5b9d4a` |
+| 88 | `packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts:148` (`sometimesCalled` regex pattern) | Still open after `5b5b9d4a` |
+
+**Why the previous fix did not satisfy CodeQL**: the input-length
+guard (`MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000`) added in
+`5b5b9d4a` is in `extractSynonymFromDefinition` (the entry function),
+but CodeQL's static analyser flags the **regex pattern itself**
+(lines 140, 148) and does not trace data flow from the guard to the
+regex. CodeQL's analysis is conservative: any caller that bypasses the
+guard would re-expose the polynomial path.
+
+**Recommended cure**: add a `(?=\S)` positive lookahead immediately
+after the `\s+(?:an?\s+)?` prefix in both regexes. Forces the next
+position to be non-whitespace; eliminates the polynomial backtracking
+path on adversarial whitespace input. Existing tests should still pass
+because all valid inputs have non-whitespace content after the
+prefix.
+
+```ts
+// Before:
+alsoKnownAs: /also known as\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+sometimesCalled: /sometimes called\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+// After:
+alsoKnownAs: /also known as\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+sometimesCalled: /sometimes called\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+```
+
+The length guard remains as defence-in-depth — keep it; do not remove.
+
+#### github-code-quality bot — `zodgen-core.ts:33` (not yet investigated)
+
+> Variable 'value' is of type date, object or regular expression, but
+> it is compared to an expression of type null.
+
+Comment landed on `68529ac6`; the file may not have changed since,
+so the finding likely still applies. **Action**: read line 33 of
+`packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.ts`,
+classify as either real bug (fix) or false-positive (dismiss with
+rationale).
+
+#### SonarCloud — only `new_duplicated_lines_density: 39.3%` remaining RED
+
+This is the pre-existing codegen-duplication concern routed to the
+separate codegen-decomposition plan. **Out of scope** for this
+session and the next; do not address as part of this PR.
+
+All other Sonar QG conditions are OK on PR #97 (HEAD `5b5b9d4a`):
+`reliability_rating`, `security_rating`, `security_hotspots_reviewed`
+(100%), `new_security_hotspots_reviewed` (100%), `new_violations` (0).
+
+### Pull-request comments — full list as of 2026-05-06 ~20:30 UTC
+
+Issue comments (`gh api repos/oaknational/oak-open-curriculum-ecosystem/issues/97/comments`):
+
+- vercel[bot] @ 15:21Z — preview deployment ready
+- sonarqubecloud[bot] @ 20:00Z — Quality Gate failed; only `39.3%
+  Duplication on New Code` listed as failing condition
+
+Review comments (`gh api repos/oaknational/oak-open-curriculum-ecosystem/pulls/97/comments`):
+
+- github-code-quality[bot] @ 18:59Z on `zodgen-core.ts:33` — type-comparison finding (above)
+- github-advanced-security[bot] @ 18:59Z on `synonym-miner.ts:140` — CodeQL alert #87 (above)
+- github-advanced-security[bot] @ 18:59Z on `synonym-miner.ts:148` — CodeQL alert #88 (above)
+
+Reviews:
+
+- github-code-quality[bot] — COMMENTED (no body)
+- github-advanced-security[bot] — COMMENTED (no body)
+
+### Next safe step (vendor-switch handoff)
+
+1. Pick up branch `fix/sonar-fixes-20260506` at HEAD `6b2b972c` on a different vendor system.
+2. Read [PDR-049][pdr-049] before merging anything.
+3. Re-initiate the merge: `git merge --no-commit --no-ff origin/main`.
+4. Resolve the 5 conflict files per the table above. Add `merge_class:` frontmatter to the in-scope files as you go (per the metadata-application table).
+5. Verify each merged file end-to-end + run validators; commit the merge.
+6. Address the two PR-comment findings (CodeQL ReDoS regex fix; zodgen-core type-comparison investigation).
+7. Push when ready; let CI re-run; expected outcome is CodeQL clean + Sonar still RED only on duplication.
+8. Either mark PR #97 ready for review or land it as DRAFT for owner review depending on owner direction.
 
 ## Lane State
 

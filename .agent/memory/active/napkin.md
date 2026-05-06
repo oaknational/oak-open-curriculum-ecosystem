@@ -21,6 +21,84 @@ the pre-step napkin from the same pass is at
 
 ## 2026-05-06 — Stormy Drifting Harbour / claude-code / opus-4-7-1m / `228bc5`
 
+### Surprise: first-instance memory/state divergence on parallel branches
+
+**What I expected**: branch `fix/sonar-fixes-20260506` would merge
+cleanly back to `main` once the Sonar work landed.
+
+**What happened**: a `git merge --no-commit --no-ff origin/main`
+produced 5 content conflicts on shared global memory and state files
+(napkin, shared-comms-log, closed-claims archive,
+pending-graduations, repo-continuity). All conflicts were
+append-shape (no deletions on either side). Owner named this as the
+*first observed instance* of memory/state divergence on parallel
+checkouts — structurally important; treat as the founding incident.
+
+**Lesson**: threads coordinate intent (active-claims partitions by
+thread); files coordinate persistence (git tracks by file). Two
+sessions on disjoint threads can be perfectly coordinated at the
+intent layer and still produce a file-level merge conflict on shared
+global state. The conflict is structural, not a coordination failure.
+Captured as PDR-049 (Memory and State File Merge Semantics) —
+portable Practice doctrine with per-class merge semantics, file-level
+`merge_class:` metadata contract, and an investment staircase
+(codify only / checklist partial / custom merge drivers) gated on
+recurrence evidence.
+
+### Surprise: doctrine-before-resolution authoring discipline applied cleanly
+
+**What I expected**: when the merge conflicts surfaced, the natural
+move was to start resolving them and write doctrine afterwards.
+
+**What happened**: owner directed pause-and-discuss before any merge
+action. Doctrine (PDR-049) authored *before* the merge resolution.
+The doctrine then shaped the resolution rather than being shaped to
+ratify it — exactly the PDR-047 doctrine-authoring discipline
+applied at the moment of first need.
+
+**Lesson**: when a structural pattern surfaces for the first time,
+the temptation to resolve-then-document is strong. Resisting it
+costs ~one extra discussion turn and produces doctrine that is
+genuinely descriptive of the structural cause, not adapted to the
+specific resolution.
+
+### Surprise: CodeQL polynomial-redos cure required regex shape change, not input bound
+
+**What I expected**: input-length guard
+(`MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000`) on
+`extractSynonymFromDefinition` would satisfy CodeQL's
+`js/polynomial-redos` finding, since CodeQL's documented mitigation
+strategies include "limit the length of the input string".
+
+**What happened**: post-push CodeQL re-analysis still flagged both
+HIGH alerts. CodeQL's static analyser flags the regex pattern itself
+and does not trace data flow from the call-site guard to the
+pattern. Length guard is a runtime defence; the rule wants a
+static-shape change.
+
+**Lesson**: distinguish runtime defences (length guards, timeouts,
+input filtering) from static-shape fixes (regex linearisation). For
+static analysers, only static-shape changes clear the alert — even
+when the runtime defence is substantively equivalent. Recommended
+cure for polynomial-redos in synonym-miner: add `(?=\S)` lookahead
+to fail-fast on whitespace-only input; keep length guard as
+defence-in-depth.
+
+### Surprise: vendor switch under quota constraint mid-merge
+
+**What happened**: weekly quota constraint required mid-session
+vendor switch. Merge aborted to leave clean state; comprehensive
+handoff written into the thread record so any platform's agent can
+resume from `6b2b972c`. Diagnostic findings preserved verbatim
+(closed-claims duplicate-key check came back empty → clean union).
+
+**Lesson**: when quota / context / clock pressure forces a session
+close mid-work, the thread record is the right surface for the
+handoff (not a new file). Aborting the merge is cheaper than
+handing off a partial-merge state because clean-tree is
+platform-agnostic and `git merge --no-commit` is trivially
+reproducible.
+
 ### Surprise: zombie HIGH-issue backlog vs. live hotspot review
 
 **What I expected**: the 133 project-wide HIGH-severity Sonar issues
