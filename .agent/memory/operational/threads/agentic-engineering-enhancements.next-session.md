@@ -1,5 +1,40 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Quota-recovery commit stewardship + closeout (2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Masked Stalking Veil / codex /
+GPT-5 / `019dfc`).
+
+**Landings**:
+
+- `ad03f276` — `docs(agent-tooling): record artefact portability audit and plans`.
+  Committed Umbral Cloaking Silhouette's quota-paused audit/report/plans
+  bundle with attribution.
+- `8bf55080` — `chore(collaboration): close quota-recovery claims`.
+  Closed the stale quota-recovery collaboration surfaces, regenerated the
+  shared comms log, and repaired the legacy comms-event shape that blocked
+  rendering.
+- Owner-requested `/jc-session-handoff` plus light `/jc-consolidate-docs`
+  pass completed after the two commits. Findings: entry points clean, no
+  track cards, no escalations, active claims empty before the closeout
+  claim, one unchanged open example decision thread, vocabulary green,
+  collaboration-state check green, and inherited HARD fitness pressure on
+  `principles.md`, `distilled.md`, and `pending-graduations.md`.
+
+**Boundary**:
+
+- This was a stewardship and closeout session, not a doctrine-promotion
+  session. No new ADR/PDR candidate qualifies from the closeout itself.
+- `.cursor/mcp.json` has an unrelated dirty preview-URL change and was left
+  untouched.
+
+**Next safe step for fresh session**: execute the urgent
+`agent-artefact-load-pressure-relief.plan.md` recommended bundle
+(Phase 0.1 + 0.2 + 1.1 + 1.2 + 1.3 + 1.4). Keep the inherited HARD
+fitness/graduation pressure as a separate substance-led consolidation lane.
+
+---
+
 ## Active arc — Skills/artefact standardisation: portability audit + decision-complete remediation plans (2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Umbral Cloaking Silhouette / claude-code /
@@ -1173,6 +1208,7 @@ and
 | `Deciduous Budding Stamen` | `cursor` | `GPT-5.5` | `512682` | `oak-local-MCP-landmark-comms; feat-eef-step-10-precursor-plan-body; thread-record-arc; jc-session-handoff-close` | 2026-05-05 | 2026-05-05 |
 | `Glittering Waning Galaxy` | `claude-code` | `claude-opus-4-7-1m` | `3cff70` | `new-agent-tooling-plan-collection-spun-out-of-agentic-engineering-enhancements; nineteen-plans-git-mv-eight-to-current-eleven-to-future; frictions-register-seeded-with-eleven-entries-from-napkin-Surprise-7-and-comms-events-2dbd74f6-a1cf45a2-dfdea3f7-and-Stamen-CLI-flag-rejection; cross-references-rewritten-in-twenty-four-active-surfaces-directives-memory-threads-research-analysis-prompts-rules-state-fixtures; archive-refs-in-moved-plans-repointed-from-broken-agent-tooling-archive-to-correct-agentic-engineering-enhancements-archive; scope-boundary-clarification-added-across-three-READMEs-distinguishing-implementation-level-workspace-from-practice-level-broader-with-when-in-doubt-test-could-this-plan-exist-if-agent-tools-did-not; bootstrap-fast-path-comms-event-d1cc1290-at-session-open-no-active-claim-opened-none-to-close` | 2026-05-05 | 2026-05-05 |
 | `Riverine Fishing Rudder` | `claude-code` | `claude-opus-4-7-1m` | `b89da0` | `three-step-napkin-and-comms-graduation-pass-per-owner-direction-2026-05-05; step-1-archived-pre-step-napkin-verbatim-514L-49170C-nine-2026-05-05-session-entries-plus-drained-plus-F-12-F-13-frictions-added; step-2-walked-78-comms-events-extracted-3-structured-surprises-A-fat-baton-handoff-B-workflow-self-improvement-C-cross-thread-git-substrate; step-3-routed-surprises-A-B-C-to-pending-graduations-3-new-entries-plus-drained-napkin-to-single-rotation-summary; step-commits-307f7f13-d7ca48d5-5b40e206; docs-adr-reviewer-P0-P1-clean-on-each-step` | 2026-05-05 | 2026-05-06 |
+| `Masked Stalking Veil` | `codex` | `GPT-5` | `019dfc` | `quota-recovery-commit-stewardship-and-session-handoff-light-consolidation; committed-Umbral-Cloaking-Silhouette-artefact-portability-audit-and-plans-as-ad03f276; closed-quota-recovery-collaboration-state-as-8bf55080; ran-owner-requested-jc-session-handoff-plus-light-jc-consolidate-docs; no-entrypoint-drift-no-track-cards-no-escalations-vocabulary-green-collaboration-check-green; inherited-fitness-pressure-remains-separate-lane` | 2026-05-06 | 2026-05-06 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

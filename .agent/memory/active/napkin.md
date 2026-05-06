@@ -101,3 +101,23 @@ audits and grow.
   style is `+`. Behaviour change: when a diff shows `++` at the start
   of a line in markdown, inspect the file content before "repairing"
   it; one `+` may be the intended bullet marker.
+
+### Session handoff + light consolidation closeout
+
+- Owner asked for `/jc-session-handoff` followed by light
+  `/jc-consolidate-docs` after the quota-recovery commits. The light pass
+  found no entry-point drift, no track cards, no escalations, one unchanged
+  open example decision thread, vocabulary green, and inherited HARD
+  fitness pressure in `principles.md`, `distilled.md`, and
+  `pending-graduations.md`.
+- `claims open` accepted repeated `--area-pattern` flags but kept only the
+  last pattern in the authored claim. I repaired the claim entry before
+  editing. Owner correction: manual claim editing is tooling friction and
+  must be preserved with analysis. Root cause: I inferred repeatability from
+  neighbouring path flags, while the parser appears to treat `area-pattern`
+  as scalar last-write-wins. Tooling route: F-14 added to
+  `.agent/plans/agent-tooling/frictions-register.md`; likely cure is
+  repeatable `--area-pattern` support plus help text and regression tests,
+  or an explicit duplicate-flag rejection if single-pattern is intentional.
+  Behaviour change: after using the collaboration-state CLI for a multi-file
+  claim, inspect the claim JSON before relying on it as evidence.

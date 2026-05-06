@@ -312,6 +312,42 @@ dedicated plan that this entry points to.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
 - **Status**: open
 
+### F-14 — `claims open` silently overwrites repeated `--area-pattern`
+
+- **Source**: napkin 2026-05-06 (Masked Stalking Veil, `019dfc`);
+  owner correction after session closeout: manual claim edits are tooling
+  friction and need preservation.
+- **Surface**: `pnpm agent-tools:collaboration-state -- claims open`
+- **Observed**: A closeout claim was opened with six repeated
+  `--area-pattern` flags. The command succeeded and printed a claim, but
+  the authored claim retained only the final pattern
+  (`.agent/state/collaboration/comms-events`). The earlier five patterns
+  were silently overwritten, so the coordination record understated the
+  files being touched. I manually edited `active-claims.json` to restore
+  the intended pattern list before proceeding.
+- **Why it happened**: the CLI presents `--area-pattern <pattern>` as an
+  option but does not make its cardinality explicit. I assumed it behaved
+  like other repeatable path flags (`--file`). The option parser appears
+  to store `area-pattern` as a scalar value, so repeated occurrences use
+  last-write-wins semantics rather than accumulating. Because the command
+  exits 0, this is easy to miss unless the agent inspects the emitted JSON.
+- **Expected**: Either repeated `--area-pattern` accumulates all supplied
+  patterns, or the CLI rejects multiple occurrences with an explicit error
+  and help text. Silent last-write-wins is the unsafe shape because it
+  produces plausible but incomplete coordination state.
+- **Candidate cure**: Treat `--area-pattern` as repeatable in the parser
+  and tests, mirroring `--file`; update help text to state cardinality
+  (`repeatable`) and include a multi-pattern example. If single-pattern is
+  intentional, add duplicate-flag detection that exits non-zero and prints
+  the supported shape. Add a regression test asserting multi-pattern claim
+  creation preserves every supplied pattern.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-options.ts`;
+  `agent-tools/src/collaboration-state/cli-claim-commands.ts`;
+  `agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts`
+- **Status**: open
+- **Owner direction**: standing (agent-tooling friction is first-class user
+  feedback)
+
 ---
 
 ## Mitigated / Addressed Frictions
@@ -338,6 +374,10 @@ plan if the pattern continues:
 4. **Identity as a first-class concept** (F-10): name, prefix, seed,
    wordlist version — these need a single coherent identity model that
    tools can rely on.
+5. **Scalar-vs-repeatable flag ambiguity** (F-04, F-12, F-14): when path
+   or enum flags are visually similar but differ in repeatability,
+   agents infer behaviour from neighbouring flags. Help text and parser
+   semantics need to make cardinality impossible to miss.
 
 ---
 

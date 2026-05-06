@@ -9,6 +9,24 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-06 — Masked Stalking Veil / `codex` /
+GPT-5 / `019dfc`)**: owner-directed quota-recovery and closeout
+landed in two commits: `ad03f276` (`docs(agent-tooling): record
+artefact portability audit and plans`) committed Umbral Cloaking
+Silhouette's audit/report/plans with attribution; `8bf55080`
+(`chore(collaboration): close quota-recovery claims`) closed the
+stale quota-recovery collaboration surfaces and repaired the legacy
+comms-event shape that blocked rendering. Follow-up
+`/jc-session-handoff` + light `/jc-consolidate-docs` pass found active
+claims empty before closeout, no entry-point drift, no track cards, no
+open escalations, one unchanged open example decision thread, vocabulary
+green, and inherited HARD fitness pressure in `principles.md`,
+`distilled.md`, and `pending-graduations.md`. `.cursor/mcp.json` is
+dirty with an unrelated preview-URL change and was left untouched.
+**Next safe step**: proceed with the agent-tooling urgent
+load-pressure-relief plan bundle; deep consolidation remains due for the
+known fitness/graduation pressure, not for this quota-recovery closeout.
+
 **Session close (2026-05-06 — Opalescent Glowing Constellation /
 `codex` / GPT-5 / `019df9`)**: minimal final handoff after PR 93 Sonar
 closeout. Remote `feat/eef_exploration` was verified at `cebbca83`
@@ -957,6 +975,13 @@ latest PR 93 Sonar closeout identity. Final Sonar state: issues 0,
 hotspots 0, `new_violations=0`; duplication remains the only red gate and
 is deferred.
 
+Active-identities delta, 2026-05-06: `agentic-engineering-enhancements`
+also has Masked Stalking Veil / `codex` / `GPT-5` / `019dfc` for
+quota-recovery commit stewardship and owner-directed
+`/jc-session-handoff` + light `/jc-consolidate-docs` closeout.
+Canonical identity row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -974,6 +999,22 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-06 (Masked Stalking Veil, codex, GPT-5, `019dfc`,
+agentic-engineering-enhancements thread, quota-recovery stewardship +
+session handoff/light consolidation)**:
+Committed Umbral Cloaking Silhouette's quota-paused artefact-portability
+work in a docs chunk (`ad03f276`) and closed the quota-recovery
+collaboration-state chunk (`8bf55080`). The session then ran
+owner-requested `/jc-session-handoff` and a light `/jc-consolidate-docs`
+pass: no entry-point drift, no track cards, no open escalations, one
+unchanged open example decision thread, active claims empty before the
+closeout claim, vocabulary green, and fitness still HARD on
+`principles.md`, `distilled.md`, and `pending-graduations.md`. The light
+pass did not promote doctrine or mutate the inherited fitness lane.
+**Next safe step**: keep the executable focus on the urgent
+agent-artefact load-pressure-relief bundle; schedule a separate
+substance-led consolidation session for the inherited HARD surfaces.
 
 **2026-05-06 (Umbral Cloaking Silhouette, claude-code, opus-4-7-1m, `a70b57`,
 agentic-engineering-enhancements thread, skills/artefact standardisation —
@@ -1249,6 +1290,17 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-06 Masked Stalking Veil close (quota-recovery commits +
+light consolidation handoff)**: no more claim-recovery work is pending.
+Active claims were empty before the closeout claim; the final handoff
+claim closed explicitly with evidence in collaboration state. The
+next executable work remains the urgent
+[`agent-artefact-load-pressure-relief.plan.md`](../../plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md)
+bundle named below. Treat the inherited HARD fitness pressure as a
+separate consolidation lane: `principles.md` (char HARD),
+`distilled.md` (line/char/prose-line HARD), and
+`pending-graduations.md` (line/char HARD).
 
 **After 2026-05-06 Umbral Cloaking Silhouette close (skills/artefact
 standardisation, plans decision-complete)**: execute the urgent plan
@@ -1619,6 +1671,24 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-06 Masked Stalking Veil, codex, GPT-5, `019dfc`,
+owner-directed `/jc-session-handoff` plus light `/jc-consolidate-docs`
+after quota-recovery commits): `light pass completed; deep consolidation
+still due — inherited fitness/graduation pressure, not quota-recovery
+scope`. Checks run: entry-point sweep clean (`CLAUDE.md`, `AGENTS.md`,
+`GEMINI.md` in contract; no adapter entrypoint found); tracks contain
+only README + `.gitkeep`; practice-core incoming contains only `.gitkeep`;
+collaboration check passes; conversation scan finds one unchanged open
+example thread and no escalations; vocabulary check green; fitness
+informational remains HARD for `.agent/directives/principles.md`,
+`.agent/memory/active/distilled.md`, and
+`.agent/memory/operational/pending-graduations.md`. No new ADR/PDR
+candidate qualifies from the handoff itself. Deferral honesty:
+deep promotion was not performed because the owner requested a light
+closeout pass and the remaining work is a separate substance-led
+consolidation lane with visible failing surfaces and a falsifiable next
+check (`pnpm practice:fitness:informational`).`**
 
 **Status (2026-05-06 Umbral Cloaking Silhouette, claude-code, opus-4-7-1m,
 `a70b57`, `/jc-session-handoff` after skills/artefact standardisation
