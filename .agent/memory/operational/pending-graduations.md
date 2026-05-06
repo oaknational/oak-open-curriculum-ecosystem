@@ -1,9 +1,12 @@
 ---
-fitness_line_target: 1000
-fitness_line_limit: 1400
-fitness_char_limit: 90000
-fitness_line_length: 200
-split_strategy: "Graduate items to PDRs/ADRs/rules/permanent docs; archive resolved items to repo-continuity-session-history archives; keep only pending and recently-graduated items here"
+fitness_line_target: 2000
+fitness_line_limit: 2500
+fitness_char_limit: 150000
+fitness_line_length: 300
+lifecycle_model: "queue — empties as substance graduates; depth proportional to cross-session-wait accumulation, not to file-permanence concerns"
+access_pattern: "consolidation-pass-only — read at consolidations and drain sessions; not loaded every session by every agent"
+split_strategy: "Graduate items to PDRs/ADRs/rules/permanent docs; archive resolved items to dated archive snapshots; keep pending and recently-graduated items here"
+fitness_rationale: "Limits calibrated to working queue depth (currently ~86 entries × ~12-25 lines/entry, with index + per-entry metadata + schema preamble headroom), not to a permanent-doc shape. Raised 2026-05-07 (Pelagic Rolling Harbour) per owner direction: principles.md is loaded every session and must stay small; this register has a fundamentally different access rhythm — multi-session cross-wait accumulation under cross-session-wait pressure — and its limits should reflect that lifecycle. Recalibration is the substance-led structural fix per the substance > destination boundary."
 ---
 
 # Pending-Graduations Register
@@ -27,17 +30,159 @@ register content was contributing the bulk of repo-continuity's
 HARD fitness state). Doctrine references that previously pointed to
 `repo-continuity.md § Deep consolidation status` now point here.
 
-Schema: `captured-date`, `source-surface`, `graduation-target`,
-`trigger-condition`, `status`. `consolidate-docs` uses this as the live
-queue. Graduated and merged history is preserved in git and the archived
-register snapshots in
-[`archive/`](archive/) — most recent is
+## Per-entry metadata schema (2026-05-07)
+
+Each entry carries an inline metadata tag line at the top of its
+body (immediately under the bullet's title line). The tag is a
+single-line key/value list, pipe-separated, designed for both
+human skim and grep navigation. Pre-2026-05-07 entries predate
+this discipline and are being backfilled across consolidation
+passes; new entries from 2026-05-07 onward MUST carry the tag.
+
+Tag shape:
+
+```text
+[captured: YYYY-MM-DD | source: <surface> | target: <type>:<id-or-name> |
+ trigger: <type> | size: <S|M|L|XL> | status: <state>]
+```
+
+Field definitions:
+
+| Field | Values | Meaning |
+| --- | --- | --- |
+| `captured` | ISO date | When the candidate was first registered. |
+| `source` | `napkin` / `experience/<file>` / `comms-log` / `napkin-archive/<file>` / `owner-direction` / `pattern-emergence` | Which capture surface seeded the entry. |
+| `target` | `pdr:<id-or-draft-name>` / `adr:<id-or-draft-name>` / `rule:<name>` / `pattern:<filename>` / `plan:<plan-name>` / `doc-amend:<doc>` / `multi:<list>` / `none` | Where the substance lands when graduated. `multi:` for entries with mandatory multiple targets. `none` is a sentinel for entries with no graduation target (e.g. quarantined entries pending rethink). Inside `multi:` lists, every component MUST follow the `<type>:<id-or-name>` shape. |
+| `trigger` | `second-instance` / `owner-direction` / `n>=3-validation` / `plan-execution-gated` / `candidate` / `vaporware-gated` | What unblocks promotion. `vaporware-gated` flags structural sequenced-deferral failure shape per `distilled.md` §Sequenced-Deferral Discipline. |
+| `size` | `S` (single small edit) / `M` (multi-file but single artefact) / `L` (multi-artefact, single domain) / `XL` (multi-artefact + cross-domain + directive-shape) | Work-shape at graduation time; informs whether entry can drain opportunistically (`S`) or needs a dedicated session (`L`/`XL`). |
+| `status` | `pending` / `due` / `overdue` / `partially-graduated` / `graduated` / `quarantined` / `withdrawn` | Lifecycle state. **Note**: `vaporware-gated` is a `trigger` facet, NOT a `status` value — the index groups vaporware-gated entries separately for navigation, but their `status` is `due`. |
+
+**Composite values**: `source` and `trigger` accept `+`-joined
+composites (e.g. `napkin+distilled.md`, `n>=3-validation+owner-implicit`)
+when multiple capture surfaces or trigger conditions co-apply, and
+parenthetical `(scope)` qualifiers (e.g.
+`vaporware-gated(WS11.3-execution)`) to name the specific gate.
+The closed-vocabulary tokens above are the building blocks; composite
+shapes are honest about real-world multi-source / multi-condition
+entries.
+
+Original schema fields (`captured-date`, `source-surface`,
+`graduation-target`, `trigger-condition`, `status`) remain valid
+inside the entry body for full prose context — the inline tag is
+a navigation accelerator, not a replacement.
+
+`consolidate-docs` uses this register as the live queue. Graduated
+and merged history is preserved in git and the archived register
+snapshots in [`archive/`](archive/) — most recent is
 [`pending-graduations-archive-2026-05-06.md`](archive/pending-graduations-archive-2026-05-06.md)
 (8 entries: 7 graduated, 1 withdrawn).
 
+## Index
+
+Generated 2026-05-07 by Pelagic Rolling Harbour. Regenerate at
+each consolidation pass; entries are listed by status then by
+captured-date (most recent first). Line numbers are advisory
+hints; grep by status field for authoritative position.
+
+### `due` (graduation candidates for next consolidation)
+
++ `pdr:directive-file-context-budget` — 30%-context budget for
+  directive-file processing (2026-05-05; XL; sequenced-deferral
+  to fresh PDR-authoring session). [L266]
++ `multi:pdr+adr+script+skill` — orchestrator-vs-gate structural
+  cure (2026-05-05; XL; sequenced-deferral). [L663]
++ `multi:adr+pdr+plan` — agent-tools CLI affordance set + build
+  isolation (2026-05-05; XL; sequenced-deferral). [L723]
++ `multi:script+rule` — hook tightening for
+  no-moving-targets-in-permanent-docs (2026-05-04; L;
+  sequenced-deferral). [L857]
+
+### `vaporware-gated` (trigger-facet sub-grouping under `due` — re-route or carrier-plan-watch)
+
++ `rule:invoke-doc-and-onboarding-reviewers-on-significant-changes`
+  — observability WS11.3 reviewer doctrine (2026-05-02; M;
+  re-route option named). [L1257]
++ `adr:observability-configuration-orthogonality` — observability
+  WS8.6/WS8.7 ADR (2026-05-02; L; carrier-plan-watch). [L1280]
++ `multi:protocol-amendments(i)-(x)` — collaboration-protocol CLI
+  ergonomics protocol cures (2026-05-03; XL; awaiting empirical
+  N≥3 validation regardless of CLI carrier). [L1328]
+
+### `partially-graduated`
+
++ `pattern:patterns/README.md §Polarity` — polarity discipline
+  (2026-05-05; option (a) landed; option (b) bulk sweep deferred;
+  option (c) PDR-014 amendment queued). [L208]
++ `rule:stage-by-explicit-pathspec` (asymmetric-cure ADR + PDR
+  follow-ups still queued; rule landed) (2026-05-04). [L907]
+
+### `quarantined`
+
++ `apply-don't-ask` / `stop-inventing-optionality` — quarantined
+  2026-05-01 by owner direction; rethink owed before any
+  re-graduation; user-memory `feedback_apply_dont_ask_superseded`
+  carries the supersession framing. [L1759]
+
+### `pending` (~76 entries — second-instance or owner-direction gated)
+
+The bulk of the queue. Reviewed at every consolidation; most stay
+pending until trigger fires. Grep `status: pending` for the full
+list; entry-level summary index is intentionally omitted to avoid
+duplicating entry-body substance and to keep the index honest as
+the queue churns.
+
+### Entry counts (2026-05-07)
+
+| Status | Count | Notes |
+| --- | --- | --- |
+| due | 7 | of which 3 are vaporware-gated (trigger-facet sub-grouping) |
+| partially-graduated | 2 | |
+| quarantined | 1 | |
+| pending | ~76 | second-instance or owner-direction gated |
+| **total** | **~86** | |
+
+## Entries
+
++ 2026-05-07; **fitness limits encode an implicit access-rhythm
+  theory; recalibration must name the lifecycle, not just bump
+  numbers** (Pelagic Rolling Harbour, owner-direction reframe of
+  the pending-graduations HARD-persists framing).
+  `[captured: 2026-05-07 | source: owner-direction | target: multi:doc-amend:fitness-validator-doc+pdr:fitness-lifecycle-axis | trigger: second-instance | size: M | status: pending]`
+  I had
+  treated the persisting HARD on this register as a load-bearing
+  signal and surfaced three response options (enlarge / split /
+  cadence) as "owner direction". Owner reframed: the limit was
+  arbitrarily calibrated against a frame that doesn't fit this
+  file's lifecycle. `principles.md` is loaded every session by
+  every agent — small *is* the quality signal. This register is
+  accessed at consolidation passes only and grows with cross-
+  session-wait substance — its limits should reflect a queue
+  lifecycle, not a permanent-doc shape. The deeper insight:
+  every fitness-tracked file implicitly encodes an access-rhythm
+  theory in its limit shape; the schema should make that explicit
+  so recalibration is principled rather than ad-hoc. Source-
+  surface: this session's owner-direction turn after the
+  2026-05-07 dedicated drain.
+  Graduation-target: (a) extend the fitness validator and/or its
+  documentation in `scripts/validate-practice-fitness.ts` and the
+  ADR-144 narrative to name `lifecycle_model` and `access_pattern`
+  as recommended (or required) frontmatter fields with a closed
+  vocabulary (`loaded-every-session` / `read-on-demand` /
+  `consolidation-pass-only` / `archive-only`); (b) sweep existing
+  fitness-tracked files to declare their access pattern; (c) PDR
+  capturing the doctrine ("limits encode access-rhythm theory")
+  if it generalises across Practice-bearing repos. Trigger:
+  second instance OR owner direction at promotion. The first
+  instance is this session's recalibration. Status: pending —
+  capture to honour the moment per PDR-048 (insight capture at
+  moment of occurrence); promotion when accumulation or owner
+  direction warrants.
+
 + 2026-05-06; **`/doctor` is session-local evidence, not a shell-
   invocable validation gate** (Briny Plumbing Fjord, owner
-  correction during urgent skill-load pressure relief). I had
+  correction during urgent skill-load pressure relief).
+  `[captured: 2026-05-06 | source: napkin-archive/2026-05-06-evening-graduation-pass | target: doc-amend:development-practice.md OR rule:plan-authoring | trigger: second-instance | size: S | status: pending]`
+  I had
   framed blocked evidence as "Codex cannot get non-interactive
   `claude doctor` output", treating shell `claude doctor` as a
   validation gate. Owner sharpened: `/doctor` reports on skills
@@ -65,7 +210,9 @@ register snapshots in
   repeat, an anti-pattern to avoid, or whether the substance is a
   recurring observation that does not yet have an actionable shape
   and belongs elsewhere** (Owner-asked aside during Opalescent
-  Threading Nebula's promotion pass, 2026-05-05). The existing
+  Threading Nebula's promotion pass, 2026-05-05).
+  `[captured: 2026-05-05 | source: owner-direction | target: multi:pattern:patterns/README.md+pattern-sweep+pdr:PDR-014-amendment | trigger: owner-direction | size: L | status: partially-graduated]`
+  The existing
   `patterns/README.md` taxonomy splits by category (code /
   architecture / process / testing / agent) but not by polarity.
   The `prevents_recurring_mistake` frontmatter criterion implicitly
@@ -119,7 +266,9 @@ register snapshots in
 + 2026-05-05; **30% context budget for directive-file processing
   is a standing rule, not a session-scoped suggestion** (Owner-
   stated during Opalescent Threading Nebula's promotion pass with
-  explicit "this is always true"). Files under
+  explicit "this is always true").
+  `[captured: 2026-05-05 | source: owner-direction | target: pdr:directive-file-context-budget | trigger: owner-direction | size: XL | status: due]`
+  Files under
   `.agent/directives/` (principles.md, AGENT.md, orientation.md,
   tdd-as-design.md, testing-strategy.md, schema-first-execution.md)
   are deep, dense, and structurally load-bearing — every agent
@@ -514,7 +663,9 @@ continuity snapshots.
 + 2026-05-05; **PDR candidate — orchestrator-vs-gate structural cure**
   (5 instances today across 4 distinct agents: Ethereal Transiting Comet,
   Dawnlit Transiting Galaxy, Opalescent Threading Nebula, Twilit Beaming
-  Aurora, Fronded Climbing Pollen). Distilled.md addition just landed at
+  Aurora, Fronded Climbing Pollen).
+  `[captured: 2026-05-05 | source: napkin+distilled.md | target: multi:pdr+adr+script:check-commit-skill-advisories+skill:commit | trigger: n>=3-validation+owner-implicit | size: XL | status: due]`
+  Distilled.md addition just landed at
   `368e5aff` (advisory-vs-blocking authority distinction). The pattern
   fires under failure pressure regardless of agents having read the
   doctrine — Threading Nebula authored the cure pattern AND fired the
@@ -570,7 +721,9 @@ continuity snapshots.
   attribution body). Trigger: drafting slot reached. Status: pending.
 
 + 2026-05-05; **PDR/ADR candidate — agent-tools CLI affordance set + build
-  isolation**. Friction observed throughout the 7-agent coordinator
+  isolation**.
+  `[captured: 2026-05-05 | source: napkin+feedback-memories | target: multi:adr:build-isolation+pdr:cli-affordance+plan:agent-tooling | trigger: owner-direction+multi-instance | size: XL | status: due]`
+  Friction observed throughout the 7-agent coordinator
   session: (a) no `comms list/show/watch` commands; (b) no `claims
   list/show` filtered by prefix/name/thread/kind; (c) no `commit-queue
   list/show` filtered by phase or agent; (d) flag-name discoverability
@@ -704,7 +857,9 @@ continuity snapshots.
 + 2026-05-04; **hook tightening for no-moving-targets-in-permanent-docs:
   distinguish prose-narrative from code-block backtick contexts**
   (Vining Spreading Seed, owner-directed at session close after
-  the WS3/WS4/WS6 + rules-and-index landing arc). The WS4
+  the WS3/WS4/WS6 + rules-and-index landing arc).
+  `[captured: 2026-05-04 | source: owner-direction | target: multi:script:check-blocked-content+rule:no-moving-targets-in-permanent-docs | trigger: owner-direction | size: L | status: due]`
+  The WS4
   scoped_block's `excludes_inline_code` rule strips backticked
   spans from each line before the regex test, which correctly
   excludes data-shape SHAs in YAML/JSON code blocks but
@@ -755,7 +910,9 @@ continuity snapshots.
   observed instances of foreign-stage absorption now justify
   structural enforcement** (Vining Spreading Seed initial;
   Lacustrine→Moonlit `8fa339f4` 2026-05-04 second; Ethereal→Dawnlit
-  `36102937` 2026-05-05 third). The cure as currently written
+  `36102937` 2026-05-05 third).
+  `[captured: 2026-05-04 | source: napkin+commit-history | target: multi:rule:stage-by-explicit-pathspec(landed)+adr:asymmetric-cure-enforcement+pdr:asymmetric-cure-followup | trigger: n>=3-validation | size: L | status: partially-graduated]`
+  The cure as currently written
   is operator-applied prose at `stage-by-explicit-pathspec.md
   §Peer-Index Note`. Each instance: a peer's `git commit`
   without `-- <pathspec>` filter swept staged content authored
@@ -1100,7 +1257,9 @@ continuity snapshots.
 + 2026-05-02; observability multi-sink + fixtures plan WS10 — owner
   doctrine *"for all significant documentation or Practice changes
   — and this is always true — we need reviews from the documentation
-  reviewer and the onboarding reviewer"*; trigger condition: this
+  reviewer and the onboarding reviewer"*;
+  `[captured: 2026-05-02 | source: owner-direction | target: rule:invoke-doc-and-onboarding-reviewers-on-significant-changes | trigger: vaporware-gated(WS11.3-execution); re-route-available | size: M | status: due]`
+  trigger condition: this
   doctrine is now load-bearing for every plan that mutates docs or
   Practice surfaces; graduation target: a permanent rule (likely
   `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
@@ -1122,7 +1281,9 @@ continuity snapshots.
   orthogonal axes shape (`OBSERVABILITY_SINKS` typed list +
   `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
   reusable architectural decision per PDR-019 (ADR scope by
-  reusability) — applies to every future sink and every future
+  reusability).
+  `[captured: 2026-05-02 | source: plan-WS-amendment | target: multi:adr:171+adr-amend:116/143/162/163 | trigger: vaporware-gated(WS8.6/WS8.7-execution) | size: L | status: due]`
+  Applies to every future sink and every future
   capability that emits; graduation target: a new
   `docs/architecture/architectural-decisions/NNN-observability-configuration-orthogonality.md`
   ADR (NEW). **2026-05-03 amendment (Moonlit Drifting Nebula)**:
@@ -1165,9 +1326,10 @@ continuity snapshots.
   (single instance; capture-only until second instance accumulates).
 
 + 2026-05-03; **inter-agent collaboration protocol gaps surfaced
-  by Pelagic ↔ Misty Task M1 round-trip** — **status reframed
-  2026-05-03 (Misty session-handoff metacognition)**: these cures
-  are now structured as candidate amendments to the N-agent
+  by Pelagic ↔ Misty Task M1 round-trip**.
+  `[captured: 2026-05-03 | source: experience+napkin | target: multi:protocol-amendments(i)-(x)+collaboration-hypothesis-evolution | trigger: vaporware-gated(CLI-ergonomics-plan); empirical-N>=3-validation-required | size: XL | status: due]`
+  **Status reframed 2026-05-03 (Misty session-handoff metacognition)**:
+  these cures are now structured as candidate amendments to the N-agent
   collaboration hypothesis at
   [`.agent/prompts/agentic-engineering/collaboration/hypothesis.md`](../../prompts/agentic-engineering/collaboration/hypothesis.md),
   with per-cure falsification criteria at
@@ -1595,7 +1757,9 @@ continuity snapshots.
   2025-01 cluster, 2025-08 cluster) for batch processing.
 
 + 2026-05-01; **`stop inventing optionality` / apply-don't-ask** —
-  **QUARANTINED 2026-05-01 by owner direction**. The doctrine
+  **QUARANTINED 2026-05-01 by owner direction**.
+  `[captured: 2026-05-01 | source: owner-direction-after-incident | target: none | trigger: owner-direction(rejection-OR-reformulation) | size: XL | status: quarantined]`
+  The doctrine
   contributed to (or ran alongside) a destructive `git checkout --`
   that discarded parallel-agent uncommitted work; the bias toward
   action lacks a destructive-operation guard. The candidate is
