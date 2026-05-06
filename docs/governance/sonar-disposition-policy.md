@@ -266,6 +266,61 @@ zombie findings against stale main-branch analysis where the code has
 already been fixed; the durable cure is to push so SonarCloud
 re-analyses).
 
+## Mechanical Encoding in `sonar-project.properties`
+
+A subset of this policy is encoded mechanically via
+`sonar.issue.ignore.multicriteria` entries in
+[`sonar-project.properties`][sonar-config]. The encoding currently covers
+**only the three rule classes whose decision criteria reduce cleanly to
+`(rule key × test-file path glob)`**:
+
+- S5443 (publicly-writable directories) for `**/*.test.ts`,
+  `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**`.
+- S5332 (clear-text protocols) for the same test-file globs plus
+  `**/playwright.config.ts` and `**/vitest*.config.ts`.
+- S1313 (hardcoded IP addresses) for the same test-file globs as S5443.
+
+[sonar-config]: ../../sonar-project.properties
+
+### Why these three only
+
+Their per-class decision criteria are fully decidable from the file path
+plus the rule key — no code-shape inspection is needed. The remaining
+documented rule classes (S5852, S4036, S2245, S1523, S4790, S5689) all
+require code-shape inspection to decide SAFE — for example, a
+`Math.random()` call in a non-test file may be either SAFE (jitter,
+correlation ID) or a real defect (token generation), and only the call
+site can tell. Mechanical encoding for those classes would relax
+standards; they stay in the human-review path.
+
+### What the mechanical encoding does NOT do
+
+- It does **not** disable any rule globally.
+- It does **not** exempt production code from any rule.
+- It does **not** exempt test files from rules other than the three
+  listed above.
+- It does **not** allow additional rule×glob combinations to be silently
+  added — see "Expansion Discipline" below.
+
+### Expansion Discipline
+
+Adding a new entry to the mechanical encoding requires, in this order:
+
+1. **Policy amendment first** — the new rule×glob class must be
+   documented in this file with decision criteria, canonical rationale,
+   and a worked-example justification for why mechanical encoding does
+   not relax standards.
+2. **Owner authorisation** — the change is owner-gated; an agent may
+   propose but must not enact.
+3. **`sonar-project.properties` update** — only after (1) and (2) are
+   landed.
+
+Expansion that bypasses this order is a violation of the
+[`never-disable-checks`][no-disable] rule's spirit even when it does not
+violate the rule's letter — silencing a rule for a path range is
+functionally equivalent to disabling it for that scope. The three-step
+gate exists to prevent the bypass.
+
 ## Maintenance
 
 - Amend this policy when a new pattern emerges, when a class needs a
