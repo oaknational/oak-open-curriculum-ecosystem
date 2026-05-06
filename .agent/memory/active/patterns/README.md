@@ -203,13 +203,15 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (29)
+### Process (31)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
 - **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
 - **Collapse Authoritative Frames When Settled** -- Use this when: a document or plan carries multiple authoritative descriptions of the same concept after a reorganisation, and "transitional dual-frame with sunset note" is being considered. → [collapse-authoritative-frames-when-settled.md](collapse-authoritative-frames-when-settled.md)
+- **Consolidation Output Shape — Contract for One Pattern, Report for N Independents** -- Use this when: a consolidation/audit/deep-exploration pass has produced N findings and you are choosing the shape of the output artefact — a single contract, a per-finding remediation list, an ADR/PDR, or a report. → [consolidation-output-shape-pattern-vs-report.md](consolidation-output-shape-pattern-vs-report.md)
+- **In-Session Contract Authoring Conditions** -- Use this when: a plan has just landed that proposes a new contract / directive / governance doc and the question is whether to author the contract in the same session or sequence it to a fresh session. → [in-session-contract-authoring-conditions.md](in-session-contract-authoring-conditions.md)
 - **Current Plan Promotion** -- Use this when: a review or planning pass has resolved "what comes next" and the repo needs a concrete next-session entry point rather than a mere intended future direction. → [current-plan-promotion.md](current-plan-promotion.md)
 - **Monotonic Counter Is Not a Quality Indicator** -- Use this when: comparing two versions of a document or artefact that each carry a sequence counter. → [monotonic-counter-is-not-quality-indicator.md](monotonic-counter-is-not-quality-indicator.md)
 - **README as Index** -- Use this when: a plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content. → [readme-as-index.md](readme-as-index.md)
@@ -245,9 +247,10 @@ surface that makes later governance or enforcement honest.
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (9)
+### Agent (10)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
+- **Audit Rule Body When Extending With a New Prohibition** -- Use this when: adding a new "X is forbidden" / "X must not appear" / "do not Y" clause to an existing rule, ADR, governance doc, or directive — scan the rule body itself for instances of the new prohibition before committing. → [audit-rule-body-on-prohibition-extension.md](audit-rule-body-on-prohibition-extension.md)
 - **Eager Rounding-Off on Partial Structures Under Failure Pressure** *(anti-pattern)* -- Use this when: an enforcer fires (gate, hook, scanner, validator, lint, type-check) and the proposed response involves bypass, doctrinal-collision framing, or any shape that lets work proceed past the signal — check whether the agent has rounded a partial structure into a whole structure and constructed a problem that does not exist. → [eager-rounding-off-on-partial-structures.md](eager-rounding-off-on-partial-structures.md)
 - **Governance Claim Needs a Scanner** -- Use this when: an ADR or governance document asserts a universal property across a set of live surfaces (one vocabulary, a required citation, a mandatory field, platform-adapter parity) and prose alone is the only enforcement. → [governance-claim-needs-a-scanner.md](governance-claim-needs-a-scanner.md)
 - **Passive Guidance Loses to Artefact Gravity** -- Use this when: designing a guardrail against an agent failure mode — choose between documented-but-not-enforced guidance (passive) and an environmentally-triggered rule, hook, or read-on-entry surface (active); passive guidance alone is a watchlist item, not a guardrail. → [passive-guidance-loses-to-artefact-gravity.md](passive-guidance-loses-to-artefact-gravity.md)

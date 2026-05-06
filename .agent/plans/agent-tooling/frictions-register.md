@@ -127,6 +127,17 @@ dedicated plan that this entry points to.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
 - **Status**: open
 - **Severity**: high (substrate-wide blocker when triggered)
+- **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
+  `comms send` succeeded in writing the new event but then failed
+  rendering because one older event
+  (`cd25a954-f569-4f7b-8d1e-f1fe9eed5dd7.json`) used top-level
+  identity fields instead of the current `author` object shape. This
+  is the *legacy-schema* sibling of the malformed-JSON case: the
+  file parses as JSON but does not conform to the current event
+  schema. The `--skip-malformed` cure should extend to schema-shape
+  mismatches, not only parse failures, with a migration warning
+  surfacing the offending event path. Manual repair of the legacy
+  event file unblocked this instance.
 
 ### F-06 — Build-on-each-CLI-invocation causes identity drift mid-session
 
@@ -223,6 +234,15 @@ dedicated plan that this entry points to.
   shared CLI helper lives) — applied across all `agent-tools/src/*/cli*.ts`
 - **Status**: open
 - **Owner direction**: standing
+- **Recurrence**: 2026-05-06 (Clouded Lifting Aerie, `1e2244`) —
+  `claims open` rejected my command three times in succession with
+  one missing-required-option error each (`--platform`, then
+  `--thread`, then `--area-kind`, then `--now`, then `--active`).
+  Each rejection emitted a single-line error; full help only
+  appeared after I asked `claims open --help` directly. Five
+  round-trips to compose one valid invocation. F-09's cure
+  (full-help-on-invalid-flag) would have surfaced the entire
+  required-flag set on the first failure.
 
 ### F-10 — Identity routing should use (name, prefix) pair
 
@@ -347,6 +367,69 @@ dedicated plan that this entry points to.
 - **Status**: open
 - **Owner direction**: standing (agent-tooling friction is first-class user
   feedback)
+- **Recurrence**: 2026-05-06 (Clouded Lifting Aerie, `1e2244`) — same
+  shape reproduced cleanly. Six `--area-pattern` flags supplied to
+  `claims open`; the persisted claim retained only the final pattern
+  (`.agent/state/collaboration/**`). The first five patterns were
+  silently overwritten. Manual edit of `active-claims.json` restored
+  the intended pattern list. Confirms F-14 is still unmitigated; the
+  cure ("treat `--area-pattern` as repeatable, mirroring `--file`")
+  remains the right shape and is worth prioritising — every
+  multi-area claim opener pays the manual-repair tax.
+
+### F-15 — Commit-queue fingerprint recursion when claim file is in staged set
+
+- **Source**: napkin 2026-05-06 (Hidden Slipping Moth, `4be7b5`),
+  Surprise 2 — observed during the
+  no-moving-targets rule extension commit attempt.
+- **Surface**: `pnpm agent-tools:commit-queue -- record-staged` /
+  `verify-staged` interaction with `.agent/state/collaboration/active-claims.json`
+  when active-claims.json is itself part of the staged bundle (which
+  it must be, because the queue entry lives there).
+- **Observed**: The commit-skill protocol
+  (claim → enqueue → stage → record-staged → verify-staged → commit)
+  fails to converge when active-claims.json is in the staged set.
+  `record-staged` writes `staged_bundle_fingerprint` into the
+  working-tree active-claims.json, creating an `MM` split (staged
+  content has no fingerprint; working-tree has one). Re-staging
+  active-claims.json to "include the fingerprint" then breaks
+  `verify-staged` because the staged content now differs from what
+  was hashed. Every record-staged + re-stage iteration shifts the
+  fingerprint; the loop never converges.
+- **Workflow that works**: stage all files including active-claims.json
+  with the queue entry but no fingerprint. Run `record-staged` once.
+  Do NOT re-stage active-claims.json afterwards. `verify-staged`
+  reads the fingerprint from working-tree and recomputes from staged;
+  they match because staged has not moved. Commit; the fingerprint
+  never needs to land in history.
+- **Why it happened**: The fingerprint is a hash of staged content
+  written into a file that is itself staged. The protocol design
+  assumes the fingerprint can be recorded after staging, but the
+  obvious "record then re-stage to capture the recording" loop is
+  the trap, because re-staging the recording invalidates the
+  recorded value.
+- **Expected**: Either (a) the fingerprint lives outside the staged
+  bundle (separate state file or external store), or (b) the
+  commit-queue tooling explicitly documents the "stage → record →
+  do not re-stage" contract in the SKILL body and CLI help, with a
+  guard that detects re-staging of active-claims.json after
+  record-staged and warns.
+- **Candidate cure**: (a) refactor fingerprint storage to a sibling
+  file (`active-claims.fingerprint`) that is gitignored or carries
+  its own claim-window discipline; (b) failing that, add explicit
+  protocol documentation in `.agent/skills/commit/SKILL.md`
+  Pre-Commit Validation section and a CLI warning in `verify-staged`
+  if active-claims.json shows `MM` after `record-staged`.
+- **Target surface**: `agent-tools/src/commit-queue/`;
+  `.agent/skills/commit/SKILL.md`; commit-queue CLI help text.
+- **Status**: open
+- **Severity**: high (every commit that includes active-claims.json
+  in its staged bundle hits this; the workflow-that-works is not
+  documented anywhere agents would find it before failing)
+- **Related**: this is sibling to F-12 (area-kind values not
+  discoverable) and F-13 (event-id not surfaced) — all three are
+  *protocol-self-modifies-its-state-file* recursion shapes that the
+  current tooling exposes without protocol-level documentation.
 
 ---
 

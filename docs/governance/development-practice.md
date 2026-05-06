@@ -220,6 +220,16 @@ the current understanding.
   outstanding work.
 - Fenced code blocks without language specifier fail markdownlint
   MD040.
+- For prose artefacts (READMEs, ADR/PDR/governance bodies,
+  runbooks), acceptance criteria name the _decision_ and the
+  _audience outcome_ — discoverability and accuracy, not exact
+  phrasing. Reserve executable tests and `rg` guards for code
+  contracts, generated surfaces, or forbidden runtime exposure;
+  asserting a specific markdown sentence shape across files
+  precisely constrains markdown implementation rather than
+  documentation behaviour and shifts maintenance cost without
+  paying for it. Validation is reviewer/read-through plus
+  formatting/link hygiene.
 - NEVER compress docs to meet line limits — split files by
   responsibility instead.
 - When moving plan artefacts, grep for old paths in `*.ts`,
