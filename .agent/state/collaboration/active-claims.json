@@ -437,8 +437,8 @@
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
     },
     {
-      "intent_id": "e2bdc581-1c9c-4d6c-a246-0185623284bc",
-      "claim_id": "81e246a4-6752-441e-b546-437109f8ddc1",
+      "intent_id": "597e9e02-5a64-4778-90ba-0fc17c8f905a",
+      "claim_id": "a9adf48c-c67e-4fd2-a7f3-59371d857ed8",
       "agent_id": {
         "agent_name": "Clouded Lifting Aerie",
         "platform": "claude-code",
@@ -446,24 +446,22 @@
         "session_id_prefix": "1e2244"
       },
       "files": [
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/operational/archive/pending-graduations-archive-2026-05-06.md",
+        ".agent/memory/operational/repo-continuity.md",
         ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md",
         ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/62039038-5df1-4c8c-a21c-8ead574df739.json"
+        ".agent/state/collaboration/closed-claims.archive.json"
       ],
-      "commit_subject": "docs(handoff): close napkin + pending-graduations session; update thread record",
-      "queued_at": "2026-05-06T16:36:36.479Z",
-      "updated_at": "2026-05-06T16:37:03.728Z",
-      "expires_at": "2026-05-06T16:51:36.479Z",
+      "commit_subject": "docs(handoff): light handoff; opener for dedicated pending-graduations drain",
+      "queued_at": "2026-05-06T17:51:33.258Z",
+      "updated_at": "2026-05-06T17:51:46.717Z",
+      "expires_at": "2026-05-06T18:06:33.258Z",
       "phase": "staging"
     }
   ],
   "claims": [
     {
-      "claim_id": "81e246a4-6752-441e-b546-437109f8ddc1",
+      "claim_id": "a9adf48c-c67e-4fd2-a7f3-59371d857ed8",
       "agent_id": {
         "agent_name": "Clouded Lifting Aerie",
         "platform": "claude-code",
@@ -479,11 +477,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-06T16:36:35Z",
+      "claimed_at": "2026-05-06T17:51:32Z",
       "freshness_seconds": 900,
-      "intent": "Stage and commit handoff bundle (reviewer P1 fix + thread update + collaboration-state cleanup).",
-      "notes": "Pathspecs: 7 files; gates pending; no peer claims.",
-      "intent_to_commit": "e2bdc581-1c9c-4d6c-a246-0185623284bc"
+      "intent": "Stage and commit light handoff bundle (repo-continuity + thread record + next-session opener).",
+      "notes": "Pathspecs: 5 files; gates pending; no peer claims.",
+      "intent_to_commit": "597e9e02-5a64-4778-90ba-0fc17c8f905a"
     }
   ]
 }
