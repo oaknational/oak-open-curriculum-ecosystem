@@ -10208,6 +10208,92 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "33E9D5A4-63CE-4502-9A2D-F8625C494B81",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T09:01:47Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "commit window: extend no-moving-targets rule with citation-directionality; graduate plans-cite-ADRs entry",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T09:03:53Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "directionality entry graduated; commit 57456ce9",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "33E9D5A4-63CE-4502-9A2D-F8625C494B81",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "492d90a5-4913-4ced-8947-95f836bf0472",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-05-06-evening.md",
+            ".agent/rules/no-moving-targets-in-permanent-docs.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T08:49:04Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "careful processing of napkin (archive rotation entry) and distilled.md (graduate moving-targets entry)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T09:04:42Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "graduation pass complete: 4 commits 3a2f713f/71cf75c9/6e17d368/57456ce9; napkin processed; 3 distilled entries graduated with 2 rule extensions; CRITICAL on napkin cleared",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "492d90a5-4913-4ced-8947-95f836bf0472",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
