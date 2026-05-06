@@ -1,5 +1,62 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Collaboration-state surface-restructure (contract + plan) (2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Briny Plumbing Fjord / claude-code /
+claude-opus-4-7-1m / `fd36cf`).
+
+**Landings (this session, single commit)**:
+
+- New executive-memory file:
+  `.agent/memory/executive/collaboration-state-placement-contract.md`
+  (110 lines) — names the substance-kind → canonical-home routing
+  for the collaboration-state surface family (lifecycle / conventions
+  / directive / schemas / consolidate-docs reporting). Includes a
+  placement audit checklist and the "wrong-file-by-adjacency"
+  failure mode this contract exists to prevent.
+- New plan file:
+  `.agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md`
+  — Phase 1 (contract authored) marked complete; Phases 2–4
+  (substance moves, vocabulary normalisation, validation, reviewer
+  dispatch) pending and explicitly out-of-scope for this session
+  per the standing 30%-context-budget rule.
+- One-line pointer added to
+  `collaboration-state-conventions.md` introducing the contract
+  surface.
+- Deep-exploration opener
+  (`2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`)
+  marked `status: superseded` with frontmatter pointer; preserved as
+  historical context, will archive at next consolidation.
+- Napkin entry capturing the recurring pattern: *graduation-flow
+  inertia produces wrong-file landings; the cure is a placement
+  contract authored before the next graduation, not after.*
+- Comms-event posted as discovery seed (no overlap at session open;
+  active claims empty).
+
+**Decision shape**: deep-exploration step folded into a contract
+because the substance-led read converged on one repeating pattern
+across N findings. Owner direction at decision point: *contract +
+plan + surface updates, no reflection report.*
+
+**Next safe step**: open a fresh session for Phase 2 of the
+restructure plan (substance moves to schemas, directive, and trim
+of lifecycle.md). Phase 2 needs the <30% context budget because it
+edits both the directive (`agent-collaboration.md`) and three
+state-surface files. Phase 1 (this session) is acceptance-clean
+and self-contained; Phase 2 onward is independent.
+
+**Companions deferred to fresh session(s)**:
+
+- Distilled.md "Queued for Next Directive-Edit Session" items
+  (coordination surface discipline, inter-agent comms first-class,
+  per-session-closure-discipline-owns-the-loop, hypothesis-layer
+  routing) — natural pairing with Phase 2 since both edit
+  `agent-collaboration.md` under the same context budget.
+- PDR-026 amendment §"Sequenced-deferral discipline" without the
+  doctrine-scanner-CLI vaporware gating — independent, runs anytime.
+
+---
+
 ## Active arc — Distilled.md graduation pass + vaporware-deferral audit (2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Iridescent Waxing Orbit / claude-code /

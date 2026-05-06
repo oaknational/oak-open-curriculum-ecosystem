@@ -13,7 +13,9 @@ evolves, and how stale entries are cleaned up. Authority:
 [`agent-collaboration.md`][directive], [PDR-035][pdr-035] for agent-work
 ownership, and [PDR-029 Family A Class A.3][pdr-029] for the shared git
 transaction tripwire. Detailed lifecycle recipes live in
-[`collaboration-state-lifecycle.md`][lifecycle].
+[`collaboration-state-lifecycle.md`][lifecycle]. Substance-kind placement
+across this surface family is governed by the
+[placement contract][placement-contract].
 
 ## Surfaces
 
@@ -173,3 +175,4 @@ fields:
 [founding-pattern]: ../collaboration/parallel-track-pre-commit-gate-coupling.md
 [p]: ../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [csw-plan]: ../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md
+[placement-contract]: ../executive/collaboration-state-placement-contract.md

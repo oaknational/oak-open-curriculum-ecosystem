@@ -1,12 +1,27 @@
 ---
-status: opener
+status: superseded
 authored: 2026-05-06
 authored_by: Iridescent Waxing Orbit (claude-code, claude-opus-4-7-1m, aeebab)
+superseded_by: collaboration-state-surface-restructure.plan.md
+superseded_at: 2026-05-06
+superseded_by_session: Briny Plumbing Fjord (claude-code, claude-opus-4-7-1m, fd36cf)
 thread: agentic-engineering-enhancements
 predecessor_session_landings: distilled-md-graduation-pass-plus-vaporware-deferral-audit
 target_session_shape: deep exploration and reflection on collaboration-state-lifecycle.md (owner-stated 2026-05-06)
 context_budget_for_directives: <30% (standing rule — directives may be touched if doctrine substrate moves)
 ---
+
+> **Superseded** by
+> [`collaboration-state-surface-restructure.plan.md`](collaboration-state-surface-restructure.plan.md).
+> The deep-exploration step ran in the Briny Plumbing Fjord session
+> 2026-05-06; the reflection produced a contract-shaped finding (the
+> file's substance had drifted by graduation-flow inertia rather than
+> first-principles placement) which graduated directly into the
+> placement contract at
+> [`.agent/memory/executive/collaboration-state-placement-contract.md`](../../../memory/executive/collaboration-state-placement-contract.md)
+> and the linked plan. No standalone reflection report was authored;
+> the contract + plan are the deliverable. This opener is preserved
+> as historical context and will archive at the next consolidation.
 
 # Next session opener — `collaboration-state-lifecycle.md` deep exploration and reflection
 

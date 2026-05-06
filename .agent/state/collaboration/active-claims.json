@@ -435,7 +435,61 @@
       "staged_bundle_fingerprint": "8b8abf1f9e2837d50e85dbacef1faa009d93de712e2a6548b500daaa466b4c4c",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/rules/no-moving-targets-in-permanent-docs.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
+    },
+    {
+      "intent_id": "7553410f-173d-41b1-a315-a1dcf0e434bc",
+      "claim_id": "37404ee8-4836-4d33-9c66-c537c8cad557",
+      "agent_id": {
+        "agent_name": "Briny Plumbing Fjord",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fd36cf"
+      },
+      "files": [
+        ".agent/memory/executive/collaboration-state-placement-contract.md",
+        ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+        ".agent/memory/operational/collaboration-state-conventions.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/630d694c-4ea5-466f-b34b-f078b1eb81eb.json"
+      ],
+      "commit_subject": "docs(collaboration): contract and plan for collaboration-state surface restructure",
+      "queued_at": "2026-05-06T14:25:52.389Z",
+      "updated_at": "2026-05-06T14:26:01.652Z",
+      "expires_at": "2026-05-06T14:40:52.389Z",
+      "phase": "staging"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "37404ee8-4836-4d33-9c66-c537c8cad557",
+      "agent_id": {
+        "agent_name": "Briny Plumbing Fjord",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fd36cf"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/executive/collaboration-state-placement-contract.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:19:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author placement contract + surface-restructure plan; arc + opener + napkin updates",
+      "intent_to_commit": "7553410f-173d-41b1-a315-a1dcf0e434bc"
+    }
+  ]
 }

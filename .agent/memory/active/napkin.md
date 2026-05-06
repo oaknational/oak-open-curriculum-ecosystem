@@ -19,7 +19,27 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
-## 2026-05-06 — Iridescent Waxing Orbit / claude-code / opus-4-7-1m / `aeebab`
+## 2026-05-06 — Briny Plumbing Fjord / claude-code / opus-4-7-1m / `fd36cf`
+
+### Insight: graduation-flow inertia produces wrong-file landings
+
+The deep-exploration read on `collaboration-state-lifecycle.md`
+converged on one repeating pattern: substance had accumulated by
+*adjacency to existing sections* rather than *first-principles
+match to substance-kind*. Concrete: apparently-orphaned-claim
+policy landed here because §Archive Stale Claims was nearby
+(doctrine clauses belong in the directive); §Schema-Field
+Provenance was moved from conventions.md but is field-level
+metadata for the schema; §Claims preamble carries doctrine that
+gates *all* shared-state mutation, not claim opening.
+
+**Cure**: a *placement contract* authored before the next
+graduation, not a report after. Lives at
+`.agent/memory/executive/collaboration-state-placement-contract.md`.
+
+**Session-shape diagnostic**: one repeating shape across N
+findings → graduate the shape as a contract. *One pattern →
+contract; N independents → report.*
 
 ### Surprise: "doctrine-scanner CLI" gating is vaporware-shaped
 
