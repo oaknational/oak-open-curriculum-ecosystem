@@ -344,6 +344,13 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(hsts).toBeDefined();
       expect(hsts).toContain('max-age=');
     });
+
+    it('does not disclose framework identity via X-Powered-By', async () => {
+      const app = await createTestApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['x-powered-by']).toBeUndefined();
+    });
   });
 
   describe('/healthz - JSON response', () => {
