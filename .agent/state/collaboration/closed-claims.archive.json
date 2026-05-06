@@ -11521,6 +11521,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f138cd67-9138-48df-bbcc-aabccda35c77",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:27:13Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit Step 2 pending-graduations register triage.",
+      "notes": "Pathspecs: 4 files (1 modified register, 1 new archive snapshot, 2 modified collaboration state); gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:28:47Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Step 2 commit landed at b4d7ddff; archive snapshot + register triage clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f138cd67-9138-48df-bbcc-aabccda35c77",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53ffd952-2e26-4017-adfe-80189545f9a1",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/**",
+            ".agent/memory/operational/**",
+            ".agent/rules/**",
+            ".agent/practice-core/**",
+            "docs/governance/development-practice.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:04:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Process napkin.md + pending-graduations.md per opener; substance > destination fitness",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:36:19Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Session close — napkin + pending-graduations Steps 1+2 landed at d12912dc and b4d7ddff. Files-claim closing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53ffd952-2e26-4017-adfe-80189545f9a1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

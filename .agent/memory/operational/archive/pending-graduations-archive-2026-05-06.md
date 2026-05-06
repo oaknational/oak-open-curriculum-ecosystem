@@ -4,8 +4,9 @@ Archive of `graduated` and `withdrawn` entries removed from
 [`pending-graduations.md`](../pending-graduations.md) during the
 2026-05-06 napkin + pending-graduations processing pass executed by
 Clouded Lifting Aerie (claude-code, opus-4-7-1m, `1e2244`) per the
-opener
-[`2026-05-06-napkin-and-pending-graduations-processing-opener.md`](../../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md).
+[opener][opener].
+
+[opener]: ../../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md
 
 Each entry is preserved in full at the form it carried at archive
 time. Destination cross-references named in each entry's `Status`

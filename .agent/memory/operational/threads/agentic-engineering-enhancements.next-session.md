@@ -1,5 +1,90 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Napkin + pending-graduations register triage (landed 2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Clouded Lifting Aerie / claude-code /
+claude-opus-4-7-1m / `1e2244`).
+
+**Session arc**: executed the
+[2026-05-06 napkin + pending-graduations processing opener][opener]
+authored by Embered Melting Kiln. Two atomic commits:
+
+- `d12912dc` — Step 1 napkin graduation pass. Routed substance from
+  the prior rotation's five 2026-05-06 napkin sessions (Embered, Briny,
+  Cindery, Umbral, Hidden) to permanent homes. Three new patterns
+  authored (`consolidation-output-shape-pattern-vs-report.md`,
+  `audit-rule-body-on-prohibition-extension.md`,
+  `in-session-contract-authoring-conditions.md`); F-15 added to
+  frictions register documenting commit-queue fingerprint recursion
+  workflow-that-works; F-14, F-09, F-05 evidence appended; markdown-
+  prose-acceptance-criteria doctrine landed in development-practice.md.
+  Napkin archived to
+  `archive/napkin-2026-05-06-evening-graduation-pass.md`; rotation
+  shell at 119 lines summarises routing destinations.
+- `b4d7ddff` — Step 2 pending-graduations register triage. Archived
+  7 entries (6 graduated, 1 withdrawn) to
+  `archive/pending-graduations-archive-2026-05-06.md`. Marked
+  Lacustrine commit-queue fingerprint entry `graduated 2026-05-06`
+  with cross-reference to F-15. Added one small new pending entry
+  (`/doctor` is session-local evidence, not a shell-invocable
+  validation gate). Register reduced 2054 → 1876 lines.
+
+**Reviewer dispatch outcome (execution-legitimacy framing)**:
+
+- `docs-adr-reviewer` — APPROVED with one P1 (broken commit SHA in
+  napkin.md:101, fixed in handoff commit) and two P2/nit notes about
+  the `learning-before-fitness.md` vs `substance-before-fitness.md`
+  filename divergence (out-of-scope per opener; opportunity flagged).
+- `code-reviewer` — APPROVED WITH SUGGESTIONS, no P0/P1; six P2
+  long-link lines (worst three in archive file refactored via
+  reference-link form; the remaining three sit inside preserved-
+  original entries in a fitness-excluded archive path).
+
+**Validation gate state (post-session)**:
+
+- `pnpm practice:fitness:informational` — napkin.md HARD cleared
+  (was 382 lines hard, now 119 ok). pending-graduations.md HARD
+  persists (1870 lines / 1400 hard; 114575 chars / 90000 hard) —
+  this is the diagnostic substrate the opener anticipated; the
+  residual ~76 `pending` entries genuinely await second-instance
+  triggers. Surface for next-audit input rather than session brake.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
+
+**Boundary applied per opener**: substance > destination fitness.
+No truncation; every legitimate graduation landed at its proper home.
+Destination-file fitness signals (the persisting pending-graduations
+HARD plus the soft signals on agent-collaboration.md, distilled.md,
+and several practice-core files) become the next calibration audit's
+input rather than this session's brake.
+
+**Next-session candidates**:
+
+- **pending-graduations.md continued drainage** — 8 `due` entries
+  remain flagged for execution (entries at lines 103, 137, 543, 598,
+  720, 1097, 1123, 1202 of the post-session file). Each names its
+  graduation target; most require a substantive doc/PDR/CLI edit
+  that did not fit this session's context budget. Recommended next
+  action: another walk dedicated to executing the `due` queue, with
+  the directive-context-budget rule applied to any directive-touching
+  entries.
+- **Companion items from this opener (deferred per opener "do not
+  pull in")**: `agent-collaboration.md` extraction question (raise
+  hard limit vs extract Communication Channels); `practice-bootstrap.md`
+  recalibration question; `testing-patterns.md` stub question.
+- **`learning-before-fitness.md` vs `substance-before-fitness.md`
+  filename rename** — reviewer-noted divergence between displayed
+  pattern name and file basename. Out of scope this session; small
+  follow-up for any future patterns-pass.
+- **Pending-graduations register split-by-domain consideration** —
+  if the residual queue substance still exceeds the limit after the
+  next `due`-execution pass, surface for owner direction on whether
+  to enlarge the queue file, split by domain, or escalate the queue
+  draining cadence (per opener's named options).
+
+[opener]: ../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md
+
 ## Active arc — Collaboration-state surface-restructure Phase 2 complete (2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Embered Melting Kiln / claude-code /

@@ -98,7 +98,7 @@ graduation, just historical evidence preserved in archive):
 Surfaced for the next-audit input (per opener boundary):
 
 - `agent-collaboration.md` extraction question — surfaced in
-  commit `40f7da45` and `ca0894fc`'s body. Companion item
+  commit `40f7da45` and `ca0794fc`'s body. Companion item
   retained in opener as "deferred to other sessions".
 - `practice-bootstrap.md` recalibration question — companion
   item.
