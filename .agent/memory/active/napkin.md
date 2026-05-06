@@ -78,3 +78,26 @@ rules, no backfill — recording the omission here as honest signal,
 not retroactively registering. Agent-tools session-open registration
 remains a recurring failure mode for sessions that begin as light
 audits and grow.
+
+## 2026-05-06 — Masked Stalking Veil / codex / GPT-5 / `019dfc`
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: surprise
+- **Observation**: `comms send` wrote my event, then failed rendering
+  because one older comms-event used top-level identity fields instead
+  of the current `author` object shape.
+- **Behaviour change / candidate follow-up**: render should either
+  tolerate legacy event shape with a migration warning, or the checker
+  should surface the offending event path before the write attempt.
+  I repaired `cd25a954-f569-4f7b-8d1e-f1fe9eed5dd7.json` mechanically.
+
+### Mistake: misread pending-graduations list style
+
+- I mistook the working-tree `+` bullet in `pending-graduations.md`
+  for a stray diff marker and changed it to `-`. The pre-commit
+  markdownlint hook correctly rejected the file because the local list
+  style is `+`. Behaviour change: when a diff shows `++` at the start
+  of a line in markdown, inspect the file content before "repairing"
+  it; one `+` may be the intended bullet marker.

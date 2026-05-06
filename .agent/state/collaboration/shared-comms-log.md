@@ -1502,3 +1502,36 @@ Opalescent Glowing Constellation marked the three remaining PR 93 oak-eslint Son
 ## 2026-05-05T21:15:17Z — `Opalescent Glowing Constellation` / `codex` / `GPT-5` / `019df9` — Commit window opened for PR 93 Sonar handoff
 
 Opalescent Glowing Constellation opened commit-window claim e29dc1d6-c218-4366-a6db-1961584a73c9 after Riverine's index/head claim became stale. Intended pathspecs: PR 93 Sonar plans/snags, observability thread handoff, repo-continuity handoff, current shared comms log, comms events for Sonar disposition/commit window, active/closed claim lifecycle. Explicitly not staging Riverine-claimed napkin.md or user-snippets.md work.
+
+---
+
+## 2026-05-06T07:55:46Z — `Riverine Fishing Rudder` / `claude-code` / `claude-opus-4-7-1m` / `b89da0` — Session close: three-step graduation pass complete
+
+Riverine Fishing Rudder (b89da0) session close on agentic-engineering-enhancements thread.
+
+Three-step napkin and comms-logs graduation pass complete per owner direction 2026-05-05:
+- Step 1 (commit 307f7f13): archived pre-step napkin verbatim (514L/49170C, nine 2026-05-05 entries); drained napkin; added F-12 and F-13 to frictions register.
+- Step 2 (commit d7ca48d5): walked 78 2026-05-05 comms-events; extracted three structured surprises A/B/C (fat-baton handoff; workflow self-improvement during same arc; cross-thread git-history substrate).
+- Step 3 (commit 5b40e206): routed Surprises A/B/C to pending-graduations (3 new entries); drained napkin to single combined rotation summary.
+
+All claims closed. Thread record and repo-continuity updated. docs-adr-reviewer P0/P1 clean on each step.
+
+Opener acceptance criteria all met. Branch: feat/eef_exploration.
+
+---
+
+## 2026-05-06T10:11:22Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — Owner-directed quota recovery and commit landing
+
+Masked Stalking Veil 019dfc is taking over owner-directed quota recovery for two Claude sessions. Current index has Umbral Cloaking Silhouette's skills/artefact audit + plans staged; working tree also has Hidden Slipping Moth collaboration-state claim closure edits. I will repair the pending-graduations line typo, commit the staged planning work in sensible chunks by explicit pathspec, commit collaboration-state closure separately, and keep shared-state writes visible. Active claims registry was consulted: no live claims in working copy; HEAD still had Hidden Slipping Moth's expired git:index/head claim, already removed by the pending closure edits.
+
+---
+
+## 2026-05-06T10:13:48Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — Commit window opened for Umbral agent-tooling bundle
+
+Masked Stalking Veil opened git:index/head claim af76958d-4714-4f42-aa9b-42414aebe4b4 to commit Umbral Cloaking Silhouette's staged agent-tooling audit/plans bundle. Intended staged paths are the eight currently staged Umbral files only; collaboration-state/takeover files remain unstaged for a second coordination commit.
+
+---
+
+## 2026-05-06T10:18:06Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — Final collaboration cleanup commit window
+
+Masked Stalking Veil opened and will close git:index/head claim 9b3c9e48-538e-4160-ad47-cf11612c50d7 inside the final coordination bundle. This commit records Hidden Slipping Moth's cancelled stale claim, the quota-recovery takeover events, the comms-event schema repair that restored rendering, and Masked Stalking Veil claim closures.

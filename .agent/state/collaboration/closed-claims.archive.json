@@ -10294,6 +10294,350 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "6D81B330-19E0-4E14-B97B-0EB434C12D39",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T09:04:57Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: collaboration-state housekeeping after graduation pass",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T09:05:57Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "housekeeping commit e700b9b8 landed; clean tree",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6D81B330-19E0-4E14-B97B-0EB434C12D39",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "B615770A-3A1A-4989-B500-E7DD79BC6C15",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T09:19:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: land principles-entrypoint-content-homing strategic plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T09:22:25Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "principles-entrypoint plan landed at 8d33ea98",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "B615770A-3A1A-4989-B500-E7DD79BC6C15",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6CF8126D-4C94-443D-8D59-6006820AED5A",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T09:45:30Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: address reviewer P0+P1 inline; capture remaining snags for next session",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T09:47:31Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "review P0+P1 fixes landed at 897228a3; 6 P1 + 3 P2 + 3 deferred specialist dispatches captured",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6CF8126D-4C94-443D-8D59-6006820AED5A",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "66A5BF81-8021-42F2-87DF-0D2E6083366F",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T09:55:52Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: Phase 0 complete — operationalisation contract directive + next-session opener",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T10:00:34Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "Phase 0 landed at 2dbc2f9a; operationalisation contract directive at .agent/directives/; next-session opener captured",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "66A5BF81-8021-42F2-87DF-0D2E6083366F",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "af76958d-4714-4f42-aa9b-42414aebe4b4",
+      "agent_id": {
+        "agent_name": "Masked Stalking Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T10:13:42Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Umbral Cloaking Silhouette staged agent-tooling audit/plans bundle.",
+      "notes": "Pathspecs: staged Umbral bundle only; active registry has only my takeover/shared-state claims; commit_queue has stale abandoned entries only.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T10:16:23Z",
+        "closed_by": {
+          "agent_name": "Masked Stalking Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfc"
+        },
+        "summary": "agent-tooling audit/plans bundle committed at ad03f276",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "af76958d-4714-4f42-aa9b-42414aebe4b4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2766d102-384f-46cb-9c32-c17bb7b1b241",
+      "agent_id": {
+        "agent_name": "Masked Stalking Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md",
+            ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+            ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/experience/2026-05-06-umbral-cloaking-skills-standardisation.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms-events/7008d5bc-64e2-4788-ab50-40c82f9e8e10.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T10:12:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-directed quota recovery: land Umbral Cloaking Silhouette staged audit/plans and Hidden Slipping Moth claim-closure state in explicit chunks.",
+      "notes": "Registry consulted: working-copy claims empty; HEAD had expired Hidden Slipping Moth git:index/head claim already represented by pending closure edits. Existing staged Umbral bundle will be committed by explicit pathspec; no live peer claim to ping.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T10:17:42Z",
+        "closed_by": {
+          "agent_name": "Masked Stalking Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfc"
+        },
+        "summary": "owner-directed quota recovery completed: Umbral bundle landed at ad03f276; Hidden claim closure and takeover state staged for collaboration cleanup",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2766d102-384f-46cb-9c32-c17bb7b1b241",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "475807a9-369b-4c34-ba19-928b6e6e129f",
+      "agent_id": {
+        "agent_name": "Masked Stalking Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/comms-events/cd25a954-f569-4f7b-8d1e-f1fe9eed5dd7.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T10:12:35Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair malformed shared comms event so collaboration-state render can update the generated log for quota-recovery takeover.",
+      "notes": "Discovered while appending takeover comms event: render fails on legacy cd25a954 event with top-level identity fields instead of author object. Shared-state mechanical repair only.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T10:17:43Z",
+        "closed_by": {
+          "agent_name": "Masked Stalking Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfc"
+        },
+        "summary": "malformed comms event repaired and shared log render restored",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "475807a9-369b-4c34-ba19-928b6e6e129f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9b3c9e48-538e-4160-ad47-cf11612c50d7",
+      "agent_id": {
+        "agent_name": "Masked Stalking Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T10:17:58Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit collaboration-state cleanup for owner-directed quota recovery.",
+      "notes": "Final coordination commit: Hidden Slipping Moth claim cancellation, Masked Stalking Veil takeover claim closures, comms-event schema repair, and rendered shared log. Commit queue self-references active-claims for this bundle, so the git claim lifecycle is archived in the bundle itself.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T10:18:07Z",
+        "closed_by": {
+          "agent_name": "Masked Stalking Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfc"
+        },
+        "summary": "final collaboration cleanup bundle staged for commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9b3c9e48-538e-4160-ad47-cf11612c50d7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -435,50 +435,7 @@
       "staged_bundle_fingerprint": "8b8abf1f9e2837d50e85dbacef1faa009d93de712e2a6548b500daaa466b4c4c",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/rules/no-moving-targets-in-permanent-docs.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
-    },
-    {
-      "intent_id": "f51a31cb-0975-48dc-84ad-39c6251a8825",
-      "claim_id": "6D81B330-19E0-4E14-B97B-0EB434C12D39",
-      "agent_id": {
-        "agent_name": "Hidden Slipping Moth",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "4be7b5"
-      },
-      "files": [
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json"
-      ],
-      "commit_subject": "chore(collaboration): close Hidden Slipping Moth file-level claim post-graduation",
-      "queued_at": "2026-05-06T09:04:59.530Z",
-      "updated_at": "2026-05-06T09:05:10.751Z",
-      "expires_at": "2026-05-06T09:19:59.530Z",
-      "phase": "staging"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "6D81B330-19E0-4E14-B97B-0EB434C12D39",
-      "agent_id": {
-        "agent_name": "Hidden Slipping Moth",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "4be7b5"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T09:04:57Z",
-      "freshness_seconds": 600,
-      "sidebar_open": false,
-      "intent": "commit window: collaboration-state housekeeping after graduation pass",
-      "intent_to_commit": "f51a31cb-0975-48dc-84ad-39c6251a8825"
-    }
-  ]
+  "claims": []
 }
