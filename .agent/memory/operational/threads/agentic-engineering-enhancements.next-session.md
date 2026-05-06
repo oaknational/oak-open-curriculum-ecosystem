@@ -1,11 +1,56 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Active arc — Collaboration-state surface-restructure (contract + plan) (2026-05-06)
+## Active arc — Collaboration-state surface-restructure Phase 2 complete (2026-05-06)
 
-**Last refreshed**: 2026-05-06 (Briny Plumbing Fjord / claude-code /
-claude-opus-4-7-1m / `fd36cf`).
+**Last refreshed**: 2026-05-06 (Embered Melting Kiln / claude-code /
+claude-opus-4-7-1m / `4044d1`).
 
-**Landings (this session, single commit)**:
+**Phase 2 landings (this session, 5 commits)**:
+
+- `13e2db28` — schema-field provenance co-located with the four
+  collaboration-state schemas via `$comment_provenance` annotations
+  (15 per-property on active-claims; schema-level on closed-claims,
+  conversation, escalation). Lifecycle.md and conventions.md updated to
+  point at the schemas as the canonical home.
+- `e072b67e` — doctrine paragraphs relocated to `agent-collaboration.md`:
+  Shared-State Posture (under §Knowledge and Communication), identity-
+  preflight extension (under §Identity vs Liveness), and §d Cleanup
+  Ethics (under §Scope Discipline). Lifecycle keeps recipe halves.
+- `b7e3f1fc` — vocabulary normalised to four-term taxonomy (stale,
+  fresh-but-quiet, orphaned, expired) across the surface family;
+  §Vocabulary section added to conventions.md as canonical.
+- `07e9274c` — lifecycle.md re-taglined to "Operational recipes for
+  `.agent/state/collaboration/`"; recipe-shape audit complete.
+- `8f388592` — docs-adr-reviewer review-fix (P1.2: race-rationale
+  re-added to lifecycle, exception-not-routine framing added to
+  directive §d; P2.1: "expire mid-work" → "go stale mid-work";
+  P2.2: vocabulary cite to link form).
+
+**Reviewer outcomes**: `code-reviewer` APPROVED (no findings).
+`docs-adr-reviewer` returned 0 P0, 2 P1 (both fixed), 3 P2 (2 fixed,
+P2.3 §Sidebars/§Joint Decisions field-shape descriptions deferred per
+plan).
+
+**Owner-attention item — directive at hard-limit ceiling**:
+`agent-collaboration.md` sits at exactly **260 lines (soft, at limit)**
+after the doctrine moves and review-fix, with zero headroom. Achieved
+only by tightening seven adjacent paragraphs. Two routes for the next
+legitimate addition (logged in the napkin):
+
+1. Raise the directive's `fitness_line_limit` (legitimate-role-outgrew-
+   ceiling per ADR-144's three-zone model);
+2. Extract Communication Channels content to
+   `agent-collaboration-channels.md` (which already exists as the
+   at-a-glance routing card).
+
+Not auto-resolvable — surfaced for owner direction at next directive-
+edit session.
+
+**Plan lifecycle**: all eight plan-body todos now `completed`. Plan
+moves to `archived/` only after the contract has prevented one
+wrong-file landing in a subsequent graduation, per plan §6 lifecycle.
+
+**Phase 1 landings (prior session, commit `c014ad2a`)**:
 
 - New executive-memory file:
   `.agent/memory/executive/collaboration-state-placement-contract.md`
@@ -38,12 +83,10 @@ because the substance-led read converged on one repeating pattern
 across N findings. Owner direction at decision point: *contract +
 plan + surface updates, no reflection report.*
 
-**Next safe step**: open a fresh session for Phase 2 of the
-restructure plan (substance moves to schemas, directive, and trim
-of lifecycle.md). Phase 2 needs the <30% context budget because it
-edits both the directive (`agent-collaboration.md`) and three
-state-surface files. Phase 1 (this session) is acceptance-clean
-and self-contained; Phase 2 onward is independent.
+**Next safe step (post-Phase-2 update)**: Phase 2 landed in
+session `4044d1` (Embered Melting Kiln) — see Active arc at the top
+of this record. The remaining open question is the directive
+hard-limit ceiling; carry that into the next directive-edit session.
 
 **Companions deferred to fresh session(s)**:
 

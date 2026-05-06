@@ -1583,3 +1583,9 @@ Active claims empty at open; no overlap. Authoring placement contract (executive
 ## 2026-05-06T14:45:49Z — `Embered Melting Kiln` / `claude-code` / `claude-opus-4-7-1m` / `4044d1` — Phase 2 collaboration-state restructure — session open
 
 Embered Melting Kiln (claude-code/claude-opus-4-7-1m/4044d1) opening session for Phase 2 of collaboration-state-surface-restructure.plan.md. Active claims at session open: claims[]=empty (only commit_queue residue from older sessions). Bootstrap fast-path applies: no other agents present. Claim opened covering the 7 surface-family files plus plan file. Sequence: provenance→schemas, doctrine→directive, vocabulary normalisation, lifecycle tagline+trim. Placement contract is owner-decided; reviewers at end-of-phase get execution-legitimacy framing only.
+
+---
+
+## 2026-05-06T15:16:53Z — `Embered Melting Kiln` / `claude-code` / `claude-opus-4-7-1m` / `4044d1` — Phase 2 collaboration-state restructure — session close
+
+Embered Melting Kiln closing session: Phase 2 of collaboration-state-surface-restructure.plan.md complete across 5 commits (13e2db28, e072b67e, b7e3f1fc, 07e9274c, 8f388592). Contract applied without behavioural change; no schema field types or required arrays modified; no schema-version bumps. Reviewers: code-reviewer APPROVED, docs-adr-reviewer surfaced 2 P1 (both fixed in 8f388592) and 3 P2 (2 fixed, 1 deferred per plan). Owner-attention item: agent-collaboration.md sits at exactly 260 lines (limit 260) — zero headroom for the next addition; routes (raise limit per ADR-144 / extract a paragraph to a companion doc) logged in the napkin. Plan moves to archived/ only after the contract has prevented one wrong-file landing in a subsequent graduation per plan §6 lifecycle.

@@ -154,27 +154,34 @@ claim and closure kind before writing the close. Recipe in
 
 ## Communication Channels
 
-Pick the channel that fits the coordination need. Routing card:
-[channels-card][channels-card]; state index: [conventions][state-conventions].
-Active claims signal "touching this now", `commit_queue` orders
-staged-bundle ownership, the shared comms log carries discovery notes,
-decision threads structure async coordination, sidebars hold focused
-short exchanges, escalations route owner-facing unresolved cases, owner
-questions are final tiebreakers. Reviewer dispatch is draft review
-inside one agent's session, not peer collaboration.
+Pick the channel that fits the shape of the coordination need. The
+at-a-glance routing card is
+[`agent-collaboration-channels.md`](../memory/executive/agent-collaboration-channels.md);
+the operational state index is
+[`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
+
+The high-frequency rule is: use active claims for live "I am touching
+this area now" signals, `commit_queue` for advisory commit turn order and
+staged-bundle verification, the shared communication log for discovery notes,
+decision threads for structured async coordination, sidebars for focused short
+exchanges inside a conversation, escalations for owner-facing unresolved
+cases, and owner questions for final tiebreakers. Reviewer dispatch is draft
+review inside one agent's session, not peer collaboration.
 
 ## Identity vs Liveness
 
 These are different concerns and live in different surfaces.
 
 - **Identity** is who-I-am-on-this-thread, additive across sessions per
-  [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md);
-  rows live in thread records, the
+  [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
+  Identity rows live in thread records; the
   [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
   rule installs the session-open tripwire. Every shared-state mutation
-  runs identity preflight first — Codex with `CODEX_THREAD_ID` derives
-  the PDR-027 block, never `Codex`/`unknown` (recipe in
-  [conventions][state-conventions] §Write-Safety Contract).
+  runs identity preflight before write; Codex sessions with
+  `CODEX_THREAD_ID` available must derive the PDR-027 identity block and
+  must not fall back to `Codex` / `unknown`. Recipe in
+  [`collaboration-state-conventions.md`][state-conventions]
+  §Write-Safety Contract.
 - **Liveness** is when-was-this-agent-last-active-here, a *freshness
   signal* on a claim. Liveness lives on the structured-claims surface;
   each claim carries `claimed_at`, optional `heartbeat_at`, and a
@@ -192,64 +199,77 @@ The single-agent case (no other agents present) pays the protocol's
 **minimum overhead — one read, one write**: read active claims and the
 shared log, log *"no other agents present"*, register the session claim,
 and proceed. The single write is load-bearing: it is the discovery seed for
-whatever sequential agent comes next. The fast-path is not an exception to
-the protocol; it is the protocol's minimum-overhead shape under low
-contention. The
+whatever sequential agent comes next. The
 [`register-active-areas-at-session-open`](../rules/register-active-areas-at-session-open.md)
 rule operationalises this early-return.
 
+The fast-path is not an exception to the protocol; it is the protocol's
+minimum-overhead shape under low contention. Solo sessions do not pay
+parallel-session coordination overhead beyond the single-write seed.
+
 ## Conversations as Learning-Loop Inputs
 
-Shared-comms-log, active/closed claims, commit-queue, decision-thread,
-sidebar, joint-decision, and escalation entries are durable evidence
-alongside the napkin. Refinements to this directive or schemas cite those
-entries directly; WS5's seed harvest reads across all of them.
+Shared-communication-log entries, active and closed claim entries,
+commit-queue entries, decision-thread files, sidebar entries, joint-decision
+entries, and escalation case files are durable evidence alongside the napkin.
+Refinements to this directive or to the collaboration-state schemas cite
+entries from those surfaces directly. Lessons graduate via the standard
+learning-loop; WS5's seed harvest reads across all of them.
 
 ## Schema Evolution
 
 JSON schemas in `.agent/state/collaboration/` carry `schema_version` from
 their first commit. Compatibility is **additive-only within a major
-version**, documented in each schema's `$comment_compatibility` block;
-field reductions land as major-version bumps. Field provenance is
-co-located with each field via `$comment_provenance`; lifecycle and
-evolution detail live in
+version**: v1.x agents reading v1.y files (`y > x`) ignore unrecognised
+fields and preserve them on write-back; major-version mismatch causes the
+agent to bail out. The contract is documented in each schema's
+`$comment_compatibility` block; field reductions land as major-version
+bumps. Field provenance is co-located with each field via
+`$comment_provenance`; lifecycle and evolution detail live in
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Threat Model
 
-The protocol assumes **trusted agents** acting in good faith; misbehaving
-agents are out of scope and surface to the owner at consolidation.
-**Future agents who suspect the trust assumption is failing must NOT add
-hardening (signed entries, integrity checks, scope quotas) — surface the
-suspicion to the owner.** The protocol is deliberately advisory;
-hardening would be a category error and a future-PDR question.
+The protocol assumes **trusted agents** acting in good faith. Misbehaving
+agents (excessive scope claims, never-released claims, fabricated entries)
+are out of scope; the owner detects and resolves these at consolidation.
+A hostile-agent threat model is a future PDR if the trust assumption
+breaks down. **Future agents who suspect the trust assumption is failing
+should NOT add hardening (signed entries, claim-integrity checks, scope
+quotas) — surface the suspicion to the owner.** The protocol is deliberately
+advisory; hardening would be a category error.
 
 ## Founding Pattern
 
-Three cross-session pre-commit-gate-coupling instances over 48 hours
-(2026-04-24/25) motivated this directive — captured at
+Three cross-session instances of full-repo pre-commit gates coupling
+parallel agent sessions inside a 48-hour window (Frodo prettier
+2026-04-24, Pippin auto-staging 2026-04-24, Jazzy knip 2026-04-25)
+motivated this directive. The pattern is captured at
 [`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
 instances surface in [`napkin.md`][napkin] and feed
-[WS5's seed harvest][p]. Commit-window claims apply the same lesson to
-the narrower git transaction surface.
+[WS5's seed harvest][p]. Commit-window claims apply the same lesson to the
+narrower git transaction surface: expose intent and queue order before
+staging or commit.
 
 ## Foundation Alignment
 
-Operationalises PDR-026 (per-session landing), PDR-027 (identity reuse),
-PDR-029 (tripwire pattern), PDR-035 (agent-work in the Practice),
-PDR-011 / ADR-150 (capture → distil → graduate → enforce), and ADR-125
-(canonical content with thin platform adapters).
+This directive operationalises PDR-026 (per-session landing as claim
+granularity), PDR-027 (identity reuse), PDR-029 (tripwire pattern),
+PDR-035 (agent-work capabilities belong to the Practice),
+PDR-011 / ADR-150 (capture → distil → graduate → enforce), and
+ADR-125 (canonical `.agent/` content with thin platform adapters).
 
 ## Cross-references
 
-Doctrine: [`user-collaboration.md`](user-collaboration.md),
-[`principles.md`](principles.md), [`.agent/state/README.md`](../state/README.md).
-State: [log](../state/collaboration/shared-comms-log.md),
-[active claims][active-claims], [closed claims][closed-claims],
-[conversation schema][conversation-schema], [conversations][conversations-dir],
-[escalation schema][escalation-schema], [escalations][escalations-dir].
-Companions: [conventions][state-conventions], [channels card][channels-card],
-[threads README][threads-readme].
+Core doctrine: [`user-collaboration.md`](user-collaboration.md),
+[`principles.md`](principles.md), and [`.agent/state/README.md`](../state/README.md).
+Core state: [log](../state/collaboration/shared-comms-log.md), [active claims][active-claims],
+[closed claims][closed-claims], [conversation schema][conversation-schema],
+[conversations][conversations-dir], [escalation schema][escalation-schema],
+and [escalations][escalations-dir]. Operational companions:
+[`collaboration-state-conventions.md`][state-conventions],
+[`agent-collaboration-channels.md`][channels-card], and
+[`threads/README.md`][threads-readme].
 
 [p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md

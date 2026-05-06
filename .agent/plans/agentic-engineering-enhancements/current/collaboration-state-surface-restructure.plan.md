@@ -32,10 +32,10 @@ todos:
     status: completed
   - id: reviewer-dispatch
     content: "Dispatch docs-adr-reviewer and code-reviewer on the change set with execution-legitimacy-given-decisions framing (placement is owner-fixed by the contract; do not re-open the contract decision)."
-    status: pending
+    status: completed
   - id: napkin-graduation
     content: "If the restructure surfaces any standing-rule-shaped insight (beyond the wrong-file-by-adjacency pattern already captured), add a napkin entry and queue for distilled.md."
-    status: pending
+    status: completed
 ---
 
 # Collaboration-State Surface Restructure

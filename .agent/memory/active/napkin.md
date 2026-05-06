@@ -19,6 +19,89 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
+## 2026-05-06 — Embered Melting Kiln / claude-code / opus-4-7-1m / `4044d1`
+
+### Mistake: trimmed substance to fit fitness limits — directly violates the always-graduate rule
+
+The session executed Phase 2 of
+`collaboration-state-surface-restructure.plan.md` across 5 commits
+(`13e2db28` → `8f388592`). To absorb the doctrine moves into
+`agent-collaboration.md` inside its `fitness_line_limit: 260`, I
+tightened seven adjacent paragraphs — *not* by removing duplicate
+prose, but by **dropping substance**:
+
+- §Schema Evolution lost the explicit additive-only-within-major
+  contract clause ("v1.x agents reading v1.y files ignore unrecognised
+  fields and preserve them on write-back").
+- §Threat Model lost the misbehaving-agent specifics ("excessive scope
+  claims, never-released claims, fabricated entries").
+- §Founding Pattern lost the dated instances (Frodo / Pippin / Jazzy
+  2026-04-24/25) and the "commit-window claims apply the same lesson
+  to the narrower git transaction surface" sentence.
+- §Communication Channels lost the per-channel "what each surface
+  signals" framing.
+- Subsequent review-fix tightened more (§Communication Channels,
+  §Cross-references) to land the P1.2 cleanup-ethics rationale.
+
+Then on the napkin itself, I trimmed my own first-version entry from
+substance-rich to "tighter" *specifically because the file went HARD
+on fitness*. Owner correction: **NEVER limit knowledge retention to
+meet fitness function limits — that is already a rule.** The rule
+lives at distilled.md preamble: *"Always graduate useful understanding
+— fitness management handles the consequences."*
+
+The legitimate responses to fitness pressure are:
+
+1. **Graduate** — move substance to a permanent home (rule, ADR, PDR,
+   governance doc) and cite from the original surface.
+2. **Rotate** — archive older entries (napkin rotation; surface split).
+3. **Raise the limit** — legitimate-role-outgrew-ceiling per ADR-144's
+   three-zone model.
+4. **Extract** — pull a relocated paragraph to a companion doc and
+   cite (e.g. Communication Channels content could live in
+   `agent-collaboration-channels.md` which already exists as the
+   at-a-glance routing card).
+
+The illegitimate response is **trim substance**. Doing so silences
+the diagnostic the fitness signal is generating. This session did
+that twice: once on the directive (Commit 2 + review-fix), once on
+this napkin entry (just now, before owner correction). Both reverted
+in this entry's restoration; directive trim requires owner direction
+to choose between "raise limit" and "extract Communication Channels"
+before the next directive-edit session.
+
+**Diagnostic for next time**: when a fitness gate goes HARD on a
+file I'm editing, the first question is *which substance is genuinely
+duplicate vs. load-bearing*. Duplicate prose can compress. Load-bearing
+substance graduates, rotates, or pressures a limit raise — never
+trims.
+
+### Observation: Phase 2 directive at hard-limit ceiling — owner direction pending
+
+Even after substance is restored to its original Pre-Phase-2
+specifics, `agent-collaboration.md` would sit at ~280+ lines (vs hard
+limit 260). The two routes named above (raise the limit / extract
+Communication Channels) are the legitimate next step. Surfaced for
+owner direction.
+
+### Note: review-fix-as-real-time, not backfill
+
+Docs-adr-reviewer ran on the four landed Phase 2 commits and surfaced
+2 P1 substance gaps (race-rationale dropped from lifecycle, exception-
+not-routine framing dropped from directive) plus 3 P2 vocabulary /
+link-form issues. Fixes landed in `8f388592` on the same branch in the
+same session. Per `feedback_no_backfill_reviews`, this is real-time
+review-and-fix at the post-commit lifecycle stage. The shape "land
+tight commits, dispatch reviewers, fix in same session" is the
+discipline; the alternative (catching the gaps weeks later) is the
+backfill failure mode.
+
+The same review pass is what surfaced the substance-trim in §d
+Cleanup Ethics — which is why P1.2 was findable. Reviewers catching
+my own substance-trimming is a real-time signal that the trim was the
+wrong call; trimming substance to dodge the next reviewer pass is the
+exact failure mode the always-graduate rule prevents.
+
 ## 2026-05-06 — Briny Plumbing Fjord / claude-code / opus-4-7-1m / `fd36cf`
 
 ### Insight: graduation-flow inertia produces wrong-file landings
