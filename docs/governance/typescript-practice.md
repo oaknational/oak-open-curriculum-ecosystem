@@ -8,25 +8,53 @@ split_strategy: 'Extract detailed gotcha collections to a companion gotchas file
 
 # TypeScript Practice
 
-## General
+## Compiler-time Types and Runtime Validation
 
-- NEVER disable type checking.
-- **No type shortcuts** — see `.agent/rules/no-type-shortcuts.md` for the
-  full forbidden-constructs list. The goal is to preserve type information,
-  not to work around constraints.
-- **`unknown` is type destruction** — see
-  `.agent/rules/unknown-is-type-destruction.md`. Permitted only at
-  incoming external boundaries from third-party systems.
-- Use type guards/predicates to narrow types (functions with the `is`
-  keyword).
-- There must be a SINGLE source of truth for each type. Define once,
-  import everywhere.
+Operationalises
+[principles.md § Compiler Time Types and Runtime Validation][principle-types].
 
-## Type Locations
+[principle-types]: ../../.agent/directives/principles.md#compiler-time-types-and-runtime-validation
 
-- Use types from external libraries as-is; do not create substitute types.
-- Define our types in type files, close to where they are used.
-- If a type is used in multiple locations, consider if a refactor is needed.
+- **No type widening or destruction** — never use widening casts
+  (`as SomeType`), `any`, `!`, `Record<string, unknown>`,
+  `{ [key: string]: unknown }`, `Object.*` methods, `Reflect.*`
+  methods, `isObject` type predicates, `z.unknown()` where a
+  concrete schema exists, `z.record(z.string(), z.unknown())`,
+  or hand-crafted Zod schemas that duplicate generated shapes.
+  `as const` and `satisfies SomeType` are permitted because they
+  tighten compile-time information instead of disabling it. See
+  `.agent/rules/no-type-shortcuts.md`.
+- **`unknown` is type destruction** — `unknown`, `z.unknown()`, and
+  `Record<string, unknown>` erase structural type information.
+  They are permitted only at named external boundaries and are
+  forbidden as stand-ins for known shapes. See
+  `.agent/rules/unknown-is-type-destruction.md`.
+- **Preserve type information** — do not widen literal types into
+  broad annotations such as `string` or `number` when the exact
+  literal matters. Let information flow from data structures with
+  `as const` through to use sites.
+- **Single source of truth for types** — define each type once,
+  preferably from the OpenAPI schema, generated SDK contract, or
+  external library, then import it everywhere. Do not redefine later
+  as an approximation.
+- **Use library types directly where possible** — do not invent a
+  local type when a package exports the type you need.
+- **Prefer library-native error and response types** — when parsing
+  third-party SDK outputs, use official exported types and error
+  classes first; introduce local shapes only when the library does
+  not expose what is needed.
+- **Validate external signals** — parse and validate API responses,
+  file reads, SSE messages, WebSocket payloads, and other external
+  signals to the exact expected shape at the boundary. Official SDKs
+  count as validation; use Zod where appropriate. Once validated, use
+  the validated type throughout the trusted zone. See
+  `.agent/rules/strict-validation-at-boundary.md`.
+- **Type imports must be labelled with `type`** — use
+  `import type { Type } from 'package'` or
+  `import { type Type } from 'package'`.
+- **Avoid type-alias entropy** — do not introduce aliases that merely
+  rename an existing generated, library, or well-named local type.
+  Good naming and direct imports keep the concept graph smaller.
 
 ## Our Type Definitions: The Constant-Type-Predicate Pattern
 
@@ -54,41 +82,6 @@ function isAllowedColor(color: string): color is AllowedColor {
 }
 // Alternative: Set<string>(ALLOWED_COLORS).has(s) — widens at lookup, not definition
 ```
-
-## Our Type Validation at External Boundaries
-
-- At external boundaries such as network API calls, database calls,
-  file system calls, etc., validate incoming data using Zod.
-- Once validated at the boundary, use the validated types throughout
-  the internal system.
-- This creates a trusted zone where types are guaranteed to be correct.
-
-### Zod Schema Integrity
-
-`z.unknown()` is type destruction — the Zod equivalent of TypeScript's
-`unknown`. It claims "we don't know the shape" when often we do.
-
-**Forbidden patterns:**
-
-- `z.unknown()` where a concrete Zod schema exists or can be generated
-- `z.record(z.string(), z.unknown())` as a stand-in for a known object
-- Hand-crafted Zod schemas that approximate shapes from `sdk-codegen`
-
-**Required pattern:** Use generated schemas and values as the source of
-truth. When validating wire data against a known shape, import from
-`@oaknational/sdk-codegen` rather than re-modelling the shape.
-
-```typescript
-// WRONG: z.object({ type: z.string(), examples: z.array(z.unknown()) })
-// RIGHT: import from the generated source of truth
-import { getToolFromToolName } from '@oaknational/sdk-codegen/mcp-tools';
-const generated = getToolFromToolName('get-key-stages-subject-lessons');
-expect(wireValue).toHaveProperty('properties.keyStage', generated.inputSchema.properties.keyStage);
-```
-
-`z.unknown()` is permitted only at genuine external boundaries from
-third-party systems (e.g. Elasticsearch aggregation buckets). See
-`.agent/rules/unknown-is-type-destruction.md`.
 
 ## Zod v4 Patterns
 

@@ -1,9 +1,9 @@
 ---
-fitness_line_target: 200
-fitness_line_limit: 260
-fitness_char_limit: 16000
+fitness_line_target: 240
+fitness_line_limit: 320
+fitness_char_limit: 19500
 fitness_line_length: 100
-split_strategy: "Extract per-channel protocol detail to companion docs as channels grow; keep this file as the agent-to-agent working model and channel index"
+split_strategy: "Extract per-channel protocol detail to companion docs as channels grow (Communication Channels content has a natural home in agent-collaboration-channels.md if needed); keep this file as the agent-to-agent working model and channel index"
 ---
 
 # Agent Collaboration Practice
@@ -46,6 +46,13 @@ Every rule installed by this directive is a **tripwire**, not a refusal:
 This is the architectural-excellence frame applied to agent-to-agent work.
 Agents in this repo are **reasoning peers**, not constrained subjects.
 Locks are the wrong tool for reasoning peers.
+
+Hot shared-state docs are not read-only. An active claim is a coordination
+signal, not a write-lock; read the current surface and write the lifecycle
+or handoff updates the work needs. The transaction helper plus commit
+queue make overlap visible and serializable. Recipe detail lives in
+[`collaboration-state-conventions.md`][state-conventions] §Write-Safety
+Contract.
 
 ## Platform Independence
 
@@ -136,6 +143,15 @@ there are visibility signals, not commit blockers. Commit `.agent` updates when
 they belong to the current bundle or are needed to keep handoff / claim /
 queue / thread state durable; otherwise shared-state residue never lands.
 
+### d. Cleanup Ethics for Apparently Orphaned Claims
+
+Resist unilateral cleanup; archive only via deliberate governance passes
+(`consolidate-docs § 7e`) or owner-forced close — manual orphan cleanup
+between scheduled audits is the exception, not the routine. Visibility
+before deletion is the discipline: post a shared-log note naming the
+claim and closure kind before writing the close. Recipe in
+[lifecycle][lifecycle] §Apparently Orphaned Claims.
+
 ## Communication Channels
 
 Pick the channel that fits the shape of the coordination need. The
@@ -160,7 +176,12 @@ These are different concerns and live in different surfaces.
   [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
   Identity rows live in thread records; the
   [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
-  rule installs the session-open tripwire.
+  rule installs the session-open tripwire. Every shared-state mutation
+  runs identity preflight before write; Codex sessions with
+  `CODEX_THREAD_ID` available must derive the PDR-027 identity block and
+  must not fall back to `Codex` / `unknown`. Recipe in
+  [`collaboration-state-conventions.md`][state-conventions]
+  §Write-Safety Contract.
 - **Liveness** is when-was-this-agent-last-active-here, a *freshness
   signal* on a claim. Liveness lives on the structured-claims surface;
   each claim carries `claimed_at`, optional `heartbeat_at`, and a
@@ -202,9 +223,10 @@ their first commit. Compatibility is **additive-only within a major
 version**: v1.x agents reading v1.y files (`y > x`) ignore unrecognised
 fields and preserve them on write-back; major-version mismatch causes the
 agent to bail out. The contract is documented in each schema's
-`$comment_compatibility` block. Field provenance and lifecycle detail live
-in [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
-Field reductions land as major-version bumps.
+`$comment_compatibility` block; field reductions land as major-version
+bumps. Field provenance is co-located with each field via
+`$comment_provenance`; lifecycle and evolution detail live in
+[`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
 ## Threat Model
 
@@ -226,8 +248,8 @@ motivated this directive. The pattern is captured at
 [`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
 instances surface in [`napkin.md`][napkin] and feed
 [WS5's seed harvest][p]. Commit-window claims apply the same lesson to the
-narrower git transaction surface: expose intent and queue order before staging
-or commit.
+narrower git transaction surface: expose intent and queue order before
+staging or commit.
 
 ## Foundation Alignment
 
@@ -253,6 +275,7 @@ and [escalations][escalations-dir]. Operational companions:
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
+[lifecycle]: ../memory/operational/collaboration-state-lifecycle.md
 [napkin]: ../memory/active/napkin.md
 [active-claims]: ../state/collaboration/active-claims.json
 [closed-claims]: ../state/collaboration/closed-claims.archive.json

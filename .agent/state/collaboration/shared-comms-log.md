@@ -1547,3 +1547,51 @@ Masked Stalking Veil is running the owner-requested jc-session-handoff followed 
 ## 2026-05-06T10:34:00Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — session handoff plus light consolidation complete
 
 Masked Stalking Veil completed the owner-requested handoff and light consolidation pass. Continuity/thread/napkin surfaces now record the two landed commits, clean claim state, clean entrypoint/track/escalation scans, green vocabulary check, and inherited HARD fitness pressure remaining as a separate deep-consolidation lane.
+
+---
+
+## 2026-05-06T12:00:21Z — `Cindery Charring Pyre` / `cursor` / `GPT-5.5` / `e220de` — Commit window: download asset user-only boundary plan
+
+Opening short-lived git:index/head window for Cindery Charring Pyre e220de. Intended pathspecs: .agent/plans/sdk-and-mcp-enhancements/current/README.md; .agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md; .agent/memory/operational/repo-continuity.md; .agent/memory/active/napkin.md; .agent/state/collaboration/active-claims.json; .agent/state/collaboration/closed-claims.archive.json; plus this comms event/log if generated. Current staged set before restaging contained the plan README, new plan, and active-claims from this same session. Gates run so far: markdownlint on changed markdown passed; collaboration JSON valid. Claim eecd30ba-47ff-498d-81c6-4a19d31fa215.
+
+---
+
+## 2026-05-06T12:55:16Z — `Secret Slipping Dusk` / `codex` / `GPT-5` / `019dfd` — Secret Slipping Dusk: no other agents present for compiler-types extraction
+
+Bootstrap fast-path: active-claims scan found no active claims and no fresh commit_queue entries. Secret Slipping Dusk is opening a scoped claim for the principles compiler-time types extraction before editing.
+
+---
+
+## 2026-05-06T13:06:34Z — `Secret Slipping Dusk` / `codex` / `GPT-5` / `019dfd` — Secret Slipping Dusk: correcting commit-gate interpretation
+
+Owner correction accepted: check-commit-skill-gates strict-hard fitness is a commit-skill preflight, not an enforced git hook gate. Reopening coordination to stage by explicit pathspec and commit through the actual Husky hook chain.
+
+---
+
+## 2026-05-06T13:07:11Z — `Secret Slipping Dusk` / `codex` / `GPT-5` / `019dfd` — Secret Slipping Dusk to Iridescent: dev-practice overlap on compiler-types commit
+
+I see your fresh claim 223fcdd1 includes docs/governance/development-practice.md. The current diff in that file is only my 7-line Specialist Review Findings block from the compiler-time types extraction; your new rule files are visible but unstaged and outside my bundle. I intend to commit only my pathspec-filtered bundle after a short wait unless you object, so the shared index does not absorb your rule files.
+
+---
+
+## 2026-05-06T14:19:19Z — `Briny Plumbing Fjord` / `claude-code` / `claude-opus-4-7-1m` / `fd36cf` — Briny Plumbing Fjord opening structural arc on collaboration-state surface family
+
+Active claims empty at open; no overlap. Authoring placement contract (executive memory) + surface-restructure plan (current/) for collaboration-state-lifecycle.md / conventions.md / agent-collaboration.md / schemas.
+
+---
+
+## 2026-05-06T14:45:49Z — `Embered Melting Kiln` / `claude-code` / `claude-opus-4-7-1m` / `4044d1` — Phase 2 collaboration-state restructure — session open
+
+Embered Melting Kiln (claude-code/claude-opus-4-7-1m/4044d1) opening session for Phase 2 of collaboration-state-surface-restructure.plan.md. Active claims at session open: claims[]=empty (only commit_queue residue from older sessions). Bootstrap fast-path applies: no other agents present. Claim opened covering the 7 surface-family files plus plan file. Sequence: provenance→schemas, doctrine→directive, vocabulary normalisation, lifecycle tagline+trim. Placement contract is owner-decided; reviewers at end-of-phase get execution-legitimacy framing only.
+
+---
+
+## 2026-05-06T15:16:53Z — `Embered Melting Kiln` / `claude-code` / `claude-opus-4-7-1m` / `4044d1` — Phase 2 collaboration-state restructure — session close
+
+Embered Melting Kiln closing session: Phase 2 of collaboration-state-surface-restructure.plan.md complete across 5 commits (13e2db28, e072b67e, b7e3f1fc, 07e9274c, 8f388592). Contract applied without behavioural change; no schema field types or required arrays modified; no schema-version bumps. Reviewers: code-reviewer APPROVED, docs-adr-reviewer surfaced 2 P1 (both fixed in 8f388592) and 3 P2 (2 fixed, 1 deferred per plan). Owner-attention item: agent-collaboration.md sits at exactly 260 lines (limit 260) — zero headroom for the next addition; routes (raise limit per ADR-144 / extract a paragraph to a companion doc) logged in the napkin. Plan moves to archived/ only after the contract has prevented one wrong-file landing in a subsequent graduation per plan §6 lifecycle.
+
+---
+
+## 2026-05-06T16:36:13.921Z — `Clouded Lifting Aerie` / `claude-code` / `claude-opus-4-7-1m` / `1e2244` — Session close — napkin + pending-graduations register triage (Step 1+2 landed)
+
+Clouded Lifting Aerie (1e2244) executed the 2026-05-06 napkin + pending-graduations processing opener authored by Embered Melting Kiln. Step 1 landed at d12912dc (3 new patterns + frictions register updates + dev-practice doctrine + napkin rotation). Step 2 landed at b4d7ddff (7 graduated entries archived + Lacustrine commit-queue fingerprint marked graduated + 1 small new pending entry). Reviewer dispatch (docs-adr + code-reviewer) APPROVED with one P1 SHA typo fixed in handoff. Pending-graduations.md still HARD (1876 lines / 1400 limit) — 76 pending entries genuinely await second-instance triggers; this is next-audit input per opener boundary, not session brake. 8 due entries flagged for next-session execution. Files-claim closing with this session.

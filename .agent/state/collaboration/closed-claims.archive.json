@@ -10677,23 +10677,1101 @@
         },
         "summary": "Owner-requested session handoff plus light consolidation closeout completed; repo-continuity, thread record, napkin, and comms surfaces updated; deep consolidation remains due for inherited fitness pressure.",
         "evidence": [
+          {
+            "kind": "claim",
+            "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
+            "summary": "Claim explicitly closed by owning session."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
+          },
+          {
+            "kind": "continuity",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "93c0e53d-0040-4cd8-906e-fb32be4cffaa",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
         {
-          "kind": "claim",
-          "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
-          "summary": "Claim explicitly closed by owning session."
-        },
-        {
-          "kind": "thread_record",
-          "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-          "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
-        },
-        {
-          "kind": "continuity",
-          "ref": ".agent/memory/operational/repo-continuity.md",
-          "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md",
+            ".agent/plans/sdk-and-mcp-enhancements/current/README.md"
+          ]
         }
-      ]
+      ],
+      "claimed_at": "2026-05-06T10:48:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Create executable plan for user-only download URL exposure",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:07:17Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Created queued executable MCP plan for user-only download URL boundary",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "93c0e53d-0040-4cd8-906e-fb32be4cffaa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b0059619-6d33-464e-8a3a-602672ad8223",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:08:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add ADR and documentation DoD requirements to download asset plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:20:28Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Added ADR and documentation DoD requirements to download asset plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b0059619-6d33-464e-8a3a-602672ad8223",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f19a8138-8328-4c02-801c-78abe0e2ad59",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:20:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify default setup does not expose asset content",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:21:46Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Clarified existing default asset-content boundary and hardening intent",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f19a8138-8328-4c02-801c-78abe0e2ad59",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1de525e9-d1df-43f6-b437-4efabfc8b9a7",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:50:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Remove over-specified markdown content tests from plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:51:48Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Removed exact-prose documentation checks from plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1de525e9-d1df-43f6-b437-4efabfc8b9a7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:00:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit download asset user-only boundary plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:03:22Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Committed download asset user-only boundary plan as 76468407",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/settings.json",
+            ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:17:24Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement urgent skill-load pressure relief plugin pruning",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:20:08Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Implemented urgent skill-load pressure relief Phase 0/1 settings prune; Claude recount pending.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2bdca82d-553c-4e94-b486-7d2c8980a886",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:33:26Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit urgent skill-load pressure relief closeout",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:36:02Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Committed urgent skill-load pressure relief closeout at 07cdddf0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2bdca82d-553c-4e94-b486-7d2c8980a886",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1BFF0D98-03DF-4CCE-B27D-57D522DF68B0",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:39:25Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: napkin handoff lessons (Hidden Slipping Moth)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:40:43Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "napkin handoff lessons committed at ad000f96; session close",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1BFF0D98-03DF-4CCE-B27D-57D522DF68B0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "be0a5397-7b1e-4c5c-92ac-190cd51cad91",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:45:17Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session handoff for skill-load pressure relief correction",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:46:24Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Completed session handoff for skill-load pressure relief correction; Phase 2 Vercel triage is next.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "be0a5397-7b1e-4c5c-92ac-190cd51cad91",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f5643be8-0cd8-4acb-ba14-b318dbffff7c",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:46:54Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit all session-handoff files",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:48:30Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Committed all session-handoff files at 7f91c938.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f5643be8-0cd8-4acb-ba14-b318dbffff7c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "18752b47-e97b-4a97-98d3-e9087459a0c3",
+      "agent_id": {
+        "agent_name": "Secret Slipping Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            "docs/governance/typescript-practice.md",
+            "docs/governance/development-practice.md",
+            ".agent/rules/no-type-shortcuts.md",
+            ".agent/rules/strict-validation-at-boundary.md",
+            ".agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:55:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Extract compiler-time TypeScript operational detail from principles.md into typescript-practice.md, retarget rule pointers, update narrow plan notes, validate, and commit.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:58:55Z",
+        "closed_by": {
+          "agent_name": "Secret Slipping Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Implemented compiler-time types extraction and validation. Commit not attempted because commit-skill orchestrator failed before staging on inherited repo-wide strict-hard fitness debt in distilled.md and pending-graduations.md; no hook bypass used.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "18752b47-e97b-4a97-98d3-e9087459a0c3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7e478c0b-695c-4407-bb80-b7846e14e0f0",
+      "agent_id": {
+        "agent_name": "Secret Slipping Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T13:08:20Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit compiler-time TypeScript extraction with explicit pathspecs; exclude Iridescent rule files and lifecycle work.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:10:13Z",
+        "closed_by": {
+          "agent_name": "Secret Slipping Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Commit window closed after successful content commit cc8866a8 for compiler-time types extraction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7e478c0b-695c-4407-bb80-b7846e14e0f0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4e5562b2-2d84-42e0-a111-5b59a32a88e0",
+      "agent_id": {
+        "agent_name": "Secret Slipping Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md",
+            "docs/governance/typescript-practice.md",
+            "docs/governance/development-practice.md",
+            ".agent/rules/no-type-shortcuts.md",
+            ".agent/rules/strict-validation-at-boundary.md",
+            ".agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T13:06:34Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit compiler-time TypeScript extraction through actual git hooks after owner correction that strict-hard preflight is not the enforced gate.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:10:13Z",
+        "closed_by": {
+          "agent_name": "Secret Slipping Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Work claim closed after compiler-time types extraction landed in cc8866a8; overlap with Iridescent on development-practice.md was communicated and pathspec-filtered.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4e5562b2-2d84-42e0-a111-5b59a32a88e0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "223fcdd1-20c3-4752-b707-dbb20a56dfc7",
+      "agent_id": {
+        "agent_name": "Iridescent Waxing Orbit",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "aeebab"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/rules/practice-core-portability.md",
+            ".agent/rules/directive-file-context-budget.md",
+            ".agent/rules/validators-must-recompute-not-just-record.md",
+            ".agent/rules/re-apply-first-question-at-elaboration-boundaries.md",
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            "docs/governance/development-practice.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T13:04:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graduate distilled.md to rules and governance docs (non-directive phase)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:14:56Z",
+        "closed_by": {
+          "agent_name": "Iridescent Waxing Orbit",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "aeebab"
+        },
+        "summary": "Distilled graduation pass landed at commit b9bae574: 4 new rules, 2 doc edits, distilled.md cleared all hard metrics. Directive-file edits queued for fresh session under <30% context budget rule.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "223fcdd1-20c3-4752-b707-dbb20a56dfc7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "02a71e42-8f6c-482d-a012-5bafde6691a5",
+      "agent_id": {
+        "agent_name": "Iridescent Waxing Orbit",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "aeebab"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T13:34:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Reframe learning-loop entry; audit vaporware-gated deferrals; session handoff + consolidate",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:42:01Z",
+        "closed_by": {
+          "agent_name": "Iridescent Waxing Orbit",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "aeebab"
+        },
+        "summary": "Reframe and audit pass completed: distilled.md learning-loop entry reframed (artefactual cost, not inherent), Sequenced-Deferral entry restructured to acknowledge doctrine-scanner-CLI vaporware-citation. Commit d9aab409. Session handoff in progress.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02a71e42-8f6c-482d-a012-5bafde6691a5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "84a0a42a-f231-4b04-8e14-2a17e128c761",
+      "agent_id": {
+        "agent_name": "Iridescent Waxing Orbit",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "aeebab"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T13:50:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author next-session opener for collaboration-state-lifecycle.md deep exploration",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T13:52:06Z",
+        "closed_by": {
+          "agent_name": "Iridescent Waxing Orbit",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "aeebab"
+        },
+        "summary": "Authored next-session opener for collaboration-state-lifecycle.md deep exploration; updated repo-continuity Next safe step and thread Active arc Next safe step to point at the opener.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "84a0a42a-f231-4b04-8e14-2a17e128c761",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "37404ee8-4836-4d33-9c66-c537c8cad557",
+      "agent_id": {
+        "agent_name": "Briny Plumbing Fjord",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fd36cf"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/executive/collaboration-state-placement-contract.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:19:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author placement contract + surface-restructure plan; arc + opener + napkin updates",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T14:28:24Z",
+        "closed_by": {
+          "agent_name": "Briny Plumbing Fjord",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "fd36cf"
+        },
+        "summary": "Phase 1 landed: placement contract + surface-restructure plan + opener supersession + thread arc + napkin entry under c014ad2a",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "37404ee8-4836-4d33-9c66-c537c8cad557",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0704a011-00b3-40f6-99e0-97f81fa3aca5",
+      "agent_id": {
+        "agent_name": "Embered Melting Kiln",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4044d1"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/collaboration-state-lifecycle.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/closed-claims.schema.json",
+            ".agent/state/collaboration/conversation.schema.json",
+            ".agent/state/collaboration/escalation.schema.json",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:45:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Phase 2: apply placement contract — 4 commits (provenance→schemas, doctrine→directive, vocabulary normalisation, lifecycle tagline+trim)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T15:16:36Z",
+        "closed_by": {
+          "agent_name": "Embered Melting Kiln",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4044d1"
+        },
+        "summary": "Phase 2 of collaboration-state-surface-restructure.plan.md complete: 5 commits (13e2db28 provenance→schemas, e072b67e doctrine→directive, b7e3f1fc vocabulary normalisation, 07e9274c tagline+recipe-shape audit, 8f388592 reviewer-fix). Placement contract applied. All gates green. Reviewers: code-reviewer APPROVED, docs-adr-reviewer 0 P0 / 2 P1 (both fixed) / 3 P2 (2 fixed, 1 deferred). P1.1 directive at hard-limit ceiling surfaced to owner via napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0704a011-00b3-40f6-99e0-97f81fa3aca5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f3a4be75-32f3-4a92-9eb2-cde353132590",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:14:12Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit Step 1 napkin graduation pass.",
+      "notes": "Pathspecs: 9 files (3 new patterns, 4 modifications, 1 new archive, 1 napkin shell); gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:18:37Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Commit landed at d12912dc; queue entry completed; window claim closed cleanly.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f3a4be75-32f3-4a92-9eb2-cde353132590",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f138cd67-9138-48df-bbcc-aabccda35c77",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:27:13Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit Step 2 pending-graduations register triage.",
+      "notes": "Pathspecs: 4 files (1 modified register, 1 new archive snapshot, 2 modified collaboration state); gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:28:47Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Step 2 commit landed at b4d7ddff; archive snapshot + register triage clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f138cd67-9138-48df-bbcc-aabccda35c77",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53ffd952-2e26-4017-adfe-80189545f9a1",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/**",
+            ".agent/memory/operational/**",
+            ".agent/rules/**",
+            ".agent/practice-core/**",
+            "docs/governance/development-practice.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:04:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Process napkin.md + pending-graduations.md per opener; substance > destination fitness",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:36:19Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Session close — napkin + pending-graduations Steps 1+2 landed at d12912dc and b4d7ddff. Files-claim closing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53ffd952-2e26-4017-adfe-80189545f9a1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "81e246a4-6752-441e-b546-437109f8ddc1",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:36:35Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit handoff bundle (reviewer P1 fix + thread update + collaboration-state cleanup).",
+      "notes": "Pathspecs: 7 files; gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:37:45Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Handoff commit landed; session closing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "81e246a4-6752-441e-b546-437109f8ddc1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a9adf48c-c67e-4fd2-a7f3-59371d857ed8",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T17:51:32Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit light handoff bundle (repo-continuity + thread record + next-session opener).",
+      "notes": "Pathspecs: 5 files; gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T17:52:44Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Light handoff commit landed; session closing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a9adf48c-c67e-4fd2-a7f3-59371d857ed8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7d637e06-e21f-4c15-beb2-9f100ce51ebf",
+      "agent_id": {
+        "agent_name": "Pelagic Rolling Harbour",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "58a9ad"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T17:58:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "drain due queue in pending-graduations register",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T18:11:32Z",
+        "closed_by": {
+          "agent_name": "Pelagic Rolling Harbour",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "58a9ad"
+        },
+        "summary": "drain due queue: 1 archived (Lacustrine F-15), 1 partially graduated (polarity-discipline), 4 sequenced-deferral pointers, 3 vaporware-trigger flags; HARD persists by design; phase-3 surfaced for owner direction",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7d637e06-e21f-4c15-beb2-9f100ce51ebf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "609f532c-1027-4162-9f92-e15c31af23a4",
+      "agent_id": {
+        "agent_name": "Pelagic Rolling Harbour",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "58a9ad"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T18:39:04Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "recalibrate pending-graduations fitness limits + add metadata schema + index + per-entry tags",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T18:52:33Z",
+        "closed_by": {
+          "agent_name": "Pelagic Rolling Harbour",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "58a9ad"
+        },
+        "summary": "recalibrate pending-graduations: 4-field fitness frontmatter +3 descriptive fields (lifecycle_model/access_pattern/fitness_rationale); per-entry tag schema with closed vocab + composite convention; index TOC by status; 12 high-touch entries tagged; new metacognition entry captures access-rhythm axis; HARD cleared (SOFT 1 line over target)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "609f532c-1027-4162-9f92-e15c31af23a4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
-  }
   ]
 }

@@ -13,13 +13,31 @@ evolves, and how stale entries are cleaned up. Authority:
 [`agent-collaboration.md`][directive], [PDR-035][pdr-035] for agent-work
 ownership, and [PDR-029 Family A Class A.3][pdr-029] for the shared git
 transaction tripwire. Detailed lifecycle recipes live in
-[`collaboration-state-lifecycle.md`][lifecycle].
+[`collaboration-state-lifecycle.md`][lifecycle]. Substance-kind placement
+across this surface family is governed by the
+[placement contract][placement-contract].
+
+## Vocabulary
+
+Four-term taxonomy used across this surface family:
+
+- **stale** — past `freshness_seconds` TTL; archivable. Noise, not a blocker.
+- **fresh-but-quiet** — within TTL, no recent `heartbeat_at`. Informational
+  only; next staleness threshold archives automatically.
+- **orphaned** — a fresh-but-quiet claim whose owning session is known or
+  suspected to have ended. Cleanup ethics in
+  [`agent-collaboration.md`][directive] §d.
+- **expired** — wall-clock past `expires_at` (commit_queue entries and
+  sidebars). Stale-reporting only; never auto-resolves.
+
+`closure.kind: "stale"` is the archive label for any claim leaving through
+staleness, including orphan archival.
 
 ## Surfaces
 
 All collaboration-state timestamps are UTC ISO 8601 strings with a trailing
 `Z`. Owner-local time can be mentioned in prose when useful, but UTC is the
-canonical value for stale/fresh calculations and durable state.
+canonical value for staleness and freshness calculations and durable state.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
@@ -36,9 +54,14 @@ canonical value for stale/fresh calculations and durable state.
 
 ## Schema Provenance
 
-Field-level provenance and lifecycle rationale live in
-[`collaboration-state-lifecycle.md`][lifecycle]. This conventions file keeps
-the state-surface index compact.
+Field-level provenance is co-located with each field in
+[`active-claims.schema.json`][active-claims-schema] and the sibling
+[`closed-claims.schema.json`][closed-claims-schema],
+[`conversation.schema.json`][conversation-schema], and
+[`escalation.schema.json`][escalation-schema] via `$comment_provenance`
+annotations. The schemas are the canonical home for field-level metadata;
+this conventions file keeps the state-surface index compact and
+[`collaboration-state-lifecycle.md`][lifecycle] keeps operational recipes.
 
 ## Default `freshness_seconds = 14400` (rationale)
 
@@ -76,7 +99,8 @@ Live claims belong to the live session that opened or inherited them. The
 current terminal-session model does not support reclaiming old live claims on
 resume. When a session closes, its claims should close explicitly into
 `closed-claims.archive.json`; if the agent misses that closeout, a later
-janitor archives the claim as stale/orphaned rather than successful.
+janitor archives the claim as orphaned (with `closure.kind: "stale"`)
+rather than successful.
 
 TTL is type-specific. Normal active-work claims use the heartbeat freshness
 window above; commit-window claims use a short expiry; attention pings and
@@ -95,7 +119,7 @@ This file keeps the operational index compact.
 | Open / refresh active work | `active-claims.json` | Fresh claim with `claimed_at`, optional `heartbeat_at`, and visible areas |
 | Queue commit intent | `active-claims.json` root `commit_queue` | FIFO advisory entry with files, subject, phase, expiry, and staged-bundle fingerprint |
 | Close active work | `closed-claims.archive.json` | Claim copied with `closure.kind: "explicit"` and evidence refs |
-| Archive stale work | `closed-claims.archive.json` | Expired claim preserved with `closure.kind: "stale"` |
+| Archive stale work | `closed-claims.archive.json` | Stale claim preserved with `closure.kind: "stale"` |
 | Open structured coordination | `conversations/<id>.json` | Decision-thread event list with concrete entries and evidence |
 | Request sidebar | `conversations/<id>.json` | `sidebar_*` entries grouped by `sidebar_id`; timeout is reporting only |
 | Record joint commitment | `conversations/<id>.json` | `joint_decision*` entries with decider, recorder, actor, ack, and evidence |
@@ -173,3 +197,4 @@ fields:
 [founding-pattern]: ../collaboration/parallel-track-pre-commit-gate-coupling.md
 [p]: ../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [csw-plan]: ../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md
+[placement-contract]: ../executive/collaboration-state-placement-contract.md

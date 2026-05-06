@@ -64,6 +64,13 @@ Each layer catches a different class of defect; the layers compose:
 9. **Accessibility audit** (`test:a11y`) — WCAG 2.2 AA compliance for
    UI-shipping workspaces, zero-tolerance, both themes.
 
+### Specialist Review Findings
+
+Reviewer findings are action items by default. Accepted findings are
+implementation work; rejected findings need written rationale; non-blocking
+deferrals need owner-visible next action. Full invocation and disposition
+policy lives at `.agent/memory/executive/invoke-code-reviewers.md`.
+
 ## Problem-Hiding Patterns
 
 Fix the problem named by a gate; do not silence the signal that names it.
@@ -187,6 +194,24 @@ the current understanding.
 - Plans are execution documents (what to do, in what order).
   Permanently useful information belongs in ADRs, not plans.
   Extract permanent knowledge to ADRs before archiving a plan.
+- Plans must be **discoverable** AND **actionable**.
+  Discoverable: linked from the README, the relevant roadmap, AND
+  the session prompt. Actionable: status-tracking tables,
+  completion checklists, and resolved (not deferred) open
+  questions. A plan that meets one criterion but not the other is
+  drift — readers either cannot find it or cannot execute it.
+- Reconcile parent when child changes runtime truth: a child plan
+  that evolves runtime architecture must reconcile the parent plan
+  and any closure proof in the same session. Otherwise the parent
+  drifts away from the system as it actually runs.
+- Narrative sections drift first. When syncing plan state, inspect
+  body status lines, decision tables, and current-state prose —
+  not just frontmatter and todo checkboxes. Frontmatter is easy to
+  keep in sync; prose is where stale truth hides.
+- Plan-following is not principle-following. Re-apply the first
+  question at every elaboration boundary; see
+  `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`
+  for the runtime discipline.
 - ADR "Accepted (Revised)" status: use for documentation entropy
   fixes where the core decision is unchanged. Do not supersede —
   it adds overhead for no structural benefit.
@@ -195,6 +220,16 @@ the current understanding.
   outstanding work.
 - Fenced code blocks without language specifier fail markdownlint
   MD040.
+- For prose artefacts (READMEs, ADR/PDR/governance bodies,
+  runbooks), acceptance criteria name the _decision_ and the
+  _audience outcome_ — discoverability and accuracy, not exact
+  phrasing. Reserve executable tests and `rg` guards for code
+  contracts, generated surfaces, or forbidden runtime exposure;
+  asserting a specific markdown sentence shape across files
+  precisely constrains markdown implementation rather than
+  documentation behaviour and shifts maintenance cost without
+  paying for it. Validation is reviewer/read-through plus
+  formatting/link hygiene.
 - NEVER compress docs to meet line limits — split files by
   responsibility instead.
 - When moving plan artefacts, grep for old paths in `*.ts`,

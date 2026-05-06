@@ -35,6 +35,7 @@ index in the same commit.
 - `.agent/rules/apply-architectural-principles.md`
 - `.agent/rules/capture-practice-tool-feedback.md`
 - `.agent/rules/consolidate-at-third-consumer.md`
+- `.agent/rules/directive-file-context-budget.md`
 - `.agent/rules/documentation-hygiene.md`
 - `.agent/rules/dont-break-build-without-fix-plan.md`
 - `.agent/rules/executive-memory-drift-capture.md`
@@ -66,7 +67,9 @@ index in the same commit.
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/plan-body-first-principles-check.md`
+- `.agent/rules/practice-core-portability.md`
 - `.agent/rules/pre-merge-divergence-analysis.md`
+- `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`
 - `.agent/rules/read-agent-md.md`
 - `.agent/rules/read-before-asking.md`
 - `.agent/rules/read-diagnostic-artefacts-in-full.md`
@@ -84,3 +87,4 @@ index in the same commit.
 - `.agent/rules/use-agent-comms-log.md`
 - `.agent/rules/use-result-pattern.md`
 - `.agent/rules/validate-full-target-estate.md`
+- `.agent/rules/validators-must-recompute-not-just-record.md`

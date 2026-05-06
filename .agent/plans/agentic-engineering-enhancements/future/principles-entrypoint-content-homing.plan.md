@@ -26,6 +26,10 @@ todos:
   - id: phase-4-extractions
     content: "Phase 4: Execute extractions in priority order; each one is a separate atomic commit with bidirectional links."
     status: pending
+    progress_note: >
+      2026-05-06: compiler-time types extraction lane executed first
+      as the contract test case; Phase 4 remains open for the
+      remaining candidate extractions.
   - id: phase-5-slim-entrypoint
     content: "Phase 5: Slim principles.md into a focused entrypoint + operationalisation index."
     status: pending
@@ -392,6 +396,12 @@ The strong-candidate extraction list captured during the analysis
 
 The exact phasing and per-extraction acceptance criteria are
 finalised when this plan promotes to `current/`.
+
+2026-05-06 lane note: the compiler-time types extraction was executed
+first as the Phase 4 contract test case. It moved the TypeScript
+operational detail to `docs/governance/typescript-practice.md`,
+left a Level-1 pointer in `principles.md`, and preserved
+bidirectional traceability. The rest of Phase 4 remains open.
 
 ## Foundation Alignment
 

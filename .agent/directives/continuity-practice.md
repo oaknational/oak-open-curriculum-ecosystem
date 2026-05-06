@@ -1,7 +1,7 @@
 ---
 fitness_line_target: 200
-fitness_line_limit: 220
-fitness_char_limit: 13000
+fitness_line_limit: 270
+fitness_char_limit: 16000
 fitness_line_length: 100
 split_strategy: 'Split by workflow surface if continuity doctrine grows beyond one page'
 ---

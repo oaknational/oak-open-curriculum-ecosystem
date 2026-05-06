@@ -13,4 +13,5 @@ The correct pattern:
 3. Use the validated, fully-typed result from then on
 4. If the shape is genuinely open-ended, that is a design problem to fix, not a type problem to work around
 
-See `.agent/directives/principles.md` §Compiler Time Types and §Validate external signals.
+See `docs/governance/typescript-practice.md` §Compiler-time Types and
+Runtime Validation.
