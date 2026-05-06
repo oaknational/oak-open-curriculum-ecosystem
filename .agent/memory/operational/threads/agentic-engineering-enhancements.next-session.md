@@ -1,5 +1,45 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Distilled.md graduation pass + vaporware-deferral audit (2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Iridescent Waxing Orbit / claude-code /
+claude-opus-4-7-1m / `aeebab`).
+
+**Landings**:
+
+- `b9bae574` — `docs(practice): graduate distilled.md to rules and
+  governance docs`. Four new rules
+  (`practice-core-portability.md`,
+  `directive-file-context-budget.md`,
+  `validators-must-recompute-not-just-record.md`,
+  `re-apply-first-question-at-elaboration-boundaries.md`); orphaned-
+  claim policy added to
+  `collaboration-state-lifecycle.md`; distilled.md trimmed
+  314 → 152 lines, all three hard-zone metrics cleared.
+- `cc8866a8` (parallel agent's commit, foreign-stage absorption):
+  discoverable+actionable plans, parent-reconciliation, narrative-
+  drift, plan-following-vs-principle-following landed in
+  `docs/governance/development-practice.md` under the typescript-
+  extraction subject.
+- `d9aab409` — `docs(distilled): reframe learning-loop and
+  sequenced-deferral entries`. Owner-corrected mid-session: the
+  doctrine-scanner CLI gating cited in the held Sequenced-Deferral
+  Discipline entry is vaporware-shaped (`future/` plan with
+  compound unmet promotion gates). Reframed cyclical-learning-loop
+  entry from inherent-cost to artefactual-cost (per-session closure
+  discipline owns the loop).
+
+**Next safe step**: Promote the queued items in distilled.md
+"Queued for Next Directive-Edit Session" (coordination surface
+discipline, inter-agent comms first-class, per-session closure-
+discipline-owns-the-loop, hypothesis-layer routing) to
+`agent-collaboration.md` in a fresh session under <30% context.
+Audit pending-graduations.md for the wider doctrine-scanner-CLI-
+gating pattern and apply the same un-gating cure (land the
+discipline now, complement with enforcement when the CLI lands).
+
+---
+
 ## Active arc — Skill-load pressure relief Phase 1 implemented (2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Ashen Burning Anvil / codex /
@@ -1205,6 +1245,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Iridescent Waxing Orbit` | `claude-code` | `claude-opus-4-7-1m` | `aeebab` | `distilled-md-graduation-pass-four-new-rules; vaporware-citation-deferral-audit-doctrine-scanner-CLI-gating; closure-discipline-owns-the-loop-reframe; orphaned-claim-policy-graduated-to-collaboration-state-lifecycle; foreign-stage-absorption-third-instance-observed-cc8866a8; commits b9bae574 and d9aab409` | 2026-05-06 | 2026-05-06 |
 | `Nebulous Illuminating Satellite` | `claude-code` | `claude-opus-4-7-1m` | `fe4acc` | `doctrine-sharpening-and-deeper-convergence-pass; gate-off-fix-gate-on-anti-pattern-elevation; practice-core-surface-retirement-execution; pattern-and-displaced-doctrine-graduations; trinity-active-principles-extensions-with-per-diff-approval; deferred-items-plan-family-authoring; six-commit-landing-shape` | 2026-04-29 | 2026-04-29 |
 | `Pearly Swimming Atoll` | `codex` | `GPT-5` | `019dd9` | `repo-goal-narrative-refresh` | 2026-04-29 | 2026-04-29 |
 | `Estuarine Washing Beacon` | `codex` | `GPT-5` | `019dd3` | `codex-agent-config-path-and-skill-discovery-repair` | 2026-04-28 | 2026-04-28 |
