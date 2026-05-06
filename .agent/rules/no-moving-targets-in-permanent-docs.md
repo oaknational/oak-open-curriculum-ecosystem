@@ -83,6 +83,33 @@ Three reasons:
    session-of-origin and rotated. Commit SHAs, timestamps,
    instance counts, and other transient values belong there.
 
+## Citation Directionality: Permanent → Ephemeral Is Forbidden
+
+Permanent docs (ADRs, PDRs, governance docs, principles,
+testing-strategy, rules) MUST NOT cite plans, plan paths, plan
+section identifiers, workstream identifiers, track-card paths, or
+other ephemeral surfaces. Plans archive, get renamed, get split or
+merged; a permanent doc citing a plan name becomes a dead pointer
+the moment that plan archives.
+
+The directionality is one-way:
+
+- *Plans cite permanent docs* — plans reference ADRs, principles,
+  rules, and PDRs as the source of truth they execute against.
+- *Permanent docs do not cite plans* — they describe what changed
+  and what reattaches when, self-contained, without naming the
+  plan or workstream that produced the change.
+
+This subsumes the SHA-specific framing under the broader
+directionality principle. Same family of failure (permanent →
+ephemeral citation), different granularities: SHAs, plan names,
+workstream identifiers, track-card paths, and any other identifier
+that lives in ephemeral state.
+
+Owner sharpening 2026-05-05: *"plans are ephemeral! ADRs are
+permanent. The ADRs are the source of truth, plans reference
+THEM"*.
+
 ## What to Do Instead
 
 | Impulse | Wrong move | Right move |

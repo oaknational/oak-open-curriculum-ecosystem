@@ -252,31 +252,6 @@ is already a full-time process; this scales superlinearly with N
 because cross-agent coordination substance accumulates faster than
 any single agent's substance graduates upward.
 
-**Plans cite ADRs, never the reverse — ADRs are permanent and
-outlive plans.** Owner sharpening 2026-05-05 of the moving-targets
-rule at coarser granularity: permanent docs (ADRs, runbooks,
-principles, READMEs in stable docs trees) MUST NOT cite plan names,
-plan paths, or plan section identifiers. Plans are by construction
-ephemeral — they archive when complete, get renamed during scope
-shifts, get split or merged. A permanent doc that cites a plan name
-becomes a dead pointer the moment that plan archives. The
-directionality is one-way: *plans reference ADRs* (ADRs are the
-source of truth a plan executes against); ADRs never reference
-plans. Worked instance: doc-cleanup commit added prose like *"...is
-tracked in the `retire-smoke-tests-all-vitest-no-real-io` plan's IO
-Inventory cycle"* across ADR-121, ADR-083, ADR-063, and the
-sentry-deployment runbook. Owner correction: *"plans are ephemeral!
-ADRs are permanent. The ADRs are the source of truth, plans
-reference THEM"*. Cure: rewrite affected sites self-contained —
-describe WHAT changed and what reattaches when, without naming the
-plan. Subsumes the prior "no SHAs in permanent docs" rule under the
-broader directionality principle: same family of failure (permanent
-→ ephemeral citation), different granularities (SHAs / plan names
-/ workstream identifiers / track-card paths). Operationalised at
-[`no-moving-targets-in-permanent-docs`](../../rules/no-moving-targets-in-permanent-docs.md);
-rule extension to encode the plan-citation case explicitly is a
-pending Layer 2 graduation candidate.
-
 **Practice-Core portability is by construction.** Anything under
 `.agent/practice-core/` (the trinity, entry points, CHANGELOG,
 provenance, `decision-records/`, `incoming/` — note that the
