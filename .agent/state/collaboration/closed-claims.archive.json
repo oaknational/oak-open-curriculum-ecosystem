@@ -11480,6 +11480,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f3a4be75-32f3-4a92-9eb2-cde353132590",
+      "agent_id": {
+        "agent_name": "Clouded Lifting Aerie",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "1e2244"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:14:12Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit Step 1 napkin graduation pass.",
+      "notes": "Pathspecs: 9 files (3 new patterns, 4 modifications, 1 new archive, 1 napkin shell); gates pending; no peer claims.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:18:37Z",
+        "closed_by": {
+          "agent_name": "Clouded Lifting Aerie",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "1e2244"
+        },
+        "summary": "Commit landed at d12912dc; queue entry completed; window claim closed cleanly.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f3a4be75-32f3-4a92-9eb2-cde353132590",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
