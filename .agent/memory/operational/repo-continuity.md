@@ -1821,27 +1821,26 @@ Visible owner-appetite items, not blockers for the active lanes:
 **Status (2026-05-07 Pelagic Rolling Harbour, claude-code,
 claude-opus-4-7-1m, `58a9ad`, dedicated pending-graduations
 drain plus owner-directed recalibration plus insight capture
-plus `/jc-session-handoff`): `due — but not well-bounded for
-this closeout`**. Trigger conditions: (i) the dedicated-drain opener
-plan closed (its work executed end-to-end across four commits);
-(ii) repeated surprises suggest a new cross-repo PDR candidate
-(fitness-limits-as-implicit-access-rhythm-theory). Both triggers
-hold per `consolidate-docs.md §Trigger Checklist`. The triggered
-work is not well-bounded for this closeout because (a) the
-metacognitive insight is captured as a fresh `pending` entry with
-explicit graduation target gated on `second-instance OR
-owner-direction at promotion`; (b) the four sequenced-deferral
-PDR/ADR/hook-tightening entries each name a dedicated session as
-their next move; (c) the Phase B backfill sweep on ~76 pending
-entries is mechanical but volume-heavy and benefits from a fresh
-context budget. Deferral honesty: constraint is *task-shape size*
-(each named follow-up is itself a single-session unit of work);
-evidence is the per-entry phase-pointer text in
-pending-graduations.md and the new entry's graduation-target
-clause; falsifiability is whether a future agent in a single
-session can land any of the four sequenced-deferral entries (each
-of which records concrete phases). No `consolidate-docs` run this
-session.
+plus `/jc-session-handoff` plus tight `/jc-consolidate-docs`):
+`completed this handoff — tight pass`**. Two triggers fired per
+`consolidate-docs.md §Trigger Checklist`: (i) the dedicated-drain
+opener plan closed; (ii) the access-rhythm-as-fitness-axis
+insight is a fresh PDR candidate. Tight-pass disposition: no
+substance ready to graduate this pass — the session insight is a
+first instance captured as a `pending` entry in
+`pending-graduations.md` (graduation target: ADR-144 amendment +
+possible cross-repo PDR; trigger: second-instance OR owner-direction
+at promotion); today's reframe arc is another instance of the
+mature `the-frame-was-the-fix` pattern (6+ cross-experience
+instances) and does not warrant re-extraction. Pattern-extraction
+sweep: nothing new at the barrier. Experience-files cross-scan:
+my session's experience file is structurally consonant with the
+existing pattern; emergent observation captured. Napkin rotation:
+not due (200 lines, well under the 500-line trigger). Fitness:
+SOFT only across all surfaces post-recalibration; no further
+disposition needed. Follow-ups remain in the Next Safe Step block
+above (Phase B sweep; sequenced-deferral entries; access-rhythm
+graduation gate).
 
 **Status (2026-05-06 Embered Melting Kiln, claude-code,
 claude-opus-4-7-1m, `4044d1`, Phase 2 collaboration-state surface
