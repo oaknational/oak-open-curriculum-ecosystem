@@ -186,6 +186,46 @@ accepted deferral to a future codegen session.
 All three public-writable-directory-looking hotspot literals were removed from
 the tested source surface. Sonar PR 93 now reports 0 hotspots.
 
+### P2: Stale Clerk version comment in auth-info-schema.ts
+
+Source: clerk-reviewer step 10 dispatch (2026-05-06).
+
+`apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/auth-info-schema.ts:34-36`
+contains a comment citing `@clerk/mcp-tools@0.3.1` behaviour. `package.json` pins
+`^0.5.0`. The Zod `.optional()` on `resource` remains behaviourally correct for
+0.5.x, but the version reference drifts.
+
+Action: update comment to reference `@clerk/mcp-tools 0.5.x` or drop the version
+and keep only the behavioural assertion ("does not set `resource`").
+
+### P2: .env.example missing local-dev DSN-pollution warning
+
+Source: sentry-reviewer step 10 dispatch (2026-05-06).
+
+Running `SENTRY_MODE=sentry` locally with a production DSN emits events tagged
+`environment=development` to the shared Sentry project. `.env.example:39-44`
+documents the resolution chain but does not warn about this.
+
+Action: add a comment to `.env.example` stating that local `SENTRY_MODE=sentry`
+runs with a production DSN pollute the `development` Sentry bucket; prefer a
+personal DSN or `SENTRY_MODE=fixture` for local capture testing.
+
+### P2: Missing contract test for local-dev release identifier shape
+
+Source: sentry-reviewer step 10 dispatch (2026-05-06).
+
+ADR-163 §1 states that `VERCEL_ENV` unset (local dev) should produce a
+`dev-<shortSha>` release tag. `config-resolution.ts` runtime resolver may return
+`APP_VERSION` semver when `VERCEL_ENV` is unset — the "split-release pollution"
+shape ADR-163 named. ADR-163's second amendment claims "the build-time resolver
+and the runtime resolver are the same function — shape divergence is impossible by
+construction" but there is no contract test asserting this for the development branch.
+
+Action: add a test in `packages/libs/sentry-node/tests/` asserting that
+`resolveSentryRelease` returns `dev-<shortSha>` (not semver `APP_VERSION`) when
+`VERCEL_ENV` is unset. If the resolver collapse already enforces this, the test
+ratifies the property; if not, the runtime resolver needs alignment.
+
 ### P2: Local Checkout Contains Non-PR Work
 
 Local HEAD is one commit ahead of the remote PR head:
