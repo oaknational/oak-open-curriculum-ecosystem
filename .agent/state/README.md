@@ -25,7 +25,7 @@ into `.agent/memory/` lessons when patterns earn promotion. Lessons in
 ### `.agent/state/collaboration/`
 
 Installed by WS0 onward of the
-[`multi-agent-collaboration-protocol`](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+[`multi-agent-collaboration-protocol`](../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
 - [`collaboration/comms/events/`](collaboration/comms/events/) — immutable

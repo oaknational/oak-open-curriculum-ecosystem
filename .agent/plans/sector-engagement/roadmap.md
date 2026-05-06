@@ -1,7 +1,7 @@
 # Sector Engagement Roadmap
 
 **Status**: Reference collection created; strategic engagement threads forming
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-04-30
 
 ---
 
@@ -46,7 +46,7 @@ should become executable work.
 - External knowledge-source work has been split into
   [external-knowledge-sources/](external-knowledge-sources/), while internal
   Oak KG integration remains in
-  [../knowledge-graph-integration/](../knowledge-graph-integration/).
+  [../connecting-oak-resources/knowledge-graph-integration/](../connecting-oak-resources/knowledge-graph-integration/).
 - External organisation use of Oak's own KG assets now has a dedicated
   [knowledge-graph-adoption/](knowledge-graph-adoption/) thread.
 - The sibling `oak-openapi` repo has a future integration brief because API,
@@ -85,7 +85,7 @@ Phase 4: Organisation-specific support playbooks            Future
 
 - Later strategic plans:
   [future/oak-openapi-monorepo-integration.plan.md](future/oak-openapi-monorepo-integration.plan.md),
-  [../knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](../knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+  [../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
 - Done when: Oak has decided how the public API repo, ontology repo, generated
   SDKs, MCP server, search service, and KG assets should relate at the repo and
   contract level.
@@ -103,6 +103,10 @@ Phase 4: Organisation-specific support playbooks            Future
 
 ### Phase 4 - Organisation-Specific Support Playbooks
 
+- Authoritative reusable-component canon (upstream for playbook wording):
+  [docs/foundation/VISION.md — What We Deliver](../../../docs/foundation/VISION.md#what-we-deliver)
+- Partner contract and playbook discipline:
+  [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)
 - Candidate threads:
   [oeai/](oeai/),
   [knowledge-graph-adoption/](knowledge-graph-adoption/)
@@ -131,5 +135,5 @@ own deterministic gates in the owning engineering collection.
 1. [High-Level Plan](../high-level-plan.md)
 2. [Collection README](README.md)
 3. [External Material Triage](external-material-triage.md)
-4. [Open Education Knowledge Surfaces](../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+4. [Open Education Knowledge Surfaces](../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
 5. [Oak Surface Isolation and Generic Foundation Programme](../architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md)

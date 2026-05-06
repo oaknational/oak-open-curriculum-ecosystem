@@ -70,8 +70,6 @@ function describeNonValueConfigError(error: NonValueConfigError): string {
   switch (error.kind) {
     case 'missing_app_version':
       return 'Application version is required for Sentry release resolution';
-    case 'missing_git_sha':
-      return 'Git SHA is required for Sentry release resolution but VERCEL_GIT_COMMIT_SHA is not set';
     case 'missing_branch_url_in_preview':
       return 'VERCEL_BRANCH_URL is required for preview-shape release resolution';
     case 'missing_sentry_dsn':

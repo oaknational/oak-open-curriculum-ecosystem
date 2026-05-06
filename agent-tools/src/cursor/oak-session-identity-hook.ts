@@ -72,7 +72,10 @@ export function planCursorSessionIdentityHook(
   const displayName = deriveIdentity(sessionId).displayName;
   const tabHint = `Oak · ${displayName}`;
   const output = {
-    env: { PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId },
+    env: {
+      PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId,
+      OAK_AGENT_IDENTITY_OVERRIDE: displayName,
+    },
     additional_context: identityContext({ displayName, tabHint, prefix }),
     user_message: `${tabHint} — suggested Composer tab title; details in .cursor/${COMPOSER_MIRROR_FILE}`,
   };

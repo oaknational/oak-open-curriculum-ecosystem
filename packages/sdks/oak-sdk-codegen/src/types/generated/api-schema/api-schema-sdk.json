@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-00e72e8d3260acea8a6b5177272f2d523c8f69f5"
+    "version": "0.6.0-0c6d4433c5ad52e49b3b41fd99087612656424f5"
   },
   "servers": [
     {
@@ -8170,10 +8170,6 @@
               "type": "string",
               "description": "The unit slug identifier"
             },
-            "unitOrder": {
-              "type": "number",
-              "description": "The position of the unit within the thread"
-            },
             "oakUrl": {
               "type": "null",
               "description": "Threads are data concepts without Oak URLs on the website. Always null for thread resources."
@@ -8181,21 +8177,18 @@
           },
           "required": [
             "unitTitle",
-            "unitSlug",
-            "unitOrder"
+            "unitSlug"
           ],
           "additionalProperties": false
         },
         "example": [
           {
             "unitTitle": "Unitising and coin recognition - counting in 2s, 5s and 10s",
-            "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s",
-            "unitOrder": 1
+            "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s"
           },
           {
             "unitTitle": "Solving problems in a range of contexts",
-            "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money",
-            "unitOrder": 2
+            "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money"
           }
         ]
       },

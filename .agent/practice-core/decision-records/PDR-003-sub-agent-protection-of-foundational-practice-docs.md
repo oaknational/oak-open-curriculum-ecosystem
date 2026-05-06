@@ -93,9 +93,8 @@ pressure (fitness violations, deduplication passes, compression
 requests), the rule reads as arbitrary. Recording the rationale
 in a portable PDR ensures that:
 
-1. Future Practice stewards, in this repo or any repo the
-   Practice hydrates into, inherit the reasoning along with the
-   rule.
+1. Future Practice stewards, in any repo the Practice hydrates
+   into, inherit the reasoning along with the rule.
 2. A host-repo permission rule can cite the PDR as its
    justification, anchoring the local rule in portable Practice
    doctrine rather than in repo-local convention.
@@ -137,13 +136,3 @@ subject to the consent protocol that attends every substantive
 edit. The sub-agent is background, autonomous, and scoped. The
 authority asymmetry is intentional and should be preserved in
 any evolution of the Practice's delegation model.
-
-### Host-local context (this repo only, not part of the decision)
-
-In the repo where this PDR was authored, the host-repo
-permission rule operationalising this doctrine is
-`.agent/rules/subagent-practice-core-protection.md`. That rule
-currently cites host-repo ADRs for its authority chain. When
-this PDR stabilises in practice, the rule's "Why" section
-SHOULD be shortened to a reference to PDR-003 rather than
-restating the rationale.

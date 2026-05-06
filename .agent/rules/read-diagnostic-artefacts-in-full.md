@@ -1,7 +1,9 @@
 # Read Diagnostic Artefacts in Full
 
-Operationalises [PDR-016 (Verification Before Propagation)](../practice-core/decision-records/PDR-016-verification-before-propagation.md)
-and [PDR-020 (Check-Driven Development)](../practice-core/decision-records/PDR-020-check-driven-development.md).
+Operationalises [PDR-016 (Claim Propagation and Reference Quality)](../practice-core/decision-records/PDR-016-claim-propagation-and-reference-quality.md),
+[PDR-020 (Check-Driven Development)](../practice-core/decision-records/PDR-020-check-driven-development.md),
+and [PDR-045 (Workspace-First Investigation Discipline)](../practice-core/decision-records/PDR-045-workspace-first-investigation-discipline.md)
+§Move 1.
 
 When a tool returns paginated, truncated, filtered, or sampled diagnostic
 output, read the complete artefact before forming a diagnostic hypothesis.

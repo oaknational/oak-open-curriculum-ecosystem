@@ -1,7 +1,7 @@
 ---
-fitness_line_target: 350
-fitness_line_limit: 500
-fitness_char_limit: 40000
+fitness_line_target: 1000
+fitness_line_limit: 1400
+fitness_char_limit: 90000
 fitness_line_length: 200
 split_strategy: "Graduate items to PDRs/ADRs/rules/permanent docs; archive resolved items to repo-continuity-session-history archives; keep only pending and recently-graduated items here"
 ---
@@ -30,7 +30,1369 @@ HARD fitness state). Doctrine references that previously pointed to
 Schema: `captured-date`, `source-surface`, `graduation-target`,
 `trigger-condition`, `status`. `consolidate-docs` uses this as the live
 queue. Graduated and merged history is preserved in git and the archived
+
++ 2026-05-05; **archive-scale historical napkin synthesis is a distinct
+  learning-loop cadence, not just current-rotation cross-session
+  consolidation** (Owner-stated aside during Riverine Navigating Sextant's
+  start-right / metacognition pass). Current doctrine already requires
+  cross-session reading across recent sessions and the current rotation
+  window, but the owner named the missing historical move: reread current and
+  archived napkins holistically after prior per-napkin processing has already
+  happened, asking what the archive now knows as a corpus that no individual
+  pass could have known at the time. Benefits: long-wave failure modes become
+  visible; learning-loop throughput problems become inspectable; PDR
+  candidates can cite historical arcs rather than only recent recurrence; and
+  archived napkins remain an evidence corpus rather than cold storage. Source
+  surface: owner message 2026-05-05. Graduation-target: amendment to
+  PDR-014 (distinguish recent-thread cross-session consolidation from
+  archive-scale historical synthesis) plus `consolidate-docs` command
+  refinement (trigger, bounded corpus selection, synthesis report / processed
+  window marker, and routing outputs). Trigger: owner direction to implement
+  the plan now. Status: `graduated 2026-05-05` — PDR-014 amendment plus
+  `consolidate-docs` command refinement landed in the same documentation
+  bundle.
+
++ 2026-05-05; **pattern surface needs polarity discipline — every
+  pattern entry must be explicit about whether it is a pattern to
+  repeat, an anti-pattern to avoid, or whether the substance is a
+  recurring observation that does not yet have an actionable shape
+  and belongs elsewhere** (Owner-asked aside during Opalescent
+  Threading Nebula's promotion pass, 2026-05-05). The existing
+  `patterns/README.md` taxonomy splits by category (code /
+  architecture / process / testing / agent) but not by polarity.
+  The `prevents_recurring_mistake` frontmatter criterion implicitly
+  covers anti-patterns without distinguishing them from patterns
+  to repeat — the freshly-authored
+  `eager-rounding-off-on-partial-structures.md` is type
+  *anti-pattern* but reads as if it could be either at first
+  glance. Recurring observations that are neither directly
+  repeatable nor failure modes to avoid (e.g. *"the cyclical
+  learning-loop is a full-time process"*) belong in distilled.md
+  (cross-session refinements) or pending-graduations (queued
+  candidates) rather than in patterns/. Source surface: owner
+  message during this session's promotion pass; immediate fix
+  applied to `eager-rounding-off-on-partial-structures.md` (added
+  `polarity: anti-pattern` frontmatter field + explicit POLARITY
+  blockquote in the body). Graduation-target options: (a)
+  amendment to `.agent/memory/active/patterns/README.md` adding
+  polarity discipline to the taxonomy and frontmatter schema with
+  the three categories explicit *(landed in this same commit;
+  status partially graduated)*; (b) sweep over existing pattern
+  files to backfill polarity markers *(deferred to fresh restart
+  session — bulk edit across ~70 files exceeds current session's
+  context budget)*; (c) Practice-Core promotion (PDR-014
+  amendment to the routing discipline naming polarity as a
+  required field at pattern-graduation time) after the host
+  operational form stabilises and a second Practice-bearing repo
+  surfaces the same recording-shape question. Note: PDR-014
+  rather than PDR-007, because polarity is a routing concern (how
+  substance is classified into the patterns surface) rather than
+  a Core-pattern-shape concern (the former Core patterns directory
+  was retired 2026-04-29 per PDR-007 amendment, so PDR-007 cannot
+  carry polarity-of-Core-patterns substance).
+  Trigger: owner direction in this turn (do this in the same
+  promotion pass) OR queue for fresh restart session if scope
+  exceeds context budget. Status: `due` (owner-direction trigger
+  fired; substance-led cure named; immediate-fix applied to one
+  pattern file; full sweep + README amendment is the graduation
+  target).
+
++ 2026-05-05; **30% context budget for directive-file processing
+  is a standing rule, not a session-scoped suggestion** (Owner-
+  stated during Opalescent Threading Nebula's promotion pass with
+  explicit "this is always true"). Files under
+  `.agent/directives/` (principles.md, AGENT.md, orientation.md,
+  tdd-as-design.md, testing-strategy.md, schema-first-execution.md)
+  are deep, dense, and structurally load-bearing — every agent
+  reads them at every session open; mistakes compound across the
+  entire Practice. The error rate of editing operations rises
+  sharply under context pressure; the disposition that produces
+  *"I'll just be careful"* under pressure is the rounding-off
+  failure mode named at
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`.
+  The 30% threshold leaves headroom for full-depth file reading,
+  existing-structure comprehension, and editing without
+  crowding-out. The cure is structural: directive-file work is
+  sequenced as the FINAL step of any consolidation pass (napkin →
+  other capture surfaces → distilled → pending-graduations →
+  directives, in that order); at the boundary before directive
+  work, the context-usage check fires; if context is at or above
+  30%, finish current-step work, write a session-handoff opener,
+  and queue the directive work for a fresh session. Source
+  surface: owner direction this session; user-memory
+  `feedback_30_percent_context_for_directives.md`; distilled.md
+  §Process entry. Graduation-target: PDR in
+  `practice-core/decision-records/` covering high-stakes-editing
+  context-budget discipline (adopter scope: every Practice-bearing
+  repo with directive files; the rule is portable). Trigger: owner
+  direction has fired ("this is always true" = standing).
+  **Status: due — but PDR landing is itself directive-shaped work
+  that requires <30% context**, which this session does not have.
+  Queued for the fresh restart session per owner direction
+  *"likely the starting again will need to happen in a fresh
+  session"*. Self-applying graduation: the rule queues itself for
+  the session where it can be safely landed.
+
++ 2026-05-05; **cyclical learning-loop maintenance is a full-time
+  process even at small N** (Owner-stated meta-observation during
+  Opalescent Threading Nebula's promotion pass): *"note the
+  cyclical nature, even with only two agents running, managing
+  the learning loop is a full time process"*. Today's evidence:
+  Opalescent's session and Dawnlit's session both contributed
+  substance to the same napkin in <2 hours; both surfaced the
+  same orchestrator-vs-hook conflation; both required owner
+  correction; substance produced *about the loop* accumulated
+  alongside substance produced *by the loop*. The loop does not
+  asymptote — every pass discovers new candidate-substance for
+  future passes. Operational implication: loop maintenance is the
+  substrate that future feature work runs on; its cost is
+  *baseline*, not overhead. At N=2 the cost is already a full-time
+  process; scales superlinearly with N because cross-agent
+  coordination substance accumulates faster than any single
+  agent's substance graduates. Source surface: owner direction
+  this session; distilled.md §Process entry. Graduation-target
+  options: (a) PDR in `practice-core/decision-records/` covering
+  Practice operational scaling (adopter scope: every multi-agent
+  Practice-bearing repo); (b) amendment to PDR-014 (consolidation
+  flow) naming the loop's full-time-baseline character. Trigger:
+  second instance OR owner direction. Status: pending — single
+  observation today; substance grows across more passes.
+
++ 2026-05-05; **eager rounding-off on partial structures under
+  failure pressure** (Opalescent Threading Nebula, host pattern
+  authored 2026-05-05): the deeper disposition that drives the
+  orchestrator-vs-hook conflation. Under failure pressure, agents
+  round partial structures into whole structures and act on the
+  rounded-off whole; the information gap is often zero. Five-step
+  rounding chain: pre-screen → gate → blocking gate → commit
+  refused → bypass needed. Three observed instances all in this
+  repo's commit flow on 2026-05-05 (Ethereal, Dawnlit, Opalescent).
+  Source surface:
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`
+  (host pattern, anti-pattern polarity, agent-tier). Graduation-
+  target: promotion to Practice-Core PDR with `pdr_kind: pattern`
+  or amendment to an existing PDR after second-context
+  manifestation outside commit flow (release pipeline, deploy
+  pipeline, schema migration gate, or any other layered enforcement
+  context). Trigger: second-context manifestation OR owner
+  direction. Status: pending — single-context evidence (all 3
+  instances are orchestrator-vs-hook conflation in commit flow);
+  promoting to Practice Core on single-context evidence would be
+  generalising from one context, exactly the rounding-off failure
+  the pattern names.
+
++ 2026-05-05; **commit-skill orchestrator vs git-hook-chain are
+  separate enforcers; agents conflate them under failure pressure**
+  (Ethereal Transiting Comet, this date — diagnostic instance during
+  graduation pass commit attempt). The commit-skill orchestrator
+  (`scripts/check-commit-skill-gates.ts`) is a script the agent runs
+  voluntarily before `git commit`; it includes
+  `practice:fitness:strict-hard`. The git-hook-chain (`.husky/pre-commit`)
+  is what `git commit` actually fires; it runs format, markdownlint,
+  knip, depcruise, type-check, lint, test — but NOT
+  `practice:fitness:strict-hard`. When the orchestrator fails, the
+  failure-mode framing reaches for `--no-verify` as escape valve
+  even though the actual blocking surface (the hook chain) may not
+  be running the failing gate. Cure: inspect which enforcer is
+  blocking BEFORE reaching for bypass. Substance distinct from
+  Lacustrine's §Surprise 1 (orchestrator's lack of staged-set
+  awareness; same orchestrator, different lacuna). Source surface:
+  napkin §Surprise 2 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`.
+  Graduation-target: pattern entry at
+  `.agent/memory/active/patterns/identify-which-enforcer-before-bypass.md`
+  (process or agent tier — TBD at second instance) OR amendment to
+  `.agent/skills/commit/SKILL.md` naming the orchestrator-vs-hook
+  distinction explicitly so agents do not conflate them. Trigger:
+  second instance of agent-confused-orchestrator-with-hook-chain in
+  any commit/release/closure surface. Status: `due` (status flipped
+  2026-05-05) — second instance observed: Dawnlit Transiting Galaxy
+  (`0ddc89`) on observability-sentry-otel thread reached for
+  `--no-verify` after orchestrator-pre-screen failure on pre-existing
+  peer fitness violations, despite `.husky/pre-commit` not including
+  the failing fitness gate. Owner caught the framing ("Why do you
+  need --no-verify?"); the conflation surfaced when articulated. CR1
+  commit subsequently landed with standard `git commit` (no
+  --no-verify) through the live hook chain cleanly. Same shape as
+  Ethereal's first instance: the orchestrator's name and shared
+  configurations let agents round it off to the live hook under
+  failure pressure. Cure now sharpest as a permanent-doc clarification
+  in `commit/SKILL.md` distinguishing the pre-screen orchestrator
+  (advisory; agent-invoked; includes fitness/vocabulary gates) from
+  the live hook (blocking; git-invoked; format/markdown/knip/depcruise/type/lint/test).
+  Owner direction at promotion supersedes; substance-trigger
+  fired (sharp + instance-count = 2). **Status: graduated 2026-05-05**
+  (Opalescent Threading Nebula). Third instance observed live during
+  Opalescent's Layer 0 → 1 napkin rotation commit attempt — same
+  rounding-off chain, different surface manifestation (constructed a
+  doctrinal collision between SKILL §Pre-Commit Validation and
+  PDR-046 §Move 2 instead of proposing `--no-verify`). Owner
+  correction: *"all quality gates are blocking always, the
+  orchestrator is not a quality gate, it surfaces very important but
+  advisory signals, there is no conflict here"*. Graduation
+  destinations: (a) `.agent/skills/commit/SKILL.md § Quality Gates
+  Are Always Blocking; the Orchestrator Is Advisory` — new section
+  distinguishing the two authorities with the 3-instance evidence
+  trail and the diagnostic discipline; (b)
+  `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`
+  — new host pattern naming the deeper disposition under failure
+  pressure (rounding-off-partial-structures-into-whole-structures,
+  with three worked instances). Both landed in same atomic commit.
+  Practice-Core promotion (PDR with `pdr_kind: pattern`, since the
+  former Core patterns directory was retired 2026-04-29) deferred
+  until second-context manifestation outside commit flow (release
+  pipeline, deploy pipeline, schema migration gate, etc.) — current
+  evidence is single-context.
+
++ 2026-05-05; **owner-initiated execution as bypass-by-trust-boundary
+  is a fourth mechanism shape for the structural-enforcer recursive-
+  exclusion pattern** (Ethereal Transiting Comet, encountered during
+  graduation pass commit attempt). The `git --no-verify`
+  PreToolUse bash hook block fired on the very pattern being
+  landed; agent-tool layer cannot bypass the hook even with owner
+  authorisation, but owner-side execution via the `!` prefix runs
+  in owner's shell, bypassing the agent-tool hook chain. This is
+  distinct from the three mechanism shapes the pattern's
+  worked-instances table now names (explicit `exclude_paths`;
+  per-line context exclusion; self-exclusion by placement) — those
+  cure the enforcer's path-scope problem; this fourth shape cures
+  via shifted-execution-trust-boundary. Source surface: napkin
+  §Surprise 1 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`,
+  pattern file `structural-enforcer-recursive-exclusion.md` (table
+  carries three mechanism shapes; this would be the fourth row).
+  Graduation-target: amendment to the pattern's worked-instances
+  table adding the trust-boundary-shifted-execution row, OR
+  separate dedicated pattern if the trust-boundary shape recurs in
+  non-`--no-verify` contexts (e.g. owner-side credential reads,
+  owner-side destructive operations gated by deny-list, owner-side
+  network actions blocked from agent-tool layer). Trigger: second
+  instance of agent-tool-hook firing on owner-authorised action
+  where owner can execute the same action directly. Status:
+  `pending` — single-instance.
+
++ 2026-05-05; **severity is not urgency** (Ethereal Transiting Comet,
+  owner-corrected at session open). Owner direction: *"remember,
+  critical means important, but it does not mean rush, if anything
+  even more care and thoughtfulness is needed"*. Severity-tier
+  labels (CRITICAL, HARD, P1, escalation-tier any other system)
+  name importance, not urgency. The response to severity is more
+  care, more thoughtfulness, slower processing — not faster action.
+  Sharpening of `feedback_no_speed_pressure.md` saved at moment of
+  correction. Substance: the failure mode is "CRITICAL → drive
+  action" framing, which is the same impulse no-speed-pressure
+  names dressed in escalation-tier vocabulary. Source surface:
+  user-memory `feedback_no_speed_pressure.md` (refined this date),
+  napkin §Surprise 3 (this date), experience file
+  `2026-05-05-ethereal-the-pattern-fired-on-its-own-commit.md`
+  §Three things I am taking from this. Graduation-target: amendment
+  to `.agent/rules/no-speed-pressure.md` adding the severity-vs-
+  urgency distinction with worked instance, OR PDR amendment if
+  the framing crosses repos (severity-vs-urgency conflation is
+  unlikely to be host-specific). Trigger: SECOND INSTANCE of an
+  agent framing an escalation-tier label as a haste driver in any
+  context. Status: `pending` — single first-class instance with
+  user-memory refinement; rule extension follows on second instance
+  per register-on-substance-not-instance-count discipline only when
+  substance is multi-instance.
+
++ 2026-05-05; **Inter-agent communication is a first-class coordination
+  primitive** (Lacustrine Navigating Rudder, owner-named after the
+  Gnarled-Lacustrine sub-2-min-roundtrip resolution).
+  Source-surface: user-memory `feedback_inter_agent_comms_first_class.md`,
+  napkin §Surprise 4 (this date).
+  Graduation-target: extend [`.agent/rules/use-agent-comms-log.md`](../../rules/use-agent-comms-log.md)
+  to make explicit the workflow ("when another agent's state blocks
+  yours and they may still be active: post comms-event with deadline
+  + default-action; poll briefly; escalate to owner only if no
+  response inside the deadline window"). Possible PDR candidate
+  encoding the more general principle: agent-to-agent coordination
+  is direct unless the decision is owner-owned. Possibly an ADR
+  amendment to ADR-150 (Continuity Surfaces) since comms-events live
+  in that surface.
+  Trigger-condition: second instance of agent-to-agent coordination
+  resolving without owner mediation (this Gnarled-Lacustrine round
+  is the worked example; second instance graduates from feedback to
+  rule).
+  Status: `pending`.
+
++ 2026-05-05; **ADRs are permanent and outlive plans; plans cite ADRs,
+  never the reverse** (Lacustrine Navigating Rudder, owner correction
+  during BF-2/BF-4 doc cleanup).
+  Source-surface: user-memory `feedback_adrs_permanent_plans_ephemeral.md`,
+  napkin §Surprise 3 (this date).
+  Graduation-target: extend
+  [`.agent/rules/no-moving-targets-in-permanent-docs.md`](../../rules/no-moving-targets-in-permanent-docs.md)
+  with the directionality principle (currently the rule covers SHAs
+  / counts / tool versions; the directionality "permanent ↛ ephemeral"
+  is a coarser-grained framing that subsumes the SHA case). Could
+  alternatively be a new rule
+  `.agent/rules/no-ephemeral-pointers-in-permanent-docs.md` if the
+  framing benefits from its own surface. Possible PDR candidate on
+  the broader directionality principle ("permanent records cite
+  permanent records; ephemeral records may cite up").
+  Trigger-condition: rule-text update at next doctrine-enforcement
+  pass on the no-moving-targets rule, OR second instance of the
+  ADR↛plan reverse-citation failure mode in a separate ADR/runbook.
+  Status: `pending`.
+
++ 2026-05-05; **Entry-point contract: default + named extensions
+  framing is forward-compatible by design** (Lacustrine Navigating
+  Rudder, owner-named during AGENTS.md drift incident).
+  Source-surface: `.agent/commands/session-handoff.md` step 6d (this
+  date), napkin entries on this session.
+  Graduation-target: pattern-tier — the design move generalises:
+  *write the default contract such that a new participant joining
+  without specific accommodation gets compatible behaviour first,
+  then add named extensions only where the participant's behaviour
+  requires it*. Possible pattern entry at
+  `.agent/memory/active/patterns/default-plus-named-extensions-for-forward-compatibility.md`
+  applicable beyond entry-point files (e.g. config schemas, plugin
+  contracts, multi-platform adapter pairs, even API design).
+  Trigger-condition: second instance of the pattern (recognise it
+  in another design context — e.g. in MCP transport adapters, or in
+  a config-schema decision — graduates from session-local note to
+  pattern entry).
+  Status: `pending`.
+
++ 2026-05-05; **Commit-queue `record-staged` + `verify-staged`
+  fingerprint protocol is non-trivially recursive when state files
+  self-modify** (Lacustrine Navigating Rudder, second instance).
+  Source-surface: napkin §Surprise 6 (this date); same observation
+  recorded in earlier session summary as the "fingerprint mismatch
+  incident" (first instance — see commit `2b78aa93`'s session arc).
+  Graduation-target: CLI hint inside `agent-tools:commit-queue --
+  record-staged` printing *"do not re-stage active-claims.json
+  after this command — the fingerprint write is metadata-only and
+  the index does not need it"*; OR doc note in
+  [`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)
+  step 7's record-staged paragraph; OR redesign the
+  `staged_bundle_fingerprint` to exclude the fingerprint-field
+  itself when computing (currently it includes the whole patch).
+  Trigger-condition: second instance now confirms (the earlier
+  Lacustrine session and this session both hit it). Promote to
+  CLI / doc / impl change at next commit-queue tooling pass.
+  Status: `due`.
+
++ 2026-05-05; **Moments of correction are high-bandwidth signals
+  worth capturing regardless of whether the correction is technical
+  or relational** (Lacustrine Navigating Rudder, surfaced by reading
+  Gnarled's two 2026-05-05 experience files together, per
+  consolidate-docs §4c emergent-cross-experience scan).
+  Source-surface: `.agent/experience/2026-05-05-gnarled-the-header-was-the-contract.md`
+  + `.agent/experience/2026-05-05-gnarled-the-asymmetry-was-the-path.md`
+  read as a pair.
+  Graduation-target: pattern-tier — both files capture the texture
+  of a *being-corrected* moment; the first is technical
+  (markdown-direct vs JSON-event contract), the second is relational
+  (receiving an apology across the asymmetric agent/human boundary).
+  The pattern observation: the correction itself, regardless of
+  domain, is the high-leverage signal — and the experience surface
+  is precisely where it lands rather than dispersing as
+  unstructured affect. Possible pattern entry at
+  `.agent/memory/active/patterns/correction-as-experience-signal.md`
+  OR a PDR amendment to PDR-048 (insight-capture-at-moment-of-occurrence)
+  noting that *correction* is a specific shape of insight-moment that
+  deserves named capture.
+  Trigger-condition: second cross-experience pair surfacing the
+  same correction-as-signal observation (likely on a different
+  thread or platform) graduates from session-local register
+  observation to pattern entry / PDR amendment.
+  Status: `pending`.
+
++ 2026-05-05; **Two-tier authorisation chain for sensitive index
+  actions** (Lacustrine Navigating Rudder, observed during option-2
+  unstage of Gnarled's pre-staged files).
+  Source-surface: napkin §Surprise 5 (this date).
+  Graduation-target: pattern entry
+  `.agent/memory/active/patterns/two-tier-authorisation-claim-holder-plus-owner.md`
+  capturing: when an action affects another agent's claimed state,
+  obtaining the affected agent's authorisation (e.g. via comms
+  reply) is necessary but not sufficient if the original deferral
+  was owner-directed; the owner's separate authorisation is also
+  required. Affects the
+  [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md)
+  rule's interaction model. Possible PDR amendment if the principle
+  surfaces in second-instance form.
+  Trigger-condition: second instance of two-tier-authorisation in a
+  different context (e.g. another agent's branch / config / shared
+  state) graduates from session-local pattern candidate to pattern
+  entry.
+  Status: `pending`.
+
 continuity snapshots.
+
++ 2026-05-05; **`use-agent-comms-log` rule must name the JSON-event-only
+  authoring contract explicitly** (Gnarled Climbing Bark, post-handoff
+  discovery via owner's *"check your messages please"* prompt).
+  Source-surface: `napkin.md` 2026-05-05 §Surprise 5 + experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md`.
+  Specific instance: I edited `shared-comms-log.md` directly during
+  session-handoff to post a heads-up to Moonlit Shimmering Comet about
+  the OAuth proxy test gate. The file is generated from
+  `.agent/state/collaboration/comms-events/*.json` (its own header
+  documents this via `> Generated from ...`); regeneration overwrote
+  my manual append, the heads-up never reached the rendered log, and
+  my session-handoff summary claimed it had. Discovered when owner
+  prompted *"check your messages please"* and a fresh real comms-event
+  from Lacustrine Navigating Rudder appeared at the bottom of the
+  rendered log addressed to me with a 2-minute deadline. Cure
+  applied this session: re-posted the Moonlit heads-up as a proper
+  JSON event (`ce5cc169-491f-45fe-9f7a-b97bdb67f002.json`) and the
+  Lacustrine reply as a proper JSON event
+  (`4ec85e69-5ee3-4dfb-a74f-09456ef7bf6d.json`).
+  Graduation-target: extend
+  [`.agent/rules/use-agent-comms-log.md`](../../rules/use-agent-comms-log.md)
+  to state explicitly *"the rendered `shared-comms-log.md` is generated;
+  do not edit it directly — author comms-events as JSON files under
+  `.agent/state/collaboration/comms-events/<uuid>.json` only"*.
+  Currently the rule references *"timestamped comms event that renders
+  into shared-comms-log.md"* without naming that direct edits are
+  reverted by regeneration. The discipline is implicit in the generator
+  script's existence; making it explicit at rule-tier closes the
+  exposure window. Trigger-condition: SECOND INSTANCE of an agent
+  editing the rendered log directly under the wrong-write-surface
+  assumption — the cost (lost message; falsely-confident handoff
+  summary) is high enough that single-instance graduation may be
+  warranted; owner direction at promotion supersedes. Status: pending.
+
++ 2026-05-05; **comms-event authoring CLI helper to reduce latency under
+  time-bounded coordination windows** (Gnarled Climbing Bark, real-time
+  coordination with Lacustrine Navigating Rudder under 2-minute
+  deadline). Source-surface: `napkin.md` 2026-05-05 §Surprise 6 +
+  experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md` §Eight
+  seconds. Specific instance: Lacustrine's question event arrived with
+  a deadline 2 minutes out; I read it ~30 seconds in; substance settled
+  immediately but the JSON-event ceremony (UUID, ISO timestamp, four
+  identity fields, title + body, heredoc-quoted into a file) took
+  ~1 minute. Reply landed at 08:39:50Z, 8 seconds before the
+  08:39:58Z deadline. Under a tighter pressure profile (deadline
+  measured in tens of seconds) the ceremony would have been the
+  bottleneck. Graduation-target: an `agent-tools` CLI subcommand,
+  e.g. `pnpm agent-tools:collaboration-state -- comms-event new
+  --title "..." --body "..."` (or `pnpm agent-tools:comms-event new
+  ...`). The CLI fills boilerplate (UUID, ISO timestamp), runs identity
+  preflight, validates schema, writes the JSON. Substance stays in
+  agent's hands; ceremony is automated. Trigger-condition: SECOND
+  INSTANCE of time-bounded comms coordination where ceremony latency
+  meaningfully reduces the response window — OR owner direction.
+  Status: pending.
+
++ 2026-05-05; **trust-the-artefact's-stated-provenance pattern: read the
+  artefact's self-documentation before treating it as a write target**
+  (Gnarled Climbing Bark, comms-log direct-edit failure mode).
+  Source-surface: experience file
+  `experience/2026-05-05-gnarled-the-header-was-the-contract.md` §What
+  shifted. Pattern shape: a markdown file whose first lines say
+  *"Generated from ..."* is exactly what it says it is — a derived
+  view, not a write target. A directory containing schema-conforming
+  JSON event files is the canonical ingest. The artefact's
+  self-documentation IS the contract; its file extension and editor-
+  openability are not. Generalises beyond comms-log: applies to any
+  generated index, any rendered view, any derived state surface in the
+  repo. Graduation-target: pattern candidate at
+  `.agent/memory/active/patterns/trust-the-artefacts-stated-provenance.md`
+  (or similar) capturing the failure mode + cure + adjacent instances.
+  The shape is structurally similar to
+  `passive-guidance-loses-to-artefact-gravity` (an artefact's natural
+  affordances dominate stated discipline) but in the opposite
+  direction: here the artefact's stated discipline (*Generated
+  from ...*) is precisely what dominates if read, but is silently
+  ignored when not read. Trigger-condition: SECOND INSTANCE of a
+  generated/derived surface being treated as a write target.
+  Status: pending.
+
++ 2026-05-05; **agent-initiated `--no-verify` is forbidden, even when the
+  doctrinal pre-existing-violations exception applies** (Gnarled
+  Climbing Bark, owner correction on commit-skill orchestrator hard
+  fail). Source-surface: `napkin.md` 2026-05-05 §Surprise 2 + user-
+  memory `feedback_no_verify_fresh_permission.md` (refined). Owner
+  direction 2026-05-05: *"stop asking for `--no-verify`, just because I
+  can give permission doesn't mean I will... I will tell you when it is
+  appropriate to use, not the other way around"*. The framing of
+  `--no-verify` as one-of-three-options *itself* is the failure mode —
+  by surfacing it the agent reframes hook failures as request
+  opportunities rather than as questions about working-tree state.
+  Graduation-target: amend
+  [`.agent/rules/no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md)
+  to encode the asymmetry directly (owner-initiated only; agents do not
+  propose / request / surface / ask). Trigger-condition: SECOND
+  INSTANCE of an agent surfacing `--no-verify` as an option after this
+  refinement is captured (the user-memory feedback file is now updated;
+  the rule extension follows on second instance per
+  register-on-substance-not-instance-count discipline only when
+  substance is multi-instance — currently single-instance). Status:
+  pending.
+
++ 2026-05-05; **PDR-027 amendment — identity routing must use (name, prefix) pair**
+  (Twilit Beaming Aurora → Ashen Banking Bellows session, `7cf730`,
+  observability-sentry-otel coordinator role). Owner-stated:
+  *"the name might change, but the session prefix will not, maybe the
+  routing should use them as a pair. They are not 1:1, the name can change
+  without the prefix changing, and the prefix can change if an identity is
+  preserved across multiple sessions... but still, we have additional
+  information we could use to at least request further information or
+  discuss options"*. Same prefix + different name = drift signal, name
+  attribution suspect. Same name + different prefix = returning agent under
+  same identity. Different both = standard new identity. Source-surface:
+  `feedback_identity_routing_uses_name_and_prefix_pair.md` plus napkin
+  Surprise 3 (live drift this session). Graduation-target: amendment to
+  PDR-027 (threads-sessions-and-agent-identity) adding §Identity Routing
+  rules; possibly companion amendment to `register-identity-on-thread-join`
+  rule. Trigger-condition: drafting slot reached (substance is single-
+  instance live but generalisable). Status: pending.
+
++ 2026-05-05; **PDR candidate — coordinator role as named pattern**
+  (Twilit Beaming Aurora → Ashen Banking Bellows session, full-time
+  coordinator role under owner direction *"I need all sessions to complete
+  their work, this has been going on far too long"* + observation
+  *"the introduction of a full time coordinator agent (you) unblocked
+  progress, it did not render the process smooth or efficient, that is
+  not criticism, it is an observation on the limits of the current
+  approaches"*). The role emerged from substrate gaps: 7-agent session
+  exceeded current tooling capacity; the coordinator pattern is a
+  proportionate behavioural cure for what should be substrate-level
+  affordances. Source-surface: experience file `2026-05-05-twilit-ashen-
+  coordinator-7agent-arc.md` plus napkin Surprises 1, 2, 9. Graduation-
+  target: PDR (a) defining when a coordinator role is appropriate;
+  (b) naming coordinator authority (cross-claim landing under owner
+  authorisation; peer-claim archival under owner-forced-close;
+  doctrine-coaching of stuck peers); (c) naming when coordinator-role is
+  the right cure vs when substrate work is the right cure (the latter
+  reduces the former). Trigger-condition: single instance with rich
+  texture; second instance would be diagnostic. Status: pending —
+  observe whether next multi-agent session needs a coordinator;
+  graduate to PDR if yes.
+
++ 2026-05-05; **PDR candidate — orchestrator-vs-gate structural cure**
+  (5 instances today across 4 distinct agents: Ethereal Transiting Comet,
+  Dawnlit Transiting Galaxy, Opalescent Threading Nebula, Twilit Beaming
+  Aurora, Fronded Climbing Pollen). Distilled.md addition just landed at
+  `368e5aff` (advisory-vs-blocking authority distinction). The pattern
+  fires under failure pressure regardless of agents having read the
+  doctrine — Threading Nebula authored the cure pattern AND fired the
+  cure pattern same session; Fronded fired it AFTER my landing of the
+  doctrine into HEAD. Reading does not inoculate; structural cure
+  required. Cure shapes: (a) rename `scripts/check-commit-skill-gates.ts`
+  → `scripts/check-commit-skill-advisories.ts` (sever the
+  linguistic invariant); (b) banner `[ADVISORY ONLY — NOT A COMMIT GATE]`
+  at top of every script invocation output; (c) SKILL.md clarification
+  in commit skill that lists the actual blocking hooks
+  (`.husky/pre-commit` chain) explicitly without the fitness gate. Source-
+  surface: distilled.md just-landed plus napkin Surprise 2. Graduation-
+  target: PDR + companion ADR + cure-implementation commit. Trigger:
+  graduation-ready (5 instances >= threshold for behaviour-changing
+  structural cure). Status: due.
+
++ 2026-05-05; **PDR candidate — cross-lane repair pattern (do-the-repair-
+  leave-unstaged-post-heads-up)**. Source: Asteroid → Fronded interaction
+  during the takeover-bundle commit attempt; Asteroid hit lint failures in
+  Fronded's collaboration-cli-gaps lane (Fronded-owned files), did the
+  minimal fix (split file to clear max-lines, shape adjustment, Prettier),
+  explicitly DID NOT stage the repair, posted heads-up event `c9dff8f1`
+  so Fronded could absorb. Cure-asymmetric counterpart to foreign-stage
+  absorption: protects the lane being repaired by leaving it owner-able.
+  Source-surface: napkin Surprise 5. Graduation-target: pattern file at
+  `.agent/memory/active/patterns/cross-lane-repair-leave-unstaged.md`;
+  possibly amendment to `stage-by-explicit-pathspec.md` rule's cure-
+  asymmetry section. Trigger: pattern-shaped (single rich instance with
+  named cure); second-instance preferred but not required given the
+  shape clarity. Status: pending.
+
++ 2026-05-05; **PDR candidate — owner-authorised coordinator-driven
+  cross-claim landing**. Named precedent at `368e5aff`: coordinator
+  re-enqueued under own intent_id citing peer's identity, verified
+  staged_bundle_fingerprint matched peer's recorded fingerprint exactly,
+  committed via explicit pathspec filter with body attributing substance
+  to original authors. Authorised by owner statement *"authorised"* in
+  reply to coordinator escalation event. Continuity action; preserves
+  substance under correct attribution rather than abandoning bundle.
+  Source-surface: napkin Surprise 4 + commit `368e5aff` body. Graduation-
+  target: PDR (a) naming when this action is appropriate (peer queue
+  expired, peer non-responsive, ready bundle); (b) naming the
+  authorisation requirement (explicit owner statement, not implied);
+  (c) naming the discipline (fingerprint verification, explicit pathspec,
+  attribution body). Trigger: drafting slot reached. Status: pending.
+
++ 2026-05-05; **PDR/ADR candidate — agent-tools CLI affordance set + build
+  isolation**. Friction observed throughout the 7-agent coordinator
+  session: (a) no `comms list/show/watch` commands; (b) no `claims
+  list/show` filtered by prefix/name/thread/kind; (c) no `commit-queue
+  list/show` filtered by phase or agent; (d) flag-name discoverability
+  (`--summary` not `--closure-summary` for `claims close`; `--file`
+  vs `--area-pattern` ambiguity for `claims open`); (e) `comms render`
+  fragile — single malformed event JSON blocks regeneration repo-wide;
+  (f) build-on-each-CLI-invocation creates identity drift under in-flight
+  tooling refactor; (g) help-on-flag-failure not consistently applied.
+  Owner standing direction: *"all invocations of ALL agent tools with
+  improper flags MUST print the FULL help text"*. Owner cure: *"all
+  agents use only the built agent tools, so that development work can
+  happen on them without causing this issue again"*. Owner suggestion:
+  optional non-blocking `comms watch` streaming CLI for platforms with
+  background services; bare polling JSON list for platforms without.
+  Source-surface: napkin Surprise 7 + feedback memories
+  `feedback_use_built_agent_tools_only`,
+  `feedback_agent_tool_help_on_invalid_flags`,
+  `feedback_periodic_comms_check`. Graduation-target: ADR (build
+  isolation discipline), PDR (CLI affordance set + non-blocking-by-design
+  + portable substrate), and a concrete agent-tools enhancement plan.
+  Trigger: graduation-ready (multiple worked instances + owner-stated
+  cures). Status: due.
+
++ 2026-05-05; **turbo cache invalidation by an unrelated peer can expose
+  a pre-existing latent test failure mid-commit, gating both sessions**
+  (Gnarled Climbing Bark, peer interaction with Moonlit Shimmering
+  Comet's smoke-tests retirement). Source-surface: `napkin.md`
+  2026-05-05 §Surprise 1 + shared-comms-log 2026-05-05T08:25:00Z.
+  Specific instance: `apps/oak-curriculum-mcp-streamable-http#test`
+  cache invalidated by Moonlit's documentation/test edits in same
+  workspace; my session's full uncached test run revealed
+  `oauth-proxy-routes.integration.test.ts:309` failing (test source
+  unchanged from HEAD, latent since PR #87/PR #90 era). Coordination
+  shape: cache-invalidation-by-unrelated-peer => shared-blocker on
+  whatever the freshly-run gate finds. Graduation-target: pattern
+  candidate (could become an entry in `.agent/memory/active/patterns/`)
+  describing the cache-invalidation-as-coordination-signal shape; OR a
+  coordination rule about when peer-edits should ping running sessions.
+  Trigger-condition: SECOND INSTANCE of the same shape — another peer
+  cache invalidation surfacing a latent gate failure that gates two
+  sessions simultaneously. Status: pending.
+
++ 2026-05-04; **the PDR shape forces the rationale to surface that
+  the capture surface did not have to** (Ferny Spreading Petal,
+  Layer-2 second pass, drafting PDR-046): the napkin entry that
+  became PDR-046's source named the principle, the layer stack,
+  the three failure modes, and two of three cures — but did not
+  name the alternatives the rule rejects. The PDR's Rationale
+  section forced two alternatives into view ("apply the per-write
+  rule recursively per layer and stop there"; "treat fitness
+  diagnostics as the primary signal and re-shape work around
+  them"), neither of which had appeared at capture time. This is
+  structural complementarity between the capture surface and the
+  decision-record surface, not redundancy: the napkin captures
+  what the moment teaches; the PDR forces the question *what
+  would the rule have been if we believed the alternative
+  instead?* — a question only fully answerable at graduation
+  time. Source surface: napkin entry under archive
+  `napkin-2026-05-04-evening.md` (Ferny § Worked-instance lessons
+  from drafting PDR-046, lesson 2). Graduation-target options:
+  (a) PDR-014 amendment naming "alternatives must be enumerated
+  and rejected at graduation, even if not at capture" as a
+  decision-record-authoring discipline; (b) new pattern in
+  `memory/active/patterns/` naming the capture-vs-decision-record
+  surface complementarity. Trigger-condition: second instance OR
+  owner direction. Status: pending — first instance.
+
++ 2026-05-04; **cross-Core PDR↔PDR connective tissue is
+  load-bearing, not decorative** (Ferny Spreading Petal, Layer-2
+  second pass, drafting PDR-046): PDR-046's Related list cites
+  eight cross-Core PDRs (PDR-014, PDR-022, PDR-026, PDR-028,
+  PDR-029, PDR-038, PDR-043, PDR-045). Every link is structural —
+  a future reader can navigate from any one cited PDR to the
+  composition picture. The Practice-Core portability constraint
+  explicitly preserves cross-Core references as internal
+  connective tissue (per `decision-records/README.md § Portability
+  Constraint`); the constraint targets host-leakage, not
+  intra-Core navigation. Observation: a PDR with three or fewer
+  Related citations is more likely to drift in isolation; PDR-045
+  cited five, PDR-046 cited eight, both authored under the
+  layered-processing methodology — the connective-tissue density
+  may be a Layer-2 maturity signal worth tracking. Source surface:
+  napkin entry under archive `napkin-2026-05-04-evening.md`
+  (Ferny § Worked-instance lessons from drafting PDR-046, lesson
+  3). Graduation-target options: (a) PDR-007 amendment naming
+  cross-Core connective tissue as a portability-preserved
+  first-class citation class with a density signal; (b) entry in
+  `decision-records/README.md § Shape of a PDR` naming the
+  Related-list shape as a maturity indicator. Trigger-condition:
+  second instance OR owner direction. Status: pending — first
+  instance.
+
++ 2026-05-04; **frontmatter-limit revision is the substance-led cure
+  when graduation lands new substance at a receiving doc whose
+  limits were sized for an earlier configuration** (Ferny Spreading
+  Petal, Layer-2 second pass — applied to two surfaces in the same
+  session). PDR-046 §Move 3 says "graduate substance upward, not
+  by compression"; this pattern is the next move after the
+  graduation lands: the receiving doc's `fitness_line_limit` /
+  `fitness_char_limit` may need to grow to reflect the doc's new
+  role. Two surfaces in this session: `pending-graduations.md`
+  (1000/1400/90000 from 350/500/40000) absorbed continuing
+  candidate registration as the register's actual sustainable
+  size; `development-practice.md` (200/280/16000 from 150/200/12000)
+  absorbed gate-taxonomy + worked failure-mode example relocated
+  from `principles.md`. The pattern is distinct from Move 3 itself
+  (which is about graduation direction) — this names the
+  consequence at the receiving end. Per `consolidate-docs §9e`,
+  only the owner can raise hard limits; this pattern names what
+  to surface for owner authorisation when the substance-led cure
+  requires it. Source surfaces: this session's commits 54560f84
+  + c73bf9f8 (the latter for the experience file capturing the
+  pattern's logic). Graduation-target options: (a) PDR-046
+  amendment (§Move 3 sub-rule on at-rest receiving-doc limits);
+  (b) entry in `consolidate-docs.md §9` naming the receiving-doc
+  limit revision as a substance-led structural fix; (c) standalone
+  PDR if the pattern generalises beyond consolidation flow.
+  Trigger-condition: second instance OR owner direction. Status:
+  pending — first instance (two surfaces in one session count as
+  one instance of the pattern, since they're the same arc).
+
++ 2026-05-04; **host-local consolidate-docs extension to point at
+  PDR-046 as the orchestration rule** (Ferny Spreading Petal,
+  Layer-2 second pass): the host's per-write rule
+  (`.agent/commands/consolidate-docs.md § Learning Preservation
+  Overrides Fitness Pressure`) is unchanged by PDR-046's
+  graduation, but should now carry an explicit cross-reference up
+  to PDR-046 as the layer-orchestration discipline the per-write
+  rule composes with. Adopter agents reading the per-write rule
+  should encounter the orchestration rule at the same surface.
+  Source surface: napkin entry under archive
+  `napkin-2026-05-04-evening.md` (Ferny § Open follow-up
+  (sequenced)). Graduation-target: amendment to
+  `.agent/commands/consolidate-docs.md § Learning Preservation
+  Overrides Fitness Pressure` adding the upward pointer.
+  Host-local; does not propagate to other Practice adopters
+  (each host carries its own per-write rule surface). Trigger-
+  condition: PDR-046 lands. Status: graduated 2026-05-05 (Ethereal
+  Transiting Comet — the section now opens with a paragraph naming
+  PDR-046 as the layer-orchestration rule and closes with a
+  PDR-046 §Move 3 reference describing graduation-upward as the
+  default response to residual fitness pressure at rest; landed in
+  same atomic commit as the structural-enforcer recursive-exclusion
+  pattern entry).
+
++ 2026-05-04; **hook tightening for no-moving-targets-in-permanent-docs:
+  distinguish prose-narrative from code-block backtick contexts**
+  (Vining Spreading Seed, owner-directed at session close after
+  the WS3/WS4/WS6 + rules-and-index landing arc). The WS4
+  scoped_block's `excludes_inline_code` rule strips backticked
+  spans from each line before the regex test, which correctly
+  excludes data-shape SHAs in YAML/JSON code blocks but
+  incorrectly excludes prose-context backticked SHAs (the
+  *"see commit `abc1234`"* shape). The repo's permission system
+  surfaced this gap by rejecting the first-draft rule files,
+  which themselves embedded backticked session-commit SHAs.
+  Owner direction is to tighten the hook, not accept the
+  rule-vs-hook gap as optionality. Implementation cue:
+  distinguish *code-block data context* (line is inside a
+  fenced block, or the line is predominantly code-shaped) from
+  *prose-narrative context* (a backticked token inside a
+  sentence — should fire). Source surface: napkin §
+  "Owner direction (2026-05-04, end of session)". Graduation-
+  target: refinement workstream extending
+  `scripts/check-blocked-content.ts` regex matcher and updating
+  `.agent/rules/no-moving-targets-in-permanent-docs.md` to
+  remove the now-stale "either/or" framing. Trigger-condition:
+  ready now (owner-directed). Status: `due`.
+
++ 2026-05-04; **session-handoff §6d "canonical-pointer-only" rule
+  is too absolute for AGENTS.md** (Vining Spreading Seed,
+  owner-corrected mid-session). The session-handoff command's
+  step 6d names "heading + one-line pointer to AGENT.md" as the
+  canonical entry-point shape and labels anything else as drift.
+  Applied literally this session, I attempted to strip the
+  `See [RULES_INDEX.md](RULES_INDEX.md) for the canonical rules
+  list.` line from `AGENTS.md` as drift. Owner correction: the
+  line is there on purpose (deliberate Codex/AGENTS-platform
+  discoverability aid). The §6d rule needs softening to
+  distinguish *canonical-pointer-only* (must) from *carefully-
+  curated additional pointers to canonical surfaces* (allowed
+  with explicit owner-blessed content). Source surface:
+  in-session owner correction. Graduation-target: amendment to
+  `.agent/commands/session-handoff.md §6d`. Trigger-condition:
+  amendment authored next session. Status: `pending`.
+
++ 2026-05-04; **structural enforcers must exclude the documents
+  that catalogue their own pathogens (recursive-exclusion
+  pattern)** (Vining Spreading Seed, captured during WS3 trip-list
+  authoring; second instance Ferny Spreading Petal during PDR-047
+  authoring). Adding the hedging-vocabulary trip-list to
+  `policy.json` `preToolUseContent.scoped_blocks` required
+  excluding `principles.md`, `distilled.md`, PDR-043, and PDR-044
+  — the documents that *catalogue* the trip-list — so they could
+  reference its members without self-tripping. The same shape
+  recurred verbatim during PDR-047 (rule-applies-always
+  doctrine-authoring) drafting: the file's first write attempt
+  was correctly blocked by the hedging-vocabulary hook (the file
+  catalogues that exact vocabulary by definition); the cure was
+  identical — extend the `exclude_paths` list to include PDR-047.
+  Two independent first-instances, same shape, same cure, two
+  consecutive sessions. Source surfaces: napkin
+  "trip-list-defines-itself paradox" entry (Vining, archived);
+  PDR-047 Notes section + experience file
+  `2026-05-04-ferny-the-gate-was-the-curation-prompt.md` (Ferny).
+  Graduation-target: pattern file at
+  `.agent/memory/active/patterns/structural-enforcer-recursive-
+  exclusion.md` (Process category). Trigger-condition: second
+  instance observed (Ferny's PDR-047 fire). Status: graduated
+  2026-05-05 (Ethereal Transiting Comet — pattern landed at
+  `.agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md`
+  with PDR-044 as `related_pdr`, **agent-tier** category (paired
+  with `governance-claim-needs-a-scanner` after assumptions-reviewer
+  challenge to the initial process-tier framing), two worked
+  instances captured in detail with substance-distinctness
+  argument for the ≥2-instance bar, three concrete mechanism
+  shapes named (explicit `exclude_paths`; per-line context
+  exclusion; self-exclusion by placement), structural composition
+  with PDR-047 §Test 3 named explicitly to distinguish
+  exclusion-list-as-mechanism from hedge-as-substance,
+  generalisation table covering ESLint / CI scanners / markdown
+  linters / trip-list documentation; patterns/README.md index
+  updated to Agent (8); `.agent/rules/no-hedging-vocabulary.md`
+  §Excluded Surfaces extended with forward link to the pattern;
+  PDR-047 §Notes intentionally NOT back-amended — Practice-Core
+  portability rule prevents Core → host-pattern references; landed
+  in same atomic commit as the consolidate-docs §Learning-Preservation
+  upward-pointer extension).
+
++ 2026-05-04 (status flipped 2026-05-05); **`git commit --
+  <pathspec>` cure is asymmetric — one-sided application does
+  not prevent absorption by peers who do not apply it; three
+  observed instances of foreign-stage absorption now justify
+  structural enforcement** (Vining Spreading Seed initial;
+  Lacustrine→Moonlit `8fa339f4` 2026-05-04 second; Ethereal→Dawnlit
+  `36102937` 2026-05-05 third). The cure as currently written
+  is operator-applied prose at `stage-by-explicit-pathspec.md
+  §Peer-Index Note`. Each instance: a peer's `git commit`
+  without `-- <pathspec>` filter swept staged content authored
+  by another agent into the peer's commit. Substance preserved
+  in all cases; commit-message attribution distorted; reviewer
+  evidence (when present) applies to the absorbed diff. The
+  third instance (Ethereal→Dawnlit) was particularly clean: the
+  absorbed-from agent had reviewer chain on the diff
+  pre-absorption (architecture-reviewer-fred CLEAN +
+  code-reviewer APPROVED WITH SUGGESTIONS); review evidence
+  intact; only the commit subject misleads. Asymmetry insight
+  (added 2026-05-05): a cure that protects the agent who
+  applies it but does not prevent the failure mode in agents
+  who don't apply it is not really a structural cure — it is a
+  behavioural commitment one side keeps on the other side's
+  behalf. Source surfaces: napkin "Peer-staged renames in the
+  index bleed into your staging area via `git add`" entry
+  (2026-05-04); Ethereal's comms-event acknowledgement at
+  2e2bfb5a (2026-05-05); Dawnlit's experience file
+  `2026-05-05-dawnlit-the-screen-and-the-gate.md` (2026-05-05).
+  Graduation-target: structural enforcement candidate for owner
+  direction. Candidate shapes: (a) pre-commit hook refuses
+  `git commit` without explicit pathspec when staged set
+  contains files outside the agent's queued bundle; (b)
+  commit-queue layer detects fingerprint-of-staged-set diverging
+  from queued-intent and aborts at `verify-staged`; (c) shared
+  pre-commit gate requiring `--include` or pathspec matching
+  the active commit-queue intent. Each is a distinct design
+  decision; owner-direction-shaped, not consolidation-shaped.
+  Trigger-condition: third instance now observed; promotes to
+  due. Status: `partially graduated 2026-05-05` (Opalescent
+  Threading Nebula). Asymmetric-cure observation graduated to
+  `.agent/rules/stage-by-explicit-pathspec.md § Cure Asymmetry —
+  One-Sided Application Does Not Prevent Absorption` with the
+  3-instance evidence table and the three named candidate shapes.
+  Two follow-ups remain queued:
+  + **ADR-shaped follow-up** (host structural-enforcement choice):
+    pending owner direction on which of the three candidate shapes
+    (pre-commit hook refusal of implicit pathspec; commit-queue
+    fingerprint-divergence detection; shared pre-commit pathspec-
+    matching gate) to implement. The choice is host-architectural
+    (trades off friction, false-positive rate, operational
+    complexity); ADR is the right home for the decision once
+    direction lands.
+  + **PDR-shaped follow-up** (Practice-governance principle):
+    "asymmetric-cure failure mode — a cure that protects only the
+    applier is not really a structural cure" is plausibly portable
+    Practice governance. Promotion to PDR awaits a second-context
+    manifestation of the same asymmetric-cure shape outside `git
+    commit -- <pathspec>` (e.g. shared lockfile discipline,
+    shared-state-file write discipline, shared-comms-log authoring
+    discipline). Single-context evidence (3 instances all `git
+    commit`) is insufficient for Practice-Core promotion per
+    consolidate-docs §7a (PDR adopter test).
+
++ 2026-05-04; **layered processing of knowledge: preserve first,
+  restructure second** (Fronded Flowering Thicket, owner-stated
+  mid-pass): *pick a layer, fully process it without worry about
+  the fitness functions in the targets, then move up a layer and
+  process the next layer without worry about the fitness in the
+  targets, and so on, until all knowledge is preserved first and
+  the fitness constraints are met second.* Generalises the existing
+  per-write rule at `consolidate-docs.md § Learning Preservation
+  Overrides Fitness Pressure` into a layer-orchestration discipline:
+  fitness has no jurisdiction during processing of any layer; it
+  becomes a measurement of the resting system after all processing
+  completes, not a constraint on in-process work. The rule
+  self-applied during this session's pass — Layer 1 (napkin →
+  distilled), then Layer 2 (distilled → permanent doctrine, with
+  PDR-045 as the first deliverable). Source surface: napkin §
+  "Layered processing: knowledge preservation first, fitness
+  second". Graduation-target options: (a) new PDR (highest-leverage
+  candidate; would self-apply); (b) amendment to PDR-026 §Deferral-
+  honesty discipline; (c) amendment to PDR-038 (doctrine-without-
+  enforcement-at-maturity is closely related); (d) `consolidate-
+  docs.md § Learning Preservation Overrides Fitness Pressure`
+  extension (host-local). My read: distinct-enough-to-warrant-new-
+  PDR, with the consolidate-docs amendment as the host-side
+  operational hook. Trigger-condition: owner direction (this is
+  the highest-leverage Layer-2 candidate from the 2026-05-04 pass;
+  fresh session is set up to draft this PDR first per the
+  agentic-engineering-enhancements thread record). Status:
+  `graduated 2026-05-04 to PDR-046 layered-knowledge-processing`
+  (Ferny Spreading Petal, Layer-2 second pass). Three moves
+  authored: bottom-up traversal (Move 1); in-process form-keeping
+  suspended on the active layer (Move 2); residual fitness pressure
+  addressed by graduating substance upward, not by compression
+  (Move 3). Host-side per-write rule unchanged; consolidate-docs.md
+  extension to the per-write section is a separate host-local
+  follow-up.
+
++ 2026-05-04; **subagent briefs must include
+  halt-on-environment-mismatch instructions; parallel
+  `isolation:"worktree"` dispatch is unreliable for shared-state
+  work** (Pearly Snorkelling Reef, captured from the
+  doctrine-enforcement-quick-wins dispatch incident on 2026-05-04).
+  Three concurrent worktree subagents in one `Agent` batch produced
+  inconsistent bases (one matched parent HEAD, two were on an older
+  `main` commit predating the plan). The two wrong-base subagents
+  improvised on the missing-plan environment rather than halting,
+  and crossed worktree boundaries by writing to absolute paths in
+  the main repo. Source surface: napkin §"Parallel
+  isolation:worktree dispatch produced inconsistent bases".
+  Graduation-target options: (a) a portable rule
+  `.agent/rules/subagent-environment-mismatch-halt.md` requiring
+  briefs to instruct halt-and-report when grounding cannot find
+  cited artefacts; (b) a PDR refining subagent-dispatch discipline
+  (parallel-dispatch-only-when-state-isolation-is-real); (c) an
+  amendment to an existing collaboration or subagent-architecture
+  PDR. Trigger-condition: a second cross-session instance of
+  parallel-worktree dispatch failure or wrong-base-improvisation,
+  OR three sessions where a subagent brief explicitly added
+  halt-on-environment-mismatch language and the discipline proved
+  load-bearing. Status: `pending`. Durable lesson held outside
+  this register at
+  `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`.
+
++ 2026-05-04; **deferrals must be sequenced (or have their
+  sequencing sequenced)** (Verdant Sprouting Leaf, owner-stated
+  sharpening of PDR-026 §Deferral-honesty discipline at session
+  close): *deferrals must either be explicitly sequenced in a plan
+  (strongly preferred), or have their sequencing sequenced in a
+  plan (acceptable only in very unusual cases). Anything else is
+  a declaration that something will not happen, wrapped in
+  obscuring language which hides a useful signal. Sometimes not
+  doing something is the best possible option, but it needs to be
+  visible, and in some cases discussed.* The existing PDR-026
+  §Deferral-honesty rule forbids convenience phrasings (*for
+  later*, *next session*, *ran out of time*); this sharpening adds
+  the positive form: a legitimate deferral points to a specific
+  plan + phase, or to a decision point sequenced in a specific
+  plan + phase. Three modes: (1) sequenced deferral (preferred),
+  (2) sequencing-sequenced deferral (rare), (3) hidden declaration
+  of non-action (forbidden — it conceals the choice). Non-action
+  can be the architecturally correct answer; it must be visible,
+  explicit, and sometimes discussed. Source-surface: napkin
+  2026-05-04 §"Three owner asides at session close". Graduation-
+  target: PDR-026 amendment §"Sequenced-deferral discipline" with
+  positive-form requirement. Trigger-condition: enforcement
+  surface ready (per the PDR-038 §2026-05-04 maturity gate). The
+  natural enforcement candidate is a doctrine-scanner fingerprint
+  detecting deferrals lacking plan + phase pointers, plus a plan-
+  reviewer check at promotion time. Both extend the
+  doctrine-scanner CLI work proposed in
+  `future/memetic-immune-system-and-progressive-disclosure.plan.md`.
+  Status: pending — PDR-026 amendment defers to post-quick-wins
+  lane until enforcement surface lands; an amendment landed without
+  enforcement would itself be the failure mode the amendment
+  describes (un-enforced sharpening = visibility-only, no
+  structural cure for the recurring shape). The deferral of *this*
+  amendment is itself sequenced — it lands when the doctrine-
+  scanner CLI lands.
+
++ 2026-05-04; **memory classifications and systems review**
+  (Verdant Sprouting Leaf, owner-flagged future-session item at
+  session close): assess the three memory planes (`active/`,
+  `operational/`, `executive/`) plus their sub-surfaces (napkin,
+  distilled, patterns, threads, comms, claims, escalations,
+  conversations, pending-graduations) for what works well, what
+  can be improved, gaps, and beneficial restructure options. The
+  seam-review concept exists in PDR-029 Family-B Layer-1 as a
+  `taxonomy-review` candidate trigger; ≥3 such candidates in a
+  single consolidation or ≥5 across consecutive consolidations
+  signal a full taxonomy-review session is owed. Source-surface:
+  napkin 2026-05-04 §"Three owner asides at session close".
+  Graduation-target: dedicated taxonomy-review session with
+  output: a memory-architecture audit report + any reorganisation
+  proposals as PDR candidates against PDR-007/PDR-024/PDR-028. The
+  assessment is multi-session in scope and benefits from the
+  structural-foundation work landing first (the doctrine-scanner
+  quick wins + practice trio activation create natural
+  observation points for what the memory system *enables* vs
+  *obstructs*). Trigger-condition: post-quick-wins evidence + owner
+  direction, OR ≥2 additional taxonomy-review candidates
+  accumulating before then. Status: pending — first instance, awaiting
+  evidence base.
+
++ 2026-05-04; **first-question at every elaboration boundary, not
+  only at plan-author time** (Verdant Sprouting Leaf, surfaced
+  during /jc-consolidate-docs napkin extraction; substance from Salty
+  Navigating Jetty 2026-05-03 session-spiral diagnosis): PDR-043 cue 3
+  ("first-principles framing question — what would the path look like
+  with no closure pressure?") is currently scoped to "when proposing
+  any change". The sharpening from Salty's session: the cue must fire
+  at *every elaboration boundary* — plans-creating-plans, arc-
+  justifying-arcs, prerequisite-justifying-prerequisites. The three-
+  day observability spiral (2026-05-01 through 2026-05-03) was
+  internally coherent at every plan-authoring step but never re-asked
+  the first-question at the level of *should this whole arc exist?*.
+  Salty's diagnosis: *plan-following can disguise rush-impulse if
+  the principles' first-question is not re-applied at every
+  elaboration boundary*. Source-surface: napkin 2026-05-03 (Salty)
+  §"Session-spiral diagnosis"; complementary to PDR-018 §Beneficial
+  prerequisites must not block (which provides the prerequisite-
+  classification cure) and PDR-043 cue 3 (which provides the per-
+  change cure but not the per-elaboration-boundary cure). Graduation-
+  target: PDR-043 amendment §"Cue 3 fires at every elaboration
+  boundary" OR PDR-018 amendment §"First-question discipline at
+  elaboration boundaries". Trigger-condition: second instance OR
+  owner direction. Salty's session is the first instance; Tidal
+  Flowing Reef's "framing-trap" entry on the same date is closely
+  related but expresses the same shape (option A vs option B between
+  two violations is the wrong frame; the question is *how do we adopt
+  our new insights?*). Status: pending — awaiting second instance or
+  owner direction. **Enforcement note (per PDR-038 §2026-05-04
+  amendment)**: at maturity, doctrine without enforcement is
+  liability. The structural enforcement candidate for this principle
+  is a planning-discipline check at plan-authoring time + plan-
+  reviewer dispatch — both of which would naturally extend the
+  doctrine-scanner CLI work proposed in
+  `future/memetic-immune-system-and-progressive-disclosure.plan.md`.
+
++ 2026-05-04; **insight capture degrades exponentially after the
+  moment of occurrence** (Verdant Sprouting Leaf, owner-stated
+  mid-session principle): *the only valid time to capture an insight
+  is when it occurs; every moment after that degrades exponentially.*
+  Stated in the post-/insights reflection round mid-authoring of
+  option (c). This is the active-memory analogue of architectural-
+  excellence-over-expediency: the cheap answer ("note it for next
+  session") burns the load-bearing detail; the architecturally
+  correct answer (capture now in napkin / PDR / plan) costs minutes
+  and preserves the substance. Source-surface: napkin 2026-05-04
+  entry. Graduation-target: addition to
+  `.agent/directives/principles.md` as a one-line principle, with
+  the napkin/PDR/plan capture pipeline as its own structural
+  enforcement (the principle is self-enforcing — its enforcement
+  surface is the act of capture itself, which already exists as
+  infrastructure). The discipline formalises what was already done
+  in this session; promotion is recording what is true. Trigger-
+  condition: second instance OR owner direction. The owner-stated
+  framing is itself the first instance and is load-bearing for the
+  three insights captured in same turn during this session. Status:
+  pending — awaiting second instance or owner direction.
+
++ 2026-05-04; **tests describe the system to itself** (Dewy Shedding
+  Glade, owner-led doctrinal arc): foundational reframing of TDD
+  landed in `tdd-as-design.md`. *A test does not verify code; a test
+  describes a system state, and product code is the path that guides
+  the system into that state. Test and product code are two halves
+  of one act of design. Writing them separately, in either order, is
+  a category error.* Adopter scope: every Practice-bearing repo —
+  this is a Practice-governance decision about the role of tests, not
+  a host-repo architectural choice. Source-surface: napkin
+  2026-05-04 entry; current home: `tdd-as-design.md` directive.
+  Graduation-target: PDR in `practice-core/decision-records/`
+  capturing the load-bearing definition + the atomic-landing
+  invariant + the describe-vs-audit blade as portable Practice
+  governance. The host directive `tdd-as-design.md` already operates
+  the host-local consequence; the PDR records the decision so it
+  travels with the Core. Trigger-condition: second instance OR
+  owner direction (owner-led arc this session is the first instance;
+  the framing is stable and load-bearing for the entire
+  validation-and-tdd-doctrine-restructure arc). Status: pending —
+  awaiting either second instance or owner direction.
+
++ 2026-05-04; **reviewers carry doctrine, not just audit it** (Dewy
+  Shedding Glade, owner direction §6 of the arc): the test-reviewer
+  refresh elevated the reviewer from structural auditor to doctrinal
+  carrier with mandatory recipe/pattern read path and citation
+  requirement on every suggestion. The shift is measurable: the
+  reviewer's *first question* is now "does this test describe an
+  interface or audit one?" rather than "does it pass". Source-surface:
+  `.agent/sub-agents/templates/test-reviewer.md` rewrite; companion
+  surfaces `.claude/agents/test-reviewer.md`,
+  `.cursor/agents/test-reviewer.md`, `.codex/agents/test-reviewer.toml`.
+  Graduation-target: PDR in `practice-core/decision-records/`
+  capturing reviewer-as-doctrine-carrier as a general
+  reviewer-authority discipline (sibling to PDR-007 reviewer
+  lineage). Trigger-condition: second instance — when one further
+  reviewer (architecture-reviewer-fred is already shaped this way;
+  candidates are type-reviewer, security-reviewer, sentry-reviewer)
+  is similarly upgraded to the doctrine-carrier shape. Status:
+  pending — first instance landed this session.
+
++ 2026-05-04; **forcing-function read path: reviewer carries the
+  recipes the doctrine cites** (Dewy Shedding Glade, derived from §5
+  of the arc): the test-reviewer's mandatory read path now includes
+  `docs/engineering/testing-tdd-recipes.md` and
+  `docs/engineering/testing-patterns.md`, with a citation requirement
+  on every suggestion (cite recipe/pattern by section heading).
+  The general shape: when a doctrine references companion recipes
+  or patterns, the reviewer that operationalises the doctrine becomes
+  the forcing function that keeps the recipes load-bearing. Without
+  this forcing function, recipes drift from doctrine because no one
+  reads them. Source-surface: test-reviewer template Reading
+  Requirements + Step 7 (suggestion mode); companion surface: the
+  recipe and pattern files themselves. Graduation-target: pattern in
+  `.agent/memory/active/patterns/` capturing the
+  reviewer-as-forcing-function shape; promote to general
+  Practice-Core PDR with `pdr_kind: pattern` once a second
+  reviewer-recipe pairing follows in another domain. Trigger-condition:
+  second instance — security-reviewer citing security-review-recipes,
+  type-reviewer citing type-flow-patterns, etc. Status: pending —
+  first instance landed this session.
+
++ 2026-05-04; **validation strategy as umbrella; testing strategy as
+  one leaf** (Dewy Shedding Glade, owner direction §2 of the arc):
+  host-repo architectural decision about the directive topology.
+  The current sprawling `testing-strategy.md` mixes test-type
+  taxonomy, TDD methodology, recipe-level configuration, and
+  cross-cutting validation surfaces. The arc proposes a three-document
+  split: `validation-strategy.md` (umbrella; right-tool-for-each-job;
+  gate inventory), `testing-strategy.md` (slimmed to test types and
+  multi-level interaction), `tdd-as-design.md` (foundational TDD
+  doctrine, landed this session). Source-surface: index plan
+  `validation-and-tdd-doctrine-restructure.plan.md`. Graduation-target:
+  ADR-121 refresh (P4 in the index plan) — the existing "Quality
+  Gate Surfaces" ADR is the natural carrier for the topology
+  decision once the new umbrella exists. Trigger-condition: P1
+  (validation-strategy umbrella) lands; ADR refresh happens
+  immediately afterwards. Status: pending — sequenced behind P1
+  in the index plan.
+
++ 2026-05-03; **autonomous .git/index.lock interaction is forbidden,
+  including wait loops** (Prismatic Illuminating Eclipse, owner
+  intervention mid-A1-commit): the existing 2026-04-30 distilled.md
+  entry "Never delete .git/index.lock" addressed the destructive
+  shape (`rm` on a foreign lock). This session surfaced a softer
+  failure mode that compounds in the same direction: an autonomous
+  polling wait loop (`until [ ! -e .git/index.lock ]; do sleep 2;
+  done && echo "lock cleared"`). Even though the loop only OBSERVED
+  the lock disappearing (Woodland's parallel commit completed
+  naturally), the "lock cleared" echo conditioned the agent to treat
+  lock-clearing as an action it takes rather than a state it
+  observes, and any future evolution of the loop (timeout-then-rm
+  fallback) would be a small step away from the catastrophic action.
+  Owner direction: any contact with `.git/index.lock` requires owner
+  authorisation, including the wait shape; surface foreign locks to
+  the user with diagnostic + wait-vs-handoff options rather than
+  running a wait loop. **Graduation target**: extend the existing
+  distilled.md "Never delete .git/index.lock" entry to "Never
+  autonomously interact with .git/index.lock at all — including wait
+  loops"; consider promoting to a `.agent/rules/` rule given the
+  destructive-blast-radius of the failure mode. Status: pending —
+  owner direction has fired in part (specific incident this
+  session); deliberate next-session shape required for the
+  distilled.md amendment + rule-authoring decision (PDR-038
+  structural-enforcement reasoning applies here too). Captured to
+  platform memory at
+  `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_no_lock_wait_loops.md`
+  for immediate effect; doctrine-level capture queued here for
+  graduation through the proper consolidation pipeline. Companion
+  entry: 2026-04-30 `feedback_no_delete_git_lock` is the destructive
+  shape; this is the autonomous-observation shape; both are
+  instances of *avoid actions that compound silently in destructive
+  directions even when each individual step looks safe*.
+
++ 2026-05-03; **session-close housekeeping ownership** (Woodland
+  Sprouting Glade + Prismatic Illuminating Eclipse parallel-lane
+  session, owner-stated experiment observation): at session-close some
+  housekeeping is **agent-specific** (own observations in napkin,
+  identity-row last_session, claim close, subjective experience file)
+  and can ONLY be done by the originating agent — no other agent has
+  the in-memory context. Other housekeeping is **NOT agent-specific**
+  (refresh repo-continuity.md, refresh pending-graduations register,
+  sweep platform entry points, commit prior-session leftover continuity
+  files, run consolidation gate) — any agent could do it, which means
+  without explicit ownership none of them does and work is lost or
+  stale. **Cure shape**: when an Orchestrator role is assigned for a
+  session, the Orchestrator owns shared / not-agent-specific
+  housekeeping. When no Orchestrator is assigned, the
+  **last-to-leave** rule applies (final committing agent picks up the
+  shared housekeeping). Agent-specific housekeeping remains the
+  originating agent's responsibility regardless. **First instance
+  (live)**: this 2026-05-03 handoff — the prior Pelagic session ended
+  with five continuity files modified-but-uncommitted; without the
+  rule, every subsequent agent assumed someone else owned them. Owner
+  direction at session-handoff fixed it. Source-surface: napkin §"E1
+  Parallel two-agent execution" 2026-05-03 + experiment-plan §P11
+  candidate; graduation-target: P11 in N-agent collaboration
+  hypothesis (`hypothesis.md`) plus a Practice-Core PDR amendment to
+  PDR-018 (Planning discipline) or a new dedicated PDR if the cure
+  shape stabilises across N≥3; trigger-condition: validation across
+  N≥3 sessions with no falsifying observation; status: candidate
+  (single instance; not yet graduation-ripe; falsification criteria
+  named in napkin entry).
+
++ 2026-05-02; observability multi-sink + fixtures plan WS10 — owner
+  doctrine *"for all significant documentation or Practice changes
+  — and this is always true — we need reviews from the documentation
+  reviewer and the onboarding reviewer"*; trigger condition: this
+  doctrine is now load-bearing for every plan that mutates docs or
+  Practice surfaces; graduation target: a permanent rule (likely
+  `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
+  OR an amendment block in `invoke-code-reviewers.md`) plus a
+  `distilled.md § Process` graduation pointer plus matrix update in
+  `invoke-code-reviewers.md`; queued as plan WS11.3 deliverable;
+  status: due (graduates when WS11.3 executes).
+
++ 2026-05-02; observability multi-sink + fixtures plan WS8.6 —
+  orthogonal axes shape (`OBSERVABILITY_SINKS` typed list +
+  `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
+  reusable architectural decision per PDR-019 (ADR scope by
+  reusability) — applies to every future sink and every future
+  capability that emits; graduation target: a new
+  `docs/architecture/architectural-decisions/NNN-observability-configuration-orthogonality.md`
+  ADR (NEW). **2026-05-03 amendment (Moonlit Drifting Nebula)**:
+  the plan body originally scheduled this as ADR-165, but ADR-165
+  is already taken — the next available number must be chosen
+  before WS8.6 starts. Plus amendments to ADR-116 (warnings
+  channel), ADR-143 (registry shape, fixture-as-tee), ADR-162
+  (Open Question close on `ServerInstrumenter` port — partially
+  addressed in WS1 RED via the type definition; final closure
+  rides at WS6 when the HTTP composition root consumes the port),
+  ADR-163 (build-time scope clarification — D7a verification
+  confirmed structural orthogonality; WS4 cleanup is the
+  follow-on); queued as plan WS8.6/WS8.7 deliverable. **2026-05-03
+  ADR-number resolved (Woodland Sprouting Glade ARC B0, c0d17634)**:
+  ARC A4 ADR is **170** (smoke harness shape, parent plan); orthogonality
+  ADR is **171** (this plan, WS8.6). Verified by
+  `ls docs/architecture/architectural-decisions/ | sort -n | tail -5`
+  — 165-169 already present, 170/171 next available. All cross-plan
+  references updated; re-verify pre-authoring guards added at three
+  locations. Status: due (ADR-number question resolved; ADR authoring
+  + amendments graduate when plan WS8.6/WS8.7 execute).
+
++ 2026-05-02; observability multi-sink + fixtures plan WS0 —
+  near-miss surprise: almost spawned a duplicate
+  `cross-app-distributed-tracing-mcp-and-search-cli.plan.md` stub
+  before checking the existing `future/` directory; caught when
+  listing during WS0 promotion. Trigger: second instance of new-plan-
+  stub-spawn-without-future-survey; graduation target: distilled.md
+  § Process entry naming "directory survey before plan-stub spawning"
+  OR amendment to `consolidate-at-third-consumer.md`; status: pending
+  (single instance; capture-only until second instance accumulates).
+
++ 2026-05-03; **inter-agent collaboration protocol gaps surfaced
+  by Pelagic ↔ Misty Task M1 round-trip** — **status reframed
+  2026-05-03 (Misty session-handoff metacognition)**: these cures
+  are now structured as candidate amendments to the N-agent
+  collaboration hypothesis at
+  [`.agent/prompts/agentic-engineering/collaboration/hypothesis.md`](../../prompts/agentic-engineering/collaboration/hypothesis.md),
+  with per-cure falsification criteria at
+  [`falsification-criteria.md`](../../prompts/agentic-engineering/collaboration/falsification-criteria.md)
+  and proposed validation experiments at
+  [`experiments.md`](../../prompts/agentic-engineering/collaboration/experiments.md).
+  Cures graduate to permanent doctrine **after** empirical validation
+  at N≥3, not before. The CLI ergonomics plan remains the natural
+  carrier for cure (v) tooling work, but the four protocol-amendment
+  cures (i)-(iv) and the five worker-perspective addenda (vi)-(x)
+  graduate via the hypothesis-evolution loop, not via direct
+  promotion to PDR. The original five structural cures
+  named in the session's reflection log
+  ([`experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`](../../experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md))
+  and a tactical 10-point next-session guide in napkin (same date,
+  Pelagic Washing Anchor). Specific candidates: (i) **out-of-band
+  brief acknowledgement** — when an agent acts on owner direction
+  received outside the comms log, first comms event must cite the
+  out-of-band source explicitly (cure for the temporal-anomaly
+  reading of Misty's pre-existing claim); (ii) **read/write claim
+  mode field** — extend `active-claims.json` schema with
+  `mode: 'read' | 'write' | 'mutual-exclusive'` so non-conflicting
+  modes coexist on overlapping paths (cure for the
+  smoke-tests-workspace path overlap); (iii) **heartbeat-or-die
+  enforcement** — claims past `claimed_at + ETA * 1.5` without
+  heartbeat are stale; orchestrator reclaims, escalates, or asks
+  owner (cure for the ETA decay observed); (iv) **overflow
+  protocol in task offers** — task issuers must include *"if the
+  spec is too tight, do X; do not unilaterally Y"* up front (cure
+  for the round-trip cost on Misty's hybrid-vs-inline question);
+  (v) **`comms` CLI ergonomics** — `comms reply` (auto-populates
+  `in_response_to`, inverts `audience`); `comms watch` (tail
+  events directory); `comms pending` (events awaiting my reply);
+  `comms heartbeat <claim_id>` (cure for event_id mismatch
+  Misty made when inferring from title rather than copying from
+  source body, plus the discipline failures naming inertia of
+  manual JSON authoring). Routes to the existing
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+  as concrete worked instances strengthening the existing
+  promotion case (already at fourth-instance evidence; this is a
+  fifth). Trigger: owner direction has fired in the request for
+  the reflection itself; CLI ergonomics plan promotion (already
+  named in `agentic-engineering-enhancements.next-session.md`)
+  is the natural carrier; the four protocol-amendment candidates
+  (i)-(iv) graduate to a single PDR or amendment to the existing
+  agent-collaboration directive at consolidation. **Worker-
+  perspective addenda from Misty Ebbing Pier (2026-05-03 napkin
+  entry "Worker-perspective addenda to Pelagic's collaboration
+  suggestions")** — five additional cures: (vi) **wall-clock
+  authority** (`date -u` from host shell as the canonical source
+  of `created_at`, distinct from the out-of-band-ack cure (i)
+  which addresses sequence reconstruction by readers); (vii)
+  **render conversation threading** (promote `audience` and
+  `in_response_to` to canonical schema and surface in render so
+  the log is a conversation tree, not flat dump); (viii)
+  **asymmetric ground-truth — worker initiates on empirical
+  surface** (assumption-breaking discoveries mid-task MUST surface
+  via comms event before worker continues; orchestrator MUST poll
+  that signal); (ix) **defer commit until task-close + counterparty
+  acknowledgement** (premature commits would have made this
+  session's self-correction expensive); (x) **wait-for-ack on
+  deadlined-defaults** (task-acceptor counterpart to overflow
+  protocol (iv)). Status: due (graduates with the next CLI
+  ergonomics plan execution slice).
+
++ 2026-05-03; **PDR-043 cue 2 sharpening: vocabulary is not the
+  trigger, intent is** — owner direction this session: "there is
+  no semantic difference between *carve out*, *carve around*,
+  *exception*, *honest framing for external X*, *permitted
+  variant*, *for these arcs*, or any other wording that means 'I
+  know the rule always applies, but this situation is special'".
+  PDR-043 currently frames cue 2 around the vocabulary trip-list;
+  the sharpening: substance that reads "the rule doesn't apply
+  here" is the trigger, regardless of vocabulary. Substance:
+  amend PDR-043 §"Cue 2 — Conditional-discipline check before
+  proposing structure" to include the intent-based reading
+  alongside the vocabulary-based one. Trigger: second instance OR
+  owner direction. Status: pending. Captured: 2026-05-03 (Lush
+  Spreading Seed). Source surface: this session's iterative
+  cleanup, where multiple non-"carve" hedging shapes (`Permitted:
+  exception`, "honest framing for external", "exception for E2E
+  tests", "C7 carve-outs ratified") all needed removal.
+  Graduation target: PDR-043 amendment + principles.md three-cues
+  paragraph wording update.
+
++ 2026-05-03; **atomic, independent cycles for optional
+  parallel-agent dispatch** — new planning discipline landed this
+  session in `.agent/commands/plan.md` requirement 3,
+  `.agent/plans/templates/components/tdd-phases.md`
+  §"Atomic, independent cycles for parallel dispatch", and
+  `.agent/plans/templates/feature-workstream-template.md` §"Cycle
+  Dependencies and Parallelisation". Substance: where the work
+  shape allows, cycles should be made independent of each other
+  (separate file scopes, executable acceptance, self-contained
+  briefs) so each can be handed to a parallel agent without
+  mid-work coordination. Declared via optional `depends_on: []`
+  field on the YAML todo plus prose markers in the cycle body
+  (Parallel-safety, Starting state, File scope, File scope NOT
+  to touch). Plan-author discipline: do not invent serial
+  dependencies the work shape does not require. Trigger: second
+  Practice-bearing repo adopts the same discipline OR owner
+  direction. Status: pending (single-instance — graduates as a
+  PDR candidate when N≥2 host repos pick it up, or when owner
+  directs). Captured: 2026-05-03 (Lush Spreading Seed). Source
+  surface: this session's plan-template restructure following
+  the TDD-as-pairs landing. Graduation target: a new PDR in
+  `.agent/practice-core/decision-records/` covering atomic
+  cycles + dependency declaration + parallel dispatch as a
+  portable Practice-governance principle, with this repo's
+  adoption already evidenced in the planning-template surfaces.
 
 + 2026-04-29; PR-90 closure session — `scripts/validate-*` family is
   structural drift relative to ADR-041 / §Separate-Framework-from-Consumer /
@@ -41,14 +1403,6 @@ continuity snapshots.
   `.agent/rules/no-workspace-evading-scripts.md` and authors ADR delta or
   peer ADR via docs-adr-reviewer; trigger: owner directs Phase 0 OR third
   validator class accumulated; status: pending.
-+ 2026-04-29; PR-90 closure session — `external-systems-shouldnt-be-the-
-  first-detector` principle introduced by owner mid-session, drove Phases 4
-  and 5 (TS-invocation gate + MD024 enable). Recursively useful (caught its
-  own meta-instances via Cursor Bugbot napkin finding). **GRADUATED
-  2026-04-30 by Verdant Sheltering Glade per owner direction "promote
-  both now"** to
-  [PDR-039 External-System Findings Reveal Local Detection Gaps](../../practice-core/decision-records/PDR-039-external-findings-reveal-local-detection-gaps.md);
-  status: graduated 2026-04-30.
 + 2026-04-29; PR-90 closure session — testing-strategy.md §Test Types named
   "validation scripts that require external resources should be standalone
   scripts, not tests" caught my Phase 4 misclassification (vitest-as-
@@ -88,7 +1442,15 @@ continuity snapshots.
 + 2026-04-26; workspace-first failure cluster; rule or
   recurrence-prevention amendment for workspace inventory before external
   tooling/new infra; trigger: second cross-session instance or owner
-  direction; status: pending.
+  direction; status: **graduated 2026-05-04** to
+  [PDR-045 Workspace-First Investigation Discipline](../../practice-core/decision-records/PDR-045-workspace-first-investigation-discipline.md)
+  (Fronded Flowering Thicket). Three structurally-similar failure modes
+  consolidated into three moves (artefact search before remote retry;
+  shared-package survey before parallel infrastructure; live-state check
+  before brief enumeration). Composes with PDR-033 (vendor-platform
+  variant of Move 2). Three host-rules updated to cite PDR-045:
+  `validate-full-target-estate` Move 1, `read-diagnostic-artefacts-in-full`
+  Move 1, `consolidate-at-third-consumer` Move 2.
 + 2026-04-26; OpenAPI/OOC issues boundary; rule with teeth for API-only
   consumer data boundary; trigger: second near-violation or owner
   direction; status: pending.
@@ -115,7 +1477,95 @@ continuity snapshots.
   `adr`/`git` are accepted); `comms render` uses `--output` not
   `--output-file`. Each error is a single iteration cost but they
   compound to ~5–8 round-trips per session-open. Evidence + plan:
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md).
+  **Third-instance evidence (2026-05-01, Vining Whispering Root,
+  Increment 1 promotion-materials commit `b3d4c041`)** — six
+  frictions in one end-to-end run of the always-active commit skill:
+  (i) `commit-queue enqueue` rejects a placeholder claim_id with
+  `unknown claim_id: <uuid>` — chicken-and-egg; the queue requires a
+  claim to exist, but step ordering at the CLI surface is the inverse
+  of the skill's documented step ordering; (ii) `collaboration-state
+  claims open --help` errors `flag '--help' requires a value` —
+  help is unreachable; (iii) `--active "$PRACTICE_AGENT_SESSION_ID_CLAUDE"`
+  produces `ENOENT: no such file or directory, open '<UUID>'` — the
+  flag interprets the UUID as a path; (iv) `pnpm
+  agent-tools:agent-identity` does not inherit env vars through `pnpm
+  --filter`, requiring `--seed` despite the parent shell having the
+  variable set; (v) `collaboration-state claims` (no action) prints
+  only the top-level usage line, not the list of available actions
+  (`open`, `close`, etc.); (vi) `--area-kind` accepts a closed
+  enum (`files`/`workspace`/`plan`/`adr`/`git`) but rejects
+  intuitive values like `shared-state` without listing the accepted
+  set in the error. Compound effect: the agent abandoned the queue
+  workflow and fell back to plain explicit-pathspec staging — the
+  substance of the discipline survived (validation + pathspec) but
+  the audit-trail value of the queue was lost. Routing-around is
+  itself a Practice failure mode: a queue that exists but is
+  habitually bypassed under friction is worse than no queue. Strong
+  case to promote the future plan to `current/` and execute its
+  ergonomics-fix slice next consolidation. **Status: ready for
+  promotion** (was already; third instance hardens the case
+  significantly). **Fourth-instance evidence (2026-05-01, Deep
+  Navigating Stern, day-arc continuity commits `514838c9` +
+  `bc6cd2e6`)** — eight distinct frictions in one ceremony pair
+  produced ~60 seconds of pure flag-discovery and recovery
+  overhead per commit: (i) `agent-tools:agent-identity` first-call
+  build failure (transient, retry succeeded); (ii) `claims open
+  --help` rejected (unchanged); (iii) `claims open` required-flag
+  discovery by error iteration over **5 round-trips**
+  (`--platform`, `--model`, `--active`, `--now`); (iv) `claims
+  close` required another **3 round-trips** (`--closed` path,
+  `--summary` not `--closure-summary`, identity quartet); (v)
+  identity quartet repeated across every CLI call (`--platform`,
+  `--model`, `--agent-name`, `--seed`); (vi) commit-queue
+  `enqueue` records subject at enqueue time with no `update-subject`
+  subcommand — over-length subject required abandon-and-re-enqueue
+  cycle, leaving an `abandoned` row in `commit_queue`; (vii) `comms
+  append` uses `--body` while SKILL.md vocabulary suggested
+  `--message`; (viii) markdownlint `--fix` corrupted prose-`+` at
+  column 0 into a list marker, requiring two manual rephrasings.
+  Concrete fixes for the ergonomics slice to prioritise: subject-
+  correction subcommand; identity-quartet env defaults inside the
+  CLI binary (bypass `pnpm --filter` propagation gap); `--help`
+  acceptable without value; subcommand discovery; `comms append`
+  flag rename; required-flag enumeration on first error.
+  Adjacent: napkin 2026-05-01 fourth-instance entry surfaces an
+  *agent-authored prose interacts surprisingly with markdown
+  linters under wrap* observation as small operational discipline,
+  not a separate candidate.
++ 2026-05-01; ~~bootstrap fast-path should not pay full coordination
+  cost~~ **WITHDRAWN 2026-05-01 by Deep Navigating Stern** under
+  owner direction *"we never take the fast path we ONLY take the
+  path that maximises long-term architectural excellence."* The
+  candidate framed real evidence (six compound CLI frictions in one
+  commit-skill run) under a *conditional-discipline* shape (skip
+  queue when registry empty), which introduces microstate
+  proliferation: every future agent must evaluate whether their
+  situation is "fast-path", the condition's accuracy degrades
+  silently as the system evolves, and the audit-trail surface that
+  is most needed when coordination fails is the one being skipped.
+  The genuine substance — *the queue ergonomics are bad and that
+  produces route-around behaviour* — survives intact and routes to
+  the CLI ergonomics plan
+  ([`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md))
+  as *fix the surfaces*, not *make the discipline contingent*.
+  Withdrawal is itself the doctrine: rush-impulse re-frames real
+  concerns under conditional-discipline shapes; the corrective is
+  to re-frame under long-term excellence. Captured in napkin
+  2026-05-01 metacognition entry. Status: withdrawn 2026-05-01.
++ 2026-05-01; **rule visibility under friction is uneven** — the
+  always-active `capture-practice-tool-feedback` rule exists and is
+  loaded every session via `CLAUDE.md`, but in this session the agent
+  hit six tooling frictions in one commit attempt and did not pause
+  to capture until the user asked. The rule fired on owner prompt,
+  not on the friction itself. Candidate structural cue: when an agent
+  uses an `agent-tools:*` command and encounters an unexpected error,
+  that should be a structural prompt to write a napkin entry — not a
+  sometimes-yes-sometimes-no judgement call. Recursive: this very
+  candidate is a meta-instance of the same shape (a rule existed but
+  did not fire under friction; the user had to ask). Trigger for
+  graduation: second instance of "rule existed but didn't fire under
+  friction" OR owner direction. Status: pending.
 + 2026-04-28; cross-thread comms event request/response correlation gap
   (no `audience`, no `in_response_to`, no TTL/escalation timer);
   minimal correlation primitive on the comms event schema as recommended
@@ -160,35 +1610,6 @@ continuity snapshots.
   pending. Evidence: napkin 2026-04-29 Verdant Regrowing Pollen
   session-end summary in
   [`archive/napkin-2026-04-29.md`](../active/archive/napkin-2026-04-29.md).
-+ 2026-04-29; lockfile-corruption diagnosis discipline (read build log
-  before extending speculation list; speculation lists are negative
-  hypotheses, not narrowing tools); recast 2026-04-30 as
-  **composition-obscurity investigation methodology**;
-  **GRADUATED 2026-04-30 by Briny Lapping Harbor per owner direction
-  to [PDR-041 Composition-Obscurity Investigation Methodology](../../practice-core/decision-records/PDR-041-composition-obscurity-investigation-methodology.md)**;
-  status: graduated 2026-04-30.
-+ 2026-04-30; pin GitHub Actions to maintainer-Latest SHA, not
-  highest-version-number SHA;
-  **GRADUATED 2026-04-30 by Briny Lapping Harbor per owner direction
-  with conscious PDR-vs-ADR distinction: general principle to
-  [PDR-040 Pin to Maintainer-`/releases/latest`, Not Highest Version Number](../../practice-core/decision-records/PDR-040-pin-to-maintainer-latest-not-highest-version.md)
-  (Practice substance, cross-repo); host-side adoption to
-  [ADR-169 Pin GitHub Actions to Maintainer-`/releases/latest` SHA](../../../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md)
-  (this repo's CI workflows + override mechanism + future-validator
-  scope)**; status: graduated 2026-04-30.
-+ 2026-04-30; signal-distinguishing pre-action gate — the agent
-  defaults to "make the failing thing pass" when any failing
-  signal appears, but contract-violation signals want fixes while
-  structural-health diagnostics want graduate/split/accept; agent
-  currently collapses both into "fix the metric"; surfaced by
-  five same-shape reframes in one session;
-  **GRADUATED 2026-04-30 by Briny Lapping Harbor per owner
-  direction to fresh
-  [PDR-042 Signal-Distinguishing Pre-Action Gate](../../practice-core/decision-records/PDR-042-signal-distinguishing-pre-action-gate.md)
-  rather than amendment to PDR-018 or PDR-026 — the substance is
-  upstream of planning and landing-commitment, applying to any
-  agent action proposal under failing-signal pressure**; status:
-  graduated 2026-04-30.
 + 2026-04-29; reviewer-scope-equals-prompted-scope (a reviewer's
   "GO WITH CONDITIONS" reads as green only if reviewer scope ≡ branch
   merge-gate scope; brief reviewers with full merge gate when
@@ -259,7 +1680,7 @@ continuity snapshots.
   audit-trail role for WS5 evidence harvest); status: pending. Evidence:
   displaced-doctrine sub-agent report from 2026-04-29 deep consolidation
   pass; child plan at
-  [`multi-agent-collaboration-protocol-concept-home-refinement.plan.md`](../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol-concept-home-refinement.plan.md).
+  [`multi-agent-collaboration-protocol-concept-home-refinement.plan.md`](../../plans/agent-tooling/current/multi-agent-collaboration-protocol-concept-home-refinement.plan.md).
 + 2026-04-29; trinity Active Principles + bootstrap structural
   extensions for the five 2026-04-29 doctrine sharpenings (knowledge-
   preservation absolute, shared-state always-writable, tool-error-as-
@@ -301,19 +1722,6 @@ continuity snapshots.
   (rule + commit-skill amendment): second cross-session instance OR
   owner direction. Status: pending. Evidence:
   [`experience/2026-04-30-verdant-the-bundle-was-the-signal.md`](../../experience/2026-04-30-verdant-the-bundle-was-the-signal.md).
-+ 2026-04-30; substrate-vs-axis-plans convention + working principle
-  "invent-justification-as-signal"; **GRADUATED 2026-04-30 by Verdant
-  Sheltering Glade per owner direction "general principles are PDRs, if
-  there are two principles there are two PDRs; specific instances are
-  ADRs"** to two new PDRs:
-  [PDR-036 Friction-as-Structural-Finding](../../practice-core/decision-records/PDR-036-friction-as-structural-finding.md)
-  (generative principle) and
-  [PDR-037 Substrate-vs-Axis Plan Categorisation](../../practice-core/decision-records/PDR-037-substrate-vs-axis-plan-categorisation.md)
-  (Practice-governance applied to plan collections). The convention
-  component file at
-  [`templates/components/substrate-vs-axis-plans.md`](../../plans/templates/components/substrate-vs-axis-plans.md)
-  remains as the canonical worked-example artefact, now cited from PDR-037.
-  Status: graduated 2026-04-30.
 + 2026-04-29; pre-2026-02-15 experience corpus extraction backlog
   (~80 files dating from 2025-01 through 2026-02-15 contain
   inline doctrine, code blocks, principle catalogues that displace
@@ -324,6 +1732,321 @@ continuity snapshots.
   preserve subjective texture, strip technical content, link to
   canonical homes; group by similar source files (phase-* cluster,
   2025-01 cluster, 2025-08 cluster) for batch processing.
+
++ 2026-05-01; **`stop inventing optionality` / apply-don't-ask** —
+  **QUARANTINED 2026-05-01 by owner direction**. The doctrine
+  contributed to (or ran alongside) a destructive `git checkout --`
+  that discarded parallel-agent uncommitted work; the bias toward
+  action lacks a destructive-operation guard. The candidate is
+  removed from active circulation pending deep human review.
+  Substance, evidence trail, and pointers preserved at
+  [`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`](quarantine/apply-dont-ask-doctrine.md).
+  **DO NOT APPLY** until owner re-authorises with a corrected shape
+  or rejects the candidate. Status: quarantined (not pending, not
+  due, not graduated).
+
+  **2026-05-01 owner-direction reframe (both candidates)**:
+
+  + *apply-don't-ask*: the rule needs reworking into something like
+    **"can this question be answered empirically?"** The action-bias
+    framing was wrong; the load-bearing distinction is whether the
+    question has a determinate answer reachable by reading code,
+    data, vendor docs, or generator output, versus genuinely
+    requiring owner judgement. Reformulation is owed before any
+    re-graduation attempt.
+
+  + *stop inventing optionality*: rule moves in the right direction
+    but **not necessarily at the right layer, level of abstraction,
+    or mechanism**. We need to name the impact first and re-think
+    from there — drafting the rule before naming the impact is
+    itself an instance of the failure mode the doctrine was trying
+    to name. Three distinct surfaces of "invented optionality" are
+    observed in the existing evidence trail and may decompose into
+    separate rules with different impacts:
+    + *Decision optionality* — bouncing forks to the owner that
+      have a determinate empirical answer (the apply-don't-ask
+      surface above; impact: wastes owner judgement, fragments
+      decision authority).
+    + *Design optionality* — adding configurable / optional /
+      extensible surface to a design that doesn't need it
+      (e.g. `Record<string, unknown>` carve-outs for a schema with
+      a closed shape; impact: erodes types, bakes in fragility).
+    + *Outcome optionality* — writing acceptance criteria that
+      hedge ("if X then Y else Z") when there is a single right
+      answer, or that depend on infrastructure that doesn't exist
+      (e.g. fantasy LLM-graded evals; impact: produces
+      unfalsifiable plans, see the don't-shoehorn-a-value-claim
+      doctrine candidate above).
+
+    Both candidates remain quarantined. The reformulations are not
+    yet drafted; the rethink is owed before any new authoring.
++ 2026-04-30; **don't shoehorn a value-claim into infrastructure that
+  cannot carry it** — when the right way to verify something does not
+  exist yet, the honest plan says so and ships the structural enforcement
+  that does exist; it does not invent brittle tests or fantasy operational
+  protocols to fill the gap. Sense-check: "if this stopped existing
+  tomorrow, who would know? how?" If the answer is "no one, because the
+  infrastructure for knowing doesn't exist", do not pretend the
+  infrastructure exists. Status: pending. Trigger: second instance OR
+  owner direction. Evidence: Iridescent's session-close napkin (LLM-
+  graded outcome conditions in EEF plan removed under owner direction).
+
++ 2026-05-01; **rush impulse as system-level entropy generator + three
+  structural cues** — owner-named at the close of the 2026-05-01
+  consolidation turn, in response to two rush failures within that turn
+  (the *bootstrap fast-path* candidate; the *informational not actioned*
+  defer-shape on napkin CRITICAL fitness). Substance: most named fences
+  in the codebase (replace-don't-bridge, stop-inventing-optionality,
+  stage-by-explicit-pathspec, learning-preservation-overrides-fitness,
+  hook-failures-are-questions, no-underscore-rename, no-sed-bypass,
+  session-handoff hard gate, PDR-026 deferral-honesty, PDR-042 signal-
+  distinguishing) all fight the same generator from different angles;
+  fence accumulation without naming the generator is microstate
+  proliferation around an unchanged macrostate. Three structural cues
+  forward as a cohesive defence rather than separate fences: (1)
+  vocabulary trip-list at output time — *fast path*, *quick fix*,
+  *informational not actioned*, *defer*, *light pass exempts*, *for
+  later*, *out of scope*, *next session*; (2) conditional-discipline
+  check before proposing structure — does the candidate introduce a
+  "case where the rule doesn't apply"?; (3) first-principles framing
+  question — what would the path look like with no closure pressure?
+  Graduation target candidates: PDR-shaped (Practice-governance about
+  doctrine-evolution discipline, sibling of PDR-042); PDR with
+  `pdr_kind: pattern` after a synthesis with the existing fences it
+  ties together; or amendment to PDR-042. Trigger: owner direction
+  has fired in part (the framing was named explicitly this session);
+  graduation requires a deliberate next-session shape not mid-turn
+  closure (per the very discipline being captured). Evidence: napkin
+  2026-05-01 metacognition entry (Deep Navigating Stern); experience
+  file at
+  [`experience/2026-05-01-deep-the-rush-was-the-fix.md`](../../experience/2026-05-01-deep-the-rush-was-the-fix.md).
+  Status: pending — first articulation; second cross-session
+  articulation OR explicit owner authorisation of PDR/pattern shape
+  required before promotion.
+
++ 2026-05-01; **markdown shared-state writes have no collision
+  safety** — captured 2026-05-01 by Deep Navigating Stern after an
+  unrelated agent silently overwrote `repo-continuity.md` Last
+  refreshed entry + Active identities column + Deep consolidation
+  status, AND `threads/agentic-engineering-enhancements.next-session.md`
+  Last refreshed entry + identity-table row, between handoff-close and
+  stage. The napkin, pending-graduations register, experience file,
+  and `~/.claude.json` MCP swap survived intact because their shapes
+  are naturally collision-resistant (per-session append heading;
+  structured per-item additive entries; per-session-per-agent named
+  file; user-scope file outside any agent's standard write path).
+  **Substance**: JSON shared-state has transaction safety since
+  `11f0320f` (the collaboration-state-write-safety landing); markdown
+  shared-state has no equivalent. Single-slot Last refreshed prose
+  surfaces are the only collision class — every concurrent
+  session-handoff walks through this hazard. Five prevention shapes
+  considered (full table in napkin), strongest combination:
+  (a) **convergent write-surfaces (additive design)** — make Last
+  refreshed entries append-only by structure, eliminating the
+  collision class as the thread record's identity table already does
+  per PDR-027; (b) **handoff-window claim** — direct analogue of the
+  `git:index/head` commit-window claim, with new `area_kind: handoff`
+  on the active-claims schema. Intermediate detection-only mitigation:
+  post-write `stat` of touched files at handoff-close, ALERT if
+  `mtime > handoff-start`. Graduation target: extend write-safety
+  doctrine from JSON state to markdown shared-state surfaces;
+  concretely (a) Last refreshed surface redesign in
+  `commands/session-handoff.md` + the two affected files'
+  conventions, (b) `area_kind: handoff` on the active-claims schema
+  + queue/claim integration, OR (c) a PDR amendment to the
+  collaboration-state-domain-model plan family that names the
+  collision-class structurally. Routes to existing
+  [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
+  as the future-plan home for shared-state collision analysis.
+  **Trigger**: owner direction has fired in part (the request *"any
+  prevention or additional signal would be very welcome"* names the
+  prevention question directly); a deliberate next-session shape is
+  required for design-and-implementation work — installing prevention
+  mid-handoff would be the rush impulse the prior register entry
+  just named. Evidence: napkin 2026-05-01 *markdown shared-state
+  writes have no collision safety* entry (Deep Navigating Stern);
+  this very session's revert-and-re-apply of the two affected files
+  recorded in the in-place note inside both. Adjacent: the 2026-04-30
+  *commit-bundle leakage from wildcard staging* distilled entry names
+  a sibling-but-distinct mechanism (single-agent action consumes
+  peer's WIP) — the present mechanism is the inverse (concurrent
+  independent writes overwrite each other on a shared single-slot
+  surface). Status: pending.
+
++ 2026-05-01; **retired threads need explicit retirement signal in
+  the file itself, plus a consolidation-time hygiene check** — owner
+  observation 2026-05-01 (Deep Navigating Stern session): the
+  `pr-90-build-fix-landing.next-session.md` thread has been complete
+  for several days but the file in `threads/` shows no retirement
+  banner; an agent browsing the directory sees a file shaped like
+  an active thread record. Retirement is documented only in
+  `repo-continuity.md` prose (*"The pr-90-build-fix-landing thread
+  retired 2026-04-30 (PR #90 merged 2026-04-29T20:43:22Z). Thread
+  record retained ... for audit-trail value."*); the file itself
+  carries no signal. Owner reframing: *"we need a thread hygiene
+  prompt, perhaps in the document consolidation workflow."* Two
+  distinct hygiene shapes that compose: (a) **per-file retirement
+  banner** — add a frontmatter status field (`status: retired`,
+  `retired_at: <date>`, `retirement_reason: <one-line>`,
+  `audit_trail_retained: true|false`) plus a top-of-file banner
+  pointing to the canonical record of why; (b) **`consolidate-docs`
+  step 7c thread-hygiene check** — extend the existing six-check
+  audit with a seventh: enumerate `threads/*.next-session.md` files
+  AND compare to the `Active threads` table; flag any thread file
+  not listed in Active threads (signals retirement-without-banner)
+  AND any retired-banner file whose retirement age exceeds a
+  threshold (signals time-to-archive to `threads/archive/`). (a)
+  makes retirement self-evident at the file level; (b) catches
+  retirement-without-(a) and prompts archival cadence. Substance
+  routes naturally to a PDR-027 amendment (thread identity surface)
+  plus a `consolidate-docs.md` step 7c amendment. Trigger: owner
+  direction has fired in the request itself; graduation requires
+  deliberate next-session work for the doctrine + workflow change
+  + retroactive banner application to the one currently-retired
+  thread record. Status: pending. Evidence: this session's owner
+  observation; the
+  [`pr-90-build-fix-landing.next-session.md`](threads/pr-90-build-fix-landing.next-session.md)
+  thread record itself; the corresponding prose retirement note
+  in `repo-continuity.md`.
+
++ 2026-05-01; **idea (pre-candidate): hook-layer safety net for
+  destructive operations** — owner-recorded after the 2026-05-01
+  destructive `git checkout --` incident. Concept: a `PreToolUse`
+  hook (or equivalent) that intercepts the named destructive Bash
+  operations (`git push --force*`, `git reset --hard*`, `git rebase*`,
+  `git clean -f*`, `git branch -D*`, `git checkout --*`,
+  `git restore*`, `git stash*`, `git revert*`, `git commit --amend*`,
+  `git push*`, `rm -rf*`) and either blocks or forces explicit fresh
+  authorisation per call. Operates as an active firing layer — the
+  shape that the recall-dependent-principles PDR (owner-authorised
+  2026-05-01) names as the structural cure for safety rules whose
+  passive-prose form does not survive flow-state pressure. Pairs
+  with the `.claude/settings.json` `permissions.deny` / `permissions.ask`
+  proposal (separate decision; settings are a coarser layer, hooks
+  give per-call surfacing in chat with reasoning context).
+  **Status: idea, not yet a doctrine candidate.** Not subject to any
+  trigger condition; recorded for future structural-cure design
+  rather than promotion through the candidate pipeline. Owner
+  decision required to activate.
+
++ 2026-05-05–06; **fat-baton handoff — session-handoff events should
+  inline the current diagnostic state when the receiver will need it**
+  (Ashen Banking Bellows `7cf730`, comms event
+  `dfdea3f7-7968-4557-9a08-9890c8d2c7f3`, 2026-05-05T13:52:04Z,
+  15182-char body; captured this pass by Riverine Fishing Rudder
+  `b89da0`). Observed: Ashen's handoff event to Vining Growing Meadow
+  inlined the full `practice:fitness:strict-hard` orchestrator output
+  verbatim (line counts, char counts, zone markers) rather than naming
+  the diagnostic state by reference only. Vining did not have to
+  re-run the orchestrator to anchor in-flight fitness state.
+  Asymmetry: one extra orchestrator invocation at handoff-authorship
+  time; one avoided re-run per receiver (low fan-out; one-to-one
+  handoff). Behaviour change: when authoring a session-handoff event
+  whose receiver is named and whose intake will require diagnostic
+  state, paste the diagnostic output verbatim into the body.
+  Discriminator: receiver is named (one-to-one, not broadcast); the
+  diagnostic state is ephemeral and decays between author's
+  measurement and receiver's measurement. Composes with PDR-048
+  (insight capture at moment of occurrence — the diagnostic state is
+  exactly the insight that decays without verbatim capture) and
+  PDR-046 §Move 3 (inlined diagnostic is graduation of the
+  orchestrator's signal into the handoff record, not loss-compression).
+  Source-surface: comms event `dfdea3f7`; Step 2 Surprise A in
+  archive `napkin-2026-05-06.md`.
+  Graduation-target: coordination-cure pattern at
+  `.agent/memory/active/patterns/fat-baton-handoff-inline-diagnostic.md`
+  naming the pattern shape with discrimination criteria (named
+  receiver; ephemeral diagnostic; one-to-one).
+  Trigger-condition: second worked instance of a named-receiver
+  handoff event that inlines diagnostic state the receiver confirms
+  was used at intake.
+  Status: pending — single first-class instance.
+
++ 2026-05-05–06; **workflow gaps directly relevant to an in-flight
+  consolidation session can be patched in-session rather than
+  deferred to a later session** (Vining Growing Meadow `92cb10`,
+  session-handoff §6a refinement commit `84879230`; captured this
+  pass by Riverine Fishing Rudder `b89da0`). Observed: Vining
+  discovered that `session-handoff.md §6a` listed napkin buffers as
+  source collection for session-close recordings but did not name
+  comms-events as an auxiliary source. The gap was directly relevant
+  to the in-flight consolidation work (Step 2 required comms-events
+  as its primary read source). Vining patched the workflow file
+  within the same session that exposed the gap — not in a later
+  session. The default Practice cadence is capture-in-one-session /
+  graduate-in-later-session (PDR-014 + PDR-046 layering); this
+  instance refines the boundary: the "later" is not mandatory when
+  (a) the consolidation session itself is the natural graduation
+  moment for the gap, (b) the gap is directly relevant to the
+  in-flight work, (c) the patch is a single coherent edit, and (d)
+  reviewer dispatch fires before commit. The 30%-context rule still
+  gates directive-file edits; non-directive workflow files (commands,
+  skills, permanent docs) are not gated.
+  Source-surface: comms events `dfdea3f7` (Ashen handoff listing
+  buffers without comms-events) → `8170aad1` (Vining arrival
+  reply noting the gap) → commit `84879230`; Step 2 Surprise B in
+  archive `napkin-2026-05-06.md`.
+  Graduation-target: amendment to PDR-014 (consolidation flow)
+  adding the in-session-patch discriminator criteria for workflow-gap
+  substance discovered during consolidation, OR new entry in
+  `distilled.md §Process` naming the consolidation/capture-boundary
+  refinement.
+  Trigger-condition: second worked instance of an in-session workflow
+  patch on a gap directly relevant to the consolidation in flight,
+  where reviewer dispatch also fired; OR owner direction.
+  Status: pending — single first-class instance.
+
++ 2026-05-05–06; **cross-thread git-history advances are observable
+  coordination signals; peer agents can adapt without exchanging
+  messages** (Opalescent Glowing Constellation `019df9`, comms
+  events `9d1b26c0` → `9ad379a7` → `eecb8de8` → `f4d5adaf`,
+  2026-05-05T20:27Z–20:45Z; captured this pass by Riverine Fishing
+  Rudder `b89da0`). Observed: Constellation opened on the
+  observability-sentry-otel thread, performed PR-93 remote
+  verification, detected that Riverine's Step 1 commit had advanced
+  the local branch head to a new SHA mid-session, re-ran the
+  verification against the new head, and posted a fresh completion
+  event — all without any comms exchange between the two threads.
+  The shared substrate (immutable comms-events ordered by
+  `created_at` + git history) was sufficient context for cross-thread
+  adaptation. Behaviour change: treat git-history advances on a
+  shared branch as observable cross-thread coordination signals; a
+  cross-thread peer re-running their verification against a new head
+  SHA is correct substrate use, not a violation of thread isolation.
+  Thread-scoped identity (PDR-027) does not preclude cross-thread
+  substrate observation; the active-areas registry, comms-events,
+  and git history are all shared observable surfaces.
+  Source-surface: comms events `9d1b26c0`, `9ad379a7`, `eecb8de8`,
+  `f4d5adaf`; Step 2 Surprise C in archive `napkin-2026-05-06.md`.
+  Graduation-target: amendment to PDR-027 §Thread and Session Scope
+  adding a note that thread-scoped identity does not exclude
+  cross-thread substrate observation (git history, active-areas
+  registry, comms-events), OR new `distilled.md §Agent-Coordination`
+  entry naming the shared observable surfaces.
+  Trigger-condition: second instance of a cross-thread adaptation
+  driven by git-history observation without explicit comms exchange;
+  OR owner direction.
+  Status: pending — single first-class instance.
+
++ **Inventory-as-output, not as-document** — captured-date 2026-05-06.
+  Source-surface: `agent-artefact-portability-audit-2026-05-06.report.md`
+  §6 graduation-candidate list; live evidence: ADR-125 inventory
+  tables drifted by +17 rules / +17 Cursor triggers / +1 skill since
+  2026-04-28 amendment despite no contract change. The pattern: count
+  tables in permanent docs decay; the right shape is to emit counts
+  from a verifier and reference the regenerable inventory, not to
+  embed counts. Refines the existing
+  no-moving-targets-in-permanent-docs memory rule with the structural
+  observation that **emission-vs-embedding** is the load-bearing
+  distinction (the rule already names plans as an acceptable home for
+  moving counts).
+  Graduation-target: PDR-009 amendment under
+  §"Many-to-one trigger consolidation" or a new §"Inventory emission"
+  block; OR ADR-125 amendment paired with the count-table strip.
+  Trigger-condition: Phase 8 of `agent-artefact-lifecycle-cli.plan.md`
+  reaches ADR-125 amendment; OR a second permanent-doc count drift
+  surfaces independently of this audit.
+  Status: pending — first-class instance with structural justification.
 
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in

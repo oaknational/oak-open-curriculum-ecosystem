@@ -18,7 +18,7 @@ describe('Auth Bypass for Development (E2E)', () => {
 
   beforeAll(async () => {
     // Auth bypass DX helper validation.
-    // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    // Auth enforcement is asserted in auth-enforcement.e2e.test.ts.
     const runtimeConfig = createMockRuntimeConfig({
       dangerouslyDisableAuth: true,
       env: { ALLOWED_HOSTS: 'localhost,127.0.0.1,::1' },

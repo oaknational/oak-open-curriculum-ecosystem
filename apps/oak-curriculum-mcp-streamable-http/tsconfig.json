@@ -7,7 +7,6 @@
     "scripts/**/*.ts",
     "build-scripts/**/*.ts",
     "runtime-only-scripts/**/*.d.mts",
-    "smoke-tests/**/*.ts",
     "tests/**/*.ts",
     "**/*.test.ts",
     "**/*.spec.ts",

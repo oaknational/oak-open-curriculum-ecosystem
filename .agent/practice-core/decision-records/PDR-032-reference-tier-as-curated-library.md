@@ -7,10 +7,12 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-04-22
 **Related**:
-[PDR-007](PDR-007-practice-core-bounded-package-contract.md)
-(ephemeral-exchange contract — defines what `practice-context/`
-is for and what it is not for; this PDR defines the destination
-tier that absorbs material that graduates out of `outgoing/`);
+[PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+(the Core-package contract; PDR-007's 2026-04-29 amendment retired
+the ephemeral `practice-context/outgoing/` exchange surface this
+PDR was originally written to define a destination tier for —
+graduation now routes via PDR-024's outbound shape table to the
+host's reference tier directly);
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (consolidation discipline — the §Graduation-target routing pattern
 provides the routing logic that decides when something belongs in
@@ -57,15 +59,15 @@ Three observable failure modes of the catch-all-by-default tier:
    investigations co-existed with deliberate, owner-vetted
    reference material.
 
-The Session-6 closing arc (2026-04-22) on the `memory-feedback`
-thread surfaced the failure modes during the Phase-C outgoing-triage
-pass: three `practice-context/outgoing/` files needed homes per
-PDR-007, but proposing they land in `reference/` made it visible
-that `reference/` lacked the definitional spine to absorb them
-deliberately. The owner's resolution: reform `reference/` as a
-deliberate, curated tier; relocate the entire pre-existing accumulation
-to a holding bay (`research/notes/`) so the new tier could start
-under definition; gate future additions on the new process.
+The Session-6 closing arc (2026-04-22) surfaced the failure modes
+during a triage pass on outgoing exchange material: three pending
+exchange files needed homes per PDR-007, but proposing they land in
+`reference/` made it visible that `reference/` lacked the
+definitional spine to absorb them deliberately. The owner's
+resolution: reform `reference/` as a deliberate, curated tier;
+relocate the entire pre-existing accumulation to a holding bay
+(`research/notes/`) so the new tier could start under definition;
+gate future additions on the new process.
 
 ## Decision
 
@@ -103,10 +105,10 @@ author needs to record a decision.
 Promotion into `reference/` follows three steps:
 
 1. **Substantiate.** The candidate's substance must already exist
-   somewhere — `research/`, `analysis/`, `reports/`, an outgoing
-   exchange under `practice-context/outgoing/`, or in a session's
-   active memory. New material is not authored directly INTO
-   `reference/`; it is promoted FROM somewhere.
+   somewhere — `research/`, `analysis/`, `reports/`, host-side
+   pending exchange material, or in a session's active memory. New
+   material is not authored directly INTO `reference/`; it is
+   promoted FROM somewhere.
 
 2. **Justify.** A promotion proposal records:
    - **Why this is reference and not research.** What read-to-learn

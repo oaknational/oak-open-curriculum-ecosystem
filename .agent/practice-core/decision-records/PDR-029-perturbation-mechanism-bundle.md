@@ -50,16 +50,17 @@ accumulation signal).
 
 - **2026-04-27 v3 amendment — shared git transaction and
   authorial-bundle tripwire (Coastal Washing Rudder / codex /
-  gpt-5.5; owner-directed queue governance graduation after
-  commit `5c39d1d4` self-applied the advisory queue protocol).**
+  gpt-5.5; owner-directed queue governance graduation after a
+  session-close commit self-applied the advisory queue protocol).**
   Family A gains Class A.3: a shared git transaction / authorial
   bundle tripwire. The amendment graduates the already-landed
   commit queue doctrine from an execution plan into portable
   Practice governance. Evidence: parallel same-branch commits
   produced substitution, disappearance, accretion, and turn-race
-  failures around the shared index / HEAD surface; commit
-  `5c39d1d4` then successfully used an advisory FIFO queue plus
-  exact staged-bundle verification before writing history.
+  failures around the shared index / HEAD surface; the
+  self-applying session-close commit then successfully used an
+  advisory FIFO queue plus exact staged-bundle verification before
+  writing history.
 
   The doctrine remains advisory, not mechanical. The queue tells
   agents whose intended bundle owns the next commit turn, leaves
@@ -157,9 +158,9 @@ accumulation signal).
      doctrine (per PDR-003 Standing decision 2); host-specific
      install-state narratives do not belong in the portable
      body. Removed in this rewrite. Previous content has
-     migrated to this repo's
-     `.agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
-     and plan-body surfaces where it was load-bearing.
+     migrated to a host-side documentation-sync log under the
+     originating repo's agentic-engineering-enhancements plan and
+     to plan-body surfaces where it was load-bearing.
 
   No semantic weakening of Family A Class A.2 or Family B; no
   change to platform parity; no change to Family A Class A.1
@@ -167,16 +168,17 @@ accumulation signal).
   simplification against accumulated accumulation, not a
   doctrine shift.
 
-  Related Session-5 register deltas recorded in
-  [`.agent/memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md):
-  `plan-body-framing-outlives-reviewers` and `new-doctrine-
-  lands-without-sweeping-indexes` demoted from `due` to
-  `pending` under a tightened cascade-vs-independent promotion
-  bar; six single-instance / distilled-absorbed pending entries
-  deleted. The Family A tripwire set named here is also the
-  set whose named near-term firing triggers are recorded at
-  `repo-continuity.md § Session 5 close summary` per
-  owner-directed delete-bias review.
+  Related Session-5 register deltas recorded in the host's
+  operational continuity surface (host-local file; bridged via
+  the practice-index Memory and Patterns section):
+  `plan-body-framing-outlives-reviewers` and
+  `new-doctrine-lands-without-sweeping-indexes` demoted from
+  `due` to `pending` under a tightened cascade-vs-independent
+  promotion bar; six single-instance / distilled-absorbed
+  pending entries deleted. The Family A tripwire set named here
+  is also the set whose named near-term firing triggers are
+  recorded in the host's operational-continuity Session-5
+  close summary per owner-directed delete-bias review.
 
 ## Context
 
@@ -328,20 +330,20 @@ The artefact discipline:
   authoritative file IS the artefact, and the agent's
   read/write of it is the firing record. Class A.2 Layer 2
   already encodes this with *"MUST NOT rely on self-reporting"*.
-- **Rule-form tripwires** (always-applied `.agent/rules/*.md`
-  entries) MUST specify, in the rule body, **what artefact the
-  firing leaves behind**. Examples:
-  - `register-identity-on-thread-join.md`: artefact is the
+- **Rule-form tripwires** (always-applied canonical rules in the
+  Practice's rule surface) MUST specify, in the rule body, **what
+  artefact the firing leaves behind**. Examples:
+  - `register-identity-on-thread-join`: artefact is the
     `last_session` row update (or new row); the row IS the
     consultation record.
-  - `register-active-areas-at-session-open.md`: artefact is the
+  - `register-active-areas-at-session-open`: artefact is the
     claim entry's `notes` field plus the registered claim
     itself; "no overlap" is logged as `"scanned registry: <N>
     active claims, no overlap with my areas"`; "overlap"
     decisions cite the other agent's `claim_id`.
-  - `respect-active-agent-claims.md`: artefact is the shared-communication-log
-    entry naming the consultation, OR the claim's `notes`
-    field with the decision recorded.
+  - `respect-active-agent-claims`: artefact is the
+    shared-communication-log entry naming the consultation, OR
+    the claim's `notes` field with the decision recorded.
 - **Decide-X rules without an artefact clause** are deficient
   by construction and must be amended to specify their artefact.
 
@@ -392,7 +394,7 @@ workflow.
 
 | Layer | Firing cadence | Example (markdown-ritual default; code optional) |
 | --- | --- | --- |
-| **Always-applied rule** | Session open (platform-loader) or read-at-grounding | `.agent/rules/<name>.md` + `.claude/rules/<name>.md` + `.cursor/rules/<name>.mdc` |
+| **Always-applied rule** | Session open (platform-loader) or read-at-grounding | A canonical rule in the Practice rule surface plus per-platform trigger adapters (one per agent platform) |
 | **Read-trigger surface** | Explicitly named in the session-open grounding order | A short file that start-right-quick / start-right-thorough reads before work begins |
 | **Skill / command invocation gate** | When the workflow is run | A named acceptance step inside a command (e.g. `/session-handoff` step 7c) naming the authoritative file to read |
 | **Pre-commit hook / CI gate** | On commit or push | A repo-root script invoked by Husky or CI job (one of the few places code is genuinely required) |
@@ -422,9 +424,9 @@ spec, or inherited artefact.
 
 **Required layers (default installs; host may override)**:
 
-1. **Always-applied rule** — a canonical rule at
-   `.agent/rules/plan-body-first-principles-check.md` (or host
-   equivalent) carrying the three-clause check:
+1. **Always-applied rule** — a canonical rule (e.g. a
+   `plan-body-first-principles-check` rule) carrying the
+   three-clause check:
    1. **Shape clause.** Is the shape right for the
       host-authored behaviour being proven, or is it a vendor /
       configuration / framework assertion in disguise?
@@ -438,8 +440,9 @@ spec, or inherited artefact.
 **Acknowledged exception to the two-complementary-layers
 default.** Class A.1 installs a single tripwire layer. The
 earlier draft of this PDR named foundation-directive grounding
-(`principles.md`, ADR index, PDR index, `.agent/rules/` tier,
-read at session open per PDR-013) as an implicit Layer 2;
+(principles, the host's ADR index, the PDR index, and the
+canonical rule tier, read at session open per PDR-013) as an
+implicit Layer 2;
 Session 5 simplification rejects that framing because
 foundation grounding is *ordinary session-open grounding
 required by PDR-013 regardless of this PDR*, not a distinct
@@ -468,10 +471,10 @@ passive guidance.
 **Required layers (default installs; host may override)**:
 
 1. **Session-open identity-registration rule** — a canonical
-   rule (`.agent/rules/register-identity-on-thread-join.md` or
-   host equivalent) that fires before any edits and requires
-   the agent to update `last_session` on a matching identity
-   row or add a new row, per PDR-027. The rule should point to a
+   rule (e.g. a `register-identity-on-thread-join` rule) that
+   fires before any edits and requires the agent to update
+   `last_session` on a matching identity row or add a new row,
+   per PDR-027. The rule should point to a
    canonical identity preflight command when the host has one so
    thread rows and shared-state writes use the same full identity
    block.
@@ -624,8 +627,8 @@ reconciled against the installed tripwire set:
 - **Standing-decision register surface** — **NOT installed.**
   The intent (owner-ratified decisions re-enter scope at every
   session) is served by ordinary foundation-directive grounding
-  read at session open per PDR-013: `principles.md`, the ADR
-  index, the PDR index, and the `.agent/rules/` tier. Adding a
+  read at session open per PDR-013: principles, the host's ADR
+  index, the PDR index, and the canonical rule tier. Adding a
   dedicated "standing decisions" surface admits unclassified-
   decision debt (a misc bucket) rather than enforcing proper
   classification into durable homes. Items that had initially
@@ -635,8 +638,8 @@ reconciled against the installed tripwire set:
 - **Non-goal re-ratification ritual** — covered by the plan-
   body rule's shape clause (non-goals are a plan-body claim
   subject to the first-principles check) and the
-  owner-beats-plan invariant in `principles.md` / repo-wide
-  invariants. Not a separate layer.
+  owner-beats-plan invariant in the Practice principles /
+  repo-wide invariants. Not a separate layer.
 
 ### Self-application requirement
 

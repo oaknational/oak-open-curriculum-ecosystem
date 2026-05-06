@@ -36,8 +36,10 @@ internal engineering plan is needed.
 
 The recurring resources in scope are the OpenAPI-driven pipeline, generated
 SDKs, MCP server surfaces, semantic-search configuration, knowledge-graph
-assets, and the documentation/playbooks that make those assets usable by
-others. The collection also tracks how MCP Apps in AI platforms such as Claude
+assets, the reusable sector-component canon in foundation Vision [_What We
+Deliver_](../../../docs/foundation/VISION.md#what-we-deliver), and the
+documentation or playbooks that make those assets usable by others (see
+[current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)). The collection also tracks how MCP Apps in AI platforms such as Claude
 Cowork and ChatGPT can turn those assets into practical end-user and developer
 experiences.
 
@@ -53,12 +55,16 @@ implementation collection when promoted.
 
 | Path | Type | Description |
 |---|---|---|
+| [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md) | Current contract | Partner adoption claims anchored on Vision reusable-component inventory |
 | [roadmap.md](roadmap.md) | Roadmap | Sector-engagement phase sequence and ownership boundaries |
 | [active/README.md](active/README.md) | Active index | In-progress sector-engagement execution plans |
 | [current/README.md](current/README.md) | Current index | Queued sector-engagement plans |
 | [future/README.md](future/README.md) | Future index | Deferred strategic briefs and partner/data-source opportunities |
 | [external-material-triage.md](external-material-triage.md) | Triage note | Current disposition of legacy external material and retained/rejected relevance |
-| [external-knowledge-sources/](external-knowledge-sources/) | Source-ingestion thread | External evidence, skills, public API, and future KG sources consumed by Oak applications |
+| [eef/](eef/) | EEF subthread | EEF Teaching and Learning Toolkit: queued MCP surface plan, strategic brief, technical comparison, and dataset snapshot |
+<!-- external-knowledge-sources/ moved 2026-05-01 to its own thread:
+     ../exploring-open-education-resources/external-knowledge-sources/ -->
+
 | [knowledge-graph-adoption/](knowledge-graph-adoption/) | Adoption thread | Support model for external organisations using Oak KG assets |
 | [castr/](castr/) | Partner/reference pack | Requirements for an external OpenAPI/codegen tool to support Oak's schema-first pipeline |
 | [ooc-api-wishlist/](ooc-api-wishlist/) | Upstream coordination | Oak Open Curriculum API wishlist, examples, and enhancement proposals |
@@ -68,13 +74,14 @@ implementation collection when promoted.
 ## Read Order
 
 1. [roadmap.md](roadmap.md)
-2. [future/README.md](future/README.md)
-3. [external-material-triage.md](external-material-triage.md)
-4. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
-5. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
-6. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
-7. [ooc-issues/README.md](ooc-issues/README.md)
-8. [oeai/README.md](oeai/README.md)
+2. [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)
+3. [future/README.md](future/README.md)
+4. [external-material-triage.md](external-material-triage.md)
+5. [eef/README.md](eef/README.md)
+6. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
+7. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
+8. [ooc-issues/README.md](ooc-issues/README.md)
+9. [oeai/README.md](oeai/README.md)
 
 ## Document Roles
 

@@ -28,11 +28,17 @@ export interface ThreadEntry {
  * Thread unit data from the /threads/\{threadSlug\}/units API endpoint.
  * Note: `oakUrl` is always null for thread units since they are data concepts
  * without corresponding pages on the website.
+ *
+ * @remarks
+ * Schema source of truth: the upstream OpenAPI spec for this endpoint
+ * exposes only `unitTitle` and `unitSlug`. Ordering is implicit in the
+ * array sequence returned by the endpoint; `unitOrder` was removed
+ * upstream and is therefore not surfaced here. Curriculum-level units
+ * (in other endpoints) still expose `unitOrder` per their own schemas.
  */
 export interface ThreadUnitEntry {
   readonly unitSlug: string;
   readonly unitTitle: string;
-  readonly unitOrder: number;
   readonly oakUrl?: null;
 }
 
@@ -90,7 +96,6 @@ export function makeGetThreadUnits(client: Pick<OakApiClient, 'GET'>): GetThread
       data.map((unit) => ({
         unitSlug: unit.unitSlug,
         unitTitle: unit.unitTitle,
-        unitOrder: unit.unitOrder,
         oakUrl: null,
       })),
     );

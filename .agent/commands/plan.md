@@ -68,20 +68,52 @@ Every strategic plan MUST define:
 Every executable plan MUST have:
 
 1. **YAML frontmatter** with machine-readable todos (id, content, status)
-2. **TDD phase structure** — RED (tests first, must fail), GREEN
-   (minimal implementation), REFACTOR (docs, cleanup)
-3. **Quality gates** after each phase — reference the
+2. **TDD cycles as the unit of landing** — every workstream is a
+   sequence of test+product-code PAIRS. Each cycle (Red → Green →
+   Refactor) is one landing unit (one commit): the failing test, the
+   product code that makes it pass, and any refactor land together.
+   Tests must NEVER be committed ahead of the product code that greens
+   them; product code must NEVER be committed ahead of the tests that
+   prove it. Both lag-shapes violate testing-strategy.md and produce
+   skipped or failing tests in the tree. Apply this at every level —
+   unit, integration, E2E — and where a higher-level test requires
+   several lower-level cycles, sequence those cycles and finish with
+   the commit that adds the final piece needed to green the
+   higher-level test. Every commit ends with all tests passing.
+3. **Atomic, independent cycles for parallel dispatch where the
+   work shape allows** — break larger workstreams into cycles that
+   are independent of each other so each can be handed to a
+   parallel agent without mid-work coordination. Two cycles are
+   independent when completing one does not change what the other
+   does or how it is verified. In practice each independent cycle
+   touches a separate file scope (or overlaps only additively),
+   declares its starting state, has executable acceptance criteria
+   another agent can verify, and carries a self-contained brief
+   with no "ask the original author" dependencies. Where cycles
+   genuinely depend on each other (a higher-level test that needs
+   lower-level cycles in place; a cycle that consumes an interface
+   another cycle introduces), declare the dependency explicitly in
+   the cycle description and, optionally, in a `depends_on` YAML
+   field on the todo. Cycles with no declared dependency are
+   parallel-safe and can be dispatched concurrently; dependent
+   cycles are queued behind their prerequisites. Plan authors do
+   not invent serial dependencies that the work shape does not
+   require — pick the natural decomposition (separate workspaces,
+   separate modules, separate features) that the cycles already
+   suggest.
+4. **Quality gates** after every cycle — reference the
    quality-gates component (`.agent/plans/templates/components/quality-gates.md`)
-4. **Acceptance criteria** for every task — specific, checkable,
-   with deterministic validation commands
-5. **Risk assessment** — what could go wrong and how to mitigate
-6. **Foundation alignment** — explicit references to principles.md,
+5. **Acceptance criteria** for every task — specific, checkable,
+   with deterministic validation commands. Acceptance for a TDD cycle
+   includes "all tests passing at every level" as a non-negotiable.
+6. **Risk assessment** — what could go wrong and how to mitigate
+7. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md
-7. **Non-goals** — what we are explicitly NOT doing (YAGNI)
-8. **Learning Loop** — all plans MUST end with running the consolidation workflow
-9. **Lifecycle triggers** — plans that touch non-trivial work MUST
-   reference `.agent/plans/templates/components/lifecycle-triggers.md`
-   or record why each lifecycle touch point is not applicable
+8. **Non-goals** — what we are explicitly NOT doing (YAGNI)
+9. **Learning Loop** — all plans MUST end with running the consolidation workflow
+10. **Lifecycle triggers** — plans that touch non-trivial work MUST
+    reference `.agent/plans/templates/components/lifecycle-triggers.md`
+    or record why each lifecycle touch point is not applicable
 
 ## Promotion Workflow (`future/` -> `current/` -> `active/`)
 

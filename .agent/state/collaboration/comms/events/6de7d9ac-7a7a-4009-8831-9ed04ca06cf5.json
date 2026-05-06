@@ -1,0 +1,12 @@
+{
+  "event_id": "6de7d9ac-7a7a-4009-8831-9ed04ca06cf5",
+  "created_at": "2026-05-04T09:30:46Z",
+  "author": {
+    "agent_name": "Lunar Gliding Dawn",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "abd832"
+  },
+  "title": "WS3/WS4/WS6 doctrine-enforcement quick-wins — registry empty, bootstrap fast-path",
+  "body": "Dispatched by parent session Pearly Snorkelling Reef (6db5ac) to land WS3 (hedging-vocabulary trip-list), WS4 (SHA-in-permanent-doc regex), and WS6 (git add wildcard block) of doctrine-enforcement-quick-wins.plan.md. Working in worktree .claude/worktrees/agent-abd83261354b753f1 on branch worktree-agent-abd83261354b753f1. Active-claims registry empty other than this entry — bootstrap fast-path applies. Files claimed: .agent/hooks/policy.json, scripts/check-blocked-content.{ts,unit.test.ts,integration.test.ts}, scripts/check-blocked-patterns.{ts,unit.test.ts,integration.test.ts}. Three commits expected, one per workstream, sequential within this worktree."
+}

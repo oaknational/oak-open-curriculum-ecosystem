@@ -21,6 +21,21 @@ aspirations).
 
 ## Amendment Log
 
+- **2026-05-04 amendment — beneficial prerequisites must not block
+  the work they were meant to enable (Verdant Sprouting Leaf /
+  claude-code / claude-opus-4-7-1m; owner-named pattern surfaced
+  during the post-`/insights` reflection round, three host
+  instances in evidence).** Planning discipline now distinguishes
+  *blocking* prerequisites (the dependent work cannot exist or
+  function without them) from *beneficial* prerequisites (the
+  dependent work ships better with them but ships without them).
+  Beneficial prerequisites must not be expressed as blocking
+  dependencies; if they are, the dependent work — usually the
+  higher-value capability — stalls behind a lower-leverage
+  refinement. New §"Beneficial prerequisites must not block"
+  names the discipline, the at-plan-time classification, the
+  audit cadence, and the additive-shape-as-default cure.
+
 - **2026-04-29 amendment — tool error as question; reviewer-scope
   equals prompted-scope (Nebulous Illuminating Satellite / claude-code
   / claude-opus-4-7-1m; owner-directed graduation during the
@@ -35,10 +50,10 @@ aspirations).
     safety contract, CI gates, type checkers, and validators. The fix
     is one of three valid responses (understand-and-address,
     understand-and-dismiss-with-rationale, understand-and-stop) — never
-    skip-understanding. Instance patterns:
-    [`tool-error-as-question.md`](../../memory/active/patterns/tool-error-as-question.md),
-    [`hook-as-question-not-obstacle.md`](../../memory/active/patterns/hook-as-question-not-obstacle.md),
-    [`ground-before-framing.md`](../../memory/active/patterns/ground-before-framing.md).
+    skip-understanding. Instance patterns: `tool-error-as-question`,
+    `hook-as-question-not-obstacle`, `ground-before-framing`
+    (host-local pattern files; bridged via the practice-index Pattern
+    instances section).
   - **Reviewer scope equals prompted scope.** A reviewer's verdict is
     scoped to the prompt that briefed them; "GO WITH CONDITIONS" reads
     as a green merge signal only when the reviewer's brief matches the
@@ -46,9 +61,10 @@ aspirations).
     with the full merge-gate criteria (zero failing gates, no warning
     toleration, all merge conditions named), not just the arc you are
     working on. Failure mode: instrumental work treated as terminal
-    because the work-list was full. Instance pattern:
-    [`scope-as-goal.md`](../../memory/active/patterns/scope-as-goal.md).
-    Cross-reference under PDR-015 amendment of the same date.
+    because the work-list was full. Instance pattern: `scope-as-goal`
+    (host-local pattern file; bridged via the practice-index Pattern
+    instances section). Cross-reference under PDR-015 amendment of
+    the same date.
 
 - **2026-04-28 amendment — disposition drift under context pressure
   (Coastal Mooring Atoll / codex / GPT-5; owner-directed deep
@@ -209,6 +225,68 @@ Trigger vocabulary that forces re-derivation includes: "stylistic",
 "all clean", "fall back to", "if recognition does not propagate", and
 "the TSDoc already explains it".
 
+### Beneficial prerequisites must not block (2026-05-04 amendment)
+
+Plans declare prerequisites in two distinct kinds:
+
+| Kind | Definition | Default treatment |
+|---|---|---|
+| `blocking` | The dependent work cannot exist or function in the prerequisite's absence. | Sequence the prerequisite first; the dependent work is gated. |
+| `beneficial` | The dependent work ships better with the prerequisite but ships without it. | Run the prerequisite in parallel or defer it; the dependent work is **not** gated. |
+
+A prerequisite labelled `blocking` when the substance is `beneficial`
+silently turns a refinement into a gate. The dependent work — which is
+typically the higher-leverage capability — stalls behind the
+lower-leverage prerequisite. The shape recurs across planning surfaces:
+infrastructure work framed as prerequisite for feature work; redesign
+work framed as prerequisite for direct fix work; coordinated migration
+work framed as prerequisite for additive new capability. Each instance
+is internally coherent ("doing the prerequisite first is tidier"); the
+cumulative effect is that the higher-value work never lands.
+
+**At plan-time discipline:**
+
+1. Every named prerequisite carries a one-word classification:
+   `blocking` or `beneficial`.
+2. For each `beneficial` prerequisite, the plan states the dependent
+   work's *minimum shippable shape without it*. If the plan cannot
+   describe this shape, the prerequisite is not actually `beneficial`
+   — either it is `blocking` (state the constraint) or the
+   classification is itself confused (re-derive).
+3. The default cure for a beneficial-but-coupled-as-blocking shape
+   is *additive*: ship the new capability alongside the existing
+   surface; defer the migration of the existing surface to a later
+   plan. The integrated rename / migration / consolidation is the
+   *optimisation*, not the *prerequisite*.
+
+**At plan-estate audit cadence (consolidation pass):**
+
+A consolidation step asks: *what plan is currently gated behind
+which prerequisite, and is the gate real?* Each gated plan answers
+in one of three shapes:
+
+1. **Real gate** — the prerequisite is genuinely `blocking`; the gate
+   stays.
+2. **False gate** — the prerequisite is `beneficial`; the gate
+   dissolves; the dependent plan promotes per its own readiness.
+3. **Confused classification** — the prerequisite is unclear;
+   re-derive at the next planning round.
+
+**Compliance triggers:**
+
+- A plan declares a prerequisite without one-word classification.
+- A plan with a `beneficial` prerequisite does not state the
+  minimum shippable shape without it.
+- A plan-estate audit finds a `beneficial` prerequisite that has
+  gated higher-leverage work for more than one consolidation pass
+  without an explicit promotion decision.
+
+**Why this is planning discipline.** The pattern is not a property
+of any single plan; it emerges from how plans declare relationships
+to other plans. Planning discipline is the only surface where the
+shape can be caught at authoring time. At execution time, the
+gating has already cost the dependent work the time it lost.
+
 ### Workflow contract clarity
 
 A workflow that repairs, transforms, or propagates content across
@@ -300,18 +378,3 @@ Alternatives rejected:
   pressure rose.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-018`:
-
-- `.agent/memory/active/patterns/end-goals-over-means-goals.md` —
-  originated from knip-triage planning where "close 96 unused
-  exports" was the means-framed plan; the end-goal-framed
-  rewrite was materially smaller and more targeted.
-- `.agent/memory/active/patterns/repair-workflow-contract-clarity.md` —
-  originated from repair workflows using ambiguous verbs that
-  produced divergent outcomes across artefacts.
-- `distilled.md` entry "Drift recurs while authoring the enforcement of
-  the principle it violates" — graduated 2026-04-28 into this PDR as
-  §Disposition drift at phase boundaries.

@@ -1,5 +1,447 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026) — refreshed 2026-05-06 (Silvered Hiding Silhouette, claude-code, sonnet-4-6, `924167`)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— Steps 01–10 closed.
+
+**Step 10 closing summary**: Reviewer dispatch for step 10 completed. Three
+parallel reviewers (security-reviewer, clerk-reviewer, sentry-reviewer) had been
+quota-stopped in the prior context-compacted session; this session recovered their
+findings from subagent jsonl transcripts and restarted the sentry-reviewer (which
+completed cleanly on quota reset). All four reviewer verdicts appended to
+`/tmp/mcp-tool-exercise.log`. Three P2 snags added to
+`pr-93-merge-snagging-2026-05-05.md` (clerk stale-version-comment, sentry
+local-dev DSN warning, sentry release-identifier contract test). Step 10 verdict:
+**ACCEPTED** — no P1 blockers from any reviewer.
+
+**Next safe step**: step 11 — pre-merge baseline check vs `origin/main`.
+Enumerate commits on this branch not yet on main; check what main-branch work
+has landed since the branch diverged; assess conflict potential (dry-run merge
+or `git merge-tree`). Note: the `pre-merge-divergence-analysis` rule applies to
+two diverged feature branches, not to a feature-branch vs main comparison — this
+step is the standard pre-merge sanity check, not that workflow. Findings feed
+step 12 (owner-gated merge readiness declaration with release-readiness-reviewer
+synthesis).
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-06 (Opalescent Glowing Constellation)
+
+**Final PR 93 Sonar state after owner disposition**: remote
+`feat/eef_exploration` was verified at `cebbca83`
+(`docs(sonar): record pr 93 false-positive dispositions`). Sonar PR 93
+reports open issues 0, security hotspots 0, and `new_violations=0`.
+
+**Remaining gate state**: Sonar quality gate remains `ERROR` only on
+duplicated-lines density (`16.0`, threshold `3`). Owner confirmed remaining
+local/docs continuity work is not Sonar-relevant; duplication remediation is
+deferred to the future codegen workspace-decomposition plan.
+
+**Next safe step**: no further PR 93 Sonar issue/hotspot work. Do not
+hand-edit generated SDK files. If the PR proceeds before future codegen
+duplication remediation, the live decision is owner acceptance of the
+documented duplication deferral / red SonarCloud state.
+
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Opalescent Glowing Constellation)
+
+**PR 93 Sonar state after owner disposition**: branch
+`feat/eef_exploration` is synced to `b929a022079876119fcd631e546f442896f78b72`.
+The three remaining `oak-eslint` S1135 findings were marked false positive
+in Sonar after owner direction: each flagged token is documentation/test
+text describing the gate that rejects TODO-like suppression rationales or
+pending-test mechanisms, not outstanding work.
+
+**Remote verification after disposition**:
+
+- Sonar open issues: 0.
+- Sonar security hotspots: 0.
+- Sonar `new_violations`: 0.
+- Sonar quality gate remains `ERROR` only on duplicated-lines density
+  (`16.0`, threshold `3`).
+- GitHub checks on `b929a022`: CI/test, CodeQL, Vercel, and Cursor Bugbot
+  green; SonarCloud remains failed because duplication remediation is
+  explicitly deferred.
+
+**Next safe step**: no further PR 93 Sonar issue/hotspot remediation is
+queued for this session. Duplication remediation is deferred to the future
+codegen workspace-decomposition plan; do not hand-edit generated SDK files in
+this PR.
+
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Glassy Drifting Dock)
+
+**Immediate PR 93 Sonar state**: local commit `da4288cd`
+(`chore(agent): land staged sonar and tooling docs`) contains the
+executable unclaimed Sonar remediation plan and docs/roadmap routing.
+Remote GitHub/Sonar had not re-analysed this commit at session close.
+
+**Next safe step**: push/sync `feat/eef_exploration` so PR 93 gets a fresh
+SonarCloud analysis, then re-query:
+
+- Sonar quality gate, open issues, hotspots, and duplicated files for PR 93.
+- GitHub PR 93 check state, especially SonarCloud Code Analysis.
+
+**Expected after reanalysis**: the eight unclaimed issues fixed in
+`scripts/check-blocked-content*` and `packages/core/env/src/schemas/*`
+should clear. The three `oak-eslint` `typescript:S1135` TODO-comment
+findings remain intentionally out of the main plan because paused Claude
+work claimed that surface; use
+[`pr-93-sonar-oak-eslint-claim-overlap.plan.md`](../../../plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md)
+only after Silvered Hiding Silhouette's claim is unpaused, closed, or
+explicitly coordinated.
+
+**Non-blocking duplication routing**: generated/built SDK duplication is
+acknowledged and non-blocking for PR 93. Do not hand-edit generated SDK
+files in this PR; the roadmap routes that debt to
+[`sdk-codegen-workspace-decomposition.md`](../../../plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md).
+
+**Hotspot disposition**: env-schema test examples were changed away from
+public `/tmp` paths in `da4288cd`. If Sonar still reports only test-string
+literal hotspots after reanalysis, review them as `SAFE` with a
+site-specific test-fixture rationale; otherwise remediate the live source.
+
+**Validation already run locally**: `pnpm test:root-scripts`,
+`pnpm --filter @oaknational/env test`,
+`pnpm --filter @oaknational/env type-check`, scoped markdownlint,
+`git diff --check`, collaboration-state check, and the full pre-commit
+hook during `da4288cd` all passed. A direct ad-hoc root `eslint` invocation
+against the scripts was invalid because the flat config requires typed
+parser services; do not treat that as a code failure.
+
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Twilit Beaming Aurora)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— 12-step linear sequence to complete and merge `feat/eef_exploration`.
+Steps 01–06 closed.
+
+**Current step**: step 07 — capture inventory + freeze allowlist
+atomically. (a) Run `no-real-io-in-tests` ESLint rule across the
+monorepo with `--format json` (or equivalent structured output) piped to
+a temporary capture file. (b) Count violations from structured output.
+(c) Populate §IO Inventory in the plan body: one entry per violation
+with absolute path, violation kind (spawn / exec-sync / fs /
+fs-promises / dynamic-import-fs / process-env / process-cwd / fetch /
+worker), one-sentence rationale for current presence, follow-up
+disposition. (d) Validate Inventory entry count matches structured
+output count; spot-check 5 random entries; re-run capture if either
+fails. (e) Configure `allowlistPathShapes` option in `eslint.config.ts`
+at the repo root with exactly the captured paths. Per-file
+`eslint-disable` comments are FORBIDDEN. (f) **If
+`apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts`
+appears in the captured set**, append cross-reference into the paused
+plan's resumption preconditions before committing. The §IO Inventory
+and the allowlist start identical; the **allowlist is the canonical
+live enforcement surface**, the §IO Inventory is the **historical
+snapshot** at merge time. Land via full commit-skill protocol with
+config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory
+completeness + cross-reference discipline) dispatch.
+
+**Step 06 closing summary**: `no-real-io-in-tests.ts` rule authored at
+`error` severity (`meta.type: 'problem'`) with comprehensive denylist
+(child_process incl. all Sync variants; worker_threads Worker; fs
+named/default/fs-promises/dynamic/require; process env reads & writes
+& cwd & chdir incl. `globalThis.process.*` and bracket-notation forms;
+network: fetch non-localhost + http/https/net/dgram imports; both
+unprefixed and node:-prefixed). Hardcoded structural allowlist
+(`**/test-helpers/**`, `**/test-fakes/**`, vitest configs as
+defence-in-depth) + optional `allowlistPathShapes: string[]` rule
+schema for step-07 additions. Paired
+`no-real-io-in-tests.unit.test.ts` RuleTester suite: 73 cases (15
+valid, 58 invalid). Plugin registration in `plugin.ts`. Root
+`eslint.config.ts` UNCHANGED (step-08 boundary respected). Reviewer
+dispatch parallel: code-reviewer APPROVED WITH SUGGESTIONS,
+config-reviewer ISSUES FOUND (no P1), test-reviewer ISSUES FOUND
+(P1-gating). All P1 + P2 findings closed pre-commit (4 missing
+node-prefix invalid cases, 2 dynamic-import + 1 require gaps,
+`globalThis.process.chdir`, bracket-notation `process['env'/'cwd'/'chdir']`
+
+- `globalThis['process']` hardening, plan-citation removal in test
+comment, defence-in-depth allowlist comment). P3 dispositions deferred:
+config-reviewer dual-enforcement with `index.ts testRules` is step-08
+decision territory; schema `minItems: 1` is informational-only and not
+adopted.
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the live
+discipline through every remaining step. Reviewer dispatch (escalation
+by findings, not curtailment), commit-skill protocol with mandatory
+`git commit -- <pathspec>` filter (third-instance foreign-stage
+absorption cure), stage-by-explicit-pathspec, and plan-body freshness
+are non-optional through every remaining step. No-warning-toleration
+applies: severity `error` is the only acceptable rule severity (no
+warn).
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-05 (Dawnlit Transiting Galaxy)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— 12-step linear sequence to complete and merge `feat/eef_exploration`.
+Steps 01–05 closed.
+
+**Current step**: step 06 — author
+`packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at error
+severity, with comprehensive Node.js IO denylist (child_process,
+worker_threads, fs (named/default/`fs/promises`/dynamic), process
+(env reads + writes + cwd + chdir), network to non-localhost) and
+path-shape allowlist (`vitest.config.ts | vitest.*.config.ts |
+vitest.setup.ts` at workspace roots; `**/test-helpers/**` |
+`**/test-fakes/**` structurally-marked directories). Pair with
+`no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for
+each denylist sub-form, positive for each allowlist sub-glob).
+Plugin registration in `plugin.ts`. **Do NOT yet wire into root
+eslint.config.ts** — that is step 08. Reviewer dispatch at commit
+close: code-reviewer (gateway) + config-reviewer (allowlist shape) +
+test-reviewer (RuleTester describe-vs-audit + Node.js IO API surface
+coverage exhaustiveness).
+
+**Step 05 closing summary**: BF-1a/b CI hook + workflow at commit
+`ef593be9` (Lacustrine, `dd239f`); BF-2/3/4/5/6/7/8 stale-smoke-reference
+doc cleanup at commit `434cf6f6` (Lacustrine); C1 boundary-crossing
+import (relocate `upstream-metadata-fixture.ts` from
+`e2e-tests/helpers/` to `src/test-helpers/`; update 12 consumers +
+own internal type import) substance at commit `36102937` (Dawnlit,
+`0ddc89` — substance correct under misleading peer-subject due to
+foreign-stage absorption; architecture-reviewer-fred CLEAN +
+code-reviewer APPROVED WITH SUGGESTIONS pre-landing); CR1
+conditional-branch test-immediate-fail × 2 integration tests at this
+commit (Dawnlit; test-reviewer CLEAN + code-reviewer APPROVED, used
+`unwrap` from `@oaknational/result` rather than inline throw per
+test-reviewer's confirmation that the substitution is "strictly
+better"). Step 05 §Sequence Summary row flipped to DONE.
+**Out-of-scope follow-ups recorded** (not closed in this branch):
+BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3),
+BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary,
+foreign-stage absorption recurring-pattern structural enforcement
+candidate.
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the
+just-landed rule the unified plan exists to operationalise.
+Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec
+(MANDATORY at commit time per §Discipline `git commit -- <pathspec>`
+filter), and plan-body freshness are non-optional through every
+remaining step.
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-04 (Lacustrine Navigating Rudder)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— unified 12-step linear sequence to complete and merge
+`feat/eef_exploration` (post Round-2 collapse from 17 steps; HEAD
+`75dbcdb6`). Steps 01–02 closed at `75dbcdb6` (Pelagic Diving
+Atoll: Round 1 + Round 2 architecture-led review with
+six-reviewer dispatch each round; capture-not-clean shape adopted
+under owner direction 2026-05-04).
+
+**Current step**: step 03 — integrate `.agent/rules/no-speed-pressure.md`
+across the rule estate via single atomic commit. Canonical rule
+authored, four adapter paths (`.agent/`, `.claude/`, `.cursor/`,
+`.agents/`) and `RULES_INDEX.md` entry already in place at session-open;
+this commit adds principles.md cross-reference, distilled.md entry,
+user-memory feedback file `feedback_no_speed_pressure.md` (Claude
+per-user MEMORY.md index update), plus plan-body status update +
+this thread-record refresh + identity row. Three speculative
+failure-mode feedback files (performed-grounding, rule-conflict-is-signal,
+auto-mode-not-permission-slip) are NOT authored at this step —
+graduate only when a second instance is observed. Post-commit:
+verify all four adapter paths exist and resolve identically.
+Reviewer dispatch at commit close: code-reviewer (gateway).
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the
+just-landed rule the unified plan exists to operationalise.
+Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec,
+and plan-body freshness are non-optional through every remaining
+step.
+
+**Step 03 closing commit**: `2b78aa93` (HEAD of `feat/eef_exploration`
+post-step-03). All eight bundled files landed clean through the full
+pre-commit chain (prettier check, markdownlint, knip, depcruise,
+turbo gates — full cache hit). Code-reviewer dispatch returned
+CLEAN-WITH-FINDINGS: one plan-body hygiene gap — §Sequence Summary
+row 3 promises commit SHA recording but the actual SHA `2b78aa93`
+was not inserted (reviewer judged this not worth an isolated
+commit; bundles naturally with step 04's plan-body touch). Step 04
+must absorb this insertion when its own commit lands.
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-04 (Pelagic Diving Atoll)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— unified 17-step linear sequence to complete and merge
+`feat/eef_exploration` (commit `b539c7c5`). Replaces the three
+plans named in the 2026-05-03 landing target, all now closed:
+plan 1 landed (`2a2d1b05`); plan 2 paused-superseded
+(`future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`,
+SENTRY_MODE rename held until foundational tension is named in PDR/ADR);
+plan 3 (smoke-tests retirement) cycles 1a–1d landed in
+`8fa339f4..b226670d` under damaged execution (commit-skill bypass,
+reviewer dispatch missed, plan-body freshness stale).
+
+**Current step**: step 1 — comprehensive sub-agent review of the
+unified plan body **and the relevant code surface** (the four
+landed plan-3 commits, `.agent/rules/no-speed-pressure.md`, and
+the observability/env package areas the plan touches). Owner
+direction (2026-05-04 Pelagic Diving Atoll session): start with
+the architecture-led pass (code-reviewer gateway +
+architecture-reviewer-barney/betty/fred/wilma + assumptions-reviewer);
+escalate to specialists driven by findings rather than the full
+fifteen-reviewer dispatch up front. The plan's named fifteen-reviewer
+set remains the contract — escalation, not curtailment.
+
+**Live discipline**: `.agent/rules/no-speed-pressure.md` is the
+just-landed rule the unified plan exists to operationalise.
+Reviewer dispatch, commit-skill protocol, stage-by-explicit-pathspec,
+and plan-body freshness are non-optional through every remaining
+step.
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-03 (Salty)
+
+**Three independent active plans replace the damaged
+`there-is-no-time-hashed-starfish` and
+`observability-multi-sink-and-fixtures-shape` plans** (archived to
+`.agent/plans/observability/archive/superseded/` with explicit
+"DAMAGED — superseded — not complete; we had to start again with
+simpler approaches" notices). The old plans should NOT be referenced
+for current work — read them only for forensic background.
+
+**Active plans, in pickup order**:
+
+1. [`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`](../../../plans/observability/current/fix-dev-boot-release-resolution.plan.md)
+   — **BLOCKING — primary unblocker.** Single cycle, single function,
+   single test file in `packages/core/build-metadata/`. Fixes
+   `resolveDevelopmentRelease` to fall through to a `local-dev`
+   placeholder when both Vercel attribution vars are absent in dev;
+   preview + production keep their hard-fail. ~10 lines product code
+   plus paired unit tests.
+2. [`.agent/plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md`](../../../plans/observability/current/replace-sentry-mode-with-observability-sinks.plan.md)
+   — DESIRABLE, parallel-safe with plan 3. Cycle 1 is a single
+   atomic ~30-file landing of the rename across sentry-node + env +
+   HTTP MCP + Search CLI + tests, per Tidal Flowing Reef's cascade
+   analysis (producer-first sequencing reintroduces the multi-commit-
+   TDD-skip-register pattern; `replace-don't-bridge` forbids the
+   transitional shims that would let WS2 land independently).
+   Cycles 2 (ADR-171) and 3 (READMEs + .env.example) are doc-only
+   and parallel-safe with cycle 1.
+3. [`.agent/plans/architecture-and-infrastructure/current/retire-smoke-tests-all-vitest-no-real-io.plan.md`](../../../plans/architecture-and-infrastructure/current/retire-smoke-tests-all-vitest-no-real-io.plan.md)
+   — DESIRABLE, parallel-safe with plan 2. Eleven cycles
+   (1a/1b/1c/1d + 2a–2f + 3) designed for maximum parallelism.
+   Retires `smoke-tests/` as duplicative of e2e + unit + integration
+   coverage; brings all tests under Vitest; bans real network calls
+   and disk access in tests outside ADR-078-permitted patterns.
+
+**Agent-pickup prompts** at
+[`.agent/prompts/handoff-2026-05-04/`](../../../prompts/handoff-2026-05-04/README.md)
+— one prompt per plan, ready to pick up and run with.
+
+**Independence**: all three plans are file-disjoint AND sequencing-
+independent at the plan-to-plan level. Within each plan, cycles are
+parallel-safe wherever the work shape allows; the explicit dependencies
+are named in each plan's §Independence section.
+
+**Soft cross-plan dependency**: plan 2 cycle 1's "boot with
+`OBSERVABILITY_SINKS=['sentry']`" acceptance exercises a code path
+that plan 1 fixes. With default `OBSERVABILITY_SINKS=[]`, plan 2 lands
+independently; sentry-enabled boot acceptance verifies after plan 1
+lands. Plan 3 is fully independent of both plan 1 and plan 2 (the
+earlier sequencing constraint with plan 1's regression-guard was
+resolved when the orphaned e2e test was deleted in commit `27983ef9`).
+
+**Bug status**: the `pnpm test:e2e` regression-guard
+`dev-server-boots-without-observability-config.e2e.test.ts` has been
+DELETED (commit `27983ef9`) as a damaged-plan artefact (multi-commit-
+TDD shape; spawning child process in violation of testing-strategy.md;
+written ahead of its WS4 cure that was archived as DAMAGED). Plan 1
+proves the underlying fix at unit level only; plan 3 cycle 1c lands
+the proper replacement test at unit/integration tier. There is no
+spawning automated test for the dev-boot invariant after this commit
+arc — that is intentional.
+
+**ARC A1 landed 2026-05-03 (Prismatic Illuminating Eclipse)**: harness
+module + RED-skip-arc tests + vitest.smoke.config.ts +
+smoke-context.ts. Workspace test suite green (740 pass / 13 skip / 1
+todo); lint clean; type-check clean. Acceptance criterion shifted from
+plan body literal "exits non-zero with expected RED messages" to the
+WS1-pattern skip-register (describe.skip + SKIP-UNTIL-An header) under
+trunk-green discipline; surface acknowledgement at comms event
+`claude-7402c9-prismatic-a1-acceptance-criterion-shift`. Four reviewers
+dispatched in parallel (test-reviewer, architecture-reviewer-fred,
+architecture-reviewer-betty, mcp-reviewer) all returned COMPLIANT
+with findings; absorbable findings implemented in-A1 (remote-mode
+factory, spawn error contract, vitest config inheritance fix, clock
+fake simplification, classification doc), deferred findings recorded
+in napkin §"ARC A1 landing" entry.
+
+**Coordination state**: Pelagic Washing Anchor (claude-code,
+`f730bd…`) is plan-author/orchestrator; Misty Ebbing Pier
+(parallel session, platform/seed TBD) is dispatched to atomic
+isolated reconnaissance task M1 — full structured map of the
+existing smoke-test harness — see comms event
+`claude-f730bd-pelagic-misty-task-1-harness-recon`. No active
+claims open at session-open; coordination is via comms log.
+
+**WS2 entry conditions**: the WS1 RED-arc `describe.skip` /
+`it.todo` placeholders that previously pinned the WS2 cross-product
+obligations and the fixture-tee closure-property invariant were
+deleted under the binary `no-skipped-tests` rule (see
+`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`
+§Cycle 1 step 7). The obligations re-enter the test estate as proper
+TDD test+code pairs at the moment WS2's atomic rename lands its
+producer + consumers, per `testing-strategy.md` §When Behaviour
+Changes. There is no "trip-wire canary"; there is the rename's own
+type-system feedback when `SENTRY_MODE` leaves `SentryConfigEnvironment`.
+
+**Plan-body amendments queued for next planning pass** (recorded by
+WS1 reviewer subagents — apply before WS8.6 starts on the ADR-165
+collision; apply at WS3 atomic rename for the others):
+
+- ADR-165 number collision (the plan body schedules
+  `165-observability-configuration-orthogonality.md` but ADR-165 is
+  already taken — must rename to next-available before WS8.6).
+- Legacy `SentryEnvSchema` `@deprecated` JSDoc tag at WS3 atomic
+  rename.
+- Plan body §WS3 should name `OBSERVABILITY_FILE_PATH` env var
+  explicitly.
+- Plan body §WS3 should ratify the `sink-registry.ts` placement
+  deviation from the planned `types.ts` location.
+- `docs/operations/environment-variables.md` propagation entry at
+  plan body §WS8.5.
+- `packages/core/observability/README.md` exports listing entry at
+  plan body §WS8.
+
+**Owner-stated broader roadmap (2026-05-02)**:
+
+1. Land vendor-neutrality fixes for observability (this plan, in progress)
+2. Prove MCP server works locally — especially search and thread
+   functions touched by the unitOrder schema change (`9e657ad3`)
+3. Push branch + open PR
+4. Prove MCP server works in the Vercel preview build
+
+Reviewer-subagent dispatch is mandatory throughout — including
+`docs-adr-reviewer` + `onboarding-reviewer` automatically on every
+significant documentation/Practice change (doctrine landed in plan
+WS10 and queued for graduation to a permanent rule in WS11.3).
+
+**Superseded plans archived**:
+
+- `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
+  (strategic brief — its WS-A/B/C/D became this plan's WS2/3/8/6)
+- `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`
+  (wrong-framed predecessor — diagnosed the bug correctly but framed
+  the cure too narrowly; structural cure subsumes all four phases)
+
+Full scope-routing tables in
+[`archive/superseded/README.md`](../../../plans/observability/archive/superseded/README.md).
+
+---
+
 ## Participating agent identities
 
 This table is the canonical additive-identity register for the
@@ -35,12 +477,108 @@ matching `platform + model + agent_name` updates `last_session`.
 | Luminous Waning Aurora | cursor | composer | `dde6be` | Preview Sentry MCP triage + oak-preview MCP readout; OAuth upstream 429 / JSON-parse root cause verified in code | 2026-04-28 | 2026-04-28 |
 | Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
 | Leafy Bending Dew | cursor | composer | `8d0db5` | MCP HTTP Sentry esbuild helpers: dedup `trimToUndefined`, explicit absent shapes (`undefined` vs post-trim `''`); Cursor handoff — **commit owned by Claude Code** | 2026-04-30 | 2026-04-30 |
+| Abyssal Diving Stern | claude-code | claude-opus-4-7-1m | `87ccac` | Doctrine graduation (rush-impulse → principles.md § Architectural Excellence Over Expediency); observability-multi-sink-and-fixtures-shape plan author + WS0 promotion + supersession routing | 2026-05-02 | 2026-05-02 |
+| Moonlit Drifting Nebula | cursor | claude-opus-4-7 | `92470a` | observability-multi-sink-and-fixtures-shape WS1 RED phase (env schemas + SinkRegistry types + warnings channel + outermost regression-guard E2E + per-layer RED tests with describe.skip / it.todo arc); D7a build-time orthogonality verification; four-reviewer round (test/docs-adr/onboarding/sentry) with cross-confirmed P1/P2 fixes addressed in-WS1; six deferred items recorded as plan-body amendment candidates | 2026-05-03 | 2026-05-03 |
+| Pelagic Washing Anchor | claude-code | claude-opus-4-7-1m | `f730bd` | plan-author / orchestrator: there-is-no-time-hashed-starfish.plan.md authored and landed in repo plan tree; smoke-harness-shape correction captured (owner-named; superseded prior Shape A proposal); architecture-reviewer-betty findings Q2/Q3/Q4 folded into ARC B0 corrections; coordinating Misty Ebbing Pier via comms log (atomic isolated tasks) | 2026-05-03 | 2026-05-03 |
+| Misty Ebbing Pier | claude-code | claude-opus-4-7-1m | `ba3961` | parallel session under owner direction; Task M1 (smoke-tests harness reconnaissance, read-only) executed and delivered (`claude-ba3961-misty-task-1-harness-recon-reply` event); polling-discipline self-correction (`claude-ba3961-override-acknowledgement` event); claim 42c9e362 closed cleanly; subjective reflection at `experience/2026-05-03-misty-two-agent-comms-reflection.md`; owner-prompted metacognition pivot reframing collaboration cures as N-agent hypothesis under test; produced four companion artefacts at `.agent/prompts/agentic-engineering/collaboration/` (hypothesis.md / falsification-criteria.md / experiments.md / README.md); next session running first-attempts.md prompts is effectively the first experiment | 2026-05-03 | 2026-05-03 |
+| Prismatic Illuminating Eclipse | claude-code | claude-opus-4-7-1m | `7402c9` | ARC A1 executor — canonical smoke harness module landed at `792c2cad` (run-smoke.ts + types.ts + boot-outcome.ts + boot-server.ts + spawn-vitest.ts + modes.ts + cli.ts + run-smoke.unit.test.ts + run-smoke.integration.test.ts + smoke-context.ts + vitest.smoke.config.ts); §A1 plan-body refresh applied per recon-driven uniform-in-process design shift; acceptance criterion shifted from RED-fail to skip-with-audit-trail (WS1-pattern); four reviewers dispatched (test/architecture-fred/architecture-betty/mcp); polling-discipline self-correction at session-open recorded as P5 falsification candidate. | 2026-05-03 | 2026-05-03 |
+| Woodland Sprouting Glade | claude-code | claude-opus-4-7-1m | `978cba` | ARC B0 orchestrator — plan-body corrections to observability-multi-sink-and-fixtures-shape.plan.md per architecture-reviewer-betty Q2-Q6 + ADR-170/171 verification (`c0d17634`) + claim-close + b0-landed disclosure (`23abeabe`) + E1 observations event (`e86af3e0`); first-claim-wins coordination at preflight (pivoted from primary ARC A1 to parallelisable ARC B0 when Prismatic claim 9cad0bab visible); three reviewers dispatched in parallel (assumptions/docs-adr/onboarding); 16 findings absorbed; orchestrator-owns-shared-housekeeping rule applied at session-close per owner-stated experiment observation. | 2026-05-03 | 2026-05-03 |
+| Lush Spreading Seed | claude-code | claude-opus-4-7-1m | `06776a` | corrective consolidation + TDD-as-pairs + atomic-parallel cycles. Three commits: `60b9ff4c` (deleted incorrect Cardinal Rule extension PDR/ADR pair + multi-commit-TDD triple; renumbered rush-impulse to PDR-043/ADR-172; stripped hedging vocabulary across principles/distilled/practice-index/ADR README/pending-graduations/testing-strategy/napkin); `797766c0` (tests + product code as PAIRS in one landing landed in directives + plan command + tdd-phases component + workstream template + 6 active plans restructured to cycle-pair landings); `755811ac` (atomic, independent cycles for optional parallel-agent dispatch added to plan command requirement 3 + tdd-phases + workstream template + self-contained-brief checklist). Owner reframings sharpened: tests + code = one practice; no special-case framing of any kind regardless of vocabulary; always strict everywhere all the time. | 2026-05-03 | 2026-05-03 |
+| Salty Navigating Jetty | claude-code | claude-opus-4-7-1m | `900b17` | session-open as ARC A2 cycle 1 executor (local-stub mode conversion to canonical harness). Bootstrap fast-path (Tidal Flowing Reef opened a coexisting claim ~5 min after Salty; lanes disjoint per plan). Drafted env-builder refactor + 5 `*.smoke.test.ts` files + harness/modes.ts registration. Owner /jc-metacognition challenge mid-session surfaced that local-stub smoke is duplicative coverage of `e2e-tests/stub-mode.e2e.test.ts` + tool-call-success/validation-failure/multi-request-session/auth-bypass e2e tests; residual distinct value reduces to "Express listens" — testing the framework, textbook anti-pattern. Owner direction: delete the needless complexity, contemplate what should actually be done. Salty's first move was `git checkout HEAD --` rollback — owner correction: rollback is amnesia, the right shape is forward Edit/Write removal of needless code while capturing realisations. NO COMMIT LANDED. Lost two doc edits to working-tree-only revert (this row + a napkin entry on strict-reading interpretation of TDD-as-pairs). Reconstructing from transcript. | 2026-05-03 | 2026-05-03 |
+| Tidal Flowing Reef | claude-code | claude-opus-4-7-1m | `f879e0` | session-open Lane B / WS2 (sentry-node SinkRegistry consumption per multi-sink plan §WS2). Honoured Salty's Lane A claim at preflight; pivoted to disjoint Lane B. Posted session-open verification event `claude-f879e0-tidal-session-open-and-verification` reading 5 facts from sentry-node + observability source. Claim 99717aca opened on 12 sentry-node files. Survived Salty's `git checkout HEAD --` revert untouched (had no in-flight napkin/thread-record edits at the time; comms event was untracked). Grounding revealed empirical cascade: WS2 plan-body strict scope (sentry-node only) leaves ~10-15 app-level tests RED awaiting WS4/WS5 — the multi-commit-TDD-skip-register shape deleted earlier today (`60b9ff4c`). Surfaced framing-trap (asking "A vs B between violations" is itself the failure; reshape work to adopt new insights). Posted step-back comms event `claude-f879e0-tidal-step-back-and-cascade-finding` recommending plan-body restructure to collapse WS2+WS3+WS4+WS5 into one atomic landing per replace-don't-bridge + TDD-as-pairs. Empirically verified `dev-server-boots-without-observability-config.e2e.test.ts` RED today via `pnpm test:e2e` (1 failed/154 passed) — multi-sink rename arc IS load-bearing for branch-push, distinct from the smoke-harness arc Salty halted. Napkin Tidal entry under 2026-05-03 day captures cascade finding + framing-trap + arc-level first-question. Two platform-memory feedback entries authored: `feedback_no_ritual_framing` and `feedback_question_shape_known_bad_vs_adopt`. Claim 99717aca closed cleanly at session-close. NO COMMIT, no product code authored. Salty now drafting fresh plans based in part on this feedback. | 2026-05-03 | 2026-05-03 |
+| Pelagic Diving Atoll | claude-code | claude-opus-4-7-1m | `6814a4` | unified-plan execution opener: hygiene-first under no-speed-pressure (thread-record refresh + identity registration + active claim) followed by architecture-led review pass over plan body AND code surface (commits `fd4eabaa..b226670d`, `.agent/rules/no-speed-pressure.md`, observability/env package areas). | 2026-05-04 | 2026-05-04 |
+| Lacustrine Navigating Rudder | claude-code | claude-opus-4-7-1m | `dd239f` | step 3 executor — integrate `.agent/rules/no-speed-pressure.md` across the rule estate via single atomic commit. Canonical rule + four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`) + `RULES_INDEX.md` entry already present at session-open; this commit adds principles.md cross-reference (§Architectural Excellence Over Expediency), distilled.md entry (sibling to "cheap cure framing"), user-memory feedback file `feedback_no_speed_pressure.md` with `MEMORY.md` index update, plan-body status update for step 03, and bundles inherited handoff working-tree state (napkin/repo-continuity/active-claims/closed-claims-archive) per Pelagic's direction. Post-commit: verify all four adapter paths exist and resolve identically. Reviewer dispatch: code-reviewer at commit close. | 2026-05-04 | 2026-05-04 |
+| Fronded Climbing Thicket | claude | claude-opus-4-7-1m | `8da3d3` | dev-server-proof three-plan arc descope and reframe. Audit found plan 1 (fix-dev-boot-release-resolution) already landed in commit `2a2d1b05`; archived to `observability/archive/completed/`. Boot probe verified server reaches `listening` on port 3333 in ~142ms with `SENTRY_MODE=sentry` and no Vercel env. Plan 2 (SENTRY_MODE → OBSERVABILITY_SINKS rename) closed and moved to `observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md` per owner direction (foundational tension unnamed; rename concept paused, requires PDR/ADR before re-attempt). Authored `observability/current/eef-branch-merge-readiness.plan.md` (7 steps) parallel to Moonlit Shimmering Comet's `architecture-and-infrastructure/current/smoke-test-retirement-recovery-and-completion.plan.md` (41 steps) — plans had overlapping verification work; owner directed unification. Result: `observability/current/feat-eef-exploration-completion.plan.md` (17 linear steps; comprehensive sub-agent review as step 1; integrate `no-speed-pressure` rule across estate; backfill reviewer dispatch on commits `fd4eabaa..b226670d`; cycles 2a–2f real-IO audits; cycles 3a–3b ESLint rule; `pnpm check` green; dev boot + MCP tool exercise via protocol; pre-merge divergence; owner-gated merge declaration). Both predecessor plans archived to their respective `archive/superseded/` with `superseded-by-unified-2026-05-04` suffix. Foreign-stage absorption observed twice during session (Moonlit's `git commit` without `--only` swept Fronded's staged files into commit `8fa339f4`; recurrence prevention codified in unified plan §Discipline as mandatory `git commit -- <pathspec>` filter). Three comms events authored: `e28b0985-...` arc-opening, `461457ad-...` plan-2 close + new plan announcement, `cb209019-...` unification + archive announcement. Claim `f2cabfad-...` closed via `owner_forced` kind. NO product code in this session; planning + descope + unification only. | 2026-05-04 | 2026-05-04 |
+| Gnarled Climbing Bark | claude | claude-opus-4-7-1m | `40a044` | read-and-reference only on this thread (no edits). Read EEF plan + thread record at start-right grounding; used Lacustrine `dd239f` session as the illustrative-journey sample in the practice-context-cost baseline harvested at `.agent/analysis/practice-context-cost-baseline.md`. The session journey baseline shows Lacustrine's dominant Read targets were this thread record (5×, ~214K tokens) and the EEF plan (5×, ~72K tokens), accounting for 79% of journey budget. Substantive work on agentic-engineering-enhancements thread; this row is the cross-thread reference per session-handoff §7c hard gate. | 2026-05-05 | 2026-05-05 |
+| Lacustrine Navigating Rudder | claude | claude-opus-4-7-1m | `dd239f` | step-04 reviewer backfill (per-commit dispatch on `fd4eabaa..b226670d`; 5 must-close violations + 8 P2 + 4 P3 findings; commit closing steps 02 + 04) followed by step-05 partial application (BF-1a/b CI hook + workflow; BF-2/3/4/5/6/7/8 stale-smoke-reference doc cleanup across ADR-121/147/083/063, root README, MCP README, TESTING.md, vercel-environment-config, three e2e test inline comments, three ops docs, agent-tools spec). Landed Gnarled Climbing Bark's deferred practice-context-cost-baseline bundle on their behalf under owner direction "commit all files in sensible chunks"; coordinated with Gnarled via comms-event with 2-min deadline + default-action when their pre-staged files blocked my verify-staged check. Three new user-memory feedback files: `feedback_adrs_permanent_plans_ephemeral.md` (owner correction: ADRs are permanent and outlive plans, plans cite ADRs not the reverse), `feedback_inter_agent_comms_first_class.md` (owner observation: agent-to-agent comms is a first-class coordination primitive, not always owner-mediated), and second-instance reinforcement of `feedback_no_verify_fresh_permission.md` (sharpened by Gnarled earlier same day: agent never asks for `--no-verify`). One AGENTS.md drift incident self-corrected: stripped the `RULES_INDEX.md` pointer thinking it was drift; owner clarified it is a documented Codex-specific contract; restored and amended session-handoff §6d to encode the contract as a named exception. Five-chunk commit landing closing the session: doc-cleanup + Gnarled's bundle + comms events + Gnarled's second experience capture + claim closures. Tree clean at session-close; only Moonlit's smoke-tests files-claim remains open (theirs to close). Step-05 named violations C1 (boundary-crossing import × 13 consumers), CR1 (conditional-branch test-immediate-fail × 2 integration tests), BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), and BF-C1-ESLint guard remain pending for the continuation session. | 2026-05-05 | 2026-05-05 |
+| Dawnlit Transiting Galaxy | claude-code | claude-opus-4-7-1m | `0ddc89` | step-05 final closure executor — close C1 (boundary-crossing import: relocate `upstream-metadata-fixture.ts` from `e2e-tests/helpers/` to `src/test-helpers/` with all 12 consumer paths updated) and CR1 (conditional-branch test-immediate-fail: refactor two `it()` blocks in `dev-boot-without-observability.integration.test.ts` to use a typed `unwrapOk` helper) as two separate atomic commits. Commit 1 reviewed by code-reviewer + architecture-reviewer-fred (the specialist who identified C1). Commit 2 reviewed by code-reviewer + test-reviewer (the specialist who identified CR1). After this session, step 05 flips to `completed` in the plan body and the next pickup is step 06 (author `no-real-io-in-tests` ESLint rule). | 2026-05-05 | 2026-05-05 |
+| Twilit Beaming Aurora | claude-code | claude-opus-4-7-1m | `7cf730` | step-06 executor — author `packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at `error` severity with comprehensive Node.js IO denylist (child_process / worker_threads / fs / fs-promises / http / https / net / dgram across static, dynamic, and require import forms; both unprefixed and `node:`-prefixed specifiers) + process surface (env reads/writes including `globalThis.process.env`; cwd/chdir calls) + non-localhost fetch literal-arg detection. Hardcoded allowlist defaults: `**/test-helpers/**`, `**/test-fakes/**`, `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`. Optional `allowlistPathShapes: string[]` rule schema for step-07 IO-Inventory additions. Pair with `no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for every denylist sub-form, positive for every allowlist sub-glob). Plugin registration in `plugin.ts`. Do NOT yet wire into root `eslint.config.ts` (that is step 08). Reviewer dispatch at commit close (parallel): code-reviewer (gateway) + config-reviewer (allowlist shape correctness + rule-options schema) + test-reviewer (RuleTester describe-vs-audit shape + Node.js IO API surface coverage exhaustiveness). | 2026-05-05 | 2026-05-05 |
+| Opalescent Eclipsing Asteroid | cursor | GPT-5.5 | `0c263b` | owner-directed step-06 takeover executor after Twilit Beaming Aurora and Opalescent Threading Nebula hit usage limits. Completed gate blockers and landed review hardening: Knip CSS/Vite coverage, public rule-options type export through the package API, URL-parser localhost hardening against lookalike hostnames, `global.process` process-surface coverage, paired RuleTester regressions, reviewer re-checks, and commit/index coordination through the high-intensity sync. | 2026-05-05 | 2026-05-05 |
+| Deep Rolling Archipelago | cursor | GPT-5.5 | `02f5f5` | PR 93 merge-readiness closeout support — fetched GitHub comments/statuses/reviews, compared stale PR body with actual `feat/eef_exploration` branch contents, wrote `pr-93-merge-snagging-2026-05-05.md`, updated PR 93's remote description to lead with the blocking `thread-units` / `unitOrder` upstream API-shape fix, and posted comms events before/completion/session-close. | 2026-05-05 | 2026-05-05 |
+| Glassy Drifting Dock | codex | GPT-5 | `019df8` | PR 93 Sonar remediation — implemented and committed the main unclaimed findings (`da4288cd`), created the future paused-claim overlap plan for `oak-eslint` TODO-comment findings, kept generated SDK duplication non-blocking and routed to future codegen workspace-decomposition, and refreshed handoff surfaces for the remote reanalysis step. | 2026-05-05 | 2026-05-05 |
+| Opalescent Glowing Constellation | codex | GPT-5 | `019df9` | PR 93 remote verification and Sonar disposition — pushed/synced `feat/eef_exploration` through `cebbca83`, verified Sonar state, marked the three remaining `oak-eslint` S1135 findings false positive after owner clarified they document the gate itself, and confirmed Sonar `new_violations=0` / hotspots `0`; duplication remains deferred to the codegen workspace-decomposition plan. | 2026-05-05 | 2026-05-06 |
+| Silvered Hiding Silhouette | claude-code | claude-sonnet-4-6 | `924167` | step 10 reviewer-dispatch completion — recovered security-reviewer and clerk-reviewer findings from quota-stopped subagent jsonl transcripts; restarted sentry-reviewer after quota reset; appended all four reviewer verdicts to `/tmp/mcp-tool-exercise.log`; added three P2 snags to `pr-93-merge-snagging-2026-05-05.md`; step 10 verdict ACCEPTED. | 2026-05-05 | 2026-05-06 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
 into this canonical register during the 2026-04-29 deep consolidation
 pass; older deeper-narrative session-close blocks below this header
 remain unchanged.)
+
+---
+
+**Session-close 2026-05-05 (Opalescent Glowing Constellation, codex,
+GPT-5, session seed prefix `019df9`)** — PR 93 Sonar verification and
+external disposition closeout. Branch synced to `b929a022`; GitHub checks
+were green except SonarCloud. Sonar was updated per owner direction:
+`AZ3z3KojDfG0f886A-h6`, `AZ3z3Ko0DfG0f886A-h8`, and
+`AZ3z3Ko0DfG0f886A-h7` marked false positive because the flagged tokens are
+documentation/test examples for the strict gate, not TODO work items.
+Post-disposition Sonar re-query: open issues 0, hotspots 0,
+`new_violations=0`; quality gate remains red only on duplicated-lines
+density. Duplication remediation is deferred to the existing future codegen
+workspace-decomposition plan. No generated SDK files edited. Napkin capture
+for the owner correction was not written in this pass because Riverine
+Fishing Rudder held a fresh claim on `napkin.md`; the correction is captured
+in this thread record, the PR 93 Sonar plan, the overlap plan, the snagging
+note, and the comms event `9621f505`.
+
+**Session-close 2026-05-05 (Deep Rolling Archipelago, cursor, GPT-5.5,
+session seed prefix `02f5f5`)** — PR 93 merge-readiness closeout support
+on the final stretch before merge. Landed outcome: structured snagging
+artefact at
+[`pr-93-merge-snagging-2026-05-05.md`](../../../plans/observability/current/pr-93-merge-snagging-2026-05-05.md)
+and updated GitHub PR 93 description. Evidence: `gh pr view 93` confirms
+the PR body now opens with the `thread-units` / `unitOrder` upstream
+API-shape fix and names remaining SonarCloud failure. Current state:
+`test`, CodeQL, Cursor Bugbot, and Vercel are green; SonarCloud remains
+failing; GitHub merge state is `UNSTABLE`. Priority for the next merge-
+readiness pass: reduce PR Sonar issues, hotspots, and duplication blockers
+to zero, then re-check statuses immediately before merge. No product code
+changed by this session.
+
+**ADR/PDR candidates (session-handoff §6b)**: no new ADR/PDR candidate.
+The only session-scoped surprise is tooling-shaped: GitHub-only work has
+no supported `external` active-claim kind, so coordination used comms
+events rather than a misleading claim. Captured in `napkin.md`.
+
+---
+
+**Session-close 2026-05-03 (Moonlit Drifting Nebula, cursor, claude-opus-4-7, session seed prefix `92470a`)** — Branch: `feat/eef_exploration` (30 commits ahead of `origin/main`, push pending owner authorisation per the broader 2026-05-02 owner roadmap). Two-phase sequential foreground execution after subagent timeouts (PING timeouts on both Practice-Core and observability-WS1 worker subagents; user directed sequential foreground finalisation).
+
+**Phase 1 landing — `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3`**: 43-file Practice-Core portability sweep across PDRs, trinity files (`README`, `practice.md`, `practice-bootstrap.md`, `practice-lineage.md`, `practice-verification.md`, `CHANGELOG.md`, `practice-index.md`), `decision-records/README.md`, and `distilled.md` amendment incorporating owner decisions C6 (Practice-canonical directory references as portable structural contract) and C7 (external http(s) citations permitted). Round-1 mechanical sweep (subagent) → Round-2 reviewer-driven refinement incorporating docs-adr-reviewer NO-GO/GO-WITH-CONDITIONS feedback (tightened Portability Constraint clause; deleted §Host context note sections; fixed PDR-007 broken-link cluster; abstracted host-repo names; generalised trinity files for the retirement model) → Round-3 inline host-anchoring sweep across 11 PDRs + fixture string abstraction in PDR-034 + recognition of CHANGELOG attribution headers + provenance.yml entries as structurally-required attribution metadata distinct from content leakage. Pre-existing fitness violations (practice.md, principles.md, etc.) flagged as graduation candidates per PDR-042 (Learning Preservation forbids compressing substance to meet size limits) — explicitly NOT compressed.
+
+**Phase 2 landing — `a3a0222a feat(observability): add WS1 multi-sink + fixtures axes scaffolding (RED)`**: 26 files / +2205/-62. Replaces single `SENTRY_MODE = off | fixture | sentry` switch with two orthogonal axes via Zod schemas + vendor-neutral runtime types + per-layer RED contract tests. New surfaces:
+
+- 4 env schema files: [`packages/core/env/src/schemas/observability{,-axes,-base,-refinements}.ts`](../../../../packages/core/env/src/schemas/observability.ts) — orthogonal axes, base shape, cross-field `superRefine` rules + legacy-rename rejection messages, public composition.
+- [`packages/core/observability/src/sink-registry.ts`](../../../../packages/core/observability/src/sink-registry.ts) — vendor-neutral `SinkRegistry` typed map (`{ readonly [K in ObservabilitySinkKind]?: ObservabilitySink<K> }`) + `ServerInstrumenter<TMcpServer, TExpressApp>` port closing ADR-162 §Open Questions on direct vendor imports (`wrapMcpServerWithSentry`, `setupExpressErrorHandler`). Zero `@sentry/*` imports.
+- [`packages/libs/env-resolution/src/types.ts`](../../../../packages/libs/env-resolution/src/types.ts) — structured warnings channel types (`EnvWarning` discriminated union including `ObservabilitySinksEmptyInPreviewWarning`).
+- [`apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts) — outermost regression-guard E2E. Spawned `pnpm dev` boots cleanly with NO observability env vars; `NODE_ENV: 'development'` pinned in child env per test-reviewer P2-1.
+
+**RED-arc test artefacts (subsequently deleted)**: WS1 originally
+landed four `describe.skip` / `it.todo` placeholders intended to pin
+WS2/WS4/WS5 obligations (sentry-node four-kind cross-product;
+fixture-as-tee closure-property invariant; HTTP/CLI SinkRegistry
+construction). Those placeholders were deleted under the binary
+`no-skipped-tests` rule (see
+`.agent/plans/observability/current/fix-dev-boot-release-resolution.plan.md`
+§Cycle 1 step 7). Re-spec lands as proper TDD test+code pairs at the
+moment each workstream's product code lands, not before.
+
+**D7a verification (read of [`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts) end-to-end)**: build-time path is structurally orthogonal to `SENTRY_MODE`. `resolveSentryRegistrationPolicy` drives off `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF` + override pair only. The dead `SENTRY_MODE` projection on `sentry-build-environment.ts:23` becomes a deterministic WS4 cleanup signal when WS2 deletes the field from `SentryConfigEnvironment`. No additional comment added today; the type-check at WS4 names the file.
+
+**Reviewer round (test-reviewer + docs-adr-reviewer + onboarding-reviewer + sentry-reviewer)**: all four returned GO-WITH-CONDITIONS. Cross-confirmed P1/P2 fixes addressed in-WS1:
+
+- TSDoc on `config-from-registry.unit.test.ts` rewritten to accurately describe its design-pinning role (was inaccurately claiming type-check canary status — sentry-reviewer P1-1 + P2-1; test-reviewer P3-4).
+- `NODE_ENV: 'development'` pinned in E2E child env so the spawned `pnpm dev` is hermetic across host shells and CI (test-reviewer P2-1).
+- WS4/WS5 contents-check `it.todo()` placeholders added so vitest's reporter surfaces the obligation (test-reviewer P2-2).
+- `ObservabilitySink` TSDoc gains an `@remarks` paragraph documenting the intentional narrow façade (capture-only at the registry surface; span / breadcrumb / log / transaction fan-out is adapter-internal) and the log fan-out path through sink-implementation-owned log adapters rather than via the registry (sentry-reviewer P2-2 + P2-3).
+
+**Quality gates this session**: full pre-commit pipeline passed for both commits (74-task turbo run × 2; type-check; lint; prettier; markdownlint; knip; depcruise — 2050 modules, 4443 dependencies, no violations; portability:check). Unit suites green: env (7/48), observability (6/63), env-resolution (4/29), sentry-node (9/120 + 4 todo + 2 skipped), MCP streamable-http (87/725 + 2 skipped + 1 todo), search-cli (101/1001 + 2 skipped + 1 todo). `practice:fitness` shows pre-existing critical-zone violations on `napkin.md`, `distilled.md`, `pending-graduations.md`, `repo-continuity.md`, `principles.md` — out of scope per PDR-042 and noted as graduation candidates.
+
+**ADR/PDR candidates (session-handoff §6b)**: structural-enforcement scanner for `SKIP-UNTIL-WSn` shape (CI gate that fails when an `it.todo` / `describe.skip` paired with that header outlives the named workstream's landing commit) — captured here as a note. (The artefacts that would have been the first instance — WS1 RED-arc placeholders — have since been deleted under the binary `no-skipped-tests` rule; whether that affects this candidate's relevance is a graduation-track decision, not noted here.)
+
+**Next safe step on this thread**: WS2 sentry-node `SinkRegistry` consumption — atomic rename per `replace-sentry-mode-with-observability-sinks.plan.md`. New TDD test+code pairs land alongside the producer change (no pre-authored RED placeholders to consume; those were deleted under the binary `no-skipped-tests` rule). Six plan-body amendment candidates listed in §Landing target above are due before WS3 (one — ADR-165 number collision — is due before WS8.6 specifically).
 
 ---
 
@@ -113,7 +651,7 @@ remain unchanged.)
 **Session-close 2026-04-28T~12:50Z (Choppy Lapping Rudder, claude-code, claude-opus-4-7-1m, session seed `d73d0b...`)** — Phase 2 PRE-PHASE complete, scope EXPANDED. PR-87 head at session-close = origin = `c601d515`. Four commits landed and pushed in this session:
 
 - `c1677d84` — `chore(state): open Cluster A claim and post cross-thread S5443 request`. Coordination state for the Cluster A claim (87fb2797) plus two comms events (S5443 cross-thread regression request to agentic-engineering-enhancements + arrival liveness on this thread).
-- `ca7e6e4b` — `docs(plans): add future plan for agent coordination CLI ergonomics and request correlation`. Strategic future brief at `.agent/plans/agentic-engineering-enhancements/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md` capturing live evidence from this session's protocol use.
+- `ca7e6e4b` — `docs(plans): add future plan for agent coordination CLI ergonomics and request correlation`. Strategic future brief at `.agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md` capturing live evidence from this session's protocol use.
 - `6a2b4e54` — `docs(napkin): capture γ-execution coordination-protocol observations`. Four structured surprise/learning entries.
 - `c601d515` — `chore(sweep): land prior-session codex identity, adapter repair, coord state, docs`. Owner-staged sweep landing in-flight working tree from prior closed Codex sessions (Mossy identity plumbing, Estuarine adapter repair, coordination state churn, docs).
 
@@ -1176,7 +1714,7 @@ three new parallel plans.
 3. **Three new parallel plans** are active alongside this thread —
    none block release-identifier work, but the next session should
    know they exist so cross-plan coordination is deliberate:
-   - [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
+   - [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md)
      — three-layer artefact-model audit + remediation. Touches
      `.agents/skills/`, `.claude/skills/`, ADR-125, vendor skill
      installations. **Coordination flag**: this plan's Phase 1

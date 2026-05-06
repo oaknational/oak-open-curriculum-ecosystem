@@ -20,12 +20,13 @@ export function parseCommitQueueArgs(argv: readonly string[]): {
   const [command, ...tokens] = effectiveArgv;
   const options: MutableCommitQueueCliOptions = { file: [] };
 
-  for (let index = 0; index < tokens.length; index += 1) {
+  for (let index = 0; index < tokens.length; ) {
     const token = tokens[index];
     if (!token.startsWith('--')) {
       throw new Error(`unexpected positional argument: ${token}`);
     }
-    index = parseOptionToken({ tokens, index, options });
+    parseOptionToken({ tokens, index, options });
+    index += 2;
   }
 
   return { command, options };
@@ -46,6 +47,7 @@ export function usage(): string {
     '  record-staged --intent-id <uuid>',
     '  verify-staged --intent-id <uuid> --commit-subject <subject>',
     '  complete --intent-id <uuid>',
+    '  status [--registry <path>] [--now <iso>]',
   ].join('\n');
 }
 
@@ -85,7 +87,7 @@ function parseOptionToken(input: {
   readonly tokens: readonly string[];
   readonly index: number;
   readonly options: MutableCommitQueueCliOptions;
-}): number {
+}): void {
   const token = input.tokens[input.index] ?? '';
   const key = token.slice(2);
   const value = input.tokens[input.index + 1];
@@ -98,6 +100,4 @@ function parseOptionToken(input: {
   } else {
     input.options[key] = value;
   }
-
-  return input.index + 1;
 }

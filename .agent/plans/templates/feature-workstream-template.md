@@ -2,26 +2,51 @@
 name: "[Plan Title]"
 overview: "[One-line scope description]"
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): [Describe tests to write]. Tests MUST fail."
+  - id: ws1-cycle-1
+    content: "WS1 cycle 1: [test name] + [product code that makes it pass]. One commit. Tree green at end."
     status: pending
-  - id: ws2-green
-    content: "WS2 (GREEN): [Describe implementation]. All tests MUST pass."
+    # depends_on: []   # parallel-safe (no prerequisites)
+  - id: ws1-cycle-2
+    content: "WS1 cycle 2: [next test+code pair]. One commit. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): [Describe documentation, TSDoc, NL guidance, README updates]."
+    # depends_on: []   # parallel-safe with ws1-cycle-1 if file scopes don't overlap
+  - id: ws2-cycle-1
+    content: "WS2 cycle 1: [test name] + [product code]. One commit. Tree green at end."
     status: pending
-  - id: ws4-quality-gates
-    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub)."
+    depends_on: [ws1-cycle-1]   # example: this cycle consumes an interface ws1-cycle-1 introduces
+  - id: ws3-doc-propagation
+    content: "WS3: TSDoc, README, NL guidance, ADR/directive updates for landed behaviour."
     status: pending
+    depends_on: [ws1-cycle-1, ws1-cycle-2, ws2-cycle-1]
+  - id: ws4-quality-gates-final
+    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub) on the integrated delivery."
+    status: pending
+    depends_on: [ws3-doc-propagation]
   - id: ws5-adversarial-review
     content: "WS5: Adversarial specialist reviews. Document findings."
     status: pending
+    depends_on: [ws4-quality-gates-final]
   - id: ws6-doc-propagation
     content: "WS6: Propagate settled outcomes to canonical ADR/directive/reference docs and relevant READMEs."
     status: pending
+    depends_on: [ws5-adversarial-review]
 isProject: false
 ---
+
+<!-- TDD shape (mandatory): every WS that lands product code is a
+     SEQUENCE of test+code CYCLES. Each cycle is one commit
+     containing the failing test + the product code that makes it
+     pass + any refactor — landed together. Tests and product code
+     never separate across commits. Higher-level tests (integration,
+     E2E) often need multiple lower-level cycles first; sequence
+     them so each commit ends with all tests passing. The
+     ws*-cycle-N todo IDs above are the unit of landing — replace
+     the example IDs with the real cycles for this plan and add
+     more rows as needed.
+
+     See .agent/plans/templates/components/tdd-phases.md for the
+     cycle definition and .agent/directives/testing-strategy.md
+     §"TDD = test + product code as PAIRS" for the directive. -->
 
 <!-- After copying this template, adjust component reference paths.
      From templates/ the paths use ../templates/components/.
@@ -119,6 +144,58 @@ session-handoff, and consolidation touch points this plan will use.
 
 ---
 
+## Cycle Dependencies and Parallelisation
+
+> See [TDD Cycles component](../templates/components/tdd-phases.md)
+> §"Atomic, independent cycles for parallel dispatch"
+
+Where the work shape allows, structure cycles so they can be
+dispatched to parallel agents. For each cycle ask:
+
+1. Could this cycle land at a different time than another in the
+   plan without changing either's behaviour or verification?
+2. Does this cycle touch the same files as another? If yes, name
+   the overlap precisely (which lines / which symbols).
+3. Does this cycle's acceptance criterion depend on another
+   cycle's product code being present?
+
+Cycles that touch separate file scopes and have no acceptance
+dependency on other cycles are PARALLEL-SAFE — declare an empty
+`depends_on: []` (or omit the field) on the YAML todo. The
+orchestrator can dispatch them to separate agents simultaneously
+with self-contained briefs.
+
+Cycles that genuinely require other cycles to land first are
+SEQUENCED — declare `depends_on: [prerequisite-cycle-id, ...]`
+on the YAML todo. They are not dispatched until each prerequisite
+has landed.
+
+Plan-author discipline: do not invent serial dependencies. Pick
+the natural decomposition (separate workspaces, separate modules,
+separate features) the cycles already suggest. Where natural
+decomposition yields independence, the cycles ARE parallel-safe
+— declare them so.
+
+### Self-contained brief checklist (per cycle)
+
+A cycle is "ready to hand off to a parallel agent" when its
+description in this plan answers:
+
+- **What test to write**: file path + assertion shape
+- **What product code to write**: file path(s) + behaviour
+- **Starting state**: which branch / commit the cycle starts from
+- **File scope**: every file the cycle is permitted to touch
+- **Files NOT to touch**: the parallel-safety boundary
+- **Acceptance**: deterministic command(s) another agent can run
+- **Reviewer dispatch (optional)**: specialist reviewers for this
+  cycle's substance
+
+If any of these is missing, the cycle cannot be safely dispatched
+to a parallel agent and must be either reshaped or kept sequenced
+with the orchestrator.
+
+---
+
 ## Reviewer Scheduling (phase-aligned)
 
 Reviewers are scheduled in three phases, chosen by what they challenge:
@@ -163,39 +240,49 @@ These reviewers ask "is the landed state internally consistent?"
 
 ---
 
-## WS1 — [Test Specification] (RED)
+## WS1 — [Slice 1: short value-bearing description]
 
-All tests MUST FAIL at the end of WS1.
+> See [TDD Cycles component](../templates/components/tdd-phases.md)
 
-> See [TDD Phases component](../templates/components/tdd-phases.md)
+WS1 is a sequence of test+code cycles that together deliver
+[value-bearing slice 1]. Every cycle is one commit containing the
+failing test, the product code that makes it pass, and any
+refactor. The tree is green at the end of every commit.
 
-### 1.1: [Test Group]
+### Cycle 1.1: [Cycle name — what behaviour this cycle delivers]
 
-**Tests**:
+**Parallel-safety**: [parallel-safe | sequenced after `<cycle-id>`]
+
+**Starting state**: [branch HEAD at dispatch | after `<cycle-id>` lands]
+
+**File scope** (this cycle is permitted to touch):
+
+- `[test-file].unit.test.ts` (NEW or MODIFIED)
+- `[path/to/file.ts]` (NEW or MODIFIED)
+
+**File scope NOT to touch** (parallel-safety boundary):
+
+- [files another concurrent cycle owns; e.g., `[other-file.ts]`]
+
+**Test** (Red):
 
 - `[test-file].unit.test.ts` — [What it asserts]
-- `[test-file].integration.test.ts` — [What it asserts]
 
-**Acceptance Criteria**:
+**Product code** (Green):
 
-1. Tests compile and run
-2. All new tests fail for the expected reason
-3. No existing tests broken
+- `[path/to/file.ts]` — [What changes; the minimal code to green
+  the test]
 
----
+**Refactor** (optional, in the same commit):
 
-## WS2 — [Implementation] (GREEN)
+- [Extract/rename/document changes that keep the test green]
 
-All tests MUST PASS at the end of WS2.
+**Acceptance** (executable by another agent without reading the
+rest of the plan):
 
-### 2.1: [Implementation Task]
-
-**File**: `[path/to/file.ts]`
-
-**Changes**:
-
-- [Specific change 1]
-- [Specific change 2]
+1. The test runs and passes
+2. The whole tree is green (`pnpm test` exits 0; no skipped tests)
+3. The commit message names the cycle
 
 **Code Sketch** (include when the approach is known):
 
@@ -210,22 +297,71 @@ All tests MUST PASS at the end of WS2.
 **Deterministic Validation**:
 
 ```bash
-# [What this checks]
-[command]
-# Expected: [result]
+pnpm test --filter [workspace]
+# Expected: exit 0, all tests pass
+
+pnpm test
+# Expected: exit 0, no skipped tests, no failing tests
 ```
+
+**Reviewer dispatch (optional)**: [specialists for this cycle's
+substance — e.g., `type-reviewer`, `mcp-reviewer`]
+
+### Cycle 1.2: [Next cycle name]
+
+[Same structure as 1.1: parallel-safety; starting state; file
+scope; files NOT to touch; Red test; Green product code;
+Refactor; Acceptance; Validation; Reviewer dispatch. One commit
+per cycle. Self-contained brief — another agent can pick it up
+and complete it without further coordination.]
 
 ---
 
-## WS3 — [Documentation and Polish] (REFACTOR)
+## WS2 — [Slice 2: short value-bearing description]
+
+WS2 is a sequence of cycles delivering [value-bearing slice 2].
+For higher-level tests (integration, E2E) that need WS1's pieces
+first, sequence the cycles so each commit ends green.
+
+### Cycle 2.1: [E2E or integration cycle name]
+
+**Test** (Red):
+
+- `[test-file].integration.test.ts` or `[test-file].e2e.test.ts`
+  — [What system-level behaviour it asserts]
+
+**Product code** (Green):
+
+- The wiring/composition pieces that turn the test green.
+  If the test requires units that are not yet present, FIRST
+  add them as their own unit cycles in this WS or the prior WS,
+  then this cycle adds the integration/E2E test + the final
+  wiring in one commit.
+
+**Acceptance**:
+
+1. The test runs and passes
+2. The whole tree is green (`pnpm test` exits 0; no skipped tests)
+3. Lower-level tests proving the units are also present
+
+---
+
+## WS3 — Documentation and Cross-Surface Updates
+
+Pure documentation changes (TSDoc, README, ADR/directive prose
+updates) that do not require new product behaviour. These do not
+need test+code cycles because no behaviour changes; they are
+landed alongside the cycles whose behaviour they document, or as
+a final cleanup commit if the documentation is integrative.
 
 ### 3.1: TSDoc and NL guidance
 
-- [Tool descriptions, NL examples, workflow guidance]
+- [Tool descriptions, NL examples, workflow guidance for the
+  landed behaviour]
 
 ### 3.2: Documentation
 
-- [README updates, architecture docs]
+- [README updates, architecture docs, ADR amendments]
 
 ---
 

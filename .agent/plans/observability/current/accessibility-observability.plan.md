@@ -17,15 +17,21 @@ blocked_on:
 release_gate: public-beta
   - "observability-events-workspace.plan.md (for schemas)"
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): widget-side emission-site tests for a11y_preference_tag + frustration proxies + widget_session_outcome + keyboard-only boolean. All fail initially."
+  - id: ws1-cycle-a11y-preference-tag
+    content: "WS1 cycle 1: widget a11y_preference_tag emission. ONE COMMIT — emission-site test + React-component wiring that emits it + conformance-helper composition. Tree green at end."
     status: pending
     priority: next
-  - id: ws2-green
-    content: "WS2 (GREEN): wire emissions from widget React components; compose conformance helper."
+  - id: ws1-cycle-frustration-proxies
+    content: "WS1 cycle 2: frustration proxies (rage-click, rapid-retry). ONE COMMIT — emission-site test + emission wiring. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): runbook entry; a11y-observation-openness documentation; cross-reference ADR-162 accessibility axis."
+  - id: ws1-cycle-widget-session-outcome
+    content: "WS1 cycle 3: widget_session_outcome emission. ONE COMMIT — emission-site test + emission wiring. Tree green at end."
+    status: pending
+  - id: ws1-cycle-keyboard-only-boolean
+    content: "WS1 cycle 4: keyboard-only session boolean. ONE COMMIT — test + emission wiring. Tree green at end."
+    status: pending
+  - id: ws2-docs
+    content: "WS2 (docs): runbook entry; a11y-observation-openness documentation; cross-reference ADR-162 accessibility axis. Pure documentation cycle — no test+code pair needed."
     status: pending
   - id: ws4-quality-gates
     content: "WS4: pnpm check exit 0; widget a11y suite still passes (axe-core dev-time coverage unchanged)."

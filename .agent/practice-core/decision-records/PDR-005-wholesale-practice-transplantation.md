@@ -6,9 +6,11 @@
 **Related**: [PDR-001](PDR-001-location-of-practice-decision-records.md)
 (numbering); [PDR-004](PDR-004-explorations-as-durable-design-space-tier.md)
 (transplant manifests ARE explorations — the tier's inaugural use case);
-[PDR-007](PDR-007-practice-core-bounded-package-contract.md) (the
-ephemeral-exchange contract that replaced the source-side seeding-pack
-substance absorbed by this PDR).
+[PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+(the Core-package contract; the source-side seeding-pack substance
+that this PDR absorbed is now governed by PDR-007's amendment
+2026-04-29 retiring the ephemeral `practice-context/outgoing/`
+exchange surface).
 
 ## Context
 
@@ -139,15 +141,16 @@ First-pass instinct gathers strategic documents (architecture notes,
 governance docs, ADRs at the top of the index). Empirically, the
 highest-value transplant material lives elsewhere:
 
-- **Distilled memory** (`.agent/memory/active/distilled.md`) — the
+- **Distilled memory** (the host's refined-memory file) — the
   durable-doctrine compression the source has paid to produce.
-- **Pattern library** (`.agent/memory/active/patterns/`,
-  `.agent/practice-core/patterns/`) — concrete reusable shapes with
-  triggers and counter-examples.
+- **Pattern library** (the host's pattern memory surface, plus
+  retired Core-pattern surfaces while they exist on legacy
+  hosts) — concrete reusable shapes with triggers and
+  counter-examples.
 - **Plan templates and recently-completed plan bodies** — the working
   shape of how this Practice scopes and delivers work.
-- **Active and current scoped work** (`.agent/plans/*/current/`,
-  `.agent/plans/*/active/`) — the live frontier of what is being
+- **Active and current scoped work** (the host's plan surface's
+  active and current tiers) — the live frontier of what is being
   worked, which carries calibration the strategic docs do not.
 
 Source-side preservation checklists MUST explicitly enumerate these
@@ -346,19 +349,6 @@ generalised at manifest time) and a beneficiary of it (items
 already-generalised get classified quickly as fully-portable). The
 two disciplines reinforce each other.
 
-### Host-local context (this repo only, not part of the decision)
-
-This repo is the current TypeScript leading-edge reference (per
-PDR-006) and is therefore a likely source of future transplants into
-other TypeScript repos in the owner's Practice network. When those
-transplants happen, the manifest should be produced in the
-*destination* repo's `docs/explorations/`, not in this repo.
-
-This repo has no transplant manifest of its own — its Practice grew
-cold-start, and plasmid integration has kept it current. Future
-transplants into this repo (if they happen) would need their own
-manifest.
-
 ## Amendment Log
 
 ### 2026-04-22 — Session 6 (memory-feedback): Source-side preservation and seeding
@@ -400,10 +390,12 @@ PDR-005.
    ephemeral-exchange contract that absorbed the seeding-pack source
    files).
 
-4. **Source files deleted post-amendment** (per PDR-007 §"substance
-   has a proper home"):
-   - `.agent/practice-context/outgoing/cross-repo-transfer-operations.md`
-   - `.agent/practice-context/outgoing/seeding-protocol-guidance.md`
+4. **Source files retired post-amendment** (per PDR-007 §"substance
+   has a proper home"): the originating amendment also retired two
+   ephemeral-exchange files (cross-repo-transfer-operations and
+   seeding-protocol-guidance) by absorbing their substance into this
+   PDR. The exchange surface they lived on was retired entirely by
+   PDR-007 amendment 2026-04-29.
 
 **Class A.1 firing verdict**: amendment body checked against the
 plan-body-first-principles-check rule. The body is positive-form
@@ -417,15 +409,16 @@ the PDR body, not a separate rule (transplantation events are
 infrequent and load-bearing — embedded discipline > rule firing for
 this cadence).
 
-**Concrete near-term firing trigger**: next wholesale transplantation
-event from this repo OR next major preservation sweep against an
-archived source. Amendment substance fires when a source agent
-produces a bundle README and an activation-checklist for the
-receiver.
+**Concrete near-term firing trigger**: next wholesale
+transplantation event from any source repo OR next major
+preservation sweep against an archived source. Amendment
+substance fires when a source agent produces a bundle README and
+an activation-checklist for the receiver.
 
 **Reviewer note**: amendment composes with PDR-007 (the
-ephemeral-exchange contract that drove the file deletion); composes
-with PDR-006 (this repo's TypeScript leading-edge reference status
-predicting future transplant events); does not require PDR-009
-amendment (canonical/adapter parity already lives in PDR-009 — this
+ephemeral-exchange contract that drove the file deletion);
+composes with PDR-006 (a leading-edge reference repo's
+ecosystem-status predicting future transplant events); does not
+require PDR-009 amendment (canonical/adapter parity already lives
+in PDR-009 — this
 amendment cites it, doesn't restate it).

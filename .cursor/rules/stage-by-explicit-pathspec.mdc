@@ -1,0 +1,6 @@
+---
+description: Stage files by explicit pathspec. Wildcard staging (`git add -A`, `--all`, `.`) is forbidden; the Bash hook blocks it.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/stage-by-explicit-pathspec.md`.

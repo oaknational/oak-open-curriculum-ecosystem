@@ -134,7 +134,7 @@ The reactive discipline (*"surface, don't fix or bypass, route to owner"*)
 is now well-recorded but does not prevent recurrence.
 
 WS0 of the
-[multi-agent-collaboration-protocol](../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md)
+[multi-agent-collaboration-protocol](../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan installed the shared communication log — now treated as a generated
 read model from immutable comms events — that any agent can read for "what
 has been happening here recently?" WS1

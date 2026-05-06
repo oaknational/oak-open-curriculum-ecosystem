@@ -4,6 +4,43 @@ Reusable building blocks for creating high-quality, foundation-aligned
 plans. See [ADR-117](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md)
 for the architectural decision and rationale.
 
+## Planning Vocabulary
+
+Definitions and relationships for the terms used across the planning
+surface in this repo. The doctrinal anchor is
+[PDR-018: Planning Discipline](/.agent/practice-core/decision-records/PDR-018-planning-discipline.md);
+the operational entrypoint is the [`/jc-plan` command](/.agent/commands/plan.md).
+
+| Term | Definition | Authoritative source |
+|------|------------|----------------------|
+| **Thread** | The continuity unit. A multi-session conceptual lane (e.g. `observability-sentry-otel`, `agentic-engineering-enhancements`) carrying identity rows across sessions. Each thread has a `next-session.md` record under `.agent/memory/operational/threads/`. | [PDR-027](/.agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md), [`threads/README.md`](/.agent/memory/operational/threads/README.md) |
+| **Arc** | A coherent sequence of sessions or plan slices that delivers a single substantial outcome on a thread. An arc may span multiple plans or comprise a single multi-session plan. Less formal than a thread; informally named (e.g. *the validation-and-tdd doctrine arc*, *the EEF graph-and-corpus arc*). | Informal; surfaced in napkin entries and thread-record session summaries |
+| **Collection** | A domain grouping of plans (e.g. `agentic-engineering-enhancements/`, `observability/`, `architecture-and-infrastructure/`). Each collection has a `roadmap.md` and `active/` `current/` `future/` subdirectories. | [ADR-117](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md) |
+| **Roadmap** | The strategic milestone sequence for a plan collection. Lives at `.agent/plans/<collection>/roadmap.md`. Names phases / milestones and the plans that serve each. | [`collection-roadmap-template.md`](collection-roadmap-template.md) |
+| **Plan (executable)** | A plan file in `current/` (queued) or `active/` (in flight). Has YAML frontmatter with machine-readable todos, TDD cycle-pairs as the unit of landing, acceptance criteria, deterministic validation, and quality-gate sequencing. | [`quality-fix-plan-template.md`](quality-fix-plan-template.md), [`feature-workstream-template.md`](feature-workstream-template.md), [`/jc-plan` §Executable Plan Requirements](/.agent/commands/plan.md) |
+| **Plan (strategic)** | A plan file in `future/`. Names problem + intent + domain boundaries + dependencies + success signals + risks + promotion triggers. May include reference implementation detail from completed research, but execution decisions finalise only at promotion to `current/`. | [`/jc-plan` §Strategic Plan Requirements](/.agent/commands/plan.md) |
+| **Phase** | An ordered sequence of workstreams within a plan. Phases gate quality-gate runs and reviewer dispatch. Some plans use phases (Phase 0, Phase 1, ...); some plans are single-phase with workstreams flat at top level. | [`quality-fix-plan-template.md`](quality-fix-plan-template.md) |
+| **Workstream (WS)** | A unit within an executable plan, typically scoped to a single concern that one agent can complete in one session. A workstream decomposes into one or more TDD cycle-pairs. Identified as `WS1`, `WS2`, ... within a plan. | [`feature-workstream-template.md`](feature-workstream-template.md) |
+| **Cycle (TDD pair)** | The unit of landing within a workstream: a failing test + the product code that greens it + any refactor, all in one commit. Tests must NEVER be committed ahead of the product code that greens them; product code must NEVER be committed ahead of the tests that prove it. | [`/jc-plan` §Executable Plan Requirements](/.agent/commands/plan.md), [`tdd-phases.md`](components/tdd-phases.md) |
+
+**Lifecycle**: a plan moves through `future/` → `current/` → `active/` → `archive/completed/`. Promotion triggers are named in the `future/` plan; promotion authors a `current/` plan from a template.
+
+**Relationships**:
+
+- A **Thread** has identity (PDR-027 row) and contains one or more **Arcs** over time.
+- An **Arc** is a working unit on a thread; arcs span one or more **Plans**.
+- A **Collection** groups Plans by domain; its **Roadmap** sequences them.
+- A **Plan (executable)** decomposes into **Phases** (optional) and **Workstreams**.
+- A **Workstream** decomposes into **Cycles** (TDD pairs).
+- The unit of commit landing is the **Cycle** (one commit per cycle, tests + product code together).
+
+**Canonical entrypoints**:
+
+- **Doctrinal**: [PDR-018: Planning Discipline](/.agent/practice-core/decision-records/PDR-018-planning-discipline.md) — end goals, mechanisms, means; ambiguous-verb avoidance; disposition-drift discipline; beneficial-vs-blocking prerequisites; plan-placement-by-ownership.
+- **Architectural**: [ADR-117: Plan Templates and Components](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md) — the host architectural decision on plan structure and document hierarchy.
+- **Operational**: [`/jc-plan`](/.agent/commands/plan.md) — the agent-facing command for creating or promoting plans, including the design gate that requires `/jc-metacognition` first when scope is ambiguous.
+- **Templates and components**: this README.
+
 ## Templates
 
 Templates are complete plan scaffolds. Copy one, fill in the bracketed

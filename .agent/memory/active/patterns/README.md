@@ -36,13 +36,49 @@ general form. The instance stays in place regardless: instance-
 level proof continues to live at the repo level after general
 abstraction is authored.
 
+## Polarity (required, every pattern)
+
+Every pattern entry MUST be explicit about its polarity. Three
+distinct shapes appear in this directory and the difference
+matters at the moment of reading — a reader skimming a pattern to
+decide whether to apply it or recognise it as a failure mode needs
+the polarity at a glance, not after parsing the body:
+
+| Polarity | Meaning | Header marker |
+| --- | --- | --- |
+| `pattern` | A shape to **repeat**: the body describes a positive solution shape proven to work, with the structural elements a reader should reproduce when applying it | `> **POLARITY: PATTERN.** This is a shape to repeat...` |
+| `anti-pattern` | A failure mode to **avoid**: the body names a recurring failure shape (often with a diagnostic for catching it in the moment) and the corrective discipline; recognising the anti-pattern shape is the first move in not repeating it | `> **POLARITY: ANTI-PATTERN.** This is a failure mode to avoid...` |
+| *(none — does not belong here)* | A recurring observation that lacks an actionable shape (no clear repeat-shape, no clear failure-mode-and-cure pair) | Belongs in [`distilled.md`](../distilled.md) (cross-session refinement) or [`pending-graduations.md`](../../operational/pending-graduations.md) (queued candidates), NOT in this directory |
+
+Patterns are doctrine ready to apply; observations awaiting shape
+are not yet patterns. Categories (`code` / `architecture` /
+`process` / `testing` / `agent`) are orthogonal to polarity — every
+(category, polarity) pair is admissible.
+
+The polarity is recorded in two places per pattern file:
+
+1. **Frontmatter field** `polarity: pattern | anti-pattern` —
+   machine-readable for the index and for tooling.
+2. **Blockquote header** in the body, immediately after the
+   frontmatter — human-visible at a glance during reading.
+
+Pre-2026-05-05 pattern files predate this discipline and are being
+backfilled across the next consolidation passes; new entries from
+2026-05-05 onward MUST carry both markers. Until backfill catches
+up, use
+[`eager-rounding-off-on-partial-structures.md`](eager-rounding-off-on-partial-structures.md)
+as the shape-of-the-art template for new pattern files — copying
+an existing pre-2026-05-05 file as template would silently produce
+a non-conformant entry.
+
 ## Categories
 
 Patterns span five categories:
 **code** (implementation techniques), **architecture** (system
 structure and boundaries), **process** (engineering workflows and
 decision-making), **testing** (verification strategies), and
-**agent** (agentic infrastructure design).
+**agent** (agentic infrastructure design). (Categories are
+orthogonal to polarity per the Polarity section above.)
 
 Note: Practice-governance patterns that were in this directory
 before 2026-04-18 have been **absorbed as PDRs** (PDR-012 through
@@ -86,20 +122,21 @@ Every pattern file has YAML frontmatter:
 ```yaml
 ---
 name: "Human-readable pattern name"
-use_this_when: "One sentence: the situation where this pattern applies"
+polarity: pattern | anti-pattern   # REQUIRED for entries authored 2026-05-05 onwards
+use_this_when: "One sentence: the situation where this pattern applies (positive shape) OR the situation where this failure mode is at risk of firing (anti-pattern)"
 category: code | architecture | process | testing | agent
 proven_in: "file path where pattern was first applied or proven"
 proven_date: YYYY-MM-DD
 barrier:
   broadly_applicable: true
   proven_by_implementation: true
-  prevents_recurring_mistake: "What mistake this prevents"
+  prevents_recurring_mistake: "What mistake this prevents (anti-patterns name the mistake itself; positive patterns name the mistake their absence permits)"
   stable: true
 cross_plane: true   # optional; see Cross-Plane Span Tag below
 ---
 ```
 
-The `use_this_when` field is the primary discovery mechanism. It describes the moment an engineer should think "I have seen this before."
+The `use_this_when` field is the primary discovery mechanism. It describes the moment an engineer should think "I have seen this before." For anti-patterns, the trigger is the moment the failure mode is about to fire — the diagnostic moment.
 
 ### Cross-Plane Span Tag (optional)
 
@@ -166,7 +203,7 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (27)
+### Process (29)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -196,6 +233,8 @@ surface that makes later governance or enforcement honest.
 - **Review Intentions, Not Just Code** -- Use this when: you want specialist reviewers to assess design intent before implementation. → [review-intentions-not-just-code.md](review-intentions-not-just-code.md)
 - **UX Predates Visual Design** -- Use this when: user experience decisions accumulate in CLIs, SDKs, APIs, documentation, and error messages long before any visual UI exists. → [ux-predates-visual-design.md](ux-predates-visual-design.md)
 - **Verify Claims Against Primary Sources Before Propagating** -- Use this when: writing technical claims into plans, TSDoc, or governance documents. → [verify-before-propagating.md](verify-before-propagating.md)
+- **Plan-as-Artefact Gravity** -- Use this when: a remediation plan has accumulated multiple session-history sections, re-grounding tables, and re-classification amendments while the gates it targets remain red. → [plan-as-artefact-gravity.md](plan-as-artefact-gravity.md)
+- **Templates Can Institutionalise Failure Modes** -- Use this when: sharpening a doctrine, principle, or rule that flows through templates, scaffolds, or generators that produce future plans or artefacts. → [templates-encode-failure-modes.md](templates-encode-failure-modes.md)
 
 ### Testing (6)
 
@@ -206,11 +245,14 @@ surface that makes later governance or enforcement honest.
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (6)
+### Agent (9)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
+- **Eager Rounding-Off on Partial Structures Under Failure Pressure** *(anti-pattern)* -- Use this when: an enforcer fires (gate, hook, scanner, validator, lint, type-check) and the proposed response involves bypass, doctrinal-collision framing, or any shape that lets work proceed past the signal — check whether the agent has rounded a partial structure into a whole structure and constructed a problem that does not exist. → [eager-rounding-off-on-partial-structures.md](eager-rounding-off-on-partial-structures.md)
 - **Governance Claim Needs a Scanner** -- Use this when: an ADR or governance document asserts a universal property across a set of live surfaces (one vocabulary, a required citation, a mandatory field, platform-adapter parity) and prose alone is the only enforcement. → [governance-claim-needs-a-scanner.md](governance-claim-needs-a-scanner.md)
 - **Passive Guidance Loses to Artefact Gravity** -- Use this when: designing a guardrail against an agent failure mode — choose between documented-but-not-enforced guidance (passive) and an environmentally-triggered rule, hook, or read-on-entry surface (active); passive guidance alone is a watchlist item, not a guardrail. → [passive-guidance-loses-to-artefact-gravity.md](passive-guidance-loses-to-artefact-gravity.md)
 - **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
 - **Platform Configuration Is Infrastructure** -- Use this when: AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored. → [platform-config-is-infrastructure.md](platform-config-is-infrastructure.md)
 - **Route Reviewers by Abstraction Layer, Not File Scope** -- Use this when: dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke. → [route-reviewers-by-abstraction-layer.md](route-reviewers-by-abstraction-layer.md)
+- **Structural Enforcer Recursive Exclusion** -- Use this when: designing a structural enforcer (hook, scanner, lint rule, regex matcher) that scans for a pathogen across a path scope; the cataloguing documents and tests inside that scope will trip the enforcer on themselves unless explicitly excluded. → [structural-enforcer-recursive-exclusion.md](structural-enforcer-recursive-exclusion.md)
+- **Parallel `isolation:"worktree"` Dispatch Is Unreliable** -- Use this when: considering a parallel `Agent` batch with `isolation:"worktree"` for non-trivial work that depends on a specific branch HEAD or specific repo state. → [parallel-worktree-dispatch-unreliable.md](parallel-worktree-dispatch-unreliable.md)

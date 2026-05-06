@@ -15,10 +15,10 @@ in the planning domain);
 (planning discipline — plans are load-bearing artefacts that
 encode world-state at authoring time; categorisation drift is a
 named risk);
-[PDR-007](PDR-007-three-destinations-for-graduation.md)
-(three destinations for graduation — pattern vs PDR vs governance
-home; this PDR is governance applied to plan collections, not a
-pattern).
+[PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+(promoting PDRs and universal patterns to first-class Core; this
+PDR is governance applied to plan collections, not a pattern, and
+it routes graduations via that contract).
 
 ## Context
 
@@ -65,11 +65,11 @@ lenses, and different promotion criteria. Conflating them forces
 substrate plans into a single axis (misleading) or hides them from
 axis-by-axis scanning (invisible).
 
-The reusable shape is captured as the
-[`substrate-vs-axis-plans` plan-collection component](../../plans/templates/components/substrate-vs-axis-plans.md).
-That component is the canonical artefact; this PDR records why the
-component exists and gives it Practice-governance authority across
-repos.
+The reusable shape is captured as a `substrate-vs-axis-plans`
+plan-collection component (host-local file; bridged via the
+practice-index Plans section). That component is the canonical
+artefact; this PDR records why the component exists and gives it
+Practice-governance authority across repos.
 
 ## Consequences
 
@@ -96,12 +96,17 @@ the axis frame (typically a five-or-N-axis coverage table at the
 top of the collection's high-level plan). Single-axis or
 chronologically-organised collections do not apply this PDR.
 
-Cross-reference for the canonical shape and worked example:
+Cross-reference for the canonical shape and worked example
+(host-local in the originating repo; bridged via the practice-index
+Plans section and Concept ↔ ADR map):
 
-- Component file: `.agent/plans/templates/components/substrate-vs-axis-plans.md`
-- First applied instance: `.agent/plans/observability/high-level-observability-plan.md § Substrate`
-- ADR-162 history entry records the closure-property bridge between
-  the convention and architectural decision records.
+- Component file: a `substrate-vs-axis-plans` plan-collection
+  component under the host's plans-templates surface.
+- First applied instance: the host's high-level observability plan
+  §Substrate section.
+- The host's product-observability five-axis-model ADR carries a
+  history entry recording the closure-property bridge between the
+  convention and architectural decision records.
 
 ## Compliance Triggers
 

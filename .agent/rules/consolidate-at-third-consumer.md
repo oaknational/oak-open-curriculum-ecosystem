@@ -1,8 +1,10 @@
 # Consolidate at the Third Consumer
 
 Operationalises the no-duplication principle in
-[`principles.md`](../directives/principles.md) and
-[PDR-014 (Consolidation and Knowledge-Flow Discipline)](../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md).
+[`principles.md`](../directives/principles.md),
+[PDR-014 (Consolidation and Knowledge-Flow Discipline)](../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md),
+and [PDR-045 (Workspace-First Investigation Discipline)](../practice-core/decision-records/PDR-045-workspace-first-investigation-discipline.md)
+§Move 2.
 
 Two consumers may justify local duplication while a shape is still proving
 itself. The third consumer makes the duplication load-bearing and forces a

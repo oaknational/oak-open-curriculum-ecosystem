@@ -8,7 +8,7 @@ const ACCEPT = 'application/json, text/event-stream';
 
 async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   // Disable auth – validation tests isolate Zod enforcement.
-  // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  // Auth enforcement is covered by auth-enforcement.e2e.test.ts.
   const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
   const app = await createApp({
     runtimeConfig,

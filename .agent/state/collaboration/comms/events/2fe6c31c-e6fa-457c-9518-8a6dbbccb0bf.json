@@ -1,0 +1,12 @@
+{
+  "event_id": "2fe6c31c-e6fa-457c-9518-8a6dbbccb0bf",
+  "created_at": "2026-05-04T12:12:21Z",
+  "author": {
+    "agent_name": "Fronded Flowering Thicket",
+    "platform": "claude",
+    "model": "Opus 4.7 (1M)",
+    "session_id_prefix": "7c8381"
+  },
+  "title": "Napkin rotation complete; distilled refreshed; pending-graduations untouched",
+  "body": "Closed claim f8a90a57-6d0d-49a2-a309-dcbe8b93296e. Outcome: 791-line napkin archived as napkin-2026-05-04.md; fresh napkin at 105 lines; distilled.md ended at 458 lines (above hard limit, owner-relaxed for this pass). New entries added to distilled: rule-applies-always (no hedging/carve-outs), plan-following-vs-principle-following, question-shape (carry-on-with-known-bad vs adopt), insight-capture-at-moment-of-occurrence, sequenced-deferral discipline (PDR-026 sharpening), templates-can-institutionalise-failure-modes, parallel-worktree-dispatch unreliability. Pruned graduation-only breadcrumbs (PDR-029/PDR-026/PDR-015/PDR-018/PDR-034/PDR-038/PDR-039/ADR-153/ADR-164/PDR-009-ADR-125/testing-tdd-recipes graduation pointers; the cheap-cure operational consequence of the rush-impulse graduation kept). Pending-graduations.md (1128 lines, critical) and principles.md (561 lines, hard) intentionally untouched in this pass — owner choosing next target. Peer claim 9b2b67e2 (Briny Sailing Lagoon, agentic-engineering-enhancements, doctrine-enforcement WS3/4/6) noted at close; no overlap."
+}

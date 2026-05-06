@@ -3096,13 +3096,11 @@ export interface components {
          * @example [
          *       \{
          *         "unitTitle": "Unitising and coin recognition - counting in 2s, 5s and 10s",
-         *         "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s",
-         *         "unitOrder": 1
+         *         "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s"
          *       \},
          *       \{
          *         "unitTitle": "Solving problems in a range of contexts",
-         *         "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money",
-         *         "unitOrder": 2
+         *         "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money"
          *       \}
          *     ]
          */
@@ -3111,8 +3109,6 @@ export interface components {
             unitTitle: string;
             /** The unit slug identifier */
             unitSlug: string;
-            /** The position of the unit within the thread */
-            unitOrder: number;
             /** Threads are data concepts without Oak URLs on the website. Always null for thread resources. */
             oakUrl?: null;
         }[];

@@ -4,9 +4,9 @@ import { defineConfig, devices } from '@playwright/test';
  * Base URL for the MCP server under test.
  *
  * Uses port 3334 (not the default 3333) to avoid clashing with
- * `dev:observe:noauth` or `smoke:dev:stub` when Turbo runs tasks
- * in parallel. No `process.env` access — config files follow the
- * same DI principle as product code.
+ * `dev:observe:noauth` when Turbo runs tasks in parallel. No
+ * `process.env` access — config files follow the same DI principle
+ * as product code.
  */
 const baseURL = 'http://localhost:3334';
 

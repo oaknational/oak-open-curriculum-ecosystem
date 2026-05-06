@@ -40,7 +40,9 @@ as executive memory — it is operational reference, not doctrine.)
 
 The governance layer is larger than a single file:
 
-- **43 canonical rules** live in [`.agent/rules/`](rules/)
+- The canonical rules live in [`.agent/rules/`](rules/) (the
+  authoritative count is `RULES_INDEX.md`; this file does not
+  duplicate it to avoid drift)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
   [`.agents/rules/`](../.agents/rules/)
@@ -101,9 +103,94 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)                      | Agentic engineering practice — naming and conceptual boundary                      |
 | [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — Core package contract, self-containment, practice-index bridge (contract expanded to files + required directories by PDR-007) |
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)                        | Agent artefact portability — three-layer model for skills, commands, and rules     |
-| [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
+| [ADR-127](../docs/architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md)      | Documentation as foundational infrastructure                                       |
+| [ADR-131](../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)                 | Self-reinforcing improvement loop — host-side architecture for the Practice's improvement-loop concept; portable form is in PDR-028 + PDR-038 + PDR-039 |
+| [ADR-144](../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md)                       | Three-zone fitness model — host-side concrete instantiation of the structural-health diagnostic concept used across the Practice Core |
+| [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline — host-side companion to portable PDR-011 |
 | [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |
+| [ADR-159](../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)                | Per-workspace vendor CLI ownership — instance of PDR-019 ADR-by-reusability       |
+| [ADR-162](../docs/architecture/architectural-decisions/162-observability-first.md)                               | Product-observability five-axis model (Observability First) — host-side closure-property bridge between substrate-vs-axis convention (PDR-037) and quality-gate-dismissal application boundary (PDR-025) |
 | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)             | Agent-work Practice phenotype boundary for this repo's local implementation surfaces |
+| [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md)       | Pin GitHub Actions to maintainer-Latest SHA — host-side adoption of portable PDR-040 |
+| [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md)       | Rush-impulse three structural cues — host-side adoption of portable PDR-043 |
+
+### Practice-Core concept ↔ ADR map
+
+Practice-Core PDRs name portable concepts; this repo's ADRs record the
+host-side adoption. The map below lets a Core reader find the local
+adoption from the Core concept name.
+
+| Core concept (portable) | Host adoption (this repo) |
+| --- | --- |
+| Three-zone fitness model (per `practice.md` §Fitness Functions, `practice-bootstrap.md` §Consolidation Workflow step 6, `practice-lineage.md` §Thresholds (Three-Zone Model), PDR-014, PDR-042) | [ADR-144](../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md) |
+| Continuity surfaces and surprise pipeline (PDR-011) | [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) |
+| Self-reinforcing improvement loop (PDR-028, PDR-038, PDR-039) | [ADR-131](../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) |
+| Practice propagation model (PDR-007 supersedes; PDR-024 vital-surfaces) | [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md) |
+| Agentic engineering practice (PDR-001 origin) | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) |
+| Documentation as foundational infrastructure | [ADR-127](../docs/architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md) |
+| ADR-by-reusability (PDR-019) | [ADR-159](../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md) (proven instance) |
+| Substrate-vs-axis-plan categorisation (PDR-037) and quality-gate dismissal application boundary (PDR-025) | [ADR-162](../docs/architecture/architectural-decisions/162-observability-first.md) (closure-property bridge / application-boundary anchor) |
+| Pin to maintainer-Latest, not highest tag (PDR-040) | [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md) |
+| Rush-impulse three structural cues (PDR-043) | [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md) (three-cues paragraph in `principles.md` § Architectural Excellence Over Expediency) |
+| Agent-work Practice phenotype boundary (PDR-035 + Practice/repo split) | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md) |
+| Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side scope statement for the constraint); structural-enforcement scanner per PDR-038 is the next follow-on |
+
+### Rules cited by Practice Core
+
+Practice-Core PDRs cite host-local rule files as proven enforcement
+surfaces of portable doctrine. The canonical rule files live at
+[`.agent/rules/`](rules/) and adapters at `.cursor/rules/`,
+`.claude/rules/`, and `.agents/rules/`.
+
+| Rule (canonical) | Cited by Core | Concept enforced |
+| --- | --- | --- |
+| [`documentation-hygiene.md`](rules/documentation-hygiene.md) | PDR-014 §Composition discipline (`principle + rule` row) | "Misleading docs are blocking" — stale prescriptive text is how inherited framing propagates |
+| [`plan-body-first-principles-check.md`](rules/plan-body-first-principles-check.md) | PDR-014 §Composition discipline + §Amendment Log | Plan-body Class A.1 tripwire (firing the first-principles check on plan promotion) |
+| [`executive-memory-drift-capture.md`](rules/executive-memory-drift-capture.md) | PDR-028 (operationalising rule) | The `active → executive` memory feedback path |
+| [`never-disable-checks.md`](rules/never-disable-checks.md) | PDR-038 (worked instance — gate-off-fix-gate-on) | Quality-gate dismissal discipline |
+| [`no-machine-local-paths.md`](rules/no-machine-local-paths.md) | PDR-038 (worked instance — months-stable principle that caught its own author) | Machine-local paths are never durable; principle requires a structural enforcement surface |
+| [`subagent-practice-core-protection.md`](rules/subagent-practice-core-protection.md) | PDR-003 (host adoption) | Sub-agent permission rule operationalising the foundational-doc protection doctrine |
+
+### Commands and skills cited by Practice Core
+
+Practice-Core PDRs cite host-local commands and skills as the workflow
+implementations of portable doctrine. Canonical files live under
+[`.agent/commands/`](commands/) and [`.agent/skills/`](skills/);
+adapters live under each platform directory.
+
+| Workflow (canonical) | Cited by Core | Concept implemented |
+| --- | --- | --- |
+| [`session-handoff.md`](commands/session-handoff.md) | PDR-026 §Deferral-honesty discipline (close ritual) | Per-session landing-evidence ritual |
+| [`consolidate-docs.md`](commands/consolidate-docs.md) | PDR-026 §Deferral-honesty discipline + PDR-042 §Decision (the Learning-Preservation doctrine the gate enforces) | Cross-session consolidation workflow that surfaces deferrals and graduates substance |
+| [`consolidate-docs.md § Learning Preservation Overrides Fitness Pressure`](commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure) | PDR-042 (the doctrine the signal-distinguishing pre-action gate enforces) | Compression of substance to fit fitness limits is forbidden |
+| [`start-right-quick`](skills/start-right-quick/shared/start-right.md) | PDR-026 §Notes (target-at-open ritual) | Session-entry workflow carrying landing-target ritual |
+| [`session-handoff`](commands/session-handoff.md) | PDR-026 §Notes (landed-at-close ritual) | Session-close workflow carrying landing-evidence ritual |
+
+### Plans cited by Practice Core
+
+Practice-Core PDRs reference host-local plan files as the in-flight
+work where portable doctrine is being exercised. Plans live under
+[`.agent/plans/`](plans/).
+
+| Plan | Cited by Core | Subject |
+| --- | --- | --- |
+| [`memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md) | PDR-028 (host adoption) (executive-memory feedback loop installation) | Where the executive-memory drift-detection installation lands |
+| [`staged-doctrine-consolidation-and-graduation.plan.md`](plans/agentic-engineering-enhancements/archive/completed/staged-doctrine-consolidation-and-graduation.plan.md) | PDR-027 (host adoption) (identity-rule install schedule) | Eight-session arc that landed the thread / identity / claim doctrine; archived 2026-04-22 |
+| [`build-pipeline-composition-safeguards.plan.md`](plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md) | PDR-040 §Evidence + PDR-041 §Evidence | Future plan covering host-side enforcement of pin-to-Latest |
+| [`what-the-system-emits-today.md`](plans/observability/what-the-system-emits-today.md) | PDR-026 (host adoption) (observability matrix) | Observability matrix tracked at session-by-session granularity |
+| [`substrate-vs-axis-plans` plan-collection component](plans/templates/components/substrate-vs-axis-plans.md) | PDR-037 §Decision (canonical artefact) | Reusable plan-collection component capturing the substrate-vs-axis convention |
+| [`doctrine-enforcement-quick-wins.plan.md`](plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md) | PDR-044 §Worked Instances + PDR-038 §2026-05-04 amendment + PDR-018 §Beneficial prerequisites | Innate-immunity layer host adoption — six structural enforcement surfaces against named pathogens |
+| [`memetic-immune-system-and-progressive-disclosure.plan.md`](plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md) | PDR-044 §Implementation Notes | Strategic roadmap for adaptive-immunity layer, practice trio additive activation, doctrine-scanner CLI consolidation, and triggered rule loading pilot |
+
+### Experience records cited by Practice Core
+
+Practice-Core PDRs cite host-local experience records as subjective-experience
+witnesses for the portable doctrine. Experience records live under
+[`.agent/experience/`](experience/).
+
+| Experience record | Cited by Core | Subject |
+| --- | --- | --- |
+| [`2026-04-30-briny-the-frame-was-the-fix.md`](experience/2026-04-30-briny-the-frame-was-the-fix.md) | PDR-041 §Evidence + PDR-042 §Evidence | Subjective-experience witness for composition-obscurity investigation methodology and the signal-distinguishing pre-action gate |
 
 ## Agentic Corpus Hub
 
@@ -120,9 +207,12 @@ surfaces, and supporting source lanes.
 
 The execution surface is intentionally split by role:
 
-- **12 stable canonical commands** in [`.agent/commands/`](commands/)
-- **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **36 canonical skills** in [`.agent/skills/`](skills/)
+- **Stable canonical commands** in [`.agent/commands/`](commands/)
+  (live count surfaces in the directory listing — counts in this
+  index drift; treat the directory as authoritative)
+- **Experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
+- **Canonical skills** in [`.agent/skills/`](skills/) (live count
+  surfaces in the directory listing)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -144,20 +234,67 @@ reusable knowledge:
 | --- | --- | --- |
 | Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Hard-won rules — read before every session |
 | Collaboration channels | [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md) | Register of communication options and when to use each |
-| Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | 77 abstract solutions to recurring design problems |
+| Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | Abstract solutions to recurring design problems (live count surfaces in the directory listing) |
 | Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |
 | Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
+| Operational continuity | [`memory/operational/repo-continuity.md`](memory/operational/repo-continuity.md) | Repo-wide active-thread register, standing decisions, pending-graduations |
 
 The patterns skill ([`.agent/skills/patterns/SKILL.md`](skills/patterns/SKILL.md))
 teaches agents to check the pattern library before inventing new approaches.
 Platform adapters exist at `.cursor/skills/patterns/`, `.claude/skills/patterns/`,
 and `.agents/skills/patterns/`.
 
+### Pattern instances cited by Practice Core
+
+Practice Core PDRs routinely cite host-local pattern instances that
+prove the portable doctrine. The instances live under
+[`memory/active/patterns/`](memory/active/patterns/) and are listed
+here as proven instances for Core readers who want the worked
+example in this repo:
+
+| Pattern instance | Cited by Core | Concept |
+| --- | --- | --- |
+| [`tool-error-as-question.md`](memory/active/patterns/tool-error-as-question.md) | PDR-018 §Tool error as question | Treat any non-pass tool result as a question to understand, not an obstacle to bypass |
+| [`hook-as-question-not-obstacle.md`](memory/active/patterns/hook-as-question-not-obstacle.md) | PDR-018 §Tool error as question | Pre-commit / pre-tool hooks fire as questions, not as obstacles |
+| [`ground-before-framing.md`](memory/active/patterns/ground-before-framing.md) | PDR-018 §Tool error as question | Read the source before drafting an interpretation |
+| [`scope-as-goal.md`](memory/active/patterns/scope-as-goal.md) | PDR-015 + PDR-018 §Reviewer scope equals prompted scope | Reviewer brief scope must match the merge-gate scope |
+| [`inherited-framing-without-first-principles-check.md`](memory/active/patterns/inherited-framing-without-first-principles-check.md) | PDR-014 §Composition discipline (`pattern + rule` row) | Inherited framing in plan bodies survives reviewers and outlasts evidence |
+| [`findings-route-to-lane-or-rejection.md`](memory/active/patterns/findings-route-to-lane-or-rejection.md) | PDR-012 Notes | Reviewer findings route either to an action lane or to a written rejection |
+| [`nothing-unplanned-without-a-promotion-trigger.md`](memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md) | PDR-012 Notes | Future-plan items carry an explicit promotion trigger |
+| [`non-leading-reviewer-prompts.md`](memory/active/patterns/non-leading-reviewer-prompts.md) | PDR-012 Notes | Reviewer prompts must avoid leading framings |
+| [`pre-implementation-plan-review.md`](memory/active/patterns/pre-implementation-plan-review.md) | PDR-012 Notes | Plan review fires before implementation, not after |
+| [`adr-by-reusability-not-diff-size.md`](memory/active/patterns/adr-by-reusability-not-diff-size.md) | PDR-019 Notes | ADR-worthiness is judged by re-derivation reuse, not by diff size |
+| [`vendor-doc-review-for-unknown-unknowns.md`](memory/active/patterns/vendor-doc-review-for-unknown-unknowns.md) | PDR-033 (instance pattern) | Plans targeting third-party platforms must schedule a vendor-doc review pass |
+| [`cross-session-pattern-emergence.md`](memory/active/patterns/cross-session-pattern-emergence.md) | PDR-014 Notes | Some patterns only become visible across multiple sessions |
+| [`substance-before-fitness.md`](memory/active/patterns/substance-before-fitness.md) | PDR-014 Notes | Write at the weight the substance deserves; handle fitness afterwards |
+| [`current-plan-promotion.md`](memory/active/patterns/current-plan-promotion.md) | PDR-014 Notes | Plans promote from `future/` to `current/` when both decision-readiness and session-entry-readiness are met |
+| [`domain-specialist-final-say.md`](memory/active/patterns/domain-specialist-final-say.md) | PDR-015 (host adoption) | Domain specialists override architecture generalists on vendor-specific behaviour |
+| [`route-reviewers-by-abstraction-layer.md`](memory/active/patterns/route-reviewers-by-abstraction-layer.md) | PDR-015 (host adoption) | Multiple reviewers on the same lane produce disjoint findings when routed by layer |
+| [`reviewer-widening-is-always-wrong.md`](memory/active/patterns/reviewer-widening-is-always-wrong.md) | PDR-015 (host adoption) | A reviewer recommending `unknown`/widening to satisfy a strictness rule is wrong even when the rule citation is valid |
+| [`review-intentions-not-just-code.md`](memory/active/patterns/review-intentions-not-just-code.md) | PDR-015 (host adoption) | Specialist reviewer dispatch fires before implementation, not just after |
+| [`verify-before-propagating.md`](memory/active/patterns/verify-before-propagating.md) | PDR-016 (host adoption) | Citation chains drift; verify against the primary source before propagating |
+| [`monotonic-counter-is-not-quality-indicator.md`](memory/active/patterns/monotonic-counter-is-not-quality-indicator.md) | PDR-016 (host adoption) | A higher counter value is not evidence of newer or better |
+| [`comments-about-externals-degrade.md`](memory/active/patterns/comments-about-externals-degrade.md) | PDR-016 (host adoption) | Negative comments about external library behaviour go stale faster than they get updated |
+| [`three-levels-of-reference-quality.md`](memory/active/patterns/three-levels-of-reference-quality.md) | PDR-016 (host adoption) | Opaque pointer / citation chain / exported concept — only exported concepts travel safely |
+| [`fix-at-source-not-consumer.md`](memory/active/patterns/fix-at-source-not-consumer.md) | PDR-017 (host adoption) | Fix the producer, not each consumer's workaround |
+| [`re-evaluate-removal-conditions.md`](memory/active/patterns/re-evaluate-removal-conditions.md) | PDR-017 (host adoption) | Workarounds whose removal conditions have been met must be re-evaluated, not preserved |
+| [`workaround-debt-compounds-through-rationalisation.md`](memory/active/patterns/workaround-debt-compounds-through-rationalisation.md) | PDR-017 (host adoption) | Rationalisation vocabulary covers genuine debt surfaces |
+| [`end-goals-over-means-goals.md`](memory/active/patterns/end-goals-over-means-goals.md) | PDR-018 (host adoption) | End-goal-framed plans are smaller and more targeted than means-framed plans |
+| [`repair-workflow-contract-clarity.md`](memory/active/patterns/repair-workflow-contract-clarity.md) | PDR-018 (host adoption) | Ambiguous verbs in repair workflows produce divergent outcomes across artefacts |
+| [`check-driven-development.md`](memory/active/patterns/check-driven-development.md) | PDR-020 (host adoption) | Use the type checker as the direct assertion, not runtime property-existence checks |
+| [`governance-claim-needs-a-scanner.md`](memory/active/patterns/governance-claim-needs-a-scanner.md) | PDR-022 (host adoption) | Every governance claim needs a mechanical scanner; vigilance does not scale |
+| [`readme-as-index.md`](memory/active/patterns/readme-as-index.md) | PDR-023 (host adoption) | Directory-level READMEs are indexes; substance lives in the indexed artefacts |
+| [`warning-severity-is-off-severity.md`](memory/active/patterns/warning-severity-is-off-severity.md) | PDR-025 §Forbidden + (host adoption) | ESLint `warn` is permitted only as a migration mechanic with a flip-to-error trigger |
+| [`tool-output-framing-bias.md`](memory/active/patterns/tool-output-framing-bias.md) | PDR-013 (host adoption) | Tool output's framing biases interpretation; investigate before classifying |
+| [`evidence-before-classification.md`](memory/active/patterns/evidence-before-classification.md) | PDR-013 (host adoption) | Classify only after evidence-gathering, not at first read |
+| [`circular-test-justification.md`](memory/active/patterns/circular-test-justification.md) | PDR-021 (host adoption) | Tests must not be the only justification for the production code they exercise |
+| [`test-claim-assertion-parity.md`](memory/active/patterns/test-claim-assertion-parity.md) | PDR-021 (host adoption) | Test description and assertion must measure the same thing |
+
 ## Artefact Directories
 
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs) + `patterns/` (general abstractions) + `incoming/` (Practice Box) |
+| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs, including universal patterns with `pdr_kind: pattern`) + `incoming/` (Practice Box). Previous `patterns/` Core directory and `practice-context/` peer companion retired 2026-04-29 (PDR-007 amendment). |
 | [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |

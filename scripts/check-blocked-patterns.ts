@@ -79,20 +79,39 @@ export function tokenizeCommand(command) {
 }
 
 /**
+ * @typedef {{ pattern: string, citation?: string }} BlockedEntry
+ */
+
+/**
+ * Normalise a string-or-entry blocked pattern into a `BlockedEntry`.
+ *
+ * @param {string | BlockedEntry} entry
+ * @returns {BlockedEntry}
+ */
+function normaliseEntry(entry) {
+  return typeof entry === 'string' ? { pattern: entry } : entry;
+}
+
+/**
  * Match a blocked pattern against a command by token subsequence.
  *
  * This catches reordered Git arguments such as
  * `git push origin HEAD --force` for the policy pattern `git push --force`.
  *
+ * Each entry may be a bare pattern string or a `BlockedEntry` carrying a
+ * doctrinal citation; the citation is surfaced in the deny payload so the
+ * agent learns *why* the pattern is forbidden, not only *that* it is.
+ *
  * @param {string} command
- * @param {readonly string[]} blockedPatterns
- * @returns {string | null}
+ * @param {readonly (string | BlockedEntry)[]} blockedPatterns
+ * @returns {BlockedEntry | null}
  */
 export function findBlockedPattern(command, blockedPatterns) {
   const commandTokens = tokenizeCommand(command);
 
   for (const blockedPattern of blockedPatterns) {
-    const patternTokens = tokenizeCommand(blockedPattern);
+    const entry = normaliseEntry(blockedPattern);
+    const patternTokens = tokenizeCommand(entry.pattern);
     let patternIndex = 0;
 
     for (const commandToken of commandTokens) {
@@ -101,7 +120,7 @@ export function findBlockedPattern(command, blockedPatterns) {
       }
 
       if (patternIndex === patternTokens.length) {
-        return blockedPattern;
+        return entry;
       }
     }
   }
@@ -112,7 +131,10 @@ export function findBlockedPattern(command, blockedPatterns) {
 /**
  * Build the structured deny payload Claude expects for `PreToolUse`.
  *
- * @param {string} blockedPattern
+ * When the entry carries a citation, it is appended to the reason so the
+ * doctrinal anchor travels to the agent at the moment of denial.
+ *
+ * @param {BlockedEntry} blockedEntry
  * @returns {{
  *   hookSpecificOutput: {
  *     hookEventName: string,
@@ -121,21 +143,51 @@ export function findBlockedPattern(command, blockedPatterns) {
  *   },
  * }}
  */
-export function buildPreToolUseDenyResponse(blockedPattern) {
+export function buildPreToolUseDenyResponse(blockedEntry) {
+  const baseReason = `Blocked by repo hook policy: matched dangerous pattern "${blockedEntry.pattern}".`;
+  const reason =
+    blockedEntry.citation === undefined
+      ? baseReason
+      : `${baseReason} Citation: ${blockedEntry.citation}.`;
   return {
     hookSpecificOutput: {
       hookEventName: PRE_TOOL_USE_EVENT_NAME,
       permissionDecision: 'deny',
-      permissionDecisionReason: `Blocked by repo hook policy: matched dangerous pattern "${blockedPattern}".`,
+      permissionDecisionReason: reason,
     },
   };
 }
 
 /**
+ * Validate a single blocked-pattern entry: bare string or `{pattern, citation?}`.
+ *
+ * @param {unknown} entry
+ * @returns {boolean}
+ */
+function isValidBlockedPatternEntry(entry) {
+  if (typeof entry === 'string') {
+    return true;
+  }
+  if (entry === null || typeof entry !== 'object') {
+    return false;
+  }
+  if (!('pattern' in entry) || typeof entry.pattern !== 'string') {
+    return false;
+  }
+  if ('citation' in entry && typeof entry.citation !== 'string') {
+    return false;
+  }
+  return true;
+}
+
+/**
  * Parse blocked command patterns from already-loaded policy data.
  *
+ * Each entry is either a plain string (legacy) or a `BlockedEntry` with a
+ * required `pattern` and optional `citation`. The matcher accepts both forms.
+ *
  * @param {unknown} policy
- * @returns {string[]}
+ * @returns {readonly (string | BlockedEntry)[]}
  */
 export function parseBlockedPatternPolicy(policy) {
   if (
@@ -149,7 +201,7 @@ export function parseBlockedPatternPolicy(policy) {
     typeof policy.hooks.preToolUse !== 'object' ||
     !('blocked_patterns' in policy.hooks.preToolUse) ||
     !Array.isArray(policy.hooks.preToolUse.blocked_patterns) ||
-    !policy.hooks.preToolUse.blocked_patterns.every((pattern) => typeof pattern === 'string')
+    !policy.hooks.preToolUse.blocked_patterns.every(isValidBlockedPatternEntry)
   ) {
     throw new Error('The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.');
   }
@@ -161,7 +213,7 @@ export function parseBlockedPatternPolicy(policy) {
  * Load blocked command patterns from the canonical hook policy.
  *
  * @param {URL} policyUrl
- * @returns {Promise<string[]>}
+ * @returns {Promise<readonly (string | BlockedEntry)[]>}
  */
 export async function loadBlockedPatterns(policyUrl = POLICY_URL) {
   const policyText = await fs.readFile(policyUrl, 'utf8');
@@ -197,7 +249,7 @@ export async function readStreamText(stdin) {
  *   stdout?: { write: (text: string) => void },
  *   stderr?: { write: (text: string) => void },
  *   policyUrl?: URL,
- *   blockedPatterns?: readonly string[],
+ *   blockedPatterns?: readonly (string | BlockedEntry)[],
  * }} options
  * @returns {Promise<{ exitCode: number }>}
  */
@@ -215,10 +267,10 @@ export async function runPreToolUseGuard(options = {}) {
     const hookInput = parseHookInput(inputText);
     const command = extractBashCommand(hookInput);
     const patterns = blockedPatterns ?? (await loadBlockedPatterns(policyUrl));
-    const blockedPattern = findBlockedPattern(command, patterns);
+    const blockedEntry = findBlockedPattern(command, patterns);
 
-    if (blockedPattern !== null) {
-      stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedPattern))}\n`);
+    if (blockedEntry !== null) {
+      stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedEntry))}\n`);
     }
 
     return { exitCode: 0 };

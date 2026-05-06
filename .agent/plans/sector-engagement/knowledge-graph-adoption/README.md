@@ -4,9 +4,9 @@ This subthread owns sector-facing plans that help external organisations use
 Oak's knowledge graph assets in their own projects.
 
 It is separate from
-[knowledge-graph-integration/](../../knowledge-graph-integration/), which owns
+[knowledge-graph-integration/](../../connecting-oak-resources/knowledge-graph-integration/), which owns
 internal integration into Oak MCP/search/QA systems, and separate from
-[external-knowledge-sources/](../external-knowledge-sources/), which owns
+[external-knowledge-sources/](../exploring-open-education-resources/external-knowledge-sources/), which owns
 third-party data sources that Oak may consume.
 
 ## Scope

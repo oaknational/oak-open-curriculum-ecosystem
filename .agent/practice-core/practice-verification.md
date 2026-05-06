@@ -137,7 +137,7 @@ consolidation, and transplantation close.
 + **Continuity surfaces** (PDR-011): named continuity contract on a
   canonical location; split-loop handoff/consolidate workflows
   present.
-+ **Dev tooling per ecosystem** (PDR-006): if this repo is a
++ **Dev tooling per ecosystem** (PDR-006): if the host repo is a
   leading-edge reference, `docs/dev-tooling.md` or equivalent
   documents the stack.
 

@@ -1,12 +1,19 @@
 # Next-Session Record — `sector-engagement` thread
 
-**Last refreshed**: 2026-04-29 (Pearly Swimming Atoll / codex / GPT-5 /
+**Last refreshed**: 2026-04-30 (Squally Washing Jetty / `cursor` /
+`composer` / `178e6a` — Vision structural pass: compositional thesis at
+fold, layered impact framing, reusable sector-component canon with partner
+[`sector-reusable-components-adoption.plan.md`](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md); README mirror of hosted vs
+fabric story; sector collection indexes + roadmap Phase 4 + reciprocal KG
+future `related_plans`. Paths below; git commit queued with owner.)
+
+**Prior refresh**: 2026-04-29 (Pearly Swimming Atoll / codex / GPT-5 /
 `019dd9` — repo-goal narrative refresh aligned public, technical, planning,
 Practice, and ADR current-framing surfaces around Oak's wider sector impact,
 MCP Apps exploration, hybrid search, knowledge graphs, reusable primitives,
 and the self-improving Practice.)
 
-**Prior refresh**: 2026-04-29 (Squally Diving Anchor / codex / GPT-5 /
+**Earlier refresh**: 2026-04-29 (Squally Diving Anchor / codex / GPT-5 /
 `019dd8` — sector-engagement taxonomy created and committed as `33b25495`,
 then session handoff/light consolidation captured the impact framing and PR
 lifecycle skill follow-up.)
@@ -28,6 +35,7 @@ lifecycle skill follow-up.)
 | --- | --- | --- | --- | --- | --- | --- |
 | `Pearly Swimming Atoll` | `codex` | `GPT-5` | `019dd9` | `repo-goal-narrative-refresh` | 2026-04-29 | 2026-04-29 |
 | `Squally Diving Anchor` | `codex` | `GPT-5` | `019dd8` | `sector-engagement-taxonomy-and-handoff` | 2026-04-29 | 2026-04-29 |
+| `Squally Washing Jetty` | `cursor` | `composer` | `178e6a` | `vision-sector-components-contract-and-readme-handoff` | 2026-04-30 | 2026-04-30 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -46,15 +54,29 @@ and knowledge graph surfaces, with the Practice described as the reusable
 agentic-first engineering framework that keeps the work plain-text and
 vendor-portable.
 
-Evidence:
+Landed additionally (2026-04-30, Cursor Composer):
 
-- [Root README](../../../README.md)
-- [Vision](../../../docs/foundation/VISION.md)
+1. **`docs/foundation/VISION.md`**: thesis at fold + Three Orders refactor +
+   `Worked Example: Aila` + reusable sector-component inventory + link to sector
+   adoption contract plan under **What We Deliver**.
+2. **Root [`README.md`](../../../../README.md)**: mirrored secondary goal versus
+   hosted surfaces; **`### Sector reusable components`** subsection; non-technical
+   VISION bullet clarified; dropped `world-class` phrasing after Data Sources glue.
+3. **Sector engagement artefacts**:
+   [`sector-reusable-components-adoption.plan.md`](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md),
+   collection `README.md` Impact Intent / Documents table / Read order,
+   `roadmap.md` Phase 4 links,
+   KG external adoption future [`related_plans`](../../../plans/sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md) cross-wire.
+
+Evidence (prior 2026-04-29 landing still authoritative for narrative sweep):
+
+- [Root README](../../../../README.md)
+- [Vision](../../../../docs/foundation/VISION.md)
 - [Sector Engagement](../../../plans/sector-engagement/README.md)
 - [Sector Engagement Roadmap](../../../plans/sector-engagement/roadmap.md)
 - [SDK and MCP Enhancements](../../../plans/sdk-and-mcp-enhancements/README.md)
 - [Semantic Search](../../../plans/semantic-search/README.md)
-- [Knowledge Graph Integration](../../../plans/knowledge-graph-integration/README.md)
+- [Knowledge Graph Integration](../../../plans/connecting-oak-resources/knowledge-graph-integration/README.md)
 - [MCP server README](../../../../apps/oak-curriculum-mcp-streamable-http/README.md)
 - [Curriculum SDK README](../../../../packages/sdks/oak-curriculum-sdk/README.md)
 - [Search CLI README](../../../../apps/oak-search-cli/README.md)
@@ -71,15 +93,19 @@ Validation evidence:
 
 ## Next Landing Target
 
-No implementation landing is queued by this handoff. The next sector-
-engagement session should choose one concrete impact target before promoting
-execution:
+Sector reusable-component adoption **contract plan** exists in `current/`;
+executable Phase 4 **playbooks** remain owner-gated (`t2`–`t4` in that plan).
+
+The next sector engagement session should still choose one concrete impact lane
+before implementation promotion:
 
 1. turn the OEAI review into a partner call brief or explicit no-go;
 2. promote Oak OpenAPI / KG convergence into an architecture decision brief;
 3. promote one external data-source demonstration into a current plan; or
-4. write an adoption/support playbook for external organisations using Oak KG,
-   SDK, MCP, semantic-search, or pipeline resources.
+4. advance playbook work from
+   [`sector-reusable-components-adoption.plan.md`](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
+   (maturity matrix, first adopter profile, scaffold prose) grounded in Vision
+   [_What We Deliver_](../../../../docs/foundation/VISION.md#what-we-deliver).
 
 ## Session Shape and Grounding Order
 
@@ -91,7 +117,7 @@ execution:
    [roadmap](../../../plans/sector-engagement/roadmap.md).
 3. Read the sub-thread that matches the owner-selected landing:
    [OEAI](../../../plans/sector-engagement/oeai/README.md),
-   [external knowledge sources](../../../plans/sector-engagement/external-knowledge-sources/README.md),
+   [external knowledge sources](../../../plans/exploring-open-education-resources/external-knowledge-sources/README.md),
    [knowledge graph adoption](../../../plans/sector-engagement/knowledge-graph-adoption/README.md),
    or the relevant `future/` brief.
 4. Re-read the owning engineering collection before writing implementation
@@ -107,10 +133,11 @@ execution:
 
 - [Sector Engagement Roadmap](../../../plans/sector-engagement/roadmap.md)
 - [OEAI Thread](../../../plans/sector-engagement/oeai/README.md)
-- [External Knowledge Sources](../../../plans/sector-engagement/external-knowledge-sources/README.md)
+- [External Knowledge Sources](../../../plans/exploring-open-education-resources/external-knowledge-sources/README.md)
 - [Knowledge Graph Adoption](../../../plans/sector-engagement/knowledge-graph-adoption/README.md)
+- [Sector reusable components adoption (current)](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
 - [Oak OpenAPI Monorepo Integration](../../../plans/sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
-- [Oak Curriculum Ontology Workspace Reassessment](../../../plans/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+- [Oak Curriculum Ontology Workspace Reassessment](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
 
 ### Current Objective
 
@@ -133,6 +160,8 @@ and knowledge-graph work together.
   under sector engagement.
 - Oak OpenAPI monorepo integration and Oak curriculum ontology workspace
   reassessment are future decision briefs, not executable implementation plans.
+- Reusable sector-component canon + partner-facing adoption contract authored;
+  playbook execution remains planned inside that current plan (`t2`–`t4`).
 
 ### Blockers / Low-Confidence Areas
 

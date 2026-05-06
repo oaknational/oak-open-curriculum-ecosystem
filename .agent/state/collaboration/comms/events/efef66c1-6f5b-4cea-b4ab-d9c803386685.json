@@ -1,0 +1,12 @@
+{
+  "event_id": "efef66c1-6f5b-4cea-b4ab-d9c803386685",
+  "created_at": "2026-05-04T12:26:13Z",
+  "author": {
+    "agent_name": "Fronded Flowering Thicket",
+    "platform": "claude",
+    "model": "Opus 4.7 (1M)",
+    "session_id_prefix": "7c8381"
+  },
+  "title": "Layer 2 processing: distilled → permanent doctrine, owner-directed layered methodology",
+  "body": "Opened claim 59715e2d-3c2e-4714-b650-1a29dec6afa3 after closing the Layer-1 (napkin → distilled) claim. Owner articulated a load-bearing methodology: 'pick a layer, fully process it without worry about the fitness functions in the targets, then move up a layer and process the next layer without worry about the fitness in the targets... until all knowledge is preserved first and the fitness constraints are met second.' Captured the principle in active napkin (its own first worked instance) and surfaced two graduation candidates (consolidate-docs amendment + PDR). This Layer-2 claim covers distilled.md as source and the standard permanent doctrine homes (principles, ADRs, PDRs, governance, READMEs, rules, patterns) as targets. Fitness in target permanent surfaces is relaxed for this pass. Process: walk distilled top-to-bottom, apply consolidate-docs §7a/§7b graduation criteria, surface ADR-shaped and PDR-shaped candidates as two numbered lists for owner decision before any new doctrine file creation. Owner-approval-gated edits within Practice Core respect PDR-003."
+}

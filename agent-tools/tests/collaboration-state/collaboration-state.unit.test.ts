@@ -17,6 +17,13 @@ import {
   type CollaborationClaim,
   type CollaborationRegistry,
 } from '../../src/collaboration-state';
+import {
+  createClaimFromOptions,
+  formatOpenClaimResult,
+} from '../../src/collaboration-state/cli-claim-commands';
+import { commsSendDefaults } from '../../src/collaboration-state/cli-comms-commands';
+import { claimReport } from '../../src/collaboration-state/claim-reports';
+import { type Options } from '../../src/collaboration-state/cli-options';
 
 const codexThreadId = '019dd34d-cb6a-74e0-a29d-6cb8a65ea14b';
 const nowIso = '2026-04-28T09:37:11Z';
@@ -106,6 +113,116 @@ describe('runCollaborationStateCli', () => {
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
+  });
+
+  it('returns help for top-level, topic, and action requests', async () => {
+    const topLevel = await runCollaborationStateCli({ argv: ['--', 'help'], env: {} });
+    expect(topLevel.exitCode).toBe(0);
+    expect(topLevel.stdout).toContain('claims         open, heartbeat, close');
+
+    const topic = await runCollaborationStateCli({ argv: ['--', 'claims', 'help'], env: {} });
+    expect(topic.exitCode).toBe(0);
+    expect(topic.stdout).toContain('claims status --active <path>');
+
+    const action = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'open', '--help'],
+      env: {},
+    });
+    expect(action.exitCode).toBe(0);
+    expect(action.stdout).toContain('claims open --active <path>');
+  });
+
+  it('reports unknown options before missing required options', async () => {
+    await expect(
+      runCollaborationStateCli({
+        argv: ['--', 'claims', 'open', '--bogus'],
+        env: {},
+      }),
+    ).resolves.toStrictEqual({
+      exitCode: 2,
+      stdout: '',
+      stderr: 'unknown option: --bogus\n',
+    });
+  });
+
+  it('reports command-specific unknown options before missing required options', async () => {
+    await expect(
+      runCollaborationStateCli({
+        argv: ['--', 'claims', 'list', '--thread', 'wrong-place'],
+        env: {},
+      }),
+    ).resolves.toStrictEqual({
+      exitCode: 2,
+      stdout: '',
+      stderr: 'unknown option for claims list: --thread\n',
+    });
+  });
+});
+
+describe('claim CLI reports', () => {
+  it('formats the full claim id when opening a claim', () => {
+    const opened = createClaimFromOptions(
+      options(
+        {
+          active: 'active.json',
+          thread: 'agentic-engineering-enhancements',
+          'area-kind': 'files',
+          intent: 'Exercise structured claim output.',
+          now: nowIso,
+          'claim-id': '22222222-2222-4222-8222-222222222222',
+        },
+        ['agent-tools/src/collaboration-state/cli.ts'],
+      ),
+      woodland,
+    );
+
+    expect(JSON.parse(formatOpenClaimResult(opened))).toMatchObject({
+      claim_id: '22222222-2222-4222-8222-222222222222',
+      claim: {
+        claim_id: '22222222-2222-4222-8222-222222222222',
+        areas: [{ patterns: ['agent-tools/src/collaboration-state/cli.ts'] }],
+      },
+    });
+  });
+
+  it('formats freshness from heartbeat or claimed timestamp without schema fields', () => {
+    expect(
+      claimReport(
+        claim({
+          claimed_at: '2026-04-28T09:00:00Z',
+          heartbeat_at: '2026-04-28T09:30:00Z',
+          freshness_seconds: 900,
+        }),
+        nowIso,
+      ),
+    ).toMatchObject({
+      fresh_until: '2026-04-28T09:45:00.000Z',
+      freshness_status: 'fresh',
+      age_seconds: 431,
+    });
+    expect(
+      claimReport(
+        claim({
+          claimed_at: '2026-04-28T08:00:00Z',
+          freshness_seconds: 60,
+        }),
+        nowIso,
+      ),
+    ).toMatchObject({
+      freshness_status: 'stale',
+    });
+  });
+
+  it('builds comms send defaults from the repo root', () => {
+    expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
+      {
+        'events-dir': '/repo/.agent/state/collaboration/comms-events',
+        now: nowIso,
+        'created-at': nowIso,
+        'event-id': 'event-one',
+        output: '/repo/.agent/state/collaboration/shared-comms-log.md',
+      },
+    );
   });
 });
 
@@ -284,4 +401,18 @@ function parseCounterState(text: string): CounterState {
   }
 
   throw new Error('invalid counter state');
+}
+
+function options(values: Readonly<Record<string, string>>, files: readonly string[] = []): Options {
+  const parsedValues = new Map<string, string>();
+  for (const key in values) {
+    parsedValues.set(key, values[key] ?? '');
+  }
+
+  return {
+    command: undefined,
+    topic: undefined,
+    values: parsedValues,
+    files,
+  };
 }

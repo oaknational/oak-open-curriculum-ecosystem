@@ -77,16 +77,13 @@ continuity unit).
     state are coordination signals, never no-write locks. The commit
     queue / `git:index/head` window is the serialisation mechanism.
 
-  Surfaces operationalising this:
-  [`napkin/SKILL.md` §Knowledge Preservation Is Absolute][napkin-skill],
-  [`commands/consolidate-docs.md` §Learning Preservation][consolidate-docs-preservation],
-  [`rules/respect-active-agent-claims.md` §Shared-state always writable][respect-shared-state-rule],
-  and [`memory/active/distilled.md`][distilled].
-
-  [napkin-skill]: ../../skills/napkin/SKILL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
-  [consolidate-docs-preservation]: ../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure
-  [respect-shared-state-rule]: ../../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable
-  [distilled]: ../../memory/active/distilled.md
+  Surfaces operationalising this (host-local; bridged via the
+  practice-index Memory and Patterns, Rules, and Commands and skills
+  sections): the host's `napkin` skill §Knowledge Preservation Is
+  Absolute; the host's `consolidate-docs` command §Learning
+  Preservation Overrides Fitness Pressure; the host's
+  `respect-active-agent-claims` rule §Shared-state always writable
+  and always commit-includable; and the host's distilled-memory file.
 
 - **2026-04-26 amendment — owner-directed pause is a load-bearing
   planning move (Frolicking Toast / claude-code / claude-opus-4-7-1m;
@@ -159,9 +156,9 @@ continuity unit).
   TSDoc) is **not landed** until those docs have been updated to
   reflect the change. Doc updates compose into the landing
   commit, not a deferred follow-up. The principle is symmetric
-  with the `Misleading docs are blocking` principle in
-  `.agent/directives/principles.md` § Code Quality: shipping a
-  change without the doc update is shipping a misleading-doc.
+  with the `Misleading docs are blocking` principle in the
+  Practice's principles directive (Code Quality section): shipping
+  a change without the doc update is shipping a misleading-doc.
   Captured originally in the retracted standing-decisions
   register entry `docs-as-definition-of-done-on-every-lane`;
   graduated to this PDR amendment in 2026-04-21 Session 5 per
@@ -176,12 +173,12 @@ continuity unit).
   whether the constraint or trade-off held. Convenience
   phrasings ("budget consumed", "out of scope", "for later",
   "next session", "ran out of time") fail one or more
-  requirements. Operationalised by command-rubric additions in
-  [`/session-handoff` step 1](../../commands/session-handoff.md)
-  (the `<what prevented>` field on unlanded cases) and
-  [`/consolidate-docs`](../../commands/consolidate-docs.md)
-  (cross-cutting top-of-Steps note covering all deferrals
-  surfaced by the workflow). Routed under the new
+  requirements. Operationalised by command-rubric additions in the
+  host's `/session-handoff` command (step 1, the `<what prevented>`
+  field on unlanded cases) and the host's `/consolidate-docs` command
+  (cross-cutting top-of-Steps note covering all deferrals surfaced
+  by the workflow). Both commands are host-local; bridged via the
+  practice-index Commands and skills section. Routed under the new
   [PDR-014 §Graduation-target routing](PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing)
   as the canonical `PDR + command rubric` composition (Driver:
   the `feel-state-of-completion-preceding-evidence-of-completion`
@@ -299,9 +296,9 @@ same close-out batch when the change spans multiple commits) — not
 deferred to a later "doc sync" phase. The doc update is **part of
 the landing**, not a follow-up. A change that ships the code
 without the doc update is shipping a misleading-doc, which the
-`Misleading docs are blocking` principle (`.agent/directives/
-principles.md` § Code Quality) categorises as a quality-gate
-breach. The two surfaces are symmetric: PDR-026 says doc updates
+`Misleading docs are blocking` principle in the Practice's
+principles directive (Code Quality section) categorises as a
+quality-gate breach. The two surfaces are symmetric: PDR-026 says doc updates
 compose into landings; the principle says misleading docs cannot
 ship.
 
@@ -386,16 +383,15 @@ counts as landed; deferral-honesty sets the standard for what
 counts as honest non-landing. Together they prevent
 partial-completion theatre at session boundaries.
 
-Operationalisation:
+Operationalisation (host commands; bridged via the practice-index
+Commands and skills section):
 
-- [`/session-handoff` step 1](../../commands/session-handoff.md) —
-  the `<what prevented>` field on unlanded cases must satisfy the
-  three requirements above.
-- [`/consolidate-docs`](../../commands/consolidate-docs.md) —
-  cross-cutting top-of-Steps note covering deferrals surfaced
-  anywhere in the workflow (Pending-band candidates kept rather
-  than promoted, fitness items deferred, Practice Core refinement
-  queued).
+- The host's `/session-handoff` command — step 1 `<what prevented>`
+  field on unlanded cases must satisfy the three requirements above.
+- The host's `/consolidate-docs` command — cross-cutting
+  top-of-Steps note covering deferrals surfaced anywhere in the
+  workflow (Pending-band candidates kept rather than promoted,
+  fitness items deferred, Practice Core refinement queued).
 
 ## Rationale
 
@@ -435,8 +431,8 @@ type that can't be named at open is drift.
 
 Session framing is portable. The landing-commitment ritual applies
 to any Practice-bearing repo running agentic engineering sessions,
-not only to this repo's workstreams. It belongs in the portable
-Practice Core, not in a repo-local surface.
+not only to a single repo's workstreams. It belongs in the
+portable Practice Core, not in a repo-local surface.
 
 ## Consequences
 
@@ -522,22 +518,3 @@ per-thread-per-session clarification brought in by the
 2026-04-21 amendment is part of the candidate substance.
 Graduation marks the PDR `Superseded by <Core section>` and
 retains it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring:
-
-- The target-at-open ritual is carried by
-  [`start-right-quick`](../../skills/start-right-quick/shared/start-right.md)
-  (session-entry workflow).
-- The landed-at-close ritual is carried by
-  [`session-handoff`](../../commands/session-handoff.md).
-- Connection to observability work: if a session's landing moves a
-  matrix cell in
-  [`what-the-system-emits-today.md`](../../plans/observability/what-the-system-emits-today.md)
-  from empty to populated, the artefact is updated in the same
-  commit so the forward-motion evidence stays accurate.
-- Connection to operational continuity: unlanded cases propagate
-  via
-  [`repo-continuity.md`](../../memory/operational/repo-continuity.md)
-  `Next safe step`.

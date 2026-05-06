@@ -1004,7 +1004,7 @@ const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
     method: 'get',
     source: 'component',
     zodIdentifier: undefined,
-    jsonSchema: {"type":"array","items":{"type":"object","properties":{"unitTitle":{"type":"string","description":"The unit title"},"unitSlug":{"type":"string","description":"The unit slug identifier"},"unitOrder":{"type":"number","description":"The position of the unit within the thread"},"oakUrl":{"type":"null","description":"Threads are data concepts without Oak URLs on the website. Always null for thread resources."}},"required":["unitTitle","unitSlug","unitOrder"],"additionalProperties":false},"example":[{"unitTitle":"Unitising and coin recognition - counting in 2s, 5s and 10s","unitSlug":"unitising-and-coin-recognitions-counting-in-2s-5s-and-10s","unitOrder":1},{"unitTitle":"Solving problems in a range of contexts","unitSlug":"unitising-and-coin-recognition-solving-problems-involving-money","unitOrder":2}]},
+    jsonSchema: {"type":"array","items":{"type":"object","properties":{"unitTitle":{"type":"string","description":"The unit title"},"unitSlug":{"type":"string","description":"The unit slug identifier"},"oakUrl":{"type":"null","description":"Threads are data concepts without Oak URLs on the website. Always null for thread resources."}},"required":["unitTitle","unitSlug"],"additionalProperties":false},"example":[{"unitTitle":"Unitising and coin recognition - counting in 2s, 5s and 10s","unitSlug":"unitising-and-coin-recognitions-counting-in-2s-5s-and-10s"},{"unitTitle":"Solving problems in a range of contexts","unitSlug":"unitising-and-coin-recognition-solving-problems-involving-money"}]},
   },
   'getThreads-getThreadUnits:400': {
     schema: curriculumSchemas.error_BAD_REQUEST,

@@ -1,0 +1,12 @@
+{
+  "event_id": "8305ccba-316b-48db-8d93-5ca1d16e32fe",
+  "created_at": "2026-05-05T18:53:33.538Z",
+  "author": {
+    "agent_name": "Glittering Waning Galaxy",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "3cff70"
+  },
+  "title": "Session 3cff70 (Glittering Waning Galaxy) — closed; new agent-tooling plan collection landed",
+  "body": "Session close on agentic-engineering-enhancements thread. Owner-directed reorganisation: new top-level plan collection .agent/plans/agent-tooling/ for agent-tools/ workspace-level work, distinct from broader practice-level agentic-engineering-enhancements/ collection.\n\nOUTCOME: skeleton + lifecycle dirs + 19 plans git-mv'd (8 current, 11 future) preserving history; frictions register seeded with 11 entries (F-01..F-11) from napkin Surprise 7, comms events 2dbd74f6/a1cf45a2/dfdea3f7, and Stamen CLI flag rejection; cross-references rewritten in 24+ active surfaces; ../archive/ refs in moved plans repointed; scope-boundary clarification added across plans/README.md, agent-tooling/README.md, agentic-engineering-enhancements/README.md.\n\nSCOPE BOUNDARY (owner-stated, codified this session): agent-tooling = the agent-tools/ workspace specifically (CLIs, schemas, state substrate, hooks, identity-derivation code). agentic-engineering-enhancements = broader practice + governance (how agents collaborate, plan, communicate, review, learn; Practice texts; doctrine enforcement; specialist reviewer capabilities). 'When in doubt: could this plan exist if agent-tools/ did not? If yes, it is broader.'\n\nDEEP CONSOLIDATION: not due — no settled-doctrine-in-ephemeral, no plan-closed substance graduation, no napkin rotation, no fitness threshold crossed. Frictions register is a capture surface; PDR/ADR routing for owner-stated boundary doctrine left to next consolidation pass.\n\nCLAIMS: registry was empty at session-open (bootstrap fast-path d1cc1290); no claim opened, none to close.\n\nNEXT-SAFE-STEP: commit the staged 58-file bundle (plan-collection split + cross-ref rewrites + frictions register + scope-boundary clarification), explicitly NOT including pre-existing oak-eslint workspace edits in working tree which are not mine.\n\nIndex/head open for next agent."
+}

@@ -197,15 +197,3 @@ Alternatives rejected:
   elimination of false-confidence tests.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-021`:
-
-- `.agent/memory/active/patterns/circular-test-justification.md` —
-  Sentry MCP wrapper removal (2026-04-15/16); dead production
-  code kept alive by test consumers only.
-- `.agent/memory/active/patterns/test-claim-assertion-parity.md` —
-  Sentry wrapping-order test rewrite (2026-04-16); test header
-  claimed regression detection but assertion passed regardless
-  of ordering.

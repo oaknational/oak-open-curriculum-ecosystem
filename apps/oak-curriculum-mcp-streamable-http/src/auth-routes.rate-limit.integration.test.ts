@@ -22,7 +22,7 @@ import { registerPublicOAuthMetadataEndpoints } from './auth-routes.js';
 import { createDefaultRateLimiterFactory } from './rate-limiting/rate-limiter-factory.js';
 import { createFakeLogger } from './test-helpers/logger-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
-import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 
 function buildApp(metadataRateLimiterLimit: number, useStubTools: boolean): Express {
   const factory = createDefaultRateLimiterFactory({ isVercelRuntime: false });

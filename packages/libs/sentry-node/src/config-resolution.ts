@@ -181,8 +181,6 @@ function toObservabilityConfigError(error: ReleaseError): ObservabilityConfigErr
       return { kind: 'invalid_app_version', value: error.message };
     case RELEASE_ERROR_KINDS.missing_branch_url_in_preview:
       return { kind: 'missing_branch_url_in_preview' };
-    case RELEASE_ERROR_KINDS.missing_git_sha:
-      return { kind: 'missing_git_sha' };
     case RELEASE_ERROR_KINDS.invalid_build_identity:
       return { kind: 'invalid_build_identity', value: error.message };
     default: {

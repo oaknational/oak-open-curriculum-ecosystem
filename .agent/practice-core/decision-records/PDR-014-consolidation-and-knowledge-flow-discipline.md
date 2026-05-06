@@ -11,7 +11,11 @@ pdr_kind: governance
 (new Core contract);
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (surprise pipeline that feeds consolidation; this PDR governs what
-happens inside consolidation).
+happens inside consolidation);
+[PDR-046](PDR-046-layered-knowledge-processing.md)
+(layered knowledge processing — archive-scale historical synthesis
+re-enters historical capture material into the same bottom-up
+staircase).
 
 ## Context
 
@@ -47,33 +51,42 @@ quality:
    promise: the queue surface says "here is your next step" but the
    plan itself requires prior-session context to understand.
 
-Underlying cause: consolidation's value depends on three qualities —
-cross-session breadth, full-weight substance, and executable
-promotion. Each has an anti-pattern that looks acceptable locally
-but corrodes the flow over time.
+4. **Archive-scale historical synthesis.** Cross-session consolidation
+   over a recent thread or rotation is necessary but not sufficient.
+   Historical capture archives accumulate after each individual napkin
+   has already been processed. Reading those archives later as a
+   corpus can reveal patterns no earlier pass could see: long-wave
+   failure modes, overfit doctrine, repeated graduation bottlenecks,
+   and learning-loop throughput problems.
+
+Underlying cause: consolidation's value depends on four qualities —
+cross-session breadth, archive-scale hindsight, full-weight
+substance, and executable promotion. Each has an anti-pattern that
+looks acceptable locally but corrodes the flow over time.
 
 ## Amendment 2026-04-29 — Pattern routing follows PDR-007 retirement
 
-PDR-007's 2026-04-29 amendment retires `.agent/practice-core/patterns/`
-as a Core directory. This PDR's "Knowledge artefact roles" table is
-updated accordingly: the `pattern` row's "Typical home" column lists
-`.agent/memory/active/patterns/` for engineering instances and
-**PDR-shaped artefacts** (PDRs with `pdr_kind: pattern` frontmatter,
-or PDR amendments) for Practice-governance patterns. There is no
-`practice-core/patterns/` destination.
+PDR-007's 2026-04-29 amendment retires the previous `patterns/`
+Core directory. This PDR's "Knowledge artefact roles" table is
+updated accordingly: the `pattern` row's "Typical home" column
+lists the host's pattern memory surface for engineering instances
+and **PDR-shaped artefacts** (PDRs with `pdr_kind: pattern`
+frontmatter, or PDR amendments) for Practice-governance patterns.
+There is no Core-pattern destination.
 
 The bidirectional flow described in §"Bidirectional flow" still
 operates; the only change is that the "general pattern abstraction"
 output of cross-instance synthesis lands as a PDR (with
-`pdr_kind: pattern`) rather than in the retired `practice-core/patterns/`
+`pdr_kind: pattern`) rather than in the retired Core-pattern
 directory.
 
 ## Decision
 
-**Consolidation runs across sessions (not just the current one).
-Concepts are written at the weight they deserve, with fitness
-handled structurally afterwards. Plans promoted to `current/` are
-both decision-ready and session-entry-ready.**
+**Consolidation runs across sessions (not just the current one), and
+has a distinct archive-scale synthesis cadence for historical capture
+corpora. Concepts are written at the weight they deserve, with
+fitness handled structurally afterwards. Plans promoted to
+`current/` are both decision-ready and session-entry-ready.**
 
 ### Cross-session consolidation
 
@@ -95,6 +108,47 @@ Practically:
 - A consolidation report from a cross-session review is more durable
   than a single-session handoff — it captures the emergent patterns
   that single-session handoffs cannot.
+
+### Archive-scale historical synthesis
+
+Archive-scale historical synthesis is a separate cadence from recent
+cross-session consolidation. Recent cross-session consolidation asks
+what a thread or current rotation knows together. Historical synthesis
+asks what the archive knows now that no individual rotation could have
+known when it was processed.
+
+Practically:
+
+- Historical synthesis is triggered, not routine. Valid triggers
+  include owner request, repeated patterns spanning multiple napkin
+  rotations, repeated consolidation reports naming the same family
+  without a deeper cause, or a deliberate Practice-health review.
+- The corpus is bounded before reading begins. The consolidator names
+  the selected window: all processed capture since the last historical
+  synthesis marker, the last N archived captures, or all current /
+  archived captures matching a named thread / theme. Current capture
+  only joins the corpus after ordinary per-napkin processing for that
+  pass has completed.
+- Historical synthesis writes a synthesis report before mutating
+  doctrine. The report records corpus window, selection rationale,
+  processed-marker boundary, emergent findings, evidence arcs,
+  rejected near-patterns, and routing decisions.
+- Synthesis reports form the marker ledger. The newest report's
+  processed-marker boundary is the starting point for any later
+  "since last marker" pass.
+- Findings route through the same graduation destinations as any
+  consolidation finding: refined memory, pending-graduations registers,
+  host-local pattern instances, ADRs, PDRs (including PDRs with
+  `pdr_kind: pattern` for ecosystem-agnostic abstractions), rules,
+  command rubrics, scanners, or permanent documentation.
+- Historical capture archives are evidence. Their substance is not
+  rewritten during synthesis; the synthesis report and downstream
+  graduations carry the new understanding.
+
+This cadence preserves two truths at once: archived capture has
+already been processed for ordinary distillation, and holistic
+reprocessing later can still produce new knowledge because hindsight
+changes which relationships are visible.
 
 ### Learning before fitness
 
@@ -173,15 +227,15 @@ make the primary role explicit.
 
 | Role | Purpose | Typical home |
 |---|---|---|
-| `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | `.agent/directives/`, `docs/governance/` |
-| `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | `docs/engineering/*-patterns.md`, focused recipe docs |
-| `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | `docs/operations/troubleshooting.md`, runbooks |
-| `pattern` | Empirical behaviour or solution shape proven by recurring practice | `.agent/memory/active/patterns/` (engineering instances); Practice-governance patterns take PDR shape with `pdr_kind: pattern` (per PDR-007 amendment 2026-04-29) |
-| `rule` | Always-applied obligation that must fire at a decision point | `.agent/rules/`, platform rule adapters |
-| `command rubric` | Workflow step that operationalises doctrine at a named command boundary | `.agent/commands/` |
+| `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | The host's directive surface or a governance-docs surface |
+| `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | A focused engineering-patterns or recipe surface in the host's docs |
+| `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | The host's operations or runbooks surface |
+| `pattern` | Empirical behaviour or solution shape proven by recurring practice | The host's pattern memory surface for engineering instances; ecosystem-agnostic abstract patterns and Practice-governance patterns take PDR shape with `pdr_kind: pattern` (per PDR-007 amendment 2026-04-29) |
+| `rule` | Always-applied obligation that must fire at a decision point | The Practice's canonical rule surface plus per-platform rule adapters |
+| `command rubric` | Workflow step that operationalises doctrine at a named command boundary | The Practice's canonical commands surface |
 | `scanner or gate` | Executable enforcement for high-confidence obligations | scripts, hooks, CI, quality gates |
 | `decision record` | Durable decision, trade-off, and consequence history | ADRs for repo architecture; PDRs for Practice governance |
-| `operational state` | Current live state and next action, not settled doctrine | `.agent/memory/operational/` |
+| `operational state` | Current live state and next action, not settled doctrine | The host's operational memory surface |
 
 When consolidating, first identify the candidate's current role, then
 ask whether that role is still correct. Over-exampled doctrine may
@@ -193,23 +247,25 @@ once the durable recipe or runbook exists.
 
 | Surface | Holds |
 |---|---|
-| `pattern` (`.agent/memory/active/patterns/`) | Failure-mode or behaviour shape with concrete instances; recipe-shaped capture |
+| `pattern` (host pattern memory surface) | Failure-mode or behaviour shape with concrete instances; recipe-shaped capture |
 | `PDR` (new) | Portable Practice-governance decision in novel scope |
 | `PDR amendment` | Extension of an existing PDR's scope (preserves provenance via Amendment Log) |
 | `ADR` (or amendment) | Architectural decision: technology, structure, boundary; see [PDR-019](PDR-019-adr-scope-by-reusability.md) for ADR↔PDR boundary |
-| `rule` (`.agent/rules/`) | Always-applied procedural step requiring per-session/per-handoff firing; platform parity required per [PDR-029](PDR-029-perturbation-mechanism-bundle.md) |
-| `principle line` (`principles.md`) | Foundation invariant; cardinal, repo-wide, short; typically composed with an operationalising rule or PDR |
-| `command rubric` (`.agent/commands/<workflow>.md`) | Operationalises a doctrine at the firing point inside a workflow step |
+| `rule` (canonical rule surface) | Always-applied procedural step requiring per-session/per-handoff firing; platform parity required per [PDR-029](PDR-029-perturbation-mechanism-bundle.md) |
+| `principle line` (host principles directive) | Foundation invariant; cardinal, repo-wide, short; typically composed with an operationalising rule or PDR |
+| `command rubric` (canonical commands surface, one file per workflow) | Operationalises a doctrine at the firing point inside a workflow step |
 | `plan-body` | Plan-local meta-decision (scope, sequencing, fitness tolerance, deferrals) — not portable beyond the plan |
-| `practice-md` (`.agent/practice-core/practice.md`) | Visible Artefact Map presence; cross-cuts other surfaces |
-| `distilled entry` (`.agent/memory/active/distilled.md`) | Hard-won single-sentence rule-of-thumb that changes behaviour |
+| `practice-md` (the trinity's `practice.md`) | Visible Artefact Map presence; cross-cuts other surfaces |
+| `distilled entry` (host's refined-memory file) | Hard-won single-sentence rule-of-thumb that changes behaviour |
 | `register entry` | Captured candidate awaiting trigger — not yet graduated |
 
 ### Routing decision (run in order; first match wins, then check composition)
 
 1. **Failure-mode or behaviour shape with concrete instances?** →
-   `pattern` (this is the empirical-observation home; always start
-   here for behaviour-shaped candidates).
+   host `pattern` for the concrete instance. If ≥2 instances across
+   repos or ecosystems make an ecosystem-agnostic abstraction legible,
+   author that general form as a PDR with `pdr_kind: pattern`; the
+   concrete instances stay in host pattern memory.
 2. **Novel portable Practice-governance decision?** → `PDR` (new) —
    but first check: does an existing PDR's scope absorb it? If yes
    → `PDR amendment` (default to amendment when scope-adjacent;
@@ -243,9 +299,9 @@ not force a single choice:
 
 | Composition | When to use | Example |
 |---|---|---|
-| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + [`documentation-hygiene`](../../rules/documentation-hygiene.md) |
+| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + a `documentation-hygiene` rule (canonical rule file is host-local; see practice-index) |
 | `PDR` + `command rubric` | Doctrine ratified portably; fires at a specific workflow step | [PDR-026 §Landing target definition](PDR-026-per-session-landing-commitment.md) + `/session-handoff` close ritual |
-| `pattern` + `rule` | Empirical capture + active prevention at firing point | [`inherited-framing-without-first-principles-check`](../../memory/active/patterns/inherited-framing-without-first-principles-check.md) + [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md) |
+| `pattern` + `rule` | Empirical capture + active prevention at firing point | The `inherited-framing-without-first-principles-check` pattern instance + a `plan-body-first-principles-check` rule (both host-local; see practice-index Pattern instances and Rules sections) |
 | `pattern` + `PDR` | Empirical observation + durable portable governance response | `passive-guidance-loses-to-artefact-gravity` + PDR-029 |
 | `principle` + `PDR amendment` | Foundation invariant + extension of existing scope | *Owner Direction Beats Plan* + future operationalisation |
 
@@ -287,6 +343,17 @@ compounding workaround debt only becomes visible when three sessions'
 worth of workarounds are read together; a repeated failure mode at
 different abstraction layers requires multi-session aggregation.
 
+**Why archive-scale synthesis is distinct from cross-session
+consolidation.** Cross-session consolidation reads a recent thread or
+rotation while its evidence is still close to the work. Archive-scale
+synthesis reads historical capture after several ordinary distillation
+passes have already run. That hindsight changes the question. The
+consolidator is no longer asking only what to lift from this window;
+they are asking whether the sequence of already-processed windows
+reveals a larger mechanism. Treating that as the same step makes the
+historical pass easy to skip, because each archived capture already
+looks "done" when read individually.
+
 **Why learning before fitness.** Fitness limits exist to prevent
 unbounded growth, not to cap individual concepts or suppress
 distillation. When limits constrain writing, concepts are trimmed to fit
@@ -308,6 +375,9 @@ Alternatives rejected:
 
 - **Single-session consolidation only.** Faster, but misses the
   cross-session patterns that are often the most load-bearing.
+- **Recent cross-session consolidation only.** Keeps the loop focused
+  on current rotations, but leaves the historical archive as cold
+  storage and misses patterns that need time-depth to become visible.
 - **Fitness as writing constraint.** Keeps files neat; destroys
   concept quality. Learning always matters more than line count.
 - **Promotion based on decision-readiness alone.** Leaves
@@ -320,18 +390,27 @@ Alternatives rejected:
 
 - Cross-thread consolidation reads the multi-session corpus,
   not just the current session.
+- Archive-scale historical synthesis runs on explicit trigger, names
+  the corpus window before reading, writes a synthesis report, and
+  routes findings through the ordinary graduation destinations.
 - Permanent-home writes happen at full substance; fitness is
   handled structurally after preservation, not during writing.
 - Promotion to `current/` verifies both decision-readiness and
   session-entry-readiness before the promotion completes.
 - Fitness metric overruns triggered by substance-first writing are
-  handled per the fitness model (four-zone; ADR-144 or equivalent
-  per host repo), not by post-hoc concept trimming.
+  handled per the fitness model (four-zone; the host's three-zone
+  fitness-model ADR or equivalent — see practice-index Concept ↔
+  ADR map), not by post-hoc concept trimming.
 
 ### Forbidden
 
 - Consolidation that reads only the current session's napkin when
   multi-session material is relevant.
+- Treating archived capture as fully exhausted because it was already
+  processed during its original rotation.
+- Rewriting archived capture during historical synthesis. Archives are
+  evidence; synthesis reports and downstream graduations carry the new
+  understanding.
 - Compressing a concept during initial writing to stay under a
   fitness limit.
 - Promoting a plan to `current/` without verifying a cold-start
@@ -343,6 +422,9 @@ Alternatives rejected:
 
 - Cross-session consolidation takes longer than single-session.
   Justified by the patterns it surfaces.
+- Archive-scale synthesis is heavier still and should remain
+  triggered. The cost is justified only when time-depth is the source
+  of the expected insight.
 - Substance-first writing produces larger concept weights; fitness
   pressure rises. Handled editorially.
 - Two-criterion promotion is more work than one-criterion
@@ -350,21 +432,6 @@ Alternatives rejected:
   step, not a status toggle.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-014`:
-
-- `.agent/memory/active/patterns/cross-session-pattern-emergence.md` —
-  WS3 SDK adoption (4 sessions: investigation → planning → Phase
-  1 → Phase 2); the "workaround debt compounds" pattern was only
-  visible across all four.
-- `.agent/memory/active/patterns/substance-before-fitness.md` — proven
-  during Practice Core authoring (2026-04-05); also cited directly
-  in `practice.md` §Learning before fitness.
-- `.agent/memory/active/patterns/current-plan-promotion.md` — statistical
-  roadmap review plus observational tranche promotion (2026-03-22,
-  algo-experiments).
 
 ## Amendment Log
 
@@ -399,8 +466,9 @@ pattern guidance.
    per [PDR-027 §Amendment Log 2026-04-21](PDR-027-threads-sessions-and-agent-identity.md)).
 
 **Class A.1 firing** (plan-body first-principles check, the
-[`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
-always-applied rule). Three clauses passed: shape (PDR-amendment,
+host-local `plan-body-first-principles-check` always-applied rule;
+canonical rule file is host-specific — see practice-index Rules
+section). Three clauses passed: shape (PDR-amendment,
 not pattern/rule/distilled), landing-path (PDR-014 tooling
 contract is established; substance-first per its own §Substance
 before fitness), vendor-literal (N/A; internal vocabulary). No
@@ -446,3 +514,39 @@ for agents working with doctrine, recipe books, and patterns.
 
 **Scope**. Clarification only. No new graduation target, barrier, or
 quality gate.
+
+### 2026-05-05 — Archive-scale historical synthesis cadence
+
+**Driver**. Owner observation during a metacognition pass: the original
+learning loop included a layer that would process current and archived
+napkins holistically for cross-session patterns not visible until the
+Practice had accumulated and preserved enough history. Existing doctrine
+covered current-window cross-session consolidation, but did not clearly
+separate that from rereading the archive as a historical corpus after
+ordinary per-napkin processing had already happened.
+
+**Changes**.
+
+1. Added archive-scale historical synthesis as a fourth load-bearing
+   consolidation quality in §Context.
+2. Added §Archive-scale historical synthesis under §Decision, naming
+   the trigger cadence, bounded corpus selection, synthesis report,
+   processed-marker boundary, routing destinations, and archive
+   immutability rule.
+3. Extended §Rationale, §Alternatives rejected, and §Consequences to
+   distinguish recent cross-session consolidation from historical
+   time-depth synthesis.
+4. Added PDR-046 to §Related because historical synthesis re-enters
+   historical capture material into the existing bottom-up staircase.
+
+**Concrete near-term firing trigger**. The next archive-scale pass is
+valid when either (a) an owner explicitly asks for a historical napkin
+synthesis, or (b) a consolidation finds the same learning-loop failure
+family spanning two or more archived napkin rotations and no existing
+PDR / rule names the deeper mechanism. That pass writes a synthesis
+report before doctrine mutation and uses the report's processed marker
+as the future boundary.
+
+**Scope**. Governance clarification plus command-rubric backing. No
+new always-applied rule or automated scanner. The operational firing
+point lives in the consolidation command.

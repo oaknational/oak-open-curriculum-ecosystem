@@ -114,12 +114,12 @@ about what is and isn't known.
 
 **Why grounding beats framing consistently.** Framing draws on
 generic knowledge (what libraries typically do, what tools usually
-report). Grounding draws on the specific state of this repo at this
-commit. When generic knowledge and specific state conflict, the
-specific state wins because it is the thing being worked on. Framing
-that does not consult specific state has no error-correction when
-generic knowledge is outdated, mis-applied, or assumes a different
-context.
+report). Grounding draws on the specific state of the working repo
+at the working commit. When generic knowledge and specific state
+conflict, the specific state wins because it is the thing being
+worked on. Framing that does not consult specific state has no
+error-correction when generic knowledge is outdated, mis-applied,
+or assumes a different context.
 
 **Why composition roots are the right grounding target.** A
 composition root is where configuration becomes behaviour — where
@@ -196,19 +196,3 @@ classified). They are not engineering patterns about code — they are
 process disciplines about cognition and planning. The PDR shape
 (Context / Decision / Rationale / Consequences) captures that
 substance better than the pattern shape would.
-
-### Host-local context (this repo only)
-
-Proven instances, retained as pattern files with `related_pdr:
-PDR-013`:
-
-- `.agent/memory/active/patterns/ground-before-framing.md` — Sentry
-  observability maximisation pivot: `wrapMcpServerWithSentry` was
-  already wired at `core-endpoints.ts:98` but claimed missing until
-  the composition root was read.
-- `.agent/memory/active/patterns/tool-output-framing-bias.md` — depcruise
-  triage plan (2026-04-12): 3 of 4 knip assumptions and 4 of 12
-  depcruise assumptions were materially wrong when investigated.
-- `.agent/memory/active/patterns/evidence-before-classification.md` — Knip
-  triage plan (2026-04-11): 96 unused files and 749 unused exports
-  initially labelled without investigation; owner-corrected.

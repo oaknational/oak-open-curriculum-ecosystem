@@ -8,7 +8,7 @@ import { createApp } from '../application.js';
 import { createFakeRateLimiterFactory } from '../test-helpers/rate-limiter-fakes.js';
 import { createFakeHttpObservability } from '../test-helpers/observability-fakes.js';
 import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers.js';
-import { TEST_UPSTREAM_METADATA } from '../../e2e-tests/helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../test-helpers/upstream-metadata-fixture.js';
 import {
   MCP_RATE_LIMIT,
   OAUTH_RATE_LIMIT,

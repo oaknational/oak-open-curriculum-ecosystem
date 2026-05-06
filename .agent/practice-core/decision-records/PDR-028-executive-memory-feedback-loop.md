@@ -7,10 +7,10 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-04-21
 **Operationalising rule** (host-local): the `active → executive`
-path named in this PDR is operationalised in this repo by
-[`.agent/rules/executive-memory-drift-capture.md`](../../rules/executive-memory-drift-capture.md)
-(installed Session 4 Task 4.5, 2026-04-21). Portable adopters
-install the equivalent rule under their own canonical rule path.
+path named in this PDR is operationalised in the originating repo by
+an `executive-memory-drift-capture` rule (host-local file; bridged
+via the practice-index Rules section). Portable adopters install
+the equivalent rule under their own canonical rule path.
 **Related**:
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (the surprise pipeline — executive-memory drift is a form of
@@ -132,7 +132,9 @@ pipeline (see PDR-011). Each register entry carries a
 trigger-condition that fires the graduation action; the register
 is reviewed and refreshed at every session-handoff and is a named
 input to the consolidation workflow. Its host-local placement
-and exact schema are named in the Host-local context below.
+and exact schema are host-local concerns and live in the host's
+operational-memory layout (host-local; bridged via the
+practice-index Memory section).
 
 At consolidation (see PDR-014 and PDR-011 pipeline stages),
 tagged napkin entries are aggregated into the pending-graduations
@@ -390,30 +392,3 @@ is a candidate for eventual graduation into `practice.md`
 (Knowledge Flow section) once the convention has been exercised
 across multiple cross-repo hydrations. Graduation marks the
 PDR `Superseded by <Core section>` and retains it as provenance.
-
-### Host-local context (this repo only, not part of the decision)
-
-At the time of authoring:
-
-- Executive-memory surfaces in this repo:
-  `.agent/memory/executive/artefact-inventory.md`,
-  `.agent/memory/executive/invoke-code-reviewers.md`,
-  `.agent/memory/executive/cross-platform-agent-surface-matrix.md`.
-- The `Drift Detection` section installation on those three
-  surfaces is scheduled as Phase 4 of the memory-feedback
-  execution plan (see
-  [`../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
-  Tasks 4.1 and 4.2).
-- The `Source plane: executive` tag convention lands on
-  `.agent/memory/active/napkin.md` and is referenced by
-  `.agent/commands/consolidate-docs.md` step 7a.
-- The cross-plane scan lands as an extension to
-  `.agent/commands/consolidate-docs.md` step 5, and a
-  `cross_plane: true` frontmatter field is added to
-  `.agent/memory/active/patterns/` convention.
-- This repo's ADR-131 (*Self-Reinforcing Improvement Loop*)
-  records the broader improvement-loop architecture; this PDR
-  extends the loop's reach to executive memory. The ADR
-  predated this PDR and remains authoritative for the full
-  interaction map; the PDR is the portable fragment covering
-  the executive-memory entry point specifically.

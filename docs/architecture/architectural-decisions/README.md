@@ -204,6 +204,16 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (TS6 compiler-options baseline, ban on workspace-to-root scripts,
   all-TS-scripts rule with the `runtime-only-scripts/` directory
   exception for no-compile-no-deps cases; Accepted 2026-04-29)
+- [ADR-169: Pin GitHub Actions to Maintainer-`/releases/latest` SHA](169-pin-github-actions-to-maintainer-latest-sha.md)
+  (host adoption of PDR-040; staged enforcement via convention now
+  and validator + Dependabot config later via the
+  build-pipeline-composition-safeguards future plan; Accepted
+  2026-04-30)
+- [ADR-172: Rush-Impulse Three Structural Cues Adoption](172-rush-impulse-three-structural-cues-adoption.md)
+  (host adoption of PDR-043 rush-impulse-three-structural-cues;
+  lands cues 2 and 3 in principles.md alongside the existing
+  vocabulary trip-list as a cohesive output-time defence;
+  Accepted 2026-05-03)
 
 ## Key Architectural Decisions
 

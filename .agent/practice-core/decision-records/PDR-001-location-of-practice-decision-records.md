@@ -133,12 +133,14 @@ practical experience accumulates.
 **Deferred**:
 
 - Retroactive migration of existing Practice-governance ADRs in
-  host-repo ADR folders (in this repo: at least six such ADRs,
-  including the ADRs that define Agentic Engineering Practice,
-  Practice Propagation, Documentation as Foundational
-  Infrastructure, Self-Referential Property of the Practice, the
-  Three-Zone Fitness Model, and Continuity Surfaces). Migration
-  touches rule-file cross-references and is a separate decision.
+  any host-repo ADR folder (the originating repo at the time of
+  authoring carried at least six such ADRs across the
+  Agentic-Engineering-Practice / Practice-Propagation /
+  Documentation-as-Foundational-Infrastructure /
+  Self-Referential-Property / Three-Zone-Fitness-Model /
+  Continuity-Surfaces concept space; host-local identifiers
+  omitted from this portable record). Migration touches rule-file
+  cross-references and is a separate decision.
 - Concrete integration of stable PDRs into Core refinements. The
   graduation path will be defined by a subsequent PDR when the
   first graduation becomes pressing.
@@ -153,17 +155,3 @@ Recording this as PDR-001 rather than PDR-000 is deliberate. PDR-000
 is reserved as a sentinel should a future Practice adopt a
 "meta-PDR about how PDRs themselves are structured" convention. The
 current directory begins at 1 and counts up.
-
-### Host-local context (this repo only, not part of the decision)
-
-In the repo where this PDR was authored, the existing
-Practice-governance ADRs referenced above are
-`ADR-119 (Agentic Engineering Practice)`,
-`ADR-124 (Practice Propagation Model)`,
-`ADR-127 (Documentation as Foundational Infrastructure)`,
-`ADR-131 (Self-Reinforcing Improvement Loop)`,
-`ADR-144 (Three-Zone Fitness Model)`,
-and
-`ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)`.
-These names do not travel with this PDR; the host repo's
-`practice-index` provides any local navigation links.

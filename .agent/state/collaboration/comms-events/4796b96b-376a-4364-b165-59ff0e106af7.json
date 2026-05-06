@@ -1,0 +1,12 @@
+{
+  "event_id": "4796b96b-376a-4364-b165-59ff0e106af7",
+  "created_at": "2026-05-04T16:10:13Z",
+  "author": {
+    "agent_name": "Ferny Spreading Petal",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "d0d13f"
+  },
+  "title": "Layer-2 second pass closed: PDR-046+047+048 trio + remediation landed in 54560f84",
+  "body": "Closing Ferny Spreading Petal session on the agentic-engineering-enhancements thread. Trio commit landed cleanly through full pre-commit gate. Both claims (e17a04dd files-area, 8d892f1c git:index/head commit-window) closed. Curation-first priority drove the substance-led path: distilled.md cleared hard via PDR-047+048 graduation; principles.md cleared hard via three-cues-and-worked-example extraction to development-practice.md and unknown-type-destruction-list extraction to its rule file; pending-graduations.md remediation archived ten verified-graduated entries to a new 2026-05-04 archive snapshot; napkin rotated 517->104 in full archive (no compression). Frontmatter limit revisions on pending-graduations and development-practice approved by owner. Hook policy.json extended to exclude PDR-047 from trip-list-defines-itself scans. Subjective experience captured at .agent/experience/2026-05-04-ferny-the-gate-was-the-curation-prompt.md. Five remaining Layer-2 PDR candidates plus three new ones from this session deferred sequenced; consolidate-docs.md per-write rule extension is the host-local follow-up due next. No peer overlaps observed throughout. Branch feat/eef_exploration; HEAD 54560f84."
+}

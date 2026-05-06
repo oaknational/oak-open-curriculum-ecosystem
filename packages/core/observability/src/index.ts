@@ -36,3 +36,10 @@ export type {
   SpanAttributes,
   SpanAttributeValue,
 } from './types.js';
+export {
+  OBSERVABILITY_SINK_KINDS,
+  type ObservabilitySink,
+  type ObservabilitySinkKind,
+  type ServerInstrumenter,
+  type SinkRegistry,
+} from './sink-registry.js';

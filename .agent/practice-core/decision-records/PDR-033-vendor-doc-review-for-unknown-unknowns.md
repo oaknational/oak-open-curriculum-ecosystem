@@ -45,16 +45,17 @@ not know about. Internal review cannot find these: reviewers operate
 inside the same worldview the plan was authored in, so capabilities
 absent from the plan are absent from the review surface too.
 
-*Empirical instance (2026-04-26 morning, Sentry on
-oak-open-curriculum-ecosystem)*: a 3499-line maximisation plan,
-multi-reviewer-cycled, was scanned against Sentry's official
-documentation in a single doc-traversal session. Six material
-capabilities the plan did not capture surfaced (custom error
-fingerprinting, ignoreErrors / denyUrls SDK-side allow-list, flush /
-shutdownTimeout review under Lambda freeze cycle, cron monitoring,
-Performance Issue auto-detection, Spotlight dev-mode sidecar). The
-plan's review cycles caught real reasoning errors but were
-structurally blind to the missing-capabilities class.
+*Empirical instance (2026-04-26 morning, Sentry vendor-doc review;
+host-local identifiers omitted from this portable record)*: a
+~3500-line maximisation plan, multi-reviewer-cycled, was scanned
+against Sentry's official documentation in a single doc-traversal
+session. Six material capabilities the plan did not capture
+surfaced (custom error fingerprinting, ignoreErrors / denyUrls
+SDK-side allow-list, flush / shutdownTimeout review under Lambda
+freeze cycle, cron monitoring, Performance Issue auto-detection,
+Spotlight dev-mode sidecar). The plan's review cycles caught real
+reasoning errors but were structurally blind to the
+missing-capabilities class.
 
 **Failure mode 2 — contract violations.** The plan correctly
 captures a vendor capability and proposes an implementation that
@@ -64,8 +65,9 @@ well-designed?) but cannot detect a vendor-contract violation from
 inside the codebase — they read for code quality, not vendor-doc
 conformance.
 
-*Empirical instance (2026-04-26 afternoon, Sentry fingerprinting
-on the same repo)*: an implementation drafted
+*Empirical instance (2026-04-26 afternoon, Sentry fingerprinting;
+host-local identifiers omitted from this portable record)*: an
+implementation drafted
 `event.fingerprint = ['<class-name>']` for known error families.
 `code-reviewer` and `test-reviewer` both passed the shape with
 NIT/MINOR findings; both implicitly accepted the single-element
@@ -179,10 +181,11 @@ review at implementation time" is invariant.
 
 ## Notes
 
-- First named in `.agent/memory/active/napkin.md` (2026-04-26 entries
-  by Sharded Stroustrup and Frolicking Toast). The pattern instance
-  in `.agent/memory/active/patterns/vendor-doc-review-for-unknown-
-  unknowns.md` cites this PDR.
+- First named in the host's session-local capture surface
+  (2026-04-26 entries by Sharded Stroustrup and Frolicking Toast).
+  The originating pattern instance — `vendor-doc-review-for-unknown-unknowns`,
+  bridged via the practice-index Pattern instances section —
+  cites this PDR.
 - The two empirical instances both occurred on the same vendor
   (Sentry) and the same repo on the same day. The graduation
   argument is that the *failure mode* is platform-agnostic even

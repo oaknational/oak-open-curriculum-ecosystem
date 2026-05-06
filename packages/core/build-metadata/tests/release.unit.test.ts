@@ -475,13 +475,46 @@ describe('resolveRelease — development (no VERCEL_ENV, or VERCEL_ENV=developme
     expect(result.value.value).toBe(`dev-${SHORT_SHA}`);
   });
 
-  it('returns missing_git_sha when neither VERCEL_GIT_COMMIT_SHA nor branch URL are usable', () => {
+  it('falls through to local-dev when neither VERCEL_GIT_COMMIT_SHA nor branch URL are usable', () => {
     const result = resolveRelease(env({ VERCEL_ENV: 'development' }));
 
-    expect(result.ok).toBe(false);
-    if (result.ok) {
-      return;
-    }
-    expect(result.error.kind).toBe('missing_git_sha');
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        value: 'local-dev',
+        source: 'local-dev',
+        environment: 'development',
+      },
+    });
+  });
+
+  it('falls through to local-dev when ReleaseInput is empty (unset VERCEL_ENV is treated as development)', () => {
+    const result = resolveRelease(env());
+
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        value: 'local-dev',
+        source: 'local-dev',
+        environment: 'development',
+      },
+    });
+  });
+
+  it('falls through to local-dev when VERCEL_BRANCH_URL is malformed and no SHA is present', () => {
+    const result = resolveRelease(
+      env({
+        VERCEL_BRANCH_URL: 'host with space.example.com',
+      }),
+    );
+
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        value: 'local-dev',
+        source: 'local-dev',
+        environment: 'development',
+      },
+    });
   });
 });

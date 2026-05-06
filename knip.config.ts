@@ -35,6 +35,9 @@ const config: KnipConfig = {
   eslint: true,
   vitest: true,
   typescript: true,
+  compilers: {
+    css: () => '',
+  },
 
   workspaces: {
     '.': {
@@ -46,7 +49,7 @@ const config: KnipConfig = {
       // entry points: the built JS is invoked via spawn from the platform's
       // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
       // knip cannot trace as a TS import.
-      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts'],
+      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts'],
       project: ['src/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
@@ -60,7 +63,6 @@ const config: KnipConfig = {
         'runtime-only-scripts/**/*.mjs',
         'widget/src/main.tsx',
         'widget/src/vite-env.d.ts',
-        'smoke-tests/**/*.ts',
         'e2e-tests/**/*.ts',
       ],
       project: [
@@ -71,7 +73,6 @@ const config: KnipConfig = {
         'scripts/**/*.ts',
         'runtime-only-scripts/**/*.mjs',
         'tests/**/*.ts',
-        'smoke-tests/**/*.ts',
         'widget/src/**/*.{ts,tsx,css}',
       ],
       ignoreDependencies: [
@@ -85,6 +86,9 @@ const config: KnipConfig = {
         // Knip cannot detect CSS @import as dependency usage.
         '@oaknational/oak-design-tokens',
       ],
+      vite: {
+        config: 'widget/vite.config.ts',
+      },
     },
     'apps/oak-search-cli': {
       entry: [

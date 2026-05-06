@@ -1620,7 +1620,6 @@ const ThreadUnitsResponseSchema = z.array(
     .object({
       unitTitle: z.string(),
       unitSlug: z.string(),
-      unitOrder: z.number(),
       oakUrl: z.null().optional(),
     })
     .strict()

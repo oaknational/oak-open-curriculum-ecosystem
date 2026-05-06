@@ -8,13 +8,28 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
 
 # Testing and Development Strategy
 
+> Foundational definition (see [tdd-as-design.md](tdd-as-design.md)): a test
+> describes a system state, product code guides the system into it. They are
+> two halves of one act of design. This directive defines the test-type
+> taxonomy and shape rules; `tdd-as-design.md` defines *why* tests exist and
+> the atomic-landing invariant.
+
 ## Tooling
 
 - Vitest
 - React Testing Library
 - Supertest
 - Playwright
-- Stryker
+
+Mutation testing (Stryker) is **meta-quality** — it audits the test surface,
+not the product, and is the constraint that makes coverage meaningful (a test
+that executes code without checking behaviour scores the same as one that
+describes it). Rollout sequencing: [mutation-testing plan][mutation-plan].
+Formal home: forthcoming `validation-strategy.md` per [doctrine restructure
+plan][doctrine-plan].
+
+[mutation-plan]: ../plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md
+[doctrine-plan]: ../plans/agentic-engineering-enhancements/current/validation-and-tdd-doctrine-restructure.plan.md
 
 ## Philosophy
 
@@ -41,14 +56,18 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
 
 ## Rules
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (failing _test_), Green (passing test,
-  because product code is created at this point, _not before_),
-  Refactor (improve the product code implementation, know that the
-  _behaviour_ at the interface will remain proven by the test)
+- **TDD = test + product code as PAIRS, in one landing** - ALWAYS
+  use TDD, prefer pure functions and unit tests. Each cycle is a
+  single landing unit (one commit): write the failing test first
+  (Red), then the product code that makes it pass (Green), then
+  refactor with the test as the safety net (Refactor). Test and
+  product code travel together, never separated across commits.
+  If a test cannot be greened in a single landing, the slice is
+  too big — break it into smaller test+code pairs and land each
+  as its own cycle. Every commit ends with all tests passing.
 - **Test real behaviour, not implementation details** - We should
-  be able to change _how_ something works without breaking the test
-  that proves _that_ it works.
+  be able to change *how* something works without breaking the test
+  that proves *that* it works.
 - **Test to interfaces, not internals** - Tests should be written
   to the interfaces, not the internals. Closely related to test
   behaviour not implementation.
@@ -68,13 +87,27 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
   no complex logic in mocks, or we risk testing the mocks rather
   than the code. Complex mocks are a signal that we need to step
   back and simplify the code or our approach.
-- **No skipped tests** - Fix it or delete it. NEVER use `it.skip`,
-  `describe.skip`, `it.skipIf`, or any other skipping mechanism.
-  Skipped tests are silent failures waiting to happen. If a test
-  cannot run (e.g., missing API key), the test MUST fail fast with
-  a helpful error message explaining what is needed. Validation
-  scripts that require external resources should be standalone
-  scripts, not tests.
+- **No skipped tests** - Fix it or delete it. Skipping mechanisms
+  (`it.skip`, `describe.skip`, `test.todo`, `it.todo`, `xit`,
+  `xdescribe`) are forbidden outright. External-resource tests must
+  fail fast with a helpful error, never silently skip. Validation
+  scripts requiring external resources are standalone scripts, not
+  tests. Full rule: [`no-skipped-tests.md`][no-skip].
+- **No conditional tests** - Conditional execution of any kind is a
+  symptom of architectural failure: `skipIf`, `runIf`, conditional
+  registration, runtime branching in test bodies, conditional
+  assertions, fixtures that vary with ambient state. The diagnosis
+  is always product-code ambiguity (multi-mode functions,
+  runtime-detected configuration, env-coupled behaviour). The
+  corrective is to remove the conditional, fix the ambiguity at the
+  source, and write deterministic behaviour-proving tests that do
+  not constrain implementation. `it.each` over a literal dataset is
+  NOT conditional — it is deterministic enumeration. Full rule:
+  [`no-conditional-tests.md`][no-cond].
+
+[no-skip]: ../rules/no-skipped-tests.md
+[no-cond]: ../rules/no-conditional-tests.md
+
 - **No ambient global state access** - Tests MUST NOT read or mutate
   `process.env`, use `vi.stubGlobal`, use `vi.mock`, or use
   `vi.doMock`. If a function needs configuration, refactor it to
@@ -91,7 +124,7 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
   instantiate tools that internally spawn processes (e.g.
   programmatic ESLint with TypeScript project service). This
   excludes vitest's own configured pool — the restriction is on
-  what _test code_ does, not the runner. Process spawning creates
+  what *test code* does, not the runner. Process spawning creates
   handles that prevent clean worker exit, causes CI hangs, and
   violates the principle of using the right tool for the job. Use
   the right tool: ESLint for boundary enforcement, Playwright for
@@ -142,8 +175,8 @@ SYSTEMS.
 
 #### Out-of-process tests
 
-Out-of-process tests are tests that validate a running _system_,
-the tests and the system run in _separate processes_. They are
+Out-of-process tests are tests that validate a running *system*,
+the tests and the system run in *separate processes*. They are
 slower, are less specific in the causes of issues but cast a wider
 net, and may produce side effects locally and in external systems.
 
@@ -231,29 +264,42 @@ infrastructure.
 
 ## TDD at All Levels
 
-TDD applies to unit, integration, and E2E tests. Each level of tests
-MUST be written to specify desired behaviour before implementation at
-that level is created or changed. Worked examples live in
-[Testing TDD Recipes][tdd-recipes].
+TDD applies to unit, integration, and E2E tests. Each level
+describes its own scope of behaviour, and we need tests at every
+level to fully describe the working system that delivers value:
 
-### Rule Summary
+| Test Level      | What It Describes               | Scope of Behaviour              |
+| --------------- | ------------------------------- | ------------------------------- |
+| **Unit**        | Pure function behaviour         | Narrow — one function or module |
+| **Integration** | How units compose at a boundary | Medium — wired pieces           |
+| **E2E**         | Running-system behaviour        | Broad — whole user-facing flow  |
 
-| Test Level      | What It Specifies       | When to Write                   | RED Phase                    |
-| --------------- | ----------------------- | ------------------------------- | ---------------------------- |
-| **Unit**        | Pure function behaviour | Before function exists          | No function → test fails     |
-| **Integration** | How units work together | Before integration exists       | Units not wired → test fails |
-| **E2E**         | System behaviour        | Before system behaviour changes | Old behaviour → test fails   |
+Higher-level tests describe broader swathes of behaviour. They
+take more product code to make pass because the behaviour they
+specify is composed from many smaller pieces. Lower-level tests
+give fast feedback and pinpoint failures; higher-level tests
+prove the system delivers value as a whole. Both are required.
 
-**Key Insight**: If tests lag behind code at ANY level, TDD was not followed at that level.
+**The cycle is the same at every level**: write the failing test
+that specifies the next slice of behaviour, write the product
+code that makes it pass, refactor while keeping it green — all
+in one landing. Across multiple cycles you build up the system
+with tests describing it at every level. Each commit ends with
+all tests passing at every level.
 
-**File-naming for RED specs**: Write RED-phase specs that
-specify not-yet-implemented behaviour in `*.e2e.test.ts`
-files, not `*.unit.test.ts`. The pre-commit hook runs
-type-check, lint, and the `test` task, so RED in-process
-specs block commits until they go green. E2E specs are
-outside pre-commit, but pre-push and CI run `test:e2e`;
-they must be green before push/merge unless the owner
-explicitly authorises staged WIP.
+**Parallel cycles across levels**: a single delivery often needs
+test+code pairs at multiple levels — a higher-level test may
+require several lower-level cycles before it can be greened.
+Order the cycles so each commit is internally complete (its own
+test passes) and the higher-level test goes green in the commit
+that adds the final piece it needs. The higher-level test is not
+written ahead and left failing for multiple commits; it is
+written in the commit where it can be made to pass.
+
+**Key Insight**: If tests lag behind code at ANY level, TDD was
+not followed at that level. If tests sit failing or skipped
+across multiple commits at any level, TDD was not followed —
+the slicing was wrong.
 
 ## Development Workflow
 
@@ -269,28 +315,46 @@ explicitly authorises staged WIP.
   - Integration tests live next to the integration point file
     containing the integration points they test. They MUST end in
     `*.integration.test.ts`
-  - E2E tests are an exception and live in the `e2e-tests`
-    directory. This is because they test a running _system_ rather
-    than importing code to test. They MUST end in `*.e2e.test.ts`
+  - E2E tests live in the `e2e-tests` directory. They test a running
+    *system* rather than importing product code, so they do not
+    co-locate with any product file. They MUST end in `*.e2e.test.ts`
 
 ## When Behaviour Changes
 
 **Rule**: Update tests at the SAME level as the behaviour change
-FIRST, before changing implementation.
+FIRST, before changing implementation — within the same landing.
 
-- **Pure function behaviour changes**: Update unit tests FIRST
-- **Integration behaviour changes**: Update integration tests FIRST
-- **System behaviour changes**: Update E2E tests FIRST
+- **Pure function behaviour changes**: update unit tests, then
+  product code that makes them pass, in one commit
+- **Integration behaviour changes**: update integration tests,
+  then the wiring/code that makes them pass, in one commit
+- **System behaviour changes**: update E2E tests, then the
+  product code that makes them pass, in one commit (or, if the
+  E2E test requires several lower-level changes first, sequence
+  the lower-level test+code commits and finish with the
+  E2E-test+wiring commit that turns the E2E test green)
 
-**Example**:
+**Example** (single landing):
 
-- If a protected endpoint should return a new status for a
+- A protected endpoint should return a new status for a
   system-level condition
-- Update E2E tests to specify that status first (RED phase)
-- Then implement changes in code (GREEN phase)
-- Then refactor internals (REFACTOR phase, tests stay green)
+- In one commit: update the E2E test specifying the new status,
+  add the product code that makes the test pass, and refactor
+  internals as needed. The commit ends with all tests green.
 
-This ensures tests remain specifications, not just regression checks.
+**Example** (multi-landing for broader behaviour):
+
+- An E2E test requires a new SDK function, a new request
+  middleware, and a new response shape
+- Commit 1: unit test for the SDK function + the function itself
+- Commit 2: integration test for the middleware + the middleware
+- Commit 3: E2E test specifying the new behaviour + the response
+  shape change that wires it together; the E2E test goes green
+- At every commit, all tests pass. No commit ends with a failing
+  or skipped test.
+
+This ensures tests remain specifications and that every commit
+leaves the tree in a green state.
 
 ## Refactoring TDD
 
@@ -384,5 +448,3 @@ Four browser-specific proof categories for UI-shipping workspaces:
 For MCP App HTML resources: serve content directly to Playwright
 (resource-level a11y), then verify via basic-host (integration-level).
 See ADR-147, `docs/governance/accessibility-practice.md`.
-
-[tdd-recipes]: ../../docs/engineering/testing-tdd-recipes.md

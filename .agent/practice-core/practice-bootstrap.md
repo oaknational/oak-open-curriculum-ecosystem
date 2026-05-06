@@ -88,8 +88,8 @@ Two types need no adapters — consumed directly by all platforms:
 - **Research** (`.agent/research/`) — synthesis-heavy notes, surveys,
   rationale trails, and disposition ledgers. The default landing
   tier for fresh exploratory material. May contain a transient
-  `notes/` holding bay for material in transit between tiers (see
-  [`research/notes/README.md`](../research/notes/README.md) when
+  `notes/` holding bay for material in transit between tiers (the
+  bay's README is bridged from the host repo's practice-index when
   the bay exists). The split criterion vs `reference/` is curation:
   research is exploratory synthesis; reference is owner-vetted
   evergreen library.
@@ -171,7 +171,7 @@ and stays in the repo. Core files link to it via `../practice-index.md`.
 
 ```markdown
 # Practice Index
-Bridge between the portable Practice Core and this repo's local artefacts.
+Bridge between the portable Practice Core and the host repo's local artefacts.
 Not part of the travelling package. Format specified by practice-bootstrap.md.
 
 ## Directives          — table: [Directive](path) | Purpose
@@ -181,7 +181,7 @@ Not part of the travelling package. Format specified by practice-bootstrap.md.
 ```
 
 Each section uses a two-column markdown table with navigable links to the
-repo's actual files. Populate every section during hydration.
+host repo's actual files. Populate every section during hydration.
 
 ## Entry Points
 
@@ -244,11 +244,11 @@ permanent destination for architectural knowledge.
 
 ### Location and Index
 
-ADRs conventionally live in a dedicated directory (e.g.
-`docs/architecture/architectural-decisions/`). Each is a numbered
-markdown file. The directory contains a `README.md` index — the entry
-point for architectural orientation, with a **Start Here** section
-listing foundational ADRs.
+ADRs conventionally live in a dedicated directory under the host repo
+(the path is host-specific; the host's practice-index records the
+local choice). Each is a numbered markdown file. The directory
+contains a `README.md` index — the entry point for architectural
+orientation, with a **Start Here** section listing foundational ADRs.
 
 ### ADR Template
 
@@ -337,9 +337,9 @@ rules are enforced via the entry-point chain. Same body
 Platform-specific notes (e.g. "In Cursor, use `ReadLints`") may appear in
 the trigger — they are activation metadata, not policy.
 
-`.agents/` note: this repo keeps portable rule adapters in `.agents/rules/`
-alongside `.agents/skills/` wrappers. Codex still picks up always-on
-behaviour through the entry-point chain (`AGENTS.md` →
+`.agents/` note: a Practice-bearing repo MAY keep portable rule adapters in
+`.agents/rules/` alongside `.agents/skills/` wrappers. Codex still picks up
+always-on behaviour through the entry-point chain (`AGENTS.md` →
 `.agent/directives/AGENT.md` → canonical rules). Reviewer roles should be
 configured through Codex project-agent support in `.codex/`, not modelled as
 skills.
@@ -501,12 +501,12 @@ recording -- errors you figure out, user corrections, your own mistakes,
 tool surprises, Practice/tooling friction, insights, ideas, wishlist
 items, general impressions, or approaches that work or fail. Practice-tool
 feedback includes host-local tools that implement Practice capabilities:
-in this repo `agent-tools` is the TypeScript-specific implementation
-surface, while other repos may supply a shell, Python, editor, CI, or
-other equivalent. Capture the behaviour-level signal so consolidation can
-separate portable Practice substance from local implementation detail. Be
-specific: "Assumed API returns list but it returns a paginated object with
-`.items`" not "Made an error."
+the host repo names its canonical implementation surface (a TypeScript
+agent-tools binary, a shell wrapper, a Python toolkit, an editor command,
+a CI workflow, etc.) in its bridge index. Capture the behaviour-level
+signal so consolidation can separate portable Practice substance from
+local implementation detail. Be specific: "Assumed API returns list but it
+returns a paginated object with `.items`" not "Made an error."
 
 **Structure**:
 
@@ -540,19 +540,27 @@ contradictions), prune graduated entries, archive, start fresh. See
 Patterns live in one of two homes depending on their level of
 abstraction:
 
-**`.agent/memory/active/patterns/`** — **Specific instances**. Concrete,
-ecosystem-grounded patterns proven in this repo (TypeScript, Zod,
-Vitest, MCP, or whichever ecosystem applies locally). Instance files
-may carry a `related_pdr: PDR-NNN` or `related_pattern: <name>`
-frontmatter pointer linking them to their general form (if one has
-been authored).
+**`.agent/memory/active/patterns/`** — **Specific instances** (host-side,
+not portable). Concrete, ecosystem-grounded patterns proven in this
+repo (TypeScript, Zod, Vitest, MCP, or whichever ecosystem applies
+locally). Instance files may carry a `related_pdr: PDR-NNN` or
+`related_pattern: <name>` frontmatter pointer linking them to their
+general form (if one has been authored).
 
-**`.agent/practice-core/patterns/`** — **General abstract patterns**
-(portable; travels with Core). Ecosystem-agnostic abstractions
-synthesised from multiple specific instances. Authored fresh when
-instance accumulation makes the general form legible across
-multiple contexts. Specific instances remain in
-`memory/active/patterns/`; they are not moved or copied.
+**`.agent/practice-core/decision-records/` with `pdr_kind: pattern`** —
+**Universal patterns recorded as PDRs** (portable; travels with Core).
+Ecosystem-agnostic abstractions synthesised from multiple specific
+instances. Authored fresh as a PDR when instance accumulation makes
+the general form legible across multiple contexts. Specific instances
+remain in `memory/active/patterns/`; they are not moved or copied.
+
+The previous `.agent/practice-core/patterns/` Core directory was
+retired 2026-04-29 by
+[PDR-007](decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
+amendment. Universal patterns now take PDR shape (the
+`pdr_kind: pattern` frontmatter distinguishes them from governance
+PDRs); the old `outgoing/patterns/` transport route is retired with
+the `practice-context/` peer companion.
 
 **Barrier to entry for either home**: a pattern belongs as a
 persisted entry only when it is (a) broadly applicable or clearly
@@ -560,14 +568,14 @@ reusable, (b) proven by implementation, (c) protective against a
 recurring mistake, and (d) stable enough to teach without immediate
 churn.
 
-**Additional criteria for `practice-core/patterns/`**:
+**Additional criteria for promotion to a `pdr_kind: pattern` PDR**:
 (e) ecosystem-agnostic — stated without dependence on any specific
 language, framework, or toolchain; (f) engineering-substance, not
-Practice-governance (Practice-governance patterns take PDR shape in
-`practice-core/decision-records/`); (g) synthesised from ≥2 specific
-instances.
+Practice-governance (Practice-governance patterns take ordinary
+governance PDR shape); (g) synthesised from ≥2 specific instances.
 
-**File format**: one `.md` per pattern with YAML frontmatter:
+**Instance file format**: one `.md` per pattern in
+`.agent/memory/active/patterns/` with YAML frontmatter:
 
 ```yaml
 ---
@@ -591,13 +599,9 @@ Body sections: **Principle** (one-paragraph statement), **Pattern**
 **Index**: maintain a `README.md` in `.agent/memory/active/patterns/` with a
 short description for each pattern.
 
-**Cross-repo exchange**: portable patterns travel as Core content.
-General, ecosystem-agnostic abstractions that apply across the
-network are authored in `.agent/practice-core/patterns/` via
-synthesis and travel with the Core package. Specific instances
-remain in `.agent/memory/active/patterns/` as proof; they do not travel.
-Under PDR-007, the previous `outgoing/patterns/` transport route is
-retired — there is no separate exchange surface for patterns.
+**Cross-repo exchange**: portable universal patterns travel as Core
+content in PDR form. Specific instances remain in
+`.agent/memory/active/patterns/` as proof; they do not travel.
 
 ### Design-Space Explorations (docs/explorations/ or host equivalent)
 
@@ -689,7 +693,7 @@ Body sections:
    | `.agent/directives/principles.md` | portable-with-adaptation | same | rewrite test-framework references; keep universal rules verbatim |
    | `.agent/practice-index.md` | local | create-from-scratch | bridge file is host-specific by design |
    | `.agent/memory/active/distilled.md` | hybrid | same | preserve universal entries; drop source-repo-domain entries |
-   | `docs/architecture/ADR-XXX-*.md` | hybrid | rewrite | decision shape portable; decision substance host-specific |
+   | `<host ADR directory>/<NNN>-*.md` | hybrid | rewrite | decision shape portable; decision substance host-specific |
    | ... | ... | ... | ... |
 
    Gradient values: **fully-portable** / **portable-with-adaptation**
@@ -701,8 +705,9 @@ Body sections:
    then hybrid, then local.
 5. **Four-audit close** — a checklist recording that each audit has
    been performed and passed:
-   - Foreign-antigen audit (grep for source-repo names, paths, ADR
-     numbers; all hits resolved or documented).
+   - Foreign-antigen audit (grep for source-repo names, paths, and
+     opaque identifiers such as ADR numbers; all hits resolved or
+     documented).
    - Completeness audit (every source concept has a destination
      representative or is recorded as intentionally omitted).
    - Cohesion audit (no self-contradictions in the destination
@@ -742,31 +747,43 @@ implement a consolidation command with this abstract workflow:
    raise with the user (the gap in documentation structure is the
    signal); not yet stable — leave for further validation. Fitness
    limits are a signal to action (step 6), never a reason to defer.
-6. **Manage fitness thresholds** (three-zone model, ADR-144). Fitness
-   is a post-writing health signal, never a learning constraint.
-   Write, capture, distil, and graduate at the weight the signal deserves,
-   then deal with zones here. Each metric lands in `healthy` → `soft` →
-   `hard` → `critical`, where critical is `hard limit × 1.5`.
+6. **Manage fitness thresholds** (three-zone fitness model — host repos
+   record the host-side adoption in their practice-index Concept ↔ ADR
+   map). Fitness is a post-writing health signal, never a learning
+   constraint. Write, capture, distil, and graduate at the weight the
+   signal deserves, then deal with zones here. Each metric lands in
+   `healthy` → `soft` → `hard` → `critical`, where critical is
+   `hard limit × 1.5`.
    - `soft`: refine, split, or extend target (modestly, with rationale).
      Never blocks.
    - `hard`: refine, split, graduate, or raise with owner approval.
      Treat the validator failure as a signal to route structural work;
      do not roll back or suppress preserved learning.
    - `critical`: loop failure. Preserve the learning, open a remediation
-     lane, and run the three-question post-mortem from ADR-144 §Loop Health.
+     lane, and run the three-question post-mortem from the host's
+     concrete fitness-model record (the §Loop Health section in the
+     host's three-zone-fitness-model ADR).
 7. **Manage the practice exchange.** Two directions:
-   - _Incoming_: integrate files from `.agent/practice-core/incoming/`
-     following the provenance chain and three-part bar. Practice evolution
-     is not linear — incoming can be behind in some areas and ahead in
-     others. Compare bidirectionally. Clear the box only after user-
-     approved integration, never unilaterally.
-   - _Outgoing_: broadcast domain-specific observations and structural
-     notes to `.agent/practice-context/outgoing/`. Content appropriate for
-     Practice Core itself (Learned Principles, structural proposals,
-     bootstrap improvements) goes as Core proposals with user approval.
-     All outgoing content must carry the **concept itself** — not a
-     pointer to where this repo documents it. No ADR numbers, no local
-     paths. The substance must be understandable without the source repo.
+   - _Incoming_: integrate files from
+     `.agent/practice-core/decision-records/incoming/` following the
+     provenance chain and three-part bar. Practice evolution is not
+     linear — incoming can be behind in some areas and ahead in others.
+     Compare bidirectionally. Clear the box only after user-approved
+     integration, never unilaterally.
+   - _Outgoing_: domain-specific observations and structural notes
+     route by shape per
+     [PDR-024](decision-records/PDR-024-vital-integration-surfaces.md)
+     amendment 2026-04-29. Content appropriate for Practice Core itself
+     (Learned Principles, structural proposals, bootstrap improvements)
+     goes as Core proposals with user approval; portable governance and
+     universal patterns become PDRs in `practice-core/decision-records/`;
+     host-specific worked instances stay in the host's pattern memory
+     and bridge index. The previous `practice-context/outgoing/`
+     ephemeral exchange surface was retired 2026-04-29 (PDR-007
+     amendment). All outgoing content must carry the **concept itself**
+     — not a pointer to where the source host repo documents it. No
+     ADR numbers, no local paths. The substance must be understandable
+     without the source repo.
 
 ## Platform Configuration
 

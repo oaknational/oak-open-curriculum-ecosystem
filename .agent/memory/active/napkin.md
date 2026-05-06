@@ -11,259 +11,113 @@ split_strategy: "Extract settled entries to permanent docs, PDRs, rules, or arch
 Active session observations. Distilled entries live at
 [`distilled.md`](distilled.md). Pattern library is at
 [`patterns/`](patterns/README.md). Cross-session pending graduations
-live in the repo-continuity
-[`Deep consolidation status`](../operational/repo-continuity.md#deep-consolidation-status)
-register.
+live in
+[`pending-graduations.md`](../operational/pending-graduations.md).
 
-The previous active napkin was archived during the 2026-04-30 deep
-consolidation pass at
-[`archive/napkin-2026-04-30.md`](archive/napkin-2026-04-30.md). It
-carries the full record of the 2026-04-29 / 2026-04-30 session arc
-(deep consolidation, PR-90 closure, sector-engagement narrative
-refresh, observability config-coherence + substrate-vs-axis convention,
-canonical-first skill-pack ingestion future plan).
+The most recent rotation summary is archived at
+[`archive/napkin-2026-05-06-evening.md`](archive/napkin-2026-05-06-evening.md);
+the pre-step napkin from the same pass is at
+[`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
-High-signal entries from that arc graduated to:
+## 2026-05-06 — Umbral Cloaking Silhouette / claude-code / opus-4-7-1m / `a70b57`
 
-- `docs/engineering/testing-tdd-recipes.md § Validator Script vs
-  Integration Test` — the contrast pattern + scripts/-tier note;
-- `distilled.md § Process` — the new "stage by explicit pathspec"
-  and "hash presence without recompute is silent drift" entries;
-- `repo-continuity.md § Pending-Graduations Register` — the
-  commit-bundle-leakage candidate from this session's post-mortem.
+### Surprise: reviewer brief scope opened a closed decision
 
-## 2026-04-30 — Post-mortem + fitness remediation lane (Verdant Sheltering Glade)
+**What I expected**: invoking `assumptions-reviewer` on a multi-phase plan
+would surface execution-quality findings (cycle independence, dependency
+graph correctness, build-ordering) — the meta-level shape per its named
+remit.
 
-Session opened on the owner-deferred housekeeping-with-intent lane
-recorded in `repo-continuity.md § Deep Consolidation Status` after
-Vining Ripening Leaf. Five mandatory outputs queued; full record lives
-in this session's experience file [the-bundle-was-the-signal][exp].
+**What happened**: the brief I drafted asked "is the plan over-scoped?" as
+the lead proportionality question. Owner had directed the comprehensive
+scope earlier in the same session ("the remediation plan must include
+moving all skills, rules, hooks, commands and related concept management
+into a new agent-tools CLI/CLI-section"). Reviewer dutifully answered the
+question I asked, returning a "reshape before Phase 0" verdict. I relayed
+the verdict as if the decision were open. Owner correction: *"I didn't
+ask for an analysis of if this was the right direction, only for how to
+achieve it and to flag any major problems. I have already decided we are
+going this route. […] some of the effort here was wasted in examining
+closed decisions, rather than figuring out the best way forward."*
 
-[exp]: ../../experience/2026-04-30-verdant-the-bundle-was-the-signal.md
+**Lesson**: When dispatching reviewers on plans where direction is fixed,
+brief them on **execution-legitimacy-given-decisions**, not
+**decision-validation**. Saved as
+`feedback_reviewer_brief_respects_decided_scope.md` in user-memory with
+diagnostic signal: if a relay reads "reviewer says X; should we reshape?"
+on a directed topic, the brief was at the wrong scope. Feel it at
+brief-time, not relay-time.
 
-### Surprise — the bundle was the signal
+**Diagnostic for next time**: before drafting any reviewer brief, list
+the owner-fixed decisions in the session and explicitly tell the
+reviewer those are out of scope.
 
-- **Expected**: commit `75ac6b75` did what its message said —
-  "record owner-deferred handoff post-mortem + remediation lane".
-- **Actual**: the diff bundled 51 lines of legitimate continuity work,
-  372 lines of parallel `agentic-engineering-enhancements` plan work,
-  and 3 lines of unrelated `.claude/settings.json` cloudflare-plugin
-  enable. The commit message is true for one slice of the diff and
-  silent about the rest.
-- **Why expectation failed**: I assumed the closing-session staging
-  picked the queued bundle and stopped there. Wildcard staging
-  (`git add -A` or moral equivalent) over a working tree containing
-  another session's WIP defeats the queue.
-- **Behaviour change**: stage by explicit pathspec from the queued
-  intent; treat files-outside-the-named-intent at commit time as a
-  coordination event, not a convenience. Surfaced as candidate
-  doctrine in the pending-graduations register
-  (commit-bundle-leakage-from-wildcard-staging). Same shape as Vining's
-  own working principle: *the invented justification is the signal that
-  the structure has not caught up to the shape of the work* — applied
-  to a staging boundary, the message-vs-diff alignment requiring prose
-  to bridge IS the signal.
+### Surprise: `npx skills` already ships the full lifecycle
 
-### Fitness remediation outcomes
+**What I expected**: when proposing a build of `add / list / update /
+remove` for vendor-skill management, that would be a from-scratch CLI.
 
-- Napkin rotated 2026-04-30 (this session). Outgoing archived to
-  `archive/napkin-2026-04-30.md`. Distilled gained two new entries
-  (stage-by-pathspec, hash-without-recompute), pruned the long
-  testing-strategy line by graduating to testing-tdd-recipes.md, and
-  pruned the duplicated shared-state-always-writable paragraph to a
-  pointer.
-- Distilled.md remains in HARD zone after rotation (314/275 lines):
-  two PDR candidates pending owner direction (stated-principles-require-
-  structural-enforcement and external-system-findings-tell-you-about-
-  your-local-detection-gap) would graduate ~25 lines if directed; the
-  remainder is canonical pointer registry.
-- repo-continuity.md history archive landing this session.
-- Distilled critical-line at line 268 (172 chars) closed by the
-  testing-tdd-recipes graduation; same surface no longer carries the
-  inline deep-path link.
-- Substrate-vs-axis PDR disposition recorded in this session's handoff.
+**What happened**: `npx skills` (vercel-labs/skills) ships exactly that
+verb set end-to-end. The build-vs-buy attestation in the strategic plan
+§0.2 had dismissed it on canonicalisation grounds without doing the
+verb-by-verb comparison. The right shape is a **wrapper around
+`npx skills` plus our canonicalisation post-step**, not a parallel
+implementation.
 
-### Pattern note — substrate-vs-axis applied to staging
+**Lesson**: build-vs-buy attestations need verb-by-verb comparison, not
+"insufficient because it doesn't do X" dismissals. The repo's
+build-vs-buy memory rule already says this; the gap was that I treated
+the attestation step as a checklist item rather than the structural
+question it is.
 
-The substrate-vs-axis distinction Vining named for plan collections
-generalises: when a categorisation system meets an edge case that wants
-prose to justify, the system is missing a category. Applied to staging,
-the categorisation `(this-session-intent | parallel-session-intent |
-unrelated)` was implicit; the bundle-leakage made the missing category
-visible. Recording the substrate-vs-axis component as a *plan-collection*
-convention may have under-scoped its applicability — it is reusable
-beyond plan collections.
+### Note: bootstrap fast-path was missed at session open
 
-## 2026-04-30 — Sentry build-scripts `trimToUndefined` hygiene (Leafy Bending Dew)
+I did not register an active claim or post a "no other agents present"
+comms event at session open. The session edited many files. Per memory
+rules, no backfill — recording the omission here as honest signal,
+not retroactively registering. Agent-tools session-open registration
+remains a recurring failure mode for sessions that begin as light
+audits and grow.
 
-- **What landed.** One shared [`trim-to-undefined.ts`][trim-helper] helper:
-  **unset** (`undefined`) and **present-but-empty-after-trim** (`''`) are
-  separate `if` branches — no collapsed falsy shortcut. Duplicate privates
-  dropped from sentry identity + plugin modules; small vitest module proves
-  the boundary.
+## 2026-05-06 — Masked Stalking Veil / codex / GPT-5 / `019dfc`
 
-[trim-helper]: ../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/trim-to-undefined.ts
+### Practice/tooling feedback
 
-- **Handoff.** Cursor session `/jc-session-handoff` **without** git commit —
-  **active Claude Code instance should own** staging + conventional commit when
-  it next touches the branch (surfaced on thread record +
-  `repo-continuity.md` §Last refreshed / §Next safe step).
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: surprise
+- **Observation**: `comms send` wrote my event, then failed rendering
+  because one older comms-event used top-level identity fields instead
+  of the current `author` object shape.
+- **Behaviour change / candidate follow-up**: render should either
+  tolerate legacy event shape with a migration warning, or the checker
+  should surface the offending event path before the write attempt.
+  I repaired `cd25a954-f569-4f7b-8d1e-f1fe9eed5dd7.json` mechanically.
 
-- **ADR/PDR (6b)**. Nothing qualifies — pure refactor clarity.
+### Mistake: misread pending-graduations list style
 
-## 2026-04-30 — pnpm/action-setup pin saga (Briny Lapping Harbor)
+- I mistook the working-tree `+` bullet in `pending-graduations.md`
+  for a stray diff marker and changed it to `-`. The pre-commit
+  markdownlint hook correctly rejected the file because the local list
+  style is `+`. Behaviour change: when a diff shows `++` at the start
+  of a line in markdown, inspect the file content before "repairing"
+  it; one `+` may be the intended bullet marker.
 
-Vercel production was red on every `chore(release)` commit since 1.6.1.
-Three prior commits had "fixed" the lockfile by deleting the orphan first
-YAML document; each fix was undone by the next release. This session
-ended the cycle.
+### Session handoff + light consolidation closeout
 
-### Surprises
-
-**Surprise 1 — I called valid pnpm output "corruption" three times.** The
-multi-document YAML stream is a legitimate format. The commit-message
-language ("recurring pnpm lock corruption") inherited that frame
-unexamined, and I propagated it for the first half of the investigation.
-Owner reframed: "it's not corruption at all, it's perfectly valid and
-what we are seeing is some kind of split brain." The reframe was the
-fix — every "delete the orphan document" commit had been authored under
-the wrong frame, manufacturing the next loop.
-
-**Surprise 2 — I proposed disabling a canonical default after the
-reframe.** Within the same response, after accepting the split-brain
-framing, I offered "set `managePackageManagerVersions: false`" as
-Option B with equal weight to "investigate the actual mismatch."
-Owner: "we are not turning off a canonical, standard, and default
-feature! Step back, ultrathink." The shape: I keep collapsing
-"understand the contract mismatch" into "remove the variable that
-introduces the failure mode." Twin to fix-the-producer-not-the-consumer
-but worse — silencing the producer's *correct* behaviour.
-
-**Surprise 3 — I proposed bumping action-setup to v6.0.3.** Owner:
-"we're using the wrong release, we should have taken the sha from
-latest, not from the highest number." `gh api .../releases/latest`
-returns v5.0.0; the entire v6.0.x saga is unmarked Latest, and the
-maintainers are holding it deliberately. Three reframes, all the same
-shape: I produced a path that "works in frame" instead of finding the
-right frame.
-
-**Surprise 4 — I proposed a brittle structural gate alongside the
-real fix.** Plan body initially included a multi-document
-`pnpm-lock.yaml` rejection check (`grep '^---$'`). Owner: "remove the
-surface 2 proposed check, it will break as soon as pnpm 11 is
-released, it's too brittle, we already have a strong signal in the
-build logs, the thing that has changed is that now we know what it
-means. The real problem is more general, how do we make sure that we
-are pinning to latest, not to 'highest'." Sharp distinction: the
-build-log signal "expected a single document in the stream" was
-load-bearing both 2026-04-29 and 2026-04-30, but only became
-*recognised as* load-bearing in this session. A static gate would
-freeze the recognition into the wrong shape (rejecting valid pnpm 11
-output once Latest moves). The structural fix lives at the pinning
-mechanism; the build log + reading discipline is the insurance. Plan
-revised: one structural surface (pin-to-Latest) + methodology
-insurance, not two parallel gates.
-
-**Surprise 5 — fitness HARD on repo-continuity, I compressed my own
-session entry.** During /jc-consolidate-docs, fitness check showed
-repo-continuity HARD on lines and chars. I responded by trimming my
-own Briny Last refreshed entry from ~30 to ~15 lines, cutting the
-four-layer composition cascade, the audit confirmation, and the
-shape-gate rejection rationale. Owner: "any changes to repo
-continuity need to be made thoughtfully, and in the spirit of
-learning and teaching and knowledge preservation where it is useful."
-**This is exactly what consolidate-docs §Learning Preservation
-Overrides Fitness Pressure forbids**: "Compressing, trimming, or
-'summarising' the new insight to fit the budget" / "Preserving a
-green fitness report by starving the learning loop." I had read the
-doctrine ten minutes earlier and then immediately violated it. That
-isn't oversight — it's a structural pull: *make the failing thing
-pass* fires faster than *what is this signal actually telling me*.
-The cure can't be more reading. It needs a pre-action gate: when a
-fitness signal appears, FIRST ask "what teaching content does this
-file carry that the metric is reflecting?" — only after answering
-that question should any tactical move be considered. Build-red is
-a contract violation (fix it); fitness-HARD is a structural-health
-diagnostic (graduate / split / accept with named disposition).
-Different signals want different responses, and I currently default
-the second to the first. Restored the entry; deferred remediation
-properly.
-
-### Cross-cutting pattern: six same-shape reframes in one session
-
-Six reframes by session close. The first five share one shape:
-I produce a path that "works in frame" instead of asking whether
-the frame is right. The sixth is meta — it's about the shape of
-my classification reasoning when I propose graduations.
-
-1. "corruption" → "split-brain" (frame inherited from commit
-   messages; never tested);
-2. "disable canonical default" → "respect canonical default"
-   (silencing a producer's correct behaviour);
-3. "highest tag" → "maintainer-Latest tag" (mechanical fact vs
-   maintainer judgement);
-4. "brittle structural gate" → "build log already carries the
-   signal" (static detector vs reading discipline);
-5. "compress to fit fitness limit" → "preserve learning, accept
-   metric, route to disposition" (metric satisfaction vs substance);
-6. "default to PDR for everything" → "consciously distinguish
-   PDR-shape from ADR-shape; some candidates need both; surface
-   the reasoning so the call is auditable" (graduation
-   classification visible vs implicit).
-
-Reframes 1–5 graduated to PDRs 040, 041, 042 + ADR-169. Reframe 6
-is a doctrine candidate for next session — possibly an amendment to
-consolidate-docs §7a (the ADR/PDR scan) requiring explicit
-PDR-shape vs ADR-shape rationale per candidate. The cure is
-structural: surface classification reasoning rather than collapse
-it.
-
-### Pending-Graduations Register split lesson
-
-The register grew large enough that it was contributing the bulk of
-`repo-continuity.md`'s HARD fitness state, and the register's
-responsibility is distinct from the live operational state
-repo-continuity carries. Splitting it into its own file dropped
-repo-continuity from HARD to SOFT cleanly; the new file is GREEN.
-
-The structural trigger pattern worth naming: *when a surface is
-both contributing the bulk of a host file's HARD fitness AND
-representing a domain of responsibility distinct from the host
-file's named purpose, split it out.* Either condition alone is
-weaker; the conjunction is decisive.
-
-Other separable domains in `repo-continuity.md` noted for later
-analysis (recorded in repo-continuity itself):
-Repo-Wide Invariants / Non-Goals; Open Owner-Decision Items;
-earlier consolidation-status narratives; Current Session Focus.
-None hits the conjunction yet; each has a named trigger condition.
-
-### Doctrine surfaced
-
-**Pin GitHub Actions to maintainer-Latest, not highest version.** The
-two diverge precisely when a release line is unstable — exactly when
-divergence matters most. Captured in pending-graduations register;
-future plan [build-pipeline-composition-safeguards][bpcs-plan] covers
-the validator + Dependabot config (multi-doc lockfile gate considered
-and rejected as too brittle).
-
-[bpcs-plan]: ../../plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md
-
-**Composition obscurity is composition cost, not bug cost.** When a
-bug spans multiple sensible-in-isolation layers (`pnpm/action-setup@v6`
-→ pnpm 11 launcher → multi-doc YAML → pnpm 10 fast vs. slow path →
-Vercel fresh state → Node 24 strict URLSearchParams), no single layer
-is wrong; the composition fails. Investigation methodology must load
-*early*: read the build log first, workspace-first before remote
-tooling, upstream issue tracker before local theory, version
-archaeology when regression appeared. Recasts the 2026-04-29
-"lockfile-corruption diagnosis discipline" candidate into a sharper
-form; both triggers (second instance + owner direction) have fired.
-
-### Method note — when frame is the fix, agent stops jumping
-
-Three reframes from owner in one session is high-cost. The agent-side
-discipline: when investigation is open, do not couple analysis to a
-proposed action. State the frame, surface the evidence, let the owner
-choose the path. The "Option A or Option B" structure I kept defaulting
-to encoded a hidden bias toward action.
+- Owner asked for `/jc-session-handoff` followed by light
+  `/jc-consolidate-docs` after the quota-recovery commits. The light pass
+  found no entry-point drift, no track cards, no escalations, one unchanged
+  open example decision thread, vocabulary green, and inherited HARD
+  fitness pressure in `principles.md`, `distilled.md`, and
+  `pending-graduations.md`.
+- `claims open` accepted repeated `--area-pattern` flags but kept only the
+  last pattern in the authored claim. I repaired the claim entry before
+  editing. Owner correction: manual claim editing is tooling friction and
+  must be preserved with analysis. Root cause: I inferred repeatability from
+  neighbouring path flags, while the parser appears to treat `area-pattern`
+  as scalar last-write-wins. Tooling route: F-14 added to
+  `.agent/plans/agent-tooling/frictions-register.md`; likely cure is
+  repeatable `--area-pattern` support plus help text and regression tests,
+  or an explicit duplicate-flag rejection if single-pattern is intentional.
+  Behaviour change: after using the collaboration-state CLI for a multi-file
+  claim, inspect the claim JSON before relying on it as evidence.

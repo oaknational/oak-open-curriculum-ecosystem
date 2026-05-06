@@ -4,6 +4,114 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-04 — insight-capture-at-moment-of-occurrence graduated to PDR-048
+
+Layer-2 second pass continuation. The active-memory discipline
+that governs *when* an insight is written down is now codified as
+its own Practice-governance decision record. Practice Core
+changes:
+
+- **Added**: `PDR-048 insight-capture-at-moment-of-occurrence`.
+  Three moves applied at the moment an insight surfaces:
+  capture before closure (resist closure-pressure deferral);
+  capture between primary actions, not after them (resist
+  flow-state deferral); capture the partial form and let the
+  whole emerge through writing (resist substance-not-yet-fully-
+  formed deferral). Adopter scope: every Practice-bearing repo
+  where insights surface in conversation. Composes with
+  PDR-011 (continuity surfaces — this PDR governs the entry
+  point), PDR-014 (consolidation — captures here are the
+  substrate the flow operates on), PDR-046 (layered-processing —
+  captures preserved here are what graduates upward layer-by-
+  layer), and PDR-047 (rule-applies-always — companion
+  deliverable: this PDR governs *when* a rule is written;
+  PDR-047 governs *how* it is written).
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-048 row.
+
+## [oak-open-curriculum-ecosystem] 2026-05-04 — rule-applies-always doctrine-authoring discipline graduated to PDR-047
+
+Layer-2 second pass continuation. The doctrine-authoring half of
+the rule-applies-always pair (the structural-enforcement half
+lives at PDR-038) is now codified as its own Practice-governance
+decision record. Practice Core changes:
+
+- **Added**: `PDR-047 rule-applies-always-doctrine-authoring`.
+  Three tests applied at the moment a rule is authored or
+  amended: substance test (read clause-by-clause for "the rule
+  does not apply here" intent); vocabulary test (cross-check
+  against the host's hedging trip-list as cheap detection); and
+  re-frame test (when either fires, re-frame the rule to ban the
+  bad shape rather than grant exceptions; if a re-frame is
+  impossible, split the rule). Adopter scope: every
+  Practice-bearing repo where rules, principles, ADRs, PDRs, or
+  governance documents are authored or amended. Composes with
+  PDR-038 (structural-enforcement scanner downstream of authoring),
+  PDR-043 (rush-impulse cue 1 vocabulary trip-list at general
+  output time), and PDR-044 (innate-immunity layer at write-time
+  is the runtime form of Test 1's substance check).
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-047 row.
+
+## [oak-open-curriculum-ecosystem] 2026-05-04 — layered knowledge processing graduated to PDR-046
+
+Layer-2 second pass under the owner-stated layered-processing
+methodology (preserve first, restructure second). The methodology
+itself is now codified as a Practice-governance decision record.
+Practice Core changes:
+
+- **Added**: `PDR-046 layered-knowledge-processing`. Generalises
+  the per-write learning-preservation rule into a layer-orchestration
+  discipline. Three moves: process layers bottom-up without
+  interrupting a lower layer to remediate an upper layer; suspend
+  in-process form-keeping on any layer currently being processed;
+  address a layer's residual fitness pressure by graduating
+  substance upward, not by compression. Adopter scope: every
+  Practice-bearing repo with multi-layer knowledge surfaces and a
+  fitness-style diagnostic. The PDR self-applies — the methodology
+  is what produced it; PDR-045 was the first deliverable of the
+  pass that surfaced the rule, this PDR-046 is the second.
+- **Index updated**: `decision-records/README.md` index gains
+  PDR-046 row.
+
+## [oak-open-curriculum-ecosystem] 2026-05-04 — workspace-first investigation discipline graduated to PDR-045
+
+Layer-2 graduation pass under the owner-stated layered-processing
+methodology (preserve first, restructure second). Practice Core
+changes:
+
+- **Added**: `PDR-045 workspace-first-investigation-discipline`.
+  Three structurally similar failure modes (diagnostic retry of
+  remote tooling when local artefacts exist; parallel infrastructure
+  proposals when shared packages already cover the contract;
+  acting on stale brief enumerations instead of querying live state)
+  share one shape and one fix: exhaust the workspace's existing
+  inventory before reaching for external tooling, before authoring
+  new shared infrastructure, and before treating any brief's
+  enumeration as authoritative. The discipline composes with
+  PDR-033 (vendor-doc review is the vendor-platform-specific case
+  of the same shape).
+- **Index drift fix**: `decision-records/README.md` index updated
+  to include PDR-043, PDR-044, and PDR-045 (PDR-043 and PDR-044
+  were authored but not indexed; this entry catches up the index).
+
+## [oak-open-curriculum-ecosystem] 2026-05-03 — rush-impulse three structural cues graduated to PDR-043
+
+Owner-directed corrective consolidation. Practice Core changes:
+
+- **Added**: `PDR-043 rush-impulse-three-structural-cues`. Three
+  output-time cues (vocabulary trip-list; conditional-discipline
+  check before proposing structure; first-principles framing
+  question) that compose into a cohesive defence against the
+  rush impulse. The cues operate upstream of fences: at output
+  drafting, before substance is committed.
+- **Removed**: an earlier draft pair on producer-output structure
+  that prescribed "carve out the operation; record the carve-out
+  as a domain constraint" with "honest framing for external
+  producers" hedging. Same shape as a withdrawn skip-register
+  pattern, different vocabulary. Deleted outright; no audit
+  trail of incorrect concepts.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-28 — disposition drift graduated into PDR-018
 
 Owner-directed deep consolidation after repeated PR-87 planning drift. Practice
@@ -25,7 +133,8 @@ clarified. Practice-Core changes:
   adjacent agent-operational mechanisms are Practice substance by default.
 - **Phenotype boundary named locally** — host repos own only local files, state
   instances, tools, hooks, platform wrappers, schemas, scripts, and execution
-  plans. This repo's implementation boundary is recorded in ADR-165.
+  plans. This repo's implementation boundary is recorded in the host-side
+  agent-work-Practice phenotype-boundary ADR (see practice-index Concept ↔ ADR map).
 
 ## [oak-open-curriculum-ecosystem] 2026-04-28 — Practice/tool feedback and live collaboration surfaces refreshed
 
@@ -36,9 +145,9 @@ collaboration-channel discoverability. Practice-Core changes:
 - **Practice/tool feedback capture** — the napkin and bootstrap guidance now
   require agents to capture frustrations, friction, insights, ideas, wishlist
   items, and general impressions from the Practice and host-local tools that
-  implement Practice capabilities. In this repo, `agent-tools` is named as the
-  TypeScript-specific implementation surface; the portable behaviour remains
-  Practice-level.
+  implement Practice capabilities. The originating host repo named its own
+  TypeScript-specific implementation surface in its bridge index; the portable
+  behaviour remains Practice-level.
 - **Collaboration state refresh** — `practice.md`, `practice-verification.md`,
   PDR-011, and PDR-024 now reflect the current live state: shared communication
   log, active claims, advisory commit queue, closed claim history, decision
@@ -47,8 +156,9 @@ collaboration-channel discoverability. Practice-Core changes:
 
 ## [oak-open-curriculum-ecosystem] 2026-04-27 — queue governance graduated into PDR-029
 
-Owner-directed queue graduation pass after commit `5c39d1d4` successfully
-self-applied the advisory commit queue and exact staged-bundle verification.
+Owner-directed queue graduation pass after a session-close commit
+successfully self-applied the advisory commit queue and exact
+staged-bundle verification.
 Practice-Core changes:
 
 - **PDR-029 (AMENDED)** — Perturbation-Mechanism Bundle gains Family A Class
@@ -101,16 +211,19 @@ proof and operational mechanics, citing PDR-033 as the cross-repo
 doctrine.
 
 Adjacent host-repo work (recorded for cross-reference, not
-travelling with Core): new ADR-164 (config-load side effects) and
-ADR-153 amendment (call-site uptake) landed on this repo's ADR
-surface.
+travelling with Core): two host-side ADRs landed on the originating
+host's ADR surface alongside the Core graduation pass — a new
+config-load-side-effects ADR plus a call-site-uptake amendment to
+the existing host-side observability decision. Identifiers tracked
+in the host repo's ADR index.
 
 ## [oak-open-curriculum-ecosystem] 2026-04-26 — learning before fitness correction
 
 Owner corrected a consolidation inversion: fitness limits, including hard and
 critical thresholds, are health signals and must never outrank preserving
 understanding. `consolidate-docs`, `practice.md`, `practice-lineage.md`,
-`practice-bootstrap.md`, PDR-014, and ADR-144 now say capture,
+`practice-bootstrap.md`, PDR-014, and the host's three-zone-fitness-model
+ADR (see practice-index Concept ↔ ADR map) now say capture,
 distillation, graduation, and useful writing happen first; fitness pressure
 created by preserving knowledge is routed to later structural response
 (refine, split, graduate, or owner-approved limit change), not used to
@@ -123,8 +236,10 @@ local operational docs into the Practice-facing surfaces. `practice.md`
 now names `.agent/state/` collaboration state as a structural and workflow
 surface; `practice-lineage.md` teaches start-right / session-handoff
 coordination responsibilities; PDR-024 names collaboration-state
-consultation as a vital integration surface. ADR-119 and ADR-124 were
-refreshed so the ADR narrative matches the live Practice Core package and
+consultation as a vital integration surface. The host-side
+agentic-engineering-practice ADR and practice-propagation ADR (see
+practice-index Concept ↔ ADR map) were refreshed so the ADR narrative
+matches the live Practice Core package and
 host-local coordination state instance. Closeout review also clarified the Practice
 Core quality taxonomy: hard gates are always blocking, while specialist
 review is preferred evidence whose findings require disposition and block
@@ -144,9 +259,9 @@ surface. Substance: state surfaces feed memory via the existing
 capture → distil → graduate → enforce pipeline. State is not a fourth
 continuity type — operational / epistemic / institutional remain the
 three types — it is a sibling artefact class contributing signal to
-capture. Boundary cited to
-[`.agent/directives/agent-collaboration.md`](../directives/agent-collaboration.md)
-and `.agent/state/README.md`.
+capture. Boundary cited to the host's `agent-collaboration` directive
+and the host's `.agent/state/README.md` (host-local files; bridged
+from the practice-index).
 
 ## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 8 (ARC CLOSE): doctrine-consolidation arc closed across eight sessions
 
@@ -239,7 +354,9 @@ artefact tier under PDR-032. Major landings across the arc:
   collapse / Active threads as the identity register); PDR-029
   Amendment Log ×2 (active-tripwire markdown definition; Class-A.1
   Layer 2 retraction)
-- **ADR amendments**: ADR-053; ADR-150
+- **ADR amendments** (host-side, identifiers tracked in the host repo's
+  ADR index): the Clerk public-alpha-temporal-scope ADR; the
+  continuity-surfaces ADR (host-side companion to PDR-011)
 - **Rules**: `no-verify-requires-fresh-authorisation` (Session 5);
   `register-identity-on-thread-join` + Cursor adapter (Session 4);
   `executive-memory-drift-capture` (Session 4);
@@ -387,23 +504,14 @@ deferred, not partially completed.
     exploratory; the routing rule names the gate)
   - `research/README.md` (Reference row updated; Holding Bay
     section added)
-- **Active references updated** — surfaces with broken links to
-  the relocated material were updated to point to
-  `research/notes/` paths with transitional status notes:
-  - root `README.md` (work-to-date pointer)
-  - `docs/foundation/README.md` (Agentic Engineering Hub +
-    progress update)
-  - `.agent/practice-index.md` (Agentic Corpus Hub)
-  - `.agent/skills/mcp-expert/SKILL.md` (official-mcp-app-skills)
-  - `.agent/memory/operational/repo-continuity.md` (3 references —
-    deep-dives reference-tier sweep entries closed by reformation)
-  - `.agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md`
-  - `.agent/plans/agentic-engineering-enhancements/roadmap.md`
-  - `docs/foundation/agentic-engineering-system.md` (2 references)
-  - `.agent/reports/agentic-engineering/deep-dive-syntheses/README.md`
-  - `.agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md`
-  - `docs/architecture/architectural-decisions/018-complete-biological-architecture.md`
-  - `docs/README.md` (2 references)
+- **Active references updated** — host-local surfaces with broken
+  links to the relocated material were updated to point to the new
+  research-notes paths with transitional status notes (rerouting
+  applied across the host repo's foundation README, practice-index,
+  expert skills, operational repo-continuity entries, several plan
+  files, the host-side biological-architecture ADR, and the docs
+  README; full per-surface list captured in the host repo's commit
+  history for this session).
 - **Outgoing triage closed honestly** — Phase C completed all
   immediately-actionable batches (Batch 1 deletes; Batch 2
   reformation + promotion; Batch 4 PDR-005 amendment + delete);
@@ -493,9 +601,9 @@ candidates, and then closed the arc.
   § Standing decisions` (substance lost when the standing-decisions
   surface was retracted Session 4) re-homed by inline restate per
   the routing pattern's plan-local-meta-decision branch:
-  attribution-gap-acceptance is thread-local (specific to the
-  `f9d5b0d2` retroactive landing), not portable governance — does
-  not warrant PDR-027 amendment.
+  attribution-gap-acceptance is thread-local (specific to a
+  retroactive observability-thread landing), not portable
+  governance — does not warrant PDR-027 amendment.
 - **Pending-graduations register refreshed** — `deferral-honesty-rule`
   graduated (removed); `feel-state-of-completion-preceding-evidence-of-completion`
   (parent pattern, 2/3) gained a falsifiability check on its
@@ -580,12 +688,14 @@ under owner-corrected manufactured-budget intervention).
     direction wins and the plan is updated same-session); *Misleading docs are blocking* (stale prescriptive text is
     how inherited framing propagates; update in same landing or
     block).
-  - **ADR-053 amendment** — Clerk through public-alpha temporal
-    scope clarified.
-  - **ADR-150 amendment** — parallel host-architecture log entry
-    added for PDR-011 (the continuity-surfaces ADR predecessor;
-    PDR-011 is the portable form, ADR-150 is the host-local
-    record).
+  - **Host-side amendment (Clerk temporal scope)** — Clerk through
+    public-alpha temporal scope clarified on the host's relevant ADR
+    (identifier tracked in the host repo's ADR index).
+  - **Host-side amendment (continuity surfaces)** — parallel
+    host-architecture log entry added for PDR-011 on the host-side
+    continuity-surfaces ADR (the predecessor to PDR-011; PDR-011 is
+    the portable form, the host ADR is the host-local record). See
+    practice-index Concept ↔ ADR map.
 - **Mid-close manufactured-budget intervention** — agent declared
   Stage 2 cancelled citing "budget consumed"; owner corrected:
   *"the budget is made up, so, step back and judge, what is
@@ -605,7 +715,8 @@ under owner-corrected manufactured-budget intervention).
   register items for Session 6 closing-session work.
 - **Loop-closure observation** captured in napkin: this arc is the
   first where every link of the `capture → distil → graduate →
-  enforce` pipeline (per ADR-150 + PDR-011) fired in sequence
+  enforce` pipeline (per the continuity-surfaces concept in PDR-011
+  and its host-side ADR companion) fired in sequence
   within a single session — but every link except the final two
   required owner intervention to surface. The loop is
   **owner-mediated**, not autonomous; that is consistent with
@@ -682,11 +793,12 @@ surfaced a platform-coupling bias in the original script-based shape.
     tag.
   - Napkin skill extended with optional `Source plane:` origin tag.
 - **Observability-thread migration**: next-session record moved from
-  legacy singular path to
-  `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`.
-  Thread identity block and Participating agent identities table added
-  (retroactive row for the `f9d5b0d2` landing; concrete attribution
-  forward from 2026-04-22). All inbound references updated. Closes the
+  the legacy singular operational-memory path to a thread-named
+  next-session record. Thread identity block and Participating agent
+  identities table added (with a retroactive row covering the prior
+  observability-thread landing whose attribution predated the
+  identity registry; concrete attribution forward from 2026-04-22).
+  All inbound references updated. Closes the
   `observability-thread-legacy-singular-path` register item.
 - **Distilled citation** added for
   `passive-guidance-loses-to-artefact-gravity` pattern in
@@ -957,7 +1069,8 @@ surfaces install in Session 4 as well.
   extension, refinement, supersession, and drift candidates against
   existing Core for owner approval; step 10 (practice exchange)
   updated per PDR-007 outgoing-narrowing.
-- `session-handoff` command now cites PDR-011 alongside ADR-150.
+- `session-handoff` command now cites PDR-011 alongside the host-side
+  continuity-surfaces ADR (see practice-index Concept ↔ ADR map).
 - `skills/patterns/SKILL.md` updated to point at both
   practice-core/patterns (general abstractions, first) and
   memory/patterns (instances, second); notes Practice-governance
@@ -1168,8 +1281,8 @@ surfaces install in Session 4 as well.
   documents it. A descriptive name is better than an opaque number, but
   a name alone is still a pointer — the substance must travel.
 - Removed all host-repo-specific ADR references from Practice Core
-  files (6 occurrences of "ADR-144" across 3 files, replaced with
-  concept descriptions).
+  files (6 occurrences of the host's three-zone-fitness-model ADR
+  identifier across 3 files, replaced with concept descriptions).
 - Reframed Integration Flow step 3 to operate at the concept level:
   "compare at the concept level, not file-by-file."
 - Compressed redundant content across practice.md, practice-bootstrap.md,

@@ -126,12 +126,14 @@ that shapes a specific repo's product architecture is ADR-shaped
 The reusability test applies to both, but the adopter scope
 differs:
 
-- ADR adopter = the next contributor in this repo (or a fork).
+- ADR adopter = the next contributor in the host repo (or a
+  fork).
 - PDR adopter = the next Practice-bearing repo that hydrates the
   Core.
 
 A decision that would be re-derived across repos is a PDR; a
-decision that would be re-derived within this repo is an ADR.
+decision that would be re-derived within a single host repo is an
+ADR.
 
 ### ADRs state WHAT, not HOW (2026-04-21 amendment)
 
@@ -168,7 +170,7 @@ This discipline applies to **new ADRs** authored after the
 required to be retroactively pruned; they are pruned opportunistically
 when the surrounding code changes and the HOW-section is observed
 to have drifted (per the `Misleading docs are blocking` principle
-in `.agent/directives/principles.md` § Code Quality).
+in the Practice's principles directive, Code Quality section).
 
 ## Rationale
 
@@ -233,13 +235,3 @@ Alternatives rejected:
   missed at lane closure may be surfaced at review).
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instance retained with `related_pdr: PDR-019`:
-
-- `.agent/memory/active/patterns/adr-by-reusability-not-diff-size.md` —
-  materialised as ADR-159 (per-workspace vendor CLI ownership)
-  from a tight hygiene lane; small diff, ADR-worthy because the
-  decision pattern would be re-derived by every next vendor CLI
-  adoption.

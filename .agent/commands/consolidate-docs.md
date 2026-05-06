@@ -26,6 +26,9 @@ Run `consolidate-docs` when one or more of these is true:
 - napkin, distilled, pattern, or fitness pressure now needs convergence work
 - repeated surprises or corrections suggest a new rule, pattern, ADR, or
   governance change
+- a repeated pattern spans multiple napkin rotations, the owner requests
+  historical synthesis, or prior consolidations keep reporting the same
+  family without naming its deeper cause
 - documentation drift or stale cross-references now need graduation
 
 This command preserves the full deep-convergence role: graduation, pattern
@@ -72,6 +75,19 @@ held over).
 
 ## Learning Preservation Overrides Fitness Pressure
 
+This section is the **per-write rule**: it governs the moment of
+individual capture or graduation. The companion **layer-orchestration
+rule** is
+[PDR-046 (Layered Knowledge Processing — Preserve First, Restructure
+Second)](../practice-core/decision-records/PDR-046-layered-knowledge-processing.md),
+which governs how the per-write rule composes when work intentionally
+traverses multiple layers (capture → distillation → permanent doctrine
+→ permanent-doctrine internal restructuring) in a single pass. Read
+PDR-046 alongside this section. Together they form one discipline:
+substance is never compressed (per-write rule); fitness applies at
+rest, not in-process; the staircase is walked bottom-up until
+knowledge has reached its durable home (PDR-046 §Decision).
+
 **Writing to shared-state records of knowledge is NEVER blocked by
 fitness limits.** Fitness signals — including SOFT, HARD, and CRITICAL
 — are health indicators about the destination file's structure; they
@@ -109,6 +125,16 @@ permanent home, write it there at full weight. Resulting fitness
 pressure routes to step 9 as follow-up structure work — refine,
 split, graduate, or adjust limits — never as retroactive permission
 to have written less.
+
+When residual fitness pressure persists at rest after a layer's
+processing completes, the default response is **graduation upward, not
+compression** ([PDR-046 §Move 3](../practice-core/decision-records/PDR-046-layered-knowledge-processing.md#move-3--a-layers-fitness-pressure-is-addressed-by-processing-the-next-layer-up-not-by-compression)).
+Substance ready for its durable home leaves the layer to that home;
+the source layer's shape relaxes naturally. Refinement / split /
+target-revision becomes the appropriate response **only** when no
+substance remains ready to graduate. This is the structural cure for
+"the destination is full" reasoning at consolidation: the layer is
+not full of substance to remove, it is full of substance to graduate.
 
 ## Plan supersession discipline
 
@@ -201,7 +227,12 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Three destinations, not one** (per PDR-007). The substance shape determines the home:
 
    - **Engineering instance, ecosystem-specific** → `.agent/memory/active/patterns/`. TypeScript/Zod/Vitest/SDK-specific patterns live here. Each entry is proven in a concrete repo context. Most pattern candidates land here.
-   - **Engineering abstraction, ecosystem-agnostic** → `.agent/practice-core/patterns/` (via **synthesis**, not move). When ≥2 instance patterns across repos or ecosystems express the same underlying general principle, consider authoring a general abstract pattern in `practice-core/patterns/` that cites the instances. **Instances stay in `memory/active/patterns/`** — synthesis authors the general form fresh; it does not move the instances. See `.agent/practice-core/patterns/README.md` for the synthesised-pattern frontmatter schema and the three-part inclusion criterion (ecosystem-agnostic / engineering-substance-not-governance / ≥2 instances).
+   - **Engineering abstraction, ecosystem-agnostic** → Practice Core PDR
+     with `pdr_kind: pattern` (via **synthesis**, not move). When ≥2
+     instance patterns across repos or ecosystems express the same underlying
+     general principle, author the general form fresh as a PDR. **Instances
+     stay in `memory/active/patterns/`** — synthesis does not move them. The
+     former Practice Core `patterns/` directory is retired by PDR-007.
    - **Practice governance** (review discipline, planning discipline, knowledge-flow discipline, reviewer authority, agent infrastructure, etc.) → **not a pattern; it is PDR-shaped.** Surface the candidate under step 7a (PDR scan) instead. Practice-governance patterns absorbed into PDRs keep their instance files in `memory/active/patterns/` with `related_pdr: PDR-NNN` frontmatter linking to the general governance form.
 
    **Cross-session scan**: Read napkin entries from the current rotation window as a chronological sequence, not just the latest session. The most important patterns often emerge from the *interaction* of observations across sessions — a correction in session 4 may reframe an observation from session 1, or a recurring mistake across sessions may reveal a structural cause invisible in any single session. Ask: "What do these sessions know together that none knows alone?" See `patterns/cross-session-pattern-emergence.md`.
@@ -225,6 +256,44 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    distil mid-session, do not distil if the napkin is under 400 lines, and do
    not distil "What Was Done" sections — those are session history, not
    learnings.
+6a. **Run archive-scale historical synthesis when triggered.** This is a
+    distinct cadence from the current-rotation cross-session scan. Run it when
+    the trigger checklist names historical synthesis, when the owner asks for a
+    holistic napkin pass, or when repeated observations span multiple archived
+    rotations. If the current napkin belongs in the selected corpus and is due
+    for rotation, complete step 6 first so the historical pass reads processed
+    capture rather than in-flight capture.
+
+    Read the selected current + archived napkins as one historical corpus after
+    their ordinary per-napkin processing has happened. Ask: "What does the
+    archive know now that no individual rotation could have known then?"
+
+    Keep the pass bounded. Before reading, name the corpus window: either all
+    napkins since the last historical-synthesis marker, the last N archived
+    napkins, or the napkins matching a specific thread / theme. Do not reread
+    the whole archive by default unless the consolidation is explicitly a
+    historical pass.
+
+    Write a synthesis report before mutating doctrine. Default home:
+    `.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/`
+    with filename `historical-napkin-synthesis-YYYY-MM-DD.md`. The report is
+    the persisted marker ledger; the newest report's processed marker is where
+    the next "since last marker" pass starts. The report records:
+
+    - `Corpus window` — exact current / archived napkins read.
+    - `Selection rationale` — why this window was selected.
+    - `Processed marker` — the archive boundary future passes can start after.
+    - `Emergent findings` — what the corpus knows that no single napkin knew.
+    - `Evidence arcs` — chronological links across entries that support each
+      finding.
+    - `Rejected near-patterns` — tempting syntheses that did not clear the bar.
+    - `Routing decisions` — destination and status for each finding.
+
+    Findings then route through the ordinary destinations: `distilled.md`, the
+    pending-graduations register, host pattern instances, ADRs, PDRs (including
+    `pdr_kind: pattern` for ecosystem-agnostic abstractions), rules, commands,
+    or permanent docs. Source archived napkins are evidence; do not rewrite
+    them.
 7. **Graduate settled content.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
 
    **Inputs to the graduation scan**:
@@ -270,7 +339,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - **Rules / principles** codified in `.agent/directives/principles.md`.
    - **Host-repo architectural decisions** → ADRs in `docs/architecture/architectural-decisions/` (or host equivalent).
    - **Practice-governance decisions** → PDRs in `.agent/practice-core/decision-records/` (portable; travels with Core). Pattern-shaped governance uses `pdr_kind: pattern` frontmatter.
-   - **General abstract engineering patterns** (ecosystem-agnostic, synthesised from ≥2 instances) → `.agent/practice-core/patterns/` (portable; travels with Core; authored fresh via synthesis — instances stay in `memory/active/patterns/`).
+   - **General abstract engineering patterns** (ecosystem-agnostic, synthesised from ≥2 instances) → PDRs in `.agent/practice-core/decision-records/` with `pdr_kind: pattern` (portable; travels with Core; authored fresh via synthesis — instances stay in `memory/active/patterns/`).
    - **Specific engineering pattern instances** → `.agent/memory/active/patterns/` (repo-local, ecosystem-grounded).
    - **Tooling documentation** → `docs/engineering/build-system.md` or equivalent.
    - **Workspace-specific gotchas** → workspace READMEs.
@@ -415,8 +484,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - **Trinity** (`.agent/practice-core/practice.md`, `practice-lineage.md`, `practice-bootstrap.md`) — blueprint prose: artefact map, knowledge flow, evolution rules, bootstrap templates.
    - **Entry points** (`.agent/practice-core/README.md`, `index.md`) — orientation and hydration guidance.
    - **Verification and operational** (`.agent/practice-core/practice-verification.md`, `CHANGELOG.md`) — bootstrap checklist, acceptance criteria, change log.
-   - **Decision Records** (`.agent/practice-core/decision-records/`) — every existing PDR (001 onward).
-   - **General patterns** (`.agent/practice-core/patterns/`) — every authored abstraction.
+   - **Decision Records** (`.agent/practice-core/decision-records/`) — every existing PDR (001 onward), including PDRs with `pdr_kind: pattern` for authored abstractions.
 
    **What to review for**:
 
@@ -486,12 +554,12 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    itself changes.
 10. **Manage the practice exchange.** Two directions:
 
-   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally — including `practice-core/decision-records/` (PDRs) and `practice-core/patterns/` (general abstractions), which are now first-class Core surfaces per PDR-007; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md` or (when substantial) to a dedicated PDR.
+   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally — including `practice-core/decision-records/` (PDRs and PDRs with `pdr_kind: pattern`), which is the first-class Core decision surface per PDR-007; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md` or (when substantial) to a dedicated PDR.
 
    **Outgoing**: PDR-007 narrowed `.agent/practice-context/outgoing/` to **ephemeral exchange only** — transient sender→receiver notes that expire after integration. Substance with durable value has four proper homes:
 
 - **Portable Practice governance** (review/planning/consolidation/etc. discipline) → PDR in `practice-core/decision-records/` (travels with Core; no outgoing copy needed).
-- **General abstract patterns** (ecosystem-agnostic, ≥2 instance synthesis) → `practice-core/patterns/` (travels with Core; authored fresh via synthesis).
+- **General abstract patterns** (ecosystem-agnostic, ≥2 instance synthesis) → PDR with `pdr_kind: pattern` in `practice-core/decision-records/` (travels with Core; authored fresh via synthesis).
 - **Host-local reference material** (platform-specific notes, ecosystem-specific examples, scripts) → `.agent/reference/` (host-local; does not travel).
 - **Ephemeral exchange context** (framing notes, short-lived write-back packs targeted at a specific receiver) → `.agent/practice-context/outgoing/`.
 

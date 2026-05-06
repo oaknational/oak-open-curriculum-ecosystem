@@ -99,6 +99,62 @@ dated and informs either an ADR or a specific plan.
 
 ---
 
+## Substrate plans (cross-axis infrastructure)
+
+Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-plan.md):
+
+- [`archive/completed/fix-dev-boot-release-resolution.plan.md`](./archive/completed/fix-dev-boot-release-resolution.plan.md)
+  — ✅ **COMPLETED** (Cycle 1 landed on `feat/eef_exploration`).
+  `resolveDevelopmentRelease` falls through to a `local-dev`
+  placeholder in development when both `VERCEL_BRANCH_URL` and
+  `VERCEL_GIT_COMMIT_SHA` are absent; preview and production retain
+  their hard-fail. `missing_git_sha` error kind and orphaned skipped/
+  todo tests were deleted as part of the same landing.
+- [`current/feat-eef-exploration-completion.plan.md`](./current/feat-eef-exploration-completion.plan.md)
+  — 🟢 **CURRENT.** Unified seventeen-step linear plan to complete and
+  merge `feat/eef_exploration`. Step 1 comprehensive sub-agent review;
+  step 2 applies findings; step 3 integrates `no-speed-pressure` rule
+  across the rule estate; steps 4–5 backfill reviewer dispatch on the
+  four landed plan-3 commits; steps 6–11 cycle 2 per-workspace real-IO
+  audits; steps 12–13 cycle 3 `no-real-io-in-tests` ESLint rule
+  (author + wire to root); step 14 `pnpm check` green; step 15 dev
+  boot + MCP tool exercise + clean shutdown; step 16 pre-merge
+  divergence analysis; step 17 owner-gated merge readiness with
+  release-readiness-reviewer synthesis. Supersedes two predecessor
+  plans:
+  [`archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`](./archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md)
+  and
+  [`../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md`](../architecture-and-infrastructure/archive/superseded/smoke-test-retirement-recovery-and-completion.plan.superseded-by-unified-2026-05-04.md)
+  whose verification work overlapped duplicatively.
+- [`current/pr-93-sonar-quality-gate-resolution.plan.md`](./current/pr-93-sonar-quality-gate-resolution.plan.md)
+  — 🟢 **CURRENT.** PR 93 Sonar resolution lane for unclaimed script/env
+  findings, hotspot cleanup, and generated SDK duplication disposition.
+  Generated/built SDK duplication is explicitly routed to the architecture
+  codegen future plan and is not hand-fixed in PR 93.
+- [`future/pr-93-sonar-oak-eslint-claim-overlap.plan.md`](./future/pr-93-sonar-oak-eslint-claim-overlap.plan.md)
+  — 🔵 **FUTURE.** Claim-overlap follow-up for the remaining `oak-eslint`
+  Sonar TODO-comment findings once Silvered Hiding Silhouette's paused
+  claim is unpaused, closed, or explicitly coordinated.
+- [`future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`](./future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md)
+  — 🛑 **DAMAGED — PAUSED — SUPERSEDED.** Multi-sink + fixture
+  orthogonality rename (`SENTRY_MODE` → `OBSERVABILITY_SINKS` +
+  `OBSERVABILITY_FIXTURES`). Owner-directed pause 2026-05-04: the
+  rename concept is real future work but its current plan body has
+  unnamed foundational tension; resumption requires naming the tension
+  in a durable artefact (PDR or ADR amendment) and re-shaping the
+  plan body. WS1 of the rename (commit `a3a0222a`) already landed —
+  observability schemas + sink-registry types coexist with the legacy
+  `SENTRY_MODE` consumer flow under the pause. ADR-171 (was cycle 2)
+  and the READMEs/.env.example updates (was cycle 3) are deferred
+  with the rename. Earlier supersession heritage:
+  `observability-multi-sink-and-fixtures-shape.plan.md` (archived as
+  superseded 2026-05-03) plus
+  `archive/superseded/observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md`
+  and
+  `archive/superseded/local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md`.
+
+---
+
 ## Related
 
 - [`high-level-plan.md`](../high-level-plan.md) — repo-wide plan index.

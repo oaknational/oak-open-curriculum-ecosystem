@@ -1,7 +1,7 @@
 # Architecture and Infrastructure Roadmap
 
 **Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-05-05
 **Session Entry**: [`start-right-quick`](../../skills/start-right-quick/SKILL.md) + [`memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md)
 
 ---
@@ -65,6 +65,9 @@ Lane indexes:
 - The existing nested codegen plan,
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md),
   remains the tranche-4 companion strategy rather than a parallel direction.
+  PR 93's generated/built SDK duplication signal is routed here for an
+  upcoming codegen session and is not hand-fixed as a PR 93 product-code
+  blocker.
 
 ---
 
@@ -137,6 +140,9 @@ Phase 4: Quality/operations hardening                 📋 future
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md)
 - Companion strategic plan:
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md)
+  — also owns the generated/built SDK duplication surfaced during PR 93
+  Sonar review; this is roadmap debt for the codegen tranche, not a
+  generated-file hand-refactor inside PR 93.
 - Cross-scale budget companion:
   [future/architectural-budget-system-across-scales.plan.md](future/architectural-budget-system-across-scales.plan.md)
   with visibility and enforcement child briefs. This companion provides

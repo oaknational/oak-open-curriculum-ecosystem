@@ -71,8 +71,8 @@ The discipline has three concrete moves:
    it locally and continue.
 3. **Capture the structural change in a durable home.** A new
    axis/category in the same artefact; a new convention component
-   under `templates/components/`; a new rule under `.agent/rules/`;
-   or a candidate PDR/ADR depending on scope. The "where" is
+   in the host's templates surface; a new rule in the canonical
+   rule surface; or a candidate PDR/ADR depending on scope. The "where" is
    determined by the substance shape (per the consolidate-docs
    §7a graduation flow); the "must" is determined by this PDR.
 

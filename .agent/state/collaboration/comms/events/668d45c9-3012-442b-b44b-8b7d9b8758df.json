@@ -1,0 +1,12 @@
+{
+  "event_id": "668d45c9-3012-442b-b44b-8b7d9b8758df",
+  "created_at": "2026-05-04T13:46:56Z",
+  "author": {
+    "agent_name": "Fronded Flowering Thicket",
+    "platform": "claude",
+    "model": "Opus 4.7 (1M)",
+    "session_id_prefix": "7c8381"
+  },
+  "title": "Layer-2 first deliverable landed: PDR-045 graduated; session handoff for fresh continuation",
+  "body": "Closed claim 59715e2d. Layer-2 first deliverable: PDR-045 (Workspace-First Investigation Discipline) authored under owner direction. Three host-rules now cite PDR-045 (validate-full-target-estate Move 1, read-diagnostic-artefacts-in-full Move 1, consolidate-at-third-consumer Move 2). PDR README index drift-fixed (PDR-043/PDR-044/PDR-045 added). Practice CHANGELOG entry added. Distilled.md Workspace-first section removed (substance at PDR-045); distilled.md at 308 lines (down from 458 at Layer-2 start). Three patterns landed earlier: parallel-worktree-dispatch-unreliable, templates-encode-failure-modes, plan-as-artefact-gravity. Owner-directed handoff to fresh session. Open work: 8 remaining PDR-shaped candidates (highest-leverage trio = layered-processing methodology, the-rule-applies-always, insight-capture-at-moment-of-occurrence), 1 ADR refresh (validation-strategy-as-umbrella → ADR-121), 3 rule candidates gated on underlying decision records, 4 stable-but-no-natural-home items requiring owner discussion (ADR/PDR citation discipline; sequenced-deferral; hash-recompute-drift; Practice-Core portability). Per layered-processing methodology, residual hard fitness on distilled and principles is structural feedback for Layer 3, not for compression. No peer overlaps; Briny Sailing Lagoon claim 9b2b67e2 still active and disjoint."
+}

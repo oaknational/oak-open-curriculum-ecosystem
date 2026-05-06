@@ -1,20 +1,25 @@
 /**
- * Environment resolution pipeline.
+ * Environment resolution pipeline. Loads `.env` / `.env.local` from both
+ * repo root and app root, merges with `processEnv` (highest precedence),
+ * validates against a Zod schema, and returns {@link EnvResolveResult} —
+ * `\{ ok: true, value, warnings \}` on success (warnings is `[]` today;
+ * populated by the schema layer in WS3 of the observability multi-sink
+ * + fixtures plan), or `\{ ok: false, error \}` with structured
+ * diagnostics. Shape-compatible with `@oaknational/result`'s
+ * `Result<T, E>` for property-access patterns (`result.ok`,
+ * `result.value`, `result.error`). Consuming apps define requirements
+ * via a Zod schema; this module owns loading, merging, validation, and
+ * diagnostics.
  *
- * Loads `.env` / `.env.local` from both repo root and app root, merges
- * with `processEnv` (highest precedence), validates against a Zod schema,
- * and returns `Result<T, EnvResolutionError>`.
- *
- * The consuming app defines its requirements via a Zod schema. This
- * module owns loading, merging, validation, and diagnostics.
+ * @see ../../../.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md
  */
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse as dotenvParse } from 'dotenv';
 import type { z } from 'zod';
-import { ok, err, type Result } from '@oaknational/result';
 import { findRepoRoot, findAppRoot } from './repo-root.js';
+import type { EnvKeyDiagnostic, EnvResolutionError, EnvResolveResult } from './types.js';
 
 /**
  * Options for the environment resolution pipeline.
@@ -28,29 +33,6 @@ export interface ResolveEnvOptions<TSchema extends z.ZodType> {
   readonly processEnv: Readonly<Record<string, string | undefined>>;
   /** Directory from which to begin searching for the monorepo root */
   readonly startDir: string;
-}
-
-/**
- * Diagnostic information for a single environment variable key.
- *
- * Reports whether the key was present in the merged environment
- * (across all sources: `.env`, `.env.local`, `processEnv`).
- */
-export interface EnvKeyDiagnostic {
-  readonly key: string;
-  readonly present: boolean;
-}
-
-/**
- * Structured error returned when environment resolution fails.
- *
- * Contains a human-readable message, per-key diagnostics showing
- * which keys were present or absent, and the raw Zod validation issues.
- */
-export interface EnvResolutionError {
-  readonly message: string;
-  readonly diagnostics: readonly EnvKeyDiagnostic[];
-  readonly zodIssues: readonly z.core.$ZodIssue[];
 }
 
 /**
@@ -205,11 +187,18 @@ function buildEnvResolutionError(
  *
  * @typeParam TSchema - Zod schema type
  * @param options - Pipeline options: schema, processEnv, startDir
- * @returns `Ok` with validated data, or `Err` with structured diagnostics
+ * @returns `EnvResolveResult` — `\{ ok: true, value, warnings \}` on
+ *   success (warnings is empty today; populated by the schema layer in
+ *   WS3 of the observability multi-sink + fixtures plan), or
+ *   `\{ ok: false, error \}` with structured diagnostics. Shape-
+ *   compatible with `Result<TEnv, EnvResolutionError>` for callers that
+ *   access `result.ok` / `result.value` / `result.error`.
+ *
+ * @see ../../../.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md
  */
 export function resolveEnv<TSchema extends z.ZodType>(
   options: ResolveEnvOptions<TSchema>,
-): Result<z.infer<TSchema>, EnvResolutionError> {
+): EnvResolveResult<z.infer<TSchema>> {
   const { schema, processEnv, startDir } = options;
 
   const repoRoot = findRepoRoot(startDir);
@@ -235,8 +224,11 @@ export function resolveEnv<TSchema extends z.ZodType>(
   const diagnostics = buildDiagnostics(merged, schemaKeys);
 
   if (parsed.success) {
-    return ok(parsed.data);
+    return { ok: true, value: parsed.data, warnings: [] };
   }
 
-  return err(buildEnvResolutionError(diagnostics, parsed.error.issues, processEnv.VERCEL === '1'));
+  return {
+    ok: false,
+    error: buildEnvResolutionError(diagnostics, parsed.error.issues, processEnv.VERCEL === '1'),
+  };
 }

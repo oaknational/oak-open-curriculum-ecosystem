@@ -7,7 +7,7 @@ source_repos:
 related_plans:
   - "../ooc-api-wishlist/index.md"
   - "../external-material-triage.md"
-  - "../../knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
+  - "../../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
 specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney, type-reviewer, docs-adr-reviewer"
 ---
 

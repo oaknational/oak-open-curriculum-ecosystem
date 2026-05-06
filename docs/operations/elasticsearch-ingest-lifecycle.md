@@ -280,7 +280,6 @@ pnpm lint:fix
 pnpm test
 pnpm test:e2e
 pnpm test:ui
-pnpm smoke:dev:stub
 ```
 
 If any gate fails, fix and restart the sequence from `pnpm secrets:scan:all`.
@@ -289,4 +288,4 @@ Migration completion gate:
 
 - Do not mark migration complete until blue/green deploy success evidence is
   recorded: deploy environment, commit SHA, cutover success, and post-deploy
-  health/smoke checks.
+  health checks.

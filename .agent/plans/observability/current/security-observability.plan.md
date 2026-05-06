@@ -15,15 +15,15 @@ blocked_on:
   - "docs/explorations/2026-04-18-cloudflare-plus-sentry-security-observability.md (informs boundary)"
 release_gate: public-beta
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): auth_failure + rate_limit_triggered emission-site contract tests; assert emissions conform to schemas from observability-events workspace."
+  - id: ws1-cycle-auth-failure
+    content: "WS1 cycle 1: auth_failure emission at Clerk trust boundary. ONE COMMIT — emission-site contract test (asserts conformance to the auth_failure schema from observability-events workspace) + Clerk trust-boundary emission wiring + conformance-helper composition into the test. Tree green at end."
     status: pending
     priority: next
-  - id: ws2-green
-    content: "WS2 (GREEN): wire emissions at Clerk trust boundary + existing rate-limit middleware; compose conformance helper into tests."
+  - id: ws1-cycle-rate-limit-triggered
+    content: "WS1 cycle 2: rate_limit_triggered emission at the existing rate-limit middleware. ONE COMMIT — emission-site contract test + middleware emission wiring + conformance-helper composition. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): runbook entry; cross-reference ADR-158 and ADR-160 redaction boundary."
+  - id: ws2-docs
+    content: "WS2 (docs): runbook entry; cross-reference ADR-158 and ADR-160 redaction boundary. Pure documentation cycle — no test+code pair needed."
     status: pending
   - id: ws4-quality-gates
     content: "WS4: pnpm check exit 0."

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 import {
   createMockObservability,

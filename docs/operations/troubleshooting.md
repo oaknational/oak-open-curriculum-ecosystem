@@ -69,19 +69,7 @@ than missing env vars.
 
 1. Ensure the app builds successfully: `pnpm build`
 2. Check that no other process is using port 3333 (streamable-http default)
-3. If a Clerk-related error appears, confirm you are running
-   `pnpm test:e2e` (not `pnpm smoke:*` — smoke tests do require
-   credentials; see the next section)
-
-### Smoke Tests Fail
-
-**Symptoms**: `pnpm smoke:dev:stub` fails.
-
-**Steps**:
-
-1. Ensure `pnpm build` succeeds first (smoke tests depend on built artefacts)
-2. Check that all E2E tests pass first (`pnpm test:e2e`)
-3. For live smoke tests (`smoke:dev:live`): ensure `OAK_API_KEY` is set
+3. If a Clerk-related error appears, confirm you are running `pnpm test:e2e`
 
 ### ESLint Reports Boundary Violations
 
@@ -234,7 +222,6 @@ pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
 pnpm test:ui
-pnpm smoke:dev:stub
 ```
 
 Each gate may fix issues for subsequent gates (e.g.

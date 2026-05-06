@@ -141,6 +141,21 @@ asks for more, this command must not trigger:
    surface is a read-source for extraction, not a surface we
    maintain.
 
+   **Auxiliary input: session comms-events.** The session's own
+   comms-events under `.agent/state/collaboration/comms-events/`
+   (and the regenerated `shared-comms-log.md`) carry
+   coordination-context substance: owner-direction-captured-inline,
+   inter-agent surprises, tooling friction discovered during
+   cross-agent work, the timeline of decisions made through the
+   parallel comms-default channel, and worked instances of
+   coordination-cure patterns. Scan events authored by your session
+   AND events addressed to your session at session close; mirror any
+   entry that would change next-session behaviour into `napkin.md`
+   using the structured surprise format. Do not rewrite or delete
+   the events themselves — they are durable coordination records,
+   not a buffer surface. This is a read-source for extraction.
+   Owner-stated standing 2026-05-05.
+
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a
@@ -185,16 +200,36 @@ asks for more, this command must not trigger:
    each of the platform-specific entry-point files at the repo root
    — `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, and any analogous
    platform entry point present in the repo — plus any host-specific
-   adapter entry-point (`.codex/AGENTS.md`, etc.). Each MUST contain
-   ONLY a heading + a one-line pointer to
+   adapter entry-point (`.codex/AGENTS.md`, etc.).
+
+   **Default contract**: heading + a one-line pointer to
    [`.agent/directives/AGENT.md`](../directives/AGENT.md) (or the
-   host's canonical equivalent). Anything else is **drift**: an
-   instruction, fact, preference, or operational note that an agent
-   or user added directly to the entry point instead of routing it
-   through the canonical surfaces. Entry-point drift is particularly
-   insidious because every platform reads only its own entry point
-   first; a fact that lives only in `AGENTS.md` is invisible to
-   Claude, and vice versa.
+   host's canonical equivalent for adapter entry-points).
+
+   The default-plus-extensions shape is forward-compatible by design:
+   if a new platform with a new entry-point file appears (e.g.
+   `FOO.md`), the default ensures the platform routes to the
+   canonical AGENT.md immediately, *before* any of us has paid
+   specific attention to that platform's quirks. Named extensions
+   are added later only where the platform's behaviour requires
+   additional shape.
+
+   **Named extensions** (apply only where listed):
+
+   - `AGENTS.md` extends the default with one additional line —
+     `See [RULES_INDEX.md](RULES_INDEX.md) for the canonical rules list.`
+     This is the Codex entry point and Codex does not follow the
+     AGENT.md pointer to its rules-index references the way Claude
+     Code does, so the rules-index pointer is part of the AGENTS.md
+     contract.
+
+   Anything beyond the default (or beyond a named extension) is
+   **drift**: an instruction, fact, preference, or operational note
+   that an agent or user added directly to the entry point instead
+   of routing it through the canonical surfaces. Entry-point drift
+   is particularly insidious because every platform reads only its
+   own entry point first; a fact that lives only in `AGENTS.md` is
+   invisible to Claude, and vice versa.
 
    For every piece of drift found, apply the
    [ephemeral-to-permanent-homing methodology](ephemeral-to-permanent-homing.md):

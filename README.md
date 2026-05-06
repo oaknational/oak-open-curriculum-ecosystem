@@ -34,11 +34,17 @@ self-improving Practice for agentic-first engineering: a plain-text framework
 that lets agents from major vendors collaborate, learn, and keep operational
 knowledge in the repository where it remains useful.
 
-## Not a developer? Start here
+**Beyond Oak-hosted products**, this repository publishes a deliberate set of
+reusable sector components—the OpenAPI-to-MCP pipeline, SDK-generation
+patterns, hybrid-search tooling, MCP/MCP App scaffolds, graph projection
+conventions, and the openly documented Practice—so other organisations can lower
+the cost of building curriculum-aware applications without starting from scratch.
+The canonical inventory and scope for each asset live in [_What We
+Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
 
 **Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
 
-- [VISION.md](docs/foundation/VISION.md) — what this project delivers, why it matters, and the investment case
+- [VISION.md](docs/foundation/VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
 - [Latest progress update](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters
 
@@ -70,6 +76,18 @@ Three capabilities, powered by three open education data sources:
 | **MCP Servers**     | AI assistants and developer tools can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) and MCP Apps | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel) |
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                    | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
 
+Together, shipped products and reusable sector-facing components are the pillars
+of _compositional curriculum intelligence_, framed in depth in [VISION.md](docs/foundation/VISION.md)—including hosted surfaces versus reusable components under [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver).
+
+### Sector reusable components
+
+Partners and external builders should anchor adoption claims on the enumerated
+inventory in [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver): what
+counts as reusable fabric (pipeline, SDK generation patterns, hybrid-search
+tooling, MCP/MCP App scaffolds, graph projection conventions, Practice) versus
+Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
+grow from [.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md](.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md).
+
 ### Data Sources
 
 This repository integrates three open education data sources, each answering a different question that teachers ask:
@@ -83,8 +101,11 @@ This repository integrates three open education data sources, each answering a d
 Together these sources enable **evidence-grounded curriculum discovery**: AI
 agents can search for content (Oak API), understand where it fits in the
 curriculum structure (ontology), and recommend evidence-backed teaching
-approaches (EEF). They also give internal Oak teams and external builders a
-set of world-class primitives for curriculum-aware products. See
+approaches (EEF). They also equip internal Oak teams and external builders with
+high-quality integration primitives spanning curriculum API access, MCP, search,
+ontology alignment, and evidence surfaces. Organisational reuse of Oak's delivery
+patterns—not merely calling the upstream REST API—is grounded in Vision,
+[_What We Deliver_](docs/foundation/VISION.md#what-we-deliver). See
 [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for
 full licence terms.
@@ -115,7 +136,6 @@ and
 - **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` or `fnm use` to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
-- **jq** (optional, for `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`) — install via [jqlang.github.io/jq/download](https://jqlang.github.io/jq/download/)
 - **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
 - **sentry** (optional, for dev-time Sentry issue triage, event inspection, and Sentry Seer via `sentry issue list` / `sentry api`) — install via [cli.sentry.dev](https://cli.sentry.dev/) (`curl https://cli.sentry.dev/install -fsS | bash`) or `brew install getsentry/tools/sentry`. Required only for humans and agents using Seer or `sentry api` locally; the HTTP MCP server's Vercel-build source-map upload + release/deploy linkage is performed by [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/) inside the workspace's `build` script (see [`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`](apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts) and [ADR-163 §6 amendment 2026-04-21](docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)). Operator-driven `sentry-cli` invocations resolve via `pnpm exec sentry-cli` from the MCP app workspace (where `@sentry/cli` arrives as a transitive devDependency of `@sentry/esbuild-plugin`), or via `pnpm dlx @sentry/cli` from elsewhere. Any script that invokes the dev `sentry` CLI must wrap the invocation in the `require_command "sentry" "https://cli.sentry.dev/"` fail-fast pattern; each script currently defines `require_command` inline — see [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh) for the canonical dev-`sentry` helper. Both patterns and the full `sentry-cli` vs dev-`sentry` split are documented in [docs/operations/sentry-cli-usage.md](docs/operations/sentry-cli-usage.md) (see also [ADR-159](docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)).
 

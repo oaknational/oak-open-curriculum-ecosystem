@@ -25,7 +25,7 @@
         {
           "kind": "plan",
           "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md"
+            ".agent/plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md"
           ]
         }
       ],

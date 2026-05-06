@@ -87,3 +87,58 @@ Tables migrated from
 `sentry-observability-translation-crosswalk.plan.md` during the
 2026-04-29 deep consolidation pass; the standalone crosswalk plan
 was archived to `archive/completed/` in the same change set.
+
+---
+
+## observability-config-coherence.plan.pre-orthogonal-axes-2026-05-02.md
+
+Source-plan archive of the strategic brief that prescribed four
+related architectural concerns (sink registry unification, env-layer
+validation, locality classification, build-log signal) plus a
+parallel config-management-platform evaluation. Superseded 2026-05-02
+because the orthogonal-axes shape (`OBSERVABILITY_SINKS` typed list +
+`OBSERVABILITY_FIXTURES` orthogonal switch) is the structural cure
+the brief was missing — it answers the brief's four open design
+questions and absorbs WS-A/B/C/D into a single coherent executable
+plan.
+
+### Scope Routing
+
+| Source workstream | New owner plan | Acceptance lane |
+|---|---|---|
+| WS-A — Unify sink registry | `current/observability-multi-sink-and-fixtures-shape.plan.md` | WS2 (sentry-node) + WS3 (env layer) |
+| WS-B — Sentry validation at env layer (superRefine) | `current/observability-multi-sink-and-fixtures-shape.plan.md` | WS3 |
+| WS-C — Build-log + startup signal | `current/observability-multi-sink-and-fixtures-shape.plan.md` | WS4 + WS8.4 (operator runbook) |
+| WS-D — ServerInstrumenter port | `current/observability-multi-sink-and-fixtures-shape.plan.md` | WS6 |
+| WS-E — Config-management-platform evaluation | `future/config-management-platform-evaluation.plan.md` | NEW STUB spawned by new owner plan WS11.1 |
+| Open Design Q1 — sink registry location | `current/observability-multi-sink-and-fixtures-shape.plan.md` D11 | Decided: `@oaknational/observability` (framework layer) |
+| Open Design Q2 — locality enforcement strength | `current/observability-multi-sink-and-fixtures-shape.plan.md` D9 | Decided: warn in preview, fail-closed in production |
+| Open Design Q3 — warnings channel shape | `current/observability-multi-sink-and-fixtures-shape.plan.md` D10 | Decided: sibling `warnings` field on Result success path |
+| Open Design Q4 — helper placement | `current/observability-multi-sink-and-fixtures-shape.plan.md` D11 | Decided: shared `@oaknational/env` |
+
+---
+
+## local-dev-sentry-boundary-regression-investigation.plan.pre-shape-fix-2026-05-02.md
+
+Source-plan archive of the wrong-framed predecessor. The plan
+correctly diagnosed the proximate symptom (`pnpm dev` from
+`apps/oak-curriculum-mcp-streamable-http` failing on Sentry release
+resolution) and traced the throw site to `runtime-error.ts:74`, but
+framed the cure too narrowly as a local-dev configuration question.
+The actual cure is structural: `SENTRY_MODE` conflates sink-target
+selection with fixture-vs-live capture; the correct shape is
+orthogonal axes per `principles.md § Architectural Excellence Over
+Expediency` (graduated 2026-05-02). The structural cure makes the
+local-dev failure impossible by construction — local dev with no
+observability env vars defaults to stdout-only via the always-implicit
+baseline; no Sentry sink, no release resolution.
+
+### Scope Routing
+
+| Source phase | New owner plan | Acceptance lane |
+|---|---|---|
+| Phase 0 — Reproduce + trace throw site | `current/observability-multi-sink-and-fixtures-shape.plan.md` | Context section preserves diagnostic evidence; throw-site reading absorbed into WS1 (D7a verification of `sentry-build-environment.ts`) |
+| Phase 1 — Canonical config options for local-dev disable | `current/observability-multi-sink-and-fixtures-shape.plan.md` | Subsumed: orthogonal-axes shape replaces single-switch; "off" is no longer a value, it is empty `OBSERVABILITY_SINKS=[]` |
+| Phase 2 — Owner decision on canonical option + structural enforcement | `current/observability-multi-sink-and-fixtures-shape.plan.md` D2 + WS3 | Decided: stdout always-implicit baseline; structural enforcement via env-layer `superRefine` |
+| Phase 3 — Implement cure with RED→GREEN tests | `current/observability-multi-sink-and-fixtures-shape.plan.md` | WS1 (RED) → WS4 (GREEN); outermost regression-guard E2E pins the contract |
+| Owner-stated invariant (*"local dev MUST NOT require Sentry release identity"*) | `current/observability-multi-sink-and-fixtures-shape.plan.md` | Acceptance criterion #2 |

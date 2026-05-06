@@ -71,29 +71,39 @@ seam, extract a pure function, inject a dependency).
     Helpers in tests must be trivial: build a literal, wrap a call.
     Conditional logic, loops with side effects, or multi-step state
     setup in a test function = test code testing itself.
-15. **Test contains skipped cases** (`it.skip`, `describe.skip`,
-    `skipIf`, or any skip mechanism). Fix or delete.
-16. **Test does not use DI where DI is possible.** If the unit
+15. **Test contains skipped or pending cases** (`it.skip`,
+    `describe.skip`, `test.todo`, `it.todo`, `xit`, `xdescribe`, or
+    any skip/pending mechanism). Fix or delete. See
+    `no-skipped-tests.md`.
+16. **Test contains conditional execution** of any kind:
+    `it.skipIf`, `describe.skipIf`, `it.runIf`, `describe.runIf`,
+    conditional `it`/`describe` registration, runtime branching
+    inside the test body, conditional assertions
+    (`if (env === 'X') expect(...)`), or fixtures whose shape
+    varies with ambient state. Conditional tests are an
+    architectural-failure signal — the fix lives in product code,
+    not in the test. See `no-conditional-tests.md`.
+17. **Test does not use DI where DI is possible.** If the unit
     supports a dependency parameter, the test must use it. Do not
     reach past the seam to a module-level singleton.
-17. **Test asserts on spies against private/internal methods.**
+18. **Test asserts on spies against private/internal methods.**
     Couples the test to implementation; breaks on refactor. Assert
     on return values or public behaviour.
-18. **Test proves something about the test scaffolding, not the
+19. **Test proves something about the test scaffolding, not the
     product code.** E.g. asserts that a mock returned the value it
     was configured to return; asserts on types only; tautologies
     (comparing two names at the same value).
 
 ## Pipeline Immediate Fails
 
-19. **Test category does not match its file name.** A
+20. **Test category does not match its file name.** A
     `*.unit.test.ts` that touches IO is a category error — either
     rename or redesign. Per `testing-strategy.md`, naming IS the
     category.
-20. **Test is named `*.integration.test.ts` but hits network or
+21. **Test is named `*.integration.test.ts` but hits network or
     spawns processes.** This is an E2E or smoke test wearing the
     wrong name.
-21. **Test depends on test-execution order to pass.** Shared mutable
+22. **Test depends on test-execution order to pass.** Shared mutable
     state between tests is a correctness hazard. Each test must be
     self-contained.
 
@@ -101,7 +111,7 @@ seam, extract a pure function, inject a dependency).
 
 - As the **first pass** on any test-reviewer invocation.
 - Before any deeper analysis of test value or TDD compliance.
-- Findings here block approval; all 21 items must be clean before
+- Findings here block approval; all 22 items must be clean before
   the test suite is considered compliant.
 
 ## Fix Direction
@@ -124,5 +134,7 @@ The test-reviewer flags the symptom. The fix is usually upstream.
   on `process.env` reads/writes, `vi.stubGlobal`, `vi.mock`,
   `vi.doMock`.
 - `.agent/rules/no-skipped-tests.md` — prohibition on skip mechanisms.
+- `.agent/rules/no-conditional-tests.md` — prohibition on conditional
+  execution and the architectural-failure diagnosis.
 - `.agent/directives/testing-strategy.md` — full authoritative
   test-quality reference.

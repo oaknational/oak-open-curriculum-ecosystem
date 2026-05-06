@@ -16,13 +16,15 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Post-merge execution active; Milestone 2 blocker queued alongside independent search-quality streams |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
-| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, agent artefact portability (ADR-125), mutation testing, and practice-convergence closeout | 🔄 Active + queued execution |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | **Broad practice + governance level.** How agents work, collaborate, plan, communicate, review, and learn; Practice texts, doctrine enforcement, specialist reviewer capabilities, hallucination/evidence guards, mutation testing, learning loops, governance concepts. Operates above any single workspace. | 🔄 Active + queued execution |
+| [agent-tooling/](agent-tooling/) | **Implementation level — the `agent-tools/` workspace specifically.** CLIs, schemas, validators, codegen, identity derivation, hooks, collaboration-state substrate, intent-to-commit queue, adapter generation. Plus a live [frictions register](agent-tooling/frictions-register.md). Distinct from `agentic-engineering-enhancements/` (which is broader and at the practice/governance level). | 🔄 Active + queued execution |
 | [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
 | [compliance/](compliance/) | External policy compliance, directory listing requirements, regulatory alignment | 📋 Planned |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
 | [sector-engagement/](sector-engagement/) | External data sources, upstream coordination, partner review threads, KG adoption support, and external-source intake | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
-| [knowledge-graph-integration/](knowledge-graph-integration/) | Internal Oak Curriculum Ontology integration, KG surfaces, graph serving, search projections, and ontology workspace decisions | 🔄 Active |
+| [connecting-oak-resources/](connecting-oak-resources/) | Connecting Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak-repo references (ontology, Aila, moderation patterns) | 🔄 Active |
+| [exploring-open-education-resources/](exploring-open-education-resources/) | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion | 📋 Planned |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |
 | [templates/](templates/) | Plan templates | 📚 Reference |
 

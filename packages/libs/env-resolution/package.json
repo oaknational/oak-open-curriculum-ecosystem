@@ -30,7 +30,6 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@oaknational/result": "workspace:*",
     "dotenv": "^17.4.1",
     "zod": "^4.3.6"
   },

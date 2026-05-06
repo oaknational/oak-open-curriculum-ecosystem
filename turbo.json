@@ -342,50 +342,6 @@
         "tsconfig.lint.json",
         "**/*.ts"
       ]
-    },
-    "smoke:dev:stub": {
-      "dependsOn": ["build", "test:e2e"],
-      "cache": false,
-      "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ],
-      "passThroughEnv": ["LOG_LEVEL"]
-    },
-    "smoke:dev:live": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "outputs": [],
-      "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
-    },
-    "smoke:dev:live:auth": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "outputs": [],
-      "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live-auth.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
-    },
-    "smoke:remote": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
-        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ],
-      "passThroughEnv": ["LOG_LEVEL"]
     }
   }
 }

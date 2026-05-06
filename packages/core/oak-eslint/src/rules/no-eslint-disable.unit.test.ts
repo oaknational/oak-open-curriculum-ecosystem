@@ -19,6 +19,15 @@ ruleTester.run('no-eslint-disable', noEslintDisableRule, {
     {
       code: '// eslint-disable-next-line no-console -- JC: CLI tooling needs console output\nexport {};',
     },
+    // ts-expect-error directives are delegated to
+    // typescript-eslint/ban-ts-comment, which the strict shared config
+    // sets to allow-with-description with a minimumDescriptionLength.
+    // This rule defers and does not double-report; bare or trivially
+    // described forms are still flagged by ban-ts-comment.
+    { code: '// @ts-expect-error\nconst x = 1;\nexport {};' },
+    {
+      code: '// @ts-expect-error: temporary widening for upstream library mismatch\nconst x = 1;\nexport {};',
+    },
   ],
   invalid: [
     // Block disable without approval
@@ -41,19 +50,9 @@ ruleTester.run('no-eslint-disable', noEslintDisableRule, {
       code: '// @ts-ignore\nconst x = 1;\nexport {};',
       errors: [{ messageId: 'tsDirectiveBanned' }],
     },
-    // ts-expect-error directive is always banned
-    {
-      code: '// @ts-expect-error\nconst x = 1;\nexport {};',
-      errors: [{ messageId: 'tsDirectiveBanned' }],
-    },
     // ts-ignore inline
     {
       code: 'const x = 1; // @ts-ignore\nexport {};',
-      errors: [{ messageId: 'tsDirectiveBanned' }],
-    },
-    // ts-expect-error with description is banned
-    {
-      code: '// @ts-expect-error some description\nconst x = 1;\nexport {};',
       errors: [{ messageId: 'tsDirectiveBanned' }],
     },
     // ts-nocheck is banned (file-level suppression)
@@ -61,14 +60,9 @@ ruleTester.run('no-eslint-disable', noEslintDisableRule, {
       code: '// @ts-nocheck\nconst x = 1;\nexport {};',
       errors: [{ messageId: 'tsDirectiveBanned' }],
     },
-    // ts-ignore with approval marker is STILL banned — TS suppressions have NO exceptions
+    // ts-ignore with approval marker is STILL banned — these TS suppressions have NO exceptions
     {
       code: '// @ts-ignore -- JC: approved\nconst x = 1;\nexport {};',
-      errors: [{ messageId: 'tsDirectiveBanned' }],
-    },
-    // ts-expect-error with approval marker is STILL banned
-    {
-      code: '// @ts-expect-error -- JC: approved\nconst x = 1;\nexport {};',
       errors: [{ messageId: 'tsDirectiveBanned' }],
     },
     // ts-nocheck with approval marker is STILL banned — completes the no-exceptions matrix

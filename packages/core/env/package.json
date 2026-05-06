@@ -30,6 +30,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@oaknational/observability": "workspace:*",
     "zod": "^4.3.6"
   },
   "devDependencies": {

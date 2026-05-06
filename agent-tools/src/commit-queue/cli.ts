@@ -18,7 +18,9 @@ import {
   usage,
 } from './args.js';
 import { getStagedBundle } from './git.js';
+import { validateCommandOptions } from './options.js';
 import { readRegistry, updateRegistry } from './registry.js';
+import { writeCommitQueueStatus } from './status.js';
 import {
   type CommitIntent,
   type CommitQueueCliInput,
@@ -34,6 +36,7 @@ const DEFAULT_TTL_SECONDS = 900;
  * Run a commit-queue CLI command against the current repository.
  */
 export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<number> {
+  validateCommandOptions(input.command, input.options);
   const registryPath = resolveRegistryPath(input.repoRoot, input.options);
   const now = nowIso(input.options);
 
@@ -57,8 +60,18 @@ export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<num
   if (input.command === 'complete') {
     return runCompleteCommand({ registryPath, options: input.options });
   }
+  if (input.command === 'status') {
+    return writeCommitQueueStatus(await readRegistryForCli(input, registryPath), now, input.stdout);
+  }
 
   throw new Error(usage());
+}
+
+function readRegistryForCli(
+  input: CommitQueueCliInput,
+  registryPath: string,
+): Promise<CommitQueueRegistry> {
+  return (input.readRegistry ?? readRegistry)(registryPath);
 }
 
 function createIntent(options: CommitQueueCliOptions): CommitIntent {
@@ -216,7 +229,6 @@ function requireIntent(registry: CommitQueueRegistry, intentId: string): CommitI
 
   return intent;
 }
-
 interface CommandInput {
   readonly registryPath: string;
   readonly options: CommitQueueCliOptions;

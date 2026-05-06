@@ -39,7 +39,7 @@ host it.
 | `.agent/memory/active/napkin.md` | Raw surprise and correction capture | Current rotation window | Canonical for raw capture | Rotates at threshold | Medium | Correct home for learning signals, not for day-to-day tactical coordination |
 | `.agent/memory/active/distilled.md` | Refined cross-session learnings | Cross-session | Canonical for refined learnings | Extract on consolidation when stable | Low | Learning layer, not tactical state |
 | `docs/governance/continuity-practice.md` + ADR-150 | Normative continuity doctrine | Permanent | Canonical doctrine | None | Low | Defines the three continuity types and split-loop model |
-| `.agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md` | Future broad sidecar strategy | Strategic | Non-authoritative for current repo state | Promotion-trigger based | Low | Valuable adjacent concept, but intentionally broader than the repo-local need |
+| `.agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md` | Future broad sidecar strategy | Strategic | Non-authoritative for current repo state | Promotion-trigger based | Low | Valuable adjacent concept, but intentionally broader than the repo-local need |
 
 ## Findings
 

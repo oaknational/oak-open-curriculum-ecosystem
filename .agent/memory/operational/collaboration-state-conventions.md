@@ -171,5 +171,5 @@ fields:
 [respect-rule]: ../../rules/respect-active-agent-claims.md
 [consolidate-7e]: ../../commands/consolidate-docs.md#stale-claim-audit
 [founding-pattern]: ../collaboration/parallel-track-pre-commit-gate-coupling.md
-[p]: ../../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
-[csw-plan]: ../../plans/agentic-engineering-enhancements/current/collaboration-state-write-safety.plan.md
+[p]: ../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
+[csw-plan]: ../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md

@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import {
   completeCommitIntent,
   createStagedBundleFingerprint,
+  formatCommitQueueStatus,
+  formatCommitQueueStatusText,
   getFreshEntriesAhead,
+  runCommitQueueCli,
   type CommitIntent,
   type CommitQueueAgentId,
   type CommitQueueRegistry,
@@ -191,6 +194,97 @@ describe('completeCommitIntent', () => {
           intent: 'Implement the queue helper.',
         },
       ],
+    });
+  });
+});
+
+describe('formatCommitQueueStatus', () => {
+  it('classifies active, expired, and abandoned queue entries', () => {
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [],
+      commit_queue: [
+        intent({
+          intent_id: '11111111-1111-4111-8111-111111111111',
+          phase: 'queued',
+          expires_at: '2026-04-27T07:35:00Z',
+        }),
+        intent({
+          intent_id: '22222222-2222-4222-8222-222222222222',
+          phase: 'pre_commit',
+          expires_at: '2026-04-27T07:00:00Z',
+        }),
+        intent({
+          intent_id: '33333333-3333-4333-8333-333333333333',
+          phase: 'abandoned',
+          expires_at: '2026-04-27T07:35:00Z',
+        }),
+      ],
+    };
+
+    expect(formatCommitQueueStatus(registry, now)).toMatchObject({
+      total: 3,
+      active: 1,
+      expired: 1,
+      abandoned: 1,
+      entries: [
+        { intent_id: '11111111-1111-4111-8111-111111111111', queue_status: 'active' },
+        { intent_id: '22222222-2222-4222-8222-222222222222', queue_status: 'expired' },
+        { intent_id: '33333333-3333-4333-8333-333333333333', queue_status: 'abandoned' },
+      ],
+    });
+  });
+
+  it('formats commit-queue status as JSON text', () => {
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [],
+      commit_queue: [intent()],
+    };
+
+    expect(JSON.parse(formatCommitQueueStatusText(registry, now))).toMatchObject({
+      total: 1,
+      active: 1,
+      expired: 0,
+      abandoned: 0,
+      entries: [{ intent_id: '11111111-1111-4111-8111-111111111111' }],
+    });
+  });
+
+  it('rejects unknown options for commit-queue status', async () => {
+    await expect(
+      runCommitQueueCli({
+        command: 'status',
+        options: { file: [], 'claim-id': 'wrong-command' },
+        repoRoot: '.',
+      }),
+    ).rejects.toThrow('unknown option for commit-queue status: --claim-id');
+  });
+
+  it('dispatches commit-queue status through the selected registry reader', async () => {
+    const writes: string[] = [];
+
+    await expect(
+      runCommitQueueCli({
+        command: 'status',
+        options: { file: [], registry: 'active.json', now },
+        repoRoot: '/repo',
+        readRegistry: async (registryPath) => {
+          expect(registryPath).toBe('/repo/active.json');
+          return {
+            schema_version: '1.3.0',
+            claims: [],
+            commit_queue: [intent()],
+          };
+        },
+        stdout: { write: (chunk) => writes.push(chunk) },
+      }),
+    ).resolves.toBe(0);
+
+    expect(JSON.parse(writes.join(''))).toMatchObject({
+      total: 1,
+      active: 1,
+      entries: [{ intent_id: '11111111-1111-4111-8111-111111111111' }],
     });
   });
 });

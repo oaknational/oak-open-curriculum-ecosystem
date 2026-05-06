@@ -14,15 +14,33 @@ strategic_parent: "observability/future/sentry-observability-maximisation.plan.m
 blocked_on:
   - "docs/explorations/2026-04-18-structured-event-schemas-for-curriculum-analytics.md (exploration 4; blocks the MVP schema shape)"
 todos:
-  - id: ws1-red
-    content: "WS1 (RED): author Zod schemas for seven MVP events + correlation-keys + conformance helper; contract tests fail because no implementations exist yet."
+  - id: ws1-cycle-correlation-keys
+    content: "WS1 cycle 1: correlation-keys contract + conformance helper primitive. ONE COMMIT — contract test for the correlation-keys shape + the Zod schema that defines it + the conformance-helper primitive that consumers use to assert against it. Tree green at end."
     status: pending
     priority: next
-  - id: ws2-green
-    content: "WS2 (GREEN): implement schemas + correlation-keys + conformance helper; all contract tests pass."
+  - id: ws1-cycle-tool-invoked
+    content: "WS1 cycle 2: tool_invoked event. ONE COMMIT — schema test + schema implementation. Tree green at end."
     status: pending
-  - id: ws3-refactor
-    content: "WS3 (REFACTOR): TSDoc on every public symbol; event-catalog.md data-scientist-facing reference; workspace README; ADR-162 Mechanism #3 cross-references."
+  - id: ws1-cycle-search-query
+    content: "WS1 cycle 3: search_query event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws1-cycle-feedback-submitted
+    content: "WS1 cycle 4: feedback_submitted event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws1-cycle-auth-failure
+    content: "WS1 cycle 5: auth_failure event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws1-cycle-rate-limit-triggered
+    content: "WS1 cycle 6: rate_limit_triggered event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws1-cycle-widget-session-outcome
+    content: "WS1 cycle 7: widget_session_outcome event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws1-cycle-a11y-preference-tag
+    content: "WS1 cycle 8: a11y_preference_tag event. ONE COMMIT — schema test + schema implementation. Tree green at end."
+    status: pending
+  - id: ws2-docs
+    content: "WS2 (docs): TSDoc on every public symbol; event-catalog.md data-scientist-facing reference; workspace README; ADR-162 Mechanism #3 cross-references. Pure documentation cycle — no test+code pair needed."
     status: pending
   - id: ws4-quality-gates
     content: "WS4: pnpm check from repo root exit 0, no filtering."

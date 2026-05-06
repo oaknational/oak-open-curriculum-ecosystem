@@ -178,16 +178,3 @@ Alternatives rejected:
   that drift will happen.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instance retained with `related_pdr: PDR-022`:
-
-- `.agent/memory/active/patterns/governance-claim-needs-a-scanner.md` —
-  proven in `scripts/validate-fitness-vocabulary.mjs` (enforces
-  that the zone vocabulary appears on every live surface).
-  Additional scanners in the host repo:
-  `scripts/validate-portability.mjs` (every canonical artefact
-  has platform adapters), `scripts/validate-subagents.mjs`
-  (sub-agent adapter parity), `scripts/validate-practice-fitness.mjs`
-  (four fitness metrics on every governed file).

@@ -564,7 +564,6 @@ pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
 pnpm test:ui
-pnpm smoke:dev:stub
 ```
 
 All gates must pass.

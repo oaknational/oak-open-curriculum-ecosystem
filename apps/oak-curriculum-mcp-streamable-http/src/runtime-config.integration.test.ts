@@ -1,3 +1,4 @@
+import { unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import type { Env } from './env.js';
@@ -15,17 +16,12 @@ const localOffModeEnv = {
 
 describe('createRuntimeConfigFromValidatedEnv', () => {
   it('builds off-mode observability without env-file IO or deploy release metadata', () => {
-    const runtimeConfig = createRuntimeConfigFromValidatedEnv(localOffModeEnv);
+    const runtimeConfig = unwrap(createRuntimeConfigFromValidatedEnv(localOffModeEnv));
 
-    expect(runtimeConfig.ok).toBe(true);
-    if (!runtimeConfig.ok) {
-      return;
-    }
-
-    expect(runtimeConfig.value.gitSha).toBeUndefined();
-    expect(runtimeConfig.value.env.VERCEL_GIT_COMMIT_SHA).toBeUndefined();
-    expect(runtimeConfig.value.env.VERCEL_BRANCH_URL).toBeUndefined();
-    expect(runtimeConfig.value.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();
-    expect(runtimeConfig.value.version).toBe('1.2.3-test');
+    expect(runtimeConfig.gitSha).toBeUndefined();
+    expect(runtimeConfig.env.VERCEL_GIT_COMMIT_SHA).toBeUndefined();
+    expect(runtimeConfig.env.VERCEL_BRANCH_URL).toBeUndefined();
+    expect(runtimeConfig.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();
+    expect(runtimeConfig.version).toBe('1.2.3-test');
   });
 });

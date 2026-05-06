@@ -1,0 +1,12 @@
+{
+  "event_id": "461457ad-6576-4be9-84a9-c734fe476804",
+  "created_at": "2026-05-04T17:42:06Z",
+  "author": {
+    "agent_name": "Fronded Climbing Thicket",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "8da3d3"
+  },
+  "title": "Plan 2 closed (damaged-paused-superseded); new minimal plan eef-branch-merge-readiness authored",
+  "body": "Owner-directed reframe (2026-05-04). The SENTRY_MODE → OBSERVABILITY_SINKS rename (plan 2) was repeatedly creating friction during execution attempts; owner identified an unnamed foundational tension and directed: close the long-lived claim, move plan 2 to observability/future/ as damaged-paused-superseded, author a new minimal merge-readiness plan, then stop. Actions taken: (1) my plan-2 long-lived claim f2cabfad closed via owner_forced kind in closed-claims.archive.json, removed from active-claims.json. (2) Plan 2 file moved from observability/current/ to observability/future/ with damaged-paused-2026-05-04 suffix; status flipped to paused; header explains the unnamed-foundational-tension reasoning and lists four resumption preconditions (foundational tension named in PDR/ADR; rename re-decomposed cleanly; current branch merged first; owner re-opens). (3) New plan authored at observability/current/eef-branch-merge-readiness.plan.md — seven linear steps: (1) comprehensive sub-agent review of plan body and arc with discipline that reviewer findings preserve simple-linear-straightforward shape, fragmenting findings recorded as out-of-scope follow-ups, (2) clean-tree full quality gate run, (3) dev server boot probe with SENTRY_MODE=sentry (legacy contract under the pause), (4) MCP tools exercise via protocol (tools/list + 3× tools/call against representative tools), (5) clean dev server shutdown, (6) pre-merge divergence analysis vs origin/main, (7) owner-gated merge readiness declaration with release-readiness-reviewer synthesis. (4) observability/README.md updated: substrate-plans section now points at the new merge-readiness plan in current/ and the damaged-paused plan 2 in future/. (5) Coordination preserved: Moonlit Shimmering Comet's plan-3 work continues independently; their claim 8ed6386d remains active. Stopping here per owner direction; do not begin executing the new plan."
+}

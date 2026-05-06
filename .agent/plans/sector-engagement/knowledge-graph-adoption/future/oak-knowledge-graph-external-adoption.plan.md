@@ -3,8 +3,9 @@ name: "Oak Knowledge Graph External Adoption"
 overview: "Define how external organisations can use Oak's ontology, graph exports, SDKs, MCP resources, and search projections responsibly in their own projects."
 status: future
 related_plans:
-  - "../../../knowledge-graph-integration/README.md"
-  - "../../../knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/README.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
+  - "../../current/sector-reusable-components-adoption.plan.md"
 specialist_reviewer: "docs-adr-reviewer, security-reviewer, architecture-reviewer-betty"
 ---
 
@@ -47,7 +48,7 @@ Explicit non-goals:
 ## Dependencies and Sequencing Assumptions
 
 1. Internal KG integration remains owned by
-   [knowledge-graph-integration/](../../../knowledge-graph-integration/).
+   [knowledge-graph-integration/](../../../connecting-oak-resources/knowledge-graph-integration/).
 2. The ontology repo integration model affects how external consumers should
    depend on KG assets, so this plan should read the workspace reassessment
    before promotion.

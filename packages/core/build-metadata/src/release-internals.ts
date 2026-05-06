@@ -180,7 +180,11 @@ export function resolvePreviewRelease(input: ReleaseInput): Result<ResolvedRelea
  *
  * @remarks Prefers a `VERCEL_BRANCH_URL` host label when set (covers
  * `vercel dev` with a Vercel-emulated environment); otherwise falls
- * back to `dev-<shortSha>` from `VERCEL_GIT_COMMIT_SHA`.
+ * back to `dev-<shortSha>` from `VERCEL_GIT_COMMIT_SHA`. When neither
+ * Vercel attribution source is available, falls through to the
+ * stable `local-dev` placeholder so `pnpm dev` boots cleanly without
+ * `SENTRY_RELEASE_OVERRIDE`. Production and preview keep their
+ * hard-fail on missing attribution; the fall-through is dev-only.
  */
 export function resolveDevelopmentRelease(
   input: ReleaseInput,
@@ -203,12 +207,10 @@ export function resolveDevelopmentRelease(
   const sha = trimToUndefined(input.VERCEL_GIT_COMMIT_SHA);
 
   if (!sha) {
-    return err({
-      kind: RELEASE_ERROR_KINDS.missing_git_sha,
-      message:
-        'Cannot resolve development release: VERCEL_GIT_COMMIT_SHA is not ' +
-        'set and no usable VERCEL_BRANCH_URL. Set VERCEL_GIT_COMMIT_SHA or ' +
-        'use SENTRY_RELEASE_OVERRIDE for ad-hoc rehearsals.',
+    return ok({
+      value: RELEASE_SOURCES.local_dev,
+      source: RELEASE_SOURCES.local_dev,
+      environment: RELEASE_ENVIRONMENTS.development,
     });
   }
 

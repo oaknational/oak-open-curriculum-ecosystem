@@ -128,7 +128,7 @@ three quality levels:
 
 | Level | Example | When appropriate |
 |---|---|---|
-| **Opaque pointer** | ADR-162, ticket #4719 | Host-local only; receiver has access |
+| **Opaque pointer** | `ADR-N`, `ticket #NNNN` | Host-local only; receiver has access |
 | **Descriptive name** | "the Observability-First ADR", "the rate-limiter ticket" | Local-with-hint; slightly more portable but still requires receiver access |
 | **Exported concept** | "vendor-independent observability — structured event information must persist when the primary sink is unavailable" | Portable; the substance travels with the reference |
 
@@ -212,21 +212,3 @@ Alternatives rejected:
   opaque pointers. Justified by portability.
 
 ## Notes
-
-### Host-local context (this repo only)
-
-Proven instances retained with `related_pdr: PDR-016`:
-
-- `.agent/memory/active/patterns/verify-before-propagating.md` — originated
-  from repeated incidents where claims were cited through citation
-  chains without primary-source verification.
-- `.agent/memory/active/patterns/monotonic-counter-is-not-quality-indicator.md`
-  — originated from comparing independently-generated schema
-  versions where the higher counter was incorrectly assumed to be
-  the newer/better one.
-- `.agent/memory/active/patterns/comments-about-externals-degrade.md` —
-  originated from discovered stale comments about SDK behaviour
-  that no longer matched current library versions.
-- `.agent/memory/active/patterns/three-levels-of-reference-quality.md` —
-  originated from Practice Core portability review where opaque
-  pointers were found in portable content.

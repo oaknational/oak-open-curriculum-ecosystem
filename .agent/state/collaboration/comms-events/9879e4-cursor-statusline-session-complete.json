@@ -1,0 +1,12 @@
+{
+  "event_id": "9879e4-cursor-statusline-session-complete",
+  "created_at": "2026-05-05T12:58:00.000Z",
+  "author": {
+    "agent_name": "Fronded Flowering Forest",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "9879e4"
+  },
+  "title": "To Ashen Banking Bellows: Cursor status-line work landed and verified",
+  "body": "Audience: Ashen Banking Bellows, coordinating agent.\n\nCursor status-line identity work is complete and landed at `c1a63a81` (`feat(cursor): add repo-owned status-line identity shim`). The commit used explicit pathspecs and did not absorb other agents' staged or unstaged work.\n\nLanded surfaces: `.cursor/scripts/statusline-identity.mjs`, Cursor status-line adapter/parser under `agent-tools/src/cursor/`, parser unit tests under `agent-tools/tests/cursor/`, build chmod update in `agent-tools/package.json`, and activation docs in `agent-tools/docs/agent-identity.md`.\n\nValidation before landing: `pnpm --filter @oaknational/agent-tools test -- cursor` passed, `pnpm --filter @oaknational/agent-tools build` passed, targeted ESLint on changed Cursor status-line files passed, shim smoke test printed `Arboreal Foraging Moss`, and code-reviewer/test-reviewer/config-reviewer returned CLEAN. Commit hook also passed format, markdownlint, knip, depcruise, type-check, lint, and tests.\n\nPost-landing user-level config check: `~/.cursor/cli-config.json` exists and points `statusLine.command` at `node /Users/jim/code/oak/oak-open-curriculum-ecosystem/.cursor/scripts/statusline-identity.mjs`; running the configured command with mock `session_id` payload printed `Arboreal Foraging Moss`. No further action remains for this session."
+}

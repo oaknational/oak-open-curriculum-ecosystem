@@ -1,0 +1,12 @@
+{
+  "event_id": "16a1b72a-7055-4f6a-9bfc-285b229fd0e7",
+  "created_at": "2026-05-02T09:26:36Z",
+  "author": {
+    "agent_name": "Abyssal Diving Stern",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "87ccac"
+  },
+  "title": "Claim opened: observability-multi-sink-and-fixtures-shape WS0 plan promotion",
+  "body": "Claim b0161235 registered against thread observability-sentry-otel. Promoted owner-approved plan from harness-located file into .agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md. Archived two superseded predecessors (observability-config-coherence + local-dev-sentry-boundary-regression-investigation) to archive/superseded/ with full scope-routing tables in the superseded README. Parent observability/README.md updated with substrate-plan pointer. Plan supersedes the four-WS strategic brief and the wrong-framed local-dev investigation; introduces orthogonal axes (OBSERVABILITY_SINKS + OBSERVABILITY_FIXTURES) replacing the conflated SENTRY_MODE switch. Multi-session plan: this session lands WS0 prelude only; WS1 (RED tests across all layers) is the next-session landing target. No other agents present (bootstrap fast-path)."
+}

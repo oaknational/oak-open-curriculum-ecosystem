@@ -1,6 +1,55 @@
 # Agentic Engineering Enhancements
 
-Plans and research for hardening the agentic engineering practice through physical constraints, cross-platform portability, and quality assurance tooling.
+This collection is the **broad, practice-and-governance level** home for
+plans about *how agents do anything* in this repo: how they collaborate,
+plan, communicate, review, learn, and how the Practice, doctrine, and repo
+structure evolve to support them. It sits at a higher abstraction level
+than any individual workspace.
+
+## Scope Boundary — Read This First
+
+**In scope** (anything about how agents work, at a level above any single
+workspace):
+
+- Practice texts, Core trinity refinement, doctrine enforcement, learning
+  loops, and graduation flow
+- Specialist reviewer capabilities (Elasticsearch, Sentry, MCP, Planning,
+  TDD, DevX, security, privacy, OOCE, etc.) and reviewer-gateway design
+- Hallucination guards, evidence-based claims, architectural enforcement,
+  mutation testing
+- Governance concepts, mechanism taxonomies, agentic corpus
+  discoverability, memory-feedback and emergent-learning mechanisms
+- Multi-agent collaboration *as a practice* (the doctrine, the protocols,
+  the patterns) — note: the *substrate* implementing those protocols
+  lives in [`agent-tooling/`](../agent-tooling/)
+- AGENT.md content homing, knowledge-role doc restructure, validation +
+  TDD doctrine restructure, fitness manifests, moving-targets remediation
+
+**Out of scope** (handled by [`agent-tooling/`](../agent-tooling/)):
+
+- Anything whose primary subject is the `agent-tools/` workspace, its
+  CLIs, schemas, validators, codegen, hooks, identity-derivation code,
+  collaboration-state substrate, or adapter generation. Those are
+  implementation-level concerns at a workspace boundary.
+
+The two collections operate at **different abstraction levels**:
+
+| Collection | Abstraction | Asks |
+|------------|-------------|------|
+| [`agent-tooling/`](../agent-tooling/) | Implementation: the `agent-tools/` workspace and its substrate | "Does the CLI / schema / state surface work correctly and ergonomically?" |
+| `agentic-engineering-enhancements/` (this) | Practice + governance: how agents do anything | "How should agents collaborate, plan, communicate, learn, review, and shape this repo?" |
+
+If a plan's substance is *what code lives in `agent-tools/`* or *what
+shape `.agent/state/collaboration/` should take*, it belongs in
+`agent-tooling/`. If a plan's substance is *how agents reason,
+coordinate, learn, or practice* — or anything about doctrine, the
+Practice, repo structure, or how the system as a whole improves — it
+belongs here. When in doubt, ask: "could this plan exist if `agent-tools/`
+did not?" If yes, it is broader than the workspace and belongs here.
+
+---
+
+## Quick Links
 
 **Collection Roadmap**: [roadmap.md](roadmap.md)
 **Active Execution Index**: [active/README.md](active/README.md)
@@ -37,9 +86,9 @@ Plans and research for hardening the agentic engineering practice through physic
 | `augmented-engineering-practices.research.md` | Research | Industry evidence base for AI-augmented engineering |
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
-| `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
-| `future/cross-vendor-session-sidecars.plan.md` | Plan (Future) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters |
-| `future/collaboration-state-domain-model-and-comms-reliability.plan.md` | Plan (Future) | Clarify collaboration-state responsibilities, reliable shared-state writes, sidebar attention, UTC validation, and identity preflight |
+| ↪️ MOVED `hooks-portability.plan.md` | — | Now at [`../agent-tooling/future/hooks-portability.plan.md`](../agent-tooling/future/hooks-portability.plan.md) (relocated 2026-05-05) |
+| ↪️ MOVED `cross-vendor-session-sidecars.plan.md` | — | Now at [`../agent-tooling/future/cross-vendor-session-sidecars.plan.md`](../agent-tooling/future/cross-vendor-session-sidecars.plan.md) (relocated 2026-05-05) |
+| ↪️ MOVED `collaboration-state-domain-model-and-comms-reliability.plan.md` | — | Now at [`../agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md`](../agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md) (relocated 2026-05-05) |
 | `future/pr-lifecycle-skill.plan.md` | Plan (Future) | Future PR lifecycle skill covering creation, reviewer-facing descriptions, unresolved comments, reviewer waits, CI/Sonar/Bugbot feedback, and gate-honest closeout |
 | `archive/completed/codex-session-identity-plumbing.plan.md` | Plan (Completed) | Codex SessionStart identity context, shared preflight guidance for thread rows/state writes, report-only anonymous Codex record audit, and ADR/PDR propagation |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
@@ -52,7 +101,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
 | `current/planning-specialist-capability.plan.md` | Plan | Planning specialist — plan architecture, lifecycle, discoverability, integration routing, and documentation sync (promoted from future/ 2026-04-20) |
 | `current/practice-and-process-structural-improvements.plan.md` | Plan | Structural Practice/process gap closure — user-collaboration directive, Planning discipline reconciliation, portability PDR/ADR, and final distilled graduation |
-| `current/agent-infrastructure-portability-remediation.plan.md` | Plan | Agent artefact portability remediation — vendor skill canonicalisation, thin-wrapper parity, validator hardening, and ADR-125 documentation updates |
+| ↪️ MOVED `agent-infrastructure-portability-remediation.plan.md` | — | Now at [`../agent-tooling/current/agent-infrastructure-portability-remediation.plan.md`](../agent-tooling/current/agent-infrastructure-portability-remediation.plan.md) (relocated 2026-05-05) |
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
@@ -62,9 +111,9 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/practice-graph-payoff-peak-pilot.plan.md` | Plan | Queued executable pilot for the highest-value derived Practice graph slice: bounded TypeScript/esbuild workspace cluster, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces |
 | `current/knowledge-role-documentation-restructure.plan.md` | Plan | Queued repo documentation restructure around PDR-014 knowledge artefact roles: doctrine, recipe books, troubleshooting, patterns, rules, gates, decision records, and operational state |
 | `archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md` | Plan (Completed) | Completed rollout for incoming `agent-collaboration` Practice Context integration, local doctrine capture, workspace-task honesty repair, and targeted write-back |
-| `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
-| `future/canonical-first-skill-pack-ingestion-tooling.plan.md` | Plan (Future) | Vendor-agnostic CLI for ingesting external skill packs into the canonical-first three-layer model; closes the unbuilt mitigation option 1 from the portability-remediation plan; promotion gated on deep sub-agent reviews |
-| `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
+| ↪️ MOVED `adapter-generation.plan.md` | — | Now at [`../agent-tooling/future/adapter-generation.plan.md`](../agent-tooling/future/adapter-generation.plan.md) (relocated 2026-05-05) |
+| ↪️ MOVED `canonical-first-skill-pack-ingestion-tooling.plan.md` | — | Now at [`../agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md`](../agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md) (relocated 2026-05-05) |
+| ↪️ MOVED `agent-classification-taxonomy.plan.md` | — | Now at [`../agent-tooling/future/agent-classification-taxonomy.plan.md`](../agent-tooling/future/agent-classification-taxonomy.plan.md) (relocated 2026-05-05) |
 | `future/mcp-governance-deep-dive.plan.md` | Plan (Future) | Deep dive into MCP `2025-11-25` governance, identity (RFC 9728), durable-tasks, SDK tiering, and JSON Schema 2020-12 implications — trigger: MCP server upgrade enters planning surface |
 | `future/graphify-and-graph-memory-exploration.plan.md` | Plan (Future) | Explore Graphify-inspired graph memory as an orthogonal, derived memory layer over canonical Practice artefacts without choosing an implementation path yet |
 

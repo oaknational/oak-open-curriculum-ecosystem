@@ -156,12 +156,11 @@ This section documents the methodology for identifying and adding new synonyms, 
 
 ### Step 1: Identify Vocabulary Gaps
 
-Run hard query baseline tests and analyse failures by category:
-
-```bash
-cd apps/oak-search-cli
-pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
-```
+Run hard query baseline tests and analyse failures by category. The
+smoke-test harness that previously ran the baseline
+(`vitest.smoke.config.ts`) has been retired; the methodology below
+remains current and reattaches to whatever runner the workspace's
+current testing strategy designates for hard-query-baseline assertions.
 
 Look for queries where the expected result is not in the top 10, particularly:
 
@@ -187,10 +186,11 @@ Cross-reference teacher query language (from failure analysis) with official cur
 
 ### Step 3: Add Synonyms Using TDD
 
-**RED**: Write failing smoke test first:
+**RED**: Write a failing query-coverage test asserting that the chosen
+teacher phrasing returns the expected lesson slug in the top results.
+Example assertion shape:
 
 ```typescript
-// smoke-tests/synonym-coverage.smoke.test.ts
 describe('Synonym Coverage', () => {
   it('finds linear equations for "solving for x"', async () => {
     const results = await searchLessons('solving for x');
@@ -201,7 +201,10 @@ describe('Synonym Coverage', () => {
 });
 ```
 
-Run test — it MUST fail before synonyms exist.
+The original `smoke-tests/synonym-coverage.smoke.test.ts` and its
+companion harness have been retired; reattach the same assertion shape
+under whichever runner the workspace's current testing strategy
+designates. Run the test — it MUST fail before synonyms exist.
 
 **GREEN**: Add synonyms to SDK:
 
@@ -219,20 +222,17 @@ Deploy and verify:
 pnpm sdk-codegen && pnpm build
 cd apps/oak-search-cli
 pnpm es:setup   # Deploys new synonyms to ES
-pnpm vitest run -c vitest.smoke.config.ts synonym-coverage
+# Run the synonym-coverage assertion under the workspace's current
+# testing strategy.
 ```
 
 Run test — it MUST pass.
 
 ### Step 4: Measure and Document
 
-Re-run the hard query baseline and document improvement:
-
-```bash
-pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
-```
-
-Record before/after MRR in [EXPERIMENT-LOG.md](../../.agent/evaluations/EXPERIMENT-LOG.md).
+Re-run the hard query baseline (under the workspace's current testing
+strategy) and record before/after MRR in
+[EXPERIMENT-LOG.md](../../.agent/evaluations/EXPERIMENT-LOG.md).
 
 ### Subject Rollout Priority
 

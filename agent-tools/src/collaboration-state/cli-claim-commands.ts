@@ -5,6 +5,7 @@ import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
+  type CollaborationAgentId,
   type CollaborationArea,
   type CollaborationClaim,
   type CollaborationStateEnvironment,
@@ -15,30 +16,38 @@ export async function openClaim(
   env: CollaborationStateEnvironment,
 ): Promise<string> {
   const identity = resolveIdentity(options, env).agent_id;
+  const openedClaim = createClaimFromOptions(options, identity);
+
   await updateActiveClaimsFile({
     activePath: required(options, 'active'),
     transform: (registry) => ({
       ...registry,
-      claims: [
-        ...registry.claims,
-        {
-          claim_id: valueOrDefault(options, 'claim-id', randomUUID()),
-          agent_id: identity,
-          thread: required(options, 'thread'),
-          areas: [areaFromOptions(options)],
-          claimed_at: required(options, 'now'),
-          freshness_seconds: Number(valueOrDefault(options, 'ttl-seconds', '14400')),
-          sidebar_open: false,
-          intent: required(options, 'intent'),
-          ...(optional(options, 'notes') === undefined
-            ? {}
-            : { notes: required(options, 'notes') }),
-        },
-      ],
+      claims: [...registry.claims, openedClaim],
     }),
   });
 
-  return '';
+  return formatOpenClaimResult(openedClaim);
+}
+
+export function createClaimFromOptions(
+  options: Options,
+  identity: CollaborationAgentId,
+): CollaborationClaim {
+  return {
+    claim_id: valueOrDefault(options, 'claim-id', randomUUID()),
+    agent_id: identity,
+    thread: required(options, 'thread'),
+    areas: [areaFromOptions(options)],
+    claimed_at: required(options, 'now'),
+    freshness_seconds: Number(valueOrDefault(options, 'ttl-seconds', '14400')),
+    sidebar_open: false,
+    intent: required(options, 'intent'),
+    ...(optional(options, 'notes') === undefined ? {} : { notes: required(options, 'notes') }),
+  };
+}
+
+export function formatOpenClaimResult(claim: CollaborationClaim): string {
+  return `${JSON.stringify({ claim_id: claim.claim_id, claim }, null, 2)}\n`;
 }
 
 export async function heartbeatClaim(options: Options): Promise<string> {

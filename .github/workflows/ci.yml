@@ -76,7 +76,7 @@ jobs:
         id: turbo-run
         run: >-
           pnpm exec turbo run sdk-codegen build type-check lint test test:e2e
-          test:ui smoke:dev:stub --summarize --log-order=grouped --continue
+          test:ui --summarize --log-order=grouped --continue
 
       # Run after build (knip + depcruise both resolve through built dist/ outputs)
       - name: Run knip (unused code detection)

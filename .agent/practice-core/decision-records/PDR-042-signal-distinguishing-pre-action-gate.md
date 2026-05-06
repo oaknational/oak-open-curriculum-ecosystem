@@ -19,13 +19,13 @@ appears);
 (stated principles require structural enforcement — this PDR is
 exactly that shape: a stated discipline requiring a structural
 gate);
-[ADR-144](../../../docs/architecture/architectural-decisions/144-fitness-three-zone-model.md)
-(fitness three-zone model — defines the structural-health
-diagnostic class of signal this PDR's gate must distinguish from
-contract-violation signals);
-[`consolidate-docs` § Learning Preservation Overrides Fitness
-Pressure](../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure)
-(the doctrine the gate enforces).
+the host's three-zone-fitness-model ADR (see practice-index
+Concept ↔ ADR map) — defines the structural-health diagnostic class
+of signal this PDR's gate must distinguish from contract-violation
+signals;
+the host's `consolidate-docs` Learning-Preservation-Overrides-Fitness-Pressure
+section (host-local command; bridged via the practice-index
+Commands and skills section) — the doctrine the gate enforces.
 
 ## Context
 
@@ -35,9 +35,10 @@ failing thing pass." The default is correct *most* of the time —
 contract-violation signals (build/test/lint/validator) genuinely
 demand fixes. But not all failing signals are contract violations.
 
-**Fitness signals** (SOFT, HARD, CRITICAL per
-[ADR-144](../../../docs/architecture/architectural-decisions/144-fitness-three-zone-model.md))
-are *structural-health diagnostics*, not contract violations. They
+**Fitness signals** (SOFT, HARD, CRITICAL per the three-zone fitness
+model — host-side adoption recorded in the practice-index Concept ↔
+ADR map) are *structural-health diagnostics*, not contract
+violations. They
 indicate that a file's structure has not yet caught up to the
 substance it carries. The valid responses are
 graduate-the-substance, split-the-file, extend-the-target,
@@ -52,14 +53,15 @@ explicitly forbids:
 > learning loop."
 > — `consolidate-docs.md § Learning Preservation Overrides Fitness Pressure`
 
-Empirical instance (2026-04-30, this repo, this session): the agent
-read this exact doctrine, accepted it, and ten minutes later
-*compressed its own session entry* in `repo-continuity.md` to fit
-fitness HARD — cutting the four-layer composition cascade, the audit
-summary, and the shape-gate-rejection rationale. Owner intervened:
-*"any changes to repo continuity need to be made thoughtfully, and
-in the spirit of learning and teaching and knowledge preservation
-where it is useful."*
+Empirical instance (2026-04-30, host-local identifiers omitted from
+this portable record): the agent read this exact doctrine,
+accepted it, and ten minutes later *compressed its own session
+entry* in a continuity-record surface to fit fitness HARD — cutting
+the four-layer composition cascade, the audit summary, and the
+shape-gate-rejection rationale. Owner intervened: *"any changes to
+repo continuity need to be made thoughtfully, and in the spirit of
+learning and teaching and knowledge preservation where it is
+useful."*
 
 The pattern was the fifth same-shape correction in one session,
 each one collapsing the situation into "what action makes the
@@ -170,10 +172,15 @@ make a failing signal pass:
 ## Evidence
 
 - Five same-shape reframes in one session, fifth firing during
-  consolidation: napkin Surprises 1–5 in
-  [`napkin.md`](../../memory/active/napkin.md).
-- Subjective experience:
-  [`experience/2026-04-30-briny-the-frame-was-the-fix.md`](../../experience/2026-04-30-briny-the-frame-was-the-fix.md).
-- Triggering doctrine the gate enforces:
-  [`consolidate-docs § Learning Preservation Overrides Fitness Pressure`](../../commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure).
-- Triggering session: 2026-04-30 Briny Lapping Harbor.
+  consolidation: napkin Surprises 1–5 in the host's active-memory
+  napkin (host-local; bridged via the practice-index Memory and
+  Patterns section).
+- Subjective experience: a `2026-04-30-briny-the-frame-was-the-fix`
+  experience record (host-local; bridged via the practice-index
+  Experience records section).
+- Triggering doctrine the gate enforces: the host's
+  `consolidate-docs` Learning-Preservation-Overrides-Fitness-Pressure
+  section (host-local; bridged via the practice-index Commands and
+  skills section).
+- Triggering session: 2026-04-30 Briny Lapping Harbor on the
+  originating repo.

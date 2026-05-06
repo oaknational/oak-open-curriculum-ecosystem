@@ -8,7 +8,7 @@ fitness_line_length: 100
 
 # Practice Lineage
 
-This is the canonical lineage document for this repo's Practice. It serves two purposes: (1) the
+This is the canonical lineage document for the host repo's Practice. It serves two purposes: (1) the
 reference for how the plasmid exchange mechanism works, and (2) the source template for outbound
 propagation.
 
@@ -16,13 +16,13 @@ When propagating the Practice to another repo, copy all eight Practice Core file
 (`practice.md`, this file, and `practice-bootstrap.md`), the verification
 companion (`practice-verification.md`), the entry points (`README.md` and
 `index.md`), the changelog (`CHANGELOG.md`), and the provenance file
-(`provenance.yml`). If
-`.agent/practice-context/outgoing/` exists, relevant files may be copied into the receiving repo's
-`.agent/practice-context/incoming/` as optional support material, but they are not part of the Core.
-**Before propagating**, verify that neither Core nor Context files
-reference host-repo artefacts (ADR numbers, local paths, entity names).
-Content must carry the concept itself, not just a name or pointer.
-See §Frontmatter and §Plasmid Exchange below.
+(`provenance.yml`), together with the `decision-records/` directory
+that travels with the Core package per
+[PDR-007](decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md).
+**Before propagating**, verify that no Core file references
+host-repo artefacts (ADR numbers, local paths, entity names,
+commit SHAs). Content must carry the concept itself, not just a
+name or pointer. See §Frontmatter and §Plasmid Exchange below.
 
 ## Frontmatter
 
@@ -335,12 +335,17 @@ versions to the user before committing.
 
 ## Plasmid Exchange
 
-The Practice is not hierarchical. Each repo carries its own Practice instance, adapted to its own
-context. The portable part of it travels as the Practice Core: the plasmid trinity (`practice.md`,
-`practice-lineage.md`, `practice-bootstrap.md`), entry points (`README.md`, `index.md`), changelog
-(`CHANGELOG.md`), and provenance file (`provenance.yml`). Optional support material may also travel
-from a sender's `.agent/practice-context/outgoing/` into a receiver's
-`.agent/practice-context/incoming/`.
+The Practice is not hierarchical. Each repo carries its own Practice
+instance, adapted to its own context. The portable part of it travels
+as the Practice Core: the plasmid trinity (`practice.md`,
+`practice-lineage.md`, `practice-bootstrap.md`), entry points
+(`README.md`, `index.md`), changelog (`CHANGELOG.md`), provenance file
+(`provenance.yml`), and the `decision-records/` directory (governance
+PDRs plus universal patterns recorded as PDRs). The previous
+`.agent/practice-context/` peer companion ephemeral exchange surface
+was retired 2026-04-29 (PDR-007 amendment); inbound substance now
+arrives via `decision-records/incoming/` and outbound substance routes
+by shape per PDR-024.
 
 ### The Practice Box
 
@@ -362,10 +367,10 @@ When Practice Core files appear in the Practice Box:
    differs from the local repo name, the file has been evolved elsewhere and may carry new
    learnings. If the last entry matches the local repo, there is nothing new to integrate.
 2. **Read it.** Read the changelog for a summary of what changed since the last provenance entry
-   matching the local repo. Then read the full files — and `.agent/practice-context/README.md` plus
-   `incoming/` if they exist — to understand what they learned and why. The `purpose` field in each
-   provenance entry tells you what kind of work shaped the evolution — use this to assess relevance
-   to the local context.
+   matching the local repo. Then read the full files to understand
+   what they learned and why. The `purpose` field in each provenance
+   entry tells you what kind of work shaped the evolution — use this
+   to assess relevance to the local context.
 3. **Compare at the concept level** — not file-by-file. The incoming
    Practice may express the same concepts under different names,
    structures, or artefacts. Ask: does it reveal principles that the
@@ -390,9 +395,9 @@ When Practice Core files appear in the Practice Box:
    workflows, hook estate is consistent (if hooks are supported), the bridge truthfully reflects
    the installed estate, and every activation in tracked platform config has a canonical backing
    source.
-9. **Clear transient exchange material.** Remove the incoming files. If
-   `.agent/practice-context/incoming/` exists, clear its received files and working notes. Local
-   `outgoing/` may remain. The integration is complete.
+9. **Clear transient exchange material.** Remove the incoming files
+   from `.agent/practice-core/decision-records/incoming/`. The
+   integration is complete.
 
 If nothing clears the bar, record that in the napkin too — the
 incoming material was reviewed and found not applicable to this
@@ -406,22 +411,27 @@ mandatory — two-way merges frequently push files over their ceilings.
 
 ### Pattern and Decision Travel
 
-Under PDR-007, portable patterns and portable Practice-governance
-decisions travel **as Core content**, not via a separate transport
-surface. The previous `practice-context/outgoing/patterns/` route is
+Under PDR-007 (with its 2026-04-29 amendment), portable patterns and
+portable Practice-governance decisions travel **as Core content** in
+PDR form. The previous `.agent/practice-core/patterns/` Core directory
+and `practice-context/outgoing/patterns/` transport route are both
 retired.
 
-**General patterns** live in `.agent/practice-core/patterns/` and
-travel with the Core package. They are ecosystem-agnostic
-abstractions synthesised from multiple specific instances.
-**Specific instances** live in `.agent/memory/active/patterns/` and remain
-local; they are the proof that supports the general abstraction.
+**Universal patterns** travel as PDRs in
+`.agent/practice-core/decision-records/` with `pdr_kind: pattern`
+frontmatter. They are ecosystem-agnostic abstractions synthesised
+from multiple specific instances.
+
+**Specific instances** live in `.agent/memory/active/patterns/` and
+remain local (they are the proof that supports the general
+abstraction).
 
 **Practice Decision Records (PDRs)** live in
 `.agent/practice-core/decision-records/` and travel with the Core
 package. Pattern-shaped governance (reviewer discipline, planning
-discipline, knowledge-flow discipline, etc.) takes the PDR shape,
-not the pattern shape.
+discipline, knowledge-flow discipline, etc.) takes ordinary PDR
+shape; ecosystem-agnostic engineering patterns take PDR shape with
+`pdr_kind: pattern`.
 
 The graduation ladder:
 
@@ -429,23 +439,24 @@ The graduation ladder:
 napkin (ephemeral)
   → distilled (settled, local)
     → memory/patterns (repo-specific pattern instances)
-         → practice-core/patterns (general abstraction via synthesis)
+         → practice-core/decision-records [PDR with pdr_kind: pattern]
+                                          (general abstraction via synthesis)
     → host ADRs (local architectural decisions)
     → practice-core/decision-records (portable Practice governance) [PDRs]
 ```
 
-A general pattern is **authored fresh** in `practice-core/patterns/`
-when instance accumulation makes the general form legible; the
-instances remain as proof. A PDR is **authored fresh** in
-`practice-core/decision-records/` when a Practice-governance
-decision needs to travel; its instance patterns (if any) remain in
-`memory/active/patterns/` with `related_pdr: PDR-NNN` frontmatter.
+A universal pattern is **authored fresh** as a PDR with
+`pdr_kind: pattern` when instance accumulation makes the general
+form legible; the instances remain as proof. A governance PDR is
+**authored fresh** in `practice-core/decision-records/` when a
+Practice-governance decision needs to travel; its instance patterns
+(if any) remain in `memory/active/patterns/` with
+`related_pdr: PDR-NNN` frontmatter.
 
-**Format**: PDRs use the template documented in
-`practice-core/decision-records/README.md`. General patterns use
-the template documented in `practice-core/patterns/README.md`.
-Specific instances use the existing pattern template (see
-`practice-bootstrap.md` §Reusable Patterns).
+**Format**: all PDRs use the template documented in
+`practice-core/decision-records/README.md`. Specific instances use
+the existing pattern template (see `practice-bootstrap.md` §Reusable
+Patterns).
 
 ## Growing a Practice from This Blueprint
 
@@ -490,13 +501,18 @@ adapters second, update references third. Existing mechanisms that exceed the bl
 specialised reviewers, editorial systems, domain-specific sub-agents — are adaptations, not
 deviations. Preserve and integrate them.
 
-1. Create the directory structure: `.agent/directives/`, `.agent/practice-core/` (with
-   `incoming/.gitkeep`), `.agent/plans/`, `.agent/skills/`, `.agent/memory/`, and platform adapter
-   directories as needed (see `practice-bootstrap.md` §The Artefact Model for the full list — e.g.
-   `.cursor/rules/`, `.claude/rules/`, `.agents/skills/`, `.codex/`). If the Practice Core files
-   were received from another repo, they should already include `index.md`, `README.md`, and
-   `CHANGELOG.md` alongside the trinity; if `.agent/practice-context/incoming/` exists, read it; if
-   building from scratch, create the required files (see `practice-bootstrap.md` for templates).
+1. Create the directory structure: `.agent/directives/`,
+   `.agent/practice-core/` (with `incoming/.gitkeep` and
+   `decision-records/incoming/.gitkeep`), `.agent/plans/`,
+   `.agent/skills/`, `.agent/memory/`, and platform adapter
+   directories as needed (see `practice-bootstrap.md` §The Artefact
+   Model for the full list — e.g. `.cursor/rules/`, `.claude/rules/`,
+   `.agents/skills/`, `.codex/`). If the Practice Core files were
+   received from another repo, they should already include
+   `index.md`, `README.md`, and `CHANGELOG.md` alongside the trinity
+   plus the `decision-records/` directory; if building from scratch,
+   create the required files (see `practice-bootstrap.md` for
+   templates).
 2. Write `AGENT.md` in `.agent/directives/` as a stable structural index: project context,
    artefacts, rules pointer, sub-agent roster, development commands, repo structure. Link to
    `.agent/practice-core/index.md` for the full Practice. No mutable state.
@@ -633,8 +649,9 @@ validated across 3+ repos.
   outgoing content, incoming integration, two-way comparison — operates
   at the concept level: what something is, how it works, why it
   matters. Not at the file level, not at the pointer level. A name
-  like "the three-zone fitness model" is better than "ADR-144", but
-  a name alone is still a pointer — the substance must travel. Two
+  like "the three-zone fitness model" is better than an opaque
+  identifier such as "ADR-N", but a name alone is still a pointer —
+  the substance must travel. Two
   repos may implement the same concept under different names and
   structures; concept-level comparison reveals equivalences that
   file-level diffing misses. This is both a self-containment guard
@@ -688,8 +705,11 @@ validated across 3+ repos.
   understand what matters and what failure looks like, not just the verb.
 - **The recursive failure mode.** When the metacognition tool is broken, you cannot use
   metacognition to discover that it's broken. Detection requires external comparison.
-- **Exchange context works best as an indexed support pack.** Index
-  `.agent/practice-context/outgoing/` and separate by responsibility.
+- **Exchange context works best as an indexed support pack.** When
+  outbound substance accompanies a transplant, separate by
+  responsibility and route by shape per PDR-024 (the previous
+  `.agent/practice-context/outgoing/` ephemeral surface was retired
+  2026-04-29 by PDR-007 amendment).
 - **The `.agents/skills/` layer is a cross-platform discovery surface.** It should contain only thin
   wrappers — zero substantive duplication.
 - **Repo-state enforcement needs its own proof layer.** Tests prove behaviour; repo-audit proves
