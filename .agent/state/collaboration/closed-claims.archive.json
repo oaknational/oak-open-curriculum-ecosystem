@@ -10859,6 +10859,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:00:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit download asset user-only boundary plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:03:22Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Committed download asset user-only boundary plan as 76468407",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
