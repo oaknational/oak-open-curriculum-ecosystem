@@ -31,11 +31,15 @@ discipline owns the loop). Adjacent: discoverable+actionable plans,
 parent-reconciliation, narrative-drift, and plan-following-vs-
 principle-following landed in `docs/governance/development-practice.md`
 under foreign-stage absorption into the parallel agent's typescript-
-extraction commit `cc8866a8`. **Next safe step**: graduate the
-queued items in distilled.md "Queued for Next Directive-Edit
-Session" to `agent-collaboration.md` in a fresh session under <30%
-context, and audit pending-graduations.md for the wider
-doctrine-scanner-CLI-gating pattern.
+extraction commit `cc8866a8`. **Next safe step**: deep exploration and reflection on
+`.agent/memory/operational/collaboration-state-lifecycle.md` per
+owner direction 2026-05-06; opener authored at
+`.agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`.
+The opener names this as the load-bearing session shape (substance-
+led audit, not fitness-driven trim) and lists adjacent companions
+(distilled.md "Queued for Next Directive-Edit Session" graduations,
+PDR-026 amendment without doctrine-scanner-CLI gating) as
+opportunistic-only.
 
 **Session close (2026-05-06 — Cindery Charring Pyre / `cursor` /
 GPT-5.5 / `e220de`)**: authored

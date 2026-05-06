@@ -29,14 +29,19 @@ claude-opus-4-7-1m / `aeebab`).
   entry from inherent-cost to artefactual-cost (per-session closure
   discipline owns the loop).
 
-**Next safe step**: Promote the queued items in distilled.md
-"Queued for Next Directive-Edit Session" (coordination surface
-discipline, inter-agent comms first-class, per-session closure-
-discipline-owns-the-loop, hypothesis-layer routing) to
-`agent-collaboration.md` in a fresh session under <30% context.
-Audit pending-graduations.md for the wider doctrine-scanner-CLI-
-gating pattern and apply the same un-gating cure (land the
-discipline now, complement with enforcement when the CLI lands).
+**Next safe step**: deep exploration and reflection on
+`.agent/memory/operational/collaboration-state-lifecycle.md` per
+owner direction at session close. Opener authored at
+`.agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`
+— substance-led audit (not fitness trim), boundary clarity against
+`agent-collaboration.md` and `collaboration-state-conventions.md`,
+schema-provenance currency check, reflection on whether the newly-
+graduated orphaned-claim policy is in the right home. Companions
+(opportunistic-only): graduate distilled.md "Queued for Next
+Directive-Edit Session" items to `agent-collaboration.md`; land
+PDR-026 amendment §"Sequenced-deferral discipline" without the
+doctrine-scanner-CLI vaporware gating; audit pending-graduations.md
+for wider doctrine-scanner-CLI-gated entries.
 
 ---
 
