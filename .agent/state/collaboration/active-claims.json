@@ -435,54 +435,7 @@
       "staged_bundle_fingerprint": "8b8abf1f9e2837d50e85dbacef1faa009d93de712e2a6548b500daaa466b4c4c",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/rules/no-moving-targets-in-permanent-docs.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
-    },
-    {
-      "intent_id": "ee413c68-6a7c-435a-a480-d556fe15a472",
-      "claim_id": "f5643be8-0cd8-4acb-ba14-b318dbffff7c",
-      "agent_id": {
-        "agent_name": "Ashen Burning Anvil",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "files": [
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/operational/repo-continuity.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json"
-      ],
-      "commit_subject": "docs(agent-tooling): close skill-load pressure handoff",
-      "queued_at": "2026-05-06T12:47:03.572Z",
-      "updated_at": "2026-05-06T12:47:12.287Z",
-      "expires_at": "2026-05-06T13:02:03.572Z",
-      "phase": "staging"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "f5643be8-0cd8-4acb-ba14-b318dbffff7c",
-      "agent_id": {
-        "agent_name": "Ashen Burning Anvil",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T12:46:54Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Commit all session-handoff files",
-      "intent_to_commit": "ee413c68-6a7c-435a-a480-d556fe15a472"
-    }
-  ]
+  "claims": []
 }
