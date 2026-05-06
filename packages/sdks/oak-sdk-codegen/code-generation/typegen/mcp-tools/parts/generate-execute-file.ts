@@ -27,7 +27,7 @@ function emitCallToolOverloads(names: readonly string[]): string {
 }
 
 function toolNameToInvocationFunctionName(toolName: string): string {
-  const identifier = toolName.replace(/-([a-z])/g, (_: string, letter: string) =>
+  const identifier = toolName.replaceAll(/-([a-z])/g, (_: string, letter: string) =>
     letter.toUpperCase(),
   );
   return `invoke${identifier.charAt(0).toUpperCase()}${identifier.slice(1)}Tool`;

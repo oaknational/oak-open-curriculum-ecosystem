@@ -114,6 +114,17 @@ describe('extractSynonymFromDefinition', () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe('input length bound', () => {
+    it('returns undefined for definitions over the safety threshold', () => {
+      const longSpaces = ' '.repeat(10_000);
+      const keyword = createKeyword('fraction', `also known as${longSpaces}rational number`);
+
+      const result = extractSynonymFromDefinition(keyword);
+
+      expect(result).toBeUndefined();
+    });
+  });
 });
 
 describe('generateMinedSynonyms', () => {

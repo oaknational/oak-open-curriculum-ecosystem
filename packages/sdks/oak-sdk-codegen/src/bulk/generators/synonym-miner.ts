@@ -63,6 +63,21 @@ const PATTERN_CONFIDENCE: Readonly<Record<string, number>> = {
 };
 
 /**
+ * Maximum definition length accepted by pattern matching.
+ *
+ * @remarks
+ * The synonym-extraction regexes (`alsoKnownAs`, `sometimesCalled`) have
+ * polynomial worst-case complexity on adversarial whitespace input, flagged
+ * by CodeQL `js/polynomial-redos`. Curriculum definitions are typically
+ * under 500 chars, so this 5000-char ceiling is far above the expected input
+ * range while bounding the regex's worst-case work to a safe level. Per
+ * CodeQL's documented mitigation strategy: "limit the length of the input
+ * string". Sites flagged: synonym-miner.ts:121 (also-known-as) and
+ * synonym-miner.ts:129 (sometimes-called).
+ */
+const MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000;
+
+/**
  * Regex patterns for synonym extraction.
  */
 const PATTERNS = {
@@ -85,6 +100,10 @@ function normaliseSynonym(raw: string): string {
  * @returns MinedSynonym if patterns match, undefined otherwise
  */
 export function extractSynonymFromDefinition(keyword: ExtractedKeyword): MinedSynonym | undefined {
+  if (keyword.definition.length > MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING) {
+    return undefined;
+  }
+
   const result = collectSynonymMatches(keyword);
 
   if (result.synonyms.length === 0) {
