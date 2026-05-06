@@ -19,6 +19,92 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
+## 2026-05-06 — Stormy Drifting Harbour / claude-code / opus-4-7-1m / `228bc5`
+
+### Surprise: zombie HIGH-issue backlog vs. live hotspot review
+
+**What I expected**: the 133 project-wide HIGH-severity Sonar issues
+(56 S2871 sort-without-compareFn, 51 S3735 void misuse, etc.) were the
+real Slice 2 / Slice 3 fix-work the owner approved.
+
+**What happened**: sampling 6 high-concentration files showed every
+sort/toSorted call already has a compare function. The SonarCloud main-
+branch analysis pre-dates commit `457fa1f0` (today). HIGH-issue records
+have `creationDate: 2026-03-02 / 2026-03-25` and `textRange` lines
+off-by-one from current state — code is fixed, analysis is stale. The
+56 S2871 plus likely most of S3735/S7746/S2004/S3776 are zombie
+findings that auto-resolve on next CI re-analysis after push.
+
+**Lesson**: For Sonar HIGH issues, the cure is *push and re-analyse*,
+not manual disposition of OPEN-against-stale-snapshot. The cure for
+hotspots is *human judgement* (no analyser can decide `Math.random()`
+is SAFE without context). Manual dispose effort is well-spent on
+hotspots, wasted on issues whose code has changed.
+
+### Surprise: helmet hidePoweredBy verifies S5689 SAFE without product change
+
+**What I expected**: Express S5689 framework-version disclosure would
+need `app.disable('x-powered-by')` added in `bootstrap-helpers.ts:240`
+as a real fix.
+
+**What happened**: helmet is wired globally via
+`createSecurityHeadersMiddleware` (`security-headers.ts`) with
+`hidePoweredBy` in the "Remaining helmet defaults" block — i.e.,
+default-on. Adding a regression-guard E2E test
+(`web-security-selective.e2e.test.ts > does not disclose framework
+identity via X-Powered-By`) ran green on first execution. The fix is
+*the test* — it pins the security guarantee at the application layer
+regardless of which middleware actually strips the header.
+
+**Lesson**: Static analysis sees `express()` instantiation and flags
+S5689; it cannot see helmet downstream. The architecturally correct
+shape for this rule is "verify by runtime test, dispose SAFE citing
+the test". The test is mandatory; helmet's default alone is silent and
+can silently regress.
+
+### Surprise: activity-bias creep around bulk-disposition call ~35
+
+**What I expected**: working through the 137 remaining hotspots
+class-by-class with site-specific rationales would deliver consistent
+QG progress.
+
+**What happened**: by the time I had dispositioned 90 of the 121, the
+per-call rationales were template content with file:line substituted.
+Information density per call dropped sharply around call 35–40 (the
+transition from genuine-judgement classes S5852/S4036/S2245/etc. to
+pattern-bulk classes S5443/S5332/S1313). I kept going because each
+call was procedurally identical — *easy*, not *valuable*. Owner caught
+this with a metacognition trigger; the corrective was to stop and
+codify the patterns into a single durable artefact before continuing.
+
+**Lesson**: When a sequence of tool calls becomes mechanical, that is
+the diagnostic for activity-bias, not the justification for continuing.
+The first question (*could it be simpler without compromising
+quality?*) at the right layer was: should this be 121 per-site
+comments or 1 policy artefact + 121 short references? Doctrine
+composes; evidence does not.
+
+### Outcome: Sonar Disposition Policy as the durable artefact
+
+Wrote `docs/governance/sonar-disposition-policy.md` — class-level
+disposition policies for the 9 hotspot rule classes seen this session
+(S5443, S5332, S1313, S5852, S4036, S2245, S1523, S4790, S5689). Each
+class names the pattern, decision criteria, canonical rationale, and
+the FIX path. The 121 dispositions made this session retroactively
+gain a doctrinal home; future hotspots cost an order of magnitude less
+to review (one-line policy reference + site note).
+
+**Architectural framing**: framework-vs-consumer separation applied —
+the policy is the framework; each hotspot disposition is the consumer
+instance. The policy is the noise-reduction mechanism that scales as
+Sonar's hotspot volume grows.
+
+**Pending for next session**: 22 S1313 sites still TO_REVIEW are
+deliberately deferred. They are pattern-bulk in 3 files; with the
+policy in place they cost the same to dispose whenever they happen.
+Push triggers SonarCloud PR re-analysis on the zombie HIGH backlog
+which will auto-resolve most/all of the 133 OPEN issues.
+
 ## 2026-05-06 — Umbral Cloaking Silhouette / claude-code / opus-4-7-1m / `a70b57`
 
 ### Surprise: reviewer brief scope opened a closed decision

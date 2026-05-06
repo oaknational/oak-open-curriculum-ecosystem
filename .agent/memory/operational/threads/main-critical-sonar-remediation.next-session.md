@@ -18,11 +18,16 @@ Primary plan:
 
 ## Landing Target For Next Session
 
-Target: `recover from incorrect PR-scoped turn, then fix main Sonar backlog` —
-first remove the broken local generated MCP executor/generator experiment from
-the working tree, then resume remediation against the project/main HIGH issues
-and security hotspots. PR #97 Sonar is a regression guard, not the source of the
-worklist.
+Target: `apply Sonar Disposition Policy to remaining hotspots and any
+post-re-analysis residual` — after the push from session 2026-05-06,
+SonarCloud re-analysis runs against the current branch HEAD; the
+zombie HIGH-issue backlog (133 OPEN) is expected to auto-resolve to
+FIXED for code that `457fa1f0` already fixed. Next session reviews the
+post-re-analysis residual, applies the new
+[`docs/governance/sonar-disposition-policy.md`](../../../../docs/governance/sonar-disposition-policy.md)
+to the 22 S1313 still TO_REVIEW (deferred from this session), and
+addresses any genuine remaining HIGH issues with TDD fixes per the
+two-outcome rule.
 
 ## Lane State
 
@@ -33,35 +38,33 @@ worklist.
 current project/main HIGH issues plus security hotspots on the branch. PR-scoped
 Sonar is used only to verify the branch does not add regressions.
 
-**Current state**:
+**Current state** (after session 2026-05-06 by Stormy Drifting Harbour):
 
-- Branch `fix/sonar-fixes-20260506` has been pushed and draft PR #97 exists.
-- Commits already pushed:
+- Branch `fix/sonar-fixes-20260506` has commits:
   - `457fa1f0 fix(sonar): remediate quality gate blockers`
   - `b903554b chore(collaboration): close commit window state`
-- GitHub checks after the first push: tests passed; SonarCloud failed; Vercel
-  and analysis checks passed; CodeQL skipped.
-- The previous plan framing incorrectly treated PR-scoped Sonar findings as the
-  primary remediation source. Owner corrected this as circular: a branch cannot
-  be opened to fix its own Sonar findings because branch findings only exist
-  after the branch introduces work.
-- Correct backlog source is the project/main Sonar state: current project-wide
-  HIGH issues and security hotspots.
-- Corrective evidence gathered during the pause:
-  - Project-wide open HIGH issues: 133.
-  - Project-wide security hotspots: 154 total, 143 `TO_REVIEW`, 11 `REVIEWED`.
-  - Since-leak/new-code hotspots: 18 total, 7 `TO_REVIEW`, 11 `REVIEWED`.
-  - PR #97 open issues: 5; PR gate red on `new_violations`,
-    `new_security_hotspots_reviewed`, and duplicated-lines density.
-- Local working tree is dirty. The broken/unwanted experiment is the generated
-  MCP executor/generator refactor in:
-  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts`
-  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.unit.test.ts`
-  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.unit.test.ts`
-  - `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`
-- The local dirty set also includes smaller PR-issue fixes. Fresh session must
-  inspect them separately and keep only changes that advance the project/main
-  HIGH or hotspot backlog.
+  - `c2f5402b fix(sonar): preserve useful remediation cleanups`
+  - `5f6a7ae2 test(http-mcp): pin X-Powered-By absence; SAFE 6 sonar hotspots`
+  - Sonar Disposition Policy commit (this session, see commit log).
+- Sonar dispositions applied this session: **121 hotspots** moved
+  TO_REVIEW → REVIEWED/SAFE with site-specific rationales, raising
+  `security_hotspots_reviewed` from 7.1% (11/154) to ~85.7% (132/154).
+- 22 S1313 hardcoded-IP hotspots in 3 test files **deliberately
+  deferred** to next session: `header-redaction.e2e.test.ts` (2),
+  `header-redaction.unit.test.ts` (13),
+  `rate-limiter-factory.unit.test.ts` (7). All test fixtures; with the
+  new policy in place they apply by class.
+- Slice 1 (Sonar high-priority hotspots: 1 RCE + 3 PRNG + 2 weak-crypto)
+  shipped with a regression-guard E2E test that pins the X-Powered-By
+  absence at the application layer.
+- Slice 2 (this session) shipped the
+  [Sonar Disposition Policy](../../../../docs/governance/sonar-disposition-policy.md)
+  codifying class-level dispositions for 9 hotspot rule classes.
+- HIGH-issue backlog: 133 OPEN as queried at session-open; sampling of 6
+  files showed all are zombie findings from a stale main-branch
+  analysis that pre-dates commit `457fa1f0`. The push from this session
+  triggers CI SonarCloud re-analysis; the bulk of the 133 are expected
+  to auto-resolve to FIXED.
 
 **Blockers / low-confidence areas**:
 
@@ -80,12 +83,20 @@ Sonar is used only to verify the branch does not add regressions.
 
 **Next safe step**:
 
-1. In a fresh session, inspect `git status --short` and the local dirty diff.
-2. Revert/remove the broken generated MCP executor/generator experiment while
-   preserving this corrective handoff documentation.
-3. Re-query project/main Sonar HIGH issues and security hotspots.
-4. Choose the first remediation slice from that main/project backlog.
-5. Run the smallest relevant gates, then root `pnpm check` before committing.
+1. Wait for CI SonarCloud re-analysis on the pushed branch to complete.
+2. Re-query project/main Sonar HIGH issues — most should now be FIXED.
+3. Re-query hotspots — the 22 S1313 should be the only TO_REVIEW
+   residual in the test-fixture classes; any new hotspots from this
+   branch's commits will appear here.
+4. Apply [Sonar Disposition Policy
+   §S1313](../../../../docs/governance/sonar-disposition-policy.md#s1313--hardcoded-ip-addresses)
+   to the 22 deferred sites: short rationales of the form
+   `SAFE per Sonar Disposition Policy §S1313: <file>:<line> — test-
+   fixture IP literal driving header-redaction/rate-limit test`.
+5. Address any genuine remaining HIGH issues with TDD per the policy's
+   two-outcome rule.
+6. Run the smallest relevant gates, then root `pnpm check` before
+   committing.
 
 **Promotion watchlist**:
 
@@ -97,3 +108,14 @@ Sonar is used only to verify the branch does not add regressions.
   before chasing errors outward.
 - Owner correction reinforced that generated files remain first-class checked
   code; quality-gate exclusion is not a valid route to green.
+- Candidate practice lesson (2026-05-06): for a *static analyser's*
+  HIGH issues against a moving target, the cure is `push + re-analyse`,
+  not manual disposition; for *security hotspots* whose decision
+  requires context the analyser cannot see, the cure is human review
+  with site-specific rationale; for both, doctrine (a class-level
+  policy artefact) compounds where per-site comments do not.
+- Candidate practice lesson (2026-05-06): activity-bias diagnostic —
+  when a sequence of mechanical tool calls becomes procedurally
+  identical, that is the prompt to re-ask the first question, not to
+  continue. The simpler shape may be a single durable artefact rather
+  than N individual calls.

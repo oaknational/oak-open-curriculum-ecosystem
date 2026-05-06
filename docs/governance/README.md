@@ -31,6 +31,7 @@ If this is your first time here, the 5-minute reading path is:
 - [Accessibility Practice](./accessibility-practice.md) — WCAG 2.2 AA compliance, Playwright + axe-core, theme-aware testing
 - [Design Token Practice](./design-token-practice.md) — DTCG JSON source format, three-tier model, CSS custom properties output
 - [MCP App Styling](./mcp-app-styling.md) — CSS custom properties, SDK variable bridges, font loading, CSP declarations
+- [Sonar Disposition Policy](./sonar-disposition-policy.md) — class-level disposition policies for SonarCloud security hotspots and HIGH issues
 
 ## Key Principles
 
