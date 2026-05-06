@@ -248,3 +248,43 @@ line have been verified to resolve at the time of this archive.
   concerns under conditional-discipline shapes; the corrective is
   to re-frame under long-term excellence. Captured in napkin
   2026-05-01 metacognition entry. Status: withdrawn 2026-05-01.
+
+### 8. Commit-queue fingerprint recursion (graduated 2026-05-06)
+
+Archived 2026-05-07 by Pelagic Rolling Harbour during the
+[dedicated pending-graduations drain][drain-opener]. The entry
+landed `graduated 2026-05-06` last session via F-15; archive is
+the audit-trail close per the opener.
+
+[drain-opener]: ../../../plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md
+
++ 2026-05-05; **Commit-queue `record-staged` + `verify-staged`
+  fingerprint protocol is non-trivially recursive when state files
+  self-modify** (Lacustrine Navigating Rudder, second instance).
+  Source-surface: napkin §Surprise 6 (this date); same observation
+  recorded in earlier session summary as the "fingerprint mismatch
+  incident" (first instance — see commit `2b78aa93`'s session arc).
+  Graduation-target: CLI hint inside `agent-tools:commit-queue --
+  record-staged` printing *"do not re-stage active-claims.json
+  after this command — the fingerprint write is metadata-only and
+  the index does not need it"*; OR doc note in
+  [`.agent/skills/commit/SKILL.md`](../../../skills/commit/SKILL.md)
+  step 7's record-staged paragraph; OR redesign the
+  `staged_bundle_fingerprint` to exclude the fingerprint-field
+  itself when computing (currently it includes the whole patch).
+  Trigger-condition: second instance now confirms (the earlier
+  Lacustrine session and this session both hit it). Promote to
+  CLI / doc / impl change at next commit-queue tooling pass.
+  Status: `graduated 2026-05-06` (Clouded Lifting Aerie) — third
+  instance observed during Hidden Slipping Moth's `4be7b5` session
+  (napkin Surprise 2). Doc-note option landed via friction register
+  entry F-15 in
+  [`.agent/plans/agent-tooling/frictions-register.md`](../../../plans/agent-tooling/frictions-register.md)
+  documenting the workflow-that-works ("stage all files including
+  active-claims.json with queue entry but no fingerprint, run
+  record-staged once, do NOT re-stage active-claims.json
+  afterwards") plus candidate cures (sibling-file fingerprint
+  storage; CLI warning on `MM` after record-staged). The CLI-hint
+  and impl-redesign options remain available for the next
+  commit-queue tooling pass; F-15 stands as the working-discipline
+  bridge until then.

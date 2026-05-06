@@ -33,7 +33,7 @@ queue. Graduated and merged history is preserved in git and the archived
 register snapshots in
 [`archive/`](archive/) — most recent is
 [`pending-graduations-archive-2026-05-06.md`](archive/pending-graduations-archive-2026-05-06.md)
-(7 entries: 6 graduated, 1 withdrawn).
+(8 entries: 7 graduated, 1 withdrawn).
 
 + 2026-05-06; **`/doctor` is session-local evidence, not a shell-
   invocable validation gate** (Briny Plumbing Fjord, owner
@@ -100,10 +100,21 @@ register snapshots in
   carry polarity-of-Core-patterns substance).
   Trigger: owner direction in this turn (do this in the same
   promotion pass) OR queue for fresh restart session if scope
-  exceeds context budget. Status: `due` (owner-direction trigger
-  fired; substance-led cure named; immediate-fix applied to one
-  pattern file; full sweep + README amendment is the graduation
-  target).
+  exceeds context budget. Status: `partially graduated 2026-05-07`
+  (Pelagic Rolling Harbour) — option (a) README amendment landed
+  in [`patterns/README.md`](../active/patterns/README.md)
+  §Polarity (required, every pattern), §Frontmatter Schema
+  `polarity: pattern | anti-pattern` field. Option (b) bulk
+  backfill sweep across ~70 pre-2026-05-05 pattern files remains
+  deferred — README §Polarity already names the backfill state
+  ("Pre-2026-05-05 pattern files predate this discipline and are
+  being backfilled across the next consolidation passes") and
+  points new authors at the shape-of-the-art template, so the
+  sweep can land iteratively without blocking new entries. Option
+  (c) PDR-014 amendment naming polarity at pattern-graduation time
+  is queued under "PDR-shaped follow-up: PDR-014 amendment for
+  polarity-required-at-graduation" pending the second
+  Practice-bearing repo evidence the original entry named.
 
 + 2026-05-05; **30% context budget for directive-file processing
   is a standing rule, not a session-scoped suggestion** (Owner-
@@ -139,7 +150,16 @@ register snapshots in
   Queued for the fresh restart session per owner direction
   *"likely the starting again will need to happen in a fresh
   session"*. Self-applying graduation: the rule queues itself for
-  the session where it can be safely landed.
+  the session where it can be safely landed. **Sequenced-deferral
+  pointer (2026-05-07, Pelagic Rolling Harbour)**: dedicated
+  PDR-authoring session — Phase 1 — author PDR
+  `directive-file-context-budget` in
+  `practice-core/decision-records/`; Phase 2 — register in
+  CHANGELOG and decision-records/README.md; Phase 3 — graduate
+  user-memory `feedback_30_percent_context_for_directives.md`
+  reference to PDR-NNN. Not "for later" — sequenced for the next
+  fresh session where context budget permits the directive-shape
+  PDR landing.
 
 + 2026-05-05; **cyclical learning-loop maintenance is a full-time
   process even at small N** (Owner-stated meta-observation during
@@ -299,37 +319,6 @@ register snapshots in
   a config-schema decision — graduates from session-local note to
   pattern entry).
   Status: `pending`.
-
-+ 2026-05-05; **Commit-queue `record-staged` + `verify-staged`
-  fingerprint protocol is non-trivially recursive when state files
-  self-modify** (Lacustrine Navigating Rudder, second instance).
-  Source-surface: napkin §Surprise 6 (this date); same observation
-  recorded in earlier session summary as the "fingerprint mismatch
-  incident" (first instance — see commit `2b78aa93`'s session arc).
-  Graduation-target: CLI hint inside `agent-tools:commit-queue --
-  record-staged` printing *"do not re-stage active-claims.json
-  after this command — the fingerprint write is metadata-only and
-  the index does not need it"*; OR doc note in
-  [`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)
-  step 7's record-staged paragraph; OR redesign the
-  `staged_bundle_fingerprint` to exclude the fingerprint-field
-  itself when computing (currently it includes the whole patch).
-  Trigger-condition: second instance now confirms (the earlier
-  Lacustrine session and this session both hit it). Promote to
-  CLI / doc / impl change at next commit-queue tooling pass.
-  Status: `graduated 2026-05-06` (Clouded Lifting Aerie) — third
-  instance observed during Hidden Slipping Moth's `4be7b5` session
-  (napkin Surprise 2). Doc-note option landed via friction register
-  entry F-15 in
-  [`.agent/plans/agent-tooling/frictions-register.md`](../../plans/agent-tooling/frictions-register.md)
-  documenting the workflow-that-works ("stage all files including
-  active-claims.json with queue entry but no fingerprint, run
-  record-staged once, do NOT re-stage active-claims.json
-  afterwards") plus candidate cures (sibling-file fingerprint
-  storage; CLI warning on `MM` after record-staged). The CLI-hint
-  and impl-redesign options remain available for the next
-  commit-queue tooling pass; F-15 stands as the working-discipline
-  bridge until then.
 
 + 2026-05-05; **Moments of correction are high-bandwidth signals
   worth capturing regardless of whether the correction is technical
@@ -540,7 +529,15 @@ continuity snapshots.
   surface: distilled.md just-landed plus napkin Surprise 2. Graduation-
   target: PDR + companion ADR + cure-implementation commit. Trigger:
   graduation-ready (5 instances >= threshold for behaviour-changing
-  structural cure). Status: due.
+  structural cure). Status: due. **Sequenced-deferral pointer
+  (2026-05-07, Pelagic Rolling Harbour)**: dedicated PDR + ADR
+  authoring session — Phase 1: PDR draft (cure shapes a/b/c);
+  Phase 2: companion ADR; Phase 3: rename
+  `scripts/check-commit-skill-gates.ts` →
+  `scripts/check-commit-skill-advisories.ts` + advisory banner;
+  Phase 4: SKILL.md update to enumerate actual blocking hooks.
+  Combined directive + script + skill scope exceeds this drain
+  session's context budget; sequenced for next slot.
 
 + 2026-05-05; **PDR candidate — cross-lane repair pattern (do-the-repair-
   leave-unstaged-post-heads-up)**. Source: Asteroid → Fronded interaction
@@ -595,7 +592,16 @@ continuity snapshots.
   isolation discipline), PDR (CLI affordance set + non-blocking-by-design
   + portable substrate), and a concrete agent-tools enhancement plan.
   Trigger: graduation-ready (multiple worked instances + owner-stated
-  cures). Status: due.
+  cures). Status: due. **Sequenced-deferral pointer (2026-05-07,
+  Pelagic Rolling Harbour)**: dedicated multi-artefact authoring
+  session — Phase 1: ADR (build isolation); Phase 2: PDR (CLI
+  affordance set / portable substrate); Phase 3: concrete
+  agent-tools enhancement plan in
+  `.agent/plans/agent-tooling/`. ADR + PDR + plan = three
+  directive-shape artefacts; exceeds this drain session's context
+  budget; sequenced for next agent-tooling work slot. Owner
+  standing direction (full-help on improper flags) and built-CLI
+  discipline operate immediately as separate user-memory rules.
 
 + 2026-05-05; **turbo cache invalidation by an unrelated peer can expose
   a pre-existing latent test failure mid-commit, gating both sessions**
@@ -717,7 +723,14 @@ continuity snapshots.
   `scripts/check-blocked-content.ts` regex matcher and updating
   `.agent/rules/no-moving-targets-in-permanent-docs.md` to
   remove the now-stale "either/or" framing. Trigger-condition:
-  ready now (owner-directed). Status: `due`.
+  ready now (owner-directed). Status: `due`. **Sequenced-deferral
+  pointer (2026-05-07, Pelagic Rolling Harbour)**: dedicated
+  hook-tightening session — Phase 1: TDD-RED on the regex matcher
+  with prose-narrative SHA fixture; Phase 2: implement
+  prose-vs-code-block distinction in
+  `scripts/check-blocked-content.ts`; Phase 3: rule body rewrite
+  removing either/or framing. Implementation + tests + rule edit
+  out of scope for this drain session.
 
 + 2026-05-04; **session-handoff §6d "canonical-pointer-only" rule
   is too absolute for AGENTS.md** (Vining Spreading Seed,
@@ -1094,7 +1107,16 @@ continuity snapshots.
   OR an amendment block in `invoke-code-reviewers.md`) plus a
   `distilled.md § Process` graduation pointer plus matrix update in
   `invoke-code-reviewers.md`; queued as plan WS11.3 deliverable;
-  status: due (graduates when WS11.3 executes).
+  status: due (graduates when WS11.3 executes). **Vaporware-trigger
+  flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is gated on
+  unmet WS11.3 plan execution, which is the sequenced-deferral
+  vaporware shape per `distilled.md` §Sequenced-Deferral Discipline.
+  Substance is owner-standing-doctrine and is already in operational
+  effect (multi-reviewer dispatch is current practice). Re-route
+  option: land directly as
+  `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
+  in next agent-rules pass without WS11.3 gating. Decision surfaced
+  for owner direction.
 
 + 2026-05-02; observability multi-sink + fixtures plan WS8.6 —
   orthogonal axes shape (`OBSERVABILITY_SINKS` typed list +
@@ -1121,7 +1143,16 @@ continuity snapshots.
   — 165-169 already present, 170/171 next available. All cross-plan
   references updated; re-verify pre-authoring guards added at three
   locations. Status: due (ADR-number question resolved; ADR authoring
-  + amendments graduate when plan WS8.6/WS8.7 execute).
+  + amendments graduate when plan WS8.6/WS8.7 execute). **Vaporware-
+  trigger flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is
+  gated on WS8.6/WS8.7 plan execution; sequenced-deferral
+  vaporware shape per `distilled.md` §Sequenced-Deferral
+  Discipline. ADR authoring is itself directive-shape work
+  requiring its own context budget. This entry stays `due` for the
+  observability-thread's WS8.6/WS8.7 carrier; it is not a
+  pending-graduations drain candidate. Recommend Phase 3
+  surfacing: keep here only as audit-trail; carrier-plan progress
+  is the live signal.
 
 + 2026-05-02; observability multi-sink + fixtures plan WS0 —
   near-miss surprise: almost spawned a duplicate
@@ -1200,7 +1231,15 @@ continuity snapshots.
   session's self-correction expensive); (x) **wait-for-ack on
   deadlined-defaults** (task-acceptor counterpart to overflow
   protocol (iv)). Status: due (graduates with the next CLI
-  ergonomics plan execution slice).
+  ergonomics plan execution slice). **Vaporware-trigger flag
+  (2026-05-07, Pelagic Rolling Harbour)**: trigger gated on unmet
+  "next CLI ergonomics plan execution slice"; sequenced-deferral
+  vaporware shape per `distilled.md` §Sequenced-Deferral
+  Discipline. The (i)-(x) cures are protocol amendments awaiting
+  empirical validation at N≥3 per the entry's own framing — they
+  should not graduate to permanent doctrine before validation
+  regardless of CLI carrier. Stays here as audit-trail; carrier-
+  plan progress is the live signal.
 
 + 2026-05-03; **PDR-043 cue 2 sharpening: vocabulary is not the
   trigger, intent is** — owner direction this session: "there is
