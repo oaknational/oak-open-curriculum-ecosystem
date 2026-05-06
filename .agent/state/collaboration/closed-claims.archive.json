@@ -11387,6 +11387,51 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "37404ee8-4836-4d33-9c66-c537c8cad557",
+      "agent_id": {
+        "agent_name": "Briny Plumbing Fjord",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "fd36cf"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/executive/collaboration-state-placement-contract.md",
+            ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T14:19:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author placement contract + surface-restructure plan; arc + opener + napkin updates",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T14:28:24Z",
+        "closed_by": {
+          "agent_name": "Briny Plumbing Fjord",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "fd36cf"
+        },
+        "summary": "Phase 1 landed: placement contract + surface-restructure plan + opener supersession + thread arc + napkin entry under c014ad2a",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "37404ee8-4836-4d33-9c66-c537c8cad557",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
