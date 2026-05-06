@@ -227,24 +227,6 @@ recompute `localHash`, compare with `computedHash`, fail on mismatch.
 Closing this gap is in scope for the canonical-first-skill-pack-
 ingestion-tooling future plan.
 
-**Moving targets do not belong in permanent docs.** Tool counts, bug
-counts, lint counts, file counts, Git HEAD SHAs and any other figure
-that changes with ordinary work are appropriate only in ephemeral or
-state-tracking surfaces (`.remember/`, `.agent/state/`, session
-napkins, comms log). Embedding them in permanent docs (ADRs, PDRs,
-README, principles, directives, practice-index, plans-as-reference)
-only generates documentation drift; it provides no durable value. The
-Git label HEAD already exists as the stable index for "current
-commit" — re-recording the SHA in prose freezes a moment in time.
-Existing instances (e.g. "43 canonical rules / 12 stable canonical
-commands / 36 canonical skills / 77 abstract solutions" in
-`practice-index.md`, baked-in SHAs in long-lived docs) are prior-art
-violations to be remediated; remediation does not have to happen in
-the session of discovery. Cure when count itself is the point: route
-to a generated/scriptable surface (`pnpm portability:check`, fitness
-reports, generated indexes), not hand-maintained prose. Owner stated
-2026-05-01.
-
 **Directive-file work requires <30% context budget; otherwise queue
 a fresh session.** Owner-stated 2026-05-05 with explicit standing
 authority (*"this is always true"*). Files under `.agent/directives/`

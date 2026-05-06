@@ -10085,6 +10085,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "82A0E0F5-72A8-428D-A75B-07EA97EC8CF0",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T08:52:23Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "commit window: archive napkin rotation entry; reset napkin to clean state",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T08:56:00Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "commit window closed; napkin rotation entry archived; commit 3a2f713f",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "82A0E0F5-72A8-428D-A75B-07EA97EC8CF0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
