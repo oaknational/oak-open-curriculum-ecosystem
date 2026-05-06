@@ -19,7 +19,76 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
-## 2026-05-06 — Ashen Burning Anvil / codex / GPT-5 / `019dfd`
+## 2026-05-06 — Iridescent Waxing Orbit / claude-code / opus-4-7-1m / `aeebab`
+
+### Surprise: "doctrine-scanner CLI" gating is vaporware-shaped
+
+**What I expected**: distilled.md's `Sequenced-Deferral Discipline`
+entry was held under owner-set gating ("PDR-026 amendment sequenced
+behind enforcement infrastructure — doctrine-scanner CLI extension")
+and would graduate when the enforcement infrastructure landed.
+
+**What happened**: owner audit. The doctrine-scanner CLI lives in
+`future/memetic-immune-system-and-progressive-disclosure.plan.md`
+with promotion gates that have not fired and are conditional on
+`current/doctrine-enforcement-quick-wins.plan.md` landing six
+workstreams green PLUS a consolidation pass identifying that the
+existing `check-blocked-*.ts` script count justifies consolidation
+PLUS a second instance of citation discipline. Three compound gates
+that must all fire. The amendment is functionally indistinguishable
+from "later" — the precise failure mode the discipline names. The
+held-deferral cited itself out of accountability.
+
+**Lesson**: a sequenced deferral whose gating mechanism is in
+`future/` with unmet compound promotion gates is a *hidden
+declaration of non-action* wearing the costume of a sequenced
+deferral. The second shape is more dangerous than the bare "we'll
+do X later" because it looks like discipline. Audit fence:
+permanent-doc deferrals must point at `current/` or fully-promoted
+`future/` plans; pointing at `future/` with unmet promotion gates
+is the failure mode the discipline forbids. Updated distilled.md
+in this session to acknowledge the vaporware-citation issue
+explicitly; the PDR-026 amendment now graduates without the
+vaporware gating in the next directive-edit session.
+
+### Surprise: cyclical-learning-loop framing was inherent-cost when it should have been artefactual-cost
+
+**What I expected**: graduate the entry "Cyclical learning-loop
+maintenance is a full-time process even at small N" to
+`agent-collaboration.md` or a PDR amendment as written.
+
+**What happened**: owner reframed mid-session. The cost is not
+inherent to the loop; it is artefactual — the symptom of letting
+fitness pressure accumulate across sessions instead of each session
+running its own handoff plus consolidation at close. Per-session
+closure discipline is the steady-state; reactive graduation passes
+are recovery work after closure was skipped. Already a current/
+plan addressing this shape:
+`learning-loop-negative-feedback-tightening.plan.md`.
+
+**Lesson**: when an observation about "cost" surfaces, re-ask the
+first question. The new
+`re-apply-first-question-at-elaboration-boundaries.md` rule
+(written earlier in this same session) names exactly this case:
+a finding that asserts inherent cost may be a symptom of poor
+discipline. The reframe is the work; the original framing is not
+something to graduate, it is something to correct. Distilled.md
+entry rewritten in this session to the closure-discipline framing.
+
+### Observation: foreign-stage absorption recurred at commit `cc8866a8`
+
+I edited `docs/governance/development-practice.md` during the
+graduation pass; the parallel principles.md-extraction agent's
+commit (subject "docs(principles): extract compiler-time types
+guidance") absorbed my working-tree edit into their staged bundle.
+My edit landed in HEAD under their commit subject, so the
+graduation provenance is split: the new rules and distilled trim
+landed under `docs(practice): graduate distilled.md to rules and
+governance docs`; the dev-practice graduations landed silently
+under the typescript-extraction commit. Substance gain; ceremony
+loss — same shape Dawnlit Transiting Galaxy logged 2026-05-05.
+Coordination cure named in the agent-collaboration directive
+(`git commit -- pathspec`) was not used by the peer.
 
 ### Correction: `/doctor` is session-local evidence, not a shell gate
 

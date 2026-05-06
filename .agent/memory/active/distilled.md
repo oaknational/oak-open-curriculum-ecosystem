@@ -76,22 +76,34 @@ expert triplet has not executed; entries remain here until it does.
 
 ### Sequenced-Deferral Discipline
 
-Held — owner-sharpened amendment to PDR-026 §Deferral-honesty
-discipline is itself sequenced behind enforcement infrastructure
-(doctrine-scanner CLI extension). Authoring it without the
-enforcement would be the failure mode the amendment names.
+The doctrine itself is settled and useful; what was held was the
+PDR-026 amendment that would land it as Practice-permanent. The
+prior held-reason cited the doctrine-scanner CLI as the enforcement
+infrastructure the amendment was sequenced behind. That citation
+was vaporware-shaped: the doctrine-scanner CLI lives in
+`future/memetic-immune-system-and-progressive-disclosure.plan.md`
+with promotion gates that have not been hit. Gating the amendment
+on a never-promoted future plan is the precise failure-mode the
+discipline names — "hidden declaration of non-action" wearing the
+costume of a sequenced deferral.
 
-Three modes:
+Three modes (the doctrine):
 
 1. **Sequenced deferral** (preferred) — "we will do X after Y, per
-   plan Z phase N".
+   plan Z phase N", where plan Z is `current/` or has hit its
+   promotion gate, not parked indefinitely in `future/`.
 2. **Sequencing-sequenced deferral** (rare) — "we will decide when
    to do X at decision point Y, per plan Z phase N".
 3. **Hidden declaration of non-action** (forbidden) — "we'll do X
-   later" without structural placement, which conceals the choice.
+   later" without structural placement, OR with structural
+   placement that points at unmet/unmet-able promotion gates. The
+   second shape is the more dangerous of the two because it looks
+   like discipline.
 
 Non-action can be the architecturally correct answer; it must be
-visible, explicit, and sometimes discussed.
+visible, explicit, and sometimes discussed. Currently queued for
+the next directive-edit session: graduate this whole block to
+PDR-026 amendment without the vaporware-citation gating.
 
 ### Repo-Specific Codegen
 
@@ -154,30 +166,38 @@ Owner-mediation remains the right channel for owner-owned decisions
 redirection; cross-thread scope changes). The discipline: route
 through the lowest-authority resolver that can decide.
 
-### Cyclical Learning-Loop Maintenance → `agent-collaboration.md` or PDR amendment
+### Per-Session Closure Owns the Loop → `agent-collaboration.md` or PDR amendment
 
-Cyclical learning-loop maintenance is a full-time process even at
-small N. Owner-named meta-observation: *"the cyclical nature, even
-with only two agents running, managing the learning loop is a full
-time process"*.
+Earlier framing (since reframed by owner 2026-05-06): "Cyclical
+learning-loop maintenance is a full-time process even at small N."
+That framing treated the loop's maintenance cost as **inherent**.
 
-The full loop is napkin (capture) → other sources → distilled
-(refinement) → pending-graduations (queue) → directives (permanent
-doctrine), then restart from napkin against the new ground. Each
-pass produces both new substance (the work itself) AND new
-substance about the loop (this observation is itself an instance).
-The loop is self-feeding by design and does not asymptote — every
-consolidation pass discovers new candidate-substance that requires
-future passes.
+Reframe: the cost is **artefactual** — a symptom of letting fitness
+pressure accumulate across sessions rather than each session
+running its own handoff plus consolidation at close. With proper
+per-session discipline (each session graduates its own captured
+substance into napkin → distilled → rules/governance, then trims
+before closing), the loop stays in steady state. Pressure
+accumulates only when sessions skip closure discipline. The
+"full-time process" observation reflects historical practice, not
+necessary cost.
 
-Operational implication: the loop is not "consolidation work that
-happens sometimes between feature work"; it is the substrate that
-future feature work runs on, and its maintenance cost is
-*baseline*, not overhead. At N=2 agents producing substance, the
-maintenance cost is already a full-time process; this scales
-superlinearly with N because cross-agent coordination substance
-accumulates faster than any single agent's substance graduates
-upward.
+Implications:
+
+- The diagnostic is closure discipline, not loop cost. When fitness
+  goes hard or distilled bloats, the question is *which sessions
+  skipped closure* — not *the loop is overweight again, queue
+  another graduation pass*.
+- Each session **owns** its loop contribution; closure is
+  non-negotiable. `jc-session-handoff` plus `jc-consolidate-docs`
+  at session-end is the unit of loop maintenance.
+- The reactive graduation passes (this one, prior ones) are the
+  recovery work after closure was skipped. The cure is structural:
+  closure discipline is the steady-state, not graduation passes.
+
+This entry graduates as a closure-discipline rule or as an
+amendment to the relevant PDR (per-session landing or capture-and-
+distil), not as a fatalistic observation about cost.
 
 ### Hypothesis-Layer Routing for Multi-Agent Cures → `hypothesis.md` family
 
