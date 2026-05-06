@@ -105,7 +105,70 @@ not retroactively registering. Agent-tools session-open registration
 remains a recurring failure mode for sessions that begin as light
 audits and grow.
 
-## 2026-05-06 — Masked Stalking Veil / codex / GPT-5 / `019dfc`
+## 2026-05-06 — Hidden Slipping Moth / claude-code / opus-4-7-1m / `4be7b5`
+
+### Surprise: rule extension introduced a self-violation in the same change set
+
+**What I expected**: extending `no-moving-targets-in-permanent-docs.md`
+with a new "Citation Directionality: Permanent → Ephemeral Is Forbidden"
+section was a clean substance-preserving graduation from distilled.md.
+
+**What happened**: the rule's own `## Source Landing` footer at file
+end already read `WS4 of doctrine-enforcement-quick-wins.plan
+(2026-05-04)` — directly violating the new clause as soon as the
+clause landed. The change set authored the prohibition and the
+violation in the same commit. Both reviewers (docs-adr + code) flagged
+it as P1. Removed the footer in a follow-up commit; provenance lives
+in git history.
+
+**Lesson**: when extending a rule with a new prohibition, scan the
+*entire rule body* for instances of the new prohibition before
+committing. Pre-existing self-violations are the exact failure mode
+the new clause exists to prevent; missing them invalidates the
+extension's first-day credibility. Add to reviewer brief on rule
+extensions: "audit the rule body itself for instances of the new
+clause".
+
+### Surprise: commit-queue fingerprint recursion when claim file is in staged set
+
+**What I expected**: the commit-skill protocol (claim → enqueue →
+stage → record-staged → verify-staged → commit) would converge
+straightforwardly when active-claims.json was part of the staged
+bundle (which it must be, because the queue entry lives there).
+
+**What happened**: `record-staged` writes `staged_bundle_fingerprint`
+into the working-tree active-claims.json, creating an `MM` split
+(staged content has no fingerprint; working-tree has fingerprint).
+Re-staging active-claims.json to "include the fingerprint" then
+breaks `verify-staged` because the staged content now differs from
+what was hashed. The loop never converges — every record-staged +
+re-stage iteration shifts the fingerprint.
+
+**Workflow that works**: stage all files including active-claims.json
+(with queue entry but no fingerprint). Run `record-staged` once. Do
+NOT re-stage active-claims.json afterwards. `verify-staged` reads
+the fingerprint from working-tree and recomputes from staged; they
+match because staged hasn't moved. Commit; the fingerprint never
+needs to land in history.
+
+**Lesson**: the queue-tooling-self-modifies-its-own-state-file
+recursion is a tool ergonomic gap, sibling to F-12/F-13. Already-
+present friction, but not yet documented in the commit skill body
+or the queue CLI help text. Candidate for tooling-friction register
+addition (F-15?) and SKILL.md clarification.
+
+### Note: Phase 0 in same session as plan authoring is viable when contract is small
+
+The strategic plan landed in this session, then owner directed Phase 0
+(authoring the operationalisation contract directive) be run in the
+same session. Worked because the contract content was already drafted
+in the plan body and the directive landed at 171 lines (within Level-1
+discipline). The pattern requires (a) explicit owner pre-alignment,
+(b) the contract being self-illustrating in scale, (c) the plan body
+already containing the substantive contract content. Not a default —
+the standing 30%-context rule for directive-file work still applies;
+this session's directive was authored at ~85% context but only because
+the substance was already drafted.
 
 ### Practice/tooling feedback
 
