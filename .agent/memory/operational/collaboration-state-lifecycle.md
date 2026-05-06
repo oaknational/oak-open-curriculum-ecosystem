@@ -13,7 +13,9 @@ index is [`collaboration-state-conventions.md`](collaboration-state-conventions.
 the doctrinal authority is
 [`agent-collaboration.md`](../../directives/agent-collaboration.md) and
 [PDR-029 Family A Class A.3][pdr-029]. Vocabulary (stale, fresh-but-quiet,
-orphaned, expired) is defined in conventions.md §Vocabulary.
+orphaned, expired) is defined in
+[`collaboration-state-conventions.md`](collaboration-state-conventions.md)
+§Vocabulary.
 
 ## Claims
 
@@ -83,9 +85,9 @@ inside the transaction window.
 ### Refresh During Work
 
 Set `heartbeat_at` to `now()` to extend a claim's freshness. Use this
-for long sessions where the original 4-hour budget would expire mid-work.
-The refreshed window is `heartbeat_at + freshness_seconds`, not
-`claimed_at + freshness_seconds`.
+for long sessions where the original 4-hour budget would go stale
+mid-work. The refreshed window is `heartbeat_at + freshness_seconds`,
+not `claimed_at + freshness_seconds`.
 
 ### Close at Session End
 
@@ -141,7 +143,9 @@ are governed by
 - Archive only through a deliberate governance pass
   (`consolidate-docs § 7e`) or an owner-forced close.
 - If another session is already performing the cleanup, do not race;
-  let the natural claim lifecycle finish.
+  let the natural claim lifecycle finish. Two agents racing to archive
+  the same orphan produces duplicate closure records and obscures
+  lifecycle history.
 - Before writing the close, post a shared-log note naming the claim
   and the closure kind (`stale` or `owner-forced`).
 

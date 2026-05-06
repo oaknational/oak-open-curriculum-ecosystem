@@ -146,23 +146,22 @@ queue / thread state durable; otherwise shared-state residue never lands.
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
 Resist unilateral cleanup; archive only via deliberate governance passes
-(`consolidate-docs § 7e`) or owner-forced close. Visibility before
-deletion is the discipline: post a shared-log note naming the claim and
-closure kind before writing the close. Recipe in
-[lifecycle](../memory/operational/collaboration-state-lifecycle.md)
-§Apparently Orphaned Claims.
+(`consolidate-docs § 7e`) or owner-forced close — manual orphan cleanup
+between scheduled audits is the exception, not the routine. Visibility
+before deletion is the discipline: post a shared-log note naming the
+claim and closure kind before writing the close. Recipe in
+[lifecycle][lifecycle] §Apparently Orphaned Claims.
 
 ## Communication Channels
 
-Pick the channel that fits the shape of the coordination need. Routing
-card: [`agent-collaboration-channels.md`][channels-card]; operational
-state index: [`collaboration-state-conventions.md`][state-conventions].
-High-frequency rule: active claims signal "touching this area now",
-`commit_queue` orders staged-bundle ownership, the shared comms log
-carries discovery notes, decision threads structure async coordination,
-sidebars hold focused short exchanges, escalations route owner-facing
-unresolved cases, and owner questions are final tiebreakers. Reviewer
-dispatch is draft review inside one agent's session, not peer collaboration.
+Pick the channel that fits the coordination need. Routing card:
+[channels-card][channels-card]; state index: [conventions][state-conventions].
+Active claims signal "touching this now", `commit_queue` orders
+staged-bundle ownership, the shared comms log carries discovery notes,
+decision threads structure async coordination, sidebars hold focused
+short exchanges, escalations route owner-facing unresolved cases, owner
+questions are final tiebreakers. Reviewer dispatch is draft review
+inside one agent's session, not peer collaboration.
 
 ## Identity vs Liveness
 
@@ -173,9 +172,9 @@ These are different concerns and live in different surfaces.
   rows live in thread records, the
   [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
   rule installs the session-open tripwire. Every shared-state mutation
-  runs identity preflight before write; Codex with `CODEX_THREAD_ID`
-  derives the PDR-027 block and must not fall back to `Codex`/`unknown`.
-  Recipe in [conventions][state-conventions] §Write-Safety Contract.
+  runs identity preflight first — Codex with `CODEX_THREAD_ID` derives
+  the PDR-027 block, never `Codex`/`unknown` (recipe in
+  [conventions][state-conventions] §Write-Safety Contract).
 - **Liveness** is when-was-this-agent-last-active-here, a *freshness
   signal* on a claim. Liveness lives on the structured-claims surface;
   each claim carries `claimed_at`, optional `heartbeat_at`, and a
@@ -243,19 +242,20 @@ PDR-011 / ADR-150 (capture → distil → graduate → enforce), and ADR-125
 
 ## Cross-references
 
-Core doctrine: [`user-collaboration.md`](user-collaboration.md),
-[`principles.md`](principles.md), and [`.agent/state/README.md`](../state/README.md).
-Core state: [log](../state/collaboration/shared-comms-log.md), [active claims][active-claims],
-[closed claims][closed-claims], [conversation schema][conversation-schema],
-[conversations][conversations-dir], [escalation schema][escalation-schema],
-[escalations][escalations-dir]. Companions:
-[conventions][state-conventions], [channels card][channels-card],
+Doctrine: [`user-collaboration.md`](user-collaboration.md),
+[`principles.md`](principles.md), [`.agent/state/README.md`](../state/README.md).
+State: [log](../state/collaboration/shared-comms-log.md),
+[active claims][active-claims], [closed claims][closed-claims],
+[conversation schema][conversation-schema], [conversations][conversations-dir],
+[escalation schema][escalation-schema], [escalations][escalations-dir].
+Companions: [conventions][state-conventions], [channels card][channels-card],
 [threads README][threads-readme].
 
 [p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
+[lifecycle]: ../memory/operational/collaboration-state-lifecycle.md
 [napkin]: ../memory/active/napkin.md
 [active-claims]: ../state/collaboration/active-claims.json
 [closed-claims]: ../state/collaboration/closed-claims.archive.json

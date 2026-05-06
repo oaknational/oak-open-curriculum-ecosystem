@@ -14,22 +14,22 @@ todos:
     status: completed
   - id: provenance-to-schemas
     content: "Move §Schema-Field Provenance content from lifecycle.md into per-property `description` and `$comment_provenance` blocks across active-claims.schema.json (and the three sibling schemas where applicable). Delete the prose table; lifecycle gains a one-line pointer."
-    status: pending
+    status: completed
   - id: doctrine-to-directive
     content: "Move doctrine paragraphs from lifecycle.md (read/write posture; 'resist unilateral cleanup'; 'visibility before deletion is the discipline'; identity-preflight-gates-all-writes) into agent-collaboration.md. Lifecycle keeps recipe halves and cites the directive."
-    status: pending
+    status: completed
   - id: vocabulary-normalisation
     content: "Separate commit, same phase: pick one term per concept and rewrite for consistency: stale (past TTL, archivable) / fresh-but-quiet (within TTL, no heartbeat) / orphaned (fresh-but-quiet whose owning session has ended) / expired (wall-clock past `expires_at`, stale-reporting only)."
-    status: pending
+    status: completed
   - id: lifecycle-tagline-and-trim
     content: "Re-tagline lifecycle.md ('Operational recipes for `.agent/state/collaboration/`') and trim sections that are no longer load-bearing after the moves above. Verify the file is recipe-shaped throughout."
-    status: pending
+    status: completed
   - id: cross-ref-audit
     content: "Audit all incoming cross-references to the moved sections (search for 'Schema-Field Provenance', 'Apparently Orphaned', 'do not treat hot shared-state docs as read-only') and update pointers."
-    status: pending
+    status: completed
   - id: validation
     content: "Run `pnpm practice:fitness:informational`, `pnpm practice:vocabulary`, `pnpm markdownlint:root`, and the collaboration-state CLI `check` action. Confirm fitness pressure on lifecycle.md is resolved by structural moves, not by trim."
-    status: pending
+    status: completed
   - id: reviewer-dispatch
     content: "Dispatch docs-adr-reviewer and code-reviewer on the change set with execution-legitimacy-given-decisions framing (placement is owner-fixed by the contract; do not re-open the contract decision)."
     status: pending
