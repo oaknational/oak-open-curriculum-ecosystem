@@ -124,6 +124,14 @@ describe('extractSynonymFromDefinition', () => {
 
       expect(result).toBeUndefined();
     });
+
+    it('does not match whitespace-only synonym phrases below the safety threshold', () => {
+      const keyword = createKeyword('fraction', `also known as ${' '.repeat(100)}`);
+
+      const result = extractSynonymFromDefinition(keyword);
+
+      expect(result).toBeUndefined();
+    });
   });
 });
 

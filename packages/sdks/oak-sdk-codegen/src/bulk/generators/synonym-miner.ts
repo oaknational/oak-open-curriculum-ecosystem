@@ -72,8 +72,9 @@ const PATTERN_CONFIDENCE: Readonly<Record<string, number>> = {
  * under 500 chars, so this 5000-char ceiling is far above the expected input
  * range while bounding the regex's worst-case work to a safe level. Per
  * CodeQL's documented mitigation strategy: "limit the length of the input
- * string". Sites flagged: synonym-miner.ts:121 (also-known-as) and
- * synonym-miner.ts:129 (sometimes-called).
+ * string". The lookahead after optional article whitespace also prevents
+ * the quantified whitespace prefix from matching unless a synonym token
+ * follows.
  */
 const MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000;
 
@@ -81,8 +82,8 @@ const MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000;
  * Regex patterns for synonym extraction.
  */
 const PATTERNS = {
-  alsoKnownAs: /also known as\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
-  sometimesCalled: /sometimes called\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+  alsoKnownAs: /also known as\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+  sometimesCalled: /sometimes called\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
   parentheticalAbbrev: /['"]([A-Z]{2,6})['"]|also known as\s+['"]?([A-Z]{2,6})['"]?/gi,
 } as const;
 

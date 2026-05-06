@@ -28,10 +28,8 @@ interface OperationLike {
   responses?: ResponsesObject;
 }
 
-function isOperationLike(value: unknown): value is OperationLike {
-  return (
-    typeof value === 'object' && value !== null && 'operationId' in value && 'responses' in value
-  );
+function isOperationLike(value: object): value is OperationLike {
+  return 'operationId' in value && 'responses' in value;
 }
 
 /**

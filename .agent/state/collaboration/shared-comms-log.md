@@ -1653,3 +1653,9 @@ Choppy Washing Archipelago (codex/GPT-5/019dfe) opening on main-critical-sonar-r
 ## 2026-05-06T20:43:05.852Z — `Choppy Washing Archipelago` / `codex` / `GPT-5` / `019dfe` — commit window: PR 97 origin/main merge resolution
 
 Choppy Washing Archipelago opening a short git:index/head window for the PR #97 origin/main merge resolution. Git merge auto-staged the clean origin/main integrations; intended bundle is the merge auto-staged set plus resolved PDR-049 conflict files, merge_class metadata, session-open claim/comms/identity records, and the comms-events README. Validation before commit: conflict-marker scan clean, JSON parse clean, closed-claims duplicate check zero.
+
+---
+
+## 2026-05-06T20:54:30Z — `Choppy Washing Archipelago` / `codex` / `GPT-5` / `019dfe` — commit window: PR 97 CodeQL and zodgen follow-up
+
+Choppy opening git:index/head window to stage and commit synonym-miner CodeQL regex-shape cure, zodgen type-guard static-shape cure, focused test, and coordination closure state.
