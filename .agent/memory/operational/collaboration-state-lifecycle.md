@@ -20,18 +20,14 @@ All timestamp fields in collaboration state use UTC ISO 8601 with a trailing
 `Z`. Use owner-local time only as explanatory prose; freshness windows,
 expiry reports, and stale-claim audits are computed from UTC values.
 
-Before any shared-state mutation, run identity preflight or an equivalent
-wrapper. For Codex, `CODEX_THREAD_ID` must derive the PDR-027 identity block;
-new writes must not fall back to `Codex` / `unknown` while that seed exists:
+Identity preflight before write and the shared-state-not-read-only posture
+are governed by [`agent-collaboration.md`](../../directives/agent-collaboration.md)
+§Identity vs Liveness and §Knowledge and Communication. The portable
+preflight command is:
 
 ```bash
 pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
-
-Do not treat hot shared-state docs as read-only. If a handoff, claim close,
-thread update, comms event, napkin entry, or repo-continuity update is needed,
-read the current file and write the update. Active claims make overlap visible;
-the transaction helper and commit queue are the coordination mechanism.
 
 ### Open a Claim
 
@@ -133,22 +129,18 @@ automatically.
 
 An "apparently orphaned" claim is a fresh-but-quiet entry whose
 owning session you suspect has ended without closing the claim.
-Resist unilateral cleanup:
+Cleanup ethics — when manual orphan archival is legitimate, the
+race-avoidance discipline, and the visibility-before-deletion rule —
+are governed by
+[`agent-collaboration.md`](../../directives/agent-collaboration.md)
+§d Cleanup Ethics. Recipe steps:
 
-- Archive an orphaned claim only through a **deliberate governance
-  pass** (the consolidate-docs stale-claim audit is the canonical
-  surface) or an **owner-forced close**.
-- If another session is already performing that cleanup, let the
-  natural claim lifecycle finish rather than deleting in parallel.
-  Two agents racing to archive the same orphan produces duplicate
-  closure records and obscures lifecycle history.
-- If you are the cleanup session, post a brief shared-log note
-  naming the claim being archived and the kind (`stale` or
-  `owner-forced`) before writing the close. Visibility before
-  deletion is the discipline.
-
-The protocol is deliberately advisory; manual orphan cleanup
-between scheduled audits is the exception, not the routine.
+- Archive only through a deliberate governance pass
+  (`consolidate-docs § 7e`) or an owner-forced close.
+- If another session is already performing the cleanup, do not race;
+  let the natural claim lifecycle finish.
+- Before writing the close, post a shared-log note naming the claim
+  and the closure kind (`stale` or `owner-forced`).
 
 The portable cleanup command is:
 
