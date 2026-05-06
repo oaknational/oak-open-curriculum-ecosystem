@@ -129,6 +129,27 @@ Fresh but quiet claims are informational only: possible crashed session,
 not a block. The next staleness threshold archives the entry
 automatically.
 
+### Apparently Orphaned Claims
+
+An "apparently orphaned" claim is a fresh-but-quiet entry whose
+owning session you suspect has ended without closing the claim.
+Resist unilateral cleanup:
+
+- Archive an orphaned claim only through a **deliberate governance
+  pass** (the consolidate-docs stale-claim audit is the canonical
+  surface) or an **owner-forced close**.
+- If another session is already performing that cleanup, let the
+  natural claim lifecycle finish rather than deleting in parallel.
+  Two agents racing to archive the same orphan produces duplicate
+  closure records and obscures lifecycle history.
+- If you are the cleanup session, post a brief shared-log note
+  naming the claim being archived and the kind (`stale` or
+  `owner-forced`) before writing the close. Visibility before
+  deletion is the discipline.
+
+The protocol is deliberately advisory; manual orphan cleanup
+between scheduled audits is the exception, not the routine.
+
 The portable cleanup command is:
 
 ```bash
