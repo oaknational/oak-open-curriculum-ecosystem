@@ -3,6 +3,7 @@
   "$id": "escalation.schema.json",
   "title": "Agent Collaboration Owner Escalation",
   "description": "Live owner-facing unresolved case record. Escalations are not durable decision authority: the owner resolution is written back to the referenced conversation as a decision, joint_decision, or resolution entry, then the escalation closes by reference.",
+  "$comment_provenance": "Escalation fields reuse the PDR-027 agent_id shape and evidence_ref enum from active-claims.schema.json — that is the field-level provenance source. Escalations are separate live case files; owner resolution is written back into the referenced conversation rather than stored on the escalation itself.",
   "type": "object",
   "additionalProperties": false,
   "required": [

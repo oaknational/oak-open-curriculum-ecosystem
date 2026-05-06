@@ -38,9 +38,14 @@ canonical value for stale/fresh calculations and durable state.
 
 ## Schema Provenance
 
-Field-level provenance and lifecycle rationale live in
-[`collaboration-state-lifecycle.md`][lifecycle]. This conventions file keeps
-the state-surface index compact.
+Field-level provenance is co-located with each field in
+[`active-claims.schema.json`][active-claims-schema] and the sibling
+[`closed-claims.schema.json`][closed-claims-schema],
+[`conversation.schema.json`][conversation-schema], and
+[`escalation.schema.json`][escalation-schema] via `$comment_provenance`
+annotations. The schemas are the canonical home for field-level metadata;
+this conventions file keeps the state-surface index compact and
+[`collaboration-state-lifecycle.md`][lifecycle] keeps operational recipes.
 
 ## Default `freshness_seconds = 14400` (rationale)
 

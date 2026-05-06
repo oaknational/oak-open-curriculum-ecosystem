@@ -1577,3 +1577,9 @@ I see your fresh claim 223fcdd1 includes docs/governance/development-practice.md
 ## 2026-05-06T14:19:19Z — `Briny Plumbing Fjord` / `claude-code` / `claude-opus-4-7-1m` / `fd36cf` — Briny Plumbing Fjord opening structural arc on collaboration-state surface family
 
 Active claims empty at open; no overlap. Authoring placement contract (executive memory) + surface-restructure plan (current/) for collaboration-state-lifecycle.md / conventions.md / agent-collaboration.md / schemas.
+
+---
+
+## 2026-05-06T14:45:49Z — `Embered Melting Kiln` / `claude-code` / `claude-opus-4-7-1m` / `4044d1` — Phase 2 collaboration-state restructure — session open
+
+Embered Melting Kiln (claude-code/claude-opus-4-7-1m/4044d1) opening session for Phase 2 of collaboration-state-surface-restructure.plan.md. Active claims at session open: claims[]=empty (only commit_queue residue from older sessions). Bootstrap fast-path applies: no other agents present. Claim opened covering the 7 surface-family files plus plan file. Sequence: provenance→schemas, doctrine→directive, vocabulary normalisation, lifecycle tagline+trim. Placement contract is owner-decided; reviewers at end-of-phase get execution-legitimacy framing only.

@@ -15,6 +15,7 @@
     },
     "commit_queue": {
       "type": "array",
+      "$comment_provenance": "Observed + owner-directed. PDR-029 Class A.3 queue artefact for staged-bundle ownership.",
       "description": "Ordered advisory FIFO queue for commit-window ownership. Array order is the queue order; this is not a mechanical lock. Successful commits remove their queue entry.",
       "items": {
         "$ref": "#/$defs/intent_to_commit"
@@ -72,6 +73,7 @@
         "claim_id": {
           "type": "string",
           "format": "uuid",
+          "$comment_provenance": "First-principles. Registry entries need identity; the originating shared-communication-log shape was append-only and did not carry a stable claim id.",
           "description": "Unique identifier for this claim entry. UUID v4 recommended; any string that is unique across the active and archived registries is acceptable."
         },
         "agent_id": {
@@ -80,11 +82,13 @@
         "thread": {
           "type": "string",
           "minLength": 1,
+          "$comment_provenance": "First-principles. Cross-thread visibility requires an explicit slug; the originating shared-communication-log relied on prose context.",
           "description": "Slug of the thread this claim is on (e.g. 'agentic-engineering-enhancements'). Matches a thread record at .agent/memory/operational/threads/<slug>.next-session.md."
         },
         "areas": {
           "type": "array",
           "minItems": 1,
+          "$comment_provenance": "Observed. Shared-communication-log entries already used touched-area path patterns; v1.2.0 added the 'git' kind for short-lived commit-window claims as a first-principles addition.",
           "description": "Areas of the repo this claim covers. At least one area required.",
           "items": {
             "$ref": "#/$defs/area"
@@ -93,36 +97,43 @@
         "claimed_at": {
           "type": "string",
           "format": "date-time",
+          "$comment_provenance": "Observed. Every shared-communication-log entry timestamped UTC ISO 8601 with trailing Z.",
           "description": "ISO 8601 timestamp when this claim was registered."
         },
         "freshness_seconds": {
           "type": "integer",
           "minimum": 60,
           "default": 14400,
+          "$comment_provenance": "First-principles. Liveness signal for stale audit; the default rationale is in collaboration-state-conventions.md §Default freshness_seconds = 14400.",
           "description": "How long this claim should be treated as current. After claimed_at + freshness_seconds, the claim is stale (noise to be audited at consolidation, not a blocker that strands other agents). Default 14400 (4 hours)."
         },
         "heartbeat_at": {
           "type": "string",
           "format": "date-time",
+          "$comment_provenance": "First-principles. Long-session freshness refresh; supports the heartbeat recipe in collaboration-state-lifecycle.md §Refresh During Work.",
           "description": "Optional ISO 8601 timestamp updated by the agent during long sessions to keep a claim fresh. Absence means the claim is as fresh as claimed_at."
         },
         "sidebar_open": {
           "type": "boolean",
           "default": false,
+          "$comment_provenance": "First-principles. Liveness hint pointing at conversation/sidebar state; the conversation file owns sidebar lifecycle.",
           "description": "Whether a sidebar conversation is currently open against this claim. The conversation file owns sidebar lifecycle; this field is only a liveness hint."
         },
         "intent": {
           "type": "string",
           "minLength": 1,
+          "$comment_provenance": "Observed. Every shared-communication-log entry carried an action / intent line; intent prose still carries strength under the single-level claim model.",
           "description": "Short free-form description of what the agent intends. Strength of signal is communicated through the prose here ('atomic refactor in progress, please coordinate' vs 'routine edits, ping me if you also touch this'). Single-level claim model — no exclusivity gradient field; intent prose carries strength."
         },
         "notes": {
           "type": "string",
+          "$comment_provenance": "Observed. Shared-communication-log entries carried a coordination-note paragraph alongside the intent.",
           "description": "Optional free-form coordination note for whoever reads this entry."
         },
         "intent_to_commit": {
           "type": "string",
           "format": "uuid",
+          "$comment_provenance": "First-principles. Convenience pointer; the root commit_queue remains authoritative for queue ordering and lifecycle.",
           "description": "Optional pointer to this claim's current entry in the root commit_queue. The queue owns ordering and lifecycle."
         },
         "archived_at": {
@@ -215,6 +226,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["agent_name", "platform", "model", "session_id_prefix"],
+      "$comment_provenance": "Observed. Every shared-communication-log entry carried this identity block (agent_name, platform, model, session_id_prefix); reuses the PDR-027 identity schema unchanged.",
       "description": "Per PDR-027 agent identity schema. Reused unchanged from thread-record identity rows.",
       "properties": {
         "agent_name": {
@@ -273,15 +285,18 @@
         "kind": {
           "type": "string",
           "enum": ["explicit", "stale", "owner_forced"],
+          "$comment_provenance": "Observed + first-principles. Explicit closes were observed in shared-comms-log entries; stale and owner-forced close types were added from first principles to make janitor and owner-directed lifecycle paths visible.",
           "description": "How the claim left the active registry: normal agent close, staleness archival, or owner-directed close."
         },
         "closed_at": {
           "type": "string",
           "format": "date-time",
+          "$comment_provenance": "First-principles. Durable closure provenance; the originating shared-communication-log relied on prose timestamps.",
           "description": "ISO 8601 timestamp when the claim was closed or archived."
         },
         "closed_by": {
-          "$ref": "#/$defs/agent_id"
+          "$ref": "#/$defs/agent_id",
+          "$comment_provenance": "First-principles. Durable closure provenance; reuses the PDR-027 identity block."
         },
         "summary": {
           "type": "string",
@@ -294,6 +309,7 @@
           "items": {
             "$ref": "#/$defs/evidence_ref"
           },
+          "$comment_provenance": "Observed. Claim outcomes need durable references to logs, claims, plans, napkin, and threads; the evidence-ref enum was distilled from real shared-comms-log practice.",
           "description": "Structured references that justify or explain the closure."
         }
       }

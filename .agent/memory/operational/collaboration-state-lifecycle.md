@@ -241,34 +241,13 @@ Non-trivial protocol claims should carry a small evidence bundle:
 
 ## Schema-Field Provenance
 
-The active-claims schema is informed by real shared-communication-log usage
-plus the small set of fields the registry shape requires that the log shape did
-not. Transparency matters because observed fields are battle-tested; fields
-drawn from first principles are more likely to be reshaped by later evidence.
-
-| Field | Source | Notes |
-| --- | --- | --- |
-| `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-log entry carried this; reuses PDR-027 identity schema |
-| `claimed_at` | Observed | Every entry timestamped UTC ISO 8601 with trailing `Z` |
-| `intent` | Observed | Every entry carried an action / intent line |
-| `areas` | Observed | Shared-log entries used touched-area path patterns; v1.2.0 adds `git:index/head` |
-| `notes` | Observed | Shared-log entries carried a coordination-note paragraph |
-| `claim_id` | First-principles | Registry entries need identity; the log was append-only |
-| `thread` | First-principles | Cross-thread visibility requires an explicit slug |
-| `freshness_seconds` | First-principles | Liveness signal for stale audit; default rationale is above |
-| `heartbeat_at` | First-principles | Long-session freshness refresh |
-| `sidebar_open` | First-principles | Whether a sidebar is open against the claim |
-| `commit_queue` | Observed + owner-directed | PDR-029 Class A.3 queue artefact |
-| `intent_to_commit` | First-principles | Convenience pointer; queue remains authoritative |
-| `closure.kind` | Observed + first-principles | Explicit, stale, and owner-forced close types |
-| `closure.closed_at` / `closed_by` | First-principles | Durable closure provenance |
-| `closure.evidence[]` | Observed | Claim outcomes need durable refs to logs, claims, plans, napkin, and threads |
-
-Conversation fields reuse the same PDR-027 `agent_id` shape and `evidence_ref`
-enum from `active-claims.schema.json`. The conversation schema preserves the
-append-only event-list model as it adds sidebars and joint decisions.
-Escalations are separate live case files and must write owner resolution back
-into the referenced conversation.
+Field provenance is co-located with each field in
+[`active-claims.schema.json`](../../state/collaboration/active-claims.schema.json)
+and the sibling [`closed-claims.schema.json`](../../state/collaboration/closed-claims.schema.json),
+[`conversation.schema.json`](../../state/collaboration/conversation.schema.json),
+and [`escalation.schema.json`](../../state/collaboration/escalation.schema.json)
+via `$comment_provenance` annotations. Schema files are the canonical home for
+field-level metadata; this lifecycle file holds operational recipes only.
 
 [register-rule]: ../../rules/register-active-areas-at-session-open.md
 [pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md
