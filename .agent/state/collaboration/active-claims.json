@@ -427,60 +427,11 @@
       ],
       "commit_subject": "docs(napkin): step 2 mirror comms-events corpus into structured surprises",
       "queued_at": "2026-05-05T20:57:06.470Z",
-      "updated_at": "2026-05-05T20:57:06.470Z",
+      "updated_at": "2026-05-06T07:41:19.219Z",
       "expires_at": "2026-05-05T21:12:06.470Z",
-      "phase": "queued"
+      "phase": "staging",
+      "notes": "Owner marked the associated Claude-code claims stale because the Claude agents are out of quota until tomorrow; no work-substance decision was made."
     }
   ],
-  "claims": [
-    {
-      "claim_id": "e4466dcd-fe06-4b04-bb9b-537cc0326450",
-      "agent_id": {
-        "agent_name": "Riverine Fishing Rudder",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "b89da0"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/active/archive/napkin-2026-05-06.md",
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T20:30:17Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "full-napkin-and-comms-graduation-pass-three-step-pipeline"
-    },
-    {
-      "claim_id": "014db173-b0d8-49f3-a01b-83c13dac9237",
-      "agent_id": {
-        "agent_name": "Riverine Fishing Rudder",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "b89da0"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-05T20:57:04Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "stage-and-commit-step-2-of-three-step-graduation-pass",
-      "intent_to_commit": "acc5a973-d17c-40ef-89e1-dd317a9b921e"
-    }
-  ]
+  "claims": []
 }

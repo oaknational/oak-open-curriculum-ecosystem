@@ -128,3 +128,216 @@ distilled / pending-graduations / patterns / frictions register.
   extracted substance and route each piece per the same Move 3
   graduation flow. After step 3 the napkin is fresh again with
   one rotation entry recording the pass.
+
+## 2026-05-05 (Riverine Fishing Rudder, `b89da0`) — Step 2 of three-step graduation pass: comms-events processed into napkin
+
+Step 2 scope: walked the full 2026-05-05 comms-events corpus
+(78 events) plus the regenerated `shared-comms-log.md`. Most
+substance is already mirrored in the archived napkin (verbatim
+2026-05-06 archive at
+[`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md))
+through Twilit/Ashen's 10 surprises, Dawnlit's 5 surprises,
+Threading Nebula's three entries, plus Glassy / Stamen / Deep
+Rolling / Vining session-close records. Comms-events provide
+the evidence-trail substrate; the archived napkin already
+distilled the substance from that substrate. Genuinely new
+substance from the events (not yet anywhere upstream) is
+captured below as structured surprises.
+
+### Corpus walked
+
+- 78 comms-events authored 2026-05-05 (08:37 Lacustrine /
+  Gnarled exchange through 20:45 Opalescent Glowing
+  Constellation PR-93 verification) — full read; substance
+  evaluated against archived-napkin coverage.
+- Regenerated `shared-comms-log.md` (peer-modified earlier this
+  session; not in my staging scope) — used as a digested
+  cross-reference; the JSON events directory is the source of
+  truth.
+- Earlier unprocessed events (none discovered — pre-2026-05-05
+  events have rotated through prior napkin rotations).
+
+### Coverage map (events → archived-napkin entries already capturing them)
+
+| Event window | Archived-napkin coverage |
+|---|---|
+| 08:37–08:40 Lacustrine ↔ Gnarled (2-minute deadline / 8s margin coordination) | Threading Nebula rotation entry §inter-agent-comms-first-class distillation; named in shared-comms-log generated-not-hand-edited Surprise |
+| 09:48–10:53 Ethereal opener + Dawnlit C1 absorption + reply-loop (<10 min) | Dawnlit `0ddc89` Surprises 1 + 5; Threading Nebula promotion-pass §three-due-items (cure asymmetry section landed at 368e5aff) |
+| 11:32–12:01 Twilit step-06 + Threading Nebula staged-set-scope check + correction loop | Threading Nebula promotion-pass §worked-instance-addendum (4th instance of eager-rounding-off, recipient-misidentification self-correction); Twilit/Ashen `7cf730` Surprise 3 covers the identity-drift surface |
+| 12:13–13:25 7-agent coordinator role (Ashen + Asteroid + Pelagic + Fronded + Threading Nebula + Riverine Sextant + Vining intake) | Twilit/Ashen `7cf730` Surprises 1, 4, 5, 6, 9, 10 (the full coordination arc) |
+| 13:14 Ashen→Fronded reopen-coaching (orchestrator-was-advisory) | Twilit/Ashen `7cf730` Surprise 9 (coordinator-as-coach pattern) |
+| 13:50 Pelagic identity-wordlist landed | Twilit/Ashen `7cf730` Surprise 3 (identity drift via in-flight refactor) |
+| 14:05 Stamen oak-local MCP landmark + 14:08 jc-session-handoff close | Stamen `512682` continuity-only-close entry |
+| 14:23–18:53 Glittering agent-tooling plan-collection split | (Glittering's session-close event records this; not yet in archived napkin — Glittering closed without writing a napkin entry) |
+| 14:38–14:45 Deep Rolling PR-93 description update | Deep Rolling `02f5f5` PR-93-merge-readiness entry in archived napkin |
+| 16:25–18:54 Glassy PR-93 Sonar resolution | Glassy `019df8` upper + lower entries in archived napkin |
+| 13:52–18:56 Vining distilled.md graduation + session-handoff opener + workflow refinement | Vining-authored opener for THIS session is the carry-forward; session-close event mentions feedback-memory updates |
+| 20:27–20:45 Opalescent Glowing Constellation PR-93 verification (observability-sentry-otel thread) | Out-of-scope cross-thread activity; logged in this session-open event |
+
+### Surprise A — Sessional handoff event with inline diagnostic paste
+
+- **Source**: comms event `dfdea3f7-7968-4557-9a08-9890c8d2c7f3`
+  (Ashen Banking Bellows / `7cf730`, 2026-05-05T13:52:04Z, 15182
+  chars body) "To Vining Growing Meadow: incoming session intent
+  on consolidation; fitness exceedances explicitly deferred to
+  your session".
+- **Expected**: A coordinator-to-receiver session-handoff event
+  names *what* the receiver should do (the three-step intake
+  sequence: handoff → metacognition → consolidate-docs) and
+  *names* the diagnostic state by reference (e.g. *"fitness on
+  napkin / distilled / pending-graduations is HARD per orchestrator
+  output; rerun to anchor"*).
+- **Actual**: The handoff event **inlined the full
+  `practice:fitness:strict-hard` orchestrator output** verbatim
+  — line counts, character counts, prose-line widths, every
+  zone marker — so Vining did not have to re-run the gate to
+  anchor in-flight state. The diagnostic state was baked into
+  the handoff itself.
+- **Why expectation failed**: The structured-surprise capture
+  default is to expect *terse* coordination prose (one event =
+  one coordination signal). What Ashen produced was a *fat
+  baton* — the handoff event carries the receiver-relevant
+  diagnostic context inline, costing transmitter time once and
+  saving receiver time once per receiver. The asymmetry is
+  worth the trade because handoff is one-to-one (low fan-out)
+  while diagnostic re-runs are per-agent (high fan-out across
+  the day).
+- **Behaviour change**: When authoring a session-handoff event
+  whose receiver is named and whose intake will require
+  diagnostic state, paste the diagnostic output verbatim into
+  the body. Cost: one extra orchestrator invocation at handoff
+  authorship time. Saving: each receiving agent skips the
+  rerun, the transcription gap, and the staleness window
+  between author's measurement and receiver's measurement.
+  Worked-instance count: 1 (this one). Awaiting second
+  instance before promotion to coordination-cure pattern;
+  candidate-shape recorded in archive for graduation review.
+- **Composes with**: PDR-048 (insight capture at moment of
+  occurrence — the diagnostic state is exactly the insight that
+  decays without verbatim capture); PDR-046 §Move 3 (graduation
+  upward not compression — the inlined diagnostic is graduation
+  of the orchestrator's signal *into the handoff record*, not
+  loss-compression of it).
+
+### Surprise B — Workflow self-improvement during the same arc that exposed the gap
+
+- **Source**: comms event sequence `dfdea3f7-7968-4557-9a08-9890c8d2c7f3`
+  (Ashen→Vining handoff, naming napkin sources by listing the
+  buffers but *not* mentioning comms-events as a source) →
+  `8170aad1-4bca-4986-8bc5-4084bbd88317` (Vining 92cb10 arrival
+  reply-loop with workflow-refinement intent; reply chain
+  `dfdea3f7 → 8170aad1 → ff9c4266 → ...`) →
+  commit `84879230` (Vining session-handoff §6a refinement —
+  comms-events added as named napkin auxiliary read-source).
+- **Expected**: Workflow documentation (`session-handoff.md`)
+  is updated in dedicated workflow sessions; the gap is
+  discovered, then patched in a future session.
+- **Actual**: The gap was discovered, named, and patched
+  *within the same arc* the gap was exposed by. Vining
+  arrived at session-open, observed that comms-events carry
+  substance the napkin should mirror (specifically: the 7-
+  agent coordination arc's coordination signals were *only* in
+  the comms-events, not yet in the napkin Ashen had been
+  unable to drain mid-coordinator-role), confirmed with the
+  owner — *"are the comms logs part of the source collection
+  for authoring session close recordings in the napkin? They
+  should be"* — and authored the workflow refinement at
+  84879230 in the same session.
+- **Why expectation failed**: The default Practice cadence is
+  *capture in one session, graduate in a later session* (per
+  PDR-014 + PDR-046 layering). For workflow-refinement
+  substance, the expected carry-forward is to next-session.
+  But Vining's session was specifically a consolidation
+  session, and the gap was directly relevant to the
+  consolidation work in flight; the rule that says *capture
+  preserves substance for later graduation* did not require
+  *later* to mean *different session* when the consolidation
+  session itself is the natural graduation moment for capture
+  surfaced earlier in the same day.
+- **Behaviour change**: Workflow gaps discovered during a
+  consolidation session whose work is directly affected by the
+  gap can be patched in-session, in the same commit family.
+  Discriminator: the gap must be (a) directly relevant to the
+  in-flight consolidation, (b) small enough that the patch is a
+  single coherent edit, and (c) authored under reviewer dispatch
+  per the rule. The 30%-context rule still gates directive-file
+  edits; non-directive workflow files (commands, skills,
+  permanent docs) are not gated by the 30% rule and may be
+  patched in-session.
+- **Composes with**: PDR-014 (consolidation cadence — this
+  refines the capture/graduate boundary at the
+  same-day-as-the-driving-arc seam); the standing rule
+  *"reviews required at every lifecycle stage"* (Vining's
+  refinement was reviewed before commit per the rule).
+
+### Surprise C — Cross-thread session interleaving as observable substrate
+
+- **Source**: comms events `9d1b26c0` (Opalescent Glowing
+  Constellation `019df9` opening on observability-sentry-otel,
+  20:27Z) → `9ad379a7` (PR-93 verification completed, 20:38Z)
+  → `eecb8de8` (verification continuing for new local head
+  b929a022, 20:39Z) → `f4d5adaf` (verification completed on
+  b929a022, 20:45Z), all interleaved with my own session
+  arc on agentic-engineering-enhancements (session-open
+  20:31Z; Step 1 commit 20:48Z).
+- **Expected**: Cross-thread sessions interleave as
+  independent processes; observation of the other thread's
+  events is informational only.
+- **Actual**: Constellation's session opened, performed
+  remote PR-93 verification, observed my Step 1 commit pushed
+  the local head to a new SHA, *re-ran* the verification
+  against the new head, and posted a fresh completion event —
+  all without any inter-agent comms exchange between us.
+  The substrate (immutable comms-events ordered by
+  `created_at`) was sufficient context for Constellation to
+  detect the local-head change and react. No coordination
+  request was needed.
+- **Why expectation failed**: I had framed cross-thread
+  isolation as "no overlap; informational only". The actual
+  substrate is *richer*: a peer agent on a different thread
+  can observe my work's externalised effects (commits,
+  branch-head changes) and adapt their own work without
+  exchanging messages. The shared substrate includes git
+  history, not only comms-events.
+- **Behaviour change**: Treat git-history changes as
+  observable cross-thread coordination signals, not just
+  as my own session's output. Other agents' reactions to my
+  branch advances are part of the substrate's behaviour
+  budget; a cross-thread peer detecting my push and
+  re-running their verification is correct substrate use,
+  not a violation of thread isolation.
+- **Composes with**: PDR-027 (threads/sessions/identity —
+  thread-scoped identity does not preclude cross-thread
+  substrate observation); the
+  `register-active-areas-at-session-open` rule (the active-
+  areas registry is one observable surface; git history is
+  another).
+
+### Discipline applied this step
+
+- Active claim still open from session-open
+  (`e4466dcd-fe06-4b04-bb9b-537cc0326450` substance-graduation
+  files area); no new claim opened for the comms-events read
+  pass since events were read-only and the napkin write-target
+  is in-claim.
+- Stage-by-explicit-pathspec discipline: step-2 commit will
+  bundle only the napkin update (and any peer-state files
+  that became co-modified by my own work), filtered via
+  `git commit -- <pathspec>`.
+- Substance preservation absolute: the three new structured
+  surprises (A / B / C) are added at full weight; no
+  compression of existing entries.
+- PDR-046 §Move 1: Layer 0 napkin remains the active layer;
+  Layer 1+ fitness pressure held untouched.
+- PDR-046 §Move 2 (extended to destinations this pass per
+  owner direction): napkin in-pass form-keeping suspended
+  during this read-and-mirror operation.
+
+### Next move
+
+- **Step 3** (next, atomic commit): walk the freshly-extracted
+  substance from this step (Surprises A / B / C plus the
+  per-event coverage map) and route each piece per the same
+  PDR-046 §Move 3 graduation flow. After step 3 the napkin
+  is fresh again with one combined rotation entry recording
+  the full pass and its routing decisions.
