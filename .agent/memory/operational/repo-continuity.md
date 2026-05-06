@@ -9,6 +9,18 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-06 — Opalescent Glowing Constellation /
+`codex` / GPT-5 / `019df9`)**: minimal final handoff after PR 93 Sonar
+closeout. Remote `feat/eef_exploration` was verified at `cebbca83`
+(`docs(sonar): record pr 93 false-positive dispositions`) with Sonar PR
+93 open issues 0, hotspots 0, and `new_violations=0`. The quality gate
+remains red only on duplicated-lines density (`16.0`, threshold `3`);
+owner confirmed remaining local/docs continuity work is not Sonar-relevant.
+Active claims report 0 after quota-paused Claude/Riverine claims were marked
+stale with explanatory closure notes. **Next safe step**: no further PR 93
+Sonar issue/hotspot work; either accept the documented duplication deferral /
+red SonarCloud state for this PR, or run the future codegen duplication plan.
+
 **Session close (2026-05-05 — Opalescent Glowing Constellation /
 `codex` / GPT-5 / `019df9`)**: PR 93 Sonar closeout completed after
 owner direction. Branch `feat/eef_exploration` is synced to
@@ -935,6 +947,16 @@ The table row above is already beyond practical line-fitness; the matching
 canonical identity row is in
 `threads/observability-sentry-otel.next-session.md`.
 
+Active-identities delta, 2026-05-06 (second entry): `observability-sentry-otel`
+latest identity is Silvered Hiding Silhouette / `claude-code` / `claude-sonnet-4-6`
+/ `924167` / step-10-reviewer-dispatch-completion / 2026-05-06.
+
+Active-identities delta, 2026-05-06: `observability-sentry-otel` also has
+Opalescent Glowing Constellation / `codex` / `GPT-5` / `019df9` as the
+latest PR 93 Sonar closeout identity. Final Sonar state: issues 0,
+hotspots 0, `new_violations=0`; duplication remains the only red gate and
+is deferred.
+
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -952,6 +974,25 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-06 (Silvered Hiding Silhouette, claude-code, sonnet-4-6, `924167`,
+observability-sentry-otel thread, step 10 reviewer-dispatch completion)**:
+Continued from prior context-compacted session. Three parallel reviewers
+(security-reviewer, clerk-reviewer, sentry-reviewer) had been quota-stopped.
+Recovered security and clerk reviewer reports from subagent jsonl transcripts;
+restarted sentry-reviewer which completed on quota reset. All four reviewer
+verdicts appended to `/tmp/mcp-tool-exercise.log`. Step 10 verdict ACCEPTED —
+no P1 blockers. Three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`.
+Plan step 10 row marked DONE. **Next safe step**: step 11 — pre-merge
+divergence analysis vs `origin/main`.
+
+**2026-05-06 (Opalescent Glowing Constellation, Codex, GPT-5, `019df9`,
+observability-sentry-otel thread, minimal PR 93 Sonar handoff)**:
+Owner confirmed the substantive PR 93 commits were pushed and the remaining
+local state is docs/coordination only. Remote branch verification found
+`cebbca83`; Sonar re-query found no open issues or hotspots and
+`new_violations=0`. The session is closed with duplication still deferred to
+the future codegen plan.
 
 **2026-05-05 (Opalescent Glowing Constellation, Codex, GPT-5, `019df9`,
 observability-sentry-otel thread, PR 93 Sonar disposition closeout)**:
@@ -1188,6 +1229,14 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-06 Silvered Hiding Silhouette close (step 10 ACCEPTED)**:
+`feat-eef-exploration-completion.plan.md` steps 01–10 closed. Next step is
+step 11 — pre-merge baseline check: enumerate commits on this branch not yet
+on `origin/main`, identify any main-branch changes that have landed since the
+branch diverged, assess conflict potential (dry-run merge or `git merge-tree`).
+No code changes expected; findings feed step 12 (release-readiness-reviewer
+synthesis + owner-gated merge authorisation).
 
 **After 2026-05-05 Opalescent Glowing Constellation close (PR 93 Sonar
 disposition)**: PR 93 has no remaining Sonar open issues or hotspots.
@@ -1533,6 +1582,23 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-06 Silvered Hiding Silhouette, claude-code, sonnet-4-6,
+`924167`, `/jc-session-handoff` after step 10 reviewer-dispatch completion):
+`not due this session — purely mechanical quota-recovery and dispatcher session
+(no new code changes, no new ADR/PDR candidates, no napkin entries). Prior
+session's consolidation pressure (Riverine Fishing Rudder, marked due for fitness on
+distilled.md / pending-graduations.md / three pending-graduations items) is
+unchanged and still due; owner-directed continuation of that work in next
+dedicated consolidation session.`**
+
+**Status (2026-05-06 Opalescent Glowing Constellation, codex, GPT-5,
+`019df9`, owner-directed minimal `/jc-session-handoff` after final PR 93
+Sonar check): `not due — focused handoff only. No code changed, no new plan
+closed, no new ADR/PDR candidate surfaced, and no new repeated surprise
+requires graduation. The only live PR 93 gate remains duplicated-lines
+density, already explicitly deferred to the future codegen duplication
+plan.`**
 
 **Status (2026-05-05 Opalescent Glowing Constellation, codex, GPT-5,
 `019df9`, owner-directed `/jc-session-handoff` after PR 93 Sonar

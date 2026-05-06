@@ -1,5 +1,49 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
+## Landing target (per PDR-026) — refreshed 2026-05-06 (Silvered Hiding Silhouette, claude-code, sonnet-4-6, `924167`)
+
+**Active plan**:
+[`.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`](../../../plans/observability/current/feat-eef-exploration-completion.plan.md)
+— Steps 01–10 closed.
+
+**Step 10 closing summary**: Reviewer dispatch for step 10 completed. Three
+parallel reviewers (security-reviewer, clerk-reviewer, sentry-reviewer) had been
+quota-stopped in the prior context-compacted session; this session recovered their
+findings from subagent jsonl transcripts and restarted the sentry-reviewer (which
+completed cleanly on quota reset). All four reviewer verdicts appended to
+`/tmp/mcp-tool-exercise.log`. Three P2 snags added to
+`pr-93-merge-snagging-2026-05-05.md` (clerk stale-version-comment, sentry
+local-dev DSN warning, sentry release-identifier contract test). Step 10 verdict:
+**ACCEPTED** — no P1 blockers from any reviewer.
+
+**Next safe step**: step 11 — pre-merge baseline check vs `origin/main`.
+Enumerate commits on this branch not yet on main; check what main-branch work
+has landed since the branch diverged; assess conflict potential (dry-run merge
+or `git merge-tree`). Note: the `pre-merge-divergence-analysis` rule applies to
+two diverged feature branches, not to a feature-branch vs main comparison — this
+step is the standard pre-merge sanity check, not that workflow. Findings feed
+step 12 (owner-gated merge readiness declaration with release-readiness-reviewer
+synthesis).
+
+---
+
+## Landing target (per PDR-026) — refreshed 2026-05-06 (Opalescent Glowing Constellation)
+
+**Final PR 93 Sonar state after owner disposition**: remote
+`feat/eef_exploration` was verified at `cebbca83`
+(`docs(sonar): record pr 93 false-positive dispositions`). Sonar PR 93
+reports open issues 0, security hotspots 0, and `new_violations=0`.
+
+**Remaining gate state**: Sonar quality gate remains `ERROR` only on
+duplicated-lines density (`16.0`, threshold `3`). Owner confirmed remaining
+local/docs continuity work is not Sonar-relevant; duplication remediation is
+deferred to the future codegen workspace-decomposition plan.
+
+**Next safe step**: no further PR 93 Sonar issue/hotspot work. Do not
+hand-edit generated SDK files. If the PR proceeds before future codegen
+duplication remediation, the live decision is owner acceptance of the
+documented duplication deferral / red SonarCloud state.
+
 ## Landing target (per PDR-026) — refreshed 2026-05-05 (Opalescent Glowing Constellation)
 
 **PR 93 Sonar state after owner disposition**: branch
@@ -452,7 +496,8 @@ matching `platform + model + agent_name` updates `last_session`.
 | Opalescent Eclipsing Asteroid | cursor | GPT-5.5 | `0c263b` | owner-directed step-06 takeover executor after Twilit Beaming Aurora and Opalescent Threading Nebula hit usage limits. Completed gate blockers and landed review hardening: Knip CSS/Vite coverage, public rule-options type export through the package API, URL-parser localhost hardening against lookalike hostnames, `global.process` process-surface coverage, paired RuleTester regressions, reviewer re-checks, and commit/index coordination through the high-intensity sync. | 2026-05-05 | 2026-05-05 |
 | Deep Rolling Archipelago | cursor | GPT-5.5 | `02f5f5` | PR 93 merge-readiness closeout support — fetched GitHub comments/statuses/reviews, compared stale PR body with actual `feat/eef_exploration` branch contents, wrote `pr-93-merge-snagging-2026-05-05.md`, updated PR 93's remote description to lead with the blocking `thread-units` / `unitOrder` upstream API-shape fix, and posted comms events before/completion/session-close. | 2026-05-05 | 2026-05-05 |
 | Glassy Drifting Dock | codex | GPT-5 | `019df8` | PR 93 Sonar remediation — implemented and committed the main unclaimed findings (`da4288cd`), created the future paused-claim overlap plan for `oak-eslint` TODO-comment findings, kept generated SDK duplication non-blocking and routed to future codegen workspace-decomposition, and refreshed handoff surfaces for the remote reanalysis step. | 2026-05-05 | 2026-05-05 |
-| Opalescent Glowing Constellation | codex | GPT-5 | `019df9` | PR 93 remote verification and Sonar disposition — pushed/synced `feat/eef_exploration` to `b929a022`, verified GitHub/Sonar state, marked the three remaining `oak-eslint` S1135 findings false positive after owner clarified they document the gate itself, and confirmed Sonar `new_violations=0` / hotspots `0`; duplication remains deferred to the codegen workspace-decomposition plan. | 2026-05-05 | 2026-05-05 |
+| Opalescent Glowing Constellation | codex | GPT-5 | `019df9` | PR 93 remote verification and Sonar disposition — pushed/synced `feat/eef_exploration` through `cebbca83`, verified Sonar state, marked the three remaining `oak-eslint` S1135 findings false positive after owner clarified they document the gate itself, and confirmed Sonar `new_violations=0` / hotspots `0`; duplication remains deferred to the codegen workspace-decomposition plan. | 2026-05-05 | 2026-05-06 |
+| Silvered Hiding Silhouette | claude-code | claude-sonnet-4-6 | `924167` | step 10 reviewer-dispatch completion — recovered security-reviewer and clerk-reviewer findings from quota-stopped subagent jsonl transcripts; restarted sentry-reviewer after quota reset; appended all four reviewer verdicts to `/tmp/mcp-tool-exercise.log`; added three P2 snags to `pr-93-merge-snagging-2026-05-05.md`; step 10 verdict ACCEPTED. | 2026-05-05 | 2026-05-06 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
