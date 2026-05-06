@@ -11690,6 +11690,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "7d637e06-e21f-4c15-beb2-9f100ce51ebf",
+      "agent_id": {
+        "agent_name": "Pelagic Rolling Harbour",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "58a9ad"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T17:58:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "drain due queue in pending-graduations register",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T18:11:32Z",
+        "closed_by": {
+          "agent_name": "Pelagic Rolling Harbour",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "58a9ad"
+        },
+        "summary": "drain due queue: 1 archived (Lacustrine F-15), 1 partially graduated (polarity-discipline), 4 sequenced-deferral pointers, 3 vaporware-trigger flags; HARD persists by design; phase-3 surfaced for owner direction",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7d637e06-e21f-4c15-beb2-9f100ce51ebf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

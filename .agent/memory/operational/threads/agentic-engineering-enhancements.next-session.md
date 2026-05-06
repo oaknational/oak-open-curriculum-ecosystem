@@ -1,5 +1,144 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Pending-graduations dedicated drain (landed 2026-05-07)
+
+**Last refreshed**: 2026-05-07 (Pelagic Rolling Harbour /
+claude-code / claude-opus-4-7-1m / `58a9ad`).
+
+**Session arc**: executed the
+[2026-05-07 dedicated-drain opener][drain-opener] end-to-end.
+Single atomic commit `cc084c67`:
+
+- **Phase 1 — `due` queue execution**:
+  - Lacustrine commit-queue fingerprint entry archived as
+    [archive entry 8][archive-2026-05-06] (already graduated
+    2026-05-06 via F-15; archive close per audit-trail discipline).
+  - Polarity-discipline entry marked `partially graduated 2026-05-07`:
+    option (a) `patterns/README.md §Polarity (required, every pattern)`
+    plus the frontmatter schema `polarity` field already landed;
+    option (b) bulk sweep across ~70 pre-2026-05-05 pattern files
+    remains deferred (README itself names the backfill state and
+    points at the shape-of-the-art template); option (c) PDR-014
+    amendment queued pending second Practice-bearing repo evidence.
+  - Four entries left `due` with **Sequenced-deferral pointers**
+    naming concrete phases (per PDR-026 §Deferral-honesty
+    discipline, not "for later"):
+    1. **30%-context PDR** (L137) — dedicated PDR-authoring
+       session for `directive-file-context-budget` PDR.
+    2. **Orchestrator-vs-gate structural cure** (L514 in source) —
+       dedicated PDR + ADR + script-rename + SKILL.md update.
+    3. **Agent-tools CLI affordance set + build isolation** (L564) —
+       dedicated multi-artefact session: ADR + PDR + agent-tooling
+       enhancement plan.
+    4. **Hook tightening for no-moving-targets** (L678) — dedicated
+       hook-tightening session: TDD-RED for prose-vs-code-block
+       distinction in `scripts/check-blocked-content.ts` + rule-body
+       rewrite.
+
+- **Phase 1.5 — vaporware-trigger flagging**: three entries whose
+  triggers gate on unmet plan executions flagged with
+  **Vaporware-trigger flag** notes citing `distilled.md`
+  §Sequenced-Deferral Discipline as the structural diagnosis:
+  1. **Observability WS11.3 reviewer doctrine** (L1067) — gated on
+     unmet plan execution; substance is owner-standing-doctrine
+     already in operational effect; re-route option named.
+  2. **Observability WS8.6/WS8.7 ADR** (L1079) — gated on
+     observability-thread plan execution; ADR authoring is itself
+     directive-shape work; carrier-plan progress is the live signal.
+  3. **Collaboration-protocol CLI ergonomics protocol cures (i)-(x)**
+     (L1136) — gated on "next CLI ergonomics plan execution slice";
+     cures are awaiting empirical N≥3 validation per the entry's
+     own framing regardless of CLI carrier.
+
+- **Phase 2 — `pending` re-evaluation**: spot-check only, not the
+  full ~76-entry walk. Quarantined entry (`apply-don't-ask` /
+  `stop inventing optionality`, L1597) confirmed quarantine
+  remains correct (rethink owed; user-memory
+  `feedback_apply_dont_ask_superseded` already supersedes). The
+  `ready for promotion` entry (CLI first-touch friction, L1344)
+  remains a future-plan-promotion question, not a doctrine-
+  graduation drain candidate; left in place. The full `pending`
+  walk is honestly out of scope for a single drain session at the
+  current ~76-entry depth — see Phase 3.
+
+**Reviewer dispatch outcome (execution-legitimacy framing)**:
+
+- `docs-adr-reviewer` — GAPS FOUND: P1 (two broken relative paths
+  in archived Lacustrine entry from depth shift, fixed in same
+  commit); P2 (false positive — reviewer conflated opener
+  procedural text with my edits; my edits cite `distilled.md` not
+  PDR-026, no fix needed).
+- `code-reviewer` — CHANGES REQUESTED: same P1 (broken paths,
+  fixed); no other findings.
+
+**Validation gate state (post-session)**:
+
+- `pnpm practice:fitness:informational` — pending-graduations.md
+  HARD persists: **1909 lines / 116994 chars** (against 1400 /
+  90000 hard, 2100 / — critical). Net +33 lines this session
+  (started 1876; Lacustrine archive removed ~30 lines; 7
+  status-line annotations added ~63 lines). Per opener
+  boundary rule: substance > destination fitness; sequenced-
+  deferral pointers are legitimate audit-trail substance and
+  should not be elided to satisfy the limit.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
+
+**Phase 3 — residual shape surfacing for owner direction**:
+
+The HARD persists by design (substance > destination). The honest
+diagnosis is structural, not session-effort: the queue file has
+outgrown its frontmatter limit across multiple drain sessions
+(2054 → 1915 lines across the 2026-05-06 + 2026-05-07 drains),
+and ~76 pending entries genuinely await second-instance triggers
+that may or may not fire. Three legitimate response options per
+the opener (no unilateral pick):
+
+1. **Enlarge the queue file** — owner-direction frontmatter limit
+   raise (e.g. line target 1400 → 2200, hard 1400 → 2400, char
+   limit proportionally), with audit reasoning that the queue
+   file is structurally a register of cross-session waits and its
+   size is proportional to the cross-session cadence.
+2. **Split by domain** — three registers:
+   - `pending-graduations-tooling.md` (CLI affordances, hook
+     tightening, agent-tools work)
+   - `pending-graduations-doctrine.md` (PDR/rule candidates,
+     pattern entries, framing-correction substance)
+   - `pending-graduations-plan-amendments.md` (ADR amendments,
+     plan WS triggers, vaporware-shaped entries)
+3. **Escalate the queue draining cadence** — owner-direction
+   schedule (e.g. monthly dedicated drain sessions; or after each
+   N=10 new pending accumulation; or fixed cadence in
+   `consolidate-docs` flow).
+
+**Adjacent calibration-audit signal**: `practice-lineage.md` sits
+at 833 lines (limit 830) — pre-existing soft-but-effectively-
+HARD breach not touched this session; flagged for the next
+calibration audit per the opener's near-critical-destination
+discipline.
+
+**Next-session candidates**:
+
+- **Owner-direction response on Phase 3 options** — required
+  before any future drain session can sustainably reduce the queue.
+- **Sequenced-deferral entries waiting on context budget** —
+  four PDR/ADR/hook-tightening entries flagged for dedicated
+  fresh sessions; each names its phase plan in the entry body.
+- **Doctrine-reviewer rule re-route option** — observability
+  WS11.3 reviewer doctrine substance is owner-standing-doctrine
+  in operational effect; consider direct rule landing without
+  WS11.3 gating in the next agent-rules pass.
+- **Companion items still deferred from prior opener**:
+  `agent-collaboration.md` extraction question;
+  `practice-bootstrap.md` recalibration question;
+  `testing-patterns.md` stub question;
+  `learning-before-fitness.md` vs file-basename
+  `substance-before-fitness.md` rename.
+
+[drain-opener]: ../../plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md
+[archive-2026-05-06]: ../archive/pending-graduations-archive-2026-05-06.md
+
 ## Active arc — Napkin + pending-graduations register triage (landed 2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Clouded Lifting Aerie / claude-code /
