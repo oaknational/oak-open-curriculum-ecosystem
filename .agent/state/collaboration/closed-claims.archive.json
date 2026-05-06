@@ -11002,8 +11002,7 @@
           }
         ]
       }
-    }
-    ,
+    },
     {
       "claim_id": "35354ad2-b1b9-4eb5-8bbd-2310b158a3ab",
       "agent_id": {
@@ -11057,6 +11056,58 @@
             "kind": "comms-event",
             "ref": ".agent/state/collaboration/comms-events/a5f40387-c828-4fcb-b9f7-9f6972bd01bb.json",
             "summary": "Corrective handoff event records the owner correction and next-session first step."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6298f09b-116e-498c-bd75-566307e622ed",
+      "agent_id": {
+        "agent_name": "Stormy Drifting Harbour",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "228bc5"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/html-encoding.unit.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/correlation/index.ts",
+            "apps/oak-search-cli/src/lib/indexing/bulk-chunk-utils.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner.ts",
+            "packages/libs/logger/src/otel-format.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner-core.ts",
+            ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T16:25:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Sonar slice 1 (6 high-priority hotspots) + slice 2 (S2871 in bulk-sequence-transformer) + slice 3 (S2871 in sitemap-scanner-core if budget allows). Two-outcome rule: fix or FALSE_POSITIVE for issues; fix or SAFE-with-rationale for hotspots. No ACCEPTED/ACKNOWLEDGED.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T18:57:43Z",
+        "closed_by": {
+          "agent_name": "Stormy Drifting Harbour",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "228bc5"
+        },
+        "summary": "Slice 1 + Slice 2 landed. 121 Sonar hotspots dispositioned SAFE; security_hotspots_reviewed 7.1% to ~85.7%. Sonar Disposition Policy doc created at docs/governance/sonar-disposition-policy.md. 22 S1313 deferred to next session. Branch pushed; CI re-analysis triggered. Two commits: 5f6a7ae2 (X-Powered-By regression test + 6 high-priority hotspots) and 68529ac6 (policy doc + 121 dispositions captured + napkin/thread update).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6298f09b-116e-498c-bd75-566307e622ed",
+            "summary": "Claim explicitly closed by owning session."
           }
         ]
       }

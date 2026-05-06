@@ -617,39 +617,5 @@
       "notes": "record-staged exceeded the previous commit-queue git buffer on the large Sonar bundle; widening the helper and re-enqueueing with the final staged path list."
     }
   ],
-  "claims": [
-    {
-      "claim_id": "6298f09b-116e-498c-bd75-566307e622ed",
-      "agent_id": {
-        "agent_name": "Stormy Drifting Harbour",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "228bc5"
-      },
-      "thread": "main-critical-sonar-remediation",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "apps/oak-curriculum-mcp-streamable-http/src/html-encoding.unit.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/correlation/index.ts",
-            "apps/oak-search-cli/src/lib/indexing/bulk-chunk-utils.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner.ts",
-            "packages/libs/logger/src/otel-format.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
-            "apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts",
-            "packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner-core.ts",
-            ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
-            ".agent/memory/active/napkin.md",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T16:25:33Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Sonar slice 1 (6 high-priority hotspots) + slice 2 (S2871 in bulk-sequence-transformer) + slice 3 (S2871 in sitemap-scanner-core if budget allows). Two-outcome rule: fix or FALSE_POSITIVE for issues; fix or SAFE-with-rationale for hotspots. No ACCEPTED/ACKNOWLEDGED."
-    }
-  ]
+  "claims": []
 }
