@@ -26,8 +26,8 @@ todos:
     status: completed
     depends_on: [0-1-baseline-capture, 0-2-settings-backup]
   - id: 1-4-phase-1-gate
-    content: "1.4 Run portability:check, subagents:check, type-check; fresh session recount."
-    status: pending
+    content: "1.4 Run portability:check, subagents:check, type-check; document /doctor as session-local only."
+    status: completed
     depends_on: [1-1-remove-mcp-apps, 1-2-remove-cloudflare, 1-3-remove-linear]
   - id: 2-1-vercel-inventory
     content: "2.1 Inventory active vs parked Vercel skills; classify each in plan body."
@@ -38,11 +38,11 @@ todos:
     status: pending
     depends_on: [2-1-vercel-inventory]
   - id: 3-1-validator-green
-    content: "3.1 portability:check + subagents:check green; fresh session active-skill count captured."
+    content: "3.1 portability:check + subagents:check green; owner-supplied session count optional."
     status: pending
     depends_on: [2-2-vercel-friction]
   - id: 3-2-functional-spotcheck
-    content: "3.2 Verify canonical mcp-apps skills still surface; MCP grants intact."
+    content: "3.2 Verify canonical mcp-apps skills from session evidence if supplied; MCP grants intact."
     status: pending
     depends_on: [3-1-validator-green]
   - id: 4-1-record-outcome
@@ -59,7 +59,7 @@ isProject: false
 # Agent Artefact Load Pressure Relief — Urgent Plugin and Skill Pruning
 
 **Last Updated**: 2026-05-06
-**Status**: 🟡 PHASE 1 SETTINGS + HANDOFF IMPLEMENTED; CLAUDE RECOUNT PENDING
+**Status**: 🟡 PHASE 1 IMPLEMENTED; PHASE 2 VERCEL TRIAGE REMAINS
 **Decision-completion seal**: All decisions recorded inline; no item
 awaits owner sign-off. Execution can begin at Phase 0.1 without
 re-opening any question.
@@ -70,29 +70,35 @@ silently truncating skill metadata in long sessions.
 
 ---
 
-## Next-session execution — fresh Claude Code acceptance
+## Next-session execution — Vercel triage or optional session-local check
 
 Phase 0 and Phase 1 settings work is implemented. The highest-impact
 item, **Phase 1.2: remove `cloudflare@claude-plugins-official`
 plugin (−8 skills)**, has landed alongside the duplicate `mcp-apps`
 removal and unused Linear removal.
 
-**Next safe step** (fresh Claude Code session, no settings edit unless
-the recount surfaces an anomaly):
+`/doctor` is **session-local Claude Code evidence**, not a useful
+terminal command or Codex validation target. It reports on the skills
+loaded into the active Claude Code session. Do not retry
+`claude doctor` from Codex or a shell as plan evidence.
 
-1. Record `/doctor` active-skill count and current system-reminder
-   skill list.
-2. Confirm the count drops by at least 12 against the audit proxy
-   (~112 → expected ~100): 4 `mcp-apps:*` and 8 `cloudflare:*`
-   skills gone.
+**Optional owner-supplied check** (if already in Claude Code):
+
+1. Record the in-session `/doctor` active-skill count and current
+   system-reminder skill list.
+2. Confirm the owner-observed count drops by at least 12 against the
+   audit proxy (~112 → expected ~100): 4 `mcp-apps:*` and
+   8 `cloudflare:*` skills gone.
 3. Confirm bare canonical MCP Apps skills still surface:
    `add-app-to-server`, `convert-web-app`, `create-mcp-app`, and
    `migrate-oai-app`.
 4. Confirm `.claude/settings.local.json` grants remain intact for
    Oak, Sentry, SonarQube, GitHub, and Vercel.
-5. Update this plan's Outcome/Baselines tables with the measured
-   post-prune count. Do not start Vercel triage or the strategic
-   `agent-tools artefacts` CLI work in that acceptance step.
+5. If owner-supplied evidence is captured, append it to this plan's
+   Outcome/Baselines tables.
+
+**Next implementation step**: Phase 2 Vercel triage. Do not start the
+strategic `agent-tools artefacts` CLI work from this urgent plan.
 
 ---
 
@@ -191,8 +197,9 @@ After Phase 3, also:
 pnpm test:root-scripts    # repo-script smoke
 ```
 
-A new session must be opened after each plugin disable to re-measure
-the active-skill discovery surface (the system-reminder skill list).
+A Claude Code `/doctor` or system-reminder measurement is session-local
+only. It can be owner-supplied as extra evidence, but is not a
+command-line or Codex gate.
 
 ---
 
@@ -200,11 +207,14 @@ the active-skill discovery surface (the system-reminder skill list).
 
 ### 0.1 Capture pre-pruning state
 
-+ **Action**: Record the live `pnpm portability:check` output and the
++ **Action**: Record the live `pnpm portability:check` output and, if
+  owner-supplied from an interactive Claude Code session, the
   active-skill list (system-reminder block) at session open.
 + **Output**: Append the baseline counts to this plan's "Baselines"
   section below. Do NOT embed in any permanent doc.
 + **Acceptance**: validator green; baseline counts captured here.
+  Session-local `/doctor` evidence is optional and cannot be produced
+  authoritatively by terminal invocation.
 
 ### 0.2 Backup settings
 
@@ -237,8 +247,8 @@ The three removals here are **non-destructive**:
   this plan; proceed without further prompt.
 + **Acceptance**:
   + `pnpm portability:check` passes (canonical skills are unaffected).
-  + New session shows the four `mcp-apps:*` skills no longer in the
-    system reminder.
+  + If owner captures Claude Code session-local evidence, the four
+    `mcp-apps:*` skills no longer appear in the system reminder.
   + Bare-name skills `add-app-to-server`, `convert-web-app`,
     `create-mcp-app`, `migrate-oai-app` continue to load (they are
     canonical).
@@ -246,21 +256,27 @@ The three removals here are **non-destructive**:
 ### 1.2 Remove `cloudflare@claude-plugins-official` plugin
 
 + **Action**: Same shape as 1.1.
-+ **Acceptance**: 8 `cloudflare:*` skills no longer in the new-session
-  reminder; no failed MCP tool grants.
++ **Acceptance**: settings no longer enable the plugin; if owner
+  captures Claude Code session-local evidence, 8 `cloudflare:*` skills
+  no longer appear in the reminder; no failed MCP tool grants.
 
 ### 1.3 Remove `linear@claude-plugins-official` plugin
 
 + **Action**: Same shape as 1.1.
-+ **Acceptance**: no `linear` plugin presence in new-session reminder;
-  GitHub plugin (user-scope) is unaffected.
++ **Acceptance**: settings no longer enable the plugin; if owner
+  captures Claude Code session-local evidence, no `linear` plugin
+  presence appears in the reminder; GitHub plugin (user-scope) is
+  unaffected.
 
 ### 1.4 Phase-1 gate
 
 + Run quality gates (above).
-+ Open a fresh session; recount active-skill list.
-+ Expected: skill discovery surface drops by ~12 (4 mcp-apps + 8 cloudflare).
-+ Record the post-Phase-1 count in the "Baselines" section.
++ Document that `/doctor` evidence is session-local and owner-supplied;
+  it is not a command-line gate.
++ Expected settings-derived drop: ~12 skills (4 mcp-apps +
+  8 cloudflare).
++ If owner supplies post-Phase-1 in-session counts, record them in the
+  "Baselines" section.
 
 ---
 
@@ -309,16 +325,17 @@ not yet remove the plugin.
 
 + **Action**: `pnpm portability:check` — must pass.
 + **Action**: `pnpm subagents:check` — must pass.
-+ **Action**: Open a fresh Claude Code session in this repo and capture
-  the active-skill list from the system reminder.
-+ **Acceptance**: post-prune active-skill count is at least 12 below
-  baseline; no skill discovery truncation visible (full list arrives in
-  the system reminder).
++ **Action**: If owner supplies interactive Claude Code evidence,
+  capture the active-skill list from `/doctor` or the system reminder.
++ **Acceptance**: settings-derived post-prune expectation is at least
+  12 below baseline; owner-supplied Claude Code evidence can confirm
+  no skill discovery truncation is visible.
 
 ### 3.2 Functional spot-check
 
-+ **Action**: Verify the four canonical mcp-apps skills still surface
-  by bare name in the new-session reminder.
++ **Action**: If owner supplies interactive Claude Code evidence,
+  verify the four canonical mcp-apps skills still surface by bare name
+  in that session's reminder.
 + **Action**: Verify the project's MCP grants for sentry, sonarqube,
   github, oak, vercel still resolve (no broken `mcp__*` references in
   `.claude/settings.local.json`).
@@ -357,8 +374,10 @@ not yet remove the plugin.
 ## Acceptance criteria (overall)
 
 1. `pnpm portability:check` passes after every phase.
-2. Active-skill list in a fresh session drops by ≥12 (mcp-apps:4 +
-   cloudflare:8) compared to pre-prune baseline.
+2. Settings-derived active-skill surface drops by ≥12 (mcp-apps:4 +
+   cloudflare:8) compared to the audit baseline; owner-supplied
+   in-session `/doctor` evidence may confirm this but is not a
+   command-line gate.
 3. No `mcp__*` grant in `.claude/settings.local.json` is broken.
 4. Vercel friction recorded in `frictions-register.md`.
 5. Outcome section in this plan filled in.
@@ -406,9 +425,9 @@ not yet remove the plugin.
 | Metric | Pre-prune | Post-Phase-1 | Post-Phase-2 | Post-Phase-3 |
 |---|---|---|---|---|
 | `pnpm portability:check` | PASS | PASS | — | — |
-| Approx. active-skill count (system reminder) | audit ~112 | expected ~100; recount pending | — | — |
-| `mcp-apps:*` skills present | 4 | settings removed; fresh session pending | 0 | 0 |
-| `cloudflare:*` skills present | 8 | settings removed; fresh session pending | 0 | 0 |
+| Approx. active-skill count (system reminder) | audit ~112; `/doctor` is session-local only | settings-derived expected ~100; optional owner confirmation | — | — |
+| `mcp-apps:*` skills present | 4 | settings removed; optional owner confirmation | 0 | 0 |
+| `cloudflare:*` skills present | 8 | settings removed; optional owner confirmation | 0 | 0 |
 | `linear` plugin present | yes | no in settings | no | no |
 | `vercel:*` skills present | 25 | 25 | 25 (no removal — see 2.2) | 25 |
 | Vercel skills classified `parked` (Phase 2) | n/a | n/a | recorded in plan body | unchanged |
@@ -426,10 +445,11 @@ not yet remove the plugin.
 + **Baseline**: `pnpm portability:check` passed before pruning with
   12 commands, 37 skills, 52 rules, 22 reviewer adapters, 54 Cursor
   triggers, 52 Claude rules, 52 `.agents` rules, and 40 command
-  adapters. `claude doctor` was available but produced no
-  non-interactive output from Codex and was killed after hanging; use
-  the audit's ~112 active-skill estimate as the pre-prune proxy until
-  a fresh Claude Code session records `/doctor` output.
+  adapters. `/doctor` is session-local Claude Code evidence: it reports
+  the skills loaded into the active Claude session, so terminal
+  `claude doctor` invocation from Codex is not an authoritative evidence
+  path. Use the audit's ~112 active-skill estimate as the pre-prune
+  proxy unless the owner supplies an in-session Claude Code count.
 + **Change**: `.claude/settings.json` no longer enables
   `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, or
   `linear@claude-plugins-official`. Retained plugins are Sentry,
@@ -443,10 +463,10 @@ not yet remove the plugin.
   `pnpm practice:fitness:informational` (pre-existing HARD signals
   remain in `principles.md`, `distilled.md`, and
   `pending-graduations.md`; napkin stayed green).
-+ **Pending evidence**: fresh Claude Code session recount, confirmation
-  that bare canonical MCP Apps skills still surface, and confirmation
-  that the removed plugin namespaces no longer appear in the session
-  reminder.
++ **Optional owner-supplied evidence**: in-session Claude Code
+  `/doctor`/system-reminder count, confirmation that bare canonical MCP
+  Apps skills still surface, and confirmation that the removed plugin
+  namespaces no longer appear in that session's reminder.
 + **Deliberately not done**: no `claude plugin uninstall`, no Vercel
   pruning, and no strategic `agent-tools artefacts` CLI work.
 

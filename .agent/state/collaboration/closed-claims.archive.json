@@ -10986,6 +10986,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1BFF0D98-03DF-4CCE-B27D-57D522DF68B0",
+      "agent_id": {
+        "agent_name": "Hidden Slipping Moth",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "4be7b5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:39:25Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "commit window: napkin handoff lessons (Hidden Slipping Moth)",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:40:43Z",
+        "closed_by": {
+          "agent_name": "Hidden Slipping Moth",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "4be7b5"
+        },
+        "summary": "napkin handoff lessons committed at ad000f96; session close",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1BFF0D98-03DF-4CCE-B27D-57D522DF68B0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "be0a5397-7b1e-4c5c-92ac-190cd51cad91",
+      "agent_id": {
+        "agent_name": "Ashen Burning Anvil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:45:17Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session handoff for skill-load pressure relief correction",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T12:46:24Z",
+        "closed_by": {
+          "agent_name": "Ashen Burning Anvil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Completed session handoff for skill-load pressure relief correction; Phase 2 Vercel triage is next.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "be0a5397-7b1e-4c5c-92ac-190cd51cad91",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

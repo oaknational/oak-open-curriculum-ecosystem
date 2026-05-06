@@ -1033,12 +1033,13 @@ remember, mcp-server-dev, SonarQube, and Vercel. Backup captured at
 implementation claim closed; validation green for `pnpm portability:check`,
 `pnpm subagents:check`, `pnpm type-check`, markdownlint on the touched
 plan/thread surfaces, `git diff --check`, and collaboration-state check.
-`claude doctor` was available but hung without useful non-interactive
-output from Codex, so the fresh Claude Code active-skill recount remains
-the only incomplete acceptance item. **Next safe step**: open a fresh
-Claude Code session, record `/doctor`/system-reminder skill-list evidence,
-confirm the active skill count drops by at least 12, and confirm the four
-bare MCP Apps skills still surface.
+Owner clarified that `/doctor` is session-local Claude Code evidence
+only: it reports on the skills loaded into the active Claude session
+and is not a useful shell/Codex gate. Plan updated accordingly; Phase 1
+is complete on settings-derived and repo-local validation evidence.
+**Next safe step**: run Phase 2 Vercel triage in the urgent plan —
+classify the 25 `vercel:*` skills into `keep`/`parked`, then record the
+plugin-catalogue friction.
 
 **2026-05-06 (Masked Stalking Veil, codex, GPT-5, `019dfc`,
 agentic-engineering-enhancements thread, quota-recovery stewardship +
@@ -1720,10 +1721,11 @@ prune and closeout evidence session`. Checks run: entry-point sweep clean
 the operational README; active implementation claim closed; collaboration
 check green; gates green for portability, subagents, type-check,
 markdownlint on touched markdown, and diff whitespace. New learning is
-operational rather than doctrine-shaped: Codex can start `claude doctor`,
-but this environment did not yield stable non-interactive active-skill
-evidence, so the Claude recount remains explicitly pending in the plan and
-thread record. No ADR/PDR candidate qualifies from the closeout itself.**
+operational rather than doctrine-shaped: owner corrected that `/doctor`
+is session-local Claude Code evidence and not a useful terminal/Codex
+validation gate, so the urgent plan now treats it as optional
+owner-supplied evidence rather than a blocker. No ADR/PDR candidate
+qualifies from the closeout itself.**
 
 **Status (2026-05-06 Masked Stalking Veil, codex, GPT-5, `019dfc`,
 owner-directed `/jc-session-handoff` plus light `/jc-consolidate-docs`
