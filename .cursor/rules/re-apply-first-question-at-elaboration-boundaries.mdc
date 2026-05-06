@@ -1,0 +1,6 @@
+---
+description: Re-ask "could this be simpler without compromising quality or value?" at every elaboration boundary, not only at plan-time
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`.

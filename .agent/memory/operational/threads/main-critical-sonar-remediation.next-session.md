@@ -1,3 +1,7 @@
+---
+merge_class: index-narrative-tables
+---
+
 # main-critical-sonar-remediation Next Session
 
 ## Thread Identity
@@ -15,6 +19,7 @@ Primary plan:
 | codex | GPT-5 | 019dfd | Moonless Vanishing Lantern | evaluator | 2026-05-06 | 2026-05-06 |
 | codex | GPT-5 | 019dfd | Ethereal Ascending Twilight | executor | 2026-05-06 | 2026-05-06 |
 | claude-code | claude-opus-4-7-1m | 228bc5 | Stormy Drifting Harbour | executor | 2026-05-06 | 2026-05-06 |
+| codex | GPT-5 | 019dfe | Choppy Washing Archipelago | executor | 2026-05-06 | 2026-05-06 |
 
 ## Landing Target For Next Session
 

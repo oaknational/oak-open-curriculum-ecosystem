@@ -1,0 +1,6 @@
+---
+description: Editing files in .agent/directives/ requires session context-usage below 30%; otherwise queue the directive work for a fresh session
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/directive-file-context-budget.md`.

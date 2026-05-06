@@ -1,0 +1,6 @@
+---
+description: Validators must recompute and compare derived values (hashes, fingerprints, manifests); storing without recomputing cannot detect drift
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/validators-must-recompute-not-just-record.md`.

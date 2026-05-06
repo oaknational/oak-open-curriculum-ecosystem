@@ -1,0 +1,6 @@
+---
+description: Anything under .agent/practice-core/ must be repo-independent — no repo paths, ADR refs, commit refs, or host-specific framing
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/practice-core-portability.md`.

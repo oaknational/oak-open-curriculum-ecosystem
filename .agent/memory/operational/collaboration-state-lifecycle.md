@@ -8,11 +8,14 @@ split_strategy: "Split by state surface if lifecycle recipes grow beyond a singl
 
 # Collaboration State Lifecycle
 
-Detailed lifecycle recipes for `.agent/state/collaboration/`. The compact
-state index is [`collaboration-state-conventions.md`](collaboration-state-conventions.md);
+Operational recipes for `.agent/state/collaboration/`. The compact state
+index is [`collaboration-state-conventions.md`](collaboration-state-conventions.md);
 the doctrinal authority is
 [`agent-collaboration.md`](../../directives/agent-collaboration.md) and
-[PDR-029 Family A Class A.3][pdr-029].
+[PDR-029 Family A Class A.3][pdr-029]. Vocabulary (stale, fresh-but-quiet,
+orphaned, expired) is defined in
+[`collaboration-state-conventions.md`](collaboration-state-conventions.md)
+§Vocabulary.
 
 ## Claims
 
@@ -20,18 +23,14 @@ All timestamp fields in collaboration state use UTC ISO 8601 with a trailing
 `Z`. Use owner-local time only as explanatory prose; freshness windows,
 expiry reports, and stale-claim audits are computed from UTC values.
 
-Before any shared-state mutation, run identity preflight or an equivalent
-wrapper. For Codex, `CODEX_THREAD_ID` must derive the PDR-027 identity block;
-new writes must not fall back to `Codex` / `unknown` while that seed exists:
+Identity preflight before write and the shared-state-not-read-only posture
+are governed by [`agent-collaboration.md`](../../directives/agent-collaboration.md)
+§Identity vs Liveness and §Knowledge and Communication. The portable
+preflight command is:
 
 ```bash
 pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
-
-Do not treat hot shared-state docs as read-only. If a handoff, claim close,
-thread update, comms event, napkin entry, or repo-continuity update is needed,
-read the current file and write the update. Active claims make overlap visible;
-the transaction helper and commit queue are the coordination mechanism.
 
 ### Open a Claim
 
@@ -74,8 +73,9 @@ Use `pnpm agent-tools:commit-queue --` through the commit skill:
    clears the claim pointer. A successful git commit is the durable record.
 6. `phase --phase abandoned` if the attempt stops before success.
 
-`expires_at` is a wall-clock stale-reporting timestamp. Expiry never
-auto-removes a queue entry and never blocks another agent by itself.
+`expires_at` is the wall-clock **expired**-reporting timestamp (per the
+four-term vocabulary in conventions.md). Expiry never auto-removes a queue
+entry and never blocks another agent by itself.
 `session_counter` is intentionally absent from v1.3.0.
 
 Commit-queue mutations reuse the same JSON transaction helper as active
@@ -85,9 +85,9 @@ inside the transaction window.
 ### Refresh During Work
 
 Set `heartbeat_at` to `now()` to extend a claim's freshness. Use this
-for long sessions where the original 4-hour budget would expire mid-work.
-The refreshed window is `heartbeat_at + freshness_seconds`, not
-`claimed_at + freshness_seconds`.
+for long sessions where the original 4-hour budget would go stale
+mid-work. The refreshed window is `heartbeat_at + freshness_seconds`,
+not `claimed_at + freshness_seconds`.
 
 ### Close at Session End
 
@@ -106,12 +106,13 @@ not part of the current protocol.
 Where a platform exposes a real session-end hook, use it as a best-effort
 pre-close cleanup prompt or closure script. Codex currently has hooks but no
 documented `SessionEnd` event; its turn-scoped `Stop` hook can remind the agent
-before a turn ends, but normal freshness and stale/orphan cleanup remain the
-fallback for missed Codex session closes.
+before a turn ends, but stale and orphaned cleanup remain the fallback
+for missed Codex session closes.
 
 Post-session janitors must not mark work as successful. If a known-ended
 session leaves a claim open past the session-close grace TTL, archive it as
-stale/orphaned with evidence of the missed close. Keep the per-type freshness
+orphaned (with `closure.kind: "stale"`) and attach evidence of the missed
+close. Keep the per-type freshness
 window separate from this grace TTL: `git:index/head` and attention pings can
 expire in minutes, while normal active-work claims use the longer heartbeat
 window unless a session-end signal proves the owner session is gone.
@@ -120,14 +121,33 @@ window unless a session-end signal proves the owner session is gone.
 
 `consolidate-docs § 7e` walks `active-claims.json`, computes
 `claimed_at + freshness_seconds` (or `heartbeat_at + freshness_seconds`
-if newer), and archives any expired entry to `closed-claims.archive.json`
+if newer), and archives any **stale** entry to `closed-claims.archive.json`
 with `archived_at` and `closure.kind: "stale"`. Stale claims are
 *noise*, not *blockers*. The system does not strand agents waiting on a
 peer's forgotten claim.
 
-Fresh but quiet claims are informational only: possible crashed session,
-not a block. The next staleness threshold archives the entry
+**Fresh-but-quiet** claims are informational only: possible crashed
+session, not a block. The next staleness threshold archives the entry
 automatically.
+
+### Apparently Orphaned Claims
+
+An "apparently orphaned" claim is a fresh-but-quiet entry whose
+owning session you suspect has ended without closing the claim.
+Cleanup ethics — when manual orphan archival is legitimate, the
+race-avoidance discipline, and the visibility-before-deletion rule —
+are governed by
+[`agent-collaboration.md`](../../directives/agent-collaboration.md)
+§d Cleanup Ethics. Recipe steps:
+
+- Archive only through a deliberate governance pass
+  (`consolidate-docs § 7e`) or an owner-forced close.
+- If another session is already performing the cleanup, do not race;
+  let the natural claim lifecycle finish. Two agents racing to archive
+  the same orphan produces duplicate closure records and obscures
+  lifecycle history.
+- Before writing the close, post a shared-log note naming the claim
+  and the closure kind (`stale` or `owner-forced`).
 
 The portable cleanup command is:
 
@@ -220,34 +240,13 @@ Non-trivial protocol claims should carry a small evidence bundle:
 
 ## Schema-Field Provenance
 
-The active-claims schema is informed by real shared-communication-log usage
-plus the small set of fields the registry shape requires that the log shape did
-not. Transparency matters because observed fields are battle-tested; fields
-drawn from first principles are more likely to be reshaped by later evidence.
-
-| Field | Source | Notes |
-| --- | --- | --- |
-| `agent_id` block (`agent_name`, `platform`, `model`, `session_id_prefix`) | Observed | Every shared-log entry carried this; reuses PDR-027 identity schema |
-| `claimed_at` | Observed | Every entry timestamped UTC ISO 8601 with trailing `Z` |
-| `intent` | Observed | Every entry carried an action / intent line |
-| `areas` | Observed | Shared-log entries used touched-area path patterns; v1.2.0 adds `git:index/head` |
-| `notes` | Observed | Shared-log entries carried a coordination-note paragraph |
-| `claim_id` | First-principles | Registry entries need identity; the log was append-only |
-| `thread` | First-principles | Cross-thread visibility requires an explicit slug |
-| `freshness_seconds` | First-principles | Liveness signal for stale audit; default rationale is above |
-| `heartbeat_at` | First-principles | Long-session freshness refresh |
-| `sidebar_open` | First-principles | Whether a sidebar is open against the claim |
-| `commit_queue` | Observed + owner-directed | PDR-029 Class A.3 queue artefact |
-| `intent_to_commit` | First-principles | Convenience pointer; queue remains authoritative |
-| `closure.kind` | Observed + first-principles | Explicit, stale, and owner-forced close types |
-| `closure.closed_at` / `closed_by` | First-principles | Durable closure provenance |
-| `closure.evidence[]` | Observed | Claim outcomes need durable refs to logs, claims, plans, napkin, and threads |
-
-Conversation fields reuse the same PDR-027 `agent_id` shape and `evidence_ref`
-enum from `active-claims.schema.json`. The conversation schema preserves the
-append-only event-list model as it adds sidebars and joint decisions.
-Escalations are separate live case files and must write owner resolution back
-into the referenced conversation.
+Field provenance is co-located with each field in
+[`active-claims.schema.json`](../../state/collaboration/active-claims.schema.json)
+and the sibling [`closed-claims.schema.json`](../../state/collaboration/closed-claims.schema.json),
+[`conversation.schema.json`](../../state/collaboration/conversation.schema.json),
+and [`escalation.schema.json`](../../state/collaboration/escalation.schema.json)
+via `$comment_provenance` annotations. Schema files are the canonical home for
+field-level metadata; this lifecycle file holds operational recipes only.
 
 [register-rule]: ../../rules/register-active-areas-at-session-open.md
 [pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md

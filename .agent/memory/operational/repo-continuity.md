@@ -1,11 +1,11 @@
 ---
-
-## fitness_line_target: 400
-
+fitness_line_target: 400
 fitness_line_limit: 525
 fitness_char_limit: 35000
 fitness_line_length: 200
 split_strategy: "Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here"
+merge_class: index-narrative-tables
+---
 
 # Repo Continuity
 
@@ -40,6 +40,82 @@ change in `synonym-miner.ts:140,148`; zodgen-core type-comparison
 investigation at `zodgen-core.ts:33`); push when ready. Local
 PDR-049 commit must be pushed at some point — either as part of the
 merge work or before it.
+
+**Session close (2026-05-06 — Clouded Lifting Aerie /
+`claude-code` / claude-opus-4-7-1m / `1e2244`)**: napkin +
+pending-graduations processing opener executed in three commits.
+`d12912dc` (`docs(practice): graduate napkin entries to patterns,
+frictions register, dev-practice`): three new patterns
+(`consolidation-output-shape-pattern-vs-report.md`,
+`audit-rule-body-on-prohibition-extension.md`,
+`in-session-contract-authoring-conditions.md`); F-15 commit-queue
+fingerprint recursion friction added with workflow-that-works
+documented; F-14 / F-09 / F-05 evidence appended;
+markdown-prose-acceptance-criteria doctrine added to
+`development-practice.md`; napkin archived 382→119 lines.
+`b4d7ddff` (`docs(practice): archive 7 graduated entries; mark
+commit-queue fingerprint graduated`): 7 register entries archived
+(6 graduated, 1 withdrawn); Lacustrine commit-queue fingerprint
+entry marked graduated 2026-05-06 cross-referencing F-15; one
+small new pending entry (`/doctor` is session-local evidence, not
+a shell-invocable validation gate); register reduced 2054→1876
+lines. `d2e2bfe5` (`docs(handoff): close napkin + pending-
+graduations session; update thread record`): reviewer P1 SHA
+typo fix; archive preamble link refactor; thread record update.
+Reviewer dispatch (docs-adr + code-reviewer) APPROVED with one
+P1 fixed and a few P2 long-link notes addressed where actionable.
+**Next safe step**: dedicated `pending-graduations.md`-only
+session — drain the residual register substance via the `due`
+queue execution and `pending` re-evaluation, then surface
+remaining shape (split-by-domain, queue-cadence, or limit-raise
+direction). Opener authored at
+`.agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md`.
+
+**Session close (2026-05-06 — Iridescent Waxing Orbit /
+`claude-code` / claude-opus-4-7-1m / `aeebab`)**: distilled.md
+graduation pass landed in two commits. `b9bae574`
+(`docs(practice): graduate distilled.md to rules and governance
+docs`): four new rules
+(`practice-core-portability.md`,
+`directive-file-context-budget.md`,
+`validators-must-recompute-not-just-record.md`,
+`re-apply-first-question-at-elaboration-boundaries.md`); orphaned-
+claim policy added to
+`collaboration-state-lifecycle.md`; distilled.md trimmed
+314 → 152 lines, all three hard-zone metrics cleared.
+`d9aab409` (`docs(distilled): reframe learning-loop and
+sequenced-deferral entries`): owner-corrected mid-session — the
+doctrine-scanner CLI gating cited in the held Sequenced-Deferral
+Discipline entry is vaporware-shaped (`future/` plan with compound
+unmet promotion gates); cyclical-learning-loop framing reframed
+from inherent-cost to artefactual-cost (per-session closure
+discipline owns the loop). Adjacent: discoverable+actionable plans,
+parent-reconciliation, narrative-drift, and plan-following-vs-
+principle-following landed in `docs/governance/development-practice.md`
+under foreign-stage absorption into the parallel agent's typescript-
+extraction commit `cc8866a8`. **Next safe step**: deep exploration and reflection on
+`.agent/memory/operational/collaboration-state-lifecycle.md` per
+owner direction 2026-05-06; opener authored at
+`.agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`.
+The opener names this as the load-bearing session shape (substance-
+led audit, not fitness-driven trim) and lists adjacent companions
+(distilled.md "Queued for Next Directive-Edit Session" graduations,
+PDR-026 amendment without doctrine-scanner-CLI gating) as
+opportunistic-only.
+
+**Session close (2026-05-06 — Cindery Charring Pyre / `cursor` /
+GPT-5.5 / `e220de`)**: authored
+`.agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md`
+and indexed it in the SDK/MCP current-plan README. The plan records the
+current default boundary (downloadable asset content is not model-visible),
+the user-only download URL hardening path, ADR/documentation DoD, and the
+owner correction that documentation validation must assess communicated
+decision rather than exact markdown prose. MCP reviewer and docs-ADR reviewer
+were used during planning; no asset URLs or asset content were opened. Claims
+opened for plan edits were closed; no active claim remains for this identity.
+**Next safe step**: implement the queued plan from Phase 0, preserving the
+no-asset-access constraint and using reviewer validation for documentation
+intent instead of exact-prose tests.
 
 **Session close (2026-05-06 — Masked Stalking Veil / `codex` /
 GPT-5 / `019dfc`)**: owner-directed quota-recovery and closeout
@@ -284,6 +360,7 @@ Codex adapters) installing describe-vs-audit screen, atomic-landing
 invariant check, and mandatory recipe/pattern read path with
 citation requirement; Stryker reframed as meta-quality (constraint
 that makes coverage meaningful, not a test runner); start-right-quick
+
 + start-right-thorough updated to load `tdd-as-design.md` ahead of
 `testing-strategy.md`; drift fix for missing `never-use-git-to-remove-work`
 adapters (rule existed since 1d58061f without portability adapters,
@@ -429,7 +506,7 @@ candidates.
 
 **Substantive landings this session**:
 
-- `a3a0222a feat(observability): add WS1 multi-sink + fixtures axes scaffolding (RED)` — WS1 of the observability multi-sink-and-fixtures-shape plan. 26 files / +2205/-62. Replaces single
++ `a3a0222a feat(observability): add WS1 multi-sink + fixtures axes scaffolding (RED)` — WS1 of the observability multi-sink-and-fixtures-shape plan. 26 files / +2205/-62. Replaces single
 `SENTRY_MODE = off | fixture | sentry` switch with two orthogonal axes
 via Zod schemas + vendor-neutral runtime types + per-layer RED contract
 tests. New surfaces: 4 env schema files (`observability{,-axes,-base,-refinements}.ts`),
@@ -450,7 +527,7 @@ to acknowledge design-pinning role (was inaccurately claiming type-
 check canary status); `NODE_ENV: 'development'` pinned in E2E child
 env; WS4/WS5 contents-check `it.todo()` added; sink-registry narrow-
 façade + log-fan-out path TSDoc notes added.
-- `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3` — 43-file Practice-Core portability sweep across PDRs, trinity files, README, distilled.md, decision-records/README, and practice-index.md.
++ `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3` — 43-file Practice-Core portability sweep across PDRs, trinity files, README, distilled.md, decision-records/README, and practice-index.md.
 Round 1 (subagent): mechanical sweep removing host-anchored references.
 Round 2 (foreground): incorporated owner decisions C6 (Practice-
 canonical directory references as portable structural contract) and
@@ -470,16 +547,16 @@ meet size limits) — explicitly NOT compressed.
 **Deferred items (recorded as plan-body amendment candidates / WS3 /
 WS8.5 by reviewer subagents)**:
 
-- ADR-165 number collision (the plan body schedules
++ ADR-165 number collision (the plan body schedules
 `165-observability-configuration-orthogonality.md` but ADR-165 is
 already taken — must rename to next-available before WS8.6 starts).
-- Legacy `SentryEnvSchema` `@deprecated` JSDoc tag at WS3 atomic-rename.
-- Plan body §WS3 should name `OBSERVABILITY_FILE_PATH` env var
++ Legacy `SentryEnvSchema` `@deprecated` JSDoc tag at WS3 atomic-rename.
++ Plan body §WS3 should name `OBSERVABILITY_FILE_PATH` env var
 explicitly.
-- Plan body §WS3 should note `sink-registry.ts` placement deviation
++ Plan body §WS3 should note `sink-registry.ts` placement deviation
 from the planned `types.ts` location.
-- `docs/operations/environment-variables.md` propagation at WS8.5.
-- `packages/core/observability/README.md` exports listing at WS8.
++ `docs/operations/environment-variables.md` propagation at WS8.5.
++ `packages/core/observability/README.md` exports listing at WS8.
 
 **Quality gates (this session)**: full pre-commit pipeline passed for
 both commits (74-task turbo run; type-check; lint; prettier;
@@ -487,7 +564,7 @@ markdownlint; knip; depcruise — 2050 modules, 4443 dependencies, no
 violations; portability:check). 87 test files / 725 tests passed in
 oak-curriculum-mcp-streamable-http; 101/1001 in search-cli; 9/120
 
-- 4 todo + 2 skipped in sentry-node; 7/48 in env; 6/63 in
++ 4 todo + 2 skipped in sentry-node; 7/48 in env; 6/63 in
 observability; 4/29 in env-resolution. `practice:fitness` shows
 pre-existing critical-zone violations on `napkin.md`, `distilled.md`,
 `pending-graduations.md`, `repo-continuity.md`, `principles.md` — out
@@ -497,7 +574,7 @@ candidates.
 **Prior 2026-05-02 landings** (Abyssal Diving Stern, included in this
 branch state):
 
-- `9356779d docs(memory): graduate rush-impulse-as-entropy doctrine to architectural-excellence principle` — `principles.md § Architectural Excellence Over Expediency` strengthened to absolute
++ `9356779d docs(memory): graduate rush-impulse-as-entropy doctrine to architectural-excellence principle` — `principles.md § Architectural Excellence Over Expediency` strengthened to absolute
 framing per owner reinforcement *"we always, ALWAYS, choose
 long-term architectural excellence over cheap or fast or good
 enough"*. Vocabulary trip-list (fast path / quick fix / cheap cure
@@ -506,7 +583,7 @@ pass exempts / bootstrap fast-path / land it then refactor) and
 generator-vs-fence analysis lifted from Deep Navigating Stern's
 2026-05-01 napkin entry. `distilled.md § Process` records the
 graduation pointer.
-- `e1840631 docs(plans): promote observability multi-sink + fixtures plan; archive superseded predecessors` — WS0 prelude of the new
++ `e1840631 docs(plans): promote observability multi-sink + fixtures plan; archive superseded predecessors` — WS0 prelude of the new
 executable plan replacing the conflated `SENTRY_MODE` switch with
 two orthogonal axes (`OBSERVABILITY_SINKS` typed list +
 `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean). Plan
@@ -568,10 +645,10 @@ quality gate sweep, six-commit landing.
 
 **Substantive landings this session**:
 
-- `93dcbd79 chore(gitignore): consolidate cross-platform OS file ignores at root` — peer-authored .gitignore additions absorbed
++ `93dcbd79 chore(gitignore): consolidate cross-platform OS file ignores at root` — peer-authored .gitignore additions absorbed
 cleanly into one place; per-app duplication removed from
 `apps/oak-search-cli/.gitignore`.
-- `9e657ad3 fix(sdk): align thread-units adapter to upstream schema dropping unitOrder` — upstream OpenAPI snapshot moved from version
++ `9e657ad3 fix(sdk): align thread-units adapter to upstream schema dropping unitOrder` — upstream OpenAPI snapshot moved from version
 `00e72e8d` to `0c6d4433`; `/threads/{threadSlug}/units` no longer
 exposes `unitOrder` (`additionalProperties: false`). Per
 schema-first directive, `ThreadUnitEntry` and the adapter
@@ -581,12 +658,12 @@ their own schemas. Empirical resolution: schema-cache diff
 showed the upstream genuinely removed the field; no consumer
 outside the adapter depended on it from this endpoint; tests
 pass (725/725 + 126/126 + others).
-- `25f93e5b chore(portability): index read-before-asking rule and authorise undo-change skill` — restored `pnpm portability:check`
++ `25f93e5b chore(portability): index read-before-asking rule and authorise undo-change skill` — restored `pnpm portability:check`
 to green by adding the missing `RULES_INDEX.md` row for
 `.agent/rules/read-before-asking.md` (the rule file existed but
 was unindexed) and the missing `Skill(undo-change)` /
 `Skill(undo-change:*)` entries in `.claude/settings.json`.
-- `0cda47eb docs(memory): capture no-moving-targets and Practice-Core portability rules; reframe quarantines` — owner
++ `0cda47eb docs(memory): capture no-moving-targets and Practice-Core portability rules; reframe quarantines` — owner
 doctrine from session open: tool counts, bug counts, Git HEAD
 SHAs and similar moving figures belong only in ephemeral surfaces;
 anything under `.agent/practice-core/` must contain no repo paths,
@@ -601,7 +678,7 @@ into three impact-named surfaces (decision optionality, design
 optionality, outcome optionality) — rule shape follows from impact,
 not vice versa. Both candidates remain quarantined; reformulations
 not yet drafted.
-- `ce66ab09 docs(plans): author structural-enforcement family of four executable plans` — quality-fix-template-shaped plans under
++ `ce66ab09 docs(plans): author structural-enforcement family of four executable plans` — quality-fix-template-shaped plans under
 `agentic-engineering-enhancements/current/`:
 `practice-core-portability-strict-enforcement.plan.md` (scanner +
 remediation for the new portability rule);
@@ -618,7 +695,7 @@ Phase 0 owner decision gate). Each plan has explicit Phase 0
 decision gates where owner input is needed before implementation
 proceeds; out-of-scope items named so plans defer cleanly to one
 another.
-- `d4a658a9 refactor(plans): restructure into Connecting Oak Resources and Open Education threads` — per owner direction
++ `d4a658a9 refactor(plans): restructure into Connecting Oak Resources and Open Education threads` — per owner direction
 2026-05-01: created `connecting-oak-resources/` containing the
 internal Oak knowledge-graph work (was the standalone
 `knowledge-graph-integration/` thread, moved with `git mv` to
@@ -683,18 +760,18 @@ cures after a destructive-action incident.
 
 **Substantive landings this session**:
 
-- `b3d4c041 docs(plans): complete Increment 1 promotion materials`
++ `b3d4c041 docs(plans): complete Increment 1 promotion materials`
 — landed the Vining tracer-matrix work and reconciled cross-file
 drift surfaced by a holistic alignment audit (17 of 21 cells, 4
 NO TRACER under the ≥2-of-3 rule, six findings across three
 review rounds, plus three operation-design corrections under the
 *stop inventing optionality* doctrine). Owner Promotion Packet
 is rendered; awaiting owner approve / amend / reject.
-- `54e37058 docs(memory): capture commit-skill CLI friction as third-instance evidence` — six-friction reproduction of the
++ `54e37058 docs(memory): capture commit-skill CLI friction as third-instance evidence` — six-friction reproduction of the
 documented CLI-ergonomics issue on the
 `agent-tools:commit-queue` and `collaboration-state` CLIs;
 hardened the case for promoting the future plan to `current/`.
-- `186e578f docs(safety): install structural cures after 2026-05-01 destructive-action incident` — quarantined
++ `186e578f docs(safety): install structural cures after 2026-05-01 destructive-action incident` — quarantined
 apply-don't-ask doctrine (new `quarantine/` directory); new
 `read-before-asking` rule (canonical + Claude/Cursor/Codex
 pointers); new `undo-change` skill (canonical + pointers);
@@ -720,8 +797,8 @@ feed the same structural cures landed in `186e578f` plus the future
 `claude-code` / `claude-opus-4-7-1m` / `c18f0a` —
 `feat/eef_exploration` branch unchanged; no thread touched by code,
 no plan moved, no commits, no push. **Off-thread tooling tweak**:
-user-scope `mcpServers.sonarqube` in `~~/.claude.json`swapped from inline-secrets`docker run mcp/sonarqube`(with`SONARQUBE_TOKEN`/`SONARQUBE_URL`/`SONARQUBE_ORG`baked into`env`) to the Docker MCP Toolkit gateway form` docker mcp gateway run --profile
-sonarqube_oak`. Server key preserved as` sonarqube`so`mcp__sonarqube__*`tool prefixes (referenced by the`sonarqube@claude-plugins-official`plugin's skills and by the permission allowlist at`.claude/settings.local.json`) still resolve. Restart needed before the gateway connection picks up. Backup at` ~/.claude.json.bak.20260501-075655`. **Deferred (owner gating)**: write Oak-repo-specific Docker MCP profile setup instructions before moving the config from user scope to a` .gitignore`d` .mcp.json` at repo root — gating order is owner
+user-scope `mcpServers.sonarqube` in `~~/.claude.json`swapped from inline-secrets`docker run mcp/sonarqube`(with`SONARQUBE_TOKEN`/`SONARQUBE_URL`/`SONARQUBE_ORG`baked into`env`) to the Docker MCP Toolkit gateway form`docker mcp gateway run --profile
+sonarqube_oak`. Server key preserved as`sonarqube`so`mcp__sonarqube__*`tool prefixes (referenced by the`sonarqube@claude-plugins-official`plugin's skills and by the permission allowlist at`.claude/settings.local.json`) still resolve. Restart needed before the gateway connection picks up. Backup at`~/.claude.json.bak.20260501-075655`. **Deferred (owner gating)**: write Oak-repo-specific Docker MCP profile setup instructions before moving the config from user scope to a`.gitignore`d`.mcp.json` at repo root — gating order is owner
 direction. Surprise + insight + jq-on-Read-blocked-file workflow
 captured in this session's first napkin entry.
 
@@ -929,7 +1006,7 @@ archives in the same directory.
 
 ## Current State
 
-- Branch `fix/pnpm-action-setup-pin-to-maintainer-latest` carries PR #92
++ Branch `fix/pnpm-action-setup-pin-to-maintainer-latest` carries PR #92
 (OPEN, awaiting review + Vercel preview validation). PR #91 merged
 2026-04-30T09:33Z. PR #90 merged 2026-04-29T20:43:22Z. Releases
 1.7.0 and 1.7.1 tagged but Vercel production deploys for both went
@@ -941,28 +1018,28 @@ and writes multi-doc lockfiles) to maintainer-Latest v5.0.0 (which
 uses pnpm 10.x and produces single-doc lockfiles). Branch
 `fix/sentry-identity-from-env` retired post-merge.
 
-- Vercel release pipeline currently RED on `main` (production deploy
++ Vercel release pipeline currently RED on `main` (production deploy
 `dpl_DFmuKNShnu9Q4LMVycf27T4LDyeG` for commit `421ff154` in ERROR);
 PR #92 expected to clear the failure both for the preview and for
 
 the next release commit on main.
 
-- ADRs landed in the recent arc: 162 closure-property + ADR-to-plan
++ ADRs landed in the recent arc: 162 closure-property + ADR-to-plan
 bridge; 166 (architectural budget system); 167 (hook-execution-failure
 visibility); 168 (TS6 baseline + workspace-script architectural rules).
-- WS3A decision-thread / claim-history / observability work is complete
++ WS3A decision-thread / claim-history / observability work is complete
 and archived. WS4A lifecycle integration is complete. Commit-window
 protocol refinement is implemented; intent-to-commit queue v1.3.0
 landed. Collaboration-state write safety landed as `11f0320f`.
 Codex-wide session identity plumbing landed; Cursor Composer has
 experimental project sessionStart hook. Workspace layer separation
 audit plan exists; first safe step is Phase 0 inventory.
-- Fitness state at 2026-04-30 close (Verdant Sheltering Glade):
++ Fitness state at 2026-04-30 close (Verdant Sheltering Glade):
 napkin.md rotated and back to GREEN; repo-continuity.md history
 archived (HARD on lines/chars — see closure disposition below);
 distilled.md HARD on lines/chars after rotation (two PDR candidates
 pending owner direction would graduate ~25 lines).
-- Branch-primary product thread: `observability-sentry-otel`. Practice
++ Branch-primary product thread: `observability-sentry-otel`. Practice
 thread: `agentic-engineering-enhancements`. Branch-level success
 criterion remains the full repo-root gate sequence in
 `[.agent/commands/gates.md](../../commands/gates.md)`.
@@ -972,12 +1049,11 @@ criterion remains the full repo-root gate sequence in
 A **thread** is the continuity unit. Full identity tables and lane state
 live in each thread record; this table is the repo-level index.
 
-
 | Thread                                            | Purpose                                                                                                                                                                 | Next-session record                                                                                                                                  | Active identities                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                 | Product/tooling — rebuild current-main HIGH issue and security-hotspot remediation on `fix/sonar-fixes-20260506`; PR Sonar is regression guard only                     | `[threads/main-critical-sonar-remediation.next-session.md](threads/main-critical-sonar-remediation.next-session.md)`                                 | Most-recent: Stormy Drifting Harbour / `claude-code` / `claude-opus-4-7-1m` / `228bc5` / executor / 2026-05-06 (143 hotspots SAFE-with-rationale; Sonar Disposition Policy doc landed; minimal mechanical encoding for S5443/S5332/S1313 in test fixtures only; X-Powered-By regression test; four commits pushed; security_hotspots_reviewed 7.1% to 100%). Prior: Silvered Masking Owl / `codex` / `GPT-5` / `019dfd` / executor / 2026-05-06; Moonless Vanishing Lantern / `codex` / `GPT-5` / `019dfd` / evaluator / 2026-05-06; Ethereal Ascending Twilight / `codex` / `GPT-5` / `019dfd` / executor / 2026-05-06.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `observability-sentry-otel`                       | Product — Sentry/OTel public-alpha integration                                                                                                                          | `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`                                             | Most-recent: Twilit Beaming Aurora → Ashen Banking Bellows (CLI re-derivation under in-flight wordlist refactor; same `7cf730` prefix) / `claude-code` / `claude-opus-4-7-1m` / `7cf730` / step-06-author-no-real-io-in-tests-rule + 7-agent-coordinator-role (own commit `368e5aff` 29 files coordinator-landing of Asteroid takeover bundle including step-06 substance + Threading Nebula promotion bundle + Asteroid hardening; own commit `33aeec40` 17 files coordinator-landing of Fronded collaboration-cli-gaps bundle under owner-directed handoff; observed Forest landing `c1a63a81` and Riverine landing `53fffe74` outside coordinator track; 4 commits closed convergence; orchestrator-vs-gate conflation reached 5 instances today; identity drift live-disclosed; cross-lane repair pattern observed) / 2026-05-05. Prior: Dawnlit Transiting Galaxy / `claude-code` / `claude-opus-4-7-1m` / `0ddc89` / step-05-final-closure (C1 boundary-crossing import substance landed at peer commit `36102937` via foreign-stage absorption — 12 consumer paths updated, fixture relocated to `src/test-helpers/`, architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; CR1 conditional-branch test-immediate-fail closed cleanly at `f6c73f4a` — used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that the substitution is "strictly better"; recurring foreign-stage absorption pattern third instance documented; orchestrator-vs-hook conflation correction landed) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude` / `claude-opus-4-7-1m` / `dd239f` / step-04-reviewer-backfill-completion + step-05-partial-doc-cleanup-bundle (BF-1a/b CI hook + workflow at `ef593be9`; BF-2 through BF-8 stale-smoke-reference doc cleanup at `434cf6f6`); landed Gnarled Climbing Bark's deferred practice-context-cost-baseline bundle on their behalf under owner direction; coordinated with Gnarled via comms-event with 2-min deadline + default-action; three new user-memory feedback files (ADRs-permanent-plans-ephemeral; inter-agent-comms-first-class; second-instance reinforcement of agent-initiated-no-verify-forbidden); five-chunk commit landing closing the session / 2026-05-05. Prior: Gnarled Climbing Bark / `claude` / `claude-opus-4-7-1m` / `40a044` / read-and-reference-only-cross-thread-baseline-source-attribution (no edits; Lacustrine session used as illustrative-journey sample in practice-context-cost baseline; see agentic-engineering-enhancements thread for substantive work) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude-code` / `claude-opus-4-7-1m` / `dd239f` / step-03-no-speed-pressure-rule-integration-across-estate (single atomic commit; principles cross-ref + distilled entry + user-memory feedback file + plan-body status update + handoff working-tree bundle) / 2026-05-04. Prior: Pelagic Diving Atoll / `claude-code` / `claude-opus-4-7-1m` / `6814a4` / two-round-architecture-led-plan-refinement + capture-not-clean-shape-adopted (commit `75dbcdb6`) / 2026-05-04. Prior: Fronded Climbing Thicket / `claude` / `claude-opus-4-7-1m` / `8da3d3` / dev-server-proof-three-plan-arc-descope-and-reframe + plan-2-paused-superseded + unified-plan-feat-eef-exploration-completion / 2026-05-04. Prior: Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a` / corrective consolidation + TDD-as-pairs framing in directives/templates/plans + atomic-independent-parallel cycles for optional parallel-agent dispatch (3 commits: `60b9ff4c`, `797766c0`, `755811ac`) / 2026-05-03; Woodland Sprouting Glade / `claude-code` / `claude-opus-4-7-1m` / `978cba` / orchestrator: ARC-B0-plan-body-corrections-and-ADR-number-verification (parallel-lane to Prismatic A1; reviewer dispatch absorbed; first-claim-wins coordination) / 2026-05-03; Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` / `7402c9` / executor: ARC-A1-canonical-smoke-harness + skip-arc + §A1-plan-body-refresh / 2026-05-03; Pelagic Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` / there-is-no-time-hashed-starfish-plan-author-and-Misty-coordination / 2026-05-03; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / smoke-tests-harness-reconnaissance-Task-M1 + worker-perspective-collab-suggestions + N-agent-collaboration-hypothesis-artefacts / 2026-05-03. Prior: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / observability-multi-sink-and-fixtures-shape-plan-WS1 + Practice-Core-portability-Rounds-1+2+3 / 2026-05-03; Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02. Full history in thread record. |
-| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Umbral Cloaking Silhouette / `claude-code` / `claude-opus-4-7-1m` / `a70b57` / skills-artefact-standardisation-audit-and-decision-complete-remediation-plans (three artefacts authored under `.agent/plans/agent-tooling/current/`: portability audit report, urgent load-pressure-relief plan, strategic agent-artefact-lifecycle-cli plan; both plans decision-complete with seals; strategic plan supersedes `canonical-first-skill-pack-ingestion-tooling.plan.md` and is positioned as wrapper around `npx skills` not a from-scratch CLI; three new user-memory entries — skill-load-budget, vendor-plugin-redundancy, reviewer-brief-respects-decided-scope; existing no-moving-targets memory updated with plans-OK nuance; pending-graduations gained inventory-as-output candidate; reviewers run docs-adr + code + assumptions; assumptions-reviewer brief-scope error captured as feedback memory) / 2026-05-06. Prior: Riverine Fishing Rudder / `claude-code` / `claude-opus-4-7-1m` / `b89da0` / three-step-napkin-and-comms-graduation-pass (step-1 archived pre-step napkin verbatim 514L/49170C nine 2026-05-05 entries + drained + F-12/F-13 frictions added; step-2 walked 78 comms-events extracted 3 structured surprises A/B/C; step-3 routed surprises to pending-graduations 3 new entries + drained napkin to single rotation summary; step commits 307f7f13 d7ca48d5 5b40e206) / 2026-05-06. Prior: Glittering Waning Galaxy / `claude-code` / `claude-opus-4-7-1m` / `3cff70` / new-`agent-tooling`-collection-spun-out-of-`agentic-engineering-enhancements` (19 plans `git mv`'d to `.agent/plans/agent-tooling/{current,future}/`; frictions register seeded with 11 entries from napkin Surprise 7 + comms; cross-references rewritten in 24+ active surfaces; `../archive/` refs in moved plans repointed to `../../agentic-engineering-enhancements/archive/`; scope-boundary clarification added across `plans/README.md`, `agent-tooling/README.md`, `agentic-engineering-enhancements/README.md` distinguishing implementation-level (workspace) from practice-level (broader)) / 2026-05-05. Prior: Deciduous Budding Stamen / `cursor` / `GPT-5.5` / `512682` / oak-local-MCP-landmark-comms + `feat-eef-exploration-completion.plan.md` § Step 10 precursor + thread-record arc + `/jc-session-handoff` close / 2026-05-05. Prior: Ethereal Transiting Comet / `claude-code` / `claude-opus-4-7-1m` / `8081d3` / foundational-graduation-pass-pattern-A-structural-enforcer-recursive-exclusion-plus-rule-extension-B-consolidate-docs-PDR-046-pointer (single atomic commit `74dcd145`; agent-tier pattern with three mechanism shapes; reviewer-driven re-categorisation from process; severity-not-urgency sharpening of no-speed-pressure feedback memory; diagnostic-over-assumption worked instance; PDR-047 §Notes intentionally not back-amended for portability) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude` / `claude-opus-4-7-1m` / `dd239f` / cross-thread-landing-of-Gnarled's-deferred-bundle (chunks 2 and 4 of five-chunk landing on this branch; substance attributed to Gnarled in commit bodies; substantive work on observability-sentry-otel thread) / 2026-05-05. Prior: Gnarled Climbing Bark / `claude` / `claude-opus-4-7-1m` / `40a044` / practice-context-cost-baseline-authored-and-progressive-disclosure-plan-scope-register-added (no commit; pre-commit `test` gate blocked by unrelated latent OAuth proxy integration test failure exposed by peer doc-edit cache invalidation; doc bundle staged in working tree pending OAuth gate unblock; comms-log heads-up posted to Moonlit Shimmering Comet) / 2026-05-05. Prior: Ferny Spreading Petal / `claude-code` / `claude-opus-4-7-1m` / `d0d13f` / Layer-2-second-pass-trio-graduated-PDR-046-layered-knowledge-processing + PDR-047-rule-applies-always-doctrine-authoring + PDR-048-insight-capture-at-moment-of-occurrence; pending-graduations-remediation-lane-archived-ten-graduated-entries-to-2026-05-04-snapshot; napkin-rotation-curation-first-priority; principles.md-extraction-three-cues-elaboration-and-worked-failure-mode-and-unknown-type-destruction-list-and-gate-taxonomy-relocated-to-durable-homes; frontmatter-line-char-limits-raised-on-pending-graduations-and-development-practice; commit `54560f84` / 2026-05-04. Prior: Vining Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `11429f` / doctrine-enforcement-quick-wins-WS3-WS4-WS6-landed-plus-rules-index-integration / 2026-05-04; Fronded Flowering Thicket / `claude-code` / `claude-opus-4-7-1m` / `7c8381` / Layer-1-rotation-and-Layer-2-first-deliverable-PDR-045 / 2026-05-04; Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` / `63a0e0` / PDR-044-memetic-immune-system + PDR-018/038-amendments / 2026-05-04; Pearly Snorkelling Reef / `claude-code` / `claude-opus-4-7-1m` / `6db5ac` / parallel-worktree-dispatch-salvage / 2026-05-04; Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` / `13ae71` / validation-and-tdd-doctrine-restructure-arc / 2026-05-04. Full history in thread record. |
+| `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Clouded Lifting Aerie / `claude-code` / `claude-opus-4-7-1m` / `1e2244` / napkin-and-pending-graduations-processing-opener-execution (commits `d12912dc` Step-1 three-new-patterns + F-15 + dev-practice + napkin-rotation 382→119; `b4d7ddff` Step-2 7-graduated-entries-archived + Lacustrine-commit-queue-fingerprint-marked-graduated + 1-small-new-pending 2054→1876 lines; `d2e2bfe5` reviewer-P1-SHA-fix + thread-record-update; pending-graduations.md HARD persists at 1876 / 1400 limit as next-audit input per opener boundary) / 2026-05-06. Prior: Embered Melting Kiln / `claude-code` / `claude-opus-4-7-1m` / `4044d1` / phase-2-collaboration-state-surface-restructure (commits `13e2db28` provenance→schemas, `e072b67e` doctrine→directive, `b7e3f1fc` vocabulary normalisation, `07e9274c` lifecycle re-tagline, `8f388592` reviewer-fix, `40f7da45` substance-trim correction after owner caught it; `ca0794fc` function-driven fitness-limit calibration on agent-collaboration.md and continuity-practice.md after a full 32-file audit; opener authored for napkin + pending-graduations processing) / 2026-05-06. Prior: Briny Plumbing Fjord / `claude-code` / `claude-opus-4-7-1m` / `fd36cf` / phase-1-collaboration-state-placement-contract-and-plan (commits `c014ad2a`, `be7c1fd6`) / 2026-05-06. Prior: Iridescent Waxing Orbit / `claude-code` / `claude-opus-4-7-1m` / `aeebab` / distilled-md-graduation-pass-and-vaporware-deferral-audit (commits `b9bae574` 4 new rules + collaboration-state-lifecycle orphaned-claim policy + distilled trim 314→152 lines clearing all three hard-zone metrics; `d9aab409` reframe of learning-loop entry from inherent-cost to artefactual-cost and Sequenced-Deferral Discipline entry restructured to acknowledge the doctrine-scanner-CLI vaporware-citation; foreign-stage absorption of dev-practice edits into peer commit `cc8866a8`) / 2026-05-06. Prior: Umbral Cloaking Silhouette / `claude-code` / `claude-opus-4-7-1m` / `a70b57` / skills-artefact-standardisation-audit-and-decision-complete-remediation-plans (three artefacts authored under `.agent/plans/agent-tooling/current/`: portability audit report, urgent load-pressure-relief plan, strategic agent-artefact-lifecycle-cli plan; both plans decision-complete with seals; strategic plan supersedes `canonical-first-skill-pack-ingestion-tooling.plan.md` and is positioned as wrapper around `npx skills` not a from-scratch CLI; three new user-memory entries — skill-load-budget, vendor-plugin-redundancy, reviewer-brief-respects-decided-scope; existing no-moving-targets memory updated with plans-OK nuance; pending-graduations gained inventory-as-output candidate; reviewers run docs-adr + code + assumptions; assumptions-reviewer brief-scope error captured as feedback memory) / 2026-05-06. Prior: Riverine Fishing Rudder / `claude-code` / `claude-opus-4-7-1m` / `b89da0` / three-step-napkin-and-comms-graduation-pass (step-1 archived pre-step napkin verbatim 514L/49170C nine 2026-05-05 entries + drained + F-12/F-13 frictions added; step-2 walked 78 comms-events extracted 3 structured surprises A/B/C; step-3 routed surprises to pending-graduations 3 new entries + drained napkin to single rotation summary; step commits 307f7f13 d7ca48d5 5b40e206) / 2026-05-06. Prior: Glittering Waning Galaxy / `claude-code` / `claude-opus-4-7-1m` / `3cff70` / new-`agent-tooling`-collection-spun-out-of-`agentic-engineering-enhancements` (19 plans `git mv`'d to `.agent/plans/agent-tooling/{current,future}/`; frictions register seeded with 11 entries from napkin Surprise 7 + comms; cross-references rewritten in 24+ active surfaces; `../archive/` refs in moved plans repointed to `../../agentic-engineering-enhancements/archive/`; scope-boundary clarification added across `plans/README.md`, `agent-tooling/README.md`, `agentic-engineering-enhancements/README.md` distinguishing implementation-level (workspace) from practice-level (broader)) / 2026-05-05. Prior: Deciduous Budding Stamen / `cursor` / `GPT-5.5` / `512682` / oak-local-MCP-landmark-comms + `feat-eef-exploration-completion.plan.md` § Step 10 precursor + thread-record arc + `/jc-session-handoff` close / 2026-05-05. Prior: Ethereal Transiting Comet / `claude-code` / `claude-opus-4-7-1m` / `8081d3` / foundational-graduation-pass-pattern-A-structural-enforcer-recursive-exclusion-plus-rule-extension-B-consolidate-docs-PDR-046-pointer (single atomic commit `74dcd145`; agent-tier pattern with three mechanism shapes; reviewer-driven re-categorisation from process; severity-not-urgency sharpening of no-speed-pressure feedback memory; diagnostic-over-assumption worked instance; PDR-047 §Notes intentionally not back-amended for portability) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude` / `claude-opus-4-7-1m` / `dd239f` / cross-thread-landing-of-Gnarled's-deferred-bundle (chunks 2 and 4 of five-chunk landing on this branch; substance attributed to Gnarled in commit bodies; substantive work on observability-sentry-otel thread) / 2026-05-05. Prior: Gnarled Climbing Bark / `claude` / `claude-opus-4-7-1m` / `40a044` / practice-context-cost-baseline-authored-and-progressive-disclosure-plan-scope-register-added (no commit; pre-commit `test` gate blocked by unrelated latent OAuth proxy integration test failure exposed by peer doc-edit cache invalidation; doc bundle staged in working tree pending OAuth gate unblock; comms-log heads-up posted to Moonlit Shimmering Comet) / 2026-05-05. Prior: Ferny Spreading Petal / `claude-code` / `claude-opus-4-7-1m` / `d0d13f` / Layer-2-second-pass-trio-graduated-PDR-046-layered-knowledge-processing + PDR-047-rule-applies-always-doctrine-authoring + PDR-048-insight-capture-at-moment-of-occurrence; pending-graduations-remediation-lane-archived-ten-graduated-entries-to-2026-05-04-snapshot; napkin-rotation-curation-first-priority; principles.md-extraction-three-cues-elaboration-and-worked-failure-mode-and-unknown-type-destruction-list-and-gate-taxonomy-relocated-to-durable-homes; frontmatter-line-char-limits-raised-on-pending-graduations-and-development-practice; commit `54560f84` / 2026-05-04. Prior: Vining Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `11429f` / doctrine-enforcement-quick-wins-WS3-WS4-WS6-landed-plus-rules-index-integration / 2026-05-04; Fronded Flowering Thicket / `claude-code` / `claude-opus-4-7-1m` / `7c8381` / Layer-1-rotation-and-Layer-2-first-deliverable-PDR-045 / 2026-05-04; Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` / `63a0e0` / PDR-044-memetic-immune-system + PDR-018/038-amendments / 2026-05-04; Pearly Snorkelling Reef / `claude-code` / `claude-opus-4-7-1m` / `6db5ac` / parallel-worktree-dispatch-salvage / 2026-05-04; Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` / `13ae71` / validation-and-tdd-doctrine-restructure-arc / 2026-05-04. Full history in thread record. |
 | `connecting-oak-resources`                        | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | `[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md)`                                               | Most-recent: Cosmic Glowing Dawn / `claude-code` / `claude-opus-4-7-1m` / `d11500` / graph-stack-spine-plan-author (`graph-stack.plan.md` in `current/`; eight-workspace topology with deferred ninth; MCP-agnostic posture per owner direction; no commits) / 2026-05-04. Prior: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `exploring-open-education-resources`              | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion                               | `[threads/exploring-open-education-resources.next-session.md](threads/exploring-open-education-resources.next-session.md)`                           | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `architectural-budget-system`                     | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning                                                                  | `[threads/architectural-budget-system.next-session.md](threads/architectural-budget-system.next-session.md)`                                         | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -1015,6 +1091,23 @@ quota-recovery commit stewardship and owner-directed
 Canonical identity row is in
 `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-06: `agentic-engineering-enhancements`
+latest identity is Ashen Burning Anvil / `codex` / `GPT-5` / `019dfd`
+for urgent skill-load pressure relief Phase 1 implementation
+(`.claude/settings.json` project-level plugin prune). Canonical identity
+row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Pelagic Rolling
+Harbour / `claude-code` / `claude-opus-4-7-1m` / `58a9ad` for the
+dedicated pending-graduations drain (commits `cc084c67`/`177b9298`)
+followed by an owner-directed reframe of the file's fitness limits as
+encoding an implicit access-rhythm theory (commits `b0b7cec3`/`b1a8536b`:
+recalibrated frontmatter + per-entry metadata schema + structured
+index + 12 high-touch entries tagged + new pending entry capturing
+the access-rhythm-as-fitness-axis insight). Canonical identity row is
+in `threads/agentic-engineering-enhancements.next-session.md`.
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -1025,6 +1118,11 @@ The `pr-90-build-fix-landing` thread retired 2026-04-30 (PR #90 merged
 for audit-trail value.
 
 ## Branch-Primary Lane State
+
+Branch-primary lane state for the observability thread lives in
+`[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`.
+The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
+(see open finding above).
 
 Current branch-primary lane state for `fix/sonar-fixes-20260506` lives in
 `[threads/main-critical-sonar-remediation.next-session.md](threads/main-critical-sonar-remediation.next-session.md)`.
@@ -1037,6 +1135,7 @@ The previous observability branch lane remains preserved in
 `228bc5`, main-critical-sonar-remediation thread, hotspot review +
 policy authoring)**: Four commits landed and pushed on
 `fix/sonar-fixes-20260506`: `5f6a7ae2` (X-Powered-By regression test
+
 + 6 high-priority hotspots SAFE), `68529ac6` (Sonar Disposition
 Policy doc + 121 hotspots captured), `9551e2d9` (claim closure),
 `f4b2dc2b` (mechanical encoding in sonar-project.properties + 22
@@ -1054,6 +1153,26 @@ journey lives in
 [`main-critical-sonar-remediation.next-session.md`](threads/main-critical-sonar-remediation.next-session.md).
 Re-query main/project HIGH
 issues and security hotspots, then resume from that backlog.
+
+**2026-05-06 (Ashen Burning Anvil, codex, GPT-5, `019dfd`,
+agentic-engineering-enhancements thread, urgent skill-load pressure relief
+Phase 1 implementation + closeout)**:
+Implemented the urgent reversible `.claude/settings.json` prune from
+`agent-artefact-load-pressure-relief.plan.md`: removed project-level
+`mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, and
+`linear@claude-plugins-official` activations while retaining Sentry,
+remember, mcp-server-dev, SonarQube, and Vercel. Backup captured at
+`/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`; active
+implementation claim closed; validation green for `pnpm portability:check`,
+`pnpm subagents:check`, `pnpm type-check`, markdownlint on the touched
+plan/thread surfaces, `git diff --check`, and collaboration-state check.
+Owner clarified that `/doctor` is session-local Claude Code evidence
+only: it reports on the skills loaded into the active Claude session
+and is not a useful shell/Codex gate. Plan updated accordingly; Phase 1
+is complete on settings-derived and repo-local validation evidence.
+**Next safe step**: run Phase 2 Vercel triage in the urgent plan —
+classify the 25 `vercel:*` skills into `keep`/`parked`, then record the
+plugin-catalogue friction.
 
 **2026-05-06 (Masked Stalking Veil, codex, GPT-5, `019dfc`,
 agentic-engineering-enhancements thread, quota-recovery stewardship +
@@ -1198,8 +1317,8 @@ coordinator clears index ownership.
 
 **2026-05-05 (Dawnlit Transiting Galaxy, Claude Code, opus-4-7-1m, `0ddc89`, observability-sentry-otel thread, step-05 closure)**: continued the unified `feat-eef-exploration-completion` plan from step 05 partial state into step 05 final closure. Two named outstanding violations closed:
 
-- **C1 (boundary-crossing import)**: relocated `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts` → `src/test-helpers/upstream-metadata-fixture.ts`; updated 12 consumer import paths (6 src/ + 6 e2e-tests/) plus the relocated file's own internal type-import path; tightened TSDoc to "integration and E2E tests". Reviewer chain on the diff pre-landing: code-reviewer APPROVED WITH SUGGESTIONS (informational only — consumer count plan-body update from "13" to actual 12; BF-C1-ESLint guard correctly out of scope) + architecture-reviewer-fred CLEAN ("C1 closes per Round 1 resolution shape; ship it"). Substance landed at peer commit `36102937` via foreign-stage absorption — Ethereal Transiting Comet's parallel-session commit absorbed my staged content into their `chore(continuity): handoff + metacognition` commit because they did not apply the §Discipline `git commit -- <pathspec>` filter. Substance correct under misleading peer-subject; reviewer evidence intact at the diff level. Ethereal posted a comms-event acknowledgement at 10:45:35Z naming the third observed instance of foreign-stage absorption (Lacustrine→Moonlit on `8fa339f4`; Lacustrine self-reported 2026-05-05; Ethereal→me today). I posted a reply comms-event at 10:53Z confirming receipt and noting CR1 would land cleanly with strict pathspec filter.
-- **CR1 (conditional-branch test-immediate-fail)**: replaced two `if (!result.ok) { return; }` patterns in `dev-boot-without-observability.integration.test.ts` (lines 57-59, 70-72) and one in sibling `runtime-config.integration.test.ts:21-23` with calls to the canonical `unwrap` from `@oaknational/result`. Removed the now-redundant `expect(result.ok).toBe(true)` (an Err result throws inside `unwrap` with stringified Err — same semantic guarantee, no silent path). Bound the unwrapped value to `runtimeConfig` (semantic name) at test-block scope. Reviewer chain at close: code-reviewer APPROVED + test-reviewer CLEAN ("strictly better than the inline shape I originally named"). Closing commit `f6c73f4a` landed cleanly through full pre-commit hook chain (turbo full-cache).
++ **C1 (boundary-crossing import)**: relocated `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/upstream-metadata-fixture.ts` → `src/test-helpers/upstream-metadata-fixture.ts`; updated 12 consumer import paths (6 src/ + 6 e2e-tests/) plus the relocated file's own internal type-import path; tightened TSDoc to "integration and E2E tests". Reviewer chain on the diff pre-landing: code-reviewer APPROVED WITH SUGGESTIONS (informational only — consumer count plan-body update from "13" to actual 12; BF-C1-ESLint guard correctly out of scope) + architecture-reviewer-fred CLEAN ("C1 closes per Round 1 resolution shape; ship it"). Substance landed at peer commit `36102937` via foreign-stage absorption — Ethereal Transiting Comet's parallel-session commit absorbed my staged content into their `chore(continuity): handoff + metacognition` commit because they did not apply the §Discipline `git commit -- <pathspec>` filter. Substance correct under misleading peer-subject; reviewer evidence intact at the diff level. Ethereal posted a comms-event acknowledgement at 10:45:35Z naming the third observed instance of foreign-stage absorption (Lacustrine→Moonlit on `8fa339f4`; Lacustrine self-reported 2026-05-05; Ethereal→me today). I posted a reply comms-event at 10:53Z confirming receipt and noting CR1 would land cleanly with strict pathspec filter.
++ **CR1 (conditional-branch test-immediate-fail)**: replaced two `if (!result.ok) { return; }` patterns in `dev-boot-without-observability.integration.test.ts` (lines 57-59, 70-72) and one in sibling `runtime-config.integration.test.ts:21-23` with calls to the canonical `unwrap` from `@oaknational/result`. Removed the now-redundant `expect(result.ok).toBe(true)` (an Err result throws inside `unwrap` with stringified Err — same semantic guarantee, no silent path). Bound the unwrapped value to `runtimeConfig` (semantic name) at test-block scope. Reviewer chain at close: code-reviewer APPROVED + test-reviewer CLEAN ("strictly better than the inline shape I originally named"). Closing commit `f6c73f4a` landed cleanly through full pre-commit hook chain (turbo full-cache).
 
 Step 05 §Sequence Summary row flipped to DONE. §Backfill Findings entries for C1 and CR1 record closing SHAs and reviewer chains. §Out-of-Scope Follow-ups now records two structural-enforcement candidates: BF-C1-ESLint guard for `src/* → e2e-tests/*` boundary, and the foreign-stage absorption recurring-pattern (3 instances now) as a structural enforcement candidate (currently §Discipline is operator-applied prose; not gate-applied). Plan body §Named Violations Confirmed for Step 05 Mandatory Close table updated with closing-commit columns.
 
@@ -1316,32 +1435,32 @@ wiring.
 Foundational invariants live in directives, rules, ADRs, and PDRs.
 Resume with these branch-relevant constraints:
 
-- no compatibility layers; replace, do not bridge;
-- distinct architectural layers live in distinct workspaces; folders/modules
++ no compatibility layers; replace, do not bridge;
++ distinct architectural layers live in distinct workspaces; folders/modules
 inside one workspace do not satisfy layer separation;
-- TDD at all levels;
-- tests prove product behaviour, not configuration or file presence;
-- strict boundary validation only;
-- no `process.env` read/write in test files or setup files;
-- `--no-verify` requires fresh per-invocation owner authorisation;
-- no warning toleration;
-- owner direction beats plan;
-- curriculum data in this monorepo comes only through the published Oak
++ TDD at all levels;
++ tests prove product behaviour, not configuration or file presence;
++ strict boundary validation only;
++ no `process.env` read/write in test files or setup files;
++ `--no-verify` requires fresh per-invocation owner authorisation;
++ no warning toleration;
++ owner direction beats plan;
++ curriculum data in this monorepo comes only through the published Oak
 Open Curriculum HTTP API and generated SDK, not direct
 Hasura/materialised views;
-- **knowledge preservation is absolute** — writing to shared-state
++ **knowledge preservation is absolute** — writing to shared-state
 knowledge surfaces is never blocked by fitness limits;
-- **shared-state files are always writable and always commit-includable**
++ **shared-state files are always writable and always commit-includable**
 regardless of any active claim (deliberate anti-log-jam tradeoff).
 
 Current branch non-goals:
 
-- do not implement intent-to-commit as claim metadata only; owner direction
++ do not implement intent-to-commit as claim metadata only; owner direction
 requires an explicit minimal queue mechanic;
-- do not reopen broader canonicalisation opportunistically;
-- do not treat monitor setup or owner-handled preview validation as in-repo
++ do not reopen broader canonicalisation opportunistically;
++ do not treat monitor setup or owner-handled preview validation as in-repo
 acceptance work;
-- do not guess Vercel, Sentry, or GitHub state before checking primary
++ do not guess Vercel, Sentry, or GitHub state before checking primary
 evidence.
 
 ## Next Safe Step
@@ -1354,6 +1473,38 @@ The generated MCP executor stop point is resolved locally and full root
 and do not exclude generated files from Sonar or lint. The next executable
 step is to inspect current remote Sonar state and choose the next
 highest-impact remaining blocker from the refreshed remediation plan.
+
+**After 2026-05-07 Pelagic Rolling Harbour close (pending-graduations
+drain + recalibration + access-rhythm insight capture)**: the
+dedicated drain opener is consumed. The recalibration cleared HARD on
+`pending-graduations.md` (now SOFT, 10 lines over target with hard
+headroom to 2500). Three follow-ups remain:
+
+1. **Phase B sweep** — backfill inline metadata tags on the ~76
+   pre-2026-05-07 `pending` entries; mechanical, low-stakes.
+2. **Sequenced-deferral entries waiting on context budget** — four
+   PDR/ADR/hook-tightening graduations flagged with concrete phase
+   pointers in their entry bodies; each needs a dedicated session.
+3. **Access-rhythm-as-fitness-axis insight** — captured as new
+   `pending` entry; graduation target is ADR-144 amendment to declare
+   `lifecycle_model` and `access_pattern` as recommended fitness
+   frontmatter fields with a closed vocabulary, plus a possible
+   cross-repo PDR if the doctrine generalises. Trigger is
+   `second-instance OR owner-direction at promotion`.
+
+Adjacent calibration signal: `practice-lineage.md` at 833/830 lines —
+pre-existing breach, not touched this session, flagged for next
+calibration audit.
+
+**After 2026-05-06 Embered Melting Kiln close (Phase 2 collaboration-state
+surface restructure + fitness-limit audit + napkin/pending-graduations
+opener authored)**: pick up the napkin + pending-graduations processing
+opener at
+[`2026-05-06-napkin-and-pending-graduations-processing-opener.md`](../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md)
+in a fresh session. Boundary: substance > destination fitness;
+legitimate graduations land without truncation. Both `napkin.md`
+(382 lines, HARD) and `pending-graduations.md` (2047 lines, HARD)
+process through graduation/archive, not through limit raises.
 
 **After 2026-05-06 Masked Stalking Veil close (quota-recovery commits +
 light consolidation handoff)**: no more claim-recovery work is pending.
@@ -1525,7 +1676,7 @@ ARC A2 + ARC B1/WS2 queued (parallelisable)"*.
 
 **Next executable lanes** (from `there-is-no-time-hashed-starfish.plan.md`):
 
-- **ARC A2 — Existing-modes migration** (mode-by-mode conversion of
++ **ARC A2 — Existing-modes migration** (mode-by-mode conversion of
   local-stub, local-stub-auth, local-live, local-live-auth, remote
   to the new canonical harness; convert smoke-assertions/* to
   *.smoke.test.ts; retire helpers/environment.ts process.env mutation;
@@ -1534,7 +1685,7 @@ ARC A2 + ARC B1/WS2 queued (parallelisable)"*.
   (the prior `describe.skip` SKIP-UNTIL-A2/A3 placeholders were
   deleted under the binary `no-skipped-tests` rule). For `remote`
   mode use `createRemoteBootServer` factory.
-- **ARC B1 (= WS2) — sentry-node SinkRegistry consumption** (atomic
++ **ARC B1 (= WS2) — sentry-node SinkRegistry consumption** (atomic
   rename: `SentryMode` deleted; `FixtureSentryStore` →
   `FixtureCaptureStore`; `ParsedSentryConfig` cross-product
   discriminated union; new TDD test+code pairs cover the four-kind
@@ -1668,33 +1819,33 @@ CodeQL closes.
 
 Other lanes:
 
-- **Sector engagement** — reusable-component **adoption contract** now in
++ **Sector engagement** — reusable-component **adoption contract** now in
 `[plans/sector-engagement/current/sector-reusable-components-adoption.plan.md](../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)`.
 Resume from `[threads/sector-engagement.next-session.md](threads/sector-engagement.next-session.md)`; next safe step is **owner-selected** playbook work
 versus OEAI / API–KG convergence / source demo per thread record lane #4 bullets.
-- **Architectural budget system** — planning/doctrine landed in ADR-166
++ **Architectural budget system** — planning/doctrine landed in ADR-166
 and parent/child plans. Resume from
 `[threads/architectural-budget-system.next-session.md](threads/architectural-budget-system.next-session.md)`.
 Next safe step is owner choice: promote the visibility layer for one
 named consumer trigger, or start Phase 0 of the directory-cardinality
 child plan.
-- **Cloudflare MCP public-beta gate / token economy** — first either
++ **Cloudflare MCP public-beta gate / token economy** — first either
 promote the security gate to `current/` with a Cloudflare control
 disposition table, or measure current Oak MCP `tools/list` and
 representative teacher-facing workflow token costs.
-- **Practice collaboration-state write safety** — first executable slice
++ **Practice collaboration-state write safety** — first executable slice
 landed in `11f0320f`; current strict-hard fitness is soft-only with
 the napkin / repo-continuity rotations done by this consolidation. Next
 safe step is a deliberate closeout/archive pass for the write-safety
 plan.
-- **Workspace layer separation audit** — first safe step is Phase 0:
++ **Workspace layer separation audit** — first safe step is Phase 0:
 re-ground ADR-154 / ADR-108 / surface isolation programme; produce
 workspace inventory before any package moves.
-- **PR-87 architectural cleanup (in flight)** — see archived plan and
++ **PR-87 architectural cleanup (in flight)** — see archived plan and
 the active CodeQL-only replacement.
-- **Codex session identity plumbing** — high-impact current slice
++ **Codex session identity plumbing** — high-impact current slice
 implemented and validated; remaining work is follow-up policy.
-- **Uncommitted Sentry build-script bundle (2026-04-30 Cursor)** — paths under
++ **Uncommitted Sentry build-script bundle (2026-04-30 Cursor)** — paths under
 `apps/oak-curriculum-mcp-streamable-http/build-scripts/` (`trim- to-undefined.ts`, wired imports, unit test). **Next action**: Claude Code
 session **owns commit** when convenient (explicit owner instruction); Cursor
 session closed without commit.
@@ -1712,29 +1863,41 @@ Visible owner-appetite items, not blockers for the active lanes:
    2026-04-30 by Briny Lapping Harbor under owner direction).
 5. **Fitness analysis (2026-05-04 Dewy Shedding Glade, surfaced not deferred)**: four files are above HARD or CRITICAL thresholds and need owner direction on remediation shape. Each is analysed below; remediation shape is owner-gated.
 
-   - `.agent/directives/principles.md`: 561 lines / target 450 / hard 525 / critical 787; 28868 chars / hard 24000. **Analysis**: principles.md is the always-loaded authoritative rules surface; growth has been substance-led across many sessions. The §Architectural Excellence Over Expediency section (lines 27-99) was rewritten in absolute form on 2026-05-02 and is appropriately dense. Other heavy sections: §Code Design and Architectural Principles (171-286), §Code Quality (353-430), §Compiler Time Types and Runtime Validation (431-488), §Testing (489-525). **Remediation options**: (a) extract §Code Design and Architectural Principles to a sibling directive `code-design.md` that principles.md references — would align with the validation/testing directive split shape and reduce principles.md by ~115 lines; (b) extend hard limit to 600 with explicit rationale that principles.md as the always-loaded authoritative surface earns a higher line budget than ordinary directives; (c) pure refinement pass — compress duplicate language across sections. Options (a) and (b) require owner direction; option (c) can run autonomously and would recover ~30 lines at most.
+   + `.agent/directives/principles.md`: 561 lines / target 450 / hard 525 / critical 787; 28868 chars / hard 24000. **Analysis**: principles.md is the always-loaded authoritative rules surface; growth has been substance-led across many sessions. The §Architectural Excellence Over Expediency section (lines 27-99) was rewritten in absolute form on 2026-05-02 and is appropriately dense. Other heavy sections: §Code Design and Architectural Principles (171-286), §Code Quality (353-430), §Compiler Time Types and Runtime Validation (431-488), §Testing (489-525). **Remediation options**: (a) extract §Code Design and Architectural Principles to a sibling directive `code-design.md` that principles.md references — would align with the validation/testing directive split shape and reduce principles.md by ~115 lines; (b) extend hard limit to 600 with explicit rationale that principles.md as the always-loaded authoritative surface earns a higher line budget than ordinary directives; (c) pure refinement pass — compress duplicate language across sections. Options (a) and (b) require owner direction; option (c) can run autonomously and would recover ~30 lines at most.
 
-   - `.agent/memory/active/distilled.md`: 401 lines / target 200 / hard 275 / critical 412; 22360 chars / hard 16500. **Analysis**: distilled.md is the cross-session refined-rules surface; it has accumulated entries that are now graduation-eligible (stable, with natural permanent homes). Section sizes: User Preferences (small, OK), Multi-agent collaboration (~78 lines, several entries graduation-eligible to PDRs), Workspace-first (~48 lines, mostly stable rules), Process (~204 lines — the largest section, mix of stable rules and session-specific learnings), Architecture (small), Repo-Specific Rules (small), Build System (small). **Remediation options**: (a) graduation pass on §Process — walk every entry, promote stable rules to permanent homes (principles.md, ADRs, governance docs), leaving distilled.md as a *staging* surface; (b) extract §Multi-agent collaboration to a dedicated PDR amendment surface since the substance has matured; (c) extend target to 350 / hard to 425 with rationale that distilled.md is structurally a refinement-staging surface and a higher steady-state is appropriate. (a) is the graduation-shaped move that the doctrine prescribes; it requires owner approval per Practice Core protection.
+   + `.agent/memory/active/distilled.md`: 401 lines / target 200 / hard 275 / critical 412; 22360 chars / hard 16500. **Analysis**: distilled.md is the cross-session refined-rules surface; it has accumulated entries that are now graduation-eligible (stable, with natural permanent homes). Section sizes: User Preferences (small, OK), Multi-agent collaboration (~78 lines, several entries graduation-eligible to PDRs), Workspace-first (~48 lines, mostly stable rules), Process (~204 lines — the largest section, mix of stable rules and session-specific learnings), Architecture (small), Repo-Specific Rules (small), Build System (small). **Remediation options**: (a) graduation pass on §Process — walk every entry, promote stable rules to permanent homes (principles.md, ADRs, governance docs), leaving distilled.md as a *staging* surface; (b) extract §Multi-agent collaboration to a dedicated PDR amendment surface since the substance has matured; (c) extend target to 350 / hard to 425 with rationale that distilled.md is structurally a refinement-staging surface and a higher steady-state is appropriate. (a) is the graduation-shaped move that the doctrine prescribes; it requires owner approval per Practice Core protection.
 
-   - `.agent/memory/active/napkin.md`: 549 lines / target 220 / limit 300 / critical 450; 29529 chars / critical 27000. **Analysis**: napkin.md exceeds the rotation threshold (~500 lines per consolidate-docs step 6) AND the critical zone. The 2026-05-03 arc accumulated 5 entries; today's session added one. The 2026-05-03 entries are substantively settled (their lessons graduated to principles.md, several PDRs, distilled.md, etc.). Today's entry is fresh. **Remediation**: napkin rotation per step 6 of consolidate-docs is *due*. The rotation flow is mechanical: extract patterns/lessons from outgoing napkin entries, merge into distilled.md (de-duplicating), prune already-graduated content, archive the outgoing napkin to `archive/napkin-2026-05-04.md`, start fresh napkin. This is a 30-60 minute focused task that benefits from owner attention on the merges (which entries graduate vs which stay in distilled vs which get pruned). Recommendation: **owner direction needed on whether to do the rotation now (in this consolidation) or in a focused follow-up session**.
+   + `.agent/memory/active/napkin.md`: 549 lines / target 220 / limit 300 / critical 450; 29529 chars / critical 27000. **Analysis**: napkin.md exceeds the rotation threshold (~500 lines per consolidate-docs step 6) AND the critical zone. The 2026-05-03 arc accumulated 5 entries; today's session added one. The 2026-05-03 entries are substantively settled (their lessons graduated to principles.md, several PDRs, distilled.md, etc.). Today's entry is fresh. **Remediation**: napkin rotation per step 6 of consolidate-docs is *due*. The rotation flow is mechanical: extract patterns/lessons from outgoing napkin entries, merge into distilled.md (de-duplicating), prune already-graduated content, archive the outgoing napkin to `archive/napkin-2026-05-04.md`, start fresh napkin. This is a 30-60 minute focused task that benefits from owner attention on the merges (which entries graduate vs which stay in distilled vs which get pruned). Recommendation: **owner direction needed on whether to do the rotation now (in this consolidation) or in a focused follow-up session**.
 
-   - `.agent/memory/operational/pending-graduations.md`: 943 lines / target 350 / limit 500 / critical 750; 59197 chars / hard 40000. **Analysis**: the register is at almost 2x its critical line threshold. The file is structurally a queue of doctrine candidates with status. Items in `graduated` status are kept "briefly for audit trail before being archived"; this archive pass has not happened in some time. **Remediation options**: (a) walk the register, identify all `graduated` and resolved items, move them to a session-history archive — this is the `split_strategy` already declared in the file's frontmatter; (b) review pending items and route any that have hit their trigger condition to graduation; (c) extend critical threshold acknowledging the register's role as an active queue. (a) is mechanical and substantively correct — the file's own split_strategy names the move. Recommendation: owner direction on whether (a) runs now or as part of a focused consolidation session; if owner approves (a), the task is "archive every entry whose status is `graduated` AND whose graduation is older than ~30 days, leaving recent graduated items + all pending/due/overdue items in the live file".
+   + `.agent/memory/operational/pending-graduations.md`: 943 lines / target 350 / limit 500 / critical 750; 59197 chars / hard 40000. **Analysis**: the register is at almost 2x its critical line threshold. The file is structurally a queue of doctrine candidates with status. Items in `graduated` status are kept "briefly for audit trail before being archived"; this archive pass has not happened in some time. **Remediation options**: (a) walk the register, identify all `graduated` and resolved items, move them to a session-history archive — this is the `split_strategy` already declared in the file's frontmatter; (b) review pending items and route any that have hit their trigger condition to graduation; (c) extend critical threshold acknowledging the register's role as an active queue. (a) is mechanical and substantively correct — the file's own split_strategy names the move. Recommendation: owner direction on whether (a) runs now or as part of a focused consolidation session; if owner approves (a), the task is "archive every entry whose status is `graduated` AND whose graduation is older than ~30 days, leaving recent graduated items + all pending/due/overdue items in the live file".
 
    **Cross-cutting**: my prior continuity entries on this thread incorrectly framed the owner's earlier session-bounded fitness-deferral as standing direction. This session corrects that framing: each session reviews fitness pressure on its own terms. The four findings above are the work that was being skipped.
 
 6. **Practice Core upstream review (2026-05-04 Dewy Shedding Glade, surfaced not deferred — consolidate-docs step 8)**: walk of trinity, decision-records, patterns, README, verification, CHANGELOG against today's session content. **Surfaced candidates** (each requires owner approval before any Core edit per PDR-003):
 
-   - **Extension** to PDR-021 (Test Validity Discipline): today's foundational reframing in `tdd-as-design.md` defines what tests *are* (descriptions of system state). PDR-021 governs claim-assertion parity and prohibits circular justification — both are *consequences* of the foundational definition rather than the foundation itself. Proposed amendment: PDR-021 cites `tdd-as-design.md` (host) or its forthcoming portable PDR (Practice) as the underlying definition, and the existing PDR-021 rules become *applications* of that definition.
+   + **Extension** to PDR-021 (Test Validity Discipline): today's foundational reframing in `tdd-as-design.md` defines what tests *are* (descriptions of system state). PDR-021 governs claim-assertion parity and prohibits circular justification — both are *consequences* of the foundational definition rather than the foundation itself. Proposed amendment: PDR-021 cites `tdd-as-design.md` (host) or its forthcoming portable PDR (Practice) as the underlying definition, and the existing PDR-021 rules become *applications* of that definition.
 
-   - **Extension** to PDR-015 (Reviewer Authority and Dispatch Discipline): today's test-reviewer refresh elevated the reviewer from structural auditor to doctrinal carrier with mandatory recipe/pattern read path. PDR-015 governs reviewer authority and phase-aligned dispatch but does not explicitly cover the *carrier* dimension. Proposed amendment: add a section "Reviewers as Doctrine Carriers" naming the substance — reviewers may carry doctrine in their stance and read paths, not only audit it; this is sibling to dispatch authority. Trigger for promotion: second instance (when one further reviewer is similarly upgraded).
+   + **Extension** to PDR-015 (Reviewer Authority and Dispatch Discipline): today's test-reviewer refresh elevated the reviewer from structural auditor to doctrinal carrier with mandatory recipe/pattern read path. PDR-015 governs reviewer authority and phase-aligned dispatch but does not explicitly cover the *carrier* dimension. Proposed amendment: add a section "Reviewers as Doctrine Carriers" naming the substance — reviewers may carry doctrine in their stance and read paths, not only audit it; this is sibling to dispatch authority. Trigger for promotion: second instance (when one further reviewer is similarly upgraded).
 
-   - **Refinement** to PDR-022 (Governance Enforcement Scanners): the "forcing-function read path" pattern this session installed (test-reviewer reads recipes on every invocation, citation requirement) is a soft enforcement mechanism — it does not ban, it *requires concrete grounding*. PDR-022 covers automated scanners; the forcing-function-read-path shape is a different mechanism in the same family (governance enforcement at the reviewer layer). Proposed amendment: add a paragraph noting that reviewer-borne forcing-function read paths are a complementary enforcement mechanism alongside automated scanners.
+   + **Refinement** to PDR-022 (Governance Enforcement Scanners): the "forcing-function read path" pattern this session installed (test-reviewer reads recipes on every invocation, citation requirement) is a soft enforcement mechanism — it does not ban, it *requires concrete grounding*. PDR-022 covers automated scanners; the forcing-function-read-path shape is a different mechanism in the same family (governance enforcement at the reviewer layer). Proposed amendment: add a paragraph noting that reviewer-borne forcing-function read paths are a complementary enforcement mechanism alongside automated scanners.
 
-   - **Drift detection** in trinity (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`): not reviewed this pass at full depth — owner approval and dedicated session warranted per PDR-003 care-and-consult posture on Core content. **Flag**: the trinity may need a refresh pass once P1 (validation-strategy umbrella) and P2 (TDD playbook) of the index plan land, since validation-and-tdd doctrine is foundational substance the trinity should reference.
+   + **Drift detection** in trinity (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`): not reviewed this pass at full depth — owner approval and dedicated session warranted per PDR-003 care-and-consult posture on Core content. **Flag**: the trinity may need a refresh pass once P1 (validation-strategy umbrella) and P2 (TDD playbook) of the index plan land, since validation-and-tdd doctrine is foundational substance the trinity should reference.
 
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-06 Ethereal Ascending Twilight, codex, GPT-5,
+`019dfd`, owner-directed corrective `/jc-session-handoff` during
+main-critical Sonar remediation): `not due — session-scoped corrective
+handoff, no plan/milestone closed`. Entry-point sweep clean
+(`CLAUDE.md`, `AGENTS.md`, `GEMINI.md` match contract); tracks contain
+only README; no relevant open decision-thread or escalation handoff was
+needed. Napkin and pending-graduations now capture the branch-PR-Sonar
+backlog-source failure mode and the corrected false-positive/hotspot
+disposition discipline. The inherited hard-fitness surfaces remain a
+separate consolidation lane; the falsifiable next check is
+`pnpm practice:fitness:informational`.`**
 
 **Status (2026-05-06 Stormy Drifting Harbour, claude-code,
 opus-4-7-1m, `228bc5`, owner-directed tight `/jc-session-handoff` +
@@ -1753,17 +1916,83 @@ session-bounded. The inherited hard-fitness surfaces (principles.md,
 distilled.md, pending-graduations.md) remain the unrelated separate
 consolidation lane.
 
-**Status (2026-05-06 Ethereal Ascending Twilight, codex, GPT-5,
-`019dfd`, owner-directed corrective `/jc-session-handoff` during
-main-critical Sonar remediation): `not due — session-scoped corrective
-handoff, no plan/milestone closed`. Entry-point sweep clean
-(`CLAUDE.md`, `AGENTS.md`, `GEMINI.md` match contract); tracks contain
-only README; no relevant open decision-thread or escalation handoff was
-needed. Napkin and pending-graduations now capture the branch-PR-Sonar
-backlog-source failure mode and the corrected false-positive/hotspot
-disposition discipline. The inherited hard-fitness surfaces remain a
-separate consolidation lane; the falsifiable next check is
-`pnpm practice:fitness:informational`.`**
+**Status (2026-05-07 Pelagic Rolling Harbour, claude-code,
+claude-opus-4-7-1m, `58a9ad`, dedicated pending-graduations
+drain plus owner-directed recalibration plus insight capture
+plus `/jc-session-handoff` plus tight `/jc-consolidate-docs`):
+`completed this handoff — tight pass`**. Two triggers fired per
+`consolidate-docs.md §Trigger Checklist`: (i) the dedicated-drain
+opener plan closed; (ii) the access-rhythm-as-fitness-axis
+insight is a fresh PDR candidate. Tight-pass disposition: no
+substance ready to graduate this pass — the session insight is a
+first instance captured as a `pending` entry in
+`pending-graduations.md` (graduation target: ADR-144 amendment +
+possible cross-repo PDR; trigger: second-instance OR owner-direction
+at promotion); today's reframe arc is another instance of the
+mature `the-frame-was-the-fix` pattern (6+ cross-experience
+instances) and does not warrant re-extraction. Pattern-extraction
+sweep: nothing new at the barrier. Experience-files cross-scan:
+my session's experience file is structurally consonant with the
+existing pattern; emergent observation captured. Napkin rotation:
+not due (200 lines, well under the 500-line trigger). Fitness:
+SOFT only across all surfaces post-recalibration; no further
+disposition needed. Follow-ups remain in the Next Safe Step block
+above (Phase B sweep; sequenced-deferral entries; access-rhythm
+graduation gate).
+
+**Status (2026-05-06 Embered Melting Kiln, claude-code,
+claude-opus-4-7-1m, `4044d1`, Phase 2 collaboration-state surface
+restructure + fitness-limit audit + opener authoring + light
+`/jc-session-handoff`): `due — napkin and pending-graduations
+processing, both currently HARD on fitness, surface-overflow not
+limit-undersize`. Six commits landed this session
+(`13e2db28` provenance→schemas, `e072b67e` doctrine→directive,
+`b7e3f1fc` vocabulary normalisation, `07e9274c` lifecycle re-tagline,
+`8f388592` reviewer-fix, `40f7da45` substance-trim correction after
+owner caught it; `ca0794fc` function-driven fitness-limit calibration
+on agent-collaboration.md and continuity-practice.md after a full
+32-file audit). The next session's executable focus is the opener
+authored at
+[`2026-05-06-napkin-and-pending-graduations-processing-opener.md`](../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md):
+process the napkin and the pending-graduations register without
+worrying about destination-file fitness limits — substance > destination
+fitness, legitimate graduations land without truncation. New learning:
+trimming substance to fit fitness limits is a recurring anti-pattern
+even when applied to ostensibly "tighter" prose; the only legitimate
+responses to fitness pressure are graduate, rotate, raise (function-
+driven), or extract. Saved in napkin under the Embered Melting Kiln
+session header.**
+
+**Status (2026-05-06 Iridescent Waxing Orbit, claude-code,
+claude-opus-4-7-1m, `aeebab`, owner-directed distilled.md
+graduation pass plus `/jc-session-handoff` plus light
+`/jc-consolidate-docs`): `due — owner-requested follow-on
+graduation pass for queued directive items and pending-graduations
+audit`. Two commits landed (`b9bae574` graduation pass, `d9aab409`
+reframe). distilled.md cleared all three hard-zone metrics
+(314 → 152 lines). New learning is doctrine-shaped: a
+sequenced deferral whose gating mechanism is in `future/` with
+unmet compound promotion gates is itself the failure mode the
+discipline names — captured in napkin under
+`Iridescent Waxing Orbit` session header. PDR candidate: PDR-026
+amendment §"Sequenced-deferral discipline" should land without the
+doctrine-scanner-CLI gating. PDR candidate: per-session-closure
+discipline (each session owns its loop contribution) as alternative
+framing for the cyclical-learning-loop observation.**
+
+**Status (2026-05-06 Ashen Burning Anvil, codex, GPT-5, `019dfd`,
+owner-directed urgent skill-load pressure relief implementation plus
+`/jc-session-handoff`): `not due for deep consolidation — focused settings
+prune and closeout evidence session`. Checks run: entry-point sweep clean
+(`CLAUDE.md`, `AGENTS.md`, `GEMINI.md` in contract); no track cards beyond
+the operational README; active implementation claim closed; collaboration
+check green; gates green for portability, subagents, type-check,
+markdownlint on touched markdown, and diff whitespace. New learning is
+operational rather than doctrine-shaped: owner corrected that `/doctor`
+is session-local Claude Code evidence and not a useful terminal/Codex
+validation gate, so the urgent plan now treats it as optional
+owner-supplied evidence rather than a blocker. No ADR/PDR candidate
+qualifies from the closeout itself.**
 
 **Status (2026-05-06 Masked Stalking Veil, codex, GPT-5, `019dfc`,
 owner-directed `/jc-session-handoff` plus light `/jc-consolidate-docs`
@@ -1955,28 +2184,28 @@ update all appropriate plans and continuity surfaces, then run the
 session handoff workflow") — no escalation. Triggers carrying
 forward, plus those newly fired in that session:
 
-- **Repeated surprises suggest a new rule (4th instance, gradation
++ **Repeated surprises suggest a new rule (4th instance, gradation
 trigger fully fired)**: *stop inventing optionality* — agent
 produces option-shaped output when work calls for action-shaped or
 read-shaped output. Documented in this session's napkin entry as
 the unifying shape across four sessions; pending-graduations
 register entry moved to `due`; graduation target
 `.agent/rules/apply-dont-ask.md`.
-- **Settled doctrine exists only in ephemeral artefacts**: the
++ **Settled doctrine exists only in ephemeral artefacts**: the
 optionality-invention rule above is in the register and napkin
 only — no rule file yet.
 
 **Earlier triggers (2026-04-30 Briny Lapping Harbor) carried
 forward** — pending consolidation:
 
-- **A plan or milestone has closed**: 2026-04-29
++ **A plan or milestone has closed**: 2026-04-29
 lockfile-corruption-diagnosis-discipline candidate's
 second-instance-OR-owner-direction trigger fired; bug fix landed
 via PR #92.
-- **Settled doctrine exists only in ephemeral artefacts**: the
++ **Settled doctrine exists only in ephemeral artefacts**: the
 maintainer-Latest action-pin doctrine is currently captured only
 in napkin + Pending-Graduations Register; no PDR / rule yet.
-- **Repeated surprises suggest a rule, pattern, ADR, or governance
++ **Repeated surprises suggest a rule, pattern, ADR, or governance
 change**: five same-shape reframes ("not corruption — split-brain";
 "don't disable canonical defaults"; "use Latest, not highest tag";
 "the brittle structural gate is the wrong shape — the build log
@@ -1989,7 +2218,7 @@ entry to fit fitness HARD — exactly the move
 *signal-distinguishing pre-action gate* (build-red is a contract
 violation; fitness-HARD is a structural-health diagnostic; they
 want different responses).
-- **Documentation drift question**: AGENTS.md contains a
++ **Documentation drift question**: AGENTS.md contains a
 "See RULES_INDEX.md" pointer that lives only in the Codex entry
 point. Whether this is intentional platform-asymmetric routing
 or unhomed drift is an owner-decision question worth raising at
@@ -2000,7 +2229,7 @@ consolidation depth.
 `pnpm practice:fitness:informational` reports HARD on three files
 after this consolidation:
 
-- `**distilled.md`** (290 / hard 275): pre-existing pressure,
++ `**distilled.md`** (290 / hard 275): pre-existing pressure,
 unchanged by this session. Disposition: route to graduation of
 pending-register candidates that owner has not yet directed
 promotion on. Constraint: owner-direction-gated promotion (per
@@ -2009,7 +2238,7 @@ Falsifiability: the owner can grant promotion at any time and
 measure the resulting reduction; if any candidate has been
 ready-with-stable-doctrine for ≥3 consolidations, the criterion
 itself is the bottleneck, not the queue.
-- `**repo-continuity.md`** (635 / hard 525, 39370 chars / hard
++ `**repo-continuity.md`** (635 / hard 525, 39370 chars / hard
 35000): HARD reflects load-bearing teaching content — the Briny
 Last refreshed entry preserves the four-layer composition
 cascade, audit summary, and shape-gate-rejection rationale that
@@ -2028,7 +2257,7 @@ to a permanent home elsewhere) and graduate-or-archive them
 without compression. Most likely structural follow-up: split the
 Pending-Graduations Register into its own file (PDR amendment to
 ADR-150 / PDR-011 if the surface convention itself is changing).
-- `**principles.md`** (24003 chars / hard 24000): 1 character over
++ `**principles.md`** (24003 chars / hard 24000): 1 character over
 hard limit. Pre-existing, not this session. Disposition: trivial
 (next edit naturally lands under limit; not closure-blocking).
 

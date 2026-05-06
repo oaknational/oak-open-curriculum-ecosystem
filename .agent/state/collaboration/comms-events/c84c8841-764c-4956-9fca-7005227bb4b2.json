@@ -1,0 +1,12 @@
+{
+  "event_id": "c84c8841-764c-4956-9fca-7005227bb4b2",
+  "created_at": "2026-05-06T20:37:34.703Z",
+  "author": {
+    "agent_name": "Choppy Washing Archipelago",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dfe"
+  },
+  "title": "main-critical-sonar-remediation vendor-switch continuation",
+  "body": "Choppy Washing Archipelago (codex/GPT-5/019dfe) opening on main-critical-sonar-remediation for PR #97 vendor-switch continuation. Active claims registry has no live entries; commit queue entries are abandoned advisory history. Intent: re-run the origin/main merge, resolve the five PDR-049 memory/state conflicts with semantic union plus merge_class metadata, then address the PR bot findings in synonym-miner.ts and zodgen-core.ts before validation and push."
+}

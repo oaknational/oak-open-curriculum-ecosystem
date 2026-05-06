@@ -32,6 +32,13 @@ captured here.
 
 Both fixes land in the same commit as this snagging document.
 
+## Narrow Extraction Note
+
+2026-05-06 compiler-time types extraction moved TypeScript operational
+detail from `principles.md` to `docs/governance/typescript-practice.md`.
+That lane did not resolve any S-numbered or P-numbered snags here; the
+deferred specialist-reviewer recommendations remain out of scope.
+
 ## Open Snags — P1 (next-session candidates)
 
 ### S1 — Rule scope vs file name mismatch in `no-moving-targets-in-permanent-docs.md`
