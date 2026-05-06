@@ -11731,6 +11731,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "609f532c-1027-4162-9f92-e15c31af23a4",
+      "agent_id": {
+        "agent_name": "Pelagic Rolling Harbour",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "58a9ad"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T18:39:04Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "recalibrate pending-graduations fitness limits + add metadata schema + index + per-entry tags",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T18:52:33Z",
+        "closed_by": {
+          "agent_name": "Pelagic Rolling Harbour",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "58a9ad"
+        },
+        "summary": "recalibrate pending-graduations: 4-field fitness frontmatter +3 descriptive fields (lifecycle_model/access_pattern/fitness_rationale); per-entry tag schema with closed vocab + composite convention; index TOC by status; 12 high-touch entries tagged; new metacognition entry captures access-rhythm axis; HARD cleared (SOFT 1 line over target)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "609f532c-1027-4162-9f92-e15c31af23a4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
