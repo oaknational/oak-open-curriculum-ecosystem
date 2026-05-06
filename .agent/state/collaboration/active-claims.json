@@ -435,38 +435,6 @@
       "staged_bundle_fingerprint": "8b8abf1f9e2837d50e85dbacef1faa009d93de712e2a6548b500daaa466b4c4c",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/rules/no-moving-targets-in-permanent-docs.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
-    },
-    {
-      "intent_id": "db64d322-262b-41ae-b927-ad2f19c8b78f",
-      "claim_id": "7e478c0b-695c-4407-bb80-b7846e14e0f0",
-      "agent_id": {
-        "agent_name": "Secret Slipping Dusk",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "files": [
-        ".agent/directives/principles.md",
-        ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
-        ".agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md",
-        ".agent/rules/no-type-shortcuts.md",
-        ".agent/rules/strict-validation-at-boundary.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/019dfd-principles-types-bootstrap-125516.json",
-        ".agent/state/collaboration/comms-events/444c151b-3b34-4ac8-9c5b-24eff397b33a.json",
-        ".agent/state/collaboration/comms-events/bb842b18-67c4-4bbb-b1ed-92f0868f583b.json",
-        "docs/governance/development-practice.md",
-        "docs/governance/typescript-practice.md"
-      ],
-      "commit_subject": "docs(principles): extract compiler-time types guidance",
-      "queued_at": "2026-05-06T13:08:34.853Z",
-      "updated_at": "2026-05-06T13:09:20.352Z",
-      "expires_at": "2026-05-06T13:23:34.853Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/directives/principles.md\nM\t.agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md\nM\t.agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md\nM\t.agent/rules/no-type-shortcuts.md\nM\t.agent/rules/strict-validation-at-boundary.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/019dfd-principles-types-bootstrap-125516.json\nA\t.agent/state/collaboration/comms-events/444c151b-3b34-4ac8-9c5b-24eff397b33a.json\nA\t.agent/state/collaboration/comms-events/bb842b18-67c4-4bbb-b1ed-92f0868f583b.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tdocs/governance/development-practice.md\nM\tdocs/governance/typescript-practice.md\n",
-      "staged_bundle_fingerprint": "5b8566785f9423d8684fca8a820c233f4f377d4fe3f6e86e03ba048111ed067e"
     }
   ],
   "claims": [
@@ -497,60 +465,6 @@
       "freshness_seconds": 14400,
       "sidebar_open": false,
       "intent": "Graduate distilled.md to rules and governance docs (non-directive phase)"
-    },
-    {
-      "claim_id": "4e5562b2-2d84-42e0-a111-5b59a32a88e0",
-      "agent_id": {
-        "agent_name": "Secret Slipping Dusk",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/directives/principles.md",
-            "docs/governance/typescript-practice.md",
-            "docs/governance/development-practice.md",
-            ".agent/rules/no-type-shortcuts.md",
-            ".agent/rules/strict-validation-at-boundary.md",
-            ".agent/plans/agentic-engineering-enhancements/future/principles-entrypoint-content-homing.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T13:06:34Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Commit compiler-time TypeScript extraction through actual git hooks after owner correction that strict-hard preflight is not the enforced gate."
-    },
-    {
-      "claim_id": "7e478c0b-695c-4407-bb80-b7846e14e0f0",
-      "agent_id": {
-        "agent_name": "Secret Slipping Dusk",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T13:08:20Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit compiler-time TypeScript extraction with explicit pathspecs; exclude Iridescent rule files and lifecycle work.",
-      "intent_to_commit": "db64d322-262b-41ae-b927-ad2f19c8b78f"
     }
   ]
 }
