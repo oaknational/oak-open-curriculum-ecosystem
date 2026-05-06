@@ -19,23 +19,19 @@ across this surface family is governed by the
 
 ## Vocabulary
 
-The four-term taxonomy used across this surface family:
+Four-term taxonomy used across this surface family:
 
-- **stale** — past `freshness_seconds` TTL; archivable by the consolidate-docs
-  stale-claim audit. Noise to be audited at consolidation, not a blocker.
+- **stale** — past `freshness_seconds` TTL; archivable. Noise, not a blocker.
 - **fresh-but-quiet** — within TTL, no recent `heartbeat_at`. Informational
-  only; the next staleness threshold archives the entry automatically if the
-  session never returns.
+  only; next staleness threshold archives automatically.
 - **orphaned** — a fresh-but-quiet claim whose owning session is known or
-  suspected to have ended without an explicit close. Cleanup ethics for
-  orphaned claims live in [`agent-collaboration.md`][directive] §d.
-- **expired** — wall-clock past `expires_at` (used by `commit_queue` entries
-  and sidebars). Stale-reporting only; expiry never auto-removes a queue
-  entry or auto-resolves a sidebar.
+  suspected to have ended. Cleanup ethics in
+  [`agent-collaboration.md`][directive] §d.
+- **expired** — wall-clock past `expires_at` (commit_queue entries and
+  sidebars). Stale-reporting only; never auto-resolves.
 
-`closure.kind: "stale"` is the archive label for any claim that left the
-active registry through staleness, including orphan archival via the
-consolidate-docs audit.
+`closure.kind: "stale"` is the archive label for any claim leaving through
+staleness, including orphan archival.
 
 ## Surfaces
 

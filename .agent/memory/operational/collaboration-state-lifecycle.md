@@ -8,11 +8,12 @@ split_strategy: "Split by state surface if lifecycle recipes grow beyond a singl
 
 # Collaboration State Lifecycle
 
-Detailed lifecycle recipes for `.agent/state/collaboration/`. The compact
-state index is [`collaboration-state-conventions.md`](collaboration-state-conventions.md);
+Operational recipes for `.agent/state/collaboration/`. The compact state
+index is [`collaboration-state-conventions.md`](collaboration-state-conventions.md);
 the doctrinal authority is
 [`agent-collaboration.md`](../../directives/agent-collaboration.md) and
-[PDR-029 Family A Class A.3][pdr-029].
+[PDR-029 Family A Class A.3][pdr-029]. Vocabulary (stale, fresh-but-quiet,
+orphaned, expired) is defined in conventions.md §Vocabulary.
 
 ## Claims
 
