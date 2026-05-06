@@ -11003,5 +11003,63 @@
         ]
       }
     }
+    ,
+    {
+      "claim_id": "35354ad2-b1b9-4eb5-8bbd-2310b158a3ab",
+      "agent_id": {
+        "agent_name": "Ethereal Ascending Twilight",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/**",
+            ".agent/plans/architecture-and-infrastructure/**",
+            ".agent/state/collaboration/**",
+            "agent-tools/**",
+            "apps/**",
+            "packages/**",
+            ".gitignore"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T15:08:56Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Preserve and verify the inherited staged Sonar remediation bundle, commit and push it, open a draft PR, then close PR-scoped Sonar blockers without gate exclusions.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T16:05:00Z",
+        "closed_by": {
+          "agent_name": "Ethereal Ascending Twilight",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Corrective handoff after owner rejected the PR-scoped Sonar framing. Plan, thread record, napkin, pending-graduations, and repo-continuity now state that this branch fixes the project/main HIGH issue and security-hotspot backlog; PR #97 Sonar is a regression guard. Broken generated MCP executor/generator experiment remains local and must be removed first in the fresh session.",
+        "evidence": [
+          {
+            "kind": "thread-record",
+            "ref": ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
+            "summary": "Corrected next-session first step and backlog source."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md",
+            "summary": "Corrected plan scope and recovery sequence."
+          },
+          {
+            "kind": "comms-event",
+            "ref": ".agent/state/collaboration/comms-events/a5f40387-c828-4fcb-b9f7-9f6972bd01bb.json",
+            "summary": "Corrective handoff event records the owner correction and next-session first step."
+          }
+        ]
+      }
+    }
   ]
 }

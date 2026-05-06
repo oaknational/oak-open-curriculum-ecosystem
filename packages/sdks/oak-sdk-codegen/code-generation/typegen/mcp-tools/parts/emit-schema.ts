@@ -223,10 +223,7 @@ function buildQueryTransformLine(paramName: string, queryMeta: ParamMetadata | u
 
 function shouldCoerceYearParam(paramName: string, queryMeta: ParamMetadata | undefined): boolean {
   return (
-    paramName === 'year' &&
-    queryMeta !== undefined &&
-    queryMeta.typePrimitive === 'number' &&
-    !queryMeta.valueConstraint
+    paramName === 'year' && queryMeta?.typePrimitive === 'number' && !queryMeta.valueConstraint
   );
 }
 

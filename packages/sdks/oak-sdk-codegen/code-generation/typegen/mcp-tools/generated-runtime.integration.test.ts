@@ -6,7 +6,7 @@ import type { paths } from '../../../src/types/generated/api-schema/api-paths-ty
 describe('generated MCP runtime input validation', () => {
   it('rejects unexpected arguments for parameterless tools before invoking the client', async () => {
     const client = wrapAsPathBasedClient(
-      createClient<paths>({ baseUrl: 'http://example.invalid' }),
+      createClient<paths>({ baseUrl: 'https://example.invalid' }),
     );
 
     await expect(callTool('get-key-stages', client, { unexpected: true })).rejects.toThrow(

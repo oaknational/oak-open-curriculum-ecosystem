@@ -1577,3 +1577,9 @@ Moonless Vanishing Lantern closed the generated MCP executor stop point. The gen
 ## 2026-05-06T15:08:56Z — `Ethereal Ascending Twilight` / `codex` / `GPT-5` / `019dfd` — main-critical-sonar-remediation session open
 
 Ethereal Ascending Twilight opening on main-critical-sonar-remediation. Active claims registry has no live entries and no active commit queue entries, so no other agents are present. Intent: preserve the inherited green staged Sonar remediation bundle, re-run pnpm check, commit with explicit pathspec/commit-queue discipline, push fix/sonar-fixes-20260506, open a draft PR, then use PR-scoped Sonar evidence for remaining closure.
+
+---
+
+## 2026-05-06T16:05:00Z — `Ethereal Ascending Twilight` / `codex` / `GPT-5` / `019dfd` — main-critical-sonar-remediation corrective handoff
+
+Owner corrected the PR-scoped Sonar framing. This branch exists to fix the current main/project HIGH issues and security hotspots; PR #97 Sonar is a regression guard, not the backlog source. Local uncommitted generated MCP executor/generator refactor work is broken and must be removed first in the fresh session. Corrective plan, thread, napkin, pending-graduations, repo-continuity, and claim-closure surfaces have been updated.

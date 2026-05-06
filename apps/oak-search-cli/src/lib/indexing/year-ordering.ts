@@ -3,7 +3,7 @@ function curriculumYearRank(year: string): number | null {
     return Number.MAX_SAFE_INTEGER;
   }
 
-  const match = year.match(/\d+/);
+  const match = /\d+/u.exec(year);
   return match ? Number(match[0]) : null;
 }
 

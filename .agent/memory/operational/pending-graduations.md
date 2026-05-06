@@ -31,6 +31,24 @@ Schema: `captured-date`, `source-surface`, `graduation-target`,
 `trigger-condition`, `status`. `consolidate-docs` uses this as the live
 queue. Graduated and merged history is preserved in git and the archived
 
++ 2026-05-06; **branch PR Sonar is a regression guard, not the backlog source
+  for a branch opened to fix existing main/project Sonar debt** (Owner
+  correction during Ethereal Ascending Twilight's
+  main-critical-sonar-remediation handoff). Failure mode: after opening draft
+  PR #97 to trigger remote Sonar, the session treated PR-scoped new issues and
+  duplication as the remediation worklist, then chased a generated MCP executor
+  duplication refactor. Owner correction: a branch cannot be opened to fix its
+  own Sonar issues because branch-scoped issues only exist after branch work
+  exists; the authoritative backlog for this lane is the current main/project
+  HIGH issues and security hotspots. PR Sonar verifies that the remediation
+  branch does not introduce regressions. Source surface: napkin 2026-05-06
+  Ethereal Ascending Twilight surprise + corrected plan
+  `.agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md`.
+  Graduation-target: rule or planning-process amendment naming backlog-source
+  discipline for quality-remediation branches. Trigger: second instance of an
+  agent using branch/PR analysis as the primary worklist when the branch purpose
+  is an existing main/project backlog, or owner direction. Status: pending.
+
 + 2026-05-05; **archive-scale historical napkin synthesis is a distinct
   learning-loop cadence, not just current-rotation cross-session
   consolidation** (Owner-stated aside during Riverine Navigating Sextant's

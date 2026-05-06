@@ -3,27 +3,31 @@ name: "Main Sonar Remediation Rebuild From Updated Main"
 overview: "Rebuild useful Sonar remediation work on a fresh branch from main."
 todos:
   - id: phase-0-new-branch-and-baseline
-    content: "Phase 0: create the branch and capture current Sonar baselines."
+    content: "Phase 0: create the branch and capture current main Sonar baselines."
     status: completed
   - id: phase-1-local-detectors
     content: "Phase 1: reintroduce targeted local SonarJS detectors."
     status: completed
   - id: phase-2-comparator-remediation
     content: "Phase 2: apply explicit comparator fixes to current main files."
-    status: in_progress
-  - id: phase-3-current-main-sonar-classes
-    content: "Phase 3: remediate remaining current-main Sonar blockers."
     status: blocked
+  - id: phase-3-current-main-sonar-classes
+    content: "Phase 3: remediate remaining project-wide HIGH issues from main evidence."
+    status: pending
+  - id: phase-4-security-hotspot-review
+    content: "Phase 4: review/fix current main security hotspots with site-specific rationale."
+    status: pending
   - id: phase-4-quality-gate-closure
-    content: "Phase 4: prove local and Sonar gates are green before review."
+    content: "Phase 5: prove local gates and remote Sonar regression guard before review."
     status: pending
 ---
 
 # Main Sonar Remediation Rebuild From Updated Main
 
 **Last Updated**: 2026-05-06  
-**Status**: PAUSED - local `pnpm check` green; continue Sonar remediation in a
-fresh session
+**Status**: PAUSED - corrective handoff; fresh session must first remove the
+broken local generator/runtime experiment, then resume the current-main HIGH and
+security-hotspot backlog
 **Scope**: Replace the stale `fix/sonar_high_priority_issues` stack with a fresh
 implementation on top of updated `main`, preserving only the useful ideas from
 the old branch.
@@ -49,73 +53,109 @@ current stack should therefore be treated as research and prior intent, not as a
 branch to rebase or cherry-pick.
 
 Main being red in Sonar is expected for this lane. The purpose of the rebuild is
-to make the current main Sonar gate green, not to preserve the old branch's
-commit history.
+to remediate the current main Sonar backlog on a branch, not to preserve the old
+branch's commit history and not to chase issues produced by this branch's own
+delta.
 
-## 2026-05-06 Local Gate Green Pause
+## 2026-05-06 Corrective Handoff
 
-Owner direction stopped the earlier implementation after the generated MCP
-runtime executor refactor began chasing TypeScript errors. The original problem
-was narrow: enabling `sonarjs/cognitive-complexity` made the generated
-`packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`
-file fail local lint because the generator emitted one large switch with repeated
-validation/invocation/output-checking bodies.
+Owner correction supersedes the previous "remote Sonar closure" framing.
 
-The original problem is **not** to generalise the MCP descriptor contract or
-core tool type aliases. The attempted cure in
-`code-generation/typegen/mcp-tools/parts/generate-execute-file.ts` introduced a
-generic invoker-map shape; `pnpm --filter @oaknational/sdk-codegen build` then
-failed because TypeScript could not preserve each literal tool name through the
-generic indexed access. Do not continue that line without owner involvement.
+A remediation branch cannot be opened to fix its own Sonar issues: branch-scoped
+Sonar issues only exist after the branch introduces work. PR analysis is a
+regression guard for the remediation branch, not the source of the remediation
+backlog. The authoritative worklist for this plan is the current main/project
+Sonar state: project-wide HIGH issues plus security hotspots on main.
 
-Owner correction on the decision space:
+Concrete correction:
 
+- Sonar **issues** are marked false positive only when they genuinely are false
+  positives. Otherwise they are fixed. They are never simply accepted.
+- Security hotspots are reviewed site by site. Mark `SAFE` only when the exact
+  site is proven safe with a concrete rationale. If a hotspot is unsafe, fix it.
+  Do not use `ACKNOWLEDGED` unless the owner explicitly accepts a residual risk.
 - Generated files are shipped code and remain inside local and remote quality
-  surfaces. Stopping Sonar or local lint from scanning generated files is not an
-  acceptable route; it disables fast feedback and violates the no-disabled-checks
-  doctrine.
-- The build-green recovery was to roll back the generic invoker-map abstraction
-  only, while preserving the unrelated generated `void flatArgs` and strict
-  flat-schema fixes.
-- The cognitive-complexity cure is now generator-owned and literal-preserving:
-  the generator emits concrete per-tool invocation helpers and a simple literal
-  switch delegation, not a generic indexed map and not core MCP type broadening.
+  surfaces. Do not exclude generated files from Sonar or lint, and do not disable
+  checks.
+- For generated-code findings, fix the generator and regenerate. If the fix
+  reaches core MCP descriptor/type surfaces, stop and involve the owner before
+  changing `ToolDescriptor`, `ToolClientForName`, `ToolArgsForName`, or adjacent
+  aliases.
+- PR #97 Sonar is useful only after main-backlog fixes are pushed: it should show
+  the remediation branch did not add new problems and that the intended backlog
+  moved in the right direction.
 
-Approved recovery sequence:
+### Current Branch And Local State
 
-1. Prefer the smallest architecture-preserving option that leaves core MCP tool
-   types unchanged.
-2. Roll back the attempted generic invoker-map generator change and regenerate
-   `runtime/execute.ts` so the existing literal switch narrowing is restored.
-3. If generated output itself must be structurally changed later, split emitted
-   per-tool invokers into generated per-tool modules or literal switch
-   delegation in a way that preserves existing literal descriptor types.
-4. Touch `ToolDescriptor`, `ToolClientForName`, `ToolArgsForName`, or adjacent
-   core aliases only with explicit owner participation.
+Branch: `fix/sonar-fixes-20260506`.
 
-Current verification state after rollback and literal-preserving executor split:
+Committed and pushed before the correction:
 
-- `pnpm --filter @oaknational/sdk-codegen sdk-codegen` passed after the attempted
-  generic invoker-map rollback and regenerated SDK outputs.
-- `pnpm --filter @oaknational/sdk-codegen build` passed after the rollback.
-- `pnpm --filter @oaknational/curriculum-sdk test` passed after updating stale
-  tests to exercise the flat generated MCP argument boundary while still proving
-  SDK invocation receives nested `{ params: {} }`.
-- `pnpm --filter @oaknational/sdk-codegen type-check`, `pnpm --filter
-  @oaknational/sdk-codegen lint:fix`, and `pnpm --filter
-  @oaknational/sdk-codegen test` passed after extracting `ResponseMapEntry` into
-  a sibling response-map contract file to remove a dependency-cruiser cycle.
-- `pnpm depcruise` passed after the response-map contract extraction.
-- Full root `pnpm check` passed on 2026-05-06 after a complete restart from the
-  top of the gate sequence.
-- The generated executor now preserves literal tool-name dispatch without
-  touching `ToolDescriptor`, `ToolClientForName`, `ToolArgsForName`, or adjacent
-  core aliases.
-- The workspace-local pnpm cache directory is generated dependency state and is
-  now ignored via `.gitignore` (`.pnpm-store/`); do not treat it as source or
-  evidence.
-- The branch remains mid-implementation for remote Sonar closure. Do not continue
-  other Sonar slices in this session; pick up the next remediation step fresh.
+- `457fa1f0 fix(sonar): remediate quality gate blockers`
+- `b903554b chore(collaboration): close commit window state`
+- Draft PR: <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/97>
+
+Remote PR #97 check snapshot after the first push:
+
+| Check | Result |
+|---|---|
+| SonarCloud Code Analysis | fail |
+| GitHub Actions test | pass |
+| CodeQL | skipping |
+| Analyze actions/javascript-typescript | pass |
+| Vercel | pass |
+
+Current Sonar evidence gathered during the corrective pause:
+
+| Scope | Count / status |
+|---|---:|
+| Project-wide open HIGH issues | 133 |
+| Project-wide security hotspots | 154 |
+| Project-wide hotspots `TO_REVIEW` | 143 |
+| Project-wide hotspots `REVIEWED` | 11 |
+| Since-leak/new-code hotspots | 18 |
+| Since-leak/new-code hotspots `TO_REVIEW` | 7 |
+| Since-leak/new-code hotspots `REVIEWED` | 11 |
+| PR #97 open issues | 5 |
+| PR #97 Quality Gate | ERROR |
+| PR #97 `new_duplicated_lines_density` | 40.1 (threshold 3) |
+| PR #97 `new_security_hotspots_reviewed` | 0.0 (threshold 100) |
+| PR #97 `new_violations` | 5 (threshold 0) |
+
+Local uncommitted state at handoff includes broken experimental work in nine
+files. The risky/unwanted part is the generated MCP executor/generator refactor
+that tried to reduce branch PR duplication by centralising descriptor invocation:
+
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.unit.test.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.unit.test.ts`
+- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`
+
+That experiment is useless for the corrected objective and must be removed first
+in the fresh session. Do not carry it forward.
+
+The same local dirty set also contains small PR-issue fixes in:
+
+- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts`
+- `apps/oak-search-cli/src/lib/indexing/year-ordering.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/generated-runtime.integration.test.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-schema.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.ts`
+
+Fresh-session recovery must inspect these separately. Keep only those that
+directly remediate the main/project HIGH or hotspot backlog under this plan.
+Discard PR-only churn that does not advance the main backlog.
+
+### Fresh-Session First Step
+
+1. Preserve this corrective handoff documentation.
+2. Inspect the local dirty diff and explicitly revert the broken generated MCP
+   executor/generator experiment. Do not blindly reset documentation surfaces.
+3. Re-run `git status --short` and confirm no broken generated-runtime refactor
+   remains.
+4. Re-query Sonar main/project HIGH issues and hotspots.
+5. Build the next work slice from the main/project backlog, not from PR #97's
+   delta.
 
 ## Abandoned Branch Lesson
 
@@ -159,8 +199,9 @@ Current main measures from the same inspection:
 | Total violations | 1150 |
 | Open HIGH/BLOCKER issues | 132 |
 
-These numbers are a starting snapshot only. Phase 0 must refresh the evidence
-after the new branch is created from updated `main`.
+Later corrective handoff evidence reported 133 project-wide open HIGH issues.
+Treat these numbers as evidence snapshots, not fixed constants. The fresh
+session must re-query before editing.
 
 ## Useful Concepts To Salvage
 
@@ -180,7 +221,13 @@ The old branch should not be replayed literally. Salvage only these concepts:
    `agent-tools` paths.
 3. **Generator-first discipline**: generated SDK output must be fixed by
    generator/source changes plus regeneration, not hand edits.
-4. **Evidence discipline**: reuse the old evidence directory only as historical
+4. **Security-hotspot disposition discipline**: review each hotspot with
+   site-specific rationale. If the code is unsafe, fix it. If it is safe, mark
+   `SAFE` with the concrete reason. Do not use bulk dispositions.
+5. **Issue disposition discipline**: issue statuses are not a pressure valve.
+   False positives may be marked false positive only when genuinely false.
+   Otherwise fix the issue.
+6. **Evidence discipline**: reuse the old evidence directory only as historical
    context. Regenerate current evidence from Sonar and local lint on the fresh
    branch.
 
@@ -206,28 +253,25 @@ Do not carry these old-branch changes forward as diffs:
   commits.
 - Do not silence, downgrade, or suppress Sonar rules to make the dashboard
   green.
+- Do not treat PR-scoped Sonar findings as the backlog definition for this
+  branch. PR Sonar is a regression guard after main-backlog remediation.
+- Do not accept Sonar issues. Mark false positive only when true, otherwise fix.
 - Do not hand-edit generated SDK output unless the generator/source change and
   regeneration are in the same phase.
-- Do not stage this plan on the old branch. Carry it unstaged, then stage it
-  only after creating the new branch from updated `main`.
+- Do not create another fresh branch unless the owner explicitly redirects. The
+  active branch is `fix/sonar-fixes-20260506`; recover it by removing the broken
+  local experiment first.
 
-## Branch Transition Plan
+## Branch Transition State
 
-Before starting implementation:
+Branch transition has already happened:
 
-1. Confirm the working tree and decide what to carry from the old branch. The
-   intended carry-forward artefact is this plan file only.
-2. Update local `main` from `origin/main`.
-3. Create a fresh remediation branch from updated `main`.
-4. Stage this plan on the fresh branch.
-5. Re-run start-right, inspect active claims, and register the implementation
-   claim before touching code.
-
-Suggested branch name:
-
-```bash
-fix/main-sonar-remediation-rebuild
-```
+1. Current branch is `fix/sonar-fixes-20260506`.
+2. The branch has been pushed.
+3. Draft PR #97 exists to provide remote regression feedback.
+4. The next session must recover the working tree before new implementation:
+   remove the broken generated executor/generator experiment, preserve this
+   corrected handoff documentation, then re-query main/project Sonar evidence.
 
 ## Foundation Alignment
 
@@ -258,6 +302,18 @@ implementation:
 
 Use targeted gates inside implementation slices, then the canonical full gate
 from root before merge.
+
+Remote Sonar strategy:
+
+1. Query project/main HIGH issues and security hotspots.
+2. Work by issue class and ownership area.
+3. For each issue class, decide `fix` vs `false positive` based on the exact
+   site, not on dashboard pressure.
+4. For each hotspot, decide `fix` vs `SAFE` based on the exact site; document
+   the rationale in Sonar when marking safe.
+5. Push only after local gates are green.
+6. Use PR #97 Sonar to verify the branch did not introduce regressions and that
+   main-backlog remediation is reflected remotely.
 
 After each implementation task, run the smallest deterministic checks that prove
 the touched behaviour, plus the relevant package lint/test command.
@@ -400,31 +456,31 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 3. `agent-tools` comparator fixes are applied to current files, not old diffs.
 4. Local detector and relevant tests pass.
 
-### Phase 3: Remaining Current-Main Sonar Blocker Classes
+### Phase 3: Remaining Project/Main HIGH Issue Classes
 
-**Goal**: Close the remaining Sonar Quality Gate blockers on current main.
+**Goal**: Fix or genuinely false-positive the remaining project/main HIGH issue
+classes.
 
 **RED**
 
-- Classify each remaining Quality Gate blocker:
+- Re-query project/main HIGH issues and group them by rule, file ownership, and
+  remediation mode.
+- Classify each remaining HIGH issue:
   - reliability bugs.
-  - new violations.
   - cognitive complexity and nested functions.
   - `void` operator use.
-  - duplicated lines.
-  - security hotspots requiring review.
-- Identify whether each blocker requires code change, test change, generator
-  change, documentation/evidence, or Sonar hotspot review.
+  - comparator/sort ordering.
+  - generated-code findings.
+  - test-only findings.
+- Identify whether each issue requires code change, test change, generator
+  change, or a true false-positive disposition.
 
 **GREEN**
 
 - Apply behaviour-preserving extractions for complexity and nesting.
 - Rewrite `void` use according to the chosen `sonarjs/void-use` policy.
 - Fix generated SDK issues through generator/source changes and regeneration.
-- Review or remediate security hotspots with evidence. Mark hotspots reviewed
-  only when the code is fixed or safe with concrete evidence, or when the owner
-  explicitly approves an `ACKNOWLEDGED` risk acceptance.
-- Reduce duplication structurally where it is part of the failing gate.
+- Mark an issue false positive only when the exact finding is genuinely false.
 
 **REFACTOR**
 
@@ -433,13 +489,52 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 
 **Acceptance Criteria**
 
-1. Every current Quality Gate blocker has a concrete disposition.
+1. Every targeted project/main HIGH issue has a concrete `fixed` or true
+   `false positive` disposition.
 2. Generated files match regenerated output.
-3. Hotspot review status is backed by recorded rationale. Any `ACKNOWLEDGED`
-   hotspot includes owner approval.
-4. Duplications that block the gate are reduced or otherwise resolved in Sonar.
+3. No issue is accepted merely to quiet Sonar.
+4. Targeted local and package gates pass after each slice.
 
-### Phase 4: Quality Gate Closure
+### Phase 4: Security Hotspot Review And Remediation
+
+**Goal**: Review and remediate the project/main security hotspots with exact
+site-specific rationale.
+
+**RED**
+
+- Re-query all project hotspots and the since-leak subset.
+- Group hotspots by rule and site type:
+  - regex denial-of-service.
+  - insecure HTTP literals.
+  - pseudorandom number usage.
+  - public writable directory usage.
+  - PATH/environment execution concerns.
+  - test-only fixture concerns.
+- For each hotspot, inspect the exact site before deciding.
+
+**GREEN**
+
+- Fix unsafe code.
+- Mark `SAFE` only when the exact site is safe and record the concrete reason in
+  Sonar.
+- Use `ACKNOWLEDGED` only if the owner explicitly accepts a residual risk.
+- Prefer code fixes over dispositions where a small safe refactor removes the
+  hotspot without harming behaviour.
+
+**REFACTOR**
+
+- Capture recurring safe-test-fixture patterns only after enough examples exist
+  to justify a durable rule or helper.
+- Avoid bulk hotspot status changes.
+
+**Acceptance Criteria**
+
+1. Every targeted hotspot has a site-specific disposition.
+2. Unsafe hotspots are fixed.
+3. `SAFE` comments explain why that exact site is safe.
+4. No `ACKNOWLEDGED` hotspot exists without explicit owner acceptance.
+
+### Phase 5: Quality Gate Closure
 
 **Goal**: Prove the branch is merge-ready.
 
@@ -447,12 +542,14 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 
 - Run `pnpm check` from repo root and record failures.
 - Trigger or wait for the relevant Sonar analysis.
-- Compare branch Sonar state with the Phase 0 baseline.
+- Compare project/main backlog movement and PR regression state with the Phase 0
+  baseline.
 
 **GREEN**
 
 - Fix all local gate failures.
-- Fix all Sonar Quality Gate failures.
+- Fix or correctly disposition targeted Sonar HIGH issues and hotspots.
+- Fix all branch-introduced PR Sonar regressions.
 - Refresh evidence summaries and update this plan's todo statuses.
 
 **REFACTOR**
@@ -464,15 +561,17 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 **Acceptance Criteria**
 
 1. `pnpm check` passes.
-2. Sonar Quality Gate is green.
-3. No old-branch superseded work was accidentally restored.
-4. Plan, evidence, and handoff state reflect current main and the fresh branch.
-5. The branch is not merged until all gates are green.
+2. Sonar main/project backlog targets are closed for this branch's agreed scope.
+3. PR #97 Sonar does not introduce regressions.
+4. No old-branch superseded work was accidentally restored.
+5. Plan, evidence, and handoff state reflect current main and the active branch.
+6. The branch is not merged until all gates are green or an owner-approved
+   residual remote metric is explicitly documented.
 
 ## Reviewer Scheduling
 
 - **Pre-execution**: assumptions review for the rebuild-not-replay strategy,
-  Quality Gate ledger, and any hotspot acceptance policy.
+  Quality Gate ledger, and hotspot disposition policy.
 - **During**: type, test, and code review after each substantial rule-class
   slice.
 - **Post**: release-readiness and docs/ADR review before merge.
@@ -481,9 +580,10 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 
 1. Security hotspot review/remediation stays in scope because both hotspot
    Quality Gate metrics currently fail.
-2. Duplication remediation targets the failing new-code gate. Overall
-   duplication is reduced only where the touched files make structural cleanup
-   obvious.
+2. Duplication remediation is not the backlog source. Reduce duplication when it
+   is a true branch regression or a natural structural cleanup in touched code;
+   do not enter core MCP type surfaces to chase a PR-only duplication metric
+   without owner participation.
 3. The current branch name is `fix/sonar-fixes-20260506`; do not create the
    suggested placeholder branch.
 4. This plan is the authority for targeted SonarJS activation on this branch and
@@ -491,12 +591,14 @@ rg -n "cognitive-complexity|no-nested-functions|no-alphabetical-sort|void-use" .
 
 ## Completion Checklist
 
-- [ ] Fresh branch created from updated `main`.
-- [ ] This plan staged only on the fresh branch.
+- [x] Active branch created from updated `main`.
+- [x] Draft PR opened for remote regression feedback.
+- [ ] Broken local generated executor/generator experiment removed.
 - [ ] Current Sonar evidence regenerated.
 - [ ] Targeted local SonarJS detector surface restored or dispositioned.
 - [ ] Comparator remediation applied to current main files.
-- [ ] Remaining Quality Gate blockers remediated or reviewed with evidence.
+- [ ] Project/main HIGH issues fixed or marked true false positive.
+- [ ] Security hotspots fixed or marked `SAFE` with site-specific rationale.
 - [ ] Full local gates pass.
-- [ ] Sonar Quality Gate is green.
+- [ ] PR Sonar confirms no branch-introduced regressions.
 - [ ] Consolidation and handoff complete.

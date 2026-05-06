@@ -618,33 +618,5 @@
     }
   ],
   "claims": [
-    {
-      "claim_id": "35354ad2-b1b9-4eb5-8bbd-2310b158a3ab",
-      "agent_id": {
-        "agent_name": "Ethereal Ascending Twilight",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019dfd"
-      },
-      "thread": "main-critical-sonar-remediation",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/**",
-            ".agent/plans/architecture-and-infrastructure/**",
-            ".agent/state/collaboration/**",
-            "agent-tools/**",
-            "apps/**",
-            "packages/**",
-            ".gitignore"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-06T15:08:56Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Preserve and verify the inherited staged Sonar remediation bundle, commit and push it, open a draft PR, then close PR-scoped Sonar blockers without gate exclusions."
-    }
   ]
 }

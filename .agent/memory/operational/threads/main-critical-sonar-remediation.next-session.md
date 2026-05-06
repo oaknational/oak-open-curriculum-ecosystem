@@ -17,63 +17,82 @@ Primary plan:
 
 ## Landing Target For Next Session
 
-Target: `continue remote Sonar closure` — local `pnpm check` is green after the
-generated MCP executor recovery. Continue from the refreshed plan and current
-Sonar evidence without reopening the generated-file exclusion decision.
+Target: `recover from incorrect PR-scoped turn, then fix main Sonar backlog` —
+first remove the broken local generated MCP executor/generator experiment from
+the working tree, then resume remediation against the project/main HIGH issues
+and security hotspots. PR #97 Sonar is a regression guard, not the source of the
+worklist.
 
 ## Lane State
 
 **Owning plan**:
 `.agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md`
 
-**Current objective**: rebuild Sonar remediation from updated main and make
-main's current Quality Gate blockers green on the branch.
+**Current objective**: rebuild Sonar remediation from updated main and fix the
+current project/main HIGH issues plus security hotspots on the branch. PR-scoped
+Sonar is used only to verify the branch does not add regressions.
 
 **Current state**:
 
-- Phase 0 evidence and plan are staged as the first branch artefact.
-- Targeted SonarJS detectors are enabled in `packages/core/oak-eslint`, with a
-  strict config test for the exact four-rule set.
-- Comparator and void-use remediation work has been applied across several
-  workspaces.
-- Multiple targeted tests had passed before the stop point, including
-  `oak-eslint` strict config tests, widget tests, and sdk-codegen MCP schema
-  tests.
-- The attempted generated MCP executor generic invoker-map refactor has been
-  replaced with generator-owned concrete per-tool invocation helpers plus
-  literal switch delegation.
-- The executor recovery preserved generated flat MCP argument validation and did
-  not touch `ToolDescriptor`, `ToolClientForName`, `ToolArgsForName`, or adjacent
-  core aliases.
-- `pnpm --filter @oaknational/curriculum-sdk test`, `pnpm --filter
-  @oaknational/sdk-codegen type-check`, `pnpm --filter @oaknational/sdk-codegen
-  lint:fix`, `pnpm --filter @oaknational/sdk-codegen test`, and `pnpm depcruise`
-  passed before the final aggregate gate.
-- Full root `pnpm check` passed on 2026-05-06 after restarting from the top of
-  the canonical sequence.
+- Branch `fix/sonar-fixes-20260506` has been pushed and draft PR #97 exists.
+- Commits already pushed:
+  - `457fa1f0 fix(sonar): remediate quality gate blockers`
+  - `b903554b chore(collaboration): close commit window state`
+- GitHub checks after the first push: tests passed; SonarCloud failed; Vercel
+  and analysis checks passed; CodeQL skipped.
+- The previous plan framing incorrectly treated PR-scoped Sonar findings as the
+  primary remediation source. Owner corrected this as circular: a branch cannot
+  be opened to fix its own Sonar findings because branch findings only exist
+  after the branch introduces work.
+- Correct backlog source is the project/main Sonar state: current project-wide
+  HIGH issues and security hotspots.
+- Corrective evidence gathered during the pause:
+  - Project-wide open HIGH issues: 133.
+  - Project-wide security hotspots: 154 total, 143 `TO_REVIEW`, 11 `REVIEWED`.
+  - Since-leak/new-code hotspots: 18 total, 7 `TO_REVIEW`, 11 `REVIEWED`.
+  - PR #97 open issues: 5; PR gate red on `new_violations`,
+    `new_security_hotspots_reviewed`, and duplicated-lines density.
+- Local working tree is dirty. The broken/unwanted experiment is the generated
+  MCP executor/generator refactor in:
+  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts`
+  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.unit.test.ts`
+  - `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.unit.test.ts`
+  - `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`
+- The local dirty set also includes smaller PR-issue fixes. Fresh session must
+  inspect them separately and keep only changes that advance the project/main
+  HIGH or hotspot backlog.
 
 **Blockers / low-confidence areas**:
 
-- The generated `runtime/execute.ts` cognitive-complexity finding was solved in
-  the generator. Do not replace it with a generic invoker map or core type
-  broadening.
+- The generated MCP executor refactor is broken local work and must be removed
+  first. It was not committed or pushed.
 - Generated files are still shipped code and must stay inside local and remote
   quality-gate scanning. Excluding generated files from Sonar or lint is not an
   acceptable remediation route.
-- Security hotspot and duplication closure remain unstarted beyond Phase 0
-  evidence.
+- Do not change core MCP tool aliases or descriptor types without owner
+  participation.
+- Sonar issues are either fixed or marked false positive when genuinely false.
+  They are never accepted as a pressure-release move.
+- Security hotspots are fixed when unsafe, or marked `SAFE` only with exact
+  site-specific rationale. `ACKNOWLEDGED` requires explicit owner acceptance of
+  residual risk.
 
 **Next safe step**:
 
-1. In a fresh session, inspect the current Sonar state and choose the next
-   highest-impact remaining blocker from the refreshed remediation plan.
-2. Keep generated files in local and remote gates; fix generators and source
-   roots rather than excluding checked code.
+1. In a fresh session, inspect `git status --short` and the local dirty diff.
+2. Revert/remove the broken generated MCP executor/generator experiment while
+   preserving this corrective handoff documentation.
+3. Re-query project/main Sonar HIGH issues and security hotspots.
+4. Choose the first remediation slice from that main/project backlog.
+5. Run the smallest relevant gates, then root `pnpm check` before committing.
 
 **Promotion watchlist**:
 
-- The session reinforced a practice lesson: once remediation enters core
-  generated/type surfaces, stop at the first type-system resistance and reframe
-  the problem before chasing errors outward.
+- Candidate practice lesson: branch-scoped quality-gate analysis is a
+  regression guard, not a backlog source for a branch whose purpose is to fix an
+  existing main/project backlog. Treating it as the source creates circular work.
+- Candidate practice lesson: once remediation enters core generated/type
+  surfaces, stop at the first type-system resistance and reframe the problem
+  before chasing errors outward.
 - Owner correction reinforced that generated files remain first-class checked
   code; quality-gate exclusion is not a valid route to green.

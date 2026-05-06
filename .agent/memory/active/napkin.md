@@ -178,3 +178,40 @@ audits and grow.
   the shared shape to a sibling contract module rather than importing back from
   the orchestrating builder.
   Source plane: active
+
+## 2026-05-06 — Ethereal Ascending Twilight / codex / GPT-5 / `019dfd`
+
+### Surprise: PR Sonar was mistaken for the remediation backlog
+
+- **Expected**: Opening draft PR #97 would give the next set of real Sonar
+  blockers to close on `fix/sonar-fixes-20260506`.
+- **Actual**: Owner corrected the framing as circular. A branch cannot be opened
+  to fix its own Sonar issues because branch-scoped Sonar issues only exist
+  after the branch introduces work. The branch purpose was to fix the existing
+  project/main HIGH issues and security hotspots; PR Sonar is only the
+  regression guard for that work.
+- **Why expectation failed**: I collapsed "remote verification surface" into
+  "worklist source" after the PR analysis appeared. That redirected the session
+  from main backlog remediation into PR-delta cleanup and then into a useless
+  generated-runtime duplication experiment.
+- **Behaviour change**: For remediation branches, identify the authoritative
+  backlog before opening or reading PR analysis. Project/main issue and hotspot
+  queries define this lane's work. PR Quality Gate data verifies the branch and
+  catches regressions; it does not replace the backlog. Sonar issues are either
+  fixed or marked false positive when genuinely false, never accepted.
+  Source plane: active
+
+### Owner correction: false-positive and hotspot dispositions are not hedges
+
+- **Expected**: "Per-finding disposition" could include accepting findings with
+  site-specific rationale.
+- **Actual**: Owner corrected the disposition rule: mark issues false positive
+  only when they are truly false positives; otherwise fix them. Never simply
+  accept issues. For security hotspots, review site by site: mark `SAFE` only
+  with a concrete site-specific rationale, fix unsafe sites, and use
+  `ACKNOWLEDGED` only if the owner explicitly accepts residual risk.
+- **Behaviour change**: Treat Sonar dispositions as evidence-backed outcomes,
+  not as dashboard pressure valves. Any future session that uses Sonar status
+  changes must be able to state the exact site, reason, and why the status is the
+  right security/quality judgement.
+  Source plane: active

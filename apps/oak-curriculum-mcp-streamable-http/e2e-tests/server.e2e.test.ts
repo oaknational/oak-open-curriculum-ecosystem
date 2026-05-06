@@ -133,8 +133,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'user-search-query',
     ];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
-    expect(names.sort((a, b) => a.localeCompare(b))).toEqual(
-      expectedToolNames.sort((a, b) => a.localeCompare(b)),
+    expect(names.toSorted((a, b) => a.localeCompare(b))).toEqual(
+      expectedToolNames.toSorted((a, b) => a.localeCompare(b)),
     );
   });
 

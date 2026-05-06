@@ -303,7 +303,7 @@ function collectOperationLookups(
       continue;
     }
     methodAndPathToOperationId.set(
-      `${method.toLowerCase()} ${rawPath.replace(/\{([^}]+)\}/g, ':$1')}`,
+      `${method.toLowerCase()} ${openApiPathToColonPath(rawPath)}`,
       operation.operationId,
     );
 
@@ -312,6 +312,15 @@ function collectOperationLookups(
       primaryStatusByOperationId.set(operation.operationId, primaryStatus);
     }
   }
+}
+
+function openApiPathToColonPath(rawPath: string): string {
+  return rawPath
+    .split('/')
+    .map((segment) =>
+      segment.startsWith('{') && segment.endsWith('}') ? `:${segment.slice(1, -1)}` : segment,
+    )
+    .join('/');
 }
 
 function getPrimaryStatus(responses: ResponsesObject | undefined): string | undefined {
