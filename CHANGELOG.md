@@ -1,3 +1,28 @@
+# [1.8.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.7.2...v1.8.0) (2026-05-06)
+
+
+### Bug Fixes
+
+* **ci:** remove retired smoke:dev:stub from pre-push hook and CI workflow ([ef593be](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ef593be9386a872224019c83bd66ef014db2bd61))
+* **hooks:** repair WS4 SHA-block citation after distilled.md rotation ([aa6e37d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/aa6e37d5879bc1364275ed2e9d48cdd8ee07f35e))
+* **observability:** dev boot falls through to local-dev; delete dead error kind and skipped tests ([2a2d1b0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2a2d1b05c3c1ba848df447563053d785809fef15))
+* **sdk:** align thread-units adapter to upstream schema dropping unitOrder ([9e657ad](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9e657ad3542ddb936a014deb17f8d9ebfd85ee3e))
+
+
+### Features
+
+* **agent-tools:** expand identity wordlists and cache session names ([ea7d3e0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ea7d3e013166c9fedb47e592e31c3987001054d2))
+* **agent-tools:** improve collaboration cli ergonomics ([33aeec4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/33aeec409f638c54443edfcac94e3715f4b66357))
+* **commit-skill:** orchestrate fitness, vocabulary, message-check gates ([767ee23](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/767ee23a64198ae4a11619b8d7c10a60129ad4b2))
+* **cursor:** add repo-owned status-line identity shim ([c1a63a8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c1a63a81ddcc7e703f10518467eecf21054e07f3))
+* **hooks:** block wildcard git add staging with citations ([0fffc55](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0fffc55e41aa38b5e670711a9f9903d5c8947b7f))
+* **hooks:** scoped hedging-vocabulary trip-list at write-time ([c256f32](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c256f325bbff957ca2a7761e06d31341d38a78f0))
+* **hooks:** scoped sha-in-permanent-doc regex with context exclusions ([8b0fe82](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8b0fe826f823e704612ea3d813fbe517b75fbc97)), closes [#3](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/3)
+* **oak-eslint:** add no-real-io-in-tests rule and clear gate blockers ([368e5af](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/368e5affccb055c7ee61f1dd0259a27336533a2b))
+* **oak-eslint:** wire no-real-io-in-tests at warn with frozen allowlist (close step 07) ([483a9e3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/483a9e329c63e0389421268b20725f25dc63585c)), closes [#5](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/5)
+* **observability:** add WS1 multi-sink + fixtures axes scaffolding (RED) ([a3a0222](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a3a0222ab2d1ee8ebdd781df72cff1d195fc9bd8))
+* **observability:** land ARC A1 canonical smoke harness + skip-arc RED tests ([792c2ca](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/792c2cada25ffb9f0d9dde54a8514d47e7e61b7f))
+
 ## [1.7.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.7.1...v1.7.2) (2026-04-30)
 
 
