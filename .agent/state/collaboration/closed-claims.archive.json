@@ -10677,23 +10677,188 @@
         },
         "summary": "Owner-requested session handoff plus light consolidation closeout completed; repo-continuity, thread record, napkin, and comms surfaces updated; deep consolidation remains due for inherited fitness pressure.",
         "evidence": [
+          {
+            "kind": "claim",
+            "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
+            "summary": "Claim explicitly closed by owning session."
+          },
+          {
+            "kind": "thread_record",
+            "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
+          },
+          {
+            "kind": "continuity",
+            "ref": ".agent/memory/operational/repo-continuity.md",
+            "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "93c0e53d-0040-4cd8-906e-fb32be4cffaa",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
         {
-          "kind": "claim",
-          "ref": "837f3fef-eb74-45b2-95fd-3ad9ae725656",
-          "summary": "Claim explicitly closed by owning session."
-        },
-        {
-          "kind": "thread_record",
-          "ref": ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-          "summary": "Thread record captures the quota-recovery closeout and light consolidation boundary."
-        },
-        {
-          "kind": "continuity",
-          "ref": ".agent/memory/operational/repo-continuity.md",
-          "summary": "Repo continuity records the landed commits, checks run, and next safe step."
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md",
+            ".agent/plans/sdk-and-mcp-enhancements/current/README.md"
+          ]
         }
-      ]
+      ],
+      "claimed_at": "2026-05-06T10:48:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Create executable plan for user-only download URL exposure",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:07:17Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Created queued executable MCP plan for user-only download URL boundary",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "93c0e53d-0040-4cd8-906e-fb32be4cffaa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b0059619-6d33-464e-8a3a-602672ad8223",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:08:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add ADR and documentation DoD requirements to download asset plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:20:28Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Added ADR and documentation DoD requirements to download asset plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b0059619-6d33-464e-8a3a-602672ad8223",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f19a8138-8328-4c02-801c-78abe0e2ad59",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:20:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify default setup does not expose asset content",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:21:46Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Clarified existing default asset-content boundary and hardening intent",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f19a8138-8328-4c02-801c-78abe0e2ad59",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1de525e9-d1df-43f6-b437-4efabfc8b9a7",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T11:50:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Remove over-specified markdown content tests from plan",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T11:51:48Z",
+        "closed_by": {
+          "agent_name": "Cindery Charring Pyre",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e220de"
+        },
+        "summary": "Removed exact-prose documentation checks from plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1de525e9-d1df-43f6-b437-4efabfc8b9a7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
-  }
   ]
 }

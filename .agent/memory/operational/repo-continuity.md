@@ -9,6 +9,20 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-06 — Cindery Charring Pyre / `cursor` /
+GPT-5.5 / `e220de`)**: authored
+`.agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md`
+and indexed it in the SDK/MCP current-plan README. The plan records the
+current default boundary (downloadable asset content is not model-visible),
+the user-only download URL hardening path, ADR/documentation DoD, and the
+owner correction that documentation validation must assess communicated
+decision rather than exact markdown prose. MCP reviewer and docs-ADR reviewer
+were used during planning; no asset URLs or asset content were opened. Claims
+opened for plan edits were closed; no active claim remains for this identity.
+**Next safe step**: implement the queued plan from Phase 0, preserving the
+no-asset-access constraint and using reviewer validation for documentation
+intent instead of exact-prose tests.
+
 **Session close (2026-05-06 — Masked Stalking Veil / `codex` /
 GPT-5 / `019dfc`)**: owner-directed quota-recovery and closeout
 landed in two commits: `ad03f276` (`docs(agent-tooling): record

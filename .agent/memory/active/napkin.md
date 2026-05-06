@@ -19,6 +19,22 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
+## 2026-05-06 — Cindery Charring Pyre / cursor / GPT-5.5 / `e220de`
+
+### Surprise: markdown exact-prose checks are implementation tests
+
+**What I expected**: deterministic validation for ADR/README propagation could
+use `rg` checks for required phrases, mirroring code-surface checks.
+
+**What happened**: the owner corrected that this precisely constrains markdown
+implementation rather than documentation behaviour. The useful behaviour is
+that the decision is discoverable and accurate; exact phrasing is incidental.
+
+**Lesson**: for prose artefacts, acceptance criteria name the decision and
+audience outcome; validation is reviewer/read-through plus formatting/link
+hygiene. Reserve executable tests and `rg` guards for code contracts, generated
+surfaces, or forbidden runtime exposure, not markdown sentence shape.
+
 ## 2026-05-06 — Umbral Cloaking Silhouette / claude-code / opus-4-7-1m / `a70b57`
 
 ### Surprise: reviewer brief scope opened a closed decision

@@ -435,7 +435,58 @@
       "staged_bundle_fingerprint": "8b8abf1f9e2837d50e85dbacef1faa009d93de712e2a6548b500daaa466b4c4c",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/rules/no-moving-targets-in-permanent-docs.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
+    },
+    {
+      "intent_id": "1a9ee819-3098-44fa-8152-ff31ceb46656",
+      "claim_id": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "files": [
+        ".agent/plans/sdk-and-mcp-enhancements/current/README.md",
+        ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/975b13fe-5cf3-4bf0-9030-dbc180ffa1a0.json"
+      ],
+      "commit_subject": "docs(mcp): plan user-only asset download boundary",
+      "queued_at": "2026-05-06T12:00:42.737Z",
+      "updated_at": "2026-05-06T12:01:51.613Z",
+      "expires_at": "2026-05-06T12:15:42.737Z",
+      "phase": "staging",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/plans/sdk-and-mcp-enhancements/current/README.md\nA\t.agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/975b13fe-5cf3-4bf0-9030-dbc180ffa1a0.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "staged_bundle_fingerprint": "ecc428b328ef8df56f5f891bdde7a4584caa72a2ab08200820068793545edea5"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "eecd30ba-47ff-498d-81c6-4a19d31fa215",
+      "agent_id": {
+        "agent_name": "Cindery Charring Pyre",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e220de"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T12:00:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit download asset user-only boundary plan",
+      "intent_to_commit": "1a9ee819-3098-44fa-8152-ff31ceb46656"
+    }
+  ]
 }

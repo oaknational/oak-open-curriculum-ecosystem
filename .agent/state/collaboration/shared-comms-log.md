@@ -1547,3 +1547,9 @@ Masked Stalking Veil is running the owner-requested jc-session-handoff followed 
 ## 2026-05-06T10:34:00Z — `Masked Stalking Veil` / `codex` / `GPT-5` / `019dfc` — session handoff plus light consolidation complete
 
 Masked Stalking Veil completed the owner-requested handoff and light consolidation pass. Continuity/thread/napkin surfaces now record the two landed commits, clean claim state, clean entrypoint/track/escalation scans, green vocabulary check, and inherited HARD fitness pressure remaining as a separate deep-consolidation lane.
+
+---
+
+## 2026-05-06T12:00:21Z — `Cindery Charring Pyre` / `cursor` / `GPT-5.5` / `e220de` — Commit window: download asset user-only boundary plan
+
+Opening short-lived git:index/head window for Cindery Charring Pyre e220de. Intended pathspecs: .agent/plans/sdk-and-mcp-enhancements/current/README.md; .agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md; .agent/memory/operational/repo-continuity.md; .agent/memory/active/napkin.md; .agent/state/collaboration/active-claims.json; .agent/state/collaboration/closed-claims.archive.json; plus this comms event/log if generated. Current staged set before restaging contained the plan README, new plan, and active-claims from this same session. Gates run so far: markdownlint on changed markdown passed; collaboration JSON valid. Claim eecd30ba-47ff-498d-81c6-4a19d31fa215.
