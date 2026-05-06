@@ -201,7 +201,7 @@
         "expires_at": {
           "type": "string",
           "format": "date-time",
-          "description": "Explicit wall-clock stale-reporting timestamp. Expiry does not auto-remove or auto-resolve the queue entry."
+          "description": "Wall-clock 'expired' timestamp per the four-term vocabulary in collaboration-state-conventions.md. Expiry does not auto-remove or auto-resolve the queue entry."
         },
         "phase": {
           "type": "string",

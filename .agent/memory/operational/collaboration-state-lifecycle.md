@@ -70,8 +70,9 @@ Use `pnpm agent-tools:commit-queue --` through the commit skill:
    clears the claim pointer. A successful git commit is the durable record.
 6. `phase --phase abandoned` if the attempt stops before success.
 
-`expires_at` is a wall-clock stale-reporting timestamp. Expiry never
-auto-removes a queue entry and never blocks another agent by itself.
+`expires_at` is the wall-clock **expired**-reporting timestamp (per the
+four-term vocabulary in conventions.md). Expiry never auto-removes a queue
+entry and never blocks another agent by itself.
 `session_counter` is intentionally absent from v1.3.0.
 
 Commit-queue mutations reuse the same JSON transaction helper as active
@@ -102,12 +103,13 @@ not part of the current protocol.
 Where a platform exposes a real session-end hook, use it as a best-effort
 pre-close cleanup prompt or closure script. Codex currently has hooks but no
 documented `SessionEnd` event; its turn-scoped `Stop` hook can remind the agent
-before a turn ends, but normal freshness and stale/orphan cleanup remain the
-fallback for missed Codex session closes.
+before a turn ends, but stale and orphaned cleanup remain the fallback
+for missed Codex session closes.
 
 Post-session janitors must not mark work as successful. If a known-ended
 session leaves a claim open past the session-close grace TTL, archive it as
-stale/orphaned with evidence of the missed close. Keep the per-type freshness
+orphaned (with `closure.kind: "stale"`) and attach evidence of the missed
+close. Keep the per-type freshness
 window separate from this grace TTL: `git:index/head` and attention pings can
 expire in minutes, while normal active-work claims use the longer heartbeat
 window unless a session-end signal proves the owner session is gone.
@@ -116,13 +118,13 @@ window unless a session-end signal proves the owner session is gone.
 
 `consolidate-docs § 7e` walks `active-claims.json`, computes
 `claimed_at + freshness_seconds` (or `heartbeat_at + freshness_seconds`
-if newer), and archives any expired entry to `closed-claims.archive.json`
+if newer), and archives any **stale** entry to `closed-claims.archive.json`
 with `archived_at` and `closure.kind: "stale"`. Stale claims are
 *noise*, not *blockers*. The system does not strand agents waiting on a
 peer's forgotten claim.
 
-Fresh but quiet claims are informational only: possible crashed session,
-not a block. The next staleness threshold archives the entry
+**Fresh-but-quiet** claims are informational only: possible crashed
+session, not a block. The next staleness threshold archives the entry
 automatically.
 
 ### Apparently Orphaned Claims

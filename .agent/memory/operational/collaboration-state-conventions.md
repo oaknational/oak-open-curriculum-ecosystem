@@ -17,11 +17,31 @@ transaction tripwire. Detailed lifecycle recipes live in
 across this surface family is governed by the
 [placement contract][placement-contract].
 
+## Vocabulary
+
+The four-term taxonomy used across this surface family:
+
+- **stale** — past `freshness_seconds` TTL; archivable by the consolidate-docs
+  stale-claim audit. Noise to be audited at consolidation, not a blocker.
+- **fresh-but-quiet** — within TTL, no recent `heartbeat_at`. Informational
+  only; the next staleness threshold archives the entry automatically if the
+  session never returns.
+- **orphaned** — a fresh-but-quiet claim whose owning session is known or
+  suspected to have ended without an explicit close. Cleanup ethics for
+  orphaned claims live in [`agent-collaboration.md`][directive] §d.
+- **expired** — wall-clock past `expires_at` (used by `commit_queue` entries
+  and sidebars). Stale-reporting only; expiry never auto-removes a queue
+  entry or auto-resolves a sidebar.
+
+`closure.kind: "stale"` is the archive label for any claim that left the
+active registry through staleness, including orphan archival via the
+consolidate-docs audit.
+
 ## Surfaces
 
 All collaboration-state timestamps are UTC ISO 8601 strings with a trailing
 `Z`. Owner-local time can be mentioned in prose when useful, but UTC is the
-canonical value for stale/fresh calculations and durable state.
+canonical value for staleness and freshness calculations and durable state.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
@@ -83,7 +103,8 @@ Live claims belong to the live session that opened or inherited them. The
 current terminal-session model does not support reclaiming old live claims on
 resume. When a session closes, its claims should close explicitly into
 `closed-claims.archive.json`; if the agent misses that closeout, a later
-janitor archives the claim as stale/orphaned rather than successful.
+janitor archives the claim as orphaned (with `closure.kind: "stale"`)
+rather than successful.
 
 TTL is type-specific. Normal active-work claims use the heartbeat freshness
 window above; commit-window claims use a short expiry; attention pings and
@@ -102,7 +123,7 @@ This file keeps the operational index compact.
 | Open / refresh active work | `active-claims.json` | Fresh claim with `claimed_at`, optional `heartbeat_at`, and visible areas |
 | Queue commit intent | `active-claims.json` root `commit_queue` | FIFO advisory entry with files, subject, phase, expiry, and staged-bundle fingerprint |
 | Close active work | `closed-claims.archive.json` | Claim copied with `closure.kind: "explicit"` and evidence refs |
-| Archive stale work | `closed-claims.archive.json` | Expired claim preserved with `closure.kind: "stale"` |
+| Archive stale work | `closed-claims.archive.json` | Stale claim preserved with `closure.kind: "stale"` |
 | Open structured coordination | `conversations/<id>.json` | Decision-thread event list with concrete entries and evidence |
 | Request sidebar | `conversations/<id>.json` | `sidebar_*` entries grouped by `sidebar_id`; timeout is reporting only |
 | Record joint commitment | `conversations/<id>.json` | `joint_decision*` entries with decider, recorder, actor, ack, and evidence |
