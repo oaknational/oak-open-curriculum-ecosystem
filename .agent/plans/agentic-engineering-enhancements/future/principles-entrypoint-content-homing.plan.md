@@ -403,8 +403,8 @@ finalised when this plan promotes to `current/`.
 - [`schema-first-execution.md`](../../../directives/schema-first-execution.md)
   — receiving home for the Cardinal Rule extraction; also prior
   art for what a focused per-principle directive looks like.
-- [PDR-014](../../../practice-core/decision-records/PDR-014-knowledge-roles.md)
-  — knowledge-role taxonomy that the knowledge-role plan operationalises.
+- [PDR-014](../../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
+  — knowledge-flow discipline that the knowledge-role plan operationalises.
 - [PDR-029](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
   — layered-defence shape; informs the contract's "multiple
   mechanisms per principle" allowance.

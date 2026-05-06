@@ -137,7 +137,3 @@ permissive than the rule's full reach) is itself a refinement
 candidate — either tighten the hook to detect SHA-shaped tokens
 even inside backticks when the surrounding context is prose, or
 leave the hook as-is and rely on the rule for the stricter case.
-
-## Source Landing
-
-WS4 of `doctrine-enforcement-quick-wins.plan` (2026-05-04).
