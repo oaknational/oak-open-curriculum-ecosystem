@@ -1929,6 +1929,105 @@ continuity snapshots.
   rather than promotion through the candidate pipeline. Owner
   decision required to activate.
 
++ 2026-05-05–06; **fat-baton handoff — session-handoff events should
+  inline the current diagnostic state when the receiver will need it**
+  (Ashen Banking Bellows `7cf730`, comms event
+  `dfdea3f7-7968-4557-9a08-9890c8d2c7f3`, 2026-05-05T13:52:04Z,
+  15182-char body; captured this pass by Riverine Fishing Rudder
+  `b89da0`). Observed: Ashen's handoff event to Vining Growing Meadow
+  inlined the full `practice:fitness:strict-hard` orchestrator output
+  verbatim (line counts, char counts, zone markers) rather than naming
+  the diagnostic state by reference only. Vining did not have to
+  re-run the orchestrator to anchor in-flight fitness state.
+  Asymmetry: one extra orchestrator invocation at handoff-authorship
+  time; one avoided re-run per receiver (low fan-out; one-to-one
+  handoff). Behaviour change: when authoring a session-handoff event
+  whose receiver is named and whose intake will require diagnostic
+  state, paste the diagnostic output verbatim into the body.
+  Discriminator: receiver is named (one-to-one, not broadcast); the
+  diagnostic state is ephemeral and decays between author's
+  measurement and receiver's measurement. Composes with PDR-048
+  (insight capture at moment of occurrence — the diagnostic state is
+  exactly the insight that decays without verbatim capture) and
+  PDR-046 §Move 3 (inlined diagnostic is graduation of the
+  orchestrator's signal into the handoff record, not loss-compression).
+  Source-surface: comms event `dfdea3f7`; Step 2 Surprise A in
+  archive `napkin-2026-05-06.md`.
+  Graduation-target: coordination-cure pattern at
+  `.agent/memory/active/patterns/fat-baton-handoff-inline-diagnostic.md`
+  naming the pattern shape with discrimination criteria (named
+  receiver; ephemeral diagnostic; one-to-one).
+  Trigger-condition: second worked instance of a named-receiver
+  handoff event that inlines diagnostic state the receiver confirms
+  was used at intake.
+  Status: pending — single first-class instance.
+
++ 2026-05-05–06; **workflow gaps directly relevant to an in-flight
+  consolidation session can be patched in-session rather than
+  deferred to a later session** (Vining Growing Meadow `92cb10`,
+  session-handoff §6a refinement commit `84879230`; captured this
+  pass by Riverine Fishing Rudder `b89da0`). Observed: Vining
+  discovered that `session-handoff.md §6a` listed napkin buffers as
+  source collection for session-close recordings but did not name
+  comms-events as an auxiliary source. The gap was directly relevant
+  to the in-flight consolidation work (Step 2 required comms-events
+  as its primary read source). Vining patched the workflow file
+  within the same session that exposed the gap — not in a later
+  session. The default Practice cadence is capture-in-one-session /
+  graduate-in-later-session (PDR-014 + PDR-046 layering); this
+  instance refines the boundary: the "later" is not mandatory when
+  (a) the consolidation session itself is the natural graduation
+  moment for the gap, (b) the gap is directly relevant to the
+  in-flight work, (c) the patch is a single coherent edit, and (d)
+  reviewer dispatch fires before commit. The 30%-context rule still
+  gates directive-file edits; non-directive workflow files (commands,
+  skills, permanent docs) are not gated.
+  Source-surface: comms events `dfdea3f7` (Ashen handoff listing
+  buffers without comms-events) → `8170aad1` (Vining arrival
+  reply noting the gap) → commit `84879230`; Step 2 Surprise B in
+  archive `napkin-2026-05-06.md`.
+  Graduation-target: amendment to PDR-014 (consolidation flow)
+  adding the in-session-patch discriminator criteria for workflow-gap
+  substance discovered during consolidation, OR new entry in
+  `distilled.md §Process` naming the consolidation/capture-boundary
+  refinement.
+  Trigger-condition: second worked instance of an in-session workflow
+  patch on a gap directly relevant to the consolidation in flight,
+  where reviewer dispatch also fired; OR owner direction.
+  Status: pending — single first-class instance.
+
++ 2026-05-05–06; **cross-thread git-history advances are observable
+  coordination signals; peer agents can adapt without exchanging
+  messages** (Opalescent Glowing Constellation `019df9`, comms
+  events `9d1b26c0` → `9ad379a7` → `eecb8de8` → `f4d5adaf`,
+  2026-05-05T20:27Z–20:45Z; captured this pass by Riverine Fishing
+  Rudder `b89da0`). Observed: Constellation opened on the
+  observability-sentry-otel thread, performed PR-93 remote
+  verification, detected that Riverine's Step 1 commit had advanced
+  the local branch head to a new SHA mid-session, re-ran the
+  verification against the new head, and posted a fresh completion
+  event — all without any comms exchange between the two threads.
+  The shared substrate (immutable comms-events ordered by
+  `created_at` + git history) was sufficient context for cross-thread
+  adaptation. Behaviour change: treat git-history advances on a
+  shared branch as observable cross-thread coordination signals; a
+  cross-thread peer re-running their verification against a new head
+  SHA is correct substrate use, not a violation of thread isolation.
+  Thread-scoped identity (PDR-027) does not preclude cross-thread
+  substrate observation; the active-areas registry, comms-events,
+  and git history are all shared observable surfaces.
+  Source-surface: comms events `9d1b26c0`, `9ad379a7`, `eecb8de8`,
+  `f4d5adaf`; Step 2 Surprise C in archive `napkin-2026-05-06.md`.
+  Graduation-target: amendment to PDR-027 §Thread and Session Scope
+  adding a note that thread-scoped identity does not exclude
+  cross-thread substrate observation (git history, active-areas
+  registry, comms-events), OR new `distilled.md §Agent-Coordination`
+  entry naming the shared observable surfaces.
+  Trigger-condition: second instance of a cross-thread adaptation
+  driven by git-history observation without explicit comms exchange;
+  OR owner direction.
+  Status: pending — single first-class instance.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

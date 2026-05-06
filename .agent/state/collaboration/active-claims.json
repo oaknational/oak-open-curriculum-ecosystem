@@ -413,8 +413,8 @@
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nA\t.agent/state/collaboration/comms-events/512682-session-handoff-close-2026-05-05.json\nA\t.agent/state/collaboration/comms-events/fe12b590-d0ce-40b5-99c8-629a0f22f432.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
     },
     {
-      "intent_id": "acc5a973-d17c-40ef-89e1-dd317a9b921e",
-      "claim_id": "014db173-b0d8-49f3-a01b-83c13dac9237",
+      "intent_id": "fd8083cc-6e4d-4ebd-b7b6-2146ea60f209",
+      "claim_id": "babefcc3-f187-4d15-bd4e-5f3c1565c705",
       "agent_id": {
         "agent_name": "Riverine Fishing Rudder",
         "platform": "claude-code",
@@ -423,15 +423,39 @@
       },
       "files": [
         ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/pending-graduations.md",
         ".agent/state/collaboration/active-claims.json"
       ],
-      "commit_subject": "docs(napkin): step 2 mirror comms-events corpus into structured surprises",
-      "queued_at": "2026-05-05T20:57:06.470Z",
-      "updated_at": "2026-05-06T07:41:19.219Z",
-      "expires_at": "2026-05-05T21:12:06.470Z",
-      "phase": "staging",
-      "notes": "Owner marked the associated Claude-code claims stale because the Claude agents are out of quota until tomorrow; no work-substance decision was made."
+      "commit_subject": "docs(napkin): step 3 drain pass into rotation entry + 3 pending-grad additions",
+      "queued_at": "2026-05-06T07:52:44.490Z",
+      "updated_at": "2026-05-06T07:52:49.068Z",
+      "expires_at": "2026-05-06T08:07:44.490Z",
+      "phase": "staging"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "babefcc3-f187-4d15-bd4e-5f3c1565c705",
+      "agent_id": {
+        "agent_name": "Riverine Fishing Rudder",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "b89da0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "feat/eef_exploration"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T07:52:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "step 3 commit window: napkin drained + 3 pending-grad entries added",
+      "intent_to_commit": "fd8083cc-6e4d-4ebd-b7b6-2146ea60f209"
+    }
+  ]
 }
