@@ -10961,6 +10961,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4804f41d-b2d2-402f-8cc0-7b5733936ae6",
+      "agent_id": {
+        "agent_name": "Ethereal Ascending Twilight",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfd"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-06T15:12:07Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Short-lived commit window for green Sonar remediation baseline.",
+      "archived_at": "2026-05-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-06T15:19:01Z",
+        "closed_by": {
+          "agent_name": "Ethereal Ascending Twilight",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfd"
+        },
+        "summary": "Commit 457fa1f0 created for green Sonar remediation baseline; blocking hooks passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4804f41d-b2d2-402f-8cc0-7b5733936ae6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
