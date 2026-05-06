@@ -197,13 +197,10 @@
     "command": "node .claude/scripts/statusline-identity.mjs"
   },
   "enabledPlugins": {
-    "mcp-apps@mcp-apps": true,
     "sentry@claude-plugins-official": true,
     "remember@claude-plugins-official": true,
     "mcp-server-dev@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
-    "linear@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true,
-    "cloudflare@claude-plugins-official": true
+    "vercel@claude-plugins-official": true
   }
 }

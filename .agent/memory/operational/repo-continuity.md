@@ -996,6 +996,13 @@ quota-recovery commit stewardship and owner-directed
 Canonical identity row is in
 `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-06: `agentic-engineering-enhancements`
+latest identity is Ashen Burning Anvil / `codex` / `GPT-5` / `019dfd`
+for urgent skill-load pressure relief Phase 1 implementation
+(`.claude/settings.json` project-level plugin prune). Canonical identity
+row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
 
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
@@ -1013,6 +1020,25 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-06 (Ashen Burning Anvil, codex, GPT-5, `019dfd`,
+agentic-engineering-enhancements thread, urgent skill-load pressure relief
+Phase 1 implementation + closeout)**:
+Implemented the urgent reversible `.claude/settings.json` prune from
+`agent-artefact-load-pressure-relief.plan.md`: removed project-level
+`mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, and
+`linear@claude-plugins-official` activations while retaining Sentry,
+remember, mcp-server-dev, SonarQube, and Vercel. Backup captured at
+`/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`; active
+implementation claim closed; validation green for `pnpm portability:check`,
+`pnpm subagents:check`, `pnpm type-check`, markdownlint on the touched
+plan/thread surfaces, `git diff --check`, and collaboration-state check.
+`claude doctor` was available but hung without useful non-interactive
+output from Codex, so the fresh Claude Code active-skill recount remains
+the only incomplete acceptance item. **Next safe step**: open a fresh
+Claude Code session, record `/doctor`/system-reminder skill-list evidence,
+confirm the active skill count drops by at least 12, and confirm the four
+bare MCP Apps skills still surface.
 
 **2026-05-06 (Masked Stalking Veil, codex, GPT-5, `019dfc`,
 agentic-engineering-enhancements thread, quota-recovery stewardship +
@@ -1685,6 +1711,19 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-06 Ashen Burning Anvil, codex, GPT-5, `019dfd`,
+owner-directed urgent skill-load pressure relief implementation plus
+`/jc-session-handoff`): `not due for deep consolidation — focused settings
+prune and closeout evidence session`. Checks run: entry-point sweep clean
+(`CLAUDE.md`, `AGENTS.md`, `GEMINI.md` in contract); no track cards beyond
+the operational README; active implementation claim closed; collaboration
+check green; gates green for portability, subagents, type-check,
+markdownlint on touched markdown, and diff whitespace. New learning is
+operational rather than doctrine-shaped: Codex can start `claude doctor`,
+but this environment did not yield stable non-interactive active-skill
+evidence, so the Claude recount remains explicitly pending in the plan and
+thread record. No ADR/PDR candidate qualifies from the closeout itself.**
 
 **Status (2026-05-06 Masked Stalking Veil, codex, GPT-5, `019dfc`,
 owner-directed `/jc-session-handoff` plus light `/jc-consolidate-docs`

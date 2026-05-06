@@ -7,23 +7,23 @@ overview: >-
 todos:
   - id: 0-1-baseline-capture
     content: "0.1 Capture pre-pruning baseline (validator output + active-skill count) into Baselines table."
-    status: pending
+    status: completed
     depends_on: []
   - id: 0-2-settings-backup
     content: "0.2 Backup .claude/settings.json out-of-tree (e.g. /tmp/) for safe rollback."
-    status: pending
+    status: completed
     depends_on: []
   - id: 1-1-remove-mcp-apps
     content: "1.1 Remove mcp-apps@mcp-apps from .claude/settings.json enabledPlugins."
-    status: pending
+    status: completed
     depends_on: [0-1-baseline-capture, 0-2-settings-backup]
   - id: 1-2-remove-cloudflare
     content: "1.2 Remove cloudflare@claude-plugins-official from enabledPlugins."
-    status: pending
+    status: completed
     depends_on: [0-1-baseline-capture, 0-2-settings-backup]
   - id: 1-3-remove-linear
     content: "1.3 Remove linear@claude-plugins-official from enabledPlugins."
-    status: pending
+    status: completed
     depends_on: [0-1-baseline-capture, 0-2-settings-backup]
   - id: 1-4-phase-1-gate
     content: "1.4 Run portability:check, subagents:check, type-check; fresh session recount."
@@ -51,7 +51,7 @@ todos:
     depends_on: [3-2-functional-spotcheck]
   - id: 4-2-continuity-update
     content: "4.2 Light continuity update (comms-log + thread record refresh)."
-    status: pending
+    status: completed
     depends_on: [4-1-record-outcome]
 isProject: false
 ---
@@ -59,7 +59,7 @@ isProject: false
 # Agent Artefact Load Pressure Relief — Urgent Plugin and Skill Pruning
 
 **Last Updated**: 2026-05-06
-**Status**: 🔴 NOT STARTED (decision-complete 2026-05-06)
+**Status**: 🟡 PHASE 1 SETTINGS + HANDOFF IMPLEMENTED; CLAUDE RECOUNT PENDING
 **Decision-completion seal**: All decisions recorded inline; no item
 awaits owner sign-off. Execution can begin at Phase 0.1 without
 re-opening any question.
@@ -70,36 +70,29 @@ silently truncating skill metadata in long sessions.
 
 ---
 
-## Next-session execution — highest-impact item
+## Next-session execution — fresh Claude Code acceptance
 
-The highest-impact single item in this plan is **Phase 1.2: remove
-`cloudflare@claude-plugins-official` plugin (−8 skills)**. It is also
-the largest reversible delta with zero functional loss in this
-project (no Cloudflare workspaces, no MCP grants, no `.agent/`
-references).
+Phase 0 and Phase 1 settings work is implemented. The highest-impact
+item, **Phase 1.2: remove `cloudflare@claude-plugins-official`
+plugin (−8 skills)**, has landed alongside the duplicate `mcp-apps`
+removal and unused Linear removal.
 
-**Recommended execution shape for the next session** (single bundled
-unit of work, ~30 min):
+**Next safe step** (fresh Claude Code session, no settings edit unless
+the recount surfaces an anomaly):
 
-1. Phase 0.1 — capture pre-prune baseline (`pnpm portability:check`
-   + `claude /doctor` skill count + system reminder skill list).
-2. Phase 0.2 — out-of-tree settings backup.
-3. Phase 1.1 — remove `mcp-apps@mcp-apps` (−4 skills).
-4. **Phase 1.2 — remove `cloudflare@claude-plugins-official` (−8 skills, the highest-impact single item).**
-5. Phase 1.3 — remove `linear@claude-plugins-official` (no skills,
-   plugin metadata only; trivial cleanup).
-6. Phase 1.4 — gate (`pnpm portability:check`, `pnpm subagents:check`,
-   `pnpm type-check`); fresh-session active-skill recount.
-
-If only one item is to be executed, do **Phase 1.2 alone** preceded
-by Phases 0.1 + 0.2 (baseline + backup are required preconditions).
-Phase 2 (Vercel triage), Phase 3 (verify), Phase 4 (handoff) can be
-scheduled independently in a follow-up session.
-
-Order within Phase 1 is operationally arbitrary — the three plugin
-removals are independent edits to `.claude/settings.json`. The
-recommended order above is purely cognitive (smallest commit first;
-largest impact second; cleanup third).
+1. Record `/doctor` active-skill count and current system-reminder
+   skill list.
+2. Confirm the count drops by at least 12 against the audit proxy
+   (~112 → expected ~100): 4 `mcp-apps:*` and 8 `cloudflare:*`
+   skills gone.
+3. Confirm bare canonical MCP Apps skills still surface:
+   `add-app-to-server`, `convert-web-app`, `create-mcp-app`, and
+   `migrate-oai-app`.
+4. Confirm `.claude/settings.local.json` grants remain intact for
+   Oak, Sentry, SonarQube, GitHub, and Vercel.
+5. Update this plan's Outcome/Baselines tables with the measured
+   post-prune count. Do not start Vercel triage or the strategic
+   `agent-tools artefacts` CLI work in that acceptance step.
 
 ---
 
@@ -412,11 +405,11 @@ not yet remove the plugin.
 
 | Metric | Pre-prune | Post-Phase-1 | Post-Phase-2 | Post-Phase-3 |
 |---|---|---|---|---|
-| `pnpm portability:check` | — | — | — | — |
-| Approx. active-skill count (system reminder) | — | — | — | — |
-| `mcp-apps:*` skills present | 4 | 0 | 0 | 0 |
-| `cloudflare:*` skills present | 8 | 0 | 0 | 0 |
-| `linear` plugin present | yes | no | no | no |
+| `pnpm portability:check` | PASS | PASS | — | — |
+| Approx. active-skill count (system reminder) | audit ~112 | expected ~100; recount pending | — | — |
+| `mcp-apps:*` skills present | 4 | settings removed; fresh session pending | 0 | 0 |
+| `cloudflare:*` skills present | 8 | settings removed; fresh session pending | 0 | 0 |
+| `linear` plugin present | yes | no in settings | no | no |
 | `vercel:*` skills present | 25 | 25 | 25 (no removal — see 2.2) | 25 |
 | Vercel skills classified `parked` (Phase 2) | n/a | n/a | recorded in plan body | unchanged |
 
@@ -424,7 +417,38 @@ not yet remove the plugin.
 
 ## Outcome
 
-*Filled in at Phase 4 close.*
+### 2026-05-06 Phase 1 implementation
+
++ **Agent**: Ashen Burning Anvil / codex / GPT-5 / `019dfd`.
++ **Claim**: `b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c`.
++ **Backup**:
+  `/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`.
++ **Baseline**: `pnpm portability:check` passed before pruning with
+  12 commands, 37 skills, 52 rules, 22 reviewer adapters, 54 Cursor
+  triggers, 52 Claude rules, 52 `.agents` rules, and 40 command
+  adapters. `claude doctor` was available but produced no
+  non-interactive output from Codex and was killed after hanging; use
+  the audit's ~112 active-skill estimate as the pre-prune proxy until
+  a fresh Claude Code session records `/doctor` output.
++ **Change**: `.claude/settings.json` no longer enables
+  `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, or
+  `linear@claude-plugins-official`. Retained plugins are Sentry,
+  remember, MCP server dev, SonarQube, and Vercel.
++ **Validation**: `jq '.enabledPlugins' .claude/settings.json`,
+  `pnpm portability:check`, `pnpm subagents:check`, and
+  `pnpm type-check` all passed. `pnpm type-check` reported
+  36 successful Turbo tasks. Session handoff validation also passed:
+  markdownlint on the touched plan/memory surfaces, `git diff --check`,
+  `pnpm agent-tools:collaboration-state -- check`, and
+  `pnpm practice:fitness:informational` (pre-existing HARD signals
+  remain in `principles.md`, `distilled.md`, and
+  `pending-graduations.md`; napkin stayed green).
++ **Pending evidence**: fresh Claude Code session recount, confirmation
+  that bare canonical MCP Apps skills still surface, and confirmation
+  that the removed plugin namespaces no longer appear in the session
+  reminder.
++ **Deliberately not done**: no `claude plugin uninstall`, no Vercel
+  pruning, and no strategic `agent-tools artefacts` CLI work.
 
 ---
 

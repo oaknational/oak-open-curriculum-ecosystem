@@ -19,6 +19,16 @@ The most recent rotation summary is archived at
 the pre-step napkin from the same pass is at
 [`archive/napkin-2026-05-06.md`](archive/napkin-2026-05-06.md).
 
+## 2026-05-06 — Ashen Burning Anvil / codex / GPT-5 / `019dfd`
+
+### Note: Claude Code recount evidence needs a real Claude session
+
+During urgent skill-load pressure relief, `claude doctor` was available from
+Codex but hung without useful non-interactive output. The reversible settings
+prune can land with repo-local gates green, but active-skill recount evidence
+belongs in a fresh Claude Code session where `/doctor` and the system-reminder
+skill list are visible.
+
 ## 2026-05-06 — Cindery Charring Pyre / cursor / GPT-5.5 / `e220de`
 
 ### Surprise: markdown exact-prose checks are implementation tests

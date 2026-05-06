@@ -1,5 +1,45 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Skill-load pressure relief Phase 1 implemented (2026-05-06)
+
+**Last refreshed**: 2026-05-06 (Ashen Burning Anvil / codex /
+GPT-5 / `019dfd`).
+
+**Landing**:
+
+- Implemented Phase 0 + Phase 1 of
+  `.agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md`.
+  `.claude/settings.json` now disables the duplicate/unused project
+  plugins `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`,
+  and `linear@claude-plugins-official`. Retained plugins are Sentry,
+  remember, MCP server dev, SonarQube, and Vercel.
+- Out-of-tree backup recorded at
+  `/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`.
+- Validation green from Codex: `pnpm portability:check`,
+  `pnpm subagents:check`, and `pnpm type-check` (36 successful Turbo
+  tasks). `jq '.enabledPlugins' .claude/settings.json` confirms only
+  the retained plugins are enabled.
+
+**Pending evidence**:
+
+- Fresh Claude Code session must record `/doctor` active-skill count
+  and system-reminder skill list. The direct `claude doctor` command
+  hung without non-interactive output from Codex and was killed, so
+  the post-prune count remains expected (~100 from the audit's ~112
+  minus 12), not yet measured.
+- Confirm bare canonical MCP Apps skills still surface:
+  `add-app-to-server`, `convert-web-app`, `create-mcp-app`,
+  `migrate-oai-app`.
+- Confirm removed namespaces no longer surface:
+  `mcp-apps:*`, `cloudflare:*`, and the Linear plugin presence.
+
+**Next safe step for fresh Claude Code session**: perform the recount
+and canonical-skill spot-check above, then update the urgent plan's
+post-Phase-1 evidence. Do not start Vercel triage or the strategic
+`agent-tools artefacts` CLI work unless explicitly scheduled.
+
+---
+
 ## Active arc — Quota-recovery commit stewardship + closeout (2026-05-06)
 
 **Last refreshed**: 2026-05-06 (Masked Stalking Veil / codex /
@@ -1209,6 +1249,7 @@ and
 | `Glittering Waning Galaxy` | `claude-code` | `claude-opus-4-7-1m` | `3cff70` | `new-agent-tooling-plan-collection-spun-out-of-agentic-engineering-enhancements; nineteen-plans-git-mv-eight-to-current-eleven-to-future; frictions-register-seeded-with-eleven-entries-from-napkin-Surprise-7-and-comms-events-2dbd74f6-a1cf45a2-dfdea3f7-and-Stamen-CLI-flag-rejection; cross-references-rewritten-in-twenty-four-active-surfaces-directives-memory-threads-research-analysis-prompts-rules-state-fixtures; archive-refs-in-moved-plans-repointed-from-broken-agent-tooling-archive-to-correct-agentic-engineering-enhancements-archive; scope-boundary-clarification-added-across-three-READMEs-distinguishing-implementation-level-workspace-from-practice-level-broader-with-when-in-doubt-test-could-this-plan-exist-if-agent-tools-did-not; bootstrap-fast-path-comms-event-d1cc1290-at-session-open-no-active-claim-opened-none-to-close` | 2026-05-05 | 2026-05-05 |
 | `Riverine Fishing Rudder` | `claude-code` | `claude-opus-4-7-1m` | `b89da0` | `three-step-napkin-and-comms-graduation-pass-per-owner-direction-2026-05-05; step-1-archived-pre-step-napkin-verbatim-514L-49170C-nine-2026-05-05-session-entries-plus-drained-plus-F-12-F-13-frictions-added; step-2-walked-78-comms-events-extracted-3-structured-surprises-A-fat-baton-handoff-B-workflow-self-improvement-C-cross-thread-git-substrate; step-3-routed-surprises-A-B-C-to-pending-graduations-3-new-entries-plus-drained-napkin-to-single-rotation-summary; step-commits-307f7f13-d7ca48d5-5b40e206; docs-adr-reviewer-P0-P1-clean-on-each-step` | 2026-05-05 | 2026-05-06 |
 | `Masked Stalking Veil` | `codex` | `GPT-5` | `019dfc` | `quota-recovery-commit-stewardship-and-session-handoff-light-consolidation; committed-Umbral-Cloaking-Silhouette-artefact-portability-audit-and-plans-as-ad03f276; closed-quota-recovery-collaboration-state-as-8bf55080; ran-owner-requested-jc-session-handoff-plus-light-jc-consolidate-docs; no-entrypoint-drift-no-track-cards-no-escalations-vocabulary-green-collaboration-check-green; inherited-fitness-pressure-remains-separate-lane` | 2026-05-06 | 2026-05-06 |
+| `Ashen Burning Anvil` | `codex` | `GPT-5` | `019dfd` | `urgent-skill-load-pressure-relief-phase-1-settings-prune; removed-project-level-mcp-apps-cloudflare-linear-plugin-activations; retained-sentry-remember-mcp-server-dev-sonarqube-vercel; backup-captured; portability-subagents-typecheck-markdownlint-diff-whitespace-and-collaboration-check-green; claude-code-fresh-session-recount-pending-because-codex-claude-doctor-hung-non-interactively` | 2026-05-06 | 2026-05-06 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
