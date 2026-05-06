@@ -83,10 +83,16 @@ because the substance-led read converged on one repeating pattern
 across N findings. Owner direction at decision point: *contract +
 plan + surface updates, no reflection report.*
 
-**Next safe step (post-Phase-2 update)**: Phase 2 landed in
-session `4044d1` (Embered Melting Kiln) — see Active arc at the top
-of this record. The remaining open question is the directive
-hard-limit ceiling; carry that into the next directive-edit session.
+**Next safe step (post-Phase-2 update)**: process the napkin and
+pending-graduations register without limiting destination-file fitness.
+Opener at
+[`2026-05-06-napkin-and-pending-graduations-processing-opener.md`](../../../plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md).
+Boundary: substance > destination fitness; legitimate graduations
+land without truncation, fitness signals on destination files become
+the next audit's input. The directive hard-limit ceiling question
+from the substance-trim correction was resolved by the function-driven
+calibration commit `ca0794fc` (200/260 → 240/320) — agent-collaboration.md
+now sits at 280 lines / soft / in growth headroom.
 
 **Companions deferred to fresh session(s)**:
 
@@ -1350,6 +1356,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Embered Melting Kiln` | `claude-code` | `claude-opus-4-7-1m` | `4044d1` | `phase-2-collaboration-state-surface-restructure-five-commits-13e2db28-through-40f7da45; substance-trim-anti-pattern-caught-by-owner-correction-and-restored; full-fitness-limit-audit-32-files; two-function-driven-limit-calibrations-agent-collaboration-md-and-continuity-practice-md-commit-ca0794fc; opener-authored-for-napkin-and-pending-graduations-processing` | 2026-05-06 | 2026-05-06 |
+| `Briny Plumbing Fjord` | `claude-code` | `claude-opus-4-7-1m` | `fd36cf` | `phase-1-collaboration-state-surface-restructure-placement-contract-authored-and-plan-body-and-opener-supersession-commit-c014ad2a; phase-2-opener-authored-commit-be7c1fd6` | 2026-05-06 | 2026-05-06 |
 | `Iridescent Waxing Orbit` | `claude-code` | `claude-opus-4-7-1m` | `aeebab` | `distilled-md-graduation-pass-four-new-rules; vaporware-citation-deferral-audit-doctrine-scanner-CLI-gating; closure-discipline-owns-the-loop-reframe; orphaned-claim-policy-graduated-to-collaboration-state-lifecycle; foreign-stage-absorption-third-instance-observed-cc8866a8; commits b9bae574 and d9aab409` | 2026-05-06 | 2026-05-06 |
 | `Nebulous Illuminating Satellite` | `claude-code` | `claude-opus-4-7-1m` | `fe4acc` | `doctrine-sharpening-and-deeper-convergence-pass; gate-off-fix-gate-on-anti-pattern-elevation; practice-core-surface-retirement-execution; pattern-and-displaced-doctrine-graduations; trinity-active-principles-extensions-with-per-diff-approval; deferred-items-plan-family-authoring; six-commit-landing-shape` | 2026-04-29 | 2026-04-29 |
 | `Pearly Swimming Atoll` | `codex` | `GPT-5` | `019dd9` | `repo-goal-narrative-refresh` | 2026-04-29 | 2026-04-29 |
