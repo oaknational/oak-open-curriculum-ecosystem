@@ -1,9 +1,9 @@
 ---
-fitness_line_target: 200
-fitness_line_limit: 260
-fitness_char_limit: 16000
+fitness_line_target: 240
+fitness_line_limit: 320
+fitness_char_limit: 19500
 fitness_line_length: 100
-split_strategy: "Extract per-channel protocol detail to companion docs as channels grow; keep this file as the agent-to-agent working model and channel index"
+split_strategy: "Extract per-channel protocol detail to companion docs as channels grow (Communication Channels content has a natural home in agent-collaboration-channels.md if needed); keep this file as the agent-to-agent working model and channel index"
 ---
 
 # Agent Collaboration Practice
