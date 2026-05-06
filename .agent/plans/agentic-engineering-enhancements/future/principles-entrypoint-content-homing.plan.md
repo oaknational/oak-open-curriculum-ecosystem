@@ -12,7 +12,8 @@ overview: >
 todos:
   - id: phase-0-mental-model-and-contract
     content: "Phase 0: Author the mental model and operationalisation contract; align with owner."
-    status: pending
+    status: completed
+    completion_note: "Contract landed at .agent/directives/operationalisation-contract.md 2026-05-06; owner pre-aligned this session."
   - id: phase-1-mechanism-catalogue
     content: "Phase 1: Catalogue the operationalisation mechanisms (rules, hooks, sub-agents, ESLint plugins, quality gates, skills, ADRs/PDRs, governance docs, patterns, worked examples)."
     status: pending
