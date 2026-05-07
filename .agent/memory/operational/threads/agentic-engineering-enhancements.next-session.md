@@ -95,12 +95,21 @@ or Practice Core content to make the report greener.
 - `git diff --check` — passed.
 - Follow-up local slice updated `scripts/validate-practice-fitness.ts` so
   non-healthy output includes a non-reactive response-discipline reminder;
-  rerun focused script tests before landing.
+  landed in `dc04d80b` with
+  `pnpm exec vitest run scripts/validate-practice-fitness.unit.test.ts`
+  passing.
 - `pnpm practice:fitness:informational` — exits 0 with critical
   `repo-continuity.md` pressure and hard `napkin.md` pressure.
   The napkin pressure now includes the intentional owner-correction
   capture from this session; do not use this as permission to delete
   substance.
+- Strict local instance checks passed before commit: manifest/schema contract
+  check reported 22 surfaces and no schema-contract failures; migration ledger
+  reported 114 entries and no hash/byte-count failures; canonical
+  `comms-events` JSON parse check reported 236 files and no parse failures;
+  explicit collaboration-state check against canonical `comms-events` passed.
+- Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
+  `bf3211ac`.
 
 **Specialist review**: completed 2026-05-07; evidence at
 [memory/state contracts specialist review][memory-state-review-evidence].
@@ -113,20 +122,19 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: validate and review the strict local instance rather than
-restarting the design work. Phase 4/5 of the portable plan remain: run the
-reviewers/gates, close any findings, consolidate the migration/immune-layer
-lesson, and archive the plan when ready. Only after the strict manifest,
-schema, migration ledger, and collaboration-state check are green should the
-[Memory/state contract doctor][memory-state-doctor-plan] begin; repo-level
-doctor commands must invoke built `agent-tools` output only. Then take the
-multi-checkout merge-handling plan for fitness/state surfaces.
+**Next safe step**: run Phase 4/5 review and closure on the strict local
+instance rather than restarting the design work. The strict manifest, schema,
+ledger, and canonical collaboration-state checks are green; after reviewer
+closure, begin [Memory/state contract doctor][memory-state-doctor-plan] Phase 0
+against that strict data. Repo-level doctor commands must invoke built
+`agent-tools` output only. Then take the multi-checkout merge-handling plan for
+fitness/state surfaces.
 
 **Non-goals for the next review session**:
 
-- Do not implement the memory/state doctor tooling unless the owner
-  explicitly changes scope or the strict local instance has validated and the
-  doctor plan has formally started.
+- Do not add root `practice:substrate:*` commands until the doctor plan has
+  formally started; when they land, they must invoke built `agent-tools`
+  output only.
 - Do not trim memory/state content for fitness.
 - Do not drop the residual merge autostash without explicit owner
   approval.

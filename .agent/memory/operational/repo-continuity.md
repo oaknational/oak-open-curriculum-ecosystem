@@ -9,30 +9,30 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
-**Session follow-up (2026-05-07 — Floating Vaulting Updraft /
-`codex` / `GPT-5` / `019e01`, memory/state strict local instance)**:
-completed the owner-directed substrate local-instance slice before doctor
-implementation. The human-facing contract remains
-`.agent/memory/executive/memory-state-substrate-contracts.md`; strict data now
-lives beside it in
+**Session close (2026-05-07 — Floating Vaulting Updraft / `codex` /
+`GPT-5` / `019e01`, memory/state strict local instance landed and main
+merged)**: completed the owner-directed substrate local-instance slice before
+doctor implementation and committed it in two chunks: `47028fc3`
+(`docs(agent): complete strict substrate local instance`) and `dc04d80b`
+(`fix(practice): show fitness response discipline`). Then merged current
+`origin/main` cleanly at `bf3211ac`. The strict local data now lives in
 `.agent/memory/executive/memory-state-substrate-contracts.manifest.json` and
-`.agent/memory/executive/memory-state-substrate-contracts.schema.json`.
-The manifest carries 22 surface rows with required fields filled. The 114
-legacy `.agent/state/collaboration/comms/events/*.json` fragments were
-collision-checked, JSON-parse-checked, ledgered with original path, target
-path, SHA-256, byte count, source evidence, and rationale, then moved into the
-canonical `.agent/state/collaboration/comms-events/` root. The legacy root is
-historical only and should contain `.gitkeep`. Phase 0/2 of the portable plan
-are now complete and Phase 3 responsibilities are routed: prevention through
-entry docs/rules/write APIs, detection through future `practice:substrate:check`,
-mitigation through structured severity and reviewer routes, repair through
-deterministic dry-run/apply only, and learning through consolidation/reviewer
-feedback. No root `practice:substrate:*` scripts were added.
-**Next safe step**: finish validation and review for Phase 4/5, preserve all
-memory/state substance under fitness pressure, close this local-instance
-claim, then start the memory/state doctor only after the strict manifest,
-schema, ledger, and canonical collaboration-state checks are green. Repo-level
-doctor commands must invoke built `agent-tools` output only.
+`.agent/memory/executive/memory-state-substrate-contracts.schema.json`; the
+human-facing contract remains
+`.agent/memory/executive/memory-state-substrate-contracts.md`. The manifest
+carries 22 surface rows with required fields filled. The 114 legacy
+`.agent/state/collaboration/comms/events/*.json` fragments were preserved,
+ledgered with original path, target path, SHA-256, byte count, source evidence,
+and rationale, then moved into canonical `.agent/state/collaboration/comms-events/`.
+Phase 0/2 of the portable plan are complete and Phase 3 immune responsibilities
+are routed. No root `practice:substrate:*` scripts were added. Commit-skill
+orchestrator still fails on inherited repo-wide fitness pressure; direct commit
+message validation and normal commit hooks passed, and no content was trimmed
+for fitness.
+**Next safe step**: run Phase 4 review/closure on the strict local instance,
+then start memory/state doctor Phase 0 against the strict manifest/schema and
+migration ledger. Repo-level doctor commands must invoke built `agent-tools`
+output only.
 
 **Session close (2026-05-07 — Windward Spiralling Aerie / `codex` /
 `GPT-5` / `019e01`, memory/state substrate contracts specialist review
