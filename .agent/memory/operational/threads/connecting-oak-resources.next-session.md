@@ -15,9 +15,14 @@ owner direction: `code-reviewer` + `assumptions-reviewer` in series
 across phases 1 + 4; `architecture-reviewer-betty` for topology in
 parallel; out-of-scope reviewers (`mcp-reviewer`, `docs-adr-reviewer`,
 `architecture-reviewer-fred`) explicitly skipped this session.
-**Next session = execution prep**: absorb topology BLOCKERs into
-`graph-stack.plan.md` + ADR-168, absorb Phase 4 FINDINGS into the
-three slice plans + slice 1, then begin slice 1 execution.
+**Next session = decision-completeness closeout (per owner direction
+2026-05-07; implementation OUT of scope for this branch)**: absorb
+topology BLOCKERs into `graph-stack.plan.md` and ADR-168, absorb
+Phase 4 FINDINGS into the three slice plans and slice 1,
+owner-resolve the EEF plan internal contradiction, then verify
+decision-complete state across the full MVP plan (spine, 3 slice
+plans, slice 1, substrate, ADR-168). NO slice execution; NO
+graph-stack ACTIVE promotion; NO ADR-168 ratification.
 **Prior**: 2026-05-07 — Windward Darting Horizon / cursor /
 claude-opus-4.7 / `dd084d` — authored
 [`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
@@ -161,40 +166,78 @@ gate.
 
 ## First Task of Next Session
 
-**MVP-arc PLANNING is CLOSED**. Spine + three slice plans + topology
-review + reviewer-driven remediation all landed 2026-05-07 in a single
-session (Breezy Navigating Sail). The 2026-05-07 opener for parallel
-specialist-reviewer pass is **superseded** — that pass ran in Phase 1
-of the closure session; do NOT re-run. The slice-2 / slice-3a /
-slice-3b plan-authoring work is **complete** in `current/`; do NOT
-re-author. The plan-phase topology review of `graph-stack.plan.md`
-ran via `architecture-reviewer-betty` in Phase 1 (architecture-fred /
-barney scope dropped per owner direction); the surfaced topology
-BLOCKERs are captured below for execution-prep absorption.
+**MVP-arc PLANNING is CLOSED on substance**. Spine + three slice
+plans + topology review + reviewer-driven BLOCKER remediation all
+landed 2026-05-07 in a single session (Breezy Navigating Sail). The
+2026-05-07 opener for parallel specialist-reviewer pass is
+**superseded** — that pass ran in Phase 1 of the closure session; do
+NOT re-run. The slice-2 / slice-3a / slice-3b plan-authoring work is
+**complete** in `current/`; do NOT re-author.
 
-**Canonical first task — execution prep**:
+**Owner direction 2026-05-07**: the next session is **planning
+decision-completeness closeout**, NOT implementation. Implementation
+is **not in scope for this branch**. The session ends with the full
+MVP plan — spine + three slice plans + slice 1 + substrate
+(`graph-stack.plan.md` + ADR-168) — at decision-complete state, with
+sealed frontmatter and no open questions.
+
+**Canonical first task — decision-completeness closeout (no
+implementation)**:
 
 1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +
    ADR-168** (see `## Topology BLOCKERs Surfaced 2026-05-07` below).
-   This is the precondition for `graph-stack.plan.md` CURRENT →
-   ACTIVE transition + ADR-168 ratification. Until both are absorbed
-   and the topology is owner-approved, slice 1 execution may proceed
-   on the graph-query-layer foundation (already shipped) but no work
-   on Inc.2 / Inc.3 substrate begins.
-2. **Absorb the six Phase 4 FINDINGS into the three slice plans** (see
-   `## Phase 4 FINDINGS for Execution-Prep Absorption` below). Two are
-   trivial (script removal, ADR path correction); four require small
-   substantive edits.
-3. **Owner decision on the EEF plan internal contradiction** — t19
-   declares LLM/outcome verification out-of-scope while §`Promotion
-   Trigger from CURRENT to ACTIVE` and the closing acceptance lines
-   treat outcome conditions as load-bearing. Resolve before slice 1
-   execution begins (slice 1 IS the EEF plan).
-4. **Begin slice 1 execution** per the existing
-   `eef-evidence-corpus.plan.md` workstream sequence. Slice 2 + 3a
-   are parallel-safe behind gate-1 per the spine.
+   - WS4 sequencing: re-order so `ws4-graph-corpus-sdk-scaffold`
+     lands before `ws4-skos-extractor`; SKOS extractor moves into
+     the consumer SDK.
+   - `practice-graph` workspace tier: relocate from `packages/libs/`
+     to `packages/sdks/` or `packages/apps/` per workspace-tier
+     semantics; ADR-168 topology entry follows.
+   - Outcome: `graph-stack.plan.md` and ADR-168 reach
+     decision-complete; no CURRENT → ACTIVE transition or
+     ratification this session (those are owner gates).
+2. **Absorb the six Phase 4 FINDINGS into the three slice plans + slice 1**
+   (see `## Phase 4 FINDINGS for Execution-Prep Absorption` below).
+   Two are trivial (smoke:dev:stub script removal across all three
+   slice plans; ADR-123 path correction across all three slice
+   plans); four are small substantive edits (slice 2 adapter
+   timing; slice 3a topic-context tightening + budget
+   concretization; slice 3b implementation-audit test-shape
+   reshape). After absorption all three slice plans should be
+   decision-complete.
+3. **Owner-resolve the EEF plan internal contradiction**. The owner
+   needs to decide whether t19's LLM/outcome verification
+   out-of-scope position holds (and the §`Promotion Trigger from
+   CURRENT to ACTIVE` + closing acceptance lines must shed their
+   outcome-condition language), or whether outcome conditions are
+   load-bearing (and t19 needs revising). This is owner work, not
+   agent work; agent surfaces the contradiction with the two
+   resolution shapes and waits for direction. Slice 1 IS the EEF
+   plan, so its decision-completeness depends on this resolution.
+4. **Decision-completeness verification across the full MVP plan**.
+   With BLOCKERs absorbed (1), FINDINGS absorbed (2), and EEF
+   contradiction owner-resolved (3), confirm sealed-frontmatter
+   state and no open questions across:
+   - `graph-mvp-arc.plan.md` (spine)
+   - `eef-evidence-corpus.plan.md` (slice 1)
+   - `oak-kg-threads-surface.plan.md` (slice 2)
+   - `oak-misconceptions-subgraph-mcp-surface.plan.md` (slice 3a)
+   - `oak-misconceptions-eef-cross-corpus-surface.plan.md` (slice 3b)
+   - `graph-stack.plan.md` (substrate)
+   - ADR-168 (topology)
 
-Queued (not blocked by MVP arc):
+   Any artefact NOT decision-complete after steps 1-3 is named
+   explicitly in the next-session record with the named blocking
+   condition; do not paper over with "ready enough".
+
+**Out of scope for this branch (per owner direction 2026-05-07)**:
+
+- Slice 1 execution; slice 2/3a/3b execution.
+- `graph-stack.plan.md` CURRENT → ACTIVE transition.
+- ADR-168 ratification.
+- Any production code changes.
+
+Queued (not blocked by MVP arc; appropriate for a separate session
+on a separate branch):
 
 5. Address EEF thread Promotion Packet (sibling thread).
 6. Promote the external-oak-references plan to `current/`.

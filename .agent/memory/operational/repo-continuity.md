@@ -9,6 +9,46 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
+**Session close (2026-05-07 — Breezy Navigating Sail / `cursor` /
+`claude-opus-4.7` / `9edbd1`)**: closed the graph MVP-arc PLANNING
+arc on the `connecting-oak-resources` thread in a single session per
+owner direction. Six commits: `62ffd8b8` pre-flight (identity claim +
+opener doctrine queue); `d740baa0` Phase 0 (spine drift remediation —
+3 residual `mvp_arc_status: deferred` lines removed); `82b3a792`
+Phase 2 (4 reviewer-driven spine remediations from Phase 1 batch —
+slice 1 substrate floor; gate-3b dep; gate-3a reason; NC row deletion
++ portfolio index + ADR-157 citation hygiene); `776df6b7` Phase 3
+(three slice plans authored in `current/`:
+`oak-kg-threads-surface.plan.md`,
+`oak-misconceptions-subgraph-mcp-surface.plan.md`,
+`oak-misconceptions-eef-cross-corpus-surface.plan.md`; 1062
+insertions); `0899ba93` Phase 4 (2 BLOCKERs remediated —
+composition-by-name conceptual mistake fixed across slices 2, 3a, 3b
+in 4 file edits); `58e61f85` Phase 5 (spine `Owner Decisions Log` +
+slice-author todos completed; thread next-session record refreshed
+for execution-prep handoff with topology-BLOCKER + Phase 4 FINDING
+sections; collaboration state cleaned). Reviewer scope reduced per
+owner direction: code-reviewer + assumptions-reviewer in series
+(Phases 1 + 4); architecture-reviewer-betty for topology in parallel
+(Phase 1); mcp-reviewer / docs-adr-reviewer / architecture-reviewer-fred
+explicitly skipped. Outcome: 1 spine BLOCKER + 2 slice-plan BLOCKERs
+remediated same-session; 6 Phase 4 FINDINGS + 2 topology BLOCKERs
+deferred to next-session execution prep with file:line citations and
+fix direction. No new ADR/PDR candidates qualify; possible second
+instance of the `spine-drift-via-comprehensive-cataloguing` pending
+entry captured to napkin (reviewer-scope-over-broadening shape; let
+consolidate-docs decide whether the existing polarity covers it).
+**Next safe step (per owner direction 2026-05-07; implementation OUT
+of scope for this branch)**: planning decision-completeness closeout
+on the connecting-oak-resources thread — (1) absorb 2 topology
+BLOCKERs into `graph-stack.plan.md` + ADR-168; (2) absorb 6 Phase 4
+FINDINGS into the three slice plans + slice 1; (3) owner-resolve the
+EEF plan internal contradiction (t19 outcome verification vs
+promotion trigger acceptance); (4) verify decision-complete state
+across the full MVP plan (spine + 3 slice plans + slice 1 + substrate
++ ADR-168). NO slice execution; NO graph-stack ACTIVE promotion; NO
+ADR-168 ratification.
+
 **Session close (2026-05-06 — Clouded Lifting Aerie /
 `claude-code` / claude-opus-4-7-1m / `1e2244`)**: napkin +
 pending-graduations processing opener executed in three commits.
@@ -1021,7 +1061,7 @@ live in each thread record; this table is the repo-level index.
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `observability-sentry-otel`                       | Product — Sentry/OTel public-alpha integration                                                                                                                          | `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`                                             | Most-recent: Twilit Beaming Aurora → Ashen Banking Bellows (CLI re-derivation under in-flight wordlist refactor; same `7cf730` prefix) / `claude-code` / `claude-opus-4-7-1m` / `7cf730` / step-06-author-no-real-io-in-tests-rule + 7-agent-coordinator-role (own commit `368e5aff` 29 files coordinator-landing of Asteroid takeover bundle including step-06 substance + Threading Nebula promotion bundle + Asteroid hardening; own commit `33aeec40` 17 files coordinator-landing of Fronded collaboration-cli-gaps bundle under owner-directed handoff; observed Forest landing `c1a63a81` and Riverine landing `53fffe74` outside coordinator track; 4 commits closed convergence; orchestrator-vs-gate conflation reached 5 instances today; identity drift live-disclosed; cross-lane repair pattern observed) / 2026-05-05. Prior: Dawnlit Transiting Galaxy / `claude-code` / `claude-opus-4-7-1m` / `0ddc89` / step-05-final-closure (C1 boundary-crossing import substance landed at peer commit `36102937` via foreign-stage absorption — 12 consumer paths updated, fixture relocated to `src/test-helpers/`, architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; CR1 conditional-branch test-immediate-fail closed cleanly at `f6c73f4a` — used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that the substitution is "strictly better"; recurring foreign-stage absorption pattern third instance documented; orchestrator-vs-hook conflation correction landed) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude` / `claude-opus-4-7-1m` / `dd239f` / step-04-reviewer-backfill-completion + step-05-partial-doc-cleanup-bundle (BF-1a/b CI hook + workflow at `ef593be9`; BF-2 through BF-8 stale-smoke-reference doc cleanup at `434cf6f6`); landed Gnarled Climbing Bark's deferred practice-context-cost-baseline bundle on their behalf under owner direction; coordinated with Gnarled via comms-event with 2-min deadline + default-action; three new user-memory feedback files (ADRs-permanent-plans-ephemeral; inter-agent-comms-first-class; second-instance reinforcement of agent-initiated-no-verify-forbidden); five-chunk commit landing closing the session / 2026-05-05. Prior: Gnarled Climbing Bark / `claude` / `claude-opus-4-7-1m` / `40a044` / read-and-reference-only-cross-thread-baseline-source-attribution (no edits; Lacustrine session used as illustrative-journey sample in practice-context-cost baseline; see agentic-engineering-enhancements thread for substantive work) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude-code` / `claude-opus-4-7-1m` / `dd239f` / step-03-no-speed-pressure-rule-integration-across-estate (single atomic commit; principles cross-ref + distilled entry + user-memory feedback file + plan-body status update + handoff working-tree bundle) / 2026-05-04. Prior: Pelagic Diving Atoll / `claude-code` / `claude-opus-4-7-1m` / `6814a4` / two-round-architecture-led-plan-refinement + capture-not-clean-shape-adopted (commit `75dbcdb6`) / 2026-05-04. Prior: Fronded Climbing Thicket / `claude` / `claude-opus-4-7-1m` / `8da3d3` / dev-server-proof-three-plan-arc-descope-and-reframe + plan-2-paused-superseded + unified-plan-feat-eef-exploration-completion / 2026-05-04. Prior: Lush Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `06776a` / corrective consolidation + TDD-as-pairs framing in directives/templates/plans + atomic-independent-parallel cycles for optional parallel-agent dispatch (3 commits: `60b9ff4c`, `797766c0`, `755811ac`) / 2026-05-03; Woodland Sprouting Glade / `claude-code` / `claude-opus-4-7-1m` / `978cba` / orchestrator: ARC-B0-plan-body-corrections-and-ADR-number-verification (parallel-lane to Prismatic A1; reviewer dispatch absorbed; first-claim-wins coordination) / 2026-05-03; Prismatic Illuminating Eclipse / `claude-code` / `claude-opus-4-7-1m` / `7402c9` / executor: ARC-A1-canonical-smoke-harness + skip-arc + §A1-plan-body-refresh / 2026-05-03; Pelagic Washing Anchor / `claude-code` / `claude-opus-4-7-1m` / `f730bd` / there-is-no-time-hashed-starfish-plan-author-and-Misty-coordination / 2026-05-03; Misty Ebbing Pier / `claude-code` / `claude-opus-4-7-1m` / `ba3961` / smoke-tests-harness-reconnaissance-Task-M1 + worker-perspective-collab-suggestions + N-agent-collaboration-hypothesis-artefacts / 2026-05-03. Prior: Moonlit Drifting Nebula / `cursor` / `claude-opus-4-7` / `92470a` / observability-multi-sink-and-fixtures-shape-plan-WS1 + Practice-Core-portability-Rounds-1+2+3 / 2026-05-03; Abyssal Diving Stern / `claude-code` / `claude-opus-4-7-1m` / `87ccac` / doctrine-graduation + observability-multi-sink-and-fixtures-shape-plan-WS0-prelude / 2026-05-02. Full history in thread record. |
 | `agentic-engineering-enhancements`                | Practice — collaboration protocol, documentation roles, continuity surfaces                                                                                             | `[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md)`                               | Most-recent: Clouded Lifting Aerie / `claude-code` / `claude-opus-4-7-1m` / `1e2244` / napkin-and-pending-graduations-processing-opener-execution (commits `d12912dc` Step-1 three-new-patterns + F-15 + dev-practice + napkin-rotation 382→119; `b4d7ddff` Step-2 7-graduated-entries-archived + Lacustrine-commit-queue-fingerprint-marked-graduated + 1-small-new-pending 2054→1876 lines; `d2e2bfe5` reviewer-P1-SHA-fix + thread-record-update; pending-graduations.md HARD persists at 1876 / 1400 limit as next-audit input per opener boundary) / 2026-05-06. Prior: Embered Melting Kiln / `claude-code` / `claude-opus-4-7-1m` / `4044d1` / phase-2-collaboration-state-surface-restructure (commits `13e2db28` provenance→schemas, `e072b67e` doctrine→directive, `b7e3f1fc` vocabulary normalisation, `07e9274c` lifecycle re-tagline, `8f388592` reviewer-fix, `40f7da45` substance-trim correction after owner caught it; `ca0794fc` function-driven fitness-limit calibration on agent-collaboration.md and continuity-practice.md after a full 32-file audit; opener authored for napkin + pending-graduations processing) / 2026-05-06. Prior: Briny Plumbing Fjord / `claude-code` / `claude-opus-4-7-1m` / `fd36cf` / phase-1-collaboration-state-placement-contract-and-plan (commits `c014ad2a`, `be7c1fd6`) / 2026-05-06. Prior: Iridescent Waxing Orbit / `claude-code` / `claude-opus-4-7-1m` / `aeebab` / distilled-md-graduation-pass-and-vaporware-deferral-audit (commits `b9bae574` 4 new rules + collaboration-state-lifecycle orphaned-claim policy + distilled trim 314→152 lines clearing all three hard-zone metrics; `d9aab409` reframe of learning-loop entry from inherent-cost to artefactual-cost and Sequenced-Deferral Discipline entry restructured to acknowledge the doctrine-scanner-CLI vaporware-citation; foreign-stage absorption of dev-practice edits into peer commit `cc8866a8`) / 2026-05-06. Prior: Umbral Cloaking Silhouette / `claude-code` / `claude-opus-4-7-1m` / `a70b57` / skills-artefact-standardisation-audit-and-decision-complete-remediation-plans (three artefacts authored under `.agent/plans/agent-tooling/current/`: portability audit report, urgent load-pressure-relief plan, strategic agent-artefact-lifecycle-cli plan; both plans decision-complete with seals; strategic plan supersedes `canonical-first-skill-pack-ingestion-tooling.plan.md` and is positioned as wrapper around `npx skills` not a from-scratch CLI; three new user-memory entries — skill-load-budget, vendor-plugin-redundancy, reviewer-brief-respects-decided-scope; existing no-moving-targets memory updated with plans-OK nuance; pending-graduations gained inventory-as-output candidate; reviewers run docs-adr + code + assumptions; assumptions-reviewer brief-scope error captured as feedback memory) / 2026-05-06. Prior: Riverine Fishing Rudder / `claude-code` / `claude-opus-4-7-1m` / `b89da0` / three-step-napkin-and-comms-graduation-pass (step-1 archived pre-step napkin verbatim 514L/49170C nine 2026-05-05 entries + drained + F-12/F-13 frictions added; step-2 walked 78 comms-events extracted 3 structured surprises A/B/C; step-3 routed surprises to pending-graduations 3 new entries + drained napkin to single rotation summary; step commits 307f7f13 d7ca48d5 5b40e206) / 2026-05-06. Prior: Glittering Waning Galaxy / `claude-code` / `claude-opus-4-7-1m` / `3cff70` / new-`agent-tooling`-collection-spun-out-of-`agentic-engineering-enhancements` (19 plans `git mv`'d to `.agent/plans/agent-tooling/{current,future}/`; frictions register seeded with 11 entries from napkin Surprise 7 + comms; cross-references rewritten in 24+ active surfaces; `../archive/` refs in moved plans repointed to `../../agentic-engineering-enhancements/archive/`; scope-boundary clarification added across `plans/README.md`, `agent-tooling/README.md`, `agentic-engineering-enhancements/README.md` distinguishing implementation-level (workspace) from practice-level (broader)) / 2026-05-05. Prior: Deciduous Budding Stamen / `cursor` / `GPT-5.5` / `512682` / oak-local-MCP-landmark-comms + `feat-eef-exploration-completion.plan.md` § Step 10 precursor + thread-record arc + `/jc-session-handoff` close / 2026-05-05. Prior: Ethereal Transiting Comet / `claude-code` / `claude-opus-4-7-1m` / `8081d3` / foundational-graduation-pass-pattern-A-structural-enforcer-recursive-exclusion-plus-rule-extension-B-consolidate-docs-PDR-046-pointer (single atomic commit `74dcd145`; agent-tier pattern with three mechanism shapes; reviewer-driven re-categorisation from process; severity-not-urgency sharpening of no-speed-pressure feedback memory; diagnostic-over-assumption worked instance; PDR-047 §Notes intentionally not back-amended for portability) / 2026-05-05. Prior: Lacustrine Navigating Rudder / `claude` / `claude-opus-4-7-1m` / `dd239f` / cross-thread-landing-of-Gnarled's-deferred-bundle (chunks 2 and 4 of five-chunk landing on this branch; substance attributed to Gnarled in commit bodies; substantive work on observability-sentry-otel thread) / 2026-05-05. Prior: Gnarled Climbing Bark / `claude` / `claude-opus-4-7-1m` / `40a044` / practice-context-cost-baseline-authored-and-progressive-disclosure-plan-scope-register-added (no commit; pre-commit `test` gate blocked by unrelated latent OAuth proxy integration test failure exposed by peer doc-edit cache invalidation; doc bundle staged in working tree pending OAuth gate unblock; comms-log heads-up posted to Moonlit Shimmering Comet) / 2026-05-05. Prior: Ferny Spreading Petal / `claude-code` / `claude-opus-4-7-1m` / `d0d13f` / Layer-2-second-pass-trio-graduated-PDR-046-layered-knowledge-processing + PDR-047-rule-applies-always-doctrine-authoring + PDR-048-insight-capture-at-moment-of-occurrence; pending-graduations-remediation-lane-archived-ten-graduated-entries-to-2026-05-04-snapshot; napkin-rotation-curation-first-priority; principles.md-extraction-three-cues-elaboration-and-worked-failure-mode-and-unknown-type-destruction-list-and-gate-taxonomy-relocated-to-durable-homes; frontmatter-line-char-limits-raised-on-pending-graduations-and-development-practice; commit `54560f84` / 2026-05-04. Prior: Vining Spreading Seed / `claude-code` / `claude-opus-4-7-1m` / `11429f` / doctrine-enforcement-quick-wins-WS3-WS4-WS6-landed-plus-rules-index-integration / 2026-05-04; Fronded Flowering Thicket / `claude-code` / `claude-opus-4-7-1m` / `7c8381` / Layer-1-rotation-and-Layer-2-first-deliverable-PDR-045 / 2026-05-04; Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` / `63a0e0` / PDR-044-memetic-immune-system + PDR-018/038-amendments / 2026-05-04; Pearly Snorkelling Reef / `claude-code` / `claude-opus-4-7-1m` / `6db5ac` / parallel-worktree-dispatch-salvage / 2026-05-04; Dewy Shedding Glade / `claude-code` / `claude-opus-4-7-1m` / `13ae71` / validation-and-tdd-doctrine-restructure-arc / 2026-05-04. Full history in thread record. |
-| `connecting-oak-resources`                        | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | `[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md)`                                               | Most-recent: Windward Darting Horizon / `cursor` / `claude-opus-4.7` / `dd084d` / mvp-arc-spine-plan-author-and-coordination-amendments (authored top-level `graph-mvp-arc.plan.md` as cross-collection coordination spine sequencing 3 vertical slices: EEF evidence corpus → Oak ontology Threads → misconception sub-graph + EEF×misconceptions cross-corpus; ADR-157 namespace table extended with `oak-misconceptions-*` + compound prefix + explicit-source-attribution discipline; eef-evidence-corpus tool/prompt names re-prefixed `eef-*` (19 occurrences); graph-portfolio-index gained Vertical-slice arc section; high-level-plan cross-links the spine; **two course-corrections same session** — added unsequenced `mvp_arc_status: deferred` to NC plan then `mvp_arc_sequencing` framing — both reverted by owner direction *"sequence properly or admit not-doing"* + *"the NC work is explicitly NOT part of the MVP"*; final state: NC plan owns its own promotion-trigger; spine tracks only what's IN the MVP) / 2026-05-07. Prior: Cosmic Glowing Dawn / `claude-code` / `claude-opus-4-7-1m` / `d11500` / graph-stack-spine-plan-author (`graph-stack.plan.md` in `current/`; eight-workspace topology with deferred ninth; MCP-agnostic posture per owner direction; no commits) / 2026-05-04. Prior: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `connecting-oak-resources`                        | Connect Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak repo references (ontology, Aila, moderation patterns, atomic concepts) | `[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md)`                                               | Most-recent: Breezy Navigating Sail / `cursor` / `claude-opus-4.7` / `9edbd1` / mvp-arc-planning-closure-single-session (closed graph MVP-arc PLANNING in single session per owner direction; 6 commits `62ffd8b8` pre-flight → `d740baa0` Phase 0 → `82b3a792` Phase 2 → `776df6b7` Phase 3 (3 slice plans authored: `oak-kg-threads-surface.plan.md`, `oak-misconceptions-subgraph-mcp-surface.plan.md`, `oak-misconceptions-eef-cross-corpus-surface.plan.md`) → `0899ba93` Phase 4 (BLOCKER remediation across 4 file edits — composition-by-name conceptual mistake fixed across slices 2, 3a, 3b) → `58e61f85` Phase 5 (spine `Owner Decisions Log` + thread next-session record refreshed for execution-prep handoff). Reviewer scope reduced per owner direction: code-reviewer + assumptions-reviewer in series; architecture-reviewer-betty for topology in parallel; mcp-reviewer/docs-adr-reviewer/architecture-reviewer-fred explicitly skipped. 1 spine BLOCKER + 2 slice-plan BLOCKERs remediated same-session; 6 Phase 4 FINDINGS + 2 topology BLOCKERs deferred to next-session execution-prep with file:line citations) / 2026-05-07. Prior: Windward Darting Horizon / `cursor` / `claude-opus-4.7` / `dd084d` / mvp-arc-spine-plan-author-and-coordination-amendments (authored top-level `graph-mvp-arc.plan.md` as cross-collection coordination spine sequencing 3 vertical slices: EEF evidence corpus → Oak ontology Threads → misconception sub-graph + EEF×misconceptions cross-corpus; ADR-157 namespace table extended with `oak-misconceptions-*` + compound prefix + explicit-source-attribution discipline; eef-evidence-corpus tool/prompt names re-prefixed `eef-*` (19 occurrences); graph-portfolio-index gained Vertical-slice arc section; high-level-plan cross-links the spine; **two course-corrections same session** — added unsequenced `mvp_arc_status: deferred` to NC plan then `mvp_arc_sequencing` framing — both reverted by owner direction *"sequence properly or admit not-doing"* + *"the NC work is explicitly NOT part of the MVP"*; final state: NC plan owns its own promotion-trigger; spine tracks only what's IN the MVP) / 2026-05-07. Prior: Cosmic Glowing Dawn / `claude-code` / `claude-opus-4-7-1m` / `d11500` / graph-stack-spine-plan-author (`graph-stack.plan.md` in `current/`; eight-workspace topology with deferred ninth; MCP-agnostic posture per owner direction; no commits) / 2026-05-04. Prior: Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap-and-light-scan / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `exploring-open-education-resources`              | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion                               | `[threads/exploring-open-education-resources.next-session.md](threads/exploring-open-education-resources.next-session.md)`                           | Gnarled Fruiting Root / `claude-code` / `claude-opus-4-7-1m` / `e18e2c` / thread-bootstrap / 2026-05-01.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `architectural-budget-system`                     | Architecture/devx — cross-scale architectural budget doctrine, visibility, staged enforcement planning                                                                  | `[threads/architectural-budget-system.next-session.md](threads/architectural-budget-system.next-session.md)`                                         | Nebulous Weaving Dusk / `codex` / `GPT-5` / architectural-budget-planning-and-adr-handoff / 2026-04-29.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `cloudflare-mcp-security-and-token-economy-plans` | Product/security — Cloudflare MCP public-beta gate and token-efficient MCP tool-use strategy                                                                            | `[threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md](threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md)` | Glassy Ebbing Reef / `codex` / `GPT-5` / cloudflare-mcp-final-handoff / 2026-04-28.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -1093,6 +1133,54 @@ The PR #90 landing lane (Solar Threading Star) is not yet thread-bound
 (see open finding above).
 
 ## Current Session Focus
+
+**2026-05-07 (Breezy Navigating Sail, cursor, claude-opus-4.7,
+`9edbd1`, connecting-oak-resources thread, single-session closure of
+the graph MVP-arc PLANNING arc)**: per owner direction, executed the
+five-phase planning closure in one session: pre-flight identity
+registration + opener + doctrine queue (`62ffd8b8`); Phase 0 spine
+drift remediation (`d740baa0`); Phase 1 parallel reviewer batch
+(`code-reviewer` + `assumptions-reviewer` over the five MVP-arc
+artefacts; `architecture-reviewer-betty` over ADR-168 + `graph-stack.plan.md`
+topology in parallel; all readonly); Phase 2 four reviewer-driven
+spine remediations (`82b3a792` — slice 1 substrate floor corrected;
+gate-3b dependency corrected; gate-3a reason corrected; NC SKOS row
+deleted from slice-2 cut-scope; portfolio index aligned; ADR-157
+ephemeral-citation hygiene); Phase 3 authored three slice plans in
+`current/` (`776df6b7` — `oak-kg-threads-surface.plan.md`,
+`oak-misconceptions-subgraph-mcp-surface.plan.md`,
+`oak-misconceptions-eef-cross-corpus-surface.plan.md`; 1062
+insertions); Phase 4 reviewer pass on the new slice plans surfaced 2
+BLOCKERs converging on the same conceptual mistake (slice 3b framed
+as composing slices 1+3a MCP tools by name, contradicting its own
+Design Principle 1 that both corpora flow through `graph-corpus-sdk`
+substrate); BLOCKERs remediated across 4 file edits in slices 2, 3a,
+3b (`0899ba93`); Phase 5 spine `Owner Decisions Log` extended with
+Phase 0/2/3/4/5 entries, slice-author todos marked completed, thread
+next-session record refreshed with topology-BLOCKER + Phase 4
+FINDING sections for execution-prep absorption (`58e61f85`).
+Collaboration state cleaned: comms event `5c4397ce`; claim
+`e3dc2e56` archived to `closed-claims.archive.json` with closure
+evidence. Three napkin entries captured: reviewer-convergence-points-
+at-conceptual-root (process pattern candidate, first instance);
+owner-bounded reviewer scope as possible second instance of
+`spine-drift-via-comprehensive-cataloguing` (let `consolidate-docs`
+decide); plan-mode mid-handoff JSON edit friction (small operational
+note for `session-handoff.md` Step 8). **Next safe step (per owner
+direction 2026-05-07; implementation OUT of scope for this branch)**:
+planning decision-completeness closeout on the connecting-oak-resources
+thread — (1) absorb 2 topology BLOCKERs into `graph-stack.plan.md` +
+ADR-168 (so both reach decision-complete; CURRENT → ACTIVE transition
++ ADR-168 ratification are NOT in scope this session); (2) absorb 6
+Phase 4 FINDINGS into the three slice plans + slice 1 (smoke:dev:stub
+script missing; ADR-123 path wrong; adapter Inc.2/Inc.3 timing; slice
+3a topic ambiguity; slice 3a budget concretization; slice 3b
+implementation-audit test shape); (3) owner-resolve the EEF plan
+internal contradiction (t19 outcome verification vs promotion trigger
+acceptance); (4) verify decision-complete state across the full MVP
+plan — spine + 3 slice plans + slice 1 + substrate + ADR-168. NO
+slice execution; NO graph-stack ACTIVE promotion; NO ADR-168
+ratification.
 
 **2026-05-07 (Windward Darting Horizon, cursor, claude-opus-4.7,
 `dd084d`, connecting-oak-resources thread + eef subthread, MVP-arc
@@ -1438,6 +1526,56 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-07 Breezy Navigating Sail close (graph MVP-arc
+PLANNING arc closed in single session per owner direction)**: next
+session = **planning decision-completeness closeout** on the
+connecting-oak-resources thread, **NOT execution and NOT
+implementation**. Owner direction 2026-05-07: implementation is out
+of scope for this branch; the session ends with the full MVP plan at
+decision-complete state.
+
+1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +
+   ADR-168** so both reach decision-complete (CURRENT → ACTIVE
+   transition + ADR-168 ratification are NOT in scope this session;
+   those are owner gates). Specific fixes:
+   - **WS4 sequencing fix** — re-order so `ws4-graph-corpus-sdk-scaffold`
+     lands before `ws4-skos-extractor`; the SKOS extractor then lives
+     in the consumer SDK (Oak-specific) rather than in the substrate
+     workspace (Principle 7 leakage fix).
+   - **`practice-graph` workspace tier fix** — relocate from
+     `packages/libs/` to `packages/sdks/` or `packages/apps/` per
+     workspace-tier semantics; ADR-168 topology entry updates to
+     match.
+2. **Absorb the six Phase 4 FINDINGS into the three slice plans +
+   slice 1** (all citations + fix direction in
+   [`connecting-oak-resources.next-session.md § Phase 4 FINDINGS`](../../memory/operational/threads/connecting-oak-resources.next-session.md#phase-4-findings-for-execution-prep-absorption-surfaced-2026-05-07)):
+   (a) `pnpm smoke:dev:stub` is non-existent in all three slice plans'
+   WS5 — replace or remove; (b) ADR-123 path wrong in all three slice
+   plans — fix to `123-mcp-server-primitives-strategy.md`; (c) slice 2
+   adapter timing inconsistency vs `graph-stack.plan.md` Inc.3; (d)
+   slice 3a topic-context acceptance contradicts non-goal — tighten;
+   (e) slice 3a budget concretization (numeric token target + fixture
+   selection rule); (f) slice 3b cycles 2 + Design Principle 2 contain
+   implementation-audit shaped tests — reshape as state-describing or
+   move to lint/architecture gates.
+3. **Owner-resolve the EEF plan internal contradiction** (t19
+   outcome verification vs promotion trigger acceptance). This is
+   owner work; agent surfaces the two resolution shapes and waits
+   for direction. Slice 1's decision-completeness depends on it.
+4. **Verify decision-complete state across the full MVP plan** —
+   sealed frontmatter + no open questions on `graph-mvp-arc.plan.md`,
+   `eef-evidence-corpus.plan.md`, `oak-kg-threads-surface.plan.md`,
+   `oak-misconceptions-subgraph-mcp-surface.plan.md`,
+   `oak-misconceptions-eef-cross-corpus-surface.plan.md`,
+   `graph-stack.plan.md`, ADR-168. Any artefact NOT decision-complete
+   after steps 1-3 is named explicitly with the named blocking
+   condition; do not paper over with "ready enough".
+
+**Out of scope for this branch (per owner direction 2026-05-07)**:
+slice 1 execution; slice 2/3a/3b execution; `graph-stack.plan.md`
+CURRENT → ACTIVE transition; ADR-168 ratification; any production
+code changes.
 
 **After 2026-05-07 Pelagic Rolling Harbour close (pending-graduations
 drain + recalibration + access-rhythm insight capture)**: the
@@ -1851,6 +1989,33 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Breezy Navigating Sail, cursor, claude-opus-4.7,
+`9edbd1`, single-session closure of the graph MVP-arc PLANNING arc,
+capture-edge `/jc-session-handoff` only): `not due — capture-edge
+work; pending-graduations register already touched 2026-05-07 by
+Pelagic Rolling Harbour; this session's two graduation candidates
+were already captured by Windward Darting Horizon's earlier 2026-05-07
+session and remain in pending status`**. This session ran a
+disciplined five-phase planning closure (substrate authoring +
+reviewer-driven remediation + slice plan authoring + reviewer-driven
+BLOCKER remediation + thread-record refresh) per owner-bounded scope.
+Three new napkin entries captured for future consolidation: (1)
+process pattern candidate `reviewer-convergence-points-at-conceptual-root`
+(first instance — when two independent reviewers converge on the
+same finding through different reasoning, the convergence points at
+an upstream conceptual mistake); (2) possible second instance of the
+existing `spine-drift-via-comprehensive-cataloguing` pending-graduation
+entry (this session's reviewer-scope-over-broadening shape — agent
+planned 5-reviewer pass, owner cut to 2+1; same mechanism as Windward
+Darting Horizon's spine-cataloguing instance, different shape; let
+`consolidate-docs` decide whether the existing polarity covers it or
+a separate entry is warranted); (3) plan-mode JSON-edit friction
+during session-handoff Step 8 (operational note candidate for
+`session-handoff.md` — JSON edits to `active-claims.json` require
+agent mode, not plan mode). No fitness pressure observed on touched
+surfaces. Next consolidation pass is the next thread-scoped
+invocation, not this handoff.
 
 **Status (2026-05-07 Windward Darting Horizon, cursor,
 claude-opus-4.7, `dd084d`, MVP-arc spine plan author + cross-
