@@ -973,7 +973,7 @@ The pre-existing fitness HARD violations the orchestrator has been firing on (vi
 
 
 Practice Fitness Check (ADR-144 three-zone model)
-╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝
+══════════════════════════════════════════════════
 
   .agent/directives/agent-collaboration.md  [33m⚠ soft[0m
     Lines:               257 / target 200 / limit 260  [33m⚠ soft[0m
@@ -1598,12 +1598,46 @@ Clouded Lifting Aerie (1e2244) executed the 2026-05-06 napkin + pending-graduati
 
 ---
 
-## 2026-05-07T15:20:03Z � `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` � Bootstrap fast-path: graph MVP-arc planning closure (single session)
+## 2026-05-07T15:20:03Z — `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` — Bootstrap fast-path — graph MVP-arc planning closure
 
-Breezy Navigating Sail (9edbd1) opening single-session planning closure for the graph MVP-arc on the `connecting-oak-resources` thread. Active-claims registry: `claims[]` empty; only abandoned commit-queue residue from 2026-05-04..06. Bootstrap fast-path applied. Files claim `e3dc2e56` opened against the spine (`graph-mvp-arc.plan.md`), the thread next-session record, the three new slice-plan paths under `connecting-oak-resources/knowledge-graph-integration/current/`, and the collaboration-state surfaces themselves. Plan: Phase 0 prefix-remediate three `mvp_arc_status: deferred` drift lines in the spine (L299/L453/L563); Phase 1 single parallel reviewer batch (code-reviewer + assumptions-reviewer over the five MVP-arc artefacts; architecture-reviewer-betty over ADR-168 + `graph-stack.plan.md` topology, all readonly); Phase 2 synthesis + remediate any BLOCKERs in existing artefacts; Phase 3 author the three slice plans (oak-kg-threads-surface, oak-misconceptions-subgraph-mcp-surface, oak-misconceptions-eef-cross-corpus-surface); Phase 4 re-review the new slice plans with the same two reviewers; Phase 5 spine closure + thread-record refresh handing the next session into execution prep. Out of scope per owner direction 2026-05-08: NC plan, all non-MVP adjacent plans, all execution / gate work, ADR-168 ratification, `graph-stack.plan.md` ACTIVE promotion. Comms event `1d293dc4`. Branch `planning/graph-tooling`; HEAD clean.
+Bootstrap fast-path per `register-active-areas-at-session-open` rule: active-claims registry has no entries from other agents (fourteen abandoned commit-queue entries from 2026-05-04 through 2026-05-06; the active `claims` array is empty). No overlap risk; proceeding without sidebar.
+
+Thread: `connecting-oak-resources`. Goal this session: close the graph MVP-arc PLANNING arc (not the work arc) per owner direction 2026-05-08. Phase 0 = three-line spine remediation removing `mvp_arc_status: deferred` drift the prior session's opener missed. Phase 1 = parallel reviewer batch (code-reviewer + assumptions-reviewer over MVP-arc artefacts; architecture-reviewer-betty over ADR-168 + graph-stack.plan.md topology). Phase 3 = author three slice plans in `current/` (oak-kg-threads-surface, oak-misconceptions-subgraph-mcp-surface, oak-misconceptions-eef-cross-corpus-surface). Phase 4 = re-review the new slice plans with the same two reviewers. Phase 5 = spine closure + thread next-session refreshed for execution-prep handoff.
+
+Out of scope: NC plan, all non-MVP adjacent plans, all execution / gate work, ADR-168 ratification (happens at graph-stack ACTIVE), graph-stack ACTIVE promotion itself.
+
+Claim `e3dc2e56-4f76-415e-bf6b-f098f26255b4` registered separately.
 
 ---
 
-## 2026-05-07T15:55:34Z � `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` � Session close: graph MVP-arc planning closure complete
+## 2026-05-07T15:55:34Z — `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` — Session close — graph MVP-arc planning closure complete
 
-Single-session planning closure complete on the `connecting-oak-resources` thread. Five phases landed: pre-flight bundle (`62ffd8b8`), Phase 0 spine drift remediation (`d740baa0`), Phase 1 reviewer batch (no commit; verdicts captured in spine Owner Decisions Log + topology BLOCKERs in next-session record), Phase 2 spine remediations from Phase 1 (`82b3a792`), Phase 3 three slice plans authored (`776df6b7`, 1062 insertions across 3 new files), Phase 4 BLOCKER remediation from Phase 4 reviewer batch (`0899ba93`), Phase 5 spine closure + thread record refresh (this commit). Reviewer scope reduced per owner direction: code-reviewer + assumptions-reviewer in series across phases 1 + 4; architecture-reviewer-betty for topology in parallel during Phase 1; mcp-reviewer / docs-adr-reviewer / architecture-reviewer-fred explicitly skipped this session. Outcome: 1 spine BLOCKER + 2 slice-plan BLOCKERs all remediated same-session; 6 Phase 4 FINDINGS + 2 topology BLOCKERs deferred to next-session execution-prep absorption per owner-set scope boundaries. Slice-author todos in spine marked completed. Next session = execution prep (absorb topology BLOCKERs into graph-stack + ADR-168, absorb Phase 4 FINDINGS into three slice plans + slice 1, owner-resolve EEF plan internal contradiction, then begin slice 1 execution). Claim `e3dc2e56` releases at session close. Comms event `5c4397ce`.
+Single-session planning closure for the graph MVP arc complete on the `connecting-oak-resources` thread per owner direction. All five phases landed in this session.
+
+Commits:
+- `62ffd8b8` (pre-flight bundle: identity, claim, opener, doctrine queue)
+- `d740baa0` (Phase 0: spine drift remediation — three `mvp_arc_status: deferred` references removed)
+- `82b3a792` (Phase 2: 4 spine remediations from Phase 1 reviewer batch — slice 1 substrate floor; gate-3b dependency; gate-3a reason; NC row deletion + portfolio index + ADR-157 citation hygiene)
+- `776df6b7` (Phase 3: three slice plans authored — `oak-kg-threads-surface.plan.md`, `oak-misconceptions-subgraph-mcp-surface.plan.md`, `oak-misconceptions-eef-cross-corpus-surface.plan.md`; 1062 insertions; all quality gates green)
+- `0899ba93` (Phase 4: 2 BLOCKERs remediated — slice-3b composition-by-name conceptual mistake fixed across slices 2, 3a, and 3b)
+- TBD (Phase 5: spine Owner Decisions Log + slice-author todos completed + thread next-session record refreshed for execution-prep handoff + this comms event)
+
+Reviewer scope reduced per owner direction: `code-reviewer` + `assumptions-reviewer` in series across phases 1 + 4; `architecture-reviewer-betty` for topology in parallel during Phase 1; `mcp-reviewer`, `docs-adr-reviewer`, `architecture-reviewer-fred` explicitly skipped this session.
+
+Reviewer outcome: 1 spine BLOCKER (Phase 1) + 2 slice-plan BLOCKERs (Phase 4) all remediated same-session per owner gate. 6 Phase 4 FINDINGS deferred to execution-prep absorption (smoke:dev:stub script missing; ADR-123 path wrong; adapter Inc.2/Inc.3 timing; slice 3a topic ambiguity; slice 3a budget concretization; slice 3b implementation-audit test shape). 2 topology BLOCKERs surfaced by architecture-reviewer-betty against `graph-stack.plan.md` + ADR-168 also deferred (those documents are out of scope this session per owner direction; absorbed into the next-session execution-prep step).
+
+Next session = execution prep, not planning. Canonical first task: absorb the topology BLOCKERs into `graph-stack.plan.md` + ADR-168, absorb the six Phase 4 FINDINGS into the three slice plans + slice 1, owner-resolve the EEF plan internal contradiction, then begin slice 1 execution.
+
+Claim `e3dc2e56` releases at session close. Branch `planning/graph-tooling`. Committing the Phase 5 bundle next.
+
+---
+
+## 2026-05-07T17:01:30Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Graph MVP closeout fixes opened
+
+Tidal Surfing Lighthouse opening owner-requested fix slice on connecting-oak-resources: correct graph topology ADR numbering collision, remove dead smoke:dev:stub gate references, clarify next-session thread wording/branch metadata, and then run docs/code/assumptions reviewers. Current graph topology ADR is ADR-173; earlier graph ADR-168 mentions are historical because ADR-168 belongs to the accepted TypeScript 6 migration ADR. Active claims were empty before opening; claim 918b1a01 registered. Note: claims open exhibited the known area-pattern last-write-wins shape, so the claim entry was immediately corrected to list the full edit area before touching planning/docs files.
+
+---
+
+## 2026-05-07T17:22:20Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Graph closeout commit window opened
+
+Tidal Surfing Lighthouse opened git:index/head claim 582e0be3 to commit the graph MVP closeout diff in two chunks: graph/ADR/planning documentation first, collaboration-state audit trail second. Staged set was empty before opening; active claims were otherwise empty; only stale abandoned commit_queue entries present.

@@ -11831,6 +11831,104 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "918b1a01-3387-47b3-ae19-fe91a088e5bb",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/*.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md",
+            ".agent/plans/templates/feature-workstream-template.md",
+            ".agent/plans/templates/components/quality-gates.md",
+            ".agent/research/graph-library.research.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/comms-events/49f2528c-e2a1-46d2-b65b-3119d3457dd4.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+            "docs/architecture/architectural-decisions/168-graph-stack-topology.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:00:42Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix known graph MVP decision-completeness documentation issues, then run docs/code/assumptions reviewers.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:13:08Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Fixed graph MVP closeout documentation issues; ran docs-adr, code, and assumptions reviewers; absorbed actionable reviewer follow-ups; EEF contradiction remains owner-owned.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "918b1a01-3387-47b3-ae19-fe91a088e5bb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "582e0be3-3673-41b2-94e1-f5b874c7a095",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:22:06Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit graph MVP closeout fixes in sensible chunks, then push planning/graph-tooling.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:25:30Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed graph MVP closeout documentation chunk as 1de72a84; closing git:index/head claim before committing final collaboration-state audit trail.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "582e0be3-3673-41b2-94e1-f5b874c7a095",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
