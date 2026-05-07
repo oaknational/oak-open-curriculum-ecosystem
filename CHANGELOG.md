@@ -1,3 +1,22 @@
+# [1.9.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.8.1...v1.9.0) (2026-05-07)
+
+
+### Bug Fixes
+
+* code quality ([7bc930e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7bc930e50cf4b7ea541b8eaaa5f0f89fab2d9889))
+* **codegen:** harden synonym regex and operation guard ([deec6a0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/deec6a00808c81d77d12d1c10f49d7be36c0d18a))
+* **practice:** show fitness response discipline ([dc04d80](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dc04d80b4c248172040cdb7efd9d7a805f53af6d))
+* **sonar:** close S7781 + bound synonym-miner regex input ([5b5b9d4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5b5b9d4a541078d64f82bc777354f09499eafd23))
+* **sonar:** preserve useful remediation cleanups ([c2f5402](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c2f5402b27365049f7658ee28609c18767c6cc74))
+* **sonar:** remediate quality gate blockers ([457fa1f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/457fa1f01399de95a275784a914804154a1ebfea))
+
+
+### Features
+
+* **agent-tools:** add practice substrate evaluators ([1392527](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1392527081c335c1e5a1c8cb8023805f2f45b905))
+* **agent-tools:** add practice substrate report mode ([44c73e4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/44c73e4d6aa44d2d3f3b1084a3c83e5a6f1c9aca))
+* **agent-tools:** finish substrate doctor safe merge ([a09fec3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a09fec3c24ae2e2e8aac8a9e3418f4fd74e90786))
+
 ## [1.8.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.8.0...v1.8.1) (2026-05-07)
 
 
