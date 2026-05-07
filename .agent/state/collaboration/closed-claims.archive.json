@@ -13943,6 +13943,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "3dc7d6e9-283c-4ca0-b9b5-1a77124130fa",
+      "agent_id": {
+        "agent_name": "Twigged Shedding Fern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:48:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 102 snagging fixes.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:50:30Z",
+        "closed_by": {
+          "agent_name": "Twigged Shedding Fern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed PR 102 snagging fixes as e8050400.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3dc7d6e9-283c-4ca0-b9b5-1a77124130fa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
