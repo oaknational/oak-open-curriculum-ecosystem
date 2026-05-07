@@ -1,6 +1,9 @@
 ---
 name: "EEF Evidence Corpus Surface"
 overview: "Expose the EEF Teaching and Learning Toolkit as an evidence corpus (graph + ranking engine) on top of the graph query layer, with two pedagogical prompts, structural citation discipline, telemetry, and a freshness story. Increment 2 (and EEF-side of 3+4) of the graph-and-corpus delivery sequence."
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
+cross_cutting_thread: "EEF Evidence — sector-cohesion demonstration"
 parent_plan: "../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
@@ -26,22 +29,22 @@ todos:
     content: "ScoringEngine with composite weighting (40/30/20/10), null-impact guard (F5), and rationale generation (R1, R2, R7). RankedResult uses non-empty tuple types: caveats: readonly [string, ...string[]], citations: readonly [Citation, ...Citation[]]."
     status: pending
   - id: t6-recommend-tool
-    content: "recommend-evidence-for-context tool composing GraphView.enumerate_nodes + ScoringEngine.rank, with explicit data_coverage in response (F8, R8)."
+    content: "eef-recommend-evidence-for-context tool composing GraphView.enumerate_nodes + ScoringEngine.rank, with explicit data_coverage in response (F8, R8)."
     status: pending
   - id: t7-explain-tool
-    content: "explain-evidence-strand tool: returns full strand context with citations, caveats, provenance, and update_history."
+    content: "eef-explain-evidence-strand tool: returns full strand context with citations, caveats, provenance, and update_history."
     status: pending
   - id: t8-compare-tool
-    content: "compare-evidence-strands tool: side-by-side comparison across user-selected dimensions, typed as ComparisonDimension literal union (no string[] widening)."
+    content: "eef-compare-evidence-strands tool: side-by-side comparison across user-selected dimensions, typed as ComparisonDimension literal union (no string[] widening)."
     status: pending
   - id: t9-guidance-constant
     content: "eef-evidence-guidance.ts with AGGREGATED_EEF_EVIDENCE_GUIDANCE (preserves R1, R3, R7 prescriptions)."
     status: pending
   - id: t10-lesson-plan-prompt
-    content: "evidence-grounded-lesson-plan prompt (preserves F8, F9, F10 resolutions; KS-to-phase mapping inline)."
+    content: "eef-evidence-grounded-lesson-plan prompt (preserves F8, F9, F10 resolutions; KS-to-phase mapping inline)."
     status: pending
   - id: t11-pp-review-prompt
-    content: "pupil-premium-strategy-review prompt (Workflow B from strategy doc; previously not in executable plan)."
+    content: "eef-pupil-premium-strategy-review prompt (Workflow B from strategy doc; previously not in executable plan)."
     status: pending
   - id: t12-citation-shape
     content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats: non-empty tuple} as structured fields. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod .min(1) re-asserts at runtime."
@@ -62,7 +65,7 @@ todos:
     content: "Register EEF resources via existing registerGraphResource() helper."
     status: pending
   - id: t18-adr-123-update
-    content: "ADR-123: add EEF resources, recommend/explain/compare tools, lesson-plan and PP-review prompts. Document corpus-vs-graph layering."
+    content: "ADR-123: add EEF resources (curriculum://eef-methodology, curriculum://eef-strands), eef-recommend/explain/compare tools, eef-evidence-grounded-lesson-plan and eef-pupil-premium-strategy-review prompts (all eef-* prefixed per ADR-157). Document corpus-vs-graph layering."
     status: pending
   - id: t19-e2e
     content: "E2E shape conditions: tools/resources/prompts listed; declared types match; Citation has non-empty caveats tuple and the response carries a non-empty citations tuple at compile time, re-asserted at runtime via Zod .min(1). Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists."
@@ -80,11 +83,37 @@ the restructure for an independent verification pass; after that pass
 confirmed no semantic loss (see [`../reference/conservation-map.md`](../reference/conservation-map.md)
 §N), `originals/` was deleted. The pre-session predecessor remains
 permanently recoverable via `git show e2796757:<path>`.
-**Last Updated**: 2026-04-30
+**Last Updated**: 2026-05-07 (tool/prompt names re-prefixed `eef-*` per
+ADR-157; cross-referenced from MVP-arc spine).
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
 **Increment**: 2 (with EEF-side of 3 and 4) of the EEF graph-and-corpus
 delivery sequence.
+**MVP arc**: this plan is **slice 1** of the
+[graph-mvp-arc spine](../../../graph-mvp-arc.plan.md). Slice 1's gate
+acceptance criteria require the `eef-*` prefix and the explicit-source-
+attribution discipline addendum to ADR-157. Both are coordination
+amendments that landed alongside the spine plan on 2026-05-07.
+
+## 2026-05-07 amendment — `eef-*` prefix applied per ADR-157
+
+ADR-157's namespace convention has always required the `eef-*` prefix
+for EEF-sourced primitives (the resource URIs `curriculum://eef-methodology`
+and `curriculum://eef-strands` already conform). This plan's tool and
+prompt names did not — a drift introduced when the plan was authored
+alongside the predecessor restructure. The 2026-05-07 amendment renames:
+
+| Before | After |
+|---|---|
+| `recommend-evidence-for-context` | `eef-recommend-evidence-for-context` |
+| `explain-evidence-strand` | `eef-explain-evidence-strand` |
+| `compare-evidence-strands` | `eef-compare-evidence-strands` |
+| `evidence-grounded-lesson-plan` | `eef-evidence-grounded-lesson-plan` |
+| `pupil-premium-strategy-review` | `eef-pupil-premium-strategy-review` |
+
+No behaviour change. No code shipped under the old names (this plan is
+in `current/`, not `active/`). Rename costs zero. Recorded as part of
+the spine's `amend-eef-plan` todo.
 
 ## Why This Plan Replaces Its Predecessor
 
@@ -528,7 +557,7 @@ structural enforcement of R1 + R7 named in T12.
 
 ### Phase D: Tools (T6–T8)
 
-**T6: `recommend-evidence-for-context`** — preserves the predecessor's
+**T6: `eef-recommend-evidence-for-context`** — preserves the predecessor's
 T4. Composes `GraphView.enumerate_nodes` + `ScoringEngine.rank`. Input
 schema preserved from predecessor (preserves F10 — the `focus` enum
 matching `most_relevant_priorities` in the data; `closing_disadvantage_gap`
@@ -559,7 +588,7 @@ Response shape (extends predecessor's, adds structural citations):
 - **Architecture validation**: confirms the corpus/tool boundary —
   the tool is thin and routes through the corpus interface.
 
-**T7: `explain-evidence-strand`** — NEW. Returns full context for one
+**T7: `eef-explain-evidence-strand`** — NEW. Returns full context for one
 strand: definition (short + full), key_findings, effectiveness,
 behind_the_average, closing_the_disadvantage_gap, implementation,
 related_strands, related_guidance_reports, update_history. Carries
@@ -568,12 +597,12 @@ related_strands, related_guidance_reports, update_history. Carries
 - **User value**: a teacher who has identified a strand can drill into
   full evidence detail with one tool call, including `update_history`
   so they know how recent the evidence is.
-- **Provability**: tool call count after a `recommend-evidence-for-context`
+- **Provability**: tool call count after a `eef-recommend-evidence-for-context`
   call (the natural funnel).
 - **Architecture validation**: confirms `get_node`-with-rich-projection
   is the right primitive for "tell me everything about this".
 
-**T8: `compare-evidence-strands`** — NEW. Side-by-side comparison
+**T8: `eef-compare-evidence-strands`** — NEW. Side-by-side comparison
 across user-selected dimensions (impact, cost, evidence, school
 context, implementation requirements). Used by Workflow B (PP review)
 and useful standalone.
@@ -596,7 +625,7 @@ not prescription, note partial coverage honestly. The guidance is
 imported into all three tool definitions (T6, T7, T8) so agents see
 consistent framing.
 
-**T10: `evidence-grounded-lesson-plan` prompt** — preserves predecessor
+**T10: `eef-evidence-grounded-lesson-plan` prompt** — preserves predecessor
 T10 verbatim, including F8 resolution (step 3 = extract implementation
 data from recommendation response, no separate tool), F9 resolution
 (KS-to-phase mapping inline in prompt), F10 resolution (focus enum
@@ -612,14 +641,14 @@ matches data values).
   orchestration without needing a new MCP primitive — at least for
   intra-source workflows.
 
-**T11: `pupil-premium-strategy-review` prompt** — NEW. Workflow B from
+**T11: `eef-pupil-premium-strategy-review` prompt** — NEW. Workflow B from
 the strategy doc, now executable. Parameters: `current_approaches: string[]`,
 `phase: enum`, `pp_percentage: number`. Orchestrates:
 
-1. For each current approach: `explain-evidence-strand`.
-2. `recommend-evidence-for-context` with `focus=closing_disadvantage_gap`
+1. For each current approach: `eef-explain-evidence-strand`.
+2. `eef-recommend-evidence-for-context` with `focus=closing_disadvantage_gap`
    and the school's phase + PP %.
-3. `compare-evidence-strands` for current vs recommended approaches.
+3. `eef-compare-evidence-strands` for current vs recommended approaches.
 4. Output: structured review {current_evidence_assessment[], recommended_approaches[],
    gaps[], implementation_quality_questions[]}.
 
@@ -748,10 +777,10 @@ Increment 2):
 
 - 2 new resources (`curriculum://eef-methodology`,
   `curriculum://eef-strands`).
-- 3 new tools (`recommend-evidence-for-context`,
-  `explain-evidence-strand`, `compare-evidence-strands`).
-- 2 new prompts (`evidence-grounded-lesson-plan`,
-  `pupil-premium-strategy-review`).
+- 3 new tools (`eef-recommend-evidence-for-context`,
+  `eef-explain-evidence-strand`, `eef-compare-evidence-strands`).
+- 2 new prompts (`eef-evidence-grounded-lesson-plan`,
+  `eef-pupil-premium-strategy-review`).
 - The corpus-vs-graph-vs-factory layering.
 - The default-projection convention for resources.
 
