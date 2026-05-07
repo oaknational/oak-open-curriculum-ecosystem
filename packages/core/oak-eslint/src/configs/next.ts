@@ -1,5 +1,5 @@
 import nextPlugin from '@next/eslint-plugin-next';
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import { react } from './react.js';
 
 /**
@@ -9,7 +9,7 @@ import { react } from './react.js';
  * plugin conflicts with our custom react config. The eslint-config-next package
  * bundles its own react/react-hooks plugins which conflict with ours.
  */
-export const next = tseslint.config(react, {
+export const next = defineConfig(react, {
   plugins: {
     '@next/next': nextPlugin,
   },

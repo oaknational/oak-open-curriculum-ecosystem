@@ -25,9 +25,11 @@ export function generateToolFile(
   queryParamMetadata: ParamMetadataMap,
 ): string {
   const parts: string[] = [];
-  parts.push(buildImports());
-  parts.push(emitHeader(toolName, path, method, operationId));
-  parts.push(emitSchema(pathParamMetadata, queryParamMetadata));
-  parts.push(emitIndex(toolName, path, method, operationId, operation));
+  parts.push(
+    buildImports(),
+    emitHeader(toolName, path, method, operationId),
+    emitSchema(pathParamMetadata, queryParamMetadata),
+    emitIndex(toolName, path, method, operationId, operation),
+  );
   return parts.join('\n');
 }

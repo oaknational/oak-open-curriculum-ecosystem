@@ -82,10 +82,7 @@ function buildInterface(
     return undefined;
   }
   const lines: string[] = [];
-  lines.push('/**');
-  lines.push(` * ${description}`);
-  lines.push(' */');
-  lines.push(`export interface ${interfaceName} {`);
+  lines.push('/**', ` * ${description}`, ' */', `export interface ${interfaceName} {`);
   for (const [name, metadata] of Object.entries(meta)) {
     const optional = metadata.required ? '' : '?';
     const summary = describeParam(metadata);
@@ -129,13 +126,13 @@ function buildHeaderBlock(
       const isQueryRequired = Object.values(queryParamMetadata).some((meta) => meta.required);
       sections.push(`  readonly query${isQueryRequired ? '' : '?'}: ToolQueryParams;`);
     }
-    sections.push('}');
-    sections.push('');
-    sections.push('export interface ToolArgs { readonly params: ToolParams; }');
+    sections.push('}', '', 'export interface ToolArgs { readonly params: ToolParams; }');
   } else {
-    sections.push('export interface ToolParams { readonly __noParams?: never; }');
-    sections.push('');
-    sections.push('export interface ToolArgs { readonly params: ToolParams; }');
+    sections.push(
+      'export interface ToolParams { readonly __noParams?: never; }',
+      '',
+      'export interface ToolArgs { readonly params: ToolParams; }',
+    );
   }
   sections.push('');
   return sections.join('\n');
@@ -164,26 +161,22 @@ function buildFlatToNestedTransform(
   const hasPathParams = pathParamNames.length > 0;
   const hasQueryParams = queryParamNames.length > 0;
   const lines: string[] = [];
-  lines.push('/**');
-  lines.push(' * Transform flat MCP arguments to nested SDK format.');
-  lines.push(' *');
   lines.push(
+    '/**',
+    ' * Transform flat MCP arguments to nested SDK format.',
+    ' *',
     ' * Converts flat parameter structure from MCP client to nested params.path/params.query',
-  );
-  lines.push(' * structure expected by SDK invoke function.');
-  lines.push(' *');
-  lines.push(
+    ' * structure expected by SDK invoke function.',
+    ' *',
     ' * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)',
-  );
-  lines.push(' * @returns Nested arguments for SDK invoke function (ToolArgs format)');
-  lines.push(' */');
-  lines.push(
+    ' * @returns Nested arguments for SDK invoke function (ToolArgs format)',
+
+    ' */',
     'export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {',
   );
 
   if (!hasPathParams && !hasQueryParams) {
-    lines.push('  toolMcpFlatInputSchema.parse(flatArgs);');
-    lines.push('  return { params: {} };');
+    lines.push('  toolMcpFlatInputSchema.parse(flatArgs);', '  return { params: {} };');
   } else {
     lines.push('  const params: ToolParams = {');
 
@@ -204,8 +197,7 @@ function buildFlatToNestedTransform(
       lines.push('    },');
     }
 
-    lines.push('  };');
-    lines.push('  return { params };');
+    lines.push('  };', '  return { params };');
   }
 
   lines.push('}');
@@ -237,11 +229,13 @@ export function emitSchema(
     pathParamMetadata,
     queryParamMetadata,
   );
-  lines.push(jsonLiteral);
-  lines.push(zodLiteral);
-  lines.push(flatMcpZodLiteral);
-  lines.push('export type ToolInputSchema = z.infer<typeof toolZodSchema>;');
-  lines.push(emitErrorDescription(pathParamMetadata, queryParamMetadata));
-  lines.push(buildFlatToNestedTransform(pathParamMetadata, queryParamMetadata));
+  lines.push(
+    jsonLiteral,
+    zodLiteral,
+    flatMcpZodLiteral,
+    'export type ToolInputSchema = z.infer<typeof toolZodSchema>;',
+    emitErrorDescription(pathParamMetadata, queryParamMetadata),
+    buildFlatToNestedTransform(pathParamMetadata, queryParamMetadata),
+  );
   return lines.join('\n');
 }

@@ -31,8 +31,7 @@ export function filterOperationsByIndex(
 
     const kind = inferKindFromIndex(indexName);
     if (kind && allowedKinds.includes(kind)) {
-      result.push(action);
-      result.push(doc);
+      result.push(action, doc);
     }
   }
 

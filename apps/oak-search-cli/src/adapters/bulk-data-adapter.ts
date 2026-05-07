@@ -161,12 +161,10 @@ export function createBulkDataAdapter(
     toBulkOperations(lessonsIndex, unitsIndex) {
       const ops: (BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc)[] = [];
       for (const doc of transformLessonsToES()) {
-        ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } });
-        ops.push(doc);
+        ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } }, doc);
       }
       for (const doc of transformUnitsToES()) {
-        ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } });
-        ops.push(doc);
+        ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } }, doc);
       }
       return ops;
     },

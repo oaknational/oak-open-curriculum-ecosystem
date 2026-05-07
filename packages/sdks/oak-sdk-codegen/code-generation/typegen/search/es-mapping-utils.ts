@@ -86,45 +86,38 @@ export function serialiseFieldMapping(mapping: EsFieldMapping, indent: number): 
  */
 export function generateSettingsBlock(): string {
   const lines: string[] = ['  settings: {'];
-  lines.push('    analysis: {');
-
-  // Normalizers
-  lines.push('      normalizer: {');
+  lines.push('    analysis: {', '      normalizer: {');
   for (const [name, config] of Object.entries(ES_NORMALIZER_CONFIG)) {
-    lines.push(`        ${name}: {`);
-    lines.push(`          type: '${config.type}',`);
-    lines.push(`          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`);
-    lines.push('        },');
+    lines.push(
+      `        ${name}: {`,
+      `          type: '${config.type}',`,
+      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      '        },',
+    );
   }
-  lines.push('      },');
-
-  // Filters
-  lines.push('      filter: {');
+  lines.push('      },', '      filter: {');
   for (const [name, config] of Object.entries(ES_FILTER_CONFIG)) {
-    lines.push(`        ${name}: {`);
-    lines.push(`          type: '${config.type}',`);
+    lines.push(`        ${name}: {`, `          type: '${config.type}',`);
     // Currently only synonym_graph filters are used
     if (config.type === 'synonym_graph') {
-      lines.push(`          synonyms_set: '${config.synonyms_set}',`);
-      lines.push(`          updateable: ${String(config.updateable)},`);
+      lines.push(
+        `          synonyms_set: '${config.synonyms_set}',`,
+        `          updateable: ${String(config.updateable)},`,
+      );
     }
     lines.push('        },');
   }
-  lines.push('      },');
-
-  // Analyzers
-  lines.push('      analyzer: {');
+  lines.push('      },', '      analyzer: {');
   for (const [name, config] of Object.entries(ES_ANALYZER_CONFIG)) {
-    lines.push(`        ${name}: {`);
-    lines.push(`          type: '${config.type}',`);
-    lines.push(`          tokenizer: '${config.tokenizer}',`);
-    lines.push(`          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`);
-    lines.push('        },');
+    lines.push(
+      `        ${name}: {`,
+      `          type: '${config.type}',`,
+      `          tokenizer: '${config.tokenizer}',`,
+      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      '        },',
+    );
   }
-  lines.push('      },');
-
-  lines.push('    },');
-  lines.push('  },');
+  lines.push('      },', '    },', '  },');
 
   return lines.join('\n');
 }
@@ -134,20 +127,16 @@ export function generateSettingsBlock(): string {
  */
 export function generateMinimalSettingsBlock(): string {
   const lines: string[] = ['  settings: {'];
-  lines.push('    analysis: {');
-
-  // Only normalizers
-  lines.push('      normalizer: {');
+  lines.push('    analysis: {', '      normalizer: {');
   for (const [name, config] of Object.entries(ES_NORMALIZER_CONFIG)) {
-    lines.push(`        ${name}: {`);
-    lines.push(`          type: '${config.type}',`);
-    lines.push(`          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`);
-    lines.push('        },');
+    lines.push(
+      `        ${name}: {`,
+      `          type: '${config.type}',`,
+      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      '        },',
+    );
   }
-  lines.push('      },');
-
-  lines.push('    },');
-  lines.push('  },');
+  lines.push('      },', '    },', '  },');
 
   return lines.join('\n');
 }
