@@ -437,34 +437,5 @@
       "notes": "header-max-length: 107>100; re-enqueuing with shorter subject"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "e3dc2e56-4f76-415e-bf6b-f098f26255b4",
-      "agent_id": {
-        "agent_name": "Breezy Navigating Sail",
-        "platform": "cursor",
-        "model": "claude-opus-4.7",
-        "session_id_prefix": "9edbd1"
-      },
-      "thread": "connecting-oak-resources",
-      "area_kind": "files",
-      "intent": "Close graph MVP-arc planning arc in single session: Phase 0 spine drift remediation; Phase 1 parallel reviewer batch; Phase 3 author three slice plans; Phase 4 review slice plans; Phase 5 spine + thread closure.",
-      "files": [
-        ".agent/plans/graph-mvp-arc.plan.md",
-        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
-        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
-        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
-        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/1d293dc4-e8f7-4398-9667-7113eb87bbd6.json"
-      ],
-      "opened_at": "2026-05-07T15:20:03Z",
-      "heartbeat_at": "2026-05-07T15:20:03Z",
-      "expires_at": "2026-05-07T19:20:03Z",
-      "ttl_seconds": 14400,
-      "phase": "active",
-      "notes": "Single-session planning closure per owner direction 2026-05-08. Doc-only; all reviewers readonly. Slice-plan paths are new; spine + thread-record are existing. NC plan, non-MVP plans, and execution explicitly out of scope."
-    }
-  ]
+  "claims": []
 }

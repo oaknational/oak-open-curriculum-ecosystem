@@ -11772,6 +11772,65 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e3dc2e56-4f76-415e-bf6b-f098f26255b4",
+      "agent_id": {
+        "agent_name": "Breezy Navigating Sail",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "9edbd1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/1d293dc4-e8f7-4398-9667-7113eb87bbd6.json",
+            ".agent/state/collaboration/comms-events/5c4397ce-26c7-43e0-90f2-e2f867acbeb0.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T15:20:03Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Close graph MVP-arc planning arc in single session per owner direction 2026-05-08: Phase 0 spine drift remediation; Phase 1 parallel reviewer batch; Phase 2 spine remediations; Phase 3 author three slice plans; Phase 4 review slice plans; Phase 5 spine + thread closure.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T15:55:34Z",
+        "closed_by": {
+          "agent_name": "Breezy Navigating Sail",
+          "platform": "cursor",
+          "model": "claude-opus-4.7",
+          "session_id_prefix": "9edbd1"
+        },
+        "summary": "Single-session planning closure complete across 5 commits (62ffd8b8 pre-flight, d740baa0 Phase 0, 82b3a792 Phase 2, 776df6b7 Phase 3, 0899ba93 Phase 4, plus Phase 5 closure commit). Three slice plans authored in current/. 1 spine BLOCKER + 2 slice-plan BLOCKERs all remediated same-session. 6 Phase 4 FINDINGS + 2 topology BLOCKERs deferred to next-session execution-prep absorption per owner-set scope. Slice-author todos in spine marked completed. Next session = execution prep, not planning.",
+        "evidence": [
+          {
+            "kind": "comms_event",
+            "ref": "1d293dc4-e8f7-4398-9667-7113eb87bbd6",
+            "summary": "Bootstrap fast-path event opening the single-session planning closure."
+          },
+          {
+            "kind": "comms_event",
+            "ref": "5c4397ce-26c7-43e0-90f2-e2f867acbeb0",
+            "summary": "Session close event with phase-by-phase commit references and outcome."
+          },
+          {
+            "kind": "claim",
+            "ref": "e3dc2e56-4f76-415e-bf6b-f098f26255b4",
+            "summary": "Claim explicitly closed at end of single-session planning closure."
+          }
+        ]
+      }
     }
   ]
 }

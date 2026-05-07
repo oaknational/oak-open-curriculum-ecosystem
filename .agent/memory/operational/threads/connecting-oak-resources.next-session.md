@@ -1,6 +1,24 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-07 (Windward Darting Horizon / cursor /
+**Last refreshed**: 2026-05-07 (Breezy Navigating Sail / cursor /
+claude-opus-4.7 / `9edbd1` — closed the MVP-arc PLANNING arc in a
+single session per owner direction. Pre-flight + Phase 0 (spine drift
+remediation, commit `d740baa0`) + Phase 1 (3-reviewer parallel batch
+over 5 MVP-arc artefacts + topology) + Phase 2 (4 spine remediations,
+commit `82b3a792`) + Phase 3 (3 slice plans authored, commit
+`776df6b7` — `oak-kg-threads-surface.plan.md`,
+`oak-misconceptions-subgraph-mcp-surface.plan.md`,
+`oak-misconceptions-eef-cross-corpus-surface.plan.md`) + Phase 4
+(2 BLOCKERs remediated, 6 FINDINGS deferred, commit `0899ba93`) +
+Phase 5 (spine + thread record updates). Reviewer scope reduced per
+owner direction: `code-reviewer` + `assumptions-reviewer` in series
+across phases 1 + 4; `architecture-reviewer-betty` for topology in
+parallel; out-of-scope reviewers (`mcp-reviewer`, `docs-adr-reviewer`,
+`architecture-reviewer-fred`) explicitly skipped this session.
+**Next session = execution prep**: absorb topology BLOCKERs into
+`graph-stack.plan.md` + ADR-168, absorb Phase 4 FINDINGS into the
+three slice plans + slice 1, then begin slice 1 execution.
+**Prior**: 2026-05-07 — Windward Darting Horizon / cursor /
 claude-opus-4.7 / `dd084d` — authored
 [`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
 top-level as a cross-collection coordination spine sequencing three
@@ -143,35 +161,44 @@ gate.
 
 ## First Task of Next Session
 
-**Canonical first task — opener landed 2026-05-07**:
-[`2026-05-08-graph-mvp-arc-specialist-review-opener.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md)
-— parallel specialist-reviewer pass over the seven artefacts authored
-2026-05-07 (graph MVP-arc spine + supporting amendments). Five
-reviewers in a single parallel batch (`assumptions-reviewer`,
-`architecture-reviewer-betty`, `architecture-reviewer-fred`,
-`mcp-reviewer`, `docs-adr-reviewer`), then synthesise verdicts. The
-review gates the slice-2 / slice-3a / slice-3b plan-authoring work;
-those don't start until review settles.
+**MVP-arc PLANNING is CLOSED**. Spine + three slice plans + topology
+review + reviewer-driven remediation all landed 2026-05-07 in a single
+session (Breezy Navigating Sail). The 2026-05-07 opener for parallel
+specialist-reviewer pass is **superseded** — that pass ran in Phase 1
+of the closure session; do NOT re-run. The slice-2 / slice-3a /
+slice-3b plan-authoring work is **complete** in `current/`; do NOT
+re-author. The plan-phase topology review of `graph-stack.plan.md`
+ran via `architecture-reviewer-betty` in Phase 1 (architecture-fred /
+barney scope dropped per owner direction); the surfaced topology
+BLOCKERs are captured below for execution-prep absorption.
 
-After the review settles, queued next:
+**Canonical first task — execution prep**:
 
-1. **Author the slice-2 executable plan** (proposed name:
-   `oak-kg-threads-surface.plan.md`) per spine's
-   `author-slice-2-plan` todo. Parallel-safe with slice-3a.
-2. **Author the slice-3a executable plan** in parallel
-   (proposed name: `oak-misconceptions-subgraph-mcp-surface.plan.md`
-   or extension to existing `misconception-graph-mcp-surface.plan.md`).
-3. **Topology approval for `graph-stack.plan.md`** — owner-gated
-   review of the eight-workspace topology before any execution.
-   Plan-phase reviewers named in graph-stack: `assumptions-reviewer`,
-   `architecture-reviewer-betty`, `architecture-reviewer-fred`,
-   `architecture-reviewer-barney`. No promotion until all four
-   have run. (Some overlap with the MVP-arc opener's reviewer set;
-   that opener's findings inform but do not substitute for this
-   topology-approval pass.)
-4. Address EEF thread Promotion Packet (sibling thread).
-5. Promote the external-oak-references plan to `current/`.
-6. Do a deep read of `oak-curriculum-ontology` to extract the
+1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +
+   ADR-168** (see `## Topology BLOCKERs Surfaced 2026-05-07` below).
+   This is the precondition for `graph-stack.plan.md` CURRENT →
+   ACTIVE transition + ADR-168 ratification. Until both are absorbed
+   and the topology is owner-approved, slice 1 execution may proceed
+   on the graph-query-layer foundation (already shipped) but no work
+   on Inc.2 / Inc.3 substrate begins.
+2. **Absorb the six Phase 4 FINDINGS into the three slice plans** (see
+   `## Phase 4 FINDINGS for Execution-Prep Absorption` below). Two are
+   trivial (script removal, ADR path correction); four require small
+   substantive edits.
+3. **Owner decision on the EEF plan internal contradiction** — t19
+   declares LLM/outcome verification out-of-scope while §`Promotion
+   Trigger from CURRENT to ACTIVE` and the closing acceptance lines
+   treat outcome conditions as load-bearing. Resolve before slice 1
+   execution begins (slice 1 IS the EEF plan).
+4. **Begin slice 1 execution** per the existing
+   `eef-evidence-corpus.plan.md` workstream sequence. Slice 2 + 3a
+   are parallel-safe behind gate-1 per the spine.
+
+Queued (not blocked by MVP arc):
+
+5. Address EEF thread Promotion Packet (sibling thread).
+6. Promote the external-oak-references plan to `current/`.
+7. Do a deep read of `oak-curriculum-ontology` to extract the
    vocabulary alignment opportunities for the post-promotion graph
    adapters.
 
@@ -204,6 +231,51 @@ must be absorbed before that transition.
 `graph-stack.plan.md` and ADR-168 are **not** edited this session. The
 fixes land in next session as the first execution-prep step, ahead of
 the graph-stack CURRENT → ACTIVE transition.
+
+## Phase 4 FINDINGS for Execution-Prep Absorption (Surfaced 2026-05-07)
+
+Phase 4 of the single-session planning closure ran `code-reviewer` +
+`assumptions-reviewer` in parallel over the three slice plans
+authored at `776df6b7`. Two BLOCKERs were remediated same-session
+(commit `0899ba93` — slice-3b composition-by-name conceptual mistake
+across slices 2, 3a, and 3b). Six FINDINGS are deferred to
+execution-prep absorption.
+
+1. **Quality-gate command — `pnpm smoke:dev:stub` does not exist**
+   (all three slice plans, WS5 quality-gate command chain). Replace
+   with a real repo command or remove. Trivial fix per plan; do
+   together as a single commit.
+2. **ADR-123 path is wrong** (all three slice plans, "Acceptance
+   Criteria — ADR amendments"). Plans cite
+   `123-mcp-primitive-naming.md`; the actual file is
+   `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`.
+   Trivial fix per plan; do together as a single commit.
+3. **Slice 2 adapter timing inconsistency** (`oak-kg-threads-surface.plan.md`
+   L115-117 asserts the Oak Curriculum Ontology adapter lands in
+   "Inc.2 or early Inc.3", but `graph-stack.plan.md` Inc.1-Inc.3
+   only names the adapter in Inc.3). Reconcile by either updating
+   the slice 2 plan to match `graph-stack.plan.md`, or by adding a
+   named adapter gate in `graph-stack.plan.md`.
+4. **Slice 3a topic ambiguity** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
+   L167-169 acceptance #1 mentions "topic context" while
+   non-goals at L160-161 cut topic-string sub-graph). Tighten
+   acceptance #1 to thread/unit context.
+5. **Slice 3a budget concretization** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
+   L197-203 says "standard context windows" + "N representative
+   responses" without numbers). Execution prep needs a concrete
+   numeric budget (e.g. 32k / 64k token target) and the rule for
+   selecting the N representative thread/unit fixtures.
+6. **Slice 3b implementation-audit test shape** (`oak-misconceptions-eef-cross-corpus-surface.plan.md`
+   L223-226 + L232-235 contain test cycles framed around
+   implementation-audit assertions: file-scope import audits, "the
+   primitive (not bespoke composition logic) is responsible", file
+   size + cyclomatic complexity bounds). Reshape as state-describing
+   behavioural tests, or move structural enforcement to lint /
+   architecture gates and document accordingly.
+
+These FINDINGS are owner-approved as deferrable per the single-session
+planning closure scope. Absorbing them is execution-prep work for the
+next session; they do NOT block slice 1 execution start.
 
 ## References
 
