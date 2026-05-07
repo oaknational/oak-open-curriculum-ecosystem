@@ -193,7 +193,7 @@ describe('serializeMisconceptionGraph', () => {
     const serialized = serializeMisconceptionGraph(graph);
     const parsed: unknown = JSON.parse(serialized);
 
-    expect(parsed).toStrictEqual(JSON.parse(JSON.stringify(graph)));
+    expect(parsed).toStrictEqual(structuredClone(graph));
   });
 
   it('does not emit eslint-disable directives in generated output', () => {
