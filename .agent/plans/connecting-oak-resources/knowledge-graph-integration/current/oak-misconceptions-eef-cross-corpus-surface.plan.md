@@ -59,7 +59,7 @@ todos:
     status: pending
     depends_on: [ws2-cycle-1-mcp-wiring]
   - id: ws3-adr-123-update
-    content: "WS3: update `docs/architecture/architectural-decisions/123-mcp-primitive-naming.md` to record the compound-prefix tool; confirm ADR-157 already records the compound-prefix convention (Phase 0 amendment)."
+    content: "WS3: update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` to record the compound-prefix tool; confirm ADR-157 already records the compound-prefix convention (Phase 0 amendment)."
     status: pending
     depends_on: [ws2-cycle-2-tool-meta-and-attribution]
   - id: ws4-quality-gates
@@ -281,7 +281,7 @@ with `tool-definition.ts` and `unit.test.ts` siblings.
 ```bash
 pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
 pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
-pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+pnpm test && pnpm test:ui && pnpm test:e2e
 ```
 
 ### WS5 — Adversarial review
@@ -334,7 +334,7 @@ Dispatch:
 - ADR-157 (multi-source integration) — compound-prefix convention +
   explicit-source-attribution discipline (already amended Phase 0 of
   MVP-arc spine).
-- ADR-168 (graph stack topology, Proposed) — substrate path.
+- ADR-173 (graph stack topology, Proposed) — substrate path.
 
 ## Dependencies
 

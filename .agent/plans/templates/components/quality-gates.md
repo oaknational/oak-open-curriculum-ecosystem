@@ -24,7 +24,6 @@ pnpm lint:fix
 pnpm test
 pnpm test:ui
 pnpm test:e2e
-pnpm smoke:dev:stub
 ```
 
 ## Rationale

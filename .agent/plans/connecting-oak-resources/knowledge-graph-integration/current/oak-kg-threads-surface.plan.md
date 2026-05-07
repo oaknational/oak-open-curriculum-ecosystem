@@ -59,11 +59,11 @@ todos:
     status: pending
     depends_on: [ws3-cycle-1-mcp-wiring]
   - id: ws4-adr-123-update
-    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-primitive-naming.md` to record `curriculum://oak-kg-threads` + `oak-kg-get-thread-content` per the namespace conventions in ADR-157."
+    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` to record `curriculum://oak-kg-threads` + `oak-kg-get-thread-content` per the namespace conventions in ADR-157."
     status: pending
     depends_on: [ws3-cycle-2-tool-descriptors]
   - id: ws5-quality-gates
-    content: "WS5: full quality-gate chain on the integrated delivery (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub`)."
+    content: "WS5: full quality-gate chain on the integrated delivery (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`)."
     status: pending
     depends_on: [ws4-adr-123-update]
   - id: ws6-adversarial-review
@@ -133,7 +133,7 @@ discipline, not a downstream-composition dependency.
    slice 3b. This plan does not rename.
 2. **Substrate-only via adapter** — no direct ontology I/O from the
    resource or tool; everything routes through `graph-corpus-sdk` so the
-   substrate-vs-surface boundary holds (per ADR-168 / ADR-154).
+   substrate-vs-surface boundary holds (per ADR-173 / ADR-154).
 3. **Inverse-edge primitive in graph-query-layer** — Thread is a forward
    edge from Unit (`curric:includesThread`); this slice exercises the
    inverse-edge primitive end-to-end and confirms it earns its keep.
@@ -250,7 +250,7 @@ registration and into the SDK's tool-guidance / NL surface.
 
 ### WS4 — ADR-123 update
 
-Update `docs/architecture/architectural-decisions/123-mcp-primitive-naming.md`
+Update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`
 to record the new primitives. Single commit, doc-only.
 
 ### WS5 — Quality gates
@@ -258,7 +258,7 @@ to record the new primitives. Single commit, doc-only.
 ```bash
 pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
 pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
-pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+pnpm test && pnpm test:ui && pnpm test:e2e
 ```
 
 ### WS6 — Adversarial review
@@ -301,7 +301,7 @@ Triggers downstream readiness check on slice 3b authoring.
 - ADR-154 (framework / consumer separation) — surface lives in the SDK,
   substrate lives in `graph-corpus-sdk`.
 - ADR-157 (multi-source integration) — `oak-kg-*` namespace.
-- ADR-168 (graph stack topology, Proposed) — substrate path.
+- ADR-173 (graph stack topology, Proposed) — substrate path.
 
 ## Dependencies
 

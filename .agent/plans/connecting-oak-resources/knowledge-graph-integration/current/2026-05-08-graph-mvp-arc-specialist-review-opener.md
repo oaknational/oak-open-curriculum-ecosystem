@@ -1,15 +1,16 @@
 ---
-status: opener
+status: superseded-opener
 authored: 2026-05-07
 authored_by: Windward Darting Horizon (cursor, claude-opus-4.7, dd084d)
 thread: connecting-oak-resources (with eef subthread coordination)
-target_session_shape: parallel specialist-reviewer pass over the graph MVP-arc spine + supporting amendments authored 2026-05-07; synthesise findings; record CLEAN / FINDINGS / BLOCKERS per artefact; prepare for slice-2 / slice-3a authoring once review settles
+target_session_shape: superseded by completed Breezy planning closure; retained as historical opener only
+superseded_by: .agent/memory/operational/threads/connecting-oak-resources.next-session.md#first-task-of-next-session
 spine_plan: ../../../graph-mvp-arc.plan.md
 artefacts_under_review:
   - .agent/plans/graph-mvp-arc.plan.md
   - .agent/plans/graph-portfolio-index.md
   - .agent/research/graph-library.research.md
-  - docs/architecture/architectural-decisions/168-graph-stack-topology.md
+  - docs/architecture/architectural-decisions/173-graph-stack-topology.md
   - docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md
   - .agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md
   - .agent/plans/connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md
@@ -21,6 +22,12 @@ out_of_scope:
 ---
 
 # Next session opener — Graph MVP-arc specialist review
+
+**Superseded**: Breezy Navigating Sail completed this specialist-review
+and slice-planning closure on 2026-05-07. Do not execute this opener as
+the current next step; use the
+[`connecting-oak-resources` thread record](../../../../memory/operational/threads/connecting-oak-resources.next-session.md#first-task-of-next-session)
+instead.
 
 **Thread**: `connecting-oak-resources` (primary), with `eef`
 subthread coordination for the EEF-shaped artefacts.
@@ -36,8 +43,9 @@ completes.
 
 Five commits on `planning/graph-tooling`:
 
-- `53698ce0` — graph portfolio + RDF 1.2 doctrine + ADR-168
-  (21 files; research rename, portfolio index, ADR-168, twelve plan
+- `53698ce0` — graph portfolio + RDF 1.2 doctrine + graph topology ADR
+  skeleton (then ADR-168; renumbered to ADR-173 on 2026-05-07 closeout)
+  (21 files; research rename, portfolio index, topology ADR, twelve plan
   frontmatters, high-level cross-link, collection README pointer).
 - `f07bacfb` — ADR-157 namespace amendment
   (`oak-misconceptions-*` row, compound prefix row, explicit-source-
@@ -96,7 +104,7 @@ legitimacy, the MVP discipline shape.
 - The boundary correction (spine tracks only what's IN; adjacent
   plans own their own sequencing) — is it fully settled in the
   artefacts? Any residual cataloguing?
-- ADR-168's seven binding tripwires — are they tripwires (specific
+- ADR-173's seven binding tripwires — are they tripwires (specific
   named events that fire) or aspirations (vague conditions)?
 
 **Expected output**: PASS / FINDINGS / BLOCKERS, each finding a
@@ -113,7 +121,7 @@ sentence; do not author corrections.
   term change cost: what happens when a tool's primary corpus
   changes? When a new corpus is added? Is the convention
   sustainable?
-- ADR-168's eight-workspace topology with a deferred ninth: the
+- ADR-173's eight-workspace topology with a deferred ninth: the
   cohesion shape (each workspace owns one substrate concern). Are
   workspace boundaries crisp? Where would a new corpus adapter
   land?
@@ -133,7 +141,7 @@ sentence; do not author corrections.
 
 **Prompt content**:
 
-- ADR-168 is proposed. Does it comply with existing ADRs? Specifically:
+- ADR-173 is proposed. Does it comply with existing ADRs? Specifically:
   ADR-157 (namespace conventions — already amended this arc), ADR-123
   (MCP primitives roster), ADR-117 (plan lifecycle / archival),
   ADR-144 (fitness vocabulary). Any contradiction or unspecified
@@ -147,7 +155,7 @@ sentence; do not author corrections.
   (no broken anchors, no dangling SHA references, no moving-target
   citations per `no-moving-targets-in-permanent-docs.md`)?
 - The seven RDF 1.2 / standards-evolution tripwires in
-  `graph-library.research.md` §19 + ADR-168: do they meet the
+  `graph-library.research.md` §19 + ADR-173: do they meet the
   named-tripwire bar (specific firing condition + named owner) or
   do any read as aspirational?
 
@@ -193,7 +201,7 @@ integrity, internal consistency.
 
 **Prompt content**:
 
-- ADR-168 (proposed) — is the skeleton at the right level (decision,
+- ADR-173 (proposed) — is the skeleton at the right level (decision,
   context, consequences, status)? Anything missing for a proposal
   that would block ratification when ready?
 - ADR-157 amendment — is the amendment self-contained (readable
@@ -252,12 +260,10 @@ spine starts gating real delivery. The boundary correction
 late-session was significant; a clean review pass also serves to
 validate that the correction settled cleanly across all artefacts.
 
-The owner-named first-task candidate after this review (per the
-[`connecting-oak-resources` thread record](../../../memory/operational/threads/connecting-oak-resources.next-session.md#first-task-of-next-session))
-is **author the slice-2 executable plan**, parallel with **author
-the slice-3a executable plan**. Those slice-plan authoring sessions
-inherit the spine's acceptance criteria; if the spine is unsound,
-they inherit unsoundness. This review is the gate.
+This opener's owner-named first-task candidate was completed by the
+2026-05-07 planning closure. The current next step now lives in the
+[`connecting-oak-resources` thread record](../../../../memory/operational/threads/connecting-oak-resources.next-session.md#first-task-of-next-session):
+decision-completeness closeout before slice execution starts.
 
 ## Practical notes for the dispatching agent
 
@@ -279,7 +285,7 @@ they inherit unsoundness. This review is the gate.
 - Spine plan: [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
 - Portfolio index: [`../../../graph-portfolio-index.md`](../../../graph-portfolio-index.md)
 - Research: [`../../../../research/graph-library.research.md`](../../../../research/graph-library.research.md)
-- ADR-168: [`../../../../../docs/architecture/architectural-decisions/168-graph-stack-topology.md`](../../../../../docs/architecture/architectural-decisions/168-graph-stack-topology.md)
+- ADR-173: [`../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md)
 - ADR-157: [`../../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 - EEF plan: [`../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 - NC plan: [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md)

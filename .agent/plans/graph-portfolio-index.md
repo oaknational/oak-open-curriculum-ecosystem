@@ -54,7 +54,7 @@ The shape of a layered, standards-based graph capability for Oak: JSON-LD
 ingestion, RDF-compatible internal model, vocabulary registry, validation,
 projection, ergonomic property-graph API.
 
-**Standards stance (Option B, ratified by ADR-168)**: **RDF 1.2-native
+**Standards stance (Option B, captured by proposed ADR-173)**: **RDF 1.2-native
 internals, JSON-LD 1.1 / RDF 1.1-compatible wire**. Triple terms are
 first-class members of the `Term` union from day one. The wire constraint
 closes as the ecosystem catches up — see the tripwire map below.
@@ -62,15 +62,15 @@ closes as the ecosystem catches up — see the tripwire map below.
 | Type | Path | Role |
 |---|---|---|
 | Research direction | [`.agent/research/graph-library.research.md`](../research/graph-library.research.md) | Authoritative direction. **§4** RDF 1.2-native internal model (TripleTerm first-class). **§8** RelationshipRecord as JSON-LD 1.1 emit projection. **§12** wire-format migration seam. **§18** Oak first-wave ingestion scope. **§19** canonical Standards-evolution tripwires map (7 named tripwires). |
-| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Eight active workspaces plus one deferred; foundation increment ingests the NC knowledge taxonomy end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-168 below). |
+| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Eight active workspaces plus one deferred; foundation increment ingests the NC knowledge taxonomy end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-173 below). |
 | Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation polymorphic query layer with progressive disclosure. Substrate folds into `graph-stack`; MCP exposure stays a separate consumer-side decision. |
-| ADR (proposed) | [`docs/architecture/architectural-decisions/168-graph-stack-topology.md`](../../docs/architecture/architectural-decisions/168-graph-stack-topology.md) | **WS0 deliverable** of `graph-stack.plan.md`. Ratifies the topology, the **Option B standards stance**, the first-wave ingestion scope, and the seven binding **tripwires**. Skeleton drafted 2026-05-07; Option B amendment 2026-05-07. |
+| ADR (proposed) | [`docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) | **WS0 deliverable** of `graph-stack.plan.md`. Ratifies the topology, the **Option B standards stance**, the first-wave ingestion scope, and the seven binding **tripwires**. Skeleton drafted 2026-05-07; Option B amendment 2026-05-07. |
 
-### Standards-evolution tripwires (binding under ADR-168)
+### Standards-evolution tripwires (captured by proposed ADR-173)
 
 Each tripwire has its own subsection in
 [`graph-library.research.md` §19](../research/graph-library.research.md#19-standards-evolution-tripwires).
-ADR-168 enumerates them as binding. **No tripwire is silently skipped —
+ADR-173 enumerates them as binding. **No tripwire is silently skipped —
 each becomes a named follow-on plan when triggered.**
 
 | # | Tripwire | Activates |

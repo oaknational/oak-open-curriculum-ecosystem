@@ -61,7 +61,7 @@ todos:
     status: pending
     depends_on: [ws3-cycle-1-mcp-wiring]
   - id: ws4-adr-123-and-157-update
-    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-primitive-naming.md` to record the new tool(s); confirm ADR-157 already records `oak-misconceptions-*` prefix (Phase 0 amendment); add cross-reference if needed."
+    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` to record the new tool(s); confirm ADR-157 already records `oak-misconceptions-*` prefix (Phase 0 amendment); add cross-reference if needed."
     status: pending
     depends_on: [ws3-cycle-2-tool-meta-legacy-disclosure]
   - id: ws5-quality-gates
@@ -266,7 +266,7 @@ If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
 ```bash
 pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
 pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
-pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+pnpm test && pnpm test:ui && pnpm test:e2e
 ```
 
 ### WS6 — Adversarial review
@@ -312,7 +312,7 @@ Dispatch:
 - ADR-123 (MCP primitive naming) — updated by WS4.
 - ADR-157 (multi-source integration) — `oak-misconceptions-*` namespace
   already present.
-- ADR-168 (graph stack topology, Proposed) — names the substrate
+- ADR-173 (graph stack topology, Proposed) — names the substrate
   workspaces; this slice intentionally lives on the legacy substrate
   pending Inc.3 misconception replatform.
 

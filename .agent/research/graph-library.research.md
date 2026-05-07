@@ -4,7 +4,7 @@
 > shape for a general graph-handling layer, plus first-wave Oak ingestion scope.
 > The executable plan that consumes this direction is
 > [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md);
-> the topology decision lives in **ADR-168**.
+> the topology decision lives in **ADR-173**.
 
 **Date:** 4 May 2026 (last revised 7 May 2026 — Option B applied:
 **RDF 1.2-native internals**, JSON-LD 1.1 wire, **Oak first-wave ingestion
@@ -821,7 +821,7 @@ This library is **RDF 1.2-native internally** and **JSON-LD 1.1 / RDF 1.1
 on the wire**. The wire constraint is a deliberate concession to JSON-LD 1.1
 stability and downstream interop. The tripwires below are the **canonical
 list of work that activates as the ecosystem catches up**: each one names
-*what to watch for*, *what changes*, and *what stays the same*. ADR-168
+*what to watch for*, *what changes*, and *what stays the same*. ADR-173
 enumerates the same tripwires by name as binding commitments; the executable
 plan ([`graph-stack.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md))
 schedules them as named follow-ons.
@@ -903,7 +903,7 @@ schedules them as named follow-ons.
 - **Modules affected**: documentation and package metadata mostly; no
   architectural change.
 - **What changes**:
-  - Update declared spec version in package metadata, READMEs, ADR-168, and
+  - Update declared spec version in package metadata, READMEs, ADR-173, and
     this research document.
   - The pre-Recommendation risk window (small, but non-zero — CR Snapshots can
     receive non-substantive corrections) closes.
@@ -948,7 +948,7 @@ schedules them as named follow-ons.
 ### Tripwire discipline (binding)
 
 - Every tripwire is a **contract test or version-pin** in the codebase.
-  This document is the **authoritative tripwire map**; ADR-168 enumerates
+  This document is the **authoritative tripwire map**; ADR-173 enumerates
   them by name as binding commitments; the plan body schedules them as
   named follow-on plans when triggered.
 - **No tripwire can be silently skipped.** When a trigger fires, the work

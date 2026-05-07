@@ -1,8 +1,7 @@
-# ADR-168: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
+# ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
 
-**Status**: Proposed (skeleton, 2026-05-07) — pending owner approval and WS0
-authoring under
-[`graph-stack.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md).
+**Status**: Proposed (skeleton, 2026-05-07) — pending owner approval
+before ratification.
 
 **Date**: 2026-05-07
 
@@ -17,16 +16,7 @@ graph workspaces;
 [ADR-157](157-multi-source-open-education-integration.md) — multi-source
 open education integration; this ADR is the structural carrier for that
 integration (Oak API + Oak Curriculum Ontology + EEF, with the EEF
-cross-cutting thread fully named);
-[`.agent/research/graph-library.research.md`](../../../.agent/research/graph-library.research.md)
-— authoritative research direction (JSON-LD 1.1 wire, **RDF 1.2-native
-internals** with TripleTerm as a first-class Term member, vocabulary
-registry, ingestion modes, validation, projection, adapter seams,
-canonical Standards-evolution tripwire map in §19);
-[`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
-— the executable plan whose WS0 produces this ADR;
-[`.agent/plans/graph-portfolio-index.md`](../../../.agent/plans/graph-portfolio-index.md)
-— cross-collection index of every graph plan and research artefact.
+cross-cutting thread fully named).
 
 ## Context
 
@@ -44,16 +34,16 @@ code path ingests its triples directly. Other Oak-internal graphs (the
 prerequisite and misconception graphs) are emitted as ad-hoc typed JSON. The
 EEF Toolkit is an external corpus we want to compose with both.
 
-Plans elsewhere in the portfolio assume a substrate exists. This ADR ratifies
-the substrate's shape so those plans can attach to a stable spine rather than
-each inventing one.
+Plans elsewhere in the portfolio assume a substrate exists. This ADR records
+the proposed substrate shape so those plans can attach to a stable spine
+rather than each inventing one.
 
 ## Decision
 
-Adopt the **eight-workspaces-plus-one-deferred** topology described in
-[`graph-stack.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
-§Topology Decision and the standards posture described in
-[`graph-library.research.md`](../../../.agent/research/graph-library.research.md).
+Adopt an **eight-workspaces-plus-one-deferred** graph topology with an RDF
+1.2-native internal model, JSON-LD 1.1 wire profile, versioned standards
+adapters, and explicit separation between MCP surfacing and graph substrate
+packages.
 
 ### Standards stance
 
@@ -65,26 +55,25 @@ Adopt the **eight-workspaces-plus-one-deferred** topology described in
 - **JSON-LD 1.1** is the wire syntax for persisted data, public APIs, and
   default exports. JSON-LD 1.2 is a future emit/parse adapter (W3C JSON-LD
   WG charter target: Q4 2027). Until then, internal triple-term annotations
-  are _projected_ to `RelationshipRecord` shapes on JSON-LD 1.1 emit
-  (research §8). RelationshipRecord is the **wire projection**, not the
-  canonical model.
+  are _projected_ to `RelationshipRecord` shapes on JSON-LD 1.1 emit.
+  RelationshipRecord is the **wire projection**, not the canonical model.
 - **RDF 1.1-compatible quads on the wire**, lowered from RDF 1.2-native
   internals.
 - **Vocabulary baseline**: schema.org, RDFS, SKOS, PROV-O, Dublin Core
   Terms, OWL 2, SHACL 1.0.
 - **SPARQL 1.2 and SHACL 1.2** are tracked behind versioned adapters in the
-  deferred `graph-future` workspace; activation triggered by tripwires #3
-  and #4 (research §19).
+  deferred `graph-future` workspace; activation is triggered by tripwires #3
+  and #4 below.
 
 ### Topology
 
-Eight active workspaces plus one deferred (research-mapped roles in the
-plan body):
+Eight active workspaces plus one deferred:
 
 1. `packages/core/graph-core/` — RDF/JS-aligned terms/quads/datasets,
    JSON-LD 1.1 expansion+compaction+framing, canonicalisation, vocabulary
    registry. Pure, no I/O.
-2. `packages/libs/graph-ingest/` — ingestion modes from research §6.
+2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, and
+   corpus-specific ingestion modes.
 3. `packages/libs/graph-enhance/` — stable IRI minting, predicate mapping,
    type inference, link detection, `EnhancementRecord` and
    `RelationshipRecord` discipline.
@@ -117,9 +106,7 @@ is a consumer-side concern with at most one home per transport.
 
 ### First-wave ingestion scope (binding for graph-stack Increment 1)
 
-The first wave of import support targets four corpora, per
-[`graph-library.research.md`](../../../.agent/research/graph-library.research.md)
-§18:
+The first wave of import support targets four corpora:
 
 1. **Oak Curriculum Ontology** — Turtle + SHACL, ingested directly from the
    sibling `oak-curriculum-ontology` repo. TTL is canonical; the repo's
@@ -163,7 +150,7 @@ consumers require them.
 - The deferred `graph-future` workspace is a deliberate gap — adapter seams
   exist from day one, but consumers requiring RDF 1.2 / JSON-LD 1.2 wire
   formats will need to author the workspace before those adapters can ship.
-- Our `TripleTerm` shape (research §4) is authored ahead of an RDF/JS WG
+- Our `TripleTerm` shape is authored ahead of an RDF/JS WG
   formalisation. If the eventual published spec differs, `graph-core`
   migrates the `Term` union — a typed refactor confined to one workspace.
   Tripwire #2 covers this.
@@ -172,10 +159,9 @@ consumers require them.
 
 The substrate is internally RDF 1.2-native and externally JSON-LD 1.1 /
 RDF 1.1-compatible on the wire. This is a deliberate gap that closes as
-the ecosystem catches up. The canonical tripwire map lives in
-[`graph-library.research.md` §19](../../../.agent/research/graph-library.research.md#19-standards-evolution-tripwires);
-this ADR enumerates the seven binding tripwires by name. **Each tripwire
-becomes a named follow-on plan when triggered, not an inline sweep.**
+the ecosystem catches up. This ADR records seven binding tripwires by name.
+**Each tripwire becomes a named follow-on plan when triggered, not an inline
+sweep.**
 
 | #   | Tripwire                                               | Trigger signal                                                                                                                                     | Modules affected                                                  | What changes (high-level)                                                                                                                                                           |
 | --- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -217,13 +203,12 @@ becomes a named follow-on plan when triggered, not an inline sweep.**
   stability is CR/WD, not Recommendation. Tripwires #1, #3, #4 close this
   gap at the right time.
 - **Direct Neo4j or Stardog adoption as the substrate.** Rejected here as
-  the substrate decision; tracked as a downstream serving-platform
-  comparison in
-  [`direct-ontology-use-and-graph-serving-prototypes.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md).
+  the substrate decision; serving-platform comparison remains a downstream
+  decision when a concrete serving consumer requires it.
 - **Property-graph as canonical model.** Rejected: GQL is conceptually
   useful, but property-graph projection over an RDF-compatible canon
   preserves migration headroom. Property-graph is exposed as an ergonomic
-  view (research §11), not the canonical truth.
+  view, not the canonical truth.
 
 ## Open questions to resolve before promotion
 
@@ -233,14 +218,12 @@ becomes a named follow-on plan when triggered, not an inline sweep.**
 2. Confirm the ADR is the right artefact for the MCP-agnostic principle, or
    whether it should be a separate ADR with this one referencing it.
 3. Confirm Mark Hodierne's author addition is required at ratification or
-   only on first ontology ingestion (currently named in graph-stack.plan.md
-   WS6).
+   only on first ontology ingestion.
 
 ## Notes for future revision
 
-This is the WS0 deliverable of `graph-stack.plan.md`. The plan body contains
-the full design rationale (Strategic Priority, Design Principles,
-Build-vs-Buy Attestation, Layer Map, Increments, Surfacing). This ADR is
-intentionally a thin ratification artefact — its job is to make the
-topology binding without duplicating the plan's reasoning. When the plan
-moves to ACTIVE, this ADR moves to Accepted.
+Before promotion to Accepted, this ADR must be reviewed for workspace path
+conventions, author attribution, and whether the MCP-agnostic principle
+belongs here or in a separate ADR. Promotion requires owner approval of the
+topology and confirmation that the proposed workspaces match repository
+workspace policy.

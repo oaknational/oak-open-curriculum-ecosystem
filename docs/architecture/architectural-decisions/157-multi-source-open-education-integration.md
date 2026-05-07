@@ -15,7 +15,7 @@ Oak API types; non-API data sources have their own typing disciplines),
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives,
 [ADR-154](154-separate-framework-from-consumer.md) — separate framework from
 consumer (the graph resource factory follows this pattern),
-[ADR-168](168-graph-stack-topology.md) — graph stack topology (proposed)
+[ADR-173](173-graph-stack-topology.md) — graph stack topology (proposed)
 
 ## Status Amendment Note (2026-04-30)
 

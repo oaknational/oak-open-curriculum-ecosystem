@@ -88,7 +88,7 @@ todos:
   - id: ws5-coordination-amendments
     content: "WS5: Amend graph-query-layer.plan.md, nc-knowledge-taxonomy-surface.plan.md, practice-graph-payoff-peak-pilot.plan.md, and the parent open-education-knowledge-surfaces.plan.md to reference this spine."
     status: pending
-    depends_on: [ws4-mcp-wiring]
+    depends_on: [ws4-query-proof]
   - id: ws6-docs-propagation
     content: "WS6: README updates (collection, monorepo, contributing); ADR-123 amendment; LICENCE-DATA.md ontology section update; Mark Hodierne author addition."
     status: pending
@@ -147,7 +147,7 @@ Practice graph pilot — attaches to this spine.
 
 ## Design Principles
 
-1. **Stable-wire, RDF 1.2-native internals.** The canonical internal data model is RDF 1.2 (triple terms first-class in `graph-core`'s `Term` union; see [`graph-library.research.md` §4](../../../../research/graph-library.research.md)). Wire emission uses stable W3C standards (JSON-LD 1.1, RDF 1.1-compatible quads, SHACL 1.0); triple-term annotations *project* to `RelationshipRecord` on JSON-LD 1.1 emit (research §8). Emerging standards (JSON-LD 1.2, SPARQL 1.2, SHACL 1.2) become adapter upgrades inside `graph-future` driven by named tripwires ([research §19](../../../../research/graph-library.research.md#19-standards-evolution-tripwires) and ADR-168). No tripwire is silently skipped; each becomes a named follow-on plan when triggered.
+1. **Stable-wire, RDF 1.2-native internals.** The canonical internal data model is RDF 1.2 (triple terms first-class in `graph-core`'s `Term` union; see [`graph-library.research.md` §4](../../../../research/graph-library.research.md)). Wire emission uses stable W3C standards (JSON-LD 1.1, RDF 1.1-compatible quads, SHACL 1.0); triple-term annotations *project* to `RelationshipRecord` on JSON-LD 1.1 emit (research §8). Emerging standards (JSON-LD 1.2, SPARQL 1.2, SHACL 1.2) become adapter upgrades inside `graph-future` driven by named tripwires ([research §19](../../../../research/graph-library.research.md#19-standards-evolution-tripwires) and ADR-173). No tripwire is silently skipped; each becomes a named follow-on plan when triggered.
 2. **Ontology identity as the spine.** Adapters in `graph-corpus-sdk` mint or honour Oak Curriculum Ontology IRIs as canonical node identity. Cross-corpus joins are structurally cheap because the join key is shared.
 3. **Property-graph as projection, not canon.** The canonical internal model is an RDF-compatible quad dataset. Property-graph nodes/edges are *projections* (per research §11). This preserves migration headroom while keeping the developer-facing API ergonomic.
 4. **Enhancement is explicit and inspectable.** Every derived claim — stable ID, predicate mapping, type inference, link detection, relationship record, provenance attribution — is recorded as an `EnhancementRecord` (research §7) with optional confidence. Silent semantic corruption is structurally prevented.
@@ -296,7 +296,7 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS4 — NC taxonomy as first attached corpus** (3 cycles): SKOS extractor (TTL → dataset); `graph-corpus-sdk` scaffold + NC taxonomy adapter; typed query proof (in-process; no surfacing).
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `nc-knowledge-taxonomy-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, ADR-123 amendment, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix.
-- **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub`).
+- **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
 - **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, mcp-reviewer, docs-adr-reviewer.
 
 ### Cycle dependencies and parallelisation

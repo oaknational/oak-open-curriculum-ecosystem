@@ -17,12 +17,12 @@ parallel; out-of-scope reviewers (`mcp-reviewer`, `docs-adr-reviewer`,
 `architecture-reviewer-fred`) explicitly skipped this session.
 **Next session = decision-completeness closeout (per owner direction
 2026-05-07; implementation OUT of scope for this branch)**: absorb
-topology BLOCKERs into `graph-stack.plan.md` and ADR-168, absorb
-Phase 4 FINDINGS into the three slice plans and slice 1,
+topology BLOCKERs into `graph-stack.plan.md` and ADR-173, absorb
+remaining Phase 4 FINDINGS into the three slice plans and slice 1,
 owner-resolve the EEF plan internal contradiction, then verify
 decision-complete state across the full MVP plan (spine, 3 slice
-plans, slice 1, substrate, ADR-168). NO slice execution; NO
-graph-stack ACTIVE promotion; NO ADR-168 ratification.
+plans, slice 1, substrate, ADR-173). NO slice execution; NO
+graph-stack ACTIVE promotion; NO ADR-173 ratification.
 **Prior**: 2026-05-07 — Windward Darting Horizon / cursor /
 claude-opus-4.7 / `dd084d` — authored
 [`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
@@ -95,7 +95,8 @@ promotion.)
     from Oak's other public repos (oak-curriculum-ontology, Aila /
     oak-ai-lesson-assistant) plus concepts-only learning from Oak's
     private repos (oak-ai-moderation-service, aila-atomic-concepts).
-- **Branch**: TBD per workstream.
+- **Branch**: `planning/graph-tooling` for the current MVP-arc planning
+  closeout branch.
 
 ## Participating Agent Identities
 
@@ -105,6 +106,7 @@ promotion.)
 | `Cosmic Glowing Dawn` | `claude-code` | `claude-opus-4-7-1m` | `d11500` | `graph-stack-spine-plan-author` | 2026-05-04 | 2026-05-04 |
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `mvp-arc-spine-plan-author-and-coordination-amendments` | 2026-05-07 | 2026-05-07 |
 | `Breezy Navigating Sail` | `cursor` | `claude-opus-4.7` | `9edbd1` | `mvp-arc-planning-closure-single-session` | 2026-05-07 | 2026-05-07 |
+| `Tidal Surfing Lighthouse` | `codex` | `GPT-5` | `019e03` | `decision-completeness-closeout-fixer` | 2026-05-07 | 2026-05-07 |
 
 ## Plan Locations
 
@@ -178,32 +180,30 @@ NOT re-run. The slice-2 / slice-3a / slice-3b plan-authoring work is
 decision-completeness closeout**, NOT implementation. Implementation
 is **not in scope for this branch**. The session ends with the full
 MVP plan — spine + three slice plans + slice 1 + substrate
-(`graph-stack.plan.md` + ADR-168) — at decision-complete state, with
+(`graph-stack.plan.md` + ADR-173) — at decision-complete state, with
 sealed frontmatter and no open questions.
 
 **Canonical first task — decision-completeness closeout (no
 implementation)**:
 
 1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +
-   ADR-168** (see `## Topology BLOCKERs Surfaced 2026-05-07` below).
+   ADR-173** (see `## Topology BLOCKERs Surfaced 2026-05-07` below).
    - WS4 sequencing: re-order so `ws4-graph-corpus-sdk-scaffold`
      lands before `ws4-skos-extractor`; SKOS extractor moves into
      the consumer SDK.
    - `practice-graph` workspace tier: relocate from `packages/libs/`
      to `packages/sdks/` or `packages/apps/` per workspace-tier
-     semantics; ADR-168 topology entry follows.
-   - Outcome: `graph-stack.plan.md` and ADR-168 reach
+     semantics; ADR-173 topology entry follows.
+   - Outcome: `graph-stack.plan.md` and ADR-173 reach
      decision-complete; no CURRENT → ACTIVE transition or
      ratification this session (those are owner gates).
-2. **Absorb the six Phase 4 FINDINGS into the three slice plans + slice 1**
+2. **Absorb the four remaining Phase 4 FINDINGS into the three slice plans + slice 1**
    (see `## Phase 4 FINDINGS for Execution-Prep Absorption` below).
-   Two are trivial (smoke:dev:stub script removal across all three
-   slice plans; ADR-123 path correction across all three slice
-   plans); four are small substantive edits (slice 2 adapter
-   timing; slice 3a topic-context tightening + budget
-   concretization; slice 3b implementation-audit test-shape
-   reshape). After absorption all three slice plans should be
-   decision-complete.
+   The prior trivial command/path fixes landed in this closeout
+   pass; the remaining work is small substantive edit work: slice 2
+   adapter timing; slice 3a topic-context tightening + budget
+   concretisation; slice 3b implementation-audit test-shape reshape.
+   After absorption all three slice plans should be decision-complete.
 3. **Owner-resolve the EEF plan internal contradiction**. The owner
    needs to decide whether t19's LLM/outcome verification
    out-of-scope position holds (and the §`Promotion Trigger from
@@ -223,7 +223,7 @@ implementation)**:
    - `oak-misconceptions-subgraph-mcp-surface.plan.md` (slice 3a)
    - `oak-misconceptions-eef-cross-corpus-surface.plan.md` (slice 3b)
    - `graph-stack.plan.md` (substrate)
-   - ADR-168 (topology)
+   - ADR-173 (topology)
 
    Any artefact NOT decision-complete after steps 1-3 is named
    explicitly in the next-session record with the named blocking
@@ -233,7 +233,7 @@ implementation)**:
 
 - Slice 1 execution; slice 2/3a/3b execution.
 - `graph-stack.plan.md` CURRENT → ACTIVE transition.
-- ADR-168 ratification.
+- ADR-173 ratification.
 - Any production code changes.
 
 Queued (not blocked by MVP arc; appropriate for a separate session
@@ -251,7 +251,7 @@ Phase 1 of the single-session planning closure (Breezy Navigating Sail
 / cursor / claude-opus-4.7 / `9edbd1`) ran `architecture-reviewer-betty`
 in parallel with the MVP-arc reviewer batch. The topology surface
 itself is out of scope for this session per owner direction
-(graph-stack ACTIVE promotion + ADR-168 ratification both happen at the
+(graph-stack ACTIVE promotion + ADR-173 ratification both happen at the
 graph-stack CURRENT → ACTIVE transition, **not** here). Two findings
 must be absorbed before that transition.
 
@@ -268,12 +268,12 @@ must be absorbed before that transition.
    `packages/libs/` but is an Oak-specific consumer, not pure
    substrate. Risks future domain-coupled imports out of `libs/`.
    Fix direction: relocate to `packages/sdks/` or `packages/apps/`
-   per workspace-tier semantics; ADR-168 topology entry updates to
+   per workspace-tier semantics; ADR-173 topology entry updates to
    match.
 
-`graph-stack.plan.md` and ADR-168 are **not** edited this session. The
-fixes land in next session as the first execution-prep step, ahead of
-the graph-stack CURRENT → ACTIVE transition.
+The topology-blocker fixes did not land in Breezy Navigating Sail's
+single-session planning closure. They remain the first execution-prep
+step, ahead of the graph-stack CURRENT → ACTIVE transition.
 
 ## Phase 4 FINDINGS for Execution-Prep Absorption (Surfaced 2026-05-07)
 
@@ -281,34 +281,29 @@ Phase 4 of the single-session planning closure ran `code-reviewer` +
 `assumptions-reviewer` in parallel over the three slice plans
 authored at `776df6b7`. Two BLOCKERs were remediated same-session
 (commit `0899ba93` — slice-3b composition-by-name conceptual mistake
-across slices 2, 3a, and 3b). Six FINDINGS are deferred to
-execution-prep absorption.
+across slices 2, 3a, and 3b). Two trivial FINDINGS were absorbed by
+Tidal Surfing Lighthouse on 2026-05-07: the dead smoke gate command was
+removed from the graph MVP and graph-stack quality-gate chains, and the
+ADR-123 path was corrected to
+`docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`.
+Four FINDINGS remain for execution-prep absorption.
 
-1. **Quality-gate command — `pnpm smoke:dev:stub` does not exist**
-   (all three slice plans, WS5 quality-gate command chain). Replace
-   with a real repo command or remove. Trivial fix per plan; do
-   together as a single commit.
-2. **ADR-123 path is wrong** (all three slice plans, "Acceptance
-   Criteria — ADR amendments"). Plans cite
-   `123-mcp-primitive-naming.md`; the actual file is
-   `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`.
-   Trivial fix per plan; do together as a single commit.
-3. **Slice 2 adapter timing inconsistency** (`oak-kg-threads-surface.plan.md`
+1. **Slice 2 adapter timing inconsistency** (`oak-kg-threads-surface.plan.md`
    L115-117 asserts the Oak Curriculum Ontology adapter lands in
    "Inc.2 or early Inc.3", but `graph-stack.plan.md` Inc.1-Inc.3
    only names the adapter in Inc.3). Reconcile by either updating
    the slice 2 plan to match `graph-stack.plan.md`, or by adding a
    named adapter gate in `graph-stack.plan.md`.
-4. **Slice 3a topic ambiguity** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
+2. **Slice 3a topic ambiguity** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
    L167-169 acceptance #1 mentions "topic context" while
    non-goals at L160-161 cut topic-string sub-graph). Tighten
    acceptance #1 to thread/unit context.
-5. **Slice 3a budget concretization** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
+3. **Slice 3a budget concretisation** (`oak-misconceptions-subgraph-mcp-surface.plan.md`
    L197-203 says "standard context windows" + "N representative
    responses" without numbers). Execution prep needs a concrete
    numeric budget (e.g. 32k / 64k token target) and the rule for
    selecting the N representative thread/unit fixtures.
-6. **Slice 3b implementation-audit test shape** (`oak-misconceptions-eef-cross-corpus-surface.plan.md`
+4. **Slice 3b implementation-audit test shape** (`oak-misconceptions-eef-cross-corpus-surface.plan.md`
    L223-226 + L232-235 contain test cycles framed around
    implementation-audit assertions: file-scope import audits, "the
    primitive (not bespoke composition logic) is responsible", file
@@ -316,9 +311,32 @@ execution-prep absorption.
    behavioural tests, or move structural enforcement to lint /
    architecture gates and document accordingly.
 
-These FINDINGS are owner-approved as deferrable per the single-session
-planning closure scope. Absorbing them is execution-prep work for the
-next session; they do NOT block slice 1 execution start.
+These remaining FINDINGS did not retroactively block Breezy Navigating
+Sail's single-session planning closure. They are execution-prep work for
+the next session and should be absorbed before slice execution starts.
+
+## Closeout Reviewer Pass 2026-05-07
+
+Tidal Surfing Lighthouse ran `docs-adr-reviewer`, `code-reviewer`, and
+`assumptions-reviewer` after the initial closeout fixes. Actionable
+follow-ups absorbed in the same pass:
+
+- ADR-173 made self-contained: no permanent ADR links to ephemeral
+  `.agent/` plan or research surfaces.
+- Superseded 2026-05-08 specialist-review opener marked historical, with
+  the broken thread link corrected and the `53698ce0` ADR-168/ADR-173
+  history clarified.
+- Collaboration claim corrected to cover the deleted ADR-168 path plus
+  the added template/napkin/comms surfaces.
+- Active napkin memory now points namespace/topology checks to ADR-173.
+- Plan templates no longer generate `pnpm smoke:dev:stub`.
+- `graph-stack.plan.md` no longer depends on nonexistent
+  `ws4-mcp-wiring`; `ws5-coordination-amendments` depends on
+  `ws4-query-proof`.
+- The Phase 4 findings note now says these findings belong before slice
+  execution, while not retroactively blocking Breezy's planning closure.
+
+The EEF plan contradiction remains owner-owned and unresolved here.
 
 ## References
 

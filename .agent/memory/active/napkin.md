@@ -62,7 +62,7 @@ Smaller observations from this session:
   plan-author time when the ADR predates the plan — the eef-evidence-
   corpus plan was authored before ADR-157's prefix was finalised.
   When authoring/amending plans that ship MCP primitives, grep
-  ADR-123 + ADR-157 + ADR-168 namespace tables before finalising
+  ADR-123 + ADR-157 + ADR-173 namespace/topology tables before finalising
   tool names.
 
 ## 2026-05-06 — Clouded Lifting Aerie / claude-code / opus-4-7-1m / `1e2244`
