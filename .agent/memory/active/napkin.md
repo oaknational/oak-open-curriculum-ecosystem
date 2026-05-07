@@ -55,14 +55,14 @@ repair mode and consolidation integration, each requiring its own plan.
 
 ### Practice/tooling feedback
 
-- **Surface**: `agent-tools:collaboration-state claims open`
-- **Signal**: bug / recurrence
-- **Observation**: Repeated `--area-pattern` flags still behave as
++ **Surface**: `agent-tools:collaboration-state claims open`
++ **Signal**: bug / recurrence
++ **Observation**: Repeated `--area-pattern` flags still behave as
   last-write-wins. During the Sonar remediation claim I supplied four
   patterns, but the persisted claim retained only the final
   `.agent/state/collaboration/**` pattern. I manually edited
   `active-claims.json` to restore the intended areas.
-- **Behaviour change / candidate follow-up**: F-14 in
++ **Behaviour change / candidate follow-up**: F-14 in
   `.agent/plans/agent-tooling/frictions-register.md` now has a fresh
   recurrence note and should be treated as a real CLI bug: either make
   `--area-pattern` repeatable like `--file`, or reject repeated usage
