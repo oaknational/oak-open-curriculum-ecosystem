@@ -199,7 +199,7 @@ function listWorktreeNames(root: string): string[] {
   return existsSync(worktreePath)
     ? readdirSync(worktreePath)
         .filter((name) => name.startsWith('agent-'))
-        .sort()
+        .sort((a, b) => a.localeCompare(b))
     : [];
 }
 function resolveWorktree(root: string, agentId: string): string | null {

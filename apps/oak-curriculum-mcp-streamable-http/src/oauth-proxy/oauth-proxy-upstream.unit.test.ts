@@ -199,9 +199,11 @@ describe('isUpstreamAuthServerMetadata', () => {
   });
 
   it('returns false when issuer is missing', () => {
-    const { issuer, ...rest } = TEST_UPSTREAM_METADATA;
-    void issuer;
-    expect(isUpstreamAuthServerMetadata(rest)).toBe(false);
+    const metadataWithoutIssuer: Partial<UpstreamAuthServerMetadata> = {
+      ...TEST_UPSTREAM_METADATA,
+    };
+    delete metadataWithoutIssuer.issuer;
+    expect(isUpstreamAuthServerMetadata(metadataWithoutIssuer)).toBe(false);
   });
 
   it('returns false when response_types_supported is not an array', () => {

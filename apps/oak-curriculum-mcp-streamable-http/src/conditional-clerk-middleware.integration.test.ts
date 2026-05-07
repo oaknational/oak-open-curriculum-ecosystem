@@ -28,9 +28,8 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
   beforeEach(() => {
     // Mock clerkMiddleware that simulates auth context setup by calling next()
     mockClerkMw = vi.fn().mockImplementation((req: Request, res: Response, next: NextFunction) => {
-      // Use parameters to avoid unused variable errors - these would be used by real clerkMiddleware
-      void req;
-      void res;
+      expect(req).toBeDefined();
+      expect(res).toBeDefined();
       next();
     });
 

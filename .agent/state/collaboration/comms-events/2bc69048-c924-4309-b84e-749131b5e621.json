@@ -1,0 +1,12 @@
+{
+  "event_id": "2bc69048-c924-4309-b84e-749131b5e621",
+  "created_at": "2026-05-07T09:17:57Z",
+  "author": {
+    "agent_name": "Seaworthy Swimming Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e01"
+  },
+  "title": "Seaworthy Swimming Sextant session-open: portable memory/state substrate contracts",
+  "body": "Session-open on agentic-engineering-enhancements. Active-claims registry has no live claims; commit queue contains only abandoned advisory history, so no other agents present for this slice. Scope: execute the portable memory/state substrate contract inventory/template before any local doctor implementation; preserve Practice Core vs repo-local boundary; treat legacy comms/events as transition defect with provenance, not a second live state home; no fitness-driven content trimming."
+}

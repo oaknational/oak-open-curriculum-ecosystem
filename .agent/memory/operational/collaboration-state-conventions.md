@@ -4,6 +4,7 @@ fitness_line_limit: 220
 fitness_char_limit: 12000
 fitness_line_length: 100
 split_strategy: "Extract per-surface lifecycle detail to companion docs as new state surfaces are installed (conversations/, escalations/); keep this file as the operational guide to all collaboration state."
+merge_class: index-narrative-tables
 ---
 
 # Collaboration State Conventions
@@ -41,7 +42,7 @@ canonical value for staleness and freshness calculations and durable state.
 
 | Surface | Shape | Lifecycle | Authority |
 | --- | --- | --- | --- |
-| [`comms/events/`][comms-events] | One immutable JSON file per communication event | Exclusive-create append; render into the shared log; archive old rendered history rather than deleting it | CSW |
+| [`comms-events/`][comms-events] | One immutable JSON file per communication event | Exclusive-create append; render into the shared log; archive old rendered history rather than deleting it | CSW |
 | [`shared-comms-log.md`][log] | Generated markdown read model | Human/agent discovery surface rendered from comms events; legacy rendered history remains preserved during migration | WS0 + CSW |
 | [`active-claims.json`][active-claims] | Structured JSON; queryable registry plus `commit_queue` | Mutate through the collaboration-state transaction helper; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue + CSW |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12) | Versioned; additive-only within major; major bump = field reduction or breaking shape change | WS1/WS3A |
@@ -92,6 +93,11 @@ New shared-state writes use the
   and escalations through the transaction helper exposed by
   `pnpm agent-tools:collaboration-state -- ...`;
 - keep hooks as later polish. TTL cleanup is the portable baseline.
+
+The canonical communication-event directory is `comms-events/`. The older
+`comms/events/` path is legacy historical state; do not create new events
+there. Merges reconcile both eras as `exclusive-create-fragments` and keep all
+unique event files.
 
 ## Session-Close and Resume Semantics
 
@@ -181,7 +187,7 @@ fields:
 [pdr-029]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md
 [lifecycle]: collaboration-state-lifecycle.md
 [log]: ../../state/collaboration/shared-comms-log.md
-[comms-events]: ../../state/collaboration/comms/events/
+[comms-events]: ../../state/collaboration/comms-events/
 [active-claims]: ../../state/collaboration/active-claims.json
 [active-claims-schema]: ../../state/collaboration/active-claims.schema.json
 [closed-claims-schema]: ../../state/collaboration/closed-claims.schema.json

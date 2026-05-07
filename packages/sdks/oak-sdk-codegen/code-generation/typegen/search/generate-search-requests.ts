@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**
  * GENERATED FILE - DO NOT EDIT
@@ -111,8 +112,8 @@ function createParsedQueryModule(): string {
   );
 }
 
-export function generateSearchRequestModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchRequestModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchRequestModules');
   return {
     '../search/requests.ts': createStructuredRequestModule(),
     '../search/natural-requests.ts': createNaturalRequestModule(),

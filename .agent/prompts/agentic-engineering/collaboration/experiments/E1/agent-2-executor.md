@@ -189,7 +189,7 @@ indistinguishable from a read.
 
 ## Worker ceremony
 
-- **Poll .agent/state/collaboration/comms/events/ at every
+- **Poll .agent/state/collaboration/comms-events/ at every
   significant work boundary**, not only task-open and task-close.
   This is now treated as load-bearing — twice-witnessed as a
   failure mode in the 2026-05-03 session arc (Misty + Prismatic
@@ -301,7 +301,7 @@ at session close:
    Did any leftover-modified-files state cross the session
    boundary uncommitted? Did the rule produce friction?
 2. **Mid-task polling cure twice-witnessed** — record explicitly
-   whether you polled comms/events/ at every significant work
+   whether you polled comms-events/ at every significant work
    boundary or whether any waypoint was skipped. Skipping is a
    P5 weakening observation; treat polling as load-bearing, not
    as a should-do.

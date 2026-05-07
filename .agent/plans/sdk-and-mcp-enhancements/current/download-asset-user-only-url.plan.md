@@ -21,8 +21,8 @@ todos:
 
 # Download Asset User-Only URL Boundary
 
-**Last Updated**: 2026-05-06  
-**Status**: NOT STARTED  
+**Last Updated**: 2026-05-06
+**Status**: NOT STARTED
 **Scope**: Change `download-asset` so signed download URLs are delivered only
 to the MCP App/user surface, never through model-visible `content` or
 `structuredContent`.

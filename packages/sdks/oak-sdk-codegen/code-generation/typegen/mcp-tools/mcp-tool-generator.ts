@@ -23,14 +23,7 @@ import { applyParamDescriptionOverrides } from './parts/param-description-overri
 import { generateStubModules } from './stub-modules.js';
 import { sampleSchemaObject } from './schema-sample-core.js';
 import { createSchemaResolver, resolveResponseSchemaForOperation } from './response-schema.js';
-export type PrimitiveType = string | number | boolean | string[] | number[] | boolean[];
-export type PrimitiveTypeLabel =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'string[]'
-  | 'number[]'
-  | 'boolean[]';
+import { compareCodeUnits } from '../../code-unit-order.js';
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
@@ -234,7 +227,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     }
   }
 
-  const toolNames = Array.from(toolNamesSet).toSorted();
+  const toolNames = Array.from(toolNamesSet).toSorted(compareCodeUnits);
 
   result.aliases['types.ts'] = generateTypesFile();
   result.runtime['execute.ts'] = generateExecuteFile(toolNames);

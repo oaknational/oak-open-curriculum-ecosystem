@@ -36,7 +36,7 @@ describe('readback field audit', () => {
       }),
       getExistsCount: async () => 3,
       getMissingCount: async () => 0,
-      sleep: async () => Promise.resolve(),
+      sleep: async () => undefined,
     });
 
     const lessonThreadEntry = result.entries.find(
@@ -62,7 +62,7 @@ describe('readback field audit', () => {
       }),
       getExistsCount: async () => 0,
       getMissingCount: async () => 10,
-      sleep: async () => Promise.resolve(),
+      sleep: async () => undefined,
     });
 
     expect(result.ok).toBe(false);
@@ -81,7 +81,7 @@ describe('readback field audit', () => {
       }),
       getExistsCount: async () => 3,
       getMissingCount: async () => 0,
-      sleep: async () => Promise.resolve(),
+      sleep: async () => undefined,
     });
 
     expect(result.ok).toBe(false);
@@ -112,7 +112,7 @@ describe('readback field audit', () => {
       }),
       getExistsCount: async () => 3,
       getMissingCount: async () => 0,
-      sleep: async () => Promise.resolve(),
+      sleep: async () => undefined,
     });
 
     expect(result.ok).toBe(false);
@@ -140,7 +140,6 @@ describe('readback field audit', () => {
       getMissingCount: async () => 1,
       sleep: async () => {
         sleepCalls += 1;
-        return Promise.resolve();
       },
     });
 
@@ -169,7 +168,7 @@ describe('readback field audit', () => {
         return 3;
       },
       getMissingCount: async () => 0,
-      sleep: async () => Promise.resolve(),
+      sleep: async () => undefined,
     });
 
     expect(result.ok).toBe(true);
@@ -204,7 +203,7 @@ describe('readback field audit', () => {
           }),
           getExistsCount: async () => 3,
           getMissingCount: async () => 0,
-          sleep: async () => Promise.resolve(),
+          sleep: async () => undefined,
         },
       ),
     ).rejects.toThrow('Ledger field status is not declared in statuses');

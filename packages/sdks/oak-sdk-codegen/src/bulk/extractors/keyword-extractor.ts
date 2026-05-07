@@ -112,9 +112,9 @@ function accumulatorToKeyword(term: string, acc: KeywordAccumulator): ExtractedK
     term,
     definition: acc.definition,
     frequency: acc.frequency,
-    subjects: [...acc.subjects].sort(),
+    subjects: [...acc.subjects].sort((a, b) => a.localeCompare(b)),
     firstYear: acc.firstYear,
-    lessonSlugs: [...acc.lessonSlugs].sort(),
+    lessonSlugs: [...acc.lessonSlugs].sort((a, b) => a.localeCompare(b)),
   };
 }
 

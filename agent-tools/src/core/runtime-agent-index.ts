@@ -27,7 +27,7 @@ export function listAgentShortIds(root: string, homePath: string): string[] {
   }
   const projects = projectSessionsPath(root, homePath);
   if (!existsSync(projects)) {
-    return [...values].sort();
+    return [...values].sort((a, b) => a.localeCompare(b));
   }
   for (const sessionId of readdirSync(projects).filter((entry) => isSessionId(entry))) {
     const subagents = join(projects, sessionId, 'subagents');
@@ -35,7 +35,7 @@ export function listAgentShortIds(root: string, homePath: string): string[] {
       values.add(entry.replace('.jsonl', '').replace('agent-', '').slice(0, 8));
     }
   }
-  return [...values].sort();
+  return [...values].sort((a, b) => a.localeCompare(b));
 }
 
 export function resolveAgentJsonlPath(

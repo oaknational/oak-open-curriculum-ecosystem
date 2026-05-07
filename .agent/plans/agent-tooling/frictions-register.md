@@ -376,6 +376,14 @@ dedicated plan that this entry points to.
   cure ("treat `--area-pattern` as repeatable, mirroring `--file`")
   remains the right shape and is worth prioritising — every
   multi-area claim opener pays the manual-repair tax.
+- **Recurrence**: 2026-05-07 (Embered Roasting Flame, `019e03`) —
+  reproduced again while opening the Sonar remediation claim. Four
+  repeated `--area-pattern` flags were supplied; the persisted claim
+  retained only the final pattern (`.agent/state/collaboration/**`).
+  Manual edit of `active-claims.json` restored the missing
+  `packages/sdks/oak-sdk-codegen/**`, `packages/core/oak-eslint/**`,
+  and thread-record patterns. Owner direction in-session: log this as a
+  bug to fix.
 
 ### F-15 — Commit-queue fingerprint recursion when claim file is in staged set
 

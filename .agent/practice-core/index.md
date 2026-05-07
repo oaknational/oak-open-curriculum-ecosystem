@@ -1,6 +1,15 @@
 # The Practice
 
-The Practice is not a single file. It is the entire system of principles, structure, and tooling -- directives, rules, commands, agents, skills, quality gates, and the learning loop -- all working together to ensure quality, reverse entropy, and support innovation. `practice.md` is one small part of that whole.
+The Practice is not a single file, and it is not merely a specification. It is
+a philosophy and a commitment expressed through a system of principles,
+structures, contracts, flows, agents, skills, commands, quality gates, and the
+learning loop. Those parts work together to ensure quality, reverse entropy,
+and support innovation. `practice.md` is one small part of that whole.
+
+Specification is one of the Practice's strongest tools: it lets portable
+processes, contracts, approaches, and structures travel without binding them to
+one host implementation. The specification serves the commitment; it does not
+replace it.
 
 ## For Day-to-Day Work
 

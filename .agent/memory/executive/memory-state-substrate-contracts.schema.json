@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "memory-state-substrate-contracts.schema.json",
+  "title": "Memory/state substrate local instance manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_version",
+    "generated_at",
+    "generated_by",
+    "human_contract",
+    "doctrine",
+    "strict_data_status",
+    "doctor_start_gate",
+    "portability_tiers",
+    "discovery",
+    "surface_defaults",
+    "surfaces"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "contract_version": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "generated_by": {
+      "$ref": "#/$defs/agentId"
+    },
+    "human_contract": {
+      "type": "string"
+    },
+    "doctrine": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "strict_data_status": {
+      "type": "string"
+    },
+    "doctor_start_gate": {
+      "type": "string"
+    },
+    "portability_tiers": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "enum": [
+          "core-portable",
+          "host-bridge",
+          "repo-local-contract",
+          "repo-local-implementation",
+          "historical-evidence"
+        ]
+      }
+    },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "live_roots",
+        "doctrine_roots",
+        "plan_roots",
+        "historical_roots",
+        "fixture_roots",
+        "generated_read_models",
+        "exclusions",
+        "migration_ledgers"
+      ],
+      "properties": {
+        "live_roots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "doctrine_roots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "plan_roots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "historical_roots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "fixture_roots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "generated_read_models": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "output",
+              "source",
+              "renderer",
+              "current_checker"
+            ],
+            "properties": {
+              "output": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "renderer": {
+                "type": "string"
+              },
+              "current_checker": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pattern",
+              "reason"
+            ],
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "migration_ledgers": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "surface_defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_contract_fields",
+        "stored_derived_values_rule",
+        "repair_preservation_rule"
+      ],
+      "properties": {
+        "required_contract_fields": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "purpose",
+              "authority",
+              "lifecycle",
+              "writer_or_write_api",
+              "entry_identity",
+              "merge_class",
+              "schema_or_parser",
+              "generated_outputs",
+              "validator",
+              "severity",
+              "repair_path",
+              "portability_tier",
+              "owner_reviewer_route"
+            ]
+          }
+        },
+        "stored_derived_values_rule": {
+          "type": "string"
+        },
+        "repair_preservation_rule": {
+          "type": "string"
+        }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/surface"
+      }
+    }
+  },
+  "$defs": {
+    "agentId": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_name",
+        "platform",
+        "model",
+        "session_id_prefix"
+      ],
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "session_id_prefix": {
+          "type": "string"
+        }
+      }
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "severity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invariant",
+        "severity"
+      ],
+      "properties": {
+        "invariant": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "blocking",
+            "review-required",
+            "informational"
+          ]
+        }
+      }
+    },
+    "repair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "repair_class"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "repair_class": {
+          "enum": [
+            "deterministic",
+            "manual-with-provenance",
+            "forbidden"
+          ]
+        }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "plane",
+        "purpose",
+        "authority",
+        "lifecycle",
+        "writer_or_write_api",
+        "entry_identity",
+        "merge_class",
+        "schema_or_parser",
+        "generated_outputs",
+        "validator",
+        "severity",
+        "repair_path",
+        "portability_tier",
+        "owner_reviewer_route"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "plane": {
+          "enum": [
+            "state",
+            "memory",
+            "generated"
+          ]
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "authority": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lifecycle": {
+          "type": "string"
+        },
+        "writer_or_write_api": {
+          "type": "string"
+        },
+        "entry_identity": {
+          "type": "string"
+        },
+        "merge_class": {
+          "enum": [
+            "index-narrative-tables",
+            "append-only-narrative",
+            "exclusive-create-fragments",
+            "append-only-structured-by-claim_id",
+            "append-only-structured-by-entry_id",
+            "append-only-structured-by-escalation_id",
+            "mostly-append-register"
+          ]
+        },
+        "schema_or_parser": {
+          "type": "string"
+        },
+        "generated_outputs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "validator": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/severity"
+          }
+        },
+        "repair_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/repair"
+          }
+        },
+        "portability_tier": {
+          "enum": [
+            "core-portable",
+            "host-bridge",
+            "repo-local-contract",
+            "repo-local-implementation",
+            "historical-evidence"
+          ]
+        },
+        "owner_reviewer_route": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

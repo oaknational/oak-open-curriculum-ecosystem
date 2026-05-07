@@ -73,6 +73,17 @@ export interface BulkDataParseError {
   readonly cause?: unknown;
 }
 
+interface BulkValidationObject {
+  readonly keyStageSlug?: unknown;
+  readonly lessonSlug?: unknown;
+  readonly lessonTitle?: unknown;
+  readonly lessons?: unknown;
+  readonly sequenceSlug?: unknown;
+  readonly subjectSlug?: unknown;
+  readonly subjectTitle?: unknown;
+  readonly unitSlug?: unknown;
+}
+
 /**
  * Phase derived from bulk data filename.
  */
@@ -167,26 +178,7 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
 
   // Step 2: Validate top-level structure
   if (!hasBulkDataStructure(parsed)) {
-    const missingFields: string[] = [];
-    if (typeof parsed !== 'object' || parsed === null) {
-      return err({
-        kind: 'validation_error',
-        message: 'Expected an object with lessons array',
-      });
-    }
-    if (!('lessons' in parsed) || !Array.isArray(parsed.lessons)) {
-      missingFields.push('lessons (array)');
-    }
-    if (!('sequenceSlug' in parsed) || typeof parsed.sequenceSlug !== 'string') {
-      missingFields.push('sequenceSlug');
-    }
-    if (!('subjectTitle' in parsed) || typeof parsed.subjectTitle !== 'string') {
-      missingFields.push('subjectTitle');
-    }
-    return err({
-      kind: 'validation_error',
-      message: `Missing or invalid fields: ${missingFields.join(', ')}`,
-    });
+    return err(describeBulkDataStructureError(parsed));
   }
 
   // Step 3: Validate each lesson
@@ -194,32 +186,7 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
   for (let i = 0; i < parsed.lessons.length; i++) {
     const lesson = parsed.lessons[i];
     if (!isBulkLesson(lesson)) {
-      const missingFields: string[] = [];
-      if (typeof lesson !== 'object' || lesson === null) {
-        return err({
-          kind: 'validation_error',
-          message: `Lesson at index ${i} is not an object`,
-        });
-      }
-      if (!('lessonSlug' in lesson) || typeof lesson.lessonSlug !== 'string') {
-        missingFields.push('lessonSlug');
-      }
-      if (!('lessonTitle' in lesson) || typeof lesson.lessonTitle !== 'string') {
-        missingFields.push('lessonTitle');
-      }
-      if (!('subjectSlug' in lesson) || typeof lesson.subjectSlug !== 'string') {
-        missingFields.push('subjectSlug');
-      }
-      if (!('keyStageSlug' in lesson) || typeof lesson.keyStageSlug !== 'string') {
-        missingFields.push('keyStageSlug');
-      }
-      if (!('unitSlug' in lesson) || typeof lesson.unitSlug !== 'string') {
-        missingFields.push('unitSlug');
-      }
-      return err({
-        kind: 'validation_error',
-        message: `Lesson at index ${i} missing fields: ${missingFields.join(', ')}`,
-      });
+      return err(describeBulkLessonError(lesson, i));
     }
     lessons.push({
       lessonSlug: lesson.lessonSlug,
@@ -235,6 +202,70 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
     sequenceSlug: parsed.sequenceSlug,
     subjectTitle: parsed.subjectTitle,
   });
+}
+
+function describeBulkDataStructureError(parsed: unknown): BulkDataParseError {
+  if (typeof parsed !== 'object' || parsed === null) {
+    return {
+      kind: 'validation_error',
+      message: 'Expected an object with lessons array',
+    };
+  }
+  const missingFields = collectMissingStringFields(parsed, ['sequenceSlug', 'subjectTitle']);
+  if (!('lessons' in parsed) || !Array.isArray(parsed.lessons)) {
+    missingFields.unshift('lessons (array)');
+  }
+  return {
+    kind: 'validation_error',
+    message: `Missing or invalid fields: ${missingFields.join(', ')}`,
+  };
+}
+
+function describeBulkLessonError(lesson: unknown, index: number): BulkDataParseError {
+  if (typeof lesson !== 'object' || lesson === null) {
+    return {
+      kind: 'validation_error',
+      message: `Lesson at index ${index} is not an object`,
+    };
+  }
+  return {
+    kind: 'validation_error',
+    message: `Lesson at index ${index} missing fields: ${collectMissingStringFields(lesson, [
+      'lessonSlug',
+      'lessonTitle',
+      'subjectSlug',
+      'keyStageSlug',
+      'unitSlug',
+    ]).join(', ')}`,
+  };
+}
+
+function hasStringField(value: BulkValidationObject, field: string): boolean {
+  switch (field) {
+    case 'keyStageSlug':
+      return 'keyStageSlug' in value && typeof value.keyStageSlug === 'string';
+    case 'lessonSlug':
+      return 'lessonSlug' in value && typeof value.lessonSlug === 'string';
+    case 'lessonTitle':
+      return 'lessonTitle' in value && typeof value.lessonTitle === 'string';
+    case 'sequenceSlug':
+      return 'sequenceSlug' in value && typeof value.sequenceSlug === 'string';
+    case 'subjectSlug':
+      return 'subjectSlug' in value && typeof value.subjectSlug === 'string';
+    case 'subjectTitle':
+      return 'subjectTitle' in value && typeof value.subjectTitle === 'string';
+    case 'unitSlug':
+      return 'unitSlug' in value && typeof value.unitSlug === 'string';
+    default:
+      return false;
+  }
+}
+
+function collectMissingStringFields(
+  value: BulkValidationObject,
+  fieldNames: readonly string[],
+): string[] {
+  return fieldNames.filter((field) => !hasStringField(value, field));
 }
 
 /**

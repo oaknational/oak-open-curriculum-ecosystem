@@ -7,6 +7,9 @@ history preserves the prior revision.
 **Amended**: 2026-04-26 — clarified that hard and critical zones are
 structural health signals, never reasons to suppress capture, distillation,
 graduation, or knowledge preservation.
+**Amended**: 2026-05-07 — clarified non-reactive handling: fitness output must
+remind agents to preserve substance first and route pressure structurally, not
+trim memory or Practice Core content to make the signal disappear.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -85,6 +88,24 @@ blocks routine work because it signals that the earlier zones failed to elicit
 the required remediation. It does not block preserving understanding: capture,
 distillation, and graduation still write the signal first, then route the
 fitness failure to structural remediation.
+
+### Non-Reactive Handling
+
+Fitness is an interaction surface, not only a report. Every non-healthy fitness
+output MUST remind the observing agent that the signal is not permission to cut
+content. The expected posture is:
+
+1. Preserve the substance at the weight it deserves, especially in memory and
+   Practice Core surfaces.
+2. Read the signal as a question about structure, lifecycle, home, or cadence.
+3. Route the pressure deliberately: home or graduate the concept, split by
+   responsibility, refine real redundancy, review the declared limit, open a
+   remediation lane, or ask the owner for an explicit decision.
+
+Forbidden responses: deleting captured knowledge; compressing a concept until
+it fits; weakening Practice Core prose to satisfy a metric; trimming memory
+surfaces because they are heavy; or making budget-shaped edits without a named
+structural response.
 
 ### Key Principles
 
@@ -207,3 +228,11 @@ First applied instances: this ADR's own amendment log (recipe-shaped
 amendment); `docs/engineering/testing-tdd-recipes.md` raised to
 `fitness_line_target: 350 / fitness_line_limit: 500 / fitness_char_limit:
 28000` and ToC added.
+
+### 2026-05-07 — Fitness output as non-reactive reminder
+
+Owner direction clarified that the existing doctrine was not enough when the
+tool interaction itself still invited reactive behaviour. The validator output
+must carry the response discipline at the point of observation: preserve
+substance first; do not delete, trim, compress, or weaken memory or Practice
+Core content to make the report greener; route pressure structurally.

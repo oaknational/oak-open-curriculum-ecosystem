@@ -4,6 +4,7 @@ import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
+import unicorn from 'eslint-plugin-unicorn';
 
 import { oakPlugin } from '../plugin.js';
 
@@ -52,13 +53,26 @@ export const recommended = tseslint.config(
   ...tseslint.configs.stylistic,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
-  // sonarjs plugin is registered but no rules are currently activated.
   // Full `sonarjs.configs.recommended` activation is tracked by the
   // sonarjs-activation-and-sonarcloud-backlog plan in
   // .agent/plans/architecture-and-infrastructure/current/ — flip the
-  // entry below back to `sonarjs.configs.recommended` when the plan is
-  // in its GREEN phase.
-  { plugins: { sonarjs } },
+  // entry below to `sonarjs.configs.recommended` when the plan is in its
+  // GREEN phase. Until then, keep only the Quality-Gate remediation rules
+  // active so local lint mirrors the current Sonar blocker surface without
+  // importing the whole recommended preset. Sonar S7778 maps to
+  // unicorn/prefer-single-call; enable that one rule without adopting the
+  // full Unicorn preset. It starts at warn because the existing monorepo
+  // violation surface is intentionally out of scope for this PR.
+  {
+    plugins: { sonarjs, unicorn },
+    rules: {
+      'sonarjs/cognitive-complexity': ['error', 15],
+      'sonarjs/no-alphabetical-sort': 'error',
+      'sonarjs/no-nested-functions': ['error', { threshold: 4 }],
+      'sonarjs/void-use': 'error',
+      'unicorn/prefer-single-call': 'warn',
+    },
+  },
   prettierConfig,
   {
     plugins: {

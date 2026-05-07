@@ -7,6 +7,7 @@ lifecycle_model: "queue — empties as substance graduates; depth proportional t
 access_pattern: "consolidation-pass-only — read at consolidations and drain sessions; not loaded every session by every agent"
 split_strategy: "Graduate items to PDRs/ADRs/rules/permanent docs; archive resolved items to dated archive snapshots; keep pending and recently-graduated items here"
 fitness_rationale: "Limits calibrated to working queue depth (currently ~86 entries × ~12-25 lines/entry, with index + per-entry metadata + schema preamble headroom), not to a permanent-doc shape. Raised 2026-05-07 (Pelagic Rolling Harbour) per owner direction: principles.md is loaded every session and must stay small; this register has a fundamentally different access rhythm — multi-session cross-wait accumulation under cross-session-wait pressure — and its limits should reflect that lifecycle. Recalibration is the substance-led structural fix per the substance > destination boundary."
+merge_class: mostly-append-register
 ---
 
 # Pending-Graduations Register
@@ -142,6 +143,24 @@ the queue churns.
 | **total** | **~86** | |
 
 ## Entries
+
++ 2026-05-06; **branch PR Sonar is a regression guard, not the backlog source
+  for a branch opened to fix existing main/project Sonar debt** (Owner
+  correction during Ethereal Ascending Twilight's
+  main-critical-sonar-remediation handoff). Failure mode: after opening draft
+  PR #97 to trigger remote Sonar, the session treated PR-scoped new issues and
+  duplication as the remediation worklist, then chased a generated MCP executor
+  duplication refactor. Owner correction: a branch cannot be opened to fix its
+  own Sonar issues because branch-scoped issues only exist after branch work
+  exists; the authoritative backlog for this lane is the current main/project
+  HIGH issues and security hotspots. PR Sonar verifies that the remediation
+  branch does not introduce regressions. Source surface: napkin 2026-05-06
+  Ethereal Ascending Twilight surprise + corrected plan
+  `.agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md`.
+  Graduation-target: rule or planning-process amendment naming backlog-source
+  discipline for quality-remediation branches. Trigger: second instance of an
+  agent using branch/PR analysis as the primary worklist when the branch purpose
+  is an existing main/project backlog, or owner direction. Status: pending.
 
 + 2026-05-07; **fitness limits encode an implicit access-rhythm
   theory; recalibration must name the lifecycle, not just bump

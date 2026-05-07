@@ -3,6 +3,7 @@
  */
 
 import type { ValidCombinations } from './typegen/extraction-types.js';
+import { compareCodeUnits } from './code-unit-order.js';
 
 /**
  * Generate the path grouping keys type union
@@ -10,7 +11,7 @@ import type { ValidCombinations } from './typegen/extraction-types.js';
 export function generatePathGroupingKeysType(validCombinations: ValidCombinations): string {
   const otherKeys = Object.keys(validCombinations)
     .filter((key) => key !== 'NO_PARAMS')
-    .sort()
+    .sort(compareCodeUnits)
     .map((key) => `"${key}"`);
   const allKeys = ['"NO_PARAMS"', ...otherKeys];
   return allKeys.join(' | ');

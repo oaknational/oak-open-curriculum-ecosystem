@@ -178,7 +178,7 @@ async function releaseLocks(releases: readonly (() => Promise<void>)[]): Promise
 }
 
 function uniqueSortedPaths(filePaths: readonly string[]): readonly string[] {
-  return Array.from(new Set(filePaths)).toSorted();
+  return Array.from(new Set(filePaths)).toSorted((a, b) => a.localeCompare(b));
 }
 
 async function writeJsonTextAtomically(filePath: string, text: string): Promise<void> {

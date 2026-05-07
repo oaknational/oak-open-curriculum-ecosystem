@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "conversation.schema.json",
+  "$merge_class": "append-only-structured-by-entry_id",
   "title": "Agent Collaboration Decision Thread",
   "description": "Lightweight async decision-thread file for structured overlap discussion, sidebars, joint decisions, concrete decision requests, decisions, resolutions, and evidence. Decision threads are operational state under .agent/state/collaboration/conversations/ and are distinct from shared log narrative, active claims, escalation case files, napkin learning, and durable thread records.",
   "$comment_provenance": "Conversation fields reuse the same PDR-027 agent_id shape and evidence_ref enum from active-claims.schema.json — that is the field-level provenance source. The conversation schema preserves the append-only event-list model as it adds sidebars and joint decisions in v1.1.0.",

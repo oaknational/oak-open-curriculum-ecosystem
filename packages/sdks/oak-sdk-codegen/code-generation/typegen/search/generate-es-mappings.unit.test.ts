@@ -16,7 +16,7 @@ const MINIMAL_SCHEMA: OpenAPIObject = {
 describe('generateEsMappingModules', () => {
   it('generates all expected mapping module files', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
-    const fileNames = Object.keys(files).sort();
+    const fileNames = Object.keys(files).sort((a, b) => a.localeCompare(b));
 
     expect(fileNames).toEqual([
       '../search/es-mappings/index.ts',

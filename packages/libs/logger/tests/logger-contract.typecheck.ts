@@ -19,25 +19,15 @@ type FatalHasContextOverload = Logger extends {
 type ErrorSecondArgument = Parameters<Logger['error']>[1];
 type FatalSecondArgument = Parameters<Logger['fatal']>[1];
 
-const errorHasContextOverload: Assert<ErrorHasContextOverload> = true;
-const fatalHasContextOverload: Assert<FatalHasContextOverload> = true;
-
-const acceptsNormalizedErrorForError: Assert<IsAssignable<NormalizedError, ErrorSecondArgument>> =
-  true;
-const acceptsNormalizedErrorForFatal: Assert<IsAssignable<NormalizedError, FatalSecondArgument>> =
-  true;
-
-const rejectsRawErrorForError: AssertFalse<IsAssignable<Error, ErrorSecondArgument>> = false;
-const rejectsRawErrorForFatal: AssertFalse<IsAssignable<Error, FatalSecondArgument>> = false;
-
-const rejectsStringForError: AssertFalse<IsAssignable<string, ErrorSecondArgument>> = false;
-const rejectsStringForFatal: AssertFalse<IsAssignable<string, FatalSecondArgument>> = false;
-
-void errorHasContextOverload;
-void fatalHasContextOverload;
-void acceptsNormalizedErrorForError;
-void acceptsNormalizedErrorForFatal;
-void rejectsRawErrorForError;
-void rejectsRawErrorForFatal;
-void rejectsStringForError;
-void rejectsStringForFatal;
+export const errorHasContextOverload: Assert<ErrorHasContextOverload> = true;
+export const fatalHasContextOverload: Assert<FatalHasContextOverload> = true;
+export const acceptsNormalizedErrorForError: Assert<
+  IsAssignable<NormalizedError, ErrorSecondArgument>
+> = true;
+export const acceptsNormalizedErrorForFatal: Assert<
+  IsAssignable<NormalizedError, FatalSecondArgument>
+> = true;
+export const rejectsRawErrorForError: AssertFalse<IsAssignable<Error, ErrorSecondArgument>> = false;
+export const rejectsRawErrorForFatal: AssertFalse<IsAssignable<Error, FatalSecondArgument>> = false;
+export const rejectsStringForError: AssertFalse<IsAssignable<string, ErrorSecondArgument>> = false;
+export const rejectsStringForFatal: AssertFalse<IsAssignable<string, FatalSecondArgument>> = false;

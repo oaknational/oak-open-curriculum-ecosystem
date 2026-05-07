@@ -20,6 +20,19 @@ generates evidence; that evidence is captured in the napkin and graduates
 into `.agent/memory/` lessons when patterns earn promotion. Lessons in
 `.agent/memory/` shape how state surfaces are designed and used.
 
+Portable substrate doctrine lives in
+[PDR-050](../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md):
+state and memory are sibling planes, generated read models are derived views,
+and every surface needs a contract, validator, repair path, and immune-layer
+route.
+
+The host-local inventory and surface-contract instance live in
+[`memory-state-substrate-contracts.md`](../memory/executive/memory-state-substrate-contracts.md).
+Its strict machine-readable manifest lives alongside it as
+[`memory-state-substrate-contracts.manifest.json`](../memory/executive/memory-state-substrate-contracts.manifest.json).
+Use those contracts before adding, auditing, or repairing state/memory
+surfaces; use PDR-050 for the transferable specification.
+
 ## Current Sub-Surfaces
 
 ### `.agent/state/collaboration/`
@@ -28,15 +41,12 @@ Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
-- [`collaboration/comms/events/`](collaboration/comms/events/) — immutable
+- [`collaboration/comms-events/`](collaboration/comms-events/) — immutable
   communication event files. New discovery notes write here first and render
   into the shared log.
-- [`collaboration/comms/archive/`](collaboration/comms/archive/) — rendered
-  communication-log history preserved when the hot read model is regenerated.
 - [`shared-comms-log.md`](collaboration/shared-comms-log.md) — generated
   shared communication log read model. Discovery surface for sequential
-  agents at session-open. Legacy rendered history remains preserved during
-  migration.
+  agents at session-open.
 - [`active-claims.json`](collaboration/active-claims.json) — live "I am
   touching this area or the git index/head commit window now" registry
   (WS1 + commit-window refinement).
@@ -82,12 +92,9 @@ This directory is governed by:
   commit queue entries, closed claims, conversations, and escalations should
   mutate through `pnpm agent-tools:collaboration-state -- ...` or an
   equivalent helper.
-- **Shared communication log history is hot-plus-archive** — the hot markdown
-  file is generated from immutable event JSON. The pre-event rendered history
-  is preserved at
-  `collaboration/comms/archive/shared-comms-log-pre-events-2026-04-28.md`;
-  future migrations should archive older rendered context before regenerating
-  the hot read model.
+- **Shared communication log is generated** — the hot markdown file is
+  regenerated from immutable event JSON in `collaboration/comms-events/`.
+  Do not edit the rendered log directly.
 - **Sign every entry with the PDR-027 agent identity** — `agent_name`,
   `platform`, `model`, `session_id_prefix` (or `unknown`).
 - **Stale entries become noise to be audited at consolidation**, not

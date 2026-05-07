@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search response modules derived from the Open Curriculum schema.\n */\n\n`;
 
@@ -214,8 +215,8 @@ export type SearchMultiScopeResponse = z.infer<typeof SearchMultiScopeResponseSc
   );
 }
 
-export function generateSearchResponseModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchResponseModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchResponseModules');
   return {
     '../search/responses.lessons.ts': createLessonsModule(),
     '../search/responses.units.ts': createUnitsModule(),

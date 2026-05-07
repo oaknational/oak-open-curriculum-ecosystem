@@ -19,12 +19,10 @@ const MINIMAL_SCHEMA: OpenAPIObject = {
 describe('search request module generation', () => {
   it('emits structured, natural, and parsed query request modules', () => {
     const files = generateSearchRequestModules(MINIMAL_SCHEMA);
-    expect(Object.keys(files).sort()).toEqual(
-      [
-        '../search/natural-requests.ts',
-        '../search/parsed-query.ts',
-        '../search/requests.ts',
-      ].sort(),
+    expect(Object.keys(files).sort((a, b) => a.localeCompare(b))).toEqual(
+      ['../search/natural-requests.ts', '../search/parsed-query.ts', '../search/requests.ts'].sort(
+        (a, b) => a.localeCompare(b),
+      ),
     );
     expect(files['../search/requests.ts']).toContain('SearchStructuredRequestSchema');
     expect(files['../search/natural-requests.ts']).toContain('SearchNaturalLanguageRequestSchema');
@@ -56,13 +54,13 @@ describe('search scope module generation', () => {
 describe('search response module generation', () => {
   it('emits per-scope and multi-scope response schemas', () => {
     const files = generateSearchResponseModules(MINIMAL_SCHEMA);
-    expect(Object.keys(files).sort()).toEqual(
+    expect(Object.keys(files).sort((a, b) => a.localeCompare(b))).toEqual(
       [
         '../search/responses.lessons.ts',
         '../search/responses.multi.ts',
         '../search/responses.sequences.ts',
         '../search/responses.units.ts',
-      ].sort(),
+      ].sort((a, b) => a.localeCompare(b)),
     );
     expect(files['../search/responses.lessons.ts']).toContain('SearchLessonsResponseSchema');
     expect(files['../search/responses.units.ts']).toContain('SearchUnitsResponseSchema');
@@ -124,11 +122,10 @@ describe('search index module generation', () => {
 describe('search index document module generation', () => {
   it('emits index document schemas, guards, and doc re-exports', () => {
     const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
-    expect(Object.keys(files).sort()).toEqual(
-      [
-        '../search/index-documents.ts',
-        '../../../../docs/_typedoc_src/types/search-index.ts',
-      ].sort(),
+    expect(Object.keys(files).sort((a, b) => a.localeCompare(b))).toEqual(
+      ['../search/index-documents.ts', '../../../../docs/_typedoc_src/types/search-index.ts'].sort(
+        (a, b) => a.localeCompare(b),
+      ),
     );
     const runtimeModule = files['../search/index-documents.ts'];
     expect(runtimeModule).toContain('SearchLessonsIndexDocSchema');

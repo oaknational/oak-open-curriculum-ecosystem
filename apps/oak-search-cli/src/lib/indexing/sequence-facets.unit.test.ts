@@ -25,7 +25,7 @@ describe('createSequenceFacetDoc', () => {
       phaseTitle: 'Primary',
       keyStage: 'ks1',
       keyStageTitle: 'Key Stage 1',
-      years: ['2', '1'], // Intentionally unsorted to test sorting
+      years: ['11', '7', 'all-years', '10'], // Intentionally unsorted to test sorting
       unitSlugs: ['unit-a', 'unit-b'],
       unitTitles: ['Unit A', 'Unit B'],
       lessonCount: 15,
@@ -41,7 +41,7 @@ describe('createSequenceFacetDoc', () => {
       key_stage_title: 'Key Stage 1',
       phase_slug: 'primary',
       phase_title: 'Primary',
-      years: ['1', '2'], // Sorted
+      years: ['7', '10', '11', 'all-years'], // Sorted
       unit_slugs: ['unit-a', 'unit-b'],
       unit_titles: ['Unit A', 'Unit B'],
       unit_count: 2,

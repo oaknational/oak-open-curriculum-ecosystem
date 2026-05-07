@@ -34,7 +34,7 @@ export function listCommandAdapterNames(
   return listBasenames(repoRoot, relativeDir, extension)
     .filter((fileName) => fileName.startsWith('jc-'))
     .map((fileName) => fileName.replace(/^jc-/u, ''))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function listPortableCommandAdapterNames(repoRoot: string): string[] {
@@ -47,7 +47,7 @@ export function listPortableCommandAdapterNames(repoRoot: string): string[] {
     .filter((entry) => entry.isDirectory() && entry.name.startsWith('jc-'))
     .filter((entry) => existsSync(join(skillsDir, entry.name, 'SKILL.md')))
     .map((entry) => entry.name.replace(/^jc-/u, ''))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function listBasenames(repoRoot: string, relativeDir: string, extension: string): string[] {
@@ -59,7 +59,7 @@ export function listBasenames(repoRoot: string, relativeDir: string, extension: 
   return readdirSync(absoluteDir, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
     .map((entry) => entry.name.slice(0, -extension.length))
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function countPracticeBoxFiles(repoRoot: string): number {

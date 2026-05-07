@@ -100,7 +100,7 @@ function calculateStats(keywords: readonly ExtractedKeyword[]): VocabularyGraphS
     totalTerms: keywords.length,
     bySubject,
     crossSubjectTermCount: crossSubjectCount,
-    subjectsCovered: [...allSubjects].sort(),
+    subjectsCovered: [...allSubjects].sort((a, b) => a.localeCompare(b)),
   };
 }
 

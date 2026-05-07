@@ -10,6 +10,7 @@ import type { SearchIndexTarget } from '../internal/index.js';
 import { TARGET_SUFFIXES } from '../internal/index.js';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { isNotFoundError } from './es-error-guards.js';
+import { compareCodeUnits } from './code-unit-order.js';
 
 /**
  * List all versioned indexes matching a base name and target.
@@ -30,7 +31,7 @@ export async function listVersionedIndexes(
 
   try {
     const response = await client.indices.get({ index: `${prefix}*` });
-    return ok(typeSafeKeys(response).sort());
+    return ok(typeSafeKeys(response).sort(compareCodeUnits));
   } catch (error: unknown) {
     if (isNotFoundError(error)) {
       return ok([]);

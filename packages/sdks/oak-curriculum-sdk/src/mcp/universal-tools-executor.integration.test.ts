@@ -93,12 +93,6 @@ function parseTextContent(result: CallToolResult): StructuredContent {
   return parsed;
 }
 
-function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
-  const { [key]: omitted, ...rest } = object;
-  void omitted;
-  return rest;
-}
-
 const registry = createFakeRegistry();
 const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;
 
@@ -206,7 +200,8 @@ describe('createUniversalToolExecutor', () => {
       throw new Error('Expected generated tool descriptor to include annotations');
     }
 
-    const annotationsWithoutTitle = omitProperty(annotations, 'title');
+    const { title, ...annotationsWithoutTitle } = annotations;
+    expect(title).toBeDefined();
     const registryWithTopLevelTitle = createFakeRegistry({
       ...sampleDescriptor,
       title: 'Spec-aligned top-level title',

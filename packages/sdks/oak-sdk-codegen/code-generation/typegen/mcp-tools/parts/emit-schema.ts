@@ -1,4 +1,3 @@
-import type { OperationObject } from 'openapi3-ts/oas31';
 import {
   buildInputSchemaObject,
   buildZodObject,
@@ -183,8 +182,7 @@ function buildFlatToNestedTransform(
   );
 
   if (!hasPathParams && !hasQueryParams) {
-    // No parameters - return empty params object
-    lines.push('  void flatArgs;');
+    lines.push('  toolMcpFlatInputSchema.parse(flatArgs);');
     lines.push('  return { params: {} };');
   } else {
     lines.push('  const params: ToolParams = {');
@@ -201,20 +199,7 @@ function buildFlatToNestedTransform(
     if (hasQueryParams) {
       lines.push('    query: {');
       for (const paramName of queryParamNames) {
-        const mcpName = normaliseParamName(paramName);
-        const queryMeta = queryParamMetadata[paramName];
-        if (
-          paramName === 'year' &&
-          queryMeta &&
-          queryMeta.typePrimitive === 'number' &&
-          !queryMeta.valueConstraint
-        ) {
-          lines.push(
-            `      ${paramName}: flatArgs.${mcpName} === 'all-years' ? undefined : flatArgs.${mcpName} === undefined ? undefined : Number(flatArgs.${mcpName}),`,
-          );
-          continue;
-        }
-        lines.push(`      ${paramName}: flatArgs.${mcpName},`);
+        lines.push(buildQueryTransformLine(paramName, queryParamMetadata[paramName]));
       }
       lines.push('    },');
     }
@@ -227,12 +212,25 @@ function buildFlatToNestedTransform(
   return lines.join('\n');
 }
 
+function buildQueryTransformLine(paramName: string, queryMeta: ParamMetadata | undefined): string {
+  const mcpName = normaliseParamName(paramName);
+  const flatValue = `flatArgs.${mcpName}`;
+  if (shouldCoerceYearParam(paramName, queryMeta)) {
+    return `      ${paramName}: ${flatValue} === 'all-years' ? undefined : ${flatValue} === undefined ? undefined : Number(${flatValue}),`;
+  }
+  return `      ${paramName}: ${flatValue},`;
+}
+
+function shouldCoerceYearParam(paramName: string, queryMeta: ParamMetadata | undefined): boolean {
+  return (
+    paramName === 'year' && queryMeta?.typePrimitive === 'number' && !queryMeta.valueConstraint
+  );
+}
+
 export function emitSchema(
-  operation: OperationObject,
   pathParamMetadata: ParamMetadataMap,
   queryParamMetadata: ParamMetadataMap,
 ): string {
-  void operation;
   const lines: string[] = [];
   lines.push(buildHeaderBlock(pathParamMetadata, queryParamMetadata));
   const { jsonLiteral, zodLiteral, flatMcpZodLiteral } = inputSchemaBlock(

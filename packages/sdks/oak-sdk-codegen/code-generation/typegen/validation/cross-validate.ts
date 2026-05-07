@@ -115,7 +115,7 @@ function computeMissing(expected: Set<string>, actual: Set<string>): string[] {
       missing.push(key);
     }
   }
-  return missing.sort();
+  return missing.sort((a, b) => a.localeCompare(b));
 }
 
 function computeExtra(expected: Set<string>, actual: Set<string>): string[] {

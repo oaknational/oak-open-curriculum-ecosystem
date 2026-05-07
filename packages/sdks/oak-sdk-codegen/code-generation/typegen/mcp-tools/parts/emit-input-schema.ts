@@ -162,7 +162,7 @@ export function buildFlatMcpZodObject(
 
   // Handle zero-parameter tools
   if (allEntries.length === 0) {
-    return 'z.object({})';
+    return 'z.strictObject({})';
   }
 
   const normalisedEntries: [string, ParamMetadataMap[string]][] = allEntries.map(([name, meta]) => [
@@ -172,5 +172,5 @@ export function buildFlatMcpZodObject(
 
   const fields = buildZodFields(normalisedEntries, 'flat').join(', ');
 
-  return `z.object({ ${fields} })`;
+  return `z.strictObject({ ${fields} })`;
 }

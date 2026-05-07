@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "closed-claims.schema.json",
+  "$merge_class": "append-only-structured-by-claim_id",
   "title": "Closed Agent Claims Archive",
   "description": "Durable archive of claims that have left active-claims.json. Closed claims preserve the original claim body and add structured closure metadata for explicit, stale, and owner-forced closure.",
   "$comment_provenance": "Closed claims reuse the active-claims claim contract via $ref; closure metadata (kind, closed_at, closed_by, summary, evidence) is sourced from active-claims.schema.json#/$defs/closure with field-level provenance recorded there. archived_at is first-principles: a durable archival date set by consolidate-docs § 7e when a claim is moved out of the active registry.",

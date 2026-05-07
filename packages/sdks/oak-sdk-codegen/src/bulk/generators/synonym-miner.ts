@@ -63,11 +63,27 @@ const PATTERN_CONFIDENCE: Readonly<Record<string, number>> = {
 };
 
 /**
+ * Maximum definition length accepted by pattern matching.
+ *
+ * @remarks
+ * The synonym-extraction regexes (`alsoKnownAs`, `sometimesCalled`) have
+ * polynomial worst-case complexity on adversarial whitespace input, flagged
+ * by CodeQL `js/polynomial-redos`. Curriculum definitions are typically
+ * under 500 chars, so this 5000-char ceiling is far above the expected input
+ * range while bounding the regex's worst-case work to a safe level. Per
+ * CodeQL's documented mitigation strategy: "limit the length of the input
+ * string". The lookahead after optional article whitespace also prevents
+ * the quantified whitespace prefix from matching unless a synonym token
+ * follows.
+ */
+const MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING = 5000;
+
+/**
  * Regex patterns for synonym extraction.
  */
 const PATTERNS = {
-  alsoKnownAs: /also known as\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
-  sometimesCalled: /sometimes called\s+(?:an?\s+)?['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+  alsoKnownAs: /also known as\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
+  sometimesCalled: /sometimes called\s+(?:an?\s+)?(?=\S)['"]?([^,.'"\n]+?)['"]?(?:[,.]|$)/gi,
   parentheticalAbbrev: /['"]([A-Z]{2,6})['"]|also known as\s+['"]?([A-Z]{2,6})['"]?/gi,
 } as const;
 
@@ -85,67 +101,99 @@ function normaliseSynonym(raw: string): string {
  * @returns MinedSynonym if patterns match, undefined otherwise
  */
 export function extractSynonymFromDefinition(keyword: ExtractedKeyword): MinedSynonym | undefined {
-  const definition = keyword.definition;
-  const synonyms: string[] = [];
-  let pattern = '';
-  let confidence = 0;
-  let occurrenceCount = 0;
-
-  // Check for "also known as" pattern
-  const akaMatches = [...definition.matchAll(PATTERNS.alsoKnownAs)];
-  for (const match of akaMatches) {
-    if (match[1]) {
-      const synonym = normaliseSynonym(match[1]);
-      if (synonym.length > 1 && synonym !== keyword.term.toLowerCase()) {
-        synonyms.push(synonym);
-        pattern = 'also known as';
-        confidence = Math.max(confidence, PATTERN_CONFIDENCE['also known as'] ?? 0);
-        occurrenceCount++;
-      }
-    }
+  if (keyword.definition.length > MAX_DEFINITION_LENGTH_FOR_PATTERN_MATCHING) {
+    return undefined;
   }
 
-  // Check for "sometimes called" pattern
-  const scMatches = [...definition.matchAll(PATTERNS.sometimesCalled)];
-  for (const match of scMatches) {
-    if (match[1]) {
-      const synonym = normaliseSynonym(match[1]);
-      if (synonym.length > 1 && synonym !== keyword.term.toLowerCase()) {
-        synonyms.push(synonym);
-        pattern = pattern ? `${pattern}, sometimes called` : 'sometimes called';
-        confidence = Math.max(confidence, PATTERN_CONFIDENCE['sometimes called'] ?? 0);
-        occurrenceCount++;
-      }
-    }
-  }
+  const result = collectSynonymMatches(keyword);
 
-  // Check for parenthetical abbreviations (e.g., 'PPE')
-  const abbrevMatches = [...definition.matchAll(PATTERNS.parentheticalAbbrev)];
-  for (const match of abbrevMatches) {
-    const abbrev = match[1] ?? match[2];
-    if (abbrev) {
-      const synonym = normaliseSynonym(abbrev);
-      if (synonym.length >= 2 && synonym !== keyword.term.toLowerCase()) {
-        synonyms.push(synonym);
-        pattern = pattern ? `${pattern}, abbreviation` : 'abbreviation';
-        confidence = Math.max(confidence, PATTERN_CONFIDENCE['parenthetical'] ?? 0);
-        occurrenceCount++;
-      }
-    }
-  }
-
-  if (synonyms.length === 0) {
+  if (result.synonyms.length === 0) {
     return undefined;
   }
 
   return {
     term: keyword.term,
-    synonyms: [...new Set(synonyms)], // Deduplicate
-    pattern,
-    confidence,
+    synonyms: [...new Set(result.synonyms)], // Deduplicate
+    pattern: result.pattern,
+    confidence: result.confidence,
     subjects: keyword.subjects,
-    occurrenceCount,
+    occurrenceCount: result.occurrenceCount,
   };
+}
+
+interface SynonymMatchAccumulator {
+  readonly synonyms: string[];
+  pattern: string;
+  confidence: number;
+  occurrenceCount: number;
+}
+
+function collectSynonymMatches(keyword: ExtractedKeyword): SynonymMatchAccumulator {
+  const result: SynonymMatchAccumulator = {
+    synonyms: [],
+    pattern: '',
+    confidence: 0,
+    occurrenceCount: 0,
+  };
+
+  collectMatchesForPattern(
+    keyword,
+    [...keyword.definition.matchAll(PATTERNS.alsoKnownAs)].map((match) => match[1]),
+    'also known as',
+    'also known as',
+    2,
+    result,
+  );
+  collectMatchesForPattern(
+    keyword,
+    [...keyword.definition.matchAll(PATTERNS.sometimesCalled)].map((match) => match[1]),
+    'sometimes called',
+    'sometimes called',
+    2,
+    result,
+  );
+  collectMatchesForPattern(
+    keyword,
+    [...keyword.definition.matchAll(PATTERNS.parentheticalAbbrev)].map(
+      (match) => match[1] ?? match[2],
+    ),
+    'abbreviation',
+    'parenthetical',
+    2,
+    result,
+  );
+
+  return result;
+}
+
+function collectMatchesForPattern(
+  keyword: ExtractedKeyword,
+  rawMatches: readonly (string | undefined)[],
+  patternLabel: string,
+  confidenceKey: keyof typeof PATTERN_CONFIDENCE,
+  minLength: number,
+  result: SynonymMatchAccumulator,
+): void {
+  for (const raw of rawMatches) {
+    if (!raw) {
+      continue;
+    }
+    const synonym = normaliseSynonym(raw);
+    if (synonym.length < minLength || synonym === keyword.term.toLowerCase()) {
+      continue;
+    }
+    result.synonyms.push(synonym);
+    result.pattern = appendPatternLabel(result.pattern, patternLabel);
+    result.confidence = Math.max(result.confidence, PATTERN_CONFIDENCE[confidenceKey] ?? 0);
+    result.occurrenceCount += 1;
+  }
+}
+
+function appendPatternLabel(pattern: string, label: string): string {
+  if (!pattern) {
+    return label;
+  }
+  return pattern.split(', ').includes(label) ? pattern : `${pattern}, ${label}`;
 }
 
 /**
@@ -230,7 +278,7 @@ export function serializeMinedSynonyms(data: MinedSynonymsData): string {
   }
 
   // Sort subjects alphabetically
-  const sortedSubjects = [...bySubject.keys()].sort();
+  const sortedSubjects = [...bySubject.keys()].sort((a, b) => a.localeCompare(b));
 
   for (const subject of sortedSubjects) {
     const subjectSynonyms = bySubject.get(subject);

@@ -10,12 +10,15 @@ fitness_line_length: 100
 
 The Practice is the self-reinforcing system of principles, structures, agents,
 and tooling that governs how work happens in a Practice-bearing repository. It
-creates the conditions for safe, high-quality human-AI collaboration. The
-Practice is what produces the host repo's deliverables — but it is not the
-deliverables themselves. It is deliberately plain text and vendor-portable:
-agents from major platforms can collaborate, continually learn and adapt, and
-preserve institutional and operational knowledge where future work can inspect
-it.
+is a philosophy and commitment before it is an implementation. Its
+specification aspect is a portability tool: it lets processes, flows,
+contracts, approaches, structures, and vocabularies travel without binding them
+to one host. It creates the conditions for safe, high-quality human-AI
+collaboration. The Practice is what produces the host repo's deliverables —
+but it is not the deliverables themselves. It is deliberately plain text and
+vendor-portable: agents from major platforms can collaborate, continually learn
+and adapt, and preserve institutional and operational knowledge where future
+work can inspect it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
 links to the host repo's directives, ADRs, and tools,
@@ -103,6 +106,16 @@ amendment 2026-04-29).
 
 This layer defines _why_ the Practice works.
 
+### Specification as Tool
+
+The Practice can specify a process completely while remaining implementation
+agnostic. A portable specification names the invariant, lifecycle, contract,
+responsibility split, vocabulary, and validation expectation; each host then
+binds that specification to its own files, commands, tools, and runtime. This
+pattern is useful beyond state and memory. Other agentic engineering processes
+and support systems can receive the same treatment when their substance is
+Practice-level and their implementation details are host-level.
+
 ### Structure
 
 The organisational patterns. Directives (`.agent/directives/`), plans
@@ -189,7 +202,10 @@ simply moves the accumulation problem downstream.
   where `critical` is `hard limit × 1.5`. All zones are signals. `hard` and
   `critical` demand structural response and may block ordinary closure, but
   they must not block capture, distillation, graduation, or preservation of
-  understanding
+  understanding. Fitness output must therefore remind agents to preserve
+  substance first and route pressure structurally: home, graduate, split,
+  refine real redundancy, review limits, or open a remediation lane. It must
+  not invite reactive trimming of memory or Practice Core content
 - **Practice Core** → the trinity files carry all four fields. See
   [practice-lineage.md §Fitness Functions](practice-lineage.md#fitness-functions).
 

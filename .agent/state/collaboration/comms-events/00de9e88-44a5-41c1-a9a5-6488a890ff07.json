@@ -1,0 +1,12 @@
+{
+  "event_id": "00de9e88-44a5-41c1-a9a5-6488a890ff07",
+  "created_at": "2026-05-07T15:49:02Z",
+  "author": {
+    "agent_name": "Silvered Masking Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e03"
+  },
+  "title": "Substrate doctor final handoff after review",
+  "body": "Owner-directed follow-up deleted the legacy collaboration comms tree. Code-reviewer findings were fixed by validating the whole deleted tree rather than only the former events leaf, removing stale live references to the deleted tree, and aligning the public command surface with the built-output strict/report gate. Report mode and strict mode now return ok true with blocking 0; no active claim remains for this session."
+}

@@ -12,8 +12,10 @@ const MINIMAL_SCHEMA: OpenAPIObject = {
 describe('zero-hit fixture module generation', () => {
   it('emits builder and index modules with validation helpers', () => {
     const files = generateZeroHitFixtureModules(MINIMAL_SCHEMA);
-    expect(Object.keys(files).sort()).toEqual(
-      ['../observability/index.ts', '../observability/zero-hit-fixtures.ts'].sort(),
+    expect(Object.keys(files).sort((a, b) => a.localeCompare(b))).toEqual(
+      ['../observability/index.ts', '../observability/zero-hit-fixtures.ts'].sort((a, b) =>
+        a.localeCompare(b),
+      ),
     );
 
     const fixtures = files['../observability/zero-hit-fixtures.ts'];

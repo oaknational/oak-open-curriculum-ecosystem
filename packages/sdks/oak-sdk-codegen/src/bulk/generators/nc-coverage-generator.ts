@@ -97,7 +97,7 @@ function calculateStats(statements: readonly ExtractedNCStatement[]): NCCoverage
     uniqueUnits: units.size,
     bySubject,
     byKeyStage,
-    subjectsCovered: [...subjects].sort(),
+    subjectsCovered: [...subjects].sort((a, b) => a.localeCompare(b)),
   };
 }
 

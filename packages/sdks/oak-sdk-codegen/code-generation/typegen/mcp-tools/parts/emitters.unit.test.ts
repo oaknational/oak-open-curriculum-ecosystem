@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject, ParameterObject } from 'openapi3-ts/oas31';
-import { createFakeOperationObject, createFakeParameterObject } from '../../../test-fakes.js';
+import type { OperationObject } from 'openapi3-ts/oas31';
+import { createFakeOperationObject } from '../../../test-fakes.js';
 import { emitHeader, emitSchema, emitIndex } from './emitters.js';
 
-function makeOp(params: ParameterObject[]): OperationObject {
+function makeOp(): OperationObject {
   return createFakeOperationObject({
     operationId: 'get-pets-id',
-    parameters: params,
+    parameters: [],
     responses: { '200': { description: 'ok' } },
   });
 }
@@ -22,17 +22,7 @@ describe('emitters', () => {
   });
 
   it('emits schema block with tool parameter types and helpers', () => {
-    const params: ParameterObject[] = [
-      createFakeParameterObject({
-        name: 'q',
-        in: 'query',
-        required: false,
-        schema: { type: 'string' },
-      }),
-    ];
-    const op = makeOp(params);
     const out = emitSchema(
-      op,
       {},
       { q: { typePrimitive: 'string', valueConstraint: false, required: false } },
     );
@@ -45,7 +35,7 @@ describe('emitters', () => {
   });
 
   it('emits index/executor block exporting tool', () => {
-    const op = makeOp([]);
+    const op = makeOp();
     op.summary = 'Get a pet by id';
     const out = emitIndex('get-pets-id', '/pets/{id}', 'get', 'get-pets-id', op);
     expect(out).not.toContain('import type { ToolDescriptor }');

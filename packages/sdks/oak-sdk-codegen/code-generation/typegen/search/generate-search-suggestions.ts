@@ -1,5 +1,6 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search suggestion modules derived from the Open Curriculum schema.\n */\n\n`;
 
@@ -80,8 +81,8 @@ function createSuggestionsModule(): string {
   );
 }
 
-export function generateSearchSuggestionModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
+export function generateSearchSuggestionModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateSearchSuggestionModules');
   return {
     '../search/suggestions.ts': createSuggestionsModule(),
   };

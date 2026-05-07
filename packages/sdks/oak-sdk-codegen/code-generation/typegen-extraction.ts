@@ -21,6 +21,7 @@ import {
   type PathEntry,
   type ValidCombinations,
 } from './typegen/extraction-types.js';
+import { compareCodeUnits } from './code-unit-order.js';
 
 function isObject(value: unknown): value is Record<PropertyKey, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -157,7 +158,7 @@ export function recordValidCombination(
     return;
   }
 
-  const sortedNames = [...parameterNames].sort();
+  const sortedNames = [...parameterNames].sort(compareCodeUnits);
   const paramsKey = sortedNames.join('_');
   const group = validCombinations[paramsKey] ?? {};
   const entry: PathEntry = {
@@ -225,7 +226,7 @@ export function extractPathParameters(schema: OpenAPIObject): ExtractedPathData 
   const pathParameters: ParameterValueSets = {};
   const validCombinations: ValidCombinations = {};
 
-  const sortedPathNames = Object.keys(paths ?? {}).sort((a, b) => a.localeCompare(b));
+  const sortedPathNames = Object.keys(paths ?? {}).sort(compareCodeUnits);
   for (const pathName of sortedPathNames) {
     const pathItem = paths?.[pathName];
     if (!isPathItemObject(pathItem)) {

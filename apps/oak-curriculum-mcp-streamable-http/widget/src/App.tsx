@@ -22,6 +22,7 @@ import {
   applyDocumentTheme,
   applyHostFonts,
   applyHostStyleVariables as applyMcpHostStyleVariables,
+  type App as McpApp,
   type McpUiHostContext,
 } from '@modelcontextprotocol/ext-apps';
 import { useApp } from '@modelcontextprotocol/ext-apps/react';
@@ -61,6 +62,29 @@ function syncHostContextStyling(hostContext: Partial<McpUiHostContext>): void {
   if (hostContext.styles?.css?.fonts) {
     applyHostFonts(hostContext.styles.css.fonts);
   }
+}
+
+type LinkOpeningHostApp = Pick<McpApp, 'getHostCapabilities' | 'openLink'>;
+
+export function openHostLink(
+  app: LinkOpeningHostApp,
+  dispatch: React.Dispatch<AppRuntimeAction>,
+  url: string,
+): boolean {
+  const capabilities = app.getHostCapabilities();
+
+  if (!capabilities?.openLinks) {
+    return false;
+  }
+
+  app.openLink({ url }).catch((openLinkError: unknown) => {
+    dispatch({
+      type: 'runtime-error',
+      errorMessage:
+        openLinkError instanceof Error ? openLinkError.message : 'Host link opening failed',
+    });
+  });
+  return true;
 }
 
 /**
@@ -188,16 +212,11 @@ export function App(): React.JSX.Element {
         return;
       }
 
-      const capabilities = app.getHostCapabilities();
-
-      if (!capabilities?.openLinks) {
-        return;
+      if (openHostLink(app, dispatch, url)) {
+        event.preventDefault();
       }
-
-      event.preventDefault();
-      void app.openLink({ url });
     },
-    [app, isConnected],
+    [app, dispatch, isConnected],
   );
 
   return <AppView onOpenLink={handleOpenLink} safeAreaInsets={hostContext?.safeAreaInsets} />;

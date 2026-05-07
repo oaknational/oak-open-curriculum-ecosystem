@@ -1,0 +1,1067 @@
+{
+  "$schema": "./memory-state-substrate-contracts.schema.json",
+  "schema_version": "1.0.0",
+  "contract_version": "0.2",
+  "generated_at": "2026-05-07T09:57:48Z",
+  "generated_by": {
+    "agent_name": "Floating Vaulting Updraft",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e01"
+  },
+  "human_contract": ".agent/memory/executive/memory-state-substrate-contracts.md",
+  "doctrine": {
+    "substrate_contracts": ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md",
+    "merge_semantics": ".agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md"
+  },
+  "strict_data_status": "strict-local-instance-ready-before-doctor-fixtures",
+  "doctor_start_gate": "Doctor Phase 0 may begin only after this manifest validates and collaboration-state explicit checks pass against the canonical comms-events root.",
+  "portability_tiers": [
+    "core-portable",
+    "host-bridge",
+    "repo-local-contract",
+    "repo-local-implementation",
+    "historical-evidence"
+  ],
+  "discovery": {
+    "live_roots": [
+      ".agent/state/",
+      ".agent/memory/"
+    ],
+    "doctrine_roots": [
+      ".agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md",
+      ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md"
+    ],
+    "plan_roots": [
+      ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+      ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
+    ],
+    "historical_roots": [
+      ".agent/memory/active/archive/",
+      ".agent/memory/operational/archive/",
+      ".agent/memory/operational/workstreams/"
+    ],
+    "fixture_roots": [
+      ".agent/state/collaboration/fixtures/"
+    ],
+    "generated_read_models": [
+      {
+        "output": ".agent/state/collaboration/shared-comms-log.md",
+        "source": ".agent/state/collaboration/comms-events/",
+        "renderer": "pnpm agent-tools:collaboration-state -- comms render",
+        "current_checker": "future doctor must regenerate and compare"
+      }
+    ],
+    "exclusions": [
+      {
+        "pattern": ".agent/state/collaboration/conversations/*.example.json",
+        "reason": "Example fixtures inside the live directory; parse as examples, not live threads."
+      },
+      {
+        "pattern": ".agent/state/collaboration/fixtures/**",
+        "reason": "Fixture estate for tests; never live state."
+      }
+    ],
+    "migration_ledgers": []
+  },
+  "surface_defaults": {
+    "required_contract_fields": [
+      "purpose",
+      "authority",
+      "lifecycle",
+      "writer_or_write_api",
+      "entry_identity",
+      "merge_class",
+      "schema_or_parser",
+      "generated_outputs",
+      "validator",
+      "severity",
+      "repair_path",
+      "portability_tier",
+      "owner_reviewer_route"
+    ],
+    "stored_derived_values_rule": "Allowed only when the validator recomputes and compares them.",
+    "repair_preservation_rule": "Do not delete, trim, or compress knowledge to satisfy fitness."
+  },
+  "surfaces": [
+    {
+      "id": "substrate-inventory",
+      "path": ".agent/memory/executive/memory-state-substrate-contracts.md",
+      "plane": "memory",
+      "purpose": "Human-facing host-local substrate contract and index for state, memory, generated read models, historical roots, and repair routing.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live contract",
+      "writer_or_write_api": "Human edit through substrate-contract adoption, consolidation, or doctor-plan implementation.",
+      "entry_identity": "single file path plus strict manifest contract_version",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": ".agent/memory/executive/memory-state-substrate-contracts.manifest.json validated by .agent/memory/executive/memory-state-substrate-contracts.schema.json",
+      "generated_outputs": [
+        ".agent/memory/executive/memory-state-substrate-contracts.manifest.json"
+      ],
+      "validator": "strict manifest schema validation; future pnpm practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "manifest JSON invalid",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "manifest omits a required surface contract field",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "human Markdown and strict manifest disagree semantically",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "regenerate strict manifest from reviewed human contract",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "edit human contract and manifest together with reviewer evidence",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete contract content to satisfy fitness",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "host-bridge",
+      "owner_reviewer_route": "docs-adr + assumptions + architecture"
+    },
+    {
+      "id": "state-entrypoint",
+      "path": ".agent/state/README.md",
+      "plane": "state",
+      "purpose": "Entry point for live and historical Practice state surfaces and their canonical communication-event root.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live entrypoint",
+      "writer_or_write_api": "Human edit when state topology changes.",
+      "entry_identity": "single file path",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "Markdown frontmatter plus section conventions; future substrate doctor parser",
+      "generated_outputs": [],
+      "validator": "markdownlint plus future pnpm practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "entrypoint names a retired root as live",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "entrypoint omits canonical live state roots",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "entrypoint route is stale but non-authoritative",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "replace stale live-path references after classification",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "classify ambiguous archived references before editing",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "rewrite archived evidence to current truth",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "architecture + docs-adr"
+    },
+    {
+      "id": "collaboration-comms-events",
+      "path": ".agent/state/collaboration/comms-events/",
+      "plane": "state",
+      "purpose": "Canonical live immutable communication-event fragments that render to the shared communication log.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live immutable fragments",
+      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- comms send",
+      "entry_identity": "event JSON filename and event_id",
+      "merge_class": "exclusive-create-fragments",
+      "schema_or_parser": "agent-tools comms parser; JSON Schema pending in doctor plan",
+      "generated_outputs": [
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "validator": "pnpm agent-tools:collaboration-state -- check --events-dir .agent/state/collaboration/comms-events; future drift comparison",
+      "severity": [
+        {
+          "invariant": "invalid event JSON",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "new event written outside canonical root",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "generated log drift after renderer contract exists",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "malformed event body requiring provenance-preserving repair",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "regenerate shared communication log from canonical events",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "repair malformed event only with original content preserved",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete events to make rendering pass",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + docs-adr"
+    },
+    {
+      "id": "collaboration-shared-comms-log",
+      "path": ".agent/state/collaboration/shared-comms-log.md",
+      "plane": "generated",
+      "purpose": "Human-readable generated read model of communication-event fragments.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live generated read model",
+      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- comms render",
+      "entry_identity": "rendered heading timestamp plus event identity from source fragment",
+      "merge_class": "append-only-narrative",
+      "schema_or_parser": "generated Markdown header plus renderer comparison",
+      "generated_outputs": [],
+      "validator": "future doctor regenerates from comms-events and compares",
+      "severity": [
+        {
+          "invariant": "generated read model drift after comparison is installed",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "rendered prose has markdownlint-sensitive formatting from source event",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "regenerate from canonical event source set",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "classify source-event rendering defects before editing event",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "manual edits to generated log as source of truth",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + docs-adr"
+    },
+    {
+      "id": "collaboration-active-claims",
+      "path": ".agent/state/collaboration/active-claims.json",
+      "plane": "state",
+      "purpose": "Live truth-of-now registry for active agent claims and advisory commit queue.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live truth-of-now registry",
+      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- claims open|heartbeat|close and commit skill queue helpers",
+      "entry_identity": "claim_id for claims; intent_id for commit_queue",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": ".agent/state/collaboration/active-claims.schema.json",
+      "generated_outputs": [],
+      "validator": "pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json",
+      "severity": [
+        {
+          "invariant": "invalid JSON/schema",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "duplicate active claim_id",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "invalid commit_queue entry",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "stale claim requiring audit",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "archive stale claims only through lifecycle helper when deterministic policy applies",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "owner-forced or stale closure with evidence",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "silent deletion of claims or queue entries",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + architecture"
+    },
+    {
+      "id": "collaboration-closed-claims",
+      "path": ".agent/state/collaboration/closed-claims.archive.json",
+      "plane": "state",
+      "purpose": "Durable archive of explicit, stale, owner-forced, and commit-window claim closure evidence.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "archive of closed or stale claim evidence",
+      "writer_or_write_api": "claim close/archive helper and commit skill closeout",
+      "entry_identity": "claim_id",
+      "merge_class": "append-only-structured-by-claim_id",
+      "schema_or_parser": ".agent/state/collaboration/closed-claims.schema.json",
+      "generated_outputs": [],
+      "validator": "pnpm agent-tools:collaboration-state -- check --closed .agent/state/collaboration/closed-claims.archive.json",
+      "severity": [
+        {
+          "invariant": "invalid JSON/schema",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "duplicate closed claim_id with incompatible closure evidence",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "same claim closed on two branches and needing semantic union",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "exact-dedupe identical closure records",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "merge same-claim closure evidence with provenance",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "drop one branch closure because it is inconvenient",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + architecture"
+    },
+    {
+      "id": "collaboration-conversations",
+      "path": ".agent/state/collaboration/conversations/",
+      "plane": "state",
+      "purpose": "Structured async decision threads, sidebars, joint decisions, and resolutions.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live decision threads; example files excluded from live set",
+      "writer_or_write_api": "human or helper-authored JSON entries following conversation schema",
+      "entry_identity": "entry_id inside each conversation record",
+      "merge_class": "append-only-structured-by-entry_id",
+      "schema_or_parser": ".agent/state/collaboration/conversation.schema.json",
+      "generated_outputs": [],
+      "validator": "future doctor JSON Schema validation excluding *.example.json",
+      "severity": [
+        {
+          "invariant": "invalid live conversation JSON/schema",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "unresolved decision thread needs owner or peer decision",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "format and schema-normalise unambiguous fields",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "resolve semantic decision conflicts through the conversation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "auto-choose a decision outcome",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + docs-adr"
+    },
+    {
+      "id": "collaboration-escalations",
+      "path": ".agent/state/collaboration/escalations/",
+      "plane": "state",
+      "purpose": "Owner-facing unresolved escalation records linked back to conversation context.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live owner escalation records",
+      "writer_or_write_api": "human or helper-authored JSON entries following escalation schema",
+      "entry_identity": "escalation_id",
+      "merge_class": "append-only-structured-by-escalation_id",
+      "schema_or_parser": ".agent/state/collaboration/escalation.schema.json plus README contract",
+      "generated_outputs": [],
+      "validator": "future doctor JSON Schema validation",
+      "severity": [
+        {
+          "invariant": "invalid escalation JSON/schema",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "open escalation awaiting owner disposition",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "close escalation after linked owner resolution exists",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "classify ambiguous escalation state with owner evidence",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete unresolved escalation to reduce noise",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + docs-adr"
+    },
+    {
+      "id": "memory-entrypoint",
+      "path": ".agent/memory/README.md",
+      "plane": "memory",
+      "purpose": "Entry point for memory taxonomy and the active, operational, executive, archive, and substrate-contract surfaces.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live memory taxonomy entrypoint",
+      "writer_or_write_api": "Human edit when memory topology changes.",
+      "entry_identity": "single file path",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "Markdown frontmatter plus section conventions; future substrate doctor parser",
+      "generated_outputs": [],
+      "validator": "markdownlint plus future pnpm practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "memory taxonomy omits live memory roots",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "entrypoint cross-reference drift",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "update stale path references after classification",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review taxonomy changes with docs-adr",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "trim memory substance for fitness",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "docs-adr + architecture"
+    },
+    {
+      "id": "memory-active-napkin",
+      "path": ".agent/memory/active/napkin.md",
+      "plane": "memory",
+      "purpose": "Active session observation and surprise capture before distillation.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live learning capture",
+      "writer_or_write_api": "Human/agent append during sessions and rotation during consolidation.",
+      "entry_identity": "dated heading plus session identity",
+      "merge_class": "append-only-narrative",
+      "schema_or_parser": "Markdown frontmatter and dated-section convention",
+      "generated_outputs": [],
+      "validator": "practice fitness plus future substrate doctor",
+      "severity": [
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "invalid frontmatter",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "fitness pressure requiring homing or rotation",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "historical entries preserved in archives",
+          "severity": "informational"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "rotate archived sections with full content preservation",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "home repeated lessons through consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete fresh capture for fitness",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + docs-adr"
+    },
+    {
+      "id": "memory-active-distilled",
+      "path": ".agent/memory/active/distilled.md",
+      "plane": "memory",
+      "purpose": "Distilled hard-won rules held until they graduate to durable homes.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live distilled learning",
+      "writer_or_write_api": "Consolidation edits only; ordinary sessions append sparingly when substance has stabilised.",
+      "entry_identity": "section heading plus routed-entry identity",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "Markdown frontmatter plus routed-entry sections",
+      "generated_outputs": [],
+      "validator": "practice fitness plus future substrate doctor",
+      "severity": [
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "invalid frontmatter",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "same-entry semantic drift",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "fitness pressure requiring graduation",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "archive or pointerise entries after named destination exists",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review same-heading semantic collisions",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "remove entries without named destination",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + docs-adr"
+    },
+    {
+      "id": "memory-active-patterns",
+      "path": ".agent/memory/active/patterns/",
+      "plane": "memory",
+      "purpose": "Reusable local engineering pattern library with one pattern per file and README index.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live pattern library",
+      "writer_or_write_api": "patterns skill and consolidation edits; new files by exclusive creation",
+      "entry_identity": "pattern filename slug",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "directory README index plus per-file markdown frontmatter conventions",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "duplicate pattern slug",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "README index missing pattern file",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "same pattern edited concurrently",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add missing README index entry for unambiguous new pattern",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "merge same-pattern semantic edits with reviewer judgement",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete pattern files because similar concepts exist elsewhere",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "patterns skill + docs-adr"
+    },
+    {
+      "id": "memory-collaboration-patterns",
+      "path": ".agent/memory/collaboration/",
+      "plane": "memory",
+      "purpose": "Collaboration-specific pattern memory and readme index.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live collaboration pattern memory",
+      "writer_or_write_api": "consolidation and collaboration-protocol work",
+      "entry_identity": "pattern filename or README section key",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "directory README plus markdown conventions",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "duplicate pattern identity",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "same-pattern semantic collision",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "repair README index drift",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "route semantic collisions to consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "drop collaboration evidence without routing",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + architecture"
+    },
+    {
+      "id": "memory-operational-continuity",
+      "path": ".agent/memory/operational/repo-continuity.md",
+      "plane": "memory",
+      "purpose": "Repo-wide operational continuity, latest handoff context, and active thread pointers.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live repo continuity contract",
+      "writer_or_write_api": "session-handoff and consolidation edits",
+      "entry_identity": "dated session summary plus thread row key",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "Markdown frontmatter plus table/section conventions",
+      "generated_outputs": [],
+      "validator": "practice fitness plus future substrate doctor",
+      "severity": [
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "invalid frontmatter",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "fitness pressure requiring archive/homing",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "historical handoff summaries after archive",
+          "severity": "informational"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "archive old session-history sections with full content preservation",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review stale next-safe-step claims",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "compress continuity by deleting teaching substance",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "session-handoff + docs-adr"
+    },
+    {
+      "id": "memory-operational-threads",
+      "path": ".agent/memory/operational/threads/",
+      "plane": "memory",
+      "purpose": "Per-thread next-session records, identity rows, and lane state.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live per-thread continuity records",
+      "writer_or_write_api": "session-open identity registration and session-handoff updates",
+      "entry_identity": "thread slug filename plus PDR-027 identity row",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "threads README identity schema plus markdown frontmatter/table conventions",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check and consolidate-docs freshness audit",
+      "severity": [
+        {
+          "invariant": "duplicate incompatible identity rows",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "stale last_session or stale next-safe-step",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "update same identity last_session",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review stale thread records during handoff/consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "overwrite peer identity rows",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "session-handoff + architecture"
+    },
+    {
+      "id": "memory-operational-tracks",
+      "path": ".agent/memory/operational/tracks/",
+      "plane": "memory",
+      "purpose": "Single-writer tactical coordination cards for operational work.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live single-writer tactical coordination cards",
+      "writer_or_write_api": "human/agent edits by owning track",
+      "entry_identity": "track filename slug",
+      "merge_class": "exclusive-create-fragments",
+      "schema_or_parser": "directory/file markdown conventions; future README contract",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "duplicate track slug",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "same track edited by multiple writers",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add missing metadata when unambiguous",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "coordinate same-track concurrent edits",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "silently discard stale-looking track cards",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "session-handoff + architecture"
+    },
+    {
+      "id": "memory-operational-pending-graduations",
+      "path": ".agent/memory/operational/pending-graduations.md",
+      "plane": "memory",
+      "purpose": "Graduation queue for cross-session candidate lessons, doctrine, patterns, and owner decisions.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live graduation queue",
+      "writer_or_write_api": "consolidation and graduation sessions",
+      "entry_identity": "entry heading plus inline metadata tag line",
+      "merge_class": "mostly-append-register",
+      "schema_or_parser": "Markdown frontmatter, index, and per-entry tag schema in file body",
+      "generated_outputs": [],
+      "validator": "practice fitness plus future substrate doctor",
+      "severity": [
+        {
+          "invariant": "invalid frontmatter",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "entry duplicate or unclear graduation status",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "queue depth fitness signal under consolidation-pass-only access model",
+          "severity": "informational"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "archive completed entries after destination evidence exists",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review duplicate/conflicting entry semantics",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete entries to satisfy fitness",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + assumptions"
+    },
+    {
+      "id": "memory-operational-collaboration-contracts",
+      "path": ".agent/memory/operational/collaboration-state-*.md",
+      "plane": "memory",
+      "purpose": "Operational contracts and recipes for collaboration-state lifecycle, conventions, and write safety.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live operational contracts and recipes",
+      "writer_or_write_api": "agent-tooling, collaboration-protocol, and consolidation edits",
+      "entry_identity": "file path and section heading",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "Markdown frontmatter and section conventions",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "stale canonical state path in live instruction",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "semantic recipe drift",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "replace stale live path after classification",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review recipe conflicts with agent-collaboration directive",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "leave contradictory live instructions unnamed",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + architecture"
+    },
+    {
+      "id": "memory-operational-diagnostics",
+      "path": ".agent/memory/operational/diagnostics/",
+      "plane": "memory",
+      "purpose": "Operational diagnostic evidence bundles that support later decisions and consolidation.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "operational diagnostic evidence",
+      "writer_or_write_api": "diagnostic sessions and consolidation",
+      "entry_identity": "diagnostic filename or directory slug",
+      "merge_class": "exclusive-create-fragments",
+      "schema_or_parser": "directory conventions; future README contract",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "duplicate diagnostic identity",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "diagnostic classification unclear",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add missing metadata when evidence identity is clear",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "route ambiguous diagnostic ownership to consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "rewrite diagnostic evidence to match current conclusion",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + assumptions"
+    },
+    {
+      "id": "memory-operational-quarantine",
+      "path": ".agent/memory/operational/quarantine/",
+      "plane": "memory",
+      "purpose": "Quarantined operational memory awaiting explicit disposition.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "quarantined operational memory awaiting disposition",
+      "writer_or_write_api": "consolidation and owner-directed quarantine/disposition edits",
+      "entry_identity": "quarantine filename slug",
+      "merge_class": "exclusive-create-fragments",
+      "schema_or_parser": "directory conventions; future README contract",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "duplicate quarantine identity",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "quarantine disposition overdue or ambiguous",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add missing metadata when source is clear",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "route disposition to owner/consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete quarantined evidence before disposition",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + assumptions"
+    },
+    {
+      "id": "memory-executive-contracts",
+      "path": ".agent/memory/executive/",
+      "plane": "memory",
+      "purpose": "Stable catalogue and contract plane for reviewer routes, artefact inventories, and substrate contracts.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "live stable contract catalogues",
+      "writer_or_write_api": "executive-memory updates through governed plans and consolidation",
+      "entry_identity": "catalogue filename plus row key",
+      "merge_class": "index-narrative-tables",
+      "schema_or_parser": "executive README plus per-file frontmatter/manifest conventions",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "catalogue omits required live contract file",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "catalogue row drift against current surface",
+          "severity": "review-required"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "update README index for new executive contract",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "review catalogue drift during consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "hide executive-memory drift outside napkin feedback loop",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "docs-adr + architecture"
+    }
+  ]
+}

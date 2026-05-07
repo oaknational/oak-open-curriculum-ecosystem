@@ -210,9 +210,11 @@ function expectAllDocumentationResourcesRegistered(
   expect(DOCUMENTATION_RESOURCES.length).toBeGreaterThan(0);
   expect(registrationCalls).toHaveLength(DOCUMENTATION_RESOURCES.length);
 
-  const expectedUris = DOCUMENTATION_RESOURCES.map((resource) => resource.uri).sort();
-  const registeredUris = Array.from(registeredResources.keys()).sort();
-  const calledUris = registrationCalls.map((call) => call.uri).sort();
+  const expectedUris = DOCUMENTATION_RESOURCES.map((resource) => resource.uri).sort((a, b) =>
+    a.localeCompare(b),
+  );
+  const registeredUris = Array.from(registeredResources.keys()).sort((a, b) => a.localeCompare(b));
+  const calledUris = registrationCalls.map((call) => call.uri).sort((a, b) => a.localeCompare(b));
   expect(registeredUris).toStrictEqual(expectedUris);
   expect(calledUris).toStrictEqual(expectedUris);
 }

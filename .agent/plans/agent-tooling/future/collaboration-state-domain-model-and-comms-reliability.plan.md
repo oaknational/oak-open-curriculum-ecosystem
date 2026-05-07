@@ -202,8 +202,8 @@ Out of scope for this strategic brief:
 
 The leading candidate is an event-log-backed communication surface:
 
-- Write each communication entry as an immutable event file under a directory
-  such as `state/collaboration/comms/events/`.
+- Write each communication entry as an immutable event file under the canonical
+  `state/collaboration/comms-events/` directory.
 - Use exclusive create or temp-file-plus-rename so a writer either creates a
   complete event or creates nothing.
 - Materialise `shared-comms-log.md` as a generated chronological read model for

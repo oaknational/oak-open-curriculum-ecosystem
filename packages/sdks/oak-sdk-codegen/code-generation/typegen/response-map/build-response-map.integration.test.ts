@@ -268,7 +268,9 @@ describe('buildResponseMapData with dotted error components (integration)', () =
     const wildcardEntries = entries.filter((e) => e.operationId === '*');
 
     expect(wildcardEntries).toHaveLength(3);
-    const wildcardStatuses = wildcardEntries.map((e) => e.status).sort();
+    const wildcardStatuses = wildcardEntries
+      .map((e) => e.status)
+      .sort((a, b) => a.localeCompare(b));
     expect(wildcardStatuses).toEqual(['400', '401', '404']);
 
     for (const wc of wildcardEntries) {
@@ -296,7 +298,7 @@ describe('buildResponseMapData with dotted error components (integration)', () =
 
     for (const opId of operationIds) {
       const opEntries = entries.filter((e) => e.operationId === opId);
-      const statuses = opEntries.map((e) => e.status).sort();
+      const statuses = opEntries.map((e) => e.status).sort((a, b) => a.localeCompare(b));
       expect(statuses).toEqual(['200', '400', '401', '404']);
     }
   });

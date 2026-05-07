@@ -26,7 +26,7 @@ export async function findJsonAssets(sourceRoot: string): Promise<readonly strin
     }),
   );
 
-  return nestedPaths.flat().sort();
+  return nestedPaths.flat().sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -50,7 +50,7 @@ export async function copyJsonAssets(
     }),
   );
 
-  return copiedFiles.sort();
+  return copiedFiles.sort((a, b) => a.localeCompare(b));
 }
 
 const entrypointPath = process.argv[1];

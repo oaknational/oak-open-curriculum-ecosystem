@@ -197,7 +197,7 @@ function collectSubjects(priorKnowledge: readonly ExtractedPriorKnowledge[]): re
   for (const pk of priorKnowledge) {
     subjects.add(pk.subject);
   }
-  return [...subjects].sort();
+  return [...subjects].sort((a, b) => a.localeCompare(b));
 }
 
 /**
