@@ -630,6 +630,29 @@ function formatSummary(mode, counts) {
 }
 
 /**
+ * Format the non-reactive response discipline for any non-healthy fitness
+ * signal.
+ *
+ * Fitness is deliberately visible at the same moment an agent is tempted to
+ * make the signal disappear. This reminder keeps the validator aligned with
+ * the Practice doctrine: preserve substance first, then route structural
+ * pressure.
+ *
+ * @returns {string}
+ */
+export function formatFitnessResponseDiscipline() {
+  return [
+    '\x1b[36mFitness response discipline:\x1b[0m',
+    '  - Preserve substance first. Do not delete, trim, compress, or weaken memory',
+    '    or Practice Core content to make this report greener.',
+    '  - Treat fitness as a routing signal: home, graduate, split, refine real',
+    '    redundancy, review the limit, or open an explicit remediation lane.',
+    '  - If editing the flagged file, record the structural response; do not make',
+    '    reactive budget-shaped prose edits.',
+  ].join('\n');
+}
+
+/**
  * Run the fitness validator.
  *
  * @param {string[]} args
@@ -654,6 +677,11 @@ async function main(args = process.argv.slice(2)) {
   const overallZones = results.map((result) => result.overallZone);
   const counts = summariseResults(results);
   console.log(formatSummary(mode, counts));
+
+  if (counts.soft + counts.hard + counts.critical > 0) {
+    console.log(formatFitnessResponseDiscipline());
+    console.log();
+  }
 
   for (const result of results) {
     if (result.overallZone === 'healthy') continue;
