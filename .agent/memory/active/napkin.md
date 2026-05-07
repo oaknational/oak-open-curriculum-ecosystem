@@ -24,6 +24,25 @@ and
 
 [archive-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
 
+## 2026-05-07 — Doctor Phase 0 validation lane / codex / GPT-5 / `019e02`
+
+### Surprise: focused fixture lanes must prove they selected tests
+
+**What I expected**: passing `practice-substrate` as a trailing argument to the
+`@oaknational/agent-tools` package test script would select the future substrate
+fixture suite.
+
+**What happened**: `test-reviewer` caught that the package script expands to the
+workspace's full `vitest run` lane, and the inherited config can pass when a
+name/path filter selects no tests. The command could therefore produce green
+evidence without exercising the intended fixture class.
+
+**Lesson**: a fixture validation lane is not trustworthy until its no-match
+case is proven to fail. For Phase 1 doctor work, use an exact Vitest path (or an
+equivalent dedicated script/config) with `--passWithNoTests=false`, and keep
+zero-selected-tests as a blocking failure before any fixture/product slice
+lands.
+
 ## 2026-05-07 — Memory/state closure handoff / codex / GPT-5 / `019e02`
 
 ### Surprise: generated read models need same-session refresh after event writes

@@ -2,7 +2,7 @@
 
 ## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (Penumbral Veiling Owl / codex /
+**Last refreshed**: 2026-05-07 (Stratospheric Whirling Airstream / codex /
 GPT-5 / `019e02`).
 
 **Owning plans**:
@@ -45,6 +45,18 @@ the retired YAML seed is preserved as dated evidence, legacy `comms/events/`
 is accepted as a `.gitkeep` terminal root plus ledger validation, topology
 policy is routed to the doctor, and the test-reviewer hold is moved to the
 post-Phase-0/pre-Phase-1 checkpoint.
+
+Doctor Phase 0 is now complete in the working tree. The read-only ledger at
+[`memory-state-contract-doctor.phase-0-ledger.md`](../../../plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md)
+classifies every Known Contract Gaps row as a live defect, known-good terminal
+state, or deferred semantic review; records the existing check inventory; and
+captures current evidence: 22 manifest surfaces, 114 migration-ledger entries,
+legacy `comms/events/` as `.gitkeep` only, canonical `comms-events/` parsing
+through the explicit collaboration-state check, and no duplicate manifest or
+ledger identities. `test-reviewer` ran before Phase 1 and found one blocker:
+the initial validation lane could pass without selecting the intended tests.
+The parent plan and ledger now require the exact Vitest path with
+`--passWithNoTests=false`, and an impossible no-match path was verified to fail.
 
 **Key doctrine points now recorded**:
 
@@ -116,6 +128,14 @@ or Practice Core content to make the report greener.
   explicit collaboration-state check against canonical `comms-events` passed.
 - Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
   `bf3211ac`.
+- Doctor Phase 0 gates passed after ledger drafting: explicit
+  `collaboration-state -- check`, `git diff --check`, `pnpm test:root-scripts`,
+  `pnpm portability:check`, `pnpm practice:vocabulary`,
+  `pnpm practice:fitness:informational` (expected routed pressure, exit 0),
+  and `pnpm markdownlint-check:root`. Direct read-only manifest/ledger probes
+  confirmed 22 surfaces and 114 migration rows with no duplicate IDs, duplicate
+  original/target paths, or byte/hash mismatches. The dedicated Phase 1
+  no-match validation probe failed as required.
 
 **Specialist review**: completed 2026-05-07; evidence at
 [memory/state contracts specialist review][memory-state-review-evidence].
@@ -128,14 +148,21 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: start [Memory/state contract doctor][memory-state-doctor-plan]
-Phase 0 only. Seed the defect ledger from every row in the Known Contract Gaps
-table, classifying each as live defect, known-good terminal state, or deferred
-semantic review. Inventory existing checks first (collaboration-state,
-markdownlint, practice fitness, portability, JSON/schema validation, and git
-topology checks) before adding new logic. Do not add or invoke
-`practice:substrate:*` root aliases until the doctor implementation phase;
-future root aliases must invoke built `agent-tools` output only.
+**Next safe step**: land the Phase 0 ledger/plan and handoff commits, then
+start [Memory/state contract doctor][memory-state-doctor-plan] Phase 1 fixture
+work only. Begin from the ledger's defect classes and preserve the validation
+lane exactly:
+
+```bash
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
+```
+
+Fixture tests must be pure in-process tests over injected snapshots, literal
+objects, and strings. They must not read repo files, fixture files, git state,
+`process.env`, or `process.cwd()`, and they must not spawn processes. Every
+fixture class lands with the implementation that greens it; no RED-only,
+skipped, conditional, or product-code-only commit shape is permitted.
 
 **Non-goals for the next review session**:
 
@@ -1819,6 +1846,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
 | `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |
 | `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
 | `Seaworthy Swimming Sextant` | `codex` | `GPT-5` | `019e01` | `portable-memory-state-substrate-contract-inventory-and-template-executor; continuing-from-committed-PDR-050-bundle; preserving-practice-core-vs-repo-local-boundary; no-fitness-driven-content-trimming; doctor-implementation-deferred-until-built-agent-tools-command-surface-contract` | 2026-05-07 | 2026-05-07 |

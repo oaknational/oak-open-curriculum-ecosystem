@@ -1206,6 +1206,15 @@ PDR-049 portability cleanup, retired YAML seed evidence move, Doctor Phase
 collaboration-state closeout. Canonical identity row is in
 `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Stratospheric Whirling
+Airstream / `codex` / `GPT-5` / `019e02` for Memory/state contract doctor
+Phase 0 defect-ledger execution, existing-check inventory, Known Contract Gaps
+classification, strict manifest/migration-ledger evidence capture,
+test-reviewer fixture-strategy checkpoint, validation-lane correction, and
+owner-requested `/jc-session-handoff` plus commit preparation. Canonical
+identity row is in `threads/agentic-engineering-enhancements.next-session.md`.
+
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
 
@@ -1227,6 +1236,24 @@ The previous observability branch lane remains preserved in
 `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`.
 
 ## Current Session Focus
+
+**2026-05-07 (Stratospheric Whirling Airstream, codex, GPT-5, `019e02`,
+agentic-engineering-enhancements thread, Doctor Phase 0 defect ledger +
+handoff)**:
+Completed Memory/state contract doctor Phase 0 only. The new sidecar ledger at
+`.agent/plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md`
+records the PDR-027 preflight, the existing-check inventory, strict manifest
+and migration-ledger evidence, and every Known Contract Gaps row classified as
+live defect, known-good terminal state, or deferred semantic review. Evidence:
+manifest has 22 surfaces with no missing required fields or duplicate IDs;
+migration ledger has 114 entries with no duplicate original/target paths and no
+byte/hash mismatches; legacy `comms/events/` is `.gitkeep` only; canonical
+`comms-events/` parses through explicit collaboration-state check. Phase 1 did
+not begin. `test-reviewer` ran at the mandatory checkpoint and forced the
+validation lane to use an exact Vitest path with `--passWithNoTests=false`
+after proving the prior package-script form could pass without selecting tests.
+**Next safe step**: land the Phase 0 and handoff commits, then start Phase 1
+fixture work only under the corrected validation lane.
 
 **2026-05-07 (Penumbral Veiling Owl, codex, GPT-5, `019e02`,
 agentic-engineering-enhancements thread, memory/state Phase 4/5
@@ -1600,6 +1627,19 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**After 2026-05-07 Stratospheric Whirling Airstream handoff (Doctor Phase 0
+defect ledger complete)**: commit the Phase 0 plan/ledger and handoff state in
+sensible chunks, then resume from
+[`agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
+and
+[`memory-state-contract-doctor.plan.md`](../../plans/agent-tooling/current/memory-state-contract-doctor.plan.md)
+at Phase 1 fixture work only. Preserve the validation lane:
+`pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`.
+Fixture tests must use injected snapshots/strings/objects only; no live repo
+IO, fixture-file reads, git state, `process.env`, `process.cwd()`, spawned
+processes, RED-only commits, skipped tests, conditional tests, or
+product-code-only fixture landings.
 
 **After 2026-05-06 Silvered Masking Owl handoff (main-critical Sonar
 remediation)**: continue on
@@ -2022,6 +2062,19 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Stratospheric Whirling Airstream, codex, GPT-5,
+`019e02`, owner-requested `/jc-session-handoff` after Doctor Phase 0 defect
+ledger): `due — Phase 0 closed and a validation-lane correction was captured;
+not run in this closeout because the owner asked for handoff plus commit
+chunks`.** One thread moved: `agentic-engineering-enhancements`. Handoff
+captured the no-match fixture-lane lesson in the napkin and routed Phase 1 to
+the exact Vitest path with `--passWithNoTests=false`. Entry-point sweep was
+clean: `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` remain in canonical pointer
+shape with the intentional AGENTS rules-index extension. Tracks contain only
+README and `.gitkeep`; `.remember/` is absent; no escalation files exist; no
+open decision-thread handoff was needed. Fitness remains routed pressure
+(`repo-continuity.md`, `napkin.md`, `practice.md`), not Phase 0 repair scope.
 
 **Status (2026-05-07 Penumbral Veiling Owl, codex, GPT-5, `019e02`,
 owner-requested `/jc-session-handoff` after memory/state Phase 4/5

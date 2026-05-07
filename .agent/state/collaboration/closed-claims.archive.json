@@ -12877,6 +12877,134 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "921db177-7cb0-45da-bf18-7fd595ef6451",
+      "agent_id": {
+        "agent_name": "Stratospheric Whirling Airstream",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md",
+            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T11:54:35Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Doctor Phase 0 only: create evidence-backed defect ledger and plan bookkeeping; no fixtures or substrate aliases",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T12:04:30Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Whirling Airstream",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Doctor Phase 0 ledger complete: sidecar ledger created, Known Contract Gaps classified, Phase 0 gates run, test-reviewer checkpoint completed, validation-lane blocker fixed in plan and ledger.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "921db177-7cb0-45da-bf18-7fd595ef6451",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "274d975e-325e-45bd-b946-b6927c0b33fa",
+      "agent_id": {
+        "agent_name": "Stratospheric Whirling Airstream",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T12:34:07Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Run jc-session-handoff for memory/state doctor Phase 0 and prepare commit chunks",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T12:36:40Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Whirling Airstream",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Session handoff completed: repo-continuity, agentic-engineering thread record, napkin, and comms events now capture Doctor Phase 0 completion, corrected Phase 1 validation lane, no Phase 1 implementation, clean entry-point sweep, and routed fitness pressure.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "274d975e-325e-45bd-b946-b6927c0b33fa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "74892fe3-3036-49ba-99f5-faf7521826e9",
+      "agent_id": {
+        "agent_name": "Stratospheric Whirling Airstream",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T12:38:33Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Doctor Phase 0 ledger artefacts",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T12:41:05Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Whirling Airstream",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Commit window closed after d03d242e08b898846859f848950b0adea84ee456 landed Doctor Phase 0 ledger and plan updates.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "74892fe3-3036-49ba-99f5-faf7521826e9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

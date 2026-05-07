@@ -2922,3 +2922,27 @@ Penumbral Veiling Owl closed claim codex-019e02-memory-state-closure after imple
 ## 2026-05-07T11:24:12Z — `Penumbral Veiling Owl` / `codex` / `GPT-5` / `019e02` — Memory/state closure handoff before commit
 
 Penumbral Veiling Owl ran jc-session-handoff after Phase 4/5 closure. Repo-continuity and the agentic-engineering thread now point to Doctor Phase 0 as the next safe step; napkin captures the generated-read-model refresh and Practice Core example-portability lessons; no new ADR/PDR candidate requires immediate register promotion beyond the already-routed doctor work. Entry points are clean, tracks contain only README/.gitkeep, no escalation files exist, and no open decision-thread handoff was needed. Next action after commits: start Doctor Phase 0 only.
+
+---
+
+## 2026-05-07T11:54:35Z — `Stratospheric Whirling Airstream` / `codex` / `GPT-5` / `019e02` — Doctor Phase 0 ledger start
+
+Starting owner-approved Doctor Phase 0 only. Scope: create .agent/plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md, update only necessary plan bookkeeping, inventory existing checks, seed every Known Contract Gaps row, and run Phase 0 gates. Out of scope: Phase 1 fixtures, product implementation, root practice:substrate aliases, destructive archive cleanup, historical rewrites, or fitness-driven trimming.
+
+---
+
+## 2026-05-07T12:04:30Z — `Stratospheric Whirling Airstream` / `codex` / `GPT-5` / `019e02` — Doctor Phase 0 ledger complete
+
+Completed Doctor Phase 0 only. Added the Phase 0 sidecar ledger, classified all Known Contract Gaps, reran the Phase 0 gates, and invoked test-reviewer before Phase 1. Test-reviewer found one validation-lane blocker; the parent plan and ledger now replace the unsafe package-script lane with an exact Vitest command using --passWithNoTests=false, and a no-match probe exits 1. No fixtures, substrate implementation, root practice:substrate aliases, archive cleanup, historical rewrite, or fitness-driven trimming were performed.
+
+---
+
+## 2026-05-07T12:35:20Z — `Stratospheric Whirling Airstream` / `codex` / `GPT-5` / `019e02` — Doctor Phase 0 handoff and commit prep opened
+
+Stratospheric Whirling Airstream opened claim 274d975e-325e-45bd-b946-b6927c0b33fa for the owner-requested jc-session-handoff after Memory/state contract doctor Phase 0. Scope is continuity handoff and commit preparation only: repo-continuity, the agentic-engineering thread record, napkin, generated shared comms log, and collaboration claim closure state. Phase 1 fixtures and implementation remain out of scope.
+
+---
+
+## 2026-05-07T12:36:05Z — `Stratospheric Whirling Airstream` / `codex` / `GPT-5` / `019e02` — Doctor Phase 0 handoff complete
+
+Stratospheric Whirling Airstream completed jc-session-handoff for Memory/state contract doctor Phase 0. Continuity surfaces now record the Phase 0 ledger, corrected Phase 1 validation lane, no new Phase 1 work, clean entry-point sweep, absent .remember buffer, no escalation or decision-thread handoff, and routed fitness pressure. Next action is commit in sensible chunks, then Phase 1 fixture work only under the exact Vitest path with --passWithNoTests=false.
