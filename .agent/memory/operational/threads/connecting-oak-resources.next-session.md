@@ -1,6 +1,28 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-07 (Breezy Navigating Sail / cursor /
+**Last refreshed**: 2026-05-07 (Lush Rustling Bark / codex /
+GPT-5 / `019e03` — after the owner-directed PR #102 comment harvest, two new
+live Copilot threads remained. The follow-up fixed branch-touched-files
+CLI precedence/help and explicit Git executable portability with focused
+tests. The same closeout resolved root lint failures from deprecated Oak
+ESLint config helper usage by moving to ESLint core `defineConfig()`, while
+keeping the local Oak plugin segment at the typed config boundary. Root
+`pnpm lint` passes. **Next safe step after push**: re-check PR #102
+comments/review threads, GitHub checks, and Sonar PR state on the new head;
+then proceed only if no live feedback remains.)
+
+**Prior refresh**: 2026-05-07 (Twigged Shedding Fern / codex /
+GPT-5 / `019e03` — PR #102 snagging landed and pushed as `e8050400`.
+The pass fixed the three graph-layer taxonomy review comments, the
+primitive-wording comment, the branch-touched-files parser index issue,
+and the Git subprocess-boundary Sonar hotspots. GitHub checks and
+SonarCloud are green; Sonar MCP reports quality gate `OK`, zero open
+issues, and zero `TO_REVIEW` hotspots. The four known Copilot review
+threads are obsolete/outdated on the new head. **Owner direction for the
+next session**: fetch remaining PR #102 comments and review threads,
+then analyse whether any live reviewer feedback remains before editing.)
+
+**Prior refresh**: 2026-05-07 (Breezy Navigating Sail / cursor /
 claude-opus-4.7 / `9edbd1` — closed the MVP-arc PLANNING arc in a
 single session per owner direction. Pre-flight + Phase 0 (spine drift
 remediation, commit `d740baa0`) + Phase 1 (3-reviewer parallel batch
@@ -107,6 +129,8 @@ promotion.)
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `mvp-arc-spine-plan-author-and-coordination-amendments` | 2026-05-07 | 2026-05-07 |
 | `Breezy Navigating Sail` | `cursor` | `claude-opus-4.7` | `9edbd1` | `mvp-arc-planning-closure-single-session` | 2026-05-07 | 2026-05-07 |
 | `Tidal Surfing Lighthouse` | `codex` | `GPT-5` | `019e03` | `decision-completeness-closeout-fixer` | 2026-05-07 | 2026-05-07 |
+| `Twigged Shedding Fern` | `codex` | `GPT-5` | `019e03` | `pr-102-snagging-and-pr-comment-refresh-handoff` | 2026-05-07 | 2026-05-07 |
+| `Lush Rustling Bark` | `codex` | `GPT-5` | `019e03` | `pr-102-live-thread-follow-up-and-lint-hardening-closeout` | 2026-05-07 | 2026-05-07 |
 
 ## Plan Locations
 
@@ -183,7 +207,22 @@ MVP plan — spine + three slice plans + slice 1 + substrate
 (`graph-stack.plan.md` + ADR-173) — at decision-complete state, with
 sealed frontmatter and no open questions.
 
-**Canonical first task — decision-completeness closeout (no
+**Post-push first task — PR #102 verification on the new head (no
+editing before evidence refresh)**:
+
+1. Re-check PR #102 feedback surfaces on the pushed head:
+   - top-level PR comments;
+   - review summaries;
+   - review threads with `isResolved`, `isOutdated`, path, line, and
+     comment `databaseId`;
+   - latest GitHub checks and Sonar PR state.
+2. Classify any remaining comment/thread as resolved, obsolete/outdated,
+   already fixed by the latest closeout commits, live/actionable, or
+   owner-decision-needed.
+3. Only after that analysis, decide whether another narrow snagging pass is
+   needed. Do not widen into graph implementation.
+
+**Canonical next planning task — decision-completeness closeout (no
 implementation)**:
 
 1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +

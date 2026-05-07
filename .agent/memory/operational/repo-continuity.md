@@ -9,6 +9,33 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-07 — Lush Rustling Bark / `codex` /
+`GPT-5` / `019e03`, PR #102 follow-up + lint hardening)**:
+completed the owner-directed PR #102 comment harvest before editing, found two
+new live Copilot threads after `e8050400`, and fixed them narrowly in
+`branch-touched-files`: positional branch/ref is now exclusive with
+`--head`/`--branch`, `--branch` and `--git` are documented, repo-root
+resolution uses the CLI cwd, and explicit Git overrides must be absolute paths
+to an executable named `git`. The same closeout replaced deprecated
+`typescript-eslint.config()` calls in the Oak ESLint configs with ESLint core
+`defineConfig()`, preserved the local `@oaknational` plugin at the typed config
+boundary, accepted the owner's additional candidate-rule activation, cleared
+the resulting single-call lint findings, and re-ran `pnpm lint` successfully.
+
+**Session close (2026-05-07 — Twigged Shedding Fern / `codex` /
+`GPT-5` / `019e03`, PR #102 snagging)**:
+implemented and pushed the narrow PR #102 snagging pass on
+`planning/graph-tooling` as `e8050400`. The pass fixed the three
+graph-layer taxonomy comments, the primitive-wording comment, the
+branch-touched-files parser index issue, and the Git subprocess-boundary
+hotspots. Local focused gates, `pnpm check`, pre-commit hooks, pre-push
+hooks, GitHub checks, and SonarCloud are green. Sonar PR quality gate is
+`OK` with zero open issues and zero `TO_REVIEW` hotspots. The four known
+Copilot review threads are obsolete/outdated on the new head, but the
+owner-directed next session must still fetch remaining PR #102 comments and
+review threads before editing, then analyse whether any live reviewer
+comments remain.
+
 **Session close (2026-05-07 — Silvered Masking Moth / `codex` /
 `GPT-5` / `019e03`, Doctor safe-merge gate implemented)**:
 completed the memory/state substrate doctor safe-merge gate. Starting from
@@ -42,16 +69,14 @@ promotion, and ADR-173 ratification remain out of scope for this branch.
 
 ## Current State
 
-+ Branch `fix/sonar-fixes-20260506` is pushed through `e1827ed8`.
-+ The memory/state substrate doctor safe-merge gate is closed: report and
-  strict modes return `ok: true` with `blocking: 0`, the root alias invokes
-  built `agent-tools` output, the doctor plan is archived, and the legacy
-  collaboration comms tree is deleted.
++ Branch `planning/graph-tooling` is in closeout for the PR #102 follow-up
+  after `e8050400`.
++ PR #102 comment harvest after `e8050400` found two new live Copilot
+  branch-touched-files threads. Both have local fixes with focused tests.
++ Root `pnpm lint` passes after replacing deprecated ESLint config helper usage
+  and clearing the resulting single-call lint findings.
 + No active collaboration claims remain. The advisory commit queue only contains
   stale/abandoned historical entries.
-+ Explicitly future arcs: repair mode, `--apply` / `--dry-run`, and
-  consolidation integration. Start those with fresh plans rather than widening
-  the safe-merge gate closure.
 + Residual Practice fitness pressure is routed, not hidden: `practice.md`
   remains HARD on character count and needs an owner-approved Core edit or
   threshold decision before a strict-hard fitness gate can be clean.
@@ -65,8 +90,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Silvered / `codex` / `019e03` / 2026-05-07 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Breezy / `cursor` / `9edbd1` / 2026-05-07 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Lush / `codex` / `019e03` / 2026-05-07 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Lush / `codex` / `019e03` / 2026-05-07 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -92,11 +117,9 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**2026-05-07 (planning/graph-tooling main merge + branch-size tooling)**:
-merge `origin/main` using the memory/state substrate contracts, preserve the
-branch's graph-planning continuity fragments, then add an agent-tools command
-and rule for branch touched-file count guidance. The merge itself should remain
-a real merge commit before the new tooling/rule commit.
+**2026-05-07 (PR #102 post-snagging follow-up + lint hardening)**:
+close out and push the remaining PR #102 live-review-thread fixes plus the
+root lint remediation requested by the owner.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -132,14 +155,16 @@ evidence.
 
 ## Next Safe Step
 
-**After the main merge on `planning/graph-tooling`**: keep the immediate work
-on the requested branch-size tooling/rule. The graph lane's next planning step
-remains decision-completeness closeout, not slice execution: absorb the two
-topology BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb the four Phase 4
-findings into the slice plans, owner-resolve the EEF t19 contradiction, and
-verify the full MVP plan reaches decision-complete state. Future doctor arcs
-(repair mode, `--apply` / `--dry-run`, consolidation integration) stay separate
-owner-choice lanes.
+**After this closeout is pushed**: re-check PR #102 comments/review threads,
+GitHub checks, and Sonar PR state on the new head. If clean, continue to the
+graph lane's planning decision-completeness closeout; if not clean, classify
+remaining feedback before editing.
+
+After that comment analysis, the graph lane's planning step remains
+decision-completeness closeout, not slice execution: absorb the two topology
+BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb the four Phase 4 findings
+into the slice plans, owner-resolve the EEF t19 contradiction, and verify the
+full MVP plan reaches decision-complete state.
 
 ## Open Owner-Decision Items
 
@@ -177,3 +202,14 @@ No new ADR/PDR was promoted: the memory/state doctrine already lives in
 PDR-049, PDR-050, the local substrate contract, and the archived doctor plan.
 Residual hard pressure on `practice.md` is routed to owner-approved Core
 remediation rather than edited reactively.
+
+**Status (2026-05-07 Twigged Shedding Fern, codex, GPT-5, `019e03`,
+PR #102 snagging handoff): `not due — tactical PR snagging closure is already
+recorded in the plan and checks; no new doctrine, ADR/PDR candidate, or
+cross-session convergence work surfaced. Next session is evidence refresh and
+PR comment analysis, not consolidation`.**
+
+**Status (2026-05-07 Lush Rustling Bark, codex, GPT-5, `019e03`,
+PR #102 follow-up + lint hardening handoff): `not due — the session produced
+local code/config fixes, plan/continuity refresh, and a napkin tooling note;
+no new ADR/PDR candidate or cross-session convergence trigger fired`.**

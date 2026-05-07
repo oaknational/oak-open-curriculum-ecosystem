@@ -1933,6 +1933,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Lush Rustling Bark` | `codex` | `GPT-5` | `019e03` | `oak-eslint-defineconfig-migration; no-deprecated-self-lint-response; single-call-lint-cleanup; session-handoff-closeout` | 2026-05-07 | 2026-05-07 |
+| `Twigged Shedding Fern` | `codex` | `GPT-5` | `019e03` | `pr-102-branch-touched-files-sonar-snagging; parser-index-refactor; audited-git-subprocess-boundary; focused-agent-tools-tests; pr-comment-refresh-handoff` | 2026-05-07 | 2026-05-07 |
 | `Silvered Masking Moth` | `codex` | `GPT-5` | `019e03` | `memory-state-doctor-safe-merge-gate; schema-blocker-fixes; strict-mode-and-built-output-root-alias; deleted-legacy-comms-tree-cleanup; code-reviewer-follow-up; final-validation-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; final-session-boundary-definition; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |

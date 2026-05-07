@@ -360,6 +360,19 @@ state before editing. The refreshed evidence showed four unresolved review
 threads, one open Sonar issue, and two Sonar security hotspots in this plan's
 scope.
 
+Post-completion follow-up by Lush Rustling Bark on 2026-05-07:
+the owner-directed comment harvest after `e8050400` found two new live Copilot
+threads outside the original four-thread/Sonar snag set. The follow-up stayed
+inside the same narrow branch-touched-files surface:
+
+- positional branch/ref input now conflicts explicitly with `--head` or
+  `--branch` instead of silently taking precedence;
+- `--branch` and `--git` are documented in usage text;
+- repo-root resolution uses the CLI cwd unless an explicit repo root is
+  injected by tests;
+- `--git` accepts only absolute paths to an executable named `git`, and maps
+  that executable's directory to the trusted `PATH`.
+
 Local validation passed:
 
 ```bash

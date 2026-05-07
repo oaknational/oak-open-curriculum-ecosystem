@@ -87,3 +87,45 @@ batch land cleanly before the larger pending-graduations walk
 begins. Step 2 may not fully drain in this session — that is
 honest output per the opener; the residual queue substance
 becomes the next audit's input rather than this session's brake.
+
+## 2026-05-07 — PR 102 snagging close / codex / GPT-5 / `019e03`
+
+### Surprise: green checks do not exhaust the PR feedback surface
+
+**Expectation**: after PR #102 snagging landed, GitHub checks and Sonar
+would be the closeout verification surface.
+
+**What happened**: the checks all passed and Sonar became clean, but the
+owner explicitly named a separate next-session duty: fetch remaining PR
+comments and analyse them. The four known Copilot review threads are
+obsolete/outdated, yet top-level comments, review summaries, or newly
+created comments can still carry live feedback outside that check surface.
+
+**Insight**: PR closeout has two distinct evidence loops: gate state and
+reviewer-comment state. A green PR can still need a comment-harvest pass
+before the next edit. This reinforces the existing PR lifecycle skill
+promotion watchlist rather than creating a new ADR/PDR candidate.
+
+**Behaviour change**: the next `planning/graph-tooling` session starts by
+fetching PR #102 top-level comments, review summaries, review threads with
+resolved/outdated state, and Sonar/check state, then classifies comments
+before editing.
+
+## 2026-05-07 — PR 102 follow-up and lint hardening close / codex / GPT-5 / `019e03`
+
+### Practice/tooling feedback
+
++ **Surface**: `@oaknational/eslint-plugin-standards` self-lint
++ **Signal**: insight
++ **Observation**: adding `@typescript-eslint/no-deprecated` to the package
+  self-lint immediately caught the deprecated `typescript-eslint.config()`
+  helper in the shared config exports. Replacing it with ESLint core
+  `defineConfig()` was straightforward for standard plugins, but the local
+  `@oaknational` plugin had to stay in a separately typed
+  `TSESLint.FlatConfig.Config` segment because core `defineConfig()` expects
+  the newer ESLint plugin type surface.
++ **Behaviour change / candidate follow-up**: keep new candidate rules in the
+  self-lint lane when practical: they are useful for surfacing maintenance
+  drift early. When core ESLint helper types do not accept a local plugin
+  typed through `@typescript-eslint/utils`, split the config at the type
+  boundary rather than weakening the plugin type.

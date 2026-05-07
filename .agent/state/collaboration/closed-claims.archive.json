@@ -13984,6 +13984,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "922bfe65-f89d-4697-91fc-9908c396cb69",
+      "agent_id": {
+        "agent_name": "Lush Rustling Bark",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/branch-touched-files/cli.ts",
+            "agent-tools/src/branch-touched-files/git.ts",
+            "agent-tools/tests/branch-touched-files.unit.test.ts",
+            "agent-tools/tests/branch-touched-files-git.integration.test.ts",
+            "agent-tools/src/bin/branch-touched-files.ts",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T19:21:15Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Address live PR #102 Copilot threads after comment harvest",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T19:38:59Z",
+        "closed_by": {
+          "agent_name": "Lush Rustling Bark",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Addressed live PR #102 Copilot threads for branch-touched-files CLI precedence/help and git executable portability; accepted eslint lint-fix cleanup; pnpm check passed after transient MCP HTTP test rerun.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "922bfe65-f89d-4697-91fc-9908c396cb69",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ae9c25fd-591b-409d-a76a-50133be7d0f9",
+      "agent_id": {
+        "agent_name": "Lush Rustling Bark",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T20:11:28Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 102 follow-up, lint remediation, and handoff closeout in three chunks.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T20:14:12Z",
+        "closed_by": {
+          "agent_name": "Lush Rustling Bark",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed PR 102 follow-up and ESLint lint remediation chunks as 7d09edb2 and 8ad0f1e8; final continuity/handoff chunk remains to land in this same closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ae9c25fd-591b-409d-a76a-50133be7d0f9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
