@@ -9,7 +9,7 @@ overview: >
 todos:
   - id: phase-0-current-defect-ledger
     content: "Phase 0: Validate the strict manifest/schema and migration ledger, inventory existing checks, build the current defect ledger from live state/memory surfaces, and lock the command contract."
-    status: pending
+    status: completed
   - id: phase-1-red-fixtures
     content: "Phase 1 (RED/GREEN fixture slices): Author each fixture class with the implementation that greens it; no RED-only commits."
     status: pending
@@ -34,7 +34,7 @@ isProject: false
 # Memory/State Contract Doctor
 
 **Last Updated**: 2026-05-07
-**Status**: QUEUED
+**Status**: QUEUED — Phase 0 complete; Phase 1 blocked until fixture work starts
 **Scope**: Repo-local enforcement for
 [PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
@@ -191,10 +191,10 @@ GREEN implementation is ready.
 
 Pure fixture tests live in the `agent-tools` test lane and use TypeScript
 literal objects or strings. In-process tests must not read repo files, fixture
-files, git state, or `process.cwd()`, and must not spawn processes. Real
-filesystem and git access belongs in the runtime validator script or in a
-correctly classified out-of-process validation surface; composition tests use
-injected snapshots or fakes.
+files, git state, `process.env`, or `process.cwd()`, and must not spawn
+processes. Real filesystem and git access belongs in the runtime validator
+script or in a correctly classified out-of-process validation surface;
+composition tests use injected snapshots or fakes.
 
 **Required fixture classes**:
 
@@ -218,8 +218,16 @@ injected snapshots or fakes.
 **Validation**:
 
 ```bash
-pnpm --filter @oaknational/agent-tools test -- practice-substrate
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
 ```
+
+Do not validate Phase 1 through
+`pnpm --filter @oaknational/agent-tools test -- practice-substrate`: that
+package script runs the full Vitest lane and can pass without selecting the
+substrate fixture suite because the inherited config permits no-match test
+runs. The dedicated command above selects the substrate fixture directory and
+fails if the directory has no matching tests.
 
 Expected local RED result: tests fail for missing implementation only.
 Expected committed result: the paired implementation makes the same tests
