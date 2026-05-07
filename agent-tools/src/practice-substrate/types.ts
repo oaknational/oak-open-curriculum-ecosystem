@@ -38,6 +38,7 @@ interface LegacyEventRootEntry {
 export interface LegacyEventRootSnapshot {
   readonly surface: string;
   readonly legacyRoot: string;
+  readonly rootExists?: boolean;
   readonly entries: readonly LegacyEventRootEntry[];
 }
 

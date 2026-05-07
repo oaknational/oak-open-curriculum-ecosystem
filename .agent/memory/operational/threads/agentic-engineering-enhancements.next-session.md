@@ -2,7 +2,7 @@
 
 ## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (Cirrus Swooping Cloud / codex / GPT-5 /
+**Last refreshed**: 2026-05-07 (Opalescent Waning Satellite / codex / GPT-5 /
 `019e02`).
 
 **Owning plans**:
@@ -42,18 +42,19 @@ and migrated the 114 legacy `comms/events` fragments into canonical
 in the working tree: PDR-049 no longer names concrete host-state paths in
 Practice Core, host-local path guidance lives in the bridge/local contract,
 the retired YAML seed is preserved as dated evidence, legacy `comms/events/`
-is accepted as a `.gitkeep` terminal root plus ledger validation, topology
-policy is routed to the doctor, and the test-reviewer hold is moved to the
-post-Phase-0/pre-Phase-1 checkpoint.
+references remain historical/provenance evidence only, the old root must be
+absent on disk, topology policy is routed to the doctor, and the test-reviewer
+hold is moved to the post-Phase-0/pre-Phase-1 checkpoint.
 
 Doctor Phase 0 is now complete in the working tree. The read-only ledger at
 [`memory-state-contract-doctor.phase-0-ledger.md`](../../../plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md)
 classifies every Known Contract Gaps row as a live defect, known-good terminal
 state, or deferred semantic review; records the existing check inventory; and
 captures current evidence: 22 manifest surfaces, 114 migration-ledger entries,
-legacy `comms/events/` as `.gitkeep` only, canonical `comms-events/` parsing
-through the explicit collaboration-state check, and no duplicate manifest or
-ledger identities. `test-reviewer` ran before Phase 1 and found one blocker:
+legacy `comms/events/` absent on disk with historical provenance preserved in
+the ledger/archive, canonical `comms-events/` parsing through the explicit
+collaboration-state check, and no duplicate manifest or ledger identities.
+`test-reviewer` ran before Phase 1 and found one blocker:
 the initial validation lane could pass without selecting the intended tests.
 The parent plan and ledger now require the exact Vitest path with
 `--passWithNoTests=false`, and an impossible no-match path was verified to fail.
@@ -69,9 +70,23 @@ drift, parse/schema incoherence, conflict markers, merge-topology snapshots,
 and repair-preservation classification. The mandatory `test-reviewer`
 checkpoint found one blocker: parameterised merge classes accepted
 `append-only-structured-by-` without a key. The implementation now rejects
-that form and the fixture suite includes the edge case. No Phase 2 report-mode
-CLI, repo reader, git reader, runtime wiring, or root `practice:substrate:*`
-alias was added.
+that form and the fixture suite includes the edge case.
+
+Doctor Phase 2 read-only report mode is now complete in the working tree and
+ready to commit. The new `agent-tools`-only CLI at
+`agent-tools/src/bin/practice-substrate.ts` builds before running and supports
+`pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+without adding root `practice:substrate:*` aliases. Runtime readers inject live
+repo snapshots into the pure evaluator/report layer for manifest/schema
+validation, manifest surface/ID/field/`merge_class` checks, the 114-row
+migration ledger, canonical collaboration JSON, generated shared-comms-log
+comparison, retired-path scanning, and optional git topology validation when
+`--target-ref` is supplied. The legacy
+`.agent/state/collaboration/comms/events/` placeholder was removed; archived
+mentions remain evidence, but the old path must not remain on disk. The
+mandatory `test-reviewer` and `code-reviewer` re-checks are clean. The report
+command currently exits `1` by design because it finds deterministic live
+substrate blockers rather than treating report mode as green.
 
 **Key doctrine points now recorded**:
 
@@ -159,6 +174,18 @@ or Practice Core content to make the report greener.
   `git diff --check`. Guard searches found no root `practice:substrate:*`
   aliases and no forbidden test imports or live `process.env`/`process.cwd()`
   access in the Phase 1 source/test tree.
+- Doctor Phase 2 report-mode gates passed after implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (32 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm --filter @oaknational/agent-tools build`,
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+  (structured exit `1` for live blockers), default
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check`
+  (same report-mode mapping), explicit collaboration-state check,
+  `pnpm markdownlint-check:root`, and `git diff --check`. Guard checks found no
+  root `practice:substrate:*` aliases, and `test ! -e
+  .agent/state/collaboration/comms/events` passed.
 
 **Specialist review**: completed 2026-05-07; evidence at
 [memory/state contracts specialist review][memory-state-review-evidence].
@@ -171,12 +198,12 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: after the Phase 1 implementation and handoff commits land,
-start [Memory/state contract doctor][memory-state-doctor-plan] Phase 2 report
-mode only. Reuse the pure Phase 1 evaluator layer from `agent-tools`, add the
-live repository readers and CLI wiring behind read-only report mode, and keep
-root aliases deferred until they invoke built `agent-tools` output only. The
-Phase 1 validation lane remains:
+**Next safe step**: after this Phase 2 implementation/handoff commit lands,
+start the next session with specialist agent reviews, as owner-directed. Then
+triage the structured report findings, especially live schema incoherence in
+closed-claim/conversation state and any remaining stale live retired-path
+references. Root `practice:substrate:*` aliases remain deferred until they
+invoke built `agent-tools` output only. The focused validation lane remains:
 
 ```bash
 pnpm --filter @oaknational/agent-tools exec vitest run \
@@ -186,8 +213,7 @@ pnpm --filter @oaknational/agent-tools exec vitest run \
 Future fixture tests must remain pure in-process tests over injected snapshots,
 literal objects, and strings. They must not read repo files, fixture files, git
 state, `process.env`, or `process.cwd()`, and they must not spawn processes.
-Phase 2 may add runtime readers and CLI wiring, but that live access belongs
-outside the fixture tests.
+Runtime readers and CLI wiring must keep live access outside the fixture tests.
 
 **Non-goals for the next review session**:
 
@@ -1871,6 +1897,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
 | `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |

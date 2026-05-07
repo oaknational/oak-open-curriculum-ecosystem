@@ -512,3 +512,31 @@ errors at every new marker.
 files, grep the file for existing list-marker style before
 authoring new lists. One-line check that prevents a
 markdownlint-fix loop.
+
+## 2026-05-07 — Opalescent Waning Satellite / codex / GPT-5 / `019e02`
+
+### Surprise 1 — retired roots must be absent, not tidy
+
+**Expectation**: the Doctor report mode would validate the legacy
+`comms/events/` root as a tidy terminal state if only a placeholder file
+remained, because earlier Phase 0/1 wording treated that as acceptable.
+
+**What happened**: the owner corrected the invariant directly: old paths
+may be mentioned in historical documents and migration ledgers, but they
+must not remain on disk. The Phase 2 checker, fixtures, plans, and
+handoff surfaces were updated to classify the path itself as blocking
+residue, while preserving archive/provenance mentions as evidence.
+
+**Insight**: for retired state roots, a placeholder directory is still
+live substrate. The evidence belongs in a ledger/archive; the old path
+does not. This is the same architectural line as "no compatibility layers,
+no fallbacks": long-term substrate excellence is achieved by retiring the old
+approach cleanly, not by keeping a hedge path around. A checker needs to
+distinguish on-disk residue from historical text provenance rather than
+treating both as the same stale-path class.
+
+**Behaviour change**: when validating retired paths, first ask whether
+the path should exist at all. Only after the disk invariant is clear
+should text-reference classification decide live stale reference vs
+archive/provenance evidence. Do not preserve a retired root as a fallback
+or compatibility shim.

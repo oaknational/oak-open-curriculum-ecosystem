@@ -15,7 +15,7 @@ todos:
     status: completed
   - id: phase-2-green-report-mode
     content: "Phase 2 (GREEN): Implement read-only report mode that recomputes all deterministic checks and exits non-zero on structural defects."
-    status: pending
+    status: completed
   - id: phase-3-strict-mode
     content: "Phase 3: Add strict mode for low-ambiguity blocking invariants and CI/merge workflow integration."
     status: pending
@@ -34,7 +34,7 @@ isProject: false
 # Memory/State Contract Doctor
 
 **Last Updated**: 2026-05-07
-**Status**: QUEUED — Phase 1 pure fixture slices complete; Phase 2 report mode next
+**Status**: QUEUED — Phase 2 read-only report mode implemented; specialist review and report findings next
 **Scope**: Repo-local enforcement for
 [PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
@@ -50,8 +50,8 @@ the tree, with at least one recent event written to the old path. The
 pre-doctor local-instance slice has now completed the terminal migration for
 that specific transition: 114 legacy fragments were collision-checked,
 JSON-parse-checked, ledgered with provenance, and moved into the canonical
-`comms-events/` root. The legacy root remains historical only and should contain
-only `.gitkeep`. A checker should validate that terminal state without
+`comms-events/` root. The legacy root remains historical evidence only and must
+not remain on disk. A checker should validate that terminal state without
 depending on a human remembering which path is canonical.
 
 This plan implements the repo-local doctor promised by the portable substrate
@@ -130,7 +130,7 @@ from the working tree without calling `practice:substrate:*` commands:
   carry every required PDR-050 contract field;
 - validate the migration ledger has 114 entries, no duplicate original/target
   paths, and target files match recorded byte counts and SHA-256 hashes;
-- verify `.agent/state/collaboration/comms/events/` contains only `.gitkeep`;
+- verify `.agent/state/collaboration/comms/events/` does not exist on disk;
 - run the explicit collaboration-state check against canonical
   `.agent/state/collaboration/comms-events/`;
 - record current `git diff --check`, `pnpm test:root-scripts`,
@@ -145,7 +145,7 @@ JSON/schema validation, and git topology checks.
 Include at least:
 
 - canonical `comms-events/` as the single live event-fragment root and legacy
-  `comms/events/` as a historical root that should contain only `.gitkeep`;
+  `comms/events/` as a historical path that must not remain on disk;
 - stale references to the legacy path in live docs and plans, classified
   separately from archived historical references that must be preserved;
 - the legacy event migration ledger at
@@ -279,6 +279,31 @@ Implement `practice:substrate:check` in read-only report mode.
 - Existing collaboration-state checks remain green or are subsumed with tests.
 - The implementation separates pure fixture-tested contract logic from the live
   validator that reads the repository and git state.
+
+**Completion evidence (2026-05-07)**: Phase 2 report mode landed in
+`agent-tools` only. The built workspace command is:
+
+```bash
+pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report
+```
+
+It builds `agent-tools`, runs `dist/src/bin/practice-substrate.js`, emits
+structured JSON, defaults `check` to report mode, exits `0` when there are no
+blocking findings, exits `1` for structured blocking findings, and reserves
+exit `2` for invalid CLI usage or unstructured runtime failure. No root
+`practice:substrate:*` aliases were added. The report-mode live reader reuses
+the pure Phase 1 evaluator layer; fixture tests remain literal-object/string
+only. `ajv` is a direct `agent-tools` dependency for schema validation.
+
+The corrected legacy-path invariant is now encoded: historical mentions of
+`.agent/state/collaboration/comms/events/` remain report-only evidence, but the
+old directory must not remain on disk. The prior placeholder was removed.
+There is no compatibility layer, fallback reader, or retained old root for the
+legacy approach.
+Report mode currently exits `1` with structured findings: schema incoherence
+in the closed-claims archive and two conversation files. `code-reviewer` and
+`test-reviewer` re-checks were clean
+after fixes.
 
 ## Phase 3: Strict Mode and Gate Integration
 

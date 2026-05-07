@@ -13216,6 +13216,91 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "D7F1A0B4-D172-4427-BB25-975F7A279E9A",
+      "agent_id": {
+        "agent_name": "Opalescent Waning Satellite",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "agent-tools/package.json",
+            "agent-tools/src/bin/practice-substrate.ts",
+            "agent-tools/src/practice-substrate",
+            "agent-tools/tests/practice-substrate"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T14:10:51Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement Doctor Phase 2 read-only practice-substrate report mode in agent-tools only.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T14:35:08Z",
+        "closed_by": {
+          "agent_name": "Opalescent Waning Satellite",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Implemented Doctor Phase 2 read-only practice-substrate report mode in agent-tools; reviewers clean after follow-up fixes; legacy comms/events path removed from disk.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "D7F1A0B4-D172-4427-BB25-975F7A279E9A",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8BD2232D-2E71-4C4E-B08E-39DC72906718",
+      "agent_id": {
+        "agent_name": "Opalescent Waning Satellite",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T14:45:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Doctor Phase 2 read-only report mode.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T14:50:00Z",
+        "closed_by": {
+          "agent_name": "Opalescent Waning Satellite",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Staged and committed Doctor Phase 2 read-only report-mode bundle; queue verified before final closeout staging.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8BD2232D-2E71-4C4E-B08E-39DC72906718",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

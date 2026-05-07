@@ -169,7 +169,8 @@ Run reviewers against the doctrine and adoption plan:
 - PDR-049 uses portable language only; host-local active-claims and policy-file
   paths live in the bridge index and local substrate contract.
 - The legacy `comms/events/` terminal condition is accepted as a historical
-  `.gitkeep` root plus migration-ledger validation.
+  path that must be absent on disk, with migration-ledger validation preserving
+  provenance.
 - Merge-topology blocking policy is routed to the doctor Phase 0 defect ledger
   and Phase 1 topology fixtures.
 - The prior `test-reviewer` hold is closed for this plan and becomes a
@@ -201,8 +202,8 @@ git diff --check
 - Strict manifest validation and required-field checks pass for 22 surfaces.
 - Migration ledger validation proves 114 entries, no duplicate source/target
   paths, and target byte-count/SHA-256 matches.
-- The legacy `.agent/state/collaboration/comms/events/` root contains only
-  `.gitkeep`; the canonical `comms-events` root parses through the explicit
+- The legacy `.agent/state/collaboration/comms/events/` root is absent on disk;
+  the canonical `comms-events` root parses through the explicit
   collaboration-state check.
 - Durable doctrine lives in PDR-050 and the host bridge.
 - Tooling work is owned by the repo-local doctor plan.
@@ -252,8 +253,8 @@ The local immune-layer responsibilities are routed as follows:
   legacy fragments under `.agent/state/collaboration/comms/events/` were
   collision-checked, JSON-parse-checked, ledgered with original path, target
   path, SHA-256, byte count, source evidence, and rationale, then moved to the
-  canonical `.agent/state/collaboration/comms-events/` root. The legacy root is
-  historical and should contain only `.gitkeep`.
+  canonical `.agent/state/collaboration/comms-events/` root. The legacy path is
+  historical evidence only and must not remain on disk.
 - 2026-05-07: Phase 3 routing is now explicit: prevention through entry-point
   docs, rules, and write APIs; detection through the future
   `practice:substrate:check`; mitigation through structured severity and

@@ -9,12 +9,34 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-07 — Opalescent Waning Satellite / `codex` /
+`GPT-5` / `019e02`, Doctor Phase 2 read-only report mode implemented)**:
+completed Doctor Phase 2 report mode only. The new built-output workspace
+command lives in `agent-tools`:
+`pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`.
+It builds `agent-tools` before running
+`dist/src/bin/practice-substrate.js`, reuses the pure Phase 1 evaluator/report
+layer, validates live substrate snapshots through thin readers, emits
+structured JSON, and exits `1` only for deterministic blocking findings.
+No root `practice:substrate:*` aliases, strict mode, repair mode, or
+consolidation integration were added. The owner-corrected legacy-path
+invariant is now encoded: `.agent/state/collaboration/comms/events/` must not
+remain on disk; archived mentions and the migration ledger remain evidence.
+No compatibility layer, fallback path, or placeholder directory is retained for
+the retired approach.
+Validation passed for the focused Vitest lane (32 tests), `agent-tools`
+type-check/lint/build, report-mode CLI, explicit collaboration-state check,
+markdownlint, and `git diff --check`. `code-reviewer` and `test-reviewer`
+re-checks are clean. **Next safe step**: next session starts with specialist
+agent reviews, then triages the structured report findings. Root aliases
+remain deferred until a later built-output-only phase.
+
 **Session close (2026-05-07 — Cirrus Swooping Cloud / `codex` /
 `GPT-5` / `019e02`, Doctor Phase 1 pure fixture slices implemented)**:
 completed Doctor Phase 1 fixture work only. New pure evaluator modules live
 under `agent-tools/src/practice-substrate/`, with literal-object/string tests
 at `agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
-The fixture suite covers legacy `comms/events` terminal state, stale live prose
+The fixture suite covers retired `comms/events` path absence, stale live prose
 vs archived evidence, missing `merge_class`, duplicate IDs, same-key semantic
 collisions, generated read-model drift, parse/schema incoherence, conflict
 markers, merge-topology snapshots, and repair-preservation classifications.
@@ -25,9 +47,7 @@ exact Phase 1 lane, `agent-tools` type-check, `agent-tools` lint,
 `markdownlint-check:root`, explicit collaboration-state check, and
 `git diff --check`. Guard searches found no root `practice:substrate:*` aliases
 and no forbidden live fs/git/env/cwd access in the Phase 1 tests.
-**Next safe step**: land this implementation/handoff, then start Doctor Phase 2
-read-only report mode. Keep root aliases deferred until they invoke built
-`agent-tools` output only.
+**Next safe step**: superseded by the Phase 2 closeout above.
 
 **Session close (2026-05-07 — Penumbral Veiling Owl / `codex` /
 `GPT-5` / `019e02`, memory/state Phase 4/5 closure implemented)**:
@@ -39,7 +59,7 @@ contract into dated evidence. The portable contract plan is now Phase 4/5
 complete, with known fitness pressure explicitly routed rather than treated
 as green-gate evidence or permission to trim content. The doctor plan now
 requires Phase 0 validation of the strict manifest/schema, migration ledger,
-legacy-root `.gitkeep` terminal state, explicit collaboration-state parsing,
+legacy-root absence, explicit collaboration-state parsing,
 and current gate outcomes before any fixtures. Phase 1 is RED/GREEN fixture
 slices in the `agent-tools` lane, with the prior `test-reviewer` hold moved to
 the post-Phase-0/pre-Phase-1 checkpoint. Specialist review used
@@ -1236,7 +1256,16 @@ owner-requested `/jc-session-handoff` plus commit preparation. Canonical
 identity row is in `threads/agentic-engineering-enhancements.next-session.md`.
 
 Active-identities delta, 2026-05-07:
-`agentic-engineering-enhancements` latest identity is Cirrus Swooping Cloud /
+`agentic-engineering-enhancements` latest identity is Opalescent Waning
+Satellite / `codex` / `GPT-5` / `019e02` for Memory/state contract doctor
+Phase 2 read-only report mode, the `agent-tools` built-output CLI, live
+reader layer, legacy-root absence correction, clean `code-reviewer` and
+`test-reviewer` re-checks, and owner-requested `/jc-session-handoff` plus
+commit landing. Canonical identity row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` prior identity is Cirrus Swooping Cloud /
 `codex` / `GPT-5` / `019e02` for Memory/state contract doctor Phase 1 pure
 fixture implementation, `agent-tools` practice-substrate evaluator modules,
 literal fixture tests, merge-class parameter edge-case fix, clean
@@ -1266,6 +1295,20 @@ The previous observability branch lane remains preserved in
 
 ## Current Session Focus
 
+**2026-05-07 (Opalescent Waning Satellite, codex, GPT-5, `019e02`,
+agentic-engineering-enhancements thread, Doctor Phase 2 report mode +
+handoff)**:
+Completed Memory/state contract doctor Phase 2 only. The `agent-tools`
+workspace command now runs a built-output `practice-substrate` CLI in
+read-only report mode, reuses the pure evaluator/report modules, validates live
+repo snapshots through thin readers, emits structured JSON, and maps exit
+codes as report mode requires. The old
+`.agent/state/collaboration/comms/events/` path is absent on disk; its mentions
+are allowed only as historical/provenance evidence. No root aliases, strict
+mode, repair mode, or consolidation integration landed. `code-reviewer` and
+`test-reviewer` re-checks are clean. **Next safe step**: next session starts
+with specialist agent reviews, then addresses the report-mode blockers.
+
 **2026-05-07 (Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
 agentic-engineering-enhancements thread, Doctor Phase 1 fixtures +
 handoff)**:
@@ -1279,8 +1322,8 @@ duplicate identities, semantic collisions, derived-output drift, parse/schema
 incoherence, conflict markers, merge topology, and repair-preservation
 classification. No repo readers, git readers, root aliases, or Phase 2 CLI
 wiring were added. `test-reviewer` passed after one blocker fix for
-`append-only-structured-by-` without a key. **Next safe step**: land the Phase 1
-and handoff commits, then begin Phase 2 read-only report mode only.
+`append-only-structured-by-` without a key. **Next safe step**: superseded by
+the Phase 2 closeout above.
 
 **2026-05-07 (Stratospheric Whirling Airstream, codex, GPT-5, `019e02`,
 agentic-engineering-enhancements thread, Doctor Phase 0 defect ledger +
@@ -1292,9 +1335,10 @@ and migration-ledger evidence, and every Known Contract Gaps row classified as
 live defect, known-good terminal state, or deferred semantic review. Evidence:
 manifest has 22 surfaces with no missing required fields or duplicate IDs;
 migration ledger has 114 entries with no duplicate original/target paths and no
-byte/hash mismatches; legacy `comms/events/` is `.gitkeep` only; canonical
-`comms-events/` parses through explicit collaboration-state check. Phase 1 did
-not begin. `test-reviewer` ran at the mandatory checkpoint and forced the
+byte/hash mismatches; legacy `comms/events/` is historical evidence only and
+the old root must be absent on disk; canonical `comms-events/` parses through
+explicit collaboration-state check. Phase 1 did not begin. `test-reviewer` ran
+at the mandatory checkpoint and forced the
 validation lane to use an exact Vitest path with `--passWithNoTests=false`
 after proving the prior package-script form could pass without selecting tests.
 **Next safe step**: land the Phase 0 and handoff commits, then start Phase 1
@@ -1309,7 +1353,8 @@ and host-local policy surface rather than concrete repo paths. The host bridge
 and local substrate contract carry concrete path guidance. The retired YAML
 seed was preserved in dated evidence instead of deleted. The portable
 contract plan is marked Phase 4/5 complete, with legacy `comms/events/`
-accepted as `.gitkeep` plus migration-ledger validation, topology policy
+treated as historical/provenance evidence only, the old root absent on disk,
+topology policy
 routed to Doctor Phase 0/1, and the earlier test-reviewer hold moved to the
 post-Phase-0/pre-Phase-1 checkpoint. Doctor Phase 0 now starts from
 strict-manifest and migration-ledger validation, inventories existing checks
@@ -2107,6 +2152,23 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Opalescent Waning Satellite, codex, GPT-5, `019e02`,
+owner-requested `/jc-session-handoff` after Doctor Phase 2 report-mode
+implementation): `due — Phase 2 closed with new live reader/CLI logic and the
+owner-corrected retired-path absence invariant; specialist reviews are the
+owner-directed first step next session, so deep consolidation was not run in
+this closeout`.** One thread moved: `agentic-engineering-enhancements`.
+Handoff captured the Phase 2 implementation, clean `code-reviewer` and
+`test-reviewer` re-checks, the report-mode command/exit-code behaviour, and
+the correction that `.agent/state/collaboration/comms/events/` is historical
+provenance only and must be absent on disk. Entry-point sweep was clean:
+`AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` remain in canonical pointer shape
+with the intentional AGENTS rules-index extension. Tracks contain no tactical
+cards beyond the README and placeholder file; `.remember/` is absent; no escalation files exist; no open
+collaboration claims remain; no open decision-thread handoff was needed. No
+new ADR/PDR candidate qualifies beyond the active plan correction and existing
+doctor arc; fitness remains routed pressure, not Phase 2 cleanup scope.
 
 **Status (2026-05-07 Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
 owner-requested `/jc-session-handoff` after Doctor Phase 1 fixture

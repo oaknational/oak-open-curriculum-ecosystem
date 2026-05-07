@@ -13,14 +13,55 @@ import {
 } from '../../src/practice-substrate';
 
 describe('practice substrate contract-path fixtures', () => {
-  it('accepts the terminal legacy event root when only .gitkeep remains', () => {
+  it('accepts the retired legacy event root only when it is absent from disk', () => {
     expect(
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
         legacyRoot: '.agent/state/collaboration/comms/events/',
-        entries: [{ path: '.agent/state/collaboration/comms/events/.gitkeep', kind: 'gitkeep' }],
+        rootExists: false,
+        entries: [],
       }),
     ).toStrictEqual([]);
+  });
+
+  it('blocks a retained .gitkeep under the retired legacy event root', () => {
+    expect(
+      evaluateLegacyEventRoot({
+        surface: 'legacy-collaboration-comms-events',
+        legacyRoot: '.agent/state/collaboration/comms/events/',
+        rootExists: true,
+        entries: [{ path: '.agent/state/collaboration/comms/events/.gitkeep', kind: 'gitkeep' }],
+      }),
+    ).toStrictEqual([
+      {
+        id: 'legacy-event-root-present',
+        surface: 'legacy-collaboration-comms-events',
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: 'Legacy event root .agent/state/collaboration/comms/events/ still exists on disk.',
+        evidence: ['.agent/state/collaboration/comms/events/.gitkeep'],
+      },
+    ]);
+  });
+
+  it('blocks an empty retained legacy event root', () => {
+    expect(
+      evaluateLegacyEventRoot({
+        surface: 'legacy-collaboration-comms-events',
+        legacyRoot: '.agent/state/collaboration/comms/events/',
+        rootExists: true,
+        entries: [],
+      }),
+    ).toStrictEqual([
+      {
+        id: 'legacy-event-root-present',
+        surface: 'legacy-collaboration-comms-events',
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: 'Legacy event root .agent/state/collaboration/comms/events/ still exists on disk.',
+        evidence: ['.agent/state/collaboration/comms/events/'],
+      },
+    ]);
   });
 
   it('blocks live JSON fragments under the retired legacy event root', () => {
@@ -28,6 +69,7 @@ describe('practice substrate contract-path fixtures', () => {
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
         legacyRoot: '.agent/state/collaboration/comms/events/',
+        rootExists: true,
         entries: [
           { path: '.agent/state/collaboration/comms/events/.gitkeep', kind: 'gitkeep' },
           { path: '.agent/state/collaboration/comms/events/old.json', kind: 'json' },

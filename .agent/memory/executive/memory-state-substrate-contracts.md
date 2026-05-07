@@ -121,7 +121,7 @@ for the doctor plan.
 
 | Gap | Current classification | Next owner |
 | --- | --- | --- |
-| `comms/events/` legacy fragments migrated | Terminal migration completed with provenance ledger; no event JSON remains in the legacy root | Doctor validates ledger and stale-path classifier |
+| `comms/events/` legacy fragments migrated | Terminal migration completed with provenance ledger; legacy root must not remain on disk | Doctor validates ledger, root absence, and stale-path classifier |
 | Live and archived prose still mention `comms/events/` | Must classify by live reference vs archived evidence | Doctor stale-path classifier |
 | `shared-comms-log.md` is not drift-checked by no-arg collaboration check | Deterministic checker gap | Doctor report mode |
 | Communication event JSON has a parser but no colocated JSON Schema | Contract gap | Agent tooling |
@@ -156,7 +156,7 @@ today it is a narrow parser check unless explicit paths are supplied.
 
 `.agent/state/collaboration/comms-events/` is the one live communication-event
 root. `.agent/state/collaboration/comms/events/` is historical transition state
-and now retains only `.gitkeep` after the provenance-ledger migration above.
+and must not remain on disk after the provenance-ledger migration above.
 Archived references to the old path remain archived evidence unless a reviewer
 explicitly decides they are live instructions.
 

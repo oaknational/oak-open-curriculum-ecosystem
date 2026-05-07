@@ -12,9 +12,28 @@ import {
 export function evaluateLegacyEventRoot(
   snapshot: LegacyEventRootSnapshot,
 ): readonly SubstrateFinding[] {
+  if (snapshot.rootExists === false) {
+    return [];
+  }
+  if (snapshot.entries.length === 0 && snapshot.rootExists !== true) {
+    return [];
+  }
+
   const liveEntries = snapshot.entries.filter((entry) => entry.kind === 'json');
   if (liveEntries.length === 0) {
-    return [];
+    return [
+      finding({
+        id: 'legacy-event-root-present',
+        surface: snapshot.surface,
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: `Legacy event root ${snapshot.legacyRoot} still exists on disk.`,
+        evidence:
+          snapshot.entries.length === 0
+            ? [snapshot.legacyRoot]
+            : snapshot.entries.map((entry) => entry.path),
+      }),
+    ];
   }
 
   return [
