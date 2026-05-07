@@ -106,9 +106,11 @@ scheduling.
 | Resource | `curriculum://oak-kg-threads` | `graph-corpus-sdk` Oak Curriculum Ontology adapter |
 | Tool | `oak-kg-get-thread-content` | inverse-edge query in graph-query-layer + adapter |
 
-Tool/resource names are **locked** by the spine — slice 3b composes
-this slice's tool by name, so renaming requires spine + slice-3b
-amendment, not just this plan.
+Tool/resource names are **locked** by the spine — they're named in
+the MVP-arc spine and any rename requires a spine amendment, not just
+this plan. Note: slice 3b does **not** consume this slice's tool at
+runtime (see "Consumed by" below); the lock is a spine-naming
+discipline, not a downstream-composition dependency.
 
 ### Existing capabilities consumed
 

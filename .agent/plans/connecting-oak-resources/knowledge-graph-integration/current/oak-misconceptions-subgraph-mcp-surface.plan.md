@@ -136,8 +136,13 @@ contract is named, and the migration is sequenced.
 ## Design Principles
 
 1. **Spine-locked names** — `oak-misconceptions-subgraph-for-thread`
-   is named in the spine; slice 3b composes it by name. Renaming
-   requires spine + slice-3b amendment, not just this plan.
+   is named in the MVP-arc spine. Renaming requires a spine amendment,
+   not just this plan. Note: slice 3b does NOT call this tool at
+   runtime — slice 3b reaches misconception data through
+   `graph-corpus-sdk` directly (per slice 3b Design Principle 1) once
+   graph-stack Inc.3 has replatformed the misconception substrate.
+   Slice 3a's contribution to slice 3b is the bounded-sub-graph SHAPE,
+   not a runtime MCP composition.
 2. **Bounded by parameter, defaulted by data** — the bound is exposed
    to callers; the default is chosen empirically so 95th-percentile
    responses fit standard context windows.
@@ -328,8 +333,10 @@ Dispatch:
 **Consumed by**:
 
 - [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)
-  (slice 3b) composes `oak-misconceptions-subgraph-for-thread` by name;
-  rename here triggers slice-3b amendment.
+  (slice 3b) reuses the bounded-sub-graph response SHAPE established
+  here, but reaches misconception data through `graph-corpus-sdk`
+  directly once Inc.3 has replatformed the misconception substrate;
+  it does NOT call this tool at runtime.
 
 **Related plans**:
 

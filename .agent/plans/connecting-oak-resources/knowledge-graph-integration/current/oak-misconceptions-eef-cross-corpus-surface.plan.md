@@ -35,7 +35,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-cross-corpus-happy-path
-    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.unit.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of N thread/unit contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements via the cross-corpus join primitive (graph-stack Inc.3) composing the slice-1 EEF tool + slice-3a misconception sub-graph tool by name. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.unit.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of N thread/unit contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-substrate-only
@@ -121,11 +121,12 @@ requires a spine amendment (the spine names the tool by name).
 
 ### Existing capabilities consumed (post-substrate-floor)
 
-- Slice 1's `eef-*` tools (especially the EEF evidence-recommendation
-  primitives) — see
-  [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
-- Slice 3a's `oak-misconceptions-subgraph-for-thread` — see
-  [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)
+This slice is substrate-only per Design Principle 1: it consumes the
+underlying graph through `graph-corpus-sdk`, NOT the MCP tools shipped
+by slices 1 or 3a. Slices 1 and 3a are referenced for naming
+conventions (compound prefix, `eef-*`) and structural compatibility of
+the response shape, not as runtime dependencies.
+
 - `graph-corpus-sdk` cross-corpus join primitive (lands in graph-stack
   Inc.3)
 - `graph-corpus-sdk` EEF strand corpus adapter (lands in Inc.3 — slice
@@ -137,6 +138,13 @@ requires a spine amendment (the spine names the tool by name).
   misconception replatform — see
   `oak-misconceptions-substrate-migration.plan.md` future plan that
   slice 3a's WS7 creates)
+- Naming/structural conventions from slice 1 (EEF strand response
+  shape, compound-prefix `eef-*`) — see
+  [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
+- Sub-graph extraction shape from slice 3a (bounded sub-graph by
+  thread/unit context) — see
+  [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md);
+  slice 3a's tool is NOT called at runtime
 - The SDK's `classify-error-response` convention
 - The SDK's tool-guidance surface
 - The MCP server registration in
@@ -359,7 +367,9 @@ Dispatch:
 - [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
   — slice 1.
 - [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)
-  — slice 3a (composed by name).
+  — slice 3a (sibling sub-graph extraction shape; not called at
+  runtime — slice 3b reaches misconception data through
+  `graph-corpus-sdk` directly per Design Principle 1).
 
 ## Consolidation
 
