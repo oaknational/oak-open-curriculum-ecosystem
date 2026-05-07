@@ -24,6 +24,34 @@ and
 
 [archive-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
 
+## 2026-05-07 — Memory/state closure handoff / codex / GPT-5 / `019e02`
+
+### Surprise: generated read models need same-session refresh after event writes
+
+**What I expected**: appending a valid comms event and passing the explicit
+collaboration-state parser check would be enough closure evidence.
+
+**What happened**: code review caught that the immutable event fragment existed
+but `shared-comms-log.md` still omitted it. The parser checked source validity;
+it did not prove the generated read model was current.
+
+**Lesson**: after any session-local `comms-events/` write that will land, render
+`shared-comms-log.md` before final validation. This is the exact generated-drift
+class the substrate doctor will later automate, but until then the handoff
+ritual owns it.
+
+### Surprise: examples can leak host paths after the main prose is fixed
+
+**What I expected**: removing the direct Practice Core link and host policy-path
+prescription from PDR-049 had cleaned the portability blocker.
+
+**What happened**: architecture review still found `active-claims.json` in a
+worked example. The example was structurally useful but still host-shaped.
+
+**Lesson**: portability review must scan examples and narratives, not only
+normative paragraphs and links. Practice Core examples should say "host
+active-claims registry" unless the filename itself is portable doctrine.
+
 ## 2026-05-07 — Memory/state contract enforcement planning / codex / GPT-5 / `019dfe`
 
 ### Contract inventory landed as executive memory

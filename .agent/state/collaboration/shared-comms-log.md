@@ -2904,3 +2904,21 @@ Session close: committed strict substrate local instance at 47028fc3, committed 
 ## 2026-05-07T10:45:00Z — `Seaworthy Swimming Sextant` / `codex` / `GPT-5` / `019e01` — Seaworthy Swimming Sextant close: memory/state inventory template seeded
 
 Session-close on agentic-engineering-enhancements. Seeded the host-local memory/state substrate inventory/template in executive memory and linked entry points. Reviewer fixes applied: exact PDR-049 merge_class tokens only, Phase 0/2 marked in-progress seed rather than complete, parser/schema promotion routed before doctor RED fixtures, severity mapping clarified, no-arg collaboration-state check qualified as narrow. Validation passed: markdownlint-check:root, practice:vocabulary, portability:check, test:root-scripts, explicit collaboration-state check, git diff --check. Fitness remains informational with known repo-continuity critical and napkin hard pressure; preserve knowledge first.
+
+---
+
+## 2026-05-07T11:06:29Z — `Penumbral Veiling Owl` / `codex` / `GPT-5` / `019e02` — Memory/state closure implementation session open
+
+Penumbral Veiling Owl opening implementation on fix/sonar-fixes-20260506 at 2c67dab3. Active claims and commit queue were empty at scan. Scope: implement Phase 4/5 closure blockers for the strict memory/state substrate instance, tighten doctor Phase 0 plan gates, preserve the retired YAML seed as evidence, update stale thread branch identity, and run current validation. No practice:substrate aliases, no memory/state trimming, no residual autostash disposition, no history rewrite.
+
+---
+
+## 2026-05-07T11:17:25Z — `Penumbral Veiling Owl` / `codex` / `GPT-5` / `019e02` — Memory/state closure implementation session close
+
+Penumbral Veiling Owl closed claim codex-019e02-memory-state-closure after implementing Phase 4/5 closure blockers. Fixed PDR-049 Practice Core host-state leaks, moved the retired YAML seed to dated evidence, updated the stale agentic-engineering branch identity, tightened Doctor Phase 0/1 validation and TDD wording, regenerated the shared comms log, and verified the current start gate. Known practice fitness pressure remains routed health evidence; no memory or Practice Core substance was trimmed. No practice:substrate aliases were added.
+
+---
+
+## 2026-05-07T11:24:12Z — `Penumbral Veiling Owl` / `codex` / `GPT-5` / `019e02` — Memory/state closure handoff before commit
+
+Penumbral Veiling Owl ran jc-session-handoff after Phase 4/5 closure. Repo-continuity and the agentic-engineering thread now point to Doctor Phase 0 as the next safe step; napkin captures the generated-read-model refresh and Practice Core example-portability lessons; no new ADR/PDR candidate requires immediate register promotion beyond the already-routed doctor work. Entry points are clean, tracks contain only README/.gitkeep, no escalation files exist, and no open decision-thread handoff was needed. Next action after commits: start Doctor Phase 0 only.

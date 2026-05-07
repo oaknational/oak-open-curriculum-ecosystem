@@ -9,6 +9,32 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-07 — Penumbral Veiling Owl / `codex` /
+`GPT-5` / `019e02`, memory/state Phase 4/5 closure implemented)**:
+completed the owner-directed Phase 4/5 closure before doctor work.
+Practice Core portability leaks were removed from PDR-049; host-local
+active-claims and merge-policy path guidance now lives in the host bridge and
+local substrate contract. The retired YAML seed was moved out of the live
+contract into dated evidence. The portable contract plan is now Phase 4/5
+complete, with known fitness pressure explicitly routed rather than treated
+as green-gate evidence or permission to trim content. The doctor plan now
+requires Phase 0 validation of the strict manifest/schema, migration ledger,
+legacy-root `.gitkeep` terminal state, explicit collaboration-state parsing,
+and current gate outcomes before any fixtures. Phase 1 is RED/GREEN fixture
+slices in the `agent-tools` lane, with the prior `test-reviewer` hold moved to
+the post-Phase-0/pre-Phase-1 checkpoint. Specialist review used
+`code-reviewer`, `docs-adr-reviewer`, `assumptions-reviewer`,
+`architecture-reviewer-fred`, and `test-reviewer`; the two blockers found
+were fixed. Current validation passed for strict manifest/ledger checks,
+legacy-root check, explicit collaboration-state check, `test:root-scripts`,
+`portability:check`, `practice:vocabulary`, `markdownlint-check:root`, and
+`git diff --check`. `practice:fitness:informational` still reports routed
+pressure, led by `repo-continuity.md`, `napkin.md`, and `practice.md`.
+**Next safe step**: start Doctor Phase 0 only. Seed the defect ledger from
+Known Contract Gaps, classify each row, inventory existing checks first, and
+do not add or invoke `practice:substrate:*` root aliases until the doctor
+implementation phase.
+
 **Session close (2026-05-07 — Floating Vaulting Updraft / `codex` /
 `GPT-5` / `019e01`, memory/state strict local instance landed and main
 merged)**: completed the owner-directed substrate local-instance slice before
@@ -1172,6 +1198,14 @@ specialist review stewardship and landing (commits `cb662b7e` and
 `526a596e`). Canonical identity row is in
 `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Penumbral Veiling Owl /
+`codex` / `GPT-5` / `019e02` for memory/state substrate Phase 4/5 closure,
+PDR-049 portability cleanup, retired YAML seed evidence move, Doctor Phase
+0/1 validation tightening, current-tree start-gate validation, and
+collaboration-state closeout. Canonical identity row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
 
@@ -1193,6 +1227,27 @@ The previous observability branch lane remains preserved in
 `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`.
 
 ## Current Session Focus
+
+**2026-05-07 (Penumbral Veiling Owl, codex, GPT-5, `019e02`,
+agentic-engineering-enhancements thread, memory/state Phase 4/5
+closure + handoff)**:
+Implemented the closure bundle requested before Doctor Phase 0. PDR-049 now
+keeps Practice Core portable by referring to the host active-claims registry
+and host-local policy surface rather than concrete repo paths. The host bridge
+and local substrate contract carry concrete path guidance. The retired YAML
+seed was preserved in dated evidence instead of deleted. The portable
+contract plan is marked Phase 4/5 complete, with legacy `comms/events/`
+accepted as `.gitkeep` plus migration-ledger validation, topology policy
+routed to Doctor Phase 0/1, and the earlier test-reviewer hold moved to the
+post-Phase-0/pre-Phase-1 checkpoint. Doctor Phase 0 now starts from
+strict-manifest and migration-ledger validation, inventories existing checks
+before adding logic, and keeps pure fixtures in the `agent-tools` lane.
+Specialist reviewers found two blockers: a stale generated comms log after
+the open event, and remaining `active-claims.json` literals in the PDR worked
+example. Both were fixed. The active claim is closed, open/close comms events
+exist, and `shared-comms-log.md` was regenerated.
+**Next safe step**: start Doctor Phase 0 defect-ledger work only; do not add
+`practice:substrate:*` aliases yet.
 
 **2026-05-07 (Windward Spiralling Aerie, codex, GPT-5, `019e01`,
 agentic-engineering-enhancements thread, memory/state substrate
@@ -1967,6 +2022,20 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Penumbral Veiling Owl, codex, GPT-5, `019e02`,
+owner-requested `/jc-session-handoff` after memory/state Phase 4/5
+closure): `not due — focused closure and handoff session`.** One thread moved:
+`agentic-engineering-enhancements`. Closure findings were fixed or routed
+inside the active plans; no new ADR/PDR candidate requires immediate register
+promotion beyond the already-routed doctor work. Session surprises were
+captured in the napkin: generated comms read-model refresh after event writes,
+and example text as a portability-leak surface. Entry-point sweep was clean:
+`AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` remain in canonical pointer shape
+with the intentional AGENTS rules-index extension. Tracks contain only README
+and `.gitkeep`; `.remember/` has no workspace files; no escalation files exist;
+no open decision-thread handoff was needed. Fitness remains a routed
+structural lane, not closeout cleanup.
 
 **Status (2026-05-07 Seaworthy Swimming Sextant, codex, GPT-5,
 `019e01`, owner-invoked `/jc-consolidate-docs` after memory/state
