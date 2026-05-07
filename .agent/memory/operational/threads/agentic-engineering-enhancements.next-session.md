@@ -72,8 +72,8 @@ checkpoint found one blocker: parameterised merge classes accepted
 `append-only-structured-by-` without a key. The implementation now rejects
 that form and the fixture suite includes the edge case.
 
-Doctor Phase 2 read-only report mode is now complete in the working tree and
-ready to commit. The new `agent-tools`-only CLI at
+Doctor Phase 2 read-only report mode landed in commit `44c73e4d`. The new
+`agent-tools`-only CLI at
 `agent-tools/src/bin/practice-substrate.ts` builds before running and supports
 `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
 without adding root `practice:substrate:*` aliases. Runtime readers inject live
@@ -87,6 +87,18 @@ mentions remain evidence, but the old path must not remain on disk. The
 mandatory `test-reviewer` and `code-reviewer` re-checks are clean. The report
 command currently exits `1` by design because it finds deterministic live
 substrate blockers rather than treating report mode as green.
+
+**Arc spine for the final session**: this work exists to make memory/state
+files safely mergeable through explicit contracts and deterministic tooling.
+The target value is a safe merge gate: agents can identify authoritative,
+generated, archival, live, derived, and historical-evidence surfaces; block
+deterministic structural defects; verify generated read models against
+canonical sources; and avoid old-path compatibility layers. The arc finishes
+when specialist reviews are complete, report mode returns `ok: true` with
+`blocking: 0`, strict mode exists for low-ambiguity blockers, the root alias
+invokes built `agent-tools` output, and the doctor plan is archived with
+validation evidence. Repair mode and consolidation integration are future arcs,
+not prerequisites for finishing this safe-merge gate.
 
 **Key doctrine points now recorded**:
 
@@ -198,12 +210,12 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: after this Phase 2 implementation/handoff commit lands,
-start the next session with specialist agent reviews, as owner-directed. Then
-triage the structured report findings, especially live schema incoherence in
-closed-claim/conversation state and any remaining stale live retired-path
-references. Root `practice:substrate:*` aliases remain deferred until they
-invoke built `agent-tools` output only. The focused validation lane remains:
+**Next safe step**: run the next and final safe-merge-gate session. Start with
+specialist reviews of `44c73e4d`, apply required review fixes, fix the three
+schema incoherence blockers in closed-claim/conversation state, rerun report
+mode until `blocking: 0`, add strict mode, add the root alias only when it
+invokes built `agent-tools` output, run final validation, then archive the
+doctor plan. The focused validation lane remains:
 
 ```bash
 pnpm --filter @oaknational/agent-tools exec vitest run \
@@ -1897,7 +1909,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
+| `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; final-session-boundary-definition; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
 | `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |

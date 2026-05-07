@@ -17,16 +17,16 @@ todos:
     content: "Phase 2 (GREEN): Implement read-only report mode that recomputes all deterministic checks and exits non-zero on structural defects."
     status: completed
   - id: phase-3-strict-mode
-    content: "Phase 3: Add strict mode for low-ambiguity blocking invariants and CI/merge workflow integration."
+    content: "Final session: run specialist reviews, fix report blockers, make report mode green, and add strict built-output gate/root alias."
     status: pending
   - id: phase-4-repair-mode
-    content: "Phase 4: Add deterministic repair dry-run/apply flows; keep semantic repairs as routed remediation items."
+    content: "Future arc: deterministic repair dry-run/apply flows after the safe-merge gate exists."
     status: pending
   - id: phase-5-consolidation-integration
-    content: "Phase 5: Integrate doctor output with consolidate-docs and update local state/memory entry points."
+    content: "Future arc: consolidate-docs integration after the safe-merge gate exists."
     status: pending
   - id: phase-6-closure
-    content: "Phase 6: Full validation, reviewers, consolidation pass, and archive readiness."
+    content: "Final closure: validate the strict gate, record reviewer evidence, and archive readiness."
     status: pending
 isProject: false
 ---
@@ -34,7 +34,8 @@ isProject: false
 # Memory/State Contract Doctor
 
 **Last Updated**: 2026-05-07
-**Status**: QUEUED — Phase 2 read-only report mode implemented; specialist review and report findings next
+**Status**: ACTIVE — final closure session defined; Phase 2 report mode is
+implemented, and the remaining work is finite
 **Scope**: Repo-local enforcement for
 [PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
@@ -58,23 +59,63 @@ This plan implements the repo-local doctor promised by the portable substrate
 contract. It does not replace the collaboration-state helper; it recomputes a
 larger health model and can call narrower helpers where they already exist.
 
+## Definitive Arc Spine
+
+**Why this arc exists**: enable state and memory files to be safely merged by
+turning implicit repo-local file conventions into explicit contracts and
+deterministic tooling.
+
+**Value provided**:
+
+- agents know which state/memory surfaces are authoritative, generated,
+  archival, live, derived, or historical evidence;
+- deterministic structural defects block unsafe merges before shared state is
+  corrupted;
+- generated read models are checked against canonical sources;
+- retired paths are actually retired, with evidence preserved in ledgers and
+  archives rather than live compatibility layers;
+- memory/state merge claims can be checked against contracts and git topology.
+
+**Current state at `44c73e4d`**: Phase 2 read-only report mode exists in
+`agent-tools`, uses built output, emits structured JSON, and correctly reports
+that the live substrate is not clean. The current deterministic blockers are:
+
+- schema incoherence in `.agent/state/collaboration/closed-claims.archive.json`;
+- schema incoherence in
+  `.agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json`;
+- schema incoherence in
+  `.agent/state/collaboration/conversations/pr-87-vercel-ignore-test-failures-prismatic-sidebar.json`.
+
+**This arc is complete when**:
+
+1. specialist reviews of `44c73e4d` are complete and required fixes are landed;
+2. `practice-substrate -- check --mode report` returns `ok: true` with
+   `blocking: 0`;
+3. strict mode exists for the low-ambiguity blocking invariants;
+4. the root alias exists only after it invokes built `agent-tools` output;
+5. the legacy `comms/events/` root remains absent on disk, with no fallback
+   reader, compatibility layer, or placeholder directory;
+6. the plan is archived with validation evidence.
+
+Repair mode and consolidate-docs integration are valuable future arcs. They are
+not required for this safe-merge gate arc to finish.
+
 ## Public Interface
 
-Add root scripts:
+Final public interface for this arc:
 
 ```bash
 pnpm practice:substrate:check
 pnpm practice:substrate:check -- --mode strict
-pnpm practice:substrate:repair -- --dry-run
-pnpm practice:substrate:repair -- --apply
 ```
 
 Implementation lives in the `agent-tools` workspace as a Practice substrate CLI
-with root package-script aliases for the public commands above. That keeps the
-plan inside the agent-tooling collection boundary while still letting the CLI
-inspect Practice docs, state, memory, schemas, generated read models, and git
-topology from the repo root. The CLI may reuse existing `agent-tools`
-collaboration-state libraries where those already own parsing.
+with root package-script aliases for the public commands above only after the
+strict gate exists. That keeps the plan inside the agent-tooling collection
+boundary while still letting the CLI inspect Practice docs, state, memory,
+schemas, generated read models, and git topology from the repo root. The CLI
+may reuse existing `agent-tools` collaboration-state libraries where those
+already own parsing.
 
 Root aliases MUST invoke the built `agent-tools` entrypoint only. They must not
 run TypeScript source directly through `tsx`, `ts-node`, ad-hoc script wrappers,
@@ -82,8 +123,7 @@ or source-relative imports. The implementation cycle may run workspace tests
 against source, but every repo-level command that agents or hooks invoke goes
 through the compiled package output after the `agent-tools` build step.
 
-These scripts remain queued in this plan. Do not add root
-`practice:substrate:*` aliases until the doctor implementation starts; when
+The root scripts remain queued until final strict-mode implementation. When
 they land, they must invoke built `agent-tools` output only.
 
 Report output is structured JSON by default with a human summary on stderr:
@@ -305,9 +345,21 @@ in the closed-claims archive and two conversation files. `code-reviewer` and
 `test-reviewer` re-checks were clean
 after fixes.
 
-## Phase 3: Strict Mode and Gate Integration
+## Phase 3: Final Strict Gate Session
 
-Add strict mode for low-ambiguity invariants.
+This is the next and final session for the safe-merge gate arc. Do not widen
+scope before this sequence is complete.
+
+**Required order**:
+
+1. run specialist reviews on `44c73e4d`;
+2. apply required review fixes without adding fallback or compatibility layers;
+3. fix the three current schema incoherence blockers with provenance;
+4. rerun report mode until it returns `ok: true` and `blocking: 0`;
+5. add strict mode for low-ambiguity invariants;
+6. add the root `practice:substrate:check` alias only if it invokes built
+   `agent-tools` output;
+7. run final validation and archive this plan.
 
 **Blocking in strict mode**:
 
@@ -330,13 +382,20 @@ Add strict mode for low-ambiguity invariants.
 
 **Acceptance criteria**:
 
-- Strict mode is wired into the merge/readiness workflow, not broad CI, until
-  the current defect ledger is clean.
-- No non-blocking deterministic defect is introduced; structural errors fail.
+- Specialist review evidence exists for the final Phase 2/3 diff.
+- Report mode is green on live repo state: `ok: true`, `blocking: 0`.
+- Strict mode fails deterministically on blocking findings and returns `0` on
+  the clean live substrate.
+- The root alias invokes compiled `agent-tools` output only.
+- No non-blocking deterministic defect is introduced.
+- Historical retired-path evidence remains informational; the retired root
+  remains absent on disk.
 
-## Phase 4: Repair Mode
+## Future Arc: Repair Mode
 
-Add repair mode with dry-run first.
+Repair mode is explicitly outside the final safe-merge gate session. It can
+begin only after the report/strict gate is green and this plan is archived or a
+new follow-on plan is opened.
 
 **Permitted deterministic repairs**:
 
@@ -371,7 +430,11 @@ Add repair mode with dry-run first.
 - The legacy event-path repair reaches a single-live-root terminal state without
   losing historical evidence.
 
-## Phase 5: Consolidation Integration
+## Future Arc: Consolidation Integration
+
+Consolidation integration is explicitly outside the final safe-merge gate
+session. It can begin only after the report/strict gate is green and this plan
+is archived or a new follow-on plan is opened.
 
 Integrate doctor output into consolidation.
 
@@ -401,20 +464,29 @@ pnpm practice:fitness:informational
 pnpm markdownlint-check:root
 ```
 
-After Phase 2 lands report mode, add the substrate check to each phase:
+Until the final root alias exists, validate through the built `agent-tools`
+workspace command:
 
 ```bash
-pnpm agent-tools:build
-pnpm practice:substrate:check
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
+pnpm --filter @oaknational/agent-tools type-check
+pnpm --filter @oaknational/agent-tools lint
+pnpm --filter @oaknational/agent-tools build
+pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report
 pnpm agent-tools:collaboration-state -- check \
   --active .agent/state/collaboration/active-claims.json \
   --closed .agent/state/collaboration/closed-claims.archive.json \
   --events-dir .agent/state/collaboration/comms-events
-pnpm test:root-scripts
-pnpm portability:check
-pnpm practice:vocabulary
-pnpm practice:fitness:informational
 pnpm markdownlint-check:root
+git diff --check
+```
+
+After strict mode and the root alias land, the final safe-merge gate command
+is:
+
+```bash
+pnpm practice:substrate:check -- --mode strict
 ```
 
 ## Non-Goals

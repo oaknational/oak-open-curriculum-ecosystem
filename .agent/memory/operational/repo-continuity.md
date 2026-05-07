@@ -27,9 +27,11 @@ the retired approach.
 Validation passed for the focused Vitest lane (32 tests), `agent-tools`
 type-check/lint/build, report-mode CLI, explicit collaboration-state check,
 markdownlint, and `git diff --check`. `code-reviewer` and `test-reviewer`
-re-checks are clean. **Next safe step**: next session starts with specialist
-agent reviews, then triages the structured report findings. Root aliases
-remain deferred until a later built-output-only phase.
+re-checks are clean. The final-session boundary is now explicit: finish the
+safe-merge gate, not repair mode or consolidation integration. **Next safe
+step**: run specialist reviews of `44c73e4d`, fix the three schema blockers,
+make report mode green, add strict mode, add the root alias only against built
+`agent-tools` output, validate, then archive the doctor plan.
 
 **Session close (2026-05-07 — Cirrus Swooping Cloud / `codex` /
 `GPT-5` / `019e02`, Doctor Phase 1 pure fixture slices implemented)**:
@@ -1306,8 +1308,11 @@ codes as report mode requires. The old
 `.agent/state/collaboration/comms/events/` path is absent on disk; its mentions
 are allowed only as historical/provenance evidence. No root aliases, strict
 mode, repair mode, or consolidation integration landed. `code-reviewer` and
-`test-reviewer` re-checks are clean. **Next safe step**: next session starts
-with specialist agent reviews, then addresses the report-mode blockers.
+`test-reviewer` re-checks are clean. **Next safe step**: run the final
+safe-merge-gate session: specialist reviews of `44c73e4d`; fix the three
+schema blockers; get report mode to `blocking: 0`; add strict mode; add the
+root alias only through built `agent-tools` output; validate; archive the
+doctor plan. Repair mode and consolidation integration are future arcs.
 
 **2026-05-07 (Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
 agentic-engineering-enhancements thread, Doctor Phase 1 fixtures +
@@ -2168,7 +2173,10 @@ with the intentional AGENTS rules-index extension. Tracks contain no tactical
 cards beyond the README and placeholder file; `.remember/` is absent; no escalation files exist; no open
 collaboration claims remain; no open decision-thread handoff was needed. No
 new ADR/PDR candidate qualifies beyond the active plan correction and existing
-doctor arc; fitness remains routed pressure, not Phase 2 cleanup scope.
+doctor arc; fitness remains routed pressure, not Phase 2 cleanup scope. Owner
+correction after commit sharpened the final boundary: the next session must
+finish the safe-merge gate rather than extending the tail into repair mode or
+consolidation integration.
 
 **Status (2026-05-07 Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
 owner-requested `/jc-session-handoff` after Doctor Phase 1 fixture

@@ -540,3 +540,24 @@ the path should exist at all. Only after the disk invariant is clear
 should text-reference classification decide live stale reference vs
 archive/provenance evidence. Do not preserve a retired root as a fallback
 or compatibility shim.
+
+### Surprise 2 — long arcs need a finish line, not a tail
+
+**Expectation**: naming the next few steps after Phase 2 would be enough
+continuity for the following session.
+
+**What happened**: the owner caught the recurring long-thread failure mode:
+after too many sessions, the purpose gets replaced by an endless list of
+"next session" items. The memory/state doctor arc needed a definite
+why/where/where-next/how-to-finish statement, with future repair and
+consolidation work separated from the safe-merge gate closure.
+
+**Insight**: a plan with phases is not automatically a plan with an end.
+For long-running Practice/tooling arcs, continuity must name the value being
+created, the exact current blockers, and the completion boundary. Otherwise
+future sessions inherit a growing tail rather than a finishable mission.
+
+**Behaviour change**: before handing off a mature multi-session arc, write the
+finish condition in executable terms. Here: specialist reviews of `44c73e4d`,
+three schema blockers fixed, report mode green, strict mode added, root alias
+through built `agent-tools` output, validation evidence recorded, plan archived.
