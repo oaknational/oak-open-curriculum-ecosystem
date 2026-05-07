@@ -142,24 +142,32 @@ gate.
 
 ## First Task of Next Session
 
-Owner-decided. Candidates:
+**Canonical first task — opener landed 2026-05-07**:
+[`2026-05-08-graph-mvp-arc-specialist-review-opener.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md)
+— parallel specialist-reviewer pass over the seven artefacts authored
+2026-05-07 (graph MVP-arc spine + supporting amendments). Five
+reviewers in a single parallel batch (`assumptions-reviewer`,
+`architecture-reviewer-betty`, `architecture-reviewer-fred`,
+`mcp-reviewer`, `docs-adr-reviewer`), then synthesise verdicts. The
+review gates the slice-2 / slice-3a / slice-3b plan-authoring work;
+those don't start until review settles.
+
+After the review settles, queued next:
 
 1. **Author the slice-2 executable plan** (proposed name:
-   `oak-kg-threads-surface.plan.md`) in
-   `connecting-oak-resources/knowledge-graph-integration/current/`.
-   Per `graph-mvp-arc.plan.md` `author-slice-2-plan` todo. Strategic
-   shape: `oak-kg-threads` resource + `oak-kg-get-thread-content`
-   tool via graph-corpus-sdk Oak Curriculum Ontology adapter.
-2. **Author the slice-3a executable plan** in parallel (proposed name:
-   `oak-misconceptions-subgraph-mcp-surface.plan.md` or extension to
-   existing `misconception-graph-mcp-surface.plan.md`). Per spine's
-   `author-slice-3a-plan` todo.
+   `oak-kg-threads-surface.plan.md`) per spine's
+   `author-slice-2-plan` todo. Parallel-safe with slice-3a.
+2. **Author the slice-3a executable plan** in parallel
+   (proposed name: `oak-misconceptions-subgraph-mcp-surface.plan.md`
+   or extension to existing `misconception-graph-mcp-surface.plan.md`).
 3. **Topology approval for `graph-stack.plan.md`** — owner-gated
    review of the eight-workspace topology before any execution.
-   Plan-phase reviewers named in the spine: `assumptions-reviewer`,
+   Plan-phase reviewers named in graph-stack: `assumptions-reviewer`,
    `architecture-reviewer-betty`, `architecture-reviewer-fred`,
-   `architecture-reviewer-barney`. No promotion until all four have
-   run.
+   `architecture-reviewer-barney`. No promotion until all four
+   have run. (Some overlap with the MVP-arc opener's reviewer set;
+   that opener's findings inform but do not substitute for this
+   topology-approval pass.)
 4. Address EEF thread Promotion Packet (sibling thread).
 5. Promote the external-oak-references plan to `current/`.
 6. Do a deep read of `oak-curriculum-ontology` to extract the
