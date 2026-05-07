@@ -174,6 +174,31 @@ is now durable in PDR-050 plus the portable substrate and local
 doctor plans. The next specialist review must still audit that
 homing decision rather than assuming the warning was noise.
 
+## 2026-05-07 — Doctor safe-merge gate / codex / GPT-5 / `019e03`
+
+### Mistake: do not parallelise git index operations
+
+I tried to move the completed doctor plan and its phase-0 ledger with two
+parallel `git mv` commands. One succeeded and the other collided on
+`.git/index.lock`. The lock cleared immediately and the second move succeeded
+serially, but the behaviour change is simple: Git index mutations are not a
+parallel lane. Even if both operations are safe in isolation, run `git mv`,
+staging, and commit-window operations serially.
+
+### Correction: deleted live state is gone, not a continuity topic
+
+Owner corrected the post-review discussion sharply: once the legacy
+collaboration comms tree was deleted under explicit direction, live continuity
+surfaces should stop expending energy on preserving, defending, or repeatedly
+naming that deleted state. Historical archive evidence can stay inert, but live
+handoff prose and check output should focus on the current substrate and the
+actual gate result.
+
+**Behaviour change**: when owner direction removes a live state tree, treat
+follow-up work as cleanup of stale live references and validation of absence.
+Do not keep re-litigating the deleted tree as though it were still a design
+surface.
+
 ## 2026-05-06 — Stormy Drifting Harbour / claude-code / opus-4-7-1m / `228bc5`
 
 ### Surprise: first-instance memory/state divergence on parallel branches
