@@ -2,8 +2,8 @@
 
 ## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (Stratospheric Whirling Airstream / codex /
-GPT-5 / `019e02`).
+**Last refreshed**: 2026-05-07 (Cirrus Swooping Cloud / codex / GPT-5 /
+`019e02`).
 
 **Owning plans**:
 
@@ -57,6 +57,21 @@ ledger identities. `test-reviewer` ran before Phase 1 and found one blocker:
 the initial validation lane could pass without selecting the intended tests.
 The parent plan and ledger now require the exact Vitest path with
 `--passWithNoTests=false`, and an impossible no-match path was verified to fail.
+
+Doctor Phase 1 fixture work is now complete in the working tree. The new pure
+contract evaluators live under `agent-tools/src/practice-substrate/`, with
+literal-object/string tests at
+`agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
+Coverage includes the planned fixture classes for legacy event-root terminal
+state, stale live prose vs archived evidence, missing `merge_class`
+metadata, duplicate IDs, same-key semantic collisions, generated read-model
+drift, parse/schema incoherence, conflict markers, merge-topology snapshots,
+and repair-preservation classification. The mandatory `test-reviewer`
+checkpoint found one blocker: parameterised merge classes accepted
+`append-only-structured-by-` without a key. The implementation now rejects
+that form and the fixture suite includes the edge case. No Phase 2 report-mode
+CLI, repo reader, git reader, runtime wiring, or root `practice:substrate:*`
+alias was added.
 
 **Key doctrine points now recorded**:
 
@@ -136,6 +151,14 @@ or Practice Core content to make the report greener.
   confirmed 22 surfaces and 114 migration rows with no duplicate IDs, duplicate
   original/target paths, or byte/hash mismatches. The dedicated Phase 1
   no-match validation probe failed as required.
+- Doctor Phase 1 fixture gates passed after implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (17 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm markdownlint-check:root`, explicit `collaboration-state -- check`, and
+  `git diff --check`. Guard searches found no root `practice:substrate:*`
+  aliases and no forbidden test imports or live `process.env`/`process.cwd()`
+  access in the Phase 1 source/test tree.
 
 **Specialist review**: completed 2026-05-07; evidence at
 [memory/state contracts specialist review][memory-state-review-evidence].
@@ -148,21 +171,23 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: land the Phase 0 ledger/plan and handoff commits, then
-start [Memory/state contract doctor][memory-state-doctor-plan] Phase 1 fixture
-work only. Begin from the ledger's defect classes and preserve the validation
-lane exactly:
+**Next safe step**: after the Phase 1 implementation and handoff commits land,
+start [Memory/state contract doctor][memory-state-doctor-plan] Phase 2 report
+mode only. Reuse the pure Phase 1 evaluator layer from `agent-tools`, add the
+live repository readers and CLI wiring behind read-only report mode, and keep
+root aliases deferred until they invoke built `agent-tools` output only. The
+Phase 1 validation lane remains:
 
 ```bash
 pnpm --filter @oaknational/agent-tools exec vitest run \
   tests/practice-substrate --passWithNoTests=false
 ```
 
-Fixture tests must be pure in-process tests over injected snapshots, literal
-objects, and strings. They must not read repo files, fixture files, git state,
-`process.env`, or `process.cwd()`, and they must not spawn processes. Every
-fixture class lands with the implementation that greens it; no RED-only,
-skipped, conditional, or product-code-only commit shape is permitted.
+Future fixture tests must remain pure in-process tests over injected snapshots,
+literal objects, and strings. They must not read repo files, fixture files, git
+state, `process.env`, or `process.cwd()`, and they must not spawn processes.
+Phase 2 may add runtime readers and CLI wiring, but that live access belongs
+outside the fixture tests.
 
 **Non-goals for the next review session**:
 
@@ -1846,6 +1871,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
 | `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |
 | `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |

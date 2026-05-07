@@ -12,7 +12,7 @@ todos:
     status: completed
   - id: phase-1-red-fixtures
     content: "Phase 1 (RED/GREEN fixture slices): Author each fixture class with the implementation that greens it; no RED-only commits."
-    status: pending
+    status: completed
   - id: phase-2-green-report-mode
     content: "Phase 2 (GREEN): Implement read-only report mode that recomputes all deterministic checks and exits non-zero on structural defects."
     status: pending
@@ -34,7 +34,7 @@ isProject: false
 # Memory/State Contract Doctor
 
 **Last Updated**: 2026-05-07
-**Status**: QUEUED — Phase 0 complete; Phase 1 blocked until fixture work starts
+**Status**: QUEUED — Phase 1 pure fixture slices complete; Phase 2 report mode next
 **Scope**: Repo-local enforcement for
 [PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
@@ -233,6 +233,23 @@ Expected local RED result: tests fail for missing implementation only.
 Expected committed result: the paired implementation makes the same tests
 green. Keep `pnpm test:root-scripts` for root/runtime validator integration
 once the standalone/root script exists.
+
+**Completion evidence (2026-05-07)**: Phase 1 landed as pure
+`agent-tools` fixture logic only. The implementation lives under
+`agent-tools/src/practice-substrate/`, and the literal-object/string fixture
+suite lives at
+`agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
+It covers the Phase 1 classes for legacy event-root terminal state,
+live-vs-archived retired-path references, `merge_class` metadata gaps,
+duplicate IDs, same-key semantic collisions, generated read-model drift,
+parse/schema incoherence, conflict markers, merge-topology snapshots, and
+repair-preservation classifications. The mandatory `test-reviewer` checkpoint
+found one fixture/implementation blocker around
+`append-only-structured-by-` without a key; that was fixed by adding the
+literal fixture and requiring a non-empty suffix for the parameterised merge
+class. No root `practice:substrate:*` aliases, live repo readers, git readers,
+runtime CLI wiring, fixture-file reads, `process.env`, or `process.cwd()`
+access were added.
 
 ## Phase 2: GREEN Report Mode
 

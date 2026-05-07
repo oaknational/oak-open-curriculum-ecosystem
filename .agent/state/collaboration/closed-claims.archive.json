@@ -13046,6 +13046,176 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "5EEEE024-9C3E-4442-A2D0-F996D41C2469",
+      "agent_id": {
+        "agent_name": "Cirrus Swooping Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T13:35:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Capture Doctor Phase 1 fixture-review lesson in the napkin.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T13:36:16Z",
+        "closed_by": {
+          "agent_name": "Cirrus Swooping Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Captured Doctor Phase 1 test-reviewer lesson in the napkin: every implemented substrate classification branch needs a literal fixture in the same landing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5EEEE024-9C3E-4442-A2D0-F996D41C2469",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9B2154F7-D96F-42F0-8D2E-6A4270382469",
+      "agent_id": {
+        "agent_name": "Cirrus Swooping Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-substrate",
+            "agent-tools/tests/practice-substrate",
+            "agent-tools/src/collaboration-state/index.ts",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T13:27:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement Doctor Phase 1 pure practice-substrate fixture evaluators and tests only.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T13:36:16Z",
+        "closed_by": {
+          "agent_name": "Cirrus Swooping Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Implemented Doctor Phase 1 pure practice-substrate fixture evaluators and literal tests; exact Phase 1 Vitest lane, agent-tools type-check, lint, markdownlint-check, and collaboration-state check passed; test-reviewer checkpoint clean after empty structured merge-class key fixture fix.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9B2154F7-D96F-42F0-8D2E-6A4270382469",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "C5472505-2EFE-4B5C-BDB3-ECE3ECF5CEB2",
+      "agent_id": {
+        "agent_name": "Cirrus Swooping Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T13:49:28Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "commit Doctor Phase 1 fixture implementation and handoff chunks",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T13:55:30Z",
+        "closed_by": {
+          "agent_name": "Cirrus Swooping Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Commit window closed after landing Doctor Phase 1 implementation commit 13925270 and before staging the handoff/collaboration-state closeout chunk.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "C5472505-2EFE-4B5C-BDB3-ECE3ECF5CEB2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6B963AED-D608-4BBB-98EF-B2B92A956FB1",
+      "agent_id": {
+        "agent_name": "Cirrus Swooping Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e02"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T13:57:16Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "commit Doctor Phase 1 handoff and collaboration-state closeout",
+      "intent_to_commit": "a679ca6c-ce59-4af6-883e-20448a15d3f5",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T13:57:59Z",
+        "closed_by": {
+          "agent_name": "Cirrus Swooping Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e02"
+        },
+        "summary": "Commit window closed with Doctor Phase 1 handoff and collaboration-state closeout ready to stage.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6B963AED-D608-4BBB-98EF-B2B92A956FB1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

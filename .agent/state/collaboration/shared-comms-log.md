@@ -2946,3 +2946,15 @@ Stratospheric Whirling Airstream opened claim 274d975e-325e-45bd-b946-b6927c0b33
 ## 2026-05-07T12:36:05Z — `Stratospheric Whirling Airstream` / `codex` / `GPT-5` / `019e02` — Doctor Phase 0 handoff complete
 
 Stratospheric Whirling Airstream completed jc-session-handoff for Memory/state contract doctor Phase 0. Continuity surfaces now record the Phase 0 ledger, corrected Phase 1 validation lane, no new Phase 1 work, clean entry-point sweep, absent .remember buffer, no escalation or decision-thread handoff, and routed fitness pressure. Next action is commit in sensible chunks, then Phase 1 fixture work only under the exact Vitest path with --passWithNoTests=false.
+
+---
+
+## 2026-05-07T13:27:48Z — `Cirrus Swooping Cloud` / `codex` / `GPT-5` / `019e02` — Doctor Phase 1 fixture implementation start
+
+Cirrus Swooping Cloud opening Doctor Phase 1 fixture implementation on agentic-engineering-enhancements. Scope is pure agent-tools practice-substrate evaluators plus literal fixture tests only: no root practice:substrate aliases, no repo-file reads in tests, no live git/fs/env/cwd access in tests, and no Phase 2 report-mode CLI wiring.
+
+---
+
+## 2026-05-07T13:36:16Z — `Cirrus Swooping Cloud` / `codex` / `GPT-5` / `019e02` — Doctor Phase 1 fixture implementation complete
+
+Cirrus Swooping Cloud completed Doctor Phase 1 fixture implementation. Added pure practice-substrate evaluator modules and literal fixture tests only; no root practice:substrate aliases or Phase 2 report-mode CLI wiring. Validation passed: exact Phase 1 Vitest lane with --passWithNoTests=false, agent-tools type-check, agent-tools lint, markdownlint-check:root, and explicit collaboration-state check. test-reviewer checkpoint is clean after adding the invalid append-only-structured-by- fixture and tightening merge-class validation.

@@ -9,6 +9,26 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-07 — Cirrus Swooping Cloud / `codex` /
+`GPT-5` / `019e02`, Doctor Phase 1 pure fixture slices implemented)**:
+completed Doctor Phase 1 fixture work only. New pure evaluator modules live
+under `agent-tools/src/practice-substrate/`, with literal-object/string tests
+at `agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
+The fixture suite covers legacy `comms/events` terminal state, stale live prose
+vs archived evidence, missing `merge_class`, duplicate IDs, same-key semantic
+collisions, generated read-model drift, parse/schema incoherence, conflict
+markers, merge-topology snapshots, and repair-preservation classifications.
+The mandatory `test-reviewer` checkpoint found one blocker around
+`append-only-structured-by-` accepting no key; the fixture and implementation
+now reject that invalid parameterised merge class. Validation passed for the
+exact Phase 1 lane, `agent-tools` type-check, `agent-tools` lint,
+`markdownlint-check:root`, explicit collaboration-state check, and
+`git diff --check`. Guard searches found no root `practice:substrate:*` aliases
+and no forbidden live fs/git/env/cwd access in the Phase 1 tests.
+**Next safe step**: land this implementation/handoff, then start Doctor Phase 2
+read-only report mode. Keep root aliases deferred until they invoke built
+`agent-tools` output only.
+
 **Session close (2026-05-07 — Penumbral Veiling Owl / `codex` /
 `GPT-5` / `019e02`, memory/state Phase 4/5 closure implemented)**:
 completed the owner-directed Phase 4/5 closure before doctor work.
@@ -1215,6 +1235,15 @@ test-reviewer fixture-strategy checkpoint, validation-lane correction, and
 owner-requested `/jc-session-handoff` plus commit preparation. Canonical
 identity row is in `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Cirrus Swooping Cloud /
+`codex` / `GPT-5` / `019e02` for Memory/state contract doctor Phase 1 pure
+fixture implementation, `agent-tools` practice-substrate evaluator modules,
+literal fixture tests, merge-class parameter edge-case fix, clean
+`test-reviewer` checkpoint, and owner-requested `/jc-session-handoff` plus
+commit landing. Canonical identity row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
 
@@ -1236,6 +1265,22 @@ The previous observability branch lane remains preserved in
 `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`.
 
 ## Current Session Focus
+
+**2026-05-07 (Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
+agentic-engineering-enhancements thread, Doctor Phase 1 fixtures +
+handoff)**:
+Completed Memory/state contract doctor Phase 1 only. The new pure
+`agent-tools/src/practice-substrate/` evaluator layer is covered by
+`agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`
+using injected snapshots, strings, and literal objects. The tests cover the
+planned fixture classes for canonical path terminal state, live/archive retired
+path references, `merge_class` gaps and invalid parameterised classes,
+duplicate identities, semantic collisions, derived-output drift, parse/schema
+incoherence, conflict markers, merge topology, and repair-preservation
+classification. No repo readers, git readers, root aliases, or Phase 2 CLI
+wiring were added. `test-reviewer` passed after one blocker fix for
+`append-only-structured-by-` without a key. **Next safe step**: land the Phase 1
+and handoff commits, then begin Phase 2 read-only report mode only.
 
 **2026-05-07 (Stratospheric Whirling Airstream, codex, GPT-5, `019e02`,
 agentic-engineering-enhancements thread, Doctor Phase 0 defect ledger +
@@ -2062,6 +2107,20 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Cirrus Swooping Cloud, codex, GPT-5, `019e02`,
+owner-requested `/jc-session-handoff` after Doctor Phase 1 fixture
+implementation): `due — Phase 1 closed with new pure fixture logic and a
+test-reviewer-discovered edge case; not run in this closeout because the owner
+asked for handoff plus commit chunks`.** One thread moved:
+`agentic-engineering-enhancements`. Handoff captured the Phase 1 completion,
+the `append-only-structured-by-` invalid-key lesson, the clean reviewer
+checkpoint, and the next-step boundary for Phase 2 read-only report mode.
+Entry-point sweep was clean: `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` remain
+in canonical pointer shape with the intentional AGENTS rules-index extension.
+`.remember/` is absent; no open collaboration claims remain; no open
+decision-thread handoff was needed. Fitness remains routed pressure, not
+Phase 1 cleanup scope.
 
 **Status (2026-05-07 Stratospheric Whirling Airstream, codex, GPT-5,
 `019e02`, owner-requested `/jc-session-handoff` after Doctor Phase 0 defect

@@ -43,6 +43,25 @@ equivalent dedicated script/config) with `--passWithNoTests=false`, and keep
 zero-selected-tests as a blocking failure before any fixture/product slice
 lands.
 
+## 2026-05-07 — Doctor Phase 1 fixture slices / codex / GPT-5 / `019e02`
+
+### Surprise: every implemented fixture branch needs its own fixture
+
+**What I expected**: the `merge-class-invalid` branch was a harmless defensive
+extension because Phase 1's required metadata fixtures centred on missing
+`merge_class` coverage.
+
+**What happened**: `test-reviewer` caught that the defensive branch accepted
+`append-only-structured-by-` with no identity key, which violates PDR-049's
+`append-only-structured-by-<key>` contract. Because I had implemented the branch
+without a literal fixture for invalid tokens, the defect was a product-code-only
+shape hidden inside otherwise fixture-driven work.
+
+**Lesson**: in fixture-slice work, every product branch that claims a substrate
+classification must have a literal fixture in the same landing. Defensive
+branches are not free; if the branch matters enough to implement, it matters
+enough to describe with a fixture.
+
 ## 2026-05-07 — Memory/state closure handoff / codex / GPT-5 / `019e02`
 
 ### Surprise: generated read models need same-session refresh after event writes
