@@ -25,51 +25,17 @@ export async function createLivePracticeSubstrateReport(
   options: PracticeSubstrateCliOptions,
 ): Promise<PracticeSubstrateReport> {
   const repoRoot = options.repoRoot ?? '.';
-  const findings: SubstrateFinding[] = [];
   const manifestResult = await safeReadManifest(repoRoot);
-  findings.push(...manifestResult.findings);
 
-  if (manifestResult.manifest !== undefined) {
-    const manifest = manifestResult.manifest;
-    findings.push(...evaluateManifestFromLiveSnapshot(manifest));
-    findings.push(
-      ...(await collectLiveFindings('legacy-comms-events-migration-ledger', () =>
-        evaluateMigrationLedgers(repoRoot, manifest),
-      )),
-    );
-    findings.push(
-      ...(await collectLiveFindings('retired-path-scan', () =>
-        evaluateRetiredPathScan(repoRoot, manifest),
-      )),
-    );
-  }
-
-  findings.push(
-    ...(await collectLiveFindings('collaboration-comms-events-legacy', () =>
-      evaluateLegacyEventsRoot(repoRoot),
-    )),
+  return createPracticeSubstrateReport(
+    [
+      ...manifestResult.findings,
+      ...(await evaluateManifestRelatedLiveFindings(repoRoot, manifestResult.manifest)),
+      ...(await evaluateAlwaysLiveFindings(repoRoot)),
+      ...(await evaluateTargetRefLiveFindings(repoRoot, options.targetRef)),
+    ],
+    options.mode,
   );
-  findings.push(
-    ...(await collectLiveFindings('collaboration-json-surfaces', () =>
-      evaluateCollaborationJsonSurfaces(repoRoot),
-    )),
-  );
-  findings.push(
-    ...(await collectLiveFindings('collaboration-shared-comms-log', () =>
-      evaluateSharedCommsLog(repoRoot),
-    )),
-  );
-
-  if (options.targetRef !== undefined) {
-    const targetRef = options.targetRef;
-    findings.push(
-      ...(await collectLiveFindings('git-topology', () =>
-        evaluateOptionalGitTopology(repoRoot, targetRef),
-      )),
-    );
-  }
-
-  return createPracticeSubstrateReport(findings, options.mode);
 }
 
 async function safeReadManifest(repoRoot: string): Promise<{
@@ -104,6 +70,52 @@ function liveReadFailureFinding(surface: string, error: unknown): SubstrateFindi
     repair: 'manual-with-provenance',
     message: `Live substrate reader failed: ${error instanceof Error ? error.message : String(error)}.`,
   });
+}
+
+async function evaluateManifestRelatedLiveFindings(
+  repoRoot: string,
+  manifest: ManifestDocument | undefined,
+): Promise<readonly SubstrateFinding[]> {
+  if (manifest === undefined) {
+    return [];
+  }
+
+  return [
+    ...evaluateManifestFromLiveSnapshot(manifest),
+    ...(await collectLiveFindings('legacy-comms-events-migration-ledger', () =>
+      evaluateMigrationLedgers(repoRoot, manifest),
+    )),
+    ...(await collectLiveFindings('retired-path-scan', () =>
+      evaluateRetiredPathScan(repoRoot, manifest),
+    )),
+  ];
+}
+
+async function evaluateAlwaysLiveFindings(repoRoot: string): Promise<readonly SubstrateFinding[]> {
+  return [
+    ...(await collectLiveFindings('collaboration-comms-events-legacy', () =>
+      evaluateLegacyEventsRoot(repoRoot),
+    )),
+    ...(await collectLiveFindings('collaboration-json-surfaces', () =>
+      evaluateCollaborationJsonSurfaces(repoRoot),
+    )),
+    ...(await collectLiveFindings('collaboration-shared-comms-log', () =>
+      evaluateSharedCommsLog(repoRoot),
+    )),
+  ];
+}
+
+async function evaluateTargetRefLiveFindings(
+  repoRoot: string,
+  targetRef: string | undefined,
+): Promise<readonly SubstrateFinding[]> {
+  if (targetRef === undefined) {
+    return [];
+  }
+
+  return collectLiveFindings('git-topology', () =>
+    evaluateOptionalGitTopology(repoRoot, targetRef),
+  );
 }
 
 function evaluateManifestFromLiveSnapshot(manifest: ManifestDocument): readonly SubstrateFinding[] {

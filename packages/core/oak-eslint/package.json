@@ -35,6 +35,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-sonarjs": "^4.0.3",
     "eslint-plugin-tsdoc": "^0.5.2",
+    "eslint-plugin-unicorn": "^64.0.0",
     "globals": "^17.6.0",
     "minimatch": "^10.2.5",
     "typescript-eslint": "^8.59.2"

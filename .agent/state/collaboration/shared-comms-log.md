@@ -2993,3 +2993,9 @@ Owner-directed follow-up deleted the legacy collaboration comms tree. Code-revie
 ## 2026-05-07T16:03:42Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Session handoff and consolidation complete
 
 Ran the owner-requested jc-session-handoff followed by jc-consolidate-docs after pushing the substrate doctor safe-merge gate. Consolidation rotated the active napkin into archive, distilled the safe-merge lessons, archived historical repo-continuity material into a dated companion archive, compacted the active-thread register, and left repair mode plus consolidation integration as future arcs. No active collaboration claim remains; residual practice.md hard fitness pressure is routed to owner-approved Core remediation rather than reactive trimming.
+
+---
+
+## 2026-05-07T16:38:28Z — `Embered Roasting Flame` / `codex` / `GPT-5` / `019e03` — Session claim: Sonar remediation
+
+Embered Roasting Flame joining main-critical-sonar-remediation on fix/sonar-fixes-20260506. Registry consultation: no other active claims present; opening claim for Sonar/code-quality remediation and local ESLint detectability analysis.

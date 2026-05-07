@@ -13433,6 +13433,54 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "58cedcc2-88fd-4bde-a11f-4626a6097d65",
+      "agent_id": {
+        "agent_name": "Embered Roasting Flame",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/**",
+            "packages/core/oak-eslint/**",
+            "agent-tools/src/practice-substrate/**",
+            "agent-tools/tests/practice-substrate/**",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
+            ".agent/plans/agent-tooling/frictions-register.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T16:38:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix Sonar/code-quality issues on PR #97 and determine whether local ESLint could detect them.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T16:50:57Z",
+        "closed_by": {
+          "agent_name": "Embered Roasting Flame",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Fixed Sonar S7778 issues in practice-substrate live findings, added unicorn/prefer-single-call as warning-only local ESLint signal, and logged repeated area-pattern claim bug for follow-up.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "58cedcc2-88fd-4bde-a11f-4626a6097d65",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -90,12 +90,17 @@ function isEnabledRuleSetting(setting: unknown): boolean {
   return severity !== undefined && severity !== 'off' && severity !== 0;
 }
 
-describe('@oaknational/eslint-plugin-standards strict config: targeted SonarJS activation', () => {
-  it('activates only the Sonar Quality-Gate remediation rules needed for this slice', () => {
+describe('@oaknational/eslint-plugin-standards strict config: targeted quality-gate activation', () => {
+  it('activates only the Sonar and Unicorn quality-gate remediation rules needed for this slice', () => {
     const settings = collectFinalRuleSettings();
     const enabledSonarRules = [...settings]
       .filter(
         ([ruleName, setting]) => ruleName.startsWith('sonarjs/') && isEnabledRuleSetting(setting),
+      )
+      .map(([ruleName]) => ruleName);
+    const enabledUnicornRules = [...settings]
+      .filter(
+        ([ruleName, setting]) => ruleName.startsWith('unicorn/') && isEnabledRuleSetting(setting),
       )
       .map(([ruleName]) => ruleName);
 
@@ -105,10 +110,25 @@ describe('@oaknational/eslint-plugin-standards strict config: targeted SonarJS a
       'sonarjs/no-nested-functions',
       'sonarjs/void-use',
     ]);
+    expect(enabledUnicornRules).toStrictEqual(['unicorn/prefer-single-call']);
     expect(settings.get('sonarjs/cognitive-complexity')).toStrictEqual(['error', 15]);
     expect(settings.get('sonarjs/no-alphabetical-sort')).toBe('error');
     expect(settings.get('sonarjs/no-nested-functions')).toStrictEqual(['error', { threshold: 4 }]);
     expect(settings.get('sonarjs/void-use')).toBe('error');
+    expect(settings.get('unicorn/prefer-single-call')).toBe('warn');
+  });
+
+  it('reports Sonar S7778-equivalent repeated Array#push calls locally', () => {
+    const code = [
+      'const findings: string[] = [];',
+      "findings.push('first');",
+      "findings.push('second');",
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lint(code, 'fixture.ts');
+
+    expect(ruleIds).toContain('unicorn/prefer-single-call');
   });
 });
 

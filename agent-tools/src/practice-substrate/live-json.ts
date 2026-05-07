@@ -90,13 +90,13 @@ export async function evaluateCollaborationJsonSurfaces(
   repoRoot: string,
 ): Promise<readonly SubstrateFinding[]> {
   const ajv = await collaborationAjv(repoRoot);
-  const findings: SubstrateFinding[] = [];
-  findings.push(...(await evaluateClaimSurfaces(repoRoot, ajv)));
-  findings.push(...(await evaluateThreadDirectory(repoRoot, ajv, CONVERSATIONS_ROOT)));
-  findings.push(...(await evaluateThreadDirectory(repoRoot, ajv, ESCALATIONS_ROOT)));
-  findings.push(...(await evaluateCommsEvents(repoRoot)));
 
-  return findings;
+  return [
+    ...(await evaluateClaimSurfaces(repoRoot, ajv)),
+    ...(await evaluateThreadDirectory(repoRoot, ajv, CONVERSATIONS_ROOT)),
+    ...(await evaluateThreadDirectory(repoRoot, ajv, ESCALATIONS_ROOT)),
+    ...(await evaluateCommsEvents(repoRoot)),
+  ];
 }
 
 export async function evaluateSharedCommsLog(

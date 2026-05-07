@@ -50,3 +50,20 @@ The memory/state substrate doctrine and merge semantics are already durable in
 PDR-049, PDR-050, the local substrate contract, and the archived doctor plan.
 The consolidation therefore did not create a new ADR or PDR. Future arcs remain
 repair mode and consolidation integration, each requiring its own plan.
+
+## 2026-05-07 — Sonar remediation follow-up / codex / GPT-5 / `019e03`
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state claims open`
+- **Signal**: bug / recurrence
+- **Observation**: Repeated `--area-pattern` flags still behave as
+  last-write-wins. During the Sonar remediation claim I supplied four
+  patterns, but the persisted claim retained only the final
+  `.agent/state/collaboration/**` pattern. I manually edited
+  `active-claims.json` to restore the intended areas.
+- **Behaviour change / candidate follow-up**: F-14 in
+  `.agent/plans/agent-tooling/frictions-register.md` now has a fresh
+  recurrence note and should be treated as a real CLI bug: either make
+  `--area-pattern` repeatable like `--file`, or reject repeated usage
+  with an explicit error and full help.

@@ -20,6 +20,7 @@ Primary plan:
 | codex | GPT-5 | 019dfd | Ethereal Ascending Twilight | executor | 2026-05-06 | 2026-05-06 |
 | claude-code | claude-opus-4-7-1m | 228bc5 | Stormy Drifting Harbour | executor | 2026-05-06 | 2026-05-06 |
 | codex | GPT-5 | 019dfe | Choppy Washing Archipelago | executor | 2026-05-06 | 2026-05-07 |
+| codex | GPT-5 | 019e03 | Embered Roasting Flame | executor | 2026-05-07 | 2026-05-07 |
 
 ## Landing Target For Next Session
 
