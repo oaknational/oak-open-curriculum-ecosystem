@@ -109,7 +109,7 @@
   "engines": {
     "node": "24.x"
   },
-  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
+  "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
   "license": "MIT",
   "pnpm": {
     "peerDependencyRules": {
@@ -126,7 +126,7 @@
       "csstype": ">=3.2.3",
       "file-type": ">=21.3.2",
       "follow-redirects": ">=1.15.12",
-      "hono": ">=4.12.14",
+      "hono": ">=4.12.16",
       "@hono/node-server": ">=1.19.10",
       "js-yaml": ">=4.1.1",
       "picomatch": ">=4.0.4",
@@ -144,8 +144,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.2",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@playwright/test": "^1.59.1",
     "@semantic-release/changelog": "^6.0.3",
@@ -155,25 +155,25 @@
     "@stryker-mutator/vitest-runner": "^9.6.1",
     "@types/node": "^25.6.0",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.59.1",
-    "@typescript-eslint/parser": "^8.59.1",
+    "@typescript-eslint/eslint-plugin": "^8.59.2",
+    "@typescript-eslint/parser": "^8.59.2",
     "@vitest/coverage-v8": "^4.1.5",
-    "dependency-cruiser": "^17.3.10",
-    "eslint": "^10.2.1",
+    "dependency-cruiser": "^17.4.0",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
-    "knip": "^6.8.0",
+    "knip": "^6.12.0",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
     "supertest": "^7.2.2",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "turbo": "^2.9.6",
-    "typescript": "^6",
+    "turbo": "^2.9.9",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   }
 }
