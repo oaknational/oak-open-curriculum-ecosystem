@@ -9,18 +9,48 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
-**Session follow-up (2026-05-07 — Memory/state substrate contract
-planning / `codex` / `GPT-5` / `019dfe`)**: created the uncommitted
-planning/doctrine bundle for portable memory/state substrate contracts
-and the repo-local memory/state doctor plan. Specialist review evidence now
-lives at
-`.agent/plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md`.
-Important correction preserved for the next session: do not strip
-captured knowledge reactively to satisfy fitness signals. Preserve
-first; then home, rotate, or escalate deliberately. This intentionally
-left `napkin.md` in hard fitness until reviewers confirmed the
-right home; reviewer fixes tightened the portable preservation clause
-and doctor repair guards before commit.
+**Session follow-up (2026-05-07 — Floating Vaulting Updraft /
+`codex` / `GPT-5` / `019e01`, memory/state strict local instance)**:
+completed the owner-directed substrate local-instance slice before doctor
+implementation. The human-facing contract remains
+`.agent/memory/executive/memory-state-substrate-contracts.md`; strict data now
+lives beside it in
+`.agent/memory/executive/memory-state-substrate-contracts.manifest.json` and
+`.agent/memory/executive/memory-state-substrate-contracts.schema.json`.
+The manifest carries 22 surface rows with required fields filled. The 114
+legacy `.agent/state/collaboration/comms/events/*.json` fragments were
+collision-checked, JSON-parse-checked, ledgered with original path, target
+path, SHA-256, byte count, source evidence, and rationale, then moved into the
+canonical `.agent/state/collaboration/comms-events/` root. The legacy root is
+historical only and should contain `.gitkeep`. Phase 0/2 of the portable plan
+are now complete and Phase 3 responsibilities are routed: prevention through
+entry docs/rules/write APIs, detection through future `practice:substrate:check`,
+mitigation through structured severity and reviewer routes, repair through
+deterministic dry-run/apply only, and learning through consolidation/reviewer
+feedback. No root `practice:substrate:*` scripts were added.
+**Next safe step**: finish validation and review for Phase 4/5, preserve all
+memory/state substance under fitness pressure, close this local-instance
+claim, then start the memory/state doctor only after the strict manifest,
+schema, ledger, and canonical collaboration-state checks are green. Repo-level
+doctor commands must invoke built `agent-tools` output only.
+
+**Session close (2026-05-07 — Windward Spiralling Aerie / `codex` /
+`GPT-5` / `019e01`, memory/state substrate contracts specialist review
+and landing)**: memory/state contract bundle landed and pushed on
+`fix/sonar-fixes-20260506`. Commit `cb662b7e` adds PDR-050, the portable
+substrate plan, the repo-local doctor plan, review evidence, state README
+updates, and canonical `comms-events` reference fixes. Commit `526a596e`
+closes the commit-window claim. Normal pre-commit hooks passed on both
+commits; pre-push checks passed. Strict practice fitness still reports
+known `repo-continuity.md` critical and `napkin.md` hard pressure; owner
+direction remains preserve knowledge first, then home, rotate, or
+escalate deliberately rather than trimming to satisfy fitness.
+**Next safe step**: continue the confirmed order without repeating landed
+work. The portable substrate inventory/template is seeded in executive
+memory; finish Phase 0/2 coverage and parseability decisions, then route
+Phase 3 immune-layer responsibilities. Only then start the memory/state
+doctor through built `agent-tools` output, followed by multi-checkout
+merge handling for fitness/state surfaces.
 
 **Session follow-up (2026-05-07 — Choppy Washing Archipelago /
 `codex` / `GPT-5` / `019dfe`)**: PR #97 vendor-switch handoff has
@@ -1135,6 +1165,13 @@ index + 12 high-touch entries tagged + new pending entry capturing
 the access-rhythm-as-fitness-axis insight). Canonical identity row is
 in `threads/agentic-engineering-enhancements.next-session.md`.
 
+Active-identities delta, 2026-05-07:
+`agentic-engineering-enhancements` latest identity is Windward Spiralling
+Aerie / `codex` / `GPT-5` / `019e01` for memory/state substrate contract
+specialist review stewardship and landing (commits `cb662b7e` and
+`526a596e`). Canonical identity row is in
+`threads/agentic-engineering-enhancements.next-session.md`.
+
 The old `memory-feedback` thread is archived. If doctrine-consolidation
 work resumes, start a fresh thread or revive that record deliberately.
 
@@ -1156,6 +1193,24 @@ The previous observability branch lane remains preserved in
 `[threads/observability-sentry-otel.next-session.md](threads/observability-sentry-otel.next-session.md)`.
 
 ## Current Session Focus
+
+**2026-05-07 (Windward Spiralling Aerie, codex, GPT-5, `019e01`,
+agentic-engineering-enhancements thread, memory/state substrate
+contracts review + commit/push)**:
+Started from the memory/state contract specialist-review opener, read the
+thread handoff and dirty substrate bundle, and dispatched
+`docs-adr-reviewer`, `assumptions-reviewer`,
+`architecture-reviewer-fred`, and `test-reviewer`. Review consensus:
+direction approved with fixes. Applied fixes to PDR-050, the portable
+substrate plan, the doctor plan, state README, and evidence. Owner
+confirmed the next order is portable contracts, then doctor, then
+multi-checkout merge handling; owner also confirmed repo-level doctor
+commands must invoke built `agent-tools` output only and legacy
+`comms/events` must be documented and migrated, not allowed to persist as
+a second live home. Landed/pushed `cb662b7e` and `526a596e`.
+**Next safe step**: start the portable substrate contract plan at Phase 0
+surface audit, with the Phase 2 surface-inventory/template dependency
+made explicit before any doctor implementation.
 
 **2026-05-06 (Stormy Drifting Harbour, claude-code, opus-4-7-1m,
 `228bc5`, main-critical-sonar-remediation thread, hotspot review +
@@ -1912,6 +1967,48 @@ Visible owner-appetite items, not blockers for the active lanes:
    None of these are "skip" — each is a candidate awaiting owner direction. The PDR-021/PDR-015/PDR-022 amendments could land alongside the index plan's PDR candidates (tests-describe-system, reviewers-carry-doctrine, forcing-function-read-path) for a coherent Practice-Core update once the host directive surface stabilises.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-07 Seaworthy Swimming Sextant, codex, GPT-5,
+`019e01`, owner-invoked `/jc-consolidate-docs` after memory/state
+substrate inventory/template seed): `completed this handoff —
+bounded consolidation pass`.** Trigger is explicit owner direction plus
+settled architectural rationale from the session. Permanent homing:
+PDR-050 amended with the transferable substrate contract specification
+vs host substrate instance split; Practice Core changelog updated.
+Host-local surfaces updated so
+`memory-state-substrate-contracts.md` is the local instance seed, not
+the portable doctrine. Practice box empty; entry-point sweep clean
+(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md` point to the canonical agent
+directive); `.remember/` and `~/.codex/memories/` have no readable
+capture files in this workspace; tracks contain only README. Active
+claims snapshot: zero live claims; commit queue has zero non-abandoned
+entries; no escalation JSON files; decision-thread snapshot has four
+closed threads plus the existing WS3A open example. JSON parse sweep
+passed for collaboration state, conversations, and comms events. Fitness
+remains a known structural lane: `repo-continuity.md` critical and
+`napkin.md` hard are preserved rather than trimmed; the new contract
+surface is soft after role-calibrated limits. Next safe step is not
+doctor implementation yet: finish local instance coverage/parseability
+and Phase 3 immune-layer routing, then start the doctor through built
+`agent-tools` output.
+
+**Status (2026-05-07 Windward Spiralling Aerie, codex, GPT-5,
+`019e01`, memory/state substrate contracts review + landing +
+`/jc-session-handoff`): `due — known memory/state continuity pressure,
+not this closeout's bounded work`.** The session landed durable
+doctrine and plans rather than leaving settled rationale in ephemeral
+surfaces: PDR-050, the portable substrate plan, the doctor plan, and the
+specialist-review evidence are committed at `cb662b7e`; the commit-window
+claim is closed at `526a596e`. Entry-point sweep clean (`CLAUDE.md`,
+`AGENTS.md`, `GEMINI.md` match contract); tracks contain only README;
+`.remember/` has no readable session buffer in this workspace; no active
+claim, open decision thread, or escalation needed handoff action. The
+trigger is the inherited `repo-continuity.md` critical and `napkin.md`
+hard fitness pressure plus the now-landed substrate plan that explains the
+correct repair direction. Per owner direction, this is not permission to
+trim knowledge: preserve first, then home, rotate, split, recalibrate, or
+escalate deliberately. Deep consolidation is therefore marked due but not
+run in this lightweight closeout.
 
 **Status (2026-05-06 Ethereal Ascending Twilight, codex, GPT-5,
 `019dfd`, owner-directed corrective `/jc-session-handoff` during

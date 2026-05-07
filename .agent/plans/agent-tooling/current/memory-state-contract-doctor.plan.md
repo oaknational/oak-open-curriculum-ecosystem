@@ -46,9 +46,13 @@ and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-f
 The current collaboration-state check parses the narrow collaboration state
 happy path, but the broader substrate can still drift. Recent inspection found
 both the canonical `comms-events/` surface and legacy `comms/events/` state in
-the tree, with at least one recent event written to the old path. That class of
-defect is structural: a checker should detect it without depending on a human
-remembering which path is canonical.
+the tree, with at least one recent event written to the old path. The
+pre-doctor local-instance slice has now completed the terminal migration for
+that specific transition: 114 legacy fragments were collision-checked,
+JSON-parse-checked, ledgered with provenance, and moved into the canonical
+`comms-events/` root. The legacy root remains historical only and should contain
+only `.gitkeep`. A checker should validate that terminal state without
+depending on a human remembering which path is canonical.
 
 This plan implements the repo-local doctor promised by the portable substrate
 contract. It does not replace the collaboration-state helper; it recomputes a
@@ -78,6 +82,10 @@ or source-relative imports. The implementation cycle may run workspace tests
 against source, but every repo-level command that agents or hooks invoke goes
 through the compiled package output after the `agent-tools` build step.
 
+These scripts remain queued in this plan. Do not add root
+`practice:substrate:*` aliases until the doctor implementation starts; when
+they land, they must invoke built `agent-tools` output only.
+
 Report output is structured JSON by default with a human summary on stderr:
 
 ```json
@@ -87,7 +95,8 @@ Report output is structured JSON by default with a human summary on stderr:
   "findings": [
     {
       "id": "canonical-path-drift",
-      "severity": "error",
+      "level": "error",
+      "severity": "blocking",
       "surface": "collaboration-comms-events",
       "repair": "deterministic",
       "message": "Legacy event path contains live JSON fragments"
@@ -99,23 +108,34 @@ Report output is structured JSON by default with a human summary on stderr:
 ## Phase 0: Current Defect Ledger
 
 Create a ledger of current defects and known-good cases from live files.
-Before fixture authoring, consume the surface-inventory contract and local
-surface-contract template from Phase 2 of
+Before fixture authoring, consume the transferable substrate contract
+specification from
+[PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
+and the local surface-inventory instance from Phase 2 of
 [`memory-state-substrate-portable-contracts.plan.md`](../../agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md).
-If that phase has not landed yet, execute that template slice first in the same
-work arc and do not author doctor fixtures against an implicit contract.
+The current host-local contract surface is
+[`memory-state-substrate-contracts.md`](../../../memory/executive/memory-state-substrate-contracts.md).
+The strict local data contract now lives beside it as
+[`memory-state-substrate-contracts.manifest.json`](../../../memory/executive/memory-state-substrate-contracts.manifest.json)
+and
+[`memory-state-substrate-contracts.schema.json`](../../../memory/executive/memory-state-substrate-contracts.schema.json).
+Do not author doctor fixtures against an implicit contract: Phase 0 must first
+validate the strict manifest and migration ledger, or promote any future local
+instance changes into the same strict data shape.
 
 Include at least:
 
-- canonical `comms-events/` vs legacy `comms/events/` coexistence;
+- canonical `comms-events/` as the single live event-fragment root and legacy
+  `comms/events/` as a historical root that should contain only `.gitkeep`;
 - stale references to the legacy path in live docs and plans, classified
   separately from archived historical references that must be preserved;
-- legacy `comms/events/` fragments as historical state with no new writes until
-  the doctor classifies the terminal migration condition. This coexistence is a
-  transition defect, not an accepted steady state: the terminal state is one
-  live event-fragment root (`comms-events/`), no live prose or command
-  references to `comms/events/`, and any historical fragments rehomed through a
-  migration ledger that preserves content, original path, and provenance;
+- the legacy event migration ledger at
+  `.agent/state/collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json`,
+  including original path, target path, SHA-256, byte count, source evidence,
+  and rationale for every migrated fragment;
+- stale live writes to `comms/events/` after the ledger date as blocking, while
+  preserving archived prose references as historical evidence unless a reviewer
+  classifies them as live instructions;
 - generated `shared-comms-log.md` provenance header;
 - `merge_class` coverage across markdown frontmatter, JSON schemas, and
   directory READMEs;
@@ -130,6 +150,8 @@ Include at least:
 
 - The ledger distinguishes live defects from archived historical references.
 - Each defect has severity, repairability, and owner/reviewer route.
+- Phase 0 validates the strict executive-memory manifest/schema and migration
+  ledger before RED fixtures encode machine-readable assumptions.
 - The command contract above is finalised before RED fixtures are written.
 - The command contract names which modes are unavailable until Phase 2 report
   mode lands, so early validation does not call commands before they exist.
@@ -227,7 +249,7 @@ Add strict mode for low-ambiguity invariants.
 
 - Strict mode is wired into the merge/readiness workflow, not broad CI, until
   the current defect ledger is clean.
-- No warning-only deterministic defect is introduced; structural errors fail.
+- No non-blocking deterministic defect is introduced; structural errors fail.
 
 ## Phase 4: Repair Mode
 
@@ -285,7 +307,10 @@ Integrate doctor output into consolidation.
 Run before the substrate command exists:
 
 ```bash
-pnpm agent-tools:collaboration-state -- check
+pnpm agent-tools:collaboration-state -- check \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --events-dir .agent/state/collaboration/comms-events
 pnpm test:root-scripts
 pnpm portability:check
 pnpm practice:vocabulary
@@ -297,7 +322,10 @@ After Phase 2 lands report mode, add the substrate check to each phase:
 
 ```bash
 pnpm practice:substrate:check
-pnpm agent-tools:collaboration-state -- check
+pnpm agent-tools:collaboration-state -- check \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --events-dir .agent/state/collaboration/comms-events
 pnpm test:root-scripts
 pnpm portability:check
 pnpm practice:vocabulary

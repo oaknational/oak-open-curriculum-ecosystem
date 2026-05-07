@@ -6,10 +6,13 @@ created during hydration and stays in the repo. The baseline content model is
 specified by `practice-core/practice-bootstrap.md`, but local sections can be
 split more explicitly when that improves discoverability.
 
-In this repo, the Practice is the reusable plain-text framework that lets
-agents from major vendors collaborate on Oak's open curriculum infrastructure,
-learn from each session, and keep institutional and operational knowledge in
-the repository where future agents and humans can use it.
+In this repo, the Practice is the reusable plain-text framework, philosophy,
+and commitment that lets agents from major vendors collaborate on Oak's open
+curriculum infrastructure, learn from each session, and keep institutional and
+operational knowledge in the repository where future agents and humans can use
+it. Its specification layer is a portability tool: Practice Core carries
+implementation-agnostic concepts, while this bridge points to the repo-local
+bindings and instances.
 
 For the Practice Core files and their roles, see [practice-core/index.md](practice-core/index.md).
 
@@ -134,7 +137,7 @@ adoption from the Core concept name.
 | Rush-impulse three structural cues (PDR-043) | [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md) (three-cues paragraph in `principles.md` § Architectural Excellence Over Expediency) |
 | Agent-work Practice phenotype boundary (PDR-035 + Practice/repo split) | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md) |
 | Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side scope statement for the constraint); structural-enforcement scanner per PDR-038 is the next follow-on |
-| State and memory substrate contracts (PDR-050) | [`memory-state-substrate-portable-contracts.plan.md`](plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md) adopts the portable contract locally; [`memory-state-contract-doctor.plan.md`](plans/agent-tooling/current/memory-state-contract-doctor.plan.md) owns deterministic host enforcement |
+| State and memory substrate contracts (PDR-050) | PDR-050 carries the transferable specification; [`memory-state-substrate-contracts.md`](memory/executive/memory-state-substrate-contracts.md) is the human-facing host-local instance; [`memory-state-substrate-contracts.manifest.json`](memory/executive/memory-state-substrate-contracts.manifest.json) and [`memory-state-substrate-contracts.schema.json`](memory/executive/memory-state-substrate-contracts.schema.json) are the strict local data contract; [`memory-state-substrate-portable-contracts.plan.md`](plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md) adopts the portable contract locally; [`memory-state-contract-doctor.plan.md`](plans/agent-tooling/current/memory-state-contract-doctor.plan.md) owns deterministic host enforcement |
 
 ### Rules cited by Practice Core
 

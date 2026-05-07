@@ -1,8 +1,9 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Active arc — Memory/state substrate contracts + doctor plans (uncommitted)
+## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (codex / GPT-5 / `019dfe`).
+**Last refreshed**: 2026-05-07 (Floating Vaulting Updraft / codex /
+GPT-5 / `019e01`).
 
 **Owning plans**:
 
@@ -18,15 +19,33 @@ truth-across-time, and consolidation is the bridge. PDR-049 remains
 the merge-semantics authority; PDR-050 adds the portable contract and
 immune-layer doctrine.
 
-**Current state**: planning/docs changes are authored but not yet
-committed. New PDR-050, the two plans, PDR/PDR-index updates,
-Practice-index bridge updates, the multi-checkout merge-plan amendment,
-canonical `comms-events` path fixes, and specialist-review evidence are
-in the working tree. Collaboration-state claims used for the work were
-closed locally in `closed-claims.archive.json`.
+**Current state**: foundation bundle landed and pushed on
+`fix/sonar-fixes-20260506`. Commit `cb662b7e` adds PDR-050, the
+portable substrate plan, the repo-local doctor plan, PDR/PDR-index
+updates, Practice-index bridge updates, the multi-checkout merge-plan
+amendment, canonical `comms-events` path fixes, state README updates,
+and specialist-review evidence. Commit `526a596e` closes the
+commit-window collaboration claim. A follow-up local working-tree slice
+seeded the host-local inventory/template at
+[`memory-state-substrate-contracts.md`](../../executive/memory-state-substrate-contracts.md),
+links it from entry points, and captures the architectural split:
+transferable contract specification in Practice Core, filled inventory
+instance in the host. The next local-instance slice promoted that inventory to
+strict JSON data at
+[`memory-state-substrate-contracts.manifest.json`](../../executive/memory-state-substrate-contracts.manifest.json)
+and
+[`memory-state-substrate-contracts.schema.json`](../../executive/memory-state-substrate-contracts.schema.json),
+completed Phase 0/2 coverage, routed Phase 3 immune-layer responsibilities,
+and migrated the 114 legacy `comms/events` fragments into canonical
+`comms-events` with a provenance ledger under
+`.agent/state/collaboration/comms/archive/`.
 
 **Key doctrine points now recorded**:
 
+- The Practice is a philosophy and commitment, not merely a specification
+  repository. Its specification layer is a powerful portability tool: fully
+  specify the portable concept in Practice Core, then bind it to repo-local
+  surfaces as host implementation and current instance.
 - Semantic content union is necessary but insufficient for
   memory/state merges; the integration must still be a real git merge
   so git ancestry and parent topology are preserved.
@@ -39,6 +58,8 @@ closed locally in `closed-claims.archive.json`.
 - Host-specific TypeScript tooling is implementation, not Practice
   Core doctrine. Portable doctrine names equivalent prevention,
   detection, mitigation, and repair loops.
+- The transferable-vs-host split may be useful for other agentic engineering
+  processes and support systems once their substance proves Practice-level.
 
 **Owner correction captured 2026-05-07**: never strip captured
 knowledge reactively to meet fitness levels. Knowledge preservation is
@@ -49,14 +70,32 @@ substance is now durable in PDR-050 and the two plans, but the next
 reviewer should audit that disposition instead of treating the fitness
 warning as noise.
 
+**Additional correction captured 2026-05-07**: do not reactively cut
+content from memory surfaces, and do not do it to Practice Core files.
+Fitness output is a routing signal: preserve the concept first, then route
+pressure to homing, graduation, splitting, limit review, or explicit owner
+decision. Do not tighten Practice Core prose merely to satisfy a hard
+fitness character signal.
+
+**Tooling response captured 2026-05-07**: the fitness interaction itself now
+needs to carry the response discipline. Non-healthy fitness output should
+remind the observing agent to preserve substance first and route pressure
+structurally, rather than deleting, trimming, compressing, or weakening memory
+or Practice Core content to make the report greener.
+
 **Validation already run**:
 
-- `pnpm agent-tools:collaboration-state -- check` — passed.
+- `pnpm agent-tools:collaboration-state -- check` — passed as the then-current
+  narrow parser check. Future evidence should use explicit `--active`,
+  `--closed`, and `--events-dir` paths until the substrate doctor exists.
 - `pnpm portability:check` — passed.
 - `pnpm practice:vocabulary` — passed.
 - `pnpm markdownlint:root` — passed.
 - `pnpm test:root-scripts` — passed.
 - `git diff --check` — passed.
+- Follow-up local slice updated `scripts/validate-practice-fitness.ts` so
+  non-healthy output includes a non-reactive response-discipline reminder;
+  rerun focused script tests before landing.
 - `pnpm practice:fitness:informational` — exits 0 with critical
   `repo-continuity.md` pressure and hard `napkin.md` pressure.
   The napkin pressure now includes the intentional owner-correction
@@ -68,15 +107,26 @@ warning as noise.
 Reviewers endorsed the direction and required pre-commit fixes to
 preservation-before-repair, surface-inventory determinism, doctor
 sequencing, TDD/validator boundaries, live/archive stale-path
-classification, and repair guards.
+classification, and repair guards. The follow-up inventory/template
+slice used explorer, tooling, docs-ADR, assumptions, architecture, and
+code-reviewer agents; focused re-review passed after fixes for invalid
+`merge_class` values, completion overclaiming, stale next-step routing,
+and no-arg collaboration-state check wording.
 
-**Next safe step**: re-run gates after reviewer fixes; then commit the
-docs/practice bundle if clean.
+**Next safe step**: validate and review the strict local instance rather than
+restarting the design work. Phase 4/5 of the portable plan remain: run the
+reviewers/gates, close any findings, consolidate the migration/immune-layer
+lesson, and archive the plan when ready. Only after the strict manifest,
+schema, migration ledger, and collaboration-state check are green should the
+[Memory/state contract doctor][memory-state-doctor-plan] begin; repo-level
+doctor commands must invoke built `agent-tools` output only. Then take the
+multi-checkout merge-handling plan for fitness/state surfaces.
 
 **Non-goals for the next review session**:
 
 - Do not implement the memory/state doctor tooling unless the owner
-  explicitly changes scope.
+  explicitly changes scope or the strict local instance has validated and the
+  doctor plan has formally started.
 - Do not trim memory/state content for fitness.
 - Do not drop the residual merge autostash without explicit owner
   approval.
@@ -1754,6 +1804,9 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
+| `Seaworthy Swimming Sextant` | `codex` | `GPT-5` | `019e01` | `portable-memory-state-substrate-contract-inventory-and-template-executor; continuing-from-committed-PDR-050-bundle; preserving-practice-core-vs-repo-local-boundary; no-fitness-driven-content-trimming; doctor-implementation-deferred-until-built-agent-tools-command-surface-contract` | 2026-05-07 | 2026-05-07 |
+| `Windward Spiralling Aerie` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-contract-review-stewardship-and-commit; dispatched-docs-adr-assumptions-architecture-fred-and-test-reviewers; applied-reviewer-fixes-to-PDR-050-portable-plan-doctor-plan-state-readme-and-evidence; preserved-owner-correction-knowledge-before-fitness; confirmed-next-session-order-portable-contracts-then-doctor-then-multi-checkout-merge-handling; committed-and-pushed-cb662b7e-and-526a596e` | 2026-05-07 | 2026-05-07 |
 | `Pelagic Rolling Harbour` | `claude-code` | `claude-opus-4-7-1m` | `58a9ad` | `pending-graduations-dedicated-drain-and-recalibration; phase-1-archive-Lacustrine-F-15-and-mark-polarity-discipline-partially-graduated; phase-1.5-vaporware-trigger-flagging-three-entries; phase-3-residual-shape-surfacing-three-options-for-owner-direction; owner-directed-reframe-fitness-limits-encode-implicit-access-rhythm-theory; recalibration-frontmatter-2000-2500-150000-300-plus-three-descriptive-fields-lifecycle-model-access-pattern-fitness-rationale; per-entry-metadata-schema-inline-tag-line-with-closed-vocabularies-plus-composite-value-convention; structured-index-TOC-by-status-with-line-hints-and-counts-table; twelve-high-touch-entries-tagged-pending-sweep-deferred-to-phase-B; new-pending-entry-captures-access-rhythm-as-fitness-axis-insight-graduation-target-ADR-144-amendment-plus-cross-repo-PDR; reviewer-dispatch-docs-adr-and-code-reviewer-three-P2-and-one-P1-and-two-nits-all-addressed; four-commits-cc084c67-177b9298-b0b7cec3-b1a8536b` | 2026-05-07 | 2026-05-07 |
 | `Clouded Lifting Aerie` | `claude-code` | `claude-opus-4-7-1m` | `1e2244` | `napkin-and-pending-graduations-processing-opener-execution; three-new-patterns-consolidation-output-shape-and-audit-rule-body-on-prohibition-extension-and-in-session-contract-authoring-conditions; F-15-commit-queue-fingerprint-recursion-friction-added; F-14-and-F-09-and-F-05-evidence-appended; markdown-prose-acceptance-criteria-doctrine-landed-in-development-practice; napkin-archived-382-to-119-lines; pending-graduations-7-graduated-or-withdrawn-entries-archived-and-Lacustrine-commit-queue-marked-graduated-and-doctor-not-shell-gate-pending-added-2054-to-1876-lines; reviewer-dispatch-docs-adr-and-code-reviewer-approved-with-P1-SHA-typo-fixed; three-commits-d12912dc-b4d7ddff-d2e2bfe5` | 2026-05-06 | 2026-05-06 |
 | `Embered Melting Kiln` | `claude-code` | `claude-opus-4-7-1m` | `4044d1` | `phase-2-collaboration-state-surface-restructure-five-commits-13e2db28-through-40f7da45; substance-trim-anti-pattern-caught-by-owner-correction-and-restored; full-fitness-limit-audit-32-files; two-function-driven-limit-calibrations-agent-collaboration-md-and-continuity-practice-md-commit-ca0794fc; opener-authored-for-napkin-and-pending-graduations-processing` | 2026-05-06 | 2026-05-06 |

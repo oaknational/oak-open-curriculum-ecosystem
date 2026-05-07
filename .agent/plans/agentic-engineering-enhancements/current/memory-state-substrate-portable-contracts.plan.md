@@ -7,16 +7,16 @@ overview: >
 todos:
   - id: phase-0-current-surface-audit
     content: "Phase 0: Audit current state, memory, generated read models, existing contracts, and known artefacts against PDR-050."
-    status: pending
+    status: completed
   - id: phase-1-host-bridge-adoption
     content: "Phase 1: Update the host bridge index and local doctrine pointers so PDR-050 is discoverable without host leakage in the Core."
-    status: pending
+    status: completed
   - id: phase-2-contract-template
-    content: "Phase 2: Define the host-local surface-inventory contract, surface-contract template, and severity vocabulary consumed by the doctor plan."
-    status: pending
+    content: "Phase 2: Split the transferable surface-contract specification from the host-local substrate instance, then define the local inventory consumed by the doctor plan."
+    status: completed
   - id: phase-3-immune-layer-routing
     content: "Phase 3: Route prevention, detection, mitigation, repair, and learning responsibilities across rules, commands, consolidation, and reviewer surfaces."
-    status: pending
+    status: completed
   - id: phase-4-adoption-review
     content: "Phase 4: Run docs/PDR review and assumptions review; record accepted or rejected follow-ons."
     status: pending
@@ -29,7 +29,7 @@ isProject: false
 # Memory/State Substrate — Portable Contracts
 
 **Last Updated**: 2026-05-07
-**Status**: QUEUED
+**Status**: IN PROGRESS
 **Scope**: Host adoption of
 [PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and related portable doctrine for state, memory, generated read models, surface
@@ -103,17 +103,21 @@ repo without adding host-local detail to the Core.
 - No Practice Core file gains host-specific paths, ADR numbers, or commit
   references.
 
-### Phase 2: Surface-Inventory and Surface-Contract Template
+### Phase 2: Transferable Contract and Local Instance
 
-Define the local inventory and template consumed by the doctor implementation
-plan. The inventory contract must include:
+Split the transferable substrate contract from the local instance. The
+transferable contract belongs in Practice Core (PDR-050 unless it grows into a
+new dedicated Core surface). The local instance belongs in host memory or a
+stricter generated data file consumed by the doctor implementation plan.
+
+The local inventory contract must include:
 
 - live roots, archived/historical roots, and explicit exclusions;
 - discovery rules for files, schemas, directory READMEs, generated read models,
   and fragment directories;
 - owner/reviewer route and portability tier for the inventory itself.
 
-The surface template must include:
+The transferable surface template must include:
 
 - purpose, authority, lifecycle, and write API;
 - merge class, schema/parser, generated outputs, and validator;
@@ -127,6 +131,8 @@ The surface template must include:
   the full substrate, not only known files.
 - The template distinguishes deterministic repairs from semantic judgement.
 - Stored derived values are allowed only with recomputation.
+- The portable fields/vocabulary live in Practice Core while concrete roots,
+  commands, schemas, and known gaps remain in the repo-local instance.
 
 ### Phase 3: Immune-Layer Routing
 
@@ -184,3 +190,60 @@ pnpm markdownlint:root
 - Moving state out of git.
 - Rewriting the full memory taxonomy.
 - Deleting historical event fragments or archived references.
+
+## Phase 3 Routing
+
+The local immune-layer responsibilities are routed as follows:
+
+| Responsibility | Current home | Doctor-facing route |
+| --- | --- | --- |
+| Prevention | Entry-point docs, PDR-050, the human contract, state/memory READMEs, and existing write APIs such as `agent-tools:collaboration-state` | Future scripts must invoke built `agent-tools` output only; authors should not write new event fragments to retired roots |
+| Detection | Strict manifest/schema validation plus explicit collaboration-state checks | Future `practice:substrate:check` consumes the strict manifest before broadening into repo-local doctor checks |
+| Mitigation | Manifest `severity`, `repair_path`, and `owner_reviewer_route` fields | Findings must distinguish blocking structural defects from semantic judgement and name the reviewer route |
+| Repair | Deterministic write APIs and future dry-run/apply doctor flows | Repairs may re-render or rehome only when source evidence, stable identity, and ledger provenance make the edit deterministic |
+| Learning | Napkin, pending graduations, consolidation, reviewer feedback, and future PDR/rule amendments | Repeated findings route through consolidation instead of trimming memory/state content to satisfy fitness |
+
+## Implementation Notes
+
+- 2026-05-07: Phase 0/2 seeded the host-local inventory and contract template
+  at
+  [`memory-state-substrate-contracts.md`](../../../memory/executive/memory-state-substrate-contracts.md).
+  The template includes discovery roots, archive/fixture exclusions, the
+  seeded surface manifest, severity vocabulary, repair classes, and the
+  built-output-only command boundary for the future doctor.
+- 2026-05-07: Phase 0/2 completed the parseability decision by promoting the
+  local instance into
+  [`memory-state-substrate-contracts.manifest.json`](../../../memory/executive/memory-state-substrate-contracts.manifest.json)
+  and
+  [`memory-state-substrate-contracts.schema.json`](../../../memory/executive/memory-state-substrate-contracts.schema.json).
+  The strict manifest carries 22 surface rows with the required contract fields
+  and validates against the schema. The Markdown contract remains the
+  human-facing local instance; the earlier fenced YAML is a retired seed
+  snapshot, not the machine-consumed source.
+- 2026-05-07: Phase 0/2 completed the legacy event transition. The 114 tracked
+  legacy fragments under `.agent/state/collaboration/comms/events/` were
+  collision-checked, JSON-parse-checked, ledgered with original path, target
+  path, SHA-256, byte count, source evidence, and rationale, then moved to the
+  canonical `.agent/state/collaboration/comms-events/` root. The legacy root is
+  historical and should contain only `.gitkeep`.
+- 2026-05-07: Phase 3 routing is now explicit: prevention through entry-point
+  docs, rules, and write APIs; detection through the future
+  `practice:substrate:check`; mitigation through structured severity and
+  reviewer routing; repair through dry-run/apply deterministic paths only; and
+  learning through consolidation and reviewer feedback.
+- 2026-05-07: owner clarified the better architecture: the seed template's
+  portable contract substance belongs in Practice Core as a transferable
+  specification, while definite filled inventories live repo-locally. PDR-050
+  now captures that split; this plan keeps Phase 0/2 open until the local
+  instance is complete enough for the doctor.
+- 2026-05-07: owner clarified the broader frame: the Practice is a philosophy
+  and commitment, not only a specification repository. Specification is a
+  powerful portability tool for fully specified, implementation-agnostic
+  processes, flows, contracts, approaches, structures, and support systems.
+  The memory/state substrate is one instance of a pattern that may apply to
+  other agentic engineering processes later.
+- 2026-05-07: owner clarified that fitness signals need active interaction
+  design, not only passive doctrine. Non-healthy fitness output should remind
+  agents to preserve substance first and route pressure structurally; agents
+  must not reactively trim memory or Practice Core content to make a report
+  greener.

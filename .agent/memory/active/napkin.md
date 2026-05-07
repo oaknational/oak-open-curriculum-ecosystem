@@ -26,6 +26,65 @@ and
 
 ## 2026-05-07 — Memory/state contract enforcement planning / codex / GPT-5 / `019dfe`
 
+### Contract inventory landed as executive memory
+
+2026-05-07: the repo-local substrate inventory/template landed in
+[`memory-state-substrate-contracts.md`](../executive/memory-state-substrate-contracts.md).
+PDR-050 remains the portable doctrine; legacy `comms/events/` remains
+provenance-bearing transition state, not a second live event root.
+
+### Strict local substrate instance landed
+
+2026-05-07: the local instance was promoted from human-facing Markdown seed to
+strict JSON data:
+[`memory-state-substrate-contracts.manifest.json`](../executive/memory-state-substrate-contracts.manifest.json)
+plus
+[`memory-state-substrate-contracts.schema.json`](../executive/memory-state-substrate-contracts.schema.json).
+The 114 legacy `comms/events` fragments were migrated into canonical
+`comms-events` only after collision and parse checks passed, with provenance
+preserved in a non-live migration ledger. This was content preservation, not
+fitness trimming: old event evidence moved with identity and rationale intact.
+
+### Transferable contract spec vs host instance
+
+2026-05-07: owner clarified the cleaner architecture: the substrate contract
+template, severity vocabulary, repair vocabulary, generated-read-model rule,
+and transition-surface pattern are transferable Practice Core substance; the
+filled inventory with roots, commands, schemas, current gaps, and migration
+ledger is a host-local instance. PDR-050 now carries the portable split.
+
+### Practice as commitment; specification as tool
+
+2026-05-07: owner clarified the broader frame. The Practice is a philosophy and
+commitment, much more than a specification, but specification is one of its
+powerful tools. Fully specified, implementation-agnostic processes, flows,
+contracts, approaches, and structures can travel in Practice Core; definite
+bindings and instances live in the host. Memory/state substrate contracts are
+one instance of a pattern that may help future agentic engineering systems.
+
+### Correction: do not trim Practice Core or memory for fitness
+
+2026-05-07: I reacted to `practice:fitness:informational` by tightening
+`practice.md` to clear a hard character signal. Owner corrected this sharply:
+do not reactively cut content from memory surfaces, and do not do it to
+Practice Core files. Fitness is a routing and health signal, never a content
+deletion signal. Correct response is preserve the concept, then route pressure
+to homing, graduation, splitting, limit review, or explicit owner decision.
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:practice-fitness`
+- **Signal**: correction
+- **Observation**: the fitness validator reported structural pressure but did
+  not itself remind the observing agent not to reactively trim memory or
+  Practice Core content. Passive doctrine was insufficient at the moment of
+  temptation.
+- **Behaviour change / candidate follow-up**: fitness output should include
+  non-reactive response discipline whenever it reports non-healthy surfaces:
+  preserve substance first, then home, graduate, split, refine real redundancy,
+  review limits, or open a remediation lane.
+- **Source plane**: active
+
 ### Correction: content preservation before fitness response
 
 **What happened**: after adding the memory/state substrate plans,

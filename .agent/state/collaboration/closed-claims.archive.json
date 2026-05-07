@@ -12550,6 +12550,246 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "55ed5d7b-e50e-47c2-afaa-3895a5e55d1b",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e01"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational",
+            ".agent/memory/executive",
+            ".agent/state",
+            ".agent/practice-index.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T09:17:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Execute portable memory/state substrate contract inventory/template slice before local doctor implementation.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T10:40:00Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e01"
+        },
+        "summary": "Seeded host-local memory/state substrate inventory/template in executive memory; linked state/memory/practice entry points and doctor plan; corrected reviewer findings by reserving merge_class for exact PDR-049 tokens, downgrading Phase 0/2 to in-progress seed status, routing parser/schema promotion before doctor RED fixtures, and qualifying collaboration-state check scope. Validation passed: markdownlint-check:root, practice:vocabulary, portability:check, test:root-scripts, explicit collaboration-state check, git diff --check; practice:fitness:informational exits 0 with known repo-continuity critical and napkin hard pressure preserved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "55ed5d7b-e50e-47c2-afaa-3895a5e55d1b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "de20c988-23f8-49b8-bb09-989396e4d54f",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e01"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/practice-index.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T10:55:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-directed consolidation wrap-up for memory/state substrate transferable-specification split.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T10:58:00Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e01"
+        },
+        "summary": "Owner-directed consolidation complete: PDR-050 amended to split transferable substrate contract specification from host-local substrate instances; Practice Core changelog, local substrate instance, plans, practice index, thread record, repo-continuity, and napkin updated. Ran jc-consolidate-docs checks: entry points clean, practice box empty, no readable .remember/Codex memory files, tracks only README, active claims/non-abandoned queue zero before close, JSON parse ok, validations passed; strict-hard fitness still fails on known repo-continuity critical and napkin hard pressure to preserve rather than trim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "de20c988-23f8-49b8-bb09-989396e4d54f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "90c85c22-7f02-4f7e-9aa5-38aa9f2f6878",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e01"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/index.md",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T11:08:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner clarification that the Practice is philosophy and commitment as well as implementation-agnostic contract/specification substrate.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T11:20:00Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e01"
+        },
+        "summary": "Recorded owner clarification: the Practice is a philosophy and commitment as well as an implementation-agnostic specification system; specification is a portability tool, not the whole Practice. Updated Practice Core orientation, Practice map, PDR-050, Core changelog, host bridge, plan notes, thread record, and napkin. Also restored reactive Practice Core trimming after owner correction and recorded that fitness must not trigger content cuts in memory or Practice Core surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "90c85c22-7f02-4f7e-9aa5-38aa9f2f6878",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ec1c4b72-d6df-4a2b-a02e-510a36ae0470",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e01"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "scripts/validate-practice-fitness.ts",
+            "scripts/validate-practice-fitness.unit.test.ts",
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T11:27:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify non-reactive handling of Practice fitness signals in doctrine and the validator output itself.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T11:42:00Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e01"
+        },
+        "summary": "Clarified non-reactive fitness handling in documentation and validator output. ADR-144 now states every non-healthy fitness output must remind agents to preserve substance first and route pressure structurally. Practice Core practice.md, CHANGELOG, thread record, plan notes, and napkin capture updated. scripts/validate-practice-fitness.ts now prints a Fitness response discipline block for non-healthy results; unit test covers the reminder. Validated with test:root-scripts, markdownlint:root, practice:vocabulary, portability:check, practice:fitness:informational, lint, and git diff --check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ec1c4b72-d6df-4a2b-a02e-510a36ae0470",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f1288fe9-92eb-4a15-9aa2-b58e71e252b0",
+      "agent_id": {
+        "agent_name": "Floating Vaulting Updraft",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e01"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/executive/memory-state-substrate-contracts.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json",
+            ".agent/memory/executive/memory-state-substrate-contracts.schema.json",
+            ".agent/state/collaboration/comms/events",
+            ".agent/state/collaboration/comms-events",
+            ".agent/state/collaboration/comms/archive",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T09:57:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Complete memory/state substrate local instance: strict JSON manifest/schema, provenance-preserving legacy comms event migration, and Phase 3 immune-layer routing. Continuation of Seaworthy seeded slice under owner direction; scanned registry shows one overlapping prior Codex claim on the same arc.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T10:07:18Z",
+        "closed_by": {
+          "agent_name": "Floating Vaulting Updraft",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e01"
+        },
+        "summary": "Completed memory/state substrate local-instance slice: strict manifest/schema added, 22 surface rows carry required contract fields, 114 legacy comms/events fragments collision-checked, parse-checked, ledgered, and moved to canonical comms-events, shared comms log regenerated, Phase 0/2 completed and Phase 3 immune routing recorded. Doctor remains queued; no practice:substrate scripts added.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f1288fe9-92eb-4a15-9aa2-b58e71e252b0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

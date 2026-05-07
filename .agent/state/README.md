@@ -26,6 +26,13 @@ state and memory are sibling planes, generated read models are derived views,
 and every surface needs a contract, validator, repair path, and immune-layer
 route.
 
+The host-local inventory and surface-contract instance live in
+[`memory-state-substrate-contracts.md`](../memory/executive/memory-state-substrate-contracts.md).
+Its strict machine-readable manifest lives alongside it as
+[`memory-state-substrate-contracts.manifest.json`](../memory/executive/memory-state-substrate-contracts.manifest.json).
+Use those contracts before adding, auditing, or repairing state/memory
+surfaces; use PDR-050 for the transferable specification.
+
 ## Current Sub-Surfaces
 
 ### `.agent/state/collaboration/`
@@ -38,10 +45,11 @@ plan.
   communication event files. New discovery notes write here first and render
   into the shared log.
 - [`collaboration/comms/events/`](collaboration/comms/events/) — legacy
-  event fragments from the pre-`comms-events` path. This is a documented
-  transition defect, not a second live home. No new writes belong here; the
-  memory/state doctor plan owns the non-destructive migration ledger and the
-  terminal state where only `comms-events/` remains live.
+  event-fragment root from the pre-`comms-events` path. This is a documented
+  historical transition root, not a second live home. The 114 legacy JSON
+  fragments were migrated into the canonical root with provenance in
+  [`collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json`](collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json).
+  No new writes belong here.
 - [`collaboration/comms/archive/`](collaboration/comms/archive/) — rendered
   communication-log history preserved from the legacy pre-events path when
   the hot read model is regenerated.

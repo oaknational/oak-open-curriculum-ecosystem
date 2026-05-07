@@ -82,6 +82,60 @@ validator, repair path, or severity model is incomplete. A validator that only
 records derived facts without recomputing them is not a validator. A repair
 path that relies on unrecorded judgement is not portable.
 
+The portable contract has two layers:
+
+1. **Transferable substrate contract specification** — the vocabulary and
+   template that travels with Practice Core: required contract fields,
+   merge-class field discipline, severity and repair vocabulary, generated
+   read-model requirements, preservation-before-fitness, transition handling
+   for retired surfaces, and the requirement that local checkers validate or
+   promote any machine-consumed manifest before tests depend on it.
+2. **Host substrate instance** — the filled inventory for one repository or
+   host: concrete roots, schemas, parsers, generated outputs, commands,
+   exclusions, current gaps, reviewer routes, and migration ledgers.
+
+The transferable specification belongs in Practice Core. Host instances belong
+in the host bridge or host memory/documentation surfaces. A host may keep a
+human-readable inventory and a stricter generated data file, but the local
+doctor validates the host instance against the transferable specification
+rather than treating a repo-local file as portable doctrine.
+
+This split is an instance of a broader Practice shape. The Practice is a
+philosophy and commitment as well as a specification system; the specification
+aspect is the tool that lets a commitment become portable without becoming
+implementation-specific. Future agentic engineering processes and support
+systems may use the same pattern: Practice Core carries the fully specified
+portable concept, while each host carries its binding and current instance.
+
+`merge_class` is reserved for exact merge-class vocabulary from PDR-049.
+Declaration status, missing coverage, partial coverage, or "declared via
+schema" belong in adjacent metadata fields, not inside `merge_class`.
+
+Substrate findings use a portable severity vocabulary:
+
+- **blocking** — a deterministic structural defect that can be proven without
+  judgement;
+- **review-required** — an ambiguous or semantic defect that needs an agent or
+  owner decision;
+- **informational** — historical or contextual evidence that must be preserved.
+
+Local tools may expose transport-oriented levels such as `error` or `warn`,
+but they must also emit or map to the portable severity vocabulary.
+
+Repair paths use the same portability split:
+
+- **deterministic** — one correct repair can be computed from the contract;
+- **manual-with-provenance** — judgement is needed, and source, original path,
+  content identity, and rationale must be preserved;
+- **forbidden** — the proposed repair would erase evidence or choose
+  semantics, so the tool reports remediation instead of mutating.
+
+Retired, renamed, or legacy state homes are transition surfaces. They are not
+second live homes, and they are not trash. A terminal migration must preserve
+provenance before changing location: original path, content identity, source
+evidence, and rationale. Archived references remain evidence unless a reviewer
+classifies them as live instructions.
+
 ## Immune Layer
 
 Each Practice substrate surface participates in a two-layer immune system:
@@ -158,3 +212,21 @@ extension. The Practice contract remains the same.
   ritual.
 - Host adoption belongs in the host bridge index and host implementation
   plans; the portable requirement lives here.
+
+## Amendment Log
+
+### 2026-05-07 — Transferable specification vs host instance split
+
+The first host-side inventory/template seed exposed a useful distinction: the
+surface-contract template, severity vocabulary, repair vocabulary, generated
+read-model rule, and transition-surface pattern are Practice-level contracts,
+while concrete roots, commands, schemas, current gaps, and migration ledgers are
+host instances. This amendment makes the split explicit so future hosts can
+reuse the transferable specification and validate their own local instance
+against it.
+
+The owner further clarified that this does not reduce the Practice to a
+specification repository. The Practice remains a philosophy and commitment; its
+specification aspect is a powerful portability tool. The transferable-vs-host
+split may apply to other agentic engineering processes when they need the same
+implementation-agnostic treatment.
