@@ -1,6 +1,8 @@
 ---
 name: "Agent Guidance Consolidation"
 overview: "Review and consolidate the advice delivered to AI agents via server instructions, tool descriptions, resource annotations, and prompts — currently scattered, partially stale, and not fully DRY."
+graph_layer: feature
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"

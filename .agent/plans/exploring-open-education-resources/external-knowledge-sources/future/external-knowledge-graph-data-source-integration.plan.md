@@ -2,6 +2,8 @@
 name: "External Knowledge Graph Data-Source Integration"
 overview: "Define the intake model for third-party knowledge graphs and structured education knowledge sources that Oak may consume as application data."
 status: future
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 related_plans:
   - "../../eef/future/evidence-integration-strategy.md"
 specialist_reviewer: "architecture-reviewer-betty, security-reviewer, docs-adr-reviewer"

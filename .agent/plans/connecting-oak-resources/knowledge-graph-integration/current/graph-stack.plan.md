@@ -1,7 +1,9 @@
 ---
 name: "Graph Stack — Topology and Foundation Increment"
-overview: "Establish a layered, standards-based graph capability for Oak — eight active workspaces plus one deferred — with the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-iibrary.md` and provides the spine that subsequent graph-shaped work attaches to."
+overview: "Establish a layered, standards-based graph capability for Oak — eight active workspaces plus one deferred — with the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
 status: current
+graph_layer: substrate
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "graph-query-layer.plan.md"
@@ -118,10 +120,9 @@ Graphs are now a first-class concern of this repository. The single coherent cap
 This plan establishes the topology that capability lives in, and ships the smallest end-to-end slice that proves it.
 
 The plan reserves explicit workspace homes for every layer in
-[`.agent/research/graph-iibrary.md`](../../../../research/graph-iibrary.md)
-(filename typo to be corrected during WS6). No layer is foreclosed; every
-layer either ships in this increment or is sequenced into a named
-follow-on increment.
+[`.agent/research/graph-library.research.md`](../../../../research/graph-library.research.md).
+No layer is foreclosed; every layer either ships in this increment or is
+sequenced into a named follow-on increment.
 
 ---
 
@@ -146,7 +147,7 @@ Practice graph pilot — attaches to this spine.
 
 ## Design Principles
 
-1. **Stable-first, future-ready.** Persisted data, public APIs, and default exports use only stable W3C standards (RDF 1.1, JSON-LD 1.1, SKOS, SHACL 1.0). Emerging standards (RDF 1.2, JSON-LD 1.2/1.3, SPARQL 1.2, SHACL 1.2) become adapter upgrades inside `graph-future`, not architectural rewrites.
+1. **Stable-wire, RDF 1.2-native internals.** The canonical internal data model is RDF 1.2 (triple terms first-class in `graph-core`'s `Term` union; see [`graph-library.research.md` §4](../../../../research/graph-library.research.md)). Wire emission uses stable W3C standards (JSON-LD 1.1, RDF 1.1-compatible quads, SHACL 1.0); triple-term annotations *project* to `RelationshipRecord` on JSON-LD 1.1 emit (research §8). Emerging standards (JSON-LD 1.2, SPARQL 1.2, SHACL 1.2) become adapter upgrades inside `graph-future` driven by named tripwires ([research §19](../../../../research/graph-library.research.md#19-standards-evolution-tripwires) and ADR-168). No tripwire is silently skipped; each becomes a named follow-on plan when triggered.
 2. **Ontology identity as the spine.** Adapters in `graph-corpus-sdk` mint or honour Oak Curriculum Ontology IRIs as canonical node identity. Cross-corpus joins are structurally cheap because the join key is shared.
 3. **Property-graph as projection, not canon.** The canonical internal model is an RDF-compatible quad dataset. Property-graph nodes/edges are *projections* (per research §11). This preserves migration headroom while keeping the developer-facing API ergonomic.
 4. **Enhancement is explicit and inspectable.** Every derived claim — stable ID, predicate mapping, type inference, link detection, relationship record, provenance attribution — is recorded as an `EnhancementRecord` (research §7) with optional confidence. Silent semantic corruption is structurally prevented.
@@ -175,6 +176,8 @@ The substrate depends on three external libraries; each is a deliberate buy.
 | SHACL validation | [`rdf-validate-shacl`](https://github.com/zazuko/rdf-validate-shacl) (Comunica family) | **Adopt inside `graph-validate` behind the `ShapeValidator` adapter (research §12 SHACL seam).** Bespoke SHACL is forbidden. |
 
 No bespoke wrappers. The adapter-shape discipline (research §12) keeps every dependency replaceable behind a versioned interface.
+
+**RDF/JS data-model alignment risk (binding under tripwire #2)**: our internal `TripleTerm` shape (research §4) is authored ahead of an RDF/JS WG formalisation of RDF 1.2 data-model types. If the eventual published spec differs from ours, `graph-core`'s `Term` union migrates to match — a typed refactor confined to a single workspace, with no cross-workspace blast radius by design. Mitigation today: keep `TripleTerm` minimal (matches the RDF 1.2 abstract syntax exactly, no extras) so divergence is structurally impossible to amplify. See [research §19 — tripwire #2](../../../../research/graph-library.research.md#tripwire-2--rdfjs-wg-formalises-an-rdf-12-data-model-extension).
 
 `assumptions-reviewer` runs against this attestation pre-ExitPlanMode (see Reviewer Scheduling).
 
@@ -221,7 +224,7 @@ The foundation increment ships zero MCP exposure. NC taxonomy availability throu
 
 ## Layer Map (research → workspace)
 
-The mapping is exhaustive against [`.agent/research/graph-iibrary.md`](../../../../research/graph-iibrary.md):
+The mapping is exhaustive against [`.agent/research/graph-library.research.md`](../../../../research/graph-library.research.md):
 
 | Research section | Workspace | Notes |
 |---|---|---|
@@ -429,7 +432,8 @@ Required handling before close:
 6. `LICENCE-DATA.md` — confirm ontology section reflects direct ingestion.
 7. `package.json` contributors — add Mark Hodierne (per existing parent-plan attribution requirement).
 8. Per-workspace READMEs (eight new files) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
-9. Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md` (with a redirect note in the collection README).
+9. ~~Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md`.~~ **DONE 2026-05-07** — file renamed to `.agent/research/graph-library.research.md` with the `.research.md` suffix to mark it as one researched direction rather than a plan; references in this plan, the collection README, and operational memory updated.
+10. First-wave ingestion scope amendment: confirm the substrate ships ingestion for Oak Curriculum Ontology Turtle (with SHACL), the prerequisite graph, the misconception graph, and the EEF corpus per `.agent/research/graph-library.research.md` §18. Other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them.
 
 ADR-123 (MCP server tool catalogue) is *not* amended by this increment because no MCP tools are added or changed. Any future increment that surfaces graph capability via MCP would amend ADR-123 at that point.
 
@@ -468,7 +472,7 @@ fitness, and update the practice exchange. Candidate graduations:
 
 **Authoritative research**:
 
-- [`.agent/research/graph-iibrary.md`](../../../../research/graph-iibrary.md) — comprehensive layer inventory; this plan's topology is its monorepo realisation. Filename typo to be corrected during WS6.
+- [`.agent/research/graph-library.research.md`](../../../../research/graph-library.research.md) — comprehensive layer inventory and Oak first-wave ingestion scope; this plan's topology is its monorepo realisation.
 
 ---
 

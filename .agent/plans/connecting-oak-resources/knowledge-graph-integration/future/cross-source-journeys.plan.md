@@ -1,6 +1,8 @@
 ---
 name: "Cross-Source Journeys (Increment 3 Design)"
 overview: "First-class user-journey artefacts that compose graph queries, evidence-corpus rankings, and search across sources. Two reference journeys: evidence-aware-lesson-sequencing (cross-source) and prerequisite-trace (graph-only). Discovers whether journeys need a new MCP primitive (playbook) or can ride on prompts."
+graph_layer: feature
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "../current/graph-query-layer.plan.md"

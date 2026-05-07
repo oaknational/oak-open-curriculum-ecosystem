@@ -2,6 +2,8 @@
 name: "Open Education Knowledge Surfaces"
 overview: "Coordinate the integration of three open education data sources (Oak API, Oak Ontology, EEF Toolkit) into the MCP server as graph resources, tools, and prompts — and declare this multi-source integration prominently in documentation."
 status: active
+graph_layer: feature
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 child_plans:
   - "graph-resource-factory.plan.md"
   - "misconception-graph-mcp-surface.plan.md"

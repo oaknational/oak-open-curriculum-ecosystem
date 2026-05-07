@@ -1,6 +1,8 @@
 ---
 name: "Graph Resource Factory"
 overview: "Extract shared infrastructure from the 3 existing graph-as-MCP-resource+tool surfaces into a factory, then refactor existing graphs to use it."
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"

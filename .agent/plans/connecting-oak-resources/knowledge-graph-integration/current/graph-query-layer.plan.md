@@ -1,6 +1,8 @@
 ---
 name: "Graph Query Layer (Foundation for Graphs and Evidence Corpora)"
 overview: "A polymorphic 7-operation query layer over Oak's typed graphs (prerequisite, misconception, EEF strands), with progressive disclosure (manifest → summary → detail → edge) and mandatory projection so responses fit working context. Foundation for the EEF evidence corpus and cross-source journeys."
+graph_layer: substrate
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "../active/graph-resource-factory.plan.md"
