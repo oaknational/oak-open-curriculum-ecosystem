@@ -23,6 +23,11 @@ rotation is
 [archive-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 [previous-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
 
+The previous two archived napkins still need a deep analysis and
+consolidation pass before treating their captured material as fully
+homed: [`napkin-2026-05-07-doctor-safe-merge.md`][archive-pass] and
+[`napkin-2026-05-06-evening-graduation-pass.md`][previous-pass].
+
 ## 2026-05-07 — Doctor safe-merge consolidation / codex / GPT-5 / `019e03`
 
 ### Rotation Summary — memory/state doctor safe-merge arc
