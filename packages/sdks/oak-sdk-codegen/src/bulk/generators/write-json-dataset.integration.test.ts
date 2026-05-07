@@ -5,9 +5,9 @@
  * Tests actual filesystem output: directory creation, file content,
  * and runtime loading of generated modules under Node ESM.
  */
-import { mkdtemp, readFile, rm } from 'fs/promises';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 

@@ -14,7 +14,7 @@
  * @see write-json-graph-file.ts for the prior-knowledge-graph-specific
  * descriptor that proved this pattern.
  */
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'path';
 import type { Logger } from '@oaknational/logger';
 
