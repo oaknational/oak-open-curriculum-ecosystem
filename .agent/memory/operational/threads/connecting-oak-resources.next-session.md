@@ -1,12 +1,36 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-04 (Cosmic Glowing Dawn / claude-code /
+**Last refreshed**: 2026-05-07 (Windward Darting Horizon / cursor /
+claude-opus-4.7 / `dd084d` — authored
+[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
+top-level as a cross-collection coordination spine sequencing three
+vertical slices: (1) EEF evidence corpus MCP surface; (2) Oak ontology
+Threads MCP surface; (3) misconception sub-graph queries +
+EEF×misconceptions cross-corpus composition. Coordination amendments
+landed: ADR-157 namespace table extended (`oak-misconceptions-*` +
+compound prefix + explicit-source-attribution discipline);
+[`eef-evidence-corpus.plan.md`](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
+tool/prompt names re-prefixed `eef-*` (19 occurrences via 5
+replace-alls); [`graph-portfolio-index.md`](../../../plans/graph-portfolio-index.md)
+gained `## Vertical-slice arc` section pointing at the spine;
+[`high-level-plan.md`](../../../plans/high-level-plan.md) cross-links
+the spine from the Cross-cutting Threads section. **Course
+corrections in same session**: (a) added unsequenced
+`mvp_arc_status: deferred` annotation to NC SKOS taxonomy plan —
+reverted by owner direction *"sequence properly or admit not-doing"*;
+(b) re-introduced under different framing as `mvp_arc_sequencing` +
+out-of-arc tracking — reverted by owner direction *"the NC work is
+explicitly NOT part of the MVP"*. Final state: NC plan carries its
+own `promotion_trigger` (demand-tripwire on SKOS-specific demand) in
+its own frontmatter; spine plan tracks ONLY what's IN the MVP. No
+commits during planning; commit chunks landed at session close.
+**Prior**: 2026-05-04 — Cosmic Glowing Dawn / claude-code /
 claude-opus-4-7-1m / `d11500` — authored
 [`graph-stack.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
 in `current/` as the topology-decision-plus-foundation-increment
 spine plan for graph work. Eight active workspaces plus one deferred
 (`graph-future`); reserves a workspace home for every layer in
-`.agent/research/graph-iibrary.md`. Foundation increment ingests the
+`.agent/research/graph-library.research.md` (renamed 2026-05-07 from `graph-iibrary.md`). Foundation increment ingests the
 NC knowledge taxonomy end-to-end via SKOS-on-`graph-core`; no
 surfacing in the increment (graph workspaces are MCP-agnostic per
 owner direction; surfacing is consumer-side, at most one workspace
@@ -56,6 +80,7 @@ promotion.)
 | --- | --- | --- | --- | --- | --- | --- |
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `thread-bootstrap-and-light-scan` | 2026-05-01 | 2026-05-01 |
 | `Cosmic Glowing Dawn` | `claude-code` | `claude-opus-4-7-1m` | `d11500` | `graph-stack-spine-plan-author` | 2026-05-04 | 2026-05-04 |
+| `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `mvp-arc-spine-plan-author-and-coordination-amendments` | 2026-05-07 | 2026-05-07 |
 
 ## Plan Locations
 
@@ -119,19 +144,27 @@ gate.
 
 Owner-decided. Candidates:
 
-1. Address EEF thread Promotion Packet (sibling thread).
-2. Promote the external-oak-references plan (this thread) to
-   `current/`; first per-repo executable plan would be the **Aila
-   deep-research plan**.
-3. Do a deep read of `oak-curriculum-ontology` to extract the
-   vocabulary alignment opportunities for the post-promotion graph
-   adapters.
-4. **Topology approval for `graph-stack.plan.md`** — owner-gated
+1. **Author the slice-2 executable plan** (proposed name:
+   `oak-kg-threads-surface.plan.md`) in
+   `connecting-oak-resources/knowledge-graph-integration/current/`.
+   Per `graph-mvp-arc.plan.md` `author-slice-2-plan` todo. Strategic
+   shape: `oak-kg-threads` resource + `oak-kg-get-thread-content`
+   tool via graph-corpus-sdk Oak Curriculum Ontology adapter.
+2. **Author the slice-3a executable plan** in parallel (proposed name:
+   `oak-misconceptions-subgraph-mcp-surface.plan.md` or extension to
+   existing `misconception-graph-mcp-surface.plan.md`). Per spine's
+   `author-slice-3a-plan` todo.
+3. **Topology approval for `graph-stack.plan.md`** — owner-gated
    review of the eight-workspace topology before any execution.
    Plan-phase reviewers named in the spine: `assumptions-reviewer`,
    `architecture-reviewer-betty`, `architecture-reviewer-fred`,
    `architecture-reviewer-barney`. No promotion until all four have
    run.
+4. Address EEF thread Promotion Packet (sibling thread).
+5. Promote the external-oak-references plan to `current/`.
+6. Do a deep read of `oak-curriculum-ontology` to extract the
+   vocabulary alignment opportunities for the post-promotion graph
+   adapters.
 
 ## References
 

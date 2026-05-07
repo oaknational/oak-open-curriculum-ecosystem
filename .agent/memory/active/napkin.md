@@ -23,6 +23,48 @@ and
 
 [archive-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
 
+## 2026-05-07 — Windward Darting Horizon / cursor / opus-4.7 / `dd084d`
+
+Authored top-level `graph-mvp-arc.plan.md` as cross-collection
+coordination spine sequencing 3 vertical slices (EEF → Oak Threads →
+mcg sub-graph + EEF×mcg cross-corpus). Coordination amendments landed
+(ADR-157 namespace, eef-* tool renames, portfolio index, high-level
+plan cross-link).
+
+Two course-corrections in same session, both captured to
+[`pending-graduations.md`](../operational/pending-graduations.md) as
+graduation candidates (sequence-or-admit-not-doing doctrine; spine-
+drift-via-comprehensive-cataloguing anti-pattern):
+
+- Added unsequenced `mvp_arc_status: deferred` to NC SKOS taxonomy
+  plan → owner: *"we never mark anything as deferred, we sequence
+  things properly or we admit we are not going to do them"*.
+- Re-framed as `mvp_arc_sequencing` + `## Out-of-MVP-Arc Items` spine
+  section → owner: *"the NC work is explicitly NOT part of the MVP,
+  you have clearly become confused and this session has been dragging
+  on in a long tail of low to negative value"*.
+
+**Behaviour change**: when authoring an MVP/coordination spine, the
+spine tracks ONLY what's IN the spine's commitment. Adjacent plans
+own their own promotion-triggers in their own homes. Don't catalogue
+"things adjacent that the spine doesn't ship" — that's a portfolio
+index, not the spine. When the owner gives a concise correction,
+apply it minimally and stop; don't generalise the correction into a
+broader audit on speculation.
+
+Smaller observations from this session:
+
+- Doc-only coordination amendments to `current/` plans are cheap and
+  parallel-safe (the eef-* rename was 19 occurrences via 5 replace-
+  alls; ADR-157 was 2 StrReplaces); landing them at spine-authoring
+  time removes acceptance-criteria ambiguity for downstream gates.
+- ADR conformance (e.g. ADR-157 namespace prefixes) isn't checked at
+  plan-author time when the ADR predates the plan — the eef-evidence-
+  corpus plan was authored before ADR-157's prefix was finalised.
+  When authoring/amending plans that ship MCP primitives, grep
+  ADR-123 + ADR-157 + ADR-168 namespace tables before finalising
+  tool names.
+
 ## 2026-05-06 — Clouded Lifting Aerie / claude-code / opus-4-7-1m / `1e2244`
 
 ### Rotation summary — graduation pass on five 2026-05-06 napkin sessions
