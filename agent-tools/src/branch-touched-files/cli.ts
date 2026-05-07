@@ -1,9 +1,10 @@
 import { formatBranchTouchedFileReport } from './index.js';
-import { readBranchTouchedFileReport } from './git.js';
+import { readBranchTouchedFileReport, readGitStdout } from './git.js';
 
 export interface BranchTouchedFilesCliInput {
   readonly args: readonly string[];
-  readonly repoRoot: string;
+  readonly repoRoot?: string;
+  readonly cwd?: string;
   readonly stdout?: Pick<NodeJS.WriteStream, 'write'>;
   readonly stderr?: Pick<NodeJS.WriteStream, 'write'>;
 }
@@ -14,14 +15,17 @@ interface ParsedArgs {
   readonly json: boolean;
   readonly showFiles: boolean;
   readonly help: boolean;
+  readonly gitPath?: string;
 }
 
 interface MutableArgs {
   baseRef: string;
   headRef: string;
+  explicitHeadRef: boolean;
   json: boolean;
   showFiles: boolean;
   help: boolean;
+  gitPath?: string;
   positionals: string[];
 }
 
@@ -49,9 +53,14 @@ const VALUE_HANDLERS: Readonly<Record<string, ValueHandler>> = {
   },
   '--head': (state, value) => {
     state.headRef = value;
+    state.explicitHeadRef = true;
   },
   '--branch': (state, value) => {
     state.headRef = value;
+    state.explicitHeadRef = true;
+  },
+  '--git': (state, value) => {
+    state.gitPath = value;
   },
 };
 
@@ -67,9 +76,10 @@ export function runBranchTouchedFilesCli(input: BranchTouchedFilesCliInput): num
     }
 
     const report = readBranchTouchedFileReport({
-      repoRoot: input.repoRoot,
+      repoRoot: resolveRepoRoot(input, parsed.gitPath),
       baseRef: parsed.baseRef,
       headRef: parsed.headRef,
+      gitPath: parsed.gitPath,
     });
 
     stdout.write(
@@ -85,10 +95,22 @@ export function runBranchTouchedFilesCli(input: BranchTouchedFilesCliInput): num
   }
 }
 
+function resolveRepoRoot(input: BranchTouchedFilesCliInput, gitPath: string | undefined): string {
+  return (
+    input.repoRoot ??
+    readGitStdout({
+      repoRoot: input.cwd ?? process.cwd(),
+      args: ['rev-parse', '--show-toplevel'],
+      gitPath,
+    }).trim()
+  );
+}
+
 export function parseArgs(args: readonly string[]): ParsedArgs {
   const state: MutableArgs = {
     baseRef: 'origin/main',
     headRef: 'HEAD',
+    explicitHeadRef: false,
     json: false,
     showFiles: false,
     help: false,
@@ -138,16 +160,20 @@ function finalizeArgs(state: MutableArgs): ParsedArgs {
     throw new Error(`expected at most one branch/ref positional\n\n${usage()}`);
   }
   if (state.positionals[0] !== undefined) {
+    if (state.explicitHeadRef) {
+      throw new Error(`provide either [branch-or-ref] or --head/--branch, not both\n\n${usage()}`);
+    }
     state.headRef = state.positionals[0];
   }
 
-  return {
+  const parsed: ParsedArgs = {
     baseRef: state.baseRef,
     headRef: state.headRef,
     json: state.json,
     showFiles: state.showFiles,
     help: state.help,
   };
+  return state.gitPath === undefined ? parsed : { ...parsed, gitPath: state.gitPath };
 }
 
 function requireValue(args: readonly string[], index: number, option: string): string {
@@ -160,10 +186,12 @@ function requireValue(args: readonly string[], index: number, option: string): s
 
 function usage(): string {
   return [
-    'branch-touched-files [branch-or-ref] [--base <ref>] [--head <ref>] [--json] [--show-files]',
+    'branch-touched-files [branch-or-ref] [--base <ref>] [--head <ref>|--branch <ref>] [--git <absolute-path>] [--json] [--show-files]',
     '',
     'Counts unique files touched since branch-or-ref diverged from the base ref.',
     'Defaults: --base origin/main --head HEAD.',
+    'Use either [branch-or-ref] or --head/--branch; do not provide both.',
+    'Use --git when git is installed outside the default trusted PATH.',
     '',
   ].join('\n');
 }

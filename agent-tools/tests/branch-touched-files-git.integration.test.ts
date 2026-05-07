@@ -31,6 +31,45 @@ describe('branch touched files git boundary', () => {
     ]);
   });
 
+  it('routes an explicit absolute git path through a single-entry trusted PATH', () => {
+    const calls: {
+      readonly file: string;
+      readonly path: string | undefined;
+    }[] = [];
+    const execFileSync: GitCommandExecutor = (file, _args, options) => {
+      calls.push({ file, path: options.env?.PATH });
+      return 'abc123\n';
+    };
+
+    expect(
+      readGitStdout({
+        repoRoot: 'repo-root',
+        args: ['rev-parse', '--show-toplevel'],
+        execFileSync,
+        gitPath: '/nix/store/git/bin/git',
+      }),
+    ).toBe('abc123');
+    expect(calls).toStrictEqual([
+      {
+        file: 'git',
+        path: '/nix/store/git/bin',
+      },
+    ]);
+  });
+
+  it('rejects relative git path overrides', () => {
+    const execFileSync: GitCommandExecutor = () => 'abc123\n';
+
+    expect(() =>
+      readGitStdout({
+        repoRoot: 'repo-root',
+        args: ['rev-parse', '--show-toplevel'],
+        execFileSync,
+        gitPath: 'git',
+      }),
+    ).toThrow('--git requires an absolute path to a git executable');
+  });
+
   it('propagates git command failures', () => {
     const execFileSync: GitCommandExecutor = () => {
       throw new Error('git failed');

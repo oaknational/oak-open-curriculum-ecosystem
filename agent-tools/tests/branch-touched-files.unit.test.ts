@@ -104,6 +104,21 @@ describe('branch touched files CLI args', () => {
     });
   });
 
+  it('rejects ambiguous positional and explicit head refs', () => {
+    expect(() => parseArgs(['--branch', 'feature/example', 'other-ref'])).toThrow(
+      'provide either [branch-or-ref] or --head/--branch, not both',
+    );
+  });
+
+  it('accepts an explicit git executable path override', () => {
+    expect(
+      parseArgs(['--git', '/nix/store/git/bin/git', '--branch', 'feature/example']),
+    ).toMatchObject({
+      gitPath: '/nix/store/git/bin/git',
+      headRef: 'feature/example',
+    });
+  });
+
   it('ignores a pnpm-forwarded argument separator', () => {
     expect(parseArgs(['--', '--base', 'main'])).toMatchObject({
       baseRef: 'main',
