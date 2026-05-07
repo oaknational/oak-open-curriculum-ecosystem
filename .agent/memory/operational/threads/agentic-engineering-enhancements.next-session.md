@@ -98,6 +98,13 @@ now returns `ok: true` with `blocking: 0`; strict mode returns `0` against the
 clean live substrate. Repair mode and consolidation integration remain future
 arcs.
 
+Post-close handoff/consolidation ran on 2026-05-07 after commit `e1827ed8`.
+The active napkin was rotated into dated archive evidence, the oversized
+repo-continuity session history was archived, the live continuity register was
+compacted to the current substrate state, and the remaining hard fitness
+pressure was routed to owner-approved Practice Core remediation instead of
+reactive trimming.
+
 **Arc spine for the completed safe-merge gate**: this work exists to make memory/state
 files safely mergeable through explicit contracts and deterministic tooling.
 The target value is a safe merge gate: agents can identify authoritative,

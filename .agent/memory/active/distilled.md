@@ -214,3 +214,29 @@ not yet at N≥3.
 [n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
 [n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
+
+---
+
+## Recently Distilled — 2026-05-07 Doctor Safe-Merge Rotation
+
+### Validation And Substrate Gates
+
+- **Focused validation lanes must prove selection.** A targeted fixture lane is
+  not credible until its no-match case fails. Use exact test paths or equivalent
+  selectors with `--passWithNoTests=false`.
+- **Every product branch in a fixture slice needs a literal fixture.**
+  Defensive branches are product behaviour; if they classify or reject a
+  substrate shape, they need a fixture in the same landing.
+- **Generated read models need same-session refresh after source writes.**
+  Passing parser checks on immutable fragments does not prove generated
+  Markdown is current.
+
+### Continuity And State Discipline
+
+- **Portability review includes examples and narrative.** Host-shaped examples
+  can leak concrete paths even after the main normative prose is fixed.
+- **Git index operations are serial work.** `git mv`, staging, and commit-window
+  actions all touch the shared index and must not be parallelised.
+- **Deleted live state is gone, not a continuity topic.** Once owner direction
+  deletes a live state tree, follow-up work is cleanup of stale live references
+  and validation of absence, not repeated defence of the deleted tree.

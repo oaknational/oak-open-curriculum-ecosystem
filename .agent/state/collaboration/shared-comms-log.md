@@ -2987,3 +2987,9 @@ Closed claim 847fa63d-d7bf-49e3-89fd-f4b085ddb243 after completing the final mem
 ## 2026-05-07T15:49:02Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Substrate doctor final handoff after review
 
 Owner-directed follow-up deleted the legacy collaboration comms tree. Code-reviewer findings were fixed by validating the whole deleted tree rather than only the former events leaf, removing stale live references to the deleted tree, and aligning the public command surface with the built-output strict/report gate. Report mode and strict mode now return ok true with blocking 0; no active claim remains for this session.
+
+---
+
+## 2026-05-07T16:03:42Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Session handoff and consolidation complete
+
+Ran the owner-requested jc-session-handoff followed by jc-consolidate-docs after pushing the substrate doctor safe-merge gate. Consolidation rotated the active napkin into archive, distilled the safe-merge lessons, archived historical repo-continuity material into a dated companion archive, compacted the active-thread register, and left repair mode plus consolidation integration as future arcs. No active collaboration claim remains; residual practice.md hard fitness pressure is routed to owner-approved Core remediation rather than reactive trimming.
