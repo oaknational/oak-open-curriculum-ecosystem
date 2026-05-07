@@ -615,75 +615,7 @@
       "expires_at": "2026-05-06T15:27:24.086Z",
       "phase": "abandoned",
       "notes": "record-staged exceeded the previous commit-queue git buffer on the large Sonar bundle; widening the helper and re-enqueueing with the final staged path list."
-    },
-    {
-      "intent_id": "7b2e1da6-e86c-40ae-b4f8-857312cbfa81",
-      "claim_id": "019e01a1-commit-memory-state-contracts",
-      "agent_id": {
-        "agent_name": "Windward Spiralling Aerie",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e01"
-      },
-      "files": [
-        ".agent/memory/active/napkin.md",
-        ".agent/memory/operational/repo-continuity.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/plans/agent-tooling/current/README.md",
-        ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
-        ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
-        ".agent/plans/agent-tooling/current/multi-checkout-merge-handling-for-fitness-files.plan.md",
-        ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
-        ".agent/plans/agentic-engineering-enhancements/current/README.md",
-        ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-        ".agent/plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md",
-        ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md",
-        ".agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md",
-        ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md",
-        ".agent/practice-core/decision-records/README.md",
-        ".agent/practice-index.md",
-        ".agent/prompts/agentic-engineering/collaboration/experiments/E1/agent-1-orchestrator.md",
-        ".agent/prompts/agentic-engineering/collaboration/experiments/E1/agent-2-executor.md",
-        ".agent/rules/respect-active-agent-claims.md",
-        ".agent/state/README.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/fb984084-8e4e-4097-b5ba-cd8d5534cf92.json"
-      ],
-      "commit_subject": "docs(practice): add memory-state substrate contracts",
-      "queued_at": "2026-05-07T09:03:11.955Z",
-      "updated_at": "2026-05-07T09:06:21.059Z",
-      "expires_at": "2026-05-07T09:18:11.955Z",
-      "phase": "staging",
-      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agent-tooling/current/README.md\nM\t.agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md\nA\t.agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md\nM\t.agent/plans/agent-tooling/current/multi-checkout-merge-handling-for-fitness-files.plan.md\nM\t.agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/current/README.md\nA\t.agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md\nA\t.agent/plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md\nM\t.agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md\nM\t.agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md\nA\t.agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/practice-index.md\nM\t.agent/prompts/agentic-engineering/collaboration/experiments/E1/agent-1-orchestrator.md\nM\t.agent/prompts/agentic-engineering/collaboration/experiments/E1/agent-2-executor.md\nM\t.agent/rules/respect-active-agent-claims.md\nM\t.agent/state/README.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/fb984084-8e4e-4097-b5ba-cd8d5534cf92.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
-      "staged_bundle_fingerprint": "46cf5c235b27c4f9b6739945618ac912de7f00176efd02014075565b6b8982a0"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "019e01a1-commit-memory-state-contracts",
-      "agent_id": {
-        "agent_name": "Windward Spiralling Aerie",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e01"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-07T00:00:00Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage, commit, and push memory/state substrate contract bundle.",
-      "heartbeat_at": "2026-05-07T09:02:30Z",
-      "intent_to_commit": "7b2e1da6-e86c-40ae-b4f8-857312cbfa81"
-    }
-  ]
+  "claims": []
 }
