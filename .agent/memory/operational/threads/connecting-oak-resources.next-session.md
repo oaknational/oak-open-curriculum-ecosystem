@@ -175,6 +175,36 @@ After the review settles, queued next:
    vocabulary alignment opportunities for the post-promotion graph
    adapters.
 
+## Topology BLOCKERs Surfaced 2026-05-07 (For Next Session — Execution Prep)
+
+Phase 1 of the single-session planning closure (Breezy Navigating Sail
+/ cursor / claude-opus-4.7 / `9edbd1`) ran `architecture-reviewer-betty`
+in parallel with the MVP-arc reviewer batch. The topology surface
+itself is out of scope for this session per owner direction
+(graph-stack ACTIVE promotion + ADR-168 ratification both happen at the
+graph-stack CURRENT → ACTIVE transition, **not** here). Two findings
+must be absorbed before that transition.
+
+1. **BLOCKER — `graph-stack.plan.md` WS4 sequencing (Principle 7 leakage)**:
+   `ws4-skos-extractor` (Oak-specific NC taxonomy extractor) is
+   sequenced **before** `ws4-graph-corpus-sdk-scaffold` (the consumer
+   SDK). This forces domain-specific ingestion logic into a substrate
+   workspace, contradicting the public-asset infrastructure boundary
+   (Principle 7, lines 156-157). Fix direction: re-order so the
+   consumer SDK scaffold lands first; the SKOS extractor then lives
+   in the consumer SDK (where it belongs as Oak-specific code), not
+   in the substrate.
+2. **FINDING — `practice-graph` workspace tier**: Placed in
+   `packages/libs/` but is an Oak-specific consumer, not pure
+   substrate. Risks future domain-coupled imports out of `libs/`.
+   Fix direction: relocate to `packages/sdks/` or `packages/apps/`
+   per workspace-tier semantics; ADR-168 topology entry updates to
+   match.
+
+`graph-stack.plan.md` and ADR-168 are **not** edited this session. The
+fixes land in next session as the first execution-prep step, ahead of
+the graph-stack CURRENT → ACTIVE transition.
+
 ## References
 
 - Plan: `.agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`

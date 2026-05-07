@@ -150,10 +150,10 @@ is retained for already-shipped API-derived tools (`prior-knowledge-graph`,
 resource, etc.) to avoid breaking consumers, but new primitives must
 conform. This ensures source attribution is trivially clear during
 assessment, observability, debugging, and licensing audit. Origin:
-[`graph-mvp-arc.plan.md`](../../../.agent/plans/graph-mvp-arc.plan.md)
-spine, owner direction 2026-05-07; `oak-misconceptions-*` and the
-compound-prefix convention added in the same amendment to support
-slice 3 of the MVP arc.
+2026-05-07 owner direction during MVP-arc planning; the
+`oak-misconceptions-*` prefix and the compound-prefix convention were
+added in the same amendment to support cross-corpus
+EEF×misconceptions sequencing tooling.
 
 **No `nc-*` prefix.** Nothing served by this system is genuinely
 National Curriculum data. All curriculum content arrives through an

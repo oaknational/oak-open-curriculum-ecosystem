@@ -190,7 +190,7 @@ honor the substrate-floor dependencies named in `graph-stack.plan.md`.
 | 1 — EEF evidence corpus MCP surface | 2 (Oak graph surface) + 3 (feature) | `eef-*` | pending substrate floor |
 | 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | blocked by slice 1 |
 | 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | parallel-safe with slice 2 |
-| 3b — EEF × misconceptions cross-corpus sequencing | 3 (feature) | `oak-misconceptions-eef-*` | blocked by slice 3a + graph-stack Inc.3 |
+| 3b — EEF × misconceptions cross-corpus sequencing | 3 (feature) | `oak-misconceptions-eef-*` | blocked by slice 1 + slice 3a + graph-stack Inc.3 |
 
 ## Related strategic indices
 

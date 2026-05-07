@@ -32,7 +32,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: gate-0-substrate-floor
-    content: "Substrate floor for slice 1 is in place: graph-stack Inc.1 + Inc.2 + Inc.3 (EEF strand corpus adapter on graph-corpus-sdk) complete; graph-query-layer 7-op surface available. Acceptance: substrate quality gates green; no surfacing required at this gate."
+    content: "Substrate floor for slice 1 is in place: graph-query-layer 7-op surface available (matches the EEF plan's actual KG-independent substrate dependency). Acceptance: substrate quality gates green; no surfacing required at this gate. Follow-up (post-arc): migrate the EEF strand corpus onto graph-corpus-sdk when graph-stack Inc.3 ships; not a slice-1 gate."
     status: pending
     depends_on: []
   - id: gate-1-eef-ships
@@ -50,7 +50,7 @@ todos:
   - id: gate-3b-cross-corpus-ships
     content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread (or equivalent) cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
     status: pending
-    depends_on: [gate-2-threads-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.2/3 misconception replatform"]
+    depends_on: [gate-1-eef-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.2/3 misconception replatform"]
   - id: amend-eef-plan
     content: "Amend sector-engagement/eef/current/eef-evidence-corpus.plan.md tool todos to apply `eef-*` prefix; update t18 (ADR-123) entry to record renamed tool names. Coordination amendment, no behaviour change."
     status: completed
@@ -208,8 +208,13 @@ sense-check pattern):
 
 **Status**: pending substrate floor.
 **Namespace**: `eef-*` (per ADR-157).
-**Substrate floor**: graph-stack Inc.1 + Inc.2 + Inc.3 (EEF strand
-adapter on graph-corpus-sdk) + graph-query-layer 7-op surface.
+**Substrate floor**: graph-query-layer 7-op surface — matches the
+substrate dependency the EEF plan itself names (`KG-Independent`
+section: thin in-process operations layer over typed JSON; promotion
+trigger requires only graph-query-layer ACTIVE). Migration of the EEF
+strand corpus onto `graph-corpus-sdk` (graph-stack Inc.3) is a named
+follow-up, **not** a slice-1 gate, per the owner-decided `spine-full`
+shape (existing plan ships in full).
 **Consumes**:
 [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 (20 todos, drafted, current/).
@@ -296,7 +301,6 @@ adapter (lands in Inc.2 or early Inc.3).
 | Programme/Unit navigator | New plan: `oak-kg-programme-navigator.plan.md` (future/) |
 | Generic IRI traverser | New plan: `oak-kg-iri-traverser.plan.md` (future/) |
 | Schema/class browser | New plan: `oak-kg-schema-browser.plan.md` (future/) |
-| NC SKOS taxonomy MCP surface | Existing plan: [`nc-knowledge-taxonomy-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — sibling plan with its own `promotion_trigger: demand-tripwire` (SKOS-specific consumer demand); not part of the MVP arc; promotes when its own tripwire fires |
 | SPARQL endpoint | Existing plan: [`direct-ontology-use-and-graph-serving-prototypes.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) (future/) |
 
 ## Slice 3a — Misconception Sub-Graph Query
@@ -349,9 +353,11 @@ composition (slice 3b) is the user-value framing on top.
 
 ## Slice 3b — EEF × Misconceptions Cross-Corpus Sequencing
 
-**Status**: blocked by gate-2-threads-ships AND gate-3a-mcg-subgraph-ships
+**Status**: blocked by gate-1-eef-ships AND gate-3a-mcg-subgraph-ships
 AND graph-stack Inc.3 (cross-corpus join primitive + misconception
-adapter on graph-corpus-sdk).
+adapter on graph-corpus-sdk). **Not** blocked by gate-2 — slice 3b
+composes EEF (slice 1) and misconceptions (slice 3a); the Oak Threads
+MCP surface is not in the cross-corpus payload.
 **Namespace**: `oak-misconceptions-eef-*` (compound prefix; ADR-157
 amendment).
 **Substrate floor**: full slice 1 substrate + slice 3a tools available
@@ -420,8 +426,8 @@ gate-learning-loop: /jc-consolidate-docs after each gate; archive after gate-3b
 **Strict gates** (cannot be reordered):
 
 - gate-1 → gate-2 (owner direction)
-- gate-1 → gate-3a (mcg sub-graph needs slice 1's namespace amendment + ADR-157 in place)
-- gate-2 + gate-3a → gate-3b (cross-corpus needs both upstream slices)
+- gate-1 → gate-3a (owner-sequenced: slice 1 first establishes the MVP-arc spine pattern + namespace discipline; slice 3a follows once that pattern is proven — ADR-157 amendment + the `eef-*` prefix landed in Phase 0, so this gate is now sequencing discipline rather than an artefact dependency)
+- gate-1 + gate-3a → gate-3b (cross-corpus composes EEF [slice 1] + misconceptions [slice 3a]; Threads [slice 2] is not part of the cross-corpus payload)
 - graph-stack Inc.3 → gate-3b (cross-corpus join primitive)
 
 **Parallel-safe**: gate-2 and gate-3a may run concurrently after gate-1.
@@ -692,3 +698,11 @@ Spine-level non-goals — spine does **not**:
 | 2026-05-07 | MVP discipline: ship soon + full quality + explicit follow-ups | Owner direct quote, recorded in `§ MVP Discipline` |
 | 2026-05-07 | **Doctrine** — never use "deferred" as bare status; sequence (gate-relative or tripwire) or admit not-doing. Applied per-plan, not as out-of-arc tracking. | Owner correction, applied to `§ MVP Discipline`; spine should NOT carry framing for plans outside the MVP arc |
 | 2026-05-07 | **Boundary correction** — the MVP-arc spine tracks only what's IN the MVP. Plans outside the MVP (NC SKOS taxonomy, etc.) carry their own promotion triggers in their own home, not as spine cuts. | Owner correction, applied by removing `§ Out-of-MVP-Arc Items` section, `amend-nc-surface-plan` todo, and `out-of-arc-items-resolved-slice-N` todos |
+| 2026-05-07 | **Boundary correction drift remediated** — three residual `mvp_arc_status: deferred` references removed from the spine (slice-2 cut-scope row; narrative paragraph; risks row). | Phase 0 of single-session planning closure (Breezy Navigating Sail, commit `d740baa0`) |
+| 2026-05-07 | **MVP-arc surface review** — Phase 1 dispatch of `code-reviewer` + `assumptions-reviewer` over the five MVP-arc artefacts; `architecture-reviewer-betty` over ADR-168 + `graph-stack.plan.md` topology in parallel. All readonly. Reduced reviewer set per owner direction (vs the four-reviewer commitment in the prior thread next-session record); rationale = single-session planning closure. | Phase 1 of single-session planning closure |
+| 2026-05-07 | **Slice 1 substrate floor corrected (assumption-reviewer BLOCKER #1)** — the spine over-asserted slice 1's substrate floor as `Inc.1 + Inc.2 + Inc.3 + graph-query-layer`; the EEF plan itself only depends on the graph-query-layer foundation (KG-independent thin in-process layer over typed JSON). Spine slice 1 substrate floor now matches the consumer plan; migration onto graph-corpus-sdk is named as a follow-up, not a slice-1 gate. Aligns with the owner-decided `spine-full` shape (existing plan ships in full). | Phase 2 remediation; spine `§ Slice 1` + `gate-0-substrate-floor` todo |
+| 2026-05-07 | **gate-3b dependency corrected (assumption-reviewer FINDING #4)** — spine previously listed slice 3b as blocked by `gate-2 + gate-3a + Inc.3`. Slice 3b composes EEF (slice 1) and misconceptions (slice 3a); the Oak Threads MCP surface is not part of the cross-corpus payload. Strict-gates list and `gate-3b-cross-corpus-ships.depends_on` corrected to `gate-1 + gate-3a + Inc.3`. The gate diagram already showed the correct shape; only the wording was wrong. | Phase 2 remediation; spine `§ Slice 3b` + strict-gates list + frontmatter |
+| 2026-05-07 | **gate-3a dependency reason corrected (assumption-reviewer FINDING #3)** — the cited reason "mcg sub-graph needs slice 1's namespace amendment + ADR-157 in place" was moot after Phase 0 closed those amendments. The strict gate is preserved (owner sequencing — slice 1 first establishes the MVP-arc spine pattern + namespace discipline) but the reason is updated to reflect what the gate actually carries. Minimum-change interpretation; if owner intends to remove the gate entirely, single-line edit in next session. | Phase 2 remediation; spine `§ Sequencing and Gates` strict-gates list |
+| 2026-05-07 | **Slice 2 cut-scope table cleaned (assumption-reviewer FINDING #2)** — NC SKOS taxonomy MCP surface row deleted from the slice-2 cut-scope table. The NC plan was never IN slice 2 to be cut from; including it as cut-scope contradicted the boundary correction. | Phase 2 remediation; spine `§ Slice 2 / Cut scope and follow-ups` |
+| 2026-05-07 | **Topology findings deferred to next session per owner scope direction** — `architecture-reviewer-betty` surfaced a BLOCKER (`graph-stack.plan.md` WS4 sequences `ws4-skos-extractor` before `ws4-graph-corpus-sdk-scaffold`, forcing Oak-specific extraction logic into substrate workspaces) and a FINDING (`practice-graph` placed in `packages/libs/` instead of `sdks/` or `apps/` mixes a domain consumer with public infrastructure) on the topology surface. Both must land before `graph-stack.plan.md` ACTIVE promotion / ADR-168 ratification (next session). Captured in next-session thread record so execution-prep absorbs them as blockers, not surprises. | Phase 2 capture; topology surface itself out of scope this session per owner direction |
+| 2026-05-07 | **EEF plan internal contradiction surfaced (code-reviewer + assumptions-reviewer concurring FINDING)** — `eef-evidence-corpus.plan.md` t19 declares LLM/outcome verification out-of-scope until evaluation infrastructure exists, while §`Promotion Trigger from CURRENT to ACTIVE` and the closing acceptance lines treat outcome conditions as load-bearing. Slice 1 IS the EEF plan; the contradiction is internal to slice-1 execution. Not amended this session — owner-decided whether to harmonise here or in slice-1 execution prep. Captured for next session. | Phase 2 capture; EEF plan body untouched this session |
