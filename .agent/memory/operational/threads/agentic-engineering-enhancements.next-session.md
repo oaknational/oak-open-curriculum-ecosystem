@@ -1,5 +1,91 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Memory/state substrate contracts + doctor plans (uncommitted)
+
+**Last refreshed**: 2026-05-07 (codex / GPT-5 / `019dfe`).
+
+**Owning plans**:
+
+- [Memory/state substrate portable contracts][memory-state-portable-plan]
+  under `agentic-engineering-enhancements/current/`.
+- [Memory/state contract doctor][memory-state-doctor-plan] under
+  `agent-tooling/current/`.
+
+**Current objective**: turn the PR 97 memory/state merge lesson into
+enforceable Practice doctrine. State and memory are treated as sibling
+planes in one substrate: state is truth-of-now, memory is
+truth-across-time, and consolidation is the bridge. PDR-049 remains
+the merge-semantics authority; PDR-050 adds the portable contract and
+immune-layer doctrine.
+
+**Current state**: planning/docs changes are authored but not yet
+committed. New PDR-050, the two plans, PDR/PDR-index updates,
+Practice-index bridge updates, the multi-checkout merge-plan amendment,
+canonical `comms-events` path fixes, and specialist-review evidence are
+in the working tree. Collaboration-state claims used for the work were
+closed locally in `closed-claims.archive.json`.
+
+**Key doctrine points now recorded**:
+
+- Semantic content union is necessary but insufficient for
+  memory/state merges; the integration must still be a real git merge
+  so git ancestry and parent topology are preserved.
+- Surface contracts must declare purpose, authority, lifecycle, write
+  API, merge class, parser/schema, generated outputs, validator,
+  repair path, severity, and portability tier.
+- Doctrine without an executable immune layer becomes operational
+  debt. The reusable pattern is
+  `contract -> checker -> repair path -> consolidation feedback -> portable doctrine`.
+- Host-specific TypeScript tooling is implementation, not Practice
+  Core doctrine. Portable doctrine names equivalent prevention,
+  detection, mitigation, and repair loops.
+
+**Owner correction captured 2026-05-07**: never strip captured
+knowledge reactively to meet fitness levels. Knowledge preservation is
+paramount; promotions, concept recognition, and custodianship must be
+considered carefully, sometimes in another session. In this session,
+the removed fresh napkin capture may be correctly homed because its
+substance is now durable in PDR-050 and the two plans, but the next
+reviewer should audit that disposition instead of treating the fitness
+warning as noise.
+
+**Validation already run**:
+
+- `pnpm agent-tools:collaboration-state -- check` — passed.
+- `pnpm portability:check` — passed.
+- `pnpm practice:vocabulary` — passed.
+- `pnpm markdownlint:root` — passed.
+- `pnpm test:root-scripts` — passed.
+- `git diff --check` — passed.
+- `pnpm practice:fitness:informational` — exits 0 with critical
+  `repo-continuity.md` pressure and hard `napkin.md` pressure.
+  The napkin pressure now includes the intentional owner-correction
+  capture from this session; do not use this as permission to delete
+  substance.
+
+**Specialist review**: completed 2026-05-07; evidence at
+[memory/state contracts specialist review][memory-state-review-evidence].
+Reviewers endorsed the direction and required pre-commit fixes to
+preservation-before-repair, surface-inventory determinism, doctor
+sequencing, TDD/validator boundaries, live/archive stale-path
+classification, and repair guards.
+
+**Next safe step**: re-run gates after reviewer fixes; then commit the
+docs/practice bundle if clean.
+
+**Non-goals for the next review session**:
+
+- Do not implement the memory/state doctor tooling unless the owner
+  explicitly changes scope.
+- Do not trim memory/state content for fitness.
+- Do not drop the residual merge autostash without explicit owner
+  approval.
+- Do not rewrite branch history.
+
+[memory-state-review-evidence]: ../../plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md
+[memory-state-portable-plan]: ../../plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md
+[memory-state-doctor-plan]: ../../plans/agent-tooling/current/memory-state-contract-doctor.plan.md
+
 ## Active arc — Pending-graduations recalibration + access-rhythm insight (landed 2026-05-07)
 
 **Last refreshed**: 2026-05-07 (Pelagic Rolling Harbour /

@@ -9,6 +9,19 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session follow-up (2026-05-07 — Memory/state substrate contract
+planning / `codex` / `GPT-5` / `019dfe`)**: created the uncommitted
+planning/doctrine bundle for portable memory/state substrate contracts
+and the repo-local memory/state doctor plan. Specialist review evidence now
+lives at
+`.agent/plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md`.
+Important correction preserved for the next session: do not strip
+captured knowledge reactively to satisfy fitness signals. Preserve
+first; then home, rotate, or escalate deliberately. This intentionally
+left `napkin.md` in hard fitness until reviewers confirmed the
+right home; reviewer fixes tightened the portable preservation clause
+and doctor repair guards before commit.
+
 **Session follow-up (2026-05-07 — Choppy Washing Archipelago /
 `codex` / `GPT-5` / `019dfe`)**: PR #97 vendor-switch handoff has
 been executed and pushed. `6683f918` is a real merge commit integrating

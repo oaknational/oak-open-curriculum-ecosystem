@@ -79,7 +79,7 @@ pnpm agent-tools:collaboration-state -- comms render --events-dir <dir> --output
 pnpm agent-tools:collaboration-state -- claims open|heartbeat|close|archive-stale ...
 pnpm agent-tools:collaboration-state -- conversation append --file <conversation.json> --entry-json '<json>'
 pnpm agent-tools:collaboration-state -- escalation open|close --file <escalation.json> --body-json '<json>'
-pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms/events
+pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events
 ```
 
 Identity preflight must reject anonymous Codex writes when `CODEX_THREAD_ID`

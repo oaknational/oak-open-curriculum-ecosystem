@@ -12416,6 +12416,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "84f0bbc0-a2b0-4a83-9aea-cb0764c391a4",
+      "agent_id": {
+        "agent_name": "Choppy Washing Archipelago",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current",
+            ".agent/plans/agent-tooling/current",
+            ".agent/plans/agent-tooling/future",
+            ".agent/state/README.md",
+            ".agent/memory/operational/collaboration-state-conventions.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T00:00:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement memory/state substrate and contract-doctor planning docs",
+      "heartbeat_at": "2026-05-07T08:33:42Z",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T08:40:52Z",
+        "closed_by": {
+          "agent_name": "Choppy Washing Archipelago",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfe"
+        },
+        "summary": "Implemented PDR-050, portable substrate plan, local doctor plan, and related stale-path/index updates",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "84f0bbc0-a2b0-4a83-9aea-cb0764c391a4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "82abd3ee-4f31-4356-82c3-5cd8a27bdeac",
+      "agent_id": {
+        "agent_name": "Choppy Washing Archipelago",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019dfe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records",
+            ".agent/practice-index.md",
+            ".agent/rules/respect-active-agent-claims.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/prompts/agentic-engineering/collaboration/experiments/E1",
+            ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T08:33:42Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Register widened memory/state planning doctrine surfaces",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T08:40:52Z",
+        "closed_by": {
+          "agent_name": "Choppy Washing Archipelago",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019dfe"
+        },
+        "summary": "Registered and completed widened doctrine, prompt, rule, and bridge-index consolidation surfaces",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "82abd3ee-4f31-4356-82c3-5cd8a27bdeac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -24,7 +24,10 @@ conflicts in shared state);
 this PDR composes by adding *merge ownership* on top of edit ownership);
 [PDR-046](PDR-046-layered-knowledge-processing.md)
 (layered knowledge processing — the staircase whose Layer-0 / Layer-1 /
-Layer-2 surfaces accumulate the diverging content this PDR resolves).
+Layer-2 surfaces accumulate the diverging content this PDR resolves);
+[PDR-050](PDR-050-state-memory-substrate-contracts.md)
+(state and memory substrate contracts — the broader surface-contract and
+immune-layer doctrine that this merge-time PDR serves).
 
 ## Context
 

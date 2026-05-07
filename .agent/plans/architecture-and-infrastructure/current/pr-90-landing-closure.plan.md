@@ -222,7 +222,7 @@ The TS-invocation pattern is mid-documentation. Phase 1 corrects the misleading 
 grep -rn "node scripts/.*\.mjs" \
   --include="*.yml" --include="*.yaml" --include="*.md" \
   --include="*.json" --include="*.toml" --include="*.sh" --include="*.ts" \
-  | grep -v "node_modules\|\.next\|dist\|\.git/\|active-claims\|closed-claims\|shared-comms-log\|comms/events\|/archive/"
+  | grep -v "node_modules\|\.next\|dist\|\.git/\|active-claims\|closed-claims\|shared-comms-log\|comms-events\|comms/events\|/archive/"
 # Expected: only the three already-named sites (or any new site is incorporated into Phase 1).
 
 # 2. Cross-check that target .ts scripts exist for each drift site
@@ -713,7 +713,7 @@ sonar list issues -p oaknational_oak-open-curriculum-ecosystem --pull-request 90
 grep -rn "node scripts/.*\.mjs" \
   --include="*.yml" --include="*.yaml" --include="*.md" \
   --include="*.json" --include="*.toml" --include="*.sh" --include="*.ts" \
-  | grep -v "node_modules\|\.next\|dist\|\.git/\|active-claims\|closed-claims\|shared-comms-log\|comms/events\|/archive/"
+  | grep -v "node_modules\|\.next\|dist\|\.git/\|active-claims\|closed-claims\|shared-comms-log\|comms-events\|comms/events\|/archive/"
 # Expected: no matches.
 
 # 2. Canonical pnpm-exec form is present in CI

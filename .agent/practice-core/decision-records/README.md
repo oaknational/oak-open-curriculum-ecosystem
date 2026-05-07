@@ -173,3 +173,4 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-047](PDR-047-rule-applies-always-doctrine-authoring.md) | The Rule Applies, Always — Doctrine-Authoring Discipline | Accepted |
 | [PDR-048](PDR-048-insight-capture-at-moment-of-occurrence.md) | Insight Capture at the Moment of Occurrence | Accepted |
 | [PDR-049](PDR-049-memory-and-state-file-merge-semantics.md) | Memory and State File Merge Semantics | Accepted |
+| [PDR-050](PDR-050-state-memory-substrate-contracts.md) | State and Memory Substrate Contracts | Accepted |

@@ -20,6 +20,12 @@ generates evidence; that evidence is captured in the napkin and graduates
 into `.agent/memory/` lessons when patterns earn promotion. Lessons in
 `.agent/memory/` shape how state surfaces are designed and used.
 
+Portable substrate doctrine lives in
+[PDR-050](../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md):
+state and memory are sibling planes, generated read models are derived views,
+and every surface needs a contract, validator, repair path, and immune-layer
+route.
+
 ## Current Sub-Surfaces
 
 ### `.agent/state/collaboration/`
@@ -28,11 +34,17 @@ Installed by WS0 onward of the
 [`multi-agent-collaboration-protocol`](../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
 plan.
 
-- [`collaboration/comms/events/`](collaboration/comms/events/) — immutable
+- [`collaboration/comms-events/`](collaboration/comms-events/) — immutable
   communication event files. New discovery notes write here first and render
   into the shared log.
+- [`collaboration/comms/events/`](collaboration/comms/events/) — legacy
+  event fragments from the pre-`comms-events` path. This is a documented
+  transition defect, not a second live home. No new writes belong here; the
+  memory/state doctor plan owns the non-destructive migration ledger and the
+  terminal state where only `comms-events/` remains live.
 - [`collaboration/comms/archive/`](collaboration/comms/archive/) — rendered
-  communication-log history preserved when the hot read model is regenerated.
+  communication-log history preserved from the legacy pre-events path when
+  the hot read model is regenerated.
 - [`shared-comms-log.md`](collaboration/shared-comms-log.md) — generated
   shared communication log read model. Discovery surface for sequential
   agents at session-open. Legacy rendered history remains preserved during

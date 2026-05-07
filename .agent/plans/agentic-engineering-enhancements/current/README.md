@@ -27,6 +27,7 @@ plans when scheduled.
 | [agent-entrypoint-content-homing.plan.md](agent-entrypoint-content-homing.plan.md) | Adjacent: lossless homing of non-entrypoint AGENT.md content into durable homes while preserving discovery parity | QUEUED |
 | [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
+| [memory-state-substrate-portable-contracts.plan.md](memory-state-substrate-portable-contracts.plan.md) | Adjacent: host adoption of PDR-050 portable state/memory substrate contracts and immune-layer routing | QUEUED |
 | ↪️ MOVED | `multi-agent-collaboration-protocol.plan.md` → [`../../agent-tooling/current/`](../../agent-tooling/current/multi-agent-collaboration-protocol.plan.md) | (relocated 2026-05-05) |
 | ↪️ MOVED | `multi-agent-collaboration-sidebar-and-escalation.plan.md` → [`../../agent-tooling/current/`](../../agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md) | (relocated 2026-05-05) |
 | ↪️ MOVED | `collaboration-state-write-safety.plan.md` → [`../../agent-tooling/current/`](../../agent-tooling/current/collaboration-state-write-safety.plan.md) | (relocated 2026-05-05) |

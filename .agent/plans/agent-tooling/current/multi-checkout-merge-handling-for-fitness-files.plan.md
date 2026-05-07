@@ -8,8 +8,10 @@ overview: >
   standard merge plus a focused post-merge reconciliation command
   for curated rule lists and structured trackers; pre-merge CI gate
   keyed on fitness frontmatter; pre-commit warning on non-main
-  branches. Phase 0 is an explicit owner decision gate where the
-  architectural shape is confirmed before implementation begins.
+  branches. PDR-049 adds the topology rule: semantic content union is
+  insufficient unless the integration lands through a real git merge.
+  Phase 0 is an explicit owner decision gate where the architectural
+  shape is confirmed before implementation begins.
 todos:
   - id: phase-0-design-gate
     content: "Phase 0: Owner decision gate on architectural shape; confirm or redirect the layered recommendation."
@@ -43,9 +45,11 @@ isProject: false
 
 # Multi-Checkout Merge Handling for Fitness-Managed Files
 
-**Last Updated**: 2026-05-01
-**Status**: 🔴 NOT STARTED — BLOCKED ON
-*fitness-frontmatter-manifest-sweep.plan.md*
+**Last Updated**: 2026-05-07
+**Status**: 🔴 NOT STARTED — broad fitness-file driver work remains
+blocked on *fitness-frontmatter-manifest-sweep.plan.md*; the
+state/memory contract-doctor slice is unblocked and owned by
+[`memory-state-contract-doctor.plan.md`](memory-state-contract-doctor.plan.md).
 **Scope**: Make multi-checkout work safe for the repo's
 knowledge-accretion surfaces by matching merge handling to file
 shape, with the fitness frontmatter as the manifest that drives
@@ -119,6 +123,19 @@ natural manifest of "knowledge-accretion surface with bounded size."
 The *fitness-frontmatter-manifest-sweep* plan (sibling, in flight)
 makes this manifest coherent. Without that work, this plan cannot
 key its routing on the manifest.
+
+### Issue 6: Content reconciliation without git topology loses future merge data
+
+PDR-049 records the additional topology contract for memory/state
+merges: copying files, cherry-picking content, or landing a
+single-parent snapshot may preserve the visible text while discarding
+the git parentage, merge-base behaviour, and future conflict-resolution
+data structures. This plan therefore treats "proper git merge
+operation first, semantic resolution second" as a gate for any
+memory/state merge handling. The repo-local doctor plan owns the
+deterministic topology check for the memory/state slice; this broader
+plan applies the same rule to fitness-managed files once the manifest
+and drivers exist.
 
 ---
 

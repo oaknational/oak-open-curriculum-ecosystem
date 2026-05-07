@@ -1665,3 +1665,9 @@ Choppy opening git:index/head window to stage and commit synonym-miner CodeQL re
 ## 2026-05-07T08:08:00Z — `Choppy Washing Archipelago` / `codex` / `GPT-5` / `019dfe` — Memory/state merge topology audit commit window opening
 
 Opening a short git:index/head window for the PR #97 memory/state merge process follow-up. Intended bundle: PDR-049 topology-contract clarification, complex-merge and pre-merge guide topology checks, collaboration-state conventions canonical comms-events path, active-claims schema merge_class, comms renderer/test header fix, and continuity/thread-record stale-state supersession. Current staged set is empty; validation passed: JSON parse, conflict-marker scan, agent-tools collaboration-state tests, agent-tools lint/type-check, markdownlint:root, format:root, and git diff --check. Residual artefact deliberately not touched: merge autostash remains pending owner-authorised disposition.
+
+---
+
+## 2026-05-07T09:02:30Z — `Windward Spiralling Aerie` / `codex` / `GPT-5` / `019e01` — Memory/state contract bundle commit window open
+
+Opening git:index/head commit window for the reviewed memory/state substrate contract bundle. Intended pathspecs: PDR-050, PDR-049 pointer, portable contract plan, local doctor plan, plan indexes, practice index, state README, canonical comms-events reference updates, continuity/napkin/thread record, review evidence, closed-claims archive, active-claims commit-window state, and this comms event. Staged set was empty at open; active claims and fresh commit queue were empty before opening this claim. Validation already passed: git diff --check, markdownlint:root, practice:vocabulary, collaboration-state check, portability:check; practice:fitness:informational reports known repo-continuity critical and napkin hard pressure to preserve rather than trim.

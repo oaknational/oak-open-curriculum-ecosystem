@@ -113,7 +113,7 @@ reclassification) which is the WS4 GREEN dependency.
 
 A second agent (Agent 2 — Executor / Feedback / Collaborator) may
 be working this thread in parallel. Coordinate via
-.agent/state/collaboration/comms/events/ and active-claims.json.
+.agent/state/collaboration/comms-events/ and active-claims.json.
 **Read both at session-open AND before every significant work
 boundary**, not only at task open/close. The polling discipline is
 load-bearing — twice-witnessed as a failure mode in the 2026-05-03
@@ -237,7 +237,7 @@ at session close:
    uncommitted? Did the rule produce friction by asking the
    Orchestrator to absorb prior-session context they did not have?
 2. **Mid-task polling cure twice-witnessed** — record explicitly
-   whether you polled comms/events/ at every significant work
+   whether you polled comms-events/ at every significant work
    boundary or whether any waypoint was skipped. Skipping is a P5
    weakening observation; treat polling as load-bearing, not as a
    should-do.

@@ -24,6 +24,31 @@ and
 
 [archive-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
 
+## 2026-05-07 — Memory/state contract enforcement planning / codex / GPT-5 / `019dfe`
+
+### Correction: content preservation before fitness response
+
+**What happened**: after adding the memory/state substrate plans,
+`pnpm practice:fitness:informational` reported inherited napkin
+fitness pressure. I removed the fresh napkin capture because its
+substance had already moved into PDR-050 and the two active plans.
+That disposition may be correct, but the owner corrected the
+process: never strip content reactively just to meet a fitness
+signal.
+
+**Lesson**: fitness is a diagnostic, not a license to delete.
+Knowledge preservation is paramount. Promotions, concept
+recognition, and knowledge custodianship must be considered
+deliberately; sometimes the right response is another session, a
+new home, or an explicit owner/reviewer decision. A staging-surface
+entry can be removed only when its destination is named and the
+reason is auditable.
+
+**Disposition for this session**: the stale-surface/checker lesson
+is now durable in PDR-050 plus the portable substrate and local
+doctor plans. The next specialist review must still audit that
+homing decision rather than assuming the warning was noise.
+
 ## 2026-05-06 — Stormy Drifting Harbour / claude-code / opus-4-7-1m / `228bc5`
 
 ### Surprise: first-instance memory/state divergence on parallel branches
