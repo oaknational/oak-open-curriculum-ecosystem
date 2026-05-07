@@ -973,7 +973,7 @@ The pre-existing fitness HARD violations the orchestrator has been firing on (vi
 
 
 Practice Fitness Check (ADR-144 three-zone model)
-══════════════════════════════════════════════════
+╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝╝
 
   .agent/directives/agent-collaboration.md  [33m⚠ soft[0m
     Lines:               257 / target 200 / limit 260  [33m⚠ soft[0m
@@ -1595,3 +1595,9 @@ Embered Melting Kiln closing session: Phase 2 of collaboration-state-surface-res
 ## 2026-05-06T16:36:13.921Z — `Clouded Lifting Aerie` / `claude-code` / `claude-opus-4-7-1m` / `1e2244` — Session close — napkin + pending-graduations register triage (Step 1+2 landed)
 
 Clouded Lifting Aerie (1e2244) executed the 2026-05-06 napkin + pending-graduations processing opener authored by Embered Melting Kiln. Step 1 landed at d12912dc (3 new patterns + frictions register updates + dev-practice doctrine + napkin rotation). Step 2 landed at b4d7ddff (7 graduated entries archived + Lacustrine commit-queue fingerprint marked graduated + 1 small new pending entry). Reviewer dispatch (docs-adr + code-reviewer) APPROVED with one P1 SHA typo fixed in handoff. Pending-graduations.md still HARD (1876 lines / 1400 limit) — 76 pending entries genuinely await second-instance triggers; this is next-audit input per opener boundary, not session brake. 8 due entries flagged for next-session execution. Files-claim closing with this session.
+
+---
+
+## 2026-05-07T15:20:03Z � `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` � Bootstrap fast-path: graph MVP-arc planning closure (single session)
+
+Breezy Navigating Sail (9edbd1) opening single-session planning closure for the graph MVP-arc on the `connecting-oak-resources` thread. Active-claims registry: `claims[]` empty; only abandoned commit-queue residue from 2026-05-04..06. Bootstrap fast-path applied. Files claim `e3dc2e56` opened against the spine (`graph-mvp-arc.plan.md`), the thread next-session record, the three new slice-plan paths under `connecting-oak-resources/knowledge-graph-integration/current/`, and the collaboration-state surfaces themselves. Plan: Phase 0 prefix-remediate three `mvp_arc_status: deferred` drift lines in the spine (L299/L453/L563); Phase 1 single parallel reviewer batch (code-reviewer + assumptions-reviewer over the five MVP-arc artefacts; architecture-reviewer-betty over ADR-168 + `graph-stack.plan.md` topology, all readonly); Phase 2 synthesis + remediate any BLOCKERs in existing artefacts; Phase 3 author the three slice plans (oak-kg-threads-surface, oak-misconceptions-subgraph-mcp-surface, oak-misconceptions-eef-cross-corpus-surface); Phase 4 re-review the new slice plans with the same two reviewers; Phase 5 spine closure + thread-record refresh handing the next session into execution prep. Out of scope per owner direction 2026-05-08: NC plan, all non-MVP adjacent plans, all execution / gate work, ADR-168 ratification, `graph-stack.plan.md` ACTIVE promotion. Comms event `1d293dc4`. Branch `planning/graph-tooling`; HEAD clean.

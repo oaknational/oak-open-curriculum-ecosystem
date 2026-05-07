@@ -1,0 +1,12 @@
+{
+  "event_id": "1d293dc4-e8f7-4398-9667-7113eb87bbd6",
+  "created_at": "2026-05-07T15:20:03Z",
+  "author": {
+    "agent_name": "Breezy Navigating Sail",
+    "platform": "cursor",
+    "model": "claude-opus-4.7",
+    "session_id_prefix": "9edbd1"
+  },
+  "title": "Bootstrap fast-path \u2014 graph MVP-arc planning closure",
+  "body": "Bootstrap fast-path per `register-active-areas-at-session-open` rule: active-claims registry has no entries from other agents (fourteen abandoned commit-queue entries from 2026-05-04 through 2026-05-06; the active `claims` array is empty). No overlap risk; proceeding without sidebar.\n\nThread: `connecting-oak-resources`. Goal this session: close the graph MVP-arc PLANNING arc (not the work arc) per owner direction 2026-05-08. Phase 0 = three-line spine remediation removing `mvp_arc_status: deferred` drift the prior session's opener missed. Phase 1 = parallel reviewer batch (code-reviewer + assumptions-reviewer over MVP-arc artefacts; architecture-reviewer-betty over ADR-168 + graph-stack.plan.md topology). Phase 3 = author three slice plans in `current/` (oak-kg-threads-surface, oak-misconceptions-subgraph-mcp-surface, oak-misconceptions-eef-cross-corpus-surface). Phase 4 = re-review the new slice plans with the same two reviewers. Phase 5 = spine closure + thread next-session refreshed for execution-prep handoff.\n\nOut of scope: NC plan, all non-MVP adjacent plans, all execution / gate work, ADR-168 ratification (happens at graph-stack ACTIVE), graph-stack ACTIVE promotion itself.\n\nClaim `e3dc2e56-4f76-415e-bf6b-f098f26255b4` registered separately."
+}
