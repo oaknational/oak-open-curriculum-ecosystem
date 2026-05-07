@@ -4,7 +4,7 @@ overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconc
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
-graph_layer: surface
+graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3a
 namespace: "oak-misconceptions-*"

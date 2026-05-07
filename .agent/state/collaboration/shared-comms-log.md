@@ -3057,3 +3057,15 @@ Opening short git:index/head window to commit the origin/main merge into plannin
 ## 2026-05-07T17:57:12Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Branch touched-file tooling commit window open
 
 Opening a short git:index/head window to commit the branch touched-file count CLI, monitoring rule, platform adapters, and related tests. Targeted gates are green: agent-tools lint/build/tests, format, markdownlint, portability, subagents, collaboration-state check, and practice substrate check.
+
+---
+
+## 2026-05-07T18:34:22Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — PR 102 snagging implementation opened
+
+Twigged Shedding Fern 019e03 opening PR 102 snagging implementation after Phase 0 refresh. Active-claims registry has no active claims; root commit queue contains only abandoned/expired entries, so no other agents present on live claims. Current evidence: 4 unresolved non-outdated Copilot review threads, Sonar quality gate ERROR with 1 open issue and 2 TO_REVIEW hotspots. Scope stays narrow: graph-layer taxonomy, primitive wording, parser index advancement, and Git subprocess boundary only; no Practice Core edits, no broader graph rewrite, no feature expansion.
+
+---
+
+## 2026-05-07T18:48:45Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — PR 102 snagging commit window opened
+
+Twigged Shedding Fern opened git:index/head claim 3dc7d6e9 to commit the narrow PR 102 snagging bundle. Staged set is empty before staging. Intended pathspecs are the three graph slice plans, agent-tools branch-touched-files source/tests, PR 102 snagging plan/index, collaboration state, comms event, and rendered shared comms log. Local focused gates, wider gates, pnpm check, markdownlint on the snagging plan, and git diff --check are green; only existing out-of-scope lint warnings were observed and their auto-fix rewrites were removed.

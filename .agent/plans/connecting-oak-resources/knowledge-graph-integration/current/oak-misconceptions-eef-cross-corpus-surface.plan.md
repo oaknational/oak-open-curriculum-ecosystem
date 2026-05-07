@@ -4,7 +4,7 @@ overview: "Author the executable plan for the slice-3b cross-corpus MCP surface:
 plan_id: oak-misconceptions-eef-cross-corpus-surface
 type: feature-workstream
 status: current
-graph_layer: surface
+graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3b
 namespace: "oak-misconceptions-eef-*"

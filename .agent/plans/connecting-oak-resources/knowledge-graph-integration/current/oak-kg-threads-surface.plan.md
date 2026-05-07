@@ -4,7 +4,7 @@ overview: "Author the executable plan for the slice-2 MCP surface: `curriculum:/
 plan_id: oak-kg-threads-surface
 type: feature-workstream
 status: current
-graph_layer: surface
+graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 2
 namespace: "oak-kg-*"
@@ -167,7 +167,7 @@ discipline, not a downstream-composition dependency.
    with `rdfs:label`, `rdfs:comment`, and `curric:whyThisWhyNow`.
 3. Inverse-edge query primitive in graph-query-layer verified
    (Thread is a forward edge from Unit; resolution requires inverse).
-4. ADR-123 records the renamed primitives.
+4. ADR-123 records the new primitives.
 5. Specialist review by `mcp-reviewer` (mid-cycle and at WS6 close).
 
 ## Workstreams

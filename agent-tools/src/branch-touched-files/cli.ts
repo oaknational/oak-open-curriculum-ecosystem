@@ -95,8 +95,10 @@ export function parseArgs(args: readonly string[]): ParsedArgs {
     positionals: [],
   };
 
-  for (let index = 0; index < args.length; index += 1) {
-    index = consumeArg({ args, index, state });
+  let index = 0;
+  while (index < args.length) {
+    const consumedIndex = consumeArg({ args, index, state });
+    index = consumedIndex + 1;
   }
 
   return finalizeArgs(state);

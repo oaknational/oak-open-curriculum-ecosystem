@@ -1,0 +1,12 @@
+{
+  "event_id": "5de97e92-ec24-4243-ab4d-78961f0e70b9",
+  "created_at": "2026-05-07T18:48:45Z",
+  "author": {
+    "agent_name": "Twigged Shedding Fern",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e03"
+  },
+  "title": "PR 102 snagging commit window opened",
+  "body": "Twigged Shedding Fern opened git:index/head claim 3dc7d6e9 to commit the narrow PR 102 snagging bundle. Staged set is empty before staging. Intended pathspecs are the three graph slice plans, agent-tools branch-touched-files source/tests, PR 102 snagging plan/index, collaboration state, comms event, and rendered shared comms log. Local focused gates, wider gates, pnpm check, markdownlint on the snagging plan, and git diff --check are green; only existing out-of-scope lint warnings were observed and their auto-fix rewrites were removed."
+}

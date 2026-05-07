@@ -97,10 +97,31 @@ describe('branch touched files CLI args', () => {
     });
   });
 
+  it('accepts explicit head and branch aliases', () => {
+    expect(parseArgs(['--head', 'HEAD~1', '--branch', 'feature/example'])).toMatchObject({
+      baseRef: 'origin/main',
+      headRef: 'feature/example',
+    });
+  });
+
   it('ignores a pnpm-forwarded argument separator', () => {
     expect(parseArgs(['--', '--base', 'main'])).toMatchObject({
       baseRef: 'main',
       headRef: 'HEAD',
     });
+  });
+
+  it('records help flags without requiring git state', () => {
+    expect(parseArgs(['--help'])).toMatchObject({
+      help: true,
+    });
+    expect(parseArgs(['-h'])).toMatchObject({
+      help: true,
+    });
+  });
+
+  it('rejects unknown and valueless options with useful messages', () => {
+    expect(() => parseArgs(['--bogus'])).toThrow('unknown option: --bogus');
+    expect(() => parseArgs(['--base'])).toThrow('--base requires a value');
   });
 });

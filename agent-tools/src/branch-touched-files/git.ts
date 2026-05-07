@@ -1,18 +1,40 @@
 import { execFileSync } from 'node:child_process';
+import type { ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 
 import { createBranchTouchedFileReport, type BranchTouchedFileReport } from './index.js';
+
+export type GitCommandExecutor = (
+  file: string,
+  args: readonly string[],
+  options: ExecFileSyncOptionsWithStringEncoding,
+) => string;
 
 export interface ReadBranchTouchedFileReportOptions {
   readonly repoRoot: string;
   readonly baseRef: string;
   readonly headRef: string;
+  readonly execFileSync?: GitCommandExecutor;
+}
+
+export interface ReadGitStdoutOptions {
+  readonly repoRoot: string;
+  readonly args: readonly string[];
+  readonly execFileSync?: GitCommandExecutor;
 }
 
 export function readBranchTouchedFileReport(
   options: ReadBranchTouchedFileReportOptions,
 ): BranchTouchedFileReport {
-  const mergeBase = git(options.repoRoot, ['merge-base', options.baseRef, options.headRef]);
-  const files = git(options.repoRoot, ['diff', '--name-only', `${mergeBase}..${options.headRef}`])
+  const mergeBase = readGitStdout({
+    repoRoot: options.repoRoot,
+    args: ['merge-base', options.baseRef, options.headRef],
+    execFileSync: options.execFileSync,
+  });
+  const files = readGitStdout({
+    repoRoot: options.repoRoot,
+    args: ['diff', '--name-only', `${mergeBase}..${options.headRef}`],
+    execFileSync: options.execFileSync,
+  })
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.length > 0);
@@ -25,10 +47,18 @@ export function readBranchTouchedFileReport(
   });
 }
 
-function git(repoRoot: string, args: readonly string[]): string {
-  return execFileSync('git', args, {
-    cwd: repoRoot,
+const TRUSTED_GIT_PATH = '/usr/bin:/bin';
+
+export function readGitStdout(options: ReadGitStdoutOptions): string {
+  const run = options.execFileSync ?? execFileSync;
+
+  return run('git', options.args, {
+    cwd: options.repoRoot,
     encoding: 'utf8',
+    env: {
+      ...process.env,
+      PATH: TRUSTED_GIT_PATH,
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   }).trim();
 }
