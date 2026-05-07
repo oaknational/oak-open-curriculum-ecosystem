@@ -1,5 +1,270 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Memory/state substrate contracts + doctor safe-merge gate (closed 2026-05-07)
+
+**Last refreshed**: 2026-05-07 (Silvered Masking Moth / codex / GPT-5 /
+`019e03`).
+
+**Owning plans**:
+
+- [Memory/state substrate portable contracts][memory-state-portable-plan]
+  under `agentic-engineering-enhancements/current/`.
+- [Memory/state contract doctor][memory-state-doctor-plan] under
+  `agent-tooling/archive/completed/`.
+
+**Current objective**: turn the PR 97 memory/state merge lesson into
+enforceable Practice doctrine. State and memory are treated as sibling
+planes in one substrate: state is truth-of-now, memory is
+truth-across-time, and consolidation is the bridge. PDR-049 remains
+the merge-semantics authority; PDR-050 adds the portable contract and
+immune-layer doctrine.
+
+**Current state**: foundation bundle landed and pushed on
+`fix/sonar-fixes-20260506`. Commit `cb662b7e` adds PDR-050, the
+portable substrate plan, the repo-local doctor plan, PDR/PDR-index
+updates, Practice-index bridge updates, the multi-checkout merge-plan
+amendment, canonical `comms-events` path fixes, state README updates,
+and specialist-review evidence. Commit `526a596e` closes the
+commit-window collaboration claim. A follow-up local working-tree slice
+seeded the host-local inventory/template at
+[`memory-state-substrate-contracts.md`](../../executive/memory-state-substrate-contracts.md),
+links it from entry points, and captures the architectural split:
+transferable contract specification in Practice Core, filled inventory
+instance in the host. The next local-instance slice promoted that inventory to
+strict JSON data at
+[`memory-state-substrate-contracts.manifest.json`](../../executive/memory-state-substrate-contracts.manifest.json)
+and
+[`memory-state-substrate-contracts.schema.json`](../../executive/memory-state-substrate-contracts.schema.json),
+completed Phase 0/2 coverage, routed Phase 3 immune-layer responsibilities,
+and migrated the 114 legacy `comms/events` fragments into canonical
+`comms-events`. The legacy collaboration comms tree has now been deleted.
+Phase 4/5 closure is now complete in the working tree: PDR-049
+no longer names concrete host-state paths in
+Practice Core, host-local path guidance lives in the bridge/local contract,
+the retired YAML seed is preserved as dated evidence, legacy `comms/events/`
+references remain historical/provenance evidence only, the old root must be
+absent on disk, topology policy is routed to the doctor, and the test-reviewer
+hold is moved to the post-Phase-0/pre-Phase-1 checkpoint.
+
+Doctor Phase 0 is complete. The archived read-only ledger at
+[`memory-state-contract-doctor.phase-0-ledger.md`](../../../plans/agent-tooling/archive/completed/memory-state-contract-doctor.phase-0-ledger.md)
+classifies every Known Contract Gaps row as a live defect, known-good terminal
+state, or deferred semantic review; records the existing check inventory; and
+captures current evidence: 22 manifest surfaces, 114 migration-ledger entries,
+legacy `comms/events/` absent on disk with historical provenance preserved in
+the ledger/archive, canonical `comms-events/` parsing through the explicit
+collaboration-state check, and no duplicate manifest or ledger identities.
+Follow-up owner direction deleted the retained legacy `comms/` archive tree;
+the live doctor now validates 21 manifest surfaces and the complete absence of
+that deleted tree.
+`test-reviewer` ran before Phase 1 and found one blocker:
+the initial validation lane could pass without selecting the intended tests.
+The parent plan and ledger now require the exact Vitest path with
+`--passWithNoTests=false`, and an impossible no-match path was verified to fail.
+
+Doctor Phase 1 fixture work is now complete in the working tree. The new pure
+contract evaluators live under `agent-tools/src/practice-substrate/`, with
+literal-object/string tests at
+`agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
+Coverage includes the planned fixture classes for legacy event-root terminal
+state, stale live prose vs archived evidence, missing `merge_class`
+metadata, duplicate IDs, same-key semantic collisions, generated read-model
+drift, parse/schema incoherence, conflict markers, merge-topology snapshots,
+and repair-preservation classification. The mandatory `test-reviewer`
+checkpoint found one blocker: parameterised merge classes accepted
+`append-only-structured-by-` without a key. The implementation now rejects
+that form and the fixture suite includes the edge case.
+
+Doctor Phase 2 read-only report mode landed in commit `44c73e4d`. The new
+`agent-tools`-only CLI at
+`agent-tools/src/bin/practice-substrate.ts` builds before running and supports
+`pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+without adding root `practice:substrate:*` aliases. Runtime readers inject live
+repo snapshots into the pure evaluator/report layer for manifest/schema
+validation, manifest surface/ID/field/`merge_class` checks, the 114-row
+migration ledger, canonical collaboration JSON, generated shared-comms-log
+comparison, retired-path scanning, and optional git topology validation when
+`--target-ref` is supplied. The legacy placeholder tree was removed; archived
+mentions remain evidence, but the old path must not remain on disk. The
+mandatory `test-reviewer` and `code-reviewer` re-checks were clean at the
+Phase 2 boundary.
+
+Doctor safe-merge closure is now complete in this working tree. The final
+closure normalised the closed-claims archive and two conversation files against
+their schemas without deleting historical evidence, extended the collaboration
+evidence vocabulary for observed archive classes, added `--mode strict`, and
+added the root built-output alias `pnpm practice:substrate:check`. Report mode
+now returns `ok: true` with `blocking: 0`; strict mode returns `0` against the
+clean live substrate. Repair mode and consolidation integration remain future
+arcs.
+
+Post-close handoff/consolidation ran on 2026-05-07 after commit `e1827ed8`.
+The active napkin was rotated into dated archive evidence, the oversized
+repo-continuity session history was archived, the live continuity register was
+compacted to the current substrate state, and the remaining hard fitness
+pressure was routed to owner-approved Practice Core remediation instead of
+reactive trimming.
+
+**Arc spine for the completed safe-merge gate**: this work exists to make memory/state
+files safely mergeable through explicit contracts and deterministic tooling.
+The target value is a safe merge gate: agents can identify authoritative,
+generated, archival, live, derived, and historical-evidence surfaces; block
+deterministic structural defects; verify generated read models against
+canonical sources; and avoid old-path compatibility layers. The arc finishes
+when specialist reviews are complete, report mode returns `ok: true` with
+`blocking: 0`, strict mode exists for low-ambiguity blockers, the root alias
+invokes built `agent-tools` output, and the doctor plan is archived with
+validation evidence. That safe-merge gate is now closed; repair mode and
+consolidation integration are future arcs.
+
+**Key doctrine points now recorded**:
+
+- The Practice is a philosophy and commitment, not merely a specification
+  repository. Its specification layer is a powerful portability tool: fully
+  specify the portable concept in Practice Core, then bind it to repo-local
+  surfaces as host implementation and current instance.
+- Semantic content union is necessary but insufficient for
+  memory/state merges; the integration must still be a real git merge
+  so git ancestry and parent topology are preserved.
+- Surface contracts must declare purpose, authority, lifecycle, write
+  API, merge class, parser/schema, generated outputs, validator,
+  repair path, severity, and portability tier.
+- Doctrine without an executable immune layer becomes operational
+  debt. The reusable pattern is
+  `contract -> checker -> repair path -> consolidation feedback -> portable doctrine`.
+- Host-specific TypeScript tooling is implementation, not Practice
+  Core doctrine. Portable doctrine names equivalent prevention,
+  detection, mitigation, and repair loops.
+- The transferable-vs-host split may be useful for other agentic engineering
+  processes and support systems once their substance proves Practice-level.
+
+**Owner correction captured 2026-05-07**: never strip captured
+knowledge reactively to meet fitness levels. Knowledge preservation is
+paramount; promotions, concept recognition, and custodianship must be
+considered carefully, sometimes in another session. In this session,
+the removed fresh napkin capture may be correctly homed because its
+substance is now durable in PDR-050 and the two plans, but the next
+reviewer should audit that disposition instead of treating the fitness
+warning as noise.
+
+**Additional correction captured 2026-05-07**: do not reactively cut
+content from memory surfaces, and do not do it to Practice Core files.
+Fitness output is a routing signal: preserve the concept first, then route
+pressure to homing, graduation, splitting, limit review, or explicit owner
+decision. Do not tighten Practice Core prose merely to satisfy a hard
+fitness character signal.
+
+**Tooling response captured 2026-05-07**: the fitness interaction itself now
+needs to carry the response discipline. Non-healthy fitness output should
+remind the observing agent to preserve substance first and route pressure
+structurally, rather than deleting, trimming, compressing, or weakening memory
+or Practice Core content to make the report greener.
+
+**Validation already run**:
+
+- `pnpm agent-tools:collaboration-state -- check` — passed as the then-current
+  narrow parser check. Future evidence should use explicit `--active`,
+  `--closed`, and `--events-dir` paths until the substrate doctor exists.
+- `pnpm portability:check` — passed.
+- `pnpm practice:vocabulary` — passed.
+- `pnpm markdownlint:root` — passed.
+- `pnpm test:root-scripts` — passed.
+- `git diff --check` — passed.
+- Follow-up local slice updated `scripts/validate-practice-fitness.ts` so
+  non-healthy output includes a non-reactive response-discipline reminder;
+  landed in `dc04d80b` with
+  `pnpm exec vitest run scripts/validate-practice-fitness.unit.test.ts`
+  passing.
+- `pnpm practice:fitness:informational` — exits 0 with critical
+  `repo-continuity.md` pressure and hard `napkin.md` pressure.
+  The napkin pressure now includes the intentional owner-correction
+  capture from this session; do not use this as permission to delete
+  substance.
+- Strict local instance checks passed before commit: manifest/schema contract
+  check reported 22 surfaces and no schema-contract failures; migration ledger
+  reported 114 entries and no hash/byte-count failures; canonical
+  `comms-events` JSON parse check reported 236 files and no parse failures;
+  explicit collaboration-state check against canonical `comms-events` passed.
+- Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
+  `bf3211ac`.
+- Doctor Phase 0 gates passed after ledger drafting: explicit
+  `collaboration-state -- check`, `git diff --check`, `pnpm test:root-scripts`,
+  `pnpm portability:check`, `pnpm practice:vocabulary`,
+  `pnpm practice:fitness:informational` (expected routed pressure, exit 0),
+  and `pnpm markdownlint-check:root`. Direct read-only manifest/ledger probes
+  confirmed 22 surfaces and 114 migration rows with no duplicate IDs, duplicate
+  original/target paths, or byte/hash mismatches. The dedicated Phase 1
+  no-match validation probe failed as required.
+- Doctor Phase 1 fixture gates passed after implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (17 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm markdownlint-check:root`, explicit `collaboration-state -- check`, and
+  `git diff --check`. Guard searches found no root `practice:substrate:*`
+  aliases and no forbidden test imports or live `process.env`/`process.cwd()`
+  access in the Phase 1 source/test tree.
+- Doctor Phase 2 report-mode gates passed after implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (32 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm --filter @oaknational/agent-tools build`,
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+  (structured exit `1` for live blockers), default
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check`
+  (same report-mode mapping), explicit collaboration-state check,
+  `pnpm markdownlint-check:root`, and `git diff --check`. Guard checks found no
+  root `practice:substrate:*` aliases, and the legacy-tree absence check
+  passed.
+- Doctor safe-merge closure gates passed during implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (35 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+  (`ok: true`, `blocking: 0`), `test ! -e .agent/state/collaboration/comms`,
+  and the root alias
+  `pnpm practice:substrate:check -- --mode strict` after parser support for
+  pnpm's post-command separator.
+
+**Specialist review**: completed 2026-05-07; evidence at
+[memory/state contracts specialist review][memory-state-review-evidence].
+Reviewers endorsed the direction and required pre-commit fixes to
+preservation-before-repair, surface-inventory determinism, doctor
+sequencing, TDD/validator boundaries, live/archive stale-path
+classification, and repair guards. The follow-up inventory/template
+slice used explorer, tooling, docs-ADR, assumptions, architecture, and
+code-reviewer agents; focused re-review passed after fixes for invalid
+`merge_class` values, completion overclaiming, stale next-step routing,
+and no-arg collaboration-state check wording.
+
+**Safe-merge gate disposition**: closed. The archived doctor plan now records
+the safe-merge gate completion. The focused validation lane remains the
+substrate unit proof:
+
+```bash
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
+```
+
+Future fixture tests must remain pure in-process tests over injected snapshots,
+literal objects, and strings. They must not read repo files, fixture files, git
+state, `process.env`, or `process.cwd()`, and they must not spawn processes.
+Runtime readers and CLI wiring must keep live access outside the fixture tests.
+
+**Future-arc boundaries**:
+
+- Do not add repair mode, `--apply`, `--dry-run`, or deterministic repair
+  flows without a fresh follow-on arc.
+- Do not integrate doctor output into consolidation in this safe-merge gate;
+  that remains a separate follow-on arc.
+- Do not trim memory/state content for fitness.
+- Do not drop the residual merge autostash without explicit owner
+  approval.
+- Do not rewrite branch history.
+
+[memory-state-review-evidence]: ../../plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md
+[memory-state-portable-plan]: ../../plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md
+[memory-state-doctor-plan]: ../../plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md
+
 ## Active arc — Pending-graduations recalibration + access-rhythm insight (landed 2026-05-07)
 
 **Last refreshed**: 2026-05-07 (Pelagic Rolling Harbour /
@@ -1661,13 +1926,21 @@ and
 - **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-- **Branch**: `feat/otel_sentry_enhancements` (parallel practice lane;
-  not the branch-primary product thread)
+- **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
+  closure and doctor-preflight lane)
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Silvered Masking Moth` | `codex` | `GPT-5` | `019e03` | `memory-state-doctor-safe-merge-gate; schema-blocker-fixes; strict-mode-and-built-output-root-alias; deleted-legacy-comms-tree-cleanup; code-reviewer-follow-up; final-validation-and-commit` | 2026-05-07 | 2026-05-07 |
+| `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; final-session-boundary-definition; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
+| `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
+| `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
+| `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |
+| `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
+| `Seaworthy Swimming Sextant` | `codex` | `GPT-5` | `019e01` | `portable-memory-state-substrate-contract-inventory-and-template-executor; continuing-from-committed-PDR-050-bundle; preserving-practice-core-vs-repo-local-boundary; no-fitness-driven-content-trimming; doctor-implementation-deferred-until-built-agent-tools-command-surface-contract` | 2026-05-07 | 2026-05-07 |
+| `Windward Spiralling Aerie` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-contract-review-stewardship-and-commit; dispatched-docs-adr-assumptions-architecture-fred-and-test-reviewers; applied-reviewer-fixes-to-PDR-050-portable-plan-doctor-plan-state-readme-and-evidence; preserved-owner-correction-knowledge-before-fitness; confirmed-next-session-order-portable-contracts-then-doctor-then-multi-checkout-merge-handling; committed-and-pushed-cb662b7e-and-526a596e` | 2026-05-07 | 2026-05-07 |
 | `Pelagic Rolling Harbour` | `claude-code` | `claude-opus-4-7-1m` | `58a9ad` | `pending-graduations-dedicated-drain-and-recalibration; phase-1-archive-Lacustrine-F-15-and-mark-polarity-discipline-partially-graduated; phase-1.5-vaporware-trigger-flagging-three-entries; phase-3-residual-shape-surfacing-three-options-for-owner-direction; owner-directed-reframe-fitness-limits-encode-implicit-access-rhythm-theory; recalibration-frontmatter-2000-2500-150000-300-plus-three-descriptive-fields-lifecycle-model-access-pattern-fitness-rationale; per-entry-metadata-schema-inline-tag-line-with-closed-vocabularies-plus-composite-value-convention; structured-index-TOC-by-status-with-line-hints-and-counts-table; twelve-high-touch-entries-tagged-pending-sweep-deferred-to-phase-B; new-pending-entry-captures-access-rhythm-as-fitness-axis-insight-graduation-target-ADR-144-amendment-plus-cross-repo-PDR; reviewer-dispatch-docs-adr-and-code-reviewer-three-P2-and-one-P1-and-two-nits-all-addressed; four-commits-cc084c67-177b9298-b0b7cec3-b1a8536b` | 2026-05-07 | 2026-05-07 |
 | `Clouded Lifting Aerie` | `claude-code` | `claude-opus-4-7-1m` | `1e2244` | `napkin-and-pending-graduations-processing-opener-execution; three-new-patterns-consolidation-output-shape-and-audit-rule-body-on-prohibition-extension-and-in-session-contract-authoring-conditions; F-15-commit-queue-fingerprint-recursion-friction-added; F-14-and-F-09-and-F-05-evidence-appended; markdown-prose-acceptance-criteria-doctrine-landed-in-development-practice; napkin-archived-382-to-119-lines; pending-graduations-7-graduated-or-withdrawn-entries-archived-and-Lacustrine-commit-queue-marked-graduated-and-doctor-not-shell-gate-pending-added-2054-to-1876-lines; reviewer-dispatch-docs-adr-and-code-reviewer-approved-with-P1-SHA-typo-fixed; three-commits-d12912dc-b4d7ddff-d2e2bfe5` | 2026-05-06 | 2026-05-06 |
 | `Embered Melting Kiln` | `claude-code` | `claude-opus-4-7-1m` | `4044d1` | `phase-2-collaboration-state-surface-restructure-five-commits-13e2db28-through-40f7da45; substance-trim-anti-pattern-caught-by-owner-correction-and-restored; full-fitness-limit-audit-32-files; two-function-driven-limit-calibrations-agent-collaboration-md-and-continuity-practice-md-commit-ca0794fc; opener-authored-for-napkin-and-pending-graduations-processing` | 2026-05-06 | 2026-05-06 |

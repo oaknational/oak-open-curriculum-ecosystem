@@ -1,0 +1,144 @@
+./docs/engineering/quality-tooling-mcp-coupling.md:127:| `typescript:S2871` Array.sort comparator | `.toSorted((a, b) => a.localeCompare(b))`                                   | Default sort is locale-insensitive UTF-16 order — explicit comparator makes contract load-bearing | n/a                                                     |
+./docs/governance/typescript-gotchas.md:61:  may diverge from `Array.sort()` unicode order. For
+./agent-tools/src/commit-queue/core.ts:213:  return [...new Set(files)].toSorted((a, b) => a.localeCompare(b));
+./scripts/ci-turbo-report.ts:209:  datedFiles.sort((left, right) => {
+./packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts:627:    expect(BARRIER_HOOKS.map(registryMatchesHookType).toSorted(byLocale)).toEqual(
+./packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts:628:      [...BARRIER_HOOKS].toSorted(byLocale),
+./packages/core/oak-eslint/src/rules/lib-boundary.unit.test.ts:124:      .sort();
+./packages/core/oak-eslint/src/rules/lib-boundary.unit.test.ts:146:      .sort();
+./packages/core/oak-eslint/src/rules/lib-boundary.unit.test.ts:184:      .sort();
+./scripts/validate-fitness-vocabulary.unit.test.ts:121:      .toSorted((left, right) => left.localeCompare(right));
+./scripts/validate-portability-helpers.ts:187:  ].sort((a, b) => a.localeCompare(b));
+./scripts/validate-portability-helpers.ts:226:  for (const ruleFile of [...canonicalRuleSet].sort((a, b) => a.localeCompare(b))) {
+./scripts/validate-portability-helpers.ts:232:  for (const indexedRuleFile of [...indexedRuleSet].sort((a, b) => a.localeCompare(b))) {
+./packages/core/oak-eslint/src/rules/max-files-per-dir.ts:84:    .sort((a, b) => a.localeCompare(b));
+./packages/libs/search-contracts/src/field-inventory.ts:101:  return [...new Set(values)].sort();
+./agent-tools/src/bin/claude-agent-ops.ts:202:        .sort()
+./scripts/validate-subagents-helpers.ts:94:  return [...paths].sort((left, right) => left.localeCompare(right));
+./scripts/validate-eslint-boundaries.ts:35:    .sort((a, b) => a.localeCompare(b));
+./scripts/validate-eslint-boundaries.ts:59:    .sort((a, b) => a.localeCompare(b));
+./scripts/validate-eslint-boundaries.ts:65:    [...APP_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
+./scripts/validate-eslint-boundaries.ts:72:    [...SDK_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
+./scripts/validate-subagents.ts:79:    .sort();
+./scripts/validate-portability.ts:76:      .sort();
+./scripts/validate-portability.ts:89:      .sort();
+./scripts/validate-portability.ts:363:].sort((a, b) => a.localeCompare(b));
+./agent-tools/src/bin/cursor-session-from-claude-session.ts:64:          .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs)
+./agent-tools/src/bin/cursor-session-from-claude-session.ts:77:          .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs);
+./apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts:213:  const expectedUris = DOCUMENTATION_RESOURCES.map((resource) => resource.uri).sort();
+./apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts:214:  const registeredUris = Array.from(registeredResources.keys()).sort();
+./apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts:215:  const calledUris = registrationCalls.map((call) => call.uri).sort();
+./agent-tools/src/core/session-tools.ts:64:  return [...map.values()].sort((left, right) => right.timestampMs - left.timestampMs);
+./scripts/validate-practice-fitness.ts:456:  return fitnessFiles.toSorted((left, right) => left.localeCompare(right));
+./scripts/validate-practice-fitness.ts:468:  const sortedEntries = dirEntries.toSorted((left, right) => left.name.localeCompare(right.name));
+./agent-tools/src/core/health-probe-shared.ts:37:    .sort();
+./agent-tools/src/core/health-probe-shared.ts:50:    .sort();
+./agent-tools/src/core/health-probe-shared.ts:62:    .sort();
+./agent-tools/src/core/codex-project-agent-registry.ts:43:  return entries.sort((left, right) => left.name.localeCompare(right.name));
+./agent-tools/src/core/runtime.ts:105:  for (const metaFile of metaFiles.sort()) {
+./docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md:87:  return normalised.sort((a, b) => b._score - a._score);
+./agent-tools/src/core/health-probe-parity.ts:83:  const allAgentNames = [...new Set([...cursorAgents, ...claudeAgents, ...codexAgents])].sort();
+./agent-tools/src/core/runtime-agent-index.ts:30:    return [...values].sort();
+./agent-tools/src/core/runtime-agent-index.ts:38:  return [...values].sort();
+./agent-tools/src/core/codex-project-agents.ts:190:  return [...referencedFiles].sort();
+./agent-tools/src/collaboration-state/comms.ts:33:  const sections = input.events.toSorted(compareEvents).map(renderEvent);
+./agent-tools/src/collaboration-state/transaction.ts:181:  return Array.from(new Set(filePaths)).toSorted();
+./packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts:15:const PHRASES_BY_LENGTH: readonly string[] = [...PHRASE_VOCABULARY].sort(
+./packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts:112:  detected.sort((a, b) => a.index - b.index);
+./agent-tools/src/collaboration-state/state-io.ts:53:    .toSorted((left, right) => left.localeCompare(right))) {
+./apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts:90:  return [...tools].sort((a, b) => {
+./apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts:136:    expect(names.sort()).toEqual(expectedToolNames.sort());
+./packages/sdks/oak-search-sdk/src/retrieval/rrf-score-processing.ts:64:  return normalised.sort((a, b) => b._score - a._score);
+./apps/oak-search-cli/ground-truths/generation/generate-ground-truth-types.ts:194:  results.sort((a, b) => {
+./apps/oak-search-cli/evaluation/analysis/benchmark-issues-report.ts:181:  const sorted = [...queries].sort((a, b) => {
+./apps/oak-search-cli/src/lib/indexing/sequence-facets.ts:33:    years: [...params.years].sort(),
+./packages/sdks/oak-search-sdk/src/admin/versioned-index-operations.ts:33:    return ok(typeSafeKeys(response).sort());
+./apps/oak-search-cli/src/lib/search-quality/metrics.ts:123:    .sort((a, b) => b - a)
+./packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts:72:  const sorted = [...listResult.value].sort();
+./apps/oak-search-cli/evaluation/analysis/benchmark-stats.ts:45:  const sorted = [...latencies].sort((a, b) => a - b);
+./apps/oak-search-cli/evaluation/analysis/benchmark-stats.ts:112:  return categoryResults.sort((a, b) => a.category.localeCompare(b.category));
+./apps/oak-search-cli/evaluation/analysis/benchmark-issues-format.ts:120:  const sorted = typeSafeEntries(data).sort((a, b) => b[1] - a[1]);
+./apps/oak-search-cli/evaluation/analysis/zero-hit-investigation.ts:121:    .sort((a, b) => b[1] - a[1])
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-path-groupings.ts:13:    .sort()
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-path-groupings.ts:59:  const sortedGroupKeys = [...Object.keys(validCombinations)].sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-path-groupings.ts:63:      const entries = group ? Object.keys(group).sort((a, b) => a.localeCompare(b)) : [];
+./packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.ts:97:  return [...DEFAULT_AUTH_SCHEME.scopes].sort();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-writers.ts:17:  const groupKeys = Object.keys(pathGroupings).sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-writers.ts:21:      const pathKeys = Object.keys(group).sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-extraction.ts:160:  const sortedNames = [...parameterNames].sort();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen-extraction.ts:228:  const sortedPathNames = Object.keys(paths ?? {}).sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.ts:29:  return nestedPaths.flat().sort();
+./packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.ts:53:  return copiedFiles.sort();
+./packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.unit.test.ts:97:      expect(scopes).toEqual([...DEFAULT_AUTH_SCHEME.scopes].sort((a, b) => a.localeCompare(b)));
+./packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.unit.test.ts:102:      const sorted = [...scopes].sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner-core.ts:183:  const sorted = (s: Set<string>) => [...s].sort();
+./packages/sdks/oak-sdk-codegen/code-generation/sitemap-scanner-core.ts:186:    teacherPaths: [...paths].sort(),
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts:82:  .sort((a, b) => a.callOrder - b.callOrder)
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts:102:    .sort((a, b) => a.callOrder - b.callOrder)
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts:108:    .sort((a, b) => a.callOrder - b.callOrder)
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts:134:    .sort((a, b) => a.callOrder - b.callOrder)
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/validation/cross-validate.ts:118:  return missing.sort();
+./packages/sdks/oak-sdk-codegen/code-generation/generate-ai-doc-catalog.ts:25:  const entries = [...names].sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/generate-ai-doc-catalog.ts:82:  return [...list].sort((left, right) => {
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/paths/path-generators.ts:42:    .sort((a, b) => a.localeCompare(b))
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/paths/path-generators.ts:91:)].sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/paths/path-generators.ts:159:  const paths = Object.keys(schema?.paths ?? {}).sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/vocab-gen/extractors/thread-extractor.ts:92:  const sortedUnits = [...data.units].sort((a, b) => a.order - b.order);
+./packages/sdks/oak-sdk-codegen/vocab-gen/extractors/thread-extractor.ts:145:  return results.sort((a, b) => a.slug.localeCompare(b.slug));
+./packages/sdks/oak-sdk-codegen/vocab-gen/extractors/keyword-extractor.ts:115:    subjects: [...acc.subjects].sort(),
+./packages/sdks/oak-sdk-codegen/vocab-gen/extractors/keyword-extractor.ts:117:    lessonSlugs: [...acc.lessonSlugs].sort(),
+./packages/sdks/oak-sdk-codegen/vocab-gen/extractors/keyword-extractor.ts:169:  results.sort((a, b) => b.frequency - a.frequency);
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts:237:  const toolNames = Array.from(toolNamesSet).toSorted();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/admin/generate-admin-fixtures.unit.test.ts:15:    expect(Object.keys(files).sort()).toEqual(
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/admin/generate-admin-fixtures.unit.test.ts:16:      ['../admin/index.ts', '../admin/stream-fixtures.ts'].sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/teacher-path-lookups.ts:5: * ordering used by `Array.prototype.sort()`, so validation must use direct
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-descriptor-helpers.ts:29:  const operations = Array.from(explicitEntries.keys()).sort((left, right) =>
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-descriptor-helpers.ts:44:      const sortedSpecific = [...operationSpecific].sort((a, b) =>
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-descriptor-helpers.ts:52:        .sort((a, b) => compareStatuses(a.status, b.status))
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index-helpers.ts:59:  return keys.sort(compareStatuses);
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index-helpers.ts:70: * @returns Comparison result for Array.sort()
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-map.integration.test.ts:271:    const wildcardStatuses = wildcardEntries.map((e) => e.status).sort();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-map.integration.test.ts:299:      const statuses = opEntries.map((e) => e.status).sort();
+./apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts:99:  return Array.from(titles).sort();
+./apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts:165:  const keyStages = Array.from(keyStagesSet).sort();
+./apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts:166:  const years = Array.from(yearsSet).sort();
+./apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts:244:      years: Array.from(group.years).sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/observability/generate-zero-hit-fixtures.unit.test.ts:15:    expect(Object.keys(files).sort()).toEqual(
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/observability/generate-zero-hit-fixtures.unit.test.ts:16:      ['../observability/index.ts', '../observability/zero-hit-fixtures.ts'].sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts:28:  const names = toolNames.slice().toSorted();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/operations/operation-extraction.ts:187:  return Array.from(methods).sort();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-definitions-file.ts:128:  const names = toolNames.slice().toSorted();
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-es-mappings.unit.test.ts:19:    const fileNames = Object.keys(files).sort();
+./packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/path-parameters.ts:84:)].sort((a, b) => a.localeCompare(b));
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/year-phase-extractor.ts:131:  results.sort((a, b) => {
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.unit.test.ts:49:    const expectedTools = [...toolGuidanceData.toolCategories.agentSupport.tools].sort();
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.unit.test.ts:50:    const actualTools = [...AGENT_SUPPORT_TOOL_NAMES].sort();
+./packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.unit.test.ts:124:    const sortedPositions = [...toolPositions].sort((a, b) => a - b);
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/thread-extractor.ts:92:  const sortedUnits = [...data.units].sort((a, b) => a.order - b.order);
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/thread-extractor.ts:145:  return results.sort((a, b) => a.slug.localeCompare(b.slug));
+./apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts:109:      subjectSlugs: Array.from(data.subjectSlugs).sort(),
+./apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts:113:  return results.sort((a, b) => a.slug.localeCompare(b.slug));
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/keyword-extractor.ts:115:    subjects: [...acc.subjects].sort(),
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/keyword-extractor.ts:117:    lessonSlugs: [...acc.lessonSlugs].sort(),
+./packages/sdks/oak-sdk-codegen/src/bulk/extractors/keyword-extractor.ts:169:  results.sort((a, b) => b.frequency - a.frequency);
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.ts:103:    subjectsCovered: [...allSubjects].sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:22:    expect(Object.keys(files).sort()).toEqual(
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:27:      ].sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:59:    expect(Object.keys(files).sort()).toEqual(
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:65:      ].sort(),
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:127:    expect(Object.keys(files).sort()).toEqual(
+./packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts:131:      ].sort(),
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/thread-progression-generator.ts:92:  return [...subjects].sort();
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/thread-progression-generator.ts:108:  return [...subjects].sort();
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/thread-progression-generator.ts:144:  const sortedThreads = [...threads].sort((a, b) => a.slug.localeCompare(b.slug));
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/misconception-graph-generator.ts:87:    subjectsCovered: [...subjects].sort(),
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts:193:  const sortedKeywords = [...keywords].sort((a, b) => b.frequency - a.frequency);
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts:205:    .sort((a, b) => b.subjects.length - a.subjects.length || b.frequency - a.frequency)
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts:267:    .sort((a, b) => b.count - a.count);
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts:289:    .sort((a, b) => b.count - a.count);
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts:390:      .sort(([a], [b]) => Number(a) - Number(b))
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.ts:100:    subjectsCovered: [...subjects].sort(),
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/prior-knowledge-graph-generator.ts:153:  return nodes.sort((a, b) => a.unitSlug.localeCompare(b.unitSlug));
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/prior-knowledge-graph-generator.ts:200:  return [...subjects].sort();
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts:174:  synonyms.sort((a, b) => b.confidence - a.confidence);
+./packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts:233:  const sortedSubjects = [...bySubject.keys()].sort();

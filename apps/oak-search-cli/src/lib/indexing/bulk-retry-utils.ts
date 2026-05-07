@@ -72,9 +72,11 @@ interface BulkResponse {
  * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
  */
 export function isRetryableError(status: number, errorType: string): boolean {
-  void errorType; // Available for logging/debugging, not used in decision
+  const isElserQueueOverflow = status === 429 && errorType === 'inference_exception';
   // Transient errors that may succeed on retry
-  return status === 429 || status === 502 || status === 503 || status === 504;
+  return (
+    isElserQueueOverflow || status === 429 || status === 502 || status === 503 || status === 504
+  );
 }
 
 /**

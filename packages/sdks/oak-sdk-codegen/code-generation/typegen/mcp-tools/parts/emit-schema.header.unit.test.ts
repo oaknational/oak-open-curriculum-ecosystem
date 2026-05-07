@@ -1,12 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject } from 'openapi3-ts/oas31';
 import { emitSchema } from './emit-schema.js';
 import type { ParamMetadata } from './param-metadata.js';
-
-function op(): OperationObject {
-  // Minimal valid operation object for our emitters
-  return { responses: {} };
-}
 
 describe('emitSchema header', () => {
   it('emits required path params type when path params exist', () => {
@@ -14,7 +8,7 @@ describe('emitSchema header', () => {
       lesson: { typePrimitive: 'string', valueConstraint: false, required: true },
     };
     const queryMeta: Record<string, ParamMetadata> = {};
-    const code = emitSchema(op(), pathMeta, queryMeta);
+    const code = emitSchema(pathMeta, queryMeta);
 
     expect(code).toContain('export interface ToolPathParams');
     expect(code).toContain('readonly lesson: string;');
@@ -35,7 +29,7 @@ describe('emitSchema header', () => {
         allowedValues: ['ks1', 'ks2'] as const,
       },
     };
-    const code = emitSchema(op(), pathMeta, queryMeta);
+    const code = emitSchema(pathMeta, queryMeta);
 
     expect(code).toContain('export interface ToolQueryParams');
     expect(code).toContain('readonly q: string;');
@@ -55,7 +49,7 @@ describe('emitSchema header', () => {
         allowedValues: ['maths', 'english'] as const,
       },
     };
-    const code = emitSchema(op(), pathMeta, queryMeta);
+    const code = emitSchema(pathMeta, queryMeta);
 
     expect(code).toContain('export interface ToolQueryParams');
     expect(code).toContain("readonly subject?: 'maths' | 'english';");
@@ -65,16 +59,21 @@ describe('emitSchema header', () => {
   });
 
   it('emits sentinel ToolParams shape when no params exist', () => {
-    const code = emitSchema(op(), {}, {});
+    const code = emitSchema({}, {});
     expect(code).toContain('export interface ToolParams');
     expect(code).toContain('readonly __noParams?: never;');
+    expect(code).toContain('transformFlatToNestedArgs(flatArgs');
+    expect(code).toContain('toolMcpFlatInputSchema.parse(flatArgs);');
+    expect(code).toContain('return { params: {} };');
+    expect(code).not.toContain('void flatArgs');
+    expect(code).not.toContain('_flatArgs');
   });
 
   it('preserves canonical path param name in ToolPathParams but normalises in flat transform', () => {
     const pathMeta: Record<string, ParamMetadata> = {
       threadSlug: { typePrimitive: 'string', valueConstraint: false, required: true },
     };
-    const code = emitSchema(op(), pathMeta, {});
+    const code = emitSchema(pathMeta, {});
 
     expect(code).toContain('readonly threadSlug: string;');
     expect(code).toContain('threadSlug: flatArgs.thread,');

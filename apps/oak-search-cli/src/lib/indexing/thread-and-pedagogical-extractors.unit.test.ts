@@ -29,7 +29,7 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
   };
   const summary: SearchUnitSummary = { ...base, ...overrides };
   // Validate against SDK schema to ensure fixture is valid
-  void unitSummarySchema.parse(summary);
+  unitSummarySchema.parse(summary);
   return summary;
 }
 

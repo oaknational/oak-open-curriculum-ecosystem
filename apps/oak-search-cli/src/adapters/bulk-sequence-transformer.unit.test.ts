@@ -144,6 +144,65 @@ describe('bulk-sequence-transformer', () => {
       expect(params.years).toHaveLength(3);
     });
 
+    it('orders years by curriculum progression, with all-years last', () => {
+      const bulkFile = createMinimalBulkFile({
+        sequence: [
+          {
+            unitSlug: 'physics-year-11',
+            unitTitle: 'Physics Year 11',
+            year: 11,
+            yearSlug: 'year-11',
+            keyStageSlug: 'ks4',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'Year 11 physics',
+            threads: [],
+            unitLessons: [],
+          },
+          {
+            unitSlug: 'physics-year-7',
+            unitTitle: 'Physics Year 7',
+            year: 7,
+            yearSlug: 'year-7',
+            keyStageSlug: 'ks3',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'Year 7 physics',
+            threads: [],
+            unitLessons: [],
+          },
+          {
+            unitSlug: 'physics-all-years',
+            unitTitle: 'Physics All Years',
+            year: 'All years',
+            yearSlug: 'all-years',
+            keyStageSlug: 'ks3',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'All years physics',
+            threads: [],
+            unitLessons: [],
+          },
+          {
+            unitSlug: 'physics-year-10',
+            unitTitle: 'Physics Year 10',
+            year: 10,
+            yearSlug: 'year-10',
+            keyStageSlug: 'ks4',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'Year 10 physics',
+            threads: [],
+            unitLessons: [],
+          },
+        ],
+      });
+
+      const params = extractSequenceParamsFromBulkFile(bulkFile);
+
+      expect(params.years).toStrictEqual(['7', '10', '11', 'all-years']);
+    });
+
     it('collects unit slugs from sequence', () => {
       const bulkFile = createMinimalBulkFile();
 
@@ -258,6 +317,54 @@ describe('bulk-sequence-transformer', () => {
       const ks2Facet = facetParams.find((f) => f.keyStage === 'ks2');
       expect(ks2Facet?.years).toContain('3');
       expect(ks2Facet?.years).toHaveLength(1);
+    });
+
+    it('orders facet years by curriculum progression, with all-years last', () => {
+      const bulkFile = createMinimalBulkFile({
+        sequence: [
+          {
+            unitSlug: 'physics-year-11',
+            unitTitle: 'Physics Year 11',
+            year: 11,
+            yearSlug: 'year-11',
+            keyStageSlug: 'ks4',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'Year 11 physics',
+            threads: [],
+            unitLessons: [],
+          },
+          {
+            unitSlug: 'physics-all-years',
+            unitTitle: 'Physics All Years',
+            year: 'All years',
+            yearSlug: 'all-years',
+            keyStageSlug: 'ks4',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'All years physics',
+            threads: [],
+            unitLessons: [],
+          },
+          {
+            unitSlug: 'physics-year-10',
+            unitTitle: 'Physics Year 10',
+            year: 10,
+            yearSlug: 'year-10',
+            keyStageSlug: 'ks4',
+            priorKnowledgeRequirements: [],
+            nationalCurriculumContent: [],
+            description: 'Year 10 physics',
+            threads: [],
+            unitLessons: [],
+          },
+        ],
+      });
+
+      const facetParams = extractSequenceFacetParamsFromBulkFile(bulkFile);
+
+      expect(facetParams).toHaveLength(1);
+      expect(facetParams[0]?.years).toStrictEqual(['10', '11', 'all-years']);
     });
 
     it('gets key stage title from lessons', () => {

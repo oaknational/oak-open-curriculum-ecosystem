@@ -62,10 +62,10 @@ describe('createStubToolExecutionAdapter', () => {
     expect(result.error.message).toContain('Invalid request parameters');
   });
 
-  it('accepts optional params objects for generated tools', async () => {
+  it('accepts flat empty argument objects for generated tools', async () => {
     const executeStubTool = createStubToolExecutionAdapter();
 
-    const result = await executeStubTool('get-subjects', { params: {} });
+    const result = await executeStubTool('get-subjects', {});
 
     expect(result.ok).toBe(true);
     if (!result.ok) {

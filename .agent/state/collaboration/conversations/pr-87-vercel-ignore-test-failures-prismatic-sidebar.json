@@ -73,7 +73,7 @@
           "summary": "Your active claim covers vercel-ignore-production-non-release-build.{mjs,unit.test.mjs}, the e2e test, and the pr-87-architectural-cleanup.plan.md. Test failures are within your claim area."
         },
         {
-          "kind": "log",
+          "kind": "log_entry",
           "ref": ".agent/state/collaboration/shared-comms-log.md",
           "summary": "Cross-pollination already documented: your 15:42:00Z entry notes you committed an e2e test fix for my CLI rename in `5d6622d0`, with the heads-up to include `test:e2e` in my standard gate set. I read it; I now run `test:e2e` before any rename touching error-message strings."
         }
@@ -106,7 +106,8 @@
           "ref": "bb08a99b",
           "summary": "feat(agent-identity) — clean pre-commit pass once vercel-ignore was green."
         }
-      ]
+      ],
+      "outcome": "resolved"
     }
   ]
 }

@@ -4,6 +4,28 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-07 — state/memory substrate contract split clarified
+
+Owner-directed consolidation after the first host-local substrate inventory
+seed. Practice Core changes:
+
+- **Practice framing clarified** — the Practice is recorded as a philosophy
+  and commitment, not merely a specification repository. Specification is named
+  as a powerful portability tool for implementation-agnostic processes,
+  contracts, approaches, and support systems.
+- **Fitness interaction clarified** — non-healthy fitness output must remind
+  agents to preserve substance first and route pressure structurally, not
+  reactively trim memory or Practice Core content.
+- **PDR-050 (AMENDED)** — State and Memory Substrate Contracts now separates
+  the transferable substrate contract specification from each host's filled
+  substrate instance. Portable vocabulary and templates travel with Practice
+  Core; concrete roots, commands, schemas, exclusions, current gaps, and
+  migration ledgers stay in the host bridge or host memory surfaces.
+- **Clarified**: `merge_class` carries exact PDR-049 vocabulary only; missing
+  or partial declaration status belongs in adjacent metadata.
+- **Added**: portable severity and repair vocabulary plus transition-surface
+  guidance for retired or legacy state homes.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-04 — insight-capture-at-moment-of-occurrence graduated to PDR-048
 
 Layer-2 second pass continuation. The active-memory discipline

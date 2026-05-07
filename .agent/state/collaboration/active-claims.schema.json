@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "active-claims.schema.json",
+  "$merge_class": "index-narrative-tables",
   "title": "Active Agent Claims Registry",
   "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
   "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x agents reading v1.y files (y > x) ignore unrecognised fields and preserve them on write-back; v1.2.0 also treats area.kind enum expansion as additive, so older runtime readers preserve unknown area kinds as opaque claimed areas rather than rejecting the registry. major-version mismatch causes the agent to bail out with an error pointing at the protocol upgrade. additionalProperties is set to false on the authored shape for the matching schema_version: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require a coordinated schema_version bump), and constrains the consolidate-docs § 7e schema-validation step. The maintained latest schema validates supported v1.x files and narrows v1.1.0 validation where enum shape changed; do not validate v1.2.0 files with an older v1.1.0 schema. It is NOT a runtime read-gate at session-open: agents reading entries written under a newer-minor schema preserve unrecognised fields and opaque enum values rather than rejecting the file. The runtime contract is preservation; the authoring/validation contract is no-free-form-expansion. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
@@ -330,7 +331,23 @@
             "napkin",
             "thread_record",
             "commit",
-            "command_output"
+            "command_output",
+            "rule",
+            "pdr",
+            "pattern",
+            "memory_archive",
+            "workspace",
+            "gate",
+            "smoke",
+            "reflog",
+            "json_parse",
+            "git_status",
+            "git_index",
+            "script",
+            "external_api",
+            "continuity",
+            "comms_event",
+            "commit_queue"
           ],
           "description": "Kind of repository evidence the reference points at."
         },

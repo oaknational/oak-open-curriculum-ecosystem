@@ -14,6 +14,7 @@
 
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
+import { assertOpenApiGeneratorInput } from '../schema-input.js';
 import { HEADER } from './es-mapping-utils.js';
 import {
   createLessonsMappingModule,
@@ -94,12 +95,11 @@ export type { OakZeroHitMapping } from './oak-zero-hit-telemetry.js';
 /**
  * Generates all ES mapping modules.
  *
- * @param _schema - The OpenAPI schema (not used, but kept for consistency with other generators)
+ * @param schema - The OpenAPI schema that anchors this generated artifact set
  * @returns FileMap of generated modules
  */
-export function generateEsMappingModules(_schema: OpenAPIObject): FileMap {
-  void _schema;
-
+export function generateEsMappingModules(schema: OpenAPIObject): FileMap {
+  assertOpenApiGeneratorInput(schema, 'generateEsMappingModules');
   return {
     '../search/es-mappings/index.ts': createEsMappingsIndexModule(),
     '../search/es-mappings/oak-lessons.ts': createLessonsMappingModule(),

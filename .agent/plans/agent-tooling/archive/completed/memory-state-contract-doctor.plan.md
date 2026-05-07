@@ -1,0 +1,516 @@
+---
+name: "Memory/State Contract Doctor"
+overview: >
+  Implement a repo-local doctor for Practice state and memory surfaces. The
+  doctor recomputes substrate health from current files, schemas, frontmatter,
+  directory READMEs, generated headers, git topology, and known state roots;
+  blocks deterministic defects; reports semantic ambiguity; and offers safe
+  repair paths.
+todos:
+  - id: phase-0-current-defect-ledger
+    content: "Phase 0: Validate the strict manifest/schema and migration ledger, inventory existing checks, build the current defect ledger from live state/memory surfaces, and lock the command contract."
+    status: completed
+  - id: phase-1-red-fixtures
+    content: "Phase 1 (RED/GREEN fixture slices): Author each fixture class with the implementation that greens it; no RED-only commits."
+    status: completed
+  - id: phase-2-green-report-mode
+    content: "Phase 2 (GREEN): Implement read-only report mode that recomputes all deterministic checks and exits non-zero on structural defects."
+    status: completed
+  - id: phase-3-strict-mode
+    content: "Final session: run specialist reviews, fix report blockers, make report mode green, and add strict built-output gate/root alias."
+    status: completed
+  - id: phase-4-repair-mode
+    content: "Future arc: deterministic repair dry-run/apply flows after the safe-merge gate exists."
+    status: pending
+  - id: phase-5-consolidation-integration
+    content: "Future arc: consolidate-docs integration after the safe-merge gate exists."
+    status: pending
+  - id: phase-6-closure
+    content: "Final closure: validate the strict gate, record reviewer evidence, and archive readiness."
+    status: completed
+isProject: false
+---
+
+# Memory/State Contract Doctor
+
+**Last Updated**: 2026-05-07
+**Status**: COMPLETED — safe-merge gate arc closed; repair mode and
+consolidation integration remain future arcs
+**Scope**: Repo-local enforcement for
+[PDR-050](../../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
+and [PDR-049](../../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
+
+---
+
+## Context
+
+The current collaboration-state check parses the narrow collaboration state
+happy path, but the broader substrate can still drift. Recent inspection found
+both the canonical `comms-events/` surface and legacy `comms/events/` state in
+the tree, with at least one recent event written to the old path. The
+pre-doctor local-instance slice has now completed the terminal migration for
+that specific transition: 114 legacy fragments were collision-checked,
+JSON-parse-checked, ledgered with provenance, and moved into the canonical
+`comms-events/` root. The legacy root remains historical evidence only and must
+not remain on disk. A checker should validate that terminal state without
+depending on a human remembering which path is canonical.
+
+This plan implements the repo-local doctor promised by the portable substrate
+contract. It does not replace the collaboration-state helper; it recomputes a
+larger health model and can call narrower helpers where they already exist.
+
+## Definitive Arc Spine
+
+**Why this arc exists**: enable state and memory files to be safely merged by
+turning implicit repo-local file conventions into explicit contracts and
+deterministic tooling.
+
+**Value provided**:
+
+- agents know which state/memory surfaces are authoritative, generated,
+  archival, live, derived, or historical evidence;
+- deterministic structural defects block unsafe merges before shared state is
+  corrupted;
+- generated read models are checked against canonical sources;
+- retired paths are actually retired, with evidence preserved in ledgers and
+  archives rather than live compatibility layers;
+- memory/state merge claims can be checked against contracts and git topology.
+
+**State at `44c73e4d`**: Phase 2 read-only report mode existed in
+`agent-tools`, uses built output, emits structured JSON, and correctly reports
+that the live substrate was not clean. The deterministic blockers were:
+
+- schema incoherence in `.agent/state/collaboration/closed-claims.archive.json`;
+- schema incoherence in
+  `.agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json`;
+- schema incoherence in
+  `.agent/state/collaboration/conversations/pr-87-vercel-ignore-test-failures-prismatic-sidebar.json`.
+
+**This arc is complete when**:
+
+1. specialist reviews of `44c73e4d` are complete and required fixes are landed;
+2. `practice-substrate -- check --mode report` returns `ok: true` with
+   `blocking: 0`;
+3. strict mode exists for the low-ambiguity blocking invariants;
+4. the root alias exists only after it invokes built `agent-tools` output;
+5. the legacy `comms/events/` root remains absent on disk, with no fallback
+   reader, compatibility layer, or placeholder directory;
+6. the plan is archived with validation evidence.
+
+Repair mode and consolidate-docs integration are valuable future arcs. They are
+not required for this safe-merge gate arc to finish.
+
+## Public Interface
+
+Final public interface for this arc:
+
+```bash
+pnpm practice:substrate:check
+pnpm practice:substrate:check -- --mode strict
+```
+
+Implementation lives in the `agent-tools` workspace as a Practice substrate CLI
+with root package-script aliases for the public commands above only after the
+strict gate exists. That keeps the plan inside the agent-tooling collection
+boundary while still letting the CLI inspect Practice docs, state, memory,
+schemas, generated read models, and git topology from the repo root. The CLI
+may reuse existing `agent-tools` collaboration-state libraries where those
+already own parsing.
+
+Root aliases MUST invoke the built `agent-tools` entrypoint only. They must not
+run TypeScript source directly through `tsx`, `ts-node`, ad-hoc script wrappers,
+or source-relative imports. The implementation cycle may run workspace tests
+against source, but every repo-level command that agents or hooks invoke goes
+through the compiled package output after the `agent-tools` build step.
+
+The final root script invokes built `agent-tools` output only.
+
+Report output is structured JSON on stdout:
+
+```json
+{
+  "ok": false,
+  "mode": "report",
+  "findings": [
+    {
+      "id": "canonical-path-drift",
+      "severity": "blocking",
+      "surface": "collaboration-comms-events",
+      "repair": "deterministic",
+      "message": "Legacy event path contains live JSON fragments"
+    }
+  ]
+}
+```
+
+## Phase 0: Current Defect Ledger
+
+Create a ledger of current defects and known-good cases from live files.
+Before fixture authoring, consume the transferable substrate contract
+specification from
+[PDR-050](../../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
+and the local surface-inventory instance from Phase 2 of
+[`memory-state-substrate-portable-contracts.plan.md`](../../../agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md).
+The current host-local contract surface is
+[`memory-state-substrate-contracts.md`](../../../../memory/executive/memory-state-substrate-contracts.md).
+The strict local data contract now lives beside it as
+[`memory-state-substrate-contracts.manifest.json`](../../../../memory/executive/memory-state-substrate-contracts.manifest.json)
+and
+[`memory-state-substrate-contracts.schema.json`](../../../../memory/executive/memory-state-substrate-contracts.schema.json).
+Do not author doctor fixtures against an implicit contract: Phase 0 must first
+validate the strict manifest and migration ledger, or promote any future local
+instance changes into the same strict data shape.
+
+Before building the defect ledger, Phase 0 must rerun the current start gate
+from the working tree without calling `practice:substrate:*` commands:
+
+- validate the strict manifest against its schema and confirm all 22 surfaces
+  carry every required PDR-050 contract field;
+- validate the migration ledger has 114 entries, no duplicate original/target
+  paths, and target files match recorded byte counts and SHA-256 hashes;
+- verify `.agent/state/collaboration/comms/events/` does not exist on disk;
+- run the explicit collaboration-state check against canonical
+  `.agent/state/collaboration/comms-events/`;
+- record current `git diff --check`, `pnpm test:root-scripts`,
+  `pnpm portability:check`, `pnpm practice:vocabulary`, and
+  `pnpm practice:fitness:informational` outcomes.
+
+Phase 0 must inventory existing checks before adding new logic. Reuse or
+orchestrate existing owners where they already cover a concern:
+collaboration-state parsing, markdownlint, practice fitness, portability,
+JSON/schema validation, and git topology checks.
+
+Include at least:
+
+- canonical `comms-events/` as the single live event-fragment root and legacy
+  `comms/events/` as a historical path that must not remain on disk;
+- stale references to the legacy path in live docs and plans, classified
+  separately from archived historical references that must be preserved;
+- the canonical event root after legacy migration, with the retired
+  `.agent/state/collaboration/comms/` tree absent on disk;
+- stale live writes to `comms/events/` after the ledger date as blocking, while
+  preserving archived prose references as historical evidence unless a reviewer
+  classifies them as live instructions;
+- generated `shared-comms-log.md` provenance header;
+- `merge_class` coverage across markdown frontmatter, JSON schemas, and
+  directory READMEs;
+- JSON/schema parse state for active claims, closed claims, conversations,
+  escalations, and event fragments;
+- duplicate stable IDs across active and archive state;
+- active/closed claim consistency and commit-queue state;
+- conflict markers in state and memory files;
+- git topology checks for memory/state merge commits.
+- every row from the Known Contract Gaps table in
+  [`memory-state-substrate-contracts.md`](../../../../memory/executive/memory-state-substrate-contracts.md),
+  classified as live defect, known-good terminal state, or deferred semantic
+  review.
+
+**Acceptance criteria**:
+
+- The ledger distinguishes live defects from archived historical references.
+- Each defect has severity, repairability, and owner/reviewer route.
+- Phase 0 validates the strict executive-memory manifest/schema and migration
+  ledger before RED fixtures encode machine-readable assumptions.
+- The command contract above is finalised before RED fixtures are written.
+- The command contract names which modes are unavailable until Phase 2 report
+  mode lands, so early validation does not call commands before they exist.
+- The prior `test-reviewer` hold is resolved after Phase 0 and before Phase 1:
+  the reviewer must approve the fixture strategy and validation lane before any
+  RED/GREEN fixture slice is implemented.
+
+## Phase 1: RED/GREEN Fixture Slices
+
+Add fixture-driven tests with their paired implementation. Do not commit a
+RED-only state. Each fixture class lands in the same commit as the product code
+that greens it, or the whole RED batch remains local/uncommitted until the
+GREEN implementation is ready.
+
+Pure fixture tests live in the `agent-tools` test lane and use TypeScript
+literal objects or strings. In-process tests must not read repo files, fixture
+files, git state, `process.env`, or `process.cwd()`, and must not spawn
+processes. Real filesystem and git access belongs in the runtime validator
+script or in a correctly classified out-of-process validation surface;
+composition tests use injected snapshots or fakes.
+
+**Required fixture classes**:
+
+- stale canonical path with new event written to legacy path;
+- live prose reference to a retired path;
+- archived historical reference to a retired path that must remain report-only;
+- missing `merge_class` in markdown, schema, and directory README forms;
+- duplicate stable IDs where duplicates are invalid;
+- same-key semantic collision where automatic repair is forbidden;
+- generated read-model drift;
+- invalid JSON and schema incoherence;
+- conflict markers in state/memory surfaces;
+- single-parent snapshot that claims to have completed a memory/state merge;
+- topology fixture that declares target ref, candidate commit, touched
+  memory/state paths, and whether squash/cherry-pick workflows are report-only
+  or blocking for the claim being validated;
+- repair preservation cases: exact duplicate by stable identity and content,
+  same prose in different historical contexts, and archive references that
+  cannot be migrated automatically.
+
+**Validation**:
+
+```bash
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
+```
+
+Do not validate Phase 1 through
+`pnpm --filter @oaknational/agent-tools test -- practice-substrate`: that
+package script runs the full Vitest lane and can pass without selecting the
+substrate fixture suite because the inherited config permits no-match test
+runs. The dedicated command above selects the substrate fixture directory and
+fails if the directory has no matching tests.
+
+Expected local RED result: tests fail for missing implementation only.
+Expected committed result: the paired implementation makes the same tests
+green. Keep `pnpm test:root-scripts` for root/runtime validator integration
+once the standalone/root script exists.
+
+**Completion evidence (2026-05-07)**: Phase 1 landed as pure
+`agent-tools` fixture logic only. The implementation lives under
+`agent-tools/src/practice-substrate/`, and the literal-object/string fixture
+suite lives at
+`agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts`.
+It covers the Phase 1 classes for legacy event-root terminal state,
+live-vs-archived retired-path references, `merge_class` metadata gaps,
+duplicate IDs, same-key semantic collisions, generated read-model drift,
+parse/schema incoherence, conflict markers, merge-topology snapshots, and
+repair-preservation classifications. The mandatory `test-reviewer` checkpoint
+found one fixture/implementation blocker around
+`append-only-structured-by-` without a key; that was fixed by adding the
+literal fixture and requiring a non-empty suffix for the parameterised merge
+class. No root `practice:substrate:*` aliases, live repo readers, git readers,
+runtime CLI wiring, fixture-file reads, `process.env`, or `process.cwd()`
+access were added.
+
+## Phase 2: GREEN Report Mode
+
+Implement `practice:substrate:check` in read-only report mode.
+
+**Checks**:
+
+- recompute surface inventory from files, schemas, frontmatter, directory
+  READMEs, generated headers, and configured roots;
+- validate the surface inventory contract itself, including live roots,
+  archived/historical roots, exclusions, discovery rules, owner route, and
+  portability tier;
+- validate JSON and schemas;
+- validate `merge_class` declarations against PDR-049 values;
+- detect stale canonical paths and duplicate live surfaces;
+- detect generated read-model drift by invoking the renderer/source-set contract
+  and comparing regenerated output with the committed read model;
+- detect duplicate stable IDs and impossible active/closed transitions;
+- detect conflict markers;
+- inspect git topology when a merge claim or merge commit is being validated.
+
+**Acceptance criteria**:
+
+- The command exits non-zero on deterministic structural defects.
+- Findings cite the surface contract or PDR behind the failure.
+- The command does not mutate files.
+- Existing collaboration-state checks remain green or are subsumed with tests.
+- The implementation separates pure fixture-tested contract logic from the live
+  validator that reads the repository and git state.
+
+**Completion evidence (2026-05-07)**: Phase 2 report mode landed in
+`agent-tools` only. The built workspace command is:
+
+```bash
+pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report
+```
+
+It builds `agent-tools`, runs `dist/src/bin/practice-substrate.js`, emits
+structured JSON, defaults `check` to report mode, exits `0` when there are no
+blocking findings, exits `1` for structured blocking findings, and reserves
+exit `2` for invalid CLI usage or unstructured runtime failure. No root
+`practice:substrate:*` aliases were added. The report-mode live reader reuses
+the pure Phase 1 evaluator layer; fixture tests remain literal-object/string
+only. `ajv` is a direct `agent-tools` dependency for schema validation.
+
+The corrected legacy-path invariant is now encoded: historical mentions of
+`.agent/state/collaboration/comms/events/` remain report-only evidence, but the
+old directory must not remain on disk. The prior placeholder was removed.
+There is no compatibility layer, fallback reader, or retained old root for the
+legacy approach.
+The final closure session resolved the three schema blockers by normalising
+archived collaboration evidence and conversation outcomes without deleting
+historical evidence. Report mode now exits `0` with `ok: true` and
+`blocking: 0`; the remaining retired-path findings are informational
+historical evidence.
+
+## Phase 3: Final Strict Gate Session
+
+This is the next and final session for the safe-merge gate arc. Do not widen
+scope before this sequence is complete.
+
+**Required order**:
+
+1. run specialist reviews on `44c73e4d`;
+2. apply required review fixes without adding fallback or compatibility layers;
+3. fix the three current schema incoherence blockers with provenance;
+4. rerun report mode until it returns `ok: true` and `blocking: 0`;
+5. add strict mode for low-ambiguity invariants;
+6. add the root `practice:substrate:check` alias only if it invokes built
+   `agent-tools` output;
+7. run final validation and archive this plan.
+
+**Blocking in strict mode**:
+
+- invalid JSON/schema;
+- conflict markers;
+- missing required surface contract metadata;
+- stale canonical path used for new live writes;
+- legacy event-fragment root still carrying live writes or live references after
+  the migration ledger exists;
+- generated read-model drift;
+- duplicate IDs where the contract forbids duplicates;
+- single-parent snapshot presented as a completed memory/state merge.
+
+**Report-only in strict mode**:
+
+- semantic same-key collisions that need judgement;
+- unclear stale-vs-archive path references;
+- surfaces missing a natural owner;
+- repair suggestions that would delete or rewrite historical evidence.
+
+**Acceptance criteria**:
+
+- Focused local review of `44c73e4d` found no required fixes beyond the
+  already-planned Phase 3 blockers; no reviewer sub-agent dispatch occurred in
+  this Codex implementation turn.
+- Report mode is green on live repo state: `ok: true`, `blocking: 0`.
+- Strict mode uses the same low-ambiguity blocking threshold and returns `0`
+  on the clean live substrate.
+- The root alias invokes compiled `agent-tools` output only.
+- No repair mode, fallback reader, compatibility layer, `--apply`, or
+  `--dry-run` surface was added.
+- Historical retired-path evidence remains informational; the retired root
+  remains absent on disk.
+
+## Future Arc: Repair Mode
+
+Repair mode is explicitly outside the final safe-merge gate session. It can
+begin only after the report/strict gate is green and this plan is archived or a
+new follow-on plan is opened.
+
+**Permitted deterministic repairs**:
+
+- regenerate generated read models;
+- add purely mechanical `merge_class` metadata after the surface contract is
+  already unambiguous;
+- migrate stale live references from legacy to canonical paths;
+- rehome legacy event fragments into the canonical history location only when a
+  migration ledger records original path, content identity, and provenance;
+- sort and exact-dedupe append-only narrative sections only when stable identity
+  and content prove they are the same evidence;
+- emit a prepared remediation report for semantic conflicts.
+
+**Forbidden automatic repairs**:
+
+- deleting historical fragments;
+- leaving contradictory live event-fragment roots in place after the migration
+  ledger and repair path have been established;
+- trimming, compressing, or rewriting knowledge to satisfy fitness;
+- migrating archived historical references merely because the text mentions a
+  retired path;
+- resolving same-key semantic conflicts;
+- rewriting git history;
+- choosing `ours` or `theirs` for memory/state files;
+- suppressing a failing finding to make a gate pass.
+
+**Acceptance criteria**:
+
+- `--dry-run` prints the exact edits without changing files.
+- `--apply` refuses ambiguous or destructive repairs.
+- Every applied repair is covered by a fixture.
+- The legacy event-path repair reaches a single-live-root terminal state without
+  losing historical evidence.
+
+## Future Arc: Consolidation Integration
+
+Consolidation integration is explicitly outside the final safe-merge gate
+session. It can begin only after the report/strict gate is green and this plan
+is archived or a new follow-on plan is opened.
+
+Integrate doctor output into consolidation.
+
+**Acceptance criteria**:
+
+- `consolidate-docs` has a substrate-health step that consumes doctor output.
+- Repeated findings are routed to napkin, pending graduations, PDR amendment,
+  rule, or tooling follow-up by shape.
+- State and memory entry points document the doctor as the local immune layer.
+- The consolidation record names any remaining legacy event-path references as
+  historical evidence, live defects, or closed migration residue; no
+  contradictory live surface remains unnamed.
+
+## Quality Gates
+
+**Final validation evidence (2026-05-07)**:
+
+- `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false` — 35 tests passed.
+- `pnpm --filter @oaknational/agent-tools type-check` — passed.
+- `pnpm --filter @oaknational/agent-tools lint` — passed.
+- `pnpm --filter @oaknational/agent-tools build` — passed.
+- `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report` — passed with `ok: true`, `blocking: 0`.
+- `pnpm practice:substrate:check -- --mode strict` — passed with `mode: "strict"`, `ok: true`, `blocking: 0`.
+- `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events` — passed.
+- `test ! -e .agent/state/collaboration/comms/events` — passed.
+- Follow-up owner correction removed the whole retired
+  `.agent/state/collaboration/comms/` tree; the live gate now treats
+  `comms-events/` as the only retained communication-event state root.
+- `test ! -e .agent/state/collaboration/comms` — passed after that correction.
+- `pnpm markdownlint-check:root` — passed.
+- `git diff --check` — passed.
+
+Run before the substrate command exists:
+
+```bash
+pnpm agent-tools:collaboration-state -- check \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --events-dir .agent/state/collaboration/comms-events
+pnpm test:root-scripts
+pnpm portability:check
+pnpm practice:vocabulary
+pnpm practice:fitness:informational
+pnpm markdownlint-check:root
+```
+
+Until the final root alias exists, validate through the built `agent-tools`
+workspace command:
+
+```bash
+pnpm --filter @oaknational/agent-tools exec vitest run \
+  tests/practice-substrate --passWithNoTests=false
+pnpm --filter @oaknational/agent-tools type-check
+pnpm --filter @oaknational/agent-tools lint
+pnpm --filter @oaknational/agent-tools build
+pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report
+pnpm agent-tools:collaboration-state -- check \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --events-dir .agent/state/collaboration/comms-events
+pnpm markdownlint-check:root
+git diff --check
+```
+
+After strict mode and the root alias land, the final safe-merge gate command
+is:
+
+```bash
+pnpm practice:substrate:check -- --mode strict
+```
+
+## Non-Goals
+
+- Moving state out of git.
+- Replacing the collaboration-state transaction helper.
+- Cleaning historical archives destructively.
+- Solving every semantic merge conflict automatically.
+- Making broad custom merge drivers for all fitness-managed files; that remains
+  owned by the multi-checkout merge plan.

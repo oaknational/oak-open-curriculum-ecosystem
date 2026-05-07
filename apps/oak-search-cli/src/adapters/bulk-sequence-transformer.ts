@@ -25,6 +25,7 @@ import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oa
 import { getCategoriesForUnit, type CategoryMap } from './category-supplementation';
 import { transformBulkUnitToSummary } from './bulk-rollup-builder';
 import { generateSequenceSemanticSummary } from '../lib/indexing/semantic-summary-generator';
+import { compareCurriculumYears } from '../lib/indexing/year-ordering';
 
 /** Accumulated unit data grouped by key stage. */
 interface KeyStageUnitAccumulator {
@@ -96,7 +97,7 @@ function collectCategoryTitles(
       }
     }
   }
-  return Array.from(titles).sort();
+  return Array.from(titles).sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -162,8 +163,8 @@ export function extractSequenceParamsFromBulkFile(
   }
 
   const categoryTitles = collectCategoryTitles(bulkFile.sequence, categoryMap);
-  const keyStages = Array.from(keyStagesSet).sort();
-  const years = Array.from(yearsSet).sort();
+  const keyStages = Array.from(keyStagesSet).sort((a, b) => a.localeCompare(b));
+  const years = Array.from(yearsSet).sort(compareCurriculumYears);
   const sequenceTitle = `${bulkFile.subjectTitle} ${phaseTitle}`;
   const orderedUnitSummaries = buildOrderedUnitSummaries(bulkFile, subjectSlug);
 
@@ -241,7 +242,7 @@ export function extractSequenceFacetParamsFromBulkFile(
       phaseTitle,
       keyStage,
       keyStageTitle,
-      years: Array.from(group.years).sort(),
+      years: Array.from(group.years).sort(compareCurriculumYears),
       unitSlugs: group.unitSlugs,
       unitTitles: group.unitTitles,
       lessonCount: group.lessonCount,

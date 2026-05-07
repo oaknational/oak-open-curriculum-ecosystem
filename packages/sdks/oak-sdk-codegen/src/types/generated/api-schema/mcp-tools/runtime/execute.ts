@@ -18,564 +18,780 @@ export function listAllToolDescriptors(): readonly ToolDescriptorForName<ToolNam
   return toolNames.map((name) => getToolFromToolName(name));
 }
 
+async function invokeGetChangelogTool(
+  client: ToolClientForName<'get-changelog'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-changelog'>> {
+  const descriptor: ToolDescriptorForName<'get-changelog'> = getToolEntryFromToolName('get-changelog').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetChangelogLatestTool(
+  client: ToolClientForName<'get-changelog-latest'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-changelog-latest'>> {
+  const descriptor: ToolDescriptorForName<'get-changelog-latest'> = getToolEntryFromToolName('get-changelog-latest').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeyStagesTool(
+  client: ToolClientForName<'get-key-stages'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-key-stages'>> {
+  const descriptor: ToolDescriptorForName<'get-key-stages'> = getToolEntryFromToolName('get-key-stages').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeyStagesSubjectAssetsTool(
+  client: ToolClientForName<'get-key-stages-subject-assets'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-key-stages-subject-assets'>> {
+  const descriptor: ToolDescriptorForName<'get-key-stages-subject-assets'> = getToolEntryFromToolName('get-key-stages-subject-assets').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeyStagesSubjectLessonsTool(
+  client: ToolClientForName<'get-key-stages-subject-lessons'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-key-stages-subject-lessons'>> {
+  const descriptor: ToolDescriptorForName<'get-key-stages-subject-lessons'> = getToolEntryFromToolName('get-key-stages-subject-lessons').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeyStagesSubjectQuestionsTool(
+  client: ToolClientForName<'get-key-stages-subject-questions'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-key-stages-subject-questions'>> {
+  const descriptor: ToolDescriptorForName<'get-key-stages-subject-questions'> = getToolEntryFromToolName('get-key-stages-subject-questions').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeyStagesSubjectUnitsTool(
+  client: ToolClientForName<'get-key-stages-subject-units'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-key-stages-subject-units'>> {
+  const descriptor: ToolDescriptorForName<'get-key-stages-subject-units'> = getToolEntryFromToolName('get-key-stages-subject-units').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetKeywordsTool(
+  client: ToolClientForName<'get-keywords'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-keywords'>> {
+  const descriptor: ToolDescriptorForName<'get-keywords'> = getToolEntryFromToolName('get-keywords').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetLessonsAssetsTool(
+  client: ToolClientForName<'get-lessons-assets'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-lessons-assets'>> {
+  const descriptor: ToolDescriptorForName<'get-lessons-assets'> = getToolEntryFromToolName('get-lessons-assets').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetLessonsQuizTool(
+  client: ToolClientForName<'get-lessons-quiz'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-lessons-quiz'>> {
+  const descriptor: ToolDescriptorForName<'get-lessons-quiz'> = getToolEntryFromToolName('get-lessons-quiz').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetLessonsSummaryTool(
+  client: ToolClientForName<'get-lessons-summary'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-lessons-summary'>> {
+  const descriptor: ToolDescriptorForName<'get-lessons-summary'> = getToolEntryFromToolName('get-lessons-summary').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetLessonsTranscriptTool(
+  client: ToolClientForName<'get-lessons-transcript'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-lessons-transcript'>> {
+  const descriptor: ToolDescriptorForName<'get-lessons-transcript'> = getToolEntryFromToolName('get-lessons-transcript').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetRateLimitTool(
+  client: ToolClientForName<'get-rate-limit'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-rate-limit'>> {
+  const descriptor: ToolDescriptorForName<'get-rate-limit'> = getToolEntryFromToolName('get-rate-limit').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSequencesAssetsTool(
+  client: ToolClientForName<'get-sequences-assets'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-sequences-assets'>> {
+  const descriptor: ToolDescriptorForName<'get-sequences-assets'> = getToolEntryFromToolName('get-sequences-assets').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSequencesQuestionsTool(
+  client: ToolClientForName<'get-sequences-questions'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-sequences-questions'>> {
+  const descriptor: ToolDescriptorForName<'get-sequences-questions'> = getToolEntryFromToolName('get-sequences-questions').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSequencesUnitsTool(
+  client: ToolClientForName<'get-sequences-units'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-sequences-units'>> {
+  const descriptor: ToolDescriptorForName<'get-sequences-units'> = getToolEntryFromToolName('get-sequences-units').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSubjectDetailTool(
+  client: ToolClientForName<'get-subject-detail'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-subject-detail'>> {
+  const descriptor: ToolDescriptorForName<'get-subject-detail'> = getToolEntryFromToolName('get-subject-detail').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSubjectsTool(
+  client: ToolClientForName<'get-subjects'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-subjects'>> {
+  const descriptor: ToolDescriptorForName<'get-subjects'> = getToolEntryFromToolName('get-subjects').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSubjectsKeyStagesTool(
+  client: ToolClientForName<'get-subjects-key-stages'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-subjects-key-stages'>> {
+  const descriptor: ToolDescriptorForName<'get-subjects-key-stages'> = getToolEntryFromToolName('get-subjects-key-stages').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSubjectsSequencesTool(
+  client: ToolClientForName<'get-subjects-sequences'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-subjects-sequences'>> {
+  const descriptor: ToolDescriptorForName<'get-subjects-sequences'> = getToolEntryFromToolName('get-subjects-sequences').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetSubjectsYearsTool(
+  client: ToolClientForName<'get-subjects-years'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-subjects-years'>> {
+  const descriptor: ToolDescriptorForName<'get-subjects-years'> = getToolEntryFromToolName('get-subjects-years').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetThreadsTool(
+  client: ToolClientForName<'get-threads'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-threads'>> {
+  const descriptor: ToolDescriptorForName<'get-threads'> = getToolEntryFromToolName('get-threads').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetThreadsUnitsTool(
+  client: ToolClientForName<'get-threads-units'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-threads-units'>> {
+  const descriptor: ToolDescriptorForName<'get-threads-units'> = getToolEntryFromToolName('get-threads-units').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
+async function invokeGetUnitsSummaryTool(
+  client: ToolClientForName<'get-units-summary'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-units-summary'>> {
+  const descriptor: ToolDescriptorForName<'get-units-summary'> = getToolEntryFromToolName('get-units-summary').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
 async function invokeToolByName<TName extends ToolName>(
   name: TName,
   client: ToolClientForName<TName>,
   rawArgs: unknown,
-): Promise<ToolResultForName<TName>> {
+): Promise<ToolResultForName<ToolName>> {
   switch (name) {
-    case 'get-changelog': {
-      const entry = getToolEntryFromToolName('get-changelog');
-      const descriptor: ToolDescriptorForName<'get-changelog'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-changelog-latest': {
-      const entry = getToolEntryFromToolName('get-changelog-latest');
-      const descriptor: ToolDescriptorForName<'get-changelog-latest'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-key-stages': {
-      const entry = getToolEntryFromToolName('get-key-stages');
-      const descriptor: ToolDescriptorForName<'get-key-stages'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-key-stages-subject-assets': {
-      const entry = getToolEntryFromToolName('get-key-stages-subject-assets');
-      const descriptor: ToolDescriptorForName<'get-key-stages-subject-assets'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-key-stages-subject-lessons': {
-      const entry = getToolEntryFromToolName('get-key-stages-subject-lessons');
-      const descriptor: ToolDescriptorForName<'get-key-stages-subject-lessons'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-key-stages-subject-questions': {
-      const entry = getToolEntryFromToolName('get-key-stages-subject-questions');
-      const descriptor: ToolDescriptorForName<'get-key-stages-subject-questions'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-key-stages-subject-units': {
-      const entry = getToolEntryFromToolName('get-key-stages-subject-units');
-      const descriptor: ToolDescriptorForName<'get-key-stages-subject-units'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-keywords': {
-      const entry = getToolEntryFromToolName('get-keywords');
-      const descriptor: ToolDescriptorForName<'get-keywords'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-lessons-assets': {
-      const entry = getToolEntryFromToolName('get-lessons-assets');
-      const descriptor: ToolDescriptorForName<'get-lessons-assets'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-lessons-quiz': {
-      const entry = getToolEntryFromToolName('get-lessons-quiz');
-      const descriptor: ToolDescriptorForName<'get-lessons-quiz'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-lessons-summary': {
-      const entry = getToolEntryFromToolName('get-lessons-summary');
-      const descriptor: ToolDescriptorForName<'get-lessons-summary'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-lessons-transcript': {
-      const entry = getToolEntryFromToolName('get-lessons-transcript');
-      const descriptor: ToolDescriptorForName<'get-lessons-transcript'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-rate-limit': {
-      const entry = getToolEntryFromToolName('get-rate-limit');
-      const descriptor: ToolDescriptorForName<'get-rate-limit'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-sequences-assets': {
-      const entry = getToolEntryFromToolName('get-sequences-assets');
-      const descriptor: ToolDescriptorForName<'get-sequences-assets'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-sequences-questions': {
-      const entry = getToolEntryFromToolName('get-sequences-questions');
-      const descriptor: ToolDescriptorForName<'get-sequences-questions'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-sequences-units': {
-      const entry = getToolEntryFromToolName('get-sequences-units');
-      const descriptor: ToolDescriptorForName<'get-sequences-units'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-subject-detail': {
-      const entry = getToolEntryFromToolName('get-subject-detail');
-      const descriptor: ToolDescriptorForName<'get-subject-detail'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-subjects': {
-      const entry = getToolEntryFromToolName('get-subjects');
-      const descriptor: ToolDescriptorForName<'get-subjects'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-subjects-key-stages': {
-      const entry = getToolEntryFromToolName('get-subjects-key-stages');
-      const descriptor: ToolDescriptorForName<'get-subjects-key-stages'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-subjects-sequences': {
-      const entry = getToolEntryFromToolName('get-subjects-sequences');
-      const descriptor: ToolDescriptorForName<'get-subjects-sequences'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-subjects-years': {
-      const entry = getToolEntryFromToolName('get-subjects-years');
-      const descriptor: ToolDescriptorForName<'get-subjects-years'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-threads': {
-      const entry = getToolEntryFromToolName('get-threads');
-      const descriptor: ToolDescriptorForName<'get-threads'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-threads-units': {
-      const entry = getToolEntryFromToolName('get-threads-units');
-      const descriptor: ToolDescriptorForName<'get-threads-units'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-units-summary': {
-      const entry = getToolEntryFromToolName('get-units-summary');
-      const descriptor: ToolDescriptorForName<'get-units-summary'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const invokeResult = await descriptor.invoke(client, nestedArgs);
-      if (invokeResult.httpStatus >= 400) {
-        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-        });
-      }
-      const validation = descriptor.validateOutput(invokeResult.payload);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
+    case 'get-changelog':
+      return invokeGetChangelogTool(client, rawArgs);
+    case 'get-changelog-latest':
+      return invokeGetChangelogLatestTool(client, rawArgs);
+    case 'get-key-stages':
+      return invokeGetKeyStagesTool(client, rawArgs);
+    case 'get-key-stages-subject-assets':
+      return invokeGetKeyStagesSubjectAssetsTool(client, rawArgs);
+    case 'get-key-stages-subject-lessons':
+      return invokeGetKeyStagesSubjectLessonsTool(client, rawArgs);
+    case 'get-key-stages-subject-questions':
+      return invokeGetKeyStagesSubjectQuestionsTool(client, rawArgs);
+    case 'get-key-stages-subject-units':
+      return invokeGetKeyStagesSubjectUnitsTool(client, rawArgs);
+    case 'get-keywords':
+      return invokeGetKeywordsTool(client, rawArgs);
+    case 'get-lessons-assets':
+      return invokeGetLessonsAssetsTool(client, rawArgs);
+    case 'get-lessons-quiz':
+      return invokeGetLessonsQuizTool(client, rawArgs);
+    case 'get-lessons-summary':
+      return invokeGetLessonsSummaryTool(client, rawArgs);
+    case 'get-lessons-transcript':
+      return invokeGetLessonsTranscriptTool(client, rawArgs);
+    case 'get-rate-limit':
+      return invokeGetRateLimitTool(client, rawArgs);
+    case 'get-sequences-assets':
+      return invokeGetSequencesAssetsTool(client, rawArgs);
+    case 'get-sequences-questions':
+      return invokeGetSequencesQuestionsTool(client, rawArgs);
+    case 'get-sequences-units':
+      return invokeGetSequencesUnitsTool(client, rawArgs);
+    case 'get-subject-detail':
+      return invokeGetSubjectDetailTool(client, rawArgs);
+    case 'get-subjects':
+      return invokeGetSubjectsTool(client, rawArgs);
+    case 'get-subjects-key-stages':
+      return invokeGetSubjectsKeyStagesTool(client, rawArgs);
+    case 'get-subjects-sequences':
+      return invokeGetSubjectsSequencesTool(client, rawArgs);
+    case 'get-subjects-years':
+      return invokeGetSubjectsYearsTool(client, rawArgs);
+    case 'get-threads':
+      return invokeGetThreadsTool(client, rawArgs);
+    case 'get-threads-units':
+      return invokeGetThreadsUnitsTool(client, rawArgs);
+    case 'get-units-summary':
+      return invokeGetUnitsSummaryTool(client, rawArgs);
     default:
       throw new TypeError('Unknown tool: ' + String(name));
   }
@@ -732,12 +948,12 @@ export function callTool(
   logger?: Logger,
 ): Promise<ToolResultForName<ToolName>>;
 
-export async function callTool<TName extends ToolName>(
-  name: TName,
-  client: ToolClientForName<TName>,
+export async function callTool(
+  name: ToolName,
+  client: ToolClientForName<ToolName>,
   rawArgs: unknown,
   logger?: Logger,
-): Promise<ToolResultForName<TName>> {
+): Promise<ToolResultForName<ToolName>> {
   logger?.debug('mcp-tool.generated.call', { toolName: name, hasArgs: rawArgs !== undefined });
   return invokeToolByName(name, client, rawArgs);
 }

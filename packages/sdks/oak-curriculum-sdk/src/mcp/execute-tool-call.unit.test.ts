@@ -71,7 +71,7 @@ describe('executeToolCall', () => {
       return { data: expected, response: { status: 200 } };
     });
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(handler).toHaveBeenCalledOnce();
     expect(result).toEqual(ok({ status: 200, data: expected }));
@@ -80,7 +80,7 @@ describe('executeToolCall', () => {
   it('maps output validation failures to McpToolError with a helpful message', async () => {
     const { client } = createRateLimitClient(() => ({ data: {}, response: { status: 200 } }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -96,7 +96,7 @@ describe('executeToolCall', () => {
       throw new Error('boom');
     });
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -118,7 +118,7 @@ describe('executeToolCall', () => {
       response: { status: 418 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -135,7 +135,7 @@ describe('executeToolCall', () => {
       response: { status: 502 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -152,7 +152,7 @@ describe('executeToolCall', () => {
       response: { status: 418 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -177,7 +177,7 @@ describe('executeToolCall', () => {
       response: { status: 418 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -194,7 +194,7 @@ describe('executeToolCall', () => {
       response: { status: 404 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -212,7 +212,7 @@ describe('executeToolCall', () => {
       response: { status: 401 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -230,7 +230,7 @@ describe('executeToolCall', () => {
       response: { status: 400 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -254,7 +254,7 @@ describe('executeToolCall', () => {
       response: { status: 400 },
     }));
 
-    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+    const result = await executeToolCall('get-rate-limit', {}, client);
 
     expect(result.ok).toBe(false);
     if (result.ok) {

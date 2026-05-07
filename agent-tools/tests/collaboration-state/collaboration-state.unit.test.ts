@@ -299,6 +299,8 @@ describe('renderSharedCommsLog', () => {
     });
 
     expect(rendered.indexOf('first event')).toBeLessThan(rendered.indexOf('second event'));
+    expect(rendered).toContain('merge_class: append-only-narrative');
+    expect(rendered).toContain('Generated from `.agent/state/collaboration/comms-events/`');
     expect(rendered).toContain('# Agent-to-Agent Shared Communication Log');
     expect(rendered).toContain('Rendered first.\n\n---\n\n## 2026-04-28T09:05:00Z');
   });

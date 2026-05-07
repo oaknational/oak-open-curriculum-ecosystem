@@ -46,8 +46,10 @@ describe('AGENT_SUPPORT_TOOL_METADATA', () => {
   });
 
   it('AGENT_SUPPORT_TOOL_NAMES matches toolCategories.agentSupport.tools', () => {
-    const expectedTools = [...toolGuidanceData.toolCategories.agentSupport.tools].sort();
-    const actualTools = [...AGENT_SUPPORT_TOOL_NAMES].sort();
+    const expectedTools = [...toolGuidanceData.toolCategories.agentSupport.tools].sort((a, b) =>
+      a.localeCompare(b),
+    );
+    const actualTools = [...AGENT_SUPPORT_TOOL_NAMES].sort((a, b) => a.localeCompare(b));
 
     expect(actualTools).toEqual(expectedTools);
   });

@@ -98,7 +98,7 @@ const INVENTORY_CONFIG: Record<(typeof SEARCH_INDEX_FAMILIES)[number], Inventory
 };
 
 function sortUnique(values: readonly string[]): string[] {
-  return [...new Set(values)].sort();
+  return [...new Set(values)].sort((a, b) => a.localeCompare(b));
 }
 
 const FIELD_GROUP_MATCHERS: readonly [

@@ -187,5 +187,5 @@ function extractCanonicalPaths(developerInstructions: string): string[] {
       referencedFiles.add(match[1]);
     }
   }
-  return [...referencedFiles].sort();
+  return [...referencedFiles].sort((a, b) => a.localeCompare(b));
 }

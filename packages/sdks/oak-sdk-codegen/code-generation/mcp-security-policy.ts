@@ -94,5 +94,5 @@ export function toolRequiresAuth(toolName: string): boolean {
  */
 export function getScopesSupported(): readonly string[] {
   // Sort for consistency in RFC 9728 metadata responses
-  return [...DEFAULT_AUTH_SCHEME.scopes].sort();
+  return [...DEFAULT_AUTH_SCHEME.scopes].sort((a, b) => a.localeCompare(b));
 }

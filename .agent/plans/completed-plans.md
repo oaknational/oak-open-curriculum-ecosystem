@@ -77,6 +77,14 @@ Before archival, mine completed outcomes into permanent documentation
 
 ---
 
+## Agent Tooling
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| Memory/State Contract Doctor | 2026-05-07 | Completed the safe-merge gate: report mode is green on live substrate state, strict mode and the root built-output alias exist, collaboration schema blockers are normalised without deleting historical evidence, and repair/consolidation integration remain future arcs. | [archived plan](agent-tooling/archive/completed/memory-state-contract-doctor.plan.md) |
+
+---
+
 ## Architecture and Infrastructure
 
 | Plan | Completed | Key Outcomes | Archive |

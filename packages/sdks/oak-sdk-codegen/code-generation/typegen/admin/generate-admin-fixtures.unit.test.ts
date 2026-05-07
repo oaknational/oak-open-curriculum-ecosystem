@@ -12,8 +12,8 @@ const MINIMAL_SCHEMA: OpenAPIObject = {
 describe('admin stream fixture module generation', () => {
   it('emits builder and index modules with validation helpers', () => {
     const files = generateAdminStreamFixtureModules(MINIMAL_SCHEMA);
-    expect(Object.keys(files).sort()).toEqual(
-      ['../admin/index.ts', '../admin/stream-fixtures.ts'].sort(),
+    expect(Object.keys(files).sort((a, b) => a.localeCompare(b))).toEqual(
+      ['../admin/index.ts', '../admin/stream-fixtures.ts'].sort((a, b) => a.localeCompare(b)),
     );
 
     const fixtures = files['../admin/stream-fixtures.ts'];

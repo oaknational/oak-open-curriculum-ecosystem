@@ -24,7 +24,7 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {} as const, additionalProperties: false as const };
 export const toolZodSchema = z.object({ params: z.object({}) });
-export const toolMcpFlatInputSchema = z.object({});
+export const toolMcpFlatInputSchema = z.strictObject({});
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
 export const describeToolArgs = () => toolArgsDescription;
@@ -38,7 +38,7 @@ export const describeToolArgs = () => toolArgsDescription;
  * @returns Nested arguments for SDK invoke function (ToolArgs format)
  */
 export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
-  void flatArgs;
+  toolMcpFlatInputSchema.parse(flatArgs);
   return { params: {} };
 }
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);

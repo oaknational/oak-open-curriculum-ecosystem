@@ -1,3 +1,5 @@
+import { compareCodeUnits } from '../../../code-unit-order.js';
+
 const banner = `/**
  * GENERATED FILE - DO NOT EDIT
  *
@@ -125,7 +127,7 @@ export function generateDefinitionsFile(
   toolNames: string[],
   operationToTool: readonly OperationToToolEntry[],
 ): string {
-  const names = toolNames.slice().toSorted();
+  const names = toolNames.slice().toSorted(compareCodeUnits);
   const toolNameToOperationId = new Map<string, string>();
 
   for (const { operationId, toolName } of operationToTool) {

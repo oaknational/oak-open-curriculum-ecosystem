@@ -84,7 +84,7 @@ function calculateStats(
     totalMisconceptions: misconceptions.length,
     bySubject,
     byKeyStage,
-    subjectsCovered: [...subjects].sort(),
+    subjectsCovered: [...subjects].sort((a, b) => a.localeCompare(b)),
   };
 }
 

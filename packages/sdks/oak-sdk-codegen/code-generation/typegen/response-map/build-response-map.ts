@@ -46,19 +46,12 @@ import {
   createComponentResolver,
   getJsonResponseInfo,
   cloneSchema,
+  type ResponseInfo,
 } from './shared.js';
+import { createWildcardResponseMapEntries } from './build-response-map-wildcards.js';
+import type { ResponseMapEntry, ResponseMapMethod } from './response-map-entry.js';
 
-export interface ResponseMapEntry {
-  readonly operationId: string;
-  readonly status: string;
-  readonly componentName: string;
-  readonly zodIdentifier?: string;
-  readonly jsonSchema?: SchemaObject;
-  readonly path: string;
-  readonly colonPath: string;
-  readonly method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | '*';
-  readonly source: 'component' | 'inline' | 'void';
-}
+export type { ResponseMapEntry } from './response-map-entry.js';
 
 function isOperationObject(value: unknown): value is OperationObject {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
@@ -93,38 +86,7 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
     );
   }
 
-  // Emit wildcard entries for error statuses when a single schema is used across all operations
-  const byStatus = new Map<string, Set<string>>();
-  for (const entry of out) {
-    if (entry.source !== 'component') {
-      continue;
-    }
-    if (entry.componentName === '__VOID__') {
-      continue;
-    }
-    const set = byStatus.get(entry.status) ?? new Set<string>();
-    set.add(entry.componentName);
-    byStatus.set(entry.status, set);
-  }
-  for (const [status, componentSet] of byStatus) {
-    if (componentSet.size === 1) {
-      const [componentName] = componentSet;
-      const schemaForComponent = componentSchemas.get(componentName);
-      if (!schemaForComponent) {
-        continue;
-      }
-      out.push({
-        operationId: '*',
-        status,
-        componentName,
-        jsonSchema: cloneSchema(schemaForComponent),
-        path: '*',
-        colonPath: '*',
-        method: '*',
-        source: 'component',
-      });
-    }
-  }
+  out.push(...createWildcardResponseMapEntries(out, componentSchemas));
 
   return out;
 }
@@ -149,30 +111,17 @@ function collectResponses(
     }
     const info = getJsonResponseInfo(response, opId, status, resolveComponent);
     if (info) {
-      let componentName = info.source === 'component' ? sanitizeIdentifier(info.name) : info.name;
-      let zodIdentifier: string | undefined;
-      if (info.source === 'inline') {
-        const baseName = sanitizeIdentifier(`${opId}_${status}`);
-        const seen = inlineCounts.get(baseName) ?? 0;
-        inlineCounts.set(baseName, seen + 1);
-        componentName = seen === 0 ? baseName : `${baseName}_${String(seen)}`;
-        zodIdentifier = componentName;
-      }
-      const jsonSchema = cloneSchema(info.schema);
-      if (info.source === 'component') {
-        componentSchemas.set(componentName, jsonSchema);
-      }
-      out.push({
-        operationId: opId,
-        status,
-        componentName,
-        zodIdentifier,
-        jsonSchema,
-        path,
-        colonPath: toColonPath(path),
-        method,
-        source: info.source,
-      });
+      out.push(
+        createJsonResponseEntry({
+          info,
+          opId,
+          status,
+          path,
+          method,
+          inlineCounts,
+          componentSchemas,
+        }),
+      );
       continue;
     }
     // If there is no JSON schema and status implies no content, emit a void entry
@@ -190,6 +139,49 @@ function collectResponses(
       });
     }
   }
+}
+
+function createJsonResponseEntry({
+  info,
+  opId,
+  status,
+  path,
+  method,
+  inlineCounts,
+  componentSchemas,
+}: {
+  readonly info: ResponseInfo;
+  readonly opId: string;
+  readonly status: string;
+  readonly path: string;
+  readonly method: Exclude<ResponseMapMethod, '*'>;
+  readonly inlineCounts: Map<string, number>;
+  readonly componentSchemas: Map<string, SchemaObject>;
+}): ResponseMapEntry {
+  let componentName = info.source === 'component' ? sanitizeIdentifier(info.name) : info.name;
+  let zodIdentifier: string | undefined;
+  if (info.source === 'inline') {
+    const baseName = sanitizeIdentifier(`${opId}_${status}`);
+    const seen = inlineCounts.get(baseName) ?? 0;
+    inlineCounts.set(baseName, seen + 1);
+    componentName = seen === 0 ? baseName : `${baseName}_${String(seen)}`;
+    zodIdentifier = componentName;
+  }
+  const jsonSchema = cloneSchema(info.schema);
+  if (info.source === 'component') {
+    componentSchemas.set(componentName, jsonSchema);
+  }
+  return {
+    operationId: opId,
+    status,
+    componentName,
+    zodIdentifier,
+    jsonSchema,
+    path,
+    colonPath: toColonPath(path),
+    method,
+    source: info.source,
+  };
 }
 
 function collectFromPathItem(

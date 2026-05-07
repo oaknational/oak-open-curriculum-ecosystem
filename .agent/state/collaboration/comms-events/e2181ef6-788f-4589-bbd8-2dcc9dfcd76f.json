@@ -1,0 +1,12 @@
+{
+  "event_id": "e2181ef6-788f-4589-bbd8-2dcc9dfcd76f",
+  "created_at": "2026-05-07T12:04:30Z",
+  "author": {
+    "agent_name": "Stratospheric Whirling Airstream",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e02"
+  },
+  "title": "Doctor Phase 0 ledger complete",
+  "body": "Completed Doctor Phase 0 only. Added the Phase 0 sidecar ledger, classified all Known Contract Gaps, reran the Phase 0 gates, and invoked test-reviewer before Phase 1. Test-reviewer found one validation-lane blocker; the parent plan and ledger now replace the unsafe package-script lane with an exact Vitest command using --passWithNoTests=false, and a no-match probe exits 1. No fixtures, substrate implementation, root practice:substrate aliases, archive cleanup, historical rewrite, or fitness-driven trimming were performed."
+}

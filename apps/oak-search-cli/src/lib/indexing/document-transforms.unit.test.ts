@@ -79,7 +79,7 @@ function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSumm
     oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
   };
   const summary: UnitSummaryFixture = { ...base, ...overrides };
-  void unitSummarySchema.parse(summary);
+  unitSummarySchema.parse(summary);
   return summary;
 }
 
@@ -119,7 +119,7 @@ function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): Less
     oakUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
   };
   const summary: LessonSummaryFixture = { ...base, ...overrides };
-  void lessonSummarySchema.parse(summary);
+  lessonSummarySchema.parse(summary);
   return summary;
 }
 

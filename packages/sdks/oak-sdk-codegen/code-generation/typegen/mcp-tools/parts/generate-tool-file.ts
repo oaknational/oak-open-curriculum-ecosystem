@@ -27,7 +27,7 @@ export function generateToolFile(
   const parts: string[] = [];
   parts.push(buildImports());
   parts.push(emitHeader(toolName, path, method, operationId));
-  parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
+  parts.push(emitSchema(pathParamMetadata, queryParamMetadata));
   parts.push(emitIndex(toolName, path, method, operationId, operation));
   return parts.join('\n');
 }
