@@ -296,7 +296,7 @@ adapter (lands in Inc.2 or early Inc.3).
 | Programme/Unit navigator | New plan: `oak-kg-programme-navigator.plan.md` (future/) |
 | Generic IRI traverser | New plan: `oak-kg-iri-traverser.plan.md` (future/) |
 | Schema/class browser | New plan: `oak-kg-schema-browser.plan.md` (future/) |
-| NC SKOS taxonomy MCP surface | Existing plan: [`nc-knowledge-taxonomy-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — annotated `mvp_arc_status: deferred`; queued post-arc |
+| NC SKOS taxonomy MCP surface | Existing plan: [`nc-knowledge-taxonomy-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — sibling plan with its own `promotion_trigger: demand-tripwire` (SKOS-specific consumer demand); not part of the MVP arc; promotes when its own tripwire fires |
 | SPARQL endpoint | Existing plan: [`direct-ontology-use-and-graph-serving-prototypes.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) (future/) |
 
 ## Slice 3a — Misconception Sub-Graph Query
@@ -450,12 +450,11 @@ criteria are unambiguous and the namespace discipline is checkable.
 Phase 0 is **closed** — all four amendments landed.
 
 The NC SKOS taxonomy plan was briefly amended during this session in
-error (added unsequenced `mvp_arc_status: deferred` then a `mvp_arc_*`
-field) — the NC plan is **not** part of the MVP arc and the spine
-should not carry framing for it. Both attempts reverted same-day per
-owner correction. The NC plan now carries its own promotion trigger
-(demand-tripwire on SKOS-specific consumer demand) in its own
-frontmatter, owned by its own thread.
+error to carry out-of-arc framing — the NC plan is **not** part of the
+MVP arc and the spine should not carry framing for it. Both attempts
+reverted same-day per owner correction. The NC plan now carries its own
+promotion trigger (demand-tripwire on SKOS-specific consumer demand) in
+its own frontmatter, owned by its own thread.
 
 ### Phase 1 — Surface-plan authoring (between spine landing and slice promotions)
 
@@ -560,7 +559,6 @@ to confirm the convention.
 | Slice 3a's legacy-factory tech debt grows during Inc.2/3 wait | Medium | The substrate-migration follow-up plan is named up-front; ADR-123 records the legacy path explicitly so the contract for migration is visible. |
 | Cross-corpus join primitive (graph-stack Inc.3) lands in a shape that complicates `oak-misconceptions-eef-*` semantics | Medium | Slice 3b waits for Inc.3 by design; spine doesn't lock the join API early. |
 | ADR-157 amendment to require explicit-source-attribution is contested by reviewers | Low | Discipline applies to NEW tools only; unprefixed default for already-shipped API-derived tools is preserved. Backwards-compatible. |
-| NC taxonomy plan author or other surface-plan owners feel deprioritised by `mvp_arc_status: deferred` annotation | Low | Annotation explicitly says "deferral is scope, not lifecycle"; plan stays where it is; clear post-arc promotion path. |
 | Specialist reviewer load (mcp-reviewer × 4 slices, elasticsearch-reviewer × cross-corpus, test-reviewer × everything) becomes serial bottleneck | Medium | Slices are sequential by design (gate gates); reviewer dispatch happens at each gate, not all at once. Parallel-safe slices (2 + 3a) can dispatch independent reviewer sessions. |
 
 ## Foundation Alignment
