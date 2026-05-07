@@ -656,7 +656,7 @@
   ],
   "claims": [
     {
-      "claim_id": "1e7d8c5e-3a9f-4f19-9c62-2f75ad5b50a7",
+      "claim_id": "37c1f9e7-52d8-4c4b-9c59-0b91dc9e4372",
       "agent_id": {
         "agent_name": "Tidal Surfing Lighthouse",
         "platform": "codex",
@@ -672,10 +672,10 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-07T17:39:57Z",
+      "claimed_at": "2026-05-07T17:57:12Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Stage and commit origin/main merge for planning/graph-tooling."
+      "intent": "Stage and commit branch touched-file CLI and rule."
     }
   ]
 }

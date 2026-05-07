@@ -15,6 +15,7 @@
     "agent-identity": "pnpm -s build && node dist/src/bin/agent-identity.js",
     "collaboration-state": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/collaboration-state.js",
     "practice-substrate": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/practice-substrate.js",
+    "branch-touched-files": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/branch-touched-files.js",
     "codex-session-identity-hook": "pnpm -s build && node dist/src/bin/codex-session-identity-hook.js",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "commit-queue": "pnpm -s build && node dist/src/bin/commit-queue.js",
