@@ -18,11 +18,11 @@ todos:
     content: "Phase 3: Route prevention, detection, mitigation, repair, and learning responsibilities across rules, commands, consolidation, and reviewer surfaces."
     status: completed
   - id: phase-4-adoption-review
-    content: "Phase 4: Run docs/PDR review and assumptions review; record accepted or rejected follow-ons."
-    status: pending
+    content: "Phase 4: Run docs/PDR, assumptions, architecture, code, and test review; record fixed, routed, or rejected follow-ons."
+    status: completed
   - id: phase-5-closure
-    content: "Phase 5: Quality gates green; consolidation pass complete; plan ready for archive."
-    status: pending
+    content: "Phase 5: Current commands pass, known fitness pressure is routed without trimming substance, and the plan is ready for archive."
+    status: completed
 isProject: false
 ---
 
@@ -158,30 +158,58 @@ Run reviewers against the doctrine and adoption plan:
 - `docs-adr-reviewer` for PDR/bridge quality;
 - `assumptions-reviewer` for proportionality and hidden deferrals;
 - `architecture-reviewer-fred` for boundary discipline.
+- `code-reviewer` for the closure gate and specialist coverage;
+- `test-reviewer` for doctor Phase 0/1 validation sequencing.
 
 **Acceptance criteria**:
 
 - Findings are either fixed, routed into a named plan, or rejected with
   rationale.
 - No future-only dependency is cited as if it were current enforcement.
+- PDR-049 uses portable language only; host-local active-claims and policy-file
+  paths live in the bridge index and local substrate contract.
+- The legacy `comms/events/` terminal condition is accepted as a historical
+  `.gitkeep` root plus migration-ledger validation.
+- Merge-topology blocking policy is routed to the doctor Phase 0 defect ledger
+  and Phase 1 topology fixtures.
+- The prior `test-reviewer` hold is closed for this plan and becomes a
+  mandatory checkpoint after Doctor Phase 0 and before Phase 1 fixture work.
 
 ### Phase 5: Closure
 
-Run the consolidation workflow and quality gates.
+Run the consolidation workflow and current closure gates. Fitness is
+informational here: known pressure must be explicitly routed, and no memory or
+Practice Core substance may be trimmed to make the report greener.
 
 **Validation**:
 
 ```bash
+pnpm agent-tools:collaboration-state -- check \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json \
+  --events-dir .agent/state/collaboration/comms-events
+pnpm test:root-scripts
 pnpm portability:check
 pnpm practice:vocabulary
 pnpm practice:fitness:informational
-pnpm markdownlint:root
+pnpm markdownlint-check:root
+git diff --check
 ```
 
 **Closure criteria**:
 
+- Strict manifest validation and required-field checks pass for 22 surfaces.
+- Migration ledger validation proves 114 entries, no duplicate source/target
+  paths, and target byte-count/SHA-256 matches.
+- The legacy `.agent/state/collaboration/comms/events/` root contains only
+  `.gitkeep`; the canonical `comms-events` root parses through the explicit
+  collaboration-state check.
 - Durable doctrine lives in PDR-050 and the host bridge.
 - Tooling work is owned by the repo-local doctor plan.
+- Known fitness pressure is named as routed health evidence, not closure
+  failure and not permission to delete, compress, or weaken knowledge.
+- The retired YAML seed is preserved as dated evidence outside the live
+  executive contract.
 - The plan can be archived without losing methodology.
 
 ## Non-Goals
@@ -219,7 +247,7 @@ The local immune-layer responsibilities are routed as follows:
   The strict manifest carries 22 surface rows with the required contract fields
   and validates against the schema. The Markdown contract remains the
   human-facing local instance; the earlier fenced YAML is a retired seed
-  snapshot, not the machine-consumed source.
+  snapshot preserved as dated evidence, not the machine-consumed source.
 - 2026-05-07: Phase 0/2 completed the legacy event transition. The 114 tracked
   legacy fragments under `.agent/state/collaboration/comms/events/` were
   collision-checked, JSON-parse-checked, ledgered with original path, target
@@ -247,3 +275,8 @@ The local immune-layer responsibilities are routed as follows:
   agents to preserve substance first and route pressure structurally; agents
   must not reactively trim memory or Practice Core content to make a report
   greener.
+- 2026-05-07: Phase 4 review closure fixed the PDR-049 Core-portability leak
+  by moving host-state and host-policy-path guidance into the host bridge. It
+  also recorded dispositions for the legacy event terminal state and merge
+  topology policy, and moved the doctor test-reviewer hold to the post-Phase-0,
+  pre-Phase-1 checkpoint.

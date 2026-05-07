@@ -2,8 +2,8 @@
 
 ## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (Floating Vaulting Updraft / codex /
-GPT-5 / `019e01`).
+**Last refreshed**: 2026-05-07 (Penumbral Veiling Owl / codex /
+GPT-5 / `019e02`).
 
 **Owning plans**:
 
@@ -38,7 +38,13 @@ and
 completed Phase 0/2 coverage, routed Phase 3 immune-layer responsibilities,
 and migrated the 114 legacy `comms/events` fragments into canonical
 `comms-events` with a provenance ledger under
-`.agent/state/collaboration/comms/archive/`.
+`.agent/state/collaboration/comms/archive/`. Phase 4/5 closure is now complete
+in the working tree: PDR-049 no longer names concrete host-state paths in
+Practice Core, host-local path guidance lives in the bridge/local contract,
+the retired YAML seed is preserved as dated evidence, legacy `comms/events/`
+is accepted as a `.gitkeep` terminal root plus ledger validation, topology
+policy is routed to the doctor, and the test-reviewer hold is moved to the
+post-Phase-0/pre-Phase-1 checkpoint.
 
 **Key doctrine points now recorded**:
 
@@ -122,13 +128,14 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: run Phase 4/5 review and closure on the strict local
-instance rather than restarting the design work. The strict manifest, schema,
-ledger, and canonical collaboration-state checks are green; after reviewer
-closure, begin [Memory/state contract doctor][memory-state-doctor-plan] Phase 0
-against that strict data. Repo-level doctor commands must invoke built
-`agent-tools` output only. Then take the multi-checkout merge-handling plan for
-fitness/state surfaces.
+**Next safe step**: start [Memory/state contract doctor][memory-state-doctor-plan]
+Phase 0 only. Seed the defect ledger from every row in the Known Contract Gaps
+table, classifying each as live defect, known-good terminal state, or deferred
+semantic review. Inventory existing checks first (collaboration-state,
+markdownlint, practice fitness, portability, JSON/schema validation, and git
+topology checks) before adding new logic. Do not add or invoke
+`practice:substrate:*` root aliases until the doctor implementation phase;
+future root aliases must invoke built `agent-tools` output only.
 
 **Non-goals for the next review session**:
 
@@ -1805,13 +1812,14 @@ and
 - **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-- **Branch**: `feat/otel_sentry_enhancements` (parallel practice lane;
-  not the branch-primary product thread)
+- **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
+  closure and doctor-preflight lane)
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |
 | `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
 | `Seaworthy Swimming Sextant` | `codex` | `GPT-5` | `019e01` | `portable-memory-state-substrate-contract-inventory-and-template-executor; continuing-from-committed-PDR-050-bundle; preserving-practice-core-vs-repo-local-boundary; no-fitness-driven-content-trimming; doctor-implementation-deferred-until-built-agent-tools-command-surface-contract` | 2026-05-07 | 2026-05-07 |
 | `Windward Spiralling Aerie` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-contract-review-stewardship-and-commit; dispatched-docs-adr-assumptions-architecture-fred-and-test-reviewers; applied-reviewer-fixes-to-PDR-050-portable-plan-doctor-plan-state-readme-and-evidence; preserved-owner-correction-knowledge-before-fitness; confirmed-next-session-order-portable-contracts-then-doctor-then-multi-checkout-merge-handling; committed-and-pushed-cb662b7e-and-526a596e` | 2026-05-07 | 2026-05-07 |

@@ -86,6 +86,13 @@ opens/closes `git:index/head` claims before staging or committing,
 `session-handoff` closes the agent's own active state, and
 `consolidate-docs` audits stale or unresolved entries.
 
+PDR-049 keeps the portable merge semantics in Practice Core. This host's
+concrete active-claims registry is
+[`state/collaboration/active-claims.json`](state/collaboration/active-claims.json).
+If per-file `merge_class` metadata stops being sufficient, the host-local
+merge policy surface belongs under operational memory and must be linked from
+this bridge index and the substrate contract, not from Practice Core.
+
 Hook support:
 
 | Surface                       | Location                                                                                                      | Current status                                                                                                          |

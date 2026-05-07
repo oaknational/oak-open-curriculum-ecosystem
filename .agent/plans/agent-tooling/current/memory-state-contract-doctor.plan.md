@@ -8,10 +8,10 @@ overview: >
   repair paths.
 todos:
   - id: phase-0-current-defect-ledger
-    content: "Phase 0: Confirm the surface-inventory/template dependency, build the current defect ledger from live state/memory surfaces, and lock the command contract."
+    content: "Phase 0: Validate the strict manifest/schema and migration ledger, inventory existing checks, build the current defect ledger from live state/memory surfaces, and lock the command contract."
     status: pending
   - id: phase-1-red-fixtures
-    content: "Phase 1 (RED/GREEN landing design): Author fixture-driven tests for stale paths, missing merge_class, duplicate IDs, generated drift, invalid JSON/schema, conflict markers, and improper merge topology; RED states remain uncommitted and land atomically with GREEN implementation."
+    content: "Phase 1 (RED/GREEN fixture slices): Author each fixture class with the implementation that greens it; no RED-only commits."
     status: pending
   - id: phase-2-green-report-mode
     content: "Phase 2 (GREEN): Implement read-only report mode that recomputes all deterministic checks and exits non-zero on structural defects."
@@ -123,6 +123,25 @@ Do not author doctor fixtures against an implicit contract: Phase 0 must first
 validate the strict manifest and migration ledger, or promote any future local
 instance changes into the same strict data shape.
 
+Before building the defect ledger, Phase 0 must rerun the current start gate
+from the working tree without calling `practice:substrate:*` commands:
+
+- validate the strict manifest against its schema and confirm all 22 surfaces
+  carry every required PDR-050 contract field;
+- validate the migration ledger has 114 entries, no duplicate original/target
+  paths, and target files match recorded byte counts and SHA-256 hashes;
+- verify `.agent/state/collaboration/comms/events/` contains only `.gitkeep`;
+- run the explicit collaboration-state check against canonical
+  `.agent/state/collaboration/comms-events/`;
+- record current `git diff --check`, `pnpm test:root-scripts`,
+  `pnpm portability:check`, `pnpm practice:vocabulary`, and
+  `pnpm practice:fitness:informational` outcomes.
+
+Phase 0 must inventory existing checks before adding new logic. Reuse or
+orchestrate existing owners where they already cover a concern:
+collaboration-state parsing, markdownlint, practice fitness, portability,
+JSON/schema validation, and git topology checks.
+
 Include at least:
 
 - canonical `comms-events/` as the single live event-fragment root and legacy
@@ -145,6 +164,10 @@ Include at least:
 - active/closed claim consistency and commit-queue state;
 - conflict markers in state and memory files;
 - git topology checks for memory/state merge commits.
+- every row from the Known Contract Gaps table in
+  [`memory-state-substrate-contracts.md`](../../../memory/executive/memory-state-substrate-contracts.md),
+  classified as live defect, known-good terminal state, or deferred semantic
+  review.
 
 **Acceptance criteria**:
 
@@ -155,15 +178,23 @@ Include at least:
 - The command contract above is finalised before RED fixtures are written.
 - The command contract names which modes are unavailable until Phase 2 report
   mode lands, so early validation does not call commands before they exist.
+- The prior `test-reviewer` hold is resolved after Phase 0 and before Phase 1:
+  the reviewer must approve the fixture strategy and validation lane before any
+  RED/GREEN fixture slice is implemented.
 
-## Phase 1: RED Fixtures
+## Phase 1: RED/GREEN Fixture Slices
 
-Add fixture-driven tests before implementation, but do not commit a RED-only
-state. Each fixture class either lands in the same commit as the product code
+Add fixture-driven tests with their paired implementation. Do not commit a
+RED-only state. Each fixture class lands in the same commit as the product code
 that greens it, or the whole RED batch remains local/uncommitted until the
-GREEN implementation is ready. Tests describe behaviour of a pure contract
-engine over literal fixture manifests; live filesystem and git access belongs
-only in thin composition tests or the runtime validator script.
+GREEN implementation is ready.
+
+Pure fixture tests live in the `agent-tools` test lane and use TypeScript
+literal objects or strings. In-process tests must not read repo files, fixture
+files, git state, or `process.cwd()`, and must not spawn processes. Real
+filesystem and git access belongs in the runtime validator script or in a
+correctly classified out-of-process validation surface; composition tests use
+injected snapshots or fakes.
 
 **Required fixture classes**:
 
@@ -187,11 +218,13 @@ only in thin composition tests or the runtime validator script.
 **Validation**:
 
 ```bash
-pnpm test:root-scripts -- --run practice-substrate
+pnpm --filter @oaknational/agent-tools test -- practice-substrate
 ```
 
-Expected local RED result: tests fail for missing implementation only. Expected
-committed result: the paired implementation makes the same tests green.
+Expected local RED result: tests fail for missing implementation only.
+Expected committed result: the paired implementation makes the same tests
+green. Keep `pnpm test:root-scripts` for root/runtime validator integration
+once the standalone/root script exists.
 
 ## Phase 2: GREEN Report Mode
 
@@ -315,12 +348,13 @@ pnpm test:root-scripts
 pnpm portability:check
 pnpm practice:vocabulary
 pnpm practice:fitness:informational
-pnpm markdownlint:root
+pnpm markdownlint-check:root
 ```
 
 After Phase 2 lands report mode, add the substrate check to each phase:
 
 ```bash
+pnpm agent-tools:build
 pnpm practice:substrate:check
 pnpm agent-tools:collaboration-state -- check \
   --active .agent/state/collaboration/active-claims.json \
@@ -330,7 +364,7 @@ pnpm test:root-scripts
 pnpm portability:check
 pnpm practice:vocabulary
 pnpm practice:fitness:informational
-pnpm markdownlint:root
+pnpm markdownlint-check:root
 ```
 
 ## Non-Goals

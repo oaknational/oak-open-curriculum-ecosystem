@@ -39,8 +39,9 @@ next-session records, and adjacent files. These surfaces evolve through
 every session and every consolidation pass.
 
 The Practice's coordination primitives partition work by **thread**:
-[`active-claims.json`](../../state/collaboration/active-claims.json)
-records which agent is operating on which thread, with which intent.
+the host's active-claims registry records which agent is operating on
+which thread, with which intent. The host bridge names the concrete
+registry path for this repository.
 Threads are the contract that makes parallel work safe at the *intent*
 layer. Two sessions on disjoint threads are non-overlapping by
 construction.
@@ -205,15 +206,15 @@ The canonical structured-key collision is **legitimate concurrent
 archival** of a pre-existing active entry. Concretely, with two
 same-`claim_id` archive entries:
 
-1. At merge-base time, the claim existed in `active-claims.json` with
-   that `claim_id`.
+1. At merge-base time, the claim existed in the host active-claims
+   registry with that `claim_id`.
 2. Branch A's session ran an explicit close; archive entry written
    with `closure.kind: "explicit"`.
 3. Branch B's consolidation pass independently observed the same
    claim past its TTL and ran a stale archive; archive entry written
    with `closure.kind: "stale"`.
-4. Both branches removed the entry from `active-claims.json` (matching
-   shape — no conflict on the active side).
+4. Both branches removed the entry from the host active-claims registry
+   (matching shape — no conflict on the active side).
 5. Both branches added a closed-claim entry with the **same
    `claim_id`** but **different closure metadata**.
 
@@ -296,11 +297,8 @@ When per-file metadata is insufficient — for example, when a host
 introduces a file class outside the five-value vocabulary, or when a
 host wants to record file-by-file merge nuances richer than a single
 token (priority resolution rules, per-section overrides, host-specific
-schema variants) — the host MAY add a dedicated policy file at
-`.agent/memory/operational/memory-state-merge-policy.md`. The host's
-bridge index at
-[`practice-index.md`](../../practice-index.md)
-references the policy file when present.
+schema variants) — the host MAY add a dedicated host-local policy
+surface. The host bridge names that surface when present.
 
 The default order is therefore:
 
