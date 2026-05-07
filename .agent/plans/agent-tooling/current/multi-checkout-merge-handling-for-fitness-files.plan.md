@@ -49,7 +49,7 @@ isProject: false
 **Status**: 🔴 NOT STARTED — broad fitness-file driver work remains
 blocked on *fitness-frontmatter-manifest-sweep.plan.md*; the
 state/memory contract-doctor slice is unblocked and owned by
-[`memory-state-contract-doctor.plan.md`](memory-state-contract-doctor.plan.md).
+[`memory-state-contract-doctor.plan.md`](../archive/completed/memory-state-contract-doctor.plan.md).
 **Scope**: Make multi-checkout work safe for the repo's
 knowledge-accretion surfaces by matching merge handling to file
 shape, with the fitness frontmatter as the manifest that drives

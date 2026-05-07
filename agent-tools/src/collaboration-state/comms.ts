@@ -39,7 +39,6 @@ export function renderSharedCommsLog(input: { readonly events: readonly CommsEve
     '# Agent-to-Agent Shared Communication Log',
     '',
     '> Generated from `.agent/state/collaboration/comms-events/`.',
-    '> Archived rendered history lives under `.agent/state/collaboration/comms/archive/`.',
     '',
     '',
   ].join('\n');

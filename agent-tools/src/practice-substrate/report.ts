@@ -1,8 +1,10 @@
 import { type SubstrateFinding } from './types.js';
 
+export type PracticeSubstrateMode = 'report' | 'strict';
+
 export interface PracticeSubstrateReport {
   readonly ok: boolean;
-  readonly mode: 'report';
+  readonly mode: PracticeSubstrateMode;
   readonly summary: {
     readonly blocking: number;
     readonly reviewRequired: number;
@@ -13,7 +15,7 @@ export interface PracticeSubstrateReport {
 
 export interface PracticeSubstrateCliOptions {
   readonly command: 'check';
-  readonly mode: 'report';
+  readonly mode: PracticeSubstrateMode;
   readonly repoRoot?: string;
   readonly targetRef?: string;
 }
@@ -43,6 +45,7 @@ interface ParsedPracticeSubstrateArgs {
  */
 export function createPracticeSubstrateReport(
   findings: readonly SubstrateFinding[],
+  mode: PracticeSubstrateMode = 'report',
 ): PracticeSubstrateReport {
   const summary = {
     blocking: findings.filter((item) => item.severity === 'blocking').length,
@@ -52,31 +55,31 @@ export function createPracticeSubstrateReport(
 
   return {
     ok: summary.blocking === 0,
-    mode: 'report',
+    mode,
     summary,
     findings,
   };
 }
 
 /**
- * Parse the intentionally narrow Phase 2 CLI surface.
+ * Parse the intentionally narrow safe-merge gate CLI surface.
  */
 export function parsePracticeSubstrateCliArgs(
   argv: readonly string[],
 ): PracticeSubstrateCliOptions {
   const [command, ...args] = stripPnpmSeparator(argv);
   if (command !== 'check') {
-    throw new Error('practice-substrate supports only the check command in Phase 2');
+    throw new Error('practice-substrate supports only the check command in this safe-merge gate');
   }
 
   const parsed = parseOptions(args);
-  if (parsed.mode !== undefined && parsed.mode !== 'report') {
-    throw new Error('practice-substrate check supports only --mode report in Phase 2');
+  if (parsed.mode !== undefined && parsed.mode !== 'report' && parsed.mode !== 'strict') {
+    throw new Error('practice-substrate check supports only --mode report or --mode strict');
   }
 
   return {
     command,
-    mode: 'report',
+    mode: parsed.mode ?? 'report',
     ...(parsed.repoRoot === undefined ? {} : { repoRoot: parsed.repoRoot }),
     ...(parsed.targetRef === undefined ? {} : { targetRef: parsed.targetRef }),
   };
@@ -118,6 +121,9 @@ function parseOptions(args: readonly string[]): ParsedPracticeSubstrateArgs {
 
   for (let index = 0; index < args.length; index += 1) {
     const option = args[index];
+    if (option === '--') {
+      continue;
+    }
     if (!isKnownOption(option)) {
       throw new Error(`Unknown practice-substrate option ${option}`);
     }

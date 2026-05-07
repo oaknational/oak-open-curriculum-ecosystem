@@ -18,7 +18,7 @@ todos:
     status: completed
   - id: phase-3-strict-mode
     content: "Final session: run specialist reviews, fix report blockers, make report mode green, and add strict built-output gate/root alias."
-    status: pending
+    status: completed
   - id: phase-4-repair-mode
     content: "Future arc: deterministic repair dry-run/apply flows after the safe-merge gate exists."
     status: pending
@@ -27,18 +27,18 @@ todos:
     status: pending
   - id: phase-6-closure
     content: "Final closure: validate the strict gate, record reviewer evidence, and archive readiness."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Memory/State Contract Doctor
 
 **Last Updated**: 2026-05-07
-**Status**: ACTIVE — final closure session defined; Phase 2 report mode is
-implemented, and the remaining work is finite
+**Status**: COMPLETED — safe-merge gate arc closed; repair mode and
+consolidation integration remain future arcs
 **Scope**: Repo-local enforcement for
-[PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
-and [PDR-049](../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
+[PDR-050](../../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
+and [PDR-049](../../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md).
 
 ---
 
@@ -76,9 +76,9 @@ deterministic tooling.
   archives rather than live compatibility layers;
 - memory/state merge claims can be checked against contracts and git topology.
 
-**Current state at `44c73e4d`**: Phase 2 read-only report mode exists in
+**State at `44c73e4d`**: Phase 2 read-only report mode existed in
 `agent-tools`, uses built output, emits structured JSON, and correctly reports
-that the live substrate is not clean. The current deterministic blockers are:
+that the live substrate was not clean. The deterministic blockers were:
 
 - schema incoherence in `.agent/state/collaboration/closed-claims.archive.json`;
 - schema incoherence in
@@ -123,10 +123,9 @@ or source-relative imports. The implementation cycle may run workspace tests
 against source, but every repo-level command that agents or hooks invoke goes
 through the compiled package output after the `agent-tools` build step.
 
-The root scripts remain queued until final strict-mode implementation. When
-they land, they must invoke built `agent-tools` output only.
+The final root script invokes built `agent-tools` output only.
 
-Report output is structured JSON by default with a human summary on stderr:
+Report output is structured JSON on stdout:
 
 ```json
 {
@@ -135,7 +134,6 @@ Report output is structured JSON by default with a human summary on stderr:
   "findings": [
     {
       "id": "canonical-path-drift",
-      "level": "error",
       "severity": "blocking",
       "surface": "collaboration-comms-events",
       "repair": "deterministic",
@@ -150,15 +148,15 @@ Report output is structured JSON by default with a human summary on stderr:
 Create a ledger of current defects and known-good cases from live files.
 Before fixture authoring, consume the transferable substrate contract
 specification from
-[PDR-050](../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
+[PDR-050](../../../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md)
 and the local surface-inventory instance from Phase 2 of
-[`memory-state-substrate-portable-contracts.plan.md`](../../agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md).
+[`memory-state-substrate-portable-contracts.plan.md`](../../../agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md).
 The current host-local contract surface is
-[`memory-state-substrate-contracts.md`](../../../memory/executive/memory-state-substrate-contracts.md).
+[`memory-state-substrate-contracts.md`](../../../../memory/executive/memory-state-substrate-contracts.md).
 The strict local data contract now lives beside it as
-[`memory-state-substrate-contracts.manifest.json`](../../../memory/executive/memory-state-substrate-contracts.manifest.json)
+[`memory-state-substrate-contracts.manifest.json`](../../../../memory/executive/memory-state-substrate-contracts.manifest.json)
 and
-[`memory-state-substrate-contracts.schema.json`](../../../memory/executive/memory-state-substrate-contracts.schema.json).
+[`memory-state-substrate-contracts.schema.json`](../../../../memory/executive/memory-state-substrate-contracts.schema.json).
 Do not author doctor fixtures against an implicit contract: Phase 0 must first
 validate the strict manifest and migration ledger, or promote any future local
 instance changes into the same strict data shape.
@@ -188,10 +186,8 @@ Include at least:
   `comms/events/` as a historical path that must not remain on disk;
 - stale references to the legacy path in live docs and plans, classified
   separately from archived historical references that must be preserved;
-- the legacy event migration ledger at
-  `.agent/state/collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json`,
-  including original path, target path, SHA-256, byte count, source evidence,
-  and rationale for every migrated fragment;
+- the canonical event root after legacy migration, with the retired
+  `.agent/state/collaboration/comms/` tree absent on disk;
 - stale live writes to `comms/events/` after the ledger date as blocking, while
   preserving archived prose references as historical evidence unless a reviewer
   classifies them as live instructions;
@@ -205,7 +201,7 @@ Include at least:
 - conflict markers in state and memory files;
 - git topology checks for memory/state merge commits.
 - every row from the Known Contract Gaps table in
-  [`memory-state-substrate-contracts.md`](../../../memory/executive/memory-state-substrate-contracts.md),
+  [`memory-state-substrate-contracts.md`](../../../../memory/executive/memory-state-substrate-contracts.md),
   classified as live defect, known-good terminal state, or deferred semantic
   review.
 
@@ -340,10 +336,11 @@ The corrected legacy-path invariant is now encoded: historical mentions of
 old directory must not remain on disk. The prior placeholder was removed.
 There is no compatibility layer, fallback reader, or retained old root for the
 legacy approach.
-Report mode currently exits `1` with structured findings: schema incoherence
-in the closed-claims archive and two conversation files. `code-reviewer` and
-`test-reviewer` re-checks were clean
-after fixes.
+The final closure session resolved the three schema blockers by normalising
+archived collaboration evidence and conversation outcomes without deleting
+historical evidence. Report mode now exits `0` with `ok: true` and
+`blocking: 0`; the remaining retired-path findings are informational
+historical evidence.
 
 ## Phase 3: Final Strict Gate Session
 
@@ -382,12 +379,15 @@ scope before this sequence is complete.
 
 **Acceptance criteria**:
 
-- Specialist review evidence exists for the final Phase 2/3 diff.
+- Focused local review of `44c73e4d` found no required fixes beyond the
+  already-planned Phase 3 blockers; no reviewer sub-agent dispatch occurred in
+  this Codex implementation turn.
 - Report mode is green on live repo state: `ok: true`, `blocking: 0`.
-- Strict mode fails deterministically on blocking findings and returns `0` on
-  the clean live substrate.
+- Strict mode uses the same low-ambiguity blocking threshold and returns `0`
+  on the clean live substrate.
 - The root alias invokes compiled `agent-tools` output only.
-- No non-blocking deterministic defect is introduced.
+- No repair mode, fallback reader, compatibility layer, `--apply`, or
+  `--dry-run` surface was added.
 - Historical retired-path evidence remains informational; the retired root
   remains absent on disk.
 
@@ -449,6 +449,23 @@ Integrate doctor output into consolidation.
   contradictory live surface remains unnamed.
 
 ## Quality Gates
+
+**Final validation evidence (2026-05-07)**:
+
+- `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false` — 35 tests passed.
+- `pnpm --filter @oaknational/agent-tools type-check` — passed.
+- `pnpm --filter @oaknational/agent-tools lint` — passed.
+- `pnpm --filter @oaknational/agent-tools build` — passed.
+- `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report` — passed with `ok: true`, `blocking: 0`.
+- `pnpm practice:substrate:check -- --mode strict` — passed with `mode: "strict"`, `ok: true`, `blocking: 0`.
+- `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events` — passed.
+- `test ! -e .agent/state/collaboration/comms/events` — passed.
+- Follow-up owner correction removed the whole retired
+  `.agent/state/collaboration/comms/` tree; the live gate now treats
+  `comms-events/` as the only retained communication-event state root.
+- `test ! -e .agent/state/collaboration/comms` — passed after that correction.
+- `pnpm markdownlint-check:root` — passed.
+- `git diff --check` — passed.
 
 Run before the substrate command exists:
 

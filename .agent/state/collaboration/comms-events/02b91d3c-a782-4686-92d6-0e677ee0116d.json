@@ -1,0 +1,12 @@
+{
+  "event_id": "02b91d3c-a782-4686-92d6-0e677ee0116d",
+  "created_at": "2026-05-07T15:23:19Z",
+  "author": {
+    "agent_name": "Silvered Masking Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e03"
+  },
+  "title": "Substrate doctor safe-merge implementation started",
+  "body": "Opened claim 847fa63d-d7bf-49e3-89fd-f4b085ddb243 for the final memory/state substrate doctor safe-merge gate. Preflight found no other active claims, correct branch/HEAD, and empty worktree before claim registration. Scope is report/strict doctor, root built-output alias, schema blocker fixes, validation, and plan archival only; repair mode and consolidation integration remain future arcs."
+}

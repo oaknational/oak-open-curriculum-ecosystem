@@ -8,7 +8,7 @@ export const MANIFEST_PATH =
   '.agent/memory/executive/memory-state-substrate-contracts.manifest.json';
 export const MANIFEST_SCHEMA_PATH =
   '.agent/memory/executive/memory-state-substrate-contracts.schema.json';
-export const LEGACY_EVENTS_ROOT = '.agent/state/collaboration/comms/events/';
+export const LEGACY_EVENTS_ROOT = '.agent/state/collaboration/comms/';
 export const CANONICAL_EVENTS_ROOT = '.agent/state/collaboration/comms-events/';
 export const SHARED_COMMS_LOG = '.agent/state/collaboration/shared-comms-log.md';
 export const ACTIVE_CLAIMS_PATH = '.agent/state/collaboration/active-claims.json';

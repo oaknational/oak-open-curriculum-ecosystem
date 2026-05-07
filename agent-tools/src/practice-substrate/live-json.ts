@@ -67,9 +67,7 @@ export async function evaluateMigrationLedgers(
   repoRoot: string,
   manifest: ManifestDocument,
 ): Promise<readonly SubstrateFinding[]> {
-  const ledgerPaths = manifest.discovery?.migration_ledgers ?? [
-    '.agent/state/collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json',
-  ];
+  const ledgerPaths = manifest.discovery?.migration_ledgers ?? [];
   const findings: SubstrateFinding[] = [];
 
   for (const ledgerPath of ledgerPaths) {

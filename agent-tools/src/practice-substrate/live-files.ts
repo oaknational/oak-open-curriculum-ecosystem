@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process';
 import { lstat, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { promisify } from 'node:util';
 
 import { LEGACY_EVENTS_ROOT, absolutePath } from './live-types.js';
@@ -14,19 +15,53 @@ export async function evaluateLegacyEventsRoot(
 ): Promise<readonly SubstrateFinding[]> {
   const rootPath = absolutePath(repoRoot, LEGACY_EVENTS_ROOT);
   const stats = await lstat(rootPath).catch(() => undefined);
-  const entries = stats?.isDirectory() === true ? await readdir(rootPath) : [];
+  const entries =
+    stats?.isDirectory() === true ? await listLegacyRootEntries(repoRoot, LEGACY_EVENTS_ROOT) : [];
 
   return evaluateLegacyEventRoot({
     surface: 'collaboration-comms-events-legacy',
     legacyRoot: LEGACY_EVENTS_ROOT,
     rootExists: stats !== undefined,
-    entries: entries
-      .toSorted((left, right) => left.localeCompare(right))
-      .map((entry) => ({
-        path: `${LEGACY_EVENTS_ROOT}${entry}`,
-        kind: entry === '.gitkeep' ? 'gitkeep' : entry.endsWith('.json') ? 'json' : 'other',
-      })),
+    entries: entries.toSorted((left, right) => left.path.localeCompare(right.path)),
   });
+}
+
+async function listLegacyRootEntries(
+  repoRoot: string,
+  root: string,
+): Promise<
+  readonly {
+    readonly path: string;
+    readonly kind: 'gitkeep' | 'json' | 'other';
+  }[]
+> {
+  const entries = await readdir(absolutePath(repoRoot, root), { withFileTypes: true });
+  const snapshots = await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = join(root, entry.name).split('\\').join('/');
+      if (entry.isDirectory()) {
+        const childRoot = entryPath.endsWith('/') ? entryPath : `${entryPath}/`;
+        return listLegacyRootEntries(repoRoot, childRoot);
+      }
+
+      return [
+        {
+          path: entryPath,
+          kind: legacyEntryKind(entry.name),
+        },
+      ];
+    }),
+  );
+
+  return snapshots.flat();
+}
+
+function legacyEntryKind(name: string): 'gitkeep' | 'json' | 'other' {
+  if (name === '.gitkeep') {
+    return 'gitkeep';
+  }
+
+  return name.endsWith('.json') ? 'json' : 'other';
 }
 
 export async function evaluateOptionalGitTopology(

@@ -28,7 +28,7 @@ discovery:
     - ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md"
   plan_roots:
     - ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md"
-    - ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md"
+    - ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
   historical_roots:
     - ".agent/state/collaboration/comms/events/"
     - ".agent/state/collaboration/comms/archive/"

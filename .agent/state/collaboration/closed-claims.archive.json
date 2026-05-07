@@ -39,21 +39,74 @@
       "closure": {
         "kind": "explicit",
         "closed_at": "2026-04-29T16:30:00Z",
-        "closed_by": "Nebulous Illuminating Satellite",
+        "closed_by": {
+          "agent_name": "Nebulous Illuminating Satellite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "fe4acc"
+        },
         "summary": "Deeper /jc-consolidate-docs convergence run COMPLETE. (1) gate-off-fix-gate-on anti-pattern doctrine elevation: never-disable-checks rule + principles.md amendment + Cursor/.agents wrappers + RULES_INDEX entry; register flipped from pattern-candidate to anti-pattern. (2) Practice Core retirement complete (4 phases): PDR-007/024/014 amended; practice-core/patterns/ and practice-context/ deleted; trinity navigation updated; routing log salvaged. (3) Sub-agent reports actioned: 4 strong patterns graduated (install-session-blind, reframing-before-hardening, recital-loses-to-recipe-momentum, breadth-as-evasion); 4-of-6 displaced doctrine extractions landed; plan-supersession discipline graduated to consolidate-docs. (4) Lifecycle moves: mcp-local-startup-release-boundary + depcruise archived; temp-agent-collaboration-continuation deleted. (5) PR-90 thread registered. (6) Identity Candidates graduated to user-collaboration.md. (7) Final fitness: SOFT-only. Deferred to register: Plan 2 (PDR creation), Plan 6 (~700-line trim), 5 trinity Active Principles structural extensions, pre-2026-02-15 experience corpus extraction. No commit performed.",
         "evidence": [
-          ".agent/rules/never-disable-checks.md",
-          ".agent/practice-core/decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md",
-          ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
-          ".agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md",
-          ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.plan.md",
-          ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.phase-0-ledger.md",
-          ".agent/memory/active/patterns/install-session-blind-to-cold-start-gaps.md",
-          ".agent/memory/active/patterns/reframing-before-hardening.md",
-          ".agent/memory/active/patterns/recital-loses-to-recipe-momentum.md",
-          ".agent/memory/active/patterns/breadth-as-evasion.md",
-          ".agent/plans/observability/archive/superseded/README.md",
-          ".agent/state/collaboration/comms/events/fe4acc7e-deep-cons-close-2026-04-29-16-30.json"
+          {
+            "kind": "rule",
+            "ref": ".agent/rules/never-disable-checks.md",
+            "summary": "Historical closure evidence preserved from .agent/rules/never-disable-checks.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.plan.md",
+            "summary": "Historical closure evidence preserved from .agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.plan.md."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.phase-0-ledger.md",
+            "summary": "Historical closure evidence preserved from .agent/plans/agentic-engineering-enhancements/archive/completed/practice-core-surface-retirement.phase-0-ledger.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/install-session-blind-to-cold-start-gaps.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/install-session-blind-to-cold-start-gaps.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/reframing-before-hardening.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/reframing-before-hardening.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/recital-loses-to-recipe-momentum.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/recital-loses-to-recipe-momentum.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/breadth-as-evasion.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/breadth-as-evasion.md."
+          },
+          {
+            "kind": "plan",
+            "ref": ".agent/plans/observability/archive/superseded/README.md",
+            "summary": "Historical closure evidence preserved from .agent/plans/observability/archive/superseded/README.md."
+          },
+          {
+            "kind": "comms_event",
+            "ref": ".agent/state/collaboration/comms/events/fe4acc7e-deep-cons-close-2026-04-29-16-30.json",
+            "summary": "Historical closure evidence preserved from .agent/state/collaboration/comms/events/fe4acc7e-deep-cons-close-2026-04-29-16-30.json."
+          }
         ]
       }
     },
@@ -89,17 +142,54 @@
       "closure": {
         "kind": "explicit",
         "closed_at": "2026-04-29T15:15:00Z",
-        "closed_by": "Nebulous Illuminating Satellite",
+        "closed_by": {
+          "agent_name": "Nebulous Illuminating Satellite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "fe4acc"
+        },
         "summary": "Deep /jc-consolidate-docs pass complete: doctrine sharpenings landed (knowledge-preservation absolute, shared-state always-commitable); napkin rotated; repo-continuity history archived; 3 stale plans moved to archive; owner-directed graduations landed (tool-error-as-question pattern + PDR-018 amendment; scope-as-goal pattern + PDR-015 amendment; testing-strategy amendment for behaviour-shape + e2e no-IO; PDR-026 amendment for knowledge-preservation absolutism); practice-core-surface-retirement.plan.md added to agentic-engineering current README. Fitness SOFT-only (17 soft, 0 hard, 0 critical) - down from 2 critical + 1 hard at session start.",
         "evidence": [
-          ".agent/memory/active/archive/napkin-2026-04-29.md",
-          ".agent/memory/operational/archive/repo-continuity-session-history-2026-04-29.md",
-          ".agent/memory/active/patterns/tool-error-as-question.md",
-          ".agent/memory/active/patterns/scope-as-goal.md",
-          ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
-          ".agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md",
-          ".agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md",
-          ".agent/state/collaboration/comms/events/fe4acc7e-cons-doc-close-2026-04-29-15-15.json"
+          {
+            "kind": "memory_archive",
+            "ref": ".agent/memory/active/archive/napkin-2026-04-29.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/archive/napkin-2026-04-29.md."
+          },
+          {
+            "kind": "memory_archive",
+            "ref": ".agent/memory/operational/archive/repo-continuity-session-history-2026-04-29.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/operational/archive/repo-continuity-session-history-2026-04-29.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/tool-error-as-question.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/tool-error-as-question.md."
+          },
+          {
+            "kind": "pattern",
+            "ref": ".agent/memory/active/patterns/scope-as-goal.md",
+            "summary": "Historical closure evidence preserved from .agent/memory/active/patterns/scope-as-goal.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-018-planning-discipline.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md."
+          },
+          {
+            "kind": "pdr",
+            "ref": ".agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md",
+            "summary": "Historical closure evidence preserved from .agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md."
+          },
+          {
+            "kind": "comms_event",
+            "ref": ".agent/state/collaboration/comms/events/fe4acc7e-cons-doc-close-2026-04-29-15-15.json",
+            "summary": "Historical closure evidence preserved from .agent/state/collaboration/comms/events/fe4acc7e-cons-doc-close-2026-04-29-15-15.json."
+          }
         ]
       }
     },
@@ -190,7 +280,6 @@
         "model": "claude-opus-4-7-1m",
         "session_id_prefix": "22e835"
       },
-      "lineage": [],
       "thread": "agent-identity-platform-surfaces",
       "areas": [
         {
@@ -3210,7 +3299,7 @@
             "summary": "Passed after archiving older napkin entries; only soft pressure remains."
           },
           {
-            "kind": "json-parse",
+            "kind": "json_parse",
             "ref": ".agent/state/collaboration/*.json",
             "summary": "Active claims, closed claims, conversations, and escalations parsed successfully."
           }
@@ -3282,17 +3371,17 @@
         "summary": "Consolidation stale-claim audit archived this observability claim after its four-hour freshness threshold elapsed. The claim is no longer a live coordination blocker, but unrelated dirty search-cli WIP remains and must not be treated as queue-owned work.",
         "evidence": [
           {
-            "kind": "active_claim_snapshot",
+            "kind": "claim",
             "ref": ".agent/state/collaboration/active-claims.json",
             "summary": "Claim was opened at 2026-04-27T00:00:00Z with freshness_seconds 14400; threshold elapsed before this consolidation pass."
           },
           {
-            "kind": "git-status",
+            "kind": "git_status",
             "ref": "git status --short",
             "summary": "Final observed staged index is clear; unrelated dirty search-cli WIP remains in the working tree."
           },
           {
-            "kind": "conversation",
+            "kind": "decision_thread",
             "ref": ".agent/state/collaboration/conversations/pr-87-phases-3-6-vining-bending-root.json",
             "summary": "Conversation file remains the durable context for the archived PR-87 work claim."
           }
@@ -3385,7 +3474,7 @@
             "summary": "Passed after handoff and consolidation edits; strict-hard reports soft pressure only."
           },
           {
-            "kind": "git-index",
+            "kind": "git_index",
             "ref": "git diff --cached --name-status",
             "summary": "Final observed staged index is clear; this session performed no staging or commit."
           }
@@ -3427,7 +3516,7 @@
         "summary": "Removed the stale staged addition for scripts/commit-queue.mjs from the index while leaving all other staged entries untouched.",
         "evidence": [
           {
-            "kind": "git-index",
+            "kind": "git_index",
             "ref": "git diff --cached --name-status -- scripts/commit-queue.mjs",
             "summary": "No staged entry remains for the deleted root commit-queue script."
           }
@@ -3510,7 +3599,7 @@
             "summary": "Repo checks passed after docs/state consolidation; strict-hard reports soft pressure only."
           },
           {
-            "kind": "git-index",
+            "kind": "git_index",
             "ref": "git diff --cached --name-status -- scripts/commit-queue.mjs",
             "summary": "No staged entry remains for the deleted root commit-queue script; other staged entries were left untouched."
           }
@@ -3562,7 +3651,7 @@
             "summary": "Pre-commit ran format-check, markdownlint, knip, depcruise, and turbo type-check/lint/test successfully."
           },
           {
-            "kind": "queue",
+            "kind": "commit_queue",
             "ref": "26eca1a9-6725-4dff-a307-f66a51089ce2",
             "summary": "Queue entry reached pre_commit, verified staged bundle fingerprint 6ef3c9fc6bd6a5a76c8dda5274fd53858ed9985f1ccbd33fbd2ce1586c3e5fd1, and was completed after commit."
           }
@@ -4090,16 +4179,6 @@
         "model": "claude-opus-4-7-1m",
         "session_id_prefix": "pr87ph"
       },
-      "lineage": [
-        {
-          "agent_name": "Tidal Rolling Lighthouse",
-          "platform": "claude-code",
-          "model": "claude-opus-4-7-1m",
-          "session_id_prefix": "compose",
-          "claimed_at": "2026-04-28T05:26:51Z",
-          "handed_over_at": "2026-04-28T15:00:00Z"
-        }
-      ],
       "thread": "observability-sentry-otel",
       "areas": [
         {
@@ -4151,14 +4230,19 @@
             "summary": "refactor(vercel-ignore): use absolute git binary; drop path inheritance from scrubbed env — Phase 1.1 finish: GIT_BINARY = '/usr/bin/git', scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive-complexity refactor via attemptShowAfterShallowFetch + readPackageJsonText helpers, /tmp/evil S5443 fixtures removed."
           },
           {
-            "kind": "thread-record",
+            "kind": "thread_record",
             "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
             "summary": "Top session-close block records full Phase 1 + Phase 1.1 outcome with QG metric deltas and reviewer-absorption disposition; identity row added per PDR-027."
           },
           {
-            "kind": "shared-comms-log",
+            "kind": "log_entry",
             "ref": ".agent/state/collaboration/shared-comms-log.md",
             "summary": "Entries at 2026-04-28T15:00:00Z (open), T15:25:00Z (concurrent-agent detection), T15:32:00Z (commit blocked by parallel session lint), T15:35:00Z (resolved), T15:42:00Z (Phase 1 commit + e2e fix), and a closing entry at session-handoff capture the full coordination + landing narrative."
+          },
+          {
+            "kind": "claim",
+            "ref": "6395ea9c-bd44-417e-8b17-c3f9c5dc3f65#lineage",
+            "summary": "Original claim lineage preserved: Tidal Rolling Lighthouse / claude-code / claude-opus-4-7-1m / compose; claimed_at=2026-04-28T05:26:51Z; handed_over_at=2026-04-28T15:00:00Z."
           }
         ]
       }
@@ -4171,7 +4255,6 @@
         "model": "GPT-5",
         "session_id_prefix": "unknown"
       },
-      "lineage": [],
       "thread": "agentic-engineering-enhancements",
       "areas": [
         {
@@ -4227,7 +4310,6 @@
         "model": "GPT-5",
         "session_id_prefix": "unknown"
       },
-      "lineage": [],
       "thread": "agentic-engineering-enhancements",
       "areas": [
         {
@@ -6956,7 +7038,7 @@
             "summary": "Canonical home for the executable plan; WS0 todo marked complete; WS1 onwards is next-session work."
           },
           {
-            "kind": "thread-record",
+            "kind": "thread_record",
             "ref": ".agent/memory/operational/threads/observability-sentry-otel.next-session.md",
             "summary": "Landing target updated; broader 2026-05-02 owner roadmap captured; Abyssal Diving Stern identity row added."
           }
@@ -11043,7 +11125,7 @@
         "summary": "Corrective handoff after owner rejected the PR-scoped Sonar framing. Plan, thread record, napkin, pending-graduations, and repo-continuity now state that this branch fixes the project/main HIGH issue and security-hotspot backlog; PR #97 Sonar is a regression guard. Broken generated MCP executor/generator experiment remains local and must be removed first in the fresh session.",
         "evidence": [
           {
-            "kind": "thread-record",
+            "kind": "thread_record",
             "ref": ".agent/memory/operational/threads/main-critical-sonar-remediation.next-session.md",
             "summary": "Corrected next-session first step and backlog source."
           },
@@ -11053,7 +11135,7 @@
             "summary": "Corrected plan scope and recovery sequence."
           },
           {
-            "kind": "comms-event",
+            "kind": "comms_event",
             "ref": ".agent/state/collaboration/comms-events/a5f40387-c828-4fcb-b9f7-9f6972bd01bb.json",
             "summary": "Corrective handoff event records the owner correction and next-session first step."
           }
@@ -12565,7 +12647,7 @@
           "kind": "files",
           "patterns": [
             ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational",
@@ -12616,7 +12698,7 @@
             ".agent/practice-core/CHANGELOG.md",
             ".agent/memory/executive/memory-state-substrate-contracts.md",
             ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md",
             ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/practice-index.md",
@@ -12762,7 +12844,7 @@
             ".agent/state/collaboration/comms-events",
             ".agent/state/collaboration/comms/archive",
             ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
           ]
         }
@@ -12848,7 +12930,7 @@
             ".agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md",
             ".agent/practice-index.md",
             ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md",
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md",
             ".agent/memory/executive/memory-state-substrate-contracts.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
           ]
@@ -12891,8 +12973,8 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md",
-            ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md"
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.phase-0-ledger.md",
+            ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
           ]
         }
       ],
@@ -13297,6 +13379,56 @@
           {
             "kind": "claim",
             "ref": "8BD2232D-2E71-4C4E-B08E-39DC72906718",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "847fa63d-d7bf-49e3-89fd-f4b085ddb243",
+      "agent_id": {
+        "agent_name": "Silvered Masking Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-substrate",
+            "agent-tools/tests/practice-substrate",
+            "agent-tools/src/bin/practice-substrate.ts",
+            "agent-tools/package.json",
+            "package.json",
+            ".agent/state/collaboration",
+            ".agent/plans/agent-tooling",
+            ".agent/plans/completed-plans.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T15:23:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Finish memory/state substrate doctor safe-merge gate: review 44c73e4d, clear report schema blockers, add strict mode/root alias, validate, and archive plan",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T15:31:06Z",
+        "closed_by": {
+          "agent_name": "Silvered Masking Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Completed the memory/state substrate doctor safe-merge gate: reviewed 44c73e4d locally, normalised schema blockers without deleting historical evidence, added strict mode and root built-output alias, refreshed generated comms, archived the doctor plan, and ran final validation with report/strict both ok true and blocking 0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "847fa63d-d7bf-49e3-89fd-f4b085ddb243",
             "summary": "Claim explicitly closed by owning session."
           }
         ]

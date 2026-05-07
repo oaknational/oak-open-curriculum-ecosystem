@@ -1,16 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Active arc — Memory/state substrate contracts + doctor plans (strict local instance landed 2026-05-07)
+## Active arc — Memory/state substrate contracts + doctor safe-merge gate (closed 2026-05-07)
 
-**Last refreshed**: 2026-05-07 (Opalescent Waning Satellite / codex / GPT-5 /
-`019e02`).
+**Last refreshed**: 2026-05-07 (Silvered Masking Moth / codex / GPT-5 /
+`019e03`).
 
 **Owning plans**:
 
 - [Memory/state substrate portable contracts][memory-state-portable-plan]
   under `agentic-engineering-enhancements/current/`.
 - [Memory/state contract doctor][memory-state-doctor-plan] under
-  `agent-tooling/current/`.
+  `agent-tooling/archive/completed/`.
 
 **Current objective**: turn the PR 97 memory/state merge lesson into
 enforceable Practice doctrine. State and memory are treated as sibling
@@ -37,23 +37,26 @@ and
 [`memory-state-substrate-contracts.schema.json`](../../executive/memory-state-substrate-contracts.schema.json),
 completed Phase 0/2 coverage, routed Phase 3 immune-layer responsibilities,
 and migrated the 114 legacy `comms/events` fragments into canonical
-`comms-events` with a provenance ledger under
-`.agent/state/collaboration/comms/archive/`. Phase 4/5 closure is now complete
-in the working tree: PDR-049 no longer names concrete host-state paths in
+`comms-events`. The legacy collaboration comms tree has now been deleted.
+Phase 4/5 closure is now complete in the working tree: PDR-049
+no longer names concrete host-state paths in
 Practice Core, host-local path guidance lives in the bridge/local contract,
 the retired YAML seed is preserved as dated evidence, legacy `comms/events/`
 references remain historical/provenance evidence only, the old root must be
 absent on disk, topology policy is routed to the doctor, and the test-reviewer
 hold is moved to the post-Phase-0/pre-Phase-1 checkpoint.
 
-Doctor Phase 0 is now complete in the working tree. The read-only ledger at
-[`memory-state-contract-doctor.phase-0-ledger.md`](../../../plans/agent-tooling/current/memory-state-contract-doctor.phase-0-ledger.md)
+Doctor Phase 0 is complete. The archived read-only ledger at
+[`memory-state-contract-doctor.phase-0-ledger.md`](../../../plans/agent-tooling/archive/completed/memory-state-contract-doctor.phase-0-ledger.md)
 classifies every Known Contract Gaps row as a live defect, known-good terminal
 state, or deferred semantic review; records the existing check inventory; and
 captures current evidence: 22 manifest surfaces, 114 migration-ledger entries,
 legacy `comms/events/` absent on disk with historical provenance preserved in
 the ledger/archive, canonical `comms-events/` parsing through the explicit
 collaboration-state check, and no duplicate manifest or ledger identities.
+Follow-up owner direction deleted the retained legacy `comms/` archive tree;
+the live doctor now validates 21 manifest surfaces and the complete absence of
+that deleted tree.
 `test-reviewer` ran before Phase 1 and found one blocker:
 the initial validation lane could pass without selecting the intended tests.
 The parent plan and ledger now require the exact Vitest path with
@@ -81,14 +84,21 @@ repo snapshots into the pure evaluator/report layer for manifest/schema
 validation, manifest surface/ID/field/`merge_class` checks, the 114-row
 migration ledger, canonical collaboration JSON, generated shared-comms-log
 comparison, retired-path scanning, and optional git topology validation when
-`--target-ref` is supplied. The legacy
-`.agent/state/collaboration/comms/events/` placeholder was removed; archived
+`--target-ref` is supplied. The legacy placeholder tree was removed; archived
 mentions remain evidence, but the old path must not remain on disk. The
-mandatory `test-reviewer` and `code-reviewer` re-checks are clean. The report
-command currently exits `1` by design because it finds deterministic live
-substrate blockers rather than treating report mode as green.
+mandatory `test-reviewer` and `code-reviewer` re-checks were clean at the
+Phase 2 boundary.
 
-**Arc spine for the final session**: this work exists to make memory/state
+Doctor safe-merge closure is now complete in this working tree. The final
+closure normalised the closed-claims archive and two conversation files against
+their schemas without deleting historical evidence, extended the collaboration
+evidence vocabulary for observed archive classes, added `--mode strict`, and
+added the root built-output alias `pnpm practice:substrate:check`. Report mode
+now returns `ok: true` with `blocking: 0`; strict mode returns `0` against the
+clean live substrate. Repair mode and consolidation integration remain future
+arcs.
+
+**Arc spine for the completed safe-merge gate**: this work exists to make memory/state
 files safely mergeable through explicit contracts and deterministic tooling.
 The target value is a safe merge gate: agents can identify authoritative,
 generated, archival, live, derived, and historical-evidence surfaces; block
@@ -97,8 +107,8 @@ canonical sources; and avoid old-path compatibility layers. The arc finishes
 when specialist reviews are complete, report mode returns `ok: true` with
 `blocking: 0`, strict mode exists for low-ambiguity blockers, the root alias
 invokes built `agent-tools` output, and the doctor plan is archived with
-validation evidence. Repair mode and consolidation integration are future arcs,
-not prerequisites for finishing this safe-merge gate.
+validation evidence. That safe-merge gate is now closed; repair mode and
+consolidation integration are future arcs.
 
 **Key doctrine points now recorded**:
 
@@ -196,8 +206,17 @@ or Practice Core content to make the report greener.
   `pnpm --filter @oaknational/agent-tools practice-substrate -- check`
   (same report-mode mapping), explicit collaboration-state check,
   `pnpm markdownlint-check:root`, and `git diff --check`. Guard checks found no
-  root `practice:substrate:*` aliases, and `test ! -e
-  .agent/state/collaboration/comms/events` passed.
+  root `practice:substrate:*` aliases, and the legacy-tree absence check
+  passed.
+- Doctor safe-merge closure gates passed during implementation:
+  `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
+  (35 tests), `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm --filter @oaknational/agent-tools practice-substrate -- check --mode report`
+  (`ok: true`, `blocking: 0`), `test ! -e .agent/state/collaboration/comms`,
+  and the root alias
+  `pnpm practice:substrate:check -- --mode strict` after parser support for
+  pnpm's post-command separator.
 
 **Specialist review**: completed 2026-05-07; evidence at
 [memory/state contracts specialist review][memory-state-review-evidence].
@@ -210,12 +229,9 @@ code-reviewer agents; focused re-review passed after fixes for invalid
 `merge_class` values, completion overclaiming, stale next-step routing,
 and no-arg collaboration-state check wording.
 
-**Next safe step**: run the next and final safe-merge-gate session. Start with
-specialist reviews of `44c73e4d`, apply required review fixes, fix the three
-schema incoherence blockers in closed-claim/conversation state, rerun report
-mode until `blocking: 0`, add strict mode, add the root alias only when it
-invokes built `agent-tools` output, run final validation, then archive the
-doctor plan. The focused validation lane remains:
+**Safe-merge gate disposition**: closed. The archived doctor plan now records
+the safe-merge gate completion. The focused validation lane remains the
+substrate unit proof:
 
 ```bash
 pnpm --filter @oaknational/agent-tools exec vitest run \
@@ -227,11 +243,12 @@ literal objects, and strings. They must not read repo files, fixture files, git
 state, `process.env`, or `process.cwd()`, and they must not spawn processes.
 Runtime readers and CLI wiring must keep live access outside the fixture tests.
 
-**Non-goals for the next review session**:
+**Future-arc boundaries**:
 
-- Do not add root `practice:substrate:*` commands until the doctor plan has
-  formally started; when they land, they must invoke built `agent-tools`
-  output only.
+- Do not add repair mode, `--apply`, `--dry-run`, or deterministic repair
+  flows without a fresh follow-on arc.
+- Do not integrate doctor output into consolidation in this safe-merge gate;
+  that remains a separate follow-on arc.
 - Do not trim memory/state content for fitness.
 - Do not drop the residual merge autostash without explicit owner
   approval.
@@ -239,7 +256,7 @@ Runtime readers and CLI wiring must keep live access outside the fixture tests.
 
 [memory-state-review-evidence]: ../../plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md
 [memory-state-portable-plan]: ../../plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md
-[memory-state-doctor-plan]: ../../plans/agent-tooling/current/memory-state-contract-doctor.plan.md
+[memory-state-doctor-plan]: ../../plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md
 
 ## Active arc — Pending-graduations recalibration + access-rhythm insight (landed 2026-05-07)
 
@@ -1909,6 +1926,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Silvered Masking Moth` | `codex` | `GPT-5` | `019e03` | `memory-state-doctor-safe-merge-gate; schema-blocker-fixes; strict-mode-and-built-output-root-alias; deleted-legacy-comms-tree-cleanup; code-reviewer-follow-up; final-validation-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Opalescent Waning Satellite` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-2-read-only-report-mode; built-agent-tools-cli; live-reader-layer; legacy-root-absence-correction; code-reviewer-and-test-reviewer-clean-rechecks; final-session-boundary-definition; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |

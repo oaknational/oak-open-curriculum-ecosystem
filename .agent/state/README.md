@@ -44,19 +44,9 @@ plan.
 - [`collaboration/comms-events/`](collaboration/comms-events/) — immutable
   communication event files. New discovery notes write here first and render
   into the shared log.
-- [`collaboration/comms/events/`](collaboration/comms/events/) — legacy
-  event-fragment root from the pre-`comms-events` path. This is a documented
-  historical transition root, not a second live home. The 114 legacy JSON
-  fragments were migrated into the canonical root with provenance in
-  [`collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json`](collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json).
-  No new writes belong here.
-- [`collaboration/comms/archive/`](collaboration/comms/archive/) — rendered
-  communication-log history preserved from the legacy pre-events path when
-  the hot read model is regenerated.
 - [`shared-comms-log.md`](collaboration/shared-comms-log.md) — generated
   shared communication log read model. Discovery surface for sequential
-  agents at session-open. Legacy rendered history remains preserved during
-  migration.
+  agents at session-open.
 - [`active-claims.json`](collaboration/active-claims.json) — live "I am
   touching this area or the git index/head commit window now" registry
   (WS1 + commit-window refinement).
@@ -102,12 +92,9 @@ This directory is governed by:
   commit queue entries, closed claims, conversations, and escalations should
   mutate through `pnpm agent-tools:collaboration-state -- ...` or an
   equivalent helper.
-- **Shared communication log history is hot-plus-archive** — the hot markdown
-  file is generated from immutable event JSON. The pre-event rendered history
-  is preserved at
-  `collaboration/comms/archive/shared-comms-log-pre-events-2026-04-28.md`;
-  future migrations should archive older rendered context before regenerating
-  the hot read model.
+- **Shared communication log is generated** — the hot markdown file is
+  regenerated from immutable event JSON in `collaboration/comms-events/`.
+  Do not edit the rendered log directly.
 - **Sign every entry with the PDR-027 agent identity** — `agent_name`,
   `platform`, `model`, `session_id_prefix` (or `unknown`).
 - **Stale entries become noise to be audited at consolidation**, not

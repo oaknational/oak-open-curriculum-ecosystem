@@ -245,15 +245,16 @@ The local immune-layer responsibilities are routed as follows:
   [`memory-state-substrate-contracts.manifest.json`](../../../memory/executive/memory-state-substrate-contracts.manifest.json)
   and
   [`memory-state-substrate-contracts.schema.json`](../../../memory/executive/memory-state-substrate-contracts.schema.json).
-  The strict manifest carries 22 surface rows with the required contract fields
+  The strict manifest now carries 21 surface rows with the required contract fields
   and validates against the schema. The Markdown contract remains the
   human-facing local instance; the earlier fenced YAML is a retired seed
   snapshot preserved as dated evidence, not the machine-consumed source.
 - 2026-05-07: Phase 0/2 completed the legacy event transition. The 114 tracked
   legacy fragments under `.agent/state/collaboration/comms/events/` were
-  collision-checked, JSON-parse-checked, ledgered with original path, target
-  path, SHA-256, byte count, source evidence, and rationale, then moved to the
-  canonical `.agent/state/collaboration/comms-events/` root. The legacy path is
+  collision-checked and JSON-parse-checked, then moved to the canonical
+  `.agent/state/collaboration/comms-events/` root. The temporary migration
+  ledger existed only in the retired `comms/` tree and is now preserved by git
+  history rather than retained as a live substrate surface. The legacy path is
   historical evidence only and must not remain on disk.
 - 2026-05-07: Phase 3 routing is now explicit: prevention through entry-point
   docs, rules, and write APIs; detection through the future

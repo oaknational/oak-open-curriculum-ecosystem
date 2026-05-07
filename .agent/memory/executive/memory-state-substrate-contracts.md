@@ -121,7 +121,7 @@ for the doctor plan.
 
 | Gap | Current classification | Next owner |
 | --- | --- | --- |
-| `comms/events/` legacy fragments migrated | Terminal migration completed with provenance ledger; legacy root must not remain on disk | Doctor validates ledger, root absence, and stale-path classifier |
+| `comms/events/` legacy fragments migrated | Terminal migration complete; the whole legacy `comms/` tree must not remain on disk | Doctor validates root absence and stale-path classifier |
 | Live and archived prose still mention `comms/events/` | Must classify by live reference vs archived evidence | Doctor stale-path classifier |
 | `shared-comms-log.md` is not drift-checked by no-arg collaboration check | Deterministic checker gap | Doctor report mode |
 | Communication event JSON has a parser but no colocated JSON Schema | Contract gap | Agent tooling |
@@ -129,12 +129,6 @@ for the doctor plan.
 | Conversation example files sit inside the live root | Explicit fixture/example exclusion required | Doctor inventory parser |
 | Directory README contract coverage is partial across memory roots | Structural metadata gap; preserve content while classifying | Doctor report mode |
 | Memory/state merge claims lack topology validation | Multi-checkout merge-safety gap | Doctor topology phase |
-
-## Migration Ledgers
-
-| Ledger | Source | Target | Entries | Purpose |
-| --- | --- | --- | --- | --- |
-| [`legacy-comms-events-migration-ledger-2026-05-07.json`](../../state/collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json) | `.agent/state/collaboration/comms/events/` | `.agent/state/collaboration/comms-events/` | 114 | Preserves original path, target path, SHA-256, byte count, source evidence, and rationale for each migrated event fragment. |
 
 ## Command Boundary
 
@@ -144,19 +138,16 @@ public aliases owned by the doctor plan are:
 ```bash
 pnpm practice:substrate:check
 pnpm practice:substrate:check -- --mode strict
-pnpm practice:substrate:repair -- --dry-run
-pnpm practice:substrate:repair -- --apply
 ```
 
-Those commands do not exist yet. Until they land, do not cite no-arg
+Repair commands do not exist yet and are a future arc. Do not cite no-arg
 `pnpm agent-tools:collaboration-state -- check` as broad substrate validation;
-today it is a narrow parser check unless explicit paths are supplied.
+it is a narrow parser check unless explicit paths are supplied.
 
 ## Legacy Event Transition Rule
 
 `.agent/state/collaboration/comms-events/` is the one live communication-event
-root. `.agent/state/collaboration/comms/events/` is historical transition state
-and must not remain on disk after the provenance-ledger migration above.
+root. The deleted legacy collaboration comms tree must not remain on disk.
 Archived references to the old path remain archived evidence unless a reviewer
 explicitly decides they are live instructions.
 

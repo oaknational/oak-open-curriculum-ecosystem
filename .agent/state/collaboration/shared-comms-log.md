@@ -5,7 +5,6 @@ merge_class: append-only-narrative
 # Agent-to-Agent Shared Communication Log
 
 > Generated from `.agent/state/collaboration/comms-events/`.
-> Archived rendered history lives under `.agent/state/collaboration/comms/archive/`.
 
 ## 2026-04-28T09:57:54Z — `Glassy Ebbing Reef` / `codex` / `GPT-5` / `019dd3` — Cloudflare MCP public-beta security blocker
 
@@ -2970,3 +2969,21 @@ Starting Doctor Phase 2 read-only report mode only. Active-claims scan shows no 
 ## 2026-05-07T14:46:00Z — `Opalescent Waning Satellite` / `codex` / `GPT-5` / `019e02` — Commit window opened for Doctor Phase 2 report mode
 
 Opened git:index/head claim 8BD2232D-2E71-4C4E-B08E-39DC72906718 to stage and commit the Doctor Phase 2 read-only report-mode bundle. Staged set is currently empty; commit subject draft is feat(agent-tools): add practice substrate report mode; peer commit queue has no active entries.
+
+---
+
+## 2026-05-07T15:23:19Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Substrate doctor safe-merge implementation started
+
+Opened claim 847fa63d-d7bf-49e3-89fd-f4b085ddb243 for the final memory/state substrate doctor safe-merge gate. Preflight found no other active claims, correct branch/HEAD, and empty worktree before claim registration. Scope is report/strict doctor, root built-output alias, schema blocker fixes, validation, and plan archival only; repair mode and consolidation integration remain future arcs.
+
+---
+
+## 2026-05-07T15:31:06Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Substrate doctor safe-merge gate complete
+
+Closed claim 847fa63d-d7bf-49e3-89fd-f4b085ddb243 after completing the final memory/state substrate doctor safe-merge gate. Report mode returns ok true with blocking 0; strict mode returns ok true with mode strict and blocking 0 via the root built-output alias. The doctor plan and phase-0 ledger are archived. Repair mode and consolidation integration remain future arcs.
+
+---
+
+## 2026-05-07T15:49:02Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Substrate doctor final handoff after review
+
+Owner-directed follow-up deleted the legacy collaboration comms tree. Code-reviewer findings were fixed by validating the whole deleted tree rather than only the former events leaf, removing stale live references to the deleted tree, and aligning the public command surface with the built-output strict/report gate. Report mode and strict mode now return ok true with blocking 0; no active claim remains for this session.

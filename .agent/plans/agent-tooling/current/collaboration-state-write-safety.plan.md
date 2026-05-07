@@ -163,9 +163,10 @@ failure and owner/path rather than repairing outside this plan.
 
 The hot `shared-comms-log.md` was regenerated from immutable events during the
 first real use of `comms append` / `comms render`. The legacy rendered history
-has been preserved at
-`.agent/state/collaboration/comms/archive/shared-comms-log-pre-events-2026-04-28.md`,
-satisfying the migration-preservation requirement in acceptance criterion 3.
+was initially preserved under the retired `comms/` tree. The later substrate
+doctor closure removed that tree entirely; git history now carries the
+transitional evidence, and `comms-events/` is the only retained collaboration
+event state root.
 
 The later owner-requested deep consolidation pass routed the named hard
 pressure in `principles.md`, `collaboration-state-conventions.md`, and

@@ -15,7 +15,7 @@
     "merge_semantics": ".agent/practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md"
   },
   "strict_data_status": "strict-local-instance-ready-before-doctor-fixtures",
-  "doctor_start_gate": "Doctor Phase 0 may begin only after this manifest validates, the migration ledger validates, and collaboration-state explicit checks pass against the canonical comms-events root.",
+  "doctor_start_gate": "Doctor Phase 0 may begin only after this manifest validates and collaboration-state explicit checks pass against the canonical comms-events root.",
   "portability_tiers": [
     "core-portable",
     "host-bridge",
@@ -34,11 +34,9 @@
     ],
     "plan_roots": [
       ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-      ".agent/plans/agent-tooling/current/memory-state-contract-doctor.plan.md"
+      ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
     ],
     "historical_roots": [
-      ".agent/state/collaboration/comms/events/",
-      ".agent/state/collaboration/comms/archive/",
       ".agent/memory/active/archive/",
       ".agent/memory/operational/archive/",
       ".agent/memory/operational/workstreams/"
@@ -64,9 +62,7 @@
         "reason": "Fixture estate for tests; never live state."
       }
     ],
-    "migration_ledgers": [
-      ".agent/state/collaboration/comms/archive/legacy-comms-events-migration-ledger-2026-05-07.json"
-    ]
+    "migration_ledgers": []
   },
   "surface_defaults": {
     "required_contract_fields": [
@@ -236,53 +232,6 @@
       ],
       "portability_tier": "repo-local-contract",
       "owner_reviewer_route": "agent-tooling + docs-adr"
-    },
-    {
-      "id": "collaboration-comms-events-legacy",
-      "path": ".agent/state/collaboration/comms/events/",
-      "plane": "state",
-      "purpose": "Legacy pre-canonical communication-event fragments preserved only as migration source evidence.",
-      "authority": [
-        "PDR-050-state-memory-substrate-contracts",
-        "PDR-049-memory-and-state-file-merge-semantics"
-      ],
-      "lifecycle": "historical transition defect; no new writes",
-      "writer_or_write_api": "no new writes; terminal migration only through provenance ledger",
-      "entry_identity": "legacy event JSON filename and pre-migration SHA-256",
-      "merge_class": "exclusive-create-fragments",
-      "schema_or_parser": "agent-tools comms parser for provenance; migration ledger JSON",
-      "generated_outputs": [],
-      "validator": "migration ledger validation plus future stale-path classifier",
-      "severity": [
-        {
-          "invariant": "new write to legacy root after migration starts",
-          "severity": "blocking"
-        },
-        {
-          "invariant": "ambiguous reference that may still instruct live writes",
-          "severity": "review-required"
-        },
-        {
-          "invariant": "archived prose naming the old path as historical evidence",
-          "severity": "informational"
-        }
-      ],
-      "repair_path": [
-        {
-          "action": "move collision-free valid legacy JSON fragments to canonical root with ledger",
-          "repair_class": "deterministic"
-        },
-        {
-          "action": "classify ambiguous live-vs-archive prose references",
-          "repair_class": "manual-with-provenance"
-        },
-        {
-          "action": "delete legacy fragments without provenance",
-          "repair_class": "forbidden"
-        }
-      ],
-      "portability_tier": "historical-evidence",
-      "owner_reviewer_route": "doctor plan + consolidation"
     },
     {
       "id": "collaboration-shared-comms-log",

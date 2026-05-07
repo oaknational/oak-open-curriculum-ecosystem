@@ -37,7 +37,23 @@ interface CollaborationEvidence {
     | 'napkin'
     | 'thread_record'
     | 'commit'
-    | 'command_output';
+    | 'command_output'
+    | 'rule'
+    | 'pdr'
+    | 'pattern'
+    | 'memory_archive'
+    | 'workspace'
+    | 'gate'
+    | 'smoke'
+    | 'reflog'
+    | 'json_parse'
+    | 'git_status'
+    | 'git_index'
+    | 'script'
+    | 'external_api'
+    | 'continuity'
+    | 'comms_event'
+    | 'commit_queue';
   readonly ref: string;
   readonly summary: string;
 }

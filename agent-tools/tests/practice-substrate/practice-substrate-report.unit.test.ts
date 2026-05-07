@@ -18,6 +18,13 @@ describe('practice substrate report-mode argument parsing', () => {
     });
   });
 
+  it('parses the strict safe-merge gate check command', () => {
+    expect(parsePracticeSubstrateCliArgs(['check', '--mode', 'strict'])).toStrictEqual({
+      command: 'check',
+      mode: 'strict',
+    });
+  });
+
   it('defaults the check command to report mode', () => {
     expect(parsePracticeSubstrateCliArgs(['check'])).toStrictEqual({
       command: 'check',
@@ -29,6 +36,13 @@ describe('practice substrate report-mode argument parsing', () => {
     expect(parsePracticeSubstrateCliArgs(['--', 'check', '--mode', 'report'])).toStrictEqual({
       command: 'check',
       mode: 'report',
+    });
+  });
+
+  it('ignores the pnpm argument separator after the check command', () => {
+    expect(parsePracticeSubstrateCliArgs(['check', '--', '--mode', 'strict'])).toStrictEqual({
+      command: 'check',
+      mode: 'strict',
     });
   });
 
@@ -51,9 +65,15 @@ describe('practice substrate report-mode argument parsing', () => {
     });
   });
 
-  it('rejects unavailable modes in Phase 2', () => {
-    expect(() => parsePracticeSubstrateCliArgs(['check', '--mode', 'strict'])).toThrow(
-      'practice-substrate check supports only --mode report in Phase 2',
+  it('rejects unavailable modes and repair-only flags', () => {
+    expect(() => parsePracticeSubstrateCliArgs(['check', '--mode', 'repair'])).toThrow(
+      'practice-substrate check supports only --mode report or --mode strict',
+    );
+    expect(() => parsePracticeSubstrateCliArgs(['repair', '--dry-run'])).toThrow(
+      'practice-substrate supports only the check command in this safe-merge gate',
+    );
+    expect(() => parsePracticeSubstrateCliArgs(['check', '--apply'])).toThrow(
+      'Unknown practice-substrate option --apply',
     );
   });
 });
@@ -106,26 +126,29 @@ describe('practice substrate report aggregation', () => {
 
   it('returns success for review-required and informational findings only', async () => {
     const result = await runPracticeSubstrateCli({
-      argv: ['check', '--mode', 'report'],
+      argv: ['check', '--mode', 'strict'],
       repoRoot: '/repo',
       executeReport: () =>
         Promise.resolve(
-          createPracticeSubstrateReport([
-            {
-              id: 'semantic-collision',
-              surface: 'closed-claims',
-              severity: 'review-required',
-              repair: 'forbidden',
-              message: 'Semantic judgement is required.',
-            },
-          ]),
+          createPracticeSubstrateReport(
+            [
+              {
+                id: 'semantic-collision',
+                surface: 'closed-claims',
+                severity: 'review-required',
+                repair: 'forbidden',
+                message: 'Semantic judgement is required.',
+              },
+            ],
+            'strict',
+          ),
         ),
     });
 
     expect(result.exitCode).toBe(0);
     expect(JSON.parse(result.stdout)).toStrictEqual({
       ok: true,
-      mode: 'report',
+      mode: 'strict',
       summary: {
         blocking: 0,
         reviewRequired: 1,
@@ -142,6 +165,34 @@ describe('practice substrate report aggregation', () => {
       ],
     });
     expect(result.stderr).toBe('');
+  });
+
+  it('passes strict mode through to the report executor', async () => {
+    await expect(
+      runPracticeSubstrateCli({
+        argv: ['check', '--mode', 'strict'],
+        repoRoot: '/repo',
+        executeReport: (options) =>
+          Promise.resolve(createPracticeSubstrateReport([], options.mode)),
+      }),
+    ).resolves.toMatchObject({
+      exitCode: 0,
+      stdout: JSON.stringify(
+        {
+          ok: true,
+          mode: 'strict',
+          summary: {
+            blocking: 0,
+            reviewRequired: 0,
+            informational: 0,
+          },
+          findings: [],
+        },
+        null,
+        2,
+      ).concat('\n'),
+      stderr: '',
+    });
   });
 
   it('maps blocking reports and runtime failures to distinct exit codes', async () => {
@@ -191,7 +242,7 @@ describe('practice substrate report aggregation', () => {
     ).resolves.toStrictEqual({
       exitCode: 2,
       stdout: '',
-      stderr: 'practice-substrate supports only the check command in Phase 2\n',
+      stderr: 'practice-substrate supports only the check command in this safe-merge gate\n',
     });
 
     await expect(

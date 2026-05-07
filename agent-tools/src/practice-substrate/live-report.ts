@@ -16,7 +16,7 @@ import { finding } from './finding.js';
 import { readOptionalString, readString, type ManifestDocument } from './live-types.js';
 import { type SubstrateFinding } from './types.js';
 
-const EXPECTED_MANIFEST_SURFACES = 22;
+const EXPECTED_MANIFEST_SURFACES = 21;
 
 /**
  * Build the read-only report from live repo state.
@@ -69,7 +69,7 @@ export async function createLivePracticeSubstrateReport(
     );
   }
 
-  return createPracticeSubstrateReport(findings);
+  return createPracticeSubstrateReport(findings, options.mode);
 }
 
 async function safeReadManifest(repoRoot: string): Promise<{
