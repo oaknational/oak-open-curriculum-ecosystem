@@ -9,6 +9,19 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session follow-up (2026-05-07 — Choppy Washing Archipelago /
+`codex` / `GPT-5` / `019dfe`)**: PR #97 vendor-switch handoff has
+been executed and pushed. `6683f918` is a real merge commit integrating
+`origin/main`; `deec6a00` follows with the CodeQL regex-shape cure and
+zodgen guard clarification. Full pre-push gate passed and the branch was
+pushed to `origin/fix/sonar-fixes-20260506`. Follow-up audit found the
+merge process worked at the Git level and preserved the expected
+memory/state unions; documentation has been amended so memory/state
+semantic resolution is explicitly necessary-but-not-sufficient on top of
+a proper git merge operation. Residual artefacts: one merge autostash
+remains and should only be dropped with explicit owner approval; post-push
+collaboration-state bookkeeping is local until this follow-up lands.
+
 **Session close (2026-05-06 evening — Stormy Drifting Harbour /
 `claude-code` / `claude-opus-4-7-1m` / `228bc5`, mid-session vendor
 switch under quota constraint)**: main-critical-sonar-remediation

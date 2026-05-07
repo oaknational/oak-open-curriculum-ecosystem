@@ -7,6 +7,10 @@ When a feature branch and its target branch have diverged significantly (tens
 of commits, hundreds of files on either side), a standard `git merge` is not
 enough. Text-level conflict resolution misses type-system breaks, deleted-file
 cascades, numbering collisions, and signature mismatches in auto-merged files.
+Here "not enough" means necessary but insufficient: the integration still
+starts from a real git merge operation and should land as a merge commit when
+preserving branch topology is required. The analysis below adds semantic checks
+on top of Git's merge machinery; it does not replace it.
 
 This guide codifies a systematic analysis process that surfaces those hidden
 risks before the merge begins.
@@ -214,6 +218,16 @@ sides of the merge commit.
 
 ## Phase 6: Execute the Merge
 
+Start the real merge operation:
+
+```bash
+git merge --no-commit --no-ff origin/main
+```
+
+Resolve conflicts inside that in-progress merge. Do not turn the analysis into
+a hand-built content snapshot, cherry-pick substitute, or copy-file
+reconstruction; Git's parent links and merge-base data are part of the result.
+
 Work in dependency order:
 
 1. **Trivial and structural conflicts first** — fast, low risk, clears noise
@@ -237,6 +251,9 @@ Work in dependency order:
 4. Run characterisation tests — confirms your branch's wiring survived
 5. Run `pnpm check` — full clean rebuild + verification
 6. Invoke specialist reviewers on the merge result
+7. Verify merge topology: `git show --no-patch --pretty=raw HEAD` shows the
+   expected two parents and `git merge-base --is-ancestor origin/main HEAD`
+   exits 0
 
 ## Checklist
 
@@ -259,9 +276,11 @@ Use this checklist to ensure nothing is missed:
 - [ ] Inventoried existing characterisation tests at integration seams
 - [ ] Created new characterisation tests for uncovered seams
 - [ ] Committed characterisation tests before starting the merge
+- [ ] Started from `git merge --no-commit --no-ff <target-ref>`
 - [ ] Resolved conflicts in dependency order
 - [ ] Adapted non-conflicting files that need new parameters
 - [ ] Cleaned up stale files, imports, and numbering
 - [ ] Regenerated lockfile
 - [ ] Ran full verification suite
 - [ ] Invoked specialist reviewers on the merge result
+- [ ] Verified merge commit parent shape and target-branch ancestry

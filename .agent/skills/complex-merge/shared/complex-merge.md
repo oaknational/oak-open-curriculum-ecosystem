@@ -126,6 +126,18 @@ of the merge commit.
 
 ## Phase 6: Execute the Merge
 
+Begin with the actual git merge operation:
+
+```bash
+git merge --no-commit --no-ff origin/main
+```
+
+Resolve conflicts inside that in-progress merge. Do not reproduce the content
+by copying files, cherry-picking the other branch, or committing a hand-built
+single-parent snapshot. The merge commit itself is part of the artefact because
+Git's parent links, merge-base calculations, and future conflict resolution
+depend on it.
+
 ### Pre-review step
 
 Have specialist reviewers validate the merge plan before executing:
@@ -158,6 +170,8 @@ handlers. Read the other branch's wrapped handlers for the canonical pattern.
 4. Characterisation tests — confirms your branch's wiring survived
 5. `pnpm check` — full clean rebuild + verification
 6. Invoke specialist reviewers on the merge result
+7. Verify merge topology: `git show --no-patch --pretty=raw HEAD` shows two
+   parents and `git merge-base --is-ancestor origin/main HEAD` exits 0
 
 ## Post-Merge
 

@@ -32,9 +32,13 @@ export function createCommsEvent(
 export function renderSharedCommsLog(input: { readonly events: readonly CommsEvent[] }): string {
   const sections = input.events.toSorted(compareEvents).map(renderEvent);
   const header = [
+    '---',
+    'merge_class: append-only-narrative',
+    '---',
+    '',
     '# Agent-to-Agent Shared Communication Log',
     '',
-    '> Generated from `.agent/state/collaboration/comms/events/`.',
+    '> Generated from `.agent/state/collaboration/comms-events/`.',
     '> Archived rendered history lives under `.agent/state/collaboration/comms/archive/`.',
     '',
     '',

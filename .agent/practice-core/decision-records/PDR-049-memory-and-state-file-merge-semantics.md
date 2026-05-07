@@ -59,6 +59,33 @@ that closes the gap at merge time.
 
 ## Decision
 
+### Git topology is part of the merge contract
+
+These semantics govern conflict resolution inside a real git merge. They do
+not replace git.
+
+A memory/state reconciliation that copies files, cherry-picks content,
+rebases away the integration, or otherwise lands as a single-parent snapshot
+is not a completed merge for this PDR. The resolver MUST start from a git merge
+operation, preferably:
+
+```bash
+git merge --no-commit --no-ff <target-ref>
+```
+
+Then resolve the conflicts with the per-file semantics below and land a merge
+commit with both parents, unless the owner explicitly chooses a different git
+topology. After committing, verify both the parent shape and ancestry:
+
+```bash
+git show --no-patch --pretty=raw HEAD
+git merge-base --is-ancestor <target-ref> HEAD
+```
+
+The semantic union preserves the Practice's memory content; the merge commit
+preserves Git's parent links, merge-base calculations, and future conflict
+resolution behaviour. Both are required.
+
 ### Per-file-class merge semantics
 
 Memory and state files fall into four merge classes plus one
@@ -105,6 +132,13 @@ contract:
   ...
 }
 ```
+
+`active-claims.schema.json` uses `index-narrative-tables` because its
+top-level object contains multiple keyed registers. Merge `claims[]` by
+`claim_id` and `commit_queue[]` by `intent_id`. If one side closed or
+completed an entry and the corresponding evidence exists in the closed archive
+or commit history, do not resurrect it as active merely because it still
+appears on the other side.
 
 **Per-event JSON fragment directories** (one file per event, never
 modified after creation) declare the class on the directory's
@@ -278,13 +312,16 @@ concrete reason to centralise.
 
 When a host first encounters a memory/state merge conflict, it SHOULD:
 
-1. Resolve the conflict using the per-class semantics above.
-2. Record the file-to-class mapping in the host's bridge index if not
+1. Start from a real git merge operation.
+2. Resolve the conflict using the per-class semantics above.
+3. Record the file-to-class mapping in the host's bridge index if not
    already recorded.
-3. Capture the incident in the host's napkin under the structured
+4. Capture the incident in the host's napkin under the structured
    surprise format, naming any same-key / same-entry collisions as
    coordination signals to investigate.
-4. Cite this PDR in the resolution commit's body as the authority.
+5. Cite this PDR in the resolution commit's body as the authority.
+6. Verify that the result is a merge commit and that the target branch is an
+   ancestor of the result.
 
 A host that observes its second instance of the same merge-class
 collision SHOULD raise the investment-staircase question with the owner

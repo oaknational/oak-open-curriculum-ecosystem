@@ -19,21 +19,25 @@ Primary plan:
 | codex | GPT-5 | 019dfd | Moonless Vanishing Lantern | evaluator | 2026-05-06 | 2026-05-06 |
 | codex | GPT-5 | 019dfd | Ethereal Ascending Twilight | executor | 2026-05-06 | 2026-05-06 |
 | claude-code | claude-opus-4-7-1m | 228bc5 | Stormy Drifting Harbour | executor | 2026-05-06 | 2026-05-06 |
-| codex | GPT-5 | 019dfe | Choppy Washing Archipelago | executor | 2026-05-06 | 2026-05-06 |
+| codex | GPT-5 | 019dfe | Choppy Washing Archipelago | executor | 2026-05-06 | 2026-05-07 |
 
 ## Landing Target For Next Session
 
-Target: **complete the vendor-switch handoff opened 2026-05-06 by
-Stormy Drifting Harbour** — finish the in-progress `origin/main` merge
-(currently *aborted*, ready to re-initiate; doctrine and diagnostics
-preserved below), address two unresolved PR #97 review-bot findings,
-then continue with the original Sonar-policy application work.
+Target: **wait for PR #97 CI / review feedback, then close residual
+coordination artefacts**. The vendor-switch handoff below has been executed:
+the branch contains a real merge commit (`6683f918`) with `origin/main` as a
+parent, followed by `deec6a00` for the CodeQL/Sonar bot cures. The branch was
+pushed to `origin/fix/sonar-fixes-20260506` after the full pre-push gate passed.
 
-This is a **mid-session vendor switch under quota constraint**. The
-substantive Sonar work landed cleanly in 6 commits on the branch; an
-unmerged 7th commit (PDR-049) is local-only and unpushed. The handoff
-preserves all in-flight findings so the next agent (any platform) can
-resume without re-deriving anything.
+Current follow-up: merge/process documentation now explicitly says semantic
+memory/state resolution must occur inside a proper git merge operation and
+must preserve merge topology unless the owner explicitly chooses otherwise.
+Residual artefacts observed during the audit: one Git autostash from the merge
+remains, and post-push collaboration-state bookkeeping is local until this
+follow-up lands.
+
+The 2026-05-06 vendor-switch snapshot is retained below as historical evidence
+of what was handed off and executed.
 
 ## Vendor-Switch Handoff Snapshot (2026-05-06 Stormy Drifting Harbour)
 
