@@ -1,6 +1,9 @@
 ---
 name: "Oak KG Knowledge Taxonomy MCP Surface"
 overview: "Extract the NC-aligned SKOS knowledge taxonomy from the Oak Curriculum Ontology and expose it as an oak-kg-namespaced MCP resource + tool — the smallest meaningful integration of the formal knowledge graph."
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
+promotion_trigger: "demand-tripwire — promotes from PENDING to executing when documented external/internal demand surfaces for SKOS Discipline/Strand/SubStrand/ContentDescriptor traversal that the Oak Threads MCP surface cannot answer"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "graph-resource-factory.plan.md"
@@ -48,13 +51,34 @@ todos:
 # Oak KG Knowledge Taxonomy MCP Surface
 
 **Status**: PENDING
-**Last Updated**: 2026-04-11
+**Last Updated**: 2026-05-07 (promotion trigger recorded)
 **Branch**: TBD (same branch as parent plan)
 **Parent**: `open-education-knowledge-surfaces.plan.md` (WS-4)
 **Strategic context**: This is the smallest meaningful integration of
 the [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
 into the MCP server. All ontology-sourced resources use the `oak-kg-*`
 namespace prefix to distinguish them from bulk-API-derived surfaces.
+
+## Promotion trigger
+
+This plan promotes from PENDING to executing when documented external
+or internal demand surfaces for SKOS Discipline / Strand / SubStrand /
+ContentDescriptor traversal that the Oak Threads MCP surface cannot
+answer (owner direction 2026-05-07).
+
+Concrete examples of tripwire-firing demand:
+
+- A consumer (sector-engagement contact, internal Oak team, or AI
+  client developer) asks for a tool that traverses the SKOS hierarchy
+  by Discipline → Strand → SubStrand and Threads alone cannot answer
+  that traversal.
+- A search/retrieval workflow needs ContentDescriptor-level lookup
+  that Threads' content navigation does not expose.
+- An ontology consumer needs to enumerate the SKOS taxonomy
+  independently of any Thread.
+
+Until the tripwire fires, this plan stays queued in `active/` (PENDING).
+No work proceeds.
 
 ## Credits
 
