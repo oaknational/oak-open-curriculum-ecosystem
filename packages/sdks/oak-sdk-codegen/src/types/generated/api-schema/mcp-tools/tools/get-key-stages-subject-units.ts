@@ -157,7 +157,7 @@ export const getKeyStagesSubjectUnits = {
       attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });
     }
     return {
-      ok: false, message: 'Response does not match any documented schema for statuses: 200, 400, 401, 404' ,
+      ok: false, message: 'Response does not match any documented schema for statuses: 200, 400, 401, 404',
       issues: attemptedStatuses.flatMap((entry) => entry.issues),
       attemptedStatuses,
     };
