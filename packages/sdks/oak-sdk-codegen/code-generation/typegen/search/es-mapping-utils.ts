@@ -36,6 +36,13 @@ function maybeQuoteFieldName(name: string): string {
 }
 
 /**
+ * Serialises string values for generated Elasticsearch config arrays.
+ */
+function serialiseStringArray(values: readonly string[]): string {
+  return values.map((value) => `'${value}'`).join(', ');
+}
+
+/**
  * Serialises an ES field mapping to TypeScript object literal.
  */
 export function serialiseFieldMapping(mapping: EsFieldMapping, indent: number): string {
@@ -88,10 +95,11 @@ export function generateSettingsBlock(): string {
   const lines: string[] = ['  settings: {'];
   lines.push('    analysis: {', '      normalizer: {');
   for (const [name, config] of Object.entries(ES_NORMALIZER_CONFIG)) {
+    const filters = serialiseStringArray(config.filter);
     lines.push(
       `        ${name}: {`,
       `          type: '${config.type}',`,
-      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      `          filter: [${filters}],`,
       '        },',
     );
   }
@@ -109,11 +117,12 @@ export function generateSettingsBlock(): string {
   }
   lines.push('      },', '      analyzer: {');
   for (const [name, config] of Object.entries(ES_ANALYZER_CONFIG)) {
+    const filters = serialiseStringArray(config.filter);
     lines.push(
       `        ${name}: {`,
       `          type: '${config.type}',`,
       `          tokenizer: '${config.tokenizer}',`,
-      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      `          filter: [${filters}],`,
       '        },',
     );
   }
@@ -129,10 +138,11 @@ export function generateMinimalSettingsBlock(): string {
   const lines: string[] = ['  settings: {'];
   lines.push('    analysis: {', '      normalizer: {');
   for (const [name, config] of Object.entries(ES_NORMALIZER_CONFIG)) {
+    const filters = serialiseStringArray(config.filter);
     lines.push(
       `        ${name}: {`,
       `          type: '${config.type}',`,
-      `          filter: [${config.filter.map((f) => `'${f}'`).join(', ')}],`,
+      `          filter: [${filters}],`,
       '        },',
     );
   }

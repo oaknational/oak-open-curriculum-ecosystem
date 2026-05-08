@@ -1,6 +1,6 @@
 ---
 name: "PR 102 Snagging"
-overview: "Queued next-session plan to clear PR review threads and Sonar gate blockers."
+overview: "Current PR #102 closeout plan for PR metadata, review comments, and Sonar blockers."
 type: quality-fix
 status: current
 source_pr: 102
@@ -20,20 +20,49 @@ todos:
   - id: phase-4-handoff
     content: "Phase 4: Record evidence, close lifecycle state, and hand off remaining risk."
     status: completed
+  - id: phase-5-rewrite-pr-metadata
+    content: "Phase 5: Compare branch to main and rewrite the PR title/body as standalone intent."
+    status: pending
+  - id: phase-6-dispose-pr-comments
+    content: "Phase 6: For each PR comment, reply/dismiss fixed or fix first, then reply/dismiss fixed."
+    status: pending
+  - id: phase-7-sonar-issues
+    content: "Phase 7: Fix the four open Sonar PR issues and re-check the Sonar PR state."
+    status: pending
+  - id: phase-8-final-verification
+    content: "Phase 8: Re-pull PR comments, GitHub checks, and Sonar before closing."
+    status: pending
 ---
 
 # PR 102 Snagging
 
-**Last Updated**: 2026-05-07  
-**Status**: COMPLETED (`current/`)  
-**Scope**: Next-session execution plan for clearing all known PR #102 review
-threads and Sonar quality-gate blockers. This plan does not implement the fixes.
+**Last Updated**: 2026-05-08
+**Status**: FOLLOW-UP REQUIRED (`current/`)
+**Scope**: Current execution plan for closing PR #102 metadata, review comments,
+and Sonar quality-gate blockers. Earlier snagging phases are complete; the
+2026-05-08 refresh reopened the plan because new PR metadata/comment/Sonar
+feedback is live on head `df66b742694d1bfdd757019c97414945540eabf5`.
 
 ## Context
 
-PR #102 is open and merge-blocked by Sonar. The latest pull found four
-unresolved, non-outdated review threads, one open Sonar code issue, and two
-unreviewed Sonar security hotspots.
+PR #102 is open and merge-blocked by Sonar. The 2026-05-08 refresh found:
+
+- PR title: `[codex] fix graph MVP closeout references`.
+- PR head: `df66b742694d1bfdd757019c97414945540eabf5`.
+- Branch comparison: `git diff --stat origin/main...HEAD` reports 93 changed
+  files, 6595 insertions, and 770 deletions.
+- GitHub checks: root quality gates, CodeQL, Cursor Bugbot, and Vercel are
+  successful; SonarCloud Code Analysis is failing; merge state is `BLOCKED`.
+- PR comments: two top-level comments, three Copilot review summaries, and nine
+  unresolved review threads.
+- Sonar: quality gate `ERROR` because `new_violations` is 4; zero
+  `TO_REVIEW` security hotspots.
+
+The current PR title and description no longer work as standalone descriptions
+of the branch intent. The body still carries an automated "Low Risk /
+Documentation-only" summary even though the branch now includes code and config
+changes, including `agent-tools` CLI code, Oak ESLint config changes, and
+search/codegen generator edits.
 
 The intended impact is narrow: unblock the PR by fixing the source problems
 without widening the branch, weakening checks, adding compatibility layers, or
@@ -43,7 +72,59 @@ tooling beyond the reported defects.
 
 First question: could this be simpler without compromising quality? Yes: do the
 minimum source-level corrections that make the comments and Sonar findings
-obsolete, then prove the PR is clean. Do not route around the findings.
+obsolete, rewrite PR metadata to match the actual diff, then prove the PR is
+clean. Do not route around the findings.
+
+## 2026-05-08 Current Feedback Ledger
+
+### PR Metadata
+
+1. Rewrite the title after comparing `origin/main...HEAD`; it must describe the
+   whole branch, not only graph closeout reference fixes.
+2. Rewrite the full PR body as a standalone intent/risk/validation description.
+   Remove or replace the stale automated "Documentation-only / Low Risk" note.
+3. The rewrite should account for at least these diff families:
+   graph MVP/ADR/planning surfaces, branch-touched-files tooling, Oak ESLint
+   config helper migration/rule hardening, search/codegen generator edits,
+   collaboration-state/continuity surfaces, and PR snagging plan updates.
+
+### Top-Level Comments
+
+| Source | Current state | Next action |
+| --- | --- | --- |
+| Vercel preview ready | Automated status; not actionable. | No repo edit. |
+| Sonar quality gate failed | Live; Sonar still reports 4 open issues. | Fix Sonar issues, then re-check and leave a `fixed` disposition if needed. |
+
+### Review Summaries
+
+| Review | Current state | Next action |
+| --- | --- | --- |
+| Copilot `45beefb` | Four comments are outdated and fixed in repo. | Dismiss/comment `fixed` where GitHub still shows unresolved. |
+| Copilot `e8050400` | Two branch-touched-files comments are fixed in repo but unresolved. | Dismiss/comment `fixed`. |
+| Copilot `df66b742` | Three comments: one fixed, two still live. | Fix live items, then dismiss/comment `fixed`. |
+
+### Review Threads
+
+| Comment | Path | Addressed in repo? | Next action |
+| --- | --- | --- | --- |
+| `3203494220` graph layer taxonomy | `oak-kg-threads-surface.plan.md` | Yes; outdated. | Dismiss/comment `fixed`. |
+| `3203494323` graph layer taxonomy | `oak-misconceptions-subgraph-mcp-surface.plan.md` | Yes; outdated. | Dismiss/comment `fixed`. |
+| `3203494358` graph layer taxonomy | `oak-misconceptions-eef-cross-corpus-surface.plan.md` | Yes; outdated. | Dismiss/comment `fixed`. |
+| `3203494399` primitive wording | `oak-kg-threads-surface.plan.md` | Yes; outdated. | Dismiss/comment `fixed`. |
+| `3203977955` CLI help / precedence | `agent-tools/src/branch-touched-files/cli.ts` | Yes; unresolved. | Dismiss/comment `fixed`. |
+| `3203978000` Git path portability | `agent-tools/src/branch-touched-files/git.ts` | Yes; unresolved. | Dismiss/comment `fixed`. |
+| `3204454751` query docstring mismatch | `schema-emitter.ts` | No. | Fix comment or validation, then dismiss/comment `fixed`. |
+| `3204454805` PR risk/description mismatch | `package.json` | No; PR metadata. | Rewrite PR title/body, then dismiss/comment `fixed`. |
+| `3204454849` ESLint rationale stale | `recommended.ts` | Yes; unresolved. | Dismiss/comment `fixed`. |
+
+### Sonar Issues
+
+| Issue | Rule | Location | Next action |
+| --- | --- | --- | --- |
+| `AZ4EFvtoMbWtnOUab6nS` | `typescript:S7780` | `schema-emitter.ts:127` | Use `String.raw` or equivalent source fix. |
+| `AZ4EFvz9MbWtnOUab6nT` | `typescript:S4624` | `es-mapping-utils.ts:94` | Remove nested template literal. |
+| `AZ4EFvz9MbWtnOUab6nU` | `typescript:S4624` | `es-mapping-utils.ts:116` | Remove nested template literal. |
+| `AZ4EFvz9MbWtnOUab6nV` | `typescript:S4624` | `es-mapping-utils.ts:135` | Remove nested template literal. |
 
 ## Foundation Alignment
 
@@ -400,6 +481,103 @@ git diff --check
 `unicorn/prefer-single-call` warnings in search/codegen files. Those commands
 also rewrote unrelated files; the rewrites were removed to keep the branch
 limited to the PR #102 snagging scope.
+
+## 2026-05-08 Follow-Up Execution Plan
+
+### Phase 5: Rewrite PR Metadata
+
+Acceptance criteria:
+
+1. `git fetch origin main` and `git diff --stat origin/main...HEAD` are run
+   before drafting.
+2. The PR title names the branch's actual intent across graph planning,
+   agent-tooling, lint/config, and codegen/search cleanup.
+3. The PR body stands alone for a reviewer who has not read the thread record.
+4. The stale "Documentation-only / Low Risk" automated summary is removed or
+   superseded by accurate scope and validation notes.
+
+Validation:
+
+```bash
+gh pr view 102 --json title,body
+```
+
+### Phase 6: Dispose PR Comments
+
+Acceptance criteria:
+
+1. Re-pull review threads with `isResolved`, `isOutdated`, comment ID, path,
+   and line before acting.
+2. For every already-fixed thread, leave the requested `fixed` disposition.
+3. For every live issue, fix source first, validate, then leave `fixed`.
+4. Do not mark automated status comments as fixed unless GitHub/Sonar state
+   needs a human-facing disposition after the source fix.
+
+Validation:
+
+```bash
+gh api graphql \
+  -f owner="$(gh repo view --json owner -q .owner.login)" \
+  -f repo="$(gh repo view --json name -q .name)" \
+  -F number=102 \
+  -f query='
+query($owner:String!, $repo:String!, $number:Int!) {
+  repository(owner:$owner, name:$repo) {
+    pullRequest(number:$number) {
+      reviewThreads(first:100) {
+        nodes {
+          id
+          isResolved
+          isOutdated
+          path
+          line
+          comments(first:20) {
+            nodes { databaseId author { login } body createdAt url }
+          }
+        }
+      }
+    }
+  }
+}'
+```
+
+### Phase 7: Fix Sonar Issues
+
+Acceptance criteria:
+
+1. The schema-emitter `String.raw` finding is fixed at source.
+2. The three nested-template findings in `es-mapping-utils.ts` are fixed at
+   source without weakening output clarity.
+3. The schema docstring mismatch review thread is fixed consistently with the
+   intended generated validation behaviour.
+4. Sonar PR state reports zero open issues and quality gate `OK`.
+
+Validation:
+
+```text
+get_project_quality_gate_status({
+  projectKey: "oaknational_oak-open-curriculum-ecosystem",
+  pullRequest: "102",
+})
+
+search_sonar_issues_in_projects({
+  projects: ["oaknational_oak-open-curriculum-ecosystem"],
+  pullRequestId: "102",
+  issueStatuses: ["OPEN", "CONFIRMED"],
+  ps: 100,
+})
+```
+
+### Phase 8: Final Verification
+
+Acceptance criteria:
+
+1. GitHub checks are re-read and no blocking check remains.
+2. PR comments and review threads are re-read and no live actionable thread
+   remains undisposed.
+3. Sonar quality gate is `OK`.
+4. Continuity surfaces are refreshed or the plan is archived only after the PR
+   feedback loop is clean.
 
 ## Non-Goals
 

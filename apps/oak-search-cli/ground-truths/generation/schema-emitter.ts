@@ -36,7 +36,7 @@ export function emitSlugEnumSchema(data: ParsedBulkData): string {
 
   lines.push(
     `// ${data.sequenceSlug}: ${data.lessonCount} lesson slugs`,
-    `// Validation uses ${data.sequenceSlug.toUpperCase().replace(/-/g, '_')}_LESSON_SLUGS Set`,
+    `// Validation uses ${data.sequenceSlug.toUpperCase().replaceAll('-', '_')}_LESSON_SLUGS Set`,
   );
 
   return lines.join('\n');
@@ -115,7 +115,7 @@ export function emitGroundTruthSchemas(): string {
     ' *',
     ' * Validates:',
     ' * - Query is non-empty string',
-    ' * - Query is 3-10 words (warning if outside range)',
+    ' * - Query has at least one word',
     ' * - expectedRelevance has at least one entry',
     ' * - Relevance scores are 1, 2, or 3',
     ' *',
@@ -124,7 +124,7 @@ export function emitGroundTruthSchemas(): string {
     'const GroundTruthQuerySchema = z.object({',
     '  query: z.string().min(1).refine(',
     '    (q) => {',
-    '      const wordCount = q.trim().split(/\\s+/).length;',
+    String.raw`      const wordCount = q.trim().split(/\s+/).length;`,
     '      return wordCount >= 1;',
     '    },',
     "    { message: 'Query must have at least 1 word' }",

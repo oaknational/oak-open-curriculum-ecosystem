@@ -9,6 +9,19 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-08 — Lush Rustling Bark / `codex` /
+`GPT-5` / `019e03`, PR #102 fresh-session handoff)**:
+ran the owner-requested `jc-session-handoff` refresh for PR #102. Current PR
+evidence is explicit: title/body are stale and must be rewritten against
+`origin/main...HEAD`; PR head is `df66b742694d1bfdd757019c97414945540eabf5`;
+the branch differs from `origin/main` by 93 files, 6595 insertions, and 770
+deletions; GitHub merge state is `BLOCKED`; SonarCloud Code Analysis is
+failing; Sonar PR quality gate is `ERROR` on four open issues and zero
+`TO_REVIEW` hotspots; nine review threads remain unresolved, with graph
+taxonomy/wording threads outdated-and-fixed, three fixed-but-undismissed live
+threads, one schema docstring mismatch still live, and one PR metadata thread
+still live. No implementation edits were made in this handoff.
+
 **Session close (2026-05-07 — Lush Rustling Bark / `codex` /
 `GPT-5` / `019e03`, PR #102 follow-up + lint hardening)**:
 completed the owner-directed PR #102 comment harvest before editing, found two
@@ -69,12 +82,17 @@ promotion, and ADR-173 ratification remain out of scope for this branch.
 
 ## Current State
 
-+ Branch `planning/graph-tooling` is in closeout for the PR #102 follow-up
-  after `e8050400`.
-+ PR #102 comment harvest after `e8050400` found two new live Copilot
-  branch-touched-files threads. Both have local fixes with focused tests.
-+ Root `pnpm lint` passes after replacing deprecated ESLint config helper usage
-  and clearing the resulting single-call lint findings.
++ Branch `planning/graph-tooling` is in PR #102 closeout on head
+  `df66b742694d1bfdd757019c97414945540eabf5`.
++ PR #102 title/body are stale. The next session must compare
+  `origin/main...HEAD` and rewrite both as standalone descriptions of the full
+  branch intent, scope, risk, and validation.
++ PR #102 review surface is not clean. Fixed-but-undismissed comments need the
+  requested `fixed` disposition, and live comments must be fixed first.
++ Sonar PR state is not clean: quality gate `ERROR`, four open issues, zero
+  `TO_REVIEW` security hotspots.
++ Other GitHub checks are currently successful: root quality gates, CodeQL,
+  Cursor Bugbot, and Vercel preview.
 + No active collaboration claims remain. The advisory commit queue only contains
   stale/abandoned historical entries.
 + Residual Practice fitness pressure is routed, not hidden: `practice.md`
@@ -91,7 +109,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Lush / `codex` / `019e03` / 2026-05-07 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Lush / `codex` / `019e03` / 2026-05-07 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Lush / `codex` / `019e03` / 2026-05-08 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -117,9 +135,10 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**2026-05-07 (PR #102 post-snagging follow-up + lint hardening)**:
-close out and push the remaining PR #102 live-review-thread fixes plus the
-root lint remediation requested by the owner.
+**2026-05-08 (PR #102 fresh-session handoff)**:
+update plan and continuity surfaces for the next session to rewrite stale PR
+metadata, dispose all PR comments with `fixed` after source fixes, and clear
+the four current Sonar issues.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -155,10 +174,16 @@ evidence.
 
 ## Next Safe Step
 
-**After this closeout is pushed**: re-check PR #102 comments/review threads,
-GitHub checks, and Sonar PR state on the new head. If clean, continue to the
-graph lane's planning decision-completeness closeout; if not clean, classify
-remaining feedback before editing.
+**PR #102 first, before graph planning work**:
+
+1. Fetch/compare `origin/main...HEAD`, then rewrite the PR title and full
+   description so they stand alone for the current 93-file diff.
+2. Re-pull every PR comment/review/thread. For each issue: if fixed in the
+   repo, leave the requested `fixed` disposition; if not fixed, fix the issue
+   first, validate, then leave `fixed`.
+3. Fix the four open Sonar PR issues and re-check Sonar quality gate state.
+4. Re-read GitHub checks, PR comments, review threads, and Sonar before moving
+   on.
 
 After that comment analysis, the graph lane's planning step remains
 decision-completeness closeout, not slice execution: absorb the two topology
@@ -213,3 +238,8 @@ PR comment analysis, not consolidation`.**
 PR #102 follow-up + lint hardening handoff): `not due — the session produced
 local code/config fixes, plan/continuity refresh, and a napkin tooling note;
 no new ADR/PDR candidate or cross-session convergence trigger fired`.**
+
+**Status (2026-05-08 Lush Rustling Bark, codex, GPT-5, `019e03`,
+PR #102 fresh-session handoff): `not due — owner requested a session-scoped
+handoff/update of current PR/Sonar surfaces; no plan closed, no new doctrine or
+ADR/PDR candidate surfaced, and the next work is tactical PR closeout`.**

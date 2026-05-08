@@ -129,3 +129,61 @@ before editing.
   drift early. When core ESLint helper types do not accept a local plugin
   typed through `@typescript-eslint/utils`, split the config at the type
   boundary rather than weakening the plugin type.
+
+## 2026-05-08 — PR 102 fresh-session handoff / codex / GPT-5 / `019e03`
+
+### Surprise: PR metadata is an active review surface, not a wrapper
+
+**Expectation**: after code/config/documentation fixes land, the remaining PR
+work is source comments and quality gates.
+
+**What happened**: the PR body still described the branch as
+"Documentation-only / Low Risk" even though the current diff now includes
+agent-tools runtime code, Oak ESLint config changes, and search/codegen
+generator edits. Copilot correctly flagged the PR description itself as a live
+review issue.
+
+**Insight**: PR title/body need the same source-of-truth discipline as code
+comments: when branch scope changes, stale metadata can mislead reviewers and
+become an actionable defect. A comment-harvest pass should classify PR metadata
+comments separately from source-code comments.
+
+**Behaviour change**: the next PR #102 session rewrites title/body after
+`origin/main...HEAD` comparison before disposing the metadata comment as
+`fixed`. No ADR/PDR candidate: this reinforces existing review-surface
+discipline rather than changing governance.
+
+## 2026-05-08 — PR 102 final closeout / codex / GPT-5 / `019e06`
+
+### Practice/tooling feedback
+
++ **Surface**: `agent-tools:collaboration-state claims open`
++ **Signal**: friction
++ **Observation**: The session-open claim attempt used `--area-kind file`,
+  mirroring the natural language of "file paths", but the CLI accepts
+  `files`, `workspace`, `plan`, `adr`, or `git`. The command failed cleanly
+  with `unsupported area kind: file`, and the schema confirmed `files` is the
+  correct area kind for explicit file path lists.
++ **Behaviour change / candidate follow-up**: Prefer checking
+  `active-claims.schema.json` or `claims open --help` before authoring claims
+  from memory. If this repeats, consider making the CLI error list the accepted
+  values.
+
+### Surprise: ground-truth generation needs real bulk data present
+
+**Expected**: rerunning the ground-truth generator after a schema-emitter fix
+would refresh only the generated schema/docstring surfaces.
+
+**Actual**: the first direct generator invocation ran against an empty
+`apps/oak-search-cli/bulk-downloads` directory and collapsed the generated
+lesson data to zero lessons. Running the real `bulk:download` composition root
+with `BULK_DOWNLOAD_DIR=bulk-downloads` fetched the 30 bulk files and the
+post-download generator restored the 12,391-lesson generated data shape.
+
+**Why expectation failed**: the generator is source-of-truth, but it is only
+valid when its source data directory is populated. A code-only generator run in
+a sparse checkout can produce structurally valid but semantically empty output.
+
+**Behaviour change**: for ground-truth generated files, use the full
+download-then-codegen path when local bulk data is absent; verify
+`Total lessons: 12391` or equivalent before trusting generated output.

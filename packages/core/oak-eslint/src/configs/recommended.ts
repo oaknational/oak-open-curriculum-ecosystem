@@ -63,8 +63,7 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
   // active so local lint mirrors the current Sonar blocker surface without
   // importing the whole recommended preset. Sonar S7778 maps to
   // unicorn/prefer-single-call; enable that one rule without adopting the
-  // full Unicorn preset. It starts at warn because the existing monorepo
-  // violation surface is intentionally out of scope for this PR.
+  // full Unicorn preset.
   {
     plugins: { sonarjs, unicorn },
     rules: {
