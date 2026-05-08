@@ -22,26 +22,28 @@ todos:
     status: completed
   - id: phase-5-rewrite-pr-metadata
     content: "Phase 5: Compare branch to main and rewrite the PR title/body as standalone intent."
-    status: pending
+    status: completed
   - id: phase-6-dispose-pr-comments
     content: "Phase 6: For each PR comment, reply/dismiss fixed or fix first, then reply/dismiss fixed."
-    status: pending
+    status: completed
   - id: phase-7-sonar-issues
     content: "Phase 7: Fix the four open Sonar PR issues and re-check the Sonar PR state."
-    status: pending
+    status: completed
   - id: phase-8-final-verification
     content: "Phase 8: Re-pull PR comments, GitHub checks, and Sonar before closing."
-    status: pending
+    status: completed
 ---
 
 # PR 102 Snagging
 
 **Last Updated**: 2026-05-08
-**Status**: FOLLOW-UP REQUIRED (`current/`)
+**Status**: COMPLETE (`current/`)
 **Scope**: Current execution plan for closing PR #102 metadata, review comments,
 and Sonar quality-gate blockers. Earlier snagging phases are complete; the
 2026-05-08 refresh reopened the plan because new PR metadata/comment/Sonar
 feedback is live on head `df66b742694d1bfdd757019c97414945540eabf5`.
+The 2026-05-08 final closeout landed on head
+`6e42a588fd2da3852526566543a9a196977f2b70`.
 
 ## Context
 
@@ -64,16 +66,31 @@ Documentation-only" summary even though the branch now includes code and config
 changes, including `agent-tools` CLI code, Oak ESLint config changes, and
 search/codegen generator edits.
 
-The intended impact is narrow: unblock the PR by fixing the source problems
+The intended impact was narrow: unblock the PR by fixing the source problems
 without widening the branch, weakening checks, adding compatibility layers, or
-editing Practice Core files. The next session should treat this as snagging,
-not as permission to rework the graph planning arc or the branch-file-count
-tooling beyond the reported defects.
+editing Practice Core files.
 
 First question: could this be simpler without compromising quality? Yes: do the
-minimum source-level corrections that make the comments and Sonar findings
-obsolete, rewrite PR metadata to match the actual diff, then prove the PR is
-clean. Do not route around the findings.
+minimum source-level corrections made the comments and Sonar findings
+obsolete, PR metadata now matches the actual diff, and the PR is clean.
+
+## 2026-05-08 Final Closeout Evidence
+
+- PR title/body rewritten as a standalone description of the 93-file branch
+  diff.
+- Nine review threads replied to as `fixed` and resolved.
+- Sonar PR quality gate is `OK`; `new_violations` is `0`; open Sonar issues
+  for PR #102 are `0`.
+- GitHub checks on `6e42a588fd2da3852526566543a9a196977f2b70`: root
+  `run-quality-gates`, CodeQL, SonarCloud Code Analysis, and Vercel passed.
+- Local closeout validation included focused schema-emitter tests,
+  search-cli/sdk-codegen/Oak ESLint lint and type-check, `git diff --check`,
+  pre-commit hooks, and pre-push hooks.
+- Graph implementation readiness check: this PR is merge-ready, but graph
+  slice execution should still start with the recorded execution-prep closeout:
+  absorb topology blockers into `graph-stack.plan.md` + ADR-173, absorb the
+  four remaining Phase 4 findings, and owner-resolve the EEF outcome-verification
+  contradiction before beginning slice 1 execution.
 
 ## 2026-05-08 Current Feedback Ledger
 

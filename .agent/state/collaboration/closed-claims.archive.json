@@ -14071,6 +14071,102 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "780a41ff-55d7-4c49-9f82-842cb788dcd9",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T06:51:35Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #102 final closeout source and state fixes. Pathspecs: search ground-truth generator/generated schema files, sdk-codegen ES mapping utility, Oak ESLint recommended config, PR closeout plan/continuity/collaboration state. Gates so far: focused schema tests, search-cli lint/type-check, sdk-codegen lint/type-check, Oak ESLint lint/type-check.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T06:56:34Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed PR #102 closeout source/state fixes as 6e42a588 after local gates passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "780a41ff-55d7-4c49-9f82-842cb788dcd9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "475799b2-3729-4fba-8f8f-23884412409e",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-search-cli/ground-truths/generation/schema-emitter.ts",
+            "apps/oak-search-cli/ground-truths/generation/generate-ground-truth-types.ts",
+            "apps/oak-search-cli/ground-truths/generated/bulk-data-manifest.ts",
+            "apps/oak-search-cli/ground-truths/generated/ground-truth-schemas.ts",
+            "apps/oak-search-cli/ground-truths/generated/index.ts",
+            "apps/oak-search-cli/ground-truths/generated/lesson-slugs-by-subject.data.json",
+            "apps/oak-search-cli/ground-truths/generated/lesson-slugs-by-subject.ts",
+            "packages/core/oak-eslint/src/configs/recommended.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-mapping-utils.ts",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T06:40:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #102 final closeout: metadata, live review/Sonar fixes, comment disposition, final validation evidence. Registry scanned: 0 active claims, 16 abandoned queue entries, no active overlap.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T07:07:32Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Closed PR #102 final closeout: PR metadata rewritten, review threads resolved, Sonar issues cleared, remote checks green, graph readiness checked.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "475799b2-3729-4fba-8f8f-23884412409e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
