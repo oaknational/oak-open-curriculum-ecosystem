@@ -1,3 +1,19 @@
+# [1.10.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.9.0...v1.10.0) (2026-05-08)
+
+
+### Bug Fixes
+
+* **agent-tools:** address PR 102 follow-up threads ([7d09edb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7d09edb2b2cbe88eb2d3473c14b1c96048dd9d61))
+* **agent-tools:** clear PR 102 snagging blockers ([e805040](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e8050400383011fe0275718c04a0571001159a96))
+* **codegen:** remove emitted schema message spacing ([2de81a4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2de81a4cf8b5f9de19bc9d9df3abdcd2f2ce0eae))
+* **eslint:** replace deprecated config helper ([8ad0f1e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8ad0f1e8e443fbe682055294791e5c5e5bbb14e1))
+* **pr-102:** clear closeout review blockers ([6e42a58](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6e42a588fd2da3852526566543a9a196977f2b70))
+
+
+### Features
+
+* **agent-tools:** report branch touched file count ([b95de26](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b95de268b802fa133c1f957f51cc52c5fe5ee3d4))
+
 # [1.9.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.8.1...v1.9.0) (2026-05-07)
 
 
