@@ -14213,6 +14213,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "125d4c80-3eb0-4821-9330-1aba6647363d",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T07:46:24Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #102 graph decision-complete handoff plan. Pathspecs: final-session plan, repo/thread continuity, napkin, comms event/log, closed-claim archive.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T07:48:53Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed PR #102 graph decision-complete handoff plan as f9abba88.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "125d4c80-3eb0-4821-9330-1aba6647363d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
