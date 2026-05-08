@@ -94,16 +94,17 @@ async function writeIndex(
   kinds: { filename: string; title: string }[],
 ): Promise<void> {
   const lines: string[] = [];
-  lines.push('# Oak Curriculum SDK — API (Markdown)');
-  lines.push('');
-  lines.push(`Generated: ${nowIso()}`);
-  lines.push('');
-  lines.push('## Contents');
+  lines.push(
+    '# Oak Curriculum SDK — API (Markdown)',
+    '',
+    `Generated: ${nowIso()}`,
+    '',
+    '## Contents',
+  );
   for (const k of kinds) {
     lines.push(`- [${k.title}](./${k.filename})`);
   }
-  lines.push('');
-  lines.push(quickstart());
+  lines.push('', quickstart());
   await fs.writeFile(join(outDir, 'index.md'), lines.join('\n'), 'utf8');
 }
 
@@ -114,11 +115,9 @@ async function writeKindFile(
   items: TDReflection[],
 ): Promise<void> {
   const lines: string[] = [];
-  lines.push(`# ${title}`);
-  lines.push('');
+  lines.push(`# ${title}`, '');
   for (const r of items) {
-    lines.push(renderReflection(r));
-    lines.push('');
+    lines.push(renderReflection(r), '');
   }
   await fs.writeFile(join(outDir, filename), lines.join('\n'), 'utf8');
 }

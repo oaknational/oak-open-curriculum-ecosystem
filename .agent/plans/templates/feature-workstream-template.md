@@ -19,7 +19,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1, ws1-cycle-2, ws2-cycle-1]
   - id: ws4-quality-gates-final
-    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub) on the integrated delivery."
+    content: "WS4: Full quality gate chain (sdk-codegen through test:e2e) on the integrated delivery."
     status: pending
     depends_on: [ws3-doc-propagation]
   - id: ws5-adversarial-review
@@ -372,7 +372,7 @@ a final cleanup commit if the documentation is integrative.
 ```bash
 pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
 pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
-pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+pnpm test && pnpm test:ui && pnpm test:e2e
 ```
 
 ---

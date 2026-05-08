@@ -1,5 +1,10 @@
 # Knowledge Graph Integration
 
+> **Cross-collection index**: the full graph portfolio — substrate, Oak graph
+> surfaces, features, and the EEF cross-cutting thread — is indexed at
+> [`../../graph-portfolio-index.md`](../../graph-portfolio-index.md).
+> This README covers the **internal Oak KG integration** subset in more depth.
+
 Internal engineering hub for Oak-owned knowledge graph work: integrating the
 Oak Curriculum Ontology and Oak-derived graphs into the MCP server, semantic
 search service, QA workflows, and any future graph-serving layer.
@@ -33,7 +38,7 @@ under [sector-engagement/](../sector-engagement/).
 
 | File | Description |
 |------|-------------|
-| [current/graph-stack.plan.md](current/graph-stack.plan.md) | **Topology decision + foundation increment.** Eight active workspaces plus one deferred for the standards-based graph capability; reserves a workspace home for every layer in `.agent/research/graph-iibrary.md`. **Graph workspaces are MCP-agnostic** — surfacing (MCP, CLI, HTTP, JSON-LD export) is a consumer-side decision tracked separately. Foundation increment ingests the NC knowledge taxonomy end-to-end (in-process; no surfacing). Subsumes the *substrate* path of `nc-knowledge-taxonomy-surface.plan.md` and the *substrate* path of `graph-query-layer.plan.md`; their MCP-surfacing concerns remain independent. |
+| [current/graph-stack.plan.md](current/graph-stack.plan.md) | **Topology decision + foundation increment.** Eight active workspaces plus one deferred for the standards-based graph capability; reserves a workspace home for every layer in `.agent/research/graph-library.research.md`. **Graph workspaces are MCP-agnostic** — surfacing (MCP, CLI, HTTP, JSON-LD export) is a consumer-side decision tracked separately. Foundation increment ingests the NC knowledge taxonomy end-to-end (in-process; no surfacing). Subsumes the *substrate* path of `nc-knowledge-taxonomy-surface.plan.md` and the *substrate* path of `graph-query-layer.plan.md`; their MCP-surfacing concerns remain independent. |
 | [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records |
 | [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities |
 | [current/graph-query-layer.plan.md](current/graph-query-layer.plan.md) | Increment 1 of EEF graph-and-corpus delivery: 7-operation polymorphic query layer over prerequisite + misconception + EEF strands, with progressive disclosure (manifest → summary → detail → edge) and mandatory projection. Foundation for [`../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). **Coordination note**: the *substrate* (GraphView interface, 7-operation surface, projection discipline) migrates into `graph-corpus-sdk` under the graph-stack spine; the *MCP exposure* (17 tools) becomes a separate consumer-side decision unrelated to the substrate. |

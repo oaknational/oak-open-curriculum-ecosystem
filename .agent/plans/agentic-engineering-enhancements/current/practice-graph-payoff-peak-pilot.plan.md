@@ -1,6 +1,8 @@
 ---
 name: "Practice Graph Payoff-Peak Pilot"
 overview: "Queued executable slice: build the highest-value derived Practice graph with a bounded TypeScript + esbuild workspace cluster, explicit-edge extraction, and read-only local navigation surfaces."
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../graph-portfolio-index.md"
 todos:
   - id: phase-0-red-baseline
     content: "Phase 0 (RED): Lock the pilot corpus, workspace-boundary gate, output contract, and failing tests."
@@ -25,7 +27,7 @@ isProject: false
 
 # Practice Graph Payoff-Peak Pilot
 
-**Last Updated**: 2026-04-23  
+**Last Updated**: 2026-05-08
 **Status**: 🔴 NOT STARTED  
 **Scope**: Build the first high-value derived Practice graph slice as a
 strictly bounded internal tool: deterministic, read-only, TypeScript-only,
@@ -139,7 +141,7 @@ The **authoring allow-list** for Phase 0 selection is:
 
 The **live pilot corpus** must then be frozen as a checked-in manifest with
 exact relative file paths, for example
-`packages/libs/practice-graph/src/corpus/pilot-corpus.manifest.ts`. Recursive
+`agent-graphs/practice-graph/src/corpus/pilot-corpus.manifest.ts`. Recursive
 globs are allowed only to help author the initial selection; they are **not**
 the runtime contract for this pilot.
 
@@ -152,7 +154,7 @@ a later explicit follow-on changes the manifest and corresponding RED fixtures.
 
 ### Required Workspace
 
-#### `packages/libs/practice-graph/`
+#### `agent-graphs/practice-graph/`
 
 Owns the Oak-specific behaviour:
 
@@ -175,14 +177,17 @@ Rules:
 - no stdio/MCP server code
 - no writes to canonical memory or reference surfaces
 
-### Conditional Workspace
+### Consumed Substrate Workspace
 
 #### `packages/core/graph-core/`
 
-Create this workspace **only if** Phase 0 proves a genuine consumer-agnostic
-mechanism that satisfies ADR-154.
+This workspace is provided by
+[`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md),
+not created conditionally by this pilot. Practice graph consumes it only after
+the graph-stack foundation increment lands; it must not fork local graph-core
+types inside `agent-graphs/practice-graph/`.
 
-Allowed contents:
+Expected consumed contents:
 
 - immutable graph types
 - adjacency/index helpers
@@ -190,7 +195,7 @@ Allowed contents:
 - lightweight graph metrics used by the report layer
 - serialisation/deserialisation helpers
 
-Forbidden contents:
+Forbidden in `packages/core/graph-core/`:
 
 - filesystem access
 - markdown parsing
@@ -199,23 +204,10 @@ Forbidden contents:
 - report prose generation
 - corpus manifests
 
-Standards if created:
-
-- TypeScript only
-- esbuild for `build`
-- README with explicit extraction rationale and non-goals
-- no deviation from the repo standard for new workspace build tooling
-
-**Creation gate**: only create `packages/core/graph-core/` if the extracted
-mechanism is both:
-
-1. free of repo-specific/document-format dependencies, and
-2. useful to more than one internal module boundary inside the pilot
-   (e.g. builder + report + query layers) such that keeping it inline would
-   actively entangle filesystem/document logic with graph mechanics.
-
-If the gate is not met, keep the code in `packages/libs/practice-graph/` and
-record a no-extraction rationale in the workspace README and phase notes.
+The top-level `agent-graphs/` organisation and workspace globs are not created
+by this pilot plan. They are sequenced through
+[`../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md)
+before this pilot is promoted for implementation.
 
 ### Existing Workspace Extension
 
@@ -398,13 +390,13 @@ are fixed enough that implementation cannot drift into larger scope silently.
 
 ### Phase 1 (GREEN): Build the Graph Workspaces
 
-#### Task 1.1: Create `packages/libs/practice-graph/`
+#### Task 1.1: Create `agent-graphs/practice-graph/`
 
 **Goal**: scaffold the required library workspace with repo-standard tooling.
 
 **Acceptance Criteria**:
 
-1. `packages/libs/practice-graph/` exists with:
+1. `agent-graphs/practice-graph/` exists with:
    - `package.json`
    - `README.md`
    - `esbuild.config.ts`
@@ -610,11 +602,10 @@ pass.
 
 This pilot is done only when all of the following are true:
 
-1. `packages/libs/practice-graph/` exists, is TypeScript-only, builds with
+1. `agent-graphs/practice-graph/` exists, is TypeScript-only, builds with
    esbuild, and has passing unit/integration tests.
-2. `packages/core/graph-core/` either exists with a justified framework-only
-   boundary, is TypeScript-only, uses esbuild, and has recorded rationale, or
-   is explicitly not created with recorded rationale.
+2. `packages/core/graph-core/` exists from the graph-stack foundation
+   increment, and this pilot consumes it without forking local graph-core types.
 3. `agent-tools` exposes `practice-graph build`, `report`, `query`, and
    `path`, and the root workspace exposes `pnpm agent-tools:practice-graph`.
 4. `.agent/local/practice-graph/graph.json` and `GRAPH_REPORT.md` are produced
@@ -686,6 +677,11 @@ After all work is complete and quality gates pass, run
 
 - [graphify-and-graph-memory-exploration.plan.md](../future/graphify-and-graph-memory-exploration.plan.md)
   — strategic parent and acknowledgement boundary
+- [graph-stack.plan.md](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+  — provides `packages/core/graph-core/` foundation consumed by this pilot
+- [agent-graphs-workspace-organisation.plan.md](../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md)
+  — creates the top-level `agent-graphs/` organisation and workspace wiring
+  before `agent-graphs/practice-graph/` is scaffolded
 
 **Related Plans**:
 

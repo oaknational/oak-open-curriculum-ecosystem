@@ -1,5 +1,6 @@
-import tseslint from 'typescript-eslint';
 import vitestPlugin from '@vitest/eslint-plugin';
+import { defineConfig } from 'eslint/config';
+import type { TSESLint } from '@typescript-eslint/utils';
 import { recommended, RECOMMENDED_RESTRICTED_TYPES } from './recommended.js';
 
 /**
@@ -39,8 +40,7 @@ import { recommended, RECOMMENDED_RESTRICTED_TYPES } from './recommended.js';
  */
 const TS_EXPECT_ERROR_MINIMUM_DESCRIPTION_LENGTH = 10;
 
-export const strict = tseslint.config(
-  recommended,
+const strictExtensions: TSESLint.FlatConfig.ConfigArray = defineConfig(
   {
     plugins: {
       vitest: vitestPlugin,
@@ -185,3 +185,5 @@ export const strict = tseslint.config(
     },
   },
 );
+
+export const strict: TSESLint.FlatConfig.ConfigArray = [...recommended, ...strictExtensions];

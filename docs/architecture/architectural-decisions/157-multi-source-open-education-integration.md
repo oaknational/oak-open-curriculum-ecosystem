@@ -7,13 +7,15 @@ collections explores the space without being constrained by this ADR's
 specific structure. The ADR may be re-promoted to Accepted when the
 multi-source integration has shipped enough surface to confirm the
 typing-discipline, URI-scheme, and namespace decisions are still right.)
-**Date**: 2026-04-10 (status amended 2026-04-30)
+**Date**: 2026-04-10 (status amended 2026-04-30; namespace table
+extended + explicit-source-attribution discipline added 2026-05-07)
 **Related**: [ADR-029](029-no-manual-api-data.md) — cardinal rule (applies to
 Oak API types; non-API data sources have their own typing disciplines),
 [ADR-030](030-sdk-single-source-truth.md) — SDK as single source of truth,
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives,
 [ADR-154](154-separate-framework-from-consumer.md) — separate framework from
-consumer (the graph resource factory follows this pattern)
+consumer (the graph resource factory follows this pattern),
+[ADR-173](173-graph-stack-topology.md) — graph stack topology (proposed)
 
 ## Status Amendment Note (2026-04-30)
 
@@ -132,11 +134,26 @@ server," not "data from the Oak API specifically."
 Resource and tool names use a prefix convention that signals data
 provenance for citation, credit, and attribution:
 
-| Prefix     | Source                              | Examples                                                |
-| ---------- | ----------------------------------- | ------------------------------------------------------- |
-| _(none)_   | Oak Open Curriculum API (bulk data) | `prior-knowledge-graph`, `thread-progressions`, `model` |
-| `oak-kg-*` | Oak Curriculum Ontology             | `oak-kg-knowledge-taxonomy`                             |
-| `eef-*`    | EEF Teaching and Learning Toolkit   | `eef-methodology`, `eef-strands`                        |
+| Prefix                         | Source                                         | Examples                                                               |
+| ------------------------------ | ---------------------------------------------- | ---------------------------------------------------------------------- |
+| _(none)_                       | Oak Open Curriculum API (bulk data)            | `prior-knowledge-graph`, `thread-progressions`, `model`                |
+| `oak-kg-*`                     | Oak Curriculum Ontology                        | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content`               |
+| `oak-misconceptions-*`         | Oak misconception graph (Oak-derived from API) | `oak-misconceptions-subgraph-for-thread`                               |
+| `eef-*`                        | EEF Teaching and Learning Toolkit              | `eef-methodology`, `eef-strands`, `eef-recommend-evidence-for-context` |
+| Compound (`oak-X-eef-*`, etc.) | Cross-corpus tool composing two named sources  | `oak-misconceptions-eef-recommend-for-thread`                          |
+
+**Explicit source attribution on every NEW tool (added 2026-05-07).**
+New tools and resources MUST carry a source-identifying prefix (or
+compound prefix for cross-corpus tools). The unprefixed default below
+is retained for already-shipped API-derived tools (`prior-knowledge-graph`,
+`thread-progressions`, `model`, the existing misconception graph
+resource, etc.) to avoid breaking consumers, but new primitives must
+conform. This ensures source attribution is trivially clear during
+assessment, observability, debugging, and licensing audit. Origin:
+2026-05-07 owner direction during MVP-arc planning; the
+`oak-misconceptions-*` prefix and the compound-prefix convention were
+added in the same amendment to support cross-corpus
+EEF×misconceptions sequencing tooling.
 
 **No `nc-*` prefix.** Nothing served by this system is genuinely
 National Curriculum data. All curriculum content arrives through an

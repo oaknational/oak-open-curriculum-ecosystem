@@ -1,0 +1,12 @@
+{
+  "event_id": "49f2528c-e2a1-46d2-b65b-3119d3457dd4",
+  "created_at": "2026-05-07T17:01:30Z",
+  "author": {
+    "agent_name": "Tidal Surfing Lighthouse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e03"
+  },
+  "title": "Graph MVP closeout fixes opened",
+  "body": "Tidal Surfing Lighthouse opening owner-requested fix slice on connecting-oak-resources: correct graph topology ADR numbering collision, remove dead smoke:dev:stub gate references, clarify next-session thread wording/branch metadata, and then run docs/code/assumptions reviewers. Current graph topology ADR is ADR-173; earlier graph ADR-168 mentions are historical because ADR-168 belongs to the accepted TypeScript 6 migration ADR. Active claims were empty before opening; claim 918b1a01 registered. Note: claims open exhibited the known area-pattern last-write-wins shape, so the claim entry was immediately corrected to list the full edit area before touching planning/docs files."
+}

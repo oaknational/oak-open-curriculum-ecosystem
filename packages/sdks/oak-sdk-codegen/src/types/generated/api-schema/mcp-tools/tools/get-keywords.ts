@@ -153,7 +153,7 @@ export const getKeywords = {
       attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });
     }
     return {
-      ok: false, message: 'Response does not match any documented schema for statuses: 200' ,
+      ok: false, message: 'Response does not match any documented schema for statuses: 200',
       issues: attemptedStatuses.flatMap((entry) => entry.issues),
       attemptedStatuses,
     };

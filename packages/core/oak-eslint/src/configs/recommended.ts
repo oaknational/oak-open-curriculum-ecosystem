@@ -1,6 +1,8 @@
 import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import prettierConfig from 'eslint-config-prettier';
+import type { TSESLint } from '@typescript-eslint/utils';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
@@ -47,7 +49,7 @@ export const RECOMMENDED_RESTRICTED_TYPES = {
   },
 } as const;
 
-export const recommended = tseslint.config(
+const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
@@ -61,8 +63,7 @@ export const recommended = tseslint.config(
   // active so local lint mirrors the current Sonar blocker surface without
   // importing the whole recommended preset. Sonar S7778 maps to
   // unicorn/prefer-single-call; enable that one rule without adopting the
-  // full Unicorn preset. It starts at warn because the existing monorepo
-  // violation surface is intentionally out of scope for this PR.
+  // full Unicorn preset.
   {
     plugins: { sonarjs, unicorn },
     rules: {
@@ -70,14 +71,28 @@ export const recommended = tseslint.config(
       'sonarjs/no-alphabetical-sort': 'error',
       'sonarjs/no-nested-functions': ['error', { threshold: 4 }],
       'sonarjs/void-use': 'error',
-      'unicorn/prefer-single-call': 'warn',
+      'unicorn/prefer-single-call': 'error',
+
+      // Potentials
+      'unicorn/no-abusive-eslint-disable': 'error',
+      // 'unicorn/error-message': 'warn',
+      // 'unicorn/throw-new-error': 'warn',
+      // 'unicorn/no-new-buffer': 'warn',
+      // 'unicorn/custom-error-definition': 'warn',
+      // 'unicorn/explicit-length-check': 'warn',
+      // 'unicorn/consistent-function-scoping': 'warn',
+      // 'unicorn/no-anonymous-default-export': 'warn',
+      // 'unicorn/prefer-string-starts-ends-with': 'warn',
+      // 'unicorn/prefer-includes': 'warn',
+      // 'unicorn/prefer-array-find': 'warn',
+      // 'unicorn/prefer-array-some': 'warn',
+      // 'unicorn/no-array-method-this-argument': 'warn',
     },
   },
   prettierConfig,
   {
     plugins: {
       tsdoc: tsdocPlugin,
-      '@oaknational': oakPlugin,
     },
     rules: {
       // Types
@@ -138,60 +153,6 @@ export const recommended = tseslint.config(
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
 
-      '@oaknational/no-eslint-disable': 'error',
-      '@oaknational/no-dynamic-import': 'error',
-      // Severity is `warn` during the rule's development phase per the general
-      // principle that new ESLint rules wire at `warn` first to avoid blocking
-      // unrelated work in the monorepo while the rule is iterated and the
-      // existing-violation surface is captured. Escalation to `error` (and the
-      // no-warning-toleration regime) is a separate, deliberate decision once
-      // the rule is stable and every existing violation is either on the frozen
-      // allowlist or migrated away.
-      //
-      // The `allowlistPathShapes` entries below are a frozen historical-violation
-      // inventory captured at the moment this rule went live. The structural
-      // defaults (`**/test-helpers/**`, `**/test-fakes/**`,
-      // `**/vitest.*.config.ts`, `**/vitest.setup.ts`) are hardcoded inside the
-      // rule and are not removable through this option.
-      //
-      // Per `.agent/rules/never-disable-checks.md`, per-file `eslint-disable`
-      // comments to bypass this rule are FORBIDDEN. Allowlist-ADD discipline:
-      // any PR adding a path here must cite either an entry in the §IO Inventory
-      // historical record carried by the originating capture commit, or a named
-      // follow-up plan whose closure removes the entry. Allowlist removals
-      // (migrating a path off the allowlist) require no citation — they are the
-      // intended end state.
-      '@oaknational/no-real-io-in-tests': [
-        'warn',
-        {
-          allowlistPathShapes: [
-            '**/agent-tools/tests/codex-project-agents.integration.test.ts',
-            '**/agent-tools/tests/codex-reviewer-resolve.integration.test.ts',
-            '**/agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts',
-            '**/agent-tools/tests/runtime-agent-index.integration.test.ts',
-            '**/apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts',
-            '**/apps/oak-search-cli/src/lib/indexing/field-readback-audit-parse-ledger.integration.test.ts',
-            '**/apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts',
-            '**/packages/core/build-metadata/tests/git-sha.unit.test.ts',
-            '**/packages/core/env/tests/root-package-version.unit.test.ts',
-            '**/packages/core/observability/src/no-node-only-imports.unit.test.ts',
-            '**/packages/libs/env-resolution/tests/app-root.integration.test.ts',
-            '**/packages/libs/env-resolution/tests/repo-root.integration.test.ts',
-            '**/packages/libs/env-resolution/tests/resolve-env.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/code-generation/codegen-core-file-operations.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/code-generation/schema-cache.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/upstream-param-description-overrides.unit.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/validate-canonical-urls.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/e2e-tests/generators/write-json-graph-file.e2e.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/e2e-tests/scripts/codegen-core.e2e.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.integration.test.ts',
-            '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts',
-          ],
-        },
-      ],
-
       // TSDoc
       'tsdoc/syntax': 'error',
 
@@ -207,3 +168,69 @@ export const recommended = tseslint.config(
     },
   },
 );
+
+const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
+  plugins: {
+    '@oaknational': oakPlugin,
+  },
+  rules: {
+    '@oaknational/no-eslint-disable': 'error',
+    '@oaknational/no-dynamic-import': 'error',
+    // Severity is `warn` during the rule's development phase per the general
+    // principle that new ESLint rules wire at `warn` first to avoid blocking
+    // unrelated work in the monorepo while the rule is iterated and the
+    // existing-violation surface is captured. Escalation to `error` (and the
+    // no-warning-toleration regime) is a separate, deliberate decision once
+    // the rule is stable and every existing violation is either on the frozen
+    // allowlist or migrated away.
+    //
+    // The `allowlistPathShapes` entries below are a frozen historical-violation
+    // inventory captured at the moment this rule went live. The structural
+    // defaults (`**/test-helpers/**`, `**/test-fakes/**`,
+    // `**/vitest.*.config.ts`, `**/vitest.setup.ts`) are hardcoded inside the
+    // rule and are not removable through this option.
+    //
+    // Per `.agent/rules/never-disable-checks.md`, per-file `eslint-disable`
+    // comments to bypass this rule are FORBIDDEN. Allowlist-ADD discipline:
+    // any PR adding a path here must cite either an entry in the §IO Inventory
+    // historical record carried by the originating capture commit, or a named
+    // follow-up plan whose closure removes the entry. Allowlist removals
+    // (migrating a path off the allowlist) require no citation — they are the
+    // intended end state.
+    '@oaknational/no-real-io-in-tests': [
+      'warn',
+      {
+        allowlistPathShapes: [
+          '**/agent-tools/tests/codex-project-agents.integration.test.ts',
+          '**/agent-tools/tests/codex-reviewer-resolve.integration.test.ts',
+          '**/agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts',
+          '**/agent-tools/tests/runtime-agent-index.integration.test.ts',
+          '**/apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts',
+          '**/apps/oak-search-cli/src/lib/indexing/field-readback-audit-parse-ledger.integration.test.ts',
+          '**/apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts',
+          '**/packages/core/build-metadata/tests/git-sha.unit.test.ts',
+          '**/packages/core/env/tests/root-package-version.unit.test.ts',
+          '**/packages/core/observability/src/no-node-only-imports.unit.test.ts',
+          '**/packages/libs/env-resolution/tests/app-root.integration.test.ts',
+          '**/packages/libs/env-resolution/tests/repo-root.integration.test.ts',
+          '**/packages/libs/env-resolution/tests/resolve-env.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/code-generation/codegen-core-file-operations.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/code-generation/schema-cache.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/upstream-param-description-overrides.unit.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/validate-canonical-urls.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/e2e-tests/generators/write-json-graph-file.e2e.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/e2e-tests/scripts/codegen-core.e2e.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.integration.test.ts',
+          '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts',
+        ],
+      },
+    ],
+  },
+};
+
+export const recommended: TSESLint.FlatConfig.ConfigArray = [
+  ...recommendedBase,
+  oakRecommendedConfig,
+];

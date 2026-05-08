@@ -139,10 +139,60 @@ the queue churns.
 | due | 7 | of which 3 are vaporware-gated (trigger-facet sub-grouping) |
 | partially-graduated | 2 | |
 | quarantined | 1 | |
-| pending | ~76 | second-instance or owner-direction gated |
-| **total** | **~86** | |
+| pending | ~78 | second-instance or owner-direction gated |
+| **total** | **~88** | |
 
 ## Entries
+
++ 2026-05-07; **sequence-or-admit-not-doing doctrine — never use
+  "deferred" as a bare status; sequence (gate-relative or tripwire-
+  based) or admit not-doing** (Windward Darting Horizon, owner
+  correction during MVP-arc spine authoring).
+  `[captured: 2026-05-07 | source: owner-direction | target: rule:never-use-bare-deferred-status OR directive-amend:principles.md | trigger: second-instance OR owner-direction | size: S | status: pending]`
+  Owner direction: *"we never mark anything as deferred, we sequence
+  things properly or we admit we are not going to do them. Sequencing
+  can include 'when these specific tripwires fire'."* I had added an
+  unsequenced `mvp_arc_status: deferred` YAML annotation. Existing
+  `sentry-observability-maximisation-mcp.plan.md` correctly uses the
+  word "deferred" only as a modifier on a stated reopen tripwire (e.g.
+  *"Deferred to public beta 2026-04-20; reopen when X"*); the doctrine
+  is: bare-status `*: deferred` is the violation, not the word itself.
+  Source-surface: napkin
+  [`napkin.md § 2026-05-07 Doctrine — sequence-or-admit-not-doing`](../active/napkin.md).
+  Graduation-target: (a) new rule
+  `.agent/rules/never-use-bare-deferred-status.md` with canonical-plus-
+  adapters triple; (b) extend `no-moving-targets-in-permanent-docs.md`
+  with a deferred-as-bare-status clause; (c) directive amendment to
+  `.agent/directives/principles.md`. Trigger: second-instance
+  observed OR owner direction at promotion. Status: pending — first
+  first-class instance with strong owner authorship; capture to honour
+  the moment per PDR-048.
+
++ 2026-05-07; **spine drift via comprehensive cataloguing — when a
+  coordination spine starts enumerating "things adjacent that the
+  spine doesn't ship", the spine has shifted from coordination tool
+  to roadmap and is over-claiming authority** (Windward Darting
+  Horizon, owner correction during MVP-arc spine authoring; same
+  session as the sequence-or-admit-not-doing doctrine).
+  `[captured: 2026-05-07 | source: owner-direction | target: pattern:patterns/spine-drift-via-comprehensive-cataloguing.md | trigger: second-instance | size: M | status: pending]`
+  Owner correction: *"the NC work is explicitly NOT part of the MVP,
+  you have clearly become confused"*. Sequence: I authored an MVP-arc
+  spine, then at the doctrine correction (entry above) I treated the
+  NC SKOS taxonomy plan as an "out-of-arc item" the spine should
+  sequence — generating a `## Out-of-MVP-Arc Items` section + per-
+  slice resolution todos + `mvp_arc_sequencing` YAML field on the NC
+  plan. All wrong. The NC plan was never IN the spine's scope; "cuts"
+  and "out-of-arc resolution" were category errors. The spine should
+  track ONLY what's IN the spine's commitment; adjacent plans own
+  their own sequencing. Source-surface: napkin
+  [`napkin.md § 2026-05-07 Surprise — boundary error: spine should not track non-MVP plans`](../active/napkin.md).
+  Graduation-target: anti-pattern in `.agent/memory/active/patterns/`
+  named `spine-drift-via-comprehensive-cataloguing.md` (polarity:
+  anti-pattern); template signal for spine authoring: when tempted to
+  enumerate "things outside the spine" inside the spine, stop and ask
+  whether the spine has become a roadmap. Trigger: second-instance
+  observed (could come from any coordination-spine plan author).
+  Status: pending — first instance, strong owner authorship.
 
 + 2026-05-06; **branch PR Sonar is a regression guard, not the backlog source
   for a branch opened to fix existing main/project Sonar debt** (Owner

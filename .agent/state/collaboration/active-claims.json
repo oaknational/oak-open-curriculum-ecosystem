@@ -615,6 +615,43 @@
       "expires_at": "2026-05-06T15:27:24.086Z",
       "phase": "abandoned",
       "notes": "record-staged exceeded the previous commit-queue git buffer on the large Sonar bundle; widening the helper and re-enqueueing with the final staged path list."
+    },
+    {
+      "intent_id": "85bacf6a-43dc-4382-8d25-4758e2be731a",
+      "claim_id": "582e0be3-3673-41b2-94e1-f5b874c7a095",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+        ".agent/plans/graph-mvp-arc.plan.md",
+        ".agent/plans/graph-portfolio-index.md",
+        ".agent/plans/templates/components/quality-gates.md",
+        ".agent/plans/templates/feature-workstream-template.md",
+        ".agent/research/graph-library.research.md",
+        "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+        "docs/architecture/architectural-decisions/168-graph-stack-topology.md",
+        "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+        "docs/architecture/architectural-decisions/README.md"
+      ],
+      "commit_subject": "docs(graph): fix graph MVP closeout references",
+      "queued_at": "2026-05-07T17:23:12.469Z",
+      "updated_at": "2026-05-07T17:23:54.844Z",
+      "expires_at": "2026-05-07T17:38:12.469Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "ba6d7db9922576a654f74e044363c2708f17de2d177f28dbb2ded18e25463a05",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md\nM\t.agent/plans/graph-mvp-arc.plan.md\nM\t.agent/plans/graph-portfolio-index.md\nM\t.agent/plans/templates/components/quality-gates.md\nM\t.agent/plans/templates/feature-workstream-template.md\nM\t.agent/research/graph-library.research.md\nM\tdocs/architecture/architectural-decisions/157-multi-source-open-education-integration.md\nR080\tdocs/architecture/architectural-decisions/168-graph-stack-topology.md\tdocs/architecture/architectural-decisions/173-graph-stack-topology.md\nM\tdocs/architecture/architectural-decisions/README.md\n",
+      "notes": "Verifier represents ADR rename by new path only; re-queueing staged bundle without old deleted path."
     }
   ],
   "claims": []

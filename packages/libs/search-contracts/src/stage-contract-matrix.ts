@@ -83,8 +83,7 @@ function createRetrievalStageEntries(field: FieldInventoryEntry): readonly Stage
 function createStageContractMatrixEntries(): readonly StageContractEntry[] {
   const entries: StageContractEntry[] = [];
   for (const field of SEARCH_FIELD_INVENTORY) {
-    entries.push(...createIngestStageEntries(field));
-    entries.push(...createRetrievalStageEntries(field));
+    entries.push(...createIngestStageEntries(field), ...createRetrievalStageEntries(field));
   }
   return entries;
 }

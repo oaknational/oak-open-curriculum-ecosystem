@@ -214,6 +214,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   lands cues 2 and 3 in principles.md alongside the existing
   vocabulary trip-list as a cohesive output-time defence;
   Accepted 2026-05-03)
+- [ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic](173-graph-stack-topology.md)
+  (proposed topology for the graph substrate: RDF-native internals,
+  standards-based wire projection, consumer/substrate workspace tiers,
+  and standards-evolution tripwires; Proposed 2026-05-07)
 
 ## Key Architectural Decisions
 

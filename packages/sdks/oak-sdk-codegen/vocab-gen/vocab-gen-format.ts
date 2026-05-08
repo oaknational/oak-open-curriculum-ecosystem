@@ -57,11 +57,16 @@ export function formatPipelineResult(result: PipelineResult): string {
     lines.push('=== DRY RUN - No files written ===', '');
   }
 
-  lines.push(`Files processed: ${result.filesProcessed}`, '');
-  lines.push(...formatSourceData(result), '');
-  lines.push(...formatVocabularyStats(result));
-  lines.push(...formatOutputFiles(result));
-  lines.push('', `Duration: ${(result.durationMs / 1000).toFixed(2)}s`);
+  lines.push(
+    `Files processed: ${result.filesProcessed}`,
+    '',
+    ...formatSourceData(result),
+    '',
+    ...formatVocabularyStats(result),
+    ...formatOutputFiles(result),
+    '',
+    `Duration: ${(result.durationMs / 1000).toFixed(2)}s`,
+  );
 
   return lines.join('\n');
 }

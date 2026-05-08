@@ -1,17 +1,29 @@
-# Report: Stable-first JSON / JSON-LD graph utilities with RDF semantics and future-standard migration paths
+# Research direction: Stable-first JSON / JSON-LD graph utilities with RDF semantics and future-standard migration paths
 
-**Date:** 4 May 2026
+> **This is a research direction, not a plan.** It captures one well-supported
+> shape for a general graph-handling layer, plus first-wave Oak ingestion scope.
+> The executable plan that consumes this direction is
+> [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md);
+> the topology decision lives in **ADR-173**.
+
+**Date:** 4 May 2026 (last revised 7 May 2026 — Option B applied:
+**RDF 1.2-native internals**, JSON-LD 1.1 wire, **Oak first-wave ingestion
+scope**, and a **canonical Standards-evolution tripwire map** in §19).
 **Scope:** A small library or collection of utilities for ingesting, enhancing, normalising, validating, querying, and exporting graph-like JSON or JSON-LD.
 
 ## Executive summary
 
-A strong design is to build a **stable-first graph utility library** around **JSON-LD 1.1**, **RDF 1.1-compatible quads**, **schema.org**, and adjacent stable RDF vocabularies such as **RDFS**, **SKOS**, **PROV-O**, **Dublin Core Terms**, **OWL 2**, and **SHACL**.
+A strong design is to build a **stable-first graph utility library** with:
+
+- **JSON-LD 1.1** as the wire syntax (JSON-LD 1.2 is not yet stable; targeted Q4 2027 per the W3C JSON-LD WG charter).
+- **RDF 1.2-native internal model** (W3C Candidate Recommendation Snapshot, 7 April 2026). Triple terms are first-class members of the canonical `Term` union from day one (§4); statement-level annotations are first-class internal types, not a shim. The library emits **RDF 1.1-compatible quads on the wire**, lowered from the RDF 1.2-native internals via a `RelationshipRecord` projection on JSON-LD 1.1 emit (§8). When JSON-LD 1.2 reaches Recommendation, the projection becomes one supported wire profile rather than the canonical wire shape (§19, tripwire #1).
+- **schema.org**, **RDFS**, **SKOS**, **PROV-O**, **Dublin Core Terms**, **OWL 2**, **SHACL** as the vocabulary baseline.
 
 The library should not merely manipulate JSON trees. It should treat JSON and JSON-LD as inputs, then normalise them into a semantic graph model with explicit identifiers, predicates, source mappings, validation, provenance, and property-graph-style interaction APIs.
 
 The recommended posture is:
 
-> Use only stable standards for persisted data, public APIs, and default exports. Design internal abstractions so RDF 1.2, JSON-LD 1.2/1.3, SPARQL 1.2, and SHACL 1.2 become adapter upgrades rather than architectural rewrites.
+> Use only stable standards on the wire and in public APIs. **Design internally to RDF 1.2** so that when JSON-LD 1.2 reaches Recommendation, the library upgrades by adding emit/parse adapters rather than reshaping the canonical model. SPARQL 1.2 and SHACL 1.2 are tracked the same way.
 
 The practical architecture is:
 
@@ -42,7 +54,7 @@ The stable baseline should be:
 | JSON-linked-data syntax               | [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/)                                                                 | Primary standards-based JSON representation for graph data                            |
 | JSON-LD processing                    | [JSON-LD 1.1 Processing Algorithms and API](https://www.w3.org/TR/json-ld11-api/)                               | Expansion, compaction, flattening, conversion into RDF-compatible data                |
 | JSON-LD tree views                    | [JSON-LD 1.1 Framing](https://www.w3.org/TR/json-ld11-framing/)                                                 | Stable way to shape graph data back into predictable JSON trees                       |
-| Graph data model                      | [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/)                                   | Canonical semantic model: subject–predicate–object triples and datasets               |
+| Graph data model                      | [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/) — wire-stable today; internals aligned with [RDF 1.2 Concepts](https://www.w3.org/TR/rdf12-concepts/) (CR Snapshot 7 April 2026) | Canonical semantic model: subject–predicate–object triples and datasets, designed for the RDF 1.2 triple-term path. |
 | RDF schema vocabulary                 | [RDF Schema 1.1](https://www.w3.org/TR/rdf-schema/)                                                             | Basic classes, properties, labels, comments, domain/range hints                       |
 | Web vocabulary                        | [schema.org](https://schema.org/) and [schema.org data model](https://schema.org/docs/datamodel.html)           | Default vocabulary for common public entities and relationships                       |
 | Validation                            | [SHACL](https://www.w3.org/TR/shacl/)                                                                           | Semantic validation of RDF graphs using shapes                                        |
@@ -64,7 +76,7 @@ The system should be designed with these emerging standards in mind, but not dep
 
 | Area                       | Current state                                                                                                                                                                                    | Design implication                                                                                                                 |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| RDF 1.2                    | [RDF 1.2 Concepts](https://www.w3.org/TR/rdf12-concepts/) and [RDF 1.2 Semantics](https://www.w3.org/TR/rdf12-semantics/) are W3C Candidate Recommendation Snapshot documents as of 7 April 2026 | Important future target, especially for triple terms and statement-level annotations; do not require it in persisted core data yet |
+| RDF 1.2                    | [RDF 1.2 Concepts](https://www.w3.org/TR/rdf12-concepts/) and [RDF 1.2 Semantics](https://www.w3.org/TR/rdf12-semantics/) are W3C Candidate Recommendation Snapshot documents as of 7 April 2026 | **Design target for internal types** (triple terms, statement-level annotation patterns) so that JSON-LD 1.2 lands as an emit/parse adapter. Persisted/wire form remains RDF 1.1-compatible until JSON-LD 1.2 is stable. |
 | JSON-LD 1.2                | The [JSON-LD Working Group Charter](https://www.w3.org/2026/01/json-ld-wg-charter.html) targets JSON-LD 1.2 Recommendation in Q4 2027                                                            | Keep context handling disciplined and adapter-based                                                                                |
 | JSON-LD 1.3 / JSON-LD-star | Listed as tentative future work in the [JSON-LD Working Group Charter](https://www.w3.org/2026/01/json-ld-wg-charter.html), related to RDF 1.2 compatibility                                     | Treat as a future import/export profile, not a core syntax                                                                         |
 | SPARQL 1.2                 | [SPARQL 1.2 Query Language](https://www.w3.org/TR/sparql12-query/) is a Working Draft                                                                                                            | Keep RDF data query-compatible; expose SPARQL 1.1-compatible behaviour by default                                                  |
@@ -93,19 +105,41 @@ Emerging standards are future adapter targets, not current dependencies.
 
 ## 4. Canonical internal model
 
-The canonical internal model should be an RDF-compatible dataset, ideally compatible with RDF/JS concepts:
+The canonical internal model is **RDF 1.2-native** — triple terms are
+first-class members of the `Term` union, matching the RDF 1.2 abstract syntax
+(W3C Candidate Recommendation Snapshot, 7 April 2026). The library is
+therefore RDF 1.2-native from day one for ingestion, internal modelling,
+validation, and projection.
+
+Wire-format compatibility with JSON-LD 1.1 / RDF 1.1 is preserved by
+*projecting* triple-term annotations to `RelationshipRecord` shapes on emit
+(§8). When JSON-LD 1.2 reaches Recommendation, the projection becomes one
+supported wire profile rather than the canonical wire shape and consumers
+can opt into native triple-term syntax (see §19 — tripwire #1).
+
+The data model aligns with RDF/JS concepts where they exist; for triple
+terms the RDF/JS WG has not yet published a formal extension (tripwire #2
+covers migration if our shape differs from the eventual published spec).
 
 ```ts
 type Term =
   | NamedNode
   | BlankNode
   | Literal
-  | DefaultGraph;
+  | DefaultGraph
+  | TripleTerm;            // RDF 1.2 (CR Snapshot, 7 April 2026)
+
+type TripleTerm = {
+  termType: "TripleTerm";
+  subject: Term;           // can itself be a TripleTerm (nested allowed)
+  predicate: NamedNode;
+  object: Term;            // can itself be a TripleTerm
+};
 
 type Quad = {
-  subject: Term;
+  subject: Term;           // includes TripleTerm in RDF 1.2
   predicate: NamedNode;
-  object: Term;
+  object: Term;            // includes TripleTerm in RDF 1.2
   graph: Term;
 };
 ```
@@ -291,9 +325,18 @@ _:article schema:author <https://example.org/people/jim> .
 
 The second transformation should be represented as an enhancement with provenance and confidence.
 
-## 8. Relationship records as the migration bridge
+## 8. Relationship records as the JSON-LD 1.1 emit projection
 
-For stable JSON-LD 1.1 and RDF 1.1 compatibility, relationship metadata should be represented as explicit relationship records.
+Relationship records are the **JSON-LD 1.1 emit projection** of RDF 1.2
+triple-term annotations — not a substitute for them. Internally, edge
+metadata is modelled as triple terms (§4); when emitting JSON-LD 1.1 — the
+wire-stable default until tripwire #1 fires (§19) — those triple-term
+annotations are projected to `RelationshipRecord` shapes so JSON-LD 1.1
+consumers receive a clean, framable JSON-LD document.
+
+Once JSON-LD 1.2 reaches Recommendation, the projection becomes one
+supported wire profile rather than the canonical wire shape, and consumers
+can opt into native triple-term syntax (see §19 — tripwire #1).
 
 Example:
 
@@ -318,7 +361,10 @@ Example:
 }
 ```
 
-This is portable today. It also gives a clean future migration path to RDF 1.2 triple-term or statement-annotation patterns where appropriate.
+This is portable today, on the JSON-LD 1.1 wire. The internal RDF 1.2
+triple-term annotation it projects from carries the same information; the
+projection is reversible (a JSON-LD 1.1 RelationshipRecord round-trips back
+to a triple-term annotation).
 
 The internal type might be:
 
@@ -488,30 +534,29 @@ Optional export representation:
 
 The system should be built around migration seams.
 
-### RDF 1.2 migration seam
+### Wire-format migration seam (formerly: RDF 1.2 migration seam)
 
-Today:
+The data model is already RDF 1.2-native (§4); the migration seam is the
+**wire format**, not the data model.
 
-```text
-RelationshipRecord {
-  source,
-  predicate,
-  target,
-  properties
-}
-```
-
-Future RDF 1.2 adapter:
+Today (JSON-LD 1.1 wire — until tripwire #1 fires, §19):
 
 ```text
-If safe:
-  relationship record → triple-term annotation
-
-If not safe:
-  relationship record remains a first-class node
+Internal:    triple-term annotation (RDF 1.2)
+On emit:     RelationshipRecord projection (JSON-LD 1.1)
 ```
 
-Do not assume every edge property is merely metadata about a triple. Some are independent domain objects.
+Future (JSON-LD 1.2 wire — when tripwire #1 fires):
+
+```text
+Internal:    triple-term annotation (unchanged)
+On emit:     native JSON-LD 1.2 triple-term syntax (default)
+             OR RelationshipRecord projection (back-compat profile)
+```
+
+Do not assume every edge property collapses neatly into a triple-term
+annotation. Some relationship records are meaningful entities in their own
+right and emerge as first-class nodes in either wire profile.
 
 ### JSON-LD 1.2 / 1.3 migration seam
 
@@ -690,14 +735,14 @@ The best architecture is:
 ```text
 Stable on the wire:
   JSON-LD 1.1
-  RDF 1.1-compatible datasets
+  RDF 1.1-compatible datasets (lowered from RDF 1.2-native internals)
   SHACL 1.0
   schema.org and stable RDF vocabularies
 
-Semantic in the middle:
-  RDF-compatible quads
+Semantic in the middle (RDF 1.2-native):
+  RDF 1.2-compatible quads with TripleTerm as a first-class Term member
   vocabulary registry
-  relationship records
+  triple-term annotations (projected to RelationshipRecord on JSON-LD 1.1 emit)
   source maps
   enhancement records
   validation reports
@@ -710,11 +755,212 @@ Ergonomic at the edges:
   framed JSON-LD
   JSONPath and JSON Pointer source access
 
-Future-ready by design:
-  RDF 1.2 adapter
-  JSON-LD 1.2 / 1.3 adapter
-  SPARQL 1.2 adapter
-  SHACL 1.2 adapter
+Future-ready by design (tripwire-driven, see §19):
+  JSON-LD 1.2 emit/parse adapter (tripwire #1)
+  RDF/JS RDF 1.2 alignment migration (tripwire #2)
+  SHACL 1.2 profile (tripwire #3)
+  SPARQL 1.2 adapter (tripwire #4)
 ```
+
+## 18. Oak Ontology repo data formats and first-wave ingestion scope
+
+Added 7 May 2026.
+
+### Oak Curriculum Ontology repo — formats and canonicality
+
+The sibling [`oak-curriculum-ontology`](https://github.com/oaknational/oak-curriculum-ontology)
+repo distributes the same logical content in multiple formats. Turtle is the
+source of truth; everything else is a derived projection.
+
+| Format | Files / scripts | Role |
+|---|---|---|
+| **Turtle (.ttl)** — RDF | `ontology/oak-curriculum-ontology.ttl`, `ontology/oak-curriculum-constraints.ttl` (SHACL), `data/**/*.ttl` (programme structure, threads, temporal structure, per-subject KS + knowledge-taxonomy) | **Source of truth**. Includes SHACL constraints. |
+| **Property-graph JSONL** | `scripts/generate_pg_jsonl.py`, `scripts/validate_pg_jsonl.py`, `docs/property-graph-format.md` | Derived view |
+| **Neo4j export** | `scripts/export_to_neo4j.py`, `scripts/export_to_neo4j_ARCHITECTURE.md` | Derived for Neo4j workloads |
+| **SQL schema + Postgres / SQLite loaders** | `scripts/generate_sql_schema.py`, `scripts/load_rdf_to_postgres.py`, `scripts/load_rdf_to_sqlite.py` | Derived relational projections |
+| **SPARQL test queries** | `scripts/test_sparql_queries.py` | Validation harness |
+| **WIDOCO HTML docs** | `.github/workflows/generate-docs-widoco.yml` | Documentation projection |
+
+**Decision (owner-set, 7 May 2026): the library imports Turtle (with SHACL)
+directly from the ontology repo. The other projections are not first-wave
+ingestion targets. Round-trip equivalence between Turtle and the derived
+projections is asserted upstream and not re-verified by the graph stack.**
+
+If a downstream Oak workload needs PG-JSONL, Neo4j-export, or SQL projections,
+they remain available as exports of the canonical TTL and can be re-introduced
+as ingestion modes when a concrete consumer demands them.
+
+### First-wave ingestion scope
+
+The first wave of import support targets four corpora:
+
+1. **Oak Curriculum Ontology — Turtle + SHACL.** Direct ingestion of the
+   ontology repo's `.ttl` distribution and its SHACL shapes. Canonical IRIs are
+   honoured; node identity is ontology-anchored.
+2. **Pre-requisite graph.** Built in this repo, so the on-disk format is a
+   choice, not a constraint. Recommended emit shape: JSON-LD 1.1 with a stable
+   Oak context, importable through the `jsonld-compatible` ingestion mode and
+   round-trippable to RDF.
+3. **Misconception graph.** Same posture as the prerequisite graph — emit
+   shape is a choice. Recommended JSON-LD 1.1 with a stable Oak context.
+4. **EEF Teaching and Learning Toolkit.** External dataset; we do not control
+   its source format. The library must accept whatever EEF provides
+   (currently a structured JSON corpus per
+   [`eef-evidence-corpus.plan.md`](../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md))
+   through the `jsonld-compatible` or `records` ingestion mode, with
+   provenance recorded.
+
+**Out of scope for first wave**: Oak ontology projections beyond Turtle
+(PG-JSONL, Neo4j export, SQL); third-party knowledge graphs as data sources
+(tracked separately in
+[`external-knowledge-graph-data-source-integration.plan.md`](../plans/exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md)).
+
+## 19. Standards-evolution tripwires
+
+This library is **RDF 1.2-native internally** and **JSON-LD 1.1 / RDF 1.1
+on the wire**. The wire constraint is a deliberate concession to JSON-LD 1.1
+stability and downstream interop. The tripwires below are the **canonical
+list of work that activates as the ecosystem catches up**: each one names
+*what to watch for*, *what changes*, and *what stays the same*. ADR-173
+enumerates the same tripwires by name as binding commitments; the executable
+plan ([`graph-stack.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md))
+schedules them as named follow-ons.
+
+### Tripwire #1 — JSON-LD 1.2 reaches W3C Recommendation
+
+- **Signal to watch**: <https://www.w3.org/TR/json-ld12/> moves from
+  Candidate Recommendation to Recommendation. (W3C JSON-LD WG charter target:
+  Q4 2027.)
+- **Modules affected**: `graph-core/jsonld` (default `JsonLdProcessor`
+  version), `graph-future` (activated to host JSON-LD 1.2 emit/parse),
+  `graph-corpus-sdk` (consumer choice of wire profile).
+- **What changes**:
+  - Add a JSON-LD 1.2 emit/parse adapter behind the existing
+    `JsonLdProcessor.version` discriminator.
+  - After consumer-compat verification, change the default version from
+    `"1.1"` to `"1.2"`.
+  - The RelationshipRecord projection becomes one supported wire profile
+    rather than the canonical wire shape; consumers can opt into native
+    triple-term JSON-LD 1.2 syntax.
+- **What stays the same**: internal RDF 1.2 model (already aligned);
+  RelationshipRecord projection (still works for JSON-LD 1.1 consumers);
+  SHACL profile; SPARQL adapter shape.
+- **Prerequisite for downstream tripwires**: none — tripwire #1 is independent
+  of #2-5.
+
+### Tripwire #2 — RDF/JS WG formalises an RDF 1.2 data-model extension
+
+- **Signal to watch**: an RDF/JS spec publishes `TripleTerm` (or equivalent)
+  as a canonical type. Watch the
+  [RDF/JS Community Group](https://rdf.js.org/) and W3C activity around
+  RDF 1.2 alignment of the JS data model.
+- **Modules affected**: `graph-core` only.
+- **What changes**:
+  - Compare our `TripleTerm` shape (§4) to the published spec.
+  - If different, migrate `graph-core`'s `Term` union and any
+    type-level downstream usage to match the published spec.
+  - Update `rdf-data-factory` and any RDF/JS-aligned dependency.
+- **What stays the same**: every workspace above `graph-core`. The migration
+  is a single-workspace concern by design — `graph-core` is the only place
+  that owns the `Term` union, so the blast radius is bounded.
+- **Mitigation today**: keep our `TripleTerm` shape minimal (matches the
+  RDF 1.2 abstract syntax — `subject`, `predicate`, `object` with no extras);
+  avoid premature additions that might diverge from the eventual spec.
+
+### Tripwire #3 — SHACL 1.2 reaches W3C Recommendation
+
+- **Signal to watch**: SHACL 1.2 Core / SHACL 1.2 Rules drafts move from
+  Working Draft to Recommendation.
+- **Modules affected**: `graph-validate`, `graph-future` (activated if a
+  consumer needs SHACL 1.2 features beyond what `graph-validate` exposes).
+- **What changes**:
+  - Add `shacl-1.2` to the `ShapeValidator.profile` discriminator (research §12).
+  - Re-evaluate `rdf-validate-shacl` (zazuko) for SHACL 1.2 conformance;
+    consider alternative implementations if conformance is partial.
+  - Update default `profile` once the substrate validates SHACL 1.2 features
+    in production use.
+- **What stays the same**: `shacl-1.0` profile remains supported (consumers'
+  existing shapes don't require migration unless they want SHACL 1.2-only
+  features).
+
+### Tripwire #4 — SPARQL 1.2 reaches W3C Recommendation
+
+- **Signal to watch**: SPARQL 1.2 Query Language moves from Working Draft to
+  Recommendation.
+- **Modules affected**: `graph-future` (activated to host the SPARQL 1.2
+  query/export adapter).
+- **What changes**: author the SPARQL 1.2 export/query adapter behind the
+  versioned interface in research §12.
+- **What stays the same**: library-native match/traverse APIs in
+  `graph-project` remain the **primary** query surface. SPARQL is always an
+  export/adapter, never the primary application API. This invariant is
+  preserved across SPARQL 1.1, 1.2, and beyond.
+
+### Tripwire #5 — RDF 1.2 itself reaches W3C Recommendation
+
+- **Signal to watch**: RDF 1.2 Concepts and RDF 1.2 Semantics move from
+  Candidate Recommendation Snapshot to Recommendation.
+- **Modules affected**: documentation and package metadata mostly; no
+  architectural change.
+- **What changes**:
+  - Update declared spec version in package metadata, READMEs, ADR-173, and
+    this research document.
+  - The pre-Recommendation risk window (small, but non-zero — CR Snapshots can
+    receive non-substantive corrections) closes.
+- **What stays the same**: internal data model (already RDF 1.2-native, §4).
+
+### Tripwire #6 — first triple-term-using corpus enters first-wave ingestion
+
+- **Signal to watch**: any first-wave corpus (Oak Curriculum Ontology,
+  prerequisite, misconception, EEF) — or a future corpus — starts emitting
+  data that uses RDF 1.2 triple-term shape (e.g. statement-level annotations,
+  RDF-star or RDF 1.2 Turtle). Today none of the first-wave corpora use
+  triple terms, so this tripwire is dormant on landing.
+- **Modules affected**: `graph-ingest` (parser correctness), `graph-validate`
+  (shape constraints over triple terms), `graph-enhance` (provenance and
+  derivation records over triple terms), contract tests across the substrate.
+- **What changes**:
+  - Verify ingestion preserves triple terms through the pipeline end-to-end.
+  - Verify SHACL shape constraints hold on triple-term data.
+  - Verify enhancement records correctly attribute triple-term derivations.
+- **What stays the same**: wire emission still defaults to JSON-LD 1.1
+  (lowering to RelationshipRecord) until tripwire #1 fires. This tripwire
+  exercises the **internal** RDF 1.2 path; it does *not* implicitly fire
+  tripwire #1.
+
+### Tripwire #7 — adapter implementation diverges from targeted spec
+
+- **Signal to watch**: contract test failure on `jsonld.js`, `rdf-canonize`,
+  `rdf-validate-shacl`, or any future adapter against the pinned spec
+  profile. Includes RDF Dataset Canonicalization 1.0 → 2.0 spec evolution and
+  any major-version dependency bumps.
+- **Modules affected**: the diverging adapter only.
+- **What changes**:
+  - Pin to the last-known-good adapter version.
+  - File an upstream issue.
+  - Evaluate alternative implementations.
+  - Use the relevant `version` / `profile` / discriminator field
+    (`JsonLdProcessor.version`, `ShapeValidator.profile`, etc.) as the
+    intervention point — never patch the canonical types or callers.
+- **What stays the same**: the canonical internal model and other adapters
+  are unaffected by definition (that is what the discriminator is for).
+
+### Tripwire discipline (binding)
+
+- Every tripwire is a **contract test or version-pin** in the codebase.
+  This document is the **authoritative tripwire map**; ADR-173 enumerates
+  them by name as binding commitments; the plan body schedules them as
+  named follow-on plans when triggered.
+- **No tripwire can be silently skipped.** When a trigger fires, the work
+  is a named follow-on plan, not an inline sweep. The follow-on cites this
+  section by tripwire number.
+- **Default position for any unresolved spec is to stay on the stable
+  profile.** Premature adoption is a worse failure mode than late adoption —
+  spec churn during CR / WD periods is real, and our wire commitments
+  outlast our internal flexibility.
+- **Discriminator fields are the only legitimate intervention point.**
+  Adapter version and profile fields (`JsonLdProcessor.version`,
+  `ShapeValidator.profile`, etc.) exist precisely so tripwire-triggered
+  upgrades happen behind a single, typed boundary.
 
 This gives you a library that is useful immediately for graph-like JSON and JSON-LD, grounded in RDF and schema.org from the beginning, but not blocked by newer standards that are still in flight.

@@ -294,10 +294,12 @@ export function serializeMinedSynonyms(data: MinedSynonymsData): string {
     lines.push('');
   }
 
-  lines.push('} as const;');
-  lines.push('');
-  lines.push('export type MinedDefinitionSynonyms = typeof minedDefinitionSynonyms;');
-  lines.push('');
+  lines.push(
+    '} as const;',
+    '',
+    'export type MinedDefinitionSynonyms = typeof minedDefinitionSynonyms;',
+    '',
+  );
 
   return lines.join('\n');
 }

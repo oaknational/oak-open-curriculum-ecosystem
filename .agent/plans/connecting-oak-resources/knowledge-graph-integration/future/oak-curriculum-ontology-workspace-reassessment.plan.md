@@ -2,6 +2,8 @@
 name: "Oak Curriculum Ontology Workspace Reassessment"
 overview: "Re-open the earlier decision not to integrate the Python ontology repo into this pnpm/Turbo monorepo now that joining the MCP, Oak Knowledge Graphs, and API threads is an organisational priority."
 status: future
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 source_repos:
   - "oak-curriculum-ontology sibling checkout"
 related_plans:

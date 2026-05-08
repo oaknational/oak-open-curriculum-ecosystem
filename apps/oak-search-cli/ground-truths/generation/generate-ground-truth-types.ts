@@ -216,7 +216,6 @@ function generateIndexFile(): string {
  * @generated - DO NOT EDIT
  */
 
-/* eslint-disable no-restricted-syntax */
 // export * is acceptable here as this is a generated barrel file
 
 // Lesson slug validation data (Sets, type guards, branded types)
@@ -236,42 +235,45 @@ export * from './bulk-data-manifest';
 function generateManifestFile(allData: readonly ParsedBulkData[]): string {
   const lines: string[] = [];
 
-  lines.push('/**');
-  lines.push(' * Bulk data manifest with generation metadata.');
-  lines.push(' *');
-  lines.push(' * @generated - DO NOT EDIT');
-  lines.push(` * Generated at: ${new Date().toISOString()}`);
-  lines.push(' */');
-  lines.push('');
-
-  lines.push('/**');
-  lines.push(' * Metadata for a subject/phase combination.');
-  lines.push(' */');
-  lines.push('interface SubjectPhaseMetadata {');
-  lines.push('  readonly subject: string;');
-  lines.push("  readonly phase: 'primary' | 'secondary';");
-  lines.push('  readonly sequenceSlug: string;');
-  lines.push('  readonly lessonCount: number;');
-  lines.push('}');
-  lines.push('');
-
-  lines.push('/**');
-  lines.push(' * All subject/phase combinations in the bulk data.');
-  lines.push(' */');
-  lines.push('export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [');
+  lines.push(
+    '/**',
+    ' * Bulk data manifest with generation metadata.',
+    ' *',
+    ' * @generated - DO NOT EDIT',
+    ` * Generated at: ${new Date().toISOString()}`,
+    ' */',
+    '',
+    '/**',
+    ' * Metadata for a subject/phase combination.',
+    ' */',
+    'interface SubjectPhaseMetadata {',
+    '  readonly subject: string;',
+    "  readonly phase: 'primary' | 'secondary';",
+    '  readonly sequenceSlug: string;',
+    '  readonly lessonCount: number;',
+    '}',
+    '',
+    '/**',
+    ' * All subject/phase combinations in the bulk data.',
+    ' */',
+    'export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [',
+  );
   for (const data of allData) {
-    lines.push('  {');
-    lines.push(`    subject: '${data.subject}',`);
-    lines.push(`    phase: '${data.phase}',`);
-    lines.push(`    sequenceSlug: '${data.sequenceSlug}',`);
-    lines.push(`    lessonCount: ${data.lessonCount},`);
-    lines.push('  },');
+    lines.push(
+      '  {',
+      `    subject: '${data.subject}',`,
+      `    phase: '${data.phase}',`,
+      `    sequenceSlug: '${data.sequenceSlug}',`,
+      `    lessonCount: ${data.lessonCount},`,
+      '  },',
+    );
   }
-  lines.push('] as const;');
-  lines.push('');
-
-  lines.push(`/** Number of subject/phase combinations */`);
-  lines.push(`export const SUBJECT_PHASE_COUNT = ${allData.length} as const;`);
+  lines.push(
+    '] as const;',
+    '',
+    `/** Number of subject/phase combinations */`,
+    `export const SUBJECT_PHASE_COUNT = ${allData.length} as const;`,
+  );
 
   return lines.join('\n');
 }

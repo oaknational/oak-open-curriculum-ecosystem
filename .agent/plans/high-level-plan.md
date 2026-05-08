@@ -3,7 +3,9 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-04-28
+last_updated: 2026-05-07
+related_indices:
+  - "graph-portfolio-index.md"
 ---
 
 # High-Level Plan
@@ -73,6 +75,60 @@ Milestone 3: Public Beta                         📋 PLANNED
 
 ---
 
+## Cross-cutting Threads
+
+Two cross-cutting threads run alongside the milestone sequence and produce
+impact independently of any single milestone gate. They are tracked through
+their own collections and indices rather than as milestone bullets.
+
+### Knowledge Graph thread
+
+Goal: a layered, standards-based graph capability that knits curriculum
+content, curriculum structure, pedagogical evidence, and Oak's own engineering
+practice into a navigable, citation-grade, AI-accessible substrate — and
+positions the stack as open-education infrastructure.
+
+The portfolio is split into three goals (substrate, Oak graph surfaces,
+features) with first-wave ingestion targeting Oak Curriculum Ontology Turtle
+and SHACL, the prerequisite graph, the misconception graph, and the EEF
+corpus.
+
+- **Index (all graph plans + research)**:
+  [graph-portfolio-index.md](graph-portfolio-index.md)
+- **MVP vertical-slice arc** (three-slice delivery spine):
+  [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
+- **Research direction**:
+  [graph-library.research.md](../research/graph-library.research.md)
+- **Topology spine plan**:
+  [connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+- **Collection README**:
+  [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md)
+
+### EEF Evidence thread (sector-cohesion demonstration)
+
+Goal: integrate the EEF Teaching and Learning Toolkit as an evidence corpus
+on top of Oak's graph stack — a clear, visible demonstration of the wider
+education sector coming together to deliver compounded impact through openly
+licensed resources. Oak's openly licensed curriculum on one side, EEF's openly
+licensed evidence on the other, composable in a single working context for
+every Oak user (and every external partner building on Oak).
+
+This thread is part of the graph portfolio (the EEF corpus is one of the
+first-wave Oak graph surfaces) and is also a separately important
+sector-engagement story.
+
+- **Canonical plan**:
+  [sector-engagement/eef/current/eef-evidence-corpus.plan.md](sector-engagement/eef/current/eef-evidence-corpus.plan.md)
+- **MVP vertical-slice arc** (slice 1 + slice 3b consume EEF):
+  [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
+- **Cross-source journeys** (search × misconception × EEF):
+  [connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+- **External-source intake** (generalised model for future sector partners
+  beyond EEF):
+  [exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md](exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md)
+
+---
+
 ## Immediate Next Intentions
 
 The active branch-critical closure sequence remains:
@@ -109,10 +165,11 @@ there). Observability plans moved into the dedicated
    [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
    and deploy that migration work.
 4. The first graph-enablement slice has now been promoted into
-   [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md).
+   [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md).
    Use its outputs to decide whether the next graph promotion is separate Neo4j
    provisioning, Elasticsearch projection work, or explanation-first graph
-   augmentation.
+   augmentation. The full graph portfolio is indexed at
+   [graph-portfolio-index.md](graph-portfolio-index.md).
 
 This sequence reflects current user priority ahead of broader Milestone 2 and
 Milestone 3 backlog items.
@@ -212,10 +269,12 @@ Graph-augmented curriculum navigation begins to surface.
      metadata visible in Claude Desktop / ChatGPT tool listings)
 3. **Knowledge graph alignment audit** (intention #4)
    - First graph-enablement slice:
-     [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
+     [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
    - Outputs inform whether next graph promotion is separate Neo4j
      provisioning, Elasticsearch projection work, or explanation-first
      graph augmentation
+   - Full graph portfolio (substrate + Oak surfaces + features + EEF
+     thread): [graph-portfolio-index.md](graph-portfolio-index.md)
 4. **Sentry + OpenTelemetry foundation**
    - Collection entry point:
      [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
@@ -279,7 +338,7 @@ broaden platform reach.
      [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
    - Reference implementation patterns exist in `starter-app-spike`
 4. **Knowledge graph alignment** (if not completed in M2)
-   - [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
+   - [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
 5. **Exemplar MCP App UI experience (`user_search` tool)**
    - New user-facing search tool (`user_search`/`userSearch`) with the same
      capabilities as the existing `search` tool but designed for interactive
@@ -353,7 +412,7 @@ Strategic architecture remains anchored in:
 | `architecture-and-infrastructure/` | Cross-cutting architecture, observability, system quality | 📋 M3 Public Beta | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `user-experience/` | Persona-level outcome contracts | 📋 M1-M2 | [user-experience/README.md](user-experience/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |
-| `knowledge-graph-integration/` | Internal Oak KG integration, ontology repo/workspace decisions, search projections, graph serving | 🔄 M2-M3 mixed lanes | [knowledge-graph-integration/README.md](knowledge-graph-integration/README.md) |
+| `connecting-oak-resources/knowledge-graph-integration/` | Internal Oak KG integration, ontology repo/workspace decisions, search projections, graph serving | 🔄 M2-M3 mixed lanes | [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md) |
 | `sector-engagement/` | External data sources, upstream coordination, partner review threads, and adoption support for Oak resources | 📋 Reference | [sector-engagement/README.md](sector-engagement/README.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 
@@ -371,7 +430,7 @@ Strategic architecture remains anchored in:
   dependencies, or move closer to this monorepo — see
   [sector-engagement/future/oak-openapi-monorepo-integration.plan.md](sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
   and
-  [knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
+  [connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
 - External KG adoption: define how MATs, edtechs, researchers, and public-sector partners can consume Oak KG assets responsibly — see [sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md](sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md)
 - Token-efficient MCP tool use: evaluate Cloudflare/Anthropic Code Mode
   patterns, progressive tool discovery, and result filtering against Oak's

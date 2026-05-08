@@ -2,6 +2,8 @@
 name: "Ontology Repo Fresh-Perspective Review"
 overview: "Revisit the official Oak ontology repo from an upstream-first starting point, without inheriting search-first or current-plan-first assumptions, and write up what that fresh read changes."
 status: complete
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 related_reports:
   - "../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
 related_plans:

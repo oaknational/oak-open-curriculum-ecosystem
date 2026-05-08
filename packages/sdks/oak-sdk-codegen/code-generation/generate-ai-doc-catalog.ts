@@ -27,15 +27,19 @@ export function renderToolCatalog<T extends string>(
   for (const name of entries) {
     const descriptor = lookupTool(name);
     const operationId = getOwnString(descriptor, 'operationId');
-    lines.push(`### ${name}`);
-    lines.push(`- path: ${getOwnString(descriptor, 'path') ?? ''}`);
-    lines.push(`- method: ${getOwnString(descriptor, 'method') ?? ''}`);
+    lines.push(
+      `### ${name}`,
+      `- path: ${getOwnString(descriptor, 'path') ?? ''}`,
+      `- method: ${getOwnString(descriptor, 'method') ?? ''}`,
+    );
     if (operationId) {
       lines.push(`- operationId: ${operationId}`);
     }
-    lines.push(`- path params: ${listParamObjectKeys(getOwnValue(descriptor, 'pathParams'))}`);
-    lines.push(`- query params: ${listParamObjectKeys(getOwnValue(descriptor, 'queryParams'))}`);
-    lines.push('');
+    lines.push(
+      `- path params: ${listParamObjectKeys(getOwnValue(descriptor, 'pathParams'))}`,
+      `- query params: ${listParamObjectKeys(getOwnValue(descriptor, 'queryParams'))}`,
+      '',
+    );
   }
 
   return lines.join('\n');
@@ -95,9 +99,7 @@ function renderSingleEndpoint(lines: string[], op: unknown): void {
   maybePush(lines, 'operationId', getOwnString(op, 'operationId'));
   maybePush(lines, 'summary', getOwnString(op, 'summary'));
   maybePush(lines, 'description', getOwnString(op, 'description'));
-  lines.push('Parameters:');
-  lines.push(renderParamSummary(getOwnValue(op, 'parameters')));
-  lines.push('');
+  lines.push('Parameters:', renderParamSummary(getOwnValue(op, 'parameters')), '');
 }
 
 function maybePush(lines: string[], label: string, value: string | undefined): void {

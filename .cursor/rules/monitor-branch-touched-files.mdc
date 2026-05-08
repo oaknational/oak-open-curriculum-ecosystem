@@ -1,0 +1,6 @@
+---
+description: Periodically check branch touched-file count and split oversized work before it becomes unreviewable.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/monitor-branch-touched-files.md`.

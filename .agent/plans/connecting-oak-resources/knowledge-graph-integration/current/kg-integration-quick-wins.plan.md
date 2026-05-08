@@ -1,6 +1,8 @@
 ---
 name: "KG Integration Quick Wins"
 overview: "Provision an isolated Neo4j curriculum graph, load the ontology's exported operational graph, and deliver the first bounded Elasticsearch integrations without assuming full model overlap."
+graph_layer: feature
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 source_research:
   - "../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md"
   - "../oak-ontology-graph-opportunities.strategy.md"

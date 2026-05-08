@@ -54,6 +54,7 @@ index in the same commit.
 - `.agent/rules/invoke-sentry-reviewer.md`
 - `.agent/rules/lint-after-edit.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
+- `.agent/rules/monitor-branch-touched-files.md`
 - `.agent/rules/never-disable-checks.md`
 - `.agent/rules/never-use-git-to-remove-work.md`
 - `.agent/rules/no-conditional-tests.md`

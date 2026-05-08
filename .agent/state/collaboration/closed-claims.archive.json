@@ -13481,6 +13481,961 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e3dc2e56-4f76-415e-bf6b-f098f26255b4",
+      "agent_id": {
+        "agent_name": "Breezy Navigating Sail",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "9edbd1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/1d293dc4-e8f7-4398-9667-7113eb87bbd6.json",
+            ".agent/state/collaboration/comms-events/5c4397ce-26c7-43e0-90f2-e2f867acbeb0.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T15:20:03Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Close graph MVP-arc planning arc in single session per owner direction 2026-05-08: Phase 0 spine drift remediation; Phase 1 parallel reviewer batch; Phase 2 spine remediations; Phase 3 author three slice plans; Phase 4 review slice plans; Phase 5 spine + thread closure.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T15:55:34Z",
+        "closed_by": {
+          "agent_name": "Breezy Navigating Sail",
+          "platform": "cursor",
+          "model": "claude-opus-4.7",
+          "session_id_prefix": "9edbd1"
+        },
+        "summary": "Single-session planning closure complete across 5 commits (62ffd8b8 pre-flight, d740baa0 Phase 0, 82b3a792 Phase 2, 776df6b7 Phase 3, 0899ba93 Phase 4, plus Phase 5 closure commit). Three slice plans authored in current/. 1 spine BLOCKER + 2 slice-plan BLOCKERs all remediated same-session. 6 Phase 4 FINDINGS + 2 topology BLOCKERs deferred to next-session execution-prep absorption per owner-set scope. Slice-author todos in spine marked completed. Next session = execution prep, not planning.",
+        "evidence": [
+          {
+            "kind": "comms_event",
+            "ref": "1d293dc4-e8f7-4398-9667-7113eb87bbd6",
+            "summary": "Bootstrap fast-path event opening the single-session planning closure."
+          },
+          {
+            "kind": "comms_event",
+            "ref": "5c4397ce-26c7-43e0-90f2-e2f867acbeb0",
+            "summary": "Session close event with phase-by-phase commit references and outcome."
+          },
+          {
+            "kind": "claim",
+            "ref": "e3dc2e56-4f76-415e-bf6b-f098f26255b4",
+            "summary": "Claim explicitly closed at end of single-session planning closure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "918b1a01-3387-47b3-ae19-fe91a088e5bb",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/*.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md",
+            ".agent/plans/templates/feature-workstream-template.md",
+            ".agent/plans/templates/components/quality-gates.md",
+            ".agent/research/graph-library.research.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/comms-events/49f2528c-e2a1-46d2-b65b-3119d3457dd4.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+            "docs/architecture/architectural-decisions/168-graph-stack-topology.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:00:42Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix known graph MVP decision-completeness documentation issues, then run docs/code/assumptions reviewers.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:13:08Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Fixed graph MVP closeout documentation issues; ran docs-adr, code, and assumptions reviewers; absorbed actionable reviewer follow-ups; EEF contradiction remains owner-owned.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "918b1a01-3387-47b3-ae19-fe91a088e5bb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "582e0be3-3673-41b2-94e1-f5b874c7a095",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:22:06Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit graph MVP closeout fixes in sensible chunks, then push planning/graph-tooling.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:25:30Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed graph MVP closeout documentation chunk as 1de72a84; closing git:index/head claim before committing final collaboration-state audit trail.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "582e0be3-3673-41b2-94e1-f5b874c7a095",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e7d8c5e-3a9f-4f19-9c62-2f75ad5b50a7",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:39:57Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit origin/main merge for planning/graph-tooling.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:43:33Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed origin/main merge as 012e5ad1 after resolving memory/state conflicts via substrate rules.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e7d8c5e-3a9f-4f19-9c62-2f75ad5b50a7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "37c1f9e7-52d8-4c4b-9c59-0b91dc9e4372",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T17:57:12Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit branch touched-file CLI and rule.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T17:58:56Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed branch touched-file CLI and monitoring rule as b95de268.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "37c1f9e7-52d8-4c4b-9c59-0b91dc9e4372",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "82af7c19-70a0-43fc-950d-de8e899cae73",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:17:44Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Create queued PR 102 snagging plan only; no implementation changes",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:24:00Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Created queued PR 102 snagging plan; no implementation fixes made",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "82af7c19-70a0-43fc-950d-de8e899cae73",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d64d028b-1957-4213-a768-ed6e9f3cb0d0",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/README.md",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:20:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Index queued PR 102 snagging plan in current agent-tooling plans",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:24:10Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Indexed queued PR 102 snagging plan in agent-tooling current plans",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d64d028b-1957-4213-a768-ed6e9f3cb0d0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e0c16da2-8823-49b0-8da4-c2a95c8b14e5",
+      "agent_id": {
+        "agent_name": "Tidal Surfing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/plans/agent-tooling/current/README.md",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:26:54Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Apply code-reviewer improvements to PR 102 snagging plan",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:29:30Z",
+        "closed_by": {
+          "agent_name": "Tidal Surfing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Applied code-reviewer improvements to PR 102 snagging plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e0c16da2-8823-49b0-8da4-c2a95c8b14e5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "45beb0a6-950e-4ef7-9702-0cf1c65b4fa4",
+      "agent_id": {
+        "agent_name": "Twigged Shedding Fern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            "agent-tools/src/bin/branch-touched-files.ts",
+            "agent-tools/src/branch-touched-files/cli.ts",
+            "agent-tools/src/branch-touched-files/git.ts",
+            "agent-tools/tests/branch-touched-files.unit.test.ts",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:34:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement PR 102 snagging: graph taxonomy, primitive wording, parser index advancement, and Git subprocess boundary",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:47:00Z",
+        "closed_by": {
+          "agent_name": "Twigged Shedding Fern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Implemented PR 102 snagging across graph taxonomy, primitive wording, parser index advancement, and Git subprocess boundary; focused and aggregate gates passed locally.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "45beb0a6-950e-4ef7-9702-0cf1c65b4fa4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c85ea9e2-c49b-4c82-a660-366a594b1fb4",
+      "agent_id": {
+        "agent_name": "Twigged Shedding Fern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/branch-touched-files-git.integration.test.ts",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T19:37:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Supplement PR 102 snagging claim with Git subprocess boundary integration test",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:47:00Z",
+        "closed_by": {
+          "agent_name": "Twigged Shedding Fern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Added injected Git subprocess boundary integration coverage for PR 102 Sonar hotspot remediation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c85ea9e2-c49b-4c82-a660-366a594b1fb4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3dc7d6e9-283c-4ca0-b9b5-1a77124130fa",
+      "agent_id": {
+        "agent_name": "Twigged Shedding Fern",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T18:48:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 102 snagging fixes.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T18:50:30Z",
+        "closed_by": {
+          "agent_name": "Twigged Shedding Fern",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed PR 102 snagging fixes as e8050400.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3dc7d6e9-283c-4ca0-b9b5-1a77124130fa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "922bfe65-f89d-4697-91fc-9908c396cb69",
+      "agent_id": {
+        "agent_name": "Lush Rustling Bark",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/branch-touched-files/cli.ts",
+            "agent-tools/src/branch-touched-files/git.ts",
+            "agent-tools/tests/branch-touched-files.unit.test.ts",
+            "agent-tools/tests/branch-touched-files-git.integration.test.ts",
+            "agent-tools/src/bin/branch-touched-files.ts",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T19:21:15Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Address live PR #102 Copilot threads after comment harvest",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T19:38:59Z",
+        "closed_by": {
+          "agent_name": "Lush Rustling Bark",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Addressed live PR #102 Copilot threads for branch-touched-files CLI precedence/help and git executable portability; accepted eslint lint-fix cleanup; pnpm check passed after transient MCP HTTP test rerun.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "922bfe65-f89d-4697-91fc-9908c396cb69",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ae9c25fd-591b-409d-a76a-50133be7d0f9",
+      "agent_id": {
+        "agent_name": "Lush Rustling Bark",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e03"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-07T20:11:28Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR 102 follow-up, lint remediation, and handoff closeout in three chunks.",
+      "archived_at": "2026-05-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-07T20:14:12Z",
+        "closed_by": {
+          "agent_name": "Lush Rustling Bark",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e03"
+        },
+        "summary": "Committed PR 102 follow-up and ESLint lint remediation chunks as 7d09edb2 and 8ad0f1e8; final continuity/handoff chunk remains to land in this same closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ae9c25fd-591b-409d-a76a-50133be7d0f9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "780a41ff-55d7-4c49-9f82-842cb788dcd9",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T06:51:35Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #102 final closeout source and state fixes. Pathspecs: search ground-truth generator/generated schema files, sdk-codegen ES mapping utility, Oak ESLint recommended config, PR closeout plan/continuity/collaboration state. Gates so far: focused schema tests, search-cli lint/type-check, sdk-codegen lint/type-check, Oak ESLint lint/type-check.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T06:56:34Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed PR #102 closeout source/state fixes as 6e42a588 after local gates passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "780a41ff-55d7-4c49-9f82-842cb788dcd9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "475799b2-3729-4fba-8f8f-23884412409e",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-search-cli/ground-truths/generation/schema-emitter.ts",
+            "apps/oak-search-cli/ground-truths/generation/generate-ground-truth-types.ts",
+            "apps/oak-search-cli/ground-truths/generated/bulk-data-manifest.ts",
+            "apps/oak-search-cli/ground-truths/generated/ground-truth-schemas.ts",
+            "apps/oak-search-cli/ground-truths/generated/index.ts",
+            "apps/oak-search-cli/ground-truths/generated/lesson-slugs-by-subject.data.json",
+            "apps/oak-search-cli/ground-truths/generated/lesson-slugs-by-subject.ts",
+            "packages/core/oak-eslint/src/configs/recommended.ts",
+            "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-mapping-utils.ts",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T06:40:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #102 final closeout: metadata, live review/Sonar fixes, comment disposition, final validation evidence. Registry scanned: 0 active claims, 16 abandoned queue entries, no active overlap.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T07:07:32Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Closed PR #102 final closeout: PR metadata rewritten, review threads resolved, Sonar issues cleared, remote checks green, graph readiness checked.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "475799b2-3729-4fba-8f8f-23884412409e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d8df8e18-51cf-4edd-9143-4d3eb03b1e5c",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md",
+            ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T07:42:58Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Plan final pre-merge PR #102 decision-completeness session: integrate graph findings, resolve EEF contradiction path, update continuity and handoff surfaces.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T07:45:57Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Planned final pre-merge PR #102 graph decision-completeness session and updated continuity/handoff surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d8df8e18-51cf-4edd-9143-4d3eb03b1e5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "125d4c80-3eb0-4821-9330-1aba6647363d",
+      "agent_id": {
+        "agent_name": "Fronded Branching Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T07:46:24Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #102 graph decision-complete handoff plan. Pathspecs: final-session plan, repo/thread continuity, napkin, comms event/log, closed-claim archive.",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T07:48:53Z",
+        "closed_by": {
+          "agent_name": "Fronded Branching Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed PR #102 graph decision-complete handoff plan as f9abba88.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "125d4c80-3eb0-4821-9330-1aba6647363d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a80e8e9a-850c-4bee-8963-a873098e4c36",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T12:45:00.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add named EEF outcome evaluation infrastructure follow-on plan for PR #102 structural-only evaluation routing",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:38:40Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "EEF outcome-evaluation follow-on plan created and linked from graph closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a80e8e9a-850c-4bee-8963-a873098e4c36",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "de4248f7-05c4-4c6a-a150-f0ccea3d84ca",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/plans/graph-portfolio-index.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T08:52:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #102 graph decision-complete closeout planning-doc updates only; align EEF eval stance to latest structural-only clarification, graph topology to agent-graphs, slice-plan findings, continuity/PR evidence",
+      "heartbeat_at": "2026-05-08T12:30:00.000Z",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:38:40Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "PR #102 graph decision-complete closeout docs updated; merge blockers routed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "de4248f7-05c4-4c6a-a150-f0ccea3d84ca",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "dbe09fd9-808b-4b23-ba9c-221869a11887",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T09:50:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit codegen whitespace fix.",
+      "notes": "Pathspec: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts; peer claims clear.",
+      "intent_to_commit": "5e495f91-3778-4cea-a5c4-ef56e5ddf079",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:55:00Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed codegen whitespace fix as 2de81a4c.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dbe09fd9-808b-4b23-ba9c-221869a11887",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e3d598b6-9f4d-4574-90ca-071aa1a5011b",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T09:57:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit generated MCP tool outputs.",
+      "intent_to_commit": "0a1369a3-b203-45bb-8cc9-e24847e4b80a",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:59:00Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed generated MCP tool outputs as 5a7c9454.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e3d598b6-9f4d-4574-90ca-071aa1a5011b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

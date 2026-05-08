@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-12T07:25:00.705Z
+ * Generated at: 2026-05-08T06:45:34.427Z
  */
 
 import { typeSafeKeys } from '@oaknational/type-helpers';
@@ -60,7 +60,7 @@ const KeyStageSchema = z.enum([
  *
  * Validates:
  * - Query is non-empty string
- * - Query is 3-10 words (warning if outside range)
+ * - Query has at least one word
  * - expectedRelevance has at least one entry
  * - Relevance scores are 1, 2, or 3
  *

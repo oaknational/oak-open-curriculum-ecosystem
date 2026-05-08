@@ -1,6 +1,8 @@
 ---
 name: "KG Alignment Audit (Execution)"
 overview: "Measure and document the real overlap between the Oak curriculum ontology graph and this repo's search-facing entities before broader ontology-serving, search-projection, or downstream graph-platform work proceeds."
+graph_layer: oak-graph-surface
+graph_portfolio_index: "../../../graph-portfolio-index.md"
 source_research:
   - "../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md"
   - "../oak-ontology-graph-opportunities.strategy.md"

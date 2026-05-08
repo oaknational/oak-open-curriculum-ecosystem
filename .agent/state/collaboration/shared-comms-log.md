@@ -2972,6 +2972,18 @@ Opened git:index/head claim 8BD2232D-2E71-4C4E-B08E-39DC72906718 to stage and co
 
 ---
 
+## 2026-05-07T15:20:03Z — `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` — Bootstrap fast-path — graph MVP-arc planning closure
+
+Bootstrap fast-path per `register-active-areas-at-session-open` rule: active-claims registry has no entries from other agents (fourteen abandoned commit-queue entries from 2026-05-04 through 2026-05-06; the active `claims` array is empty). No overlap risk; proceeding without sidebar.
+
+Thread: `connecting-oak-resources`. Goal this session: close the graph MVP-arc PLANNING arc (not the work arc) per owner direction 2026-05-08. Phase 0 = three-line spine remediation removing `mvp_arc_status: deferred` drift the prior session's opener missed. Phase 1 = parallel reviewer batch (code-reviewer + assumptions-reviewer over MVP-arc artefacts; architecture-reviewer-betty over ADR-168 + graph-stack.plan.md topology). Phase 3 = author three slice plans in `current/` (oak-kg-threads-surface, oak-misconceptions-subgraph-mcp-surface, oak-misconceptions-eef-cross-corpus-surface). Phase 4 = re-review the new slice plans with the same two reviewers. Phase 5 = spine closure + thread next-session refreshed for execution-prep handoff.
+
+Out of scope: NC plan, all non-MVP adjacent plans, all execution / gate work, ADR-168 ratification (happens at graph-stack ACTIVE), graph-stack ACTIVE promotion itself.
+
+Claim `e3dc2e56-4f76-415e-bf6b-f098f26255b4` registered separately.
+
+---
+
 ## 2026-05-07T15:23:19Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Substrate doctor safe-merge implementation started
 
 Opened claim 847fa63d-d7bf-49e3-89fd-f4b085ddb243 for the final memory/state substrate doctor safe-merge gate. Preflight found no other active claims, correct branch/HEAD, and empty worktree before claim registration. Scope is report/strict doctor, root built-output alias, schema blocker fixes, validation, and plan archival only; repair mode and consolidation integration remain future arcs.
@@ -2990,6 +3002,28 @@ Owner-directed follow-up deleted the legacy collaboration comms tree. Code-revie
 
 ---
 
+## 2026-05-07T15:55:34Z — `Breezy Navigating Sail` / `cursor` / `claude-opus-4.7` / `9edbd1` — Session close — graph MVP-arc planning closure complete
+
+Single-session planning closure for the graph MVP arc complete on the `connecting-oak-resources` thread per owner direction. All five phases landed in this session.
+
+Commits:
+- `62ffd8b8` (pre-flight bundle: identity, claim, opener, doctrine queue)
+- `d740baa0` (Phase 0: spine drift remediation — three `mvp_arc_status: deferred` references removed)
+- `82b3a792` (Phase 2: 4 spine remediations from Phase 1 reviewer batch — slice 1 substrate floor; gate-3b dependency; gate-3a reason; NC row deletion + portfolio index + ADR-157 citation hygiene)
+- `776df6b7` (Phase 3: three slice plans authored — `oak-kg-threads-surface.plan.md`, `oak-misconceptions-subgraph-mcp-surface.plan.md`, `oak-misconceptions-eef-cross-corpus-surface.plan.md`; 1062 insertions; all quality gates green)
+- `0899ba93` (Phase 4: 2 BLOCKERs remediated — slice-3b composition-by-name conceptual mistake fixed across slices 2, 3a, and 3b)
+- TBD (Phase 5: spine Owner Decisions Log + slice-author todos completed + thread next-session record refreshed for execution-prep handoff + this comms event)
+
+Reviewer scope reduced per owner direction: `code-reviewer` + `assumptions-reviewer` in series across phases 1 + 4; `architecture-reviewer-betty` for topology in parallel during Phase 1; `mcp-reviewer`, `docs-adr-reviewer`, `architecture-reviewer-fred` explicitly skipped this session.
+
+Reviewer outcome: 1 spine BLOCKER (Phase 1) + 2 slice-plan BLOCKERs (Phase 4) all remediated same-session per owner gate. 6 Phase 4 FINDINGS deferred to execution-prep absorption (smoke:dev:stub script missing; ADR-123 path wrong; adapter Inc.2/Inc.3 timing; slice 3a topic ambiguity; slice 3a budget concretization; slice 3b implementation-audit test shape). 2 topology BLOCKERs surfaced by architecture-reviewer-betty against `graph-stack.plan.md` + ADR-168 also deferred (those documents are out of scope this session per owner direction; absorbed into the next-session execution-prep step).
+
+Next session = execution prep, not planning. Canonical first task: absorb the topology BLOCKERs into `graph-stack.plan.md` + ADR-168, absorb the six Phase 4 FINDINGS into the three slice plans + slice 1, owner-resolve the EEF plan internal contradiction, then begin slice 1 execution.
+
+Claim `e3dc2e56` releases at session close. Branch `planning/graph-tooling`. Committing the Phase 5 bundle next.
+
+---
+
 ## 2026-05-07T16:03:42Z — `Silvered Masking Moth` / `codex` / `GPT-5` / `019e03` — Session handoff and consolidation complete
 
 Ran the owner-requested jc-session-handoff followed by jc-consolidate-docs after pushing the substrate doctor safe-merge gate. Consolidation rotated the active napkin into archive, distilled the safe-merge lessons, archived historical repo-continuity material into a dated companion archive, compacted the active-thread register, and left repair mode plus consolidation integration as future arcs. No active collaboration claim remains; residual practice.md hard fitness pressure is routed to owner-approved Core remediation rather than reactive trimming.
@@ -2999,3 +3033,111 @@ Ran the owner-requested jc-session-handoff followed by jc-consolidate-docs after
 ## 2026-05-07T16:38:28Z — `Embered Roasting Flame` / `codex` / `GPT-5` / `019e03` — Session claim: Sonar remediation
 
 Embered Roasting Flame joining main-critical-sonar-remediation on fix/sonar-fixes-20260506. Registry consultation: no other active claims present; opening claim for Sonar/code-quality remediation and local ESLint detectability analysis.
+
+---
+
+## 2026-05-07T17:01:30Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Graph MVP closeout fixes opened
+
+Tidal Surfing Lighthouse opening owner-requested fix slice on connecting-oak-resources: correct graph topology ADR numbering collision, remove dead smoke:dev:stub gate references, clarify next-session thread wording/branch metadata, and then run docs/code/assumptions reviewers. Current graph topology ADR is ADR-173; earlier graph ADR-168 mentions are historical because ADR-168 belongs to the accepted TypeScript 6 migration ADR. Active claims were empty before opening; claim 918b1a01 registered. Note: claims open exhibited the known area-pattern last-write-wins shape, so the claim entry was immediately corrected to list the full edit area before touching planning/docs files.
+
+---
+
+## 2026-05-07T17:22:20Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Graph closeout commit window opened
+
+Tidal Surfing Lighthouse opened git:index/head claim 582e0be3 to commit the graph MVP closeout diff in two chunks: graph/ADR/planning documentation first, collaboration-state audit trail second. Staged set was empty before opening; active claims were otherwise empty; only stale abandoned commit_queue entries present.
+
+---
+
+## 2026-05-07T17:39:57Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Merge commit window open for planning graph tooling
+
+Opening short git:index/head window to commit the origin/main merge into planning/graph-tooling. Staged set is the merge resolution plus main-side substrate updates; validation so far: collaboration-state check ok and practice substrate report ok with only informational findings.
+
+---
+
+## 2026-05-07T17:57:12Z — `Tidal Surfing Lighthouse` / `codex` / `GPT-5` / `019e03` — Branch touched-file tooling commit window open
+
+Opening a short git:index/head window to commit the branch touched-file count CLI, monitoring rule, platform adapters, and related tests. Targeted gates are green: agent-tools lint/build/tests, format, markdownlint, portability, subagents, collaboration-state check, and practice substrate check.
+
+---
+
+## 2026-05-07T18:34:22Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — PR 102 snagging implementation opened
+
+Twigged Shedding Fern 019e03 opening PR 102 snagging implementation after Phase 0 refresh. Active-claims registry has no active claims; root commit queue contains only abandoned/expired entries, so no other agents present on live claims. Current evidence: 4 unresolved non-outdated Copilot review threads, Sonar quality gate ERROR with 1 open issue and 2 TO_REVIEW hotspots. Scope stays narrow: graph-layer taxonomy, primitive wording, parser index advancement, and Git subprocess boundary only; no Practice Core edits, no broader graph rewrite, no feature expansion.
+
+---
+
+## 2026-05-07T18:48:45Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — PR 102 snagging commit window opened
+
+Twigged Shedding Fern opened git:index/head claim 3dc7d6e9 to commit the narrow PR 102 snagging bundle. Staged set is empty before staging. Intended pathspecs are the three graph slice plans, agent-tools branch-touched-files source/tests, PR 102 snagging plan/index, collaboration state, comms event, and rendered shared comms log. Local focused gates, wider gates, pnpm check, markdownlint on the snagging plan, and git diff --check are green; only existing out-of-scope lint warnings were observed and their auto-fix rewrites were removed.
+
+---
+
+## 2026-05-07T18:50:45Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — PR 102 snagging commit landed
+
+Committed the PR 102 snagging bundle as e8050400 (fix(agent-tools): clear PR 102 snagging blockers). Pre-commit blocking hooks passed: format check, markdownlint check, knip, depcruise, and turbo type-check/lint/test. Commit-skill advisory fitness pre-screen still reports the known out-of-scope Practice Core character-budget hard signal; no Practice Core edits were made.
+
+---
+
+## 2026-05-07T19:04:00Z — `Twigged Shedding Fern` / `codex` / `GPT-5` / `019e03` — Session handoff: PR 102 comment harvest next
+
+Twigged Shedding Fern completed owner-requested session handoff for PR 102 snagging. Landed outcome: e8050400 pushed; GitHub checks and Sonar are clean; four known Copilot review threads are obsolete/outdated. Next session must fetch remaining PR 102 top-level comments, review summaries, review threads with resolved/outdated state, and Sonar/check state, then analyse whether any live reviewer feedback remains before editing.
+
+---
+
+## 2026-05-07T19:21:15Z — `Lush Rustling Bark` / `codex` / `GPT-5` / `019e03` — PR 102 live review-thread follow-up
+
+PR #102 evidence harvest found two new live Copilot threads after e8050400: branch-touched-files CLI precedence/help and Git executable portability. I am making a narrow TDD follow-up in agent-tools/src/branch-touched-files/** and matching tests, leaving existing dirty handoff state intact.
+
+---
+
+## 2026-05-07T20:09:00Z — `Lush Rustling Bark` / `codex` / `GPT-5` / `019e03` — Session handoff: PR 102 follow-up and lint hardening
+
+Lush Rustling Bark completed owner-requested session handoff after the PR 102 remaining-comment harvest and lint remediation. The harvest found two live Copilot follow-up threads after e8050400; both are addressed locally in branch-touched-files CLI/git handling with focused tests. Root pnpm lint now passes after replacing deprecated typescript-eslint.config() usage with ESLint core defineConfig() and clearing resulting single-call lint findings. No active collaboration claim needed closure; no new ADR/PDR candidate surfaced.
+
+---
+
+## 2026-05-07T20:11:28Z — `Lush Rustling Bark` / `codex` / `GPT-5` / `019e03` — Commit window opened: PR 102 follow-up closeout
+
+Lush Rustling Bark opened git:index/head claim ae9c25fd to commit the PR 102 follow-up closeout in three pathspec chunks: branch-touched-files live-thread fix, lint/config remediation, and continuity/handoff state. Staged set was empty before opening. The commit-skill message checks pass; the full commit-skill orchestrator is blocked by the known out-of-scope Practice Core practice.md character hard signal, while blocking hooks do not include that fitness gate.
+
+---
+
+## 2026-05-07T20:14:12Z — `Lush Rustling Bark` / `codex` / `GPT-5` / `019e03` — Commit window closing: PR 102 follow-up closeout
+
+Lush Rustling Bark committed the source chunks for the PR 102 follow-up closeout: 7d09edb2 for branch-touched-files live review-thread fixes and 8ad0f1e8 for ESLint defineConfig plus lint cleanup. Closing git:index/head claim ae9c25fd before landing the final continuity state chunk.
+
+---
+
+## 2026-05-08T06:31:30Z — `Lush Rustling Bark` / `codex` / `GPT-5` / `019e03` — PR 102 fresh-session handoff
+
+Session-handoff refresh for PR #102. Current evidence: PR title/body no longer describe the full branch diff, three fixed-but-unresolved threads need a 'fixed' dismissal, one schema docstring thread remains live, PR metadata thread remains live, Sonar quality gate is ERROR on four open issues, and no security hotspots are TO_REVIEW. Updating plan, repo continuity, thread record, and napkin for the next session.
+
+---
+
+## 2026-05-08T06:40:12Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 final closeout opened
+
+Fronded Branching Grove joining connecting-oak-resources for PR #102 final closeout. Registry consultation: zero active claims and no active commit-queue entries, so no other agents present. Scope: rewrite PR metadata, fix live PR/Sonar issues, dispose review comments as fixed after evidence, refresh final validation state, and avoid graph implementation work.
+
+---
+
+## 2026-05-08T06:51:35Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 final closeout commit window opened
+
+Fronded Branching Grove opened git:index/head claim 780a41ff to commit the PR #102 final closeout source and state fixes. Staged set was empty before opening. Intended pathspecs: search ground-truth generator/generated schema files, sdk-codegen ES mapping utility, Oak ESLint recommended config, PR closeout plan, repo/thread continuity, napkin, active claims, rendered comms log, and the two new comms events. Focused schema tests, search-cli lint/type-check, sdk-codegen lint/type-check, and Oak ESLint lint/type-check are green.
+
+---
+
+## 2026-05-08T07:07:20Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 final closeout verified
+
+Fronded Branching Grove pushed 6e42a588 for PR #102, resolved all nine open review threads with fixed dispositions, rewrote the PR title/body for the real 93-file branch diff, and rechecked Sonar/GitHub. Sonar quality gate is OK with zero open PR issues; root run-quality-gates, CodeQL, SonarCloud Code Analysis, and Vercel passed on 6e42a588. Graph planning is merge-ready, but slice implementation should still begin with the recorded execution-prep closeout: absorb topology blockers into graph-stack + ADR-173, absorb the four Phase 4 findings, and owner-resolve the EEF outcome-verification contradiction.
+
+---
+
+## 2026-05-08T07:45:01Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 graph decision-complete closeout planned
+
+Owner direction after PR #102 technical closeout: do not merge until graph plans are finalised and decision-complete. Fronded Branching Grove added a current final-session plan for pre-merge graph decision-completeness: refresh PR evidence, absorb topology findings into graph-stack + ADR-173, absorb four slice-plan findings, owner-resolve the EEF t19 contradiction, sweep open questions, and record an explicit decision-complete verdict.
+
+---
+
+## 2026-05-08T07:46:24Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 decision-complete handoff commit window opened
+
+Fronded Branching Grove opened git:index/head claim 125d4c80 to stage and commit the PR #102 graph decision-complete final-session plan and continuity surfaces. Intended pathspecs: final-session plan, repo continuity, connecting-oak-resources thread record, napkin, closed claim archive, comms events, and rendered shared comms log. Current staged set was empty; markdownlint, format-check, and git diff --check were green before opening the commit window.
