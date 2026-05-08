@@ -22,6 +22,21 @@ do not merge until the graph plans are finalised and decision-complete. New
 current plan:
 [`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
 
+**Session update (2026-05-08 — Opalescent Shimmering Orbit / `codex` /
+`GPT-5` / `019e06`, PR #102 graph decision-complete closeout)**:
+applied the latest owner discussion to the graph plan estate. EEF slice 1 is
+structural-only for evaluation now: citation/data/caveat/freshness/MCP-shape
+preservation is load-bearing; LLM/outcome evaluation is follow-on
+infrastructure outside Vitest. Practice-facing graph tooling is now planned
+under `agent-graphs/practice-graph/`, with
+`agent-tooling/future/agent-graphs-workspace-organisation.plan.md` owning the
+future top-level workspace organisation. Refreshed evidence on PR head
+`d5e32a3c7ba47f3f21de138c7752afb8d6362171`: GitHub checks pass; Sonar quality
+gate `OK`, zero open PR issues, zero `TO_REVIEW` hotspots; branch touched files
+`107`, so pre-merge divergence analysis is required; one live Copilot review
+thread remains on `emit-index.ts` whitespace and must be classified before
+merge.
+
 **Session close (2026-05-08 — Lush Rustling Bark / `codex` /
 `GPT-5` / `019e03`, PR #102 fresh-session handoff)**:
 ran the owner-requested `jc-session-handoff` refresh for PR #102. Current PR
@@ -89,28 +104,38 @@ session per owner direction. Six commits landed the spine remediation, reviewer
 pass, three slice plans, BLOCKER remediation, owner-decision log, and refreshed
 thread handoff. Remaining execution-prep work is deliberately planning-only:
 absorb topology BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb four
-Phase 4 findings into the slice plans, owner-resolve the EEF t19 contradiction,
-and verify decision-complete state. Slice execution, graph-stack ACTIVE
-promotion, and ADR-173 ratification remain out of scope for this branch.
+Phase 4 findings into the slice plans, and resolve the EEF t19 contradiction.
+That historical queue is superseded by the 2026-05-08 structural-only EEF
+decision above. Slice execution, graph-stack ACTIVE promotion, and ADR-173
+ratification remain out of scope for this branch.
 
 ## Current State
 
-+ Branch `planning/graph-tooling` is in final pre-merge planning closeout on
-  PR #102 head `a8ef3ad1be343d2b786416ce12dcfeca270fb56e`.
-+ PR #102 technical gates are clean: GitHub merge state `CLEAN`, root
-  `run-quality-gates` pass, CodeQL pass, SonarCloud Code Analysis pass, Vercel
-  pass, Sonar MCP quality gate `OK`, zero open Sonar PR issues, and zero
-  unresolved review threads.
-+ Owner direction 2026-05-08: PR #102 must not merge until the graph plans are
-  finalised and decision-complete.
-+ The live final-session plan is
+- Branch `planning/graph-tooling` is in final pre-merge planning closeout. Last
+  pushed/refreshed PR #102 head before the local closeout bundle is
+  `d5e32a3c7ba47f3f21de138c7752afb8d6362171`; evidence must be refreshed after
+  this bundle is committed and pushed.
+- PR #102 technical gates on that last pushed head are mostly clean: GitHub
+  checks pass, Sonar MCP quality gate `OK`, zero open Sonar PR issues, and zero
+  `TO_REVIEW` hotspots. One live Copilot review thread remains on
+  `emit-index.ts` whitespace and must be classified before merge.
+- Owner direction 2026-05-08: PR #102 must not merge until the graph plans are
+  finalised and decision-complete. Local closeout docs now record
+  `Decision-complete: YES`; merge-ready remains `NO`.
+- Latest eval/structure decisions: EEF slice 1 structural-only now; LLM/outcome
+  eval is follow-on infrastructure; Practice graph home is
+  `agent-graphs/practice-graph/`.
+- Branch-touched-files is `107`, so pre-merge divergence analysis is required.
+- The live final-session plan is
   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
-+ Remaining graph-planning work is planning-only: integrate topology findings,
-  integrate four slice-plan findings, resolve the EEF t19 contradiction, sweep
-  remaining questions, and record the decision-complete verdict.
-+ No active collaboration claims remain. The advisory commit queue only contains
-  stale/abandoned historical entries.
-+ Residual Practice fitness pressure is routed, not hidden: `practice.md`
+- Remaining merge blockers: commit/push the local closeout bundle and re-check
+  GitHub/Sonar on the final pushed head; dispose the live Copilot
+  `emit-index.ts` thread; run the final pre-merge divergence workflow for the
+  107-file branch.
+- Opalescent Shimmering Orbit's closeout collaboration claims are closed;
+  `claims status` reports zero active claims. The advisory commit queue only
+  contains stale/abandoned historical entries.
+- Residual Practice fitness pressure is routed, not hidden: `practice.md`
   remains HARD on character count and needs an owner-approved Core edit or
   threshold decision before a strict-hard fitness gate can be clean.
 
@@ -151,60 +176,57 @@ This branch also depends on the Practice/tooling substrate work from main in
 ## Current Session Focus
 
 **2026-05-08 (PR #102 graph decision-complete planning)**:
-finalise the next session so the branch can absorb remaining graph-plan findings
-and resolve contradictions before PR #102 merges. This is a planning closeout
-session, not implementation.
+absorb remaining graph-plan findings and apply the latest structural-only EEF
+evaluation decision before PR #102 merges. This is a planning closeout session,
+not implementation.
 
 ## Repo-Wide Invariants / Non-Goals
 
 Foundational invariants live in directives, rules, ADRs, and PDRs.
 Resume with these branch-relevant constraints:
 
-+ no compatibility layers; replace, do not bridge;
-+ distinct architectural layers live in distinct workspaces; folders/modules
+- no compatibility layers; replace, do not bridge;
+- distinct architectural layers live in distinct workspaces; folders/modules
 inside one workspace do not satisfy layer separation;
-+ TDD at all levels;
-+ tests prove product behaviour, not configuration or file presence;
-+ strict boundary validation only;
-+ no `process.env` read/write in test files or setup files;
-+ `--no-verify` requires fresh per-invocation owner authorisation;
-+ no warning toleration;
-+ owner direction beats plan;
-+ curriculum data in this monorepo comes only through the published Oak Open
+- TDD at all levels;
+- tests prove product behaviour, not configuration or file presence;
+- strict boundary validation only;
+- no `process.env` read/write in test files or setup files;
+- `--no-verify` requires fresh per-invocation owner authorisation;
+- no warning toleration;
+- owner direction beats plan;
+- curriculum data in this monorepo comes only through the published Oak Open
 Curriculum HTTP API and generated SDK, not direct Hasura/materialised views;
-+ **knowledge preservation is absolute** — writing to shared-state
+- **knowledge preservation is absolute** — writing to shared-state
 knowledge surfaces is never blocked by fitness limits;
-+ **shared-state files are always writable and always commit-includable**
+- **shared-state files are always writable and always commit-includable**
 regardless of any active claim (deliberate anti-log-jam tradeoff).
 
 Current branch non-goals:
 
-+ do not implement intent-to-commit as claim metadata only; owner direction
+- do not implement intent-to-commit as claim metadata only; owner direction
 requires an explicit minimal queue mechanic;
-+ do not reopen broader canonicalisation opportunistically;
-+ do not treat monitor setup or owner-handled preview validation as in-repo
+- do not reopen broader canonicalisation opportunistically;
+- do not treat monitor setup or owner-handled preview validation as in-repo
 acceptance work;
-+ do not guess Vercel, Sentry, or GitHub state before checking primary
+- do not guess Vercel, Sentry, or GitHub state before checking primary
 evidence.
 
 ## Next Safe Step
 
-**Final pre-merge graph decision-complete session**:
+**Clear PR #102 merge blockers**:
 
-1. Start from
-   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
-2. Refresh PR #102 evidence first; if checks/comments/Sonar regressed, name
-   that before editing.
-3. Absorb the topology findings into `graph-stack.plan.md` + ADR-173:
-   WS4 sequencing and `practice-graph` workspace tier.
-4. Absorb the four remaining Phase 4 slice-plan findings: slice 2 adapter
-   timing; slice 3a topic-context wording; slice 3a budget/fixture
-   concretisation; slice 3b implementation-audit test shape.
-5. Owner-resolve the EEF t19 contradiction, then apply the chosen resolution to
-   `eef-evidence-corpus.plan.md`, the spine, and downstream references.
-6. Sweep for open questions/stale blockers and record:
-   `Decision-complete: YES/NO`, `Merge-ready with respect to graph planning:
-   YES/NO`, remaining blockers, owner decisions, validation, and next safe step.
+1. Commit and push the local planning closeout bundle, then re-check GitHub and
+   Sonar on the final pushed head.
+2. Classify or fix the remaining live Copilot `emit-index.ts` review thread
+   before any merge-ready verdict; this planning closeout did not silently edit
+   production code.
+3. Because branch-touched-files is `107`, run the final pre-merge divergence
+   workflow on a clean worktree before merge. The 2026-05-08 non-mutating probe
+   found no changed-both files, no ADR/plan numbering add/add collisions, and
+   no merge-tree conflict signal.
+4. After PR #102 merges, start graph MVP implementation-prep; do not start
+   slice implementation before the post-merge type-check and full gate chain.
 
 Do not start slice implementation, graph-stack ACTIVE promotion, ADR-173
 ratification, or production code changes in this final closeout session.

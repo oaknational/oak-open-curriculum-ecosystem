@@ -14254,6 +14254,188 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "a80e8e9a-850c-4bee-8963-a873098e4c36",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T12:45:00.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add named EEF outcome evaluation infrastructure follow-on plan for PR #102 structural-only evaluation routing",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:38:40Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "EEF outcome-evaluation follow-on plan created and linked from graph closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a80e8e9a-850c-4bee-8963-a873098e4c36",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "de4248f7-05c4-4c6a-a150-f0ccea3d84ca",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/plans/graph-portfolio-index.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T08:52:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #102 graph decision-complete closeout planning-doc updates only; align EEF eval stance to latest structural-only clarification, graph topology to agent-graphs, slice-plan findings, continuity/PR evidence",
+      "heartbeat_at": "2026-05-08T12:30:00.000Z",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:38:40Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "PR #102 graph decision-complete closeout docs updated; merge blockers routed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "de4248f7-05c4-4c6a-a150-f0ccea3d84ca",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "dbe09fd9-808b-4b23-ba9c-221869a11887",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T09:50:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit codegen whitespace fix.",
+      "notes": "Pathspec: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts; peer claims clear.",
+      "intent_to_commit": "5e495f91-3778-4cea-a5c4-ef56e5ddf079",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:55:00Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed codegen whitespace fix as 2de81a4c.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dbe09fd9-808b-4b23-ba9c-221869a11887",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e3d598b6-9f4d-4574-90ca-071aa1a5011b",
+      "agent_id": {
+        "agent_name": "Opalescent Shimmering Orbit",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e06"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-08T09:57:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit generated MCP tool outputs.",
+      "intent_to_commit": "0a1369a3-b203-45bb-8cc9-e24847e4b80a",
+      "archived_at": "2026-05-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-08T09:59:00Z",
+        "closed_by": {
+          "agent_name": "Opalescent Shimmering Orbit",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e06"
+        },
+        "summary": "Committed generated MCP tool outputs as 5a7c9454.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e3d598b6-9f4d-4574-90ca-071aa1a5011b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

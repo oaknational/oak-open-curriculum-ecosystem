@@ -6,7 +6,7 @@ type: cross-collection-coordination-spine
 status: current
 graph_layer: cross-cutting
 graph_portfolio_index: "graph-portfolio-index.md"
-last_updated: 2026-05-07
+last_updated: 2026-05-08
 related_indices:
   - "high-level-plan.md"
   - "graph-portfolio-index.md"
@@ -41,17 +41,17 @@ todos:
     status: pending
     depends_on: [gate-0-substrate-floor]
   - id: gate-2-threads-ships
-    content: "Slice 2 ships: oak-kg-threads resource + oak-kg-get-thread-content tool complete via graph-corpus-sdk Oak Curriculum Ontology adapter; inverse-edge query (Unit→Thread) verified; ADR-123 updated. STRICT GATE — slice 2 starts only after slice 1 ships per owner direction."
+    content: "Slice 2 ships: oak-kg-threads resource + oak-kg-get-thread-content tool complete via graph-corpus-sdk Oak Curriculum Ontology Thread adapter; inverse-edge query (Unit→Thread) verified; ADR-123 updated. STRICT GATE — slice 2 starts only after slice 1 ships and after the named graph-stack Oak Curriculum Ontology Thread adapter cycle lands."
     status: pending
     depends_on: [gate-1-eef-ships]
   - id: gate-3a-mcg-subgraph-ships
-    content: "Slice 3a ships: oak-misconceptions-subgraph-for-{thread|unit} tool(s) complete on legacy graph factory data; bounded sub-graph extraction primitive verified for context-window fit; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 (different substrate path)."
+    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on legacy graph factory data; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 (different substrate path)."
     status: pending
     depends_on: [gate-1-eef-ships]
   - id: gate-3b-cross-corpus-ships
     content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread (or equivalent) cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
     status: pending
-    depends_on: [gate-1-eef-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.2/3 misconception replatform"]
+    depends_on: [gate-1-eef-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.3 graph-corpus-sdk EEF strand adapter + misconception adapter + cross-corpus join primitive"]
   - id: amend-eef-plan
     content: "Amend sector-engagement/eef/current/eef-evidence-corpus.plan.md tool todos to apply `eef-*` prefix; update t18 (ADR-123) entry to record renamed tool names. Coordination amendment, no behaviour change."
     status: completed
@@ -89,7 +89,7 @@ todos:
 # Graph MVP Arc — Three-Slice Vertical Delivery Spine
 
 **Status**: CURRENT — committed-to-now; queued behind substrate floor.
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-08
 **Type**: Cross-collection coordination spine. Sequences existing plans;
 does not write code itself.
 
@@ -156,10 +156,13 @@ sense-check pattern):
   receives a ranked list of approaches with structural citations
   (strand id + data version + caveat).
 - **Provability**: caveat-presence rate ≥95% across N=50 sampled
-  responses; distinct contexts queried per week (Sentry).
+  structural recommendation responses; each sampled response must preserve
+  required caveat, `data_coverage`, `data_version`, and citation fields.
+  Distinct contexts queried per week (Sentry).
 - **Architecture validation**: confirms `EvidenceCorpus = GraphView +
-  ScoringEngine` composition; confirms structural citations survive
-  LLM paraphrasing better than prose-requested caveats.
+  ScoringEngine` composition; confirms structural citations are preserved at
+  the tool boundary. LLM/outcome evaluation is sequenced behind a follow-on
+  evaluation-infrastructure plan, not slice 1.
 
 ### Slice 2 — Oak Ontology Threads
 
@@ -178,28 +181,31 @@ sense-check pattern):
 ### Slice 3a — Misconception Sub-Graph Query
 
 - **User value**: An AI agent asks *"what misconceptions are relevant to
-  {topic, thread, unit}?"* and receives a bounded sub-graph small enough
-  to fit in normal context windows. The full misconception graph is too
+  this Thread IRI (and, if explicitly authorised, this Unit IRI)?"* and
+  receives a bounded sub-graph small enough to fit in the response budget.
+  The full misconception graph is too
   large to use without an impractical amount of context — sub-graph
   extraction is the blocking problem this slice unblocks.
-- **Provability**: sampled sub-graph responses fit within a stated
-  context budget across N representative queries; sub-graph completeness
-  versus full-graph control on reachable misconceptions.
+- **Provability**: sampled sub-graph responses fit within
+  `maxResponseTokens = 16000` across a committed `20`-context fixture
+  manifest selected deterministically from reachable-misconception counts;
+  sub-graph completeness versus full-graph control on reachable
+  misconceptions.
 - **Architecture validation**: confirms the legacy graph factory carries
-  enough scaffolding to support topical sub-graph queries while the
+  enough scaffolding to support Thread IRI sub-graph queries while the
   substrate replatform completes (graph-stack Inc.2/3); sets the contract
   the substrate-side migration must preserve.
 
 ### Slice 3b — EEF × Misconceptions Cross-Corpus Sequencing
 
 - **User value**: A teacher (or AI client serving a teacher) sequencing
-  lessons asks *"for {thread or unit}, what evidence-based approaches
+  lessons asks *"for this Thread IRI, what evidence-based approaches
   AND common misconceptions should I plan for?"* and receives both
   ranked EEF strands and a relevant misconception sub-graph in one
   structured response.
 - **Provability**: per-call response carries non-empty EEF strand list
   AND non-empty misconception sub-graph for a curated set of N
-  thread/unit contexts where both are known to exist.
+  Thread IRI contexts where both are known to exist.
 - **Architecture validation**: confirms cross-corpus join primitive
   (graph-stack Inc.3) earns its keep; confirms the cross-cutting EEF
   thread the portfolio names as strategically important is technically
@@ -245,7 +251,8 @@ gate are unchanged.
 3. ADR-123 records the renamed primitives.
 4. ADR-157 reflects the explicit-source-attribution discipline (see
    [`§ ADR-157 Amendment`](#adr-157-amendment)).
-5. Caveat-presence rate sampled at ≥95% across N=50 sampled responses.
+5. Structural caveat/data/citation presence sampled at ≥95% across N=50
+   recommendation responses.
 
 ### Cut scope and follow-ups for slice 1
 
@@ -256,9 +263,11 @@ under the namespace fix. No scope cut at slice 1.
 
 **Status**: pending slice 1.
 **Namespace**: `oak-kg-*` (per ADR-157).
-**Substrate floor**: graph-stack Inc.1 + Inc.2 (Turtle ingestion mode in
-Inc.2 covers `.ttl` parsing); graph-corpus-sdk Oak Curriculum Ontology
-adapter (lands in Inc.2 or early Inc.3).
+**Substrate floor**: graph-stack Inc.1 + Inc.2 plus the named graph-stack
+Oak Curriculum Ontology Thread adapter cycle that lands the
+`graph-corpus-sdk` API for `curric:Thread` enumeration and inverse
+`curric:includesThread` resolution. Slice 2 cannot start until that named
+adapter cycle has landed.
 **Sequencing**: STRICT after slice 1 ships, per owner direction
 (*"once that is complete an Oak ontology slice"*).
 
@@ -291,17 +300,17 @@ adapter (lands in Inc.2 or early Inc.3).
    with `rdfs:label`, `rdfs:comment`, and `curric:whyThisWhyNow`.
 3. Inverse-edge query primitive in graph-query-layer verified
    (Thread is a forward edge from Unit; resolution requires inverse).
-4. ADR-123 records the renamed primitives.
+4. ADR-123 records the new primitives.
 5. Specialist review by `mcp-reviewer`.
 
 ### Cut scope and follow-ups for slice 2
 
 | Cut | Follow-up |
 |---|---|
-| Lesson-graph projection | New plan: `oak-kg-lesson-graph-surface.plan.md` (future/) |
-| Programme/Unit navigator | New plan: `oak-kg-programme-navigator.plan.md` (future/) |
-| Generic IRI traverser | New plan: `oak-kg-iri-traverser.plan.md` (future/) |
-| Schema/class browser | New plan: `oak-kg-schema-browser.plan.md` (future/) |
+| Lesson-graph projection | Future plan: [`oak-kg-lesson-graph-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-lesson-graph-surface.plan.md) |
+| Programme/Unit navigator | Future plan: [`oak-kg-programme-navigator.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-programme-navigator.plan.md) |
+| Generic IRI traverser | Future plan: [`oak-kg-iri-traverser.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-iri-traverser.plan.md) |
+| Schema/class browser | Future plan: [`oak-kg-schema-browser.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-schema-browser.plan.md) |
 | SPARQL endpoint | Existing plan: [`direct-ontology-use-and-graph-serving-prototypes.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) (future/) |
 
 ## Slice 3a — Misconception Sub-Graph Query
@@ -319,9 +328,9 @@ lands.
 | Tool | `oak-misconceptions-subgraph-for-thread` | Thread IRI → bounded misconception sub-graph for misconceptions associated with units in that thread |
 | Tool (optional) | `oak-misconceptions-subgraph-for-unit` | Unit IRI → bounded misconception sub-graph for misconceptions on that unit's content |
 
-The tools return **bounded** sub-graphs sized to fit a stated context
-budget. Bound is a parameter; default chosen so 95th-percentile responses
-fit standard context windows.
+The tools return **bounded** sub-graphs sized to fit
+`maxResponseTokens = 16000`. Bound is a parameter; the default is justified
+against the committed `20`-context fixture manifest.
 
 ### Why this is the slice 3 priority
 
@@ -333,9 +342,10 @@ composition (slice 3b) is the user-value framing on top.
 
 ### Acceptance — Slice 3a
 
-1. Sub-graph extraction by topic/thread/unit context returns bounded
-   results that fit stated context budgets across N representative
-   queries.
+1. Sub-graph extraction by Thread IRI context returns bounded results that fit
+   `maxResponseTokens = 16000` across the committed `20`-context fixture
+   manifest. Unit IRI context is accepted only if the optional unit variant is
+   explicitly authorised at slice opening.
 2. Sub-graph completeness verified versus full-graph control: for each
    sample query, all reachable misconceptions within the bound are
    present.
@@ -348,27 +358,30 @@ composition (slice 3b) is the user-value framing on top.
 
 | Cut | Follow-up |
 |---|---|
-| Substrate-based implementation | New plan: `oak-misconceptions-substrate-migration.plan.md` (future/) — migrates slice 3a tools onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships |
+| Substrate-based implementation | Future plan: [`oak-misconceptions-substrate-migration.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-substrate-migration.plan.md) — migrates slice 3a tools onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships |
 | Per-IRI lookup (single-misconception detail) | Tracked todo on existing `misconception-graph-mcp-surface.plan.md` (already DONE) — file as a follow-up enhancement |
-| Topic-string sub-graph (without IRI) | Future plan: `oak-misconceptions-topic-extraction.plan.md` (future/) |
+| Topic-string sub-graph (without IRI) | Future plan: [`oak-misconceptions-topic-extraction.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-topic-extraction.plan.md) |
 
 ## Slice 3b — EEF × Misconceptions Cross-Corpus Sequencing
 
 **Status**: blocked by gate-1-eef-ships AND gate-3a-mcg-subgraph-ships
-AND graph-stack Inc.3 (cross-corpus join primitive + misconception
-adapter on graph-corpus-sdk). **Not** blocked by gate-2 — slice 3b
-composes EEF (slice 1) and misconceptions (slice 3a); the Oak Threads
-MCP surface is not in the cross-corpus payload.
+as naming/response-shape prerequisites, plus graph-stack Inc.3
+(`graph-corpus-sdk` EEF strand adapter + misconception adapter +
+cross-corpus join primitive). **Not** blocked by gate-2 — slice 3b composes
+EEF and misconceptions through `graph-corpus-sdk`; it does not call slice 1,
+slice 2, or slice 3a MCP tools at runtime.
 **Namespace**: `oak-misconceptions-eef-*` (compound prefix; ADR-157
 amendment).
-**Substrate floor**: full slice 1 substrate + slice 3a tools available
-(via either path) + graph-stack Inc.3 cross-corpus joins.
+**Substrate floor**: graph-stack Inc.3 `graph-corpus-sdk` EEF strand adapter,
+misconception adapter, and cross-corpus join primitive. Slice 1 and slice 3a
+must have shipped their naming/response-shape contracts first, but their MCP
+tools are not runtime dependencies.
 
 ### What ships — Slice 3b
 
 | Primitive | Name | Notes |
 |---|---|---|
-| Tool | `oak-misconceptions-eef-recommend-for-thread` | Thread IRI (or Unit IRI) → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload |
+| Tool | `oak-misconceptions-eef-recommend-for-thread` | Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload |
 
 The compound prefix names both source corpora explicitly so source
 attribution is trivially clear during assessment, observability, and
@@ -384,20 +397,23 @@ misconceptions) in one structured response, not two separate calls.
 ### Acceptance — Slice 3b
 
 1. Per-call response carries non-empty EEF strand list AND non-empty
-   misconception sub-graph for a curated set of N thread/unit contexts
+   misconception sub-graph for a curated set of N Thread IRI contexts
    where both are known to exist.
 2. Both corpora flow through graph-corpus-sdk + GraphView (no legacy
    factory).
 3. Cross-corpus join primitive verified end-to-end.
 4. ADR-123 records the compound-prefix tool.
+5. MCP response envelope uses `content` with a short summary plus serialized
+   JSON, `structuredContent` for the domain payload, a declared `outputSchema`,
+   and `isError: true` on tool execution errors.
 
 ### Cut scope and follow-ups for slice 3b
 
 | Cut | Follow-up |
 |---|---|
 | Three-corpus joins (EEF + misconceptions + threads simultaneously, or with the prerequisite graph) | Existing plan: [`cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) (future/) |
-| Open-ended sequencing recommendations beyond thread/unit context (e.g. by lesson, by content descriptor) | New plan: `oak-misconceptions-eef-extended-contexts.plan.md` (future/) |
-| LLM-graded outcome verification | Tracked as out-of-scope per `eef-evidence-corpus.plan.md` t19 (*"Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists"*); existing position holds |
+| Open-ended sequencing recommendations beyond Thread IRI context (e.g. by unit, lesson, or content descriptor) | Future plan: [`oak-misconceptions-eef-extended-contexts.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-extended-contexts.plan.md) |
+| LLM/outcome evaluation | Follow-on [`eef-outcome-evaluation-infrastructure.plan.md`](sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md). `eef-evidence-corpus.plan.md` t19 keeps LLM paraphrase/outcome verification out of slice 1; structural citation/data/caveat preservation is the load-bearing gate now. |
 
 ## Sequencing and Gates
 
@@ -475,7 +491,7 @@ for all three; with sector-engagement/eef coordination for slice 3b).
 |---|---|---|
 | `author-slice-2-plan` | After Phase 0; before gate-1 begins so reviewer dispatch can plan ahead. Authoring is parallel-safe with slice 1's delivery work. | knowledge-graph-integration thread |
 | `author-slice-3a-plan` | After Phase 0; parallel-safe with `author-slice-2-plan`. Both can land in the same authoring session. | knowledge-graph-integration thread |
-| `author-slice-3b-plan` | After both upstream slice plans exist (so the cross-corpus tool can reference both upstream tools by name) **AND** before graph-stack Inc.3 ships (so the cross-corpus join primitive design has a downstream consumer's shape requirements visible). | knowledge-graph-integration thread (with sector-engagement/eef coordination) |
+| `author-slice-3b-plan` | After slice 1 and slice 3a plans exist (so the cross-corpus tool can reference their naming/response-shape contracts) **AND** before graph-stack Inc.3 ships (so the cross-corpus join primitive design has a downstream consumer's shape requirements visible). | knowledge-graph-integration thread (with sector-engagement/eef coordination) |
 
 These are the three spine gaps surfaced 2026-05-07 — the original spine
 draft pre-supposed these plans existed but they don't. Authoring them
@@ -613,9 +629,13 @@ Plus per-slice gates:
 - **gate-2**: E2E test verifies all `curric:Thread` enumeration and
   inverse-edge resolution returns expected unit lists.
 - **gate-3a**: E2E test verifies sub-graph extraction stays within
-  context budget across N=20 representative queries.
+  `maxResponseTokens = 16000` across the committed `20`-context fixture
+  manifest selected deterministically from reachable-misconception counts.
+  The budget is measured against the serialized model-visible `content` text
+  payload, including citations/caveats and duplicated JSON required for MCP
+  compatibility.
 - **gate-3b**: E2E test verifies non-empty cross-corpus payload across
-  curated thread/unit contexts.
+  curated Thread IRI contexts.
 
 ## Specialist Reviewers
 
@@ -706,8 +726,10 @@ Spine-level non-goals — spine does **not**:
 | 2026-05-07 | **gate-3a dependency reason corrected (assumption-reviewer FINDING #3)** — the cited reason "mcg sub-graph needs slice 1's namespace amendment + ADR-157 in place" was moot after Phase 0 closed those amendments. The strict gate is preserved (owner sequencing — slice 1 first establishes the MVP-arc spine pattern + namespace discipline) but the reason is updated to reflect what the gate actually carries. Minimum-change interpretation; if owner intends to remove the gate entirely, single-line edit in next session. | Phase 2 remediation; spine `§ Sequencing and Gates` strict-gates list |
 | 2026-05-07 | **Slice 2 cut-scope table cleaned (assumption-reviewer FINDING #2)** — NC SKOS taxonomy MCP surface row deleted from the slice-2 cut-scope table. The NC plan was never IN slice 2 to be cut from; including it as cut-scope contradicted the boundary correction. | Phase 2 remediation; spine `§ Slice 2 / Cut scope and follow-ups` |
 | 2026-05-07 | **Topology findings deferred to next session per owner scope direction** — `architecture-reviewer-betty` surfaced a BLOCKER (`graph-stack.plan.md` WS4 sequences `ws4-skos-extractor` before `ws4-graph-corpus-sdk-scaffold`, forcing Oak-specific extraction logic into substrate workspaces) and a FINDING (`practice-graph` placed in `packages/libs/` instead of `sdks/` or `apps/` mixes a domain consumer with public infrastructure) on the topology surface. Both must land before `graph-stack.plan.md` ACTIVE promotion / ADR-173 ratification (next session). Captured in next-session thread record so execution-prep absorbs them as blockers, not surprises. | Phase 2 capture; topology surface itself out of scope this session per owner direction |
-| 2026-05-07 | **EEF plan internal contradiction surfaced (code-reviewer + assumptions-reviewer concurring FINDING)** — `eef-evidence-corpus.plan.md` t19 declares LLM/outcome verification out-of-scope until evaluation infrastructure exists, while §`Promotion Trigger from CURRENT to ACTIVE` and the closing acceptance lines treat outcome conditions as load-bearing. Slice 1 IS the EEF plan; the contradiction is internal to slice-1 execution. Not amended this session — owner direction is required before slice-1 execution prep can become decision-complete. Captured for next session. | Phase 2 capture; EEF plan body untouched this session |
+| 2026-05-07 | **EEF plan internal contradiction surfaced (code-reviewer + assumptions-reviewer concurring FINDING)** — `eef-evidence-corpus.plan.md` t19 declares LLM/outcome verification out-of-scope until evaluation infrastructure exists, while §`Promotion Trigger from CURRENT to ACTIVE` and the closing acceptance lines treat outcome conditions as load-bearing. Slice 1 IS the EEF plan, so the MVP could not be decision-complete until resolved. **Superseded by the 2026-05-08 structural-only evaluation decision below.** | Phase 2 capture; superseded by PR #102 closeout |
+| 2026-05-08 | **EEF evaluation stance clarified** — structural citation/data/caveat preservation is load-bearing for slice 1; LLM paraphrase/outcome evaluation, teacher-trust measurement, and SENCO workflow-time measurement are follow-on evaluation-infrastructure work outside Vitest. The EEF plan, this spine, and slice-3b risk/non-goal text must carry this stance before PR #102 can be decision-complete. | PR #102 decision-complete closeout; owner clarification after load-bearing EEF discussion |
+| 2026-05-08 | **Practice graph location clarified** — practice-facing graph tooling belongs under the new top-level `agent-graphs/` area, with `agent-graphs/practice-graph/` documented as the Practice graph pilot home and a future plan responsible for workspace organisation/wiring. | PR #102 decision-complete closeout; owner structure clarification |
 | 2026-05-07 | **Three slice plans authored** — `oak-kg-threads-surface.plan.md` (slice 2), `oak-misconceptions-subgraph-mcp-surface.plan.md` (slice 3a), `oak-misconceptions-eef-cross-corpus-surface.plan.md` (slice 3b) created in `connecting-oak-resources/knowledge-graph-integration/current/`. All three inherit substance from the spine, follow the feature-workstream template, define TDD cycles with file scopes, and carry dispatch-ready reviewer briefs. `author-slice-N-plan` todos marked completed. | Phase 3, commit `776df6b7` (1062 insertions across 3 new files; all quality gates green) |
 | 2026-05-07 | **Slice-plan composition model corrected (code-reviewer BLOCKER B1 + assumptions-reviewer concurring BLOCKER on slice 3b)** — slice 2, 3a, and 3b all carried "slice 3b composes slice-1 / slice-3a tools by name" framing that contradicted slice 3b Design Principle 1 (both corpora flow through `graph-corpus-sdk` substrate, not through inter-tool MCP calls). Four edits across the three plans: slice 2 spine-lock principle reworded; slice 3a spine-lock principle and "Consumed by" entry reworded; slice 3b WS1 cycle 1 frontmatter, "Existing capabilities consumed" section, and "Related plans" annotation reworded. Slices 1 and 3a are now correctly named as sources of naming conventions and response shape compatibility — not runtime MCP dependencies. | Phase 4 BLOCKER remediation, commit `0899ba93` |
 | 2026-05-07 | **Phase 4 FINDINGS deferred to execution-prep absorption** — six FINDINGS surfaced by the Phase 4 reviewer batch did not retroactively block Breezy Navigating Sail's single-session planning closure. Two trivial documentation findings were later absorbed by Tidal Surfing Lighthouse in the closeout pass: the dead smoke gate command was removed, and the obsolete ADR-123 path was corrected. Four substantive findings remain and must be absorbed before slice execution starts: slice 2 adapter timing; slice 3a topic-context wording; slice 3a budget/fixture concretisation; slice 3b implementation-audit test shape. | Phase 4 capture; Tidal closeout absorbed trivial findings |
-| 2026-05-07 | **Single-session planning closure achieved per owner direction** — pre-flight + Phase 0 (spine drift) + Phase 1 (3-reviewer parallel batch over 5 MVP-arc artefacts + topology) + Phase 2 (4 spine remediations) + Phase 3 (3 slice plans authored) + Phase 4 (2 BLOCKERs remediated, 6 FINDINGS captured) all landed in one session with explicit reviewer scope reduction (code-reviewer + assumptions-reviewer in series across phases 1 + 4; architecture-reviewer-betty for topology in parallel; out-of-scope reviewers — mcp-reviewer, docs-adr-reviewer, architecture-reviewer-fred — explicitly skipped per owner direction). Next session: execution prep — absorb topology BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb four remaining Phase 4 FINDINGS, owner-resolve the EEF contradiction, then begin slice 1 execution. | Closure verdict, Breezy Navigating Sail, single-session arc |
+| 2026-05-07 | **Single-session planning closure achieved per owner direction** — pre-flight + Phase 0 (spine drift) + Phase 1 (3-reviewer parallel batch over 5 MVP-arc artefacts + topology) + Phase 2 (4 spine remediations) + Phase 3 (3 slice plans authored) + Phase 4 (2 BLOCKERs remediated, 6 FINDINGS captured) all landed in one session with explicit reviewer scope reduction (code-reviewer + assumptions-reviewer in series across phases 1 + 4; architecture-reviewer-betty for topology in parallel; out-of-scope reviewers — mcp-reviewer, docs-adr-reviewer, architecture-reviewer-fred — explicitly skipped per owner direction). The next-session instruction in this historical row is superseded by the 2026-05-08 PR #102 closeout entries. | Closure verdict, Breezy Navigating Sail, single-session arc |

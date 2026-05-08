@@ -11,9 +11,9 @@ namespace: "oak-kg-*"
 substrate_floor:
   - "graph-stack Inc.1 (foundation: typed-Term core, graph-core)"
   - "graph-stack Inc.2 (Turtle ingestion mode + graph-query-layer 7-op surface)"
-  - "graph-corpus-sdk Oak Curriculum Ontology adapter (lands Inc.2 or early Inc.3)"
+  - "named graph-stack Oak Curriculum Ontology Thread adapter cycle (lands the graph-corpus-sdk API for curric:Thread enumeration + inverse curric:includesThread resolution)"
 sequencing_gate: "STRICT after gate-1-eef-ships per owner direction"
-last_updated: 2026-05-07
+last_updated: 2026-05-08
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -31,7 +31,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-resource-stub
-    content: "WS1 cycle 1: `oak-kg-threads-resource.unit.test.ts` (RED) asserts the resource lists every `curric:Thread` instance from the ontology with `rdfs:label`; `oak-kg-threads-resource.ts` (GREEN) implements via `graph-corpus-sdk` Oak Curriculum Ontology adapter. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-kg-threads-resource.integration.test.ts` (RED) asserts the resource lists every `curric:Thread` instance from the ontology with `rdfs:label`; `oak-kg-threads-resource.ts` (GREEN) implements via `graph-corpus-sdk` Oak Curriculum Ontology adapter. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-resource-grouping
@@ -39,7 +39,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1-resource-stub]
   - id: ws2-cycle-1-tool-inverse-edge
-    content: "WS2 cycle 1: `oak-kg-get-thread-content.unit.test.ts` (RED) — call with a Thread IRI, assert returned Units contain inverse-edge (`curric:includesThread`) results with `rdfs:label`, `rdfs:comment`, `curric:whyThisWhyNow`; `oak-kg-get-thread-content.ts` (GREEN) implements via the inverse-edge primitive in graph-query-layer + adapter. One commit."
+    content: "WS2 cycle 1: `oak-kg-get-thread-content.integration.test.ts` (RED) — call with a Thread IRI, assert returned Units contain inverse-edge (`curric:includesThread`) results with `rdfs:label`, `rdfs:comment`, `curric:whyThisWhyNow`; `oak-kg-get-thread-content.ts` (GREEN) implements via the inverse-edge primitive in graph-query-layer + adapter. One commit."
     status: pending
     depends_on: [ws1-cycle-1-resource-stub]
   - id: ws2-cycle-2-tool-grouping
@@ -78,9 +78,9 @@ todos:
 
 # Oak KG Threads MCP Surface — Slice 2 of the MVP Arc
 
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
-Inc.1 + Inc.2 + `graph-corpus-sdk` Oak Curriculum Ontology adapter) +
+Inc.1 + Inc.2 + named Oak Curriculum Ontology Thread adapter cycle) +
 gate-1-eef-ships.
 **Scope**: Slice 2 of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
@@ -114,9 +114,10 @@ discipline, not a downstream-composition dependency.
 
 ### Existing capabilities consumed
 
-- `graph-corpus-sdk` Oak Curriculum Ontology adapter (lands in
-  graph-stack Inc.2 or early Inc.3 — see
-  [`graph-stack.plan.md`](graph-stack.plan.md))
+- Named graph-stack Oak Curriculum Ontology Thread adapter cycle (see
+  [`graph-stack.plan.md`](graph-stack.plan.md)); slice 2 starts only after
+  that cycle lands the `graph-corpus-sdk` API for `curric:Thread`
+  enumeration and inverse `curric:includesThread` resolution.
 - `graph-query-layer` 7-op surface, including the inverse-edge primitive
   (lands in Inc.2)
 - The existing MCP server wiring in
@@ -129,8 +130,8 @@ discipline, not a downstream-composition dependency.
 ## Design Principles
 
 1. **Spine-locked names** — `curriculum://oak-kg-threads` and
-   `oak-kg-get-thread-content` are named in the spine and consumed by
-   slice 3b. This plan does not rename.
+   `oak-kg-get-thread-content` are named in the spine. This plan does not
+   rename. Slice 3b does not consume these tools at runtime.
 2. **Substrate-only via adapter** — no direct ontology I/O from the
    resource or tool; everything routes through `graph-corpus-sdk` so the
    substrate-vs-surface boundary holds (per ADR-173 / ADR-154).
@@ -183,7 +184,7 @@ following the convention set by the existing `*-resource.ts` files
 
 #### Cycle 1.1 — list every Thread with label
 
-- **Test** (Red): `oak-kg-threads-resource.unit.test.ts` — load
+- **Test** (Red): `oak-kg-threads-resource.integration.test.ts` — load
   fixture ontology with N known Threads; assert resource returns
   exactly N entries, each with IRI + `rdfs:label`.
 - **Product code** (Green): minimal adapter call surface; no grouping
@@ -201,7 +202,7 @@ following the convention set by the existing `*-resource.ts` files
 
 Three TDD cycles. The tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-kg-get-thread-content.ts`
-with `tool-definition.ts` and `unit.test.ts` siblings per the
+with `tool-definition.ts` and `integration.test.ts` siblings per the
 convention set by the existing `aggregated-*` tool families.
 
 #### Cycle 2.1 — inverse-edge happy path
@@ -213,6 +214,11 @@ convention set by the existing `aggregated-*` tool families.
   `graph-query-layer` via the `graph-corpus-sdk` adapter; project Units
   to the documented shape.
 - **Acceptance**: test passes; full tree green.
+
+MCP envelope acceptance: tool calls return a `CallToolResult` with `content`
+containing a short summary plus serialized JSON, `structuredContent` containing
+the Thread/Unit payload, a declared `outputSchema`, and `isError: true` on tool
+execution errors.
 
 #### Cycle 2.2 — grouping by subject + key-stage
 
@@ -313,8 +319,7 @@ Triggers downstream readiness check on slice 3b authoring.
 - `graph-stack.plan.md` Inc.1 + Inc.2 (substrate; topology must reach
   ACTIVE before this slice can execute, with the topology BLOCKERs
   surfaced by `architecture-reviewer-betty` 2026-05-07 absorbed).
-- `graph-corpus-sdk` Oak Curriculum Ontology adapter (lands in
-  Inc.2 / early Inc.3).
+- Named graph-stack Oak Curriculum Ontology Thread adapter cycle.
 
 **Parallel-safe with**:
 

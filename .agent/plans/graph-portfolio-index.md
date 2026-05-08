@@ -3,9 +3,10 @@ plan_id: graph-portfolio-index
 title: "Graph Portfolio — Index"
 type: cross-collection-index
 status: active
-last_updated: 2026-05-07
+last_updated: 2026-05-08
 indexed_collections:
   - "connecting-oak-resources/knowledge-graph-integration/"
+  - "agent-tooling/"
   - "agentic-engineering-enhancements/"
   - "sector-engagement/eef/"
   - "sector-engagement/knowledge-graph-adoption/"
@@ -16,7 +17,7 @@ sibling_index: "high-level-plan.md"
 # Graph Portfolio — Index
 
 Single index for **every plan and research artefact related to graphs**,
-spanning all four collections that touch graph work. Designed to make
+spanning all six collections that touch graph work. Designed to make
 consolidation cheap when the time comes.
 
 If a graph-related artefact is not listed here, that is a bug — open a follow-on
@@ -32,6 +33,8 @@ thread**:
 2. **Oak graph surfaces** — Oak's own graphs and ontology, ingested through
    the substrate (misconception, pre-requisite, NC taxonomy, full Oak
    ontology, EEF strands, derived Practice graph, external KG intake).
+   Practice-facing graph tooling is housed under `agent-graphs/`, adjacent to
+   `agent-tools/`, rather than under substrate package workspaces.
 3. **Features** — what we build on top for search and MCP, plus external
    adoption of Oak's KG assets.
 
@@ -62,16 +65,16 @@ closes as the ecosystem catches up — see the tripwire map below.
 | Type | Path | Role |
 |---|---|---|
 | Research direction | [`.agent/research/graph-library.research.md`](../research/graph-library.research.md) | Authoritative direction. **§4** RDF 1.2-native internal model (TripleTerm first-class). **§8** RelationshipRecord as JSON-LD 1.1 emit projection. **§12** wire-format migration seam. **§18** Oak first-wave ingestion scope. **§19** canonical Standards-evolution tripwires map (7 named tripwires). |
-| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Eight active workspaces plus one deferred; foundation increment ingests the NC knowledge taxonomy end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-173 below). |
+| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Seven active graph workspaces plus one deferred; foundation increment ingests the NC knowledge taxonomy end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-173 below). |
 | Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation polymorphic query layer with progressive disclosure. Substrate folds into `graph-stack`; MCP exposure stays a separate consumer-side decision. |
-| ADR (proposed) | [`docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) | **WS0 deliverable** of `graph-stack.plan.md`. Ratifies the topology, the **Option B standards stance**, the first-wave ingestion scope, and the seven binding **tripwires**. Skeleton drafted 2026-05-07; Option B amendment 2026-05-07. |
+| ADR (proposed) | [`docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) | **WS0 deliverable** of `graph-stack.plan.md`. Proposes the topology, the **Option B standards stance**, the first-wave ingestion scope, and the seven tripwires pending owner approval. Skeleton drafted 2026-05-07; Option B amendment 2026-05-07. |
 
 ### Standards-evolution tripwires (captured by proposed ADR-173)
 
 Each tripwire has its own subsection in
 [`graph-library.research.md` §19](../research/graph-library.research.md#19-standards-evolution-tripwires).
-ADR-173 enumerates them as binding. **No tripwire is silently skipped —
-each becomes a named follow-on plan when triggered.**
+ADR-173 proposes them for ratification. Intended discipline: no tripwire is
+silently skipped; each becomes a named follow-on plan when triggered.
 
 | # | Tripwire | Activates |
 |---|---|---|
@@ -83,21 +86,23 @@ each becomes a named follow-on plan when triggered.**
 | 6 | First triple-term-using corpus enters ingestion | Contract-test verification of ingestion / validation / provenance for triple terms |
 | 7 | Adapter implementation diverges from targeted spec | Pin, upstream issue, alternative evaluation; intervention through version/profile discriminator only |
 
-### First-wave ingestion scope (from `graph-library.research.md` §18)
+### Foundation and sequenced ingestion scope (from graph-stack + ADR-173)
 
 | # | Corpus | Source format | Notes |
 |---|---|---|---|
-| 1 | **Oak Curriculum Ontology** | Turtle + SHACL, ingested directly from sibling `oak-curriculum-ontology` repo | TTL is canonical. PG-JSONL, Neo4j export, SQL projections, WIDOCO docs are out of first-wave scope. |
-| 2 | **Pre-requisite graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | We build it — format choice is ours. |
-| 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | We build it — format choice is ours. |
-| 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; ingested through `jsonld-compatible` or `records` ingestion mode with provenance recorded. |
+| 1 | **NC knowledge taxonomy from Oak Curriculum Ontology** | Turtle/SKOS + SHACL source, ingested directly from sibling `oak-curriculum-ontology` repo | Foundation attached corpus. `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns NC/Oak mapping. PG-JSONL, Neo4j export, SQL projections, and WIDOCO docs are out of foundation scope. |
+| 2 | **Pre-requisite graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3. |
+| 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3; required before slice 3b. |
+| 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; EEF strand adapter is explicit graph-stack Increment 3 scope before cross-corpus joins. |
 
 ---
 
 ## Goal 2 — Oak graph surfaces (specific graphs)
 
 Each surface is a concrete graph (or ontology) made available through the
-substrate. Status reflects YAML and plan-body claims as of 2026-05-07.
+substrate. Status reflects YAML and plan-body claims as of 2026-05-08 for
+surfaces touched by PR #102 closeout; a broader portfolio status refresh is a
+follow-on consolidation task.
 
 | Surface | Plan | Status |
 |---|---|---|
@@ -109,8 +114,15 @@ substrate. Status reflects YAML and plan-body claims as of 2026-05-07.
 | **Oak Curriculum Ontology repo intake** (workspace decision) | [`connecting-oak-resources/.../future/oak-curriculum-ontology-workspace-reassessment.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md) | future |
 | **Oak Curriculum Ontology — fresh-perspective re-read** | [`connecting-oak-resources/.../future/ontology-repo-fresh-perspective-review.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | complete (per YAML) |
 | **Direct ontology use vs Neo4j vs Stardog prototypes** | [`connecting-oak-resources/.../future/direct-ontology-use-and-graph-serving-prototypes.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | future |
+| **Oak KG lesson graph surface** | [`connecting-oak-resources/.../future/oak-kg-lesson-graph-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-lesson-graph-surface.plan.md) | future — slice 2 cut scope |
+| **Oak KG programme navigator** | [`connecting-oak-resources/.../future/oak-kg-programme-navigator.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-programme-navigator.plan.md) | future — slice 2 cut scope |
+| **Oak KG IRI traverser** | [`connecting-oak-resources/.../future/oak-kg-iri-traverser.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-iri-traverser.plan.md) | future — slice 2 cut scope |
+| **Oak KG schema browser** | [`connecting-oak-resources/.../future/oak-kg-schema-browser.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-schema-browser.plan.md) | future — slice 2 cut scope |
+| **Oak misconceptions substrate migration** | [`connecting-oak-resources/.../future/oak-misconceptions-substrate-migration.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-substrate-migration.plan.md) | future — slice 3a substrate follow-on |
+| **Oak misconceptions topic extraction** | [`connecting-oak-resources/.../future/oak-misconceptions-topic-extraction.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-topic-extraction.plan.md) | future — slice 3a topic-string follow-on |
 | **EEF evidence strands corpus** | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | CURRENT — 20 todos pending. Cross-cutting thread (see below). |
 | **Derived Practice graph** (memory estate) | [`agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | NOT STARTED — first graph-memory pilot |
+| **Agent graph workspace organisation** | [`agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](agent-tooling/future/agent-graphs-workspace-organisation.plan.md) | future — creates `agent-graphs/` and workspace wiring for `agent-graphs/practice-graph/` when the Practice pilot promotes |
 | **External knowledge graph intake** (third-party KGs as Oak data) | [`exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md`](exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md) | future |
 
 ---
@@ -123,6 +135,7 @@ substrate. Status reflects YAML and plan-body claims as of 2026-05-07.
 | **Multi-source umbrella** (coordinates Oak API + Oak Ontology + EEF as MCP surfaces) | [`connecting-oak-resources/.../active/open-education-knowledge-surfaces.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | ACTIVE — WS-0/1/2 done; WS-3+ pending |
 | **Agent guidance over graph surfaces** | [`connecting-oak-resources/.../active/agent-guidance-consolidation.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md) | active — runs after surfaces ship |
 | **Cross-source journeys** (search × misconception × EEF; prerequisite traces) | [`connecting-oak-resources/.../future/cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | future |
+| **Oak misconceptions × EEF extended contexts** | [`connecting-oak-resources/.../future/oak-misconceptions-eef-extended-contexts.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-extended-contexts.plan.md) | future — slice 3b non-Thread context follow-on |
 | **Graphify-style memory navigation** (Practice memory layer) | [`agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`](agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | future — strategic parent of the Practice graph pilot |
 | **External adoption of Oak KG assets** | [`sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md`](sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md) | future |
 
@@ -140,7 +153,7 @@ both in a single working context.
 
 | Type | Path | Role |
 |---|---|---|
-| Plan (current) | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | Canonical executable plan for the EEF graph surface, ranking engine, two prompts, citation discipline, telemetry, freshness gate. |
+| Plan (current) | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | Canonical executable plan for the EEF graph surface, ranking engine, two prompts, structural citation/data/caveat discipline, telemetry, freshness gate. LLM/outcome evaluation is a follow-on evaluation-infrastructure concern, not a slice-1 gate. |
 | Plan (future) | [`connecting-oak-resources/.../future/cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | Journeys that compose EEF with the misconception graph and search. |
 | External-source intake | [`exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md`](exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md) | Generalised intake model for future third-party knowledge graphs (sector partners beyond EEF). |
 
@@ -161,7 +174,7 @@ fold or cross-link when consolidation runs.
 | **Knowledge graphs as data sources** | `exploring-open-education-resources/external-knowledge-sources/` (intake model) and `connecting-oak-resources/knowledge-graph-integration/` (Oak-owned graphs) | Cross-link only; same separation rule. |
 | **NC taxonomy substrate vs surfacing** | `graph-stack.plan.md` owns the substrate; `nc-knowledge-taxonomy-surface.plan.md` owns the MCP surface | Already declared in graph-stack's coordination map; surface plan should add a one-line YAML pointer. (Pending; trivial follow-on.) |
 | **Query layer substrate vs MCP exposure** | Same split: `graph-stack.plan.md` (substrate) and `graph-query-layer.plan.md` (MCP-side decisions) | Same as above. |
-| **Practice graph vs curriculum graphs** | `agentic-engineering-enhancements/` owns the Practice memory graph; `connecting-oak-resources/knowledge-graph-integration/` owns curriculum graphs | Both consume the same substrate (`graph-corpus-sdk`/`practice-graph` workspaces); cross-link only. |
+| **Practice graph vs curriculum graphs** | `agentic-engineering-enhancements/` owns the Practice memory graph; `agent-tooling/` owns the top-level `agent-graphs/` organisation; `connecting-oak-resources/knowledge-graph-integration/` owns curriculum graphs | Both consume the same substrate packages (`graph-core`, `graph-ingest`, `graph-project`); `graph-corpus-sdk` and `agent-graphs/practice-graph` are consumer workspaces. Cross-link only. |
 
 ---
 
@@ -187,7 +200,7 @@ honor the substrate-floor dependencies named in `graph-stack.plan.md`.
 
 | Slice | Goal | Namespace | Status |
 |---|---|---|---|
-| 1 — EEF evidence corpus MCP surface | 2 (Oak graph surface) + 3 (feature) | `eef-*` | pending substrate floor |
+| 1 — EEF evidence corpus MCP surface | 2 (Oak graph surface) + 3 (feature) | `eef-*` | pending substrate floor; structural eval only now |
 | 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | blocked by slice 1 |
 | 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | parallel-safe with slice 2 |
 | 3b — EEF × misconceptions cross-corpus sequencing | 3 (feature) | `oak-misconceptions-eef-*` | blocked by slice 1 + slice 3a + graph-stack Inc.3 |

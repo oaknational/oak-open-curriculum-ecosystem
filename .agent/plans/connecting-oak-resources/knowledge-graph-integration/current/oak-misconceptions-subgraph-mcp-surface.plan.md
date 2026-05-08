@@ -1,6 +1,6 @@
 ---
 name: "Oak Misconceptions Sub-Graph MCP Surface (Slice 3a of MVP arc)"
-overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy graph factory. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to be usable inside normal context windows. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
+overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy graph factory. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
@@ -13,7 +13,7 @@ substrate_floor:
   - "legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
 sequencing_gate: "STRICT after gate-1-eef-ships (owner sequencing); PARALLEL-SAFE with gate-2-threads-ships"
-last_updated: 2026-05-07
+last_updated: 2026-05-08
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -33,15 +33,15 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-bounded-extraction-thread
-    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.unit.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit stated context budget; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) implements via legacy graph factory. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) implements via legacy graph factory. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-bound-default
-    content: "WS1 cycle 2: extend test to assert default bound chosen so 95th-percentile responses fit standard context windows (per spine acceptance #1); product-code adjustment minimal. One commit."
+    content: "WS1 cycle 2: extend test to assert default bound chosen so 95th-percentile responses from the committed `20`-context fixture manifest fit `maxResponseTokens = 16000` (per spine acceptance #1); product-code adjustment minimal. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-3-completeness-control
-    content: "WS1 cycle 3: completeness test — for sample queries, all reachable misconceptions WITHIN THE BOUND are present versus a full-graph control. Property-style assertion across N representative queries. One commit."
+    content: "WS1 cycle 3: completeness test — for sample queries, all reachable misconceptions WITHIN THE BOUND are present versus a full-graph control. Property-style assertion across the committed `20`-context fixture manifest selected deterministically from reachable-misconception counts. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-4-error-shapes
@@ -49,7 +49,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws2-cycle-1-for-unit-optional
-    content: "WS2 cycle 1 (OPTIONAL — gate at owner direction or T0 owner check): `oak-misconceptions-subgraph-for-unit.unit.test.ts` (RED) + `oak-misconceptions-subgraph-for-unit.ts` (GREEN) ship the per-unit variant on the same legacy substrate. One commit. Skip the WS if owner direction at slice-3a opening confirms thread-only suffices."
+    content: "WS2 cycle 1 (OPTIONAL — gate at owner direction or T0 owner check): `oak-misconceptions-subgraph-for-unit.integration.test.ts` (RED) + `oak-misconceptions-subgraph-for-unit.ts` (GREEN) ship the per-unit variant on the same legacy substrate. One commit. Skip the WS if owner direction at slice-3a opening confirms thread-only suffices."
     status: pending
     depends_on: [ws1-cycle-3-completeness-control]
   - id: ws3-cycle-1-mcp-wiring
@@ -73,14 +73,14 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
-    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; create the named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b authoring readiness check."
+    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; refresh the named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b authoring readiness check."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
 
 # Oak Misconceptions Sub-Graph MCP Surface — Slice 3a of the MVP Arc
 
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships
 (STRICT, owner sequencing). PARALLEL-SAFE with slice 2 — different
 substrate path, different namespace, different files.
@@ -89,7 +89,7 @@ substrate path, different namespace, different files.
 ship `oak-misconceptions-subgraph-for-thread` (and optionally
 `-for-unit`) on the **legacy graph factory** path. Bounded sub-graph
 extraction is the blocking primitive the misconception graph needs to
-be usable inside normal context windows.
+fit `maxResponseTokens = 16000`.
 
 ## Context
 
@@ -109,9 +109,23 @@ named explicitly.
 | Tool | `oak-misconceptions-subgraph-for-thread` | legacy graph factory |
 | Tool (optional) | `oak-misconceptions-subgraph-for-unit` | legacy graph factory |
 
-The tools return **bounded** sub-graphs sized to fit a stated context
-budget. Bound is a parameter; default chosen so 95th-percentile
-responses fit standard context windows.
+The tools return **bounded** sub-graphs sized to fit
+`maxResponseTokens = 16000`. Bound is a parameter; default chosen so
+95th-percentile responses from the committed `20`-context fixture manifest fit
+that budget. The budget is measured by a shared response-budget helper against
+the serialized model-visible `content` text payload, including citations,
+caveats, and duplicated JSON required for MCP compatibility.
+
+Fixture manifest path:
+`packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.fixture-manifest.ts`.
+The manifest schema is
+`readonly { iri: string; reachableMisconceptionCount: number; bucket:
+"zero" | "low" | "median" | "high" }[]`.
+Selection rule: compute reachable-misconception counts for all eligible Thread
+IRIs, sort by count descending with IRI lexical tie-break, then commit exactly
+5 high, 5 median-nearest, 5 low-nonzero, and 5 zero-count contexts. If a bucket
+has fewer than 5 candidates, fill from the adjacent bucket by the same ordering
+and record the fill in the manifest comment.
 
 ### Existing capabilities consumed
 
@@ -145,7 +159,7 @@ contract is named, and the migration is sequenced.
    not a runtime MCP composition.
 2. **Bounded by parameter, defaulted by data** — the bound is exposed
    to callers; the default is chosen empirically so 95th-percentile
-   responses fit standard context windows.
+   responses fit `maxResponseTokens = 16000`.
 3. **Legacy disclosed in `_meta`** — every consumer of the tool sees
    from `_meta` that the substrate is the legacy graph factory, with a
    pointer to the substrate-migration follow-up plan. This is the
@@ -169,9 +183,10 @@ contract is named, and the migration is sequenced.
 
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3a")
 
-1. Sub-graph extraction by topic/thread/unit context returns bounded
-   results that fit stated context budgets across N representative
-   queries.
+1. Sub-graph extraction by Thread IRI context returns bounded results that fit
+   `maxResponseTokens = 16000` across the committed `20`-context fixture
+   manifest. Unit IRI context is accepted only if the optional unit variant is
+   explicitly authorised at slice opening.
 2. Sub-graph completeness verified versus full-graph control: for each
    sample query, all reachable misconceptions within the bound are
    present.
@@ -187,14 +202,16 @@ contract is named, and the migration is sequenced.
 
 Four TDD cycles. Tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.ts`
-with `tool-definition.ts` and `unit.test.ts` siblings.
+with `tool-definition.ts` and `integration.test.ts` siblings.
+Because these cycles exercise the legacy graph factory, the test file is
+classified as `integration.test.ts` at implementation time.
 
 #### Cycle 1.1 — bounded extraction happy path
 
 - **Test**: Thread IRI + bound parameter → tool returns a sub-graph
   of misconceptions attached (transitively, within the bound) to units
-  in that thread; sub-graph fits the stated context budget for N
-  representative queries.
+  in that thread; sub-graph fits `maxResponseTokens = 16000` for the
+  committed `20`-context fixture manifest.
 - **Product code**: legacy graph factory traversal bounded by the
   parameter; project to MCP-friendly response shape.
 - **Acceptance**: test passes; full tree green.
@@ -202,15 +219,23 @@ with `tool-definition.ts` and `unit.test.ts` siblings.
 #### Cycle 1.2 — default bound
 
 - **Test**: with no bound supplied, the default chosen makes 95th
-  percentile of N representative responses fit a standard context
-  window. (The N representative queries are committed as fixtures.)
+  percentile of the committed `20`-context fixture manifest fit
+  `maxResponseTokens = 16000`.
 - **Product code**: default constant + comment naming the empirical
-  basis.
+  basis. The fixture manifest is selected deterministically from
+  reachable-misconception counts, covering high, median, low, and
+  zero-count contexts.
 - **Acceptance**: test passes; cycle 1.1 still passes.
+
+MCP envelope acceptance: tool calls return a `CallToolResult` with `content`
+containing a short summary plus serialized JSON, `structuredContent` containing
+the bounded sub-graph payload, a declared `outputSchema`, and `isError: true`
+on tool execution errors.
 
 #### Cycle 1.3 — completeness control
 
-- **Test**: for each of N sample queries, assert that every
+- **Test**: for each fixture in the committed `20`-context manifest, assert
+  that every
   misconception reachable within the bound IS present in the
   response (versus a full-graph control walked separately in the
   test).
@@ -297,7 +322,7 @@ Dispatch:
 
 | Risk | Mitigation |
 |---|---|
-| Empirical bound default poorly chosen; 95th percentile drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + fixture; substrate-migration plan re-validates the default. |
+| Empirical bound default poorly chosen; 95th percentile drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
 | Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's full-graph control test surfaces this directly. |
 | Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-reviewer` gate; substrate-migration plan re-validates `_meta` shape. |
 | Slice 3b authoring (parallel) ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + slice-3b amendment. |

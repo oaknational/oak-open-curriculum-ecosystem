@@ -11,8 +11,8 @@ strategy; this ADR establishes the substrate that future graph-shaped MCP
 primitives will consume, and explicitly does _not_ amend ADR-123 because the
 substrate ships no MCP primitives;
 [ADR-154](154-separate-framework-from-consumer.md) — framework/consumer
-separation; this ADR is a worked application of that rule across eight
-graph workspaces;
+separation; this ADR is a worked application of that rule across seven active
+graph workspaces plus one deferred future-standards workspace;
 [ADR-157](157-multi-source-open-education-integration.md) — multi-source
 open education integration; this ADR is the structural carrier for that
 integration (Oak API + Oak Curriculum Ontology + EEF, with the EEF
@@ -40,7 +40,7 @@ rather than each inventing one.
 
 ## Decision
 
-Adopt an **eight-workspaces-plus-one-deferred** graph topology with an RDF
+Adopt a **seven-active-plus-one-deferred** graph topology with an RDF
 1.2-native internal model, JSON-LD 1.1 wire profile, versioned standards
 adapters, and explicit separation between MCP surfacing and graph substrate
 packages.
@@ -67,13 +67,14 @@ packages.
 
 ### Topology
 
-Eight active workspaces plus one deferred:
+Seven active graph workspaces plus one deferred:
 
 1. `packages/core/graph-core/` — RDF/JS-aligned terms/quads/datasets,
    JSON-LD 1.1 expansion+compaction+framing, canonicalisation, vocabulary
    registry. Pure, no I/O.
-2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, and
-   corpus-specific ingestion modes.
+2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, generic
+   Turtle/SKOS parse-to-dataset support, and other consumer-agnostic
+   ingestion modes. Oak/NC corpus mapping does not live here.
 3. `packages/libs/graph-enhance/` — stable IRI minting, predicate mapping,
    type inference, link detection, `EnhancementRecord` and
    `RelationshipRecord` discipline.
@@ -85,13 +86,14 @@ Eight active workspaces plus one deferred:
    knowledge taxonomy, prerequisite, misconception, EEF strands, future
    corpora). Cross-corpus join primitives. Ontology IRIs as canonical
    identity.
-7. `packages/libs/practice-graph/` — markdown-corpus graph for Oak's
-   engineering practice. Proves the substrate works for non-curriculum data.
+7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
+   engineering practice. It is an agent-tooling-adjacent consumer, not a
+   substrate library, and proves the substrate works for non-curriculum data.
 8. `packages/libs/graph-future/` — _deferred_. Workspace not created until
    a consumer needs RDF 1.2 / JSON-LD 1.2 / SPARQL 1.2 / SHACL 1.2
    adapters; the adapter seams ship from day one in the active workspaces.
 
-### MCP-agnostic principle (binding)
+### MCP-agnostic principle (proposed)
 
 **No graph workspace ships MCP-shaped code.** Tool definitions, resource
 constants, and registration helpers live with the application that surfaces
@@ -104,24 +106,22 @@ the point a consumer surfaces them.
 The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
 is a consumer-side concern with at most one home per transport.
 
-### First-wave ingestion scope (binding for graph-stack Increment 1)
+### First-wave ingestion scope (proposed topology constraint)
 
-The first wave of import support targets four corpora:
+The foundation wave targets the smallest end-to-end attached corpus:
 
 1. **Oak Curriculum Ontology** — Turtle + SHACL, ingested directly from the
    sibling `oak-curriculum-ontology` repo. TTL is canonical; the repo's
    PG-JSONL, Neo4j-export, SQL, and WIDOCO projections are _not_ first-wave
    ingestion targets. Round-trip equivalence between TTL and the derived
    projections is asserted upstream and not re-verified by the graph stack.
-2. **Pre-requisite graph** — Oak-controlled emit shape; recommended
-   JSON-LD 1.1 with a stable Oak context.
-3. **Misconception graph** — Oak-controlled emit shape; recommended
-   JSON-LD 1.1 with a stable Oak context.
-4. **EEF Toolkit corpus** — external; ingested through `jsonld-compatible`
-   or `records` mode with provenance recorded.
+   `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns
+   the NC/Oak knowledge-taxonomy mapping and typed adapter.
 
-Other Oak ontology projections and third-party knowledge graphs are tracked
-separately and re-introduced as ingestion modes only when concrete
+Pre-requisite, misconception, and EEF strand adapters are outside the foundation
+topology decision and are sequenced by the executable graph-stack plan. Other
+Oak ontology projections and third-party knowledge graphs are tracked
+separately and re-introduced as ingestion modes or adapters only when concrete
 consumers require them.
 
 ## Consequences
@@ -138,9 +138,9 @@ consumers require them.
 - The RDF 1.2-native internal stance minimises the JSON-LD 1.2 upgrade
   cost: when JSON-LD 1.2 reaches Recommendation (tripwire #1), we add an
   emit/parse adapter rather than reshape the canonical model.
-- The first-wave ingestion scope is small enough to ship and broad enough
-  to validate the substrate against curriculum, derived, and external
-  corpora.
+- The foundation ingestion scope is small enough to ship while still proving
+  ontology IRI identity and generic Turtle/SKOS parsing through one real
+  attached corpus.
 
 **Negative / cost accepted**:
 
@@ -159,7 +159,7 @@ consumers require them.
 
 The substrate is internally RDF 1.2-native and externally JSON-LD 1.1 /
 RDF 1.1-compatible on the wire. This is a deliberate gap that closes as
-the ecosystem catches up. This ADR records seven binding tripwires by name.
+the ecosystem catches up. This ADR proposes seven tripwires by name.
 **Each tripwire becomes a named follow-on plan when triggered, not an inline
 sweep.**
 
@@ -173,7 +173,7 @@ sweep.**
 | 6   | **First triple-term-using corpus enters ingestion**    | Any first-wave corpus or future corpus emits triple-term-shaped data (none do today)                                                               | `graph-ingest`, `graph-validate`, `graph-enhance`, contract tests | Verify ingestion preserves triple terms; verify SHACL shape constraints; verify provenance for triple-term derivations                                                              |
 | 7   | **Adapter implementation diverges from targeted spec** | Contract test failure on `jsonld.js`, `rdf-canonize`, `rdf-validate-shacl`, or any future adapter; includes RDF Dataset Canonicalization 1.0 → 2.0 | The diverging adapter only                                        | Pin to last-known-good version, file upstream issue, evaluate alternatives; intervention point is always the version/profile discriminator                                          |
 
-**Tripwire discipline (binding under this ADR)**:
+**Tripwire discipline (proposed for ratification)**:
 
 - Every tripwire is a contract test or version-pin in the codebase.
 - No tripwire can be silently skipped. Triggering creates a named follow-on
@@ -214,7 +214,9 @@ sweep.**
 
 1. Confirm the workspace path conventions
    (`packages/core/graph-core/`, `packages/libs/...`,
-   `packages/sdks/graph-corpus-sdk/`) match repository workspace policy.
+   `packages/sdks/graph-corpus-sdk/`, `agent-graphs/practice-graph/`) match
+   repository workspace policy. The `agent-graphs/` physical organisation is
+   sequenced outside this ADR.
 2. Confirm the ADR is the right artefact for the MCP-agnostic principle, or
    whether it should be a separate ADR with this one referencing it.
 3. Confirm Mark Hodierne's author addition is required at ratification or

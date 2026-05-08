@@ -10,11 +10,11 @@ spine_slice: 3b
 namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
 substrate_floor:
-  - "gate-1-eef-ships (slice 1's `eef-*` tools available; corpus on graph-corpus-sdk if migrated, on graph-query-layer otherwise)"
-  - "gate-3a-mcg-subgraph-ships (slice 3a's `oak-misconceptions-subgraph-for-thread` available; legacy or replatformed substrate)"
-  - "graph-stack Inc.3 (cross-corpus join primitive + misconception adapter on graph-corpus-sdk)"
+  - "graph-stack Inc.3 (cross-corpus join primitive + misconception adapter + EEF strand adapter on graph-corpus-sdk)"
+  - "gate-1-eef-ships as naming/response-shape prerequisite only; no runtime MCP tool dependency"
+  - "gate-3a-mcg-subgraph-ships as bounded-sub-graph response-shape prerequisite only; no runtime MCP tool dependency"
 sequencing_gate: "gate-1 + gate-3a + Inc.3 (Phase 2 spine correction 2026-05-07: gate-2 is NOT a dependency)"
-last_updated: 2026-05-07
+last_updated: 2026-05-08
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -35,15 +35,15 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-cross-corpus-happy-path
-    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.unit.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of N thread/unit contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.integration.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of N Thread IRI contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-substrate-only
-    content: "WS1 cycle 2: assertion that BOTH corpora flow through `graph-corpus-sdk` + GraphView (no legacy factory imports in this tool). Tested by an architectural assertion (file-scope import audit) + integration test exercising the cross-corpus join end-to-end. One commit."
+    content: "WS1 cycle 2: behavioural integration test exercising the cross-corpus join end-to-end with both EEF strands and misconception nodes supplied through `graph-corpus-sdk` fixture adapters. One commit."
     status: pending
     depends_on: [ws1-cycle-1-cross-corpus-happy-path]
   - id: ws1-cycle-3-cross-corpus-join-verified
-    content: "WS1 cycle 3: cross-corpus join primitive verified end-to-end — assert that the join primitive (not bespoke composition logic in this tool) is responsible for the cross-corpus composition; tool body is thin. One commit."
+    content: "WS1 cycle 3: behavioural test verifies the cross-corpus join result changes when the `graph-corpus-sdk` join fixture changes, proving the tool projects the substrate join output rather than composing stale local data. One commit."
     status: pending
     depends_on: [ws1-cycle-2-substrate-only]
   - id: ws1-cycle-4-error-shapes
@@ -67,7 +67,7 @@ todos:
     status: pending
     depends_on: [ws3-adr-123-update]
   - id: ws5-adversarial-review
-    content: "WS5: dispatch `mcp-reviewer` (MCP spec + compound-prefix tool shape + source-attribution discipline + namespace) + `architecture-reviewer-betty` (substrate-only enforcement + cross-corpus join primitive boundary; tool body should be thin) + `elasticsearch-reviewer` (if EEF strand ranking touches Elasticsearch retrieval; otherwise note scope and skip) + `test-reviewer` (TDD pair audit + cross-corpus integration coverage) + `code-reviewer` (gateway). Document findings; remediate or queue."
+    content: "WS5: dispatch `mcp-reviewer` (MCP spec + compound-prefix tool shape + source-attribution discipline + namespace) + `architecture-reviewer-betty` (substrate-only enforcement + cross-corpus join primitive boundary; tool body should be thin) + `elasticsearch-reviewer` (if EEF strand ranking touches Elasticsearch retrieval; otherwise note scope and skip) + `test-reviewer` (TDD pair audit + cross-corpus integration coverage) + `code-reviewer` (gateway). Lint/depcruise/architecture gates, not TDD cycles, enforce no legacy imports, thin-body expectations, file size, and complexity bounds. Document findings; remediate or queue."
     status: pending
     depends_on: [ws4-quality-gates]
   - id: ws6-spine-gate-3b-close-and-arc-archive
@@ -78,7 +78,7 @@ todos:
 
 # Oak Misconceptions × EEF Cross-Corpus MCP Surface — Slice 3b of the MVP Arc
 
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships +
 gate-3a-mcg-subgraph-ships + graph-stack Inc.3.
 **Scope**: Slice 3b of the
@@ -129,11 +129,10 @@ the response shape, not as runtime dependencies.
 
 - `graph-corpus-sdk` cross-corpus join primitive (lands in graph-stack
   Inc.3)
-- `graph-corpus-sdk` EEF strand corpus adapter (lands in Inc.3 — slice
-  1's EEF substrate may be on graph-query-layer at gate-1; the
-  cross-corpus join primitive requires both corpora on
-  `graph-corpus-sdk`, so an EEF substrate migration is implicitly
-  required between gate-1 and gate-3b)
+- `graph-corpus-sdk` EEF strand corpus adapter (explicitly included in
+  graph-stack Inc.3 before slice 3b starts — slice 1's EEF substrate may be
+  on graph-query-layer at gate-1; the cross-corpus join primitive requires
+  both corpora on `graph-corpus-sdk`)
 - `graph-corpus-sdk` misconception adapter (lands in Inc.3
   misconception replatform — see
   `oak-misconceptions-substrate-migration.plan.md` future plan that
@@ -141,8 +140,8 @@ the response shape, not as runtime dependencies.
 - Naming/structural conventions from slice 1 (EEF strand response
   shape, compound-prefix `eef-*`) — see
   [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
-- Sub-graph extraction shape from slice 3a (bounded sub-graph by
-  thread/unit context) — see
+- Sub-graph extraction shape from slice 3a (bounded sub-graph by Thread IRI
+  context) — see
   [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md);
   slice 3a's tool is NOT called at runtime
 - The SDK's `classify-error-response` convention
@@ -182,13 +181,13 @@ the response shape, not as runtime dependencies.
 - Three-corpus joins (EEF + misconceptions + threads simultaneously,
   or with the prerequisite graph) — see existing future plan
   [`cross-source-journeys.plan.md`](cross-source-journeys.plan.md).
-- Open-ended sequencing recommendations beyond thread/unit context
-  (e.g. by lesson, by content descriptor) — future plan
-  `oak-misconceptions-eef-extended-contexts.plan.md`.
-- LLM-graded outcome verification — out-of-scope per
-  `eef-evidence-corpus.plan.md` t19; existing position holds (see also
-  EEF plan internal-contradiction note in spine Owner Decisions Log
-  2026-05-07; owner direction needed before slice-3b execution).
+- Open-ended sequencing recommendations beyond Thread IRI context
+  (e.g. by unit, by lesson, by content descriptor) — future plan
+  [`oak-misconceptions-eef-extended-contexts.plan.md`](../future/oak-misconceptions-eef-extended-contexts.plan.md).
+- LLM/outcome evaluation — follow-on evaluation infrastructure, not a
+  slice-3b gate. `eef-evidence-corpus.plan.md` t19 keeps LLM paraphrase and
+  outcome verification out of Vitest; structural citation/data/caveat
+  preservation is the load-bearing EEF stance for this arc.
 - A per-unit cross-corpus variant (`oak-misconceptions-eef-recommend-for-unit`)
   — defer to a follow-up plan if demand surfaces; the per-thread
   variant covers the named user value.
@@ -199,7 +198,7 @@ the response shape, not as runtime dependencies.
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3b")
 
 1. Per-call response carries non-empty EEF strand list AND non-empty
-   misconception sub-graph for a curated set of N thread/unit contexts
+   misconception sub-graph for a curated set of N Thread IRI contexts
    where both are known to exist.
 2. Both corpora flow through `graph-corpus-sdk` + `GraphView` (no
    legacy factory).
@@ -212,13 +211,13 @@ the response shape, not as runtime dependencies.
 
 Four TDD cycles. Tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-eef-recommend-for-thread.ts`
-with `tool-definition.ts` and `unit.test.ts` siblings.
+with `tool-definition.ts` and `integration.test.ts` siblings.
 
 #### Cycle 1.1 — cross-corpus happy path
 
 - **Test**: Thread IRI → response carries non-empty `evidence` (EEF
   strand list, ranked) AND non-empty `misconceptions` (bounded
-  sub-graph) for a curated set of N thread/unit contexts where both
+  sub-graph) for a curated set of N Thread IRI contexts where both
   corpora are known to have content. The N contexts are committed as
   fixtures.
 - **Product code**: invoke the cross-corpus join primitive composing
@@ -226,22 +225,27 @@ with `tool-definition.ts` and `unit.test.ts` siblings.
   `graph-corpus-sdk`; project to MCP-friendly response shape.
 - **Acceptance**: test passes; full tree green.
 
-#### Cycle 1.2 — substrate-only enforcement
+#### Cycle 1.2 — behavioural substrate join
 
-- **Tests**: (a) integration test exercises the cross-corpus join
-  end-to-end and asserts both corpora flow through `graph-corpus-sdk`
-  (e.g. via spy / fixture wiring); (b) ESLint rule or import audit
-  asserts no legacy graph factory import in this tool's file.
-- **Product code**: any wiring fixes the tests expose.
-- **Acceptance**: substrate-only assertion passes.
+- **Tests**: integration test exercises the cross-corpus join
+  end-to-end with both EEF strands and misconception nodes supplied
+  through `graph-corpus-sdk` fixture adapters.
+- **Product code**: any wiring fixes the test exposes.
+- **Acceptance**: joined payload comes from the fixture adapters and carries
+  explicit source attribution for both corpora.
 
-#### Cycle 1.3 — cross-corpus join primitive responsibility
+#### Cycle 1.3 — join-output projection
 
-- **Test**: assertion that the cross-corpus join primitive (not
-  bespoke composition logic in this tool) is responsible for the
-  composition. Implementation discipline: the tool body should be
-  thin — file size + cyclomatic complexity bounded.
-- **Product code**: any extraction this assertion drives.
+- **Test**: mutate the `graph-corpus-sdk` join fixture and assert the tool
+  response changes accordingly while preserving the MCP response shape.
+- **Product code**: projection changes the behavioural test drives.
+- **Acceptance**: the tool projects the substrate join output, not stale local
+  composition data.
+
+MCP envelope acceptance: tool calls return a `CallToolResult` with `content`
+containing a short summary plus serialized JSON, `structuredContent` containing
+the compound payload, a declared `outputSchema`, and `isError: true` on tool
+execution errors.
 
 #### Cycle 1.4 — error-shape and empty-corpus paths
 
@@ -300,6 +304,14 @@ Dispatch:
   no audit-shaped tests; no skipped tests
 - `code-reviewer` — gateway
 
+Structural enforcement gates at WS5:
+
+- lint/depcruise: no legacy graph factory imports in the slice-3b tool path;
+- architecture review: tool body remains a projection over
+  `graph-corpus-sdk`, with cross-corpus responsibility in the join primitive;
+- code-review gateway: file-size and complexity concerns are reviewed as code
+  quality, not encoded as brittle TDD assertions.
+
 ### WS6 — Spine gate-3b close + MVP-arc archive trigger
 
 1. Update spine
@@ -317,11 +329,11 @@ Dispatch:
 
 | Risk | Mitigation |
 |---|---|
-| EEF substrate migration (graph-query-layer → graph-corpus-sdk) ships in a shape that breaks slice 1's already-shipped `eef-*` tools | EEF migration plan named in spine cut-scope row 1; slice 3b's substrate-only assertion (cycle 1.2) catches drift between slice 1 ship and slice 3b execution. |
-| Cross-corpus join primitive (graph-stack Inc.3) lands in a shape that complicates `oak-misconceptions-eef-*` semantics | Per spine risk: slice 3b waits for Inc.3 by design; spine doesn't lock the join API early. Cycle 1.3's "primitive carries responsibility" assertion catches if the tool body has to fight the primitive shape. |
+| EEF substrate migration (graph-query-layer → graph-corpus-sdk) ships in a shape that breaks slice 1's already-shipped `eef-*` tools | EEF strand adapter is explicit graph-stack Inc.3 scope before slice 3b starts; cycle 1.2's behavioural join fixture catches drift between slice 1 ship and slice 3b execution. |
+| Cross-corpus join primitive (graph-stack Inc.3) lands in a shape that complicates `oak-misconceptions-eef-*` semantics | Per spine risk: slice 3b waits for Inc.3 by design; spine doesn't lock the join API early. Cycle 1.3's join-output projection test catches if the tool has to fight the primitive shape. |
 | Empty-corpus response shape inconsistency surprises consumers | Cycle 1.4 covers all four empty-result combinations explicitly. |
 | Compound-prefix tool name drift (e.g., consumer-side rename request mid-execution) | Tool name is locked from spine; renaming requires spine + this plan + slice-3a (since it's name-composed) amendment. |
-| Slice 1's EEF plan internal contradiction (T19 vs promotion-trigger acceptance, surfaced by Phase 1 reviewers 2026-05-07) drifts into slice-3b scope before owner direction settles it | Captured in spine Owner Decisions Log; slice-3b execution gates on owner direction landing in the EEF plan; slice 3b's outcome-verification non-goal restates the existing position in the meantime. |
+| EEF outcome evaluation is accidentally treated as a slice-3b gate | EEF plan and spine now state structural-only verification for slice 1; slice 3b inherits that stance and routes LLM/outcome measurement to follow-on evaluation infrastructure. |
 
 ## Foundation Alignment
 
@@ -340,17 +352,16 @@ Dispatch:
 
 **Blocking**:
 
-- Spine `gate-1-eef-ships` (slice 1's `eef-*` tools available).
+- Spine `gate-1-eef-ships` (slice 1's `eef-*` names and response-shape
+  contract available).
 - Spine `gate-3a-mcg-subgraph-ships`
   ([`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)).
 - `graph-stack.plan.md` Inc.3 (cross-corpus join primitive +
-  misconception adapter on `graph-corpus-sdk`).
-- EEF substrate migration onto `graph-corpus-sdk` (implicit
-  precondition; named in spine cut-scope row 1 and required by
-  cycle 1.2's substrate-only assertion).
-- Slice-1 EEF plan internal contradiction (T19 vs promotion-trigger
-  acceptance) resolved by owner direction (captured in spine Owner
-  Decisions Log 2026-05-07).
+  misconception adapter + EEF strand adapter on `graph-corpus-sdk`).
+- EEF substrate migration onto `graph-corpus-sdk` is an explicit
+  Inc.3 precondition for slice 3b.
+- Slice-1 EEF evaluation stance resolved to structural-only: no
+  LLM/outcome gate before slice 1 or slice 3b execution.
 
 **Not** blocked by:
 

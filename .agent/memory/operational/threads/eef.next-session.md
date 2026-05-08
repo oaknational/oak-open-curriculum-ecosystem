@@ -1,6 +1,16 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-04-30 (Vining Whispering Root / claude-code /
+**Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
+GPT-5 / `019e06` — PR #102 graph decision-complete closeout reaffirmed the
+EEF evaluation stance: slice 1 is structural-only for evaluation purposes.
+Load-bearing acceptance is citation/data/caveat/freshness/MCP-shape
+preservation at the tool boundary; LLM paraphrase scoring, teacher-trust
+measurement, and SENCO workflow-time measurement are follow-on
+evaluation-infrastructure work outside Vitest. The follow-on now owns the
+pre-ACTIVE split decision for teacher-trust and SENCO workflow-time
+measurement.)
+
+**Prior refresh**: 2026-04-30 (Vining Whispering Root / claude-code /
 claude-opus-4-7-1m / session seed `696765` — drafted the 7×3 T1
 tracer matrix into `graph-query-layer.plan.md § Phase 1` with
 verification footnotes against real generator output and data files;
@@ -37,6 +47,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `tracer-matrix-and-promotion-packet` | 2026-04-30 | 2026-05-01 |
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `cross-ref-path-updates-from-thread-restructure-only` | 2026-05-01 | 2026-05-01 |
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `eef-tool-rename-eef-prefix-per-adr-157-and-mvp-arc-cross-ref` | 2026-05-07 | 2026-05-07 |
+| `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-eef-structural-eval-closeout` | 2026-05-08 | 2026-05-08 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -73,6 +84,10 @@ Evidence:
 
 - All three plan files (graph-query-layer, eef-evidence-corpus,
   cross-source-journeys) are CURRENT or FUTURE; **none is ACTIVE**.
+- `eef-evidence-corpus.plan.md` now carries the structural-only evaluation
+  stance: T19 proves shape/citation/data/caveat preservation at the tool
+  boundary; LLM/outcome evaluation is sequenced behind follow-on evaluation
+  infrastructure.
 - Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
   tree; recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`.
 - The `originals/` snapshot directory was created during the

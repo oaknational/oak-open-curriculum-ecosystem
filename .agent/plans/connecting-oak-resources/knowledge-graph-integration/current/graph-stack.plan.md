@@ -1,6 +1,6 @@
 ---
 name: "Graph Stack — Topology and Foundation Increment"
-overview: "Establish a layered, standards-based graph capability for Oak — eight active workspaces plus one deferred — with the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
+overview: "Establish a layered, standards-based graph capability for Oak — seven active graph workspaces plus one deferred — with the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
 status: current
 graph_layer: substrate
 graph_portfolio_index: "../../../graph-portfolio-index.md"
@@ -54,7 +54,7 @@ todos:
     status: pending
     depends_on: [ws1-graph-document]
   - id: ws2-jsonld-compatible
-    content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape); test against SKOS taxonomy fixture."
+    content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape) plus generic Turtle/SKOS parse-to-dataset support; test against a generic SKOS fixture."
     status: pending
     depends_on: [ws2-ingest-scaffold]
   - id: ws2-source-mapping
@@ -73,24 +73,24 @@ todos:
     content: "WS3.3: adjacency primitives — incoming/outgoing/neighbours/match; tests against fixture."
     status: pending
     depends_on: [ws3-property-graph]
-  - id: ws4-skos-extractor
-    content: "WS4.1: NC knowledge taxonomy SKOS extractor (Turtle → dataset via graph-core); deterministic extraction test against pinned ontology revision."
-    status: pending
-    depends_on: [ws1-jsonld-compact-frame, ws1-vocab-registry]
   - id: ws4-graph-corpus-sdk-scaffold
-    content: "WS4.2: Scaffold packages/sdks/graph-corpus-sdk workspace; NC taxonomy adapter as first GraphView."
+    content: "WS4.1: Scaffold packages/sdks/graph-corpus-sdk workspace with a typed corpus-adapter seam; no NC-specific mapping before the SDK boundary exists."
     status: pending
-    depends_on: [ws3-adjacency, ws4-skos-extractor]
+    depends_on: [ws3-adjacency, ws2-source-mapping]
+  - id: ws4-skos-extractor
+    content: "WS4.2: NC knowledge taxonomy adapter inside graph-corpus-sdk (generic Turtle/SKOS parsing via graph-ingest; Oak/NC mapping here); deterministic extraction test against pinned ontology revision."
+    status: pending
+    depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]
   - id: ws4-query-proof
     content: "WS4.3: Prove the NC taxonomy adapter end-to-end via graph-corpus-sdk's typed query surface (no MCP wiring in this cycle — surfacing is a consumer decision, see §Surfacing)."
     status: pending
-    depends_on: [ws4-graph-corpus-sdk-scaffold]
+    depends_on: [ws4-skos-extractor]
   - id: ws5-coordination-amendments
     content: "WS5: Amend graph-query-layer.plan.md, nc-knowledge-taxonomy-surface.plan.md, practice-graph-payoff-peak-pilot.plan.md, and the parent open-education-knowledge-surfaces.plan.md to reference this spine."
     status: pending
     depends_on: [ws4-query-proof]
   - id: ws6-docs-propagation
-    content: "WS6: README updates (collection, monorepo, contributing); ADR-123 amendment; LICENCE-DATA.md ontology section update; Mark Hodierne author addition."
+    content: "WS6: README updates (collection, monorepo, contributing); LICENCE-DATA.md ontology section update; Mark Hodierne author addition. ADR-123 is not amended because this increment ships no MCP primitives."
     status: pending
     depends_on: [ws5-coordination-amendments]
   - id: ws7-quality-gates
@@ -105,9 +105,9 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-04
+**Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR).
-**Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of eight active workspaces plus one deferred, then ship the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus.
+**Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus.
 
 ---
 
@@ -152,7 +152,7 @@ Practice graph pilot — attaches to this spine.
 3. **Property-graph as projection, not canon.** The canonical internal model is an RDF-compatible quad dataset. Property-graph nodes/edges are *projections* (per research §11). This preserves migration headroom while keeping the developer-facing API ergonomic.
 4. **Enhancement is explicit and inspectable.** Every derived claim — stable ID, predicate mapping, type inference, link detection, relationship record, provenance attribution — is recorded as an `EnhancementRecord` (research §7) with optional confidence. Silent semantic corruption is structurally prevented.
 5. **Validation distinguishes structure from meaning.** JSON Schema validates raw input shape; SHACL validates graph semantics. Both live in `graph-validate`; neither replaces the other (research §9).
-6. **Framework-vs-consumer separation, strictly.** Per ADR-154: `graph-core`, `graph-jsonld`-equivalent modules, `graph-canon`, and `graph-vocab` carry no consumer knowledge. `graph-ingest`, `graph-enhance`, `graph-validate`, `graph-project` carry general-purpose policy. `graph-corpus-sdk` and `practice-graph` are the corpus-specific consumers.
+6. **Framework-vs-consumer separation, strictly.** Per ADR-154: `graph-core`, `graph-jsonld`-equivalent modules, `graph-canon`, and `graph-vocab` carry no consumer knowledge. `graph-ingest`, `graph-enhance`, `graph-validate`, `graph-project` carry general-purpose policy. `graph-corpus-sdk` is the curriculum corpus-specific consumer; `agent-graphs/practice-graph` is the practice-facing consumer outside substrate package tiers.
 7. **Public-asset discipline.** Every workspace below `graph-corpus-sdk` is publishable as open-education infrastructure. No Oak-specific identifiers leak into the substrate.
 
 **Non-Goals (YAGNI)**:
@@ -177,7 +177,7 @@ The substrate depends on three external libraries; each is a deliberate buy.
 
 No bespoke wrappers. The adapter-shape discipline (research §12) keeps every dependency replaceable behind a versioned interface.
 
-**RDF/JS data-model alignment risk (binding under tripwire #2)**: our internal `TripleTerm` shape (research §4) is authored ahead of an RDF/JS WG formalisation of RDF 1.2 data-model types. If the eventual published spec differs from ours, `graph-core`'s `Term` union migrates to match — a typed refactor confined to a single workspace, with no cross-workspace blast radius by design. Mitigation today: keep `TripleTerm` minimal (matches the RDF 1.2 abstract syntax exactly, no extras) so divergence is structurally impossible to amplify. See [research §19 — tripwire #2](../../../../research/graph-library.research.md#tripwire-2--rdfjs-wg-formalises-an-rdf-12-data-model-extension).
+**RDF/JS data-model alignment risk (tracked under tripwire #2)**: our internal `TripleTerm` shape (research §4) is authored ahead of an RDF/JS WG formalisation of RDF 1.2 data-model types. If the eventual published spec differs from ours, `graph-core`'s `Term` union migrates to match — a typed refactor confined to a single workspace, with no cross-workspace blast radius by design. Mitigation today: keep `TripleTerm` minimal (matches the RDF 1.2 abstract syntax exactly, no extras) so divergence is structurally impossible to amplify. See [research §19 — tripwire #2](../../../../research/graph-library.research.md#tripwire-2--rdfjs-wg-formalises-an-rdf-12-data-model-extension).
 
 `assumptions-reviewer` runs against this attestation pre-ExitPlanMode (see Reviewer Scheduling).
 
@@ -185,20 +185,27 @@ No bespoke wrappers. The adapter-shape discipline (research §12) keeps every de
 
 ## Topology Decision
 
-The stack is **eight active workspaces plus one deferred**:
+The graph stack is **seven active graph workspaces plus one deferred**:
 
 | # | Workspace | Tier | Carries (research §13) | Role |
 |---|---|---|---|---|
 | 1 | `packages/core/graph-core/` | core | `graph-core` + `graph-jsonld` + `graph-canon` + `graph-vocab` | Substrate. Term / Quad / Dataset (RDF/JS-aligned), JSON-LD 1.1 expansion+compaction+framing, RDF dataset canonicalisation, vocabulary registry. Pure, no I/O. |
-| 2 | `packages/libs/graph-ingest/` | lib | `graph-ingest` | Six ingestion modes (research §6): `strict-jsonld`, `jsonld-compatible`, `plain-json-tree`, `records`, `node-edge-list`, `custom-mapping`. Source mapping via JSON Pointer + JSONPath. |
+| 2 | `packages/libs/graph-ingest/` | lib | `graph-ingest` | Six ingestion modes (research §6): `strict-jsonld`, `jsonld-compatible`, `plain-json-tree`, `records`, `node-edge-list`, `custom-mapping`; generic Turtle/SKOS parse-to-dataset support. Source mapping via JSON Pointer + JSONPath. No Oak/NC mapping. |
 | 3 | `packages/libs/graph-enhance/` | lib | `graph-enhance` | Stable IRI minting, predicate mapping, type inference, link detection. `EnhancementRecord` discipline (research §7). `RelationshipRecord` migration bridge (research §8). |
 | 4 | `packages/libs/graph-validate/` | lib | `graph-validate` | JSON Schema (raw shape) + SHACL (graph meaning) wrappers. Validation report shape stable across SHACL versions (research §9). |
 | 5 | `packages/libs/graph-project/` | lib | `graph-project` | Property-graph projection, adjacency-list, neighbours/match/traverse primitives, visualisation/export hooks (research §10, §11). |
 | 6 | `packages/sdks/graph-corpus-sdk/` | sdk | (Oak-specific consumer) | Oak's typed corpus adapters: NC knowledge taxonomy, prerequisite, misconception, EEF strands, plus future corpora. **Cross-corpus join primitives.** Uses ontology IRIs as canonical identity. |
-| 7 | `packages/libs/practice-graph/` | lib | (Practice-specific consumer) | Markdown-corpus graph for Oak's engineering practice. Built on the same stack — proves the substrate works for non-curriculum data. |
+| 7 | `agent-graphs/practice-graph/` | agent graph | (Practice-specific consumer) | Markdown-corpus graph for Oak's engineering practice. Built on the same stack, owned adjacent to agent tooling, and wired by the future `agent-graphs/` organisation plan. |
 | 8 | (deferred) `packages/libs/graph-future/` | lib | `graph-future` | RDF 1.2 / JSON-LD 1.2/1.3 / SPARQL 1.2 / SHACL 1.2 adapters. **Workspace not created until a consumer needs one of these specs**; the adapter seams (research §12) live inside `graph-core`, `graph-validate`, and `graph-project` from day one. |
 
 This is the topology in full. No layer is missing; no layer is collapsed in a way that forecloses its later activation.
+
+`agent-graphs/practice-graph/` is deliberately adjacent to `agent-tools/`
+rather than under `packages/libs/`. It is the seventh active graph workspace: a
+practice-facing consumer that proves the substrate over repository memory,
+owned by the agent-tooling/practice plan estate. The future organisation/wiring
+plan is
+[`../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md).
 
 **Every workspace in the topology is MCP-agnostic.** None of the graph workspaces ship MCP tool definitions, MCP resource constants, or MCP-server registration code. Surfacing graph capability through MCP — if Oak chooses to do so — is a *consumer-side* concern handled by an existing or future app workspace that imports `graph-corpus-sdk`. See §Surfacing.
 
@@ -211,7 +218,7 @@ The graph stack is infrastructure. How (or whether) graph capability is surfaced
 Possible surfaces, none privileged by the topology:
 
 - **In-process library imports** — application code imports `graph-corpus-sdk` directly. Always available; the default for any same-runtime consumer.
-- **CLI** — the existing `agent-tools/` workspace exposes commands over `practice-graph` (per the Practice pilot's existing plan). A future curriculum-side CLI could do the same over `graph-corpus-sdk`.
+- **CLI** — the existing `agent-tools/` workspace exposes commands over `agent-graphs/practice-graph` (per the Practice pilot's existing plan). A future curriculum-side CLI could do the same over `graph-corpus-sdk`.
 - **MCP** — at most one workspace surfaces graph tools via MCP. If Oak chooses MCP exposure, it lives in an existing app workspace (e.g. the curriculum MCP server) or a new sibling that imports `graph-corpus-sdk`. The graph workspaces themselves stay MCP-clean.
 - **HTTP/JSON-LD export** — `graph-project` will eventually emit JSON-LD profiles for cross-organisation consumption (Increment 5).
 - **Search-augmentation** — Oak's Elasticsearch integration may consume `graph-corpus-sdk` to project graph-derived signals into search indices (a future plan, not committed here).
@@ -233,7 +240,7 @@ The mapping is exhaustive against [`.agent/research/graph-library.research.md`](
 | §3 core design position | Plan-level: encoded in §Design Principles above. | Every workspace inherits the stable-first commitment. |
 | §4 canonical internal model (Term/Quad/Dataset; GraphNode/GraphEdge/GraphDocument) | `graph-core` | The core types are foundation-increment WS1 deliverables. |
 | §5 vocabulary layer | `graph-core/vocab` module | Default registries + Oak Curriculum Ontology + EEF + extension API. |
-| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` and reserves the others for Increment 2. |
+| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` plus generic Turtle/SKOS parsing and reserves the other modes for Increment 2. Oak/NC corpus mapping remains in `graph-corpus-sdk`. |
 | §7 enhancement model | `graph-enhance` | `EnhancementRecord` is first-class; `id → strand_id`-style transformations carry provenance. |
 | §8 relationship records as migration bridge | `graph-enhance` | `RelationshipRecord` is first-class today; RDF 1.2 triple-term annotation is a `graph-future` adapter target. |
 | §9 validation model | `graph-validate` | JSON Schema + SHACL, distinct concerns, both supported. |
@@ -251,10 +258,10 @@ The full topology activates over seven increments. This plan ships **Increment 1
 
 | # | Increment | Activates | Status |
 |---|---|---|---|
-| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + NC taxonomy as first attached corpus, MCP wiring | **CURRENT** — pending owner approval of topology |
+| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + NC taxonomy as first attached corpus | **CURRENT** — pending owner approval of topology |
 | 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); rewrites of existing `oak-curriculum-sdk` graph code onto the new stack | future |
-| 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, EEF strands; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk` | future (depends on Increment 2; subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
-| 4 | **Practice proof point** | `practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | future (depends on Increment 2; consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
+| 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, and the EEF strand adapter required for cross-corpus joins; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk` | future (depends on Increment 2; subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
+| 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | future (depends on Increment 2 + the `agent-graphs/` organisation plan; consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
 | 5 | **Projection + export** | Full `graph-project` surface — visualisation export hooks, JSON-LD export profiles, GQL-friendly property-graph shapes; cross-corpus journey tooling | future |
 | 6 | **Public-asset positioning** | Publishing discipline, external-org adoption documentation, ontology IRI alignment guarantees, contribution model | future |
 | 7 | **Future-standards adapters** | `graph-future` workspace activated; first concrete adapter (likely RDF 1.2 statement-annotation export, or SPARQL 1.1 query) | future (consumer-driven) |
@@ -289,13 +296,13 @@ The foundation increment surfaces nothing through MCP, HTTP, or CLI. Surfacing i
 
 The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this plan. The summary:
 
-- **WS0 — Topology ADR**: author the ADR that ratifies the topology decision and records the supersession/coordination map (see §Coordination with Existing Plans).
+- **WS0 — Topology ADR**: author the proposed ADR that records the intended topology decision and supersession/coordination map for owner review (see §Coordination with Existing Plans).
 - **WS1 — `graph-core`** (8 cycles): scaffold; RDF Term + Quad; DatasetCore; JSON-LD expand; JSON-LD compact + frame; canonicalisation; vocabulary registry; GraphDocument ergonomic surface.
-- **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode; SourceMapping primitives.
+- **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode + generic Turtle/SKOS parsing; SourceMapping primitives.
 - **WS3 — minimal `graph-project`** (3 cycles): scaffold; `toPropertyGraph` projection; adjacency primitives.
-- **WS4 — NC taxonomy as first attached corpus** (3 cycles): SKOS extractor (TTL → dataset); `graph-corpus-sdk` scaffold + NC taxonomy adapter; typed query proof (in-process; no surfacing).
+- **WS4 — NC taxonomy as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter seam; NC taxonomy adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, Oak/NC mapping here); typed query proof (in-process; no surfacing).
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `nc-knowledge-taxonomy-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
-- **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, ADR-123 amendment, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix.
+- **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
 - **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, mcp-reviewer, docs-adr-reviewer.
 
@@ -320,7 +327,7 @@ The foundation increment lands tests for the load-bearing invariants from resear
 
 The foundation increment is done when:
 
-1. The eight foundation-tier cycles land green.
+1. The foundation-tier cycles land green.
 2. NC taxonomy is queryable in-process via `graph-corpus-sdk`'s typed surface; ontology IRIs are canonical identity end-to-end. No surfacing (MCP, CLI, HTTP) is required for completeness.
 3. The full quality-gate chain passes.
 4. ADR for the topology decision is merged.
@@ -340,7 +347,7 @@ This plan does **not** wholesale supersede adjacent plans; it provides the spine
 | [`../active/graph-resource-factory.plan.md`](../active/graph-resource-factory.plan.md) | **Status remains DONE.** The factory currently lives in the curriculum MCP app's surface layer; it stays where it is and continues to work. If MCP exposure of new graph capabilities is later chosen, the factory may be revisited then. No retroactive amendment needed. |
 | [`../active/misconception-graph-mcp-surface.plan.md`](../active/misconception-graph-mcp-surface.plan.md) | **Status remains DONE.** The current misconception MCP tool stays live and unchanged. If the misconception adapter is later rewritten onto `graph-corpus-sdk`, the MCP tool is a thin re-wrapping the owner can do at any point — independent of the substrate. |
 | [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **Amended.** WS-4 (NC taxonomy) is now executed via this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
-| [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | **Conditional `graph-core` gate is satisfied unconditionally by Increment 1.** The Practice plan is amended: its required `packages/libs/practice-graph/` workspace remains, but its `packages/core/graph-core/` is the one this plan lands. The Practice plan becomes a *consumer* of the spine (Increment 4 in the topology sequencing). |
+| [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | **Conditional `graph-core` gate is satisfied unconditionally by Increment 1.** The Practice plan is amended: its required workspace is `agent-graphs/practice-graph/`, and its `packages/core/graph-core/` is the one this plan lands. The Practice plan becomes an adjacent practice-facing consumer of the spine (Increment 4 in the topology sequencing), after the future `agent-graphs/` organisation plan wires the top-level area. |
 | [`../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`](../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | **Strategic brief; no amendment needed.** Practice-graph attribution discipline (Graphify / Safi Shamsi) carries forward through the Practice plan and into the eventual `practice-graph` workspace README. |
 
 WS5 in the cycle list executes these amendments.
@@ -356,7 +363,7 @@ The substrate is publishable. Each workspace below `graph-corpus-sdk` carries:
 3. Standards-only dependency surface (W3C standards + `jsonld.js` / `rdf-canonize` / `rdf-validate-shacl`).
 4. Documentation written for arbitrary education-domain consumers, not Oak-internal contributors.
 
-`graph-corpus-sdk` and `practice-graph` are Oak-specific by design and signal that explicitly in name and README.
+`graph-corpus-sdk` is Oak-specific by design and signals that explicitly in name and README. `agent-graphs/practice-graph` is practice-specific by design and is documented in the agent-tooling/practice estate, not as a substrate workspace.
 
 The eventual public-asset move (Increment 6) is to publish `graph-core`, `graph-ingest`, `graph-enhance`, `graph-validate`, `graph-project` under a neutral scope (or unscoped) so other education organisations can:
 
@@ -372,8 +379,8 @@ This is named here so the substrate is built for that future from day one — no
 
 ### Plan-phase (PRE-ExitPlanMode)
 
-- `assumptions-reviewer` — proportionality check (does the eight-workspace topology fit the value claim?), build-vs-buy attestation, blocking legitimacy of the foundation-first sequencing
-- `architecture-reviewer-betty` — cohesion and change-cost trade-offs of the eight-workspace shape; long-term evolution path
+- `assumptions-reviewer` — proportionality check (does the seven-active-plus-one-deferred graph topology fit the value claim?), build-vs-buy attestation, blocking legitimacy of the foundation-first sequencing
+- `architecture-reviewer-betty` — cohesion and change-cost trade-offs of the seven-active-plus-one-deferred graph shape; long-term evolution path
 - `architecture-reviewer-fred` — ADR-154 framework-vs-consumer compliance across the layer boundaries; dependency direction
 - `architecture-reviewer-barney` — boundary simplification; whether any workspace can be safely collapsed without losing layer discipline
 
@@ -397,12 +404,12 @@ This is named here so the substrate is built for that future from day one — no
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Eight-workspace topology proves over-decomposed; some workspaces have insufficient surface to justify their boundary | Medium | Medium | Per-workspace creation gate in WS1–WS3: each workspace lands only when its first cycle has green tests proving the boundary carries weight. If a layer's cycles all collapse into another workspace, fold it. |
+| Seven-active-plus-one-deferred topology proves over-decomposed; some workspaces have insufficient surface to justify their boundary | Medium | Medium | Per-workspace creation gate in WS1–WS3: each workspace lands only when its first cycle has green tests proving the boundary carries weight. If a layer's cycles all collapse into another workspace, fold it. |
 | The substrate is built ahead of consumer demand and accumulates speculative API | Medium | High | The foundation increment ships only what NC taxonomy needs end-to-end. Every method on `graph-core`/`graph-ingest`/`graph-project` has a NC-taxonomy-driven justification or it does not ship. Subsequent increments justify their additions with their own consumer slices. |
 | `jsonld.js` / `rdf-canonize` / `rdf-validate-shacl` create maintenance burden disproportionate to value | Low | Medium | The adapter shapes (research §12) keep them replaceable. Each is W3C-spec-aligned and widely used; bespoke alternatives are higher-risk. |
 | Ontology IRIs are not as stable as the strategy assumes; rewrite cost is hidden | Medium | High | The strategy doc (`oak-ontology-graph-opportunities.strategy.md`) names this risk. The vocabulary registry's pin-by-version model lets corpus adapters declare a specific ontology revision; alignment audit (separate plan) measures actual stability. |
 | Foundation increment lands without a Practice consumer; the substrate's cross-corpus claim is unproven | Medium | Medium | The increment's success criterion is end-to-end NC ingestion *plus* the second-consumer commitment in Increment 4. Increment 4 is a hard predecessor for Increment 6 (public-asset positioning). |
-| Existing graph-shaped code in `oak-curriculum-sdk` and the queued `graph-query-layer.plan.md` drifts from the spine during Increment 1 | Medium | Low | Coordination amendments (WS5) explicitly point those plans at this spine. ADR ratifies the topology so future plans cannot silently re-fork. |
+| Existing graph-shaped code in `oak-curriculum-sdk` and the queued `graph-query-layer.plan.md` drifts from the spine during Increment 1 | Medium | Low | Coordination amendments (WS5) explicitly point those plans at this spine. The proposed ADR records the intended topology so future plans cannot silently re-fork while ratification remains an owner gate. |
 
 ---
 
@@ -410,11 +417,11 @@ This is named here so the substrate is built for that future from day one — no
 
 > See [Foundation Alignment component](../../../templates/components/foundation-alignment.md)
 
-- **principles.md**: strict, complete, schema-first, separate framework from consumer. The eight-workspace topology is the framework-vs-consumer separation made structural.
+- **principles.md**: strict, complete, schema-first, separate framework from consumer. The seven-active-plus-one-deferred graph topology is the framework-vs-consumer separation made structural.
 - **testing-strategy.md**: TDD at all levels. Every cycle in WS1–WS4 lands one failing test plus the product code that greens it, in one commit.
 - **schema-first-execution.md**: types flow from schema. The vocabulary registry is the schema; `graph-core`'s types flow from RDF/JSON-LD spec; `graph-corpus-sdk`'s adapters flow from the ontology IRIs.
 
-First question: **Could it be simpler without compromising quality?** The eight-workspace shape collapses ten research-named layers into eight monorepo packages (folding `graph-jsonld`, `graph-canon`, `graph-vocab` into `graph-core` because their surfaces are small and tightly coupled). Going below eight forecloses the layer discipline; going above eight without a consumer is speculative. Eight is the floor.
+First question: **Could it be simpler without compromising quality?** The seven-active-plus-one-deferred graph shape collapses ten research-named layers into seven active graph packages (folding `graph-jsonld`, `graph-canon`, `graph-vocab` into `graph-core` because their surfaces are small and tightly coupled, and moving the practice consumer to `agent-graphs/`). Going below seven active graph workspaces forecloses the layer discipline; going above seven without a consumer is speculative. Seven active graph workspaces plus one deferred future-standards workspace is the floor.
 
 ---
 
@@ -424,16 +431,16 @@ First question: **Could it be simpler without compromising quality?** The eight-
 
 Required handling before close:
 
-1. New ADR ratifying the topology and supersession map (WS0). The ADR includes the MCP-agnostic principle as a binding constraint of the topology.
+1. New proposed ADR records the topology and supersession map (WS0). The ADR includes the MCP-agnostic principle as an intended topology constraint pending owner ratification.
 2. ADR-154 (framework-vs-consumer) reference: the topology is a worked application of the rule.
 3. ADR-157 (multi-source open education) amendment: the spine is now the structural carrier of multi-source integration.
 4. Collection README ([`../README.md`](../README.md)) — add this plan to Current Queue, update Read Order.
 5. Monorepo root `README.md` — Data Sources section to mention the graph stack as the structural integration layer.
 6. `LICENCE-DATA.md` — confirm ontology section reflects direct ingestion.
 7. `package.json` contributors — add Mark Hodierne (per existing parent-plan attribution requirement).
-8. Per-workspace READMEs (eight new files) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
+8. Per-workspace READMEs (seven active graph workspace files, plus one deferred `graph-future` README when activated) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
 9. ~~Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md`.~~ **DONE 2026-05-07** — file renamed to `.agent/research/graph-library.research.md` with the `.research.md` suffix to mark it as one researched direction rather than a plan; references in this plan, the collection README, and operational memory updated.
-10. First-wave ingestion scope amendment: confirm the substrate ships ingestion for Oak Curriculum Ontology Turtle (with SHACL), the prerequisite graph, the misconception graph, and the EEF corpus per `.agent/research/graph-library.research.md` §18. Other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them.
+10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the NC/Oak Curriculum Ontology knowledge-taxonomy adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. Other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them.
 
 ADR-123 (MCP server tool catalogue) is *not* amended by this increment because no MCP tools are added or changed. Any future increment that surfaces graph capability via MCP would amend ADR-123 at that point.
 
