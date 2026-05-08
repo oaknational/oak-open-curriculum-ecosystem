@@ -187,3 +187,22 @@ a sparse checkout can produce structurally valid but semantically empty output.
 **Behaviour change**: for ground-truth generated files, use the full
 download-then-codegen path when local bulk data is absent; verify
 `Total lessons: 12391` or equivalent before trusting generated output.
+
+### Surprise: merge-ready can still be planning-blocked
+
+**Expected**: once PR #102 technical checks, review threads, Sonar, and PR
+metadata were clean, the branch would be ready to merge.
+
+**Actual**: owner direction added a stronger pre-merge gate: the branch should
+not merge until the graph MVP plans themselves are finalised and
+decision-complete. The remaining blockers are not PR mechanics; they are plan
+truthfulness issues: topology findings, slice-plan findings, and the EEF t19
+contradiction.
+
+**Why expectation failed**: I treated "merge-ready" as a property of the pull
+request surface. For planning branches, the merge gate can also be a property
+of the planning artefacts' decision completeness.
+
+**Behaviour change**: when closing a planning PR, report two verdicts
+separately: PR technical readiness and plan decision-completeness. Do not let a
+green PR collapse unresolved planning questions into implicit acceptance.

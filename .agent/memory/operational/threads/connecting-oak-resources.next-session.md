@@ -1,6 +1,18 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-08 (Lush Rustling Bark / codex /
+**Last refreshed**: 2026-05-08 (Fronded Branching Grove / codex /
+GPT-5 / `019e06` — PR #102 technical closeout is green on
+`a8ef3ad1be343d2b786416ce12dcfeca270fb56e`: GitHub merge state `CLEAN`,
+root `run-quality-gates`, CodeQL, SonarCloud Code Analysis, and Vercel pass;
+Sonar MCP reports quality gate `OK`, zero open PR issues, and zero new
+violations; unresolved review threads are zero. Owner direction after that
+closeout: PR #102 must not merge until the graph plans are finalised and
+decision-complete. New current plan:
+[`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
+**Next session starts with final graph decision-completeness closeout, not
+merge and not slice implementation.**)
+
+**Prior refresh**: 2026-05-08 (Lush Rustling Bark / codex /
 GPT-5 / `019e03` — owner-requested `jc-session-handoff` refresh for PR #102.
 Current head is `df66b742694d1bfdd757019c97414945540eabf5`; PR title/body
 are stale and must be rewritten after comparing `origin/main...HEAD`; the
@@ -213,63 +225,12 @@ landed 2026-05-07 in a single session (Breezy Navigating Sail). The
 NOT re-run. The slice-2 / slice-3a / slice-3b plan-authoring work is
 **complete** in `current/`; do NOT re-author.
 
-**Owner direction 2026-05-08 supersedes the next immediate step**:
-start with PR #102 closeout. Planning decision-completeness remains the
-canonical graph-lane task, but only after PR title/body, PR comments, and Sonar
-are clean.
+**Owner direction 2026-05-08 supersedes merge**:
+PR #102 technical closeout is clean, but the PR should not merge until graph
+planning is decision-complete. Start with
+[`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
 
-**Immediate first task — PR #102 closeout on current head**:
-
-1. Compare branch to main before rewriting metadata:
-
-   ```bash
-   git fetch origin main
-   git diff --stat origin/main...HEAD
-   git diff --name-status origin/main...HEAD
-   ```
-
-   Current snapshot from this handoff: 93 files changed, 6595 insertions, 770
-   deletions. PR title is `[codex] fix graph MVP closeout references`; PR body
-   still contains a stale automated "Documentation-only / Low Risk" note.
-
-2. Rewrite the PR title and description so they stand alone. The description
-   must cover graph planning/ADR surfaces, branch-touched-files tooling, Oak
-   ESLint config/helper changes, search/codegen generator edits, collaboration
-   continuity surfaces, risk, and validation.
-3. Work through every PR comment/thread. Fixed items get the requested
-   `fixed` disposition. Live items are fixed first, validated, then receive the
-   same disposition.
-4. Fix the four open Sonar issues:
-   - `AZ4EFvtoMbWtnOUab6nS` — `schema-emitter.ts:127`,
-     `typescript:S7780`, use `String.raw` or equivalent source fix.
-   - `AZ4EFvz9MbWtnOUab6nT` — `es-mapping-utils.ts:94`,
-     `typescript:S4624`, remove nested template literal.
-   - `AZ4EFvz9MbWtnOUab6nU` — `es-mapping-utils.ts:116`,
-     `typescript:S4624`, remove nested template literal.
-   - `AZ4EFvz9MbWtnOUab6nV` — `es-mapping-utils.ts:135`,
-     `typescript:S4624`, remove nested template literal.
-5. Re-read GitHub checks, PR comments, review threads, and Sonar state before
-   closing. Current non-Sonar checks are successful; SonarCloud Code Analysis
-   is failing and merge state is `BLOCKED`.
-
-**Current PR comment disposition ledger (2026-05-08 snapshot)**:
-
-| Comment | State in repo | Next action |
-| --- | --- | --- |
-| Vercel preview comment | Automated, not actionable. | No repo edit. |
-| Sonar quality-gate comment | Live; 4 open issues. | Fix Sonar, then disposition if needed. |
-| `3203494220` graph layer | Fixed; outdated. | `fixed`. |
-| `3203494323` graph layer | Fixed; outdated. | `fixed`. |
-| `3203494358` graph layer | Fixed; outdated. | `fixed`. |
-| `3203494399` primitive wording | Fixed; outdated. | `fixed`. |
-| `3203977955` CLI help/precedence | Fixed; unresolved. | `fixed`. |
-| `3203978000` Git path portability | Fixed; unresolved. | `fixed`. |
-| `3204454751` schema docstring | Live. | Fix, validate, then `fixed`. |
-| `3204454805` PR metadata | Live. | Rewrite PR metadata, then `fixed`. |
-| `3204454849` ESLint rationale | Fixed; unresolved. | `fixed`. |
-
-**Canonical next planning task — decision-completeness closeout (no
-implementation; resume only after PR #102 is clean)**:
+**Immediate first task — decision-completeness closeout (no implementation)**:
 
 1. **Absorb the two topology BLOCKERs into `graph-stack.plan.md` +
    ADR-173** (see `## Topology BLOCKERs Surfaced 2026-05-07` below).
@@ -313,6 +274,11 @@ implementation; resume only after PR #102 is clean)**:
    Any artefact NOT decision-complete after steps 1-3 is named
    explicitly in the next-session record with the named blocking
    condition; do not paper over with "ready enough".
+
+5. **Final verdict and merge gate**. Record exactly:
+   `Decision-complete: YES/NO`; `Merge-ready with respect to graph planning:
+   YES/NO`; remaining blockers; owner decisions resolved; validation; and the
+   next safe step after merge.
 
 **Out of scope for this branch (per owner direction 2026-05-07)**:
 

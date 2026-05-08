@@ -9,6 +9,19 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-08 — Fronded Branching Grove / `codex` /
+`GPT-5` / `019e06`, PR #102 final closeout + decision-complete session
+planning)**:
+closed the PR #102 technical merge blockers and then captured the owner's
+pre-merge graph-planning requirement. PR #102 is green on
+`a8ef3ad1be343d2b786416ce12dcfeca270fb56e`: GitHub merge state is `CLEAN`,
+root `run-quality-gates`, CodeQL, SonarCloud Code Analysis, and Vercel passed;
+Sonar MCP reports quality gate `OK`, `new_violations=0`, and zero open PR
+issues; unresolved review threads are zero. Owner direction after that closeout:
+do not merge until the graph plans are finalised and decision-complete. New
+current plan:
+[`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
+
 **Session close (2026-05-08 — Lush Rustling Bark / `codex` /
 `GPT-5` / `019e03`, PR #102 fresh-session handoff)**:
 ran the owner-requested `jc-session-handoff` refresh for PR #102. Current PR
@@ -82,17 +95,19 @@ promotion, and ADR-173 ratification remain out of scope for this branch.
 
 ## Current State
 
-+ Branch `planning/graph-tooling` is in PR #102 closeout on head
-  `df66b742694d1bfdd757019c97414945540eabf5`.
-+ PR #102 title/body are stale. The next session must compare
-  `origin/main...HEAD` and rewrite both as standalone descriptions of the full
-  branch intent, scope, risk, and validation.
-+ PR #102 review surface is not clean. Fixed-but-undismissed comments need the
-  requested `fixed` disposition, and live comments must be fixed first.
-+ Sonar PR state is not clean: quality gate `ERROR`, four open issues, zero
-  `TO_REVIEW` security hotspots.
-+ Other GitHub checks are currently successful: root quality gates, CodeQL,
-  Cursor Bugbot, and Vercel preview.
++ Branch `planning/graph-tooling` is in final pre-merge planning closeout on
+  PR #102 head `a8ef3ad1be343d2b786416ce12dcfeca270fb56e`.
++ PR #102 technical gates are clean: GitHub merge state `CLEAN`, root
+  `run-quality-gates` pass, CodeQL pass, SonarCloud Code Analysis pass, Vercel
+  pass, Sonar MCP quality gate `OK`, zero open Sonar PR issues, and zero
+  unresolved review threads.
++ Owner direction 2026-05-08: PR #102 must not merge until the graph plans are
+  finalised and decision-complete.
++ The live final-session plan is
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
++ Remaining graph-planning work is planning-only: integrate topology findings,
+  integrate four slice-plan findings, resolve the EEF t19 contradiction, sweep
+  remaining questions, and record the decision-complete verdict.
 + No active collaboration claims remain. The advisory commit queue only contains
   stale/abandoned historical entries.
 + Residual Practice fitness pressure is routed, not hidden: `practice.md`
@@ -135,10 +150,10 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**2026-05-08 (PR #102 fresh-session handoff)**:
-update plan and continuity surfaces for the next session to rewrite stale PR
-metadata, dispose all PR comments with `fixed` after source fixes, and clear
-the four current Sonar issues.
+**2026-05-08 (PR #102 graph decision-complete planning)**:
+finalise the next session so the branch can absorb remaining graph-plan findings
+and resolve contradictions before PR #102 merges. This is a planning closeout
+session, not implementation.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -174,22 +189,25 @@ evidence.
 
 ## Next Safe Step
 
-**PR #102 first, before graph planning work**:
+**Final pre-merge graph decision-complete session**:
 
-1. Fetch/compare `origin/main...HEAD`, then rewrite the PR title and full
-   description so they stand alone for the current 93-file diff.
-2. Re-pull every PR comment/review/thread. For each issue: if fixed in the
-   repo, leave the requested `fixed` disposition; if not fixed, fix the issue
-   first, validate, then leave `fixed`.
-3. Fix the four open Sonar PR issues and re-check Sonar quality gate state.
-4. Re-read GitHub checks, PR comments, review threads, and Sonar before moving
-   on.
+1. Start from
+   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
+2. Refresh PR #102 evidence first; if checks/comments/Sonar regressed, name
+   that before editing.
+3. Absorb the topology findings into `graph-stack.plan.md` + ADR-173:
+   WS4 sequencing and `practice-graph` workspace tier.
+4. Absorb the four remaining Phase 4 slice-plan findings: slice 2 adapter
+   timing; slice 3a topic-context wording; slice 3a budget/fixture
+   concretisation; slice 3b implementation-audit test shape.
+5. Owner-resolve the EEF t19 contradiction, then apply the chosen resolution to
+   `eef-evidence-corpus.plan.md`, the spine, and downstream references.
+6. Sweep for open questions/stale blockers and record:
+   `Decision-complete: YES/NO`, `Merge-ready with respect to graph planning:
+   YES/NO`, remaining blockers, owner decisions, validation, and next safe step.
 
-After that comment analysis, the graph lane's planning step remains
-decision-completeness closeout, not slice execution: absorb the two topology
-BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb the four Phase 4 findings
-into the slice plans, owner-resolve the EEF t19 contradiction, and verify the
-full MVP plan reaches decision-complete state.
+Do not start slice implementation, graph-stack ACTIVE promotion, ADR-173
+ratification, or production code changes in this final closeout session.
 
 ## Open Owner-Decision Items
 
