@@ -1,31 +1,30 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
 **Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
-GPT-5 / `019e06` — PR #102 graph planning closeout is decision-complete in the
-local working tree, but PR #102 is not merge-ready. Pushed head
-`d5e32a3c7ba47f3f21de138c7752afb8d6362171` has passing GitHub checks and
-Sonar quality gate `OK` with zero open PR issues/hotspots; the local closeout
-bundle still needs commit/push/re-check. Branch-touched-files reports `107`.
-One live Copilot review thread remains on `emit-index.ts` whitespace. Latest
+GPT-5 / `019e06` — PR #102 graph planning closeout is decision-complete and
+pushed as head `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`. GitHub checks pass,
+SonarCloud Code Analysis passes through PR checks, and all known review threads
+are resolved. Branch-touched-files reports `107`, so PR #102 is not
+merge-ready until the final clean-worktree dry-run merge/abort is run. Latest
 owner decisions applied in this pass: EEF verification is structural-only for
 slice 1; LLM/outcome eval is follow-on infrastructure; practice-facing graph
 tooling lives under `agent-graphs/practice-graph/`. Current plan:
 [`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
-**Next session clears merge blockers, not slice implementation.**)
+**Next session clears the final merge blocker, not slice implementation.**)
 
 ```text
 Decision-complete: YES
 Merge-ready with respect to graph planning: NO
-Remaining blockers: local closeout bundle not pushed/rechecked; one live
-Copilot `emit-index.ts` thread; 107-file branch requires the final pre-merge
-workflow.
+Remaining blocker: the 107-file branch requires the final pre-merge workflow
+on a clean worktree. Current unrelated local scratch state in
+.agent/plans/notes/ must be preserved or isolated before the dry-run.
 Owner decisions resolved: structural-only EEF slice 1 evaluation; LLM/outcome
 eval follow-on; `agent-graphs/practice-graph/`; slice 3a 16k budget +
 20-context fixture; slice 3b Thread IRI substrate-only runtime; ADR-173 remains
 Proposed.
 Validation: markdownlint, format-check, git diff --check, branch-touched-files,
-gh pr checks, Sonar PR surfaces, review-thread refresh, non-mutating divergence
-probe.
+gh pr checks on pushed head 309d9e5e, Sonar PR surface through PR checks,
+review-thread refresh with all threads resolved, non-mutating divergence probe.
 Next safe step after merge: graph MVP implementation-prep after remaining
 merge blockers clear and PR #102 merges.
 ```

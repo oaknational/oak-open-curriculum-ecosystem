@@ -66,15 +66,12 @@ MVP plans have no hidden "ready enough" caveats.
 
 ## Known Inputs
 
-- PR #102 latest pushed/refreshed head before this local closeout bundle is
-  `d5e32a3c7ba47f3f21de138c7752afb8d6362171`: GitHub checks passed, Sonar
-  quality gate is `OK`, open Sonar PR issues are `0`, and zero Sonar hotspots
-  are `TO_REVIEW`. This evidence must be refreshed after the closeout bundle is
-  committed and pushed; it does not yet cover the local planning-doc edits.
-- One live GitHub review thread remains at refresh time: Copilot's
-  `emit-index.ts` generated-message whitespace comment. This closeout is
-  planning-only, so the thread must be classified explicitly before any merge
-  verdict; it is not silently fixed as part of graph-plan closeout.
+- PR #102 latest pushed/refreshed head is
+  `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`: GitHub checks passed, including
+  SonarCloud Code Analysis, after the closeout bundle was committed and pushed.
+- The live Copilot `emit-index.ts` generated-message whitespace comment was
+  fixed in `2de81a4c` and the GitHub review thread was resolved before this
+  handoff.
 - The branch diff is intentionally broad and above the pre-merge divergence
   threshold: branch-touched-files reports `107` touched files against
   `origin/main`. A divergence analysis is required before merge.
@@ -157,9 +154,9 @@ latest owner clarification resolves the contradiction:
 | `mcp-reviewer` | Token budget measurement ambiguous | **ACTIONED** — budget is measured against serialized model-visible `content` text payload. |
 | `assumptions-reviewer` | EEF outcome follow-on was unnamed | **ACTIONED** — created `eef-outcome-evaluation-infrastructure.plan.md` and linked it. |
 | `assumptions-reviewer` | `agent-graphs/` path convention still open for ADR promotion | **ROUTED** — blocker for ADR-173 ratification / graph-stack ACTIVE promotion, not this planning-doc closeout. |
-| `assumptions-reviewer` / `code-reviewer` | Branch divergence and live PR review thread still block merge | **ROUTED** — named as merge blockers outside planning-doc updates; do not claim merge-ready until fixed or rejected by owner. |
+| `assumptions-reviewer` / `code-reviewer` | Branch divergence and live PR review thread still block merge | **ACTIONED / ROUTED** — the live PR review thread was fixed and resolved; branch divergence remains routed as the final clean-worktree pre-merge blocker. |
 | `code-reviewer` | Historical next-session records reopened closed findings | **ACTIONED** — thread record now marks topology/slice findings as closed dispositions. |
-| `code-reviewer` | Evidence covered last pushed head, not local closeout edits | **ACTIONED** — evidence is labelled as last pushed/refreshed head pending commit/push/re-check. |
+| `code-reviewer` | Evidence covered last pushed head, not local closeout edits | **ACTIONED** — closeout bundle was committed/pushed and PR checks now cover `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`. |
 | `code-reviewer` | Continuity claimed no active claims remained | **ACTIONED** — continuity now states live closeout claims remain until final handoff. |
 | Final `code-reviewer` gateway | Graph-stack still used ratification/binding language while ADR-173 remains Proposed | **ACTIONED** — graph-stack now says proposed/intended and reserves ratification for the owner gate. |
 | Final `code-reviewer` gateway | Follow-on routes were bare future filenames | **ACTIONED** — created and indexed named future plan stubs for slice-2 cuts, slice-3a substrate/topic cuts, and slice-3b extended contexts. |
@@ -168,7 +165,7 @@ latest owner clarification resolves the contradiction:
 | Final `assumptions-reviewer` | EEF snapshot age was date-fragile | **ACTIONED** — replaced fixed age with promotion-time recalculation from `last_updated`. |
 | Final `assumptions-reviewer` | Outcome follow-on was narrower than teacher-trust/SENCO routed outcomes | **ACTIONED / ROUTED** — follow-on now owns the pre-ACTIVE split decision for teacher-trust and SENCO workflow-time measurement. |
 | `release-readiness-reviewer` | PR body stale against local structural-only EEF stance | **ACTIONED** — PR body refreshed 2026-05-08 to describe structural-only EEF evaluation and named follow-ons. |
-| `release-readiness-reviewer` | Local closeout bundle not covered by remote PR checks/Sonar; live Copilot thread and 107-file divergence remain | **ROUTED** — merge-readiness blockers below; do not claim merge-ready until pushed, rechecked, thread disposed, and merge workflow completed. |
+| `release-readiness-reviewer` | Local closeout bundle not covered by remote PR checks/Sonar; live Copilot thread and 107-file divergence remain | **ACTIONED / ROUTED** — closeout bundle is pushed/rechecked and the live thread is resolved; the 107-file clean-worktree merge workflow remains routed below. |
 | `code-reviewer` | Live closeout claim count mismatched continuity | **ACTIONED** — both Opalescent Shimmering Orbit closeout claims were closed; active claim count is now zero. |
 
 ## Execution Plan
@@ -326,9 +323,7 @@ Acceptance:
 Decision-complete: YES
 Merge-ready with respect to graph planning: NO
 Remaining blockers:
-- Local closeout bundle is not committed/pushed; GitHub checks and Sonar cover pushed head d5e32a3c7ba47f3f21de138c7752afb8d6362171, not these local docs.
-- One live Copilot review thread remains on packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts:177.
-- Branch touched-file count is 107. Non-mutating divergence probe found origin/main has 0 changed files since merge-base 91e73d3c95066c9670b000648c547592d1334bd0, no changed-both files, no ADR/plan numbering add/add collisions, and no merge-tree conflict signal; the actual dry-run merge/abort step remains unrun because the working tree is dirty.
+- Branch touched-file count is 107. Non-mutating divergence probe found origin/main has 0 changed files since merge-base 91e73d3c95066c9670b000648c547592d1334bd0, no changed-both files, no ADR/plan numbering add/add collisions, and no merge-tree conflict signal; the actual dry-run merge/abort step remains unrun because the working tree is dirty with unrelated `.agent/plans/notes/` scratch state.
 Owner decisions resolved:
 - EEF slice 1 evaluation is structural-only now: citation, caveat, data coverage, freshness, and MCP response-shape preservation at the tool boundary.
 - LLM/outcome evaluation is a named follow-on; teacher-trust and SENCO workflow-time measurement are routed to the outcome-evaluation split decision before EEF ACTIVE promotion.
@@ -341,10 +336,10 @@ Validation:
 - pnpm format-check:root PASS
 - git diff --check PASS
 - pnpm agent-tools:branch-touched-files -- --base origin/main --head HEAD PASS with hard warning: 107 touched files
-- gh pr checks 102 PASS on pushed head d5e32a3c7ba47f3f21de138c7752afb8d6362171
-- Sonar quality gate OK, 0 open PR issues, 0 TO_REVIEW hotspots on PR #102 pushed head
-- PR review threads: one unresolved Copilot thread remains on emit-index.ts whitespace
-- PR body refreshed 2026-05-08
+- gh pr checks 102 PASS on pushed head 309d9e5e44cebecb1be2478d2fb084a54f39b6b2
+- SonarCloud Code Analysis PASS through PR checks on PR #102 pushed head
+- PR review threads: all known threads resolved after the emit-index.ts whitespace fix
+- PR body refreshed 2026-05-08 after push
 - Collaboration claims status: 0 active claims after closeout closure
 Next safe step after merge: implementation-prep for the graph MVP slices only after the remaining merge blockers are cleared and PR #102 merges.
 ```

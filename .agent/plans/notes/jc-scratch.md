@@ -1,4 +1,4 @@
-Profile the check performance and getting rid of the root scripts, if it needs CI it should hen a workspace
+Profile the check performance and getting rid of the root scripts, if it needs CI it should be in a workspace
 
 Researching which platforms no longer support commands, if they are going away, and move everything to skills
 

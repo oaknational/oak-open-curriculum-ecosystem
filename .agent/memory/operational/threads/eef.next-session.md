@@ -1,8 +1,9 @@
 # Next-Session Record — `eef` thread
 
 **Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
-GPT-5 / `019e06` — PR #102 graph decision-complete closeout reaffirmed the
-EEF evaluation stance: slice 1 is structural-only for evaluation purposes.
+GPT-5 / `019e06` — PR #102 graph decision-complete closeout was pushed as head
+`309d9e5e44cebecb1be2478d2fb084a54f39b6b2`; the EEF evaluation stance is
+unchanged at handoff. Slice 1 is structural-only for evaluation purposes.
 Load-bearing acceptance is citation/data/caveat/freshness/MCP-shape
 preservation at the tool boundary; LLM paraphrase scoring, teacher-trust
 measurement, and SENCO workflow-time measurement are follow-on

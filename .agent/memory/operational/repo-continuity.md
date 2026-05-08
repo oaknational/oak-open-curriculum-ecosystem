@@ -31,11 +31,13 @@ infrastructure outside Vitest. Practice-facing graph tooling is now planned
 under `agent-graphs/practice-graph/`, with
 `agent-tooling/future/agent-graphs-workspace-organisation.plan.md` owning the
 future top-level workspace organisation. Refreshed evidence on PR head
-`d5e32a3c7ba47f3f21de138c7752afb8d6362171`: GitHub checks pass; Sonar quality
-gate `OK`, zero open PR issues, zero `TO_REVIEW` hotspots; branch touched files
-`107`, so pre-merge divergence analysis is required; one live Copilot review
-thread remains on `emit-index.ts` whitespace and must be classified before
-merge.
+`309d9e5e44cebecb1be2478d2fb084a54f39b6b2`: GitHub checks pass; Sonar quality
+gate is green through PR checks; branch touched files remain `107`, so
+pre-merge divergence analysis is required. The `emit-index.ts` whitespace
+thread was fixed in `2de81a4c` and resolved on GitHub. The only remaining
+merge blocker recorded by this handoff is the final clean-worktree dry-run
+merge/abort required by the 107-file branch scope; `.agent/plans/notes/` still
+has unrelated local scratch state and is not part of the closeout.
 
 **Session close (2026-05-08 — Lush Rustling Bark / `codex` /
 `GPT-5` / `019e03`, PR #102 fresh-session handoff)**:
@@ -112,26 +114,24 @@ ratification remain out of scope for this branch.
 ## Current State
 
 - Branch `planning/graph-tooling` is in final pre-merge planning closeout. Last
-  pushed/refreshed PR #102 head before the local closeout bundle is
-  `d5e32a3c7ba47f3f21de138c7752afb8d6362171`; evidence must be refreshed after
-  this bundle is committed and pushed.
-- PR #102 technical gates on that last pushed head are mostly clean: GitHub
-  checks pass, Sonar MCP quality gate `OK`, zero open Sonar PR issues, and zero
-  `TO_REVIEW` hotspots. One live Copilot review thread remains on
-  `emit-index.ts` whitespace and must be classified before merge.
+  pushed/refreshed PR #102 head is
+  `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`.
+- PR #102 technical gates are clean on that pushed head: GitHub checks pass,
+  SonarCloud Code Analysis passes through PR checks, and all known review
+  threads are resolved.
 - Owner direction 2026-05-08: PR #102 must not merge until the graph plans are
-  finalised and decision-complete. Local closeout docs now record
-  `Decision-complete: YES`; merge-ready remains `NO`.
+  finalised and decision-complete. Closeout docs now record
+  `Decision-complete: YES`; merge-ready remains `NO` until the final
+  clean-worktree dry-run merge/abort is run.
 - Latest eval/structure decisions: EEF slice 1 structural-only now; LLM/outcome
   eval is follow-on infrastructure; Practice graph home is
   `agent-graphs/practice-graph/`.
 - Branch-touched-files is `107`, so pre-merge divergence analysis is required.
 - The live final-session plan is
   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
-- Remaining merge blockers: commit/push the local closeout bundle and re-check
-  GitHub/Sonar on the final pushed head; dispose the live Copilot
-  `emit-index.ts` thread; run the final pre-merge divergence workflow for the
-  107-file branch.
+- Remaining merge blocker: run the final pre-merge divergence workflow for the
+  107-file branch on a clean worktree. Current unrelated local scratch state in
+  `.agent/plans/notes/` should be preserved or isolated before that dry-run.
 - Opalescent Shimmering Orbit's closeout collaboration claims are closed;
   `claims status` reports zero active claims. The advisory commit queue only
   contains stale/abandoned historical entries.
@@ -149,12 +149,12 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Lush / `codex` / `019e03` / 2026-05-07 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Lush / `codex` / `019e03` / 2026-05-08 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Opalescent / `codex` / `019e06` / 2026-05-08 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
 | `sector-engagement` | External adoption | [record][sector] | Squally / `cursor` / 2026-04-30 |
-| `eef` | EEF evidence corpus | [record][eef] | Windward / `cursor` / `dd084d` / 2026-05-07 |
+| `eef` | EEF evidence corpus | [record][eef] | Opalescent / `codex` / `019e06` / 2026-05-08 |
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
 [observability]: threads/observability-sentry-otel.next-session.md
@@ -214,18 +214,15 @@ evidence.
 
 ## Next Safe Step
 
-**Clear PR #102 merge blockers**:
+**Clear PR #102 merge blocker**:
 
-1. Commit and push the local planning closeout bundle, then re-check GitHub and
-   Sonar on the final pushed head.
-2. Classify or fix the remaining live Copilot `emit-index.ts` review thread
-   before any merge-ready verdict; this planning closeout did not silently edit
-   production code.
-3. Because branch-touched-files is `107`, run the final pre-merge divergence
+1. Preserve or isolate the unrelated dirty `.agent/plans/notes/` scratch state
+   so the worktree is clean.
+2. Because branch-touched-files is `107`, run the final pre-merge divergence
    workflow on a clean worktree before merge. The 2026-05-08 non-mutating probe
    found no changed-both files, no ADR/plan numbering add/add collisions, and
    no merge-tree conflict signal.
-4. After PR #102 merges, start graph MVP implementation-prep; do not start
+3. After PR #102 merges, start graph MVP implementation-prep; do not start
    slice implementation before the post-merge type-check and full gate chain.
 
 Do not start slice implementation, graph-stack ACTIVE promotion, ADR-173
@@ -283,3 +280,9 @@ no new ADR/PDR candidate or cross-session convergence trigger fired`.**
 PR #102 fresh-session handoff): `not due — owner requested a session-scoped
 handoff/update of current PR/Sonar surfaces; no plan closed, no new doctrine or
 ADR/PDR candidate surfaced, and the next work is tactical PR closeout`.**
+
+**Status (2026-05-08 Opalescent Shimmering Orbit, codex, GPT-5, `019e06`,
+PR #102 graph decision-complete closeout): `due — the PR #102 graph planning
+closeout plan completed and pushed; run consolidate-docs after merge or in a
+bounded follow-up to mine durable decisions/follow-ons without delaying the
+merge blocker cleanup`.**

@@ -54,7 +54,7 @@
     "@elastic/elasticsearch": "^9.4.0",
     "@elastic/transport": "^9.3.5",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.6.2",
     "eslint": "^10.3.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",

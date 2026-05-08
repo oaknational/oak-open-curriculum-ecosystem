@@ -146,8 +146,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.3",
-    "@commitlint/config-conventional": "^20.5.3",
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@playwright/test": "^1.59.1",
     "@semantic-release/changelog": "^6.0.3",
@@ -155,7 +155,7 @@
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/typescript-checker": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.6.2",
     "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
@@ -167,14 +167,14 @@
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
-    "knip": "^6.12.0",
+    "knip": "^6.12.1",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
     "supertest": "^7.2.2",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "turbo": "^2.9.9",
+    "turbo": "^2.9.10",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   }

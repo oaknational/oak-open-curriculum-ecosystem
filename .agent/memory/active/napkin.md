@@ -206,3 +206,13 @@ of the planning artefacts' decision completeness.
 **Behaviour change**: when closing a planning PR, report two verdicts
 separately: PR technical readiness and plan decision-completeness. Do not let a
 green PR collapse unresolved planning questions into implicit acceptance.
+
+### Handoff note: remote metadata is part of the state transition
+
+**Observation**: after the closeout commits were pushed and the final
+`emit-index.ts` review thread was resolved, the PR body and continuity files
+still described the pre-push state.
+
+**Behaviour change**: when a closeout changes from local/pending to pushed,
+refresh the live PR body and next-session records in the same handoff pass so
+the next session does not inherit stale blockers.
