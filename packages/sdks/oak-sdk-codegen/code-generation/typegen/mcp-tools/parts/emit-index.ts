@@ -173,7 +173,7 @@ function buildExports({
     '      attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });',
     '    }',
     '    return {',
-    `      ok: false, message: 'Response does not match any documented schema for statuses: ${documentedStatusesMessage}' ,`,
+    `      ok: false, message: 'Response does not match any documented schema for statuses: ${documentedStatusesMessage}',`,
     '      issues: attemptedStatuses.flatMap((entry) => entry.issues),',
 
     '      attemptedStatuses,',
