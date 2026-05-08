@@ -15,7 +15,7 @@
  * descriptor that proved this pattern.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'path';
+import { join } from 'node:path';
 import type { Logger } from '@oaknational/logger';
 
 /**
