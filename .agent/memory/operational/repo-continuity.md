@@ -9,6 +9,33 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-09 — `claude-code` / Opus 4.7 / `00dc26`, skills-standardisation plan re-issue)**:
+landed PDR-051 (vendor-agnostic skills standardisation, portability-pure),
+amended ADR-125 in place with the 2026-05-09 entry recording the two-surface
+contract + retired `.cursor/skills/`/`.gemini/skills/`/`.codex/skills/`/
+`.windsurf/skills/`, added friction F-16 to the agent-tooling register, and
+authored a canonical repo plan at
+[`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md).
+Attempt 1 of the implementation failed by skipping TDD discipline (700 LOC
+of unverified product code before any test); code was binned, plan moved to
+[`archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md`](../../plans/agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md)
+with a Failure Note. The new plan embeds cycle-by-cycle TDD discipline,
+WS0 mandatory pre-execution review by four specialist reviewers
+(`assumptions-reviewer`, `test-reviewer`, `architecture-reviewer-fred`,
+`docs-adr-reviewer`), a WS2.5 pre-migration plan-direction check, and
+plan-direction reviews at every workstream boundary. **No commit in this
+session.** **Next safe step**: open the new plan in the next session and
+dispatch the WS0 four-reviewer parallel pass before any implementation.
+
+**Session update (2026-05-09 — owner direction / `jc-session-handoff`)**:
+next sessions **prioritise implementing graph MVP features** (per
+`connecting-oak-resources` slice plans) **after** any remaining PR #102 merge
+prep completes. The **monorepo workspace topology** programme
+(`architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`,
+superseding-ADR-108 candidate in `pending-graduations.md`) is **parked** —
+no ADR drafting or topology execution until the owner returns to that arc
+**after** the graph MVP implementation tranche.
+
 **Session close (2026-05-09 — Fronded Bending Blossom / `cursor` /
 Composer / `60775a`, workspace topology strategic planning)**:
 refined
@@ -165,8 +192,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Lush / `codex` / `019e03` / 2026-05-07 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Opalescent / `codex` / `019e06` / 2026-05-08 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Solar Glimmering Eclipse / `claude-code` / Opus 4.7 / `00dc26` / 2026-05-09 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -192,9 +219,17 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
+**Next up (owner 2026-05-09)**:
+**graph MVP implementation** on the `connecting-oak-resources` thread once
+PR #102 merge blockers are cleared — slice plans drive execution. **Deferred**:
+monorepo topology ADR / stage-matrix work (strategic plan remains in `future/`
+until re-opened).
+
+*Historical context:*
+
 **2026-05-09 (workspace topology / pipeline stages)**:
 strategic plan only — monorepo supply-chain model for superseding ADR-108;
-branch-primary remains PR #102.
+execution intentionally sequenced after graph MVP tranche.
 
 **2026-05-08 (PR #102 graph decision-complete planning)**:
 absorb remaining graph-plan findings and apply the latest structural-only EEF
@@ -243,11 +278,19 @@ evidence.
    workflow on a clean worktree before merge. The 2026-05-08 non-mutating probe
    found no changed-both files, no ADR/plan numbering add/add collisions, and
    no merge-tree conflict signal.
-3. After PR #102 merges, start graph MVP implementation-prep; do not start
-   slice implementation before the post-merge type-check and full gate chain.
+3. After PR #102 merges, **start graph MVP feature implementation** per the
+   slice plans in `connecting-oak-resources/knowledge-graph-integration/` — that
+   arc is now the **primary** engineering focus.
+4. **Defer** monorepo workspace topology ADR drafting and stage-matrix audits
+   until the owner explicitly returns to that programme **after** the graph
+   MVP implementation tranche (see `monorepo-workspace-topology-adr-and-canonical-plan.plan.md`).
 
-Do not start slice implementation, graph-stack ACTIVE promotion, ADR-173
-ratification, or production code changes in this final closeout session.
+**Sequencing (owner 2026-05-09)**:
+while PR #102 is still open, finish merge prep (clean worktree, divergence) on
+`planning/graph-tooling` before implementation work. **After merge**, the
+**primary** arc is **graph MVP feature implementation** per slice plans.
+**Park** monorepo topology ADR / **S0–S6** enforcement until the owner
+returns to that programme after the MVP tranche.
 
 ## Open Owner-Decision Items
 
@@ -262,6 +305,9 @@ Visible owner-appetite items, not blockers for the current branch state:
    dedicated consolidation sessions.
 3. Future doctor arcs are separate owner-choice lanes: repair mode and
    consolidation integration.
+4. **Monorepo workspace topology** (superseding ADR-108, **S0–S6** strategic
+   plan): **parked** until after the graph MVP implementation tranche; the
+   candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
 
@@ -313,3 +359,7 @@ workspace topology plan refinement handoff): `not due — strategic plan and
 register capture only; no plan closure, no napkin rotation, no new graduated
 doctrine; ADR candidate appended to pending-graduations for drafting after
 owner locks S0–S6`.**
+
+**Status (2026-05-09 owner sequencing note, cursor handoff): `not due — owner
+directed next arcs to graph MVP implementation; topology ADR programme parked;
+continuity-only updates to repo-continuity + thread record`.**

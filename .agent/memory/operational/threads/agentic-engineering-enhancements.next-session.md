@@ -1,5 +1,52 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — Skills standardisation and adapter generator (attempt 2)
+
+**Last refreshed**: 2026-05-09 (`claude-code` / Opus 4.7 / `00dc26`).
+
+**Owning plan**: [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md).
+
+**Failed predecessor**: [`agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md`](../../../plans/agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md).
+
+**Current objective**: implement [PDR-051](../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md) doctrine in this repo. One canonical body per skill at `.agent/skills/<id>/SKILL-CANONICAL.md` (non-discoverable filename); exactly two adapter surfaces (`.agents/skills/` for Cursor/Codex/Gemini/Amp + `.claude/skills/` for Claude Code); generator-mandatory; custom commands subsumed into skills. Friction F-16 closes when this plan completes.
+
+**Documents already landed (uncommitted)**:
+
+- `.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md`
+- `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` — 2026-05-09 amendment line + Layer-2 table updated to two skill surfaces only.
+- `.agent/plans/agent-tooling/frictions-register.md` — F-16 entry.
+- `.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md` — attempt-2 plan with cycle-by-cycle TDD shape.
+- `.agent/plans/agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md` — failed-attempt record with Failure Note prepended.
+
+**First task of next session — MANDATORY before any implementation**:
+
+Open the plan and dispatch **WS0 — Pre-Execution Plan Review** before touching code. The plan's WS0 section contains four self-contained reviewer briefs:
+
+1. `assumptions-reviewer` — proportionality, build-vs-buy attestation, blocking relationships, sunk-cost reasoning detection.
+2. `test-reviewer` — describes-vs-audits screen on every WS1 cycle's test section; atomic-landing invariant; full-help-on-stderr assertion shape.
+3. `architecture-reviewer-fred` — ADR/PDR boundary compliance; consolidate-at-third-consumer between generator and validator; WS3 strict-flip safety.
+4. `docs-adr-reviewer` — PDR-051 portability-rule compliance (especially the `skills-lock.json` mention, borderline against the practice-core-portability rule); ADR-125 amendment shape; WS5 propagation completeness.
+
+All four dispatch in parallel via the Agent tool. Synthesise findings, address every BLOCKER as a follow-up commit (or plan amendment) before WS1.1 begins.
+
+**Why this matters**: attempt 1 failed by treating "1 hour, tighten it up" as a quality-discipline signal rather than a scope signal. The failure mode is named in `.agent/rules/no-speed-pressure.md`. WS0 exists to prevent its recurrence. If the next session feels the impulse to start coding immediately, that impulse is the diagnostic.
+
+**Subsequent flow** (after WS0 passes):
+
+- WS1.1–WS1.8: generator core under cycle-by-cycle TDD.
+- WS1 mid-review: code/type/test reviewers + assumptions-reviewer build-vs-buy survival check.
+- WS2.1–WS2.6: validator extension under TDD.
+- WS2 mid-review.
+- **WS2.5 pre-migration plan-direction check** (MANDATORY): `architecture-reviewer-fred` + `assumptions-reviewer` re-validate WS3 sequencing before destructive migration.
+- WS3.1–WS3.9: mechanical migration commits.
+- WS4 quality gates; WS5 documentation propagation; WS6 adversarial review and consolidation.
+
+**Branch state**: `feat/mcp-graph-support-foundation` at HEAD `111e18cb`. No commits this session. Working tree includes the new docs and plan plus the modifications to ADR-125 and the friction register; nothing else from this session touched the tree.
+
+**Out of scope for this thread**: graph MVP implementation (under `connecting-oak-resources` thread); workspace topology programme (parked).
+
+---
+
 ## Active arc — Memory/state substrate contracts + doctor safe-merge gate (closed 2026-05-07)
 
 **Last refreshed**: 2026-05-07 (Silvered Masking Moth / codex / GPT-5 /
