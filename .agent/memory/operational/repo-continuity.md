@@ -9,6 +9,35 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-09 — Luminous Twinkling Dawn / `claude-code` /
+Opus 4.7 / `c03c02`, historical-napkin-synthesis pass)**:
+ran owner-directed historical-napkin-synthesis (per `/jc-consolidate-docs`
+Step 6a) over the current napkin plus the three prior archived rotations
+(`napkin-2026-05-06-evening-graduation-pass`, `napkin-2026-05-07-graph-mvp-planning`,
+`napkin-2026-05-07-doctor-safe-merge`); fitness-blind per owner direction.
+Synthesis report at
+[`.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md):
+12 emergent findings (4 already-homed confirmations; 3 promoted to new
+patterns; 4 captured as new pending-graduations entries; 3 owner-gated for
+separate session); 6 rejected near-patterns. Three new patterns landed at
+`.agent/memory/active/patterns/`: `comprehensive-cataloguing-drift.md`
+(anti-pattern), `long-arc-finish-line-not-tail.md` (pattern),
+`mechanical-sequence-is-activity-bias-diagnostic.md` (anti-pattern). Pattern
+index Process count 31→34. Distilled.md updated with §F1
+meta-observation (fitness-as-trim impulse is doctrine-resistant under
+context pressure; cure: lifecycle-aware fitness model + active inline
+discipline-reminder text) and §F4 status note (PDR-026 amendment owner-
+gated). Pending-graduations: 4 new entries; spine-drift-via-
+comprehensive-cataloguing partially-graduated; sequence-or-admit-not-doing
+status updated to owner-gated three-instance-confirmed; lifecycle-aware-
+fitness-model cross-referenced. Owner directed all three owner-gated
+candidates (PDR-026 amendment per F4; sequence-or-admit graduation target
+per F11; synthesis PDR `pdr_kind: pattern` per F12) deferred to a separate
+session. **practice.md char-HARD signal carried forward unactioned** per
+explicit owner direction this pass. Source archived napkins not modified.
+**Next safe step**: separate session for owner-gated PDR drafting OR
+continue graph MVP implementation per prior owner sequencing.
+
 **Session close (2026-05-09 — `claude-code` / Opus 4.7 / `00dc26`, skills-standardisation plan re-issue)**:
 landed PDR-051 (vendor-agnostic skills standardisation, portability-pure),
 amended ADR-125 in place with the 2026-05-09 entry recording the two-surface
@@ -192,7 +221,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Solar Glimmering Eclipse / `claude-code` / Opus 4.7 / `00dc26` / 2026-05-09 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Cosmic Glowing Star / `claude-code` / Opus 4.7 / `7d10e5` / 2026-05-09 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -226,6 +255,13 @@ monorepo topology ADR / stage-matrix work (strategic plan remains in `future/`
 until re-opened).
 
 *Historical context:*
+
+**2026-05-09 (skills standardisation WS0 — Cosmic Glowing Star)**:
+WS0 review remediations landed as commit `989375a8` on `feat/mcp-graph-support-foundation`.
+Four reviewers ran in parallel; 3 BLOCKER reshapes (WS1.4/1.5 structural body
+assertions, WS1.7 structural help-text assertion, WS2.3 subprocess delegation),
+7 must-fix WARN reshapes, 4 new WS5 propagation cycles. Plan body records WS0
+Outcome paragraph. WS1.1 (Ajv schema + loader) is the next-session opening task.
 
 **2026-05-09 (workspace topology / pipeline stages)**:
 strategic plan only — monorepo supply-chain model for superseding ADR-108;
@@ -363,3 +399,10 @@ owner locks S0–S6`.**
 **Status (2026-05-09 owner sequencing note, cursor handoff): `not due — owner
 directed next arcs to graph MVP implementation; topology ADR programme parked;
 continuity-only updates to repo-continuity + thread record`.**
+
+**Status (2026-05-09 Cosmic Glowing Star, claude-code, Opus 4.7, `7d10e5`,
+skills-standardisation WS0 review remediation): `not due — WS0 ran four
+reviewers in parallel and landed plan amendments under 989375a8; no plan
+closure, no napkin rotation, no new doctrine surfaced. WS1.1 implementation
+remains the next-session opening task. Owner-locked decisions reaffirmed
+without primary-source basis to reopen any`.**

@@ -22,6 +22,19 @@ remains here is repo/domain-specific context with no natural
 permanent home, plus entries explicitly held pending plan
 execution or queued for a directive-edit session.
 
+**Meta-observation (2026-05-09 historical-napkin-synthesis)**: the
+fitness-as-trim impulse is doctrine-resistant under context
+pressure. Three independent corrections in the 2026-05-06 → 2026-05-09
+window (Embered 05-06, Pelagic 05-07, doctor-safe-merge 05-07) on
+the same shape — agents reflexively trimming substance when fitness
+signals fire. Reading the rule once is verifiably not enough. Two
+structural cures graduating: lifecycle-aware fitness model
+(`lifecycle_model: loaded-every-session | read-on-demand |
+consolidation-pass-only | archive-only`) and active inline
+discipline-reminder text in fitness-validator output at non-healthy
+zones. Both captured as pending-graduations entries. Source:
+[`.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md) §F1.
+
 **Recent graduations (2026-05-06)**: Practice-Core portability,
 directive-file <30% context budget, validators-must-recompute, and
 re-apply-first-question-at-elaboration-boundaries graduated to new
@@ -104,6 +117,11 @@ Non-action can be the architecturally correct answer; it must be
 visible, explicit, and sometimes discussed. Currently queued for
 the next directive-edit session: graduate this whole block to
 PDR-026 amendment without the vaporware-citation gating.
+
+**Status (2026-05-09)**: owner-gated PDR-026 amendment per
+[`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+§F4 + §F11 — three corpus-window instances confirm the doctrine; awaiting
+owner approval to graduate.
 
 ### Repo-Specific Codegen
 

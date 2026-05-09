@@ -132,17 +132,115 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
-### Entry counts (2026-05-07)
+### Entry counts (2026-05-09)
 
 | Status | Count | Notes |
 | --- | --- | --- |
 | due | 7 | of which 3 are vaporware-gated (trigger-facet sub-grouping) |
-| partially-graduated | 2 | |
+| partially-graduated | 3 | spine-drift-via-comprehensive-cataloguing promoted to broader pattern 2026-05-09 |
 | quarantined | 1 | |
-| pending | ~78 | second-instance or owner-direction gated |
-| **total** | **~88** | |
+| pending | ~82 | second-instance or owner-direction gated; +4 from historical-napkin-synthesis 2026-05-09 |
+| **total** | **~93** | +5 net entries from 2026-05-09 historical-napkin-synthesis |
 
 ## Entries
+
++ 2026-05-09; **fitness-validator output should print the
+  non-reactive-response discipline reminder inline at non-healthy
+  zones** (doctor-safe-merge tooling-feedback 2026-05-07; corpus
+  recurrence confirmed 2026-05-09).
+  `[captured: 2026-05-09 | source: historical-napkin-synthesis-2026-05-09 | target: tool-amend:scripts/validate-practice-fitness.ts | trigger: tooling-implementation OR owner-direction OR second-instance | size: S | status: pending]`
+  Three corpus-window instances of agents reflexively trimming
+  substance when fitness signals fire (Embered 05-06, Pelagic 05-07,
+  doctor-safe-merge 05-07) prove the doctrine is doctrine-resistant
+  under context pressure. Reading the rule once is verifiably not
+  enough. The cure: fitness validator output (`pnpm
+  practice:fitness:informational`) should print the discipline
+  reminder text inline at every non-healthy (`soft` / `hard` /
+  `critical`) zone — *"Preserve substance first. Do not delete, trim,
+  compress, or weaken memory or Practice Core content to make this
+  report greener. Treat fitness as a routing signal: home, graduate,
+  split, refine real redundancy, review the limit, or open an
+  explicit remediation lane."* This is sibling cure to the
+  lifecycle-aware fitness model (see entry above); both graduate
+  together. Source-surface:
+  [`archive/napkin-2026-05-07-doctor-safe-merge.md`](../active/archive/napkin-2026-05-07-doctor-safe-merge.md)
+  §Practice-tooling-feedback `agent-tools:practice-fitness`. Source
+  finding:
+  [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F1. Graduation-target: `scripts/validate-practice-fitness.ts`
+  output amendment to print discipline-reminder when any zone is
+  non-healthy. Trigger: tooling-implementation OR owner direction.
+  Status: pending.
+
++ 2026-05-09; **verify reviewer text-claims against the diff
+  before applying corrections** (Pelagic Rolling Harbour 2026-05-07,
+  first instance).
+  `[captured: 2026-05-09 | source: historical-napkin-synthesis-2026-05-09 | target: rule-or-pattern | trigger: second-instance | size: S | status: pending]`
+  Reviewer cited specific text the diff did not contain (PDR-026
+  §Sequenced-deferral discipline citation that was actually in
+  procedural-text-not-diff). `git diff | grep` would have caught the
+  conflation cheaply. The reviewer's substance was load-bearing even
+  when the textual claim was wrong; trust-but-verify on textual
+  claims saves wrong-direction edits. First-instance evidence; capture
+  awaiting second-instance to promote. Source-surface:
+  [`archive/napkin-2026-05-07-graph-mvp-planning.md`](../active/archive/napkin-2026-05-07-graph-mvp-planning.md)
+  Pelagic §Surprise-2 + same content in
+  [`archive/napkin-2026-05-07-doctor-safe-merge.md`](../active/archive/napkin-2026-05-07-doctor-safe-merge.md).
+  Source finding:
+  [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F3b. Graduation-target: rule (`.agent/rules/verify-reviewer-text-claims-against-diff.md`)
+  OR pattern instance under category `agent`. Trigger: second-instance.
+  Status: pending — first instance.
+
++ 2026-05-09; **reviewer convergence points at a conceptual root
+  deeper than either reviewer named directly** (Breezy Navigating
+  Sail 2026-05-07, first instance, named in the originating napkin
+  as a candidate process pattern).
+  `[captured: 2026-05-09 | source: historical-napkin-synthesis-2026-05-09 | target: pattern:patterns/reviewer-convergence-points-at-conceptual-root.md | trigger: second-instance | size: S | status: pending]`
+  Two independent reviewers converged on the same BLOCKER through
+  different reasoning (code-reviewer flagged "slice 3b composes by
+  name"; assumptions-reviewer flagged "compose by name violates
+  substrate-only design principle"). The convergence pointed at a
+  deeper conceptual mistake than either reviewer named — composing
+  OTHER MCP TOOLS at runtime when the correct model was composing
+  underlying graph data through the SDK substrate. The "by name"
+  phrasing appeared in 4 places across slices 2, 3a, 3b — all
+  symptoms of one wrong mental model. Diagnostic: when reviewers
+  converge through different reasoning paths, grep all related
+  surfaces for the symptomatic phrase before fixing only the cited
+  spots. Originating napkin already named this as candidate
+  pattern. Source-surface:
+  [`archive/napkin-2026-05-07-graph-mvp-planning.md`](../active/archive/napkin-2026-05-07-graph-mvp-planning.md)
+  Breezy §Surprise-1. Source finding:
+  [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F3c. Graduation-target: pattern instance
+  `.agent/memory/active/patterns/reviewer-convergence-points-at-conceptual-root.md`
+  (polarity: pattern; category: process). Trigger: second-instance.
+  Status: pending — first instance.
+
++ 2026-05-09; **owner-bounded reviewer scope can collapse a
+  multi-session arc into single-session closure without quality
+  regression** (Breezy Navigating Sail 2026-05-07, first instance).
+  `[captured: 2026-05-09 | source: historical-napkin-synthesis-2026-05-09 | target: pattern-instance | trigger: second-instance | size: S | status: pending]`
+  Owner directed *"reduce reviewers to code-reviewer +
+  assumptions-reviewer; have a specialist do the topology review in
+  parallel; finish the planning this session"* — collapsed a
+  proposed 5-reviewer / 4-session pass to a 2 + 1 / 1-session pass.
+  All five planning phases landed cleanly with BLOCKERs surfaced AND
+  remediated AND captured for next-session, no quality regression.
+  Substance: "comprehensive review" was over-scoped relative to the
+  session-bounded landing target. The proportional reviewer set for
+  the arc's specific BLOCKER-surfacing job was 2 + 1, not 5. Owner-
+  set when there is a hard landing commitment. Sibling to the
+  comprehensive-cataloguing-drift anti-pattern (proportionality
+  question is the substrate). Source-surface:
+  [`archive/napkin-2026-05-07-graph-mvp-planning.md`](../active/archive/napkin-2026-05-07-graph-mvp-planning.md)
+  Breezy §Surprise-2. Source finding:
+  [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F10. Graduation-target: pattern instance under category `process`,
+  positive polarity (the cure-shape, not the failure mode); cross-
+  reference comprehensive-cataloguing-drift.md. Trigger:
+  second-instance. Status: pending — first instance.
 
 + 2026-05-07; **sequence-or-admit-not-doing doctrine — never use
   "deferred" as a bare status; sequence (gate-relative or tripwire-
@@ -164,9 +262,12 @@ the queue churns.
   adapters triple; (b) extend `no-moving-targets-in-permanent-docs.md`
   with a deferred-as-bare-status clause; (c) directive amendment to
   `.agent/directives/principles.md`. Trigger: second-instance
-  observed OR owner direction at promotion. Status: pending — first
-  first-class instance with strong owner authorship; capture to honour
-  the moment per PDR-048.
+  observed OR owner direction at promotion. **Status (2026-05-09):
+  three corpus-window instances confirmed via historical-napkin-synthesis
+  (Windward spine 2026-05-07; Briny vaporware-cited deferral 2026-05-06;
+  PDR-051 plan §Out-of-scope 2026-05-09); promotion is now owner-gated**
+  per [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F11. Originally captured to honour the moment per PDR-048.
 
 + 2026-05-07; **spine drift via comprehensive cataloguing — when a
   coordination spine starts enumerating "things adjacent that the
@@ -192,7 +293,13 @@ the queue churns.
   enumerate "things outside the spine" inside the spine, stop and ask
   whether the spine has become a roadmap. Trigger: second-instance
   observed (could come from any coordination-spine plan author).
-  Status: pending — first instance, strong owner authorship.
+  **Status: partially graduated 2026-05-09** — historical-napkin-synthesis
+  found three corpus-window instances (spine, reviewer-pass, rule-extension)
+  and authored the broader anti-pattern as
+  [`comprehensive-cataloguing-drift.md`](../active/patterns/comprehensive-cataloguing-drift.md).
+  This entry's spine-specific instance evidence is preserved by the broader
+  pattern's spine-instance section; entry remains as historical capture.
+  Source: [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md) §F2.
 
 + 2026-05-06; **branch PR Sonar is a regression guard, not the backlog source
   for a branch opened to fix existing main/project Sonar debt** (Owner
@@ -245,7 +352,14 @@ the queue churns.
   instance is this session's recalibration. Status: pending —
   capture to honour the moment per PDR-048 (insight capture at
   moment of occurrence); promotion when accumulation or owner
-  direction warrants.
+  direction warrants. **Cross-reference (2026-05-09)**:
+  historical-napkin-synthesis confirms the recurrence of fitness-as-trim
+  impulse across three corpus-window instances and identifies this
+  lifecycle-aware-fitness recalibration as one of two structural cures
+  (sibling cure: active inline discipline-reminder text in fitness output
+  at non-healthy zones — separate entry below). Source:
+  [`historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
+  §F1.
 
 + 2026-05-06; **`/doctor` is session-local evidence, not a shell-
   invocable validation gate** (Briny Plumbing Fjord, owner
@@ -2161,7 +2275,28 @@ continuity snapshots.
   narrative per ADR-117; supersession notice on ADR-108.
   Trigger-condition: owner confirms or revises **S0–S6** names and substrate
   exception rules; OR executable promotion of `draft-adr-supersedes-108` todo.
+  **Sequencing (owner 2026-05-09)**: do not start drafting until after the
+  **graph MVP implementation** tranche; this item stays `pending` for that gap.
   Status: pending — substance lives in the strategic plan until drafting slot.
+
+### deferred-at-write-time decisions are unmade load-bearing decisions
+
+  When a plan defers a substantive structural decision into "decide at
+  write time" (e.g. WS2.3 of skills-standardisation: import-from-workspace
+  vs duplicate-XOR), the deferral is not flexibility — it is the plan
+  owner declining to make a load-bearing decision, leaving the cycle
+  author to make it under implementation pressure. WS0 (2026-05-09)
+  turned the deferral into a structural choice (subprocess delegation)
+  before any code was written, and the reshape applied cleanly to the
+  paired sibling cycle (WS2.4) at no extra cost.
+  `[captured: 2026-05-09 | source: napkin | target: pattern OR rule | trigger: second instance observed in a different plan | size: S | status: pending]`
+  Graduation-target: pattern under `.agent/memory/active/patterns/` or
+  rule under `.agent/rules/` (deferred-decisions-are-unmade-decisions);
+  consider folding into a broader plan-shape rule alongside
+  consolidate-at-third-consumer.
+  Trigger-condition: a second instance of "decide at write time" surfaces
+  in any plan during the next session window OR the next consolidation
+  pass evaluates the substance.
 
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in

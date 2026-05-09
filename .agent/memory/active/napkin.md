@@ -231,3 +231,56 @@ the next session does not inherit stale blockers.
 
 Registered in `pending-graduations.md` 2026-05-09; plan file:
 `architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`.
+
+### Owner direction — sequencing (2026-05-09)
+
++ **Next**: graph MVP **implementation** (after PR #102 merge prep / gates).
++ **Later**: reopen repo topology / superseding-ADR-108 work — candidate stays
+  `pending` with explicit sequencing note in `pending-graduations.md`.
+
+## 2026-05-09 — Synthesis Pass Marker / Luminous Twinkling Dawn / claude-code / Opus 4.7 / `c03c02`
+
+Luminous Twinkling Dawn ran the historical-napkin-synthesis pass over the
+current napkin plus the three prior archived rotations
+(`napkin-2026-05-06-evening-graduation-pass.md`,
+`napkin-2026-05-07-graph-mvp-planning.md`,
+`napkin-2026-05-07-doctor-safe-merge.md`) per `/jc-consolidate-docs`
+Step 6a, owner-directed fitness-blind. Synthesis report at
+[`.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md).
+
+Twelve emergent findings; six rejected near-patterns. Routing applied:
+
++ **Three new patterns** under `.agent/memory/active/patterns/`:
+  `comprehensive-cataloguing-drift.md` (anti-pattern; F2 — three-instance
+  cross-artefact: spine + reviewer-pass + rule-extension);
+  `long-arc-finish-line-not-tail.md` (pattern; F8 — three-instance: doctor
+  arc, Sonar arc, skills arc); `mechanical-sequence-is-activity-bias-diagnostic.md`
+  (anti-pattern; F9 — three-instance: Sonar bulk disposition, skills attempt-1,
+  Windward minimal-application).
++ **Four new pending-graduations entries**: fitness-output inline-discipline-reminder
+  (F1 cure 2); verify-reviewer-text-claims-against-diff (F3b);
+  reviewer-convergence-points-at-conceptual-root (F3c);
+  owner-bounded-reviewer-scope (F10).
++ **Existing pending-graduations updates**: `spine-drift-via-comprehensive-cataloguing`
+  marked partially-graduated with cross-reference to broader pattern;
+  `sequence-or-admit-not-doing` marked owner-gated three-corpus-window
+  instances; `lifecycle-aware-fitness-model` cross-referenced.
++ **Owner-gated candidates surfaced** for separate decision (PDR-026
+  amendment per F4; sequence-or-admit graduation target per F11; synthesis
+  PDR `pdr_kind: pattern` consolidating F2 + F9 per F12).
++ **distilled.md** updated with §F1 meta-observation and §F4 status note;
+  no entries pruned.
+
+Source archived napkins not modified (verified by Phase H continuity check).
+
+---
+
+## 2026-05-09 — WS0 dispatch produced concrete cycle-shape correctives, not just nudges (Cosmic Glowing Star)
+
+**Surprise**: I expected the four parallel WS0 reviewers to surface mostly proportionality WARNs and a small number of edge-case notes, given the plan had been authored carefully after attempt-1's failure note. Instead each reviewer (test, fred, docs-adr) returned at least one concrete BLOCKER plus multiple cycle-reshape WARNs. Aggregate: 3 BLOCKERs + 7 must-fix WARNs across 11 plan sections — substantial reshape, not a tightening pass.
+
+**What this updates**: WS0's value is not only "catch the obvious failure mode before code". It is also "every reviewer lens shrinks a different part of the audit-shape surface". Test-reviewer caught literal-text assertions that read fluent in plan English; fred caught a deferred boundary decision the plan had explicitly written as "decide at write time"; docs-adr caught five missing propagation surfaces. Each was invisible to the other two lenses.
+
+**Candidate** (`candidate:`): when a plan defers a substantive decision into "decide at write time" (WS2.3's import-vs-duplicate), that's not flexibility — it's a load-bearing decision the plan owner has declined to make, which the cycle author will then be forced to make under implementation pressure. WS0 turned the deferral into a structural choice (subprocess delegation) before any code was written. Pattern-name candidate: **"deferred-at-write-time decisions are unmade load-bearing decisions"**. Flag for next consolidation.
+
+**Owner-direction substance affirmed**: locked decisions held under all four reviewer lenses. None surfaced primary-source evidence to reopen. The brief framing ("execution-legitimacy only, not design re-litigation") worked: reviewers respected scope without flattening their lens.
