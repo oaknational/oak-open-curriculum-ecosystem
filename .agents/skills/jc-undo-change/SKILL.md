@@ -5,4 +5,4 @@ description: Decision tree for safely undoing a working-tree, staged, or committ
 
 # Undo Change (Cross-tool)
 
-Read and follow `.agent/skills/undo-change/SKILL.md`.
+Read and follow `.agent/skills/undo-change/SKILL-CANONICAL.md`.

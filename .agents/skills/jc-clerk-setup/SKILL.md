@@ -5,4 +5,4 @@ description: Add Clerk authentication to any project by following the official q
 
 # Clerk Setup (Cross-tool)
 
-Read and follow `.agent/skills/clerk-setup/SKILL.md`.
+Read and follow `.agent/skills/clerk-setup/SKILL-CANONICAL.md`.

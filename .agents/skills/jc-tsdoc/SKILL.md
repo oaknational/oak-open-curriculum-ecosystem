@@ -5,4 +5,4 @@ description: Write and audit canonical TSDoc plus the adjacent README or ADR upd
 
 # Tsdoc (Cross-tool)
 
-Read and follow `.agent/skills/tsdoc/SKILL.md`.
+Read and follow `.agent/skills/tsdoc/SKILL-CANONICAL.md`.

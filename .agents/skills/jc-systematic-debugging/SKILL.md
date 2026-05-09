@@ -5,4 +5,4 @@ description: Structured debugging workflow. Use when encountering bugs, test fai
 
 # Systematic Debugging (Cross-tool)
 
-Read and follow `.agent/skills/systematic-debugging/SKILL.md`.
+Read and follow `.agent/skills/systematic-debugging/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Apply the repository start-right quick grounding workflow to the ac
 
 # Start Right Quick (Cross-tool)
 
-Read and follow `.agent/skills/start-right-quick/SKILL.md`.
+Read and follow `.agent/skills/start-right-quick/SKILL-CANONICAL.md`.

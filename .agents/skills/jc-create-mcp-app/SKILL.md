@@ -5,4 +5,4 @@ description: This skill should be used when the user asks to "create an MCP App"
 
 # Create Mcp App (Cross-tool)
 
-Read and follow `.agent/skills/create-mcp-app/SKILL.md`.
+Read and follow `.agent/skills/create-mcp-app/SKILL-CANONICAL.md`.

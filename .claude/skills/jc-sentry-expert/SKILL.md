@@ -5,4 +5,4 @@ description: Active workflow skill for Sentry and OpenTelemetry planning, resear
 
 # Sentry Expert (Claude Code)
 
-Read and follow `.agent/skills/sentry-expert/SKILL.md`.
+Read and follow `.agent/skills/sentry-expert/SKILL-CANONICAL.md`.

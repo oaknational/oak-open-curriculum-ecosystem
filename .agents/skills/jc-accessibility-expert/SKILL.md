@@ -5,4 +5,4 @@ description: Active workflow skill for accessibility planning, research, and imp
 
 # Accessibility Expert (Cross-tool)
 
-Read and follow `.agent/skills/accessibility-expert/SKILL.md`.
+Read and follow `.agent/skills/accessibility-expert/SKILL-CANONICAL.md`.

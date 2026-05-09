@@ -5,4 +5,4 @@ description: How to process code review feedback effectively. Understand before 
 
 # Receiving Code Review (Cross-tool)
 
-Read and follow `.agent/skills/receiving-code-review/SKILL.md`.
+Read and follow `.agent/skills/receiving-code-review/SKILL-CANONICAL.md`.

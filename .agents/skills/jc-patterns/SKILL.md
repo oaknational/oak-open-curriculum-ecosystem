@@ -5,4 +5,4 @@ description: 'Check .agent/memory/active/patterns/ for repo-grounded pattern ins
 
 # Patterns (Cross-tool)
 
-Read and follow `.agent/skills/patterns/SKILL.md`.
+Read and follow `.agent/skills/patterns/SKILL-CANONICAL.md`.

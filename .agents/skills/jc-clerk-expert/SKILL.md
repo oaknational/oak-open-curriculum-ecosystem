@@ -5,4 +5,4 @@ description: Active workflow skill for Clerk planning, research, and implementat
 
 # Clerk Expert (Cross-tool)
 
-Read and follow `.agent/skills/clerk-expert/SKILL.md`.
+Read and follow `.agent/skills/clerk-expert/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Recover ChatGPT-, deep-research-, or other LLM-exported reports fro
 
 # Chatgpt Report Normalisation (Cross-tool)
 
-Read and follow `.agent/skills/chatgpt-report-normalisation/SKILL.md`.
+Read and follow `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md`.

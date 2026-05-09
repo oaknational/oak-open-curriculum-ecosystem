@@ -5,4 +5,4 @@ description: This skill should be used when the user asks to "migrate from OpenA
 
 # Migrate Oai App (Cross-tool)
 
-Read and follow `.agent/skills/migrate-oai-app/SKILL.md`.
+Read and follow `.agent/skills/migrate-oai-app/SKILL-CANONICAL.md`.

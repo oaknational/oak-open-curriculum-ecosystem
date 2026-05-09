@@ -5,4 +5,4 @@ description: Active workflow skill for conducting assumption audits during plann
 
 # Assumptions Expert (Claude Code)
 
-Read and follow `.agent/skills/assumptions-expert/SKILL.md`.
+Read and follow `.agent/skills/assumptions-expert/SKILL-CANONICAL.md`.

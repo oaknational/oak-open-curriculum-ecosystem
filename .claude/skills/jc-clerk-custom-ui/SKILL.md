@@ -5,4 +5,4 @@ description: Custom authentication flows and component appearance - hooks (useSi
 
 # Clerk Custom Ui (Claude Code)
 
-Read and follow `.agent/skills/clerk-custom-ui/SKILL.md`.
+Read and follow `.agent/skills/clerk-custom-ui/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Clerk webhooks for real-time events and data syncing. Always output
 
 # Clerk Webhooks (Claude Code)
 
-Read and follow `.agent/skills/clerk-webhooks/SKILL.md`.
+Read and follow `.agent/skills/clerk-webhooks/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Clerk Backend REST API explorer and executor. Browse tags, inspect 
 
 # Clerk Backend Api (Cross-tool)
 
-Read and follow `.agent/skills/clerk-backend-api/SKILL.md`.
+Read and follow `.agent/skills/clerk-backend-api/SKILL-CANONICAL.md`.

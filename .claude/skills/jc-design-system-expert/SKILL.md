@@ -5,4 +5,4 @@ description: Active workflow skill for design token and visual consistency plann
 
 # Design System Expert (Claude Code)
 
-Read and follow `.agent/skills/design-system-expert/SKILL.md`.
+Read and follow `.agent/skills/design-system-expert/SKILL-CANONICAL.md`.

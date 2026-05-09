@@ -5,4 +5,4 @@ description: Clerk Backend REST API explorer and executor. Browse tags, inspect 
 
 # Clerk Backend Api (Claude Code)
 
-Read and follow `.agent/skills/clerk-backend-api/SKILL.md`.
+Read and follow `.agent/skills/clerk-backend-api/SKILL-CANONICAL.md`.

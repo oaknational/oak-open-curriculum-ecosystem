@@ -5,4 +5,4 @@ description: Evaluate and validate ground truths for Oak semantic search using t
 
 # Ground Truth Evaluation (Claude Code)
 
-Read and follow `.agent/skills/ground-truth-evaluation/SKILL.md`.
+Read and follow `.agent/skills/ground-truth-evaluation/SKILL-CANONICAL.md`.

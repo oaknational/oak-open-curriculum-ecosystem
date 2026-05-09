@@ -5,4 +5,4 @@ description: Advanced Next.js patterns - middleware, Server Actions, caching wit
 
 # Clerk Nextjs Patterns (Claude Code)
 
-Read and follow `.agent/skills/clerk-nextjs-patterns/SKILL.md`.
+Read and follow `.agent/skills/clerk-nextjs-patterns/SKILL-CANONICAL.md`.

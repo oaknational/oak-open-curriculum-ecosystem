@@ -5,4 +5,4 @@ description: When and how to use git worktrees for isolated work. Use for parall
 
 # Worktrees (Claude Code)
 
-Read and follow `.agent/skills/worktrees/SKILL.md`.
+Read and follow `.agent/skills/worktrees/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Recover ChatGPT-, deep-research-, or other LLM-exported reports fro
 
 # Chatgpt Report Normalisation (Claude Code)
 
-Read and follow `.agent/skills/chatgpt-report-normalisation/SKILL.md`.
+Read and follow `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Branch completion checklist. Use before merging or creating a PR. C
 
 # Finishing Branch (Claude Code)
 
-Read and follow `.agent/skills/finishing-branch/SKILL.md`.
+Read and follow `.agent/skills/finishing-branch/SKILL-CANONICAL.md`.

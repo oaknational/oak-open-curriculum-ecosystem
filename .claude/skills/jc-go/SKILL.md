@@ -5,4 +5,4 @@ description: Re-ground and structure execution with ACTION/REVIEW/GROUNDING cade
 
 # Go (Claude Code)
 
-Read and follow `.agent/skills/go/SKILL.md`.
+Read and follow `.agent/skills/go/SKILL-CANONICAL.md`.

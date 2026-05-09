@@ -5,4 +5,4 @@ description: Clerk Organizations for B2B SaaS - create multi-tenant apps with or
 
 # Clerk Orgs (Claude Code)
 
-Read and follow `.agent/skills/clerk-orgs/SKILL.md`.
+Read and follow `.agent/skills/clerk-orgs/SKILL-CANONICAL.md`.

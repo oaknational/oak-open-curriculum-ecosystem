@@ -5,4 +5,4 @@ description: Maintain a per-repo napkin file at .agent/memory/active/napkin.md t
 
 # Napkin (Cross-tool)
 
-Read and follow `.agent/skills/napkin/SKILL.md`.
+Read and follow `.agent/skills/napkin/SKILL-CANONICAL.md`.

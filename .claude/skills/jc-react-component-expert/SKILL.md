@@ -5,4 +5,4 @@ description: Active workflow skill for React component architecture, hook patter
 
 # React Component Expert (Claude Code)
 
-Read and follow `.agent/skills/react-component-expert/SKILL.md`.
+Read and follow `.agent/skills/react-component-expert/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Guidance on dispatching parallel sub-agents safely. Use when facing
 
 # Parallel Agents (Cross-tool)
 
-Read and follow `.agent/skills/parallel-agents/SKILL.md`.
+Read and follow `.agent/skills/parallel-agents/SKILL-CANONICAL.md`.

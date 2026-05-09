@@ -5,4 +5,4 @@ description: This skill should be used when the user asks to "add MCP App suppor
 
 # Convert Web App (Cross-tool)
 
-Read and follow `.agent/skills/convert-web-app/SKILL.md`.
+Read and follow `.agent/skills/convert-web-app/SKILL-CANONICAL.md`.

@@ -5,4 +5,4 @@ description: Design ground truth queries for the Oak semantic search service usi
 
 # Ground Truth Design (Claude Code)
 
-Read and follow `.agent/skills/ground-truth-design/SKILL.md`.
+Read and follow `.agent/skills/ground-truth-design/SKILL-CANONICAL.md`.

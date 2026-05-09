@@ -5,4 +5,4 @@ description: This skill should be used when the user asks to "add an app to my M
 
 # Add App To Server (Claude Code)
 
-Read and follow `.agent/skills/add-app-to-server/SKILL.md`.
+Read and follow `.agent/skills/add-app-to-server/SKILL-CANONICAL.md`.

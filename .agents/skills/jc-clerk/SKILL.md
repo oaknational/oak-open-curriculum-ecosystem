@@ -5,4 +5,4 @@ description: Clerk authentication router. Use when user asks about adding authen
 
 # Clerk (Cross-tool)
 
-Read and follow `.agent/skills/clerk/SKILL.md`.
+Read and follow `.agent/skills/clerk/SKILL-CANONICAL.md`.

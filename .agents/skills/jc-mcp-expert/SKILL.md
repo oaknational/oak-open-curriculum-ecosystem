@@ -5,4 +5,4 @@ description: Active workflow skill for MCP planning, research, and implementatio
 
 # Mcp Expert (Cross-tool)
 
-Read and follow `.agent/skills/mcp-expert/SKILL.md`.
+Read and follow `.agent/skills/mcp-expert/SKILL-CANONICAL.md`.

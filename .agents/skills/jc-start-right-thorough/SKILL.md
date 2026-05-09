@@ -5,4 +5,4 @@ description: Apply the repository start-right-thorough grounding workflow to the
 
 # Start Right Thorough (Cross-tool)
 
-Read and follow `.agent/skills/start-right-thorough/SKILL.md`.
+Read and follow `.agent/skills/start-right-thorough/SKILL-CANONICAL.md`.

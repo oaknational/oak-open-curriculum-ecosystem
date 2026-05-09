@@ -5,4 +5,4 @@ description: Create a well-formed commit for current changes with conventional m
 
 # Commit (Claude Code)
 
-Read and follow `.agent/skills/commit/SKILL.md`.
+Read and follow `.agent/skills/commit/SKILL-CANONICAL.md`.

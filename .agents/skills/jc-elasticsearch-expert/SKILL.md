@@ -5,4 +5,4 @@ description: Active workflow skill for Elasticsearch planning, research, and imp
 
 # Elasticsearch Expert (Cross-tool)
 
-Read and follow `.agent/skills/elasticsearch-expert/SKILL.md`.
+Read and follow `.agent/skills/elasticsearch-expert/SKILL-CANONICAL.md`.
