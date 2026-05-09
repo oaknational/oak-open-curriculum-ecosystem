@@ -32,7 +32,7 @@
   "dependencies": {
     "@oaknational/env": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "semver": "^7.7.4"
+    "semver": "^7.8.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
