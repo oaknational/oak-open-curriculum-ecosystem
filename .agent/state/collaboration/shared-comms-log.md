@@ -3141,3 +3141,7 @@ Owner direction after PR #102 technical closeout: do not merge until graph plans
 ## 2026-05-08T07:46:24Z — `Fronded Branching Grove` / `codex` / `GPT-5` / `019e06` — PR 102 decision-complete handoff commit window opened
 
 Fronded Branching Grove opened git:index/head claim 125d4c80 to stage and commit the PR #102 graph decision-complete final-session plan and continuity surfaces. Intended pathspecs: final-session plan, repo continuity, connecting-oak-resources thread record, napkin, closed claim archive, comms events, and rendered shared comms log. Current staged set was empty; markdownlint, format-check, and git diff --check were green before opening the commit window.
+
+## 2026-05-09T16:15:28Z — `Cosmic Glowing Star` / `claude-code` / `claude-opus-4-7-1m` / `7d10e5` — WS0 remediation commit window opened
+
+Cosmic Glowing Star opened git:index/head claim d03d3180 to stage and commit WS0 review remediations to the skills-standardisation-and-adapter-generator plan. Single pathspec: `.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`. Pre-existing edits in other files (memory/active/{distilled,napkin}.md, pending-graduations, two thread/plan files) belong to other threads and are deliberately excluded. Commitlint check passed. Peer claims: zero active. Commit-queue archive shows only `abandoned` entries from 2026-05-04/05; no contention.

@@ -19,7 +19,7 @@ todos:
   - id: ws1-cycle-2-frontmatter
     content: "WS1.2: canonical frontmatter parse/emit round-trip. Test: real fixture round-trips bytewise; multi-line description preserved. Product: src/skills-adapter-generate/frontmatter.ts. One commit."
     status: pending
-    depends_on: [ws1-cycle-1-lock-loader]
+    depends_on: [ws0-pre-execution-plan-review]
   - id: ws1-cycle-3-consistency
     content: "WS1.3: owned-XOR-locked consistency check. Test: owned+locked → error; neither → orphan; pure ok→ok. Product: src/skills-adapter-generate/consistency.ts. One commit."
     status: pending
@@ -137,13 +137,29 @@ todos:
     status: pending
     depends_on: [ws5-cycle-3-tsdoc-audit]
   - id: ws5-cycle-5-practice-index
-    content: "WS5.5: .agent/practice-index.md — register PDR-051 in Practice-Core concept ↔ ADR map; future/adapter-generation.plan.md note that skills surface is closed. One commit."
+    content: "WS5.5: .agent/practice-index.md — register PDR-051 in Practice-Core concept ↔ ADR map; update patterns adapter-list line (~257-258) for two-surface state; future/adapter-generation.plan.md note that skills surface is closed. One commit."
     status: pending
     depends_on: [ws5-cycle-4-research-corrections]
+  - id: ws5-cycle-6-executive-memory
+    content: "WS5.6 (WS0 remediation): update executive-memory surfaces — cross-platform-agent-surface-matrix.md (Skills/Commands rows), artefact-inventory.md (Layer-2 table + How to Create New Artefacts), .agent/README.md line 82 — to reflect two-surface contract and command subsumption."
+    status: pending
+    depends_on: [ws5-cycle-5-practice-index]
+  - id: ws5-cycle-7-live-research-alignment
+    content: "WS5.7 (WS0 remediation): align operating-model-and-platforms/agents-md-skills-and-plugins-direction-of-travel.md (lines ~123, 206-207) with two-surface contract. Snapshot research surveys not edited."
+    status: pending
+    depends_on: [ws5-cycle-6-executive-memory]
+  - id: ws5-cycle-8-skills-ref-validate-pointer
+    content: "WS5.8 (WS0 remediation): record skills-ref validate deferred-adoption forward pointer in PDR-051 §Notes (or plan closure summary)."
+    status: pending
+    depends_on: [ws5-cycle-7-live-research-alignment]
+  - id: ws5-cycle-9-adr-125-historical-clarifier
+    content: "WS5.9 (WS0 remediation): single-clause edit to docs/architecture/architectural-decisions/125-agent-artefact-portability.md line 12 marking the sentence as pre-amendment historical state."
+    status: pending
+    depends_on: [ws5-cycle-8-skills-ref-validate-pointer]
   - id: ws6-adversarial-review
     content: "WS6: docs-adr-reviewer on PDR-051 + ADR-125 + engineering doc + research corrections; architecture-reviewer-fred on boundary compliance + ADR amendment shape. Address BLOCKERs in follow-up commits."
     status: pending
-    depends_on: [ws5-cycle-5-practice-index]
+    depends_on: [ws5-cycle-9-adr-125-historical-clarifier]
   - id: ws6-consolidation
     content: "WS6: /jc-consolidate-docs — graduate settled content, rotate napkin, update repo-continuity, mark plan completed, archive."
     status: pending
@@ -340,6 +356,40 @@ If a reviewer surfaces a question about a closed decision, the brief was misfram
 
 Only after WS0 acceptance does WS1.1 begin.
 
+### WS0 Outcome — 2026-05-09
+
+**Reviewers run** (all four in parallel via the Agent tool):
+
+- `assumptions-reviewer` — verdict: WS1.1 may begin; 3 WARN, no BLOCKER. Findings: false `depends_on` between WS1.1↔WS1.2; deferred skills-ref-validate adoption needs a forward pointer; WS3.4↔WS3.5 lacks human-eyeball gate.
+- `test-reviewer` — verdict: WS1 not landable as written. 2 BLOCKER, 3 WARN, 1 NOTE. BLOCKERs: WS1.4/WS1.5 literal body-string assertions are audit-shaped; WS1.7 "FULL help text on stderr" couples to literal text. WARNs: WS1.1 schema literal pre-spec, WS1.6 missing unit-level coverage, WS2.3 underspecified shorthand. NOTE: WS1.8 wrong test classification (.integration.test.ts → .e2e.test.ts).
+- `architecture-reviewer-fred` — verdict: WS2 not ready. 1 BLOCKER, 2 WARN. BLOCKER: WS2.3 deferred boundary decision (import-from-workspace vs duplicate XOR). WARNs: WS2.4 same boundary risk; WS3.1 ordering risk against legacy `SKILL.md` reads in `validate-portability.ts`. WS3 structurally sound subject to the WARN remediations.
+- `docs-adr-reviewer` — verdict: PDR-051 + ADR-125 landed-coherent (no BLOCKER). WS5 propagation list incomplete: 5 surfaces missing (cross-platform-agent-surface-matrix.md, artefact-inventory.md, .agent/README.md:82, .agent/practice-index.md:257-258, operating-model research doc). ADR-125 line 12 historical-clarifier needed (NOTE).
+
+**Remediations landed in this commit** (plan amendments only; no implementation):
+
+| Finding | Remediation |
+|---|---|
+| WS1.2 false `depends_on` | Frontmatter `ws1-cycle-2-frontmatter.depends_on` changed `[ws1-cycle-1-lock-loader]` → `[ws0-pre-execution-plan-review]` |
+| WS1.1 pre-authored Ajv schema literal | Plan body schema literal removed; cycle now derives schema from test cases |
+| WS1.4 literal body assertion | Test section restated as structural assertions (canonical-path link substring, AUTO-GENERATED marker presence, structural absence of `metadata.claude-*`) |
+| WS1.5 literal hoist assertion | Test section restated as per-property structural assertions |
+| WS1.6 missing unit coverage | Cycle now lands paired `*.unit.test.ts` (in-memory `fs` fake) + `*.integration.test.ts` (real tmpdir for fs-real wrapper) |
+| WS1.7 literal help-text assertion | Test section restated structurally: stderr contains synopsis substring + every declared flag, ends with `/Error: …'--unknown-flag'/`, channel separation, exit 2 |
+| WS1.8 wrong test classification | `bin.integration.test.ts` → `bin.e2e.test.ts` |
+| WS2 ordering risk vs WS3.1 | WS2.1 broadened: same cycle adds canonical-filename check AND migrates existing validator `SKILL.md` reads to a tolerant probe (`SKILL-CANONICAL.md` else `SKILL.md`); fallback removed in WS3.9 |
+| WS2.3 deferred boundary | Cycle reshaped to delegate via subprocess to generator's `--check`; consistency logic single-homed in `agent-tools/src/skills-adapter-generate/consistency.ts` |
+| WS2.4 same boundary risk | Cycle reshaped to delegate to generator's `--check`; bytewise-equality logic single-homed in `agent-tools/src/skills-adapter-generate/supporting-files.ts` |
+| WS3.4 missing eyeball gate | Acceptance amended: spot-check ≥3 emitted `.claude/skills/jc-*/SKILL.md` before WS3.5 destruction; eyeballed ids recorded in commit body |
+| WS5 propagation list incomplete | New cycles added: WS5.6 (executive-memory updates), WS5.7 (live research-doc alignment), WS5.8 (skills-ref deferred-adopt forward pointer), WS5.9 (ADR-125 historical clarifier). WS5.5 also extended to update practice-index patterns adapter-list line. |
+
+**Deferred (not addressed in this commit; will land inside the cycle they touch)**:
+
+- (None of the reviewer findings was deferred uncovered. Every BLOCKER and every must-fix WARN is reshaped above; the lower-risk WARNs that remain are absorbed inside their cycles' acceptance criteria.)
+
+**Owner-locked decisions reaffirmed**: two-surface contract; `SKILL-CANONICAL.md` filename; bytewise supporting-file copies; configurable `jc-` prefix; commands subsumed into skills; retirement of `.cursor/.gemini/.codex/.windsurf/skills`. No reviewer surfaced a primary-source basis to reopen any locked decision.
+
+WS0 acceptance: **passed**. WS1.1 may begin in the next session (this session uses remaining context to commit and refresh continuity rather than start implementation, in line with attempt-1's failure-mode diagnostic — the impulse to keep going after substrate work is the cure to apply, not override).
+
 ---
 
 ## WS1 — Generator core
@@ -370,7 +420,7 @@ Each cycle is one commit. Tree green at end of every commit. After every cycle: 
 
 **Product (Green)** — `lock.ts`:
 
-- Export `LockSchema` (Ajv schema literal): `{ type: 'object', required: ['version', 'skills'], properties: { version: { type: 'integer' }, skills: { type: 'object', additionalProperties: { type: 'object', required: ['source', 'sourceType', 'computedHash'], properties: { source: { type: 'string' }, sourceType: { type: 'string' }, computedHash: { type: 'string' } } } } } }`.
+- Export an Ajv schema sufficient to validate the existing `skills-lock.json` shape. The schema fields are derived during the cycle from the test cases above; the plan does not pre-author the literal schema. (WS0 remediation 2026-05-09: removed pre-authored schema literal so the implementer experiences a genuine Red phase.)
 - Export `loadLockedSkillIds(rawJsonText: string): Result<ReadonlySet<string>, LockError>`.
 - Use `Result<T, E>` shape with `kind: 'ok' | 'error'` (matches `agent-identity-cli-parser` pattern, satisfies `use-result-pattern` rule).
 - No `as` casts.
@@ -466,12 +516,19 @@ pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/frontmatt
 - `agent-tools/src/skills-adapter-generate/index.ts` (NEW — exports + `OWNED_PREFIX = 'jc-'` constant + `CANONICAL_FILENAME = 'SKILL-CANONICAL.md'` constant)
 - `agent-tools/tests/skills-adapter-generate/generator-cross-tool.unit.test.ts` (NEW)
 
-**Test (Red)**:
+**Test (Red)** — assertions describe behaviour structurally; do not assert byte-for-byte equality against literal output strings (WS0 remediation 2026-05-09):
 
-- Owned skill with simple frontmatter → emitted adapter has `name: jc-<id>`, spec-portable fields preserved, `metadata.claude-*` stripped, body = `Read and follow [SKILL-CANONICAL.md](../../../.agent/skills/<id>/SKILL-CANONICAL.md), including any supporting files it references.` plus AUTO-GENERATED header comment.
-- Ingested skill (owned: false) → emitted adapter has `name: <id>` (no prefix).
+- Owned skill with simple frontmatter → emitted adapter:
+  - top-level `name` equals `jc-<id>`;
+  - spec-portable top-level fields (`description`, `classification`, etc.) match canonical;
+  - `metadata.claude-*` keys structurally absent from emitted frontmatter;
+  - body **contains** the relative-path link to `.agent/skills/<id>/SKILL-CANONICAL.md` (assert via substring or regex on the path component, not the full sentence);
+  - body **contains** an "AUTO-GENERATED — do not edit" marker comment (assert presence, not exact wording).
+- Ingested skill (`owned: false`) → emitted adapter `name` equals `<id>` (no prefix).
 - `buildAdapterId('metacognition', true) === 'jc-metacognition'`; `buildAdapterId('clerk', false) === 'clerk'`.
-- Metadata block with both `owned` and `claude-*` keys → output preserves `owned`, drops `claude-*`.
+- Metadata block with both `owned` and `claude-*` keys → emitted output preserves `owned`; `claude-*` keys structurally absent.
+
+The literal sentence wording of the body and the literal phrasing of the AUTO-GENERATED marker are implementation choices; tests must survive minor rewording.
 
 **Product (Green)** — `generator.ts` (cross-tool only):
 
@@ -492,12 +549,17 @@ pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/frontmatt
 - `agent-tools/src/skills-adapter-generate/generator.ts` (MODIFIED — add Claude path)
 - `agent-tools/tests/skills-adapter-generate/generator-claude.unit.test.ts` (NEW)
 
-**Test (Red)**:
+**Test (Red)** — structural assertions; survive output rewording (WS0 remediation 2026-05-09):
 
-- Canonical with `metadata.claude-argument-hint: '[topic]'` → Claude adapter has top-level `argument-hint: '[topic]'`; the `metadata.claude-argument-hint` key is removed from `metadata`.
-- Canonical with `metadata.claude-user-invocable: 'true'` → Claude adapter top-level `user-invocable: true` (string-to-boolean if needed; document the convention).
-- Canonical with no `claude-*` keys → Claude adapter top-level matches cross-tool top-level.
-- Canonical with both `claude-*` and other metadata → other metadata preserved under `metadata:`; claude-* hoisted.
+- Canonical with `metadata.claude-argument-hint: '[topic]'` →
+  - Claude adapter has top-level property `argument-hint` whose value equals `'[topic]'`;
+  - `metadata.claude-argument-hint` is structurally absent from emitted `metadata`.
+- Canonical with `metadata.claude-user-invocable: 'true'` →
+  - Claude adapter top-level `user-invocable` exists with the documented coerced value (the cycle picks coercion convention: assert the chosen shape).
+- Canonical with no `claude-*` keys → Claude adapter top-level field set is a (non-strict) subset of cross-tool adapter top-level field set, with no Claude-only fields appearing.
+- Canonical with both `claude-*` and non-claude metadata → non-claude metadata keys are preserved under `metadata:`; every `claude-*` key is hoisted (top-level) and removed from `metadata`.
+
+Do not assert against literal full-document equality; assert per-property presence/absence and value equality on the specific fields under test.
 
 **Product (Green)** — `generator.ts`:
 
@@ -515,20 +577,29 @@ pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/frontmatt
 **File scope**:
 
 - `agent-tools/src/skills-adapter-generate/supporting-files.ts` (NEW)
-- `agent-tools/tests/skills-adapter-generate/supporting-files.integration.test.ts` (NEW — uses `node:fs/promises` + `node:os` tmpdir)
+- `agent-tools/tests/skills-adapter-generate/supporting-files.unit.test.ts` (NEW — uses an in-memory fs fake injected via the `SkillsAdapterFs` interface; no IO)
+- `agent-tools/tests/skills-adapter-generate/supporting-files.integration.test.ts` (NEW — uses `node:fs/promises` + `node:os` tmpdir to verify the real-fs wrapper)
 
-**Test (Red)**:
+(WS0 remediation 2026-05-09: added the unit test alongside the integration test. The pure walk/copy logic is exercised at unit scale through a fake `fs`; the integration test scopes down to verifying the real `node:fs/promises` wrapper preserves bytes against a real tmpdir. Doctrine: complementary scales per `tdd-as-design.md §Why Scales Are Complementary`.)
+
+**Test (Red)** — unit (in-memory `fs` fake):
 
 - Canonical skill with `references/rubric.md` → both adapter dirs receive bytewise-identical `references/rubric.md`.
-- Canonical with `scripts/run.sh` (executable bit set) → both adapter dirs receive the file with bytes preserved (executable bit handling documented; behaviour either preserves it or asserts it does not, but is consistent).
+- Canonical with `scripts/run.sh` → both adapter dirs receive the file with bytes preserved (executable-bit handling is an integration-test concern, not unit).
 - Canonical with `assets/templates/output.md` (nested) → both adapter dirs receive the nested structure.
-- Canonical with binary file (`assets/diagram.png` — small fixture) → bytes preserved exactly.
+- Canonical with binary fixture (small `Uint8Array`) → bytes preserved exactly.
 - No supporting files → no error, no adapter sub-dirs created.
+
+**Test (Red)** — integration (real `node:fs/promises` against tmpdir):
+
+- A canonical fixture with one text and one binary supporting file copies bytewise to a real tmpdir adapter location; bytes verified by direct read.
+- Executable-bit behaviour is asserted as documented (preserves or strips; one chosen behaviour, asserted explicitly).
 
 **Product (Green)** — `supporting-files.ts`:
 
-- `copySupportingFiles(canonicalDir, adapterDir, fs): Promise<void>` over an injectable fs interface.
+- `copySupportingFiles(canonicalDir, adapterDir, fs): Promise<void>` over an injectable `SkillsAdapterFs` interface.
 - Walks `references/`, `scripts/`, `assets/`; bytewise reads via `Uint8Array`; writes to adapter dir creating directories as needed.
+- Real `node:fs/promises` wrapper lives in `fs-real.ts` (introduced in WS1.8); this cycle's product code is fs-interface-agnostic.
 
 **Acceptance**: `pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/supporting-files` exits 0.
 
@@ -545,22 +616,24 @@ pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/frontmatt
 - `agent-tools/src/skills-adapter-generate/fs-interface.ts` (NEW — `SkillsAdapterFs`)
 - `agent-tools/tests/skills-adapter-generate/cli.unit.test.ts` (NEW — uses an in-memory fs implementation in the test file)
 
-**Test (Red)**:
+**Test (Red)** — assertions describe channel + structural shape; do not assert byte-equality against the literal `HELP_TEXT` constant (WS0 remediation 2026-05-09):
 
-- `runCli({argv: ['--help'], cwd: '/r', fs: memFs})` → exit 0; full help text on stdout; stderr empty.
-- `runCli({argv: ['-h'], ...})` → same as `--help`.
-- `runCli({argv: [], ...})` against an in-memory fs seeded with two canonical skills (one owned, one ingested) → exit 0; both adapter dirs populated; `Generated 4 adapter file(s)` message.
+- `runCli({argv: ['--help'], cwd: '/r', fs: memFs})` → exit 0; stdout contains the tool synopsis (regex match for `pnpm agent-tools:skills-adapter-generate` or equivalent invocation phrase); stdout contains every declared mode (`--check`); stdout contains an Examples or Exit codes section header; stderr is empty.
+- `runCli({argv: ['-h'], ...})` → same shape as `--help`.
+- `runCli({argv: [], ...})` against an in-memory fs seeded with one owned + one ingested canonical skill → exit 0; both adapter dirs populated; stdout contains a "Generated" message naming the count of files written (assert presence + numeric count, not literal sentence).
 - `runCli({argv: ['--check'], ...})` against in-memory fs already in sync → exit 0.
-- `runCli({argv: ['--check'], ...})` after a manual edit to one adapter → exit 1; stderr lists the drifted file.
-- `runCli({argv: ['--unknown-flag'], ...})` → **exit 2; stderr starts with the FULL help text, then `\n\nError: unknown argument '--unknown-flag'\n`** (per F-09).
-- `runCli({argv: ['--prefix'], ...})` (a flag without value, if applicable) → exit 2; full help on stderr.
-- `runCli` against a fs where `skills-lock.json` is missing → exit 1; stderr names the inconsistency (every owned skill OK, every ingested skill is now an orphan with the lock-deletion remediation message).
+- `runCli({argv: ['--check'], ...})` after a manual edit to one adapter → exit 1; stderr lists the drifted file path.
+- `runCli({argv: ['--unknown-flag'], ...})` (per F-09) → **exit 2** AND **stderr contains** every declared flag/mode (synopsis + `--check` + `--help`/`-h`) AND **stderr ends with** a line matching `/Error: unknown argument '--unknown-flag'/` AND stdout is empty. (Assertion shape: structural presence + ending-line regex; do not import `HELP_TEXT` and assert `stderr === HELP_TEXT + '\n\nError: …\n'`.)
+- `runCli({argv: ['--prefix'], ...})` (flag-without-value if applicable) → exit 2; stderr satisfies the same structural assertions as `--unknown-flag`; ending-line regex names the value-missing condition.
+- `runCli` against an fs where `skills-lock.json` is missing → exit 1; stderr names the inconsistency (every owned skill OK; every ingested skill is now an orphan with the lock-deletion remediation message).
+
+The contract under test is "full help shown on bad invocation, on stderr, with the specific error appended, with the right exit code" — not the byte content of any help-text constant. Help-text rewording must not break these tests.
 
 **Product (Green)** — `cli.ts` + `cli-parser.ts`:
 
 - Parser: `parseArgs(argv): {kind: 'ok', mode: 'generate' | 'check'} | {kind: 'help'} | {kind: 'error', message: string}`.
 - Runner: `runSkillsAdapterGenerateCli(input): Promise<Result>` returning `{exitCode, stdout, stderr}`.
-- Bad-usage path emits `${HELP_TEXT}\n\nError: ${message}\n` on stderr (F-09).
+- Bad-usage path emits `${HELP_TEXT}\n\nError: ${message}\n` on stderr (F-09). The exact concatenation order is implementation; the test asserts the structural invariants above.
 - `HELP_TEXT` covers synopsis, all modes, inputs/outputs, owned-vs-ingested rules, manual-edit prohibition, exit codes, examples.
 
 **Acceptance**:
@@ -584,7 +657,7 @@ pnpm --filter @oaknational/agent-tools test -- skills-adapter-generate/cli
 - `agent-tools/src/skills-adapter-generate/fs-real.ts` (NEW)
 - `agent-tools/package.json` (MODIFIED — add `"skills-adapter-generate": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/skills-adapter-generate.js"` under scripts)
 - `package.json` (MODIFIED — add `"agent-tools:skills-adapter-generate": "pnpm --filter @oaknational/agent-tools skills-adapter-generate"` under scripts)
-- `agent-tools/tests/skills-adapter-generate/bin.integration.test.ts` (NEW — spawns the built binary against a temp-fs fixture)
+- `agent-tools/tests/skills-adapter-generate/bin.e2e.test.ts` (NEW — spawns the built binary against a temp-fs fixture; classified E2E because the test starts a child process — see `testing-strategy.md` taxonomy and `test-immediate-fails.md` rule 8) (WS0 remediation 2026-05-09: renamed from `.integration.test.ts`)
 
 **Test (Red)**:
 
@@ -621,23 +694,30 @@ pnpm agent-tools:skills-adapter-generate --help
 
 Each cycle: one commit. After every cycle: `pnpm portability:check` exits 0 against the working tree (legacy contract still active until WS3.9). New checks land at `severity: warn` if any pass over the existing tree would cascade-fail; otherwise at error severity directly.
 
-### Cycle 2.1 — Canonical filename check
+### Cycle 2.1 — Canonical filename check + tolerant-probe migration
+
+(WS0 remediation 2026-05-09: this cycle now both (a) adds the new canonical-filename check at `warn` level and (b) migrates every existing `validate-portability.ts` read of `<skillDir>/SKILL.md` to a tolerant probe — read `SKILL-CANONICAL.md` if present, else `SKILL.md`. Without the probe, WS3.1's mass rename would ENOENT every legacy read in the validator. Severity stays at `warn` until WS3.9 strict-flips and the `SKILL.md` fallback is removed.)
 
 **File scope**:
 
-- `scripts/validate-portability.ts` (MODIFIED — add the check)
-- `scripts/validate-portability.test.ts` if exists, else `agent-tools/tests/validate-portability/canonical-filename.unit.test.ts` (NEW, reading `validate-portability.ts` exports)
+- `scripts/validate-portability.ts` (MODIFIED — add new check + migrate existing `SKILL.md` reads to a `readCanonicalSkillBody(skillDir)` helper that probes `SKILL-CANONICAL.md` first, falls back to `SKILL.md` for the duration of WS2/WS3.1–3.8)
+- `scripts/validate-portability-helpers.ts` (MODIFIED if helpers live there — host the new probe alongside existing helpers)
+- `scripts/validate-portability.test.ts` if exists, else `agent-tools/tests/validate-portability/canonical-filename.unit.test.ts` (NEW)
 
 **Test (Red)**:
 
-- Fixture with `.agent/skills/<id>/SKILL-CANONICAL.md` and no `SKILL.md` → check passes.
-- Fixture with `.agent/skills/<id>/SKILL.md` (legacy) → check fails with skill id named.
-- Fixture with both files → check fails with skill id named.
-- Fixture with neither file → check fails with skill id named (canonical missing).
+- Fixture with `.agent/skills/<id>/SKILL-CANONICAL.md` and no `SKILL.md` → new check passes; tolerant probe returns the canonical content.
+- Fixture with `.agent/skills/<id>/SKILL.md` (legacy) → new check fires `warn` naming the skill id; tolerant probe returns the legacy content (so other validator checks downstream still receive a body to work with).
+- Fixture with both files → new check fails with skill id named (both-present is illegal even pre-migration); tolerant probe returns canonical content.
+- Fixture with neither file → new check fails with skill id named (canonical missing).
+- Tolerant probe is the only filename-aware reader of skill bodies in `validate-portability.ts` after this cycle (regression assertion: a grep over the post-cycle script for hard-coded `SKILL.md` reads outside the probe returns no results).
 
-**Product (Green)**: extend the validator with a check function that walks `.agent/skills/`. Until WS3.1 lands the rename, this check fires `warn` and lists every skill missing `SKILL-CANONICAL.md`; after WS3.1, it fires `error`.
+**Product (Green)**:
 
-**Acceptance**: `pnpm portability:check` exits 0 on the working tree (warn level acceptable pre-migration).
+- New check function walking `.agent/skills/`, fires at `warn` until WS3.1 lands the rename; flips to `error` in WS3.9.
+- `readCanonicalSkillBody(skillDir): string | null` helper. All other validator code paths read skill bodies through this helper.
+
+**Acceptance**: `pnpm portability:check` exits 0 on the working tree (warn level acceptable pre-migration); `grep -nE "SKILL\\.md" scripts/validate-portability*.ts` returns matches only inside the probe helper.
 
 ---
 
@@ -657,27 +737,36 @@ Each cycle: one commit. After every cycle: `pnpm portability:check` exits 0 agai
 
 ---
 
-### Cycle 2.3 — Owned/lock consistency programmatic check
+### Cycle 2.3 — Owned/lock consistency via generator delegation
 
-**File scope**: `scripts/validate-portability.ts`, paired test. Imports `consistency.ts` from agent-tools (or duplicates the small XOR logic, accepting duplication if cross-package import is non-trivial — decide at write time).
+(WS0 remediation 2026-05-09: reshaped from "import consistency.ts from agent-tools or duplicate the XOR logic — decide at write time" to a single-home subprocess delegation. The generator's `--check` mode is the one home for owned/lock consistency logic; the validator delegates by spawning the bin and translating its exit code + structured stderr into portability-issue records. Avoids both (a) the workspace-internal import that would couple a root script to `agent-tools/src/skills-adapter-generate/consistency.ts` and (b) the duplication that would violate `consolidate-at-third-consumer`.)
 
-**Test (Red)**: same fixtures as WS1.3 but driven through the validator entry point.
+**File scope**: `scripts/validate-portability.ts` (MODIFIED — adds a "consistency" portability check that delegates to the generator); paired test.
 
-**Product (Green)**: load `skills-lock.json` via the new Ajv schema, walk canonical skills, check XOR.
+**Test (Red)** — assertions on validator output, not on generator internals:
 
-**Acceptance**: `pnpm portability:check` exits 0.
+- Fixture where every owned skill is absent from `skills-lock.json` and every locked skill is not owned → validator reports no consistency issues; exit 0.
+- Fixture where one canonical is both owned (`metadata.owned: true`) and present in `skills-lock.json` → validator reports a portability issue naming the skill id and the consistency category.
+- Fixture where one canonical is neither owned nor locked → validator reports a portability issue naming the skill id (orphan).
+- Generator's `--check` exit-code 1 with structured stderr → validator surfaces the issue records; exit-code 0 → validator surfaces no consistency issues.
+
+**Product (Green)**: portability check that spawns `pnpm agent-tools:skills-adapter-generate --check` (or the bin directly), parses its structured stderr (or a `--json` mode added in WS1.7 if needed; if not, exit-code-only is sufficient until WS2.5 generalises), and emits portability-issue records.
+
+**Acceptance**: `pnpm portability:check` exits 0; the consistency check is the only validator code path that reasons about `metadata.owned` ↔ `skills-lock.json`. (Regression assertion: `grep` over `scripts/validate-portability*.ts` for `metadata.owned` returns no matches outside subprocess-result handling.)
 
 ---
 
-### Cycle 2.4 — Bytewise supporting-file equality check
+### Cycle 2.4 — Bytewise supporting-file equality via generator delegation
 
-**File scope**: `scripts/validate-portability.ts`, paired test.
+(WS0 remediation 2026-05-09: reshaped to delegate to the generator's `--check` mode. The generator already detects supporting-file drift as part of its drift check; the validator surfaces those records rather than re-walking the tree itself. Same single-home rationale as WS2.3.)
 
-**Test (Red)**: fixture with canonical `references/rubric.md` and matching adapter copies → passes; fixture with one byte different → fails with the diverged path; fixture with adapter copy missing → fails with missing path.
+**File scope**: `scripts/validate-portability.ts` (MODIFIED); paired test.
 
-**Product (Green)**: walk canonical supporting trees; bytewise compare adapter copies.
+**Test (Red)**: fixture with canonical `references/rubric.md` matched bytewise by both adapter copies → no issue; fixture with one byte differing → validator reports the diverged path (the same path the generator surfaces via `--check`); fixture with adapter copy missing → validator reports the missing path.
 
-**Acceptance**: `pnpm portability:check` exits 0.
+**Product (Green)**: extend the WS2.3 subprocess invocation (or share with WS2.5) so supporting-file drift records flow through the same validator boundary. No bytewise walk in `validate-portability.ts`.
+
+**Acceptance**: `pnpm portability:check` exits 0; supporting-file drift logic lives only in `agent-tools/src/skills-adapter-generate/supporting-files.ts` (regression assertion: `grep -RE "Uint8Array|readFile.*compare" scripts/validate-portability*.ts` returns no walk-and-compare logic).
 
 ---
 
@@ -778,6 +867,8 @@ This protects supporting-file path resolution when the canonical is read through
 
 `pnpm agent-tools:skills-adapter-generate`. Commit emitted `.agents/skills/jc-*/SKILL.md`, `.claude/skills/jc-*/SKILL.md`, plus `.agents/skills/<ingested-id>/SKILL.md`, `.claude/skills/<ingested-id>/SKILL.md`, plus all supporting-file copies.
 
+**Owner-eyeball gate (WS0 remediation 2026-05-09)**: before progressing to WS3.5 (which destroys the four retired skill surfaces), spot-check at least three emitted `.claude/skills/jc-*/SKILL.md` files for: (a) frontmatter shape (top-level fields hoisted correctly, `metadata.claude-*` absent); (b) body shape (canonical-link present, AUTO-GENERATED marker present); (c) supporting-file copies present where canonical has them. Record the eyeballed skill ids in this commit's body. WS3.5 does not begin until this spot-check is recorded.
+
 ### 3.5 — Delete retired skill surfaces
 
 ```bash
@@ -855,7 +946,30 @@ Every exported function in `agent-tools/src/skills-adapter-generate/` has descri
 `.agent/practice-index.md`:
 
 - Add PDR-051 row to the "Practice-Core concept ↔ ADR map".
+- Update lines around 257–258 ("Platform adapters exist at `.cursor/skills/patterns/`, `.claude/skills/patterns/`, and `.agents/skills/patterns/`") to reflect the post-amendment two-surface state: `.cursor/skills/patterns/` is retired.
 - `.agent/plans/agent-tooling/future/adapter-generation.plan.md` body or README — note that the skills surface is closed by this plan; sub-agents and rules remain the future scope.
+
+### 5.6 — Executive-memory updates (WS0 remediation 2026-05-09)
+
+Update the executive-memory surfaces that today still describe the four-platform per-vendor adapter shape. These are authoritative platform-support and artefact-creation references; failing to update them after migration creates immediate drift for new contributors.
+
+- `.agent/memory/executive/cross-platform-agent-surface-matrix.md` — update Skills row (line 11) and Commands row (line 12) to reflect the two-surface contract and command subsumption per ADR-125 amendment.
+- `.agent/memory/executive/artefact-inventory.md` — update the Layer-2 table (around lines 54–58) and the "How to Create New Artefacts" section (around lines 67–86) so Skills/Commands sections name the post-amendment surfaces (`.agents/skills/`, `.claude/skills/`) as canonical creation targets via the generator.
+- `.agent/README.md` line 82 — replace the old `.cursor/skills/commit/` thin-pointer reference with the post-amendment shape.
+
+One commit, or grouped with WS5.5 if the diffs are mechanically aligned.
+
+### 5.7 — Live research-doc alignment (WS0 remediation 2026-05-09)
+
+`.agent/research/agentic-engineering/operating-model-and-platforms/agents-md-skills-and-plugins-direction-of-travel.md` (around lines 123 and 206–207) reads as live operating-model guidance and currently references the retired four-platform adapter shape. Update to the two-surface contract. (`.agent/research/agentic-engineering/standardising-skills.md` is handled in WS5.4; `.agent/research/agentic-engineering/cross-lane-direction-survey.md` line 263 is a snapshot survey and stays as historical record — no edit.)
+
+### 5.8 — Build-vs-buy deferred-adoption forward pointer (WS0 remediation 2026-05-09)
+
+PDR-051 §Notes (or this plan's WS5 closure summary) records: "skills-ref validate adoption is deferred. The adoption decision is tracked under `.agent/plans/agent-tooling/future/adapter-generation.plan.md` and revisited when adapter generation stabilises." Prevents future re-survey from re-ruling-out without seeing the prior reasoning.
+
+### 5.9 — ADR-125 historical clarifier (WS0 remediation 2026-05-09)
+
+Single-clause edit to `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` line 12 ("Skills existed only in `.cursor/skills/`…") to mark the sentence as describing pre-amendment historical state, e.g. "(historical state; superseded by the 2026-05-09 amendment)". Avoids a passing reader taking the Context paragraph as a description of current state.
 
 ---
 
