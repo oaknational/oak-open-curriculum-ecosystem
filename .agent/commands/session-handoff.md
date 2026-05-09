@@ -156,6 +156,34 @@ asks for more, this command must not trigger:
    not a buffer surface. This is a read-source for extraction.
    Owner-stated standing 2026-05-05.
 
+   **Auxiliary input: platform-specific per-user memory.** Vendor
+   tools maintain their own per-user memory and session-history
+   surfaces outside the repo, one location per platform per user.
+   Named instances:
+
+   - Claude Code: `~/.claude/projects/<project>/memory/` (curated
+     auto-memory; `MEMORY.md` + per-entry files)
+   - Cursor: `~/.cursor/chats/` (per-session transcripts),
+     `~/.cursor/prompt_history.json` (accumulated prompts)
+   - Codex: `~/.codex/memories/` (curated memory files),
+     `~/.codex/history.jsonl` (rolling session history),
+     `~/.codex/archived_sessions/` (older session archives)
+
+   Read **only the surface that matches your current platform**
+   at session close — cross-platform ingestion (reading another
+   platform's memory) is reserved for `consolidate-docs` step 3.
+   Mirror any entry that would change next-session behaviour into
+   `napkin.md` using the structured surprise format. These are
+   vendor-managed surfaces; do not rotate, archive, or delete
+   them — lifecycle is owned by the platform. This is a read-source
+   for extraction, not a buffer surface this workflow maintains.
+   Symmetry note: this auxiliary input is also enumerated in
+   [`start-right-quick`](../skills/start-right-quick/shared/start-right.md)
+   §4 (own-platform read at session open) and
+   [`consolidate-docs`](consolidate-docs.md) step 3
+   (cross-platform read at thread-scoped depth); session-handoff is
+   the session-close edge of the same surface.
+
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a

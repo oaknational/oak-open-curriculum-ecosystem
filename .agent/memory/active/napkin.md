@@ -273,6 +273,67 @@ Twelve emergent findings; six rejected near-patterns. Routing applied:
 
 Source archived napkins not modified (verified by Phase H continuity check).
 
+### Surprise: pre-commit gate scope is whole-tree, not staged-set
+
+**Expectation**: a clean staged-set + clean staged-file markdownlint + clean
+staged-file format-check would land the workflow-doc commit through the
+husky pre-commit hook.
+
+**What happened**: pre-commit ran `prettier --check .` and
+`markdownlint --dot .` over the *entire* working tree. The first commit
+attempt failed on MD038 in `repo-continuity.md` line 405 — a line introduced
+by Cosmic Glowing Star's earlier commit, not mine. The second commit attempt
+failed on prettier in `agent-tools/tests/skills-adapter-generate/fixtures/lock-malformed.json`
+— a *parallel-agent's untracked WIP fixture* file, also not mine. Neither
+defect was in my staged 2-file edit.
+
+**Insight**: this is an architectural property of the repo's pre-commit
+gate. `prettier --check .` and `markdownlint --dot .` are
+*tree-scoped* not *staged-set-scoped*; any working-tree noise from any
+agent (including untracked files from concurrent sessions running WIP
+work) breaks every commit until that noise is cleaned. The class is a
+coordination tax on multi-agent work: my clean change cannot land while
+another agent's WIP is in progress, even though our changes don't touch
+the same files.
+
+**Behaviour change**: when pre-commit fails on a file outside the staged
+set, the diagnostic is *gate scope*, not file content. The cure shapes
+are: (a) narrow the gate to staged-set only (architectural change to the
+hook); (b) coordinate via comms-event so concurrent-agent WIP is committed
+or stashed before any of us tries to land; (c) accept the coordination
+tax and queue commits to clean-tree windows. Captured as PDR/ADR
+candidate below.
+
+**ADR/PDR candidate**: pre-commit gate scope (whole-tree vs staged-set)
+— ADR-shaped (host architectural property); affects every multi-agent
+session. Capture in pending-graduations §6b below.
+
+### Surprise: foreign-stage absorption recurred (4th documented instance)
+
+**Expectation**: my staged 8-file output from the historical-napkin-synthesis
+pass would commit under my own commit subject after pre-commit hooks ran.
+
+**What happened**: my synthesis report (1 file) committed as `5071c8e6`.
+Then before I could commit the remaining 7 files, Cosmic Glowing Star
+absorbed them into their own session-handoff commit `c63e3816` (with
+co-authorship attribution to me). Substance preserved; ceremony split
+across two commits under different subjects.
+
+**Insight**: this is the same shape Briny logged 2026-05-06 (3rd instance
+in `Iridescent Waxing Orbit` 2026-05-06 thread record), Dawnlit logged
+2026-05-05 (2nd), and the original at `cc8866a8` from earlier. Pattern
+is durable: when two agents share a working tree and the staged-bundle
+windows overlap, the first commit subject in the queue absorbs the
+shared content. Cure named in `agent-collaboration.md` (`git commit --
+pathspec` discipline) reduces but does not eliminate the recurrence —
+the Cosmic Glowing Star commit honoured `git add -- pathspec` and *still*
+absorbed because the pre-staged content was already in the index when
+they ran their staging.
+
+**Behaviour change**: nothing new — the cure is already named and the
+recurrence is itself the diagnostic. Pattern is well-known. Recording
+the 4th instance as evidence accumulation; no new graduation.
+
 ---
 
 ## 2026-05-09 — WS0 dispatch produced concrete cycle-shape correctives, not just nudges (Cosmic Glowing Star)

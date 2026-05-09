@@ -144,6 +144,36 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-09; **pre-commit gate scope (whole-tree vs staged-set)
+  imposes a coordination tax on multi-agent work** (Luminous Twinkling
+  Dawn 2026-05-09, observed during workflow-doc edit landing).
+  `[captured: 2026-05-09 | source: napkin-2026-05-09 | target: adr-candidate:pre-commit-gate-staged-scope OR tooling-amend:.husky/pre-commit | trigger: second-instance OR owner-direction | size: M | status: pending]`
+  The pre-commit hook runs `prettier --check .` and `markdownlint --dot .`
+  over the *entire* working tree, not the staged set. Any working-tree
+  noise from any agent (concurrent session WIP, abandoned partial edits,
+  in-progress test fixtures) breaks every commit until that noise is
+  cleaned. Observed instance: a clean 2-file workflow-doc edit could
+  not land because (a) commit attempt 1 failed on a parallel agent's
+  earlier-commit MD038 issue in `repo-continuity.md` line 405, and (b)
+  commit attempt 2 failed on prettier in
+  `agent-tools/tests/skills-adapter-generate/fixtures/lock-malformed.json`
+  — an untracked WIP fixture from a concurrent session's WS1 work that
+  is not in the staged set. The architectural property: gate-scope
+  mismatch with commit-scope produces silent coordination failures
+  between agents whose changes don't even touch the same files.
+  Source-surface:
+  [`napkin.md § 2026-05-09 Surprise: pre-commit gate scope is whole-tree, not staged-set`](../active/napkin.md).
+  Graduation-target options: (a) ADR documenting the gate's whole-tree
+  scope as a deliberate decision (with documented coordination tax),
+  OR (b) tooling amendment to `.husky/pre-commit` narrowing to staged
+  paths via `git diff --cached --name-only` (with the trade-off that
+  staged-set scope misses tree-wide drift the wider gate catches), OR
+  (c) leave gate as-is and codify a coordination protocol for
+  multi-agent staged-bundle windows. Trigger: second instance OR owner
+  direction. Status: pending — first instance with named architectural
+  property; awaiting second-instance accumulation OR owner direction
+  on the trade-off.
+
 + 2026-05-09; **fitness-validator output should print the
   non-reactive-response discipline reminder inline at non-healthy
   zones** (doctor-safe-merge tooling-feedback 2026-05-07; corpus

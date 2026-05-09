@@ -29,9 +29,15 @@ isProject: false
 # Monorepo Workspace Topology — ADR Superseding 108 and Canonical Plan
 
 **Last Updated**: 2026-05-09  
-**Status**: Strategic brief — not executable until owner locks topology sketch and ADR numbering  
+**Status**: Strategic brief — **parked** (owner 2026-05-09): resume after the **graph
+MVP implementation** tranche on `connecting-oak-resources`; when re-opened, still
+needs owner topology lock and ADR numbering before execution.  
 **Lane**: `future/`  
 **Foundation alignment**: @.agent/directives/principles.md (Separate Framework from Consumer, Cardinal Rule, architectural excellence); @.agent/directives/testing-strategy.md (enforcement and migrations land with verifiable gates); @.agent/directives/schema-first-execution.md (definitions → emitted primitives → consumers; generator fixes over consumer shortcuts)
+
+**Owner sequencing (2026-05-09)**: Next sessions implement **graph MVP features** per
+`knowledge-graph-integration` slice plans. This programme and its todos stay **queued**
+until the owner explicitly returns here **after** that work.
 
 ---
 

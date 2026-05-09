@@ -38,6 +38,23 @@ explicit owner direction this pass. Source archived napkins not modified.
 **Next safe step**: separate session for owner-gated PDR drafting OR
 continue graph MVP implementation per prior owner sequencing.
 
+**Follow-on (same session)**: per owner direction, also amended
+[`session-handoff`](../../commands/session-handoff.md) Step 6a to add
+vendor per-user memory (`~/.claude/projects/<project>/memory/`,
+`~/.cursor/chats/`, `~/.codex/memories/`) as auxiliary input — closing
+the asymmetry where consolidate-docs Step 3 included it but
+session-handoff did not. Also amended [`consolidate-docs`](../../commands/consolidate-docs.md)
+Step 3 to include `.agent/state/collaboration/comms-events/` as a
+sweep surface for parity with session-handoff Step 6a auxiliary inputs.
+Both edits are staged but uncommitted in this session — owner directive
+"another session will commit" honoured. Surfaced as session surprise:
+pre-commit gate runs `prettier --check .` and `markdownlint --dot .`
+over the whole tree, not staged set; concurrent-agent WIP files
+(skills-adapter-generate fixtures from a parallel session) blocked the
+commit. ADR/PDR candidate captured in
+[`pending-graduations.md`](pending-graduations.md) — pre-commit gate
+scope vs staged-set as architectural-property decision.
+
 **Session close (2026-05-09 — `claude-code` / Opus 4.7 / `00dc26`, skills-standardisation plan re-issue)**:
 landed PDR-051 (vendor-agnostic skills standardisation, portability-pure),
 amended ADR-125 in place with the 2026-05-09 entry recording the two-surface
@@ -399,6 +416,15 @@ owner locks S0–S6`.**
 **Status (2026-05-09 owner sequencing note, cursor handoff): `not due — owner
 directed next arcs to graph MVP implementation; topology ADR programme parked;
 continuity-only updates to repo-continuity + thread record`.**
+
+**Status (2026-05-09 Luminous Twinkling Dawn, claude-code, Opus 4.7,
+`c03c02`, historical-napkin-synthesis pass + workflow-doc edits):
+`completed this handoff — historical-napkin-synthesis pass landed
+(commits 5071c8e6 + c63e3816 with co-authorship); 12 emergent findings
+routed (3 patterns + 4 pending-graduations + 3 owner-gated deferred);
+session-handoff and consolidate-docs ancillary-memory-source amendments
+staged but uncommitted per owner direction; pre-commit gate-scope
+candidate added to register; one new candidate captured`.**
 
 **Status (2026-05-09 Cosmic Glowing Star, claude-code, Opus 4.7, `7d10e5`,
 skills-standardisation WS0 review remediation): `not due — WS0 ran four

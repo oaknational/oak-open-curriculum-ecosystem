@@ -168,8 +168,11 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    [ephemeral-to-permanent-homing methodology](ephemeral-to-permanent-homing.md)
    (canonical destinations table, entry-point rule, deferral-honesty
    discipline). At thread-scoped depth, the surfaces to sweep are
-   broader than the session-scoped sweep at `session-handoff` step
-   6d:
+   the full superset of what `session-handoff` step 6a auxiliary
+   inputs and step 6d entry-point sweep already cover — the same
+   surfaces are read at session close (own-platform, session-scoped
+   substance) and again at consolidation (cross-platform, cross-session
+   substance):
 
    - **Capture surfaces**: `.agent/memory/active/napkin.md`,
      `.agent/memory/active/distilled.md` (the staging surface itself,
@@ -182,6 +185,17 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      or delete them manually. Read them alongside the napkin and
      extract any cross-session insight into `distilled.md` or a
      permanent home per the standard graduation rules in step 7.
+   - **Session comms-events**: `.agent/state/collaboration/comms-events/`
+     (and the regenerated `shared-comms-log.md`) carry coordination-context
+     substance — owner-direction-captured-inline, inter-agent surprises,
+     tooling friction discovered during cross-agent work, decision
+     timelines, and worked instances of coordination-cure patterns.
+     Sweep events across the consolidation window (not only session-
+     authored ones); extract any cross-session coordination insight to
+     `distilled.md`, a pattern instance, or a pending-graduations entry.
+     Do not rewrite or delete events — they are durable coordination
+     records. Step 7e audits them for protocol observability; this step
+     extracts substance.
    - **Plan surfaces**: active and recently completed plans (per step
      1 above) — surface any content that describes how things work
      rather than what to do next.

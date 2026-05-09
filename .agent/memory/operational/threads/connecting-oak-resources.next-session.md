@@ -1,6 +1,15 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
+**Last refreshed**: 2026-05-09 (owner direction via `jc-session-handoff` /
+Fronded Bending Blossom / `cursor` / Composer / `60775a` — **next engineering
+arc**: implement **graph MVP features** per slice plans after PR #102 merge
+prep completes (post-merge type-check + gates). **Parked until later**:
+monorepo workspace topology ADR / **S0–S6** programme
+(`architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`).
+Prior evidence block below remains authoritative for PR #102 state until
+refreshed against live GitHub.)
+
+**Prior refresh**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
 GPT-5 / `019e06` — PR #102 graph planning closeout is decision-complete and
 pushed as head `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`. GitHub checks pass,
 SonarCloud Code Analysis passes through PR checks, and all known review threads
@@ -10,7 +19,8 @@ owner decisions applied in this pass: EEF verification is structural-only for
 slice 1; LLM/outcome eval is follow-on infrastructure; practice-facing graph
 tooling lives under `agent-graphs/practice-graph/`. Current plan:
 [`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
-**Next session clears the final merge blocker, not slice implementation.**)
+Historical note at time of that refresh: next session was framed as clearing
+the final merge blocker before implementation.)
 
 ```text
 Decision-complete: YES
@@ -25,8 +35,9 @@ Proposed.
 Validation: markdownlint, format-check, git diff --check, branch-touched-files,
 gh pr checks on pushed head 309d9e5e, Sonar PR surface through PR checks,
 review-thread refresh with all threads resolved, non-mutating divergence probe.
-Next safe step after merge: graph MVP implementation-prep after remaining
-merge blockers clear and PR #102 merges.
+Next safe step after merge: **graph MVP feature implementation** per
+`knowledge-graph-integration/current/*` slice plans (owner sequencing
+2026-05-09). Defer monorepo topology ADR work until after that tranche.
 ```
 
 **Prior refresh**: 2026-05-08 (Fronded Branching Grove / codex /
@@ -189,6 +200,7 @@ promotion.)
 | `Lush Rustling Bark` | `codex` | `GPT-5` | `019e03` | `pr-102-live-thread-follow-up-lint-hardening-and-handoff` | 2026-05-07 | 2026-05-08 |
 | `Fronded Branching Grove` | `codex` | `GPT-5` | `019e06` | `pr-102-final-closeout` | 2026-05-08 | 2026-05-08 |
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-graph-decision-complete-closeout-updater` | 2026-05-08 | 2026-05-08 |
+| `Fronded Bending Blossom` | `cursor` | `Composer` | `60775a` | `owner-sequencing-graph-mvp-next-topology-parked` | 2026-05-09 | 2026-05-09 |
 
 ## Plan Locations
 
