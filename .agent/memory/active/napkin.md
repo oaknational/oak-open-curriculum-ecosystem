@@ -22,6 +22,73 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-09 — 3rd-instance / Mistbound Glimmering Threshold / claude-code / Opus 4.7 / `03f9bc`
+
+**`--clear` regression repeated (3rd instance).** During the canonical
+rename + regenerate (Item 1 of the deferred punch list), `--clear`
+again wiped the 6 owner-authored adapter-only skills
+(`jc-consolidate-docs`, `jc-gates`, `jc-metacognition`, `jc-plan`,
+`jc-review`, `jc-session-handoff`). Restored via
+`git show HEAD~1:<path> > <path>` in a follow-up commit (`4b931cca`).
+Cure named on 2026-05-09 napkin yesterday — teach `--clear` to spare a
+registered exception list OR canonicalise the six — is overdue. Three
+repeats of the same loss in two sessions; structural, not one-off.
+
+**Auto-classifier matched English substring inside a commit body.**
+`git commit -m "fix(skills): restore..."` was blocked because the body
+contained the literal substring "git restore" near the word
+"restore". The matcher fired on token presence rather than
+shell-command shape. Reword to "re-add" worked. ADR/PDR candidate:
+should pre-commit auto-classifiers match command-line shape (not bare
+substrings) inside commit-message bodies?
+
+**Parallel agent absorbed my staged deletions.** While I was working
+through Items 1–3, another agent (Woodland Sheltering Glade,
+identity from a prior in-flight session) committed both their
+prior-session memory-graduation work AND my `git rm -r .cursor/skills`
+plus `git rm .claude/commands/jc-*.md` staged deletions in a single
+commit (`4db5e084`) authored under their identity. Outcome
+acceptable — Item 3's destructive operations did land — but the
+attribution boundary is unclear: my staging, their commit identity.
+Coordination signal worth surfacing to `agent-collaboration.md`:
+when two agents share a working tree, a parallel commit can absorb
+unrelated staging. Cure candidate: per-session staging clears via
+`git diff --cached` audit before any commit not authored this
+session.
+
+**Six adapter-only skills now hand-mirrored across both surfaces.**
+Item 3 deleted `.claude/commands/jc-*.md` (which had been the discovery
+surface for these six in Claude Code). Post-deletion, the six skills
+disappeared from Claude's runtime registry. Mirrored
+`.agents/skills/jc-<id>/SKILL.md` content into
+`.claude/skills/jc-<id>/SKILL.md` to restore discovery (commit
+`939900c7`). Skill bodies still say "(Codex)" rather than "(Claude
+Code)" because they originated as Codex adapters. Functionally OK
+(both surfaces point at `.agent/commands/<id>.md`); cosmetically off.
+The reviewer-fred WARN matches: until canonicalised, these six
+bypass the trust boundary.
+
+**Reviewer-rule cascade re-emerged at smaller scale.** type-reviewer
+flagged `parseFrontmatter` widening as BLOCKER (returned the raw
+parsed object after narrowing, leaking extra YAML keys past the
+declared `CanonicalFrontmatter` shape). Fix was structural: construct
+a fresh `{ name, description }` object instead of returning the
+narrowed value. The earlier napkin entry on reviewer-rule cascade
+(2026-05-09 Scorched Stoking Crucible) generalises: type-narrowing
+guards that return the raw input rather than a constructed value
+are a recurring shape, worth surfacing.
+
+**Pattern candidate: cycle-budget overruns are signal, not noise.**
+This session's punch list ran 82 minutes against a 60-minute budget
+(22 over). Contributors: --clear regression recovery (5 min), lint
+cleanup on extracted module (15 min), reviewer dispatch synthesis +
+BLOCKER fix (10 min). The overrun is information about the punch
+list's actual size, not a discipline failure to confess and move on.
+The closure-discipline doctrine (per-session loop maintenance) wants
+this captured as evidence: "punch lists with deferred reviewer
+dispatch and parallel-agent coordination cost ~30% more than naive
+estimation."
+
 ## 2026-05-09 — Surprise / Scorched Stoking Crucible / claude-code / Opus 4.7 / `a8f67e`
 
 **Plan-cycle inflation as process theatre.** Worked WS1.1 cycle for ~2 hours

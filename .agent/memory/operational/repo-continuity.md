@@ -9,6 +9,43 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-09 — Mistbound Glimmering Threshold /
+`claude-code` / Opus 4.7 / `03f9bc`, skills standardisation
+follow-up)**: completed all four deferred items from the prior
+Scorched-Stoking-Crucible session. Branch
+`feat/mcp-graph-support-foundation` advanced 6 commits beyond
+session start (`708e2964`): `901f113f` (37 canonicals renamed to
+`SKILL-CANONICAL.md`), `4b931cca` (re-added 6 adapter-only skills
+wiped by `--clear` — 3rd-instance regression captured in napkin),
+`a8351b33` (`--check` drift gate with injectable `CheckerFs`,
+`pnpm skills:check` chained into `pnpm check`), `4db5e084` (parallel
+agent absorbed Item 3 deletions + memory graduations under Woodland
+Sheltering Glade identity), `939900c7` (6 adapter-only skills
+mirrored into `.claude/skills/` after `.claude/commands/jc-*.md`
+deletion broke their Claude discovery), `17176e29` (BLOCKER fix:
+`parseFrontmatter` constructs fresh return value instead of
+returning the narrowed `unknown`; legacy `SKILL.md` fallback
+removed). Reviewer dispatch ran in parallel (code/type/fred);
+verdicts and dispositions logged at
+[`tracks/skills-standardisation-followup-timing.md`][skills-followup-timing].
+Wall-clock: 82 minutes vs 60-minute budget — recorded in the same
+file. **Deferred (named constraints, falsifiability)**: lock loader
+wiring (`lock.ts:loadLockedSkillIds` is module-tested but not
+integrated; falsifiability — grep for callers); `rendering.ts`
+extraction (writer/checker as siblings of pure core; falsifiability
+— `checker.ts` no longer imports types from `generator.ts`);
+canonicalise the 6 adapter-only skills (falsifiability —
+`find .agent/skills -name SKILL-CANONICAL.md | wc -l` reaches 43);
+`parseFlags` rejection of unknown flags + help printout
+(falsifiability — `node ... --bogus` exits 1 with help);
+`clearGeneratedAdapters` test coverage. **Next safe step**: pick
+one of the deferred items as the next session's landing target,
+preferring canonicalisation of the six (closes the trust-boundary
+gap that fred flagged AND the 3rd-instance `--clear` regression in
+one structural cure).
+
+[skills-followup-timing]: tracks/skills-standardisation-followup-timing.md
+
 **Session close (2026-05-09 — Scorched Stoking Crucible / `claude-code` /
 Opus 4.7 / `a8f67e`, skills standardisation impact pass)**:
 landed three commits on `feat/mcp-graph-support-foundation` delivering
@@ -258,7 +295,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Scorched Stoking Crucible / `claude-code` / Opus 4.7 / `a8f67e` / 2026-05-09 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Mistbound Glimmering Threshold / `claude-code` / Opus 4.7 / `03f9bc` / 2026-05-09 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -384,6 +421,17 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-09 Mistbound Glimmering Threshold, claude-code,
+Opus 4.7, `03f9bc`, skills-standardisation follow-up): `due — 3rd
+instance of --clear regression in 2 sessions plus auto-classifier
+substring-match shape question; both already captured in napkin and
+thread record. Not well-bounded for this closeout (22 min over
+budget); next session picks up canonicalise-the-six (closes the
+structural gap) and surfaces the auto-classifier matcher-shape
+question as an ADR/PDR candidate`.** This handoff stops after
+marking `due` per session-handoff step 10's
+not-well-bounded-this-closeout branch.
 
 **Status (2026-05-07 Breezy Navigating Sail, cursor, claude-opus-4.7,
 `9edbd1`, graph MVP-arc PLANNING closeout): `not due — capture-edge
