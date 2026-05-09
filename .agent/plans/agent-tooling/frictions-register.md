@@ -439,6 +439,41 @@ dedicated plan that this entry points to.
   *protocol-self-modifies-its-state-file* recursion shapes that the
   current tooling exposes without protocol-level documentation.
 
+### F-16 — Skills/commands surface sprawl across five vendor adapter trees
+
+- **Source**: 2026-05-09 owner direction; primary-source verification of
+  agent-skills.io spec + per-vendor docs (Claude Code, Cursor, Codex,
+  Gemini CLI); inventory of `.agent/skills/` (37 canonical),
+  `.agents/skills/` (47 — 37 dups + 10 mis-shaped `jc-*` command-as-skill
+  entries), `.cursor/skills/` (37), `.claude/skills/` (37), plus 12
+  canonical commands with mirrored adapters (10 in `.claude/`, 10 in
+  `.cursor/`, 29 in `.gemini/` due to `review-*` fan-out)
+- **Surface**: `.agent/skills/`, `.agent/commands/`, all `<platform>/skills/`,
+  all `<platform>/commands/`; `pnpm portability:check`
+- **Observed**: Single canonical skill body lives at the same filename
+  as discoverable adapters, causing duplicate registrations on
+  platforms that scan multiple paths. Five adapter surfaces emit
+  per-platform copies that drift over time. Custom commands are a
+  parallel surface that duplicates skills. Manual edits to adapters
+  occur to clear validation issues, propagating drift.
+- **Expected**: One canonical source of truth (non-discoverable
+  filename, non-discoverable directory), exactly the two adapter
+  surfaces every documented platform requires
+  (`.agents/skills/` + `.claude/skills/`), generated deterministically
+  with no manual edits, with commands subsumed into the skills surface.
+- **Candidate cure**:
+  [`current/skills-standardisation-and-adapter-generator.plan.md`](current/skills-standardisation-and-adapter-generator.plan.md) —
+  PDR-051 doctrine, ADR-125 amendment, generator CLI, validator
+  extension, mass migration, custom command retirement.
+- **Target surface**:
+  [PDR-051](../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md),
+  [ADR-125 (amended 2026-05-09)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md),
+  `agent-tools/src/skills-adapter-generate/`,
+  `scripts/validate-portability.ts`,
+  `docs/engineering/skills-adapter-generation.md`.
+- **Status**: addressed-in-plan-skills-standardisation-and-adapter-generator
+- **Owner direction**: standing — pre-requisite for top-quality agent work
+
 ---
 
 ## Mitigated / Addressed Frictions
