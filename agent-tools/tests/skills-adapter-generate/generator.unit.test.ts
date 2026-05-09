@@ -24,12 +24,11 @@ Workflow content here.
 `;
 
 describe('parseFrontmatter', () => {
-  it('extracts name and description from a fenced canonical SKILL', () => {
+  it('extracts name and description from a fenced canonical SKILL, discarding extra keys', () => {
     const result = parseFrontmatter(sampleCanonicalSkill);
 
     expect(result).toEqual({
       name: 'start-right-quick',
-      classification: 'active',
       description:
         'Apply the repository start-right quick grounding workflow to the active session.',
     });

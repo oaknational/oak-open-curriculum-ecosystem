@@ -22,7 +22,6 @@ import {
 } from './generator.js';
 
 const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
-const LEGACY_CANONICAL_FILENAME = 'SKILL.md';
 const SURFACES: readonly AdapterSurface[] = ['claude', 'agents'];
 
 export interface CheckOutcome {
@@ -83,17 +82,14 @@ async function loadCanonical(
   id: string,
   fs: CheckerFs,
 ): Promise<ParsedCanonicalSkill | undefined> {
-  for (const filename of [CANONICAL_FILENAME, LEGACY_CANONICAL_FILENAME]) {
-    const path = join(canonicalsRoot, id, filename);
-    const text = await fs.readFileOrUndefined(path);
-    if (text === undefined) {
-      continue;
-    }
-    const frontmatter = parseFrontmatter(text);
-    if (frontmatter === undefined) {
-      return undefined;
-    }
-    return { id, frontmatter, canonicalPath: path, canonicalFilename: filename };
+  const path = join(canonicalsRoot, id, CANONICAL_FILENAME);
+  const text = await fs.readFileOrUndefined(path);
+  if (text === undefined) {
+    return undefined;
   }
-  return undefined;
+  const frontmatter = parseFrontmatter(text);
+  if (frontmatter === undefined) {
+    return undefined;
+  }
+  return { id, frontmatter, canonicalPath: path, canonicalFilename: CANONICAL_FILENAME };
 }

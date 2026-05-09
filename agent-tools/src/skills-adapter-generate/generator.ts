@@ -18,7 +18,6 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 
 const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
 const ADAPTER_FILENAME = 'SKILL.md';
-const LEGACY_CANONICAL_FILENAME = 'SKILL.md';
 
 export interface GeneratorOptions {
   readonly repoRoot: string;
@@ -100,12 +99,9 @@ async function resolveCanonicalPath(
   canonicalsRoot: string,
   id: string,
 ): Promise<{ readonly path: string; readonly filename: string } | undefined> {
-  const candidates = [CANONICAL_FILENAME, LEGACY_CANONICAL_FILENAME];
-  for (const filename of candidates) {
-    const path = join(canonicalsRoot, id, filename);
-    if (await fileExists(path)) {
-      return { path, filename };
-    }
+  const path = join(canonicalsRoot, id, CANONICAL_FILENAME);
+  if (await fileExists(path)) {
+    return { path, filename: CANONICAL_FILENAME };
   }
   return undefined;
 }
@@ -122,7 +118,9 @@ async function fileExists(path: string): Promise<boolean> {
 /**
  * Parse the leading YAML frontmatter block from a markdown file body.
  * Returns undefined if the file lacks a valid frontmatter fence or omits
- * the required `name`/`description` fields.
+ * the required `name`/`description` fields. Extra YAML keys (e.g.
+ * `classification`) are silently discarded so the returned value matches
+ * the declared {@link CanonicalFrontmatter} shape exactly.
  */
 export function parseFrontmatter(text: string): CanonicalFrontmatter | undefined {
   const fenceMatch = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text);
@@ -131,13 +129,15 @@ export function parseFrontmatter(text: string): CanonicalFrontmatter | undefined
   }
   const yamlBody = fenceMatch[1] ?? '';
   const parsed: unknown = parseYaml(yamlBody);
-  if (!isCanonicalFrontmatter(parsed)) {
+  if (!hasNameAndDescription(parsed)) {
     return undefined;
   }
-  return parsed;
+  return { name: parsed.name, description: parsed.description };
 }
 
-function isCanonicalFrontmatter(value: unknown): value is CanonicalFrontmatter {
+function hasNameAndDescription(
+  value: unknown,
+): value is { readonly name: string; readonly description: string } {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
