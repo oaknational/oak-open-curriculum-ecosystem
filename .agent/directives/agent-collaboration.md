@@ -168,6 +168,48 @@ exchanges inside a conversation, escalations for owner-facing unresolved
 cases, and owner questions for final tiebreakers. Reviewer dispatch is draft
 review inside one agent's session, not peer collaboration.
 
+### Coordination Surface Discipline
+
+Before adding a new always-visible coordination surface, widen the regular
+state audit first. Active claims, closure history, decision threads,
+unresolved decision requests, evidence bundles, and schema validation became
+usable once `consolidate-docs` reported them together. Structured state plus
+consolidation output is usually the first dashboard.
+
+Split evidenced durability gaps from speculative coordination mechanisms.
+Claim-history and decision-thread work were grounded in real harvest
+evidence; sidebar, timeout, and file-backed owner-escalation primitives were
+held promotion-gated until async decision threads proved insufficient. The
+discipline: **ground each new coordination mechanism in observed need before
+promoting it.** Speculative coordination shapes accumulate as dead surfaces
+the moment they ship without an evidence-of-need claim.
+
+### Inter-Agent Comms Is a First-Class Primitive
+
+Not all coordination needs owner-mediation. When another agent's state
+blocks mine and they may still be active, the correct first move is a direct
+comms-event to that agent (with a deadline + a named default action if no
+response), brief poll for reply, then escalate to owner only if no response
+by deadline. The reverse order — surface options to the owner first —
+over-uses owner mediation for coordination the agents can resolve between
+themselves.
+
+Operating shape: **bounded-deadline + default-action format** on the
+comms-event; agent posts, polls briefly, acts on default if silent.
+Owner-mediation remains the right channel for **owner-owned decisions**
+(authorisation chain lifts on owner-directed deferrals; strategic
+redirection; cross-thread scope changes). The discipline: route through the
+**lowest-authority resolver** that can decide.
+
+Worked instance (graduated to this directive 2026-05-09): doc-cleanup
+`verify-staged` blocked on three pre-staged-but-deferred files from a peer's
+session. Initial options surfaced to the owner were all owner-mediated
+(authorise unstage; commit peer's first; wait). Owner direction redirected
+to a comms-event with bounded deadline + default action; coordination
+resolved between the two agents within the deadline. Owner-stated principle
+on close: communicating with other agents is always an option; not all
+communication needs to be mediated through the owner.
+
 ## Identity vs Liveness
 
 These are different concerns and live in different surfaces.

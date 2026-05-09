@@ -144,6 +144,21 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-09; **`src/bulk/generators/` and `vocab-gen/generators/`
+  duplication routed to SDK codegen workspace decomposition plan**
+  (Woodland Sheltering Glade 2026-05-09; converted from `distilled.md`
+  routing-pointer entry during focused consolidation pass).
+  `[captured: 2026-05-09 | source: distilled.md (graduated/removed) | target: sdk-codegen-workspace-decomposition.plan | trigger: plan-promotion-to-current | size: L | status: held-pending-plan]`
+  The duplication exists between the bulk generator pipeline in
+  `src/bulk/generators/` and the vocab-gen generator pipeline in
+  `vocab-gen/generators/`. Cleanup is plan-shaped, not consolidation-
+  shaped — depends on the SDK codegen workspace decomposition that
+  has been planned but not promoted to `current/`. Held in this
+  register (not in `distilled.md`) so the pointer survives consolidation
+  cycles without occupying steady-read distillation surface. Trigger:
+  the SDK codegen workspace decomposition plan promotes to `current/`
+  and reaches a phase that consumes this duplication.
+
 + 2026-05-09; **pre-commit gate scope (whole-tree vs staged-set)
   imposes a coordination tax on multi-agent work** (Luminous Twinkling
   Dawn 2026-05-09, observed during workflow-doc edit landing).

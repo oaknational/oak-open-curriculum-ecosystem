@@ -4,6 +4,27 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-09 — focused distilled.md graduation pass
+
+Owner-directed focused consolidation pass on `distilled.md` (Woodland
+Sheltering Glade / claude-code / claude-opus-4-7-1m). Three PDR amendments
+land Practice-governance substance previously held in distilled:
+
+- **PDR-018 (AMENDED)** — five planning-discipline rules graduated:
+  lead-with-narrative, CLI-first enumeration before owner questions,
+  locally-producible-evidence-first for validation closures, split
+  client-compatibility from deployment-validation lanes, dry-run
+  multi-step workflows against accumulated state. Held-on-future-plan
+  unblocked per the Sequenced-Deferral graduation in the same pass.
+- **PDR-026 (AMENDED, two amendments)** —
+  *Sequenced-Deferral Discipline (three modes)* graduated: sequenced
+  deferral (preferred), sequencing-sequenced deferral (rare), hidden
+  declaration of non-action (forbidden). Three corpus-window instances
+  confirmed in `historical-napkin-synthesis-2026-05-09.md` §F4 + §F11.
+  *Per-Session Closure Owns the Loop* graduated: loop-cost reframed
+  from inherent to artefactual; closure discipline is the steady-state,
+  reactive graduation passes are recovery work.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-07 — state/memory substrate contract split clarified
 
 Owner-directed consolidation after the first host-local substrate inventory

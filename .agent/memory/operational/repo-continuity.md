@@ -9,14 +9,34 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-09 — Scorched Stoking Crucible / `claude-code` /
+Opus 4.7 / `a8f67e`, skills standardisation impact pass)**:
+landed three commits on `feat/mcp-graph-support-foundation` delivering
+the skills-standardisation impact in the 1-hour budget the owner set:
+`a5d7fb12` (WS1.1 Ajv lock loader), `41831d5c` (skills adapter
+generator + bin + unit tests), `708e2964` (mass migration: 117 files,
+all adapters now `jc-<id>` two-surface). Generator runnable via
+`pnpm --filter @oaknational/agent-tools skills-adapter-generate
+[--clear]`. Live skill registry confirms only `jc-*` adapters present.
+**Owner pushback diagnosed mid-session**: the WS-N cycle plan
+(36 cycles for ~400 LOC) was process inflation; collapsed to one
+generator + one mass-migration commit. **Deferred (named
+constraints)**: SKILL.md → SKILL-CANONICAL.md rename (auto-classifier
+blocked mass `git mv`; owner authorisation needed); validator
+`--check` wiring into CI gate; retiring `.cursor/.gemini/.codex/.windsurf/skills`
+and `.claude/commands/jc-*.md` (destructive sweeps; owner go-ahead
+needed); generator-cycle reviewer dispatch (deferred-by-clock — work
+small enough that tests cover the public surface).
+**Next safe step**: separate session for the four deferred work items
+above, clock-bounded with explicit start/end times recorded to file.
+
 **Session close (2026-05-09 — Luminous Twinkling Dawn / `claude-code` /
 Opus 4.7 / `c03c02`, historical-napkin-synthesis pass)**:
 ran owner-directed historical-napkin-synthesis (per `/jc-consolidate-docs`
 Step 6a) over the current napkin plus the three prior archived rotations
 (`napkin-2026-05-06-evening-graduation-pass`, `napkin-2026-05-07-graph-mvp-planning`,
 `napkin-2026-05-07-doctor-safe-merge`); fitness-blind per owner direction.
-Synthesis report at
-[`.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md):
+Synthesis report at [`historical-napkin-synthesis-2026-05-09.md`][synth-2026-05-09]:
 12 emergent findings (4 already-homed confirmations; 3 promoted to new
 patterns; 4 captured as new pending-graduations entries; 3 owner-gated for
 separate session); 6 rejected near-patterns. Three new patterns landed at
@@ -238,7 +258,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Cosmic Glowing Star / `claude-code` / Opus 4.7 / `7d10e5` / 2026-05-09 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Scorched Stoking Crucible / `claude-code` / Opus 4.7 / `a8f67e` / 2026-05-09 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -255,6 +275,7 @@ each thread record; this table is the repo-level index.
 [cloudflare]: threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
+[synth-2026-05-09]: ../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md
 
 ## Branch-Primary Lane State
 

@@ -21,6 +21,43 @@ aspirations).
 
 ## Amendment Log
 
+- **2026-05-09 amendment — five planning-discipline rules graduated
+  from distilled.md (Woodland Sheltering Glade / claude-code /
+  claude-opus-4-7-1m; owner-directed graduation during the focused
+  consolidation pass on `distilled.md`).** The rules had been "held
+  pending Planning expert triplet execution"; that triplet has not
+  arrived and held-on-future-plan is the exact failure-mode
+  Sequenced-Deferral discipline names. Graduating now without
+  vaporware-citation gating. Substance:
+  - **Lead with narrative, not infrastructure.** On a multi-workstream
+    initiative, write the ADR and README first. WS-0 (narrative) →
+    WS-1 (factory) → WS-2+ (consumers). Infrastructure that arrives
+    before its narrative justification produces shape-without-purpose.
+  - **CLI-first enumeration before owner questions.** Research the
+    generic REST or CLI surface (`sentry api`, `clerk api`,
+    vendor-equivalent) before raising any owner question about
+    observability or infrastructure state. "The specialist tool
+    doesn't surface X" ≠ "X is unknowable from automation." Extends
+    to workspace sizing: when owner direction names a repo-level
+    mechanism (build cancellation, env-var policy, release
+    resolution), search the repo for prior implementation before
+    sizing a workstream. "Stated many times" or "should already be
+    true" signals the substance may exist and the gap is
+    documentation/linkage, not implementation.
+  - **Validation closures: produce locally-producible evidence
+    first.** For deployment-validation lanes, generate every
+    locally-producible proof under a session-specific release tag
+    before asking the owner. Only ask for owner action when tooling
+    cannot reach the artefact.
+  - **Split client-compatibility out of deployment-validation
+    lanes.** A client-specific compat issue emerging in an active
+    deployment-validation lane spins into its own follow-up plan.
+    Shared preview infrastructure ≠ shared plan ownership.
+  - **Dry-run multi-step workflows against accumulated state**
+    before committing to the recipe. The dry-run produces a *proceed*
+    or *stage differently* signal; treating multi-step workflows as
+    fire-and-confirm risks landing the wrong serialisation.
+
 - **2026-05-04 amendment — beneficial prerequisites must not block
   the work they were meant to enable (Verdant Sprouting Leaf /
   claude-code / claude-opus-4-7-1m; owner-named pattern surfaced
