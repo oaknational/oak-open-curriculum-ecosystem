@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
+import { checkAdapters, type CheckerFs } from '../../src/skills-adapter-generate/checker';
 import {
+  adapterTargetPath,
   buildAdapterFrontmatter,
   parseFrontmatter,
+  renderAdapter,
+  type AdapterSurface,
+  type ParsedCanonicalSkill,
 } from '../../src/skills-adapter-generate/generator';
 
 const sampleCanonicalSkill = `---
@@ -84,5 +89,93 @@ describe('buildAdapterFrontmatter', () => {
     );
 
     expect(result).toEqual({ name: 'go', description: 'Re-ground execution.' });
+  });
+});
+
+describe('checkAdapters', () => {
+  const repoRoot = '/repo';
+  const prefix = 'jc-';
+  const sampleCanonical: ParsedCanonicalSkill = {
+    id: 'sample',
+    frontmatter: { name: 'sample', description: 'A sample canonical skill.' },
+    canonicalPath: '/repo/.agent/skills/sample/SKILL-CANONICAL.md',
+    canonicalFilename: 'SKILL-CANONICAL.md',
+  };
+
+  function makeFs(files: ReadonlyMap<string, string>): CheckerFs {
+    return {
+      async readFileOrUndefined(path) {
+        return files.get(path);
+      },
+      async listSubdirectoryNames(path) {
+        return path === '/repo/.agent/skills' ? ['sample'] : [];
+      },
+    };
+  }
+
+  function expectedAdapter(surface: AdapterSurface): { path: string; content: string } {
+    return {
+      path: adapterTargetPath(repoRoot, prefix, sampleCanonical.id, surface),
+      content: renderAdapter(sampleCanonical, prefix, surface),
+    };
+  }
+
+  it('reports no drift when adapters match what the generator would emit', async () => {
+    const claude = expectedAdapter('claude');
+    const agents = expectedAdapter('agents');
+    const fs = makeFs(
+      new Map([
+        [
+          sampleCanonical.canonicalPath,
+          '---\nname: sample\ndescription: A sample canonical skill.\n---\n\nbody\n',
+        ],
+        [claude.path, claude.content],
+        [agents.path, agents.content],
+      ]),
+    );
+
+    const result = await checkAdapters({ repoRoot, prefix }, fs);
+
+    expect(result.drifted).toEqual([]);
+    expect(result.missing).toEqual([]);
+  });
+
+  it('detects drift in a modified adapter', async () => {
+    const claude = expectedAdapter('claude');
+    const agents = expectedAdapter('agents');
+    const fs = makeFs(
+      new Map([
+        [
+          sampleCanonical.canonicalPath,
+          '---\nname: sample\ndescription: A sample canonical skill.\n---\n\nbody\n',
+        ],
+        [claude.path, `${claude.content}\n<!-- drift -->\n`],
+        [agents.path, agents.content],
+      ]),
+    );
+
+    const result = await checkAdapters({ repoRoot, prefix }, fs);
+
+    expect(result.drifted).toEqual([claude.path]);
+    expect(result.missing).toEqual([]);
+  });
+
+  it('detects missing adapters', async () => {
+    const claude = expectedAdapter('claude');
+    const agents = expectedAdapter('agents');
+    const fs = makeFs(
+      new Map([
+        [
+          sampleCanonical.canonicalPath,
+          '---\nname: sample\ndescription: A sample canonical skill.\n---\n\nbody\n',
+        ],
+        [claude.path, claude.content],
+      ]),
+    );
+
+    const result = await checkAdapters({ repoRoot, prefix }, fs);
+
+    expect(result.missing).toEqual([agents.path]);
+    expect(result.drifted).toEqual([]);
   });
 });

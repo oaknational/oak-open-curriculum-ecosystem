@@ -9,6 +9,7 @@
  */
 import { argv, exit, stderr, stdout } from 'node:process';
 
+import { checkAdapters } from '../skills-adapter-generate/checker.js';
 import { clearGeneratedAdapters, generateAdapters } from '../skills-adapter-generate/generator.js';
 
 interface CliFlags {
@@ -33,22 +34,39 @@ function parseFlags(args: readonly string[]): CliFlags {
   return { clear, check, prefix };
 }
 
-async function main(): Promise<number> {
-  const flags = parseFlags(argv.slice(2));
-  const repoRoot = process.cwd();
+async function runCheck(repoRoot: string, prefix: string): Promise<number> {
+  const result = await checkAdapters({ repoRoot, prefix });
+  if (result.drifted.length === 0 && result.missing.length === 0) {
+    stdout.write('All adapters are up to date.\n');
+    return 0;
+  }
+  if (result.missing.length > 0) {
+    stderr.write(`Missing adapters:\n${result.missing.map((p) => `  ${p}`).join('\n')}\n`);
+  }
+  if (result.drifted.length > 0) {
+    stderr.write(`Drifted adapters:\n${result.drifted.map((p) => `  ${p}`).join('\n')}\n`);
+  }
+  stderr.write('Run `pnpm skills:check` after regenerating to confirm.\n');
+  return 1;
+}
 
+async function runGenerate(repoRoot: string, flags: CliFlags): Promise<number> {
   if (flags.clear) {
     await clearGeneratedAdapters(repoRoot);
     stdout.write('Cleared adapter directories.\n');
   }
-
   const outcome = await generateAdapters({ repoRoot, prefix: flags.prefix });
-
   stdout.write(`Wrote ${String(outcome.written.length)} adapter files.\n`);
   if (outcome.skipped.length > 0) {
     stderr.write(`Skipped (no canonical SKILL): ${outcome.skipped.join(', ')}\n`);
   }
   return 0;
+}
+
+async function main(): Promise<number> {
+  const flags = parseFlags(argv.slice(2));
+  const repoRoot = process.cwd();
+  return flags.check ? await runCheck(repoRoot, flags.prefix) : await runGenerate(repoRoot, flags);
 }
 
 main()

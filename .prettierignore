@@ -78,3 +78,7 @@ apps/oak-search-cli/bulk-downloads/**
 .agent/cache/
 .agent/artifacts/
 .agent/reference/replaced-http-auth-model/
+
+# Generated adapter directories (owned by skills-adapter-generate)
+.claude/skills/
+.agents/skills/

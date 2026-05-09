@@ -147,34 +147,41 @@ function isCanonicalFrontmatter(value: unknown): value is CanonicalFrontmatter {
   return typeof value.name === 'string' && typeof value.description === 'string';
 }
 
-type AdapterSurface = 'claude' | 'agents';
+export type AdapterSurface = 'claude' | 'agents';
+export type ParsedCanonicalSkill = ParsedCanonical;
 
 async function emitAdapter(
   options: GeneratorOptions,
   parsed: ParsedCanonical,
   surface: AdapterSurface,
 ): Promise<string> {
-  const frontmatter = buildAdapterFrontmatter(parsed.frontmatter, options.prefix, parsed.id);
-  const surfaceLabel = surface === 'claude' ? 'Claude Code' : 'Cross-tool';
-  const body = renderAdapterBody(parsed.id, surfaceLabel, parsed.canonicalFilename);
-  const target = adapterPath(options, parsed.id, surface);
-  await writeAdapterFile(target, frontmatter, body);
+  const target = adapterTargetPath(options.repoRoot, options.prefix, parsed.id, surface);
+  const fileContent = renderAdapter(parsed, options.prefix, surface);
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, fileContent, 'utf8');
   return target;
 }
 
-function adapterPath(
-  options: GeneratorOptions,
+export function renderAdapter(
+  parsed: ParsedCanonicalSkill,
+  prefix: string,
+  surface: AdapterSurface,
+): string {
+  const frontmatter = buildAdapterFrontmatter(parsed.frontmatter, prefix, parsed.id);
+  const surfaceLabel = surface === 'claude' ? 'Claude Code' : 'Cross-tool';
+  const body = renderAdapterBody(parsed.id, surfaceLabel, parsed.canonicalFilename);
+  const yamlBlock = stringifyYaml(frontmatter, { lineWidth: 0 }).trimEnd();
+  return `---\n${yamlBlock}\n---\n\n${body.trimStart()}`;
+}
+
+export function adapterTargetPath(
+  repoRoot: string,
+  prefix: string,
   canonicalId: string,
   surface: AdapterSurface,
 ): string {
   const surfaceRoot = surface === 'claude' ? '.claude' : '.agents';
-  return join(
-    options.repoRoot,
-    surfaceRoot,
-    'skills',
-    `${options.prefix}${canonicalId}`,
-    ADAPTER_FILENAME,
-  );
+  return join(repoRoot, surfaceRoot, 'skills', `${prefix}${canonicalId}`, ADAPTER_FILENAME);
 }
 
 /**
@@ -211,17 +218,6 @@ function toTitleCase(id: string): string {
     .split('-')
     .map((part) => (part.length === 0 ? part : `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`))
     .join(' ');
-}
-
-async function writeAdapterFile(
-  targetPath: string,
-  frontmatter: AdapterFrontmatter,
-  body: string,
-): Promise<void> {
-  const yamlBlock = stringifyYaml(frontmatter, { lineWidth: 0 }).trimEnd();
-  const fileContent = `---\n${yamlBlock}\n---\n\n${body.trimStart()}`;
-  await mkdir(dirname(targetPath), { recursive: true });
-  await writeFile(targetPath, fileContent, 'utf8');
 }
 
 /**
