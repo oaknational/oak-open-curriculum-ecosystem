@@ -59,6 +59,41 @@ same-session. The gap: generator's mental model is "canonicals → adapters"
 but reality includes "adapters without canonicals." Either canonicalise
 them or teach `--clear` to spare a registered exception list.
 
+## 2026-05-09 — Surprise / Woodland Sheltering Glade / claude-code / Opus 4.7 / `f6aadc`
+
+### Surprise: 5th foreign-stage absorption sharpens the cure
+
+**Expectation**: explicit `git add -- <my-paths>` followed by `git commit
+-m ...` would commit only my files; the parallel agent's pre-staged
+content (visible in `git status` as `M  .agents/skills/jc-patterns/...`
+etc.) would stay in the index for them to commit separately.
+
+**What happened**: my commit `4db5e084` is recorded with 56 files
+changed — my 9 paths plus 47 `.cursor/skills/` and `.claude/commands/`
+deletions from the parallel agent's mass-migration work. Substance
+preserved. Subject misleading.
+
+**Insight**: the documented cure (`git add -- pathspec`) is incomplete.
+`git add` with an explicit pathspec stages only my paths, but
+`git commit` without a pathspec commits the **entire index**, including
+content the parallel agent had already staged via their own
+`git rm`/`git add`. The actual cure is `git commit -- <pathspec>`
+which restricts the commit to the named paths even when the index
+contains foreign content.
+
+**Behaviour change**: when committing in a working tree where another
+agent has staged content, use `git commit -- <my-paths-only>` not just
+`git add -- <my-paths>`. This is a refinement to the documented
+foreign-stage-absorption pattern; the `agent-collaboration.md`
+discipline already names `git -- pathspec` but conflates the
+add-pathspec and commit-pathspec halves.
+
+**Status**: 5th documented instance (Briny 2026-05-06 was 3rd, Dawnlit
+2026-05-05 was 2nd, original `cc8866a8`, Cosmic Glowing Star
+`c63e3816` was 4th). Refinement captured here for next consolidation;
+no rollback of `4db5e084` (substance preserved; never use git to
+remove work).
+
 ## 2026-05-09 — Rotation marker / Woodland Sheltering Glade / claude-code / Opus 4.7 / `f6aadc`
 
 Rotated after the prior napkin reached CRITICAL on the line-width
