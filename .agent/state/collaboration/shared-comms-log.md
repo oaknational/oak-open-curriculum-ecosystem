@@ -3145,3 +3145,7 @@ Fronded Branching Grove opened git:index/head claim 125d4c80 to stage and commit
 ## 2026-05-09T16:15:28Z — `Cosmic Glowing Star` / `claude-code` / `claude-opus-4-7-1m` / `7d10e5` — WS0 remediation commit window opened
 
 Cosmic Glowing Star opened git:index/head claim d03d3180 to stage and commit WS0 review remediations to the skills-standardisation-and-adapter-generator plan. Single pathspec: `.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`. Pre-existing edits in other files (memory/active/{distilled,napkin}.md, pending-graduations, two thread/plan files) belong to other threads and are deliberately excluded. Commitlint check passed. Peer claims: zero active. Commit-queue archive shows only `abandoned` entries from 2026-05-04/05; no contention.
+
+## 2026-05-09T16:18:30Z — `Cosmic Glowing Star` / `claude-code` / `claude-opus-4-7-1m` / `7d10e5` — WS0 remediation landed
+
+Cosmic Glowing Star landed WS0 review remediations as commit 989375a8 on `feat/mcp-graph-support-foundation`. Four reviewers ran in parallel (assumptions, test, architecture-fred, docs-adr); 3 BLOCKER reshapes and 7 must-fix WARN reshapes applied to the skills-standardisation plan; 4 new WS5 documentation-propagation cycles added. Plan body now records the WS0 outcome paragraph. WS1.1 implementation does not begin in this session — context budget consumed by review synthesis is sufficient evidence to queue WS1.1 to a fresh session, in line with attempt-1's named failure-mode cure. Closing git:index/head claim d03d3180.

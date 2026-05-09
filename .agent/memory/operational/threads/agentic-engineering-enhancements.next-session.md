@@ -2,7 +2,7 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-09 (`claude-code` / Opus 4.7 / `00dc26`).
+**Last refreshed**: 2026-05-09 (`claude-code` / Opus 4.7 / Cosmic Glowing Star / `7d10e5`).
 
 **Owning plan**: [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md).
 
@@ -10,26 +10,27 @@
 
 **Current objective**: implement [PDR-051](../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md) doctrine in this repo. One canonical body per skill at `.agent/skills/<id>/SKILL-CANONICAL.md` (non-discoverable filename); exactly two adapter surfaces (`.agents/skills/` for Cursor/Codex/Gemini/Amp + `.claude/skills/` for Claude Code); generator-mandatory; custom commands subsumed into skills. Friction F-16 closes when this plan completes.
 
-**Documents already landed (uncommitted)**:
+**WS0 status — landed 2026-05-09 as commit `989375a8`**:
 
-- `.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md`
-- `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` — 2026-05-09 amendment line + Layer-2 table updated to two skill surfaces only.
-- `.agent/plans/agent-tooling/frictions-register.md` — F-16 entry.
-- `.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md` — attempt-2 plan with cycle-by-cycle TDD shape.
-- `.agent/plans/agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md` — failed-attempt record with Failure Note prepended.
+All four reviewers ran in parallel (assumptions, test, architecture-fred, docs-adr). Synthesis: 3 BLOCKERs, 7 must-fix WARNs, 4 new WS5 propagation cycles. Every BLOCKER and every must-fix WARN landed as plan amendments in `989375a8`. Plan body now records the WS0 Outcome paragraph.
 
-**First task of next session — MANDATORY before any implementation**:
+Highlights of the reshape:
 
-Open the plan and dispatch **WS0 — Pre-Execution Plan Review** before touching code. The plan's WS0 section contains four self-contained reviewer briefs:
+- WS1.4 / WS1.5 / WS1.7: literal-text assertions replaced with structural assertions.
+- WS1.1: pre-authored Ajv schema literal removed from plan body (genuine Red phase preserved).
+- WS1.2 frontmatter `depends_on` corrected to `[ws0-pre-execution-plan-review]`.
+- WS1.6: paired `*.unit.test.ts` (in-memory `fs` fake) added alongside the integration test.
+- WS1.8: renamed `bin.integration.test.ts` → `bin.e2e.test.ts` (process spawn = E2E classification).
+- WS2.1 broadened: same cycle adds canonical-filename check AND migrates existing validator `SKILL.md` reads to a tolerant probe; bridge for WS3.1 ordering safety; fallback removed in WS3.9.
+- WS2.3 + WS2.4 reshaped: subprocess delegation to generator's `--check`; consistency and bytewise-equality logic single-homed in `agent-tools/src/skills-adapter-generate/`.
+- WS3.4 acceptance: owner-eyeball gate before WS3.5 destruction.
+- WS5: extended with WS5.6 (executive-memory updates), WS5.7 (live operating-model research alignment), WS5.8 (skills-ref deferred-adopt forward pointer), WS5.9 (ADR-125 line 12 historical clarifier).
 
-1. `assumptions-reviewer` — proportionality, build-vs-buy attestation, blocking relationships, sunk-cost reasoning detection.
-2. `test-reviewer` — describes-vs-audits screen on every WS1 cycle's test section; atomic-landing invariant; full-help-on-stderr assertion shape.
-3. `architecture-reviewer-fred` — ADR/PDR boundary compliance; consolidate-at-third-consumer between generator and validator; WS3 strict-flip safety.
-4. `docs-adr-reviewer` — PDR-051 portability-rule compliance (especially the `skills-lock.json` mention, borderline against the practice-core-portability rule); ADR-125 amendment shape; WS5 propagation completeness.
+Owner-locked decisions reaffirmed; no reviewer surfaced primary-source basis to reopen any. WS1.1 is now the open work.
 
-All four dispatch in parallel via the Agent tool. Synthesise findings, address every BLOCKER as a follow-up commit (or plan amendment) before WS1.1 begins.
+**First task of next session**:
 
-**Why this matters**: attempt 1 failed by treating "1 hour, tighten it up" as a quality-discipline signal rather than a scope signal. The failure mode is named in `.agent/rules/no-speed-pressure.md`. WS0 exists to prevent its recurrence. If the next session feels the impulse to start coding immediately, that impulse is the diagnostic.
+Begin **WS1.1 — Ajv schema + loader for `skills-lock.json`** as the first TDD cycle in `agent-tools/src/skills-adapter-generate/`. The cycle ships failing test + product code in one commit; tree green at end. Acceptance per the (amended) plan body. Schema is derived from test cases, not pre-authored.
 
 **Subsequent flow** (after WS0 passes):
 
@@ -41,7 +42,7 @@ All four dispatch in parallel via the Agent tool. Synthesise findings, address e
 - WS3.1–WS3.9: mechanical migration commits.
 - WS4 quality gates; WS5 documentation propagation; WS6 adversarial review and consolidation.
 
-**Branch state**: `feat/mcp-graph-support-foundation` at HEAD `111e18cb`. No commits this session. Working tree includes the new docs and plan plus the modifications to ADR-125 and the friction register; nothing else from this session touched the tree.
+**Branch state**: `feat/mcp-graph-support-foundation` at HEAD `989375a8`. WS0 commit landed this session.
 
 **Out of scope for this thread**: graph MVP implementation (under `connecting-oak-resources` thread); workspace topology programme (parked).
 

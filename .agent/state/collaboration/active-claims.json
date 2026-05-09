@@ -673,53 +673,7 @@
       "staged_name_status": "M\t.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md\n",
       "staged_bundle_fingerprint": "cf21c3085cf10dcfaef17a7eba59505ec9411f2280fa4945a6af2adf96f79208",
       "notes": "Re-enqueuing with full coordination bundle"
-    },
-    {
-      "intent_id": "92367198-3f76-4cc8-92ff-67a37ea84d17",
-      "claim_id": "d03d3180-827e-4798-a71b-6b96309b0f51",
-      "agent_id": {
-        "agent_name": "Cosmic Glowing Star",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "7d10e5"
-      },
-      "files": [
-        ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/shared-comms-log.md"
-      ],
-      "commit_subject": "docs(plans): apply WS0 review remediations to skills-standardisation plan",
-      "queued_at": "2026-05-09T16:16:48.630Z",
-      "updated_at": "2026-05-09T16:17:09.298Z",
-      "expires_at": "2026-05-09T16:31:48.630Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
-      "staged_bundle_fingerprint": "0492a730fdf34206a25ce01881aa71a319e352fb4f010182bb055fc564c1437d"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "d03d3180-827e-4798-a71b-6b96309b0f51",
-      "agent_id": {
-        "agent_name": "Cosmic Glowing Star",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "7d10e5"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-09T16:15:28Z",
-      "freshness_seconds": 900,
-      "intent": "Stage and commit WS0 review remediations to skills-standardisation plan.",
-      "notes": "Pathspec: .agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md; gates: commitlint passed; peer claims: zero active.",
-      "intent_to_commit": "92367198-3f76-4cc8-92ff-67a37ea84d17"
-    }
-  ]
+  "claims": []
 }
