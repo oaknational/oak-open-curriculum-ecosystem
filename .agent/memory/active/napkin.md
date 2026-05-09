@@ -216,3 +216,18 @@ still described the pre-push state.
 **Behaviour change**: when a closeout changes from local/pending to pushed,
 refresh the live PR body and next-session records in the same handoff pass so
 the next session does not inherit stale blockers.
+
+## 2026-05-09 — Fronded Bending Blossom / cursor / Composer / `60775a` (workspace topology session)
+
+### What worked
+
++ Owner pushed unbundling **“codegen”** into explicit pipeline stages
+  (**S0–S6**) plus three producer roles; the strategic plan is now the
+  durable capture surface until the superseding ADR is drafted.
++ **Multi-stage** workspace membership as a **review signal** (not automatic
+  shame) matches how `core` and mixed CLI apps actually behave.
+
+### candidate: adr:supersedes-108-workspace-topology
+
+Registered in `pending-graduations.md` 2026-05-09; plan file:
+`architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`.

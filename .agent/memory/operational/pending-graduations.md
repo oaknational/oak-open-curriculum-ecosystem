@@ -2142,6 +2142,27 @@ continuity snapshots.
   surfaces independently of this audit.
   Status: pending — first-class instance with structural justification.
 
++ 2026-05-09; **workspace topology ADR superseding ADR-108 — pipeline stages
+  S0–S6 and stage×workspace matrix** (Fronded Bending Blossom / cursor /
+  Composer / `60775a`; strategic plan
+  `architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`).
+  Owner-refined direction: avoid treating “codegen” as one concept; separate
+  definition acquisition (**S0**), primitive emission — types, constants,
+  predicates (**S1**), optional derived/mining (**S2**), library composition
+  from primitives (**S3**), package build (**S4**), runtime assembly
+  (**S5**), execution (**S6**); classify every workspace by stage tags;
+  **multi-stage membership outside substrate** is a boundary-review signal;
+  **substrate** (`packages/core/*` first) may span stages with explicit allow
+  rules. Aligns superseding ADR with ADR-154 thin leaves (generic **S3** +
+  **S1/S2** vs named wiring).
+  `[captured: 2026-05-09 | source: owner-direction+plan | target: adr:supersedes-108-workspace-topology | trigger: owner-direction OR plan-promoted-to-draft | size: L | status: pending]`
+  Graduation-target: new `docs/architecture/architectural-decisions/*.md`
+  superseding ADR-108, **Related** ADR-154/117/031/030; one canonical topology
+  narrative per ADR-117; supersession notice on ADR-108.
+  Trigger-condition: owner confirms or revises **S0–S6** names and substrate
+  exception rules; OR executable promotion of `draft-adr-supersedes-108` todo.
+  Status: pending — substance lives in the strategic plan until drafting slot.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

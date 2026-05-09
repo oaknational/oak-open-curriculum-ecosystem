@@ -9,6 +9,23 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-09 — Fronded Bending Blossom / `cursor` /
+Composer / `60775a`, workspace topology strategic planning)**:
+refined
+`.agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md`
+with pipeline stages **S0–S6** (replacing monolithic “codegen”), three
+producer roles (primitive emitters / library authors / app consumers),
+stage×workspace matrix with **multi-stage non-substrate packages** as
+explicit triage signals, **substrate** (`core` first) participation tags,
+and a metacognition delta; updated
+`.agent/plans/architecture-and-infrastructure/future/README.md` plan index.
+Capture: ADR candidate **supersedes ADR-108** (expansive topology, links
+ADR-154) registered in `pending-graduations.md`. **Evidence**: working-tree
+paths above; **no commit** in this session. **Branch-primary next step**
+unchanged: PR #102 merge prep on `planning/graph-tooling` — see **Next safe
+step** below. **Follow-on**: owner locks stage list; then draft ADR per
+plan todos.
+
 **Session close (2026-05-08 — Fronded Branching Grove / `codex` /
 `GPT-5` / `019e06`, PR #102 final closeout + decision-complete session
 planning)**:
@@ -175,6 +192,10 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
+**2026-05-09 (workspace topology / pipeline stages)**:
+strategic plan only — monorepo supply-chain model for superseding ADR-108;
+branch-primary remains PR #102.
+
 **2026-05-08 (PR #102 graph decision-complete planning)**:
 absorb remaining graph-plan findings and apply the latest structural-only EEF
 evaluation decision before PR #102 merges. This is a planning closeout session,
@@ -286,3 +307,9 @@ PR #102 graph decision-complete closeout): `due — the PR #102 graph planning
 closeout plan completed and pushed; run consolidate-docs after merge or in a
 bounded follow-up to mine durable decisions/follow-ons without delaying the
 merge blocker cleanup`.**
+
+**Status (2026-05-09 Fronded Bending Blossom, cursor, Composer, `60775a`,
+workspace topology plan refinement handoff): `not due — strategic plan and
+register capture only; no plan closure, no napkin rotation, no new graduated
+doctrine; ADR candidate appended to pending-graduations for drafting after
+owner locks S0–S6`.**
