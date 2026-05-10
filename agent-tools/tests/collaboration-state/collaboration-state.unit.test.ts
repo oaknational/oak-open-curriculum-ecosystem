@@ -18,12 +18,16 @@ import {
   type CollaborationRegistry,
 } from '../../src/collaboration-state';
 import {
+  closeSummaryFromOptions,
   createClaimFromOptions,
   formatOpenClaimResult,
 } from '../../src/collaboration-state/cli-claim-commands';
-import { commsSendDefaults } from '../../src/collaboration-state/cli-comms-commands';
+import {
+  commsSendDefaults,
+  formatCommsSendResult,
+} from '../../src/collaboration-state/cli-comms-commands';
 import { claimReport } from '../../src/collaboration-state/claim-reports';
-import { type Options } from '../../src/collaboration-state/cli-options';
+import { parseOptions, type Options } from '../../src/collaboration-state/cli-options';
 
 const codexThreadId = '019dd34d-cb6a-74e0-a29d-6cb8a65ea14b';
 const nowIso = '2026-04-28T09:37:11Z';
@@ -115,6 +119,117 @@ describe('runCollaborationStateCli', () => {
     }
   });
 
+  it('parses repeated area-pattern flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'claims',
+      'open',
+      '--area-pattern',
+      'agent-tools/src/collaboration-state/cli-options.ts',
+      '--area-pattern',
+      'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+    ]);
+
+    expect(parsed).toMatchObject({
+      files: [],
+      areaPatterns: [
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+      ],
+    });
+  });
+
+  it('parses repeated file flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'claims',
+      'open',
+      '--file',
+      'agent-tools/src/collaboration-state/cli-options.ts',
+      '--file',
+      'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+    ]);
+
+    expect(parsed).toMatchObject({
+      files: [
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+      ],
+      areaPatterns: [],
+    });
+  });
+
+  it('builds claim areas from repeated area-pattern values', () => {
+    const opened = createClaimFromOptions(
+      options(
+        {
+          active: 'active.json',
+          thread: 'agentic-engineering-enhancements',
+          'area-kind': 'files',
+          intent: 'Exercise area pattern claim construction.',
+          now: nowIso,
+          'claim-id': '33333333-3333-4333-8333-333333333333',
+        },
+        [],
+        [
+          'agent-tools/src/collaboration-state/cli-options.ts',
+          'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+        ],
+      ),
+      woodland,
+    );
+
+    expect(opened).toMatchObject({
+      claim_id: '33333333-3333-4333-8333-333333333333',
+      areas: [
+        {
+          patterns: [
+            'agent-tools/src/collaboration-state/cli-options.ts',
+            'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+          ],
+        },
+      ],
+    });
+  });
+
+  it('rejects mixed file and area-pattern sources when opening a claim', async () => {
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'claims',
+        'open',
+        '--active',
+        'active.json',
+        '--thread',
+        'agentic-engineering-enhancements',
+        '--area-kind',
+        'files',
+        '--file',
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        '--area-pattern',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+        '--intent',
+        'Exercise mixed area source validation.',
+        '--now',
+        nowIso,
+        '--platform',
+        'cursor',
+        '--model',
+        'GPT-5.5',
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
+      },
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain(
+      'Error: claims open accepts either --file or --area-pattern, not both',
+    );
+  });
+
   it('returns help for top-level, topic, and action requests', async () => {
     const topLevel = await runCollaborationStateCli({ argv: ['--', 'help'], env: {} });
     expect(topLevel.exitCode).toBe(0);
@@ -130,32 +245,114 @@ describe('runCollaborationStateCli', () => {
     });
     expect(action.exitCode).toBe(0);
     expect(action.stdout).toContain('claims open --active <path>');
+    expect(action.stdout).toContain('--area-kind <files|workspace|plan|adr|git>');
+    expect(action.stdout).toContain('use either repeatable --file or repeatable --area-pattern');
   });
 
   it('reports unknown options before missing required options', async () => {
-    await expect(
-      runCollaborationStateCli({
-        argv: ['--', 'claims', 'open', '--bogus'],
-        env: {},
-      }),
-    ).resolves.toStrictEqual({
-      exitCode: 2,
-      stdout: '',
-      stderr: 'unknown option: --bogus\n',
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'open', '--bogus'],
+      env: {},
     });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('unknown option for claims open: --bogus');
   });
 
   it('reports command-specific unknown options before missing required options', async () => {
-    await expect(
-      runCollaborationStateCli({
-        argv: ['--', 'claims', 'list', '--thread', 'wrong-place'],
-        env: {},
-      }),
-    ).resolves.toStrictEqual({
-      exitCode: 2,
-      stdout: '',
-      stderr: 'unknown option for claims list: --thread\n',
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'list', '--thread', 'wrong-place'],
+      env: {},
     });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('claims list --active <path> [--now <iso>]');
+  });
+
+  it('prints command help with the specific validation error', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'open', '--bogus'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('claims open --active <path>');
+    expect(result.stderr).toContain('Error: unknown option for claims open: --bogus');
+  });
+
+  it('lists supported area kinds when an unsupported kind is supplied', async () => {
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'claims',
+        'open',
+        '--active',
+        'active.json',
+        '--thread',
+        'agentic-engineering-enhancements',
+        '--area-kind',
+        'file',
+        '--file',
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        '--intent',
+        'Exercise area kind validation.',
+        '--now',
+        nowIso,
+        '--platform',
+        'cursor',
+        '--model',
+        'GPT-5.5',
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
+      },
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('claims open --active <path>');
+    expect(result.stderr).toContain(
+      'Error: unsupported area kind: file. Expected one of: files | workspace | plan | adr | git',
+    );
+  });
+
+  it('documents identity seed inputs in comms send help', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'send', '--help'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('PRACTICE_AGENT_SESSION_ID_CURSOR');
+    expect(result.stdout).toContain('OAK_AGENT_IDENTITY_OVERRIDE');
+  });
+
+  it('resolves closure-summary as an alias for summary', () => {
+    expect(closeSummaryFromOptions(options({ 'closure-summary': 'Closed via alias.' }))).toBe(
+      'Closed via alias.',
+    );
+    expect(() =>
+      closeSummaryFromOptions(
+        options({ summary: 'Primary summary.', 'closure-summary': 'Alias summary.' }),
+      ),
+    ).toThrow('claims close accepts either --summary or --closure-summary, not both');
+    expect(() => closeSummaryFromOptions(options({}))).toThrow(
+      'claims close requires either --summary or --closure-summary',
+    );
+  });
+
+  it('prints comms send help when an identity-name flag is unsupported', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'send', '--agent-name', 'Moonlit Transiting Prism'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('comms send --title <title>');
+    expect(result.stderr).toContain('PRACTICE_AGENT_SESSION_ID_CURSOR');
+    expect(result.stderr).toContain('Error: unknown option for comms send: --agent-name');
   });
 });
 
@@ -222,6 +419,21 @@ describe('claim CLI reports', () => {
         'event-id': 'event-one',
         output: '/repo/.agent/state/collaboration/shared-comms-log.md',
       },
+    );
+  });
+
+  it('formats comms send output from resolved write paths', () => {
+    expect(
+      formatCommsSendResult(
+        options({ 'events-dir': '/custom/events', output: '/custom/shared-comms-log.md' }),
+        'event-one',
+      ),
+    ).toBe(
+      '{\n' +
+        '  "event_id": "event-one",\n' +
+        '  "event_path": "/custom/events/event-one.json",\n' +
+        '  "shared_log_path": "/custom/shared-comms-log.md"\n' +
+        '}\n',
     );
   });
 });
@@ -405,16 +617,15 @@ function parseCounterState(text: string): CounterState {
   throw new Error('invalid counter state');
 }
 
-function options(values: Readonly<Record<string, string>>, files: readonly string[] = []): Options {
+function options(
+  values: Readonly<Record<string, string>>,
+  files: readonly string[] = [],
+  areaPatterns: readonly string[] = [],
+): Options {
   const parsedValues = new Map<string, string>();
   for (const key in values) {
     parsedValues.set(key, values[key] ?? '');
   }
 
-  return {
-    command: undefined,
-    topic: undefined,
-    values: parsedValues,
-    files,
-  };
+  return { command: undefined, topic: undefined, values: parsedValues, files, areaPatterns };
 }

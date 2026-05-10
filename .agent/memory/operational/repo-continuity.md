@@ -9,6 +9,65 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Open Lifting Gale / `cursor` /
+GPT-5.5 / `e4ad13`, agent-tooling friction closeout Workstream 1
+completed in working tree)**: implemented the shared
+`collaboration-state` CLI discoverability slice from
+`.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md`.
+Workstream 1 covers F-01, F-02, F-04, F-09 for `collaboration-state`,
+F-12, and F-13: invalid-option errors include command help; `claims
+close` accepts/conflict-checks `--closure-summary`; `claims open`
+enumerates accepted area kinds; `comms send` help names identity seed
+sources and success output is structured JSON with resolved paths;
+README/register evidence updated. Focused validation passed
+(`vitest` collaboration-state unit suite, agent-tools type-check, lint,
+markdownlint, prettier check, collaboration-state consistency check).
+Specialist reviewers (`code-expert`, `test-expert`, `docs-adr-expert`)
+returned CLEAN after first-pass findings were absorbed. Claim
+`d7a76b78-8245-436a-8955-3f7e3a8ba305` was explicitly closed; active
+claims are empty at handoff. **No commit this session** per owner
+boundary. **Next safe step**: continue the same closeout plan with
+Workstream 2 (`comms list/show` and `claims list` filters) after fresh
+status/diff/collaboration preflight and a new exact file claim.
+
+**Session close (2026-05-10 — Stratospheric Sweeping Plume /
+`claude-code` / Opus 4.7 / `c8dd27`, practice.md examination opened —
+framing failure surfaced; owner ended thread)**: opened the practice.md
+examination lane per Woodland Growing Leaf's session-close direction.
+After reading the trinity + `practice-verification.md` + PDR-003 +
+PDR-026 + ADR-144, surfaced shape options to owner. Options were framed
+in optimisation vocabulary ("contractions", bulleted line-and-char
+savings), violating PDR-003 §Decision-2 ("consolidation is curation,
+not optimisation"). Owner ended the thread before any practice.md
+mutation. **No commits this session.** No reviewer dispatch (examination-
+only). No claim registered. The pre-existing HARD char pressure on
+`practice.md` persists; the §Open Owner-Decision Items item 1 stays
+open with sharpened next-attempt criteria captured in the thread
+record. **Next safe step**: re-attempt practice.md examination in a
+fresh session that holds the curation frame from session-open;
+entry criteria are the four falsifiability checks recorded in
+[`agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
+under the 2026-05-10 Stratospheric Sweeping Plume session record.
+
+**Session close (2026-05-10 — Woodland Growing Leaf / `claude-code` /
+Opus 4.7 / `0844d9`, repo-continuity archive plan executed
+end-to-end)**: landed all four commits of
+`repo-continuity-archive-and-invariants-role.plan.md` on
+`feat/mcp-graph-support-foundation`: `d981b2b3` (Group A — directive
+foreign-stage cure named in `agent-collaboration.md` §c + plan
+landing), `6d7d5ee3` (Phase 1 — archive sweep, live file 555 → 270
+lines, 13 session-close blocks + 9 Deep-Consolidation entries archived
+verbatim per PDR-026), `09b513ae` (Phase 2 — owner chose Option A;
+§Repo-Wide Invariants role-justified with all 12 canonical-home
+cross-references), `c3061935` (plan archived current/ →
+archive/completed/ per ADR-117). Inter-agent comms-event coordination
+with Riverine Drifting Lighthouse cleanly resolved a brief Phase 2
+markdownlint blockage (`9344adf1` → `05ccefb8` → `5bff4178`). The
+foreign-stage cure operated on every commit of this session — the cure
+named at the directive layer applied to every commit landing it.
+**Next safe step**: unchanged — graph MVP work + PR #102 merge prep on
+`connecting-oak-resources`.
+
 **Session close (2026-05-10 — Velvet Creeping Mask / `codex` / GPT-5 /
 `019e11`, onboarding entrypoint remediation)**: landed the owner-requested
 follow-up to the onboarding-reviewer audit. Root README, CONTRIBUTING,
@@ -127,7 +186,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Velvet Creeping Mask / `codex` / GPT-5 / `019e11` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Open Lifting Gale / `cursor` / GPT-5.5 / `e4ad13` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -154,11 +213,13 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Next up (owner 2026-05-09)**:
-**graph MVP implementation** on the `connecting-oak-resources` thread once
-PR #102 merge blockers are cleared — slice plans drive execution. **Deferred**:
-monorepo topology ADR / stage-matrix work (strategic plan remains in `future/`
-until re-opened).
+**Latest focus (2026-05-10 — Open Lifting Gale)**: agent-tooling
+friction closeout Workstream 1 completed in the working tree; continue
+with Workstream 2 (`comms list/show` and `claims list` filters) if the
+owner resumes this closeout lane. Branch-primary graph MVP focus below
+still controls the product branch once PR #102 merge blockers are
+cleared. **Deferred**: monorepo topology ADR / stage-matrix work
+(strategic plan remains in `future/` until re-opened).
 
 *Historical context:*
 
@@ -232,7 +293,52 @@ evidence.
 
 ## Next Safe Step
 
-**Clear PR #102 merge blocker**:
+**Status update (2026-05-10 — Open Lifting Gale close)**:
+Workstream 1 of the agent-tooling friction closeout is complete in the
+working tree and uncommitted by owner boundary. The next safe step on
+this lane is Workstream 2 from
+`.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md`:
+add `comms list/show` and `claims list` filters. Before edits, refresh
+status/diffs, re-check collaboration state, and open a new exact file
+claim for the Workstream 2 file set. Do not edit the plan file unless
+the owner explicitly asks.
+
+**Status update (2026-05-10 — Stratospheric Sweeping Plume close)**:
+the practice.md examination lane was opened this session; an agent
+framing failure surfaced (treated curation as optimisation in
+vocabulary; PDR-003 §Decision-2 violation surfaced via the words
+"contractions" and bulleted line-savings). Owner ended the thread
+before any Core mutation. The pre-existing HARD char pressure on
+`practice.md` (31,870 / 30,500 at session close) persists. This
+session counts as one re-attempt of the examination, not as a
+"deferred" outcome under PDR-026 deferral-honesty.
+
+**Re-attempt entry criteria** (per the falsifiability captured in the
+thread record): the next session re-attempting this examination MUST
+(a) read the trinity + `practice-verification.md` at session-open
+before any analysis, (b) lead any surfacing with role-questions per
+section ("does this section still serve its role in the WHAT-
+blueprint?") rather than size measurement, (c) present candidate
+shapes as role-justifications with sizing as at most a parenthetical,
+and (d) carry no instance of the words "contraction", "trim",
+"reduction", or "savings" framing the work. If those tokens appear,
+the re-attempt has not held the frame.
+
+**Controlling governance** (do not re-derive next session): PDR-003
+§Decision-2 ("consolidation is curation, not optimisation") is the
+discipline that failed this session; PDR-026 substance-preservation
+overrides fitness pressure; ADR-144 Key Principle 4 makes
+`fitness_char_limit` change owner-only; ADR-144 Key Principle 2
+forbids raising thresholds to track content drift. No new doctrine
+to author — the diagnosis is "agent failed to hold PDR-003 while
+surfacing", a pattern-instance candidate
+(`read-doctrine-without-holding-frame`).
+
+Branch-primary lane state for `planning/graph-tooling` continues
+beneath this examination; the Practice Core lane and the graph MVP
+lane remain parallel, not sequential.
+
+**Clear PR #102 merge blocker** (parallel lane):
 
 1. Preserve or isolate the unrelated dirty `.agent/plans/notes/` scratch state
    so the worktree is clean.
@@ -262,6 +368,14 @@ Visible owner-appetite items, not blockers for the current branch state:
    Core edit, threshold decision, or dedicated remediation lane. Constraint:
    Practice Core edits require owner approval under the Core care-and-consult
    rule; falsifiability is `pnpm practice:fitness --strict-hard`.
+   **Status (2026-05-10 — Stratospheric Sweeping Plume close)**:
+   examination lane was opened and re-attempted once this session;
+   agent framing failure (curation-vs-optimisation vocabulary;
+   PDR-003 §Decision-2 violation) caused owner to end the thread
+   before any Core mutation. Item remains active. Re-attempt entry
+   criteria captured in §Next Safe Step and the agentic-engineering-
+   enhancements thread record. Pre-existing HARD signal persists at
+   31,870 / 30,500 chars.
 2. The pending-graduations queue remains SOFT and is intentionally calibrated
    for consolidation-pass access rhythm. Continue draining due entries in
    dedicated consolidation sessions.
@@ -272,6 +386,49 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-10 Open Lifting Gale, cursor, GPT-5.5, `e4ad13`,
+agent-tooling friction closeout Workstream 1 completed in working
+tree): `due — Workstream 1 milestone closed and a fresh napkin
+behaviour change was captured after the no-real-IO test review loop.
+Not well-bounded for this lightweight handoff: the closeout plan still
+has Workstreams 2-5 open, the work is intentionally uncommitted by
+owner boundary, and existing repo fitness/consolidation pressure
+remains a separate lane. Future consolidation should mine the Workstream
+1 review loop after landing or at a deliberate closeout point, not
+during this session handoff`.**
+
+**Status (2026-05-10 Stratospheric Sweeping Plume, claude-code, Opus 4.7,
+`c8dd27`, practice.md examination opened — framing failure surfaced;
+owner ended thread): `not due from this session's work — bounded
+examination session with no commit, no plan closure, no graduation
+trigger. One napkin entry captured the framing failure (substance
+preserved per PDR-026; vocabulary intact per the curation discipline
+that failed). One pattern-instance candidate identified
+(read-doctrine-without-holding-frame); routed to the napkin entry
+itself rather than to pending-graduations because PDR-003 §Decision-2
+already names the underlying doctrine — the diagnosis is agent
+capacity, not doctrine absence. Cumulative consolidation pressure
+from prior sessions remains in the same "due" state Woodland Growing
+Leaf recorded; this session does not change that state. Carry-forward
+load for the next consolidation: napkin past line + char hard limits,
+practice.md remains HARD on chars (now load-bearing for
+next-attempt entry criteria, not just file-size), pending-graduations
+register state from prior sessions`.**
+
+**Status (2026-05-10 Woodland Growing Leaf, claude-code, Opus 4.7,
+`0844d9`, repo-continuity archive plan executed end-to-end): `due —
+plan closure trigger fires (4 commits archived a current-lifecycle
+plan: d981b2b3, 6d7d5ee3, 09b513ae, c3061935). Three napkin findings
+captured this session (cure-operated-under-itself, whole-tree-gate-vs-
+pathspec-isolation, plan-target-arithmetic-drifts-in-concurrent-flow);
+none rise to single-instance ADR/PDR but the first is a candidate for
+the second-instance graduation watch. Not well-bounded for this
+closeout: napkin is HARD (331/300) from concurrent-agent flow,
+pending-graduations is at 2339/2000 SOFT, and pattern extraction +
+napkin rotation + register drain is substantial work. Next session
+picks up deliberately per session-handoff step 10's
+not-well-bounded-this-closeout branch`.**
 
 **Status (2026-05-10 Woodland Shedding Moss, claude-code, Opus 4.7,
 `5869e0`, onboarding-flow integration + good-first-issues index):

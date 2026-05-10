@@ -3,6 +3,7 @@ export interface Options {
   readonly topic: string | undefined;
   readonly values: ReadonlyMap<string, string>;
   readonly files: readonly string[];
+  readonly areaPatterns: readonly string[];
 }
 
 const KNOWN_OPTION_KEYS = new Set([
@@ -14,6 +15,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'claim-id',
   'closed',
   'created-at',
+  'closure-summary',
   'entry-json',
   'event-id',
   'events-dir',
@@ -41,12 +43,13 @@ export function parseOptions(argv: readonly string[]): Options {
   const rest = topic === undefined ? normalizedArgv.slice(1) : normalizedArgv.slice(2);
   const values = new Map<string, string>();
   const files: string[] = [];
+  const areaPatterns: string[] = [];
 
   for (let index = 0; index < rest.length; ) {
-    index = parseToken({ rest, index, values, files });
+    index = parseToken({ rest, index, values, files, areaPatterns });
   }
 
-  return { command, topic, values, files };
+  return { command, topic, values, files, areaPatterns };
 }
 
 export function required(options: Options, key: string): string {
@@ -79,6 +82,7 @@ function parseToken(input: {
   readonly index: number;
   readonly values: Map<string, string>;
   readonly files: string[];
+  readonly areaPatterns: string[];
 }): number {
   const token = input.rest[input.index] ?? '';
   const next = input.rest[input.index + 1];
@@ -91,9 +95,12 @@ function parseToken(input: {
     input.files.push(requireFlagValue(token, next));
     return input.index + 2;
   }
-  if (token.startsWith('--')) {
-    parseValueOption({ token, next, values: input.values });
+  if (token === '--area-pattern') {
+    input.areaPatterns.push(requireFlagValue(token, next));
     return input.index + 2;
+  }
+  if (token.startsWith('--')) {
+    return parseValueOption({ token, next, values: input.values, index: input.index });
   }
 
   throw new Error(`unknown argument: ${token}`);
@@ -103,10 +110,18 @@ function parseValueOption(input: {
   readonly token: string;
   readonly next: string | undefined;
   readonly values: Map<string, string>;
-}): void {
+  readonly index: number;
+}): number {
   const key = input.token.slice(2);
   if (!KNOWN_OPTION_KEYS.has(key)) {
-    throw new Error(`unknown option: ${input.token}`);
+    input.values.set(
+      key,
+      input.next === undefined || input.next.startsWith('--') ? 'true' : input.next,
+    );
+    return input.next === undefined || input.next.startsWith('--')
+      ? input.index + 1
+      : input.index + 2;
   }
   input.values.set(key, requireFlagValue(input.token, input.next));
+  return input.index + 2;
 }

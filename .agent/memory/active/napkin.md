@@ -22,6 +22,149 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-10 — Stratospheric Sweeping Plume / claude-code / Opus 4.7 / `c8dd27`
+
+### Framing failure — read PDR-003, then violated its §Decision-2
+
+- **Expected**: reading PDR-003 (sub-agent protection of foundational
+  Practice docs) at session-open would equip me to surface practice.md
+  examination options in the curation frame ("does this still serve
+  its role?"), per its §Decision-2 ("consolidation is curation, not
+  optimisation").
+- **Actual**: I read PDR-003 in full, then surfaced shape options
+  framed in optimisation vocabulary — the word "contractions",
+  bulleted line-and-char savings ("~80 lines / ~5K chars saved"),
+  estimated-impact paragraph leading on size. Owner ended the thread
+  to prevent damage: "you are talking about contractions instead of
+  careful curation of highly valuable knowledge."
+- **Why expectation failed**: reading governance is not the same as
+  *holding* governance frame at the moment of surfacing options. The
+  optimisation vocabulary is the default tooling-shaped reflex when
+  presenting reductions; the curation frame requires explicit
+  role-questioning per surface, with substance-justification as the
+  lead and sizing as a footnote (or absent). The default vocabulary
+  betrayed the doctrine I had just read. Reading-without-holding is
+  the failure mode.
+- **Recursive interest**: PDR-003's whole §Decision-1 rationale —
+  *"sub-agents lack cross-session and cross-file context to judge
+  what repetition is deliberate"* — is structurally identical to the
+  failure this primary agent demonstrated. The PDR scopes itself to
+  sub-agents, but the failure mode (operating on doctrine without
+  holding its frame, optimising for local metrics visible inside a
+  scope) is not sub-agent specific. A primary agent reading the PDR
+  and failing to hold the frame is a stronger signal than a sub-agent
+  failing to know the PDR.
+- **Earlier in-session correction was the warning shot**: after my
+  first analysis suggested a Core → ADR-144 pointer (self-containment
+  violation), owner said "I don't think you have enough grasp on the
+  context to do a good job." I read the trinity in response. I
+  improved the self-containment dimension. I did NOT improve the
+  curation-vs-optimisation dimension. Both warnings were available
+  before the second surfacing; only one was acted on.
+- **Behaviour change for next attempt**: at session-open, read the
+  trinity (`practice.md` + `practice-bootstrap.md` + `practice-lineage.md`
+  - `practice-verification.md`) BEFORE attempting analysis. Lead any
+  surfacing with the role-question per section ("does this section
+  still serve its role in the WHAT-blueprint?") and present candidate
+  shapes as role-justifications. Sizing implications are at most a
+  parenthetical, never the lead. Vocabulary discipline: never use
+  "contraction", "trim", "reduction", "savings", or comparable
+  optimisation tokens in foundational-doc work.
+- **No new doctrine to graduate**: PDR-003 §Decision-2 names this
+  exactly. The diagnosis is not "PDR-003 is missing a clause" but
+  "agent failed to hold PDR-003 while surfacing." This is a pattern-
+  instance candidate, not a PDR candidate. Possible pattern slug:
+  `read-doctrine-without-holding-frame`.
+- **Source plane**: active learning loop / agent-meta.
+
+## 2026-05-10 — Moonlit Transiting Prism / cursor / GPT-5.5 / `e86710`
+
+### Agent-tooling fix lessons
+
+- **Expected**: The focused command
+  `pnpm --filter @oaknational/agent-tools test -- tests/collaboration-state/collaboration-state.unit.test.ts`
+  would remain a precise test-file proof because it had done so earlier in
+  the session.
+- **Actual**: Later in the same working tree it ran the full agent-tools
+  suite and exposed an unrelated live-roster failure for a missing
+  `.codex/agents/code-reviewer.toml`; direct `pnpm --dir agent-tools exec
+  vitest run tests/collaboration-state/collaboration-state.unit.test.ts`
+  gave the exact proof.
+- **Why expectation failed**: I trusted package-script argument forwarding
+  instead of verifying the runner's reported file count after the working
+  tree changed. The test output itself was the authority.
+- **Behaviour change**: For focused agent-tools Vitest proof, use the
+  direct workspace Vitest invocation when exact file isolation matters, and
+  report package-script failures separately when they expose unrelated live
+  adapter state.
+
+- **Reviewer correction**: My first regression test for repeated
+  `--area-pattern` used filesystem-backed CLI state in a `*.unit.test.ts`
+  file, then the second draft composed `parseOptions` with
+  `createClaimFromOptions`. Test-reviewer correctly forced the taxonomy:
+  unit tests prove one unit. Final shape split the behaviour into pure
+  parser tests (`parseOptions` accumulates repeated flags) and pure claim
+  construction tests (`createClaimFromOptions` consumes `areaPatterns`).
+  Source plane: active
+
+## 2026-05-10 — Woodland Growing Leaf / claude-code / Opus 4.7 / `0844d9`
+
+### Surprise — cure operated under itself
+
+- **Expected**: the foreign-stage absorption cure named at directive
+  level in `agent-collaboration.md` §c (Group A commit `d981b2b3`)
+  would only manifest as guidance for future sessions.
+- **Actual**: the cure operated on every commit of this same session
+  — Group A landed it; Phase 1 (`6d7d5ee3`), Phase 2 (`09b513ae`),
+  and the plan archive (`c3061935`) all used `git add -- <paths>`
+  and `git commit -- <paths>` discipline. The first application of
+  the cure was its own landing commit.
+- **Why interesting**: doctrine that cannot be applied to its own
+  landing is suspect; this one passed that test on first contact.
+  Identity-candidate observation: cure-named-at-directive-layer +
+  cure-applied-to-own-landing is a stronger evidence shape than
+  cure-named-without-application.
+
+### Surprise — pre-commit hook is whole-tree, blocks pathspec-only commits
+
+- **Expected**: `git commit -- <pathspec>` would only run gates
+  relevant to the staged set; my Phase 2 commit with two pathspecs
+  (`repo-continuity.md` + `shared-comms-log.md`) would not be
+  blocked by another agent's unrelated state.
+- **Actual**: husky `pre-commit` runs `markdownlint --dot .` over
+  the whole working tree. Riverine Drifting Lighthouse's mid-flight
+  deletion of `.agent/skills/add-app-to-server/SKILL-CANONICAL.md`
+  caused markdownlint to crash with ENOENT, blocking my pathspec-
+  only commit with no overlap to their work.
+- **Why expectation failed**: pathspec discipline isolates *what is
+  committed*, but does not isolate *what is checked*. Quality gates
+  legitimately validate the whole tree because tests/lints span
+  files; pathspec-only validation would let circular regressions
+  slip through. The blockage is by design.
+- **Cure (worked instance)**: inter-agent comms-event with deadline
+  - default action (`9344adf1` → `05ccefb8` → `5bff4178`). Resolved
+  in 15 min, well inside 30-min deadline. Confirms comms-first-class
+  pattern works under real coordination pressure.
+
+### Surprise — plan target arithmetic outdated by multi-agent same-day flow
+
+- **Expected**: Phase 1 acceptance criterion 4 ("live file ≤ 220
+  lines") was set when one most-recent 2026-05-10 session-close
+  block was anticipated.
+- **Actual**: by the time Phase 1 ran, three 2026-05-10 same-day
+  blocks needed retaining (Iridescent + Woodland Shedding Moss +
+  Blooming Ripening Glade); each ~23 lines; live file 270 not 220.
+- **Resolution**: PDR-026 substance preservation overrides fitness
+  pressure — kept all three. Plan body's acceptance criterion 6
+  ("zero substantive content changes — only relocation") is the
+  load-bearing criterion; criterion 4's number is downstream of
+  criterion 6 and was based on a single-block estimate.
+- **Why interesting**: plan-target arithmetic locked at plan-write-
+  time drifts before plan execution when the branch is concurrently
+  active. Cure: when plan acceptance includes a count target
+  derived from current state, name the derivation explicitly so
+  later agents can re-derive at execution time.
+
 ## 2026-05-10 — Velvet Creeping Mask / codex / GPT-5 / `019e11`
 
 ### Practice/tooling feedback
@@ -336,3 +479,31 @@ owner with rationale) cleanly distinguishes legitimate doctrine
 accretion from drift. The interaction between PDR-026 (substance
 preservation overrides fitness pressure) and ADR-144 §9e (limit
 raise is owner-only) defines an honest accretion pathway.
+
+## 2026-05-10 — `git for-loop` newline-split bug masking deletion failure (Riverine Drifting Lighthouse)
+
+- **Surprise**: `for id in $(jq -r '.skills | keys[]' skills-lock.json); do rm -rf ".agent/skills/${id}"; done` printed plausible-looking "Deleted: ..." lines but actually nothing was deleted, because `for ... in $(...)` treats the whole jq output as a single multi-line word when the surrounding shell does not split on newlines under `set` defaults.
+- **Diagnosis**: post-loop verification showed all 12 directories still present; `ls -d "${id}"` inside the loop emitted a single concatenated filename ending with "No such file or directory".
+- **Fix**: switched to `while IFS= read -r id; do ...; done < <(jq -r ...)` which splits on real newlines.
+- **Implication**: when iterating multi-line CLI output in shell, prefer `while read` over `for ... in $(...)`, especially in destructive paths. Verification-after-action surfaced the bug in seconds; the friction-cost was a single redundant verification step that was already part of the workflow.
+
+## 2026-05-10 — peer agents committing in parallel held foreign git/index.lock (Riverine Drifting Lighthouse)
+
+- **Surprise**: my `git add` returned `fatal: Unable to create '.git/index.lock': File exists` mid-staging. Per `feedback_no_delete_git_lock` and `feedback_no_lock_wait_loops`, the only legitimate response is to surface to the user (not delete the lock, not poll). Surfaced via prose; the lock cleared on its own as the peer agents (Woodland Growing Leaf + Velvet Creeping Mask) finished their commits.
+- **Implication**: under multi-agent committing pressure on a single branch, expect transient lock contention. Continuing without acknowledging the lock would be a `feedback_no_delete_git_lock` violation; passive polling is a `feedback_no_lock_wait_loops` violation. Surfacing IS the correct path; the lock self-clears within the peer agent's commit window. Do not engineer a wait loop.
+
+## 2026-05-10 — Open Lifting Gale / cursor / GPT-5.5 / `e4ad13`
+
+### Agent-tools Workstream 1 review loop
+
+- **Surprise**: moving new filesystem-backed CLI checks into a fresh
+  `*.integration.test.ts` file still tripped `@oaknational/no-real-io-in-tests`.
+  Existing mixed IO in `collaboration-state.unit.test.ts` is historical debt, not
+  permission to add more. The quality-preserving shape for the CLI
+  discoverability slice was to extract pure helpers (`closeSummaryFromOptions`,
+  `formatCommsSendResult`) and test those directly while leaving the pre-existing
+  file-level debt untouched.
+- **Behaviour change**: when agent-tools CLI behaviour needs output/path
+  assertions, first ask whether the observable contract can be factored into a
+  pure formatter or option resolver. Add filesystem-backed coverage only if the
+  repo already has an accepted harness shape for that path.

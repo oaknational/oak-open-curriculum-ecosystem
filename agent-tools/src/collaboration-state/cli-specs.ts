@@ -42,7 +42,10 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'comms:send': commandSpec({
     help:
       'comms send --title <title> --body <body> --platform <platform> --model <model> ' +
-      '[--events-dir <dir>] [--output <path>] [--repo-root <path>] [--now <iso>] [--event-id <id>]',
+      '[--events-dir <dir>] [--output <path>] [--repo-root <path>] [--now <iso>] ' +
+      '[--event-id <id>] (identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
+      'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
+      'or OAK_AGENT_IDENTITY_OVERRIDE)',
     options: [
       'title',
       'body',
@@ -63,9 +66,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   }),
   'claims:open': commandSpec({
     help:
-      'claims open --active <path> --thread <thread> --area-kind <kind> ' +
+      'claims open --active <path> --thread <thread> ' +
+      '--area-kind <files|workspace|plan|adr|git> ' +
       '--intent <text> --now <iso> --platform <platform> --model <model> ' +
-      '[--file <path>...] [--area-pattern <pattern>] [--claim-id <id>] [--ttl-seconds <n>]',
+      '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
+      '[--ttl-seconds <n>] (use either repeatable --file or repeatable --area-pattern, not both)',
     options: [
       'active',
       'thread',
@@ -90,8 +95,18 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'claims:close': commandSpec({
     help:
       'claims close --active <path> --closed <path> --claim-id <id> ' +
-      '--summary <text> --now <iso> --platform <platform> --model <model>',
-    options: ['active', 'closed', 'claim-id', 'summary', 'now', 'platform', 'model'],
+      '--summary <text> --now <iso> --platform <platform> --model <model> ' +
+      '[--closure-summary <text> alias for --summary]',
+    options: [
+      'active',
+      'closed',
+      'claim-id',
+      'summary',
+      'closure-summary',
+      'now',
+      'platform',
+      'model',
+    ],
     handler: closeClaim,
   }),
   'claims:archive-stale': commandSpec({

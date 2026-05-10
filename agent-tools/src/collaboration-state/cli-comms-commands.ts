@@ -55,10 +55,11 @@ export async function sendComms(
   const nowIso = optional(options, 'now') ?? new Date().toISOString();
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
   const defaults = commsSendDefaults(options, nowIso, eventId);
-  await appendComms(withDefaults(options, defaults), env);
-  await renderComms(withDefaults(options, defaults));
+  const resolvedOptions = withDefaults(options, defaults);
+  await appendComms(resolvedOptions, env);
+  await renderComms(resolvedOptions);
 
-  return '';
+  return formatCommsSendResult(resolvedOptions, eventId);
 }
 
 export function commsSendDefaults(
@@ -78,6 +79,25 @@ export function commsSendDefaults(
 
 function collaborationRepoRoot(options: Options): string {
   return optional(options, 'repo-root') ?? findCollaborationRepoRoot(process.cwd());
+}
+
+export function formatCommsSendResult(options: Options, eventId: string): string {
+  return `${JSON.stringify(commsSendResult(options, eventId), null, 2)}\n`;
+}
+
+function commsSendResult(
+  options: Options,
+  eventId: string,
+): Readonly<{
+  readonly event_id: string;
+  readonly event_path: string;
+  readonly shared_log_path: string;
+}> {
+  return {
+    event_id: eventId,
+    event_path: join(required(options, 'events-dir'), `${eventId}.json`),
+    shared_log_path: required(options, 'output'),
+  };
 }
 
 function findCollaborationRepoRoot(start: string): string {

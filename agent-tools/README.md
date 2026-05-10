@@ -22,10 +22,11 @@ adjacent mechanisms are Practice substance by default per
 This repository's local implementation boundary is recorded in
 [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md).
 
-It provides five operator tools:
+It provides six operator tools:
 
 - `agent-identity`: derive deterministic agent display names from explicit stable seeds.
 - `collaboration-state`: safely mutate shared collaboration state with identity preflight, immutable comms events, transaction-guarded JSON writes, and TTL cleanup.
+- `commit-queue`: coordinate short-lived git index/head commit windows and verify staged bundles before commit.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -86,7 +87,8 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity -
   `agent_name`, `platform`, `model`, `session_id_prefix`, and seed source.
 - `comms append` / `comms send` / `comms render` — append immutable
   communication events and render `shared-comms-log.md`. Use `send` for the
-  low-boilerplate append-and-render path.
+  low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
+  `event_path`, and `shared_log_path` so agents can verify the write target.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
   generated or supplied `claim_id` as JSON.
@@ -106,6 +108,25 @@ CODEX_THREAD_ID=019dd34d-cb6a-74e0-a29d-6cb8a65ea14b \
   pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 pnpm agent-tools:collaboration-state -- claims list --active .agent/state/collaboration/active-claims.json
 pnpm agent-tools:collaboration-state -- claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
+pnpm agent-tools:collaboration-state -- claims open \
+  --active .agent/state/collaboration/active-claims.json \
+  --thread agentic-engineering-enhancements \
+  --area-kind files \
+  --file agent-tools/src/collaboration-state/cli.ts \
+  --intent "Implement collaboration-state CLI ergonomics." \
+  --now 2026-05-10T12:15:00Z \
+  --platform cursor \
+  --model GPT-5.5
+pnpm agent-tools:collaboration-state -- claims open \
+  --active .agent/state/collaboration/active-claims.json \
+  --thread agentic-engineering-enhancements \
+  --area-kind files \
+  --area-pattern "agent-tools/src/collaboration-state/*.ts" \
+  --area-pattern "agent-tools/tests/collaboration-state/*.test.ts" \
+  --intent "Inspect collaboration-state CLI surfaces." \
+  --now 2026-05-10T12:15:00Z \
+  --platform cursor \
+  --model GPT-5.5
 pnpm agent-tools:collaboration-state -- comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
 pnpm agent-tools:commit-queue -- status
 ```

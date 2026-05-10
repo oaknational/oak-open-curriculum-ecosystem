@@ -34,17 +34,36 @@ async function dispatch(options: Options, env: CollaborationStateEnvironment): P
     return `${topicUsage(options.command)}\n`;
   }
 
-  const spec = specs[`${options.command ?? ''}:${options.topic ?? ''}`];
-  if (spec === undefined) {
-    throw new Error(usage());
-  }
+  return dispatchCommand(options, env, commandSpecForOptions(options));
+}
+
+async function dispatchCommand(
+  options: Options,
+  env: CollaborationStateEnvironment,
+  spec: CommandSpec,
+): Promise<string> {
   if (options.values.has('help')) {
     return `${spec.help}\n`;
   }
 
   validateKnownOptions(options, spec);
 
-  return spec.handler(options, env);
+  try {
+    return await spec.handler(options, env);
+  } catch (error) {
+    throw new Error(commandError(spec, error instanceof Error ? error.message : String(error)), {
+      cause: error,
+    });
+  }
+}
+
+function commandSpecForOptions(options: Options): CommandSpec {
+  const spec = specs[`${options.command ?? ''}:${options.topic ?? ''}`];
+  if (spec === undefined) {
+    throw new Error(usage());
+  }
+
+  return spec;
 }
 
 function success(stdout: string): CollaborationStateCliResult {
@@ -106,13 +125,22 @@ function validateKnownOptions(options: Options, spec: CommandSpec): void {
   for (const key of options.values.keys()) {
     if (isUnknownValueOption(key, spec)) {
       throw new Error(
-        `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${key}`,
+        commandError(
+          spec,
+          `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${key}`,
+        ),
       );
     }
   }
 
-  if (isUnknownFileOption(options, spec)) {
-    throw new Error(`unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --file`);
+  const unknownRepeatableOption = firstUnknownRepeatableOption(options, spec);
+  if (unknownRepeatableOption !== undefined) {
+    throw new Error(
+      commandError(
+        spec,
+        `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${unknownRepeatableOption}`,
+      ),
+    );
   }
 }
 
@@ -120,6 +148,17 @@ function isUnknownValueOption(key: string, spec: CommandSpec): boolean {
   return key !== 'help' && !spec.options.has(key);
 }
 
-function isUnknownFileOption(options: Options, spec: CommandSpec): boolean {
-  return options.files.length > 0 && spec.allowsFiles !== true && !spec.options.has('file');
+function firstUnknownRepeatableOption(options: Options, spec: CommandSpec): string | undefined {
+  if (options.files.length > 0 && spec.allowsFiles !== true && !spec.options.has('file')) {
+    return 'file';
+  }
+  if (options.areaPatterns.length > 0 && !spec.options.has('area-pattern')) {
+    return 'area-pattern';
+  }
+
+  return undefined;
+}
+
+function commandError(spec: CommandSpec, message: string): string {
+  return `${spec.help}\n\nError: ${message}`;
 }

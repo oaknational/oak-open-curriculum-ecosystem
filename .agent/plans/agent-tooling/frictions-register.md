@@ -30,7 +30,9 @@ agent-observed friction is first-class user feedback."*
 - **Expected**: what should have happened
 - **Candidate cure**: smallest concrete change that resolves the friction
 - **Target surface**: agent-tools CLI / docs / rule / plan / ADR / PDR
-- **Status**: open / mitigated / addressed-in-plan-X / superseded
+- **Status**: open / partially-addressed / mitigated / addressed-in-plan-X /
+  addressed-in-working-tree-YYYY-MM-DD / addressed-in-existing-behaviour /
+  superseded
 - **Owner direction status**: standing / session-scoped / unsolicited
 ```
 
@@ -39,7 +41,11 @@ dedicated plan that this entry points to.
 
 ---
 
-## Open Frictions
+## Friction Entries
+
+Status lines are the disposition source of truth. Entries remain in this
+section until a consolidation pass moves them; the addressed/mitigated section
+below is a cross-reference index, not a second source of truth.
 
 ### F-01 — `comms send` rejects `--agent-name`
 
@@ -56,7 +62,11 @@ dedicated plan that this entry points to.
   AND name the supported identity inputs in the help text; consider
   accepting `--agent-name` as an alias resolved against the wordlist.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree. `comms send` help now
+  names `PRACTICE_AGENT_SESSION_ID_CURSOR` and
+  `OAK_AGENT_IDENTITY_OVERRIDE`, and unsupported identity-name flags
+  return command help plus the specific unknown-option error.
 - **Owner direction**: standing (full-help-on-invalid-flags, F-09)
 
 ### F-02 — `claims close` requires `--summary` not `--closure-summary`
@@ -73,7 +83,10 @@ dedicated plan that this entry points to.
   `--summary`; full-help-on-invalid-flag (F-09) ensures next agent
   discovers the canonical name immediately.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree. `claims close` accepts
+  `--closure-summary` as an alias for `--summary`, and help documents
+  the alias.
 
 ### F-03 — `claims close` error names wrong option as missing
 
@@ -93,7 +106,11 @@ dedicated plan that this entry points to.
   composes with this.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-options.ts`
   or shared CLI parser layer
-- **Status**: open
+- **Status**: addressed-in-existing-cli-validation
+- **Review 2026-05-10**: addressed for the reported shape. The current
+  parser rejects globally unknown flags before required-option validation,
+  and `runCollaborationStateCli` has regression coverage for unknown
+  options before missing required options.
 
 ### F-04 — `claims open` `--file` vs `--area-pattern` ambiguity
 
@@ -108,7 +125,11 @@ dedicated plan that this entry points to.
   and mutual-exclusion clearly stated; add canonical examples.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`
   - `agent-tools/README.md`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree. Command help states
+  repeatability and mutual exclusion for `--file` and `--area-pattern`;
+  `agent-tools/README.md` now includes canonical `claims open --file`
+  and `claims open --area-pattern` examples.
 
 ### F-05 — `comms render` chokes on a single malformed event JSON
 
@@ -126,6 +147,9 @@ dedicated plan that this entry points to.
   per-file try/catch with error summary at the end.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
 - **Status**: open
+- **Review 2026-05-10**: still open. `readCommsEvents` parses each JSON
+  file directly in sequence; one parse or schema error still aborts the
+  entire render.
 - **Severity**: high (substrate-wide blocker when triggered)
 - **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
   `comms send` succeeded in writing the new event but then failed
@@ -164,6 +188,9 @@ dedicated plan that this entry points to.
 - **Target surface**: root `package.json` agent-tools scripts;
   `agent-tools/src/core/agent-identity/`
 - **Status**: open
+- **Review 2026-05-10**: still open. Root `agent-tools:*` scripts still
+  delegate to workspace scripts whose operational CLIs rebuild before
+  execution.
 - **Owner direction**: standing
 - **Related plan**: ties into `current/agent-infrastructure-portability-remediation.plan.md`
 
@@ -196,6 +223,8 @@ dedicated plan that this entry points to.
   `comms watch` is the optional streaming layer.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
 - **Status**: open
+- **Review 2026-05-10**: still open. `comms append`, `send`, and
+  `render` exist; `comms list`, `show`, and `watch` do not.
 - **Owner direction**: standing
 
 ### F-08 — No `claims list/show` CLIs
@@ -213,9 +242,10 @@ dedicated plan that this entry points to.
   - `claims show <claim-id>`
 - **Target surface**: `agent-tools/src/collaboration-state/cli-claim-query-commands.ts`
   (already exists per Fronded's bundle 33aeec40 — verify scope)
-- **Status**: partially-addressed-in-33aeec40 — confirm against
-  Fronded's `feat(agent-tools): improve collaboration cli ergonomics`
-  bundle whether the gap is closed; if not, list as open.
+- **Status**: partially-addressed-in-33aeec40
+- **Review 2026-05-10**: `claims list`, `claims show`, `claims mine`,
+  and `claims status` exist. The requested list filters
+  (`--prefix`, `--name`, `--thread`, `--kind`) are still absent.
 
 ### F-09 — Invalid flags MUST print FULL help
 
@@ -232,7 +262,11 @@ dedicated plan that this entry points to.
   `mutually-exclusive option` errors.
 - **Target surface**: `agent-tools/src/core/cli/` (or wherever the
   shared CLI helper lives) — applied across all `agent-tools/src/*/cli*.ts`
-- **Status**: open
+- **Status**: addressed-for-collaboration-state-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed for the `collaboration-state` CLI in the
+  working tree. Command-specific validation and handler errors now return
+  full command help plus the specific error; other `agent-tools` CLIs
+  still need the convention when their friction entries require it.
 - **Owner direction**: standing
 - **Recurrence**: 2026-05-06 (Clouded Lifting Aerie, `1e2244`) —
   `claims open` rejected my command three times in succession with
@@ -264,6 +298,9 @@ dedicated plan that this entry points to.
 - **Target surface**: `.agent/practice-core/decision-records/PDR-027-*.md`
   amendment; `agent-tools/src/collaboration-state/state-io.ts` matchers
 - **Status**: open (PDR amendment candidate)
+- **Review 2026-05-10**: still open. `sameAgent`-based ownership checks
+  exist for `claims mine`; no broader documented pair-key routing model
+  has landed here.
 - **Owner direction**: standing
 
 ### F-11 — No `commit-queue list/show` CLIs
@@ -280,9 +317,10 @@ dedicated plan that this entry points to.
   - `commit-queue show <intent-id>`
 - **Candidate cure**: Add the two commands above.
 - **Target surface**: `agent-tools/src/commit-queue/cli.ts`
-- **Status**: partially-addressed-in-33aeec40 — confirm against Fronded's
-  `feat(agent-tools): improve collaboration cli ergonomics` bundle
-  whether the gap is closed; if not, list as open.
+- **Status**: partially-addressed-by-commit-queue-status
+- **Review 2026-05-10**: `commit-queue status` exists and emits the
+  machine-readable queue with entries. Dedicated `list` / `show`
+  commands and `--prefix` / `--phase` filters are still absent.
 
 ### F-12 — `claims open --area-kind` accepted values not discoverable
 
@@ -308,7 +346,10 @@ dedicated plan that this entry points to.
   `cli-options.ts` — generalise as a discoverability convention.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`
   and `cli-options.ts`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree. `claims open` help now
+  enumerates `--area-kind <files|workspace|plan|adr|git>`, and the
+  unsupported-kind error lists the accepted values.
 - **Owner direction**: standing (full-help-on-invalid-flags, F-09)
 
 ### F-13 — `comms send` does not print event-id and path on success
@@ -330,7 +371,10 @@ dedicated plan that this entry points to.
 - **Candidate cure**: Print the success line. Composes with F-09 (full
   help on invalid flags) and the broader CLI-discoverability theme.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree. `sendComms` returns
+  structured JSON containing `event_id`, `event_path`, and
+  `shared_log_path`.
 
 ### F-14 — `claims open` silently overwrites repeated `--area-pattern`
 
@@ -364,7 +408,15 @@ dedicated plan that this entry points to.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-options.ts`;
   `agent-tools/src/collaboration-state/cli-claim-commands.ts`;
   `agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts`
-- **Status**: open
+- **Status**: addressed-in-working-tree-2026-05-10
+- **Review 2026-05-10**: fixed in working tree by adding repeatable
+  `areaPatterns` parsing, exact-one validation for `--file` vs
+  `--area-pattern`, help text that states repeatability/mutual exclusion,
+  and regression coverage for both repeated-pattern preservation and mixed
+  source rejection. `agent-tools/README.md` now includes a multi-pattern
+  `--area-pattern` example.
+- **Landing trigger**: after commit, replace this working-tree status with
+  `addressed-in-<commit-sha>`.
 - **Owner direction**: standing (agent-tooling friction is first-class user
   feedback)
 - **Recurrence**: 2026-05-06 (Clouded Lifting Aerie, `1e2244`) — same
@@ -431,6 +483,10 @@ dedicated plan that this entry points to.
 - **Target surface**: `agent-tools/src/commit-queue/`;
   `.agent/skills/commit/SKILL.md`; commit-queue CLI help text.
 - **Status**: open
+- **Review 2026-05-10**: still open. `record-staged` still writes the
+  fingerprint into the registry entry and `verify-staged` still verifies
+  against staged content; no sibling fingerprint store or `MM` guard is
+  present.
 - **Severity**: high (every commit that includes active-claims.json
   in its staged bundle hits this; the workflow-that-works is not
   documented anywhere agents would find it before failing)
@@ -472,13 +528,17 @@ dedicated plan that this entry points to.
   `scripts/validate-portability.ts`,
   `docs/engineering/skills-adapter-generation.md`.
 - **Status**: addressed-in-plan-skills-standardisation-and-adapter-generator
+- **Review 2026-05-10**: no status change. The entry already routes to
+  the skills standardisation plan; this pass did not re-scope that work.
 - **Owner direction**: standing — pre-requisite for top-quality agent work
 
 ---
 
 ## Mitigated / Addressed Frictions
 
-*(none yet — first capture pass)*
+- F-03 — addressed by current CLI validation ordering.
+- F-14 — addressed in the 2026-05-10 working tree; replace with commit
+  SHA after landing.
 
 ---
 
@@ -487,20 +547,20 @@ dedicated plan that this entry points to.
 These run across multiple individual frictions and may justify their own
 plan if the pattern continues:
 
-1. **Discoverability** (F-01, F-02, F-03, F-04, F-09): agents repeatedly
+1. **Discoverability** (F-01, F-02, F-04, F-09, F-12, F-13): agents repeatedly
    reach for semantic flag names that don't exist; full-help-on-invalid
    (F-09) is the structural cure for the whole class.
-2. **Read-side CLI gaps** (F-07, F-08, F-11): the substrate has good
-   write-side CLIs but agents fall back to Python for reads. The shape of
-   the missing read commands is consistent (`list` + `show` + optional
-   `watch`).
+2. **Read-side CLI gaps** (F-07, F-08, F-11): the substrate has some
+   read-side coverage (`claims list/show/mine/status`,
+   `commit-queue status`) but agents still lack filtered list/show/watch
+   affordances and fall back to Python for narrower reads.
 3. **In-flight refactor isolation** (F-06): development changes to
    agent-tools should not propagate to live sessions without explicit
    acceptance; this is a build/release boundary issue, not a CLI issue.
 4. **Identity as a first-class concept** (F-10): name, prefix, seed,
    wordlist version — these need a single coherent identity model that
    tools can rely on.
-5. **Scalar-vs-repeatable flag ambiguity** (F-04, F-12, F-14): when path
+5. **Scalar-vs-repeatable flag ambiguity** (F-04, F-12): when path
    or enum flags are visually similar but differ in repeatability,
    agents infer behaviour from neighbouring flags. Help text and parser
    semantics need to make cardinality impossible to miss.
