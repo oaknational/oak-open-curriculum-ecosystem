@@ -6,6 +6,7 @@ import {
   findAddedBlockedContent,
   findAddedScopedBlock,
   isPathInScope,
+  lineIsPredominantlyCodeShaped,
   parseBlockedContentPolicy,
   parseHookInput,
   parseScopedContentBlocks,
@@ -310,11 +311,26 @@ describe('findAddedScopedBlock — regex with context-aware exclusions (WS4)', (
     ).toStrictEqual(shaBlock);
   });
 
-  it('does not detect a SHA wrapped in inline code (excludes_inline_code: true)', () => {
+  it('detects a SHA wrapped in inline code on a prose-narrative line (cure for the WS4 over-strip bug)', () => {
+    // Per PDR-053-adjacent cure: backticked SHAs in prose-narrative
+    // context are intentional moving-target pointers and the rule must
+    // fire. The earlier blanket inline-code strip gave a false negative
+    // on this shape.
     expect(
       findAddedScopedBlock(
         'See commit `abc1234` for the change.',
         'See some commit for the change.',
+        '/repo/docs/architecture/architectural-decisions/ADR-x.md',
+        [shaBlock],
+      ),
+    ).toStrictEqual(shaBlock);
+  });
+
+  it('does not detect a SHA wrapped in inline code on a data-shaped line (excludes_inline_code: true)', () => {
+    expect(
+      findAddedScopedBlock(
+        '  commit_sha: `abc1234`',
+        '  commit_sha: `older000`',
         '/repo/docs/architecture/architectural-decisions/ADR-x.md',
         [shaBlock],
       ),
@@ -523,5 +539,69 @@ describe('readStreamText', () => {
     }
 
     await expect(readStreamText(emptyStdin())).resolves.toBe('');
+  });
+});
+
+describe('lineIsPredominantlyCodeShaped', () => {
+  it('treats prose with a backticked SHA as prose-narrative', () => {
+    expect(lineIsPredominantlyCodeShaped('see commit `abc1234` for the original change')).toBe(
+      false,
+    );
+  });
+
+  it('treats a YAML-style data line with a backticked SHA as code-shaped', () => {
+    expect(lineIsPredominantlyCodeShaped('  commit_sha: `abc1234`')).toBe(true);
+  });
+
+  it('treats a markdown table cell as code-shaped when the prose run is short', () => {
+    expect(lineIsPredominantlyCodeShaped('| 2026-05-04 | `abc1234` | landed |')).toBe(true);
+  });
+
+  it('treats a sentence with multiple natural-language words as prose', () => {
+    expect(
+      lineIsPredominantlyCodeShaped(
+        'the rule was added in commit `abc1234` to address the moving-target failure mode',
+      ),
+    ).toBe(false);
+  });
+
+  it('treats a JSON line as code-shaped', () => {
+    expect(lineIsPredominantlyCodeShaped('"sha": "abc1234"')).toBe(true);
+  });
+
+  it('treats a list item that is mostly a code reference as code-shaped', () => {
+    expect(lineIsPredominantlyCodeShaped('- `abc1234`')).toBe(true);
+  });
+});
+
+describe('regex matching with prose-vs-code distinction', () => {
+  it('fires the SHA matcher on prose-narrative backticked SHAs when excludes_inline_code is set', () => {
+    const block = {
+      pattern: '\\b[0-9a-f]{7,40}\\b',
+      kind: 'regex' as const,
+      include_paths: ['**/*.md'],
+      excludes_inline_code: true,
+      citation: 'no moving targets in permanent docs',
+    };
+    const newContent = 'See commit `abc1234` for the original change to the auth flow.';
+    const priorContent = '';
+
+    expect(findAddedScopedBlock(newContent, priorContent, '/workspace/x.md', [block])).toEqual(
+      block,
+    );
+  });
+
+  it('does not fire the SHA matcher on YAML-style data lines with backticked SHAs', () => {
+    const block = {
+      pattern: '\\b[0-9a-f]{7,40}\\b',
+      kind: 'regex' as const,
+      include_paths: ['**/*.md'],
+      excludes_inline_code: true,
+      citation: 'no moving targets in permanent docs',
+    };
+    const newContent = '  commit_sha: `abc1234`';
+    const priorContent = '';
+
+    expect(findAddedScopedBlock(newContent, priorContent, '/workspace/x.md', [block])).toBeNull();
   });
 });

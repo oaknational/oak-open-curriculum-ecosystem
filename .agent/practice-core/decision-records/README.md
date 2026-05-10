@@ -176,3 +176,7 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-050](PDR-050-state-memory-substrate-contracts.md) | State and Memory Substrate Contracts | Accepted |
 | [PDR-051](PDR-051-vendor-agnostic-skills-standardisation.md) | Vendor-Agnostic Skills Standardisation | Accepted |
 | [PDR-052](PDR-052-directive-file-context-budget.md) | Directive-File Context Budget | Accepted |
+| [PDR-053](PDR-053-orchestrator-vs-gate-structural-cure.md) | Orchestrator-vs-Gate Structural Cure (Advisory Polarity) | Accepted |
+| [PDR-054](PDR-054-asymmetric-cure-discipline.md) | Asymmetric-Cure Discipline | Accepted |
+| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set Discipline for Coordination Tooling | Accepted |
+| [PDR-056](PDR-056-inter-agent-collaboration-protocol.md) | Inter-Agent Collaboration Protocol — Ten Named Cures | Accepted |

@@ -146,13 +146,44 @@ function stripInlineCodeSpans(line) {
 }
 
 /**
+ * Decide whether a line is *predominantly code-shaped* (a YAML/JSON-style
+ * data line, an indented data fragment, or a line whose substance is the
+ * backticked tokens) versus *prose-narrative* (a sentence containing
+ * backticked references). The discipline (per PDR-053 surface-polarity
+ * doctrine and the no-moving-targets rule) is that backticked SHAs in
+ * prose are intentional pointers and SHOULD fire the moving-target rule;
+ * backticked SHAs inside data-shaped lines (YAML field values, table
+ * cells, JSON snippets) are the data being documented and SHOULD NOT.
+ *
+ * Heuristic: the line is "predominantly code-shaped" when its
+ * non-backticked content does not contain a recognisable sentence
+ * fragment (≥3 consecutive alphabetic words separated by spaces).
+ * Sentence-shape content marks the line as prose; absence marks it as
+ * data.
+ *
+ * @param {string} line
+ * @returns {boolean}
+ */
+export function lineIsPredominantlyCodeShaped(line) {
+  const stripped = stripInlineCodeSpans(line);
+  // Three-word run of alphabetic tokens separated by spaces marks the
+  // line as prose. Apostrophes within words are allowed.
+  const proseRun = /\b[A-Za-z][A-Za-z']+\s+[A-Za-z][A-Za-z']+\s+[A-Za-z][A-Za-z']+\b/u;
+  return !proseRun.test(stripped);
+}
+
+/**
  * Scan content line-by-line for a regex match that respects fenced
- * code blocks, inline code (when configured), and explicit
- * historical-reference markers.
+ * code blocks, inline code (when configured AND the line is data-shaped),
+ * and explicit historical-reference markers.
  *
  * - Lines inside fenced code blocks (delimited by `​`​`​`) are skipped.
- * - When `excludes_inline_code` is true, inline-code spans are
- *   stripped from each line before the regex test.
+ * - When `excludes_inline_code` is true, inline-code spans are stripped
+ *   from each line before the regex test ONLY IF the line is
+ *   predominantly code-shaped (per `lineIsPredominantlyCodeShaped`). For
+ *   prose-narrative lines (a sentence with a backticked token), the line
+ *   is tested verbatim — backticked SHAs in prose are intentional moving-
+ *   target pointers and the rule fires on them.
  * - Lines containing any `excludes_lines_with` marker are skipped.
  *
  * @param {string} content
@@ -176,7 +207,10 @@ function scanLinesForRegex(content, block) {
     if (excludeMarkers.some((marker) => rawLine.includes(marker))) {
       continue;
     }
-    const probeLine = excludesInlineCode ? stripInlineCodeSpans(rawLine) : rawLine;
+    const probeLine =
+      excludesInlineCode && lineIsPredominantlyCodeShaped(rawLine)
+        ? stripInlineCodeSpans(rawLine)
+        : rawLine;
     if (regex.test(probeLine)) {
       return true;
     }

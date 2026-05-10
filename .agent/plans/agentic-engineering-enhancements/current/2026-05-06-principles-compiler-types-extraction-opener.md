@@ -132,7 +132,7 @@ pointed at from the moved sections must remain valid.
 ### Step 8 — Run the gate orchestrator
 
 Per the commit skill, run
-`pnpm exec tsx scripts/check-commit-skill-gates.ts -F /tmp/<msg>`
+`pnpm exec tsx scripts/check-commit-skill-advisories.ts -F /tmp/<msg>`
 before staging. If fitness on `principles.md` improves (HARD →
 under), record that in the commit message.
 

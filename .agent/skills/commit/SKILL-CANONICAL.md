@@ -32,17 +32,22 @@ closes that exposure window.
 
 These scripts make this skill actionable end-to-end:
 
-- **`scripts/check-commit-skill-gates.ts`** — orchestrates the full
-  pre-`git commit` validation sequence as a single composed gate: practice
-  fitness (`practice:fitness:strict-hard`), practice vocabulary
-  (`practice:vocabulary`), then the commit-message check
+- **`scripts/check-commit-skill-advisories.ts`** — `[ADVISORY ONLY — NOT A
+  COMMIT GATE]`. Orchestrates the commit skill's pre-`git commit` advisory
+  discipline-check sequence: practice fitness (`practice:fitness:strict-hard`),
+  practice vocabulary (`practice:vocabulary`), then the commit-message check
   (`scripts/check-commit-message.sh`). Exits with the first non-zero exit
-  code. **Use BEFORE every `git commit`.** Run via
-  `pnpm exec tsx scripts/check-commit-skill-gates.ts` and forward the same
-  arguments you would pass to `check-commit-message.sh` (`-F file`, `-F -`,
-  `-m "subject"`, etc.). Doctrinal anchors: PDR-038 §2026-05-04 amendment
-  (un-enforced doctrine at maturity is liability), PDR-044 (memetic immune
-  system, innate-immunity layer), ADR-144 (vocabulary consistency).
+  code. **Use BEFORE every `git commit`** — but the exit is **advisory, not
+  blocking**. The blocking commit-time enforcement is `.husky/pre-commit`,
+  a separate enforcement surface (see "Quality Gates Are Always Blocking; the
+  Orchestrator Is Advisory" below). Run via
+  `pnpm exec tsx scripts/check-commit-skill-advisories.ts` and forward the
+  same arguments you would pass to `check-commit-message.sh` (`-F file`,
+  `-F -`, `-m "subject"`, etc.). Doctrinal anchors: PDR-038 §2026-05-04
+  amendment (un-enforced doctrine at maturity is liability), PDR-044
+  (memetic immune system, innate-immunity layer), PDR-053
+  (orchestrator-vs-gate structural cure), ADR-144 (vocabulary consistency),
+  ADR-176 (advisory orchestrator naming).
 - **`scripts/check-commit-message.sh`** — validates a commit message against
   this repo's commitlint config in isolation from the rest of the pre-commit /
   commit-msg hook chain. Mirrors `git commit` message intake (`-m` repeats,
@@ -194,7 +199,7 @@ the advisory queue and the short-lived git transaction claim:
    immediately before committing:
 
    ```bash
-   pnpm exec tsx scripts/check-commit-skill-gates.ts -F .git/COMMIT_EDITMSG
+   pnpm exec tsx scripts/check-commit-skill-advisories.ts -F .git/COMMIT_EDITMSG
    pnpm agent-tools:commit-queue -- verify-staged \
      --intent-id "<intent-id>" \
      --commit-subject "<draft subject>"
@@ -283,7 +288,7 @@ The wait is not coordination. It complements, but never replaces, the
    `bulk-downloads/`. Review each file staged and record its fingerprint.
 6. **Draft the message** against the enumerated constraints.
 7. **Run the commit-skill gate orchestrator
-   (`pnpm exec tsx scripts/check-commit-skill-gates.ts`) BEFORE invoking
+   (`pnpm exec tsx scripts/check-commit-skill-advisories.ts`) BEFORE invoking
    `git commit`** (see below). The orchestrator runs the practice fitness
    gate, the practice vocabulary gate, and the commit-message check in
    sequence. If any gate fails, fix the underlying issue and re-run — do
@@ -306,7 +311,7 @@ fitness gate (`practice:fitness:strict-hard`), the practice vocabulary gate
 with the first non-zero exit code.
 
 ```bash
-pnpm exec tsx scripts/check-commit-skill-gates.ts -F - <<'EOF'
+pnpm exec tsx scripts/check-commit-skill-advisories.ts -F - <<'EOF'
 type(scope): short subject starting lowercase
 
 Body paragraph explaining motivation and context. Wrap at ~100 chars
@@ -320,7 +325,7 @@ Or pass via `-m` (repeats join paragraphs with blank lines, identical to
 `git commit -m … -m …`):
 
 ```bash
-pnpm exec tsx scripts/check-commit-skill-gates.ts \
+pnpm exec tsx scripts/check-commit-skill-advisories.ts \
   -m "type(scope): short subject" \
   -m "Body paragraph one." \
   -m "Body paragraph two."
@@ -469,7 +474,7 @@ absolute. Bypassing them requires explicit per-commit owner authorisation
 (`--no-verify`), which is owner-initiated only — never agent-proposed.
 
 **The commit-skill orchestrator — advisory, always.** The
-`scripts/check-commit-skill-gates.ts` script (and its sub-checks
+`scripts/check-commit-skill-advisories.ts` script (and its sub-checks
 `practice:fitness:strict-hard`, `practice:vocabulary`,
 `scripts/check-commit-message.sh`) is the **advisory pre-screen tier**.
 Agents invoke it voluntarily before `git commit` to surface important
@@ -480,19 +485,26 @@ the substance-led path (e.g. PDR-046 §Move 3 graduation upward when the
 signal flags a layer at rest, or fitness diagnostics on layers being
 processed during a multi-layer pass).
 
-**The conflation failure mode.** Three observed instances on 2026-05-05:
-agents under failure pressure round the orchestrator's identity into the
-hook chain's identity ("`check-commit-skill-gates.ts` has 'gates' in the
-name → it must be a blocking gate") and reach for `--no-verify` as the
+**The conflation failure mode.** Five observed instances across four
+distinct agents on 2026-05-05 (Ethereal Transiting Comet, Dawnlit Transiting
+Galaxy, Opalescent Threading Nebula, Twilit Beaming Aurora, Fronded Climbing
+Pollen): agents under failure pressure round the advisory orchestrator's
+identity into the blocking hook chain's identity (the `gates` token in the
+former filename `check-commit-skill-gates.ts` pulled the rounded-off whole
+back into place under context pressure) and reach for `--no-verify` as the
 escape valve, despite the actual blocking surface (the hook chain) running
-a different rule set than the failing pre-screen. Two of the three
-instances reached `--no-verify` proposal before owner correction; the
-third (Opalescent Threading Nebula's rotation commit) constructed a false
+a different rule set than the failing pre-screen. Two of the five instances
+reached `--no-verify` proposal before owner correction; the third
+(Opalescent Threading Nebula's rotation commit) constructed a false
 doctrinal collision between SKILL §Pre-Commit Validation and PDR-046 §Move
 2 to justify proceeding past the orchestrator's HARD signal — same
 underlying rounding-off, different framing. In every instance plain `git
 commit` succeeded because `.husky/pre-commit` does not run
-`practice:fitness:strict-hard`.
+`practice:fitness:strict-hard`. The 2026-05-10 structural cure
+(rename `scripts/check-commit-skill-gates.ts` →
+`scripts/check-commit-skill-advisories.ts`, advisory banner at every
+invocation, this skill-doctrine update) closes the rounding-off gap by
+encoding the advisory polarity at three surfaces. See PDR-053 + ADR-176.
 
 **Diagnostic discipline.** When *any* enforcer fires, before proposing any
 response, name *which* enforcer is firing on *which* surface and *with

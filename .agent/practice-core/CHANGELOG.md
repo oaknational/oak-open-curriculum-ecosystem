@@ -17,6 +17,29 @@ session. Practice Core changes:
   Sequencing corollary fixes directive-file work as the FINAL step of any
   consolidation pass. Self-applying clause: this PDR is itself directive-
   shape doctrine and the rule applies to its own edits.
+- **Added**: `PDR-053 orchestrator-vs-gate-structural-cure (advisory
+  polarity)`. Polarity-at-three-surfaces structural cure for the recurring
+  conflation of advisory enforcement orchestrators with blocking hook
+  chains: filename + banner + skill-doctrine. Five evidence instances
+  across four agents in 24 hours; reading-only cures lose to artefact
+  gravity.
+- **Added**: `PDR-054 asymmetric-cure-discipline`. A behavioural cure for
+  a shared-state failure mode that fires only when *every* operator
+  follows it is asymmetric: it protects the applier but not peer-
+  triggered manifestations. Third-instance trigger graduates the cure to
+  symmetric structural enforcement; cure documentation must record its
+  symmetry classification.
+- **Amended PDR-014** (Consolidation and Knowledge-Flow Discipline) —
+  polarity required at pattern graduation. Every pattern instance MUST
+  declare polarity (`pattern` | `anti-pattern`) in frontmatter and as a
+  blockquote header. Categories remain orthogonal to polarity.
+- **Added**: `PDR-055 cli-affordance-set-discipline-for-coordination-tooling`. Coordination CLIs on a Practice-bearing repo's collaboration
+  surfaces (`claims`, `commit-queue`, `comms`, identity) implement the
+  affordance triple (`list`, `show`, `watch`) with consistent filter
+  flags. Full help on every flag-validation failure. Robust render
+  boundaries (one bad entry does not block the surface). CLIs invoked
+  via built dist, not source-on-each-invocation. Owner-stated cures
+  graduated.
 
 ## [oak-open-curriculum-ecosystem] 2026-05-09 — focused distilled.md graduation pass
 

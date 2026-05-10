@@ -92,7 +92,7 @@ maps the five-layer restart sequence for the next session.
 - `commit/SKILL.md § Quality Gates Are Always Blocking; the
   Orchestrator Is Advisory` — canonical section heading using
   owner's exact phrasing; distinguishes advisory pre-screen
-  (`scripts/check-commit-skill-gates.ts`) from blocking gates
+  (`scripts/check-commit-skill-advisories.ts`) from blocking gates
   (`.husky/pre-commit` + `commit-msg`); 3-instance evidence trail.
 - `stage-by-explicit-pathspec.md § Cure Asymmetry — One-Sided
   Application Does Not Prevent Absorption` — 3-instance evidence

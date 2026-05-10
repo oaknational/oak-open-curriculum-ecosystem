@@ -168,6 +168,14 @@ Specialist on-demand (not standard roster -- situational trigger only):
 
 **Onboarding docs/path update**: Invoke `code-expert` + `docs-adr-expert` immediately. Add `onboarding-expert` when the change affects onboarding journeys (human and/or AI), `start-right` discoverability, or ADR progressive disclosure.
 
+**Significant documentation or Practice change**: Per
+[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md),
+significant doc/Practice changes always pair `docs-adr-expert` with `onboarding-expert`
+(both reviewers, in parallel) — neither alone covers the failure surface the other catches.
+"Significant" includes: any new ADR/PDR/governance doc/rule; any rename or restructure
+across permanent doctrine surfaces; any change to onboarding entry points
+(`README.md`, `CONTRIBUTING.md`, platform memory files, `.agent/practice-index.md`).
+
 **Release go/no-go**: Invoke `release-readiness-expert` (on-demand, situational trigger).
 
 **Elasticsearch/search change**: Invoke `code-expert` + `elasticsearch-expert` immediately. Add `type-expert` if schema or mapping types are affected.
