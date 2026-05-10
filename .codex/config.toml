@@ -88,15 +88,15 @@ description = "Adversarial architecture reviewer — resilience, failure modes, 
 config_file = "agents/architecture-expert-wilma.toml"
 
 [agents."assumptions-expert"]
-description = "Meta-level plan reviewer for proportionality, assumption validity, and blocking legitimacy."
+description = "Meta-level plan specialist for both read-only review and active-workflow planning support, focused on proportionality, assumption validity, and blocking legitimacy."
 config_file = "agents/assumptions-expert.toml"
 
 [agents."accessibility-expert"]
-description = "WCAG 2.2 AA compliance reviewer for rendered HTML, ARIA, keyboard interaction, colour contrast, and focus management."
+description = "Accessibility specialist for both read-only review and active-workflow planning around WCAG 2.2 AA, WAI-ARIA, keyboard interaction, colour contrast, and focus management in UI-shipping workspaces."
 config_file = "agents/accessibility-expert.toml"
 
 [agents."design-system-expert"]
-description = "Design token and visual consistency reviewer for DTCG JSON, CSS custom properties, and theming."
+description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around DTCG JSON, CSS custom properties, three-tier token model, and theming in UI-shipping workspaces."
 config_file = "agents/design-system-expert.toml"
 
 [agents."react-component-expert"]

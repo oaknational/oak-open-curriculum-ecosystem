@@ -1,5 +1,5 @@
 name = "accessibility-expert"
-description = "WCAG 2.2 AA compliance reviewer for rendered HTML, ARIA, keyboard interaction, colour contrast, and focus management."
+description = "Accessibility specialist for both read-only review and active-workflow planning around WCAG 2.2 AA, WAI-ARIA, keyboard interaction, colour contrast, and focus management in UI-shipping workspaces."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"
@@ -7,8 +7,9 @@ approval_policy = "never"
 developer_instructions = """
 Read and follow `.agent/sub-agents/templates/accessibility-expert.md`.
 
-This file is a thin Codex adapter. The canonical reviewer instructions live in
+This file is a thin Codex adapter. The canonical expert instructions live in
 the template referenced above.
 
-Mode: Observe, analyse and report. Do not modify code or plans.
+Mode: Review or recommend. Do not modify code. The calling agent executes any
+changes you propose.
 """
