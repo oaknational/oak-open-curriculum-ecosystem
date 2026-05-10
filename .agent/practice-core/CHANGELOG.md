@@ -40,6 +40,14 @@ session. Practice Core changes:
   boundaries (one bad entry does not block the surface). CLIs invoked
   via built dist, not source-on-each-invocation. Owner-stated cures
   graduated.
+- **Added**: `PDR-056 inter-agent-collaboration-protocol`. Ten named
+  cures for multi-agent coordination on shared state: out-of-band
+  brief acknowledgement; read/write claim mode; heartbeat-or-die;
+  overflow protocol; comms CLI ergonomics; wall-clock authority;
+  threaded render; worker initiates on empirical surface; deferred
+  commit until task-close + ack; wait-for-ack on deadlined defaults.
+  Each cure carries inline validation status (Hypothesis →
+  Validated as N≥3 evidence accumulates).
 
 ## [oak-open-curriculum-ecosystem] 2026-05-09 — focused distilled.md graduation pass
 

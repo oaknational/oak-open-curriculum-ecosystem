@@ -59,223 +59,41 @@ edits in `docs/`, `.cursor/plans/`, `.agent/plans/`, `.agent/memory/`,
 governance docs); sub-agent template self-references in
 `subagent-architect.md` and `code-expert.md` are equal-priority sites.
 
-**Session close (2026-05-10 — Sylvan Sprouting Grove / `codex` / GPT-5 /
-`019e12`, deep consolidate-docs + `/jc-session-handoff`)**: completed the
-owner-requested deep consolidation pass. Safe landed state: archived the active
-napkin to `archive/napkin-2026-05-10.md`, distilled the 2026-05-10 lessons,
-started a fresh `napkin.md`, and closed the read-oriented consolidation claim.
-Validation passed: targeted markdownlint/prettier, vocabulary, and
-collaboration-state checks. Fitness after rotation: `napkin.md` is healthy;
-`repo-continuity.md` remains hard. **Next safe step**: Windswept Sweeping Gale
-owns the live insight-report plan/pattern/pending-graduations lane; the next
-unclaimed consolidation lane is targeted repo-continuity archive/current-state
-reconciliation for the remaining hard signal and stale current-state text.
+**Session close (2026-05-10 — Sylvan Fruiting Glade / `claude-code` /
+opus-4.7 / `a53e45`, knowledge graduation session)**: owner-invoked
+deep consolidation with explicit reframe — the pending-graduations
+register's `vaporware-gated` / `sequenced-deferral` / `XL-deferred`
+vocabulary was named as fabricated avoidance, not legitimate
+scheduling. Drained the full backlog in session: PDR-052 (directive-file
+context budget); PDR-053 + ADR-176 (orchestrator-vs-gate cure + advisory
+orchestrator naming) including script rename
+`scripts/check-commit-skill-gates.ts` →
+`scripts/check-commit-skill-advisories.ts` + commit-skill update;
+PDR-054 + ADR-177 (asymmetric-cure discipline + staging enforcement);
+PDR-055 + ADR-178 (CLI affordance-set discipline + agent-tools build
+isolation); ADR-171 + amendments to ADR-116/143/162/163 (observability
+orthogonal axes); PDR-056 (inter-agent collaboration protocol — ten
+named cures with inline validation status); PDR-014 amendment for
+polarity-required-at-graduation; new rule
+`.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md`;
+no-moving-targets hook tightening (prose-vs-data distinction in
+`scripts/check-blocked-content.ts` with tests); polarity backfill
+across ~93 pattern files. New pattern instance
+`fabricated-gate-as-avoidance.md` captures the meta-finding so the
+register cannot regrow the same vocabulary. Repo-continuity targeted
+curation moved 12 historical session-close blocks to
+`archive/repo-continuity-session-history-2026-05-10.md`.
+**Next safe step**: pending-graduations housekeeping (mark graduated,
+archive snapshot), fitness/vocabulary gate verification, and owner
+surfacing for the QUAR-1 apply-don't-ask reformulation choice.
 
-**Session close (2026-05-10 — Oceanic Lapping Lighthouse / `claude-code` /
-opus-4.7 / `5765c7`, claude-insight-report disposition plan landed in
-`current/`)**: authored
-`.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`
-(471 lines, 33 KB) covering each of the 30 useful-content items mined from
-the gitignored 2026-05-10 Claude insight report at
-`.agent/reference-local/claude-insight-reports/2026-05-10-full-corpus/`.
-Disposition tally: 2 INTEGRATE · 1 VERIFY-INTEGRATE · 7 CANDIDATE · 20
-DISCARD = 30 items, each row carrying a documented rationale so future
-regenerations of the same report do not re-pose them. Validation passed:
-`pnpm exec markdownlint`, `pnpm exec prettier --check`,
-`pnpm practice:fitness:informational` (new file not flagged), and
-`pnpm agent-tools:collaboration-state -- check`. Plan file is staged as
-untracked; no commit this session per owner direction (next session
-implements). Active claim `1b1648a5` closed at handoff. **Next safe step**:
-the next session opens the plan and executes Phase 0 (audit confirmation)
-then Phase 1 (single net-new pattern file
-`.agent/memory/active/patterns/owner-course-correct-vocabulary.md`).
-
-**Session close (2026-05-10 — Gilded Eclipsing Meteor / `codex` / GPT-5 /
-`019e12`, ADR coverage sweep landed)**: completed the owner-requested serious
-ADR coverage review with docs-adr-expert planning and review. Landed ADR-174
-(dependency vulnerability scanning quality gate) and ADR-175 (external
-evidence corpus freshness governance), refreshed ADR indexes, and amended
-recent auth, security/redaction, quality-gate, Elastic/search, observability,
-Sentry, and agent-practice ADR coverage. Follow-up commits absorbed the docs
-specialist review: HTTP MCP operator docs again reflect live `SENTRY_MODE`
-runtime behaviour while `OBSERVABILITY_SINKS` / `OBSERVABILITY_FIXTURES` remain
-target follow-through; ADR-162 is Proposed; ADR-125 command retirement is
-transition wording until cleanup completes; OAuth JWT/JWKS text is labelled
-historical for the current Clerk opaque-token flow. Validation passed:
-`git diff --check`, `pnpm markdownlint-check:root`, and
-`pnpm format-check:root`. **Next safe step**: no ADR-sweep follow-up remains
-open; continue the branch-primary graph lane with the Oak Ontology Threads
-proof in `graph-corpus-sdk`, and coordinate with the still-active
-agentic-engineering claims before touching expert-integration surfaces.
-
-**Session close (2026-05-10 — Foamy Navigating Hull / `codex` / GPT-5 /
-`019e12`, graph MVP plan amendment + handoff)**: amended the graph MVP plan
-estate so the first executable graph work is explicit:
-`graph-stack.plan.md` now names the Oak Ontology Threads proof in
-`graph-corpus-sdk` as `first_graph_work` and as the first task in Increment 1
-(`curric:Thread` enumeration + inverse `curric:includesThread` Unit lookup
-with a tiny fixture-backed test). Owner clarified the boundary: the MVP still
-needs EEF + misconception graph + cross-source value; the restriction is that
-the Oak Ontology repo intake must bring in only the Oak ontology/graph, not
-the NC graph/taxonomy. Six specialist sub-agents reviewed the plan estate;
-valid findings were absorbed into plan text around Inc.1 Thread lookup gates,
-MCP registration surfaces, response-budget/test-shape wording, stale links,
-and NC boundary routing. Targeted checks passed:
-`markdownlint`, `prettier --check`, and `git diff --check` on the amended plan
-files. **Next safe step**: start graph MVP work with the Oak Ontology Threads
-proof in `graph-corpus-sdk`; do not start NC taxonomy work, EEF adapter
-migration, misconception replatform, cross-corpus joins, serving prototypes, or
-broader query-layer migration before that proof lands.
-
-**Session close (2026-05-10 — Salty Rolling Compass / `codex` / GPT-5 /
-`019e12`, final handoff after commit safety sweep)**: earlier in this session
-the owner-requested commit sweep made in-flight state durable in
-`57de914f`, `1cc83d62`, and `b96b7e48`; later commits `16c10cea` and
-`31a2a9e1` completed the remaining Phase 1B expert content/adaptor merges,
-and `c9c88cbb` landed graph thread handoff state. Current working tree now
-carries uncommitted Phase 1B cleanup work: the standalone canonical expert
-skills and generated `jc-*` skill adapters are deleted, matching `Skill()`
-permissions are removed from `.claude/settings.json`, and the active plan is
-updated to show Phase 1B.1 plus cleanup complete in-tree. **Next safe step**:
-coordinate with Stormbound Floating Current's Phase 1B claims, including fresh
-cleanup `git:index/head` claim `02faf64f`, validate and land the cleanup
-bundle under that lane, then run the planned Phase 1B reviewer dispatch before
-starting Phase 2's cross-repo reference sweep.
-
-**Session close (2026-05-10 — Open Lifting Gale / `cursor` /
-GPT-5.5 / `e4ad13`, agent-tooling friction closeout Workstream 1
-completed in working tree)**: implemented the shared
-`collaboration-state` CLI discoverability slice from
-`.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md`.
-Workstream 1 covers F-01, F-02, F-04, F-09 for `collaboration-state`,
-F-12, and F-13: invalid-option errors include command help; `claims
-close` accepts/conflict-checks `--closure-summary`; `claims open`
-enumerates accepted area kinds; `comms send` help names identity seed
-sources and success output is structured JSON with resolved paths;
-README/register evidence updated. Focused validation passed
-(`vitest` collaboration-state unit suite, agent-tools type-check, lint,
-markdownlint, prettier check, collaboration-state consistency check).
-Specialist reviewers (`code-expert`, `test-expert`, `docs-adr-expert`)
-returned CLEAN after first-pass findings were absorbed. Claim
-`d7a76b78-8245-436a-8955-3f7e3a8ba305` was explicitly closed; active
-claims are empty at handoff. **No commit this session** per owner
-boundary. **Next safe step**: continue the same closeout plan with
-Workstream 2 (`comms list/show` and `claims list` filters) after fresh
-status/diff/collaboration preflight and a new exact file claim.
-
-**Session close (2026-05-10 — Stratospheric Sweeping Plume /
-`claude-code` / Opus 4.7 / `c8dd27`, practice.md examination opened —
-framing failure surfaced; owner ended thread)**: opened the practice.md
-examination lane per Woodland Growing Leaf's session-close direction.
-After reading the trinity + `practice-verification.md` + PDR-003 +
-PDR-026 + ADR-144, surfaced shape options to owner. Options were framed
-in optimisation vocabulary ("contractions", bulleted line-and-char
-savings), violating PDR-003 §Decision-2 ("consolidation is curation,
-not optimisation"). Owner ended the thread before any practice.md
-mutation. **No commits this session.** No reviewer dispatch (examination-
-only). No claim registered. The pre-existing HARD char pressure on
-`practice.md` persists; the §Open Owner-Decision Items item 1 stays
-open with sharpened next-attempt criteria captured in the thread
-record. **Next safe step**: re-attempt practice.md examination in a
-fresh session that holds the curation frame from session-open;
-entry criteria are the four falsifiability checks recorded in
-[`agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
-under the 2026-05-10 Stratospheric Sweeping Plume session record.
-
-**Session close (2026-05-10 — Woodland Growing Leaf / `claude-code` /
-Opus 4.7 / `0844d9`, repo-continuity archive plan executed
-end-to-end)**: landed all four commits of
-`repo-continuity-archive-and-invariants-role.plan.md` on
-`feat/mcp-graph-support-foundation`: `d981b2b3` (Group A — directive
-foreign-stage cure named in `agent-collaboration.md` §c + plan
-landing), `6d7d5ee3` (Phase 1 — archive sweep, live file 555 → 270
-lines, 13 session-close blocks + 9 Deep-Consolidation entries archived
-verbatim per PDR-026), `09b513ae` (Phase 2 — owner chose Option A;
-§Repo-Wide Invariants role-justified with all 12 canonical-home
-cross-references), `c3061935` (plan archived current/ →
-archive/completed/ per ADR-117). Inter-agent comms-event coordination
-with Riverine Drifting Lighthouse cleanly resolved a brief Phase 2
-markdownlint blockage (`9344adf1` → `05ccefb8` → `5bff4178`). The
-foreign-stage cure operated on every commit of this session — the cure
-named at the directive layer applied to every commit landing it.
-**Next safe step**: unchanged — graph MVP work + PR #102 merge prep on
-`connecting-oak-resources`.
-
-**Session close (2026-05-10 — Velvet Creeping Mask / `codex` / GPT-5 /
-`019e11`, onboarding entrypoint remediation)**: landed the owner-requested
-follow-up to the onboarding-reviewer audit. Root README, CONTRIBUTING,
-environment/troubleshooting/build docs, start-right shared workflows,
-agent directive links, and related search/governance docs now reflect
-per-workspace `.env.local` setup, retired root smoke tests, canonical
-skill links, current start-right invocation language, and explicit
-pathspec staging guidance. Validation before handoff: `pnpm
-markdownlint:root`, `pnpm format:root`, targeted stale-reference scan,
-canonical-link check, and `git diff --check`. **Next safe step**:
-unchanged for branch-primary work — continue the graph/agent-tooling
-lane below; onboarding entrypoint remediation has no open follow-up in
-this continuity file.
-
-**Session close (2026-05-10 — Iridescent Dancing Nebula /
-`claude-code` / Opus 4.7 / `04cca8`, Wave 2 plan-file pivot)**: landed
-Wave 2 Item 1 as commit `fae57312` on `feat/mcp-graph-support-foundation`
-(6 SKILL-CANONICAL.md as thin pointers + 86 generated adapters; reviewer
-dispatch returned APPROVED from both code-reviewer and architecture-reviewer-fred
-with Wave 1 trust-boundary WARN concretely closed). Owner observation
-post-landing — *".agent/commands still exists; I expected that to be gone
-by now"* — reframed the work: Item 1's pointer-shape preserves the very
-surface PDR-051 + ADR-125 §2026-05-09 retire. Plan-time code-reviewer
-dispatch on the proposed full-retirement migration returned APPROVED
-WITH SUGGESTIONS with five critical findings (incl. reclassifying
-`chatgpt-report-normalisation.md` from delete-only to inline; reversing
-commit order to land validator refactor first; fixing pre-existing
-validator drift in same commit). Surface deeper than initial estimate:
-realistic ~3–4 focused hours. Honoured `feedback_no_speed_pressure` +
-`feedback_ground_state_before_planning`: stopped Wave 2 punch-list mode;
-opened plan in `current/`. Landed handoff as `3ecbc4dc`. **Next safe step**:
-execute `.agent/plans/agent-tooling/current/agent-commands-retirement.plan.md`
-phase 1 (validator + health-probe refactor + pre-existing drift fixes).
-Wave 2 Items 3–6 (lock.ts wiring, rendering.ts extraction, parseFlags
-strict, clearGeneratedAdapters tests) queued separately as agent-tools
-quality work.
-
-**Session close (2026-05-10 — Woodland Shedding Moss /
-`claude-code` / Opus 4.7 / `5869e0`, onboarding flow integration +
-good-first-issues index)**: synthesised `/team-onboarding` slash-command
-draft (root `ONBOARDING.md`) into the existing layered onboarding flow
-per parallel `onboarding-reviewer` and `docs-adr-reviewer` audit
-verdicts. Landed commit `9752892d` on `feat/mcp-graph-support-foundation`
-with 10 files: deleted root `ONBOARDING.md` (mixed personal stats +
-durable team guidance + Claude prompt; competed with README/CONTRIBUTING
-as entry point), gitignored future slash-command output, created
-`.agent/prompts/onboarding-claude-teammate.md` (per ADR-117 §3 prompt
-type), `docs/engineering/sibling-repos.md`, `docs/engineering/mcp-servers-for-contributors.md`
-(Vercel-CLI prohibition called out), `.agent/plans/good-first-issues.md`
-(top-level plan index sibling to `high-level-plan.md`, primarily routing
-to GitHub `good first issue` label), and updated README, CONTRIBUTING,
-high-level-plan, plus the engineering and prompts indices. Reviewer
-findings honoured: no personal usage stats in tracked docs
-(no-moving-targets-in-permanent-docs); canonical unprefixed skill names
-(`/start-right-quick`) not personal `/jc-*` aliases; ADR-117 lifecycle
-respected. Pre-existing `practice.md` HARD char-count surfaced again at
-the orchestrator pre-screen, not introduced by this bundle. **Next safe
-step**: unchanged from the prior session — graph MVP work + PR #102
-merge-prep on `connecting-oak-resources`; the onboarding artefacts are
-now durable and ready for the next teammate to use.
-
-**Session close (2026-05-10 — Blooming Ripening Glade /
-`claude-code` / Opus 4.7 / `0730a8`, agent-collaboration directive
-evolution + repo-continuity archive plan)**: applied five edits to
-`.agent/directives/agent-collaboration.md` (full enumeration in the
-thread record). Drafted current-lifecycle plan at
-[`repo-continuity-archive-and-invariants-role.plan.md`][rc-archive-plan]
-— Phase 1 mechanical archive sweep, Phase 2 owner-gated role-decision
-for the §Repo-Wide Invariants enumeration. **No commit in this
-session**. **Next safe step**: owner-directed commit of the
-agent-collaboration.md edits + new plan via the commit skill
-(pathspec-stage + pathspec-commit per the cure now named in §c);
-Phase 1 of the plan is unblocked and agent-executable next session.
-
-[rc-archive-plan]: ../../plans/agentic-engineering-enhancements/current/repo-continuity-archive-and-invariants-role.plan.md
+[Earlier 2026-05-10 session-close blocks archived — see
+`archive/repo-continuity-session-history-2026-05-10.md § Append
+2026-05-10` for Sylvan Sprouting Grove, Oceanic Lapping Lighthouse,
+Gilded Eclipsing Meteor, Foamy Navigating Hull, Salty Rolling Compass,
+Open Lifting Gale, Stratospheric Sweeping Plume, Woodland Growing Leaf,
+Velvet Creeping Mask, Iridescent Dancing Nebula, Woodland Shedding
+Moss, Blooming Ripening Glade.]
 
 Historical session summaries and old next-safe-step queues moved to
 [repo-continuity-session-history-2026-05-07.md](archive/repo-continuity-session-history-2026-05-07.md)
@@ -613,121 +431,20 @@ should mine the convergent-reviewer-finding pattern (3 independent
 reviewers surfacing the same trigger-surface break) and the
 ADR-146-area-count drift as documentation-integrity captures`.**
 
-**Status (2026-05-10 Sylvan Sprouting Grove, codex, GPT-5, `019e12`,
-deep consolidate-docs pass + handoff): `completed this handoff — owner
-explicitly requested the deeper loop. Completed safe curation work under fresh
-peer claims: napkin rotation, distilled update, active napkin restart, route
-audit, entry-point sweep, vocabulary/collaboration checks, and strict-hard
-verification. Remaining hard is routed: repo-continuity.md needs targeted
-archive/current-state reconciliation, not reactive prose trimming`.**
-
-**Status (2026-05-10 Gilded Eclipsing Meteor, codex, GPT-5, `019e12`,
-ADR coverage sweep landed): `due — a broad ADR sweep created two new ADRs,
-amended multiple existing ADR families, and produced a fresh napkin capture
-about target-architecture wording over-claiming consuming-runtime state. Not
-well-bounded for this lightweight handoff: the sweep already graduated the
-settled decisions into ADRs/permanent docs, while existing graph and
-agentic-engineering consolidation pressure remains active. Future
-consolidation should mine the over-claiming pattern alongside other
-documentation-integrity captures rather than reopen the ADR sweep itself`.**
-
-**Status (2026-05-10 Foamy Navigating Hull, codex, GPT-5, `019e12`,
-graph MVP plan amendment + handoff): `due — owner correction plus six
-specialist reviews changed the graph MVP plan estate and produced a fresh
-napkin capture about scope-boundary drift and the corrected interpretation.
-Not well-bounded for this lightweight handoff: graph MVP execution is now
-poised to start, existing repo fitness/consolidation pressure remains, and
-the next action is implementation of the Inc.1 Threads proof rather than a
-thread-scoped doctrine consolidation pass. Future consolidation should mine
-the plan-boundary drift pattern after the graph MVP lane has a stable first
-implementation slice`.**
-
-**Status (2026-05-10 Salty Rolling Compass, codex, GPT-5, `019e12`,
-final handoff after commit safety sweep): `due — the session made dirty
-in-flight state durable, Phase 1B expert integration reached 8/8 content
-merges, and current in-tree cleanup removes the redundant standalone skill
-surface. Not well-bounded for this lightweight handoff: active napkin.md is
-critical, prior due consolidation pressure remains, and the cleanup bundle
-still needs validation/commit plus reviewer dispatch. Next deliberate
-consolidation should mine the commit-queue claim-preservation surprise and
-route the accumulated napkin fitness pressure without trimming capture
-substance`.**
-
-**Status (2026-05-10 Open Lifting Gale, cursor, GPT-5.5, `e4ad13`,
-agent-tooling friction closeout Workstream 1 completed in working
-tree): `due — Workstream 1 milestone closed and a fresh napkin
-behaviour change was captured after the no-real-IO test review loop.
-Not well-bounded for this lightweight handoff: the closeout plan still
-has Workstreams 2-5 open, the work is intentionally uncommitted by
-owner boundary, and existing repo fitness/consolidation pressure
-remains a separate lane. Future consolidation should mine the Workstream
-1 review loop after landing or at a deliberate closeout point, not
-during this session handoff`.**
-
-**Status (2026-05-10 Stratospheric Sweeping Plume, claude-code, Opus 4.7,
-`c8dd27`, practice.md examination opened — framing failure surfaced;
-owner ended thread): `not due from this session's work — bounded
-examination session with no commit, no plan closure, no graduation
-trigger. One napkin entry captured the framing failure (substance
-preserved per PDR-026; vocabulary intact per the curation discipline
-that failed). One pattern-instance candidate identified
-(read-doctrine-without-holding-frame); routed to the napkin entry
-itself rather than to pending-graduations because PDR-003 §Decision-2
-already names the underlying doctrine — the diagnosis is agent
-capacity, not doctrine absence. Cumulative consolidation pressure
-from prior sessions remains in the same "due" state Woodland Growing
-Leaf recorded; this session does not change that state. Carry-forward
-load for the next consolidation: napkin past line + char hard limits,
-practice.md remains HARD on chars (now load-bearing for
-next-attempt entry criteria, not just file-size), pending-graduations
-register state from prior sessions`.**
-
-**Status (2026-05-10 Woodland Growing Leaf, claude-code, Opus 4.7,
-`0844d9`, repo-continuity archive plan executed end-to-end): `due —
-plan closure trigger fires (4 commits archived a current-lifecycle
-plan: d981b2b3, 6d7d5ee3, 09b513ae, c3061935). Three napkin findings
-captured this session (cure-operated-under-itself, whole-tree-gate-vs-
-pathspec-isolation, plan-target-arithmetic-drifts-in-concurrent-flow);
-none rise to single-instance ADR/PDR but the first is a candidate for
-the second-instance graduation watch. Not well-bounded for this
-closeout: napkin is HARD (331/300) from concurrent-agent flow,
-pending-graduations is at 2339/2000 SOFT, and pattern extraction +
-napkin rotation + register drain is substantial work. Next session
-picks up deliberately per session-handoff step 10's
-not-well-bounded-this-closeout branch`.**
-
-**Status (2026-05-10 Woodland Shedding Moss, claude-code, Opus 4.7,
-`5869e0`, onboarding-flow integration + good-first-issues index):
-`not due — bounded reviewer-driven docs synthesis (10 files,
-commit 9752892d); pre-existing ADR-117 + no-moving-targets governance
-already covered the design decisions; no plan closure, no napkin
-rotation, no new graduated doctrine; no ADR/PDR candidate qualifies
-for pending-graduations`. The earlier 2026-05-10 Blooming Ripening
-Glade closeout (agent-collaboration directive evolution; tactical
-directive-edit pass on a single file; three findings captured in
-napkin as session-scoped observations; foreign-stage cure-naming
-reinforced an already partially-graduated entry) also recorded
-`not due` and stands. Velvet Creeping Mask's 2026-05-10 onboarding
-entrypoint remediation marks consolidation due: the bounded docs
-correction itself closed cleanly, but the session-close fitness
-pre-screen shows `napkin.md` HARD and `practice.md` still HARD. This
-is not well-bounded for the owner-requested commit closeout, so a later
-consolidation pass should route the fitness pressure without trimming
-capture substance.**
-
-**Status (2026-05-09 Mistbound Glimmering Threshold, claude-code,
-Opus 4.7, `03f9bc`, skills-standardisation follow-up): `due — 3rd
-instance of --clear regression in 2 sessions plus auto-classifier
-substring-match shape question; both already captured in napkin and
-thread record. Not well-bounded for this closeout (22 min over
-budget); next session picks up canonicalise-the-six (closes the
-structural gap) and surfaces the auto-classifier matcher-shape
-question as an ADR/PDR candidate`.** This handoff stops after
-marking `due` per session-handoff step 10's
-not-well-bounded-this-closeout branch.
-
-**Status (2026-05-08 Opalescent Shimmering Orbit, codex, GPT-5, `019e06`,
-PR #102 graph decision-complete closeout): `due — the PR #102 graph planning
-closeout plan completed and pushed; run consolidate-docs after merge or in a
-bounded follow-up to mine durable decisions/follow-ons without delaying the
-merge blocker cleanup`.**
+**Status (2026-05-10 Sylvan Fruiting Glade, claude-code, opus-4.7,
+`a53e45`, knowledge graduation session): `completed this handoff —
+owner-reframed the pending-graduations register's deferral vocabulary
+as fabricated avoidance and directed full backlog drain in session.
+Drained: 7 due items + 1 partially-graduated completion via 5 new PDRs
+(PDR-052..056), 3 new ADRs (ADR-171, ADR-176, ADR-177, ADR-178), 1
+new rule (invoke-doc-and-onboarding-experts), 1 PDR amendment
+(PDR-014 polarity), 4 ADR amendments (116/143/162/163), commit-skill
+script rename + advisory banner + skill-doctrine update, no-moving-
+targets hook tightening (prose-vs-data distinction in
+check-blocked-content with new tests), pattern polarity backfill
+across ~93 files. Captured the fabricated-gate-as-avoidance pattern
+as anti-pattern instance (agent category). 12 historical 2026-05-10
+session-close blocks moved to archive. QUAR-1 (apply-don't-ask) left
+as owner-decision-moment for session close. Next consolidation should
+mine the substance-vs-gate-vocabulary diagnostic that drove this
+session's reframe.`**

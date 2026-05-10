@@ -80,51 +80,38 @@ snapshots in [`archive/`](archive/) — most recent is
 
 ## Index
 
-Generated 2026-05-07 by Pelagic Rolling Harbour. Regenerate at
-each consolidation pass; entries are listed by status then by
-captured-date (most recent first). Line numbers are advisory
-hints; grep by status field for authoritative position.
+Regenerated 2026-05-10 by Sylvan Fruiting Glade (knowledge graduation
+session). Owner reframed the `vaporware-gated` / `sequenced-deferral`
+/ `XL-deferred` vocabulary as fabricated avoidance and directed full
+backlog drain; all 7 due items + both partially-graduated items
+graduated this pass. Entries are listed by status then by
+captured-date (most recent first). Line numbers are advisory hints;
+grep by status field for authoritative position.
+
+Per the [`fabricated-gate-as-avoidance`](../active/patterns/fabricated-gate-as-avoidance.md)
+pattern instance, future consolidation passes read each entry's
+substance before its inline metadata tag — gate vocabulary is a tag,
+not a verdict.
 
 ### `due` (graduation candidates for next consolidation)
 
-+ `pdr:directive-file-context-budget` — 30%-context budget for
-  directive-file processing (2026-05-05; XL; sequenced-deferral
-  to fresh PDR-authoring session). [L266]
-+ `multi:pdr+adr+script+skill` — orchestrator-vs-gate structural
-  cure (2026-05-05; XL; sequenced-deferral). [L663]
-+ `multi:adr+pdr+plan` — agent-tools CLI affordance set + build
-  isolation (2026-05-05; XL; sequenced-deferral). [L723]
-+ `multi:script+rule` — hook tightening for
-  no-moving-targets-in-permanent-docs (2026-05-04; L;
-  sequenced-deferral). [L857]
-
-### `vaporware-gated` (trigger-facet sub-grouping under `due` — re-route or carrier-plan-watch)
-
-+ `rule:invoke-doc-and-onboarding-reviewers-on-significant-changes`
-  — observability WS11.3 reviewer doctrine (2026-05-02; M;
-  re-route option named). [L1257]
-+ `adr:observability-configuration-orthogonality` — observability
-  WS8.6/WS8.7 ADR (2026-05-02; L; carrier-plan-watch). [L1280]
-+ `multi:protocol-amendments(i)-(x)` — collaboration-protocol CLI
-  ergonomics protocol cures (2026-05-03; XL; awaiting empirical
-  N≥3 validation regardless of CLI carrier). [L1328]
+(empty — full backlog drained 2026-05-10)
 
 ### `partially-graduated`
 
-+ `pattern:patterns/README.md §Polarity` — polarity discipline
-  (2026-05-05; option (a) landed; option (b) bulk sweep deferred;
-  option (c) PDR-014 amendment queued). [L208]
-+ `rule:stage-by-explicit-pathspec` (asymmetric-cure ADR + PDR
-  follow-ups still queued; rule landed) (2026-05-04). [L907]
+(empty — both partially-graduated items completed 2026-05-10)
 
 ### `quarantined`
 
 + `apply-don't-ask` / `stop-inventing-optionality` — quarantined
-  2026-05-01 by owner direction; rethink owed before any
-  re-graduation; user-memory `feedback_apply_dont_ask_superseded`
-  carries the supersession framing. [L1759]
+  2026-05-01 by owner direction; reformulations explicitly named
+  by owner (empirical-answerability + three-tier optionality).
+  Owner-rethink remains the legitimate gate (substance was rejected,
+  not deferred). Surfaced for owner decision at 2026-05-10 session
+  close: (a) reformulate-and-land vs (b) re-quarantine vs
+  (c) retire. [L1759]
 
-### `pending` (~76 entries — second-instance or owner-direction gated)
+### `pending` (~82 entries — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
 pending until trigger fires. Grep `status: pending` for the full
@@ -132,15 +119,29 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
-### Entry counts (2026-05-09)
+### 2026-05-10 graduations log (Sylvan Fruiting Glade — knowledge graduation session)
+
+| Entry | Graduated to | Lines |
+| --- | --- | --- |
+| 30% context budget for directive-file processing | PDR-052 | L494–539 |
+| invoke-doc-and-onboarding-reviewers rule | `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md` (re-route option exercised) | L1485–1506 |
+| pattern surface needs polarity discipline | PDR-014 amendment + bulk sweep across ~93 pattern files | L436–492 |
+| orchestrator-vs-gate structural cure | PDR-053 + ADR-176 + script rename + commit-skill SKILL update | L891–919 |
+| agent-tools CLI affordance set + build isolation | PDR-055 + ADR-178 | L951–985 |
+| no-moving-targets hook tightening | `scripts/check-blocked-content.ts` prose-vs-data distinction + rule update | L1085–1116 |
+| stage-by-explicit-pathspec asymmetric-cure | PDR-054 + ADR-177 (rule already landed) | L1135–1198 |
+| observability orthogonal axes | ADR-171 + amendments to ADR-116/143/162/163 | L1508–1544 |
+| inter-agent collaboration protocol gaps | PDR-056 (ten cures, hypothesis-status preserved) | L1556–1632 |
+
+### Entry counts (2026-05-10 — post-Sylvan-Fruiting-Glade drain)
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 7 | of which 3 are vaporware-gated (trigger-facet sub-grouping) |
-| partially-graduated | 3 | spine-drift-via-comprehensive-cataloguing promoted to broader pattern 2026-05-09 |
-| quarantined | 1 | |
-| pending | ~82 | second-instance or owner-direction gated; +4 from historical-napkin-synthesis 2026-05-09 |
-| **total** | **~93** | +5 net entries from 2026-05-09 historical-napkin-synthesis |
+| due | 0 | all drained 2026-05-10 — fabricated-gate vocabulary retired |
+| partially-graduated | 0 | both completed 2026-05-10 |
+| quarantined | 1 | apply-don't-ask owner-rethink (substance rejected, not deferred); reformulations named — owner choice surfaced at session close |
+| pending | ~82 | second-instance or owner-direction gated |
+| **total** | **~83** | down from ~93 (10 graduated entries retained inline as audit trail; archive snapshot to follow) |
 
 ## Entries
 

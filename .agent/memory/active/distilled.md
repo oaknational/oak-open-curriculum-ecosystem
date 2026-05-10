@@ -204,11 +204,7 @@ validation per the step-7b stability criterion before any graduation.
   literal-text assertions; fred caught a deferred boundary decision;
   docs-adr caught propagation-surface omissions. Plan WS0 dispatch
   expecting concrete cycle-shape correctives, not just nudges.
-- **"Decide at write time" deferrals are unmade load-bearing
-  decisions.** When a plan defers a substantive decision to
-  implementation time, that is not flexibility — it is a load-bearing
-  decision the plan owner has declined to make, which the cycle
-  author will then be forced to make under implementation pressure.
-  Surface the deferral as a structural choice in WS0 before any code
-  is written. (Pattern candidate registered in
-  `pending-graduations.md`.)
+
+*"Decide at write time" deferrals are unmade load-bearing decisions*
+graduated 2026-05-10 to
+[`patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md`](patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md).
