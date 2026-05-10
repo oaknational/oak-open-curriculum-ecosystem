@@ -212,3 +212,55 @@ accumulation only; cure already named in `agent-collaboration.md`,
 no new graduation.
 
 Source archived napkin not modified.
+
+## 2026-05-10 — Blooming Ripening Glade / claude-code / Opus 4.7 / `0730a8`
+
+**Directive intro count drifted unobserved.** §Scope Discipline opened
+with "Three foundational rules" while enumerating four (a, b, c, d).
+The mismatch was caught only by reading-through-the-design-commitment
+lens, not by any structural check. When §d (Cleanup Ethics) was added,
+the intro count was not refreshed and no audit fired. Distillation
+candidate: when adding a lettered child to an enumerated section,
+re-read the section's intro sentence as part of the same edit.
+
+**Frontmatter `split_strategy` text aged relative to actual growth
+shape.** The directive's split_strategy presupposed per-channel
+protocol detail accreting under §Communication Channels; the actual
+2026-05-09 graduation added cross-channel governance instead. The
+strategy text is itself drift-prone relative to where doctrine
+actually lands. Cure applied this session: amended split_strategy to
+distinguish per-channel detail (extract to companion) from
+cross-channel governance (keep here, parented under Working Model).
+Distillation candidate: when graduation lands new doctrine, audit
+the destination directive's split_strategy text as part of the same
+edit — does the strategy still describe the actual growth axis?
+
+**Directive-layer tripwire absent even when operational rule names
+the cure.** Five foreign-stage absorptions across 2026-05-05 →
+2026-05-09 with the cure (`git add -- pathspec` AND `git commit --
+pathspec`) refined and landed in `stage-by-explicit-pathspec.md`.
+The directive that introduces the rule's parent discipline (§c
+"Treat Commit as a Short-Lived Shared Transaction Surface") named
+"verify the staged bundle exactly" via the commit skill but did not
+name the explicit-pathspec cure on either staging or commit side.
+Five instances of an absorbed-foreign-stage failure mode without the
+directive layer naming the cure suggests a structural gap: agents
+read the directive first; if the cure is only in the rule, the
+re-discovery pattern continues. Cure applied this session: added
+the explicit-pathspec naming + 5-instance evidence + rule link to
+§c. Pattern candidate: when an operational rule's cure is being
+re-discovered across sessions, the parent directive's tripwire is
+plausibly the missing link — check the directive layer first.
+
+**Re-parenting alone does not reduce line count.** Plan correctly
+anticipated this; re-parent moved 41 lines of doctrine from
+§Communication Channels to §Working Model with zero net line change.
+Honest options after re-parent: limit raise (owner-only ADR-144 §9e)
+or substance-neutral compression (PDR-026-bounded). Owner chose
+limit raise (target 240→280, limit 320→360); compression candidates
+declined for low yield (1 line). The two-step shape (apply
+substance-preserving structural fix, then surface limit decision to
+owner with rationale) cleanly distinguishes legitimate doctrine
+accretion from drift. The interaction between PDR-026 (substance
+preservation overrides fitness pressure) and ADR-144 §9e (limit
+raise is owner-only) defines an honest accretion pathway.

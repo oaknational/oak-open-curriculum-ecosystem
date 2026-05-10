@@ -2,7 +2,68 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-09 (`claude-code` / Opus 4.7 / Mistbound Glimmering Threshold / `03f9bc`, skills-standardisation follow-up).
+**Last refreshed**: 2026-05-10 (`claude-code` / Opus 4.7 / Blooming Ripening Glade / `0730a8`, agent-collaboration directive evolution).
+
+### 2026-05-10 session record — agent-collaboration.md re-parent + cure-naming + frontmatter refresh
+
+**Working tree state at session close (uncommitted)**:
+
+- `.agent/directives/agent-collaboration.md` — five edits applied,
+  pending owner-directed commit. No reviewer dispatch run; this is
+  directive-edit work and the brief was approved per the
+  `~/.claude/plans/a-please-jc-metacognition-zany-lemon.md` plan.
+
+**Edits landed in working tree**:
+
+1. **Re-parent**: §Coordination Surface Discipline + §Inter-Agent Comms
+   First-Class Primitive moved from §Communication Channels (their
+   2026-05-09 graduation home) to §Working Model. Substance preserved
+   verbatim; both subsections are cross-channel governance, not
+   per-channel detail.
+2. **Heading correction**: "Three foundational rules" → "Four
+   foundational rules" under §Scope Discipline (intro count had drifted
+   when §d Cleanup Ethics was added).
+3. **§c amendment**: named `git add -- <paths>` AND `git commit --
+   <paths>` as the cure for foreign-stage absorption, with 5-instance
+   evidence and link to `stage-by-explicit-pathspec.md` rule. Closes
+   the directive-layer tripwire gap that allowed the pattern to
+   re-discover itself across sessions.
+4. **Frontmatter `split_strategy` rewrite**: distinguishes per-channel
+   detail (extract to companion) from cross-channel governance (keep
+   here, parented under Working Model). Reflects actual 2026-05-09
+   growth shape, not the presupposed per-channel shape.
+5. **Frontmatter limit raise** (owner-approved this session): target
+   240→280, limit 320→360. Rationale: legitimate doctrine accretion on
+   the cross-channel governance axis, not drift; ADR-144 §9e owner-only.
+
+**Fitness state after edits**: 331 / target 280 / limit 360 / critical
+480 — soft, healthy with margin. Char limit 17289/19500 green; max
+prose line 97/100 green; markdownlint clean.
+
+**Mid-session friction (worth recording)**:
+
+- Re-parent surfaced an unobserved heading-count drift (3 vs 4 rules)
+  that no structural check had caught. Caught only by reading-through-
+  the-design-commitment lens. Suggests intro counts on enumerated
+  sections drift silently when children are added.
+- §c had not named the foreign-stage cure even though five instances
+  were captured and the cure was refined and landed in
+  `stage-by-explicit-pathspec.md`. Directive-layer tripwire absence
+  was the missing link — agents read the directive first; if the cure
+  is only in the rule, re-discovery continues.
+
+**Plan landed (current-lifecycle, agentic thread)**:
+[`repo-continuity-archive-and-invariants-role.plan.md`](../../plans/agentic-engineering-enhancements/current/repo-continuity-archive-and-invariants-role.plan.md)
+— two-phase plan addressing the 2026-05-10 handoff analysis findings
+on `repo-continuity.md`. Phase 1: mechanical archive sweep (14 stale
+session-close blocks + 8 stale Deep-Consolidation-Status entries →
+new `archive/repo-continuity-session-history-2026-05-10.md`
+companion). Phase 2: owner-gated role-decision for the §Repo-Wide
+Invariants enumeration (3 options surfaced with trade-offs). Phase 1
+is agent-executable next session; Phase 2 awaits owner A/B/C choice.
+
+**Branch state**: `feat/mcp-graph-support-foundation` at HEAD
+`4a722635` (unchanged this session — no commits landed).
 
 ### 2026-05-09 session record — punch list completed, deferred-reviewer findings captured
 
@@ -2064,6 +2125,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Blooming Ripening Glade` | `claude-code` | `claude-opus-4-7-1m` | `0730a8` | `agent-collaboration-directive-evolution; re-parent-coordination-surface-discipline-and-inter-agent-comms-first-class-primitive-from-communication-channels-to-working-model; heading-count-correction-three-to-four-foundational-rules; c-amendment-naming-git-add-and-git-commit-explicit-pathspec-with-five-instance-evidence-and-rule-link; frontmatter-split-strategy-rewrite-per-channel-detail-vs-cross-channel-governance; owner-approved-fitness-line-target-240-to-280-limit-320-to-360; repo-continuity-archive-and-invariants-role-plan-drafted-current-lifecycle-two-phase-archive-sweep-then-owner-gated-invariants-role-decision; markdownlint-clean-no-commit-in-session` | 2026-05-10 | 2026-05-10 |
 | `Luminous Twinkling Dawn` | `claude-code` | `claude-opus-4-7-1m` | `c03c02` | `historical-napkin-synthesis-pass-2026-05-09-corpus-current-plus-three-prior-rotations; twelve-emergent-findings-six-rejected-near-patterns; three-new-patterns-comprehensive-cataloguing-drift-and-long-arc-finish-line-not-tail-and-mechanical-sequence-is-activity-bias-diagnostic; four-new-pending-graduations-entries-fitness-output-inline-discipline-reminder-and-verify-reviewer-text-claims-against-diff-and-reviewer-convergence-points-at-conceptual-root-and-owner-bounded-reviewer-scope; spine-drift-partially-graduated; sequence-or-admit-three-instance-confirmed; three-owner-gated-candidates-deferred-PDR-026-amendment-and-sequence-or-admit-graduation-and-proportionality-question-synthesis-PDR; commit-5071c8e6-synthesis-report; remainder-bundled-by-Cosmic-Glowing-Star-into-c63e3816-foreign-stage-absorption-fourth-instance; subsequent-workflow-doc-edits-vendor-memory-added-to-session-handoff-and-comms-events-added-to-consolidate-docs-step-3-staged-but-uncommitted-per-owner-direction-another-session-will-commit` | 2026-05-09 | 2026-05-09 |
 | `Lush Rustling Bark` | `codex` | `GPT-5` | `019e03` | `oak-eslint-defineconfig-migration; no-deprecated-self-lint-response; single-call-lint-cleanup; session-handoff-closeout` | 2026-05-07 | 2026-05-07 |
 | `Twigged Shedding Fern` | `codex` | `GPT-5` | `019e03` | `pr-102-branch-touched-files-sonar-snagging; parser-index-refactor; audited-git-subprocess-boundary; focused-agent-tools-tests; pr-comment-refresh-handoff` | 2026-05-07 | 2026-05-07 |

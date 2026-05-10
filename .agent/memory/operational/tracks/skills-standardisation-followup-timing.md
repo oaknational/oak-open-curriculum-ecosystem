@@ -48,4 +48,14 @@ Realistic budget: 90–120 min full set; 30–45 min canonicalisation alone.
 
 ### Items
 
-- [item-1-canonicalise-six] start 2026-05-10T09:58:01Z — pending
+- [item-1-canonicalise-six] start 2026-05-10T09:58:01Z — landed 2026-05-10T11:08Z — fae57312
+
+  Notes: 43 canonicals (find count) × 2 surfaces = 86 adapter files
+  written by generator. `pnpm skills:check` clean. Six previously
+  hand-mirrored adapters now byte-identical to generator output. Codex-
+  specific paragraph in `.agents/skills/jc-review/SKILL.md` was wiped
+  by regeneration; same content already lives in `.agent/commands/review.md`
+  (Step 3 — Codex Preflight), so no information loss. Pre-commit retry
+  needed once: first attempt blocked by format-check on an unrelated
+  untracked `ONBOARDING.md` (owner-removed during session interruption);
+  second attempt succeeded with no `--no-verify` use.

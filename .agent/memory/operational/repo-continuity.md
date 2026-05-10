@@ -9,6 +9,45 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Woodland Shedding Moss /
+`claude-code` / Opus 4.7 / `5869e0`, onboarding flow integration +
+good-first-issues index)**: synthesised `/team-onboarding` slash-command
+draft (root `ONBOARDING.md`) into the existing layered onboarding flow
+per parallel `onboarding-reviewer` and `docs-adr-reviewer` audit
+verdicts. Landed commit `9752892d` on `feat/mcp-graph-support-foundation`
+with 10 files: deleted root `ONBOARDING.md` (mixed personal stats +
+durable team guidance + Claude prompt; competed with README/CONTRIBUTING
+as entry point), gitignored future slash-command output, created
+`.agent/prompts/onboarding-claude-teammate.md` (per ADR-117 §3 prompt
+type), `docs/engineering/sibling-repos.md`, `docs/engineering/mcp-servers-for-contributors.md`
+(Vercel-CLI prohibition called out), `.agent/plans/good-first-issues.md`
+(top-level plan index sibling to `high-level-plan.md`, primarily routing
+to GitHub `good first issue` label), and updated README, CONTRIBUTING,
+high-level-plan, plus the engineering and prompts indices. Reviewer
+findings honoured: no personal usage stats in tracked docs
+(no-moving-targets-in-permanent-docs); canonical unprefixed skill names
+(`/start-right-quick`) not personal `/jc-*` aliases; ADR-117 lifecycle
+respected. Pre-existing `practice.md` HARD char-count surfaced again at
+the orchestrator pre-screen, not introduced by this bundle. **Next safe
+step**: unchanged from the prior session — graph MVP work + PR #102
+merge-prep on `connecting-oak-resources`; the onboarding artefacts are
+now durable and ready for the next teammate to use.
+
+**Session close (2026-05-10 — Blooming Ripening Glade /
+`claude-code` / Opus 4.7 / `0730a8`, agent-collaboration directive
+evolution + repo-continuity archive plan)**: applied five edits to
+`.agent/directives/agent-collaboration.md` (full enumeration in the
+thread record). Drafted current-lifecycle plan at
+[`repo-continuity-archive-and-invariants-role.plan.md`][rc-archive-plan]
+— Phase 1 mechanical archive sweep, Phase 2 owner-gated role-decision
+for the §Repo-Wide Invariants enumeration. **No commit in this
+session**. **Next safe step**: owner-directed commit of the
+agent-collaboration.md edits + new plan via the commit skill
+(pathspec-stage + pathspec-commit per the cure now named in §c);
+Phase 1 of the plan is unblocked and agent-executable next session.
+
+[rc-archive-plan]: ../../plans/agentic-engineering-enhancements/current/repo-continuity-archive-and-invariants-role.plan.md
+
 **Session close (2026-05-09 — Mistbound Glimmering Threshold /
 `claude-code` / Opus 4.7 / `03f9bc`, skills standardisation
 follow-up)**: completed all four deferred items from the prior
@@ -295,7 +334,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Mistbound Glimmering Threshold / `claude-code` / Opus 4.7 / `03f9bc` / 2026-05-09 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Blooming Ripening Glade / `claude-code` / Opus 4.7 / `0730a8` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -421,6 +460,19 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-10 Woodland Shedding Moss, claude-code, Opus 4.7,
+`5869e0`, onboarding-flow integration + good-first-issues index):
+`not due — bounded reviewer-driven docs synthesis (10 files,
+commit 9752892d); pre-existing ADR-117 + no-moving-targets governance
+already covered the design decisions; no plan closure, no napkin
+rotation, no new graduated doctrine; no ADR/PDR candidate qualifies
+for pending-graduations`. The earlier 2026-05-10 Blooming Ripening
+Glade closeout (agent-collaboration directive evolution; tactical
+directive-edit pass on a single file; three findings captured in
+napkin as session-scoped observations; foreign-stage cure-naming
+reinforced an already partially-graduated entry) also recorded
+`not due` and stands.**
 
 **Status (2026-05-09 Mistbound Glimmering Threshold, claude-code,
 Opus 4.7, `03f9bc`, skills-standardisation follow-up): `due — 3rd
