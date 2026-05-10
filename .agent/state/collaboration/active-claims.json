@@ -677,79 +677,28 @@
   ],
   "claims": [
     {
-      "claim_id": "d526f5d3-eed0-46e8-aee9-0a6bcf8739ff",
+      "claim_id": "4aa5cfbe-b859-45bd-84e0-299c26644313",
       "agent_id": {
-        "agent_name": "Stormbound Floating Current",
+        "agent_name": "Windswept Sweeping Gale",
         "platform": "claude",
         "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "ea1cbe"
+        "session_id_prefix": "726fcb"
       },
       "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/sub-agents/templates/accessibility-expert.md",
-            ".agent/sub-agents/templates/assumptions-expert.md",
-            ".agent/sub-agents/templates/design-system-expert.md",
-            ".agent/sub-agents/templates/elasticsearch-expert.md",
-            ".agent/sub-agents/templates/react-component-expert.md",
-            ".agent/skills/accessibility-expert/**",
-            ".agent/skills/assumptions-expert/**",
-            ".agent/skills/clerk-expert/**",
-            ".agent/skills/design-system-expert/**",
-            ".agent/skills/elasticsearch-expert/**",
-            ".agent/skills/mcp-expert/**",
-            ".agent/skills/react-component-expert/**",
-            ".agent/skills/sentry-expert/**",
-            ".claude/agents/accessibility-expert.md",
-            ".claude/agents/assumptions-expert.md",
-            ".claude/agents/design-system-expert.md",
-            ".claude/agents/elasticsearch-expert.md",
-            ".claude/agents/react-component-expert.md",
-            ".cursor/agents/accessibility-expert.md",
-            ".cursor/agents/assumptions-expert.md",
-            ".cursor/agents/design-system-expert.md",
-            ".cursor/agents/elasticsearch-expert.md",
-            ".cursor/agents/react-component-expert.md",
-            ".codex/agents/accessibility-expert.toml",
-            ".codex/agents/assumptions-expert.toml",
-            ".codex/agents/design-system-expert.toml",
-            ".codex/agents/elasticsearch-expert.toml",
-            ".codex/agents/react-component-expert.toml",
-            ".codex/config.toml",
-            ".claude/skills/jc-*-expert/**",
-            ".agents/skills/jc-*-expert/**",
-            ".claude/settings.json"
+            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
+            ".agent/memory/active/patterns/owner-course-correct-vocabulary.md",
+            ".agent/memory/operational/pending-graduations.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-10T13:17:19Z",
-      "freshness_seconds": 7200,
+      "claimed_at": "2026-05-10T14:48:16Z",
+      "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Phase 1B continuation: 5 remaining domain merges (accessibility, assumptions, design-system, elasticsearch, react-component) + Phase 1B.2-4 cleanup (standalone deletion + Skill() permission removal + gates). Per plan .agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md and prior session opener."
-    },
-    {
-      "claim_id": "1b1648a5-4abe-4246-aa93-a01db51d28ec",
-      "agent_id": {
-        "agent_name": "Oceanic Lapping Lighthouse",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "5765c7"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T14:20:12Z",
-      "freshness_seconds": 5400,
-      "sidebar_open": false,
-      "intent": "Author claude-insight-report-2026-05-10-disposition plan in current/"
+      "intent": "Execute claude-insight-report-2026-05-10-disposition plan: Phase 0 audit, Phase 1 new pattern file, Phase 2 pending-graduations batch entry, Phase 3 closeout"
     }
   ]
 }

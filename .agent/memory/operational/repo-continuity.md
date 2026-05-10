@@ -9,6 +9,80 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Stormbound Floating Current / `claude` /
+opus-4.7 / `ea1cbe`, Phase 1B closeout extended scope)**: completed the
+sub-agent rename + skill integration plan's Phase 1B end-to-end. Three
+commits landed on `feat/mcp-graph-support-foundation`: `ae36670a`
+(cleanup — 24 standalone-skill dirs deleted across canonical + Claude +
+Agents jc-* surfaces, 8 `Skill()` permissions removed,
+`mcp-expert/installation-and-integration.md` companion deleted),
+`c31eb492` (reviewer follow-ups — plan-drift fix + dead Style Dictionary
+URL fix), `249600f1` (owner-directed pull-forward of Phase 2 trigger
+surface — 37 invoke-rule renames across 5 surfaces with body updates,
+gateway routing rule + executive memory renamed `invoke-code-reviewers`
+→ `invoke-code-experts`, plus 5 immediate-broken-pointer cross-reference
+fixes in AGENT.md / executive README / practice-index / `.codex/README`
+/ `RULES_INDEX.md`). Phase 1B reviewer matrix dispatched (4
+cross-cutting + 5 domain): 2 CLEAN, 7 WARNINGS — convergent finding from
+3 reviewers about broken invoke-rule trigger surface drove the
+extended-scope commit. Latent issues remain queued: ADR-146 area-count
+drift (6 vs 7), ADR filename retention for 146/149, ~590 cross-repo
+prose references in non-rule docs (Phase 2 sweep). **Next safe step**:
+the Phase 2 cross-repo `*-reviewer` → `*-expert` reference sweep is the
+next agentic-engineering lane (~590 sites, mostly mechanical prose
+edits in `docs/`, `.cursor/plans/`, `.agent/plans/`, `.agent/memory/`,
+governance docs); sub-agent template self-references in
+`subagent-architect.md` and `code-expert.md` are equal-priority sites.
+
+**Session close (2026-05-10 — Sylvan Sprouting Grove / `codex` / GPT-5 /
+`019e12`, deep consolidate-docs + `/jc-session-handoff`)**: completed the
+owner-requested deep consolidation pass. Safe landed state: archived the active
+napkin to `archive/napkin-2026-05-10.md`, distilled the 2026-05-10 lessons,
+started a fresh `napkin.md`, and closed the read-oriented consolidation claim.
+Validation passed: targeted markdownlint/prettier, vocabulary, and
+collaboration-state checks. Fitness after rotation: `napkin.md` is healthy;
+`repo-continuity.md` remains hard. **Next safe step**: Windswept Sweeping Gale
+owns the live insight-report plan/pattern/pending-graduations lane; the next
+unclaimed consolidation lane is targeted repo-continuity archive/current-state
+reconciliation for the remaining hard signal and stale current-state text.
+
+**Session close (2026-05-10 — Oceanic Lapping Lighthouse / `claude-code` /
+opus-4.7 / `5765c7`, claude-insight-report disposition plan landed in
+`current/`)**: authored
+`.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`
+(471 lines, 33 KB) covering each of the 30 useful-content items mined from
+the gitignored 2026-05-10 Claude insight report at
+`.agent/reference-local/claude-insight-reports/2026-05-10-full-corpus/`.
+Disposition tally: 2 INTEGRATE · 1 VERIFY-INTEGRATE · 7 CANDIDATE · 20
+DISCARD = 30 items, each row carrying a documented rationale so future
+regenerations of the same report do not re-pose them. Validation passed:
+`pnpm exec markdownlint`, `pnpm exec prettier --check`,
+`pnpm practice:fitness:informational` (new file not flagged), and
+`pnpm agent-tools:collaboration-state -- check`. Plan file is staged as
+untracked; no commit this session per owner direction (next session
+implements). Active claim `1b1648a5` closed at handoff. **Next safe step**:
+the next session opens the plan and executes Phase 0 (audit confirmation)
+then Phase 1 (single net-new pattern file
+`.agent/memory/active/patterns/owner-course-correct-vocabulary.md`).
+
+**Session close (2026-05-10 — Gilded Eclipsing Meteor / `codex` / GPT-5 /
+`019e12`, ADR coverage sweep landed)**: completed the owner-requested serious
+ADR coverage review with docs-adr-expert planning and review. Landed ADR-174
+(dependency vulnerability scanning quality gate) and ADR-175 (external
+evidence corpus freshness governance), refreshed ADR indexes, and amended
+recent auth, security/redaction, quality-gate, Elastic/search, observability,
+Sentry, and agent-practice ADR coverage. Follow-up commits absorbed the docs
+specialist review: HTTP MCP operator docs again reflect live `SENTRY_MODE`
+runtime behaviour while `OBSERVABILITY_SINKS` / `OBSERVABILITY_FIXTURES` remain
+target follow-through; ADR-162 is Proposed; ADR-125 command retirement is
+transition wording until cleanup completes; OAuth JWT/JWKS text is labelled
+historical for the current Clerk opaque-token flow. Validation passed:
+`git diff --check`, `pnpm markdownlint-check:root`, and
+`pnpm format-check:root`. **Next safe step**: no ADR-sweep follow-up remains
+open; continue the branch-primary graph lane with the Oak Ontology Threads
+proof in `graph-corpus-sdk`, and coordinate with the still-active
+agentic-engineering claims before touching expert-integration surfaces.
+
 **Session close (2026-05-10 — Foamy Navigating Hull / `codex` / GPT-5 /
 `019e12`, graph MVP plan amendment + handoff)**: amended the graph MVP plan
 estate so the first executable graph work is explicit:
@@ -29,23 +103,19 @@ migration, misconception replatform, cross-corpus joins, serving prototypes, or
 broader query-layer migration before that proof lands.
 
 **Session close (2026-05-10 — Salty Rolling Compass / `codex` / GPT-5 /
-`019e12`, owner-requested commit safety sweep completed)**: landed all dirty
-in-flight files in three logical commits on
-`feat/mcp-graph-support-foundation`: `57de914f` (expert
-active-workflow bundle for accessibility, assumptions, design-system, and
-elasticsearch templates plus changed adapters), `1cc83d62` (`practice.md`
-fitness metadata recalibration only), and `b96b7e48` (napkin,
-active-claims, closed-claim archive, comms events, rendered shared log).
-Pre-commit hooks passed on all three commits; `pnpm subagents:check` passed
-before `57de914f`; `pnpm agent-tools:collaboration-state -- check` passed
-after `b96b7e48`. The commit-skill strict-hard pre-screen remains blocked by
-active `napkin.md` critical fitness pressure, preserved per the knowledge-
-capture rule. **Next safe step**: resume Phase 1B of the sub-agent rename /
-skill integration plan from the real post-sweep state: seven of eight paired
-expert merges have landed; only `react-component-expert` remains before
-standalone skill deletion, `Skill()` permission cleanup, and reviewer
-dispatch. Stormbound Floating Current's Phase 1B claim and Gilded Eclipsing
-Meteor's ADR-review claim remain active for their offline sessions.
+`019e12`, final handoff after commit safety sweep)**: earlier in this session
+the owner-requested commit sweep made in-flight state durable in
+`57de914f`, `1cc83d62`, and `b96b7e48`; later commits `16c10cea` and
+`31a2a9e1` completed the remaining Phase 1B expert content/adaptor merges,
+and `c9c88cbb` landed graph thread handoff state. Current working tree now
+carries uncommitted Phase 1B cleanup work: the standalone canonical expert
+skills and generated `jc-*` skill adapters are deleted, matching `Skill()`
+permissions are removed from `.claude/settings.json`, and the active plan is
+updated to show Phase 1B.1 plus cleanup complete in-tree. **Next safe step**:
+coordinate with Stormbound Floating Current's Phase 1B claims, including fresh
+cleanup `git:index/head` claim `02faf64f`, validate and land the cleanup
+bundle under that lane, then run the planned Phase 1B reviewer dispatch before
+starting Phase 2's cross-repo reference sweep.
 
 **Session close (2026-05-10 — Open Lifting Gale / `cursor` /
 GPT-5.5 / `e4ad13`, agent-tooling friction closeout Workstream 1
@@ -224,7 +294,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Salty Rolling Compass / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Stormbound Floating Current / `claude` / opus-4.7 / `ea1cbe` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Foamy Navigating Hull / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -250,6 +320,24 @@ This branch also depends on the Practice/tooling substrate work from main in
 [threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
 
 ## Current Session Focus
+
+**Latest focus (2026-05-10 — Sylvan Sprouting Grove handoff)**:
+owner-requested deep consolidation has completed. The active napkin was rotated
+and the useful 2026-05-10 lessons were distilled. Windswept's claimed
+insight-report implementation lane remains active; `repo-continuity.md` is the
+next unclaimed hard-fitness remediation lane.
+
+**Latest focus (2026-05-10 — Salty Rolling Compass final handoff)**:
+handoff surfaces now reflect the real post-commit state: Phase 1B expert
+content merges are 8/8 landed, cleanup deletions and permission removals are
+in the working tree under Stormbound Floating Current's cleanup commit lane,
+and reviewer dispatch remains pending after cleanup validation/commit.
+Branch-primary graph focus remains the Oak Ontology Threads proof below.
+
+**Prior focus (2026-05-10 — Gilded Eclipsing Meteor)**: ADR coverage sweep is
+complete and landed. The branch-primary graph focus below is unchanged; this
+session's distinct focus closed the ADR/documentation gap review and left no
+Gilded ADR claims active.
 
 **Latest focus (2026-05-10 — Foamy Navigating Hull)**: graph MVP plan
 amendment/handoff complete. Branch-primary graph MVP focus is now explicit:
@@ -332,6 +420,40 @@ evidence.
 
 ## Next Safe Step
 
+**Status update (2026-05-10 — Stormbound Floating Current close)**: the
+sub-agent rename + skill integration plan's Phase 1B is fully closed
+(3 commits this session: `ae36670a` cleanup, `c31eb492` follow-ups,
+`249600f1` extended-scope rule rename). The next agentic-engineering
+lane is **Phase 2 — cross-repo `*-reviewer` → `*-expert` sweep**: ~590
+mechanical prose edits across `docs/foundation/`,
+`docs/architecture/architectural-decisions/`, `docs/governance/`,
+`.cursor/plans/`, `.agent/plans/`, `.agent/memory/` non-rule docs,
+plus equal-priority self-reference cleanup inside
+`.agent/sub-agents/templates/subagent-architect.md` and
+`.agent/sub-agents/templates/code-expert.md` gateway routing tables.
+ADR filenames for 146 and 149 are owner-decision (filename retention
+vs rename); ADR-146 area-count drift (6 vs 7 — Build-vs-buy promoted
+to area #1 by template but not yet by ADR body) is a separate
+doc-drift item. The owning plan
+`.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`
+§Phase 2 is the canonical scope reference.
+
+**Status update (2026-05-10 — Sylvan Sprouting Grove close)**:
+the deep consolidate-docs pass is complete. Immediate active work remains with
+Windswept Sweeping Gale's insight-report plan/pattern/pending-graduations
+claim. The next unclaimed consolidation lane is targeted `repo-continuity.md`
+hard-fitness remediation: archive historical closeout blocks and reconcile
+stale current-state text with the live `feat/mcp-graph-support-foundation`
+branch state.
+
+**Status update (2026-05-10 — Gilded Eclipsing Meteor close)**:
+the ADR coverage sweep is complete; ADR-174/175 and the related amendments are
+landed, reviewed, and validated. No ADR-sweep follow-up is open. The next safe
+step for branch-primary work remains the graph MVP Inc.1 Threads proof below.
+For agentic-engineering work, coordinate with the active claims owned by
+Stormbound Floating Current and Oceanic Lapping Lighthouse before touching
+their surfaces.
+
 **Status update (2026-05-10 — Foamy Navigating Hull close)**:
 the graph MVP plan estate is amended and the first graph task is explicit.
 Next session on the branch-primary graph lane starts by landing the Oak
@@ -341,16 +463,16 @@ a tiny fixture-backed test. Do not begin NC taxonomy work. Do not begin EEF
 adapter migration, misconception replatform, cross-corpus joins, serving
 prototypes, or broader query-layer migration before that proof lands.
 
-**Prior status (2026-05-10 — Salty Rolling Compass close)**:
-the commit-safety sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`;
-working tree was clean at session completion. The next safe step on the
-agentic-engineering lane is Phase 1B continuation in
-`.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`:
-merge the remaining `react-component-expert` skill body into its template,
-run `pnpm subagents:check`, then perform the standalone skill deletion,
-`Skill()` permission cleanup, required gates, and reviewer dispatch.
-Stormbound Floating Current and Gilded Eclipsing Meteor claims remain active;
-consult and coordinate before touching their areas.
+**Status update (2026-05-10 — Salty Rolling Compass final handoff)**:
+the sub-agent rename / skill-integration lane is no longer waiting on
+`react-component-expert`: all eight paired expert content/adaptor merges have
+landed. The working tree currently carries the Phase 1B cleanup bundle
+(standalone skill deletions, generated `jc-*` skill adapter deletions,
+`.claude/settings.json` permission removals, and plan/continuity updates).
+Next safe step for agentic-engineering work is to coordinate with Stormbound
+Floating Current's active file claim and fresh cleanup `git:index/head` claim
+`02faf64f`, validate and land that cleanup bundle, then run the planned Phase
+1B reviewer dispatch before any Phase 2 sweep.
 
 **Prior status (2026-05-10 — Open Lifting Gale close)**:
 Workstream 1 of the agent-tooling friction closeout is complete and now
@@ -442,6 +564,38 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
+**Status (2026-05-10 Stormbound Floating Current, claude, opus-4.7,
+`ea1cbe`, sub-agent rename + skill integration Phase 1B closeout):
+`due — plan-closure trigger fires (Phase 1B fully closed in 3 commits:
+ae36670a + c31eb492 + 249600f1). 9-reviewer dispatch returned 2 CLEAN
+and 7 WARNINGS; convergent finding from 3 reviewers drove the
+extended-scope commit and is now resolved. Not well-bounded for this
+closeout: the user explicitly flagged the session as over-running,
+~590-site Phase 2 sweep is the next agentic-engineering lane, and
+existing fitness/consolidation pressure (Sylvan's prior pass already
+cleared napkin) remains routed but not zero. Future consolidation
+should mine the convergent-reviewer-finding pattern (3 independent
+reviewers surfacing the same trigger-surface break) and the
+ADR-146-area-count drift as documentation-integrity captures`.**
+
+**Status (2026-05-10 Sylvan Sprouting Grove, codex, GPT-5, `019e12`,
+deep consolidate-docs pass + handoff): `completed this handoff — owner
+explicitly requested the deeper loop. Completed safe curation work under fresh
+peer claims: napkin rotation, distilled update, active napkin restart, route
+audit, entry-point sweep, vocabulary/collaboration checks, and strict-hard
+verification. Remaining hard is routed: repo-continuity.md needs targeted
+archive/current-state reconciliation, not reactive prose trimming`.**
+
+**Status (2026-05-10 Gilded Eclipsing Meteor, codex, GPT-5, `019e12`,
+ADR coverage sweep landed): `due — a broad ADR sweep created two new ADRs,
+amended multiple existing ADR families, and produced a fresh napkin capture
+about target-architecture wording over-claiming consuming-runtime state. Not
+well-bounded for this lightweight handoff: the sweep already graduated the
+settled decisions into ADRs/permanent docs, while existing graph and
+agentic-engineering consolidation pressure remains active. Future
+consolidation should mine the over-claiming pattern alongside other
+documentation-integrity captures rather than reopen the ADR sweep itself`.**
+
 **Status (2026-05-10 Foamy Navigating Hull, codex, GPT-5, `019e12`,
 graph MVP plan amendment + handoff): `due — owner correction plus six
 specialist reviews changed the graph MVP plan estate and produced a fresh
@@ -454,15 +608,15 @@ the plan-boundary drift pattern after the graph MVP lane has a stable first
 implementation slice`.**
 
 **Status (2026-05-10 Salty Rolling Compass, codex, GPT-5, `019e12`,
-commit safety sweep completed): `due — dirty in-flight state was made
-durable in three commits, Phase 1B expert integration advanced from 3/8 to
-7/8 merges, and a fresh napkin surprise captured commit-queue lifecycle
-loss of an unrelated fresh peer claim. Not well-bounded for this lightweight
-handoff: active napkin.md is critical, prior due consolidation pressure
-remains, and the sub-agent integration lane still has the react-component
-merge plus cleanup/review open. Next deliberate consolidation should mine the
-commit-queue claim-preservation surprise and route the accumulated napkin
-fitness pressure without trimming capture substance`.**
+final handoff after commit safety sweep): `due — the session made dirty
+in-flight state durable, Phase 1B expert integration reached 8/8 content
+merges, and current in-tree cleanup removes the redundant standalone skill
+surface. Not well-bounded for this lightweight handoff: active napkin.md is
+critical, prior due consolidation pressure remains, and the cleanup bundle
+still needs validation/commit plus reviewer dispatch. Next deliberate
+consolidation should mine the commit-queue claim-preservation surprise and
+route the accumulated napkin fitness pressure without trimming capture
+substance`.**
 
 **Status (2026-05-10 Open Lifting Gale, cursor, GPT-5.5, `e4ad13`,
 agent-tooling friction closeout Workstream 1 completed in working

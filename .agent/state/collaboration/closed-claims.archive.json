@@ -15566,6 +15566,376 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "02faf64f-220d-4862-84d5-d6bc81823f8b",
+      "agent_id": {
+        "agent_name": "Stormbound Floating Current",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ea1cbe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:29:53Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Phase 1B cleanup commit: 24 standalone-skill dirs deleted (8 .agent/skills + 8 .claude/skills/jc-* + 8 .agents/skills/jc-*), 8 Skill() permissions removed from .claude/settings.json, owning plan updated. Pathspec-only staging — peer working-tree (napkin/repo-continuity/thread record) not absorbed.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:32:24Z",
+        "closed_by": {
+          "agent_name": "Stormbound Floating Current",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ea1cbe"
+        },
+        "summary": "Phase 1B cleanup commit ae36670a landed: 27 files, +76 / -1261. 24 standalone *-expert skill dirs deleted, 8 Skill() permissions removed, plan updated. Phase 1B.1+1B.2-4 complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02faf64f-220d-4862-84d5-d6bc81823f8b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d526f5d3-eed0-46e8-aee9-0a6bcf8739ff",
+      "agent_id": {
+        "agent_name": "Stormbound Floating Current",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ea1cbe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/sub-agents/templates/accessibility-expert.md",
+            ".agent/sub-agents/templates/assumptions-expert.md",
+            ".agent/sub-agents/templates/design-system-expert.md",
+            ".agent/sub-agents/templates/elasticsearch-expert.md",
+            ".agent/sub-agents/templates/react-component-expert.md",
+            ".agent/skills/accessibility-expert/**",
+            ".agent/skills/assumptions-expert/**",
+            ".agent/skills/clerk-expert/**",
+            ".agent/skills/design-system-expert/**",
+            ".agent/skills/elasticsearch-expert/**",
+            ".agent/skills/mcp-expert/**",
+            ".agent/skills/react-component-expert/**",
+            ".agent/skills/sentry-expert/**",
+            ".claude/agents/accessibility-expert.md",
+            ".claude/agents/assumptions-expert.md",
+            ".claude/agents/design-system-expert.md",
+            ".claude/agents/elasticsearch-expert.md",
+            ".claude/agents/react-component-expert.md",
+            ".cursor/agents/accessibility-expert.md",
+            ".cursor/agents/assumptions-expert.md",
+            ".cursor/agents/design-system-expert.md",
+            ".cursor/agents/elasticsearch-expert.md",
+            ".cursor/agents/react-component-expert.md",
+            ".codex/agents/accessibility-expert.toml",
+            ".codex/agents/assumptions-expert.toml",
+            ".codex/agents/design-system-expert.toml",
+            ".codex/agents/elasticsearch-expert.toml",
+            ".codex/agents/react-component-expert.toml",
+            ".codex/config.toml",
+            ".claude/skills/jc-*-expert/**",
+            ".agents/skills/jc-*-expert/**",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:17:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 1B continuation: 5 remaining domain merges (accessibility, assumptions, design-system, elasticsearch, react-component) + Phase 1B.2-4 cleanup (standalone deletion + Skill() permission removal + gates). Per plan .agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md and prior session opener.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:32:38Z",
+        "closed_by": {
+          "agent_name": "Stormbound Floating Current",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ea1cbe"
+        },
+        "summary": "Phase 1B continuation claim closed: all 5 remaining domain merges (accessibility, assumptions, design-system, elasticsearch, react-component) landed via 57de914f + 16c10cea + 31a2a9e1 (owner-led), and the cleanup commit ae36670a removed all 24 standalone-skill dirs + 8 Skill() permissions. Phase 1B.1+1B.2-4 complete; Phase 1B reviewer dispatch is the next todo.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d526f5d3-eed0-46e8-aee9-0a6bcf8739ff",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1b1648a5-4abe-4246-aa93-a01db51d28ec",
+      "agent_id": {
+        "agent_name": "Oceanic Lapping Lighthouse",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "5765c7"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:20:12Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Author claude-insight-report-2026-05-10-disposition plan in current/",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:37:12Z",
+        "closed_by": {
+          "agent_name": "Oceanic Lapping Lighthouse",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "5765c7"
+        },
+        "summary": "Insight-Report 2026-05-10 disposition plan authored in current/; validated; staged untracked; next session implements.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1b1648a5-4abe-4246-aa93-a01db51d28ec",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cdada64a-0d39-49f6-8d7e-477fc1575d85",
+      "agent_id": {
+        "agent_name": "Stormbound Floating Current",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ea1cbe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:44:52Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Phase 1B reviewer follow-up small fixes commit: anchor ae36670a in plan + fix dead Style Dictionary URL in design-system-expert template.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:46:22Z",
+        "closed_by": {
+          "agent_name": "Stormbound Floating Current",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ea1cbe"
+        },
+        "summary": "Small-fixes commit c31eb492 landed: plan drift fix + Style Dictionary URL fix.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cdada64a-0d39-49f6-8d7e-477fc1575d85",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1d3d5808-0cf4-4ac6-ad2e-de15bbc433d3",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:50:26Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-requested deep consolidate-docs workflow: read-oriented scan across memory, plans, Practice Core, collaboration state, entry points, fitness, and practice exchange; consult fresh Windswept/Stormbound overlaps before any substantive mutation.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:54:41Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Deep consolidate-docs read-oriented scan completed; napkin rotated and findings routed; no substantive Practice Core/directive mutation under active peer claims",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1d3d5808-0cf4-4ac6-ad2e-de15bbc433d3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "86e0e93c-d3a4-4e41-b43a-aa244de63a84",
+      "agent_id": {
+        "agent_name": "Stormbound Floating Current",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ea1cbe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/invoke-*",
+            ".claude/rules/invoke-*",
+            ".cursor/rules/invoke-*",
+            ".agents/rules/invoke-*",
+            ".agent/memory/executive/invoke-code-reviewers.md",
+            "RULES_INDEX.md",
+            ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:49:43Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Phase 1B closeout extended scope (owner-directed pull-forward): rename 8 invoke-<domain>-reviewer rules across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/) to invoke-<domain>-expert; body-update the gateway invoke-code-reviewers.md across 4 surfaces + executive memory for *-reviewer → *-expert agent identifiers; update RULES_INDEX.md entries; update owning plan to record.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:56:37Z",
+        "closed_by": {
+          "agent_name": "Stormbound Floating Current",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ea1cbe"
+        },
+        "summary": "Phase 1B closeout extended scope landed at 249600f1: 37 file renames across 5 surfaces (8 per-domain rules × 4 surfaces + 5 gateway files including the executive memory) + body updates removing all *-reviewer agent identifiers + 5 immediate-broken-pointer cross-reference fixes + RULES_INDEX.md updates. Phase 1B fully closed; ~590-site Phase 2 sweep remains queued.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "86e0e93c-d3a4-4e41-b43a-aa244de63a84",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3f514b74-b2ef-438a-9115-bc773a72e2d7",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T15:05:19Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Owner-requested /jc-session-handoff after deep consolidate-docs pass; update continuity/thread/napkin/shared-state only; avoid Windswept claimed plan/pattern/pending-grad surfaces",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T15:06:50Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Owner-requested /jc-session-handoff complete after deep consolidate-docs pass; repo-continuity/thread/napkin/shared comms updated; remaining hard fitness routed to repo-continuity and Windswept-owned pending-graduations lane",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3f514b74-b2ef-438a-9115-bc773a72e2d7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6e95d6be-8801-45d4-bdb6-72e25f1d2d4c",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T15:12:40Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit deep consolidation handoff bundle by explicit pathspec; exclude Windswept claimed insight-report plan, pattern, and pending-graduations surfaces",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T15:14:13Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Commit window closed before final continuity commit so closure state lands durably; staged bundle verified by commit queue e45acaa8 for docs(continuity): land deep consolidation handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6e95d6be-8801-45d4-bdb6-72e25f1d2d4c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

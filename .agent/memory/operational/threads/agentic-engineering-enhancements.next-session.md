@@ -2,8 +2,275 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`codex` / GPT-5 / Salty Rolling Compass /
-`019e12`, owner-requested commit safety sweep landed).
+**Last refreshed**: 2026-05-10 (`claude` / opus-4.7 / Stormbound Floating
+Current / `ea1cbe`, sub-agent rename + skill integration Phase 1B
+closeout, including owner-directed extended-scope pull-forward).
+
+### 2026-05-10 session record — Phase 1B closeout extended scope (Stormbound Floating Current)
+
+**Landed outcome**: completed Phase 1B of the sub-agent rename + skill
+integration plan end-to-end, including owner-directed extended scope
+that pulled forward the Phase 2 trigger surface (rule files) into the
+Phase 1B closeout.
+
+**Commits landed (3 on `feat/mcp-graph-support-foundation`)**:
+
+- `ae36670a` — `chore(sub-agents): retire standalone *-expert skills
+  after Phase 1B integration`. 27 files: 24 standalone-skill directories
+  deleted (8 `.agent/skills/*-expert/` canonical + 8
+  `.claude/skills/jc-*-expert/` adapters + 8
+  `.agents/skills/jc-*-expert/` adapters), `mcp-expert/installation-and-integration.md`
+  companion deleted, 8 `Skill(*-expert)` entries removed from
+  `.claude/settings.json`, owning plan updated.
+- `c31eb492` — `docs(sub-agents): land Phase 1B reviewer follow-ups`.
+  Plan-drift fix per docs-adr-expert (anchored_commits + status text)
+  - dead Style Dictionary URL fix per design-system-expert
+  (`https://amzn.github.io/style-dictionary/` → `https://styledictionary.com/`).
+- `249600f1` — `refactor(rules): rename invoke-*-reviewer rules to
+  invoke-*-expert (Phase 1B closeout)`. 37 file renames across 5
+  surfaces (`.agent/rules/`, `.claude/rules/`, `.cursor/rules/.mdc`,
+  `.agents/rules/`, `.agent/memory/executive/`) — 8 per-domain rules
+  - 1 gateway rule + 1 executive memory all renamed
+  `*-reviewer*` → `*-expert*` with body updates removing all stale
+  agent identifiers (~30 in executive memory alone). 5
+  immediate-broken-pointer cross-reference fixes in `AGENT.md`,
+  executive `README.md`, `practice-index.md`, `.codex/README.md`,
+  `RULES_INDEX.md`.
+
+**Reviewer matrix (9 reviewers dispatched per plan)**:
+
+- `code-expert` (gateway): WARNINGS — flagged the 8 `invoke-*-reviewer`
+  rules + executive memory as broken trigger surface (Phase 2 priority).
+- `config-expert`: CLEAN.
+- `docs-adr-expert`: WARNINGS — plan drift (addressed in `c31eb492`).
+- `architecture-expert-fred`: WARNINGS — same trigger-surface finding
+  as code-expert; classified as Phase 1B closeout per ADR-129
+  amendment.
+- `accessibility-expert`, `assumptions-expert`,
+  `react-component-expert`: CLEAN on their own paired domain.
+- `design-system-expert`: WARNINGS — dead Style Dictionary URL
+  (addressed in `c31eb492`).
+- `elasticsearch-expert`: CLEAN with minor brief-vs-template PDR-051
+  attribution observation.
+
+**Convergent finding driving the extended scope**: 3 of 4 cross-cutting
+reviewers independently flagged the 8 `invoke-<domain>-reviewer.md`
+situational rules (and the canonical/executive-memory routing surfaces)
+as broken — they invoked deleted `<domain>-reviewer` agent identities
+AND pointed to deleted `*-reviewer.md` canonical paths. ADR-129's
+2026-05-10 amendment names the *-expert role as the canonical, so the
+trigger surface contradicted the canonical surface. Owner-directed
+pull-forward landed at `249600f1`.
+
+**Validation gates**: `pnpm subagents:check` (22 Cursor, 22 Codex, 19
+templates), `pnpm skills:check` (no adapter drift), `pnpm portability:check`
+(97 failures — pre-existing jc-adapter drift, zero expert-related),
+`pnpm test --filter @oaknational/agent-tools` (215 passed across 27),
+`pnpm format:root` + `pnpm markdownlint:root` clean.
+
+**Owner-direction signal**: at session re-entry the user said the
+session was over-running and asked for `/jc-session-handoff` + commit +
+opening statement for next session.
+
+**Foreign-stage discipline**: pathspec-explicit staging across all 3
+commits; peer working-tree changes (napkin/distilled/repo-continuity/
+thread record/practice.md/active-claims/closed-claims/shared-comms-log/
+ADR working-tree edits from peer agents) NOT absorbed in source
+commits.
+
+**Latent items carried forward**:
+
+- ~590-site Phase 2 prose-reference sweep across `docs/`, `.agent/plans/`,
+  `.agent/memory/` non-rule docs, `.cursor/plans/` archives.
+- Self-reference cleanup in `.agent/sub-agents/templates/subagent-architect.md`
+  and `.agent/sub-agents/templates/code-expert.md` gateway routing
+  tables (equal priority to general Phase 2 prose).
+- ADR filenames `146-assumptions-reviewer-meta-level-plan-assessment.md`
+  and `149-frontend-specialist-reviewer-gateway-cluster.md` retain
+  `reviewer` in the path; rename-or-keep is owner decision (ADR
+  filenames are conventionally permanent).
+- ADR-146 area-count drift: ADR body enumerates 6 areas; merged
+  template's reviewer Step 3 uses the 7-area form (Build-vs-buy added
+  as #1). Doc-drift item, not template defect.
+- `agent-tools/src/skills-adapter-generate/generator.ts:191-199`
+  applies `jc-` prefix unconditionally and silently discards
+  classification keys — captured at
+  `.agent/plans/agent-tooling/future/third-party-skill-reimport-targets.md`,
+  not blocking (no ingested skills under `.agent/skills/` after Phase
+  1B).
+
+**Collaboration lifecycle**: Stormbound's claim `d526f5d3` (Phase 1B
+domain merges, opened at session start) and follow-up claims
+`02faf64f` (cleanup commit window), `cdada64a` (small-fixes commit
+window), `86e0e93c` (extended-scope commit window) all closed at
+handoff. Bootstrap fast-path used at session-open and after each
+peer-led commit landed by Salty Rolling Compass (the user's
+direct-commit interventions on `57de914f`, `16c10cea`, `31a2a9e1`).
+
+**Next safe step**: Phase 2 cross-repo `*-reviewer` → `*-expert` sweep
+per the owning plan `.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`
+§Phase 2. Equal priority targets: subagent-architect.md +
+code-expert.md self-references (already named in plan). Phase 2
+reviewer dispatch matrix is the same as Phase 1B with `onboarding-expert`
+plus `test-expert` added per the plan's Phase 2 reviewer dispatch row.
+
+### 2026-05-10 session record — deep consolidate-docs pass closed (Sylvan Sprouting Grove)
+
+**Landed outcome**: completed the owner-requested deep consolidate-docs
+workflow from the `start-right-quick` entrypoint, then ran
+`/jc-session-handoff`.
+
+**Safe updates made**:
+
+- archived the oversized active napkin verbatim to
+  `.agent/memory/active/archive/napkin-2026-05-10.md`;
+- distilled the 2026-05-10 behaviour-changing lessons into
+  `.agent/memory/active/distilled.md`;
+- started a fresh `.agent/memory/active/napkin.md` and recorded the
+  consolidation findings;
+- registered identity/claims, logged the opening comms event, closed the
+  broad read-oriented consolidation claim, and opened/closed this short
+  handoff claim.
+
+**Deliberate non-edits**: Windswept Sweeping Gale owns the live
+insight-report execution lane:
+`.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`,
+`.agent/memory/active/patterns/owner-course-correct-vocabulary.md`, and
+`.agent/memory/operational/pending-graduations.md`. This handoff avoided those
+surfaces after Windswept's claim became active.
+
+**Validation**: targeted markdownlint/prettier on touched memory/thread
+surfaces passed, `pnpm practice:vocabulary` passed, collaboration-state check
+passed. `pnpm practice:fitness:strict-hard` still fails only because
+`repo-continuity.md` remains hard (600/525 lines, 36,238/35,000 chars).
+
+**Next safe step**: let Windswept finish or explicitly hand off the
+insight-report plan/pattern/pending-graduations lane. The next unclaimed
+consolidation task is a targeted `repo-continuity.md` hard-fitness remediation:
+archive historical closeout blocks and reconcile stale current-state text with
+the live `feat/mcp-graph-support-foundation` branch state.
+
+### 2026-05-10 session record — claude-insight-report disposition plan landed (Oceanic Lapping Lighthouse)
+
+**Landed outcome**: authored an executable plan at
+`.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`
+(471 lines, 33 KB) routing the 30 useful-content items mined from the
+gitignored 2026-05-10 Claude insight report
+(`.agent/reference-local/claude-insight-reports/2026-05-10-full-corpus/`) to
+canonical surfaces, candidate batch, or explicit discard.
+
+**Disposition tally**: 2 INTEGRATE · 1 VERIFY-INTEGRATE · 7 CANDIDATE · 20
+DISCARD = 30. The 20 discards each carry a documented rationale (moving
+target, restatement of canonical, or covered by an existing rule/memory) so
+that future regenerations of the same report do not re-pose them as fresh.
+
+**Plan shape**: Phase 0 — confirm ledger against current canonical (15 min,
+five spot-checks). Phase 1 — author one new pattern file
+`.agent/memory/active/patterns/owner-course-correct-vocabulary.md` covering
+items 9 + 20 jointly (45 min) plus one conditional terminology task. Phase
+2 — single batched `pending-graduations.md` entry covering items 10, 12,
+19, 21, 26, 29, 30 with proposed homes and falsification triggers (20 min).
+Phase 3 — foundation compliance, claim closeout, consolidation (15 min).
+
+**Validation**: `pnpm exec markdownlint` clean, `pnpm exec prettier --check`
+clean, `pnpm practice:fitness:informational` did not flag the new plan file
+(within budget), `pnpm agent-tools:collaboration-state -- check` ok.
+
+**Hooks fired**: innate-immunity hook blocked first plan-write attempt
+because the plan body included a verbatim quote from `principles.md`
+containing an owner-only phrase. Resolved by paraphrasing the principle
+text and citing the source. Captured as a napkin surprise.
+
+**Collaboration lifecycle**: claim
+`1b1648a5-4abe-4246-aa93-a01db51d28ec` was opened for the new plan file path
+at session start and explicitly closed at handoff. No other claim
+overlapped.
+
+**No commit this session** per owner direction; the next session implements
+the plan. Plan file is staged as untracked.
+
+**Next safe step**: a fresh session opens the plan, executes Phase 0 (audit
+confirmation), then Phase 1 (the new pattern file). Phases 2 and 3 follow
+within the same session if scope allows; otherwise they queue.
+
+### 2026-05-10 session record — final handoff update (Salty Rolling Compass)
+
+**Landed outcome**: owner-requested commit safety sweep landed earlier in this
+session, then final handoff refreshed the continuity surfaces against the real
+post-sweep state.
+
+**Current state**:
+
+- Commit sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`.
+- Follow-up Phase 1B content commits `16c10cea` and `31a2a9e1` mean all eight
+  paired expert content/adaptor merges are now landed.
+- The working tree currently carries the Phase 1B cleanup bundle:
+  standalone canonical expert skill directories deleted, generated
+  `.claude/skills/jc-*` and `.agents/skills/jc-*` expert adapters deleted,
+  matching `.claude/settings.json` `Skill()` permissions removed, and this
+  plan/continuity state updated.
+- Branch-primary graph handoff state is already landed at `c9c88cbb`; the
+  graph lane remains the Oak Ontology Threads proof in `graph-corpus-sdk`.
+
+**Collaboration lifecycle**: no Salty Rolling Compass active claim remains
+open. Active claims belong to Stormbound Floating Current for the Phase 1B
+expert cleanup surfaces, Stormbound's fresh cleanup `git:index/head` claim
+`02faf64f`, and Oceanic Lapping Lighthouse for the Claude insight-report
+disposition plan. Stormbound's older file-claim wording is stale relative to
+the actual 8/8 merge state, but its file ownership plus the fresh commit claim
+cover the cleanup bundle.
+
+**Next safe step**: validate and land the Phase 1B cleanup bundle in
+coordination with Stormbound Floating Current's active file and git claims,
+then run the planned Phase 1B reviewer dispatch. Do not start Phase 2's
+cross-repo reference sweep until that cleanup/review path is settled.
+
+### 2026-05-10 session record — ADR coverage sweep landed (Gilded Eclipsing Meteor)
+
+**Landed outcome**: owner-requested serious ADR coverage review completed,
+with docs-adr-expert help for both planning and review.
+
+**Commits landed**:
+
+- `f6643e60` — `docs(adr): refresh coverage decisions` — created ADR-174
+  (dependency vulnerability scanning gate) and ADR-175 (external evidence
+  corpus freshness governance), refreshed ADR indexes, and amended recent
+  auth, quality-gate, graph/search, security/redaction, observability, and
+  agent-practice ADR coverage.
+- `335a2373` — `docs(security): align observability guidance` — aligned
+  `SECURITY.md`, logging guidance, and HTTP MCP observability docs.
+- `8dfe7b49` — `docs(adr): align hook and observability wording` — corrected
+  ADR-013 hook doctrine and stale consolidation/Sentry wording.
+- `55e2c097` — `docs(adr): correct current runtime guidance` — absorbed the
+  docs-adr-expert review by restoring HTTP MCP operator docs to current
+  `SENTRY_MODE` behaviour, marking ADR-162 Proposed, softening ADR-125 command
+  retirement wording, and tightening source-map/redaction/auth wording.
+- `b450679b` — `docs(adr): refine auth observability follow-ups` — completed
+  follow-up corrections for OAuth JWT/JWKS historical wording, ADR-005
+  implementation direction, and ADR-162 acceptance language.
+
+**Validation**:
+
+- `git diff --check`
+- `pnpm markdownlint-check:root`
+- `pnpm format-check:root`
+
+**Specialist review**: `docs-adr-expert` reviewed the implementation read-only.
+Findings were addressed in the follow-up commits above: no over-claiming
+`OBSERVABILITY_SINKS` as live HTTP MCP behaviour, command-surface retirement
+described as transition until cleanup completes, ADR-162 status aligned to
+Proposed, email-like redaction marked as implementation debt, OAuth JWT/JWKS
+text labelled historical, ADR-149 expert naming completed, and source-map scope
+narrowed.
+
+**Collaboration lifecycle**: all Gilded ADR coverage claims were explicitly
+closed. Active claims at handoff belong to other agents on
+`agentic-engineering-enhancements`; no Gilded claim remains open.
+
+**Next safe step**: no ADR sweep follow-up is open in this thread. Continue the
+active agentic-engineering work from the live claims and plan state: Stormbound
+Floating Current owns the expert-integration cleanup surfaces; Oceanic Lapping
+Lighthouse owns the Claude insight-report disposition plan.
 
 ### 2026-05-10 session record — commit safety sweep landed (Salty Rolling Compass)
 
@@ -42,11 +309,12 @@ blocked by the active `napkin.md` critical fitness signal. Per the knowledge
 preservation rule, the sweep preserved the capture and routed the pressure to
 consolidation instead of trimming shared memory.
 
-**Next safe step**: resume Phase 1B of
+**Next safe step at that checkpoint, now superseded by the final handoff
+record above**: resume Phase 1B of
 `.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`
-from the real post-sweep state: seven of eight paired expert merges have
-landed; only `react-component-expert` remains before the standalone skill
-deletion / `Skill()` permission cleanup / reviewer-dispatch pass.
+from the real post-sweep state. At that time seven of eight paired expert
+merges had landed; later commits completed the remaining domain and moved the
+lane to cleanup/review.
 
 ### 2026-05-10 session record — agent-tooling friction closeout Workstream 1 completed (Open Lifting Gale)
 
@@ -2417,7 +2685,9 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Salty Rolling Compass` | `codex` | `GPT-5` | `019e12` | `owner-requested-commit-safety-sweep; committed-expert-active-workflow-bundle-57de914f; committed-practice-core-fitness-budget-1cc83d62; committed-collaboration-state-bundle-b96b7e48; restored-peer-Gilded-active-claim-after-commit-queue-lifecycle-loss; working-tree-clean; handoff-updated-plan-to-one-remaining-react-component-merge` | 2026-05-10 | 2026-05-10 |
+| `Gilded Eclipsing Meteor` | `codex` | `GPT-5` | `019e12` | `owner-requested-adr-coverage-sweep; created-adr-174-dependency-vulnerability-scanning-and-adr-175-external-evidence-freshness; amended-auth-security-observability-quality-gate-search-agent-practice-adrs; absorbed-docs-adr-expert-review; closed-adr-coverage-claims; validation-markdownlint-format-check-diff-check-passed` | 2026-05-10 | 2026-05-10 |
+| `Salty Rolling Compass` | `codex` | `GPT-5` | `019e12` | `owner-requested-commit-safety-sweep; committed-expert-active-workflow-bundle-57de914f; committed-practice-core-fitness-budget-1cc83d62; committed-collaboration-state-bundle-b96b7e48; restored-peer-Gilded-active-claim-after-commit-queue-lifecycle-loss; final-handoff-updated-agentic-lane-to-8-of-8-expert-merges-landed-plus-cleanup-bundle-in-working-tree; no-open-Salty-claim` | 2026-05-10 | 2026-05-10 |
+| `Sylvan Sprouting Grove` | `codex` | `GPT-5` | `019e12` | `owner-requested-deep-consolidate-docs-workflow-plus-jc-session-handoff; curation-frame-over-optimisation; napkin-2026-05-10-rotation-and-distilled-update; repo-continuity-hard-routed-to-targeted-archive-current-state-reconciliation; avoided-Windswept-claimed-plan-pattern-pending-grad-surfaces` | 2026-05-10 | 2026-05-10 |
 | `Open Lifting Gale` | `cursor` | `GPT-5.5` | `e4ad13` | `agent-tooling-friction-closeout-workstream-1; collaboration-state-cli-discoverability; invalid-option-help; closure-summary-alias-and-conflict; area-kind-enumeration; comms-send-json-output-with-resolved-paths; pure-helper-tests-after-no-real-io-review; README-and-frictions-register-evidence; claim-d7a76b78-closed; no-commit-owner-boundary` | 2026-05-10 | 2026-05-10 |
 | `Woodland Growing Leaf` | `claude-code` | `claude-opus-4-7-1m` | `0844d9` | `repo-continuity-archive-plan-end-to-end-execution; group-A-directive-foreign-stage-cure-naming-d981b2b3; phase-1-archive-sweep-13-session-close-blocks-and-9-deep-consolidation-entries-relocated-verbatim-to-2026-05-10-archive-companion-6d7d5ee3-live-file-555-to-270-lines; phase-2-invariants-role-justified-option-A-with-12-canonical-home-cross-references-09b513ae; plan-archived-current-to-archive-completed-c3061935; inter-agent-comms-event-coordination-with-Riverine-Drifting-Lighthouse-9344adf1-to-05ccefb8-to-5bff4178-resolved-pre-commit-blockage; cure-named-and-applied-to-its-own-landing` | 2026-05-10 | 2026-05-10 |
 | `Blooming Ripening Glade` | `claude-code` | `claude-opus-4-7-1m` | `0730a8` | `agent-collaboration-directive-evolution; re-parent-coordination-surface-discipline-and-inter-agent-comms-first-class-primitive-from-communication-channels-to-working-model; heading-count-correction-three-to-four-foundational-rules; c-amendment-naming-git-add-and-git-commit-explicit-pathspec-with-five-instance-evidence-and-rule-link; frontmatter-split-strategy-rewrite-per-channel-detail-vs-cross-channel-governance; owner-approved-fitness-line-target-240-to-280-limit-320-to-360; repo-continuity-archive-and-invariants-role-plan-drafted-current-lifecycle-two-phase-archive-sweep-then-owner-gated-invariants-role-decision; markdownlint-clean-no-commit-in-session` | 2026-05-10 | 2026-05-10 |
@@ -3058,12 +3328,25 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-**2026-05-10 update (Salty Rolling Compass)**: the immediate owner-requested
-commit-safety sweep is complete and the working tree was clean at session
-completion. The active sub-agent rename / skill-integration lane now has seven
-of eight paired expert merges landed; resume with the single remaining
-`react-component-expert` merge, then standalone skill deletion, permission
-cleanup, and reviewer dispatch.
+**2026-05-10 update (Sylvan Sprouting Grove)**: the owner-requested deep
+consolidate-docs pass and `/jc-session-handoff` are complete. The active
+napkin has been rotated and restarted; 2026-05-10 lessons are distilled; the
+remaining hard fitness signal is isolated to `repo-continuity.md`. The next
+unclaimed consolidation task is a targeted repo-continuity archive/current
+state reconciliation. Windswept Sweeping Gale owns the active
+insight-report plan/pattern/pending-graduations lane.
+
+**2026-05-10 update (Gilded Eclipsing Meteor)**: the owner-requested ADR
+coverage sweep is complete and landed. ADR-174/175 now cover dependency
+vulnerability scanning and external evidence corpus freshness; the docs
+specialist review was absorbed; no Gilded ADR coverage claims remain open.
+
+**2026-05-10 update (Salty Rolling Compass final handoff)**: the immediate
+owner-requested commit-safety sweep is complete, all eight paired expert
+content/adaptor merges have now landed, and the Phase 1B cleanup bundle is in
+the working tree. Resume by coordinating with Stormbound Floating Current's
+active claim, validating and landing cleanup, then running Phase 1B reviewer
+dispatch before Phase 2.
 
 **WS4A lifecycle integration, coordination consolidation, deterministic
 identity, collaboration-doc fitness remediation, cross-vendor shared-log

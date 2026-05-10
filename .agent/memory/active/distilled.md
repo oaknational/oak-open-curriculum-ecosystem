@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before
 every session. Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-16.md` through `napkin-2026-05-09.md`
-(sessions 2026-02-10 to 2026-05-09).
+`napkin-2026-02-16.md` through `napkin-2026-05-10.md`
+(sessions 2026-02-10 to 2026-05-10).
 
 **Permanent documentation**: Entries graduate to permanent docs
 when stable and a natural home exists. Always graduate useful
@@ -80,6 +80,72 @@ not yet at N≥3.
 [n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
 [n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
+
+---
+
+## Recently Distilled — 2026-05-10 Napkin Rotation
+
+These entries merged during the 2026-05-10 deep consolidation pass and
+remain pending one subsequent-session validation cycle before graduation.
+
+### Curation And Doctrine-Holding
+
+- **Reading doctrine is weaker than holding its frame at output time.**
+  Foundational-doc work must lead with each section's role question:
+  does this still serve its role? Metrics may inform the diagnosis, but
+  optimisation vocabulary must not frame the work.
+- **Target-architecture wording needs consuming-runtime evidence.** A
+  shared package exposing a target schema is not proof that an app has
+  migrated. Verify at least one composition root before using present
+  tense in ADRs, runbooks, or operator docs.
+- **Lettered-section edits must re-read the intro count.** Adding a new
+  `a/b/c/d` child without re-reading the parent sentence lets "three
+  rules" drift into a four-rule section.
+- **Growth-axis metadata is live doctrine.** When a graduation lands in
+  a directive, audit the file's `split_strategy` against the actual
+  growth axis just introduced.
+
+### Coordination And Commit Discipline
+
+- **Commit-helper state writes still need peer-claim audits.** After any
+  commit-queue completion or claim close, re-read active claims before
+  the final state commit; helper-mediated writes can otherwise lose a
+  fresh peer claim under rapid same-file updates.
+- **Parent directives need operational cures when the rule keeps being
+  rediscovered.** Five foreign-stage absorptions despite the explicit
+  pathspec rule showed that the parent collaboration directive also had
+  to name both `git add -- <paths>` and `git commit -- <paths>`.
+- **Whole-tree hooks can block pathspec-only commits by design.**
+  Pathspec discipline controls commit contents, not quality-gate scope.
+  Minor peer-owned hook failures are repaired or coordinated; gates are
+  not narrowed to the staged bundle.
+- **Shell loops over multiline command output are unsafe in deletion
+  paths.** Prefer `while IFS= read -r` over `for x in $(...)`, then
+  verify after the action.
+
+### Tooling And Test Proofs
+
+- **Exact focused tests should use the runner directly when script
+  forwarding drifts.** For agent-tools Vitest proof, prefer
+  `pnpm --dir agent-tools exec vitest run <file>` when the package
+  script starts running broader suites than the proof requires.
+- **Unit test taxonomy beats historical local precedent.** Existing IO
+  debt in a unit test file is not permission to add more; factor pure
+  option parsers or formatters and test those directly.
+- **Generators require populated source data.** A structurally valid
+  generator run over sparse source data can produce semantically empty
+  outputs; verify the expected dataset-size signal before trusting it.
+
+### Planning Arithmetic And Disposition
+
+- **Count targets derived from current state must name their derivation.**
+  Concurrent same-day flow can invalidate an acceptance count before
+  execution; re-derive the target at execution time and let substance
+  preservation outrank stale arithmetic.
+- **"Apply all of X" needs a disposition ledger, not one cycle per item.**
+  When most inputs are redundant with canonical doctrine, thoroughness is
+  every item having a recorded decision; implementation may be one small
+  tranche plus a batched pending-graduations entry.
 
 ---
 
