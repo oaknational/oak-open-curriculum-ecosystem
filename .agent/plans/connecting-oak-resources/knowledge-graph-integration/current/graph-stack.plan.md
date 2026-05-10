@@ -1,13 +1,13 @@
 ---
 name: "Graph Stack — Topology and Foundation Increment"
-overview: "Establish a layered, standards-based graph capability for Oak — seven active graph workspaces plus one deferred — with the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
+overview: "Establish a layered, standards-based graph capability for Oak — seven active graph workspaces plus one deferred — with the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
 status: current
 graph_layer: substrate
 graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "graph-query-layer.plan.md"
-  - "../active/nc-knowledge-taxonomy-surface.plan.md"
+  - "oak-kg-threads-surface.plan.md"
   - "../active/graph-resource-factory.plan.md"
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md"
@@ -74,19 +74,19 @@ todos:
     status: pending
     depends_on: [ws3-property-graph]
   - id: ws4-graph-corpus-sdk-scaffold
-    content: "WS4.1: Scaffold packages/sdks/graph-corpus-sdk workspace with a typed corpus-adapter seam; no NC-specific mapping before the SDK boundary exists."
+    content: "WS4.1: Scaffold packages/sdks/graph-corpus-sdk workspace with a typed corpus-adapter boundary; no Oak-specific ontology mapping before the SDK boundary exists."
     status: pending
     depends_on: [ws3-adjacency, ws2-source-mapping]
-  - id: ws4-skos-extractor
-    content: "WS4.2: NC knowledge taxonomy adapter inside graph-corpus-sdk (generic Turtle/SKOS parsing via graph-ingest; Oak/NC mapping here); deterministic extraction test against pinned ontology revision."
+  - id: ws4-oak-ontology-thread-adapter
+    content: "WS4.2: Oak Curriculum Ontology Threads adapter inside graph-corpus-sdk (generic Turtle/RDF/SKOS parsing via graph-ingest; curric:Thread enumeration and curric:includesThread inverse-edge mapping here); deterministic extraction test against pinned ontology revision."
     status: pending
     depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]
   - id: ws4-query-proof
-    content: "WS4.3: Prove the NC taxonomy adapter end-to-end via graph-corpus-sdk's typed query surface (no MCP wiring in this cycle — surfacing is a consumer decision, see §Surfacing)."
+    content: "WS4.3: Prove the Oak Curriculum Ontology Threads adapter end-to-end via graph-corpus-sdk's typed query surface (Thread enumeration plus Unit->Thread inverse-edge lookup; no MCP wiring in this cycle — surfacing is a consumer decision, see §Surfacing)."
     status: pending
-    depends_on: [ws4-skos-extractor]
+    depends_on: [ws4-oak-ontology-thread-adapter]
   - id: ws5-coordination-amendments
-    content: "WS5: Amend graph-query-layer.plan.md, nc-knowledge-taxonomy-surface.plan.md, practice-graph-payoff-peak-pilot.plan.md, and the parent open-education-knowledge-surfaces.plan.md to reference this spine."
+    content: "WS5: Amend graph-query-layer.plan.md, oak-kg-threads-surface.plan.md, practice-graph-payoff-peak-pilot.plan.md, and the parent open-education-knowledge-surfaces.plan.md to reference this spine."
     status: pending
     depends_on: [ws4-query-proof]
   - id: ws6-docs-propagation
@@ -107,7 +107,7 @@ todos:
 
 **Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR).
-**Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the NC knowledge taxonomy end-to-end as the first attached corpus.
+**Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
 ---
 
@@ -136,12 +136,13 @@ The Oak Curriculum Ontology already publishes RDF/OWL/SKOS/SHACL with stable IRI
 
 ### What Changes
 
-The foundation increment introduces a layered substrate. The NC knowledge taxonomy becomes the first corpus attached to that substrate, replacing the planned JSON-extraction approach in
-[`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md).
+The foundation increment introduces a layered substrate. The Oak Curriculum Ontology Threads graph becomes the first corpus attached to that substrate, giving the MVP's `oak-kg-*` Thread surface a real ontology-backed foundation.
 Every subsequent graph-shaped artefact — including the work queued in
 [`graph-query-layer.plan.md`](graph-query-layer.plan.md), the eventual
 EEF and misconception graph rewrites, the cross-source journeys, and the
 Practice graph pilot — attaches to this spine.
+
+The NC knowledge taxonomy is not part of this MVP foundation increment. It remains owned by its own plan and can attach to the substrate later only if the owner promotes that work separately.
 
 ---
 
@@ -190,11 +191,11 @@ The graph stack is **seven active graph workspaces plus one deferred**:
 | # | Workspace | Tier | Carries (research §13) | Role |
 |---|---|---|---|---|
 | 1 | `packages/core/graph-core/` | core | `graph-core` + `graph-jsonld` + `graph-canon` + `graph-vocab` | Substrate. Term / Quad / Dataset (RDF/JS-aligned), JSON-LD 1.1 expansion+compaction+framing, RDF dataset canonicalisation, vocabulary registry. Pure, no I/O. |
-| 2 | `packages/libs/graph-ingest/` | lib | `graph-ingest` | Six ingestion modes (research §6): `strict-jsonld`, `jsonld-compatible`, `plain-json-tree`, `records`, `node-edge-list`, `custom-mapping`; generic Turtle/SKOS parse-to-dataset support. Source mapping via JSON Pointer + JSONPath. No Oak/NC mapping. |
+| 2 | `packages/libs/graph-ingest/` | lib | `graph-ingest` | Six ingestion modes (research §6): `strict-jsonld`, `jsonld-compatible`, `plain-json-tree`, `records`, `node-edge-list`, `custom-mapping`; generic Turtle/SKOS parse-to-dataset support. Source mapping via JSON Pointer + JSONPath. No Oak-specific corpus mapping. |
 | 3 | `packages/libs/graph-enhance/` | lib | `graph-enhance` | Stable IRI minting, predicate mapping, type inference, link detection. `EnhancementRecord` discipline (research §7). `RelationshipRecord` migration bridge (research §8). |
 | 4 | `packages/libs/graph-validate/` | lib | `graph-validate` | JSON Schema (raw shape) + SHACL (graph meaning) wrappers. Validation report shape stable across SHACL versions (research §9). |
 | 5 | `packages/libs/graph-project/` | lib | `graph-project` | Property-graph projection, adjacency-list, neighbours/match/traverse primitives, visualisation/export hooks (research §10, §11). |
-| 6 | `packages/sdks/graph-corpus-sdk/` | sdk | (Oak-specific consumer) | Oak's typed corpus adapters: NC knowledge taxonomy, prerequisite, misconception, EEF strands, plus future corpora. **Cross-corpus join primitives.** Uses ontology IRIs as canonical identity. |
+| 6 | `packages/sdks/graph-corpus-sdk/` | sdk | (Oak-specific consumer) | Oak's typed corpus adapters: Oak Curriculum Ontology Threads graph, prerequisite, misconception, EEF strands, plus future corpora. **Cross-corpus join primitives.** Uses ontology IRIs as canonical identity. |
 | 7 | `agent-graphs/practice-graph/` | agent graph | (Practice-specific consumer) | Markdown-corpus graph for Oak's engineering practice. Built on the same stack, owned adjacent to agent tooling, and wired by the future `agent-graphs/` organisation plan. |
 | 8 | (deferred) `packages/libs/graph-future/` | lib | `graph-future` | RDF 1.2 / JSON-LD 1.2/1.3 / SPARQL 1.2 / SHACL 1.2 adapters. **Workspace not created until a consumer needs one of these specs**; the adapter seams (research §12) live inside `graph-core`, `graph-validate`, and `graph-project` from day one. |
 
@@ -225,7 +226,7 @@ Possible surfaces, none privileged by the topology:
 
 **Discipline**: no graph workspace ships MCP-shaped code. Tool definitions, resource constants, and registration helpers live with the app that surfaces them, not with the graph SDK that produces them. If a graph workspace starts wanting an MCP type or factory, that is the signal to extract a thin sibling adapter workspace — not to leak MCP into the substrate.
 
-The foundation increment ships zero MCP exposure. NC taxonomy availability through `graph-corpus-sdk`'s typed query surface is the proof that the substrate works end-to-end. Whether to surface it through the curriculum MCP server is a follow-on decision the owner can make at any time, with or without this spine in flight.
+The foundation increment ships zero MCP exposure. Oak Curriculum Ontology Threads availability through `graph-corpus-sdk`'s typed query surface is the proof that the substrate works end-to-end. Whether to surface it through the curriculum MCP server is a follow-on decision handled by the MVP slice plan, with or without this spine in flight.
 
 ---
 
@@ -240,7 +241,7 @@ The mapping is exhaustive against [`.agent/research/graph-library.research.md`](
 | §3 core design position | Plan-level: encoded in §Design Principles above. | Every workspace inherits the stable-first commitment. |
 | §4 canonical internal model (Term/Quad/Dataset; GraphNode/GraphEdge/GraphDocument) | `graph-core` | The core types are foundation-increment WS1 deliverables. |
 | §5 vocabulary layer | `graph-core/vocab` module | Default registries + Oak Curriculum Ontology + EEF + extension API. |
-| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` plus generic Turtle/SKOS parsing and reserves the other modes for Increment 2. Oak/NC corpus mapping remains in `graph-corpus-sdk`. |
+| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` plus generic Turtle/SKOS parsing and reserves the other modes for Increment 2. Oak ontology Thread mapping remains in `graph-corpus-sdk`. |
 | §7 enhancement model | `graph-enhance` | `EnhancementRecord` is first-class; `id → strand_id`-style transformations carry provenance. |
 | §8 relationship records as migration bridge | `graph-enhance` | `RelationshipRecord` is first-class today; RDF 1.2 triple-term annotation is a `graph-future` adapter target. |
 | §9 validation model | `graph-validate` | JSON Schema + SHACL, distinct concerns, both supported. |
@@ -258,7 +259,7 @@ The full topology activates over seven increments. This plan ships **Increment 1
 
 | # | Increment | Activates | Status |
 |---|---|---|---|
-| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + NC taxonomy as first attached corpus | **CURRENT** — pending owner approval of topology |
+| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + Oak Curriculum Ontology Threads graph as first attached corpus | **CURRENT** — pending owner approval of topology |
 | 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); rewrites of existing `oak-curriculum-sdk` graph code onto the new stack | future |
 | 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, and the EEF strand adapter required for cross-corpus joins; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk` | future (depends on Increment 2; subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
 | 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | future (depends on Increment 2 + the `agent-graphs/` organisation plan; consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
@@ -277,7 +278,7 @@ Each increment is a separate plan when promoted. The foundation increment is the
 After landing, Oak has:
 
 - A working RDF-compatible substrate with JSON-LD 1.1 ingestion, vocabulary registry, and canonicalisation.
-- The NC knowledge taxonomy (Discipline → Strand → SubStrand → ContentDescriptor) extracted from `oak-curriculum-ontology` `.ttl` files into a typed dataset, queryable through `graph-corpus-sdk`'s typed surface.
+- The Oak Curriculum Ontology Threads graph (`curric:Thread` nodes and inverse `curric:includesThread` Unit lookup) extracted from `oak-curriculum-ontology` `.ttl` files into a typed dataset, queryable through `graph-corpus-sdk`'s typed surface.
 - The first proof that ontology IRIs flow end-to-end as canonical identity.
 - Workspace homes for every layer in the research, with the foundation tier proven.
 
@@ -286,9 +287,10 @@ The foundation increment surfaces nothing through MCP, HTTP, or CLI. Surfacing i
 ### Slice non-scope (deferred to Increment 2 and beyond)
 
 - The other five ingestion modes (`strict-jsonld`, `plain-json-tree`, `records`, `node-edge-list`, `custom-mapping`).
-- Full `graph-enhance` (only the bare IRI-honouring path ships; no inference, no relationship-record minting beyond what NC taxonomy needs).
+- Full `graph-enhance` (only the bare IRI-honouring path ships; no inference, no relationship-record minting beyond what the Thread adapter needs).
 - Full `graph-validate` (no SHACL execution in this increment; SHACL validation happens upstream in the ontology repo's CI).
 - Adapters for prerequisite, misconception, EEF strands (Increment 3).
+- NC knowledge taxonomy ingestion or surfacing. That work is outside the MVP and remains in its own plan unless separately promoted by the owner.
 - The `practice-graph` workspace (Increment 4).
 - Sunset of the existing graph-resource-factory (Increment 2).
 
@@ -300,8 +302,8 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS1 — `graph-core`** (8 cycles): scaffold; RDF Term + Quad; DatasetCore; JSON-LD expand; JSON-LD compact + frame; canonicalisation; vocabulary registry; GraphDocument ergonomic surface.
 - **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode + generic Turtle/SKOS parsing; SourceMapping primitives.
 - **WS3 — minimal `graph-project`** (3 cycles): scaffold; `toPropertyGraph` projection; adjacency primitives.
-- **WS4 — NC taxonomy as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter seam; NC taxonomy adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, Oak/NC mapping here); typed query proof (in-process; no surfacing).
-- **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `nc-knowledge-taxonomy-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
+- **WS4 — Oak Ontology Threads as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter boundary; Thread adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, `curric:Thread` and inverse `curric:includesThread` mapping here); typed query proof (in-process; no surfacing).
+- **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
 - **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, mcp-reviewer, docs-adr-reviewer.
@@ -316,7 +318,7 @@ The parallel-safe pairs (`WS2.1+WS3.1`, `WS2.2+WS3.2`, `WS2.3+WS3.3`) can be dis
 
 The foundation increment lands tests for the load-bearing invariants from research §14:
 
-1. **Stable IRI**: `graph-core/vocab` lookups + `graph-corpus-sdk` adapter mint stable IRIs deterministically.
+1. **Stable IRI**: `graph-core/vocab` lookups + `graph-corpus-sdk` adapter honour stable ontology IRIs deterministically.
 2. **Predicate IRI**: every emitted edge carries a `NamedNode` predicate, never a bare string.
 3. **Source path preserved**: every node and edge produced by `graph-ingest` carries a `sourcePath` referenceable through JSON Pointer.
 4. **Enhancement traceable**: every derived attribute carries an `EnhancementRecord` (even where the foundation increment only emits one or two enhancement kinds).
@@ -328,7 +330,7 @@ The foundation increment lands tests for the load-bearing invariants from resear
 The foundation increment is done when:
 
 1. The foundation-tier cycles land green.
-2. NC taxonomy is queryable in-process via `graph-corpus-sdk`'s typed surface; ontology IRIs are canonical identity end-to-end. No surfacing (MCP, CLI, HTTP) is required for completeness.
+2. Oak Curriculum Ontology Threads are queryable in-process via `graph-corpus-sdk`'s typed surface, including Unit-to-Thread inverse-edge lookup; ontology IRIs are canonical identity end-to-end. No surfacing (MCP, CLI, HTTP) is required for completeness.
 3. The full quality-gate chain passes.
 4. ADR for the topology decision is merged.
 5. Coordination amendments are applied to the named plans.
@@ -342,11 +344,11 @@ This plan does **not** wholesale supersede adjacent plans; it provides the spine
 
 | Plan | Coordination |
 |---|---|
-| [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md) | **Structural part subsumed by Increment 1 WS4.** The SKOS-on-`graph-core` ingestion replaces the JSON-extraction approach. The plan's MCP-surfacing concerns (resource constant, aggregated tool, registration) are *not* part of the foundation increment — they remain in the original plan as a follow-on consumer slice the owner can choose to land separately. The original plan is amended to declare the structural split and to point here for the substrate path. |
+| [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md) | **Outside this MVP foundation increment.** The NC taxonomy plan is not amended or subsumed here. If the owner later promotes NC taxonomy work, it can attach to the substrate as a separate corpus adapter and consumer surface. |
 | [`graph-query-layer.plan.md`](graph-query-layer.plan.md) | **Substrate subsumed into Increment 3.** The `GraphView<TNode, TEdgeType>` interface, the seven operations, projection discipline, and the tracer-matrix work all migrate into `graph-corpus-sdk` over the new substrate. **Whether and how those operations are exposed via MCP is no longer this plan's concern**; the 17-MCP-tool count and per-operation tool definitions become a separate consumer-side decision. The plan file is amended to declare the substrate home and to mark MCP exposure as an independent follow-on. |
 | [`../active/graph-resource-factory.plan.md`](../active/graph-resource-factory.plan.md) | **Status remains DONE.** The factory currently lives in the curriculum MCP app's surface layer; it stays where it is and continues to work. If MCP exposure of new graph capabilities is later chosen, the factory may be revisited then. No retroactive amendment needed. |
 | [`../active/misconception-graph-mcp-surface.plan.md`](../active/misconception-graph-mcp-surface.plan.md) | **Status remains DONE.** The current misconception MCP tool stays live and unchanged. If the misconception adapter is later rewritten onto `graph-corpus-sdk`, the MCP tool is a thin re-wrapping the owner can do at any point — independent of the substrate. |
-| [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **Amended.** WS-4 (NC taxonomy) is now executed via this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
+| [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **Amended.** The graph substrate and Oak Ontology Threads foundation are now executed via this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
 | [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | **Conditional `graph-core` gate is satisfied unconditionally by Increment 1.** The Practice plan is amended: its required workspace is `agent-graphs/practice-graph/`, and its `packages/core/graph-core/` is the one this plan lands. The Practice plan becomes an adjacent practice-facing consumer of the spine (Increment 4 in the topology sequencing), after the future `agent-graphs/` organisation plan wires the top-level area. |
 | [`../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`](../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | **Strategic brief; no amendment needed.** Practice-graph attribution discipline (Graphify / Safi Shamsi) carries forward through the Practice plan and into the eventual `practice-graph` workspace README. |
 
@@ -369,7 +371,7 @@ The eventual public-asset move (Increment 6) is to publish `graph-core`, `graph-
 
 - Use the substrate to model their own corpora.
 - Attach to Oak's ontology IRIs through `graph-corpus-sdk` for cross-organisation joins.
-- Contribute back vocabulary mappings for the EEF strands and NC taxonomy.
+- Contribute back vocabulary mappings for the Oak ontology Thread graph and EEF strands.
 
 This is named here so the substrate is built for that future from day one — no Oak-specific shortcuts in the layered packages.
 
@@ -405,10 +407,10 @@ This is named here so the substrate is built for that future from day one — no
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
 | Seven-active-plus-one-deferred topology proves over-decomposed; some workspaces have insufficient surface to justify their boundary | Medium | Medium | Per-workspace creation gate in WS1–WS3: each workspace lands only when its first cycle has green tests proving the boundary carries weight. If a layer's cycles all collapse into another workspace, fold it. |
-| The substrate is built ahead of consumer demand and accumulates speculative API | Medium | High | The foundation increment ships only what NC taxonomy needs end-to-end. Every method on `graph-core`/`graph-ingest`/`graph-project` has a NC-taxonomy-driven justification or it does not ship. Subsequent increments justify their additions with their own consumer slices. |
+| The substrate is built ahead of consumer demand and accumulates speculative API | Medium | High | The foundation increment ships only what the Oak Ontology Threads adapter needs end-to-end. Every method on `graph-core`/`graph-ingest`/`graph-project` has a Thread-adapter-driven justification or it does not ship. Subsequent increments justify their additions with their own consumer slices. |
 | `jsonld.js` / `rdf-canonize` / `rdf-validate-shacl` create maintenance burden disproportionate to value | Low | Medium | The adapter shapes (research §12) keep them replaceable. Each is W3C-spec-aligned and widely used; bespoke alternatives are higher-risk. |
 | Ontology IRIs are not as stable as the strategy assumes; rewrite cost is hidden | Medium | High | The strategy doc (`oak-ontology-graph-opportunities.strategy.md`) names this risk. The vocabulary registry's pin-by-version model lets corpus adapters declare a specific ontology revision; alignment audit (separate plan) measures actual stability. |
-| Foundation increment lands without a Practice consumer; the substrate's cross-corpus claim is unproven | Medium | Medium | The increment's success criterion is end-to-end NC ingestion *plus* the second-consumer commitment in Increment 4. Increment 4 is a hard predecessor for Increment 6 (public-asset positioning). |
+| Foundation increment lands without a Practice consumer; the substrate's cross-corpus claim is unproven | Medium | Medium | The increment's success criterion is end-to-end Oak Ontology Threads ingestion *plus* the second-consumer commitment in Increment 4. Increment 4 is a hard predecessor for Increment 6 (public-asset positioning). |
 | Existing graph-shaped code in `oak-curriculum-sdk` and the queued `graph-query-layer.plan.md` drifts from the spine during Increment 1 | Medium | Low | Coordination amendments (WS5) explicitly point those plans at this spine. The proposed ADR records the intended topology so future plans cannot silently re-fork while ratification remains an owner gate. |
 
 ---
@@ -440,7 +442,7 @@ Required handling before close:
 7. `package.json` contributors — add Mark Hodierne (per existing parent-plan attribution requirement).
 8. Per-workspace READMEs (seven active graph workspace files, plus one deferred `graph-future` README when activated) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
 9. ~~Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md`.~~ **DONE 2026-05-07** — file renamed to `.agent/research/graph-library.research.md` with the `.research.md` suffix to mark it as one researched direction rather than a plan; references in this plan, the collection README, and operational memory updated.
-10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the NC/Oak Curriculum Ontology knowledge-taxonomy adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. Other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them.
+10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the Oak Curriculum Ontology Threads adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. NC taxonomy and other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them and the owner promotes that work separately.
 
 ADR-123 (MCP server tool catalogue) is *not* amended by this increment because no MCP tools are added or changed. Any future increment that surfaces graph capability via MCP would amend ADR-123 at that point.
 
@@ -464,13 +466,13 @@ fitness, and update the practice exchange. Candidate graduations:
 **Blocking**:
 
 - Owner approval of the topology decision (WS0 ADR is the artefact).
-- Pinned `oak-curriculum-ontology` revision for SKOS extraction (foundation-increment WS4 dependency).
+- Pinned `oak-curriculum-ontology` revision for Oak Ontology Threads extraction (foundation-increment WS4 dependency).
 
 **Related Plans**:
 
 - [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) — parent narrative; this plan executes its WS-4 via the spine.
 - [`graph-query-layer.plan.md`](graph-query-layer.plan.md) — subsumed into Increment 3.
-- [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md) — subsumed into Increment 1 WS4.
+- [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md) — outside this MVP; not subsumed by Increment 1.
 - [`../active/graph-resource-factory.plan.md`](../active/graph-resource-factory.plan.md) — DONE; refactored during Increment 2.
 - [`../active/misconception-graph-mcp-surface.plan.md`](../active/misconception-graph-mcp-surface.plan.md) — DONE; rewritten during Increment 3.
 - [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) — Increment 4 consumer.
@@ -489,5 +491,5 @@ Promote when:
 
 1. Owner has approved the topology decision.
 2. WS0 ADR is drafted and reviewed (not necessarily merged).
-3. The pinned `oak-curriculum-ontology` revision is identified for the SKOS extractor.
+3. The pinned `oak-curriculum-ontology` revision is identified for the Oak Ontology Threads adapter.
 4. `assumptions-reviewer`, `architecture-reviewer-betty`, `architecture-reviewer-fred`, and `architecture-reviewer-barney` have run against this plan body and findings are addressed.

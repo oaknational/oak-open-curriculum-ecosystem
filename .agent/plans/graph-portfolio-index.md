@@ -31,7 +31,7 @@ thread**:
    member, schema.org / RDFS / SKOS / PROV-O / SHACL vocabularies,
    property-graph projection, tripwire-driven adapter upgrades).
 2. **Oak graph surfaces** — Oak's own graphs and ontology, ingested through
-   the substrate (misconception, pre-requisite, NC taxonomy, full Oak
+   the substrate (misconception, pre-requisite, Oak ontology Threads, full Oak
    ontology, EEF strands, derived Practice graph, external KG intake).
    Practice-facing graph tooling is housed under `agent-graphs/`, adjacent to
    `agent-tools/`, rather than under substrate package workspaces.
@@ -65,7 +65,7 @@ closes as the ecosystem catches up — see the tripwire map below.
 | Type | Path | Role |
 |---|---|---|
 | Research direction | [`.agent/research/graph-library.research.md`](../research/graph-library.research.md) | Authoritative direction. **§4** RDF 1.2-native internal model (TripleTerm first-class). **§8** RelationshipRecord as JSON-LD 1.1 emit projection. **§12** wire-format migration seam. **§18** Oak first-wave ingestion scope. **§19** canonical Standards-evolution tripwires map (7 named tripwires). |
-| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Seven active graph workspaces plus one deferred; foundation increment ingests the NC knowledge taxonomy end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-173 below). |
+| Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | **Topology spine.** Seven active graph workspaces plus one deferred; foundation increment ingests the Oak Curriculum Ontology Threads graph end-to-end. Design Principle #1 names the Option B stance. WS0 is the topology ADR (see ADR-173 below). |
 | Plan (current) | [`connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation polymorphic query layer with progressive disclosure. Substrate folds into `graph-stack`; MCP exposure stays a separate consumer-side decision. |
 | ADR (proposed) | [`docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) | **WS0 deliverable** of `graph-stack.plan.md`. Proposes the topology, the **Option B standards stance**, the first-wave ingestion scope, and the seven tripwires pending owner approval. Skeleton drafted 2026-05-07; Option B amendment 2026-05-07. |
 
@@ -90,7 +90,7 @@ silently skipped; each becomes a named follow-on plan when triggered.
 
 | # | Corpus | Source format | Notes |
 |---|---|---|---|
-| 1 | **NC knowledge taxonomy from Oak Curriculum Ontology** | Turtle/SKOS + SHACL source, ingested directly from sibling `oak-curriculum-ontology` repo | Foundation attached corpus. `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns NC/Oak mapping. PG-JSONL, Neo4j export, SQL projections, and WIDOCO docs are out of foundation scope. |
+| 1 | **Oak Curriculum Ontology Threads graph** | Turtle/SKOS + SHACL source, ingested directly from sibling `oak-curriculum-ontology` repo | Foundation attached corpus for the MVP. `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns `curric:Thread` enumeration and inverse `curric:includesThread` Unit lookup. PG-JSONL, Neo4j export, SQL projections, WIDOCO docs, and NC taxonomy work are out of foundation scope. |
 | 2 | **Pre-requisite graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3. |
 | 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3; required before slice 3b. |
 | 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; EEF strand adapter is explicit graph-stack Increment 3 scope before cross-corpus joins. |
@@ -109,7 +109,7 @@ follow-on consolidation task.
 | **Misconception graph** | [`connecting-oak-resources/.../active/misconception-graph-mcp-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) | DONE (1eb302e8) |
 | **Pre-requisite graph** | (lives inside `graph-resource-factory.plan.md` — `prior-knowledge-graph-resource.ts` already shipping) | DONE |
 | **Graph resource factory** (shared infrastructure) | [`connecting-oak-resources/.../active/graph-resource-factory.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-resource-factory.plan.md) | DONE (1eb302e8) — to be rewritten on the substrate during graph-stack Increment 2 |
-| **NC knowledge taxonomy** (Oak Curriculum Ontology slice) | [`connecting-oak-resources/.../active/nc-knowledge-taxonomy-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) | Substrate path subsumed by `graph-stack.plan.md` foundation increment; surfacing concerns remain owned by this plan |
+| **NC knowledge taxonomy** (Oak Curriculum Ontology slice) | [`connecting-oak-resources/.../active/nc-knowledge-taxonomy-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) | Outside the MVP. Not subsumed by `graph-stack.plan.md`; any substrate or surfacing work requires separate owner promotion. |
 | **Full Oak Curriculum Ontology** (TTL + SHACL) | [`connecting-oak-resources/.../current/kg-alignment-audit.execution.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md) | ACTIVE — first canonical overlap audit |
 | **Oak Curriculum Ontology repo intake** (workspace decision) | [`connecting-oak-resources/.../future/oak-curriculum-ontology-workspace-reassessment.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md) | future |
 | **Oak Curriculum Ontology — fresh-perspective re-read** | [`connecting-oak-resources/.../future/ontology-repo-fresh-perspective-review.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | complete (per YAML) |
@@ -172,7 +172,7 @@ fold or cross-link when consolidation runs.
 |---|---|---|
 | **Knowledge graph for external organisations** | `sector-engagement/knowledge-graph-adoption/` (adoption playbook) and `connecting-oak-resources/knowledge-graph-integration/` (the assets being adopted) | Cross-link only; collections are deliberately separated by audience (sector-facing vs internal). |
 | **Knowledge graphs as data sources** | `exploring-open-education-resources/external-knowledge-sources/` (intake model) and `connecting-oak-resources/knowledge-graph-integration/` (Oak-owned graphs) | Cross-link only; same separation rule. |
-| **NC taxonomy substrate vs surfacing** | `graph-stack.plan.md` owns the substrate; `nc-knowledge-taxonomy-surface.plan.md` owns the MCP surface | Already declared in graph-stack's coordination map; surface plan should add a one-line YAML pointer. (Pending; trivial follow-on.) |
+| **NC taxonomy substrate vs surfacing** | NC taxonomy is outside the MVP; `nc-knowledge-taxonomy-surface.plan.md` remains the owner if it is separately promoted | Cross-link only. `graph-stack.plan.md` must not take NC taxonomy substrate ownership in the MVP foundation. |
 | **Query layer substrate vs MCP exposure** | Same split: `graph-stack.plan.md` (substrate) and `graph-query-layer.plan.md` (MCP-side decisions) | Same as above. |
 | **Practice graph vs curriculum graphs** | `agentic-engineering-enhancements/` owns the Practice memory graph; `agent-tooling/` owns the top-level `agent-graphs/` organisation; `connecting-oak-resources/knowledge-graph-integration/` owns curriculum graphs | Both consume the same substrate packages (`graph-core`, `graph-ingest`, `graph-project`); `graph-corpus-sdk` and `agent-graphs/practice-graph` are consumer workspaces. Cross-link only. |
 

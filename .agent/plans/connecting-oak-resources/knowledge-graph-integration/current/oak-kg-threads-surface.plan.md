@@ -9,9 +9,7 @@ spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 2
 namespace: "oak-kg-*"
 substrate_floor:
-  - "graph-stack Inc.1 (foundation: typed-Term core, graph-core)"
-  - "graph-stack Inc.2 (Turtle ingestion mode + graph-query-layer 7-op surface)"
-  - "named graph-stack Oak Curriculum Ontology Thread adapter cycle (lands the graph-corpus-sdk API for curric:Thread enumeration + inverse curric:includesThread resolution)"
+  - "graph-stack Inc.1 (Oak Curriculum Ontology Threads foundation: generic Turtle/SKOS ingestion, graph-project adjacency, graph-corpus-sdk curric:Thread adapter)"
 sequencing_gate: "STRICT after gate-1-eef-ships per owner direction"
 last_updated: 2026-05-08
 related_indices:
@@ -39,7 +37,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1-resource-stub]
   - id: ws2-cycle-1-tool-inverse-edge
-    content: "WS2 cycle 1: `oak-kg-get-thread-content.integration.test.ts` (RED) — call with a Thread IRI, assert returned Units contain inverse-edge (`curric:includesThread`) results with `rdfs:label`, `rdfs:comment`, `curric:whyThisWhyNow`; `oak-kg-get-thread-content.ts` (GREEN) implements via the inverse-edge primitive in graph-query-layer + adapter. One commit."
+    content: "WS2 cycle 1: `oak-kg-get-thread-content.integration.test.ts` (RED) — call with a Thread IRI, assert returned Units contain inverse-edge (`curric:includesThread`) results with `rdfs:label`, `rdfs:comment`, `curric:whyThisWhyNow`; `oak-kg-get-thread-content.ts` (GREEN) implements via the graph-corpus-sdk Thread adapter over graph-project adjacency. One commit."
     status: pending
     depends_on: [ws1-cycle-1-resource-stub]
   - id: ws2-cycle-2-tool-grouping
@@ -51,7 +49,7 @@ todos:
     status: pending
     depends_on: [ws2-cycle-1-tool-inverse-edge]
   - id: ws3-cycle-1-mcp-wiring
-    content: "WS3 cycle 1: integration test (`oak-kg-threads-mcp.integration.test.ts`) wires the resource + tool through the MCP server registration; assert tool/resource discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS3 cycle 1: integration test (`oak-kg-threads-mcp.integration.test.ts`) wires the resource + tool through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS` + `registerAllResources`); assert tool/resource discoverable + invocable end-to-end. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-2-resource-grouping, ws2-cycle-2-tool-grouping, ws2-cycle-3-tool-error-shapes]
   - id: ws3-cycle-2-tool-descriptors
@@ -80,8 +78,7 @@ todos:
 
 **Last Updated**: 2026-05-08
 **Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
-Inc.1 + Inc.2 + named Oak Curriculum Ontology Thread adapter cycle) +
-gate-1-eef-ships.
+Inc.1 Oak Curriculum Ontology Threads foundation) + gate-1-eef-ships.
 **Scope**: Slice 2 of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
 ship the `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content`
@@ -104,7 +101,7 @@ scheduling.
 | Primitive | Name | Substrate path |
 |---|---|---|
 | Resource | `curriculum://oak-kg-threads` | `graph-corpus-sdk` Oak Curriculum Ontology adapter |
-| Tool | `oak-kg-get-thread-content` | inverse-edge query in graph-query-layer + adapter |
+| Tool | `oak-kg-get-thread-content` | inverse-edge query via `graph-corpus-sdk` Thread adapter over `graph-project` adjacency |
 
 Tool/resource names are **locked** by the spine — they're named in
 the MVP-arc spine and any rename requires a spine amendment, not just
@@ -114,16 +111,27 @@ discipline, not a downstream-composition dependency.
 
 ### Existing capabilities consumed
 
-- Named graph-stack Oak Curriculum Ontology Thread adapter cycle (see
+- Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (see
   [`graph-stack.plan.md`](graph-stack.plan.md)); slice 2 starts only after
-  that cycle lands the `graph-corpus-sdk` API for `curric:Thread`
-  enumeration and inverse `curric:includesThread` resolution.
-- `graph-query-layer` 7-op surface, including the inverse-edge primitive
-  (lands in Inc.2)
+  that increment lands the `graph-corpus-sdk` API for `curric:Thread`
+  enumeration and inverse `curric:includesThread` resolution over
+  `graph-project` adjacency.
 - The existing MCP server wiring in
   `apps/oak-curriculum-mcp-streamable-http`
 - The SDK's tool-guidance surface
   (`packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-*.ts`)
+- Current MCP registration surfaces:
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+  (`AggregatedToolName`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
+  (`AGGREGATED_TOOL_DEFS`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`
+  (`AGGREGATED_HANDLERS`),
+  `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (public
+  exports), and
+  `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts`
+  (`registerAllResources`). `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+  lists universal tools automatically via `listUniversalTools`.
 - The SDK's `classify-error-response` convention
   (`packages/sdks/oak-curriculum-sdk/src/mcp/classify-error-response.ts`)
 
@@ -135,9 +143,10 @@ discipline, not a downstream-composition dependency.
 2. **Substrate-only via adapter** — no direct ontology I/O from the
    resource or tool; everything routes through `graph-corpus-sdk` so the
    substrate-vs-surface boundary holds (per ADR-173 / ADR-154).
-3. **Inverse-edge primitive in graph-query-layer** — Thread is a forward
-   edge from Unit (`curric:includesThread`); this slice exercises the
-   inverse-edge primitive end-to-end and confirms it earns its keep.
+3. **Inverse-edge primitive in `graph-corpus-sdk`/`graph-project`** — Thread
+   is a forward edge from Unit (`curric:includesThread`); this slice
+   exercises the inverse-edge primitive end-to-end and confirms it earns its
+   keep.
 4. **Bounded responses** — `threads.ttl` is small; per-Thread Unit lists
    are bounded; no context-budget concerns. Responses do not need
    pagination at this scale.
@@ -166,8 +175,9 @@ discipline, not a downstream-composition dependency.
 2. For each Thread, `oak-kg-get-thread-content` returns the full set of
    Units with `curric:includesThread` to it, grouped by subject + KS,
    with `rdfs:label`, `rdfs:comment`, and `curric:whyThisWhyNow`.
-3. Inverse-edge query primitive in graph-query-layer verified
-   (Thread is a forward edge from Unit; resolution requires inverse).
+3. Inverse-edge query primitive in `graph-corpus-sdk`/`graph-project`
+   verified (Thread is a forward edge from Unit; resolution requires
+   inverse lookup).
 4. ADR-123 records the new primitives.
 5. Specialist review by `mcp-reviewer` (mid-cycle and at WS6 close).
 
@@ -202,17 +212,20 @@ following the convention set by the existing `*-resource.ts` files
 
 Three TDD cycles. The tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-kg-get-thread-content.ts`
-with `tool-definition.ts` and `integration.test.ts` siblings per the
-convention set by the existing `aggregated-*` tool families.
+with descriptor/schema exports wired into the universal-tool registry
+(`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, and `AGGREGATED_HANDLERS`).
+If the implementation uses an `aggregated-oak-kg-threads/` subdirectory,
+its `tool-definition.ts` follows the existing `aggregated-*` convention;
+the central registry surfaces remain the source of truth.
 
 #### Cycle 2.1 — inverse-edge happy path
 
 - **Test**: Thread IRI → tool returns the set of Units with
   `curric:includesThread` edge to it; Unit projections include
   `rdfs:label`, `rdfs:comment`, `curric:whyThisWhyNow`.
-- **Product code**: invoke the inverse-edge primitive on
-  `graph-query-layer` via the `graph-corpus-sdk` adapter; project Units
-  to the documented shape.
+- **Product code**: invoke the inverse-edge primitive through the
+  `graph-corpus-sdk` Thread adapter over `graph-project` adjacency; project
+  Units to the documented shape.
 - **Acceptance**: test passes; full tree green.
 
 MCP envelope acceptance: tool calls return a `CallToolResult` with `content`
@@ -245,8 +258,12 @@ registration and into the SDK's tool-guidance / NL surface.
 - **Test**: `oak-kg-threads-mcp.integration.test.ts` exercises the
   full MCP path (server registers resource + tool; client lists +
   invokes both successfully).
-- **Product code**: registration in the MCP app's tool/resource
-  registration path.
+- **Product code**: add the tool to the SDK universal registry
+  (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
+  export it through `public/mcp-tools.ts`; add the resource constant/getter
+  to `public/mcp-tools.ts` and `registerAllResources`. `handlers.ts`
+  registers tools by iterating `listUniversalTools`, so no separate
+  per-tool app handler is expected.
 - **Acceptance**: integration test passes; unit tests still pass.
 
 #### Cycle 3.2 — descriptor + NL guidance
@@ -292,7 +309,7 @@ Triggers downstream readiness check on slice 3b authoring.
 | Risk | Mitigation |
 |---|---|
 | `graph-corpus-sdk` Oak Curriculum Ontology adapter API drifts before slice-2 execution | Plan locks against named substrate primitives, not signatures; cycles re-validate when substrate lands. |
-| Inverse-edge primitive in graph-query-layer ships in a shape that surprises the tool projection | Cycle 2.1 is a contract test — any drift surfaces immediately, before grouping/error cycles consume the contract. |
+| Inverse-edge primitive in `graph-corpus-sdk`/`graph-project` ships in a shape that surprises the tool projection | Cycle 2.1 is a contract test — any drift surfaces immediately, before grouping/error cycles consume the contract. |
 | `threads.ttl` shape evolves in `oak-curriculum-ontology` between plan-write and execution | Fixture-based unit tests pin the expected shape; any drift surfaces at execution time. |
 | MCP descriptor / NL guidance regression breaks downstream agent comprehension | Descriptor tests + `mcp-reviewer` gate at WS6. |
 
@@ -314,12 +331,10 @@ Triggers downstream readiness check on slice 3b authoring.
 **Blocking**:
 
 - Spine `gate-1-eef-ships` (STRICT, owner direction).
-- Spine `gate-0-substrate-floor` (graph-query-layer 7-op surface
-  available; transitively needs graph-stack Inc.1+Inc.2).
-- `graph-stack.plan.md` Inc.1 + Inc.2 (substrate; topology must reach
-  ACTIVE before this slice can execute, with the topology BLOCKERs
-  surfaced by `architecture-reviewer-betty` 2026-05-07 absorbed).
-- Named graph-stack Oak Curriculum Ontology Thread adapter cycle.
+- Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (substrate;
+  topology must reach ACTIVE before this slice can execute, with the
+  topology BLOCKERs surfaced by `architecture-reviewer-betty` 2026-05-07
+  absorbed).
 
 **Parallel-safe with**:
 
@@ -339,8 +354,8 @@ Triggers downstream readiness check on slice 3b authoring.
 - [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — coordination
   spine.
 - [`graph-stack.plan.md`](graph-stack.plan.md) — substrate plan.
-- [`graph-query-layer.plan.md`](graph-query-layer.plan.md) — substrate
-  primitive.
+- [`graph-query-layer.plan.md`](graph-query-layer.plan.md) — related query
+  substrate, but not a slice-2 gate.
 
 ## Consolidation
 

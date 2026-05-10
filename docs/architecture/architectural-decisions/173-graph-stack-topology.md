@@ -74,7 +74,7 @@ Seven active graph workspaces plus one deferred:
    registry. Pure, no I/O.
 2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, generic
    Turtle/SKOS parse-to-dataset support, and other consumer-agnostic
-   ingestion modes. Oak/NC corpus mapping does not live here.
+   ingestion modes. Oak-specific corpus mapping does not live here.
 3. `packages/libs/graph-enhance/` — stable IRI minting, predicate mapping,
    type inference, link detection, `EnhancementRecord` and
    `RelationshipRecord` discipline.
@@ -82,10 +82,10 @@ Seven active graph workspaces plus one deferred:
    (graph meaning).
 5. `packages/libs/graph-project/` — property-graph projection, adjacency,
    neighbours/match/traverse primitives, visualisation/export hooks.
-6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (NC
-   knowledge taxonomy, prerequisite, misconception, EEF strands, future
-   corpora). Cross-corpus join primitives. Ontology IRIs as canonical
-   identity.
+6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (Oak
+   Curriculum Ontology Threads graph, prerequisite, misconception, EEF
+   strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
+   canonical identity.
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
@@ -110,19 +110,21 @@ is a consumer-side concern with at most one home per transport.
 
 The foundation wave targets the smallest end-to-end attached corpus:
 
-1. **Oak Curriculum Ontology** — Turtle + SHACL, ingested directly from the
-   sibling `oak-curriculum-ontology` repo. TTL is canonical; the repo's
-   PG-JSONL, Neo4j-export, SQL, and WIDOCO projections are _not_ first-wave
-   ingestion targets. Round-trip equivalence between TTL and the derived
-   projections is asserted upstream and not re-verified by the graph stack.
-   `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns
-   the NC/Oak knowledge-taxonomy mapping and typed adapter.
+1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
+   directly from the sibling `oak-curriculum-ontology` repo. TTL is
+   canonical; the repo's PG-JSONL, Neo4j-export, SQL, and WIDOCO projections
+   are _not_ first-wave ingestion targets. Round-trip equivalence between TTL
+   and the derived projections is asserted upstream and not re-verified by
+   the graph stack. `graph-ingest` owns generic Turtle/SKOS parsing;
+   `graph-corpus-sdk` owns the `curric:Thread` enumeration and
+   `curric:includesThread` inverse-edge typed adapter.
 
 Pre-requisite, misconception, and EEF strand adapters are outside the foundation
 topology decision and are sequenced by the executable graph-stack plan. Other
-Oak ontology projections and third-party knowledge graphs are tracked
-separately and re-introduced as ingestion modes or adapters only when concrete
-consumers require them.
+Oak ontology projections, including the NC knowledge taxonomy, and third-party
+knowledge graphs are tracked separately and re-introduced as ingestion modes or
+adapters only when concrete consumers require them and the owner promotes that
+work separately.
 
 ## Consequences
 
@@ -139,8 +141,8 @@ consumers require them.
   cost: when JSON-LD 1.2 reaches Recommendation (tripwire #1), we add an
   emit/parse adapter rather than reshape the canonical model.
 - The foundation ingestion scope is small enough to ship while still proving
-  ontology IRI identity and generic Turtle/SKOS parsing through one real
-  attached corpus.
+  ontology IRI identity and generic Turtle/SKOS parsing through one real Oak
+  ontology attached corpus.
 
 **Negative / cost accepted**:
 

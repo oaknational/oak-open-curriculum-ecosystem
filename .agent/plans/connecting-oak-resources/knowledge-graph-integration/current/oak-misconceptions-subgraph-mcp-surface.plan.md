@@ -53,7 +53,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-3-completeness-control]
   - id: ws3-cycle-1-mcp-wiring
-    content: "WS3 cycle 1: integration test wires the tool(s) through MCP server registration; assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS3 cycle 1: integration test wires the tool(s) through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-3-completeness-control, ws1-cycle-4-error-shapes]
   - id: ws3-cycle-2-tool-meta-legacy-disclosure
@@ -134,8 +134,16 @@ and record the fill in the manifest comment.
   and `aggregated-misconception-graph.ts`
 - The SDK's `classify-error-response` convention
 - The SDK's tool-guidance surface
-- The MCP server registration in
-  `apps/oak-curriculum-mcp-streamable-http`
+- Current MCP registration surfaces:
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+  (`AggregatedToolName`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
+  (`AGGREGATED_TOOL_DEFS`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`
+  (`AGGREGATED_HANDLERS`), and
+  `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (public
+  exports). `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+  lists universal tools automatically via `listUniversalTools`.
 
 ### Why legacy substrate now (not later)
 
@@ -202,7 +210,11 @@ contract is named, and the migration is sequenced.
 
 Four TDD cycles. Tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.ts`
-with `tool-definition.ts` and `integration.test.ts` siblings.
+with descriptor/schema exports wired into the universal-tool registry
+(`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, and `AGGREGATED_HANDLERS`).
+If the implementation uses an `aggregated-oak-misconceptions-subgraph/`
+subdirectory, its `tool-definition.ts` follows the existing `aggregated-*`
+convention; the central registry surfaces remain the source of truth.
 Because these cycles exercise the legacy graph factory, the test file is
 classified as `integration.test.ts` at implementation time.
 
@@ -267,7 +279,11 @@ If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
 
 - **Test**: integration exercises the full MCP path; tool discoverable
   and invocable end-to-end.
-- **Product code**: registration in MCP app's tool registration path.
+- **Product code**: add the tool to the SDK universal registry
+  (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
+  export it through `public/mcp-tools.ts`. `handlers.ts` registers tools by
+  iterating `listUniversalTools`, so no separate per-tool app handler is
+  expected.
 
 #### Cycle 3.2 — tool `_meta` declares legacy substrate
 
@@ -351,7 +367,8 @@ Dispatch:
 **Parallel-safe with**:
 
 - [`oak-kg-threads-surface.plan.md`](oak-kg-threads-surface.plan.md)
-  (slice 2) — different substrate path (legacy vs Inc.2 substrate),
+  (slice 2) — different substrate path (legacy misconception factory vs
+  Oak Ontology Threads substrate),
   different namespace (`oak-misconceptions-*` vs `oak-kg-*`), different
   tool / resource files.
 

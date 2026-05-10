@@ -51,7 +51,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1-cross-corpus-happy-path]
   - id: ws2-cycle-1-mcp-wiring
-    content: "WS2 cycle 1: integration test wires the tool through MCP server registration; assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS2 cycle 1: integration test wires the tool through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-3-cross-corpus-join-verified, ws1-cycle-4-error-shapes]
   - id: ws2-cycle-2-tool-meta-and-attribution
@@ -146,8 +146,16 @@ the response shape, not as runtime dependencies.
   slice 3a's tool is NOT called at runtime
 - The SDK's `classify-error-response` convention
 - The SDK's tool-guidance surface
-- The MCP server registration in
-  `apps/oak-curriculum-mcp-streamable-http`
+- Current MCP registration surfaces:
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+  (`AggregatedToolName`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
+  (`AGGREGATED_TOOL_DEFS`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`
+  (`AGGREGATED_HANDLERS`), and
+  `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (public
+  exports). `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+  lists universal tools automatically via `listUniversalTools`.
 
 ## Design Principles
 
@@ -211,7 +219,12 @@ the response shape, not as runtime dependencies.
 
 Four TDD cycles. Tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-eef-recommend-for-thread.ts`
-with `tool-definition.ts` and `integration.test.ts` siblings.
+with descriptor/schema exports wired into the universal-tool registry
+(`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, and `AGGREGATED_HANDLERS`).
+If the implementation uses an
+`aggregated-oak-misconceptions-eef-recommend/` subdirectory, its
+`tool-definition.ts` follows the existing `aggregated-*` convention; the
+central registry surfaces remain the source of truth.
 
 #### Cycle 1.1 — cross-corpus happy path
 
@@ -264,7 +277,11 @@ execution errors.
 
 - **Test**: integration exercises the full MCP path; tool discoverable
   and invocable end-to-end on a real cross-corpus join primitive.
-- **Product code**: registration in MCP app's tool registration path.
+- **Product code**: add the tool to the SDK universal registry
+  (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
+  export it through `public/mcp-tools.ts`. `handlers.ts` registers tools by
+  iterating `listUniversalTools`, so no separate per-tool app handler is
+  expected.
 
 #### Cycle 2.2 — descriptor + per-source citations
 
