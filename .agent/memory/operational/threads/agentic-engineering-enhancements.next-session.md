@@ -2,9 +2,82 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`claude` / opus-4.7 / Stormbound Floating
-Current / `ea1cbe`, sub-agent rename + skill integration Phase 1B
-closeout, including owner-directed extended-scope pull-forward).
+**Last refreshed**: 2026-05-10 (`claude-code` / opus-4.7 / Windswept Sweeping
+Gale / `726fcb`, claude-insight-report disposition plan executed end-to-end:
+pattern landed + pending-graduations batch entry registered).
+
+### 2026-05-10 session record — disposition plan executed (Windswept Sweeping Gale)
+
+**Landed outcome**: executed all four phases of
+`.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`.
+Plan status flipped 🔴 NOT STARTED → 🟢 IN PROGRESS → ✅ COMPLETE; YAML
+todos all `completed`.
+
+**What landed**:
+
+- New pattern file at
+  `.agent/memory/active/patterns/owner-course-correct-vocabulary.md`
+  (138 lines, fitness-clean) lifting items 9 + 20 of the disposition
+  ledger jointly: owner-side course-correct phrases (corpus from
+  `08-communication-style.md`) and agent-side self-trigger phrases
+  (from `06-frictions-and-anti-patterns.md` + `09-agent-action-rules.md`).
+- Single batch entry "Insight-Report 2026-05-10 Candidates" appended to
+  `.agent/memory/operational/pending-graduations.md` covering 8 candidate
+  items (10, 12, 16, 19, 21, 26, 29, 30) as 6 entries after natural
+  pairing (19+21 share target/trigger; 29+30 share scope as "any future
+  generated insight artefact").
+- Disposition plan body annotated with Phase 0 audit outcomes inline.
+
+**Phase 0 audit outcomes**: items 11 (`invoke-code-experts.md`), 17,
+24 confirmed DISCARD; item 16 refined VERIFY-INTEGRATE → CANDIDATE
+(named glossary surfaces are not natural homes for memory/skills
+terms; the question of a memory-glossary surface routes to the Phase 2
+batch); item 21 retained CANDIDATE (compact reply-shape doctrine
+absent in `user-collaboration.md` §Working Model).
+
+**Reviewer dispatch**:
+
+- `assumptions-expert` (Phase 0): caught citation drift on item 11 —
+  the file was renamed `invoke-code-reviewers.md` →
+  `invoke-code-experts.md` mid-session by the Stormbound Phase 1B
+  closeout commit `249600f1`. Plan body updated; Phase 0 deterministic
+  validation block re-cited.
+- `docs-adr-expert` (Phase 1): APPROVED. All six checks passed
+  (doctrine fit, cross-reference correctness, polarity declaration,
+  ledger faithfulness, vocabulary discipline, no verbatim
+  principles.md quotes).
+- `docs-adr-expert` (Phase 2): APPROVED WITH NITS. One optional nit on
+  item 12's withdrawal trigger (substance-falsification path) applied
+  in a small follow-up edit.
+
+**Validation**: `pnpm markdownlint:root` PASS; `pnpm format:root` PASS;
+`pnpm practice:fitness:informational` shows new pattern file
+fitness-clean and not flagged.
+
+**Fitness signal to surface to owner**: `pending-graduations.md` went
+HARD on characters (154209 / 150000) after the batch entry. Pre-session
+was 147743 chars (within budget). The added ~6500 chars are genuine
+candidate substance — each item carries the schema-mandated five fields
+(statement, source, why-candidate, target, trigger, withdrawal
+trigger). Substance preservation discipline + ADR-144 §9e
+(limit-raise-is-owner-only) was applied: 19+21 and 29+30 paired as
+curation-shaped reductions, withdrawal triggers preserved. Flagged
+here for owner decision (recalibrate limit vs further curate).
+
+**Pre-existing fitness HARD signals not from this session**:
+`repo-continuity.md` (691 / 525 lines, 41965 / 35000 chars). Inherited
+from earlier 2026-05-10 sessions. Not in my claim.
+
+**Collaboration lifecycle**: claim
+`4aa5cfbe-b859-45bd-84e0-299c26644313` opened at session start
+(replacing the closed-archive `1b1648a5` from the prior Oceanic Lapping
+Lighthouse session). Closed cleanly at handoff. Active claims now zero.
+
+**Next safe step**: nothing required from the disposition plan itself
+— it is ✅ COMPLETE and will archive to `archive/completed/` at the
+next consolidation pass per PDR-018 plan lifecycle. The 8 batched
+candidates wait in `pending-graduations.md` for trigger conditions
+(typically: a second insight-report regeneration, or owner direction).
 
 ### 2026-05-10 session record — Phase 1B closeout extended scope (Stormbound Floating Current)
 
@@ -2685,6 +2758,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Windswept Sweeping Gale` | `claude-code` | `claude-opus-4-7-1m` | `726fcb` | `executed-claude-insight-report-2026-05-10-disposition-plan-end-to-end; phase-0-audit-confirmed-items-11-17-24-discard-rationale-with-citation-fix-on-item-11-from-invoke-code-reviewers-md-to-invoke-code-experts-md-after-mid-session-rename; phase-0-refined-item-16-from-VERIFY-INTEGRATE-to-CANDIDATE-named-glossary-surfaces-not-natural-homes-for-memory-skills-terms; phase-1-authored-pattern-owner-course-correct-vocabulary-md-138-lines-fitness-clean-lifting-items-9-and-20-jointly-owner-side-and-agent-side-trigger-tables; phase-2-appended-single-batch-entry-to-pending-graduations-md-covering-8-candidates-as-6-entries-after-pairing-19-21-and-29-30; phase-3-foundation-checklist-closed-claim-4aa5cfbe-closed-cleanly-active-claims-zero; reviewer-dispatch-assumptions-expert-flagged-citation-drift-docs-adr-expert-approved-phase-1-approved-with-nits-phase-2; surfaced-pending-graduations-md-HARD-on-characters-after-substance-preserved-batch-for-owner-decision-on-limit-recalibration; commits-pending-owner-authorisation` | 2026-05-10 | 2026-05-10 |
 | `Gilded Eclipsing Meteor` | `codex` | `GPT-5` | `019e12` | `owner-requested-adr-coverage-sweep; created-adr-174-dependency-vulnerability-scanning-and-adr-175-external-evidence-freshness; amended-auth-security-observability-quality-gate-search-agent-practice-adrs; absorbed-docs-adr-expert-review; closed-adr-coverage-claims; validation-markdownlint-format-check-diff-check-passed` | 2026-05-10 | 2026-05-10 |
 | `Salty Rolling Compass` | `codex` | `GPT-5` | `019e12` | `owner-requested-commit-safety-sweep; committed-expert-active-workflow-bundle-57de914f; committed-practice-core-fitness-budget-1cc83d62; committed-collaboration-state-bundle-b96b7e48; restored-peer-Gilded-active-claim-after-commit-queue-lifecycle-loss; final-handoff-updated-agentic-lane-to-8-of-8-expert-merges-landed-plus-cleanup-bundle-in-working-tree; no-open-Salty-claim` | 2026-05-10 | 2026-05-10 |
 | `Sylvan Sprouting Grove` | `codex` | `GPT-5` | `019e12` | `owner-requested-deep-consolidate-docs-workflow-plus-jc-session-handoff; curation-frame-over-optimisation; napkin-2026-05-10-rotation-and-distilled-update; repo-continuity-hard-routed-to-targeted-archive-current-state-reconciliation; avoided-Windswept-claimed-plan-pattern-pending-grad-surfaces` | 2026-05-10 | 2026-05-10 |

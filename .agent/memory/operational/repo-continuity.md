@@ -9,6 +9,31 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Windswept Sweeping Gale / `claude-code` /
+opus-4.7 / `726fcb`, claude-insight-report disposition plan executed end-to-end)**:
+landed all four phases of the disposition plan authored by the prior
+Oceanic Lapping Lighthouse session. Pattern
+`owner-course-correct-vocabulary.md` (138 lines, fitness-clean) lifts
+items 9 + 20 jointly. Single batch entry "Insight-Report 2026-05-10
+Candidates" appended to `pending-graduations.md` covering 8 items as 6
+entries after natural pairing (19+21 share target/trigger; 29+30 share
+"future generated artefact" scope). Phase 0 audit refined item 16 from
+VERIFY-INTEGRATE → CANDIDATE; assumptions-expert caught citation drift
+on item 11 caused by the mid-session `invoke-code-reviewers.md` →
+`invoke-code-experts.md` rename (Stormbound's commit `249600f1`).
+docs-adr-expert APPROVED Phase 1 + APPROVED WITH NITS Phase 2 (one
+optional nit applied). Plan body flipped 🔴 → 🟢 → ✅ COMPLETE; YAML
+todos all `completed`. Active claim `4aa5cfbe-b859-45bd-84e0-299c26644313`
+opened and closed cleanly; active claims now zero. **Fitness signal
+to surface**: `pending-graduations.md` HARD on characters
+(154209 / 150000) after the batch entry; pre-session was 147743
+within budget. Substance preservation discipline applied (paired
+items, did not trim withdrawal triggers); flagging for owner decision
+on limit recalibration per ADR-144 §9e. **Next safe step**: commits
+pending owner authorisation (Commit A: pattern + plan-status flip;
+Commit B: batch entry + plan-status flip + claim-state edits — owner
+chose to commit at session close).
+
 **Session close (2026-05-10 — Stormbound Floating Current / `claude` /
 opus-4.7 / `ea1cbe`, Phase 1B closeout extended scope)**: completed the
 sub-agent rename + skill integration plan's Phase 1B end-to-end. Three
@@ -294,7 +319,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Stormbound Floating Current / `claude` / opus-4.7 / `ea1cbe` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Windswept Sweeping Gale / `claude-code` / opus-4.7 / `726fcb` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Foamy Navigating Hull / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -564,7 +589,17 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-10 Stormbound Floating Current, claude, opus-4.7,
+**Status (2026-05-10 Windswept Sweeping Gale, claude-code, opus-4.7,
+`726fcb`, claude-insight-report disposition plan executed):
+`not due — small-scope doctrine integration (one new pattern + one
+batched candidate entry); no consolidation triggers fired. Napkin
+clean (141/220 lines), no graduations beyond the batched candidates
+already routed to pending-graduations.md, no major waypoint. The
+prior Stormbound 'due' status below remains the controlling state
+for the next deliberate consolidation session — Phase 2 cross-repo
+*-reviewer → *-expert sweep + ~590-site reference cleanup.`**
+
+**Prior status (2026-05-10 Stormbound Floating Current, claude, opus-4.7,
 `ea1cbe`, sub-agent rename + skill integration Phase 1B closeout):
 `due — plan-closure trigger fires (Phase 1B fully closed in 3 commits:
 ae36670a + c31eb492 + 249600f1). 9-reviewer dispatch returned 2 CLEAN

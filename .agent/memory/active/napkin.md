@@ -22,6 +22,70 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-10.md
 [previous-pass]: archive/napkin-2026-05-09.md
 
+## 2026-05-10 — Windswept Sweeping Gale / claude-code / opus-4.7 / `726fcb`
+
+### Surprise — assumptions-expert caught a citation drifted by mid-session file rename
+
+- **Expected**: my Phase 0 `ls -la` confirmed
+  `.agent/memory/executive/invoke-code-reviewers.md` exists at 11614 B,
+  so the disposition ledger row 11 citation was sound and the discard
+  rationale held.
+- **Actual**: between my first `ls` and the assumptions-expert sub-agent's
+  read, the file was renamed to `invoke-code-experts.md` as part of an
+  in-flight reviewer→expert rename (commit `249600f1` from the
+  Stormbound Floating Current Phase 1B closeout that landed earlier the
+  same day). The reviewer's `ls` against the cited path returned ENOENT;
+  the audit had recorded a file size for a path that no longer existed.
+- **Why expectation failed**: the working tree had three different
+  identities making concurrent edits to `.agent/` surfaces during the
+  same morning. My Phase 0 read captured a snapshot that was already
+  stale by the time of write. The mistake was not the read — the
+  mistake was citing the path I read at write-time without re-verifying
+  the path was still valid against the post-rename state.
+- **Behaviour change**: when a reviewer or write-step references a
+  named file path captured earlier in the session, re-`ls` before the
+  reference is committed. If the working tree carries multi-agent
+  in-flight edits (the brief explicitly named this state), treat all
+  earlier path captures as snapshot-only.
+
+### Surprise — substance-preservation under HARD fitness pressure on `pending-graduations.md`
+
+- **Expected**: a single batched candidate entry covering 8 items would
+  fit within the existing `pending-graduations.md` budget (line target
+  2000 / limit 2500; char limit 150000).
+- **Actual**: my first batch authoring pushed character count to 155305
+  (HARD over by 5305). After natural pairing of 19+21 (shared target)
+  and 29+30 (shared scope), the count came down to 154078 — still HARD
+  but reduced by ~1227 chars without losing substance.
+- **Why interesting**: the pairing was curation-shaped (pairs were
+  genuinely paired by source rationale), not optimisation-shaped. The
+  PDR-026 substance-preservation discipline + ADR-144 §9e
+  (limit-raise-is-owner-only) yielded the honest two-step: apply
+  substance-preserving structural fix (pairing), then surface limit
+  decision to owner. I did not trim withdrawal triggers or per-item
+  rationale to chase the budget.
+- **Cure (worked)**: the natural-pairing move is doctrine-aligned;
+  the residual HARD signal is information for owner decision, not a
+  blocker on my work.
+
+### Surprise — `git stash --keep-index` is risky during shared-state sessions
+
+- **Expected**: `git stash --keep-index` to compare current vs HEAD
+  character counts on `pending-graduations.md` would be a reversible
+  read-only-shaped probe.
+- **Actual**: owner immediately interrupted: "no, stash is risky" — and
+  the cleaner alternative was `git show HEAD:<path> | wc -c` which
+  reads HEAD content without touching the working tree.
+- **Why expectation failed**: `git stash` is state-mutating even with
+  `--keep-index`; in a working tree carrying multi-agent in-flight
+  edits, stashing risks losing peer-agent staged content the same way
+  the foreign-stage absorption pattern documented. The `git show HEAD:`
+  alternative achieves the same goal without any state mutation.
+- **Behaviour change**: for "compare current state to HEAD" probes,
+  default to `git show HEAD:<path>` over `git stash` even with
+  `--keep-index`. Stash is genuinely destructive-shaped under
+  multi-agent commit pressure.
+
 ## 2026-05-10 — Sylvan Sprouting Grove / codex / GPT-5 / `019e12`
 
 ### Deep Consolidation Opening
