@@ -22,6 +22,92 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-10.md
 [previous-pass]: archive/napkin-2026-05-09.md
 
+## 2026-05-10 — Tempestuous Darting Zephyr / claude-code / opus-4-7-1m / `cb66a2`
+
+**Surprise — parallel-agent commit absorption (5th instance).** `a098d709`
+committed 11 files when verify-staged confirmed a 2-file bundle for the
+parallel Quiet Lurking Mask session and a 9-file bundle for my staged
+validator/probe/permission/settings work. The two work-streams were
+unrelated; both agents had distinct intent; the commit landed under Mask's
+pending-graduations message with no description of my substance. Owner
+direction during the absorption was "just commit the additional file"
+(referring to the additional pending-graduations file before my staging),
+but Mask's `git commit` then bundled both. The `git reset HEAD` recovery
+path I attempted to unstage Mask's files was hook-blocked. **Cure**:
+test-expert's "cross-agent sweep-bundling must be refused when any
+non-trivial test or product code change is included" is the right
+graduation; pending-graduations entry queued. Distinct from prior
+foreign-stage absorptions because the absorber agent was a peer's
+commit invocation, not a hook-driven regenerator. The validator/probe
+audit trail has no commit message describing what changed — only the
+diff explains it.
+
+**Surprise — vercel plugin duplicate registration via dual-scope install.**
+`vercel:bootstrap` appeared twice in the active-skill list because
+`~/.claude/plugins/installed_plugins.json` had `vercel@claude-plugins-official`
+registered at both `user` and `project` scope pointing at the same cache
+path. The dual registration manifests as two slug-identical skills with
+different descriptions (the SKILL.md is read twice per registration
+pass). Cure: remove project-scope entry; user-scope retained alongside
+the project's `enabledPlugins` flag. Generalises to: any plugin
+installed at multiple scopes manifests as duplicated skill/command
+exposure.
+
+**Surprise — actual portability validator failure surface exceeded the
+plan's Issue 2 enumeration.** Plan named 3 failure families; live
+`pnpm portability:check` returned 101 issues across 5 families,
+including ~80 missing bare-name skill adapters (the validator was
+checking for the wrong adapter shape — bare-name instead of `jc-*`),
+13 stale `.agents/skills/jc-*` "command adapter" failures, plus a
+missing rule (`invoke-doc-and-onboarding-experts-on-significant-changes.md`)
+with no platform wrappers and no `RULES_INDEX.md` entry. **Cure**:
+ground-state-before-planning rule applied — captured full failure
+surface before letting the plan's Issue 2 framing define scope. Owner
+direction: delegate skill-adapter validation entirely to
+`pnpm skills:check`, fold the previously-tracked two-validator-contract
+follow-up into Commit 1.
+
+**Pattern instance — owner authority for incomplete-commit-message
+trade-offs.** When the parallel-agent absorption produced an
+imperfectly-labelled commit, my reach was for `git reset HEAD` to
+unstage. Owner intervened: "just commit the additional file." The
+commit landed with the wrong message but the right files. Reading:
+owner trades commit-message audit-trail purity for forward momentum
+when the alternative is git-state surgery during a parallel-agent
+race. The destructive-action constraint (no `git reset` without
+authorisation) holds; the cure was not technical recovery but owner
+direction to accept the imperfect outcome.
+
+**Pattern instance — historical-vs-normative ADR amendment discipline
+works at scale.** ADR-125 now has 4 amendments (2026-04-17, 2026-04-24,
+2026-05-09 transitional, 2026-05-10 cleanup-complete). Each preserves
+its predecessor verbatim and explicitly cites supersession. Reading
+the chain end-to-end tells a coherent decision story without
+rewriting any historical paragraph. The discipline scales:
+docs-adr-expert verified the chain reads coherently after the
+4th amendment. The §Layer 2 body prose lagged the amendment chain
+(was caught and fixed in the reviewer pass) — body prose is the
+weak point in this discipline, not amendment text.
+
+**Pattern instance — practice-core-portability rule catches its own
+violations in-session.** While editing
+`.agent/practice-core/practice-bootstrap.md` §Skills, I accidentally
+added "see ADR-125 §2026-05-10" — a repo-specific ADR reference in
+portable Practice Core. The portability-strict memory rule fired
+in-session and I caught it before commit. Cure was already documented
+as a feedback memory (`feedback_practice_core_portability_strict.md`);
+this is a worked instance demonstrating the rule does its job during
+authoring, not just at review.
+
+**Surprise — Anthropic plugin/skill landscape is in active flux.** Owner
+direction: "the only source of truth should be considered the official
+documentation for each platform" — not in-repo precedent, not training
+data. The skill/adapter shapes I was working with (`.cursor/rules/*.mdc`
+frontmatter, `.claude/rules/*.md` thin pointers, jc-* skill adapters)
+were correct at this branch's HEAD, but the rule is platform-feature
+parity is not a default. Cure: feedback memory landed
+(`feedback_platform_features_check_official_docs.md`).
+
 ## 2026-05-10 — Windswept Sweeping Gale / claude-code / opus-4.7 / `726fcb`
 
 ### Surprise — assumptions-expert caught a citation drifted by mid-session file rename

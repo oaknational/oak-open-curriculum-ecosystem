@@ -1,5 +1,93 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Active arc — `.agent/commands/` surface retirement (landed 2026-05-10)
+
+**Last refreshed**: 2026-05-10 (`claude-code` / opus-4-7-1m / Tempestuous Darting Zephyr / `cb66a2`).
+
+### 2026-05-10 session record — commands retirement complete (Tempestuous Darting Zephyr)
+
+Closed the PDR-051 / ADR-125 §2026-05-09 retirement loop end-to-end.
+Five commits on `feat/mcp-graph-support-foundation`:
+
+- `a098d709` (sweep-bundled by parallel Quiet Lurking Mask session;
+  primary substance: validator + probe refactor + missing rule
+  surface generation + .claude/settings.json jc-* permissions)
+- `b92a99e6` — inlined 6 substantive command bodies into
+  `.agent/skills/<name>/SKILL-CANONICAL.md` (consolidate-docs 582L,
+  session-handoff 438L, plan 154L, review 96L, gates 64L; new passive
+  skill `ephemeral-to-permanent-homing` 130L; metacognition pointer
+  fix; finishing-branch cross-ref repair). Deleted 12 `.agent/commands/`
+  plus 3 experiments, 10 `.cursor/commands/jc-*`, and 10
+  `.gemini/commands/jc-*` (preserved `.gemini/commands/review-*.toml`).
+- `90363d08` — docs sweep (ADR-125 amendment chain + 11 live docs).
+- `58910fe6` — reviewer fixes from architecture-expert-fred +
+  docs-adr-expert + config-expert (practice.md mermaid, bootstrap
+  §Required Skills, ADR-125 body, ADR-117 References,
+  build-system.md, prompts/README.md, artefact-inventory.md,
+  stripFrontmatter placement).
+- `b00ad5a5` — final code-expert + docs-adr-expert findings
+  (.agent/README.md directory map, practice-index §Memory and
+  Patterns, practice-bootstrap §SKILL-CANONICAL.md Format).
+
+Five reviewers dispatched in parallel: code-expert (APPROVED WITH
+SUGGESTIONS), architecture-expert-fred (APPROVED WITH SUGGESTIONS),
+docs-adr-expert (GAPS FOUND — all critical + important applied),
+test-expert (IMPROVEMENTS RECOMMENDED — atomic-landing violation in
+sweep-bundled `a098d709` historical, can't fix), config-expert
+(COMPLIANT WITH WARNINGS — pre-existing pre-commit hook gap).
+
+**Surprises captured**:
+
+1. Parallel-agent commit absorption: Quiet Lurking Mask's session
+   committed `a098d709` with their pending-graduations message but
+   bundled in my staged validator/probe/permission/settings work
+   between my `git add` and their `git commit`. The `git reset HEAD`
+   recovery path I attempted was hook-blocked. Owner-authorised
+   proceeding with the imperfect commit message. The audit trail
+   for the validator/probe substance therefore has no commit message
+   describing it.
+2. Vercel plugin duplicate registration: `vercel:bootstrap` appears
+   twice in the active-skill list because `vercel@claude-plugins-official`
+   was installed at both `user` scope and `project` scope in
+   `~/.claude/plugins/installed_plugins.json`. Removed the project-scope
+   entry; user-scope retained alongside the project's
+   `enabledPlugins` flag.
+3. Actual portability validator failure surface exceeded the plan's
+   Issue 2 enumeration: 101 issues across 5 families instead of 3.
+   Owner-directed delegation of skill-adapter validation entirely to
+   `pnpm skills:check` (rather than re-pointing
+   `validate-portability.ts` at `jc-*` shape) folded the previously-
+   tracked two-validator-contract follow-up into Commit 1.
+4. `invoke-doc-and-onboarding-experts-on-significant-changes.md`
+   rule existed canonical-only with no platform wrappers and no
+   `RULES_INDEX.md` entry — generated all four surfaces as part of
+   Commit 1.
+
+**Tracked follow-ups (out of branch scope; surfaced to
+pending-graduations register)**:
+
+1. Add `pnpm portability:check` + `pnpm skills:check` to
+   `.husky/pre-commit` (config-expert P1 — pre-existing).
+2. Remove dead `claudeCommandFiles` parameter from
+   `getSkillPermissionIssues`; add `claudeSkillDirs`-path unit tests
+   (code-expert + test-expert).
+3. Add unit tests for `evaluateReviewerAdapterParity` and
+   `evaluateReviewerRegistrationParity` (test-expert).
+4. `shouldInspectFile` second positive example for the skills-path
+   acceptance rule (test-expert).
+5. Cross-agent sweep-bundling without distinct commit messages
+   should be refused going forward (test-expert atomic-landing
+   observation).
+
+**Next safe step**: branch-primary graph MVP focus resumes —
+Oak Ontology Threads proof in `graph-corpus-sdk`
+(`curric:Thread` enumeration + inverse `curric:includesThread` Unit
+lookup with a tiny fixture-backed test). The agent-tooling lane is
+clean post-retirement; the substrate (skills as sole
+user-and-model-invokable workflow surface) is in production-shape.
+
+---
+
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
 **Last refreshed**: 2026-05-10 (`claude-code` / opus-4-7-1m / Quiet Lurking
@@ -2825,6 +2913,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Tempestuous Darting Zephyr` | `claude-code` | `claude-opus-4-7-1m` | `cb66a2` | `agent-commands-retirement-end-to-end; five-commits-a098d709-sweep-bundled-validator-probe-drift-fixes-and-b92a99e6-inline-and-delete-and-90363d08-docs-sweep-and-58910fe6-reviewer-fixes-and-b00ad5a5-final-code-expert-and-docs-adr-fixes; six-substantive-command-bodies-inlined-into-skill-canonicals; new-passive-skill-ephemeral-to-permanent-homing-promoted; twelve-commands-files-plus-three-experiments-plus-ten-cursor-jc-md-plus-ten-gemini-jc-toml-deleted; five-reviewers-dispatched-code-expert-architecture-fred-docs-adr-test-expert-config-expert-all-actionable-findings-applied; surface-parallel-agent-commit-absorption-vercel-plugin-duplicate-registration-validator-failure-surface-exceeded-plan-enumeration-missing-rule-wrappers-generated; tracked-follow-ups-pre-commit-hook-gap-claudeCommandFiles-dead-parameter-evaluateParityChecks-unit-coverage-shouldInspectFile-second-example-cross-agent-sweep-bundling-prohibition` | 2026-05-10 | 2026-05-10 |
 | `Windswept Sweeping Gale` | `claude-code` | `claude-opus-4-7-1m` | `726fcb` | `executed-claude-insight-report-2026-05-10-disposition-plan-end-to-end; phase-0-audit-confirmed-items-11-17-24-discard-rationale-with-citation-fix-on-item-11-from-invoke-code-reviewers-md-to-invoke-code-experts-md-after-mid-session-rename; phase-0-refined-item-16-from-VERIFY-INTEGRATE-to-CANDIDATE-named-glossary-surfaces-not-natural-homes-for-memory-skills-terms; phase-1-authored-pattern-owner-course-correct-vocabulary-md-138-lines-fitness-clean-lifting-items-9-and-20-jointly-owner-side-and-agent-side-trigger-tables; phase-2-appended-single-batch-entry-to-pending-graduations-md-covering-8-candidates-as-6-entries-after-pairing-19-21-and-29-30; phase-3-foundation-checklist-closed-claim-4aa5cfbe-closed-cleanly-active-claims-zero; reviewer-dispatch-assumptions-expert-flagged-citation-drift-docs-adr-expert-approved-phase-1-approved-with-nits-phase-2; surfaced-pending-graduations-md-HARD-on-characters-after-substance-preserved-batch-for-owner-decision-on-limit-recalibration; commits-pending-owner-authorisation` | 2026-05-10 | 2026-05-10 |
 | `Gilded Eclipsing Meteor` | `codex` | `GPT-5` | `019e12` | `owner-requested-adr-coverage-sweep; created-adr-174-dependency-vulnerability-scanning-and-adr-175-external-evidence-freshness; amended-auth-security-observability-quality-gate-search-agent-practice-adrs; absorbed-docs-adr-expert-review; closed-adr-coverage-claims; validation-markdownlint-format-check-diff-check-passed` | 2026-05-10 | 2026-05-10 |
 | `Salty Rolling Compass` | `codex` | `GPT-5` | `019e12` | `owner-requested-commit-safety-sweep; committed-expert-active-workflow-bundle-57de914f; committed-practice-core-fitness-budget-1cc83d62; committed-collaboration-state-bundle-b96b7e48; restored-peer-Gilded-active-claim-after-commit-queue-lifecycle-loss; final-handoff-updated-agentic-lane-to-8-of-8-expert-merges-landed-plus-cleanup-bundle-in-working-tree; no-open-Salty-claim` | 2026-05-10 | 2026-05-10 |

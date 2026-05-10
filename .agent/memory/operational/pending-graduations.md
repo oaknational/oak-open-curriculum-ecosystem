@@ -2373,6 +2373,68 @@ continuity snapshots.
   "honest documentation" with no marginal value over existing
   principles.
 
+### 2026-05-10 commands-retirement follow-ups (Tempestuous Darting Zephyr)
+
+Five follow-ups surfaced during the .agent/commands retirement that
+were tracked as out-of-branch-scope; recording here for the next
+consolidation to triage.
+
+1. **Pre-commit hook gap for skills/portability gates.** Neither
+   `pnpm portability:check` nor `pnpm skills:check` runs in
+   `.husky/pre-commit` today; both gates are only reachable via the
+   full `pnpm check` or manual invocation. The .agent/commands
+   retirement shifted skill-adapter drift detection entirely onto
+   `pnpm skills:check`, amplifying the gap. Config-expert P1.
+   `[captured: 2026-05-10 | source: reviewer:config-expert | target:
+   rule:pre-commit-hook-coverage OR ADR-121-amendment | trigger:
+   adapter-drift slips past pre-commit OR owner-direction to fix |
+   size: S | status: pending]`
+
+2. **`getSkillPermissionIssues` dead parameter + missing live-path
+   tests.** Post-retirement, `claudeCommandFiles` is always `[]`;
+   existing unit tests exercise the dead `claudeCommandFiles` path
+   while the live `claudeSkillDirs` path has zero unit coverage.
+   `[captured: 2026-05-10 | source: reviewer:test-expert+code-expert
+   | target: code-cleanup + test-cycle | trigger: next touch on
+   scripts/validate-portability-helpers.ts | size: S | status: due]`
+
+3. **Unit-coverage gap for `evaluateParityChecks`.** The two remaining
+   parity evaluators (`evaluateReviewerAdapterParity`,
+   `evaluateReviewerRegistrationParity`) have no unit tests; exercised
+   only at integration level via `pnpm portability:check`. The
+   `evaluateCommandAdapterParity` deletion made this gap visible but
+   did not introduce it. Test-expert finding.
+   `[captured: 2026-05-10 | source: reviewer:test-expert | target:
+   test-cycle | trigger: next touch on agent-tools/src/core/health-probe-parity.ts
+   | size: M | status: pending]`
+
+4. **`shouldInspectFile` single-positive-example coverage.** The
+   `inspects live markdown files` test exercises one `.agent/skills/…`
+   path; a stub that special-cases that exact path would pass. Add a
+   second positive example to demonstrate the rule applies to the
+   class of paths, not one instance. Test-expert finding.
+   `[captured: 2026-05-10 | source: reviewer:test-expert | target:
+   test-cycle | trigger: next touch on validate-fitness-vocabulary
+   suite | size: XS | status: due]`
+
+5. **Cross-agent sweep-bundling prohibition (PATTERN — 5th instance).**
+   Mask-bundle pattern: parallel agent's `git commit` absorbs another
+   session's staged work between the staging agent's `git add` and the
+   committing agent's `git commit`. Five observed instances across
+   2026-05-04 → 2026-05-10. Cure shape: refuse cross-agent
+   sweep-bundling when any non-trivial test or product code change is
+   included. Source for graduation: test-expert atomic-landing
+   observation + four prior foreign-stage absorption instances.
+   `[captured: 2026-05-10 | source: reviewer:test-expert+napkin | target:
+   PDR:cross-agent-commit-bundling-discipline OR rule:never-bundle-foreign-staged-work
+   | trigger: second instance confirmed (already 5 — DUE) | size: M |
+   status: due]`
+   Graduation-target: portable Practice PDR governing commit-window
+   coordination + intent-to-commit lifecycle.
+   Withdrawal-trigger: a sixth instance proves the cure unworkable
+   in practice OR commit-window claims protocol (PDR-054 / ADR-177)
+   absorbs the discipline.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

@@ -4,6 +4,31 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-10 — `.agent/commands/` retirement (Tempestuous Darting Zephyr session)
+
+Closed the PDR-051 / ADR-125 §2026-05-09 commands-retirement loop on
+`feat/mcp-graph-support-foundation`. Five commits landed; five
+reviewers dispatched in parallel; all actionable findings applied.
+
+Practice Core changes:
+
+- **Amended**: `practice.md` Three-Layers Mermaid diagram — `CANON`
+  node label drops `.agent/commands` (was wrongly teaching the retired
+  surface to hydrating repos).
+- **Amended**: `practice-bootstrap.md` §Skills section retitled to
+  describe the two-surface adapter contract
+  (`.agents/skills/jc-<name>/SKILL.md` + `.claude/skills/jc-<name>/SKILL.md`)
+  with manual-edit prohibition surfaced explicitly. Removed §Required
+  Commands subsection and replaced with §Required Skills using
+  canonical `SKILL-CANONICAL.md` paths. Renamed §SKILL.md Format to
+  §SKILL-CANONICAL.md Format and removed the retired multi-surface
+  model reference (`.cursor/skills/`, `.gemini/skills/`,
+  `.github/skills/`).
+- **Confirmed portable**: practice-core-portability rule fired
+  in-session and caught an attempted repo-specific ADR reference
+  during authoring; reworded before commit. Worked instance of the
+  rule operating during authoring, not just at review.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-10 — QUAR-1 reformulation (Quiet Lurking Mask session)
 
 Owner-directed graduation of the quarantined `apply-don't-ask` /

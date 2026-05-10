@@ -220,7 +220,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Quiet Lurking Mask / `claude-code` / opus-4-7-1m / `88b0a5` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Tempestuous Darting Zephyr / `claude-code` / opus-4-7-1m / `cb66a2` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -247,7 +247,27 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-10 — Fragrant Regrowing Root)**:
+**Latest focus (2026-05-10 — Tempestuous Darting Zephyr,
+.agent/commands retirement)**: PDR-051 / ADR-125 §2026-05-09
+retirement loop closed end-to-end on `feat/mcp-graph-support-foundation`.
+Five commits landed (`a098d709` sweep-bundled, `b92a99e6` inline+delete,
+`90363d08` docs sweep, `58910fe6` reviewer fixes, `b00ad5a5` final
+code-expert/docs-adr findings). `.agent/commands/`, `.cursor/commands/jc-*`,
+and `.gemini/commands/jc-*` are gone; `.gemini/commands/review-*.toml`
+retained per ADR-125 §2026-05-10. Skills are now the sole
+user-and-model-invokable workflow surface. Five reviewers
+dispatched in parallel; all actionable findings applied. Quality
+gates green at HEAD `b00ad5a5`. Surprises: parallel-agent commit
+absorption (Quiet Lurking Mask's `a098d709` bundled my staged work
+with their pending-graduations message), vercel plugin duplicate
+registration cured by removing project-scope install, validator
+failure surface exceeded plan's Issue 2 enumeration (101 issues
+across 5 families), `invoke-doc-and-onboarding-experts-on-significant-changes.md`
+rule had no platform wrappers and no RULES_INDEX entry — generated
+all four surfaces. **Next safe step**: branch-primary graph MVP focus
+resumes — Oak Ontology Threads proof in `graph-corpus-sdk`.
+
+**Prior focus (2026-05-10 — Fragrant Regrowing Root)**:
 source-authority clarification complete across the graph MVP and EEF plan
 estate. The current session changed no implementation code. Branch-primary
 graph focus remains the Oak Ontology Threads proof; the clarification prevents
@@ -510,7 +530,27 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-10 Fragrant Regrowing Root, codex, GPT-5, `019e12`,
+**Status (2026-05-10 Tempestuous Darting Zephyr, claude-code,
+opus-4-7-1m, `cb66a2`, commands retirement)**: `completed this
+handoff — settled doctrine (commands retirement closure) graduated
+into ADR-125 §2026-05-10 amendment + validator/probe refactor;
+practice.md and practice-bootstrap.md amended to match (logged in
+Practice Core CHANGELOG); five tracked follow-ups (pre-commit hook
+gap, dead getSkillPermissionIssues parameter, evaluateParityChecks
+unit-coverage gap, shouldInspectFile single-example coverage, cross-
+agent sweep-bundling pattern at 5th instance) routed to
+pending-graduations register; napkin captured five surprises +
+pattern instances; entry-points clean (no drift); no claims to
+close (no active Tempestuous claim); thread record updated; Active
+threads register refreshed. Napkin is in critical-fitness zone
+(~570 lines after my entries; HARD 300, CRITICAL 450); the
+substance is load-bearing session-close capture, owner-direction
+needed on rotation cadence vs further drain. Pending-graduations
+register grew by ~70 lines (now ~2450); within character HARD
+limit per Quiet Lurking Mask's recent recalibration. No ADR-shaped
+or PDR-shaped doctrine surfaced beyond what already graduated.`
+
+**Prior status (2026-05-10 Fragrant Regrowing Root, codex, GPT-5, `019e12`,
 source-authority clarification)**: `not due — decision captured in ADR-173
 and ADR-157, executable plans refreshed, and no new reusable Practice pattern
 or cross-session doctrine candidate surfaced. Handoff captured the operational
