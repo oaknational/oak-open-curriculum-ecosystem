@@ -3,6 +3,10 @@
 **Status**: Accepted (2026-04-19). Amended 2026-05-10 to make Sentry
 org/project/repository identity environment-derived only and to narrow the
 current source-map deletion/upload contract to the deployed server entrypoint.
+Build-time scope clarification (2026-05-10): the release identifier and
+Vercel production attribution this ADR governs are _build-time concerns_
+and are explicitly orthogonal to the runtime sink/fixture axes codified
+at [ADR-171](171-observability-configuration-orthogonal-axes.md).
 **Date**: 2026-04-19
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry emission

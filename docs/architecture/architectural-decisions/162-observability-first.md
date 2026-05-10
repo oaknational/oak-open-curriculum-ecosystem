@@ -3,6 +3,10 @@
 **Status**: Proposed. Amended 2026-05-10 to record that
 vendor-independence enforcement and the sink/fixture axis migration are
 partially implemented and still have follow-through work before acceptance.
+The orthogonal-axes configuration shape this ADR's lifecycle commitment
+requires is now codified at
+[ADR-171](171-observability-configuration-orthogonal-axes.md) — citing
+that ADR rather than re-deriving the shape inline.
 **Date**: 2026-04-18
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry-compliant

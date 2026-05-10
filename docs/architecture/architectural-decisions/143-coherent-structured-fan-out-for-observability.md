@@ -10,7 +10,16 @@ ADR-162 records the target migration from historical `SENTRY_MODE`
 configuration to orthogonal sink/fixture axes; consuming runtimes may still
 use `SENTRY_MODE` until their env schemas and wiring are migrated.
 
-**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md)
+> **Amendment note (2026-05-10, registry shape + fixture-as-tee)**:
+> [ADR-171](171-observability-configuration-orthogonal-axes.md) names
+> the orthogonal-axes configuration shape (`OBSERVABILITY_SINKS` typed
+> list + `OBSERVABILITY_FIXTURES` boolean orthogonal tee) as the
+> canonical resolved-env model. The runtime sink registry was already
+> set-shaped per this ADR; ADR-171 makes the configuration boundary
+> match. Fixture mode is an orthogonal tee, not a member of the sink
+> set: any `(sinks, fixtures)` combination is a valid runtime.
+
+**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md), [ADR-171 (Observability Configuration — Orthogonal Sinks and Fixtures Axes)](171-observability-configuration-orthogonal-axes.md)
 
 ## Context
 

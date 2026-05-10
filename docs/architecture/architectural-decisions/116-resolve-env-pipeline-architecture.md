@@ -2,12 +2,22 @@
 
 ## Status
 
-Accepted (Revised 2026-02-26)
+Accepted (Revised 2026-02-26; Amended 2026-05-10)
 
 **Supersedes**: [ADR-016 (dotenv for configuration)](016-dotenv-for-configuration.md)
 
-**Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md)
+**Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-171 (Observability Configuration — Orthogonal Sinks and Fixtures Axes)](171-observability-configuration-orthogonal-axes.md)
 
+> **Amendment note (2026-05-10)**: Adopt
+> [ADR-171](171-observability-configuration-orthogonal-axes.md)'s
+> orthogonal-axes shape for observability configuration in the resolved
+> env. The pipeline now exposes `OBSERVABILITY_SINKS` (typed list) and
+> `OBSERVABILITY_FIXTURES` (boolean) as the canonical fields; the
+> historical `SENTRY_MODE` continues to resolve through a transitional
+> bridge for unmigrated consumers, removed once every consumer migrates.
+> Warnings-channel handling rides on the typed sink list rather than a
+> separate mode value.
+>
 > **Revision note (2026-02-26)**: Expanded to five-source hierarchy with
 > app-root discovery via `findAppRoot` (nearest `package.json`). This
 > enables workspace apps to maintain their own `.env` / `.env.local` files
