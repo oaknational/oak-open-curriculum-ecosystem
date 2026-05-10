@@ -40,6 +40,8 @@ anchored_commits:
   - 16c10cea — Phase 1B follow-up: elasticsearch adapters synchronised
   - 31a2a9e1 — Phase 1B continuation: react-component template + adapters merged
   - ae36670a — Phase 1B.2-4 cleanup: 24 standalone-skill dirs deleted + 8 Skill() permissions removed + plan updated
+  - c31eb492 — Phase 1B reviewer follow-ups: plan-drift fix + dead Style Dictionary URL fix
+  - PENDING — Phase 1B closeout extended scope (owner-directed pull-forward): 8 invoke-<domain>-reviewer rule files renamed to invoke-<domain>-expert across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/); invoke-code-reviewers gateway renamed to invoke-code-experts across 4 surfaces + executive memory; RULES_INDEX.md, AGENT.md, practice-index.md, executive README, .codex/README cross-references updated
 ---
 
 # Sub-agent rename to `*-expert` + skill integration

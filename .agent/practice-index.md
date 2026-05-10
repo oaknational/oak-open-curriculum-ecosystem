@@ -30,7 +30,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | [orientation.md](directives/orientation.md)                       | Layering contract: directives / memory / reference / practice-core; authority order |
 
 (The reviewer invocation matrix previously listed here has moved to
-[`memory/executive/invoke-code-reviewers.md`](memory/executive/invoke-code-reviewers.md)
+[`memory/executive/invoke-code-experts.md`](memory/executive/invoke-code-experts.md)
 as executive memory — it is operational reference, not doctrine.)
 
 ### Architecture Guidance (docs/agent-guidance/)
@@ -70,7 +70,7 @@ Representative rules:
 | [consolidate-at-third-consumer.md](rules/consolidate-at-third-consumer.md) | Canonicalise duplicated shapes at the third consumer |
 | [tdd-for-refactoring.md](rules/tdd-for-refactoring.md)     | Enforce RED → GREEN → REFACTOR during refactoring     |
 | [no-type-shortcuts.md](rules/no-type-shortcuts.md)         | Prevent type-erasing shortcuts and assertion drift    |
-| [invoke-code-reviewers.md](rules/invoke-code-reviewers.md) | Require the reviewer matrix after non-trivial changes |
+| [invoke-code-experts.md](rules/invoke-code-experts.md) | Require the reviewer matrix after non-trivial changes |
 
 ### Collaboration State Surface
 

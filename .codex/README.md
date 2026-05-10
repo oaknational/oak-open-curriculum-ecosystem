@@ -47,7 +47,7 @@ In `.codex/config.toml`, each `agents.<name>.config_file` value is relative to
 `.codex/config.toml` itself, so entries point to `agents/<name>.toml`, not
 `.codex/agents/<name>.toml`.
 
-For the full reviewer invocation matrix and timing guidance, see `.agent/memory/executive/invoke-code-reviewers.md`.
+For the full reviewer invocation matrix and timing guidance, see `.agent/memory/executive/invoke-code-experts.md`.
 
 ## Resolver Workflow
 

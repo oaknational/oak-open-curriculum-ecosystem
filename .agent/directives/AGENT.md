@@ -100,7 +100,7 @@ file listed in `RULES_INDEX.md` at session open.
 Apply your own critical thinking, then use reviewers when the platform and
 owner direction allow it. Reviewer routing, timing, roster, depth, and reporting
 requirements live in
-[invoke-code-reviewers.md](../memory/executive/invoke-code-reviewers.md).
+[invoke-code-experts.md](../memory/executive/invoke-code-experts.md).
 
 Agent workflow CLIs live in [agent-tools](../../agent-tools/README.md). Use
 root scripts such as `pnpm agent-tools:claude-agent-ops health` from the repo
