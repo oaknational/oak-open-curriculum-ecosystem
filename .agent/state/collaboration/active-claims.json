@@ -730,136 +730,26 @@
       "intent": "Phase 1B continuation: 5 remaining domain merges (accessibility, assumptions, design-system, elasticsearch, react-component) + Phase 1B.2-4 cleanup (standalone deletion + Skill() permission removal + gates). Per plan .agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md and prior session opener."
     },
     {
-      "claim_id": "da50bd23-ae5e-4a17-890d-e1a982364d3d",
+      "claim_id": "1b1648a5-4abe-4246-aa93-a01db51d28ec",
       "agent_id": {
-        "agent_name": "Foamy Navigating Hull",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e12"
+        "agent_name": "Oceanic Lapping Lighthouse",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "5765c7"
       },
-      "thread": "connecting-oak-resources",
+      "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/graph-mvp-arc.plan.md",
-            ".agent/plans/graph-portfolio-index.md",
-            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
-            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
-            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
-            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
-            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
-            ".agent/memory/active/napkin.md"
+            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-10T14:01:47Z",
-      "freshness_seconds": 7200,
+      "claimed_at": "2026-05-10T14:20:12Z",
+      "freshness_seconds": 5400,
       "sidebar_open": false,
-      "intent": "Amend graph MVP plan estate per owner correction: MVP excludes NC graph work; record findings; coordinate specialist plan review"
-    },
-    {
-      "claim_id": "3a3532c7-7190-4416-a5e9-b308954b7bd7",
-      "agent_id": {
-        "agent_name": "Gilded Eclipsing Meteor",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e12"
-      },
-      "thread": "adr-coverage-sweep",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "docs/architecture/architectural-decisions/005-automatic-pii-scrubbing.md",
-            "docs/architecture/architectural-decisions/052-oauth-2.1-for-mcp-http-authentication.md",
-            "docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md",
-            "docs/architecture/architectural-decisions/057-selective-authentication-for-public-mcp-resources.md",
-            "docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md",
-            "docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md",
-            "docs/architecture/architectural-decisions/111-secret-scanning-quality-gate.md",
-            "docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md",
-            "docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md",
-            "docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md",
-            "docs/architecture/architectural-decisions/119-agentic-engineering-practice.md",
-            "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
-            "docs/architecture/architectural-decisions/122-permissive-cors-for-oauth-protected-mcp.md",
-            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
-            "docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md",
-            "docs/architecture/architectural-decisions/131-practice-core-agent-architecture.md",
-            "docs/architecture/architectural-decisions/135-agent-classification-taxonomy.md",
-            "docs/architecture/architectural-decisions/137-specialist-operational-tooling-layer.md",
-            "docs/architecture/architectural-decisions/142-clerk-mcp-tools-adopt-or-explain.md",
-            "docs/architecture/architectural-decisions/146-assumptions-reviewer-meta-level-plan-assessment.md",
-            "docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md",
-            "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
-            "docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md",
-            "docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md",
-            "docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md",
-            "docs/architecture/architectural-decisions/162-observability-first.md",
-            "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md",
-            "docs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md",
-            "docs/architecture/architectural-decisions/174-dependency-vulnerability-scanning-quality-gate.md",
-            "docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md",
-            "docs/architecture/architectural-decisions/README.md",
-            "docs/architecture/README.md",
-            "docs/governance/safety-and-security.md",
-            "docs/operations/sentry-deployment-runbook.md",
-            "docs/operations/sentry-cli-usage.md",
-            ".agent/plans/sector-engagement/eef/README.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T14:03:05Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Implement owner-approved ADR coverage sweep across recent work; excludes ADR-173 because Foamy has active graph claim."
-    },
-    {
-      "claim_id": "03b8055e-c56c-4ae5-8139-6affba8c5a53",
-      "agent_id": {
-        "agent_name": "Gilded Eclipsing Meteor",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e12"
-      },
-      "thread": "adr-coverage-sweep",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "docs/architecture/architectural-decisions/057-selective-auth-public-resources.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T14:08:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Add missing ADR-057 public-resource carve-out amendment for ADR coverage sweep."
-    },
-    {
-      "claim_id": "91ca1f76-ee06-4d31-8220-720816b0b086",
-      "agent_id": {
-        "agent_name": "Gilded Eclipsing Meteor",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e12"
-      },
-      "thread": "adr-coverage-sweep",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md",
-            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
-            "docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T14:18:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Add missing agent-platform ADR follow-through files for coverage sweep."
+      "intent": "Author claude-insight-report-2026-05-10-disposition plan in current/"
     }
   ]
 }

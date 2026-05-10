@@ -9,6 +9,25 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Foamy Navigating Hull / `codex` / GPT-5 /
+`019e12`, graph MVP plan amendment + handoff)**: amended the graph MVP plan
+estate so the first executable graph work is explicit:
+`graph-stack.plan.md` now names the Oak Ontology Threads proof in
+`graph-corpus-sdk` as `first_graph_work` and as the first task in Increment 1
+(`curric:Thread` enumeration + inverse `curric:includesThread` Unit lookup
+with a tiny fixture-backed test). Owner clarified the boundary: the MVP still
+needs EEF + misconception graph + cross-source value; the restriction is that
+the Oak Ontology repo intake must bring in only the Oak ontology/graph, not
+the NC graph/taxonomy. Six specialist sub-agents reviewed the plan estate;
+valid findings were absorbed into plan text around Inc.1 Thread lookup gates,
+MCP registration surfaces, response-budget/test-shape wording, stale links,
+and NC boundary routing. Targeted checks passed:
+`markdownlint`, `prettier --check`, and `git diff --check` on the amended plan
+files. **Next safe step**: start graph MVP work with the Oak Ontology Threads
+proof in `graph-corpus-sdk`; do not start NC taxonomy work, EEF adapter
+migration, misconception replatform, cross-corpus joins, serving prototypes, or
+broader query-layer migration before that proof lands.
+
 **Session close (2026-05-10 — Salty Rolling Compass / `codex` / GPT-5 /
 `019e12`, owner-requested commit safety sweep completed)**: landed all dirty
 in-flight files in three logical commits on
@@ -206,7 +225,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Salty Rolling Compass / `codex` / GPT-5 / `019e12` / 2026-05-10 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Foamy Navigating Hull / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -232,14 +251,13 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-10 — Salty Rolling Compass)**: owner-requested
-commit safety sweep completed and committed all dirty in-flight files in
-logical groups. The sub-agent rename / skill-integration lane is the live
-Practice/tooling lane on this branch: seven of eight paired expert merges
-have landed; resume with `react-component-expert`, then standalone skill
-deletion, `Skill()` permission cleanup, gates, and reviewer dispatch.
-Branch-primary graph MVP focus below still controls the product branch once
-PR #102 merge blockers are cleared. **Deferred**: monorepo topology ADR /
+**Latest focus (2026-05-10 — Foamy Navigating Hull)**: graph MVP plan
+amendment/handoff complete. Branch-primary graph MVP focus is now explicit:
+the first graph work is the Oak Ontology Threads proof in `graph-corpus-sdk`
+(`curric:Thread` enumeration + inverse `curric:includesThread` Unit lookup
+with a tiny fixture-backed test). EEF + misconception graph + cross-source
+value remain core MVP scope; NC graph/taxonomy work is excluded from the MVP
+and requires separate owner promotion. **Deferred**: monorepo topology ADR /
 stage-matrix work (strategic plan remains in `future/` until re-opened).
 
 *Historical context:*
@@ -314,7 +332,16 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-10 — Salty Rolling Compass close)**:
+**Status update (2026-05-10 — Foamy Navigating Hull close)**:
+the graph MVP plan estate is amended and the first graph task is explicit.
+Next session on the branch-primary graph lane starts by landing the Oak
+Ontology Threads proof in `graph-corpus-sdk`: enumerate `curric:Thread` and
+resolve inverse `curric:includesThread` Unit lookup through the substrate with
+a tiny fixture-backed test. Do not begin NC taxonomy work. Do not begin EEF
+adapter migration, misconception replatform, cross-corpus joins, serving
+prototypes, or broader query-layer migration before that proof lands.
+
+**Prior status (2026-05-10 — Salty Rolling Compass close)**:
 the commit-safety sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`;
 working tree was clean at session completion. The next safe step on the
 agentic-engineering lane is Phase 1B continuation in
@@ -414,6 +441,17 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-10 Foamy Navigating Hull, codex, GPT-5, `019e12`,
+graph MVP plan amendment + handoff): `due — owner correction plus six
+specialist reviews changed the graph MVP plan estate and produced a fresh
+napkin capture about scope-boundary drift and the corrected interpretation.
+Not well-bounded for this lightweight handoff: graph MVP execution is now
+poised to start, existing repo fitness/consolidation pressure remains, and
+the next action is implementation of the Inc.1 Threads proof rather than a
+thread-scoped doctrine consolidation pass. Future consolidation should mine
+the plan-boundary drift pattern after the graph MVP lane has a stable first
+implementation slice`.**
 
 **Status (2026-05-10 Salty Rolling Compass, codex, GPT-5, `019e12`,
 commit safety sweep completed): `due — dirty in-flight state was made
