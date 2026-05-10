@@ -22,6 +22,41 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-10 — Iridescent Dancing Nebula / claude-code / Opus 4.7 / `04cca8`
+
+**Wave 2 Item 1 closed cure for Wave 1 trust-boundary, but the brief itself
+perpetuated retired surface.** Item 1 created six SKILL-CANONICAL.md files
+as thin pointers to `.agent/commands/<id>.md`. fae57312 landed clean
+(both reviewers approved). Owner observation post-landing: ".agent/commands
+still exists; I expected that to be gone by now." Architecture-reviewer-fred's
+prior non-finding about PDR-051/ADR-125 §2026-05-09 retirement statement
+mismatching live state became the keystone — pointer-shape preserves the
+retired surface.
+
+**Estimate doubled three times.** Initial: 30–40 min. After surveying:
+105–115 min. After exhaustive grep + reading validate-portability +
+health-probe-shared/parity: 3–4 focused hours. Pattern: each round of
+deeper survey reveals a load-bearing surface (validator script, runtime
+health-probe, ~15 live docs, ~50 plan/memory references) that wasn't in
+the prior estimate. The "use code-reviewer to help plan" pivot caught
+the misclassification of `chatgpt-report-normalisation` (45 lines of
+substantive content, not a thin pointer) BEFORE I deleted it.
+Information-loss check is the load-bearing reviewer service, not style
+critique.
+
+**Honoured `feedback_no_speed_pressure` + `feedback_ground_state_before_planning`
+under owner direction.** Stopped Wave 2 punch-list mode mid-flight; created
+proper plan in `.agent/plans/agent-tooling/current/agent-commands-retirement.plan.md`
+capturing four-commit shape, plan-time reviewer findings, four tracked
+follow-ups. Items 3–6 also queued separately. Real handoff, not faux-progress.
+
+**Frame-was-the-fix recurrence.** This is the same shape as prior
+"frame-was-the-fix" napkin entries: the technical problem (Item 1 thin
+pointers) was symptom; the doctrinal frame (.agent/commands/ retirement
+incomplete) was the load-bearing diagnosis. Cure: read the ADR amendment
+text (PDR-051 §"Decision", ADR-125 §2026-05-09) before authoring any
+canonicalisation brief that touches `.agent/commands/`.
+
 ## 2026-05-09 — 3rd-instance / Mistbound Glimmering Threshold / claude-code / Opus 4.7 / `03f9bc`
 
 **`--clear` regression repeated (3rd instance).** During the canonical

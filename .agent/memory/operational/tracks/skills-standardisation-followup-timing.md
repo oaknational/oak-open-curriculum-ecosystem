@@ -59,3 +59,52 @@ Realistic budget: 90–120 min full set; 30–45 min canonicalisation alone.
   needed once: first attempt blocked by format-check on an unrelated
   untracked `ONBOARDING.md` (owner-removed during session interruption);
   second attempt succeeded with no `--no-verify` use.
+
+  Reviewer dispatch (parallel, post-fae57312):
+  - code-reviewer: APPROVED WITH SUGGESTIONS (1 suggestion: pointer-canonical
+    marker for the 6 thin canonicals — superseded by retirement plan, see below)
+  - architecture-reviewer-fred: APPROVED. Wave 1 trust-boundary WARN
+    concretely closed: --clear + regenerate now deterministic for all 86
+    adapters. ADR-125 §2026-04-17 amendment permits canonical-skill ↔
+    canonical-command composition; no layer violation. One non-finding
+    observation: PDR-051/ADR-125 retire-`.agent/commands/` statement
+    mismatches the live state where 6 canonicals still point at it.
+
+### Wave 2 pivot — owner direction 2026-05-10T10:30Z
+
+Owner re-framed Wave 2 after Item 1 landing: ".agent/commands still exists;
+I expected that to be gone by now." Architecture-reviewer-fred's non-finding
+observation became the keystone — Item 1's pointer-shape preserves the very
+surface PDR-051 + ADR-125 §2026-05-09 retire.
+
+Plan-time code-reviewer dispatch on the proposed full-retirement migration
+(agentId a49d706db87f87853) returned APPROVED WITH SUGGESTIONS with five
+critical findings, including reclassifying `chatgpt-report-normalisation.md`
+from delete-only to inline (45 lines of substantive content not in canonical),
+reversing commit order (validator refactor first), and fixing pre-existing
+validator drift in Commit 1.
+
+Surface deeper than initial estimate: validate-portability.ts (~80 LoC
+refactor), agent-tools/src/core/health-probe-{shared,parity}.ts (~50 LoC
+removal), .claude/settings.json (~30 perms), 5 ADRs, ~10 live docs.
+Realistic cost: 3–4 focused hours.
+
+Owner direction (post plan-time review): stop Wave 2 punch-list mode; create
+plan-file for retirement; queue Items 3–6 as separate workstream. Honours
+standing rules `feedback_no_speed_pressure` + `feedback_ground_state_before_planning`.
+
+- [wave-2-pivot-to-plan] 2026-05-10T10:38Z — handoff:
+  - `.agent/plans/agent-tooling/current/agent-commands-retirement.plan.md` (new)
+  - This timing file's role for retirement work transfers to the plan's
+    todo state and Reviewer Findings section.
+
+Session end: 2026-05-10T10:38:36Z
+Wave 2 elapsed: ~40 min active (interruption gap excluded). Item 1 actual
+work + reviewer dispatch + plan-time review + plan authoring.
+
+### Items 3–6 disposition
+
+Still pending. Independent of retirement plan. Agent-tools quality work:
+lock.ts wiring, rendering.ts extraction, parseFlags strict, clearGeneratedAdapters
+tests. Surface to retirement plan's `tracked-follow-ups` or queue separately
+to a fresh agent-tools quality plan.
