@@ -5,6 +5,7 @@ status: current
 graph_layer: substrate
 graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
+first_graph_work: "Oak Ontology Threads proof in graph-corpus-sdk: enumerate curric:Thread and resolve inverse curric:includesThread Unit lookup with a tiny fixture-backed test."
 sibling_plans:
   - "graph-query-layer.plan.md"
   - "oak-kg-threads-surface.plan.md"
@@ -272,6 +273,13 @@ Each increment is a separate plan when promoted. The foundation increment is the
 ---
 
 ## Increment 1 — Foundation (this plan)
+
+**First graph work**: the first executable graph task is the
+`graph-corpus-sdk` Oak Curriculum Ontology Threads proof: enumerate
+`curric:Thread` and resolve inverse `curric:includesThread` Unit lookup through
+the substrate with a tiny fixture-backed test. Do this before any NC work, EEF
+adapter migration, misconception replatform, cross-corpus join, serving-layer
+prototype, or broader query-layer migration.
 
 ### Slice value
 

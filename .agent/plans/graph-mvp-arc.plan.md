@@ -518,18 +518,22 @@ outcomes into ADRs and archives this spine plan per ADR-117.
 Reading the phases in order:
 
 1. **Now → today/this week:** Phase 0 closed (4 amendments landed).
-2. **Next session(s) on the knowledge-graph-integration thread:**
-   author the slice 2 + slice 3a executable plans (parallel-safe).
-3. **In parallel with slice work:** graph-stack Inc.1 and Inc.3 progress in
+2. **First graph work:** land graph-stack Inc.1's Oak Ontology Threads proof
+   (`curric:Thread` enumeration + inverse `curric:includesThread` Unit
+   lookup through `graph-corpus-sdk`) with a tiny fixture-backed test.
+3. **Next session(s) on the knowledge-graph-integration thread:**
+   promote/execute slice 2 + slice 3a only after the Inc.1 Thread lookup
+   floor exists.
+4. **In parallel with slice work:** graph-stack Inc.1 and Inc.3 progress in
    their own plan; the spine watches the gates each slice actually needs.
-4. **When the graph-query-layer substrate floor lands:** gate-1 via eef-evidence-corpus
+5. **When the graph-query-layer substrate floor lands:** gate-1 via eef-evidence-corpus
    promotion + execution.
-5. **After gate-1 + graph-stack Inc.1:** gate-2. **After gate-1:** gate-3a.
+6. **After gate-1 + graph-stack Inc.1:** gate-2. **After gate-1 + graph-stack Inc.1:** gate-3a.
    Gate-2 and gate-3a remain parallel-safe once their own floors are present.
-6. **After gate-1 + gate-3a + Inc.3 EEF/misconception adapters and
+7. **After gate-1 + gate-3a + Inc.3 EEF/misconception adapters and
    cross-corpus join:** gate-3b.
-7. **After every gate:** learning-loop continuous run.
-8. **After gate-3b:** learning-loop closeout + spine archive.
+8. **After every gate:** learning-loop continuous run.
+9. **After gate-3b:** learning-loop closeout + spine archive.
 
 ## ADR-157 Amendment
 
