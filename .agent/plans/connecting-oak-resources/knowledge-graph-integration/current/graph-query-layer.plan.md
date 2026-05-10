@@ -8,7 +8,6 @@ sibling_plans:
   - "../active/graph-resource-factory.plan.md"
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
-  - "../active/nc-knowledge-taxonomy-surface.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, type-reviewer, test-reviewer, architecture-reviewer-betty"
 status: current
 isProject: false

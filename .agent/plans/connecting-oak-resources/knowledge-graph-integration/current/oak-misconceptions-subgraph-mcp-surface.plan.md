@@ -198,9 +198,9 @@ contract is named, and the migration is sequenced.
    `maxResponseTokens = 16000` across the committed `20`-context fixture
    manifest. Unit IRI context is accepted only if the optional unit variant is
    explicitly authorised at slice opening.
-2. Sub-graph completeness verified versus full-graph control: for each
-   sample query, all reachable misconceptions within the bound are
-   present.
+2. Bounded-traversal completeness is verified with small literal graph tests:
+   for each sample query, all reachable misconceptions within the bound are
+   present, without a second full traversal implementation in the test.
 3. The legacy-factory interim path is explicit in the plan body, in
    tool `_meta`, and in ADR-123 — every consumer can see this is a
    contract the substrate must preserve.

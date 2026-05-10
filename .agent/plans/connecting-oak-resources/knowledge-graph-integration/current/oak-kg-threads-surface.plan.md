@@ -57,7 +57,7 @@ todos:
     status: pending
     depends_on: [ws3-cycle-1-mcp-wiring]
   - id: ws4-adr-123-update
-    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` to record `curriculum://oak-kg-threads` + `oak-kg-get-thread-content` per the namespace conventions in ADR-157."
+    content: "WS4: update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` to record `curriculum://oak-kg-threads` + `oak-kg-get-thread-content` per the namespace conventions in ADR-157; recalculate primitive counts and include structured output, annotations, `_meta`, and resource metadata expectations."
     status: pending
     depends_on: [ws3-cycle-2-tool-descriptors]
   - id: ws5-quality-gates
@@ -277,7 +277,9 @@ composition and into the SDK's tool-guidance / NL surface.
 ### WS4 — ADR-123 update
 
 Update `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`
-to record the new primitives. Single commit, doc-only.
+to record the new primitives, recalculate primitive counts, and capture
+resource/tool metadata expectations (`annotations`, `_meta`, `outputSchema`,
+structured content, and resource metadata). Single commit, doc-only.
 
 ### WS5 — Quality gates
 

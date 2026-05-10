@@ -189,8 +189,8 @@ sense-check pattern):
 - **Provability**: sampled sub-graph responses fit within
   `maxResponseTokens = 16000` across a committed `20`-context fixture
   manifest selected deterministically from reachable-misconception counts;
-  sub-graph completeness versus full-graph control on reachable
-  misconceptions.
+  small literal graph tests describe bounded-traversal completeness without
+  duplicating the traversal algorithm in the test.
 - **Architecture validation**: confirms the legacy graph factory carries
   enough scaffolding to support Thread IRI sub-graph queries while the
   substrate replatform completes (graph-stack Inc.2/3); sets the contract
@@ -347,9 +347,9 @@ composition (slice 3b) is the user-value framing on top.
    `maxResponseTokens = 16000` across the committed `20`-context fixture
    manifest. Unit IRI context is accepted only if the optional unit variant is
    explicitly authorised at slice opening.
-2. Sub-graph completeness verified versus full-graph control: for each
-   sample query, all reachable misconceptions within the bound are
-   present.
+2. Bounded-traversal completeness is verified with small literal graph tests:
+   for each sample query, all reachable misconceptions within the bound are
+   present, without a second full traversal implementation in the test.
 3. The legacy-factory interim path is explicit in the plan body, in tool
    `_meta`, and in ADR-123 — every consumer can see this is a contract
    the substrate must preserve.
