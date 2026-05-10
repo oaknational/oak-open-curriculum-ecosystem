@@ -9,6 +9,29 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Iridescent Dancing Nebula /
+`claude-code` / Opus 4.7 / `04cca8`, Wave 2 plan-file pivot)**: landed
+Wave 2 Item 1 as commit `fae57312` on `feat/mcp-graph-support-foundation`
+(6 SKILL-CANONICAL.md as thin pointers + 86 generated adapters; reviewer
+dispatch returned APPROVED from both code-reviewer and architecture-reviewer-fred
+with Wave 1 trust-boundary WARN concretely closed). Owner observation
+post-landing — *".agent/commands still exists; I expected that to be gone
+by now"* — reframed the work: Item 1's pointer-shape preserves the very
+surface PDR-051 + ADR-125 §2026-05-09 retire. Plan-time code-reviewer
+dispatch on the proposed full-retirement migration returned APPROVED
+WITH SUGGESTIONS with five critical findings (incl. reclassifying
+`chatgpt-report-normalisation.md` from delete-only to inline; reversing
+commit order to land validator refactor first; fixing pre-existing
+validator drift in same commit). Surface deeper than initial estimate:
+realistic ~3–4 focused hours. Honoured `feedback_no_speed_pressure` +
+`feedback_ground_state_before_planning`: stopped Wave 2 punch-list mode;
+opened plan in `current/`. Landed handoff as `3ecbc4dc`. **Next safe step**:
+execute `.agent/plans/agent-tooling/current/agent-commands-retirement.plan.md`
+phase 1 (validator + health-probe refactor + pre-existing drift fixes).
+Wave 2 Items 3–6 (lock.ts wiring, rendering.ts extraction, parseFlags
+strict, clearGeneratedAdapters tests) queued separately as agent-tools
+quality work.
+
 **Session close (2026-05-10 — Woodland Shedding Moss /
 `claude-code` / Opus 4.7 / `5869e0`, onboarding flow integration +
 good-first-issues index)**: synthesised `/team-onboarding` slash-command

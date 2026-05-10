@@ -2,9 +2,37 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`claude-code` / Opus 4.7 / Blooming Ripening Glade / `0730a8`, agent-collaboration directive evolution).
+**Last refreshed**: 2026-05-10 (`claude-code` / Opus 4.7 / Iridescent Dancing Nebula / `04cca8`, Wave 2 plan-file pivot).
 
-### 2026-05-10 session record — agent-collaboration.md re-parent + cure-naming + frontmatter refresh
+### 2026-05-10 session record — Wave 2 Item 1 landed; full retirement opened as plan
+
+**Commits landed on `feat/mcp-graph-support-foundation`**:
+
+- `fae57312` feat(skills): canonicalise 6 adapter-only skills (Wave 2 Item 1) — 6 SKILL-CANONICAL.md as thin pointers to `.agent/commands/<id>.md`; 86 adapter files regenerated; reviewer-approved.
+- `3ecbc4dc` docs(plans): open agent-commands-retirement plan + Wave 2 handoff.
+
+**Plan-time reviewer findings** (code-reviewer agentId `a49d706db87f87853`, APPROVED WITH SUGGESTIONS):
+
+1. `chatgpt-report-normalisation.md` was misclassified as delete-only; contains 45 lines of substantive content (PUA character table, positional mapping rule, output contract) not in the canonical. Reclassified to inline.
+2. Commit ordering reversed — validator refactor lands FIRST so the gate is never red on a committed state.
+3. Pre-existing portability validator failures (skills-lock drift, .claude/settings.json missing perms, SKILL.md→SKILL-CANONICAL.md drift at lines 247/264) must be fixed in same commit as the validator refactor (`no-warning-toleration` + `ground-state-before-planning` standing rules).
+4. `experiments/` (collaborate.md, step-back.md, think.md) decision required before Commit 2 — owner-confirmed delete.
+5. `finishing-branch` SKILL-CANONICAL.md cross-refs assigned to Commit 2.
+
+**Tracked follow-ups** (from plan-time review):
+
+1. Two-validator contract documentation: `validate-portability.ts` vs `pnpm skills:check`.
+2. Live-plan + memory drift sweep: ~50 references to `.agent/commands/<id>.md` in active plans + memory; tracked as documentation drift, not load-bearing.
+3. ADR-125 §2026-05-09 amendment: protect historical paragraph distinction during Commit 3.
+4. Wave 2 Items 3–6 (lock.ts wiring, rendering.ts extraction, parseFlags strict, clearGeneratedAdapters tests) — independent of retirement plan; queue separately.
+
+**Owning plan**: `.agent/plans/agent-tooling/current/agent-commands-retirement.plan.md`
+**Current objective**: Execute Phase 1 (validator refactor + health-probe + pre-existing drift fixes).
+**Current state**: Plan written; reviewer findings captured; ready to execute.
+**Blockers**: None. Phase 1 is agent-executable.
+**Next safe step**: Open Phase 1 of `agent-commands-retirement.plan.md` per its acceptance criteria.
+
+### 2026-05-10 session record — agent-collaboration.md re-parent + cure-naming + frontmatter refresh (prior)
 
 **Working tree state at session close (uncommitted)**:
 
