@@ -33,6 +33,14 @@ Additionally, the `mcp-router.ts` conflated "noauth tool" (tool with no scope re
 
 **Enforce HTTP-level authentication for ALL MCP methods.** The only exception is public resource reads (widget HTML, documentation) which contain no user-specific data.
 
+The public `resources/read` exception is an intentional compatibility and
+content-classification carve-out, not a general weakening of MCP HTTP auth. It
+applies only to resources that are deliberately public, contain no user-specific
+data, and are safe to fetch during client bootstrap or UI rendering. Any future
+resource that carries user, tenant, school, or operational state must go through
+HTTP-level authentication even if the tool or resource has no additional scope
+check.
+
 ### What Changed
 
 1. **`mcp-router.ts`**: `shouldSkipAuth()` now only checks for public resource reads. All other MCP methods go through `options.auth()`.

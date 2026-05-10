@@ -2,7 +2,8 @@
 
 ## Status
 
-Accepted (2025-09-07)
+Accepted (2025-09-07). Amended 2026-05-10 to align the summary and
+requirements with the proxy-AS and opaque-token runtime shape.
 
 **Related**: ADR-052 (OAuth 2.1 for MCP), ADR-040 (Neutral Architecture)
 
@@ -11,7 +12,7 @@ Accepted (2025-09-07)
 Per ADR-052, we've decided to use OAuth 2.1 for MCP HTTP server authentication. This requires an external **Authorization Server** (Identity Provider) to:
 
 1. Manage user authentication (login, logout, MFA)
-2. Issue OAuth 2.1 access tokens (JWT)
+2. Issue OAuth 2.1 access tokens
 3. Provide OAuth discovery endpoints (RFC 8414)
 4. Manage user sessions and refresh tokens
 5. Integrate with social identity providers (Google, Microsoft)
@@ -25,7 +26,7 @@ Per ADR-052, we've decided to use OAuth 2.1 for MCP HTTP server authentication. 
 - Email domain allowlist (`.thenational.academy` initially)
 - Multi-factor authentication (MFA)
 - Session management with refresh tokens
-- JWKS endpoint for token verification
+- Token verification support for the selected Clerk OAuth token shape
 
 **Operational**:
 
@@ -98,6 +99,12 @@ Use **Clerk** as the Identity Provider and Authorization Server for the MCP HTTP
 - Proxies Clerk's OAuth discovery to `/.well-known/oauth-authorization-server`
 - Uses Clerk's JWKS for signature verification
 - Does NOT handle user login/signup flows
+
+The "Resource Server only" and JWT/JWKS bullets above describe the original
+2025 decision. The binding current interpretation is the 2026-02-21 proxy-AS
+amendment plus ADR-142: Clerk remains the upstream IdP/AS, while the MCP server
+presents a same-origin proxy AS to clients and verifies Clerk opaque OAuth
+tokens through Clerk-supported verification.
 
 **Token Flow**:
 

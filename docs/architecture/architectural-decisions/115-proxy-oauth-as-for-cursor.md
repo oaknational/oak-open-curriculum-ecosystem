@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted (2026-02-21)
+Accepted (2026-02-21). Amended 2026-05-10 to clarify that "transparent
+passthrough" means protocol payload passthrough, not absence of protective
+traffic controls.
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-113 (Spec-Compliant Auth)](113-mcp-spec-compliant-auth-for-all-methods.md)
 
@@ -83,7 +85,15 @@ Act as a **proxy OAuth Authorisation Server** by serving three proxy endpoints t
 
 ### Transparent Passthrough
 
-The proxy is a transparent pipe. It does NOT validate, filter, rate-limit, or alter any request or response. Clerk is the real authorisation server and handles all security. The proxy adds nothing of its own.
+The proxy is a transparent protocol pipe. It does not alter OAuth payloads,
+filter client parameters, rewrite Clerk response bodies, or perform its own
+OAuth grant validation. Clerk is the real authorisation server and handles
+OAuth security decisions.
+
+The proxy may still sit behind application and edge traffic controls. Current
+runtime wires application rate limiting for OAuth proxy routes per ADR-158;
+that does not violate transparency because the limiter rejects excess traffic
+before proxy semantics are applied rather than modifying OAuth messages.
 
 - `/oauth/authorize`: All query parameters forwarded via `buildAuthorizeRedirectUrl()`.
 - `/oauth/token`: Raw body forwarded as-is (parsed by `express.text()`, not `express.urlencoded()`).
@@ -119,7 +129,7 @@ All upstream HTTP calls use `fetchWithTimeout()` with a 10-second timeout (confi
 
 1. **Host header trust**: The server derives self-origin from the request `Host` header via `deriveSelfOrigin()`. All OAuth metadata (`authorization_servers`, `issuer`, endpoint URLs) uses this value. Ingress (Vercel, reverse proxy) must enforce a canonical host/protocol — otherwise, a malicious `Host` header could cause metadata to advertise incorrect endpoints. Locally, `isLoopbackHost()` forces `http://` for `localhost`; in production, Vercel enforces the canonical domain.
 
-2. **Rate limiting**: The proxy endpoints (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) are unauthenticated and not rate-limited at the application layer. Clerk protects its own endpoints, but the proxy's CPU and egress are exposed to flood patterns. Edge/WAF rate limiting (Vercel's built-in, or Cloudflare if fronted) provides the compensating control.
+2. **Rate limiting**: The proxy endpoints (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) are unauthenticated, public OAuth endpoints and therefore require traffic controls. Application-layer rate limiting is now applied as defence-in-depth per ADR-158, with edge/WAF rate limiting remaining the authoritative volumetric control.
 
 ### Precedent
 
@@ -162,10 +172,11 @@ All files within `apps/oak-curriculum-mcp-streamable-http/`.
 
 **Rate limiting must be in place before production rollout.** The proxy
 OAuth flow exposes publicly reachable `/register` and `/token` endpoints.
-Without edge/WAF rate limiting, these are vulnerable to credential-stuffing
-and denial-of-service attacks. Configure rate limiting at the CDN/reverse
-proxy layer (e.g. Vercel Edge Middleware, Cloudflare WAF, or AWS WAF)
-before deploying to production.
+Without edge/WAF and application-layer rate limiting, these are vulnerable to
+credential-stuffing and denial-of-service patterns. Configure rate limiting at
+the CDN/reverse proxy layer (e.g. Vercel Edge Middleware, Cloudflare WAF, or
+AWS WAF) and keep the application limiter wired per ADR-158 before deploying to
+production.
 
 ## Related ADRs
 

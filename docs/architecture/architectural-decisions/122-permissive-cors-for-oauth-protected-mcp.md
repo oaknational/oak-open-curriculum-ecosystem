@@ -2,7 +2,8 @@
 
 ## Status
 
-Accepted (2026-02-28)
+Accepted (2026-02-28). Amended 2026-05-10 to distinguish permissive CORS
+from Origin/Host validation required for DNS-rebinding protection.
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-116 (resolveEnv pipeline)](116-resolve-env-pipeline-architecture.md)
 
@@ -18,7 +19,15 @@ This caused two problems:
 
 ## Decision
 
-CORS is unconditionally permissive: all origins are allowed. The `CORS_MODE`, `ALLOWED_ORIGINS`, `BASE_URL`, and `MCP_CANONICAL_URI` environment variables are removed. DNS rebinding protection on the landing page is unchanged.
+CORS is unconditionally permissive: all origins are allowed. The `CORS_MODE`,
+`ALLOWED_ORIGINS`, `BASE_URL`, and `MCP_CANONICAL_URI` environment variables
+are removed.
+
+Permissive CORS does not remove DNS-rebinding defences. Streamable HTTP
+security requires servers to validate browser-supplied origin/host context for
+incoming connections where a hostile website could cause a browser to reach a
+local or private MCP server. In this repo, CORS remains an interoperability
+policy; Origin/Host validation is the security policy.
 
 ## Rationale
 
@@ -41,7 +50,11 @@ Restricting origins therefore adds configuration surface without any security be
 
 ### DNS rebinding protection remains as the browser security measure
 
-The landing page (`/`) serves HTML and is the only route vulnerable to DNS rebinding attacks. DNS rebinding protection validates the `Host` header against an allowlist derived from Vercel deployment URLs or explicit `ALLOWED_HOSTS`. This is orthogonal to CORS and remains unchanged.
+The original implementation applied DNS rebinding protection to the landing
+page (`/`) and Host-sensitive metadata derivation. As of the 2026-05-10 review,
+this ADR should be read as requiring explicit Origin/Host validation for
+Streamable HTTP browser entry points as well. The implementation must not treat
+permissive CORS as a substitute for Origin/Host validation.
 
 ### Dead code removal
 
@@ -52,4 +65,6 @@ The landing page (`/`) serves HTML and is the only route vulnerable to DNS rebin
 - **Positive**: Fewer env vars to configure; no CORS-related deployment failures; browser-based MCP clients can connect; simpler codebase
 - **Positive**: Error messages from `buildEnvResolutionError` now distinguish failing keys from absent-but-optional keys
 - **Neutral**: Any MCP client from any origin can attempt requests, but all protected endpoints still require a valid OAuth token
-- **Risk**: Low — this makes the server more permissive, not less. The security boundary is OAuth authentication, not origin policy
+- **Risk**: Moderate if Origin/Host validation is absent on browser-reachable
+  Streamable HTTP entry points. The security boundary is OAuth authentication
+  plus DNS-rebinding protection, not CORS.

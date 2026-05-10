@@ -37,7 +37,8 @@ third-party examples.
 
 Escalation path:
 
-- `pnpm secrets:scan:all` for local commit/branch checks
+- `pnpm secrets:scan` for routine local commit/branch checks
+- `pnpm secrets:scan:all` for bootstrap and audit scans across branches/tags
 - `pnpm secrets:scan:all-refs` for repository forensics
 
 ### Configuration Examples
@@ -214,7 +215,9 @@ Both are mitigated by application-layer rate limiting (see
 
 - **Minimal Dependencies**: Only essential packages
 - **Regular Updates**: Dependencies kept current
-- **Vulnerability Scanning**: npm audit in CI/CD
+- **Vulnerability Governance**: Dependency vulnerability policy follows
+  [ADR-174](../architecture/architectural-decisions/174-dependency-vulnerability-scanning-quality-gate.md).
+  Do not claim a dependency-audit CI gate until it is wired into ADR-121.
 - **Lock Files**: Exact versions via pnpm-lock.yaml
 
 ### Runtime Security

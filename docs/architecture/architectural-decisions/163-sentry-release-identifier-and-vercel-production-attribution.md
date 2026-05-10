@@ -1,6 +1,8 @@
 # ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution
 
-**Status**: Accepted (2026-04-19)
+**Status**: Accepted (2026-04-19). Amended 2026-05-10 to make Sentry
+org/project/repository identity environment-derived only and to narrow the
+current source-map deletion/upload contract to the deployed server entrypoint.
 **Date**: 2026-04-19
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry emission
@@ -361,15 +363,15 @@ relationship that regression attribution depends on.
 >
 > Outcomes-to-plugin-options mapping (read alongside §6.0–§6.6 below):
 >
-> | §   | Outcome                                                           | `@sentry/esbuild-plugin` realisation                                                                                              |
-> | --- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-> | 6.0 | Idempotent release identity — re-running same version is a no-op  | Plugin's `release.name` upsert semantics; commit attribution preserved on the original deploy's binding.                          |
-> | 6.1 | Release exists in Sentry under semver                             | `release.name = $VERSION` (set in `createSentryBuildPlugin`).                                                                     |
-> | 6.2 | Commit attached via explicit `org/repo@sha` form                  | `release.setCommits = { commit: $SHA, repo: 'oaknational/oak-open-curriculum-ecosystem' }` (no `auto`).                           |
-> | 6.3 | Debug IDs embedded in `.js` and `.map` under `dist/`              | Plugin injects Debug IDs as a build step (vendor default behaviour).                                                              |
-> | 6.4 | Source-map artefacts uploaded, keyed by Debug IDs, weak-linked    | Plugin uploads sourcemaps using the same Debug IDs; `sourcemaps.filesToDeleteAfterUpload` strips `.map` from `dist/` post-upload. |
-> | 6.5 | Release finalized in the Sentry timeline                          | Plugin's `release.finalize: true`.                                                                                                |
-> | 6.6 | Deploy event registered with `--release $VERSION -e $DERIVED_ENV` | `release.deploy.env = $DERIVED_ENV` (resolved from `resolveSentryEnvironment`).                                                   |
+> | §   | Outcome                                                           | `@sentry/esbuild-plugin` realisation                                                                                               |
+> | --- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+> | 6.0 | Idempotent release identity — re-running same version is a no-op  | Plugin's `release.name` upsert semantics; commit attribution preserved on the original deploy's binding.                           |
+> | 6.1 | Release exists in Sentry under semver                             | `release.name = $VERSION` (set in `createSentryBuildPlugin`).                                                                      |
+> | 6.2 | Commit attached via explicit `org/repo@sha` form                  | `release.setCommits` uses repo identity resolved from `SENTRY_REPO_SLUG` or Vercel Git metadata; no source literal is canonical.   |
+> | 6.3 | Debug IDs embedded in the deployed server entrypoint and map      | Plugin injects Debug IDs as a build step (vendor default behaviour).                                                               |
+> | 6.4 | Source-map artefact uploaded, keyed by Debug IDs, weak-linked     | Current plugin config uploads/deletes the deployed server source map; broadening to all maps requires implementation/test updates. |
+> | 6.5 | Release finalized in the Sentry timeline                          | Plugin's `release.finalize: true`.                                                                                                 |
+> | 6.6 | Deploy event registered with `--release $VERSION -e $DERIVED_ENV` | `release.deploy.env = $DERIVED_ENV` (resolved from `resolveSentryEnvironment`).                                                    |
 >
 > Per-step error-handling postures (§6.0 abort, §6.1 abort, §6.2 warn,
 > §6.3 abort, §6.4 abort, §6.5 warn, §6.6 warn) are preserved as
@@ -473,8 +475,8 @@ degrade gracefully if the integration is uninstalled.
 
 #### 6.3 `sourcemaps inject` — **abort on failure**
 
-Embeds Debug IDs into each `.js` and its matching `.map` under
-`dist/`. Debug IDs are the **primary symbolication key** at event
+Embeds Debug IDs into the deployed server `.js` entrypoint and its matching
+source map under `dist/`. Debug IDs are the **primary symbolication key** at event
 ingestion time (Sentry docs,
 `https://docs.sentry.io/platforms/javascript/sourcemaps/troubleshooting_js/debug-ids/`).
 Without this step, uploaded source maps would have no key to match
@@ -488,14 +490,17 @@ release.
 
 #### 6.4 `sourcemaps upload --release` — **abort on failure**
 
-Uploads the artefact bundle, keyed by the Debug IDs from §6.3, and
+Uploads the source-map artefact keyed by the Debug IDs from §6.3, and
 associates it with the release `$VERSION`. The `--release` flag
 creates a **weak association** that drives the Releases → Source
 Maps surface in the Sentry UI. Debug IDs are sufficient for
 symbolication without `--release`; the weak association is retained
 because the plugin's release configuration still provides that UI path
 for humans investigating a specific release. Failure
-means symbolication will not work; abort.
+means symbolication for the deployed server entrypoint will not work; abort.
+If future builds deploy additional JavaScript entrypoints that should be
+observable in Sentry, the implementation and this ADR must be widened together
+instead of relying on a broad `dist/**/*.js.map` runbook snippet.
 
 #### 6.5 `releases finalize` — **continue on failure (warn)**
 

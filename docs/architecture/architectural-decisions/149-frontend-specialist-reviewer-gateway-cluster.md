@@ -1,22 +1,23 @@
-# ADR-149: Frontend Specialist Reviewer Gateway Cluster
+# ADR-149: Frontend Specialist Expert Gateway Cluster
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to align the cluster with the
+`*-expert` naming model.
 **Date**: 2026-04-02
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-135 (Agent Classification Taxonomy)](135-agent-classification-taxonomy.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md), [ADR-148 (Design Token Architecture)](148-design-token-architecture.md)
 
 ## Context
 
-The repository has 16 specialist reviewers (code-reviewer gateway +
+The repository has a growing specialist expert roster (code-expert gateway +
 4 architecture + 6 standard + 5 domain specialists). All are backend-
 focused. WS3 Phases 4-5 introduce React MCP App views — the first
-user-facing rendered UI in this repository. No reviewer assesses DOM
+user-facing rendered UI in this repository. No expert assesses DOM
 accessibility, token governance, component architecture, or visual
 correctness.
 
-The code-reviewer gateway (ADR-114) routes changes to specialists based
+The code-expert gateway (ADR-114/ADR-135) routes changes to specialists based
 on change profile signals. The current routing model has no UI/Frontend
 cluster. Changes touching rendered UI, CSS, or React components fall
-through to the generic code-reviewer without specialist assessment.
+through to the generic code-expert without specialist assessment.
 
 ## Decision
 
@@ -25,13 +26,13 @@ through to the generic code-reviewer without specialist assessment.
 Add a UI/Frontend cluster to the code-reviewer gateway's routing model.
 The cluster contains three specialist agents created as a cohort:
 
-1. **accessibility-reviewer** — WCAG 2.2 AA compliance, keyboard
+1. **accessibility-expert** — WCAG 2.2 AA compliance, keyboard
    navigation, screen reader readiness, colour contrast, ARIA patterns,
    landmark structure, focus management, motion sensitivity
-2. **design-system-reviewer** — Token usage consistency, tier referencing
+2. **design-system-expert** — Token usage consistency, tier referencing
    rules, theme-aware styles, component API correctness, visual
    regression triage, style containment
-3. **react-component-reviewer** — Component architecture, hook patterns,
+3. **react-component-expert** — Component architecture, hook patterns,
    render performance, accessibility integration, prop API design,
    composition patterns, server/client component boundary
 
@@ -47,33 +48,33 @@ The gateway routes to this cluster when changes touch:
 
 ### MCP Boundary Rule
 
-These reviewers assess DOM, accessibility, token usage, and React
-structure _inside_ an MCP App view. `mcp-reviewer` remains required for
+These experts assess DOM, accessibility, token usage, and React
+structure _inside_ an MCP App view. `mcp-expert` remains required for
 `_meta.ui*`, resource registration, visibility, MIME, CSP/domain, and
 host bridge lifecycle. When reviewing MCP App surfaces, ADR-141 is in
 both clusters' reading sets.
 
 ### Overlap Boundaries
 
-| Domain                | UI/Frontend Cluster      | Existing Reviewer |
-| --------------------- | ------------------------ | ----------------- |
-| DOM accessibility     | accessibility-reviewer   | —                 |
-| Token tier violations | design-system-reviewer   | —                 |
-| React patterns        | react-component-reviewer | —                 |
-| MCP App packaging     | —                        | mcp-reviewer      |
-| Type safety in props  | react-component-reviewer | type-reviewer     |
-| Security in UI code   | —                        | security-reviewer |
-| Test coverage gaps    | —                        | test-reviewer     |
+| Domain                | UI/Frontend Cluster    | Existing Reviewer |
+| --------------------- | ---------------------- | ----------------- |
+| DOM accessibility     | accessibility-expert   | —                 |
+| Token tier violations | design-system-expert   | —                 |
+| React patterns        | react-component-expert | —                 |
+| MCP App packaging     | —                      | mcp-expert        |
+| Type safety in props  | react-component-expert | type-expert       |
+| Security in UI code   | —                      | security-expert   |
+| Test coverage gaps    | —                      | test-expert       |
 
 When overlap exists, both reviewers apply — their assessments are
 complementary, not competing.
 
 ### Agent Construction
 
-All three agents follow the ADR-129 triplet pattern: canonical template +
-skill + situational rule. Platform adapters for Cursor, Claude Code,
-Codex, and Gemini CLI. Reading requirements include ADR-147, ADR-148,
-ADR-149, and `docs/governance/accessibility-practice.md` and
+All three agents follow the amended ADR-129 `*-expert` pattern: canonical
+expert template, situational invocation, and platform adapters for Cursor,
+Claude Code, Codex, and Gemini CLI. Reading requirements include ADR-147,
+ADR-148, ADR-149, and `docs/governance/accessibility-practice.md` and
 `docs/governance/design-token-practice.md`.
 
 ### Testing Reviewer Cluster Pattern (Future-Facing)

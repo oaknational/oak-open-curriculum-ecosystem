@@ -1,6 +1,8 @@
 # ADR-161: Network-Free PR-Check CI Boundary
 
-**Status**: Accepted (2026-04-17)
+**Status**: Accepted (2026-04-17). Amended 2026-05-10 to clarify that live
+schema drift checks and dependency audits that reach the network are covered by
+the same PR-check boundary.
 **Date**: 2026-04-17
 **Related**: [ADR-078](078-dependency-injection-for-testability.md) — the DI
 discipline that makes in-process tests deterministic;
@@ -84,6 +86,11 @@ Consequences:
    subject to this rule. A code review or a lint rule that greps for
    vendor-CLI invocations in those files is a future enforcement
    mechanism (see §Enforcement).
+5. Schema drift checks, dependency vulnerability audits, and marketplace
+   metadata checks are also subject to this rule when they reach the network.
+   They may run in local operator context, deploy/scheduled workflows, or a
+   pre-fetched/offline mode; they must not make live network calls from the
+   PR/push check path without an explicit amendment to ADR-121 and this ADR.
 
 ## Consequences
 

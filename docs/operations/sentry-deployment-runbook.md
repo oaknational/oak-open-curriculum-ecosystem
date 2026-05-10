@@ -56,10 +56,14 @@ In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-c
 
 | Variable                    | Value                | Notes                                                                                                                 |
 | --------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `SENTRY_MODE`               | `sentry`             | Enables live Sentry                                                                                                   |
+| `OBSERVABILITY_SINKS`       | `["sentry"]`         | Enables the Sentry sink in the orthogonal observability config                                                        |
+| `OBSERVABILITY_FIXTURES`    | `false`              | Fixture tee disabled for production live Sentry                                                                       |
 | `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1                                                                                   |
 | `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high                                                                                |
 | `SENTRY_AUTH_TOKEN`         | `sntrys-...`         | Organisation auth token. Required at **build time** by `@sentry/esbuild-plugin`. See ADR-163 §6 (amended 2026-04-21). |
+| `SENTRY_ORG`                | Sentry org slug      | Build-time plugin identity; required, no source literal fallback                                                      |
+| `SENTRY_PROJECT`            | Sentry project slug  | Build-time plugin identity; required, no source literal fallback                                                      |
+| `SENTRY_REPO_SLUG`          | `owner/repo`         | Commit attribution repo slug; falls back only to Vercel Git metadata when available                                   |
 
 Auto-resolved (no need to set on Vercel):
 
@@ -67,7 +71,7 @@ Auto-resolved (no need to set on Vercel):
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `SENTRY_RELEASE`     | ADR-163 per-environment release projection: production-on-`main` uses resolved app semver; preview / production-from-non-main uses the `VERCEL_BRANCH_URL` host label; development uses `dev-<shortSha>`; `SENTRY_RELEASE_OVERRIDE` wins first. **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2. |
 | `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`.                                                               |
-| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `@sentry/esbuild-plugin`'s `release.setCommits.commit` field (with `repo` pinned to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                                                                                                                                                                       |
+| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `@sentry/esbuild-plugin`'s `release.setCommits.commit` field. Repo identity is resolved from `SENTRY_REPO_SLUG` or Vercel Git metadata, not hardcoded in source.                                                                                                                                                             |
 
 Optional:
 
@@ -85,7 +89,8 @@ Set in the execution environment (CI, local `.env.local`, or shell):
 
 | Variable                    | Value                                      |
 | --------------------------- | ------------------------------------------ |
-| `SENTRY_MODE`               | `sentry`                                   |
+| `OBSERVABILITY_SINKS`       | `["sentry"]`                               |
+| `OBSERVABILITY_FIXTURES`    | `false`                                    |
 | `SENTRY_DSN`                | Search CLI project DSN from Step 1         |
 | `SENTRY_RELEASE`            | Set explicitly (no Vercel auto-resolution) |
 | `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                                      |
@@ -181,8 +186,8 @@ Plugin configuration shape (read alongside ADR-163 §6 amendment
 
 ```typescript
 sentryEsbuildPlugin({
-  org: 'oak-national-academy',
-  project: 'oak-open-curriculum-mcp',
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
   release: {
     name: RELEASE, // ADR-163 per-environment release projection
@@ -190,12 +195,12 @@ sentryEsbuildPlugin({
     setCommits: {
       auto: false, // §6.2 — explicit form, --auto rejected by ADR-163 Alt 8
       commit: VERCEL_GIT_COMMIT_SHA,
-      repo: 'oaknational/oak-open-curriculum-ecosystem',
+      repo: process.env.SENTRY_REPO_SLUG,
     },
     deploy: { env: DERIVED_ENV }, // §6.6 — env from resolveSentryEnvironment
   },
   sourcemaps: {
-    filesToDeleteAfterUpload: ['dist/**/*.js.map'], // strip .map post-upload
+    filesToDeleteAfterUpload: ['dist/server.js.map'], // current deployed entrypoint
   },
   telemetry: false,
 });
@@ -272,9 +277,9 @@ contract for troubleshooting:
 
 ## Rollback
 
-Set `SENTRY_MODE=off` (or remove the variable) and redeploy. The
-runtime creates a noop observability bundle with no Sentry network
-calls. No code change required.
+Remove `SENTRY_DSN` or deploy with the observability runtime configured for its
+noop path and redeploy. The runtime creates a noop observability bundle with no
+Sentry network calls. No code change required.
 
 ## Vercel Log Drains as an Alternative
 

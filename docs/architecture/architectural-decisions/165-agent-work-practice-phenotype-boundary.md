@@ -38,20 +38,20 @@ capabilities. This ADR records only this repository's phenotype:
 where those Practice capabilities appear locally and how local
 implementation surfaces relate to the portable memotype.
 
-| Local surface                                                                                     | Classification                                                                  |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `.agent/practice-core/`                                                                           | Portable Practice Core and PDR memotype.                                        |
-| `.agent/directives/`, `.agent/rules/`, `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/` | Hydrated canonical Practice content for this repo.                              |
-| `.agent/state/collaboration/`                                                                     | Local operational state instance for Practice collaboration protocols.          |
-| `.agent/memory/operational/` and `.agent/memory/executive/`                                       | Local continuity, routing, and evidence surfaces.                               |
-| `agent-tools/`                                                                                    | Optional TypeScript implementation of Practice-operational tooling.             |
-| `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/`                                         | Platform adapters, activation metadata, hooks, and local project configuration. |
-| `.agent/plans/`                                                                                   | Execution tracking and plan state, not permanent doctrine.                      |
+| Local surface                                                                 | Classification                                                                  |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `.agent/practice-core/`                                                       | Portable Practice Core and PDR memotype.                                        |
+| `.agent/directives/`, `.agent/rules/`, `.agent/skills/`, `.agent/sub-agents/` | Hydrated canonical Practice content for this repo.                              |
+| `.agent/state/collaboration/`                                                 | Local operational state instance for Practice collaboration protocols.          |
+| `.agent/memory/operational/` and `.agent/memory/executive/`                   | Local continuity, routing, and evidence surfaces.                               |
+| `agent-tools/`                                                                | Optional TypeScript implementation of Practice-operational tooling.             |
+| `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/`                     | Platform adapters, activation metadata, hooks, and local project configuration. |
+| `.agent/plans/`                                                               | Execution tracking and plan state, not permanent doctrine.                      |
 
 When an agent-work behaviour changes, route the change by substance:
 
 1. Portable concept, vocabulary, lifecycle, or governance goes to a
-   PDR, Practice Core section, canonical rule, skill, command, or
+   PDR, Practice Core section, canonical rule, skill, expert template, or
    portable pattern.
 2. Repo-specific implementation, state layout, command wiring, or
    stack choice goes to this repo's ADRs, READMEs, state docs, or

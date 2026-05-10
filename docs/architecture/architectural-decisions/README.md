@@ -183,7 +183,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
-- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
+- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md) ← **Proposed**
 - [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
 - [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
 - [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md) (supersedes ADR-143 §6 in part)
@@ -218,6 +218,14 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (proposed topology for the graph substrate: RDF-native internals,
   standards-based wire projection, consumer/substrate workspace tiers,
   and standards-evolution tripwires; Proposed 2026-05-07)
+- [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](174-dependency-vulnerability-scanning-quality-gate.md)
+  (dependency vulnerability triage, blocking/disposition policy,
+  Dependabot/override governance, and relationship to quality gates;
+  Accepted 2026-05-10)
+- [ADR-175: External Evidence Corpus Freshness Governance](175-external-evidence-corpus-freshness-governance.md)
+  (freshness metadata, ownership, threshold, stale-data behaviour, and
+  attribution requirements for EEF and future external evidence corpora;
+  Accepted 2026-05-10)
 
 ## Key Architectural Decisions
 
@@ -226,7 +234,8 @@ For understanding our API integration approach:
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
-- **[ADR-157](157-multi-source-open-education-integration.md)** - Multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
+- **[ADR-157](157-multi-source-open-education-integration.md)** - Proposed multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
+- **[ADR-175](175-external-evidence-corpus-freshness-governance.md)** - Accepted freshness governance for EEF and future external evidence corpora
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
@@ -246,6 +255,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
 - **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
 - **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)
+- **[ADR-174](174-dependency-vulnerability-scanning-quality-gate.md)** - Dependency vulnerability scanning as a quality gate policy (implementation wiring still belongs in ADR-121/build docs)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
@@ -255,9 +265,9 @@ For understanding the agentic engineering practice:
 - **[ADR-117](117-plan-templates-and-components.md)** - Plan templates and reusable plan components (document hierarchy, lifecycle, TDD phases)
 - **[ADR-119](119-agentic-engineering-practice.md)** - Practice naming, boundary, three-layer model, and self-teaching property
 - **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
-- **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
-- **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
-- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
+- **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: canonical `.agent/` source plus thin platform adapters; commands retired into skills by PDR-051
+- **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: unified `*-expert` model with situational invocation
+- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional live-system tooling for domain experts
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)

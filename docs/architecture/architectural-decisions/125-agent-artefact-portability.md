@@ -3,6 +3,10 @@
 **Status**: Accepted
 **Date**: 2026-03-04
 **Amended**: 2026-05-09 — vendor-agnostic two-surface skills contract per [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md). Skill adapters retired from `.cursor/skills/`, `.gemini/skills/`, `.codex/skills/`, and `.windsurf/skills/`; only `.agents/skills/` (cross-tool alias) and `.claude/skills/` (Claude-native) remain. Canonical skill body filename is `SKILL-CANONICAL.md` (non-discoverable). Custom command surfaces (`.agent/commands/`, `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`) retired; canonical commands subsumed into skills. The thin-wrapper contract, three-layer model, and rules/sub-agent surfaces are unchanged.
+**Amended**: 2026-05-10 — clarified that Gemini `review-*.toml` files are
+transitional sub-agent invocation adapters only while Gemini lacks native
+sub-agent spawning. They are not a general custom-command surface and must be
+removed or reclassified when native Gemini agent support exists.
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -73,11 +77,11 @@ retired per the 2026-05-09 amendment.
 #### Gemini CLI (`.gemini/`) — settings only
 
 Gemini CLI reads skills from `.agents/skills/` (documented as an alias
-for `.gemini/skills/`, with precedence). The `.gemini/commands/`
-adapter set (custom-command and `review-*` reviewer surfaces) is
-retired per the 2026-05-09 amendment; reviewer invocation on Gemini
-proceeds through native skill activation against the `.agents/skills/`
-adapters.
+for `.gemini/skills/`, with precedence). General custom-command adapters
+are retired per the 2026-05-09 amendment. If `review-*.toml` files remain
+during migration, they are temporary sub-agent invocation adapters for a
+platform without native sub-agent spawning, not a user workflow command
+surface.
 
 #### Codex (`.codex/`)
 
@@ -151,7 +155,7 @@ Each platform uses its native mechanism for sub-agent-equivalent functionality:
 | ----------- | -------------------------------- | ------------------------------------------------------------------------------------- |
 | Cursor      | `.cursor/agents/*.md`            | `name`, `description`, `model`, `tools`, `readonly`                                   |
 | Claude Code | `.claude/agents/*.md`            | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
-| Gemini CLI  | `.gemini/commands/review-*.toml` | `description`, `prompt` (user-invoked review commands)                                |
+| Gemini CLI  | `.gemini/commands/review-*.toml` | Transitional sub-agent invocation adapter until native support exists                 |
 | Codex       | `.codex/agents/*.toml`           | TOML roster and developer instructions loaded from canonical templates                |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
@@ -307,12 +311,12 @@ ADR-114's three-layer model is proven and working for sub-agents. The same force
 
 Four platforms are now active: Cursor, Claude Code, Gemini CLI, and Codex. Maintaining independent copies of each command, skill, and rule across four platforms is unsustainable. The canonical-plus-adapter model scales linearly: one canonical file plus one thin wrapper per platform.
 
-### Why `.agent/commands/` instead of `.agent/prompts/`
+### Historical note: why `.agent/commands/` existed
 
 `.agent/prompts/` already exists for reusable prompt playbooks (e.g.,
-the semantic-search prompts). Commands are a
-distinct artefact type: they are invoked by name, have platform-specific
-syntax, and map to slash commands. Keeping them separate avoids overloading the
+the semantic-search prompts). Commands were a distinct artefact type: they were
+invoked by name, had platform-specific syntax, and mapped to slash commands.
+Keeping them separate avoided overloading the
 prompts directory.
 
 ### Why consistent `jc-*` naming across platforms
@@ -370,13 +374,12 @@ as an exclusion.
 ### 2026-04-17 — Thin-wrapper scope clarification
 
 The "thin wrapper" contract established in §Layer 2 applies to **platform
-adapters wrapping canonical content**, not to canonical command-to-skill
-relationships. Commands (`.agent/commands/`) and skills (`.agent/skills/`)
-are sibling Layer 1 artefacts; a canonical command that orchestrates
-skills or invokes logic of its own is not a thin wrapper, and it does not
-violate this ADR's thin-wrapper requirement. A "thick" orchestrating
-command is a valid Layer 1 artefact — see ADR-135's `process_executor`
-classification for the worked example.
+adapters wrapping canonical content**. This 2026-04-17 clarification is now
+historical for command-to-skill relationships: commands (`.agent/commands/`)
+are a retired canonical surface per the 2026-05-09 amendment, and skills
+(`.agent/skills/`) are the durable user-and-model-invokable capability
+surface. A platform adapter that activates skills or invokes logic of its own
+is not a thin wrapper and does not satisfy this ADR's portability contract.
 
 This clarification graduated from `.agent/memory/active/distilled.md` (2026-04-16
 observation) as part of the enforce-edge tightening pass alongside

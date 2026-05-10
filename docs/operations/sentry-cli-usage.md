@@ -335,7 +335,7 @@ pnpm exec sentry-cli sourcemaps inject  "$DIST_DIR"
 pnpm exec sentry-cli sourcemaps upload  --release "$VERSION" "$DIST_DIR"
 ```
 
-with `dist/**/*.js.map` deleted post-upload (per
+with the deployed server source map deleted post-upload (per
 `sourcemaps.filesToDeleteAfterUpload` in the plugin config) so
 deployed `dist/` ships hidden source-maps only.
 

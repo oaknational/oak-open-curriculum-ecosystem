@@ -1,6 +1,7 @@
 # ADR-160: Non-Bypassable Redaction Barrier as Principle
 
-**Status**: Accepted (2026-04-17)
+**Status**: Accepted (2026-04-17). Amended 2026-05-10 to clarify the email
+PII and Clerk user-id policy gaps surfaced by ADR coverage review.
 **Date**: 2026-04-17
 **Supersedes in part**: [ADR-143 §6](143-coherent-structured-fan-out-for-observability.md#6-shared-redaction-barrier)
 (the enumerated list of hook types; the rest of ADR-143 remains in force)
@@ -102,6 +103,24 @@ redactor is adequate today; if a future fan-out requires async
 redaction (for example, an external classification service),
 introducing async breaks the synchronous contracts. Such a change
 requires an ADR amendment, not an in-place refactor.
+
+### Coverage Gaps Recorded 2026-05-10
+
+This ADR requires known-PII fixture coverage for every telemetry fan-out path.
+Email-like strings are part of that known-PII class unless a data-flow proof
+shows they cannot enter the path under test. Existing implementations that
+scrub sensitive keys, bearer tokens, OAuth fields, and IP-like headers but do
+not scrub arbitrary email-like values are incomplete relative to the principle;
+they need either implementation follow-through or an explicit amendment that
+narrows the policy with proof.
+
+Clerk `userId` values in telemetry scope remain an unresolved identity-envelope
+policy decision. Until that decision is closed, they must be treated as
+linkable identifiers: allowed only where the sink, retention, deletion, and
+lawful-basis story is documented. Future observability work must choose one of
+the durable positions — anonymous-only, Sentry-only, or all-sinks with deletion
+propagation — rather than letting sink-specific behaviour accumulate by
+accident.
 
 ### Runtime Extension: Browser Side (L-12)
 

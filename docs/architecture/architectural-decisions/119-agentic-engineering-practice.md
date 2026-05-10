@@ -79,10 +79,10 @@ codebase:
   fail-fast, no type shortcuts
 - **Structures** — directives, plans, templates, ADRs, institutional
   memory
-- **Agents** — specialist reviewers, their three-layer prompt
+- **Agents** — specialist experts, their three-layer prompt
   architecture (ADR-114)
-- **Workflows** — commands, quality gates, documentation
-  consolidation
+- **Workflows** — skills, quality gates, documentation
+  consolidation, and historical commands while command retirement is in progress
 - **Learning mechanisms** — napkin, distilled learnings, experience
   records
 - **Agent-to-agent coordination** — shared communication log, active

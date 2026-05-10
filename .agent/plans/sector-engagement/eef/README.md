@@ -9,7 +9,7 @@ engine) on Oak's MCP server.
 into corpus-and-graph shape (CURRENT lifecycle bucket, awaiting
 promotion to ACTIVE once foundation graph-query-layer plan reaches
 ACTIVE — see [Promotion Rule](#promotion-rule)).
-**Last Updated**: 2026-04-30
+**Last Updated**: 2026-05-10
 **Originating session branch**: `feat/eef_exploration`
 **Conservation evidence**: semantic preservation map at
 [`reference/conservation-map.md`](reference/conservation-map.md). The
@@ -120,8 +120,11 @@ The dataset was structurally validated at the time of relocation:
 Currency note: snapshot is 28 days old at relocation. The EEF Toolkit is a
 "living systematic review" updated roughly twice per year; caveat #8 inside the
 JSON itself records that the data reflects "May 2025 and October 2025 living
-systematic review updates where available." A fresh upstream check would be
-prudent before the executable plan promotes from CURRENT to ACTIVE.
+systematic review updates where available." [ADR-175](../../../../docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md)
+now makes freshness metadata and a default 180-day threshold binding for
+external evidence corpora before user-facing surfaces ship. A fresh upstream
+check remains required before the executable plan promotes from CURRENT to
+ACTIVE.
 
 ## Parent and Sibling Relationships
 
@@ -134,6 +137,7 @@ prudent before the executable plan promotes from CURRENT to ACTIVE.
   - [`../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) — WS-2 (DONE), establishes graph factory pattern.
   - [`../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — WS-4 (PENDING).
 - **Related ADR (proposed, not constraining)**: [`docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) — typing discipline, URI scheme, namespace prefixes (`eef-*`), licensing. ADR is in **Proposed** status as of 2026-04-30; it documents a direction that the in-flight work explores, not a constraint that gates the work.
+- **Freshness governance (accepted)**: [`docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md`](../../../../docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md) — owner, metadata, threshold, and stale-corpus behaviour for EEF and future external evidence corpora.
 
 ## Credits and Attribution
 

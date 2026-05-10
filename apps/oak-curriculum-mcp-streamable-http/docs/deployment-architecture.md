@@ -105,7 +105,7 @@ const loadConfiguredApp = async () => {
     observability,
     getWidgetHtml: () => WIDGET_HTML_CONTENT,
     setupSentryErrorHandler:
-      runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+      runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });
 };
 
@@ -113,6 +113,11 @@ export default createDeployEntryHandler({
   loadHandler: loadConfiguredApp,
 });
 ```
+
+Note: the observability environment schema now rejects non-empty
+`SENTRY_MODE` in favour of `OBSERVABILITY_SINKS` and
+`OBSERVABILITY_FIXTURES`. This snippet reflects the current server wiring
+until that migration follow-through lands; it should be updated with the code.
 
 `createApp` remains async because startup includes OAuth metadata work and MCP
 factory/readiness setup. `src/server.ts` keeps that async work behind a

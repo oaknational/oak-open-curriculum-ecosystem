@@ -1,6 +1,8 @@
 # ADR-162: Observability-First — Every Capability Emits Across Five Axes
 
-**Status**: Accepted (2026-04-19)
+**Status**: Accepted (2026-04-19). Amended 2026-05-10 to record that
+vendor-independence enforcement is partially implemented and still has
+follow-through work.
 **Date**: 2026-04-18
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry-compliant
@@ -111,6 +113,14 @@ DI seam per [ADR-078](078-dependency-injection-for-testability.md).
 The enforcement boundary for this clause is therefore feature code, not
 wiring code. Phase 5 operationalises this distinction with a structural
 import lint (see Enforcement Mechanism #5).
+
+**Current enforcement status (2026-05-10).** The provider-neutral port and
+adapter direction is accepted, but the structural
+`no-vendor-observability-import` rule is not yet the complete enforcement
+boundary. Existing composition-root imports of `@sentry/node` are allowed only
+as DI wiring. Any direct vendor SDK import in feature code remains a violation
+of this ADR, and the lint rule is the implementation follow-through that makes
+that boundary mechanically visible.
 
 ### The Closure Property and Test Gate
 

@@ -2,7 +2,8 @@
 
 ## Status
 
-Accepted
+Accepted. Amended 2026-05-10 to clarify that the public-resource bypass is a
+deliberate carve-out, not a precedent for unauthenticated MCP methods.
 
 ## Context
 
@@ -31,6 +32,18 @@ Both auth layers are updated:
 - `mcp-router.ts` - skips auth middleware
 
 The public resource list is derived from source constants, ensuring synchronisation with registered resources.
+
+This is the only accepted HTTP-auth bypass for MCP JSON-RPC methods. The bypass
+is valid only when all of the following are true:
+
+- the method is `resources/read`;
+- the URI is on the known public-resource allowlist;
+- the content is static or public documentation;
+- the resource contains no user, school, tenant, operational, or personal data.
+
+Any future public resource must be deliberately classified into this allowlist.
+Tool calls, prompts, discovery methods, and non-public resources remain covered
+by ADR-113's HTTP-level authentication rule.
 
 ### Implementation Details
 

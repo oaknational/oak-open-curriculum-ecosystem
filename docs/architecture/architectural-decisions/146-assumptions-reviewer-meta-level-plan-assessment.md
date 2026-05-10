@@ -1,6 +1,7 @@
 # ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to rename the capability to
+`assumptions-expert`.
 **Date**: 2026-04-02
 **Related**: [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md)
 
@@ -14,7 +15,10 @@ Existing reviewers apply their doctrine hierarchy with external expertise at the
 
 ## Decision
 
-Create an `assumptions-reviewer` following the ADR-129 Domain Specialist Capability Pattern with an **inverted doctrine hierarchy**.
+Create an `assumptions-expert` following the ADR-129 Domain Specialist
+Capability Pattern with an **inverted doctrine hierarchy**. Historical
+references to `assumptions-reviewer` name the original review-only form of the
+same capability.
 
 ### Inverted Doctrine Hierarchy
 
@@ -27,7 +31,7 @@ This inverts the standard ADR-129 hierarchy where external documentation ranks f
 
 ### Assessment Areas
 
-The assumptions reviewer assesses six areas:
+The assumptions expert assesses six areas:
 
 1. **Proportionality** — Is the proposed work proportional to the problem it solves? Could fewer artefacts, simpler architecture, or a smaller scope deliver equivalent value?
 2. **Assumption validity** — For each assumption the plan makes, what evidence exists? What evidence is missing? Are unvalidated assumptions treated as decisions?
@@ -38,7 +42,7 @@ The assumptions reviewer assesses six areas:
 
 ### Output Format
 
-The reviewer produces a structured Assumption Audit with per-assumption evidence ratings:
+The expert produces a structured Assumption Audit with per-assumption evidence ratings:
 
 - **Validated** — evidence exists and supports the assumption.
 - **Partially validated** — some evidence exists but gaps remain.
@@ -75,8 +79,7 @@ The six assessment areas (proportionality, assumption validity, blocking legitim
 
 ## References
 
-- `.agent/sub-agents/templates/assumptions-reviewer.md` — reviewer template
-- `.agent/skills/assumptions-expert/SKILL.md` — active workflow skill
-- `.agent/rules/invoke-assumptions-reviewer.md` — situational invocation rule
+- `.agent/sub-agents/templates/assumptions-expert.md` — expert template
+- `.agent/rules/invoke-assumptions-expert.md` — situational invocation rule
 - `.agent/memory/executive/invoke-code-reviewers.md` — reviewer invocation guidance
 - `.agent/directives/principles.md` — project principles (first question, simplicity)

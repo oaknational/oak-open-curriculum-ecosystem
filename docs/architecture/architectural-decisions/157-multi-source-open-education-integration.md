@@ -13,6 +13,8 @@ extended + explicit-source-attribution discipline added 2026-05-07)
 Oak API types; non-API data sources have their own typing disciplines),
 [ADR-030](030-sdk-single-source-truth.md) — SDK as single source of truth,
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives,
+[ADR-175](175-external-evidence-corpus-freshness-governance.md) — accepted
+freshness governance for external evidence corpora,
 [ADR-154](154-separate-framework-from-consumer.md) — separate framework from
 consumer (the graph resource factory follows this pattern),
 [ADR-173](173-graph-stack-topology.md) — graph stack topology (proposed)
@@ -36,6 +38,11 @@ still operating assumptions for the in-flight work but should be
 re-evaluated when the corpus extension lands. Until then, this ADR
 is **proposed**, not **accepted** — it documents a direction, not a
 constraint.
+
+ADR-175 is narrower and accepted: external evidence corpora such as EEF need
+freshness metadata, ownership, and stale-data behaviour before user-facing
+surfaces ship. That freshness decision is binding even while this broader
+multi-source integration ADR remains Proposed.
 
 ## Context
 
@@ -178,9 +185,7 @@ provenance without parsing names.
 symbols (e.g. `NCCoverageGraph`, `nc-statement-extractor.ts`) for
 types that process `nationalCurriculumContent` from bulk data. These
 are not exposed as MCP surfaces but should be renamed in a future
-session to avoid implying direct NC ownership. See
-`.agent/plans/kgs-and-pedagogy/future/ontology-integration-strategy.md`
-for the planned rename.
+session to avoid implying direct NC ownership.
 
 ### Licensing
 
@@ -258,12 +263,11 @@ different methods:
 | **Strength** | Concrete instances (lesson-level)                              | Formal relationships (concept-level)                      |
 | **Example**  | "Students confuse area and perimeter" (from a specific lesson) | Misconception → relatedTo → Concept (typed semantic link) |
 
-As the ontology matures, deeper integration (Levels 4/4b of the
-evidence integration strategy) will connect these complementary
-views — for instance, linking a bulk-derived misconception instance
-to its ontology concept classification. The KG alignment audit
-(`.agent/plans/semantic-search/current/kg-alignment-audit.execution.plan.md`)
-measures this overlap to inform the integration path.
+As the ontology matures, deeper integration may connect these complementary
+views — for instance, linking a bulk-derived misconception instance to its
+ontology concept classification. That deeper integration needs a fresh accepted
+decision before it becomes implementation work; this Proposed ADR does not make
+the future graph alignment path binding.
 
 ### Trade-offs
 

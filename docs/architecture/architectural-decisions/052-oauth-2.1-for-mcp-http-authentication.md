@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted (2025-09-07)
+Accepted (2025-09-07). Amended 2026-05-10 to mark the
+resource-server-only/JWT/JWKS implementation details as superseded by the
+Clerk proxy-AS and opaque-token decisions in ADR-053, ADR-115, and ADR-142.
 
 **Related**: ADR-053 (Clerk as IdP), ADR-040 (Neutral Architecture)
 
@@ -73,6 +75,28 @@ The MCP specification mandates OAuth 2.1 for HTTP-based transports:
 ## Decision
 
 Implement **OAuth 2.1** for HTTP server authentication, with the MCP server acting as a **Resource Server** that verifies tokens issued by an external **Authorization Server**.
+
+### Current Runtime Shape (2026-05-10)
+
+The original Resource Server architecture remains the conceptual security
+boundary — MCP requests carry `Authorization: Bearer <token>` and the MCP
+server authenticates the caller before protected methods run. The
+implementation details below are historical where they describe direct JWT
+signature validation through Clerk JWKS.
+
+The current runtime shape is:
+
+- Clerk remains the canonical identity provider through public alpha (ADR-053).
+- The MCP server also presents a same-origin proxy Authorisation Server for
+  client compatibility (ADR-115).
+- Clerk OAuth access tokens are opaque `oat_...` tokens rather than JWT access
+  tokens for this flow (ADR-142).
+- Runtime token verification uses Clerk-supported verification rather than
+  local JWT/JWKS claim validation.
+
+If Clerk later moves this OAuth flow to JWT access tokens, this ADR must be
+revisited with ADR-115 because issuer/audience validation would become
+load-bearing again.
 
 ### Architecture
 

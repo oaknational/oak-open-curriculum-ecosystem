@@ -1,6 +1,7 @@
 # ADR-129: Domain Specialist Capability Pattern
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to align the pattern with the
+unified `*-expert` agent model.
 **Date**: 2026-03-07
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md)
 
@@ -18,9 +19,31 @@ This creates three risks:
 
 ## Decision
 
-Codify the **domain specialist triplet** as the standard capability shape for adding domain-specific expertise to the agent ecosystem.
+Codify the **domain specialist capability** as the standard shape for adding
+domain-specific expertise to the agent ecosystem.
 
-### The Triplet
+### 2026-05-10 Amendment: Unified Expert Model
+
+The original triplet separated read-only reviewer templates from active
+workflow skills. The current accepted direction is a unified `*-expert`
+sub-agent template that can explore, advise, and review, with active-workflow
+guidance folded into the expert prompt where that domain previously had a
+paired skill. The situational rule remains the trigger surface, but it invokes
+the expert rather than a `*-reviewer` identity.
+
+Standalone active skills may remain temporarily while migration is in progress,
+but the durable shape is:
+
+| Artefact             | Purpose                                                          | Location                                         |
+| -------------------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| **Expert template**  | Domain expertise across explore, advise, and review modes        | `.agent/sub-agents/templates/<domain>-expert.md` |
+| **Situational rule** | Trigger conditions for when to invoke the expert                 | `.agent/rules/invoke-<domain>-expert.md`         |
+| **Adapters**         | Thin platform wrappers for the expert and its invocation surface | Per ADR-125                                      |
+
+The old reviewer + skill split is historical unless a future ADR records a
+domain-specific reason to keep the capabilities separate.
+
+### Historical Triplet
 
 A complete domain specialist consists of three artefacts:
 
@@ -30,10 +53,13 @@ A complete domain specialist consists of three artefacts:
 | **Skill**            | Active workflow for planning, research, and implementation support | `.agent/skills/<domain>-expert/SKILL.md`           |
 | **Situational rule** | Trigger conditions for when to invoke the reviewer                 | `.agent/rules/invoke-<domain>-reviewer.md`         |
 
-The reviewer and skill have distinct responsibilities:
+Historically, the reviewer and skill had distinct responsibilities:
 
-- The **reviewer** observes, analyses, and reports. It does not modify code. It assesses work against authoritative sources and surfaces findings with severity and citations.
-- The **skill** supports the working agent during active tasks. It provides research, planning guidance, and implementation support under the same doctrine, but it does not replace the reviewer's independent assessment.
+- The **reviewer** observed, analysed, and reported. It did not modify code.
+- The **skill** supported the working agent during active tasks.
+
+Under the unified expert model, those responsibilities become modes of one
+domain expert rather than separate canonical artefacts.
 
 ### Doctrine Hierarchy
 

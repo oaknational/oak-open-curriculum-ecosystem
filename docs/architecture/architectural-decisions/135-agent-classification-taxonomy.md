@@ -1,6 +1,7 @@
 # ADR-135: Agent Classification Taxonomy
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to record the owner-directed
+`*-expert` final naming.
 **Date**: 2026-03-12
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md)
 
@@ -118,6 +119,15 @@ The Practice domain splits into three agents matching the existing conceptual bo
 
 All agents are renamed to remove the `-reviewer` suffix and align with the classification model. This is executed on a feature branch with complete documentation updates across all four platforms as a success criterion.
 
+**2026-05-10 final naming amendment.** The proposed short names below are
+historical. The implemented and accepted naming keeps the domain noun plus an
+`-expert` suffix for domain experts: `code-expert`, `docs-adr-expert`,
+`mcp-expert`, `security-expert`, `test-expert`, `type-expert`,
+`config-expert`, `release-readiness-expert`, `accessibility-expert`,
+`design-system-expert`, `react-component-expert`, and the architecture persona
+variants `architecture-expert-{barney,fred,betty,wilma}`. The suffix names
+capability, not mode: an expert may explore, advise, or review.
+
 #### Proposed Naming
 
 | Current Name                   | New Name              | Classification                   |
@@ -165,7 +175,7 @@ Each platform has different mechanisms for communicating mode and classification
 | Cursor      | `@` file injection loads mode component       | Agent selection via `description` matching  |
 | Claude Code | `$ARGUMENTS` in commands, agent `description` | `model` and `permissionMode` in frontmatter |
 | Gemini CLI  | `{{args}}` in TOML commands                   | `description` in TOML                       |
-| Codex       | Skill mention syntax                          | `description` in `SKILL.md` frontmatter     |
+| Codex       | Agent roster + skill mention syntax           | `description` in TOML/frontmatter           |
 
 Platform-specific mode invocation patterns are designed as part of the adapter layer work, following ADR-125's thin wrapper contract.
 
@@ -219,8 +229,12 @@ The Practice Core (portable blueprint) and the applied Practice (this repo's ope
 
 ### Neutral
 
-- The ADR-129 domain specialist triplet pattern (reviewer + skill + situational rule) evolves into a domain expert triplet (expert + skill + situational rule). The pattern is the same; the naming changes.
-- Existing ADRs that reference `-reviewer` agents by name will need updating as part of the rename work.
+- The ADR-129 domain specialist triplet pattern evolves into a unified
+  `*-expert` capability pattern. The expert prompt carries the read-only review
+  stance plus active workflow guidance where the old paired skill has been
+  merged.
+- Existing ADRs that reference `-reviewer` agents by name are historical unless
+  explicitly amended to the `*-expert` model.
 
 ## References
 
