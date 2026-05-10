@@ -100,7 +100,7 @@ description = "Design token and visual consistency specialist for both read-only
 config_file = "agents/design-system-expert.toml"
 
 [agents."react-component-expert"]
-description = "React component architecture reviewer for hooks, render performance, prop API design, and composition patterns."
+description = "React component specialist for both read-only review and active-workflow planning around hooks, render performance, prop API design, and composition patterns in UI-shipping workspaces."
 config_file = "agents/react-component-expert.toml"
 
 [sandbox_workspace_write]

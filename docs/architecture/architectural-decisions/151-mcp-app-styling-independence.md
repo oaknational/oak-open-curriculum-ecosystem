@@ -143,7 +143,7 @@ why. The ADR-148 architecture is the correct fit because it:
   oak-components use different hex values and different spacing models.
   Palette evolution in oak-components requires a manual review cycle to
   determine whether MCP App token values should be updated. The
-  `design-system-reviewer` (ADR-149) is responsible for this governance.
+  `design-system-expert` (ADR-149) is responsible for this governance.
 - If Oak Components migrates to CSS custom properties in future, MCP App
   views could adopt shared components — but that is a future decision,
   not a compatibility layer to build now.
@@ -153,7 +153,7 @@ why. The ADR-148 architecture is the correct fit because it:
 - [ADR-148](148-design-token-architecture.md) — defines the token
   architecture that MCP App views consume
 - [ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md) —
-  `design-system-reviewer` enforces token governance including palette
+  `design-system-expert` enforces token governance including palette
   alignment
 - [ADR-045](045-hybrid-theming-bridge-for-oak-components.md) —
   historical predecessor; attempted to bridge Oak Components theming into

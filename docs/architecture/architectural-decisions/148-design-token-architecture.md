@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-04-02
-**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Reviewer Gateway Cluster)](149-frontend-specialist-reviewer-gateway-cluster.md)
+**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Expert Gateway Cluster)](149-frontend-specialist-reviewer-gateway-cluster.md)
 
 ## Context
 
@@ -158,6 +158,6 @@ with CSS output is the minimal, correct dependency.
 ### Cross-References
 
 - ADR-041 amended to add `packages/design/` category
-- `design-system-reviewer` (ADR-149) enforces token governance
+- `design-system-expert` (ADR-149) enforces token governance
 - `docs/governance/design-token-practice.md` provides authoring and build
   pipeline guidance

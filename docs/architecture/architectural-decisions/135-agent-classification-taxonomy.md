@@ -128,29 +128,29 @@ historical. The implemented and accepted naming keeps the domain noun plus an
 variants `architecture-expert-{barney,fred,betty,wilma}`. The suffix names
 capability, not mode: an expert may explore, advise, or review.
 
-#### Proposed Naming
+#### Current Naming
 
-| Current Name                   | New Name              | Classification                   |
-| ------------------------------ | --------------------- | -------------------------------- |
-| `code-reviewer`                | `code-quality`        | `domain_expert` (broad, gateway) |
-| `architecture-reviewer-barney` | `architecture-barney` | `domain_expert` (deep)           |
-| `architecture-reviewer-fred`   | `architecture-fred`   | `domain_expert` (deep)           |
-| `architecture-reviewer-betty`  | `architecture-betty`  | `domain_expert` (deep)           |
-| `architecture-reviewer-wilma`  | `architecture-wilma`  | `domain_expert` (deep)           |
-| `test-reviewer`                | `test`                | `domain_expert` (deep)           |
-| `type-reviewer`                | `type`                | `domain_expert` (deep)           |
-| `config-reviewer`              | `config`              | `domain_expert` (deep)           |
-| `security-reviewer`            | `security`            | `domain_expert` (deep)           |
-| `docs-adr-reviewer`            | `docs-adr`            | `domain_expert` (deep)           |
-| `onboarding-reviewer`          | `onboarding`          | `domain_expert` (deep)           |
-| `elasticsearch-reviewer`       | `elasticsearch`       | `domain_expert` (deep)           |
-| `mcp-reviewer`                 | `mcp`                 | `domain_expert` (deep)           |
-| `ground-truth-designer`        | `ground-truth`        | `domain_expert` (deep)           |
-| `release-readiness-reviewer`   | `release-readiness`   | `domain_expert` (deep)           |
-| `subagent-architect`           | `subagent-architect`  | `process_executor`               |
-| — (new)                        | `practice`            | `domain_expert` (broad, gateway) |
-| — (new)                        | `practice-core`       | `domain_expert` (deep)           |
-| — (new)                        | `practice-applied`    | `domain_expert` (deep)           |
+| Current Name                   | New Name                     | Classification                   |
+| ------------------------------ | ---------------------------- | -------------------------------- |
+| `code-reviewer`                | `code-expert`                | `domain_expert` (broad, gateway) |
+| `architecture-reviewer-barney` | `architecture-expert-barney` | `domain_expert` (deep)           |
+| `architecture-reviewer-fred`   | `architecture-expert-fred`   | `domain_expert` (deep)           |
+| `architecture-reviewer-betty`  | `architecture-expert-betty`  | `domain_expert` (deep)           |
+| `architecture-reviewer-wilma`  | `architecture-expert-wilma`  | `domain_expert` (deep)           |
+| `test-reviewer`                | `test-expert`                | `domain_expert` (deep)           |
+| `type-reviewer`                | `type-expert`                | `domain_expert` (deep)           |
+| `config-reviewer`              | `config-expert`              | `domain_expert` (deep)           |
+| `security-reviewer`            | `security-expert`            | `domain_expert` (deep)           |
+| `docs-adr-reviewer`            | `docs-adr-expert`            | `domain_expert` (deep)           |
+| `onboarding-reviewer`          | `onboarding-expert`          | `domain_expert` (deep)           |
+| `elasticsearch-reviewer`       | `elasticsearch-expert`       | `domain_expert` (deep)           |
+| `mcp-reviewer`                 | `mcp-expert`                 | `domain_expert` (deep)           |
+| `ground-truth-designer`        | `ground-truth`               | `domain_expert` (deep)           |
+| `release-readiness-reviewer`   | `release-readiness-expert`   | `domain_expert` (deep)           |
+| `subagent-architect`           | `subagent-architect`         | `process_executor`               |
+| — (new)                        | `practice`                   | `domain_expert` (broad, gateway) |
+| — (new)                        | `practice-core`              | `domain_expert` (deep)           |
+| — (new)                        | `practice-applied`           | `domain_expert` (deep)           |
 
 Architecture personas remain separate agents to preserve model diversity across providers.
 
