@@ -155,8 +155,7 @@ Minimum canonical update surfaces are:
 3. `.agent/practice-core/practice.md`
 
 Additionally, update any impacted ADRs, `/docs/` pages, and README files.
-Apply the consolidation workflow in
-`.agent/commands/consolidate-docs.md` before closing major phases.
+Apply the repository consolidation workflow before closing major phases.
 
 ### Why "Practice" and Not "Framework"
 

@@ -134,8 +134,8 @@ For the principle to remain enforceable rather than aspirational:
    vendor lock-in is not shippable.** The reviewer matrix at phase
    close interrogates each of the five axes per new capability.
 3. **The vendor-independence clause is tested programmatically.** A
-   vendor-independence conformance test runs emitting workspaces in
-   `SENTRY_MODE=off` and asserts all structural event information
+   vendor-independence conformance test runs emitting workspaces with no
+   Sentry sink configured and asserts all structural event information
    persists via stdout/err.
 
 The plans that implement this closure property are catalogued under
@@ -183,7 +183,7 @@ Phase 5 of the
 4. **Vendor-independence emission test** in
    `multi-sink-vendor-independence-conformance.plan.md`'s output (plan
    to be authored under Phase 2 of the restructure): runs the MCP app
-   server + browser widget + Search CLI in `SENTRY_MODE=off` and
+   server + browser widget + Search CLI with `OBSERVABILITY_SINKS=[]` and
    asserts structural event information persists via stdout/err with
    no loss beyond the network hop. This proves the **stdout-sink
    fallback**.
@@ -353,7 +353,7 @@ In summary:
   for `multi-sink-vendor-independence-conformance.plan.md`.
 - `wrapMcpServerWithSentry` at `core-endpoints.ts:98` is currently an
   unconditional call into `@sentry/node` — inertness under
-  `SENTRY_MODE=off` is a vendor-SDK behaviour, not a structural
+  no configured Sentry sink is a vendor-SDK behaviour, not a structural
   property. To prove "adding, replacing, or removing a vendor adapter
   MUST NOT require changes in consumer code", the wrapping call must
   move behind a `ServerInstrumenter` port injected from

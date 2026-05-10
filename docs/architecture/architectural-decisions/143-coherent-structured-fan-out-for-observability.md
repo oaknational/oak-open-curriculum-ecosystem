@@ -2,7 +2,12 @@
 
 ## Status
 
-Accepted (2026-03-27) — **Superseded in part by [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) (§6 only; 2026-04-17)**. The rest of ADR-143 (sink model, `OtelLogRecord` currency, workspace scope, other out-of-scope clauses) remains in force.
+Accepted (2026-03-27) — **Superseded in part by [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) (§6 only; 2026-04-17)**.
+Revised 2026-05-10 by
+[ADR-162](162-observability-first.md): the sink model, `OtelLogRecord`
+currency, workspace scope, and other out-of-scope clauses remain in force, but
+the historical `SENTRY_MODE` configuration key has been replaced by the
+orthogonal sink/fixture axes recorded in ADR-162.
 
 **Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md)
 
@@ -270,7 +275,8 @@ The implementation is expected to:
 1. create shared observability packages for provider-neutral helpers and
    Sentry-specific wiring,
 2. add the Sentry specialist capability before implementation work begins,
-3. model Sentry config as a discriminated union keyed by `SENTRY_MODE`,
+3. model Sentry config as a discriminated union keyed by the current
+   observability sink and fixture axes,
 4. fail closed when live Sentry config is invalid,
 5. keep `SENTRY_SEND_DEFAULT_PII` effectively pinned to `false` in v1,
 6. treat the HTTP server and Search CLI as the adoption targets,

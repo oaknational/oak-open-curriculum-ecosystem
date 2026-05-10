@@ -124,7 +124,6 @@ mechanism that produces rules, not just the rules themselves.
 
 - This ADR records architectural properties not captured by the
   existing operational documentation. The operational detail remains
-  in `practice.md` (`.agent/practice-core/practice.md`) §The
-  Knowledge Flow and the consolidate-docs command
-  (`.agent/commands/consolidate-docs.md`), which contains the
-  distillation protocol inline
+  in `practice.md` (`.agent/practice-core/practice.md`) and the
+  repository consolidation workflow, which contains the distillation
+  protocol inline
