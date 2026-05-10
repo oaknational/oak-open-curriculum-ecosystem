@@ -171,12 +171,12 @@ Read and follow \`.agent/sub-agents/templates/code-reviewer.md\`.
     );
   });
 
-  it('lists the live repo roster, including clerk-reviewer parity for Codex', () => {
+  it('lists the live repo roster, including clerk-expert parity for Codex', () => {
     const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 
-    expect(listCodexProjectAgentNames(repoRoot)).toContain('clerk-reviewer');
-    expect(resolveCodexProjectAgent(repoRoot, 'code-reviewer').referencedCanonicalFiles).toContain(
-      '.agent/sub-agents/templates/code-reviewer.md',
+    expect(listCodexProjectAgentNames(repoRoot)).toContain('clerk-expert');
+    expect(resolveCodexProjectAgent(repoRoot, 'code-expert').referencedCanonicalFiles).toContain(
+      '.agent/sub-agents/templates/code-expert.md',
     );
   });
 });
