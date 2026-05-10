@@ -670,11 +670,10 @@
       "updated_at": "2026-05-09T16:16:36.477Z",
       "expires_at": "2026-05-09T16:30:43.177Z",
       "phase": "abandoned",
-      "staged_name_status": "M\t.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md\n",
       "staged_bundle_fingerprint": "cf21c3085cf10dcfaef17a7eba59505ec9411f2280fa4945a6af2adf96f79208",
+      "staged_name_status": "M\t.agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md\n",
       "notes": "Re-enqueuing with full coordination bundle"
     }
   ],
-  "claims": [
-  ]
+  "claims": []
 }

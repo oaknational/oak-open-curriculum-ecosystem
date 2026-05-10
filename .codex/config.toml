@@ -44,15 +44,15 @@ description = "Elasticsearch specialist reviewer for mappings, queries, ELSER, R
 config_file = "agents/elasticsearch-expert.toml"
 
 [agents."clerk-expert"]
-description = "Clerk specialist reviewer for middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
+description = "Clerk specialist for both read-only review and active-workflow planning around middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
 config_file = "agents/clerk-expert.toml"
 
 [agents."sentry-expert"]
-description = "Sentry and OpenTelemetry specialist reviewer for SDK init, logging, tracing, MCP Insights, and telemetry redaction."
+description = "Sentry and OpenTelemetry specialist for both read-only review and active-workflow planning around SDK init, logging, tracing, MCP Insights, and telemetry redaction."
 config_file = "agents/sentry-expert.toml"
 
 [agents."mcp-expert"]
-description = "MCP protocol specification and implementation reviewer."
+description = "MCP protocol specification and implementation expert for both read-only review and active-workflow planning."
 config_file = "agents/mcp-expert.toml"
 
 [agents."onboarding-expert"]

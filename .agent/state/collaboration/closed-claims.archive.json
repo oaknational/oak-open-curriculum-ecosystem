@@ -14656,6 +14656,185 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ddf63246-4137-4eaf-adc7-bfe1ee0e0345",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:33:01Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit onboarding entrypoint remediation plus session handoff.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:37:14Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Committed onboarding entrypoint remediation and session handoff as 8de02f0375705b345090465f8e72b9a1a27b1bee.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ddf63246-4137-4eaf-adc7-bfe1ee0e0345",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c80dadb4-6d08-4f5d-b998-7b36bbfc6959",
+      "agent_id": {
+        "agent_name": "Moonlit Transiting Prism",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e86710"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/src/collaboration-state/cli-claim-commands.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+            ".agent/plans/agent-tooling/frictions-register.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:29:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix repeated --area-pattern claim parsing and review agent-tooling frictions.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:42:00Z",
+        "closed_by": {
+          "agent_name": "Moonlit Transiting Prism",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e86710"
+        },
+        "summary": "Fixed repeated --area-pattern claim parsing and reviewed agent-tooling frictions.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c80dadb4-6d08-4f5d-b998-7b36bbfc6959",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d7a76b78-8245-436a-8955-3f7e3a8ba305",
+      "agent_id": {
+        "agent_name": "Open Lifting Gale",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e4ad13"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli.ts",
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/src/collaboration-state/cli-claim-commands.ts",
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+            "agent-tools/README.md",
+            ".agent/plans/agent-tooling/frictions-register.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T12:15:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement Workstream 1 shared CLI discoverability for agent-tooling friction closeout.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T12:30:00Z",
+        "closed_by": {
+          "agent_name": "Open Lifting Gale",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e4ad13"
+        },
+        "summary": "Completed Workstream 1 collaboration-state CLI discoverability slice with focused tests, docs/register evidence, green gates, and clean reviewer pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d7a76b78-8245-436a-8955-3f7e3a8ba305",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "51d6d5e6-ed40-494d-8086-2032acb91ee1",
+      "agent_id": {
+        "agent_name": "Penumbral Hiding Veil",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "cdcf5d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/sub-agents/templates/{accessibility,assumptions,clerk,design-system,elasticsearch,mcp,react-component,sentry}-expert.md",
+            ".agent/skills/{accessibility,assumptions,clerk,design-system,elasticsearch,mcp,react-component,sentry}-expert/**",
+            ".claude/skills/jc-{accessibility,assumptions,clerk,design-system,elasticsearch,mcp,react-component,sentry}-expert/**",
+            ".agents/skills/jc-{accessibility,assumptions,clerk,design-system,elasticsearch,mcp,react-component,sentry}-expert/**",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T12:16:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Phase 1B: integrate 8 paired skill bodies into renamed sub-agent expert templates and remove standalones; opening with sentry-expert pilot",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T13:00:15Z",
+        "closed_by": {
+          "agent_name": "Penumbral Hiding Veil",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "cdcf5d"
+        },
+        "summary": "Phase 1B partial: 3 of 8 paired domain merges landed (sentry, clerk, mcp). Per-domain edit pattern locked in (5 files per domain: template + 3 adapters + .codex/config.toml description sync). Standalone deletion + permission cleanup deferred to next session per owner direction. Plan updated with mid-sequence checkpoint + next-session opener for the 5 remaining domains.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "51d6d5e6-ed40-494d-8086-2032acb91ee1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 name = "clerk-expert"
-description = "Clerk specialist reviewer for middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
+description = "Clerk specialist for both read-only review and active-workflow planning around middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"
@@ -7,8 +7,9 @@ approval_policy = "never"
 developer_instructions = """
 Read and follow `.agent/sub-agents/templates/clerk-expert.md`.
 
-This file is a thin Codex adapter. The canonical reviewer instructions live in
+This file is a thin Codex adapter. The canonical expert instructions live in
 the template referenced above.
 
-Mode: Observe, analyse and report. Do not modify code.
+Mode: Review or recommend. Do not modify code. The calling agent executes any
+changes you propose.
 """
