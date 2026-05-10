@@ -675,30 +675,5 @@
       "notes": "Re-enqueuing with full coordination bundle"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "4aa5cfbe-b859-45bd-84e0-299c26644313",
-      "agent_id": {
-        "agent_name": "Windswept Sweeping Gale",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "726fcb"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
-            ".agent/memory/active/patterns/owner-course-correct-vocabulary.md",
-            ".agent/memory/operational/pending-graduations.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T14:48:16Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Execute claude-insight-report-2026-05-10-disposition plan: Phase 0 audit, Phase 1 new pattern file, Phase 2 pending-graduations batch entry, Phase 3 closeout"
-    }
-  ]
+  "claims": []
 }

@@ -2343,6 +2343,136 @@ continuity snapshots.
   in any plan during the next session window OR the next consolidation
   pass evaluates the substance.
 
+### Insight-Report 2026-05-10 Candidates
+
+  Eight borderline candidates surfaced during disposition of the 30
+  useful-content items in the 2026-05-10 Claude insight report
+  (`.agent/reference-local/claude-insight-reports/2026-05-10-full-corpus/`,
+  observational, gitignored). Authoritative analysis lives in
+  `.agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md`
+  §Disposition Ledger. Items registered as a single batch because the
+  source artefact is one observational snapshot and the entries share
+  the same trigger discipline (need corroboration across more than one
+  regeneration window before graduation, except where named otherwise).
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: multi:see-per-item | trigger: candidate | size: L | status: pending]`
+
++ **Item 10 — Affirmation phrase corpus** (paired complement to the
+  course-correct vocabulary pattern). Owner-side affirmation phrases
+  ("exactly", "great", "perfect") read as confirmation that the prior
+  framing landed correctly; the question is whether weighting agent
+  state-change on these affirmations needs a documented discipline.
+  Source: `08-communication-style.md` §Signals that mean "you got it
+  right".
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: pattern:owner-affirmation-vocabulary | trigger: second-instance(regeneration-window) | size: S | status: pending]`
+  Graduation-target: companion pattern at
+  `.agent/memory/active/patterns/owner-affirmation-vocabulary.md`,
+  paired with the just-landed `owner-course-correct-vocabulary.md`.
+  Trigger-condition: a second insight-report regeneration confirms the
+  affirmation set, OR an in-session observation surfaces a misread of
+  affirmation-as-instruction.
+  Withdrawal-trigger: if the next regeneration shows the affirmation
+  set has shifted materially (different phrases, different meanings),
+  withdraw and re-derive.
+
++ **Item 12 — Cross-repo sibling list** (Oak ecosystem).
+  Static cross-repo map naming sibling repositories (oak-curriculum,
+  oak-ontology, etc.) and their relationship to this repo. Source:
+  `01-user-profile.md` and `04-domain-and-stack.md`. Verification owed
+  against `.agent/practice-core/practice-lineage.md` before any
+  graduation decision: if `practice-lineage.md` already carries a
+  cross-repo sibling map, this is a DISCARD.
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: doc-amend:practice-lineage.md OR none | trigger: candidate(verification-owed) | size: S | status: pending]`
+  Graduation-target: amendment to `practice-lineage.md` with a sibling
+  list section, OR a new `docs/engineering/sibling-repos.md`-paired
+  pointer if `sibling-repos.md` is the canonical home.
+  Trigger-condition: verification confirms `practice-lineage.md` does
+  NOT already carry the sibling map.
+  Withdrawal-trigger: verification confirms it does — DISCARD with
+  rationale; OR the sibling list churns within a release window such
+  that any static map is stale on arrival, regardless of where it
+  lands.
+
++ **Item 16 — Memory/skills key-terms glossary** (Distillation, Napkin
+  rotation, Adapter-only skill). Phase 0 audit (Windswept Sweeping
+  Gale, 2026-05-10) confirmed the three terms are pervasive in context
+  across `.agent/memory/` and `.agent/skills/` but absent as glossary
+  entries in `practice-index.md` (navigation surface) and
+  `templates/README.md` (planning vocabulary, not memory/skills
+  vocabulary). The candidate question is whether a memory/skills
+  glossary surface is warranted, distinct from the planning glossary.
+  Source: `05-doctrine-substrate.md`.
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: doc-amend:memory-readme-or-new-glossary | trigger: candidate(structural) | size: M | status: pending]`
+  Graduation-target: `.agent/memory/README.md` amendment with a §Key
+  terms section, OR a new `.agent/memory/glossary.md` file scoped to
+  memory and skills vocabulary. Decision deferred to graduation time.
+  Trigger-condition: a second instance of agent confusion or
+  inconsistent term usage across `.agent/memory/` surfaces, OR owner
+  direction that a glossary surface is warranted.
+  Withdrawal-trigger: terms become self-defining in context to a
+  degree that an explicit glossary adds no clarity.
+
++ **Items 19 + 21 — Reply preferences and default reply shape**
+  (paired). Item 19: compact table of owner reply preferences
+  (direct answers vs hedging; concise updates vs trailing summaries;
+  specific paths vs generic descriptions). Item 21: the four-step
+  default reply shape (lead with answer; one sentence of evidence;
+  one-line next step if action; one or two sentences on what changed
+  if completion). Phase 0 audit confirmed
+  `.agent/directives/user-collaboration.md` does not carry either
+  explicitly; §Working Model partially overlaps. Source:
+  `08-communication-style.md` §What Jim wants in replies and §Reply
+  shape (default).
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: doc-amend:user-collaboration.md OR pattern:owner-reply-shape | trigger: candidate | size: S | status: pending]`
+  Graduation-target: amendment to `user-collaboration.md` §Working
+  Model adding a §Reply shape subsection, OR pattern at
+  `.agent/memory/active/patterns/owner-reply-shape.md` paired with
+  the just-landed `owner-course-correct-vocabulary.md`.
+  Trigger-condition: a second observation across regeneration windows
+  OR owner direction.
+  Withdrawal-trigger: owner direction that the implicit doctrine in
+  §Working Model is sufficient.
+
++ **Item 26 — Ten cures ranked by recurrence**. The
+  `09-agent-action-rules.md` §"The ten cures" lists corrections
+  ordered by observed recurrence. Recurrence-ranking is observational
+  synthesis; the candidate question is whether the ranking itself
+  informs `pending-graduations.md` weighting (more frequently-cited
+  cures escalate faster).
+  Source: `09-agent-action-rules.md` §The ten cures.
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: doc-amend:pending-graduations-or-distilled-weighting | trigger: candidate(synthesis) | size: M | status: pending]`
+  Graduation-target: amendment to this register's lifecycle prose, OR
+  to `distilled.md`, naming recurrence-rank as a weighting input for
+  graduation-readiness.
+  Trigger-condition: a second insight-report regeneration confirms a
+  stable rank ordering across at least two windows.
+  Withdrawal-trigger: ranks shift materially between regenerations
+  (rank-instability falsifies the weighting claim).
+
++ **Items 29 + 30 — Decay model and honesty discipline for generated
+  insight artefacts** (paired; both scoped to any future
+  agent-generated insight artefact in this repo). Item 29: the
+  cadence-vs-friction decay split (cadence/topic/branch decays
+  week-scale; friction/communication decays month+) names which
+  sections of a generated artefact go stale fastest. Item 30: the
+  evidence-vs-interpretation honesty split distinguishes direct
+  evidence (counts in the relevant file) from interpretation (grounded
+  in curated surfaces, not invented). Both are methodological framing
+  rather than substance; they govern HOW future generated artefacts
+  shape themselves.
+  Source: `00-INDEX.md` §Decay & refresh and §Honesty notes.
+  `[captured: 2026-05-10 | source: experience/insight-report-2026-05-10 | target: pattern:generated-insight-artefact-discipline OR rule:no-moving-targets-amendment | trigger: candidate(structural) | size: S | status: pending]`
+  Graduation-target: pattern at
+  `.agent/memory/active/patterns/generated-insight-artefact-discipline.md`
+  carrying both splits, OR amendment to
+  `.agent/rules/no-moving-targets-in-permanent-docs.md` naming the
+  cadence-vs-friction split as a load-bearing distinction.
+  Trigger-condition: a second generated insight artefact is created in
+  this repo and either split applies usefully.
+  Withdrawal-trigger: a second artefact's decay shape contradicts the
+  cadence-vs-friction split, OR the honesty discipline collapses to
+  "honest documentation" with no marginal value over existing
+  principles.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

@@ -15936,6 +15936,90 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4aa5cfbe-b859-45bd-84e0-299c26644313",
+      "agent_id": {
+        "agent_name": "Windswept Sweeping Gale",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "726fcb"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
+            ".agent/memory/active/patterns/owner-course-correct-vocabulary.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T14:48:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Execute claude-insight-report-2026-05-10-disposition plan: Phase 0 audit, Phase 1 new pattern file, Phase 2 pending-graduations batch entry, Phase 3 closeout",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T15:14:53Z",
+        "closed_by": {
+          "agent_name": "Windswept Sweeping Gale",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "726fcb"
+        },
+        "summary": "Insight-Report 2026-05-10 disposition plan executed; pattern owner-course-correct-vocabulary.md landed; pending-graduations batch entry registered.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4aa5cfbe-b859-45bd-84e0-299c26644313",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "21b9e92d-41d3-4766-90d4-1b9ac8ff3c2a",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T15:15:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Windswept completed insight-report disposition bundle after owning claim closure",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T15:17:24Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Commit window closed before final insight-report disposition commit so closure state lands durably; staged bundle verified by commit queue c924f244 for docs(practice): land insight report disposition",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "21b9e92d-41d3-4766-90d4-1b9ac8ff3c2a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
