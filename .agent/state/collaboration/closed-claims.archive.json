@@ -16281,6 +16281,227 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "11dc5004-7afe-4bc2-a8d8-ee5977a4df57",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/sector-engagement/eef/reference/eef-toolkit.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T17:52:01Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Correct EEF data provenance framing: repo reference JSON is definitive until EEF origin clarified",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T17:52:41Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "EEF plan and reference JSON now treat repo copy as definitive pending EEF provenance clarification; removed assumption that data is web-scraped/reconstructed or currently fetched from upstream.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "11dc5004-7afe-4bc2-a8d8-ee5977a4df57",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "54bdd89f-2145-4f10-b1ec-19573103db78",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T18:05:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record graph corpus source authority model: EEF repo snapshot canonical for implementation, Oak ontology from GitHub, misconceptions constructed from bulk-data processing.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T18:06:28Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "ADR-173, ADR-157, graph MVP arc, graph-stack plan, and slice 3a/3b plans now record the three-part source authority model: EEF repo snapshot, ontology GitHub raw material, and misconceptions bulk-derived in repo.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "54bdd89f-2145-4f10-b1ec-19573103db78",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "622a3b8b-2fe1-424c-ae51-a5e1d9683cce",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T18:17:15Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Refresh executable plan frontmatter/logs so new corpus source-authority clarifications are visible to plan executors.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T18:18:30Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Updated graph MVP and linked executable plan frontmatter/logs so executor-facing todos carry the EEF repo snapshot, ontology GitHub source, and bulk-derived misconception clarifications.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "622a3b8b-2fe1-424c-ae51-a5e1d9683cce",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2154189d-15c4-4170-ac55-d7eabac2048d",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T19:12:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit source-authority clarification and handoff bundle.",
+      "notes": "Pathspecs: graph/EEF ADRs, plans, EEF snapshot metadata, handoff surfaces, and session comms events; gates: markdownlint/diff-check/json parse passed before window; peer claims: one active agentic-engineering claim with no overlap on this bundle.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T19:13:39Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Commit-window claim closed into the same staged bundle after staged-set verification and before git commit so collaboration state lands without a live index/head claim.",
+        "evidence": [
+          {
+            "kind": "comms-event",
+            "ref": "19043a6f-2ff2-4c37-8314-682cf7cc0b9f",
+            "summary": "Commit window opening event records pathspecs, gate state, and peer-claim scan."
+          },
+          {
+            "kind": "command",
+            "ref": "pnpm agent-tools:commit-queue -- verify-staged",
+            "summary": "Staged bundle verified for intent 8106f9d9-6c9c-44eb-8e6f-9504666cd13c before closure."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4a2091a8-ec70-4a39-8c72-7c3bf6b66d6a",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T19:14:22Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Retry source-authority commit after mechanical ADR-157 formatting fix.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T19:14:22Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Short retry window recorded after the first commit attempt failed on Prettier for ADR-157. Prettier was applied to that staged file, markdownlint and diff-check passed, and the retry uses the same explicit staged pathset.",
+        "evidence": [
+          {
+            "kind": "command",
+            "ref": "pnpm exec prettier --write docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md",
+            "summary": "Mechanical formatting repair after pre-commit failure."
+          }
+        ]
+      }
     }
   ]
 }

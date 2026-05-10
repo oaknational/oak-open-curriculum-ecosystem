@@ -16,9 +16,9 @@
       ]
     },
     "licence": {
-      "name": "Dataset compilation under fair dealing; original EEF content is Crown-adjacent public benefit",
+      "name": "Repository-held EEF Toolkit data snapshot; provenance pending EEF clarification",
       "url": "https://educationendowmentfoundation.org.uk",
-      "attribution_note": "This structured dataset is derived from the EEF Teaching and Learning Toolkit. All impact estimates, cost ratings, and evidence strength ratings are sourced from EEF publications. Users should consult the original EEF strand pages for full detail, technical appendices, and the most current figures. This dataset is provided for research, education and AI grounding purposes."
+      "attribution_note": "This structured dataset is the repository-held EEF Teaching and Learning Toolkit snapshot. The acquisition path is not yet confirmed in-repo; it may have been downloaded from EEF or supplied to Oak by EEF. Until EEF clarifies provenance and refresh mechanics, this repository copy is the definitive source for implementation. All EEF-derived outputs must continue to attribute EEF and link users to the original EEF strand pages for full detail, technical appendices, and the most current figures."
     },
     "last_updated": "2026-04-02",
     "coverage": {

@@ -109,12 +109,19 @@ OpenAPI specification via `pnpm sdk-codegen`. Non-API data sources
 discipline is:
 
 - **Ontology data**: Typed interfaces derived from the SKOS/OWL
-  structure at build time. Changes to `.ttl` files require re-extraction.
+  structure at build time. Oak ontology source files are taken from the
+  source-of-truth Oak Curriculum Ontology GitHub repository. Changes to `.ttl`
+  files require re-extraction.
 - **EEF data**: Typed interfaces with Zod validation at load time.
-  The EEF JSON file is static and versioned. Zod validation catches
-  schema drift between the file and the declared types.
+  The repository-held EEF JSON snapshot is static, versioned, and canonical for
+  implementation until EEF clarifies whether Oak should refresh from a public
+  download/API endpoint or direct supply. Zod validation catches schema drift
+  between the file and the declared types.
+- **Oak misconception data**: The misconception graph is constructed in this
+  repository from Oak bulk data as part of bulk-data processing. It is
+  graph-shaped API-derived data, not a separate external raw corpus.
 
-Both approaches preserve the principle of strict, compile-time type
+These approaches preserve the principle of strict, compile-time type
 safety without requiring an OpenAPI specification.
 
 ### URI Scheme Policy
@@ -141,13 +148,13 @@ server," not "data from the Oak API specifically."
 Resource and tool names use a prefix convention that signals data
 provenance for citation, credit, and attribution:
 
-| Prefix                         | Source                                         | Examples                                                               |
-| ------------------------------ | ---------------------------------------------- | ---------------------------------------------------------------------- |
-| _(none)_                       | Oak Open Curriculum API (bulk data)            | `prior-knowledge-graph`, `thread-progressions`, `model`                |
-| `oak-kg-*`                     | Oak Curriculum Ontology                        | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content`               |
-| `oak-misconceptions-*`         | Oak misconception graph (Oak-derived from API) | `oak-misconceptions-subgraph-for-thread`                               |
-| `eef-*`                        | EEF Teaching and Learning Toolkit              | `eef-methodology`, `eef-strands`, `eef-recommend-evidence-for-context` |
-| Compound (`oak-X-eef-*`, etc.) | Cross-corpus tool composing two named sources  | `oak-misconceptions-eef-recommend-for-thread`                          |
+| Prefix                         | Source                                        | Examples                                                               |
+| ------------------------------ | --------------------------------------------- | ---------------------------------------------------------------------- |
+| _(none)_                       | Oak Open Curriculum API (bulk data)           | `prior-knowledge-graph`, `thread-progressions`, `model`                |
+| `oak-kg-*`                     | Oak Curriculum Ontology                       | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content`               |
+| `oak-misconceptions-*`         | Oak misconception graph (bulk-derived)        | `oak-misconceptions-subgraph-for-thread`                               |
+| `eef-*`                        | EEF Teaching and Learning Toolkit             | `eef-methodology`, `eef-strands`, `eef-recommend-evidence-for-context` |
+| Compound (`oak-X-eef-*`, etc.) | Cross-corpus tool composing two named sources | `oak-misconceptions-eef-recommend-for-thread`                          |
 
 **Explicit source attribution on every NEW tool (added 2026-05-07).**
 New tools and resources MUST carry a source-identifying prefix (or

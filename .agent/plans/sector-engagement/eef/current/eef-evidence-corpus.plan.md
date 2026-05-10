@@ -17,7 +17,7 @@ todos:
     content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns; sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
     status: pending
   - id: t2-zod-loader
-    content: "Zod-validated loader for eef-toolkit.json (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties carve-out — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string()."
+    content: "Zod-validated loader for the repository-held canonical eef-toolkit.json snapshot (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties carve-out — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string()."
     status: pending
   - id: t3-methodology-resource
     content: "Methodology+caveats resource via graph factory (preserves F6 + F11 resolutions)."
@@ -50,7 +50,7 @@ todos:
     content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats: non-empty tuple} as structured fields. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod .min(1) re-asserts at runtime."
     status: pending
   - id: t13-freshness-gate
-    content: "CI gate that fails when eef-toolkit.json is >180 days old; refresh script lives in SDK workspace at packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts."
+    content: "CI gate that fails when the SDK eef-toolkit.json copy is >180 days old. Until EEF clarifies provenance/refresh mechanics, the refresh workflow validates and copies a reviewed replacement from the repo-held reference snapshot rather than reconstructing from scraped EEF pages; if EEF later confirms a public download/API or direct-supply process, the SDK refresh script implements that acquisition path."
     status: pending
   - id: t14-telemetry
     content: "Sentry spans on every corpus operation; named metrics for recommendations served, distinct contexts, citation-presence rate."
@@ -83,8 +83,10 @@ the restructure for an independent verification pass; after that pass
 confirmed no semantic loss (see [`../reference/conservation-map.md`](../reference/conservation-map.md)
 §N), `originals/` was deleted. The pre-session predecessor remains
 permanently recoverable via `git show e2796757:<path>`.
-**Last Updated**: 2026-05-08 (tool/prompt names re-prefixed `eef-*` per
-ADR-157; structural-only evaluation stance applied per PR #102 closeout).
+**Last Updated**: 2026-05-10 (tool/prompt names re-prefixed `eef-*` per
+ADR-157; structural-only evaluation stance applied per PR #102 closeout;
+repository-held EEF snapshot treated as canonical for implementation pending
+EEF provenance/refresh clarification).
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
 **Increment**: 2 (with EEF-side of 3 and 4) of the EEF graph-and-corpus
@@ -228,8 +230,11 @@ concern, gated on the KG alignment audit completing.
 ## Source Data and Snapshot Validation
 
 The EEF data file (`eef-toolkit.json`, v0.2.0, last_updated 2026-04-02)
-is at [`../reference/eef-toolkit.json`](../reference/eef-toolkit.json).
-Re-validated 2026-04-30:
+is at [`../reference/eef-toolkit.json`](../reference/eef-toolkit.json). Until
+EEF clarifies whether this JSON was downloaded from a public data endpoint or
+supplied directly to Oak, this repository copy is the definitive source for the
+implementation. Do not reconstruct it from scraped EEF pages, and do not assume
+the repo authored the data. Re-validated 2026-04-30:
 
 - 30 strands ✓
 - 4 null-impact strands with matching IDs ✓
@@ -244,8 +249,13 @@ Re-validated 2026-04-30:
 The snapshot age is intentionally recalculated at promotion time from the
 `last_updated` field, not baked into this plan. Caveat #8 in the JSON itself
 notes that the data reflects "May 2025 and October 2025 living systematic
-review updates where available". A fresh upstream check against the EEF website
-is **a precondition for promotion to ACTIVE**.
+review updates where available". Before promotion to ACTIVE, the implementer
+must perform a provenance check with EEF or Oak's EEF contact: confirm whether a
+public download/API exists, whether EEF supplied this JSON directly, or whether
+a newer replacement snapshot exists. If provenance remains unresolved, the plan
+may still proceed only by explicitly treating the checked-in JSON as the
+definitive snapshot and recording the accepted provenance gap in the promotion
+notes.
 
 ## Credits and Attribution (load-bearing)
 
@@ -714,13 +724,15 @@ invariants.
 
 **T13: Freshness gate** — A CI job that fails when
 `packages/sdks/oak-curriculum-sdk/src/mcp/data/eef-toolkit.json` has
-`meta.last_updated` >180 days old. A refresh script
-(`packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`)
-that fetches the upstream EEF data, validates it against the Zod
-schema, and produces a diff summary for human review. The script
-lives inside the SDK workspace so it has natural access to the Zod
-schema and stays inside the workspace boundary (no workspace-to-root
-script coupling).
+`meta.last_updated` >180 days old. Until EEF clarifies a public download or API,
+the refresh workflow treats the repo reference file as the definitive source and
+validates/copies a reviewed replacement snapshot rather than reconstructing data
+from EEF web pages. If EEF later confirms a download URL, API, or direct supply
+process, `packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`
+implements that acquisition path, validates it against the Zod schema, and
+produces a diff summary for human review. The script lives inside the SDK
+workspace so it has natural access to the Zod schema and stays inside the
+workspace boundary (no workspace-to-root script coupling).
 
 - **User value**: teachers receive evidence-backed recommendations
   whose data version is not silently >6 months stale; CI says so before
@@ -964,9 +976,11 @@ Promote when:
 2. The graph-query-layer plan
    ([`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md))
    has reached ACTIVE.
-3. A fresh upstream EEF data check has been performed; if a new
-   version is available, the snapshot is refreshed before any code
-   work begins.
+3. EEF data provenance has been checked with EEF or Oak's EEF contact. If a
+   public download/API, direct-supply process, or newer replacement snapshot is
+   available, the snapshot is refreshed before any code work begins; otherwise
+   the promotion notes explicitly record that the checked-in JSON remains the
+   definitive source pending EEF clarification.
 4. The conservation map ([`../reference/conservation-map.md`](../reference/conservation-map.md))
    has been reviewed and signed off — every concept from the
    predecessor has a verified home in this plan or in a sibling.

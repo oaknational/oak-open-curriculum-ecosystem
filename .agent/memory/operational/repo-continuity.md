@@ -9,6 +9,22 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Fragrant Regrowing Root / `codex` /
+GPT-5 / `019e12`, source-authority clarification + handoff)**:
+recorded the graph/EEF source model across ADRs and executable plans.
+ADR-173 now carries the decision-level corpus authority split; ADR-157
+records typing/naming implications. The graph MVP arc, graph-stack plan,
+slice 3a/3b plans, and EEF evidence corpus plan now all agree that EEF
+uses the repository-held JSON snapshot as the canonical implementation source
+pending EEF clarification, Oak ontology raw material comes from the
+`oaknational/oak-curriculum-ontology` GitHub source of truth, and the
+misconception graph is constructed in this repo from Oak bulk data during
+bulk-data processing. Validated with targeted `markdownlint`,
+`git diff --check`, and JSON parse checks. **Next safe step**: commit this
+source-authority/handoff bundle; after that, the branch-primary graph lane
+still starts with graph-stack Inc.1's Oak Ontology Threads proof in
+`graph-corpus-sdk`.
+
 **Session close (2026-05-10 — Umbral Creeping Night / `claude-code` /
 opus-4.7 / `188baa`, owner-directed commit drain)**: owner invoked
 `/jc-start-right-quick please commit files in logical chunks` against a
@@ -172,12 +188,12 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
 | `sector-engagement` | External adoption | [record][sector] | Squally / `cursor` / 2026-04-30 |
-| `eef` | EEF evidence corpus | [record][eef] | Opalescent / `codex` / `019e06` / 2026-05-08 |
+| `eef` | EEF evidence corpus | [record][eef] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
 [observability]: threads/observability-sentry-otel.next-session.md
@@ -197,6 +213,13 @@ This branch also depends on the Practice/tooling substrate work from main in
 [threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
 
 ## Current Session Focus
+
+**Latest focus (2026-05-10 — Fragrant Regrowing Root)**:
+source-authority clarification complete across the graph MVP and EEF plan
+estate. The current session changed no implementation code. Branch-primary
+graph focus remains the Oak Ontology Threads proof; the clarification prevents
+future executors from treating EEF as scraped/reconstructed data or
+misconceptions as an external raw corpus.
 
 **Latest focus (2026-05-10 — Umbral Creeping Night, commit drain)**:
 working tree is clean. Three preceding sessions' in-flight work was
@@ -302,6 +325,13 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**Status update (2026-05-10 — Fragrant Regrowing Root close)**:
+commit the source-authority/handoff bundle, then resume the branch-primary
+graph lane at graph-stack Inc.1's Oak Ontology Threads proof in
+`graph-corpus-sdk`. Do not start NC taxonomy work. Do not start EEF adapter
+migration, misconception replatform, cross-corpus joins, serving prototypes,
+or broader query-layer migration before that proof lands.
 
 **Status update (2026-05-10 — Stormbound Floating Current close)**: the
 sub-agent rename + skill integration plan's Phase 1B is fully closed
@@ -446,6 +476,12 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-10 Fragrant Regrowing Root, codex, GPT-5, `019e12`,
+source-authority clarification)**: `not due — decision captured in ADR-173
+and ADR-157, executable plans refreshed, and no new reusable Practice pattern
+or cross-session doctrine candidate surfaced. Handoff captured the operational
+state; deeper consolidation can wait for the normal post-gate learning loop.`
 
 **Status (2026-05-10 Umbral Creeping Night, claude-code, opus-4.7,
 `188baa`, owner-directed commit drain)**: `not due — pure transport

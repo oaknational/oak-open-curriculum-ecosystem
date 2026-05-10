@@ -339,7 +339,7 @@ The most recent rotation is archived at
   budget: each retry costs ~30s of pre-commit hook + fix; budget
   for 3–5 retries on a busy multi-agent commit drain.
 
-### Surprise — `git commit -- <pathspec>` is the cleanest way to leave staged peer files for next chunk
+### Surprise — `git commit -- <pathspec>` preserves peer staging
 
 - **Expected**: when I needed to commit a subset of staged files
   (Chunk 2 = patterns + PDR-014, leaving 2 staged scripts for
@@ -363,3 +363,28 @@ The most recent rotation is archived at
   default to `git commit -- <pathspec>`. For "remove a file from
   staging entirely without committing it", surface the use case to
   owner — there's no current session-tested clean path.
+
+## 2026-05-10 — Fragrant Regrowing Root / codex / GPT-5 / `019e12`
+
+### What Was Done
+
+- Clarified the graph MVP source-authority model across ADR-173,
+  ADR-157, graph MVP plans, and the EEF plan: EEF uses the repo-held
+  JSON snapshot pending EEF clarification; Oak ontology raw material comes
+  from GitHub; misconception graph data is constructed from Oak bulk data
+  inside this repo.
+
+### Patterns to Remember
+
+- When an owner correction changes data-source authority, update executable
+  plan frontmatter as well as prose. Future agents often start from YAML
+  todos; if the correction lives only in a body section, implementation can
+  drift back to the stale model.
+
+### Correction Captured
+
+- I initially framed EEF provenance as if the repo may have constructed or
+  scraped the dataset. The owner clarified that the data was either downloaded
+  or supplied by EEF, and that the repo copy is definitive until EEF clarifies
+  provenance and refresh mechanics. Behaviour change: never describe the EEF
+  JSON as reconstructed or scraped unless a future EEF source confirms that.

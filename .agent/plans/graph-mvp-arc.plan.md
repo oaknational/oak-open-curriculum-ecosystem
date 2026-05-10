@@ -37,7 +37,7 @@ todos:
     status: pending
     depends_on: []
   - id: gate-1-eef-ships
-    content: "Slice 1 ships: all 20 todos in eef-evidence-corpus.plan.md complete; tools/resources named per ADR-157 with `eef-*` prefix; ADR-123 + ADR-157 updated; freshness CI gate active; Sentry telemetry live; caveat-presence rate sampled."
+    content: "Slice 1 ships: all 20 todos in eef-evidence-corpus.plan.md complete against the repository-held EEF Toolkit JSON snapshot as the canonical implementation source pending EEF provenance/refresh clarification; tools/resources named per ADR-157 with `eef-*` prefix; ADR-123 + ADR-157 updated; freshness CI gate active without reconstructing data from scraped EEF pages; Sentry telemetry live; caveat-presence rate sampled."
     status: pending
     depends_on: [gate-0-substrate-floor]
   - id: gate-2-threads-ships
@@ -45,11 +45,11 @@ todos:
     status: pending
     depends_on: [gate-1-eef-ships, "graph-stack Inc.1 Oak Ontology Threads foundation"]
   - id: gate-3a-mcg-subgraph-ships
-    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on legacy misconception graph factory data plus graph-stack Inc.1 Thread→Unit lookup; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 after gate-1 + Inc.1."
+    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on the bulk-derived legacy misconception graph factory data plus graph-stack Inc.1 Thread→Unit lookup; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 after gate-1 + Inc.1."
     status: pending
     depends_on: [gate-1-eef-ships, "graph-stack Inc.1 Oak Ontology Threads foundation"]
   - id: gate-3b-cross-corpus-ships
-    content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
+    content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread cross-corpus tool complete on substrate; repository-held EEF snapshot data and the bulk-derived misconception graph are both routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
     status: pending
     depends_on: [gate-1-eef-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.3 graph-corpus-sdk EEF strand adapter + misconception adapter + cross-corpus join primitive"]
   - id: amend-eef-plan
@@ -73,11 +73,11 @@ todos:
     status: completed
     depends_on: []
   - id: author-slice-3a-plan
-    content: "Author the slice-3a executable plan in connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md. Strategic shape: bounded sub-graph extraction tool(s) on legacy graph factory; ADR-123 + ADR-157 updates named in WS4. Authored 2026-05-07 (Phase 3, commit 776df6b7); BLOCKER on slice-3b composition framing remediated 2026-05-07 (Phase 4, commit 0899ba93)."
+    content: "Author the slice-3a executable plan in connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md. Strategic shape: bounded sub-graph extraction tool(s) on the bulk-derived legacy graph factory; ADR-123 + ADR-157 updates named in WS4. Authored 2026-05-07 (Phase 3, commit 776df6b7); BLOCKER on slice-3b composition framing remediated 2026-05-07 (Phase 4, commit 0899ba93); source-authority clarification applied 2026-05-10."
     status: completed
     depends_on: []
   - id: author-slice-3b-plan
-    content: "Author the slice-3b executable plan in connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md. Strategic shape: cross-corpus tool reaching EEF and misconception data through graph-corpus-sdk + graph-stack Inc.3 cross-corpus join primitive (NOT by composing slice 1 / slice 3a MCP tools at runtime). Authored 2026-05-07 (Phase 3, commit 776df6b7); BLOCKER on substrate-vs-tool composition framing remediated 2026-05-07 (Phase 4, commit 0899ba93). Authored in same session as slices 2 + 3a per owner direction (single-session planning closure)."
+    content: "Author the slice-3b executable plan in connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md. Strategic shape: cross-corpus tool reaching repository-held EEF snapshot data and bulk-derived misconception data through graph-corpus-sdk + graph-stack Inc.3 cross-corpus join primitive (NOT by composing slice 1 / slice 3a MCP tools at runtime). Authored 2026-05-07 (Phase 3, commit 776df6b7); BLOCKER on substrate-vs-tool composition framing remediated 2026-05-07 (Phase 4, commit 0899ba93); source-authority clarification applied 2026-05-10. Authored in same session as slices 2 + 3a per owner direction (single-session planning closure)."
     status: completed
     depends_on: [author-slice-2-plan, author-slice-3a-plan]
   - id: learning-loop
@@ -142,6 +142,17 @@ Three commitments, none negotiable:
    things properly or we admit we are not going to do them.
    Sequencing can include 'when these specific tripwires fire'."* —
    applied on each plan's home, not as out-of-arc tracking.
+
+## Source Authority Model
+
+The MVP arc composes three different source-authority modes. They must stay
+distinct in implementation, tests, citations, and provenance metadata:
+
+| Corpus | Current authority | MVP handling |
+|---|---|---|
+| EEF strands | Repository-held EEF Toolkit JSON snapshot | Treat the checked-in snapshot as the canonical implementation source until EEF clarifies whether the refresh path is public download/API or direct supply. Do not reconstruct the corpus from scraped EEF pages. |
+| Oak ontology | `oaknational/oak-curriculum-ontology` GitHub repository | Fetch straight-copy Turtle/SHACL source files from a pinned upstream GitHub revision; derived graph artefacts retain provenance to that revision. |
+| Oak misconceptions | Oak bulk data/API, processed in this repository | Construct the misconception graph here as part of bulk-data processing; downstream graph surfaces consume the generated bulk-derived graph rather than treating misconceptions as an external raw corpus. |
 
 ## Top-Line User Value (per slice)
 
@@ -320,9 +331,9 @@ start until graph-stack Inc.1 has landed.
 
 **Status**: pending slice 1; PARALLEL-SAFE with slice 2.
 **Namespace**: `oak-misconceptions-*` (new prefix; ADR-157 amendment).
-**Substrate path**: legacy graph factory (interim). Explicit follow-up
-to migrate to substrate when graph-stack Inc.2/3 misconception replatform
-lands.
+**Substrate path**: bulk-derived legacy graph factory (interim). Explicit
+follow-up to migrate to substrate when graph-stack Inc.2/3 misconception
+replatform lands.
 
 ### What ships — Slice 3a
 
@@ -554,7 +565,7 @@ Spine-driven amendment adds:
 
 | Prefix | Source | Examples |
 |---|---|---|
-| `oak-misconceptions-*` | Oak misconception graph (Oak-derived from API; graph-shaped) | `oak-misconceptions-subgraph-for-thread` |
+| `oak-misconceptions-*` | Oak misconception graph (bulk-derived; constructed in-repo from Oak bulk data) | `oak-misconceptions-subgraph-for-thread` |
 | Compound (`oak-misconceptions-eef-*`) | Cross-corpus tool composing two named sources | `oak-misconceptions-eef-recommend-for-thread` |
 
 Plus a discipline statement (verbatim addendum):
@@ -740,6 +751,7 @@ Spine-level non-goals — spine does **not**:
 | 2026-05-08 | **EEF evaluation stance clarified** — structural citation/data/caveat preservation is load-bearing for slice 1; LLM paraphrase/outcome evaluation, teacher-trust measurement, and SENCO workflow-time measurement are follow-on evaluation-infrastructure work outside Vitest. The EEF plan, this spine, and slice-3b risk/non-goal text must carry this stance before PR #102 can be decision-complete. | PR #102 decision-complete closeout; owner clarification after load-bearing EEF discussion |
 | 2026-05-08 | **Practice graph location clarified** — practice-facing graph tooling belongs under the new top-level `agent-graphs/` area, with `agent-graphs/practice-graph/` documented as the Practice graph pilot home and a future plan responsible for workspace organisation/wiring. | PR #102 decision-complete closeout; owner structure clarification |
 | 2026-05-10 | **MVP NC boundary reconfirmed** — the MVP plan must not do anything with the NC graph or NC taxonomy. The only thing brought in from the Oak Ontology repo is the Oak ontology/graph, currently the Threads graph foundation for slice 2. EEF and misconception graph work remain core MVP scope because the cross-source value is one of the main points. NC work remains outside the MVP and requires separate owner promotion. | Owner correction; Foamy Navigating Hull amendment pass plus owner clarification |
+| 2026-05-10 | **Corpus source authority clarified** — EEF uses the repository-held JSON snapshot as the canonical implementation source until EEF clarifies provenance/refresh; Oak ontology raw material comes from the `oaknational/oak-curriculum-ontology` GitHub source of truth; the misconception graph is constructed in this repository from Oak bulk data as part of bulk-data processing. | Owner clarification; `§ Source Authority Model`; ADR-173 corpus source authority; EEF, graph-stack, and slice 3a/3b plans |
 | 2026-05-07 | **Three slice plans authored** — `oak-kg-threads-surface.plan.md` (slice 2), `oak-misconceptions-subgraph-mcp-surface.plan.md` (slice 3a), `oak-misconceptions-eef-cross-corpus-surface.plan.md` (slice 3b) created in `connecting-oak-resources/knowledge-graph-integration/current/`. All three inherit substance from the spine, follow the feature-workstream template, define TDD cycles with file scopes, and carry dispatch-ready reviewer briefs. `author-slice-N-plan` todos marked completed. | Phase 3, commit `776df6b7` (1062 insertions across 3 new files; all quality gates green) |
 | 2026-05-07 | **Slice-plan composition model corrected (code-expert BLOCKER B1 + assumptions-expert concurring BLOCKER on slice 3b)** — slice 2, 3a, and 3b all carried "slice 3b composes slice-1 / slice-3a tools by name" framing that contradicted slice 3b Design Principle 1 (both corpora flow through `graph-corpus-sdk` substrate, not through inter-tool MCP calls). Four edits across the three plans: slice 2 spine-lock principle reworded; slice 3a spine-lock principle and "Consumed by" entry reworded; slice 3b WS1 cycle 1 frontmatter, "Existing capabilities consumed" section, and "Related plans" annotation reworded. Slices 1 and 3a are now correctly named as sources of naming conventions and response shape compatibility — not runtime MCP dependencies. | Phase 4 BLOCKER remediation, commit `0899ba93` |
 | 2026-05-07 | **Phase 4 FINDINGS deferred to execution-prep absorption** — six FINDINGS surfaced by the Phase 4 reviewer batch did not retroactively block Breezy Navigating Sail's single-session planning closure. Two trivial documentation findings were later absorbed by Tidal Surfing Lighthouse in the closeout pass: the dead smoke gate command was removed, and the obsolete ADR-123 path was corrected. Four substantive findings remain and must be absorbed before slice execution starts: slice 2 adapter timing; slice 3a topic-context wording; slice 3a budget/fixture concretisation; slice 3b implementation-audit test shape. | Phase 4 capture; Tidal closeout absorbed trivial findings |

@@ -1,6 +1,18 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
+**Last refreshed**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
+`019e12` — EEF source-authority clarification. The repository-held
+`eef-toolkit.json` snapshot is now treated as the canonical implementation
+source until EEF clarifies whether refresh should come from a public
+download/API endpoint or direct supply. The EEF plan now says not to
+reconstruct the corpus from scraped EEF pages and to record the provenance gap
+at promotion if EEF has not clarified it. The structural-only evaluation stance
+is unchanged: load-bearing acceptance is citation/data/caveat/freshness/
+MCP-shape preservation at the tool boundary; LLM paraphrase scoring,
+teacher-trust measurement, and SENCO workflow-time measurement remain
+follow-on evaluation-infrastructure work outside Vitest.)
+
+**Prior refresh**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
 GPT-5 / `019e06` — PR #102 graph decision-complete closeout was pushed as head
 `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`; the EEF evaluation stance is
 unchanged at handoff. Slice 1 is structural-only for evaluation purposes.
@@ -49,6 +61,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `cross-ref-path-updates-from-thread-restructure-only` | 2026-05-01 | 2026-05-01 |
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `eef-tool-rename-eef-prefix-per-adr-157-and-mvp-arc-cross-ref` | 2026-05-07 | 2026-05-07 |
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-eef-structural-eval-closeout` | 2026-05-08 | 2026-05-08 |
+| `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `eef-source-authority-clarification` | 2026-05-10 | 2026-05-10 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -116,8 +129,9 @@ The five-increment delivery sequence with explicit promotion gates:
    - EEF corpus plan (Increment 2) ready for parallel start.
 2. **Increment 2** (eef-evidence-corpus) → ACTIVE when:
    - Increment 1 reached ACTIVE.
-   - Fresh upstream EEF data check performed (snapshot is 28 days old
-     at handoff; living systematic review updates twice yearly).
+   - EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
+     unresolved, promotion notes must explicitly record that the checked-in
+     JSON remains the definitive implementation source pending clarification.
    - Conservation map signed off by owner.
    - Plan-body first-principles check applied to citation type, corpus
      operations, test shapes.

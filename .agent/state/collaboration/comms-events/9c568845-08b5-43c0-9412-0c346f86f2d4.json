@@ -1,0 +1,12 @@
+{
+  "event_id": "9c568845-08b5-43c0-9412-0c346f86f2d4",
+  "created_at": "2026-05-10T17:52:41Z",
+  "author": {
+    "agent_name": "Fragrant Regrowing Root",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "EEF data provenance framing corrected",
+  "body": "Updated eef-evidence-corpus.plan.md and reference/eef-toolkit.json: checked-in JSON is definitive for implementation until EEF clarifies whether it was downloaded or supplied; refresh path validates replacement snapshots and must not reconstruct from scraped EEF pages."
+}

@@ -111,7 +111,7 @@ ADR-123 at the point a consumer surfaces them.
 The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
 is a consumer-side concern with at most one home per transport.
 
-### API, bulk, and ontology source authority
+### Corpus source authority
 
 The graph stack does not replace the Oak Open Curriculum API contract or the
 bulk-data extraction pipeline. It adds an ontology-identity layer that composes
@@ -123,15 +123,22 @@ The source-authority split is:
   execution types still flow from the OpenAPI schema through `pnpm
 sdk-codegen`. Thread slugs, API endpoint shapes, unit response fields, and
   generated validators remain API-owned.
-- **Bulk-data authority**: graph-shaped resources already derived from bulk
-  API data, such as thread progressions, prior knowledge, and misconception
-  graphs, remain generated from bulk data. Their authored logic may project or
-  adapt that data, but it must not hand-author replacement thread/unit schemas.
+- **Bulk-data authority**: graph-shaped resources derived from Oak bulk API
+  data, such as thread progressions, prior knowledge, and misconception
+  graphs, remain generated from bulk-data processing in this repository. The
+  misconception graph is constructed here from bulk data as part of that
+  processing path; it is not an external raw corpus and is not hand-authored as
+  a replacement source of curriculum truth.
 - **Ontology authority**: the Oak Curriculum Ontology owns ontology IRIs,
   classes, predicates, and graph semantics such as `curric:Thread` and
   `curric:includesThread`. `graph-corpus-sdk` maps ontology identity to typed
   corpus adapters and joins, but it does not become the source of API-shaped
   unit or thread definitions.
+- **EEF authority**: until EEF clarifies whether Oak should refresh from a
+  public download/API endpoint or direct supply, the repository-held EEF
+  Toolkit JSON snapshot is the canonical implementation source for EEF strand
+  data. The graph stack may validate, copy, index, and enhance that snapshot,
+  but it must not reconstruct the corpus from scraped EEF pages.
 
 Where the same educational concept appears in more than one source, identity is
 joined explicitly rather than collapsed silently. For the first attached corpus,
@@ -175,10 +182,14 @@ or generated derived artefacts, not a developer's local ontology checkout and
 not live network URLs.
 
 Pre-requisite, misconception, and EEF strand adapters are outside the foundation
-topology decision and are sequenced by the executable graph-stack plan. Other
-ontology-derived adapters or surfaces, including NC knowledge taxonomy work, and
-third-party knowledge graphs are tracked separately and introduced only when
-concrete consumers require them and the owner promotes that work separately.
+topology decision and are sequenced by the executable graph-stack plan. The
+source-authority decision above still constrains those later adapters:
+misconceptions are bulk-derived, EEF strands are repository-snapshot-derived
+until EEF clarifies refresh mechanics, and ontology adapters are upstream
+GitHub-derived. Other ontology-derived adapters or surfaces, including NC
+knowledge taxonomy work, and third-party knowledge graphs are tracked separately
+and introduced only when concrete consumers require them and the owner promotes
+that work separately.
 
 ## Consequences
 

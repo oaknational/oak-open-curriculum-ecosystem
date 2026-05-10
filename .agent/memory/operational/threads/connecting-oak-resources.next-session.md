@@ -1,6 +1,21 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-10 (Foamy Navigating Hull / `codex` / GPT-5 /
+**Last refreshed**: 2026-05-10 (Fragrant Regrowing Root / `codex` / GPT-5 /
+`019e12` — source-authority clarification + handoff. Owner clarified the
+three corpus sources: EEF uses the repository-held JSON snapshot as canonical
+for implementation until EEF clarifies provenance/refresh; Oak ontology raw
+material comes from the `oaknational/oak-curriculum-ontology` GitHub source of
+truth; the misconception graph is constructed in this repo from Oak bulk data
+during bulk-data processing. ADR-173, ADR-157, the graph MVP arc, graph-stack,
+slice 3a/3b, and EEF plans now carry the clarification. The first graph work
+remains graph-stack Inc.1's Oak Ontology Threads proof in `graph-corpus-sdk` —
+enumerate `curric:Thread` and resolve inverse `curric:includesThread` Unit
+lookup with a tiny fixture-backed test. This must land before NC work, EEF
+adapter migration, misconception replatform, cross-corpus joins, serving
+prototypes, or broader query-layer migration. Targeted markdownlint,
+`git diff --check`, and JSON parse checks passed.)
+
+**Prior refresh**: 2026-05-10 (Foamy Navigating Hull / `codex` / GPT-5 /
 `019e12` — graph MVP plan amendment + handoff. Owner clarified the boundary:
 the MVP still needs EEF + misconception graph + cross-source value; the
 restriction is that the Oak Ontology repo intake brings in only the Oak
@@ -219,6 +234,7 @@ promotion.)
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-graph-decision-complete-closeout-updater` | 2026-05-08 | 2026-05-08 |
 | `Fronded Bending Blossom` | `cursor` | `Composer` | `60775a` | `owner-sequencing-graph-mvp-next-topology-parked` | 2026-05-09 | 2026-05-09 |
 | `Foamy Navigating Hull` | `codex` | `GPT-5` | `019e12` | `graph-mvp-plan-amendment-and-first-implementation-handoff` | 2026-05-10 | 2026-05-10 |
+| `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `source-authority-clarification-and-handoff` | 2026-05-10 | 2026-05-10 |
 
 ## Plan Locations
 

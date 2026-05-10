@@ -1,6 +1,6 @@
 ---
 name: "Oak Misconceptions × EEF Cross-Corpus MCP Surface (Slice 3b of MVP arc)"
-overview: "Author the executable plan for the slice-3b cross-corpus MCP surface: `oak-misconceptions-eef-recommend-for-thread` composes EEF strands (slice 1) and the bounded misconception sub-graph (slice 3a) through the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3). Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch. Gate-3b waits on slice 1 + slice 3a + Inc.3; **not** on slice 2."
+overview: "Author the executable plan for the slice-3b cross-corpus MCP surface: `oak-misconceptions-eef-recommend-for-thread` composes repository-held EEF strands (slice 1) and the bounded bulk-derived misconception sub-graph (slice 3a) through the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3). Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch. Gate-3b waits on slice 1 + slice 3a + Inc.3; **not** on slice 2."
 plan_id: oak-misconceptions-eef-cross-corpus-surface
 type: feature-workstream
 status: current
@@ -10,11 +10,11 @@ spine_slice: 3b
 namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
 substrate_floor:
-  - "graph-stack Inc.3 (cross-corpus join primitive + misconception adapter + EEF strand adapter on graph-corpus-sdk)"
+  - "graph-stack Inc.3 (cross-corpus join primitive + bulk-derived misconception adapter + repository-held EEF strand adapter on graph-corpus-sdk)"
   - "gate-1-eef-ships as naming/response-shape prerequisite only; no runtime MCP tool dependency"
   - "gate-3a-mcg-subgraph-ships as bounded-sub-graph response-shape prerequisite only; no runtime MCP tool dependency"
 sequencing_gate: "gate-1 + gate-3a + Inc.3 (Phase 2 spine correction 2026-05-07: gate-2 is NOT a dependency)"
-last_updated: 2026-05-08
+last_updated: 2026-05-10
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -35,7 +35,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-cross-corpus-happy-path
-    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.integration.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of 10 Thread IRI contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.integration.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of 10 Thread IRI contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the repository-held EEF adapter and bulk-derived misconception adapter on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-substrate-only
@@ -78,7 +78,7 @@ todos:
 
 # Oak Misconceptions × EEF Cross-Corpus MCP Surface — Slice 3b of the MVP Arc
 
-**Last Updated**: 2026-05-08
+**Last Updated**: 2026-05-10
 **Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships +
 gate-3a-mcg-subgraph-ships + graph-stack Inc.3.
 **Scope**: Slice 3b of the
@@ -118,6 +118,15 @@ slice 2 once gate-1, gate-3a, and Inc.3 have landed.
 
 The compound prefix names both source corpora explicitly. Renaming
 requires a spine amendment (the spine names the tool by name).
+
+### Source authority
+
+This slice joins two differently governed corpora. EEF strand data comes from
+the repository-held EEF Toolkit JSON snapshot, treated as canonical for
+implementation until EEF clarifies refresh mechanics. Misconception data comes
+from the bulk-derived misconception graph constructed in this repository as
+part of Oak bulk-data processing. The cross-corpus tool must preserve both
+source identities in citations and response metadata.
 
 ### Existing capabilities consumed (post-substrate-floor)
 

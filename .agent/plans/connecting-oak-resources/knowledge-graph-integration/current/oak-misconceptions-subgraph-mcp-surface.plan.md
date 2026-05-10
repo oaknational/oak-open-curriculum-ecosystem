@@ -1,6 +1,6 @@
 ---
 name: "Oak Misconceptions Sub-Graph MCP Surface (Slice 3a of MVP arc)"
-overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy misconception graph factory plus graph-stack Inc.1 Thread-to-Unit lookup. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
+overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the bulk-derived legacy misconception graph factory plus graph-stack Inc.1 Thread-to-Unit lookup. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
@@ -8,9 +8,9 @@ graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3a
 namespace: "oak-misconceptions-*"
-substrate_path: "legacy misconception graph factory (interim) + graph-stack Inc.1 Thread-to-Unit lookup"
+substrate_path: "bulk-derived legacy misconception graph factory (interim) + graph-stack Inc.1 Thread-to-Unit lookup"
 substrate_floor:
-  - "legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
+  - "bulk-derived legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
   - "graph-stack Inc.1 Oak Ontology Threads foundation (Thread IRI -> Unit lookup)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
 sequencing_gate: "STRICT after gate-1-eef-ships + graph-stack Inc.1 (owner sequencing + Thread lookup); PARALLEL-SAFE with gate-2-threads-ships after those gates"
@@ -34,7 +34,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-bounded-extraction-thread
-    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) resolves Thread->Units via graph-stack Inc.1 and traverses misconceptions via the legacy graph factory. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) resolves Thread->Units via graph-stack Inc.1 and traverses misconceptions via the bulk-derived legacy graph factory. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-bound-default
@@ -81,14 +81,15 @@ todos:
 
 # Oak Misconceptions Sub-Graph MCP Surface — Slice 3a of the MVP Arc
 
-**Last Updated**: 2026-05-08
+**Last Updated**: 2026-05-10
 **Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships
 (STRICT, owner sequencing). PARALLEL-SAFE with slice 2 — different
 substrate path, different namespace, different files.
 **Scope**: Slice 3a of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
 ship `oak-misconceptions-subgraph-for-thread` (and optionally
-`-for-unit`) on the **legacy graph factory** path. Bounded sub-graph
+`-for-unit`) on the **bulk-derived legacy graph factory** path. Bounded
+sub-graph
 extraction is the blocking primitive the misconception graph needs to
 fit `maxResponseTokens = 16000`.
 
@@ -100,15 +101,23 @@ too large to use without using an impractical amount of context."* The
 sub-graph query primitive is the BLOCKING problem to fix; cross-corpus
 composition (slice 3b) is the user-value framing on top. This slice
 solves the blocking problem on the substrate available **today**
-(legacy graph factory), with the substrate-replatform follow-up
-named explicitly.
+(bulk-derived legacy graph factory), with the substrate-replatform
+follow-up named explicitly.
+
+### Source authority
+
+The misconception graph is constructed in this repository from Oak bulk data as
+part of bulk-data processing. This slice consumes that generated,
+bulk-derived graph through the available legacy graph factory path; it does
+not introduce an external misconception raw corpus and does not hand-author
+replacement misconception data.
 
 ### What ships (locked from spine)
 
 | Primitive | Name | Substrate path |
 |---|---|---|
-| Tool | `oak-misconceptions-subgraph-for-thread` | legacy graph factory |
-| Tool (optional) | `oak-misconceptions-subgraph-for-unit` | legacy graph factory |
+| Tool | `oak-misconceptions-subgraph-for-thread` | bulk-derived legacy graph factory |
+| Tool (optional) | `oak-misconceptions-subgraph-for-unit` | bulk-derived legacy graph factory |
 
 The tools return **bounded** sub-graphs sized to fit
 `maxResponseTokens = 16000`. Bound is a parameter; default chosen so
@@ -172,7 +181,8 @@ contract is named, and the migration is sequenced.
    to callers; the default is chosen empirically so every committed manifest
    response fits `maxResponseTokens = 16000`.
 3. **Legacy disclosed in `_meta`** — every consumer of the tool sees
-   from `_meta` that the substrate is the legacy graph factory, with a
+   from `_meta` that the substrate is the bulk-derived legacy graph factory,
+   with a
    pointer to the substrate-migration follow-up plan. This is the
    contract the substrate replatform must preserve.
 4. **No new direct legacy-factory imports outside the tool file** —
@@ -218,7 +228,7 @@ with descriptor/schema exports wired into the universal-tool registry
 If the implementation uses an `aggregated-oak-misconceptions-subgraph/`
 subdirectory, its `tool-definition.ts` follows the existing `aggregated-*`
 convention; the central registry surfaces remain the source of truth.
-Because these cycles exercise the legacy graph factory, the test file is
+Because these cycles exercise the bulk-derived legacy graph factory, the test file is
 classified as `integration.test.ts` at implementation time.
 
 #### Cycle 1.1 — bounded extraction happy path
@@ -227,7 +237,7 @@ classified as `integration.test.ts` at implementation time.
   of misconceptions attached (transitively, within the bound) to units
   in that thread; sub-graph fits `maxResponseTokens = 16000` for the
   committed `20`-context fixture manifest.
-- **Product code**: legacy graph factory traversal bounded by the
+- **Product code**: bulk-derived legacy graph factory traversal bounded by the
   parameter; project to MCP-friendly response shape.
 - **Acceptance**: test passes; full tree green.
 

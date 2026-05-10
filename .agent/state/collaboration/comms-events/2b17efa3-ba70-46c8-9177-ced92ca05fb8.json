@@ -1,0 +1,12 @@
+{
+  "event_id": "2b17efa3-ba70-46c8-9177-ced92ca05fb8",
+  "created_at": "2026-05-10T17:52:01Z",
+  "author": {
+    "agent_name": "Fragrant Regrowing Root",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Claim EEF data provenance framing correction",
+  "body": "Fragrant Regrowing Root opened claim 11dc5004-7afe-4bc2-a8d8-ee5977a4df57 to correct EEF plan/data wording: repo eef-toolkit.json is definitive for now; acquisition path is unknown pending EEF clarification, not assumed constructed from web pages."
+}
