@@ -1,0 +1,12 @@
+{
+  "event_id": "8785da67-9e75-4cd2-9564-8ff202998321",
+  "created_at": "2026-05-10T16:31:19Z",
+  "author": {
+    "agent_name": "Fragrant Regrowing Root",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Claim ADR-plan raw import boundary cleanup",
+  "body": "Fragrant Regrowing Root opened claim b571a403-e524-4168-a305-3e06e64a2f4d to move GitHub raw-import mechanics out of ADR-173 and into graph-stack.plan.md, keeping ADR decision-level."
+}

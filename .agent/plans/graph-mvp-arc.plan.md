@@ -284,8 +284,10 @@ start until graph-stack Inc.1 has landed.
   spines (e.g. *"Empire, persecution and resistance"*, *"How can
   substances be made and changed"*). Not surfaced anywhere else in the
   Oak MCP estate or the API.
-- **Bounded.** `threads.ttl` is small; total Thread instance count is
-  modest. Inverse-edge resolution (Unit→Thread) returns a bounded list
+- **Bounded surface, full raw source.** The user-facing Thread list is
+  modest, while the graph-stack foundation imports the pinned Oak
+  Curriculum Ontology Turtle / SHACL source corpus as straight-copy raw
+  material. Inverse-edge resolution (Unit→Thread) returns a bounded list
   per Thread — no context-budget concerns.
 - **Demonstrates the substrate.** Surfaces require Turtle ingestion,
   inverse-edge query, and graph-corpus-sdk Oak ontology adapter — all
@@ -293,8 +295,8 @@ start until graph-stack Inc.1 has landed.
 
 ### Acceptance — Slice 2
 
-1. All `curric:Thread` instances enumerable from
-   `oak-curriculum-ontology/data/threads.ttl` via the resource.
+1. All `curric:Thread` instances enumerable from the pinned
+   straight-copy Oak Curriculum Ontology raw import via the resource.
 2. For each Thread, `oak-kg-get-thread-content` returns the full set of
    Units with `curric:includesThread` to it, grouped by subject + KS,
    with `rdfs:label`, `rdfs:comment`, and `curric:whyThisWhyNow`.

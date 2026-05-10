@@ -16143,6 +16143,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8b2c5da5-998c-4527-bf2e-9c48e8115508",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T16:31:19Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Align graph MVP arc thread slice with full ontology raw import boundary",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T16:32:45Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Graph MVP arc Slice 2 now distinguishes bounded Thread surface from full straight-copy ontology raw source import.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b2c5da5-998c-4527-bf2e-9c48e8115508",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b571a403-e524-4168-a305-3e06e64a2f4d",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T16:31:19Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Move ontology GitHub raw-import implementation detail from ADR-173 into graph-stack plan",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T16:32:45Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "ADR-173 now records decision-level source-of-truth boundary; graph-stack plan now owns GitHub raw URL, full source set, manifest, and derived-artifact mechanics.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b571a403-e524-4168-a305-3e06e64a2f4d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

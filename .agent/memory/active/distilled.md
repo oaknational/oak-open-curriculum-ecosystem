@@ -206,5 +206,7 @@ validation per the step-7b stability criterion before any graduation.
   expecting concrete cycle-shape correctives, not just nudges.
 
 *"Decide at write time" deferrals are unmade load-bearing decisions*
-graduated 2026-05-10 to
-[`patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md`](patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md).
+graduated 2026-05-10 to the host pattern
+[`deferred-at-write-time-is-unmade-load-bearing-decision`][def-at-write].
+
+[def-at-write]: patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md

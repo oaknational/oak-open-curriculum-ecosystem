@@ -79,7 +79,7 @@ todos:
     status: pending
     depends_on: [ws3-adjacency, ws2-source-mapping]
   - id: ws4-oak-ontology-thread-adapter
-    content: "WS4.2: Oak Curriculum Ontology Threads adapter inside graph-corpus-sdk (generic Turtle/RDF/SKOS parsing via graph-ingest; curric:Thread enumeration and curric:includesThread inverse-edge mapping here); deterministic extraction test against pinned ontology revision."
+    content: "WS4.2: Oak Curriculum Ontology Threads adapter inside graph-corpus-sdk (generic Turtle/RDF/SKOS parsing via graph-ingest; curric:Thread enumeration and curric:includesThread inverse-edge mapping here); deterministic extraction test against the pinned straight-copy ontology raw import."
     status: pending
     depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]
   - id: ws4-query-proof
@@ -286,11 +286,62 @@ prototype, or broader query-layer migration.
 After landing, Oak has:
 
 - A working RDF-compatible substrate with JSON-LD 1.1 ingestion, vocabulary registry, and canonicalisation.
-- The Oak Curriculum Ontology Threads graph (`curric:Thread` nodes and inverse `curric:includesThread` Unit lookup) extracted from `oak-curriculum-ontology` `.ttl` files into a typed dataset, queryable through `graph-corpus-sdk`'s typed surface.
+- The Oak Curriculum Ontology Threads graph (`curric:Thread` nodes and inverse `curric:includesThread` Unit lookup) extracted from the pinned straight-copy ontology raw import into a typed dataset, queryable through `graph-corpus-sdk`'s typed surface.
 - The first proof that ontology IRIs flow end-to-end as canonical identity.
 - Workspace homes for every layer in the research, with the foundation tier proven.
 
 The foundation increment surfaces nothing through MCP, HTTP, or CLI. Surfacing is a consumer-side decision tracked separately (see §Surfacing). The increment is complete when graph capability is present and queryable in-process.
+
+### Raw ontology import mechanics
+
+ADR-173 records the decision: the GitHub repository
+`oaknational/oak-curriculum-ontology` is the source of truth for ontology
+definitions and ontology source data. This plan owns the implementation detail
+for importing those source files into the graph stack.
+
+The refresh/import command downloads source files from the canonical raw URL
+form:
+
+```text
+https://raw.githubusercontent.com/oaknational/oak-curriculum-ontology/<revision>/<path>
+```
+
+`<revision>` is an immutable commit SHA or release tag recorded in the import
+manifest. `main` is allowed only for discovery while preparing an update. The
+discovery revision identified on 2026-05-10 was
+`c308419f44eff1ef89a67a381221b193bc26feab`; the implementer must re-confirm
+and pin the intended revision before WS4.2 lands.
+
+The first-wave raw source set is a full straight-copy import of the ontology
+Turtle / SHACL source corpus used by the ontology graph, not a reduced subset:
+
+- `ontology/oak-curriculum-ontology.ttl`
+- `ontology/oak-curriculum-constraints.ttl`
+- `data/programme-structure.ttl`
+- `data/temporal-structure.ttl`
+- `data/threads.ttl`
+- `data/subjects/**/*.ttl`
+
+The importer resolves globs against the pinned GitHub tree and writes an
+explicit manifest entry for every copied file. The raw import is byte-for-byte
+source material: no formatting, filtering, canonicalisation, enrichment, or
+path-local hand editing happens in the raw layer.
+
+The manifest records at least:
+
+- upstream repository;
+- pinned revision and any discovery branch/tag;
+- upstream path and resolved raw URL for each source file;
+- generated raw output path for each copied file;
+- byte length and content hash for each copied file;
+- licence and attribution text/source;
+- generation timestamp and importer version or command identifier.
+
+Derived graph artefacts are generated separately from the raw copy. That
+includes cleanup, indexes, join records, `EnhancementRecord` data, JSON-LD
+projections, property-graph projections, and typed SDK surfaces. Small literal
+Turtle fixtures remain valid for parser unit tests, but the adapter's
+deterministic extraction proof runs against the pinned raw import.
 
 ### Slice non-scope (deferred to Increment 2 and beyond)
 
@@ -298,7 +349,10 @@ The foundation increment surfaces nothing through MCP, HTTP, or CLI. Surfacing i
 - Full `graph-enhance` (only the bare IRI-honouring path ships; no inference, no relationship-record minting beyond what the Thread adapter needs).
 - Full `graph-validate` (no SHACL execution in this increment; SHACL validation happens upstream in the ontology repo's CI).
 - Adapters for prerequisite, misconception, EEF strands (Increment 3).
-- NC knowledge taxonomy ingestion or surfacing. That work is outside the MVP and remains in its own plan unless separately promoted by the owner.
+- NC knowledge taxonomy adapter/enhancement/surfacing work. The raw source
+  files may be present in the straight-copy import, but interpreting or
+  surfacing that corpus is outside the MVP and remains in its own plan unless
+  separately promoted by the owner.
 - The `practice-graph` workspace (Increment 4).
 - Sunset of the existing graph-resource-factory (Increment 2).
 
@@ -310,7 +364,7 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS1 — `graph-core`** (8 cycles): scaffold; RDF Term + Quad; DatasetCore; JSON-LD expand; JSON-LD compact + frame; canonicalisation; vocabulary registry; GraphDocument ergonomic surface.
 - **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode + generic Turtle/SKOS parsing; SourceMapping primitives.
 - **WS3 — minimal `graph-project`** (3 cycles): scaffold; `toPropertyGraph` projection; adjacency primitives.
-- **WS4 — Oak Ontology Threads as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter boundary; Thread adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, `curric:Thread` and inverse `curric:includesThread` mapping here); typed query proof (in-process; no surfacing).
+- **WS4 — Oak Ontology Threads as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter boundary; GitHub raw-import fixture/manifest against the pinned `oaknational/oak-curriculum-ontology` revision; Thread adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, `curric:Thread` and inverse `curric:includesThread` mapping here); typed query proof (in-process; no surfacing).
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
@@ -450,7 +504,7 @@ Required handling before close:
 7. `package.json` contributors — add Mark Hodierne (per existing parent-plan attribution requirement).
 8. Per-workspace READMEs (seven active graph workspace files, plus one deferred `graph-future` README when activated) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
 9. ~~Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md`.~~ **DONE 2026-05-07** — file renamed to `.agent/research/graph-library.research.md` with the `.research.md` suffix to mark it as one researched direction rather than a plan; references in this plan, the collection README, and operational memory updated.
-10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the Oak Curriculum Ontology Threads adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. NC taxonomy and other Oak Ontology projections (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them and the owner promotes that work separately.
+10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the Oak Curriculum Ontology Threads adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. NC taxonomy adapter/surface work and other Oak Ontology projection formats (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them and the owner promotes that work separately.
 
 ADR-123 (MCP server tool catalogue) is *not* amended by this increment because no MCP tools are added or changed. Any future increment that surfaces graph capability via MCP would amend ADR-123 at that point.
 

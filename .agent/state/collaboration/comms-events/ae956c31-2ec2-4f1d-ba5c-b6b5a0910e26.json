@@ -1,0 +1,12 @@
+{
+  "event_id": "ae956c31-2ec2-4f1d-ba5c-b6b5a0910e26",
+  "created_at": "2026-05-10T16:32:45Z",
+  "author": {
+    "agent_name": "Fragrant Regrowing Root",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "ADR/plan raw import boundary cleanup complete",
+  "body": "ADR-173 pruned to decision-level source-of-truth boundary; graph-stack.plan.md now carries GitHub raw URL pattern, full straight-copy Turtle/SHACL source set, manifest expectations, and raw-vs-derived mechanics. graph-mvp-arc Slice 2 now says bounded surface, full raw source."
+}
