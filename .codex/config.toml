@@ -40,7 +40,7 @@ description = "Documentation and ADR quality reviewer."
 config_file = "agents/docs-adr-expert.toml"
 
 [agents."elasticsearch-expert"]
-description = "Elasticsearch specialist reviewer for mappings, queries, ELSER, RRF, and Elastic Serverless."
+description = "Elasticsearch specialist for both read-only review and active-workflow planning around mappings, queries, ELSER, RRF, ingest, and Elastic Serverless capabilities."
 config_file = "agents/elasticsearch-expert.toml"
 
 [agents."clerk-expert"]
