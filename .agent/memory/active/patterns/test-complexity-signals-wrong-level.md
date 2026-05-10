@@ -1,5 +1,6 @@
 ---
 name: "Test Complexity Signals Wrong Level"
+polarity: anti-pattern
 use_this_when: "A test requires elaborate scaffolding (type predicate hacks, mock capture arrays, wrapper functions, eslint-disable) to reach the code under test"
 category: testing
 proven_in: "apps/oak-curriculum-mcp-streamable-http — handlers-observability setTag test required CapturedTool interface, isToolHandler type predicate, mockImplementation bridge, all to prove a single setTag call. Deleted."
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Engineers build elaborate test infrastructure instead of questioning whether the test is at the right level or testing the right thing"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Test Complexity Signals Wrong Level
 

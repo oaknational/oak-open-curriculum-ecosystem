@@ -1,5 +1,6 @@
 ---
 name: "Source-first adopt-or-explain evaluation"
+polarity: pattern
 use_this_when: "Evaluating whether an existing dependency's utilities should replace hand-rolled code"
 category: process
 proven_in: "docs/spikes/clerk-mcp-tools-express-evaluation.md"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Adopting library utilities without understanding their gaps, or keeping hand-rolled code without documenting why"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Source-First Adopt-or-Explain Evaluation
 

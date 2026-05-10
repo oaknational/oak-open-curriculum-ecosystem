@@ -1,11 +1,16 @@
 ---
 name: Install-Session Blind to Cold-Start Gaps
+polarity: anti-pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "Experience-audit cross-session scan. ≥6 instances: 2026-04-21-the-expert-found-the-gaps-i-installed (explicit naming as candidate), 2026-04-21-the-recursive-session (owner caught 4 separate drifts), 2026-04-22-the-plan-was-not-the-conversation (owner reading the diff caught the protocol violation), 2026-04-29-the-quietly-off-grid-session (owner closing message made off-grid texture visible), 2026-04-24-frodo-evasion-called-out (owner caught the evasion), 2026-04-24-pippin-the-spiral-i-could-not-see (owner intervention broke the spiral)."
 related_pdr: PDR-027
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Install-Session Blind to Cold-Start Gaps
 

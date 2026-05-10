@@ -1,5 +1,6 @@
 ---
 name: "Scoped Gitignore for Colliding Directory Names"
+polarity: pattern
 use_this_when: "Adding or tightening `.gitignore` rules for a generically named directory (`reference`, `data`, `output`, `tmp`) and more than one subtree uses that name for different purposes"
 category: process
 proven_in: ".gitignore (scoped `packages/sdks/oak-sdk-codegen/reference/*.json`); .agent/reference/README.md (where-this-fits table)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "A repo-wide `**/dirname/*` rule silently ignores new tracked docs under an unrelated `dirname/` tree, or blocks committing long-lived material until someone force-adds or adds ad hoc negations"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Scoped Gitignore for Colliding Directory Names
 

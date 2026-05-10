@@ -1,9 +1,14 @@
 ---
 title: "pnpm Strict Hoisting Blocks Transitive Type Resolution"
+polarity: anti-pattern
 category: build-system
 barrier_met: true
 source_sessions: ["2026-04-14d"]
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when type resolution silently fails on a transitive dependency, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # pnpm Strict Hoisting Blocks Transitive Type Resolution
 

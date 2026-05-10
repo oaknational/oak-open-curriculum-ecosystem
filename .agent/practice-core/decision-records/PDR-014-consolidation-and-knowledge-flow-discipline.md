@@ -515,6 +515,64 @@ for agents working with doctrine, recipe books, and patterns.
 **Scope**. Clarification only. No new graduation target, barrier, or
 quality gate.
 
+### 2026-05-10 — Polarity required at pattern graduation
+
+**Driver**. Owner direction 2026-05-05 (Opalescent Threading Nebula's
+promotion pass): the patterns surface had no explicit polarity discipline.
+The host `patterns/README.md` taxonomy split entries by category (code,
+architecture, process, testing, agent) but not by *polarity* — whether the
+entry described a positive shape to repeat (`pattern`) or a failure mode to
+avoid (`anti-pattern`). The frontmatter criterion `prevents_recurring_mistake`
+implicitly covered anti-patterns without distinguishing them from patterns
+to repeat. A reader skimming a pattern to decide whether to apply or
+recognise it as a failure mode needed the polarity at a glance, not after
+parsing the body.
+
+The host operational form has stabilised
+([`memory/active/patterns/README.md` § Polarity](../../memory/active/patterns/README.md))
+with the polarity required for entries authored 2026-05-05 onwards and a
+backfill pass underway across the pre-2026-05-05 corpus. Per PDR-007 §Routing,
+polarity is a *routing concern* (how substance is classified into the patterns
+surface) and therefore lands in PDR-014, the consolidation-and-knowledge-flow
+PDR, rather than in PDR-007.
+
+**Changes**.
+
+1. **Polarity required at pattern graduation**. Every pattern instance
+   admitted to the host's pattern memory surface MUST declare its polarity
+   in two places:
+   - `polarity: pattern | anti-pattern` frontmatter field (machine-readable);
+   - Blockquote header in the body immediately after the frontmatter
+     (human-visible at a glance during reading).
+2. **Routing decision step 1 amended** (§Routing decision §1): when
+   classifying a candidate as a pattern instance, polarity classification
+   is part of the routing decision, not a deferred decision. The graduation
+   work is incomplete without polarity.
+3. **Categories remain orthogonal to polarity**. The five categories
+   (code / architecture / process / testing / agent) describe substance
+   domain; polarity describes the pattern's directionality. Every
+   (category, polarity) pair is admissible.
+4. **Host-local README is the operational source**. The polarity vocabulary,
+   header marker text, and frontmatter schema live in
+   `memory/active/patterns/README.md` (host-local, ecosystem-grounded).
+   This PDR ratifies polarity as a Practice-governance requirement;
+   the operational forms travel with the host README.
+
+**Scope**. Practice-governance amendment to the pattern-graduation
+discipline. Applies to every Practice-bearing repo with a pattern memory
+surface. Pre-amendment instances backfill iteratively; new instances must
+carry polarity from authoring time.
+
+**Concrete near-term firing trigger**. The bulk-sweep pass over
+~70 pre-2026-05-05 pattern files in `memory/active/patterns/` runs in the
+same consolidation pass that lands this amendment, completing the host
+operational backfill.
+
+**Reviewer**. `docs-adr-expert` + `onboarding-expert` per
+[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md)
+(this amendment is a Practice-governance change to the pattern-graduation
+contract).
+
 ### 2026-05-05 — Archive-scale historical synthesis cadence
 
 **Driver**. Owner observation during a metacognition pass: the original

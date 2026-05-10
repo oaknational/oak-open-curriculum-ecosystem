@@ -1,5 +1,6 @@
 ---
 name: "Stage What You Commit, Commit What You Staged"
+polarity: pattern
 use_this_when: "about to run `git commit` with unrelated changes visible in `git status` — the index may carry work the commit message does not describe."
 category: process
 proven_in: ".agent/memory/active/archive/napkin-2026-03-24.md (session 2026-03-24); .agent/memory/active/napkin.md (session 2026-04-19, commit bundling during observability restructure close-out)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "commits whose content diverges from their message because pre-existing staged or partially-staged changes rode along"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Stage What You Commit, Commit What You Staged
 

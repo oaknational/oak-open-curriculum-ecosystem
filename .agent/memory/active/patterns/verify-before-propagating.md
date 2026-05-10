@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-016
 name: verify-before-propagating
+polarity: pattern
 category: process
 status: active
 discovered: 2026-04-06
 proven_by: "MCP Apps SDK font embedding assumption corrected 3 times; single-callback-slot claim carried from napkin to distilled.md without source verification"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Verify Claims Against Primary Sources Before Propagating
 

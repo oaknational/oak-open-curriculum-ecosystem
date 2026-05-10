@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-016
 name: "Comments About External Behaviour Degrade"
+polarity: anti-pattern
 use_this_when: "Code comments describe the behaviour of an external library, SDK, or service, especially when they assert what the library does NOT support"
 category: process
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/preserve-schema-examples.ts (line 49 — claimed MCP SDK does not honour .meta(); it does)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Comments asserting external behaviour become stale after library upgrades, creating false constraints that block correct solutions"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Comments About External Behaviour Degrade
 

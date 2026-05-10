@@ -1,12 +1,17 @@
 ---
 related_pdr: PDR-021
 name: circular-test-justification
+polarity: anti-pattern
 category: testing
 proven_by: "Sentry MCP wrapper removal (2026-04-15/16)"
 summary: >
   Tests that are the sole consumers of production code create circular
   justification chains where dead code appears live because tests call it.
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Circular Test Justification
 

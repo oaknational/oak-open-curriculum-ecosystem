@@ -1,5 +1,6 @@
 ---
 name: "Boundary Narrowing for Schema Types"
+polarity: pattern
 use_this_when: "a schema type is optional but at a specific call site the value is known to exist, and a non-null assertion or runtime throw is tempting"
 category: code
 proven_in: "packages/sdks/oak-curriculum-sdk/src/bulk/generators/helpers.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "non-null assertions (lint violations) or over-widening schema types to always-required (schema infidelity)"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Boundary Narrowing for Schema Types
 

@@ -1,5 +1,6 @@
 ---
 name: "Agentic Surface Separation"
+polarity: pattern
 use_this_when: "Designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters"
 category: agent
 proven_in: "Cross-platform skills review plus local Practice integration (2026-03-20, algo-experiments)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Skill-rule-command conflation, over-eager auto-invocation, adapter drift, hidden side effects"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Agentic Surface Separation
 

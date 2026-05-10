@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-033
 name: Vendor-Doc Review for Unknown Unknowns
+polarity: pattern
 use_this_when: >-
   Authoring or reviewing a plan that targets a third-party platform,
   or reviewing substantive implementation choices that interact with
@@ -14,6 +15,10 @@ barrier:
   prevents_recurring_mistake: "Plans authored from internal knowledge silently miss vendor capabilities (capability gaps) AND ship implementations that violate vendor-documented contracts (contract violations) — both invisible to in-house reviewers operating inside the same worldview."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

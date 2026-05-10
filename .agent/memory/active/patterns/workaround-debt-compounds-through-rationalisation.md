@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-017
 name: "Workaround Debt Compounds Through Rationalisation"
+polarity: anti-pattern
 use_this_when: "A workaround exists in the codebase and someone is explaining why it's justified, necessary, or acceptable — especially when the explanation invokes 'different purposes' or 'separate concerns'"
 category: architecture
 proven_in: "packages/sdks/oak-curriculum-sdk — triple schema representation (JSON Schema + validation Zod + registration Zod) rationalised as 'different purposes' when all three described the same input contract"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Workarounds that acquire justification narratives become permanent architecture, compounding with each other"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Workaround Debt Compounds Through Rationalisation
 

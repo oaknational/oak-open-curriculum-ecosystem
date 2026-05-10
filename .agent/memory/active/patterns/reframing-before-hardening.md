@@ -1,11 +1,16 @@
 ---
 name: Reframing Before Hardening
+polarity: pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "Experience-audit cross-session scan. ≥4 instances: 2026-04-25-jazzy-from-locks-to-knowledge (Wilma's findings dissolved under owner-directed reframe from enforcement to advisory; explicit candidate naming), 2026-04-23-three-reviewers-collapse-an-ambitious-plan (Barney's ABANDON-REFACTOR was the reframe not the absorption), 2026-04-24-pippin-the-spiral-i-could-not-see (failure mode: hardening-before-reframing produces inflation spiral), 2026-04-18-seam-definition-precedes-migration (mid-bash-loop interrupt: boundary axis was wrong, reframing before file-moves)."
 related_pdr: PDR-015
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Reframing Before Hardening
 

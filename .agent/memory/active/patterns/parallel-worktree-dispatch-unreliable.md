@@ -1,5 +1,6 @@
 ---
 name: "Parallel `isolation:\"worktree\"` Dispatch Is Unreliable; Prefer Sequential"
+polarity: anti-pattern
 use_this_when: "Considering a parallel `Agent` batch with `isolation:\"worktree\"` for non-trivial work that depends on a specific branch HEAD or specific repo state"
 category: agent
 proven_in: ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md (Pearly Snorkelling Reef 2026-05-04)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Parallel worktree dispatch silently resolves subagents to inconsistent base commits, and wrong-base subagents improvise rather than halt — corrupting the main repo via absolute-path Edit/Write"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Parallel `isolation:"worktree"` Dispatch Is Unreliable; Prefer Sequential
 

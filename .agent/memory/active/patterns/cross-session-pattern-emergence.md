@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-014
 name: "Cross-Session Pattern Emergence"
+polarity: pattern
 use_this_when: "Running consolidation after multiple sessions on the same workstream, or when a user observes that insights from separate sessions form a larger picture"
 category: process
 proven_in: "WS3 SDK adoption (4 sessions: investigation → planning → Phase 1 → Phase 2) — the 'workaround debt compounds' pattern was only visible across all four"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Individual session handoffs capture local observations but miss patterns that only emerge when observations from separate sessions are read together"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Cross-Session Pattern Emergence
 

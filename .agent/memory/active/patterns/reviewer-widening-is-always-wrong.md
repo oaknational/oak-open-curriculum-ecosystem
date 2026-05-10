@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-015
 name: Reviewer Widening Is Always Wrong
+polarity: anti-pattern
 category: agent
 status: proven
 emerged_from: "Session 2026-04-06 — type-expert recommended z.unknown()"
 cross_session: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Reviewer Widening Is Always Wrong
 

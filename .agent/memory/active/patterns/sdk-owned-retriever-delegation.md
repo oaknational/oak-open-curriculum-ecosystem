@@ -1,5 +1,6 @@
 ---
 name: "SDK-Owned Retriever Delegation"
+polarity: pattern
 use_this_when: "An app-layer module builds an Elasticsearch retriever shape that the SDK already owns as a shared capability."
 category: architecture
 proven_in: "apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Duplicate retriever shapes in app and SDK drift silently — field boosts, rank parameters, or semantic fields change in one place but not the other, causing inconsistent search quality across consumers."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Pattern
 

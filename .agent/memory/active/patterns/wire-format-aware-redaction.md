@@ -1,5 +1,6 @@
 ---
 name: "Wire-Format-Aware Redaction"
+polarity: pattern
 use_this_when: "Telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as application/x-www-form-urlencoded request bodies."
 category: architecture
 proven_in: "packages/core/observability/src/redaction.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Assuming query/header/object redaction automatically protects every wire format that can carry credentials"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Wire-Format-Aware Redaction
 

@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-014
 name: Learning Before Fitness
+polarity: pattern
 aliases:
   - Substance Before Fitness
 use_this_when: >-
@@ -15,6 +16,10 @@ barrier:
   prevents_recurring_mistake: "Artificially compressed concepts that fail to teach because they were shaped by a character budget rather than by their own substance"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

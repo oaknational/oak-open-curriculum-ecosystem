@@ -1,12 +1,17 @@
 ---
 related_pdr: PDR-012
 name: "Findings Route to a Lane or a Rejection"
+polarity: pattern
 category: process
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry L-0b reviewer findings register (commit d08c6969) + prior scope-separation doctrine from the maximisation-pivot session"
 informs_deeper_pattern: "no-smuggled-drops (pending consolidation — see docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md)"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Findings Route to a Lane or a Rejection
 

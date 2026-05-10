@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-015
 name: "Route Reviewers by Abstraction Layer, Not File Scope"
+polarity: pattern
 use_this_when: "dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke"
 category: agent
 proven_in: ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md (hygiene closure finishing pass, 2026-04-17)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Picking reviewers by which files each one reads, producing overlapping findings and leaving semantic layers uncovered"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Route Reviewers by Abstraction Layer, Not File Scope
 

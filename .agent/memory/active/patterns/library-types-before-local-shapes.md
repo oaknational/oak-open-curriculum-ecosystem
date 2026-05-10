@@ -1,5 +1,6 @@
 ---
 name: "Library Types Before Local Shapes"
+polarity: pattern
 use_this_when: "An integration parses third-party SDK responses or errors and custom local `*Like` shapes are being considered."
 category: code
 proven_in: "apps/oak-search-cli/src/lib/elasticsearch/index-meta.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Replacing official SDK types with broad local shapes that widen type information and hide real invariants."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Library Types Before Local Shapes
 

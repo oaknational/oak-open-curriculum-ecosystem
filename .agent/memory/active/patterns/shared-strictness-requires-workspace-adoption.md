@@ -1,5 +1,6 @@
 ---
 name: "Shared Strictness Requires Workspace Adoption"
+polarity: pattern
 use_this_when: "A repo has landed a root strictness or gate foundation and it is tempting to treat the shared config itself as completion before every claimed participant actually composes it and passes under it"
 category: process
 proven_in: "agent-tools/package.json"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Declaring a repo strict or fully covered because root config exists while participating workspaces still lack task exports, local adoption, or passing proof"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Shared Strictness Requires Workspace Adoption
 

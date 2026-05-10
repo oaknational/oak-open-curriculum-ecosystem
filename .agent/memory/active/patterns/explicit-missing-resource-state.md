@@ -1,5 +1,6 @@
 ---
 name: "Explicit Missing Resource State"
+polarity: pattern
 use_this_when: "A numeric or boolean result can be confused with a missing upstream resource, causing fail-open behaviour."
 category: architecture
 proven_in: "packages/sdks/oak-search-sdk/src/admin/create-admin-service.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Treating missing resources as valid zero-valued metrics"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Explicit Missing Resource State
 

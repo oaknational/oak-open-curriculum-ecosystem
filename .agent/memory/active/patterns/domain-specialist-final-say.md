@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-015
 name: "Domain Specialist Has Final Say on SDK Semantics"
+polarity: pattern
 use_this_when: "Architecture reviewers make assumptions about SDK-specific behaviour (scope models, handler ordering, API semantics) that have not been verified against official documentation"
 category: process
 proven_in: ".agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Architecture generalists assuming SDK behaviour without checking docs, leading to over-engineered or incorrect solutions"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Domain Specialist Has Final Say on SDK Semantics
 

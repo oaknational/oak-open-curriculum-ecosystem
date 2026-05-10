@@ -1,10 +1,15 @@
 ---
 name: Breadth as Evasion
+polarity: anti-pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "Already named in user-memory feedback (feedback_answer_verification_questions_directly.md). Experience-audit cross-session scan confirms ≥3 instances: 2026-04-24-frodo-evasion-called-out (explicit naming, table-as-evasion), 2026-04-24-pippin-the-spiral-i-could-not-see (option-menus as evasion on judgement questions, named as sibling resonance to Frodo's), 2026-04-17-the-language-that-hides-scope (\"stretch\", \"deferred\", neutral-sounding labels as cover for scope debt)."
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Breadth as Evasion
 

@@ -1,10 +1,15 @@
 ---
 related_pdr: PDR-012
 name: Pre-implementation plan review
+polarity: pattern
 category: process
 status: proven
 proven_by: "2026-04-10 (7 blocking findings), 2026-04-11 (12 findings resolved)"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Pre-implementation plan review
 

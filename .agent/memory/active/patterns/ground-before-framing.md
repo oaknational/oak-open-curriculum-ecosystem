@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-013
 name: "Ground Before Framing"
+polarity: pattern
 category: process
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry observability maximisation pivot — `wrapMcpServerWithSentry` was already wired at `core-endpoints.ts:98` but claimed as missing in the first pivot summary because scope was inferred from SDK exports rather than read from the composition root"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Ground Before Framing
 

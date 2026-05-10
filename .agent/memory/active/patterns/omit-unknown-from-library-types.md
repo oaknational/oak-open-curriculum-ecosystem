@@ -1,5 +1,6 @@
 ---
 name: "Omit unknown-carrying fields from library types"
+polarity: pattern
 use_this_when: "Extending a library type that carries Record<string, unknown> or any on one or more fields, while the rest of the type is valuable."
 category: code
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Three sessions tried interface→type alias change to fix TS2430; the real fix was removing the unknown-carrying field."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Omit Unknown-Carrying Fields from Library Types
 

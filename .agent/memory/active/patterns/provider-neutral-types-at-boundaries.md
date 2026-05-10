@@ -1,9 +1,14 @@
 ---
 name: provider-neutral-types-at-boundaries
+polarity: pattern
 category: architecture
 barrier_met: true
 proven_by: "Sentry adapter extension 2026-04-13 — 4 reviewers independently converged: app-layer interfaces must not import adapter types"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Provider-Neutral Types at Adapter Boundaries
 

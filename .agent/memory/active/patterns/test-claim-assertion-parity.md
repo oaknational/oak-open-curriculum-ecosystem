@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-021
 name: test-claim-assertion-parity
+polarity: pattern
 category: testing
 proven_by: "Sentry wrapping-order test rewrite (2026-04-16)"
 summary: >
@@ -9,6 +10,10 @@ summary: >
   cannot distinguish the regressed state from the correct state,
   the test creates false confidence.
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Test Claim-Assertion Parity
 

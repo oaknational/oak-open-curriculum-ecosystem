@@ -1,5 +1,6 @@
 ---
 name: "ChatGPT report normalisation"
+polarity: pattern
 use_this_when: "Recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown"
 category: process
 proven_in: >-
@@ -12,6 +13,10 @@ barrier:
   prevents_recurring_mistake: "Trusting export artefacts, losing real citation links, and preserving stale time-sensitive claims"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # ChatGPT Report Normalisation
 

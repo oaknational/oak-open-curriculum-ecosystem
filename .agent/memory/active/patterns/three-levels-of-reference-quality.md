@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-016
 name: "Three Levels of Reference Quality"
+polarity: pattern
 use_this_when: "Documentation, portable content, or cross-repo material references concepts from another context — choose the right level of self-containment"
 category: process
 proven_in: ".agent/practice-core/ — ADR references replaced with exported concepts for portability"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Portable content that references host-repo-specific artefacts becomes opaque when it travels"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Three Levels of Reference Quality
 

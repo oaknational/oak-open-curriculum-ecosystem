@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-020
 name: "Check Driven Development"
+polarity: pattern
 use_this_when: "Writing TDD RED-phase assertions in a codebase with multiple quality gates"
 category: process
 proven_in: "packages/sdks/oak-curriculum-sdk/src/mcp/canonical-descriptor.unit.test.ts"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Bending tool usage to fit a narrow definition of TDD (e.g. using runtime toHaveProperty checks to avoid breaking type-check, or adding eslint-disable to avoid breaking lint)"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Check Driven Development
 

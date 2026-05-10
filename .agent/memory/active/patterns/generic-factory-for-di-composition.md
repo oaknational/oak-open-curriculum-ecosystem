@@ -1,5 +1,6 @@
 ---
 name: "Generic Factory for DI Composition"
+polarity: pattern
 use_this_when: "A DI interface exposes multiple factory functions that callers always compose in the same order"
 category: code
 proven_in: "apps/oak-curriculum-mcp-streamable-http (ToolHandlerDependencies 5→2 members)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Tests re-implementing the factory composition chain (31 lines of mock setup)"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Generic Factory for DI Composition
 

@@ -1,5 +1,6 @@
 ---
 name: "satisfies for Mock Completeness"
+polarity: pattern
 use_this_when: "A test mock implements an interface and you need compile-time proof that all methods are present"
 category: testing
 proven_in: "apps/oak-curriculum-mcp-stdio/src/app/startup.integration.test.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Incomplete mocks that satisfy the test but break when a different code path exercises an unimplemented method"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # satisfies for Mock Completeness
 

@@ -1,5 +1,6 @@
 ---
 name: "Indexed-access sub-type derivation from generated unions"
+polarity: pattern
 use_this_when: "You need to process elements of a generated union type and the existing code uses hand-rolled local types that approximate the schema"
 category: code
 proven_in: "apps/oak-search-cli/src/adapters/category-supplementation.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Hand-rolled types that silently drift from the generated schema, requiring manual maintenance and hiding schema changes from the compiler"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Pattern
 

@@ -1,10 +1,15 @@
 ---
 related_pdr: PDR-018
 name: end-goals-over-means-goals
+polarity: pattern
 category: process
 barrier_met: true
 proven_by: "Sentry canonical alignment session 2026-04-13 — 15-item plan produced busywork when framed as 'close gaps' (means goal) vs 'developers can debug errors' (end goal)"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # End Goals Over Means Goals
 

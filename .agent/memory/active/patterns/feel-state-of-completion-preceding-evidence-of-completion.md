@@ -1,5 +1,6 @@
 ---
 name: Feel-State of Completion Preceding Evidence of Completion
+polarity: anti-pattern
 use_this_when: About to mark a to-do completed, defer an item at session-handoff, raise a limit, install a tripwire, or report what landed — before the report, ask whether the evidence loop the doctrine requires has actually fired, or whether the agent's own sense of "done" is standing in for it
 category: agent
 proven_in: .agent/memory/active/napkin.md (three cross-session independent instances, 2026-04-21 / 2026-04-22; owner-adjudicated 3/3, 2026-04-22 Session 8 open)
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Reporting completion (a to-do marked done, a tripwire installed, a deferral asserted, a limit raised, a fitness target met) on the strength of the agent's internal sense of finishedness, when the doctrine the agent is operating under requires an external evidence loop that has not yet fired"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

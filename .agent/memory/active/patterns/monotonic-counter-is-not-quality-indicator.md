@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-016
 name: "Monotonic Counter Is Not a Quality Indicator"
+polarity: anti-pattern
 use_this_when: "Comparing two versions of a document or artefact that each carry a sequence counter"
 category: process
 proven_in: ".agent/practice-core/provenance.yml"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Higher-indexed incoming material dismissed as stale without content comparison"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

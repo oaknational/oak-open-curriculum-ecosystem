@@ -1,9 +1,14 @@
 ---
 name: "Infrastructure operations never mask business logic"
+polarity: pattern
 use_this_when: "Recording telemetry, flushing buffers, or ending spans in a catch/finally block"
 category: code
 proven_in: "packages/libs/sentry-mcp/src/wrappers.ts, apps/oak-curriculum-mcp-streamable-http/src/observability/span-helpers.ts"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Infrastructure Operations Never Mask Business Logic
 

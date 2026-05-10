@@ -1,11 +1,16 @@
 ---
 name: Scope as Goal
+polarity: anti-pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "Verdant Regrowing Pollen TS6-closeout session — the agent treated the TS6 work-list as the goal because it was full and structured, when the actual goal was 'unblock the Vercel build investigation, branch absolutely not mergeable until Vercel builds with no errors and no warnings'. Owner reframe was the corrective. The session-end summary made the meta-observation that a release-readiness reviewer's 'GO WITH CONDITIONS' read as a green light only because arc-scope was conflated with branch-merge-gate-scope."
 related_pdr: PDR-015
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Scope as Goal
 

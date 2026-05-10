@@ -1,5 +1,6 @@
 ---
 name: "Guarded Fire-and-Forget Cleanup"
+polarity: pattern
 use_this_when: "You have async cleanup (close, flush, disconnect) that runs after the response is sent and cannot be awaited by the caller"
 category: code
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Silent error swallowing in fire-and-forget cleanup; indefinite cleanup hangs from stalled close operations; logger failures masking the original resource-leak error"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Guarded Fire-and-Forget Cleanup
 

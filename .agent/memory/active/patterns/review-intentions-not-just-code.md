@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-015
 name: "Review Intentions, Not Just Code"
+polarity: pattern
 category: process
 status: proven
 discovered: 2026-04-04
 proven_in: "WS3 Phase 4 brand banner — 5 specialist reviewers before implementation"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Review Intentions, Not Just Code
 

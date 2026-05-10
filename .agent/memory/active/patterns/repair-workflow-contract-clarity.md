@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-018
 name: "Repair workflow contract clarity"
+polarity: pattern
 use_this_when: "A workflow repairs or transforms the same content across multiple artefacts or locations, and ambiguous verbs could trigger rewrite or promotion drift"
 category: process
 proven_in: "2026-04-03 protocol/interoperability report repair and consolidation"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Allowing 'normalise', 'canonical', or similar wording to blur source precedence, non-goals, and landing zone in multi-artefact workflows"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Repair Workflow Contract Clarity
 

@@ -1,5 +1,6 @@
 ---
 name: "Validation Error Severity Separation"
+polarity: pattern
 use_this_when: "A schema validation error message lists all absent fields alongside actually failing fields, making operators debug the wrong variables"
 category: code
 proven_in: "packages/libs/env-resolution/src/resolve-env.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Operators waste time configuring optional-but-absent variables when only one variable has an invalid value"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Validation Error Severity Separation
 
