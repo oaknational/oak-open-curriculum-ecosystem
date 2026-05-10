@@ -19,7 +19,7 @@ related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
-  - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped)"
+  - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped), recalculate primitive counts, and capture `_meta` legacy-substrate disclosure as non-contractual metadata"
   - "ADR-157: confirm `oak-misconceptions-*` prefix is recorded (already amended Phase 0 of MVP-arc spine)"
 specialist_reviewers:
   - mcp-reviewer
@@ -112,10 +112,10 @@ named explicitly.
 
 The tools return **bounded** sub-graphs sized to fit
 `maxResponseTokens = 16000`. Bound is a parameter; default chosen so
-95th-percentile responses from the committed `20`-context fixture manifest fit
-that budget. The budget is measured by a shared response-budget helper against
-the serialized model-visible `content` text payload, including citations,
-caveats, and duplicated JSON required for MCP compatibility.
+every response from the committed `20`-context fixture manifest fits that
+budget. The budget is measured by a shared response-budget helper against the
+serialized model-visible `content` text payload, including citations, caveats,
+and duplicated JSON required for MCP compatibility.
 
 Fixture manifest path:
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.fixture-manifest.ts`.
@@ -169,8 +169,8 @@ contract is named, and the migration is sequenced.
    Slice 3a's contribution to slice 3b is the bounded-sub-graph SHAPE,
    not a runtime MCP composition.
 2. **Bounded by parameter, defaulted by data** — the bound is exposed
-   to callers; the default is chosen empirically so 95th-percentile
-   responses fit `maxResponseTokens = 16000`.
+   to callers; the default is chosen empirically so every committed manifest
+   response fits `maxResponseTokens = 16000`.
 3. **Legacy disclosed in `_meta`** — every consumer of the tool sees
    from `_meta` that the substrate is the legacy graph factory, with a
    pointer to the substrate-migration follow-up plan. This is the
@@ -300,7 +300,9 @@ If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
 
 ### WS4 — ADR-123 + ADR-157 confirmation
 
-- ADR-123: record the new tool(s).
+- ADR-123: record the new tool(s), recalculate primitive counts, and capture
+  `_meta` legacy-substrate disclosure as non-contractual metadata alongside
+  structured output and annotation expectations.
 - ADR-157: confirm `oak-misconceptions-*` row already present
   (Phase 0 amendment); add cross-reference if needed.
 
@@ -341,8 +343,8 @@ Dispatch:
 
 | Risk | Mitigation |
 |---|---|
-| Empirical bound default poorly chosen; 95th percentile drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
-| Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's full-graph control test surfaces this directly. |
+| Empirical bound default poorly chosen; manifest coverage drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
+| Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's small literal graph behaviour tests describe the traversal contract without a second full traversal implementation in the test. |
 | Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-reviewer` gate; substrate-migration plan re-validates `_meta` shape. |
 | Slice 3b authoring (parallel) ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + slice-3b amendment. |
 

@@ -35,7 +35,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-cross-corpus-happy-path
-    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.integration.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of N Thread IRI contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-eef-recommend-for-thread.integration.test.ts` (RED) — Thread IRI → structured `{evidence: [...EEF strands ranked], misconceptions: {...bounded sub-graph}}` payload for a curated set of 10 Thread IRI contexts where both corpora are known to have content; `oak-misconceptions-eef-recommend-for-thread.ts` (GREEN) implements the response by invoking the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3), which traverses the EEF and misconception adapters on the substrate. The tool does NOT call slice-1 or slice-3a MCP tools at runtime; both corpora are reached through `graph-corpus-sdk` directly per Design Principle 1. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-substrate-only
@@ -51,7 +51,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-1-cross-corpus-happy-path]
   - id: ws2-cycle-1-mcp-wiring
-    content: "WS2 cycle 1: integration test wires the tool through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS2 cycle 1: integration test wires the tool through the current in-process MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert registry discoverability + executor invocation. Transport-level list/invoke coverage, if needed, belongs in an e2e test. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-3-cross-corpus-join-verified, ws1-cycle-4-error-shapes]
   - id: ws2-cycle-2-tool-meta-and-attribution
@@ -206,8 +206,11 @@ the response shape, not as runtime dependencies.
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3b")
 
 1. Per-call response carries non-empty EEF strand list AND non-empty
-   misconception sub-graph for a curated set of N Thread IRI contexts
-   where both are known to exist.
+   misconception sub-graph for a curated set of 10 Thread IRI contexts
+   where both are known to exist. The manifest lives at
+   `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-eef-recommend-for-thread.fixture-manifest.ts`
+   and is selected by descending combined EEF+misconception coverage with IRI
+   lexical tie-break.
 2. Both corpora flow through `graph-corpus-sdk` + `GraphView` (no
    legacy factory).
 3. Cross-corpus join primitive verified end-to-end.
@@ -230,9 +233,11 @@ central registry surfaces remain the source of truth.
 
 - **Test**: Thread IRI → response carries non-empty `evidence` (EEF
   strand list, ranked) AND non-empty `misconceptions` (bounded
-  sub-graph) for a curated set of N Thread IRI contexts where both
-  corpora are known to have content. The N contexts are committed as
-  fixtures.
+  sub-graph) for a curated set of 10 Thread IRI contexts where both
+  corpora are known to have content. The contexts are committed in
+  `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-eef-recommend-for-thread.fixture-manifest.ts`,
+  selected deterministically by sorting eligible Thread IRIs by descending
+  combined EEF+misconception coverage, with IRI lexical tie-break.
 - **Product code**: invoke the cross-corpus join primitive composing
   the EEF strand corpus adapter + misconception adapter via
   `graph-corpus-sdk`; project to MCP-friendly response shape.
@@ -247,13 +252,15 @@ central registry surfaces remain the source of truth.
 - **Acceptance**: joined payload comes from the fixture adapters and carries
   explicit source attribution for both corpora.
 
-#### Cycle 1.3 — join-output projection
+#### Cycle 1.3 — join-output behaviour
 
-- **Test**: mutate the `graph-corpus-sdk` join fixture and assert the tool
-  response changes accordingly while preserving the MCP response shape.
+- **Test**: given two small `graph-corpus-sdk` adapter fixtures with distinct
+  EEF and misconception payloads for the same Thread IRI, assert the tool
+  returns the corresponding compound payload with citations while preserving
+  the MCP response shape.
 - **Product code**: projection changes the behavioural test drives.
-- **Acceptance**: the tool projects the substrate join output, not stale local
-  composition data.
+- **Acceptance**: user-visible compound payload behaviour is correct for both
+  fixtures.
 
 MCP envelope acceptance: tool calls return a `CallToolResult` with `content`
 containing a short summary plus serialized JSON, `structuredContent` containing
@@ -275,8 +282,10 @@ execution errors.
 
 #### Cycle 2.1 — MCP integration test
 
-- **Test**: integration exercises the full MCP path; tool discoverable
-  and invocable end-to-end on a real cross-corpus join primitive.
+- **Test**: integration exercises in-process registry composition and the
+  universal-tool executor; tool is discoverable and invocable through those
+  surfaces. A transport-level MCP list/invoke proof uses an e2e test file if
+  execution needs it.
 - **Product code**: add the tool to the SDK universal registry
   (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
   export it through `public/mcp-tools.ts`. `handlers.ts` registers tools by
@@ -293,7 +302,9 @@ execution errors.
 
 ### WS3 — ADR-123 + ADR-157 confirmation
 
-- ADR-123: record the compound-prefix tool.
+- ADR-123: record the compound-prefix tool, recalculate primitive counts, and
+  include structured output, annotations, `_meta`, and source-attribution
+  expectations.
 - ADR-157: confirm compound-prefix convention already recorded
   (Phase 0 amendment); add cross-reference if needed.
 

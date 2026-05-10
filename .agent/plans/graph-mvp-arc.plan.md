@@ -204,7 +204,7 @@ sense-check pattern):
   ranked EEF strands and a relevant misconception sub-graph in one
   structured response.
 - **Provability**: per-call response carries non-empty EEF strand list
-  AND non-empty misconception sub-graph for a curated set of N
+  AND non-empty misconception sub-graph for a curated set of 10
   Thread IRI contexts where both are known to exist.
 - **Architecture validation**: confirms cross-corpus join primitive
   (graph-stack Inc.3) earns its keep; confirms the cross-cutting EEF
@@ -398,8 +398,9 @@ misconceptions) in one structured response, not two separate calls.
 ### Acceptance — Slice 3b
 
 1. Per-call response carries non-empty EEF strand list AND non-empty
-   misconception sub-graph for a curated set of N Thread IRI contexts
-   where both are known to exist.
+   misconception sub-graph for a curated set of 10 Thread IRI contexts
+   where both are known to exist. The slice-3b plan owns the deterministic
+   manifest path and selection rule.
 2. Both corpora flow through graph-corpus-sdk + GraphView (no legacy
    factory).
 3. Cross-corpus join primitive verified end-to-end.
