@@ -111,6 +111,36 @@ ADR-123 at the point a consumer surfaces them.
 The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
 is a consumer-side concern with at most one home per transport.
 
+### API, bulk, and ontology source authority
+
+The graph stack does not replace the Oak Open Curriculum API contract or the
+bulk-data extraction pipeline. It adds an ontology-identity layer that composes
+with them.
+
+The source-authority split is:
+
+- **OpenAPI / SDK authority**: API-shaped request, response, and MCP tool
+  execution types still flow from the OpenAPI schema through `pnpm
+sdk-codegen`. Thread slugs, API endpoint shapes, unit response fields, and
+  generated validators remain API-owned.
+- **Bulk-data authority**: graph-shaped resources already derived from bulk
+  API data, such as thread progressions, prior knowledge, and misconception
+  graphs, remain generated from bulk data. Their authored logic may project or
+  adapt that data, but it must not hand-author replacement thread/unit schemas.
+- **Ontology authority**: the Oak Curriculum Ontology owns ontology IRIs,
+  classes, predicates, and graph semantics such as `curric:Thread` and
+  `curric:includesThread`. `graph-corpus-sdk` maps ontology identity to typed
+  corpus adapters and joins, but it does not become the source of API-shaped
+  unit or thread definitions.
+
+Where the same educational concept appears in more than one source, identity is
+joined explicitly rather than collapsed silently. For the first attached corpus,
+the ontology Thread IRI is the graph identity, while API/bulk slugs and unit
+metadata remain generated API/bulk projections. A consumer that needs API shape
+uses the generated SDK types; a consumer that needs graph traversal uses
+ontology IRIs through `graph-corpus-sdk`; a cross-corpus tool states the join
+boundary in its adapter and output metadata.
+
 ### First-wave ingestion scope (proposed topology constraint)
 
 The foundation wave targets the smallest end-to-end attached corpus:
@@ -123,6 +153,27 @@ The foundation wave targets the smallest end-to-end attached corpus:
    the graph stack. `graph-ingest` owns generic Turtle/SKOS parsing;
    `graph-corpus-sdk` owns the `curric:Thread` enumeration and
    `curric:includesThread` inverse-edge typed adapter.
+
+### Raw ontology import policy
+
+The Turtle files are upstream source inputs, not new authored source in this
+repository. The implementation must not rely on a developer's machine-local
+`../oak-curriculum-ontology` checkout, a symlink, or hand-copied files with no
+provenance.
+
+If the graph stack needs the ontology data available in this repository for
+deterministic builds, tests, or CI, it may commit a **tool-generated pinned
+snapshot** of the minimal required Turtle / SHACL files. That snapshot must be
+created by a refresh/import command from a named upstream revision and must
+carry a manifest recording at least: upstream repository, commit or release
+identifier, source file list, content hashes, licence, attribution, generation
+timestamp, and the generated output paths.
+
+Normal graph code consumes the generated snapshot or generated typed artefacts,
+not a sibling checkout. The sibling checkout is a developer convenience for the
+refresh command only. Small literal Turtle fixtures remain valid for unit and
+integration tests when they describe behaviour better than importing the full
+corpus.
 
 Pre-requisite, misconception, and EEF strand adapters are outside the foundation
 topology decision and are sequenced by the executable graph-stack plan. Other
@@ -148,6 +199,11 @@ work separately.
 - The foundation ingestion scope is small enough to ship while still proving
   ontology IRI identity and generic Turtle/SKOS parsing through one real Oak
   ontology attached corpus.
+- The API/bulk/ontology split prevents a new graph adapter from becoming a
+  shadow schema layer for thread or unit data. Joins are explicit and
+  inspectable instead of hidden behind shared names.
+- A pinned generated snapshot gives reproducible CI without making the
+  ontology repository a machine-local runtime dependency.
 
 **Negative / cost accepted**:
 
@@ -161,6 +217,10 @@ work separately.
   formalisation. If the eventual published spec differs, `graph-core`
   migrates the `Term` union — a typed refactor confined to one workspace.
   Tripwire #2 covers this.
+- The pinned snapshot introduces a provenance-maintenance obligation. The
+  refresh command and manifest become part of the validation surface; a copied
+  Turtle file without manifest evidence is documentation/data drift, not an
+  acceptable import.
 
 ## Standards evolution and tripwires
 

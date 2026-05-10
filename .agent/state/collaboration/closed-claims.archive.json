@@ -16061,6 +16061,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0702b122-774d-446e-92c7-29a9d452b3f7",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "adr",
+          "patterns": [
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T16:20:00Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Amend ADR-173 to record API/bulk/ontology source-of-truth relationship and raw Turtle import policy",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T16:25:00Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "ADR-173 amended with API/bulk/ontology source authority and raw Turtle import policy; markdownlint target passed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0702b122-774d-446e-92c7-29a9d452b3f7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
