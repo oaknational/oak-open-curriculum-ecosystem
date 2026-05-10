@@ -5,10 +5,10 @@ overview: >
   Claude/Cursor/Codex adapters from `<domain>-reviewer` to `<domain>-expert`,
   followed by integration of the eight standalone `<domain>-expert` skill
   bodies into the renamed templates and a repo-wide reference sweep.
-  Phase 1A (mechanical rename) is already landed at `ce054100`. Phase 1B
-  (substantive integration + skill deletion) and Phase 2 (cross-repo
-  reference sweep) remain.
-status: 🟡 IN PROGRESS
+  Phase 1A (mechanical rename) is landed at `ce054100`. Phase 1B
+  (substantive integration + skill deletion) is complete through `249600f1`.
+  Phase 2 (cross-repo reference sweep) is landed at `25a8ee6b`.
+status: 🟢 COMPLETE
 todos:
   - id: phase-1b-integrate-and-delete
     content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and inline the `mcp-expert` companion `installation-and-integration.md` (Option C). Resolved: 8 of 8 merges landed (sentry/clerk/mcp at 52c139c7; accessibility/assumptions/design-system/elasticsearch templates at 57de914f; elasticsearch adapters at 16c10cea; react-component at 31a2a9e1). Cleanup pass landed at ae36670a: 24 standalone-skill directories deleted (8 canonical + 8 .claude jc- adapters + 8 .agents jc- adapters), the mcp-expert companion file deleted alongside, and 8 `Skill()` permissions removed from `.claude/settings.json`."
@@ -18,12 +18,12 @@ todos:
     status: pending
     depends_on: [phase-1b-integrate-and-delete]
   - id: phase-2-cross-repo-sweep
-    content: "Phase 2: sweep ~590 cross-repo references (`grep -rln` count from Phase 1A scoping, excluding archives + reference-local). Most consequential: `.agent/rules/invoke-code-experts.md` and `.agent/memory/executive/invoke-code-experts.md` (the canonical reviewer-routing rule); `AGENT.md`; ADRs that name reviewers; current/future plans; READMEs; `agent-tools/src/bin/codex-reviewer-resolve.ts` HELP_TEXT examples; `validate-portability-helpers.ts` + `validate-no-stale-script-invocations.ts` if they encode reviewer names."
-    status: pending
+    content: "Phase 2: sweep ~590 cross-repo references (`grep -rln` count from Phase 1A scoping, excluding archives + reference-local). Most consequential: `.agent/rules/invoke-code-experts.md` and `.agent/memory/executive/invoke-code-experts.md` (the canonical reviewer-routing rule); `AGENT.md`; ADRs that name reviewers; current/future plans; READMEs; `agent-tools/src/bin/codex-reviewer-resolve.ts` HELP_TEXT examples; `validate-portability-helpers.ts` + `validate-no-stale-script-invocations.ts` if they encode reviewer names. Landed at `25a8ee6b` (304 files, ADR-146 + ADR-149 renamed + body amendments). Two files (`pending-graduations.md`, `practice-core/CHANGELOG.md`) deferred to Sylvan Fruiting Glade's pending-graduations drain claim by coordination event."
+    status: completed
     depends_on: [phase-1b-expert-dispatch]
   - id: phase-2-expert-dispatch
-    content: "Phase 2 reviewer dispatch: code-expert (gateway), docs-adr-expert (rule + ADR + permanent-doc rewrites), config-expert (any settings/lint/codex-config touch), onboarding-expert (ensure onboarding paths still point to current names), test-expert (any test fixture updates needed)."
-    status: pending
+    content: "Phase 2 reviewer dispatch: code-expert (gateway), docs-adr-expert (rule + ADR + permanent-doc rewrites), config-expert (any settings/lint/codex-config touch), onboarding-expert (ensure onboarding paths still point to current names), test-expert (any test fixture updates needed). Dispatched in parallel before commit; five fixable findings remediated; HOLD lifted after fixes; commit `25a8ee6b` lands the substance."
+    status: completed
     depends_on: [phase-2-cross-repo-sweep]
 related:
   - docs/architecture/architectural-decisions/125-agent-artefact-portability.md
@@ -41,7 +41,8 @@ anchored_commits:
   - 31a2a9e1 — Phase 1B continuation: react-component template + adapters merged
   - ae36670a — Phase 1B.2-4 cleanup: 24 standalone-skill dirs deleted + 8 Skill() permissions removed + plan updated
   - c31eb492 — Phase 1B reviewer follow-ups: plan-drift fix + dead Style Dictionary URL fix
-  - PENDING — Phase 1B closeout extended scope (owner-directed pull-forward): 8 invoke-<domain>-reviewer rule files renamed to invoke-<domain>-expert across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/); invoke-code-experts gateway renamed to invoke-code-experts across 4 surfaces + executive memory; RULES_INDEX.md, AGENT.md, practice-index.md, executive README, .codex/README cross-references updated
+  - 249600f1 — Phase 1B closeout extended scope (owner-directed pull-forward): 8 invoke-<domain>-reviewer rule files renamed to invoke-<domain>-expert across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/); invoke-code-reviewers gateway renamed to invoke-code-experts across 4 surfaces + executive memory; RULES_INDEX.md, AGENT.md, practice-index.md, executive README, .codex/README cross-references updated
+  - 25a8ee6b — Phase 2 cross-repo sweep: 304 files, ADR-146 + ADR-149 renamed (filename + body), ADR-146 amendment promotes Build-vs-buy to area #1 (six → seven), agent-tools CLI HELP_TEXT refreshed, production-code reviewer-finding comments updated. Reviewer dispatch (code/docs-adr/config/onboarding/test) returned 5 fixable findings, all remediated. Two files deferred to Sylvan Fruiting Glade's pending-graduations drain claim by coordination comms event.
 ---
 
 # Sub-agent rename to `*-expert` + skill integration
