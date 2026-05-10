@@ -55,7 +55,6 @@ activation metadata and a pointer to the canonical source.
 | ---------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Skills**                   | `.agent/skills/*/SKILL.md`         | Native wrappers such as `.cursor/skills/*/SKILL.md`, `.claude/skills/*/SKILL.md`, `.gemini/skills/*/SKILL.md`, `.github/skills/*/SKILL.md`, plus portable `.agents/skills/*/SKILL.md` where supported |
 | **Rules**                    | `.agent/rules/*.md`                | `.cursor/rules/*.mdc`, `.claude/rules/*.md`, or an entry-point chain where the local matrix documents that choice                                     |
-| **Commands** (`jc-*` prefix) | `.agent/commands/*.md`             | `.cursor/commands/jc-*.md`, `.claude/commands/jc-*.md`, `.gemini/commands/jc-*.toml`, `.agents/skills/jc-*/SKILL.md`                                 |
 | **Sub-agent templates**      | `.agent/sub-agents/templates/*.md` | `.cursor/agents/`, `.claude/agents/`, `.github/agents/*.agent.md`, Codex project-agent config in `.codex/`; unsupported states stay explicit in the local matrix |
 | **Hooks**                    | `.agent/hooks/` (policy + README)  | Thin native activation in tracked platform config (for example `.claude/settings.json`, with gitignored local overrides where supported). Runtime in a repo-local script surface (`scripts/` or `tools/` as appropriate). Unsupported platforms stay explicit in the local matrix |
 
@@ -389,13 +388,17 @@ When dispatching a reviewer to gate merge or completion, brief with the
 full merge-gate scope, not the arc scope — reviewer verdicts are
 scope-bounded artefacts (PDR-015 amendment 2026-04-29).
 
-## Commands: Canonical and Platform Adapters
+## Skills: Canonical and Platform Adapters
 
-Canonical commands in `.agent/commands/*.md` contain the substantive
-workflow. Platform adapters use the `jc-*` prefix consistently and are
-thin wrappers: Cursor `@` injection, Claude Code YAML + `$ARGUMENTS`,
-Gemini TOML + `{{args}}`, Codex `.agents/skills/jc-*/SKILL.md` with
-`name`/`description` frontmatter. Unsupported states belong in the local
+Canonical skill bodies live in `.agent/skills/<name>/SKILL-CANONICAL.md`
+and carry the substantive workflow. Platform adapters use the `jc-*`
+prefix consistently and are generated thin wrappers at
+`.agents/skills/jc-<name>/SKILL.md` (cross-tool alias, read by Cursor,
+Codex, Gemini CLI, Amp) and `.claude/skills/jc-<name>/SKILL.md`
+(Claude Code only). Adapters are emitted by
+`pnpm agent-tools:skills-adapter-generate`; manual edits forbidden.
+Skills are the sole user-and-model-invokable workflow surface — custom
+command surfaces are retired. Unsupported states belong in the local
 surface matrix.
 
 ### Required Commands

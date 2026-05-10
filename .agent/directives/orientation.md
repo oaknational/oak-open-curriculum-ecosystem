@@ -29,7 +29,7 @@ for the operational-memory surfaces and authority order within them.
 | **Plans** | Scope, sequencing, acceptance criteria | `.agent/plans/*/active/*`, `.agent/plans/*/current/*` | When picking up a lane |
 | **Reference** | Curated library — owner-vetted evergreen read-to-learn material; promotion-gated ([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)) | `.agent/reference/` | When consulting promoted reference material |
 | **Research** | Default exploratory-synthesis tier and holding bay for un-promoted material | `.agent/research/` (with optional transient `notes/` holding bay) | When investigating a topic, or when authoring fresh material that has not been (and may not be) promoted to reference |
-| **Workflow** | Named rituals and canonical commands | `.agent/skills/`, `.agent/commands/`, `.agent/rules/`, `.agent/sub-agents/` | On invocation or trigger |
+| **Workflow** | Named rituals and canonical skills | `.agent/skills/`, `.agent/rules/`, `.agent/sub-agents/` | On invocation or trigger |
 | **Platform Adapters** | Thin wrappers pointing back at canonical surfaces | `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` | Platform-specific activation |
 
 ## Authority Order (for same-scope conflicts)

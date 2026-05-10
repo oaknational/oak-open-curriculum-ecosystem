@@ -30,10 +30,8 @@ prompts below are domain-specific handover briefs for focused work.
 | [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
 | [onboarding-claude-teammate.md](onboarding-claude-teammate.md) | handover | First-session walkthrough for an Oak teammate joining via Claude Code (or another AI coding agent) | [good-first-issues.md](../plans/good-first-issues.md), [mcp-servers-for-contributors.md](../../docs/engineering/mcp-servers-for-contributors.md), [sibling-repos.md](../../docs/engineering/sibling-repos.md) |
 
-Complementary execution cadence: use
-[`/jc-go`](../../.cursor/commands/jc-go.md), which reads
-[`.agent/commands/go.md`](../commands/go.md) and the shared
-[GO workflow](../skills/go/shared/go.md).
+Complementary execution cadence: use the [`go` skill](../skills/go/SKILL-CANONICAL.md)
+and its [shared GO workflow](../skills/go/shared/go.md).
 
 ## Retained Completed Prompts
 

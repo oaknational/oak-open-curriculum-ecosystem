@@ -162,20 +162,20 @@ surfaces of portable doctrine. The canonical rule files live at
 | [`no-machine-local-paths.md`](rules/no-machine-local-paths.md) | PDR-038 (worked instance — months-stable principle that caught its own author) | Machine-local paths are never durable; principle requires a structural enforcement surface |
 | [`subagent-practice-core-protection.md`](rules/subagent-practice-core-protection.md) | PDR-003 (host adoption) | Sub-agent permission rule operationalising the foundational-doc protection doctrine |
 
-### Commands and skills cited by Practice Core
+### Skills cited by Practice Core
 
-Practice-Core PDRs cite host-local commands and skills as the workflow
+Practice-Core PDRs cite host-local skills as the workflow
 implementations of portable doctrine. Canonical files live under
-[`.agent/commands/`](commands/) and [`.agent/skills/`](skills/);
-adapters live under each platform directory.
+[`.agent/skills/`](skills/); adapters are generated at
+`.agents/skills/jc-*/SKILL.md` and `.claude/skills/jc-*/SKILL.md`.
 
 | Workflow (canonical) | Cited by Core | Concept implemented |
 | --- | --- | --- |
-| [`session-handoff.md`](commands/session-handoff.md) | PDR-026 §Deferral-honesty discipline (close ritual) | Per-session landing-evidence ritual |
-| [`consolidate-docs.md`](commands/consolidate-docs.md) | PDR-026 §Deferral-honesty discipline + PDR-042 §Decision (the Learning-Preservation doctrine the gate enforces) | Cross-session consolidation workflow that surfaces deferrals and graduates substance |
-| [`consolidate-docs.md § Learning Preservation Overrides Fitness Pressure`](commands/consolidate-docs.md#learning-preservation-overrides-fitness-pressure) | PDR-042 (the doctrine the signal-distinguishing pre-action gate enforces) | Compression of substance to fit fitness limits is forbidden |
+| [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md) | PDR-026 §Deferral-honesty discipline (close ritual) | Per-session landing-evidence ritual |
+| [`consolidate-docs`](skills/consolidate-docs/SKILL-CANONICAL.md) | PDR-026 §Deferral-honesty discipline + PDR-042 §Decision (the Learning-Preservation doctrine the gate enforces) | Cross-session consolidation workflow that surfaces deferrals and graduates substance |
+| [`consolidate-docs § Learning Preservation Overrides Fitness Pressure`](skills/consolidate-docs/SKILL-CANONICAL.md#learning-preservation-overrides-fitness-pressure) | PDR-042 (the doctrine the signal-distinguishing pre-action gate enforces) | Compression of substance to fit fitness limits is forbidden |
 | [`start-right-quick`](skills/start-right-quick/shared/start-right.md) | PDR-026 §Notes (target-at-open ritual) | Session-entry workflow carrying landing-target ritual |
-| [`session-handoff`](commands/session-handoff.md) | PDR-026 §Notes (landed-at-close ritual) | Session-close workflow carrying landing-evidence ritual |
+| [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md) | PDR-026 §Notes (landed-at-close ritual) | Session-close workflow carrying landing-evidence ritual |
 
 ### Plans cited by Practice Core
 
@@ -216,16 +216,15 @@ This is both the lane router and the merged concept-and-deep-dive hub
 it routes back to the authoritative ADRs, Practice Core, `/docs/**`
 surfaces, and supporting source lanes.
 
-## Commands, Skills, and Prompts
+## Skills and Prompts
 
 The execution surface is intentionally split by role:
 
-- **Stable canonical commands** in [`.agent/commands/`](commands/)
-  (live count surfaces in the directory listing — counts in this
-  index drift; treat the directory as authoritative)
-- **Experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
 - **Canonical skills** in [`.agent/skills/`](skills/) (live count
-  surfaces in the directory listing)
+  surfaces in the directory listing — counts in this index drift;
+  treat the directory as authoritative). Skills are the sole
+  user-and-model-invokable workflow surface; custom command surfaces
+  have been retired.
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -233,10 +232,8 @@ Representative execution surfaces:
 
 | Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
 | --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`session-handoff.md`](commands/session-handoff.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
-| Experimental commands | [`.agent/commands/experiments/`](commands/experiments/) | `collaborate`, `step-back`, `think`                                                                                                                                                                                                                                                                                                                                                             | Trial surfaces not yet promoted into the stable command set   |
-| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`commit`](skills/commit/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
-| Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. [`gt-review.md`](prompts/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL.md).                                                     | Stateful session entry points tied to active plans or domains |
+| Skills                | [`.agent/skills/`](skills/)                             | [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL-CANONICAL.md), [`go`](skills/go/SKILL-CANONICAL.md), [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md), [`gates`](skills/gates/SKILL-CANONICAL.md), [`plan`](skills/plan/SKILL-CANONICAL.md), [`review`](skills/review/SKILL-CANONICAL.md), [`consolidate-docs`](skills/consolidate-docs/SKILL-CANONICAL.md), [`metacognition`](skills/metacognition/SKILL-CANONICAL.md), [`napkin`](skills/napkin/SKILL-CANONICAL.md), [`commit`](skills/commit/SKILL-CANONICAL.md), [`patterns`](skills/patterns/SKILL-CANONICAL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL-CANONICAL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL-CANONICAL.md) | User-invoked workflows and on-demand expertise                |
+| Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. [`gt-review.md`](prompts/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md).                                                     | Stateful session entry points tied to active plans or domains |
 
 ## Memory and Patterns
 
@@ -316,7 +313,6 @@ example in this repo:
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |
 | [`.agent/skills/`](skills/)                                                                   | Canonical skills (platform-agnostic)                                        |
-| [`.agent/commands/`](commands/)                                                               | Canonical commands (platform-agnostic)                                      |
 | [`.agent/research/`](research/)                                                               | Research documents and analysis                                             |
 | [`.agent/analysis/`](analysis/)                                                               | Investigations and evidence                                                 |
 | [`.agent/reports/`](reports/)                                                                 | Promoted formal audits and syntheses                                        |

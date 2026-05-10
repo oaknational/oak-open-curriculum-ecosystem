@@ -73,7 +73,7 @@ The system improves over time through the [Knowledge Flow](../../.agent/practice
 
 **Capture** → **Refine** → **Graduate** → **Enforce** → **Work** → repeat.
 
-Each stage serves a broader audience: the napkin serves the current session, distilled learnings serve future agents, permanent docs (ADRs, governance, READMEs) serve everyone. Each transition raises the bar for what passes through. The [`/jc-consolidate-docs`](../../.agent/commands/consolidate-docs.md) command drives graduation and is where the intra-repo loop, inter-repo integration, and fitness regulation all converge ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
+Each stage serves a broader audience: the napkin serves the current session, distilled learnings serve future agents, permanent docs (ADRs, governance, READMEs) serve everyone. Each transition raises the bar for what passes through. The [`/jc-consolidate-docs`](../../.agent/skills/consolidate-docs/SKILL-CANONICAL.md) skill drives graduation and is where the intra-repo loop, inter-repo integration, and fitness regulation all converge ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
 
 **Fitness functions** prevent unbounded growth at every stage. The napkin
 triggers distillation at ~500 lines. Distilled targets <200 lines. Permanent

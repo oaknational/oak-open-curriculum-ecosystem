@@ -7,6 +7,11 @@
 transitional sub-agent invocation adapters only while Gemini lacks native
 sub-agent spawning. They are not a general custom-command surface and must be
 removed or reclassified when native Gemini agent support exists.
+**Amended**: 2026-05-10 — `.agent/commands/`, `.cursor/commands/jc-*.md`,
+and `.gemini/commands/jc-*.toml` are now retired. Their substantive content
+has been inlined into `.agent/skills/<name>/SKILL-CANONICAL.md`; skills are
+the sole user-and-model-invokable workflow surface. The 2026-05-09
+amendment's transitional language no longer applies.
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -439,6 +444,21 @@ includes a drift gate and the new contract checks. Owned skills carry
 `skills-lock.json` keep canonical names. The portable doctrine is
 [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md);
 this ADR records the host adoption.
+
+### 2026-05-10 — Custom command surfaces retired
+
+The retirement targeted by the 2026-05-09 amendment is now complete.
+`.agent/commands/`, `.cursor/commands/jc-*.md`, and
+`.gemini/commands/jc-*.toml` have been deleted; substantive command
+content was inlined into the corresponding
+`.agent/skills/<name>/SKILL-CANONICAL.md`. `.gemini/commands/review-*.toml`
+files remain as transitional sub-agent invocation adapters per the
+earlier 2026-05-10 amendment. `validate-portability.ts` and
+`agent-tools/src/core/health-probe-{shared,parity}.ts` no longer
+enumerate canonical commands or platform command adapters; skill-adapter
+validation is delegated entirely to `pnpm skills:check`. Skills are now
+the sole user-and-model-invokable workflow surface across all
+platforms.
 
 ## References
 

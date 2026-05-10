@@ -6,7 +6,7 @@ This directory contains the Codex project-agent configuration for the Oak Open C
 
 Codex uses two directories:
 
-- **`.agents/skills/`** — Codex skill and command adapters (thin wrappers referencing canonical content in `.agent/skills/` and `.agent/commands/`)
+- **`.agents/skills/`** — Codex skill adapters (thin wrappers referencing canonical content in `.agent/skills/`)
 - **`.codex/`** — Codex project-agent configuration for reviewer sub-agents
 
 Reviewer sub-agents are **not** skills. They require `sandbox_mode = "read-only"`, `approval_policy = "never"`, and `model_reasoning_effort = "high"` — settings only available to project agents.

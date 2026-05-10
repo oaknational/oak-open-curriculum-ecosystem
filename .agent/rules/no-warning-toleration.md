@@ -118,7 +118,7 @@ Two rules follow:
    bind is the normal way doctrine spreads.** Canon surfaces
    (`.agent/directives/`, `.agent/memory/`, `.agent/plans/`,
    `.agent/practice-core/`, `.agent/rules/`,
-   `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/`, plus
+   `.agent/skills/`, `.agent/sub-agents/`, plus
    workspace source, configs, and shared infrastructure) belong inside
    each relevant gate by default. Reference / synthesis / archive /
    third-party / generated material stays outside until someone

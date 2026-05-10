@@ -280,9 +280,6 @@ graph LR
     REVIEW --> CONSOL[Documentation Consolidation]
 ```
 
-- **Commands** (`.agent/commands/`, with platform adapters in
-  `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`,
-  `.agents/skills/jc-*/`) — slash commands that initiate structured workflows
 - **Skills** (`.agent/skills/`) — canonical skill definitions providing session workflows
   (start-right-quick, start-right-thorough, go) and passive capabilities (napkin,
   patterns, etc.). Platform adapters in `.cursor/skills/`,
@@ -348,7 +345,6 @@ graph LR
 | `.agent/experience/`                                                       | Experiential records across sessions                                                                                                                            |
 | `.agent/skills/`                                                           | Canonical skills — session workflows and passive capabilities (platform-agnostic)                                                                               |
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |
-| `.agent/commands/`                                                         | Canonical commands (platform-agnostic)                                                                                                                          |
 | `.agent/prompts/`                                                          | Domain-specific handover prompts — stateful session context (local adaptation)                                                                                  |
 | `.agent/research/`                                                         | Research documents and analysis. May contain a transient `notes/` holding bay (see the host repo's `research/` README via the practice-index)                   |
 | `docs/explorations/` (or host equivalent)                                  | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
