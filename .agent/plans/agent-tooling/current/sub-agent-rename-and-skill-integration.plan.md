@@ -35,7 +35,7 @@ anchored_commits:
   - 153e960b — third-party skill vendoring cleanup (precondition)
   - 261d50fe — reviewer feedback follow-up (mcp-reviewer WARN + fred latent BLOCKER note)
   - ce054100 — Phase 1A mechanical rename (templates + adapters + frontmatter + paths)
-  - "<TBD this commit> — Phase 1B partial: sentry/clerk/mcp templates merged + adapters updated"
+  - 52c139c7 — Phase 1B partial: sentry/clerk/mcp templates merged + adapters updated
 ---
 
 # Sub-agent rename to `*-expert` + skill integration
@@ -151,10 +151,11 @@ pattern; five domains remain.
 
 One commit on `feat/mcp-graph-support-foundation`:
 
-- `<TBD>` — `feat(sub-agents): merge sentry/clerk/mcp expert templates with
-  active-workflow content (Phase 1B partial)`. 13 files: 3 templates,
-  9 adapters (3 Claude + 3 Cursor + 3 Codex), `.codex/config.toml`
-  description sync.
+- `52c139c7` — `feat(sub-agents): merge sentry/clerk/mcp experts with
+  active-workflow content (1B partial)`. 19 files: 3 templates, 9 adapters
+  (3 Claude + 3 Cursor + 3 Codex), `.codex/config.toml` description sync,
+  the plan itself, and 5 collaboration-state surfaces (active-claims,
+  closed-claims archive, shared comms log, 2 new comms events).
 
 #### Owner-locked decisions carried forward
 
