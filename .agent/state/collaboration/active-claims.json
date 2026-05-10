@@ -675,5 +675,83 @@
       "notes": "Re-enqueuing with full coordination bundle"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "d526f5d3-eed0-46e8-aee9-0a6bcf8739ff",
+      "agent_id": {
+        "agent_name": "Stormbound Floating Current",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ea1cbe"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/sub-agents/templates/accessibility-expert.md",
+            ".agent/sub-agents/templates/assumptions-expert.md",
+            ".agent/sub-agents/templates/design-system-expert.md",
+            ".agent/sub-agents/templates/elasticsearch-expert.md",
+            ".agent/sub-agents/templates/react-component-expert.md",
+            ".agent/skills/accessibility-expert/**",
+            ".agent/skills/assumptions-expert/**",
+            ".agent/skills/clerk-expert/**",
+            ".agent/skills/design-system-expert/**",
+            ".agent/skills/elasticsearch-expert/**",
+            ".agent/skills/mcp-expert/**",
+            ".agent/skills/react-component-expert/**",
+            ".agent/skills/sentry-expert/**",
+            ".claude/agents/accessibility-expert.md",
+            ".claude/agents/assumptions-expert.md",
+            ".claude/agents/design-system-expert.md",
+            ".claude/agents/elasticsearch-expert.md",
+            ".claude/agents/react-component-expert.md",
+            ".cursor/agents/accessibility-expert.md",
+            ".cursor/agents/assumptions-expert.md",
+            ".cursor/agents/design-system-expert.md",
+            ".cursor/agents/elasticsearch-expert.md",
+            ".cursor/agents/react-component-expert.md",
+            ".codex/agents/accessibility-expert.toml",
+            ".codex/agents/assumptions-expert.toml",
+            ".codex/agents/design-system-expert.toml",
+            ".codex/agents/elasticsearch-expert.toml",
+            ".codex/agents/react-component-expert.toml",
+            ".codex/config.toml",
+            ".claude/skills/jc-*-expert/**",
+            ".agents/skills/jc-*-expert/**",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:17:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 1B continuation: 5 remaining domain merges (accessibility, assumptions, design-system, elasticsearch, react-component) + Phase 1B.2-4 cleanup (standalone deletion + Skill() permission removal + gates). Per plan .agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md and prior session opener."
+    },
+    {
+      "claim_id": "1435de15-1c1e-4f7c-b062-b562fb5c2614",
+      "agent_id": {
+        "agent_name": "Gilded Eclipsing Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:40:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "ADR gap analysis: read current ADR corpus against recent repo work; write only session memory/collaboration state unless owner asks for follow-up edits."
+    }
+  ]
 }

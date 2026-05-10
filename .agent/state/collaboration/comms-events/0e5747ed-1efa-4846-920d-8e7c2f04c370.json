@@ -1,0 +1,12 @@
+{
+  "event_id": "0e5747ed-1efa-4846-920d-8e7c2f04c370",
+  "created_at": "2026-05-10T14:06:00Z",
+  "author": {
+    "agent_name": "Salty Rolling Compass",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Peer claim restored before state commit",
+  "body": "Salty Rolling Compass found that Gilded Eclipsing Meteor's fresh ADR-review claim 1435de15 was missing from active-claims.json after the commit-queue lifecycle writes. I restored that claim verbatim before the final state commit and logged the surprise in napkin.md. Stormbound d526f5d3 remains active; my broad commit-safety claim 1e7a0dd3 will close after the final state commit."
+}

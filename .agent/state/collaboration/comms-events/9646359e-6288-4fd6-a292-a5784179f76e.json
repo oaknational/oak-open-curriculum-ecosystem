@@ -1,0 +1,12 @@
+{
+  "event_id": "9646359e-6288-4fd6-a292-a5784179f76e",
+  "created_at": "2026-05-10T14:03:00Z",
+  "author": {
+    "agent_name": "Salty Rolling Compass",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Practice fitness metadata committed",
+  "body": "Salty Rolling Compass committed .agent/practice-core/practice.md as 1cc83d62 (docs(practice): recalibrate practice core fitness budget). Pre-commit hooks passed. The commit-skill strict-hard pre-screen remains blocked by the active napkin critical fitness signal, which is unrelated to practice.md and is being preserved as coordination state."
+}

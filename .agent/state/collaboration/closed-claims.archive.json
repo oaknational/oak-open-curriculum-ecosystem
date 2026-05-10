@@ -14835,6 +14835,236 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "79fa5bff-2bac-429f-9afb-8b6a5f11b72f",
+      "agent_id": {
+        "agent_name": "Open Lifting Gale",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "e4ad13"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:33:19Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Open Lifting Gale agent-tools Workstream 1, plan rename, and handoff bundle.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T13:35:44Z",
+        "closed_by": {
+          "agent_name": "Open Lifting Gale",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "e4ad13"
+        },
+        "summary": "Committed primary agent-tooling bundle as 05adba87; queue entry 88964f57 completed. Pre-commit passed after mechanical Prettier repair to peer adapter files.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "79fa5bff-2bac-429f-9afb-8b6a5f11b72f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "71d2350e-5648-4f61-a631-6a44ea924d0a",
+      "agent_id": {
+        "agent_name": "Salty Rolling Compass",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:52:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit expert template/adaptor active-workflow bundle using explicit pathspecs.",
+      "intent_to_commit": "0a3fa93a-fc6c-4764-b798-8dd78dcad19e",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T13:57:00Z",
+        "closed_by": {
+          "agent_name": "Salty Rolling Compass",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Committed expert template/adaptor active-workflow bundle as 57de914f.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "71d2350e-5648-4f61-a631-6a44ea924d0a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1435de15-1c1e-4f7c-b062-b562fb5c2614",
+      "agent_id": {
+        "agent_name": "Gilded Eclipsing Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:40:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "ADR gap analysis: read current ADR corpus against recent repo work; write only session memory/collaboration state unless owner asks for follow-up edits.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T13:52:14Z",
+        "closed_by": {
+          "agent_name": "Gilded Eclipsing Meteor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Completed ADR coverage gap analysis across recent merged work and current branch; no ADR files edited.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1435de15-1c1e-4f7c-b062-b562fb5c2614",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c464219f-3e3d-41ed-ace1-dc3e0cae1909",
+      "agent_id": {
+        "agent_name": "Salty Rolling Compass",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:59:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit practice-core fitness metadata recalibration using explicit pathspec.",
+      "intent_to_commit": "af77175a-439f-447b-aa34-2bc26510e498",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:03:00Z",
+        "closed_by": {
+          "agent_name": "Salty Rolling Compass",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Committed practice-core fitness metadata recalibration as 1cc83d62.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c464219f-3e3d-41ed-ace1-dc3e0cae1909",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e7a0dd3-3f02-4c5a-8467-8b74dbe1a4e1",
+      "agent_id": {
+        "agent_name": "Salty Rolling Compass",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/practice-core/practice.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/94516a8e-e5d3-43c2-8ea5-2253a531f55e.json",
+            ".agent/state/collaboration/comms-events/b7e52d0f-3f5b-48a5-87e8-1c10db6e7f2d.json",
+            ".agent/state/collaboration/comms-events/8b6e050b-d2ce-4c56-b356-1e6b361c29f3.json",
+            ".agent/sub-agents/templates/accessibility-expert.md",
+            ".agent/sub-agents/templates/assumptions-expert.md",
+            ".agent/sub-agents/templates/design-system-expert.md",
+            ".agent/sub-agents/templates/elasticsearch-expert.md",
+            ".claude/agents/accessibility-expert.md",
+            ".claude/agents/assumptions-expert.md",
+            ".claude/agents/design-system-expert.md",
+            ".codex/agents/accessibility-expert.toml",
+            ".codex/agents/assumptions-expert.toml",
+            ".codex/agents/design-system-expert.toml",
+            ".codex/config.toml",
+            ".cursor/agents/accessibility-expert.md",
+            ".cursor/agents/assumptions-expert.md",
+            ".cursor/agents/design-system-expert.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:50:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Owner-requested commit safety sweep for all currently dirty in-flight files; proceeding with caution over Stormbound d526f5d3 and Gilded 1435de15 because both are offline, with explicit pathspec commits and commit-queue verification.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:08:00Z",
+        "closed_by": {
+          "agent_name": "Salty Rolling Compass",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Owner-requested commit safety sweep completed: expert bundle committed as 57de914f, practice metadata committed as 1cc83d62, final collaboration-state bundle prepared for durable commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e7a0dd3-3f02-4c5a-8467-8b74dbe1a4e1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

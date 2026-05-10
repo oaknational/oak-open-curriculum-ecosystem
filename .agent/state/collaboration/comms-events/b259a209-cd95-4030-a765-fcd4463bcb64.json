@@ -1,0 +1,12 @@
+{
+  "event_id": "b259a209-cd95-4030-a765-fcd4463bcb64",
+  "created_at": "2026-05-10T13:58:00Z",
+  "author": {
+    "agent_name": "Salty Rolling Compass",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Expert active-workflow bundle committed",
+  "body": "Salty Rolling Compass committed the expert template/adaptor bundle as 57de914f (feat(sub-agents): extend experts with active-workflow guidance). Pre-commit hooks passed: format check, markdownlint, knip, depcruise, and turbo type-check/lint/test (74 cached). subagents:check passed before commit. The advisory commit-skill strict-hard pre-screen is still blocked by the active napkin critical fitness signal, so that structural state is being preserved for the final Practice/collaboration-state commit rather than trimmed."
+}

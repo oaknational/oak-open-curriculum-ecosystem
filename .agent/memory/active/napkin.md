@@ -22,6 +22,36 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-10 — Salty Rolling Compass / codex / GPT-5 / `019e12`
+
+### Surprise
+
+- **Expected**: commit-queue lifecycle writes would preserve unrelated fresh
+  file claims while adding and completing my git-window queue entries.
+- **Actual**: Gilded Eclipsing Meteor's fresh ADR-review claim disappeared
+  from `active-claims.json` during the commit safety sweep; I caught the loss
+  in the final pre-state-commit claim audit and restored the claim before
+  committing shared state.
+- **Why expectation failed**: I trusted helper-mediated state mutation as
+  preservation-complete instead of re-auditing peer claims after each queue
+  completion. The helper may be operating on a stale read model or an
+  unexpected merge path under rapid same-file lifecycle writes.
+- **Behaviour change**: After every commit-queue complete / claim-close pair,
+  re-run `jq '.claims'` and compare fresh peer claims before staging the final
+  collaboration-state commit. Treat missing peer claims as a blocker to repair,
+  not as stale cleanup.
+  Source plane: operational
+
+## 2026-05-10 — Gilded Eclipsing Meteor ADR expansion / codex / GPT-5 / `019e12`
+
+### What Was Done
+
+- Started an owner-requested ADR gap analysis grounded in repo standards,
+  with specialist sub-agent review authorised by the owner. Registered claim
+  `1435de15-1c1e-4f7c-b062-b562fb5c2614`; read start-right quick,
+  principles, TDD/testing/schema directives, operational collaboration state,
+  and active napkin/distilled memory before ADR corpus review.
+
 ## 2026-05-10 — Stratospheric Sweeping Plume / claude-code / Opus 4.7 / `c8dd27`
 
 ### Framing failure — read PDR-003, then violated its §Decision-2
@@ -507,3 +537,24 @@ raise is owner-only) defines an honest accretion pathway.
   assertions, first ask whether the observable contract can be factored into a
   pure formatter or option resolver. Add filesystem-backed coverage only if the
   repo already has an accepted harness shape for that path.
+
+## 2026-05-10 — Gilded Eclipsing Meteor / codex / GPT-5 / `019e12`
+
+### ADR coverage review scope expansion
+
+- **Correction absorbed**: initial ADR review centred on the visible
+  graph/agent-tooling tranche, but owner pointed out there had been no serious
+  ADR coverage review in at least two weeks. The right unit became "merged
+  work since 2026-04-26 plus current branch", not "latest graph closeout".
+- **Useful decomposition**: the drift sorted into four lanes:
+  runtime/security protocol ADRs (MCP auth, Origin/CORS, rate limits,
+  redaction), quality-gate ADRs (network-free CI, Sonar, shell lint, secrets),
+  observability ADR/runbooks (Sentry identity/source maps/config), and
+  agent-platform follow-through (command retirement, `*-expert`
+  consolidation, skill adapter generation).
+- **Pattern candidate**: when many recent PRs have landed across unrelated
+  domains, do not ask "which ADR is stale?" globally. First enumerate recent
+  PR/domain slices, then assign specialist lanes. The result is sharper: only
+  dependency vulnerability policy and EEF freshness governance looked like
+  genuinely new ADR candidates; most other gaps were accepted-ADR amendments
+  or implementation follow-through.
