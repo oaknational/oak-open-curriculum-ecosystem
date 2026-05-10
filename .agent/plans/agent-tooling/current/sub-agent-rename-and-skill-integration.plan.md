@@ -11,10 +11,10 @@ overview: >
 status: 🟡 IN PROGRESS
 todos:
   - id: phase-1b-integrate-and-delete
-    content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and decide where the `mcp-expert` companion `installation-and-integration.md` lives (move to `.agent/sub-agents/templates/mcp-expert/` as supporting file, or keep at `.agent/skills/mcp-expert/installation-and-integration.md` and update cross-link). 7 of 8 merges landed (sentry, clerk, mcp, accessibility, assumptions, design-system, elasticsearch); 1 remains (react-component); standalone deletion + permission cleanup deferred to next session."
-    status: in_progress
+    content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and inline the `mcp-expert` companion `installation-and-integration.md` (Option C). Resolved: 8 of 8 merges landed (sentry/clerk/mcp at 52c139c7; accessibility/assumptions/design-system/elasticsearch templates at 57de914f; elasticsearch adapters at 16c10cea; react-component at 31a2a9e1). Cleanup pass complete in the working tree: 24 standalone-skill directories deleted (8 canonical + 8 .claude jc- adapters + 8 .agents jc- adapters), the mcp-expert companion file deleted alongside, and 8 `Skill()` permissions removed from `.claude/settings.json`."
+    status: completed
   - id: phase-1b-reviewer-dispatch
-    content: "Phase 1B reviewer dispatch: code-reviewer (gateway), docs-adr-reviewer (8 substantive content merges + role-broadening), config-reviewer (.claude/settings.json permission removals + skills-lock interaction), mcp-reviewer + clerk-reviewer + sentry-reviewer (each on their own paired domain), architecture-reviewer-fred (PDR-051 alignment of the unified expert role)."
+    content: "Phase 1B reviewer dispatch: code-expert (gateway), docs-adr-expert (8 substantive content merges + role-broadening), config-expert (.claude/settings.json permission removals + skills-lock interaction), mcp-expert + clerk-expert + sentry-expert (each on their own paired domain), architecture-expert-fred (PDR-051 alignment of the unified expert role)."
     status: pending
     depends_on: [phase-1b-integrate-and-delete]
   - id: phase-2-cross-repo-sweep
@@ -22,7 +22,7 @@ todos:
     status: pending
     depends_on: [phase-1b-reviewer-dispatch]
   - id: phase-2-reviewer-dispatch
-    content: "Phase 2 reviewer dispatch: code-reviewer (gateway), docs-adr-reviewer (rule + ADR + permanent-doc rewrites), config-reviewer (any settings/lint/codex-config touch), onboarding-expert (renamed onboarding-reviewer — ensure onboarding paths still point to current names), test-reviewer (any test fixture updates needed)."
+    content: "Phase 2 reviewer dispatch: code-expert (gateway), docs-adr-expert (rule + ADR + permanent-doc rewrites), config-expert (any settings/lint/codex-config touch), onboarding-expert (ensure onboarding paths still point to current names), test-expert (any test fixture updates needed)."
     status: pending
     depends_on: [phase-2-cross-repo-sweep]
 related:
@@ -36,7 +36,9 @@ anchored_commits:
   - 261d50fe — reviewer feedback follow-up (mcp-reviewer WARN + fred latent BLOCKER note)
   - ce054100 — Phase 1A mechanical rename (templates + adapters + frontmatter + paths)
   - 52c139c7 — Phase 1B partial: sentry/clerk/mcp templates merged + adapters updated
-  - 57de914f — Phase 1B continuation: accessibility/assumptions/design-system/elasticsearch templates merged + changed adapters updated
+  - 57de914f — Phase 1B continuation: accessibility/assumptions/design-system/elasticsearch templates + changed adapters updated
+  - 16c10cea — Phase 1B follow-up: elasticsearch adapters synchronised
+  - 31a2a9e1 — Phase 1B continuation: react-component template + adapters merged
 ---
 
 # Sub-agent rename to `*-expert` + skill integration
@@ -84,11 +86,11 @@ of the now-redundant standalone skills, and the repo-wide reference sweep.
 
 ## Phase 1B — substantive integration
 
-### Phase 1B status (mid-sequence checkpoint)
+### Phase 1B status (complete)
 
-**Last refreshed**: 2026-05-10 (Salty Rolling Compass commit-safety sweep close).
+**Last refreshed**: 2026-05-10 (Stormbound Floating Current cleanup close).
 
-**Domains merged and adapters refreshed** (7 of 8):
+**Domains merged and adapters refreshed** (8 of 8 — Phase 1B.1 complete):
 
 - `sentry-expert` — template merged; `.claude` + `.cursor` + `.codex`
   adapter descriptions broadened, body H1 → "Sentry Expert", body prose →
@@ -96,13 +98,26 @@ of the now-redundant standalone skills, and the repo-wide reference sweep.
   sync'd. `subagents:check` passes after this merge.
 - `clerk-expert` — same shape as sentry; passes.
 - `mcp-expert` — same shape; companion `installation-and-integration.md`
-  inlined into the merged template (Option C from §1B.3). Standalone
-  `.agent/skills/mcp-expert/installation-and-integration.md` is now
-  duplicate — deletion deferred to next-session cleanup pass with the
-  other standalone-skill deletions.
+  inlined into the merged template (Option C from §1B.3).
 - `accessibility-expert`, `assumptions-expert`, `design-system-expert`, and
   `elasticsearch-expert` — templates merged with active-workflow mode and
-  changed Claude/Cursor/Codex adapters synchronised in `57de914f`.
+  changed Claude/Cursor/Codex adapters synchronised. The four templates
+  landed at `57de914f`; the elasticsearch adapters then landed separately
+  at `16c10cea`.
+- `react-component-expert` — template merged with mode-aware Workflow
+  split, adapters refreshed across `.claude`/`.cursor`/`.codex`,
+  `.codex/config.toml` description sync'd. Landed at `31a2a9e1`.
+
+**Phase 1B.2-4 cleanup** (complete in the working tree; validation/commit
+still pending):
+
+- 8 standalone `.agent/skills/<domain>-expert/` directories deleted
+  (including the `mcp-expert/installation-and-integration.md` companion
+  file, now duplicated by the inlined section in the merged template).
+- 8 `.claude/skills/jc-<domain>-expert/` adapter directories deleted.
+- 8 `.agents/skills/jc-<domain>-expert/` adapter directories deleted.
+- 8 `Skill(<domain>-expert)` entries removed from
+  `.claude/settings.json` permissions.allow.
 
 **Per-domain edit pattern (locked in)**:
 
@@ -124,32 +139,34 @@ of the now-redundant standalone skills, and the repo-wide reference sweep.
    per-domain pattern.
 6. Run `pnpm subagents:check` after each domain — must pass.
 
-**Domains remaining** (1 of 8):
+**Domains remaining**: none. Phase 1B.1 complete.
 
-- react-component (template 275 LoC + skill 94 LoC)
+**Standalone deletion + permission cleanup**: complete. Eight
+`.agent/skills/<domain>-expert/` dirs, eight `.claude/skills/jc-*-expert/`
+adapter dirs, eight `.agents/skills/jc-*-expert/` adapter dirs, and the
+eight matching `Skill()` permissions in `.claude/settings.json` are all
+gone. The `mcp-expert/installation-and-integration.md` companion file
+deleted as part of the same pass.
 
-**Standalone deletion + permission cleanup**: deferred to next session per
-owner direction at this session's pause. Run after the remaining
-`react-component-expert` merge lands.
+**Cross-references inside merged templates**: every merged template
+updated internal references to sibling sub-agents from `*-reviewer` to
+`*-expert` for self-consistency (e.g. "use `code-reviewer`" → "use
+`code-expert`"). This is Phase 2 sweep substance pre-empted within the
+bounds of the touched files only; the remaining ~590 cross-repo sites
+stay queued for Phase 2.
 
-**Cross-references inside merged templates**: the three landed templates
-(sentry, clerk, mcp) had their internal references to sibling
-`*-reviewer` agents updated to `*-expert` for self-consistency (e.g.
-"use `code-reviewer`" → "use `code-expert`"). This is Phase 2 sweep
-substance pre-empted within the bounds of the touched files only; the
-remaining ~590 cross-repo sites stay queued for Phase 2.
-
-### Next-session opener (Phase 1B continuation)
+### Next-session opener (Phase 1B cleanup validation and review)
 
 Branch: `feat/mcp-graph-support-foundation`. Owning plan: this file.
 
-Prior sessions landed seven substantive merges (sentry, clerk, mcp,
-accessibility, assumptions, design-system, elasticsearch) and the locked-in
-per-domain edit pattern; one domain remains.
+Current working-tree state already contains the cleanup bundle for Phase 1B:
+24 standalone skill directories are deleted, `.claude/settings.json` no longer
+allows the eight deleted standalone expert skills, and this plan records all
+eight paired expert content/adaptor merges as landed.
 
-#### What landed this session
+#### What has landed
 
-Two Phase 1B content commits on `feat/mcp-graph-support-foundation`:
+Phase 1B content commits on `feat/mcp-graph-support-foundation`:
 
 - `52c139c7` — `feat(sub-agents): merge sentry/clerk/mcp experts with
   active-workflow content (1B partial)`. 19 files: 3 templates, 9 adapters
@@ -161,6 +178,8 @@ Two Phase 1B content commits on `feat/mcp-graph-support-foundation`:
   elasticsearch templates plus the changed Claude/Cursor/Codex adapters and
   `.codex/config.toml` description sync. `pnpm subagents:check` passed before
   commit; pre-commit hooks passed.
+- `16c10cea` — `feat(sub-agents): finish elasticsearch expert adapters`.
+- `31a2a9e1` — `feat(sub-agents): merge react component expert guidance`.
 
 #### Owner-locked decisions carried forward
 
@@ -182,62 +201,25 @@ The Phase 1B owner-locked decisions from the prior opener stand unchanged:
 
 #### What you're starting
 
-**Phase 1B.1 continuation: 1 remaining domain merge + Phase 1B.2-4
-cleanup.** Reasonable shape: apply the per-domain edit pattern to
-`react-component-expert`, then a single cleanup commit covering standalone
-deletion + 8 `Skill()` permission removals + skills:check verification.
+**Phase 1B cleanup validation + reviewer dispatch.** Reasonable shape:
+coordinate with Stormbound Floating Current's still-active claim, inspect the
+current cleanup diff, run the Phase 1B.5 gates, land the cleanup commit, then
+dispatch the reviewers listed below. Do not begin Phase 2's ~590-site reference
+sweep until Phase 1B cleanup and review are settled.
 
-Remaining domain:
+Expected cleanup diff:
 
-- react-component
+- delete `.agent/skills/<domain>-expert/` for all 8 paired domains, including
+  the now-inlined `mcp-expert/installation-and-integration.md` companion;
+- delete `.claude/skills/jc-<domain>-expert/` and
+  `.agents/skills/jc-<domain>-expert/` for all 8 paired domains;
+- remove the 8 `Skill(<domain>-expert)` entries from
+  `.claude/settings.json` permissions.allow.
 
-Paired domain set for audit/review context:
-
-1. Read `.agent/sub-agents/templates/<domain>-expert.md` (the
-   reviewer-body template).
-2. Read `.agent/skills/<domain>-expert/SKILL-CANONICAL.md` (the standalone
-   active-workflow skill body).
-3. Write the unified template:
-   - Merged "Delegation Triggers" + "Triggering Scenarios" (broadened to
-     cover both modes).
-   - Body H1 → `# <Domain> Expert`.
-   - Mode declaration (review or active-workflow) before the doctrine
-     hierarchy.
-   - Doctrine + Deployment Context + Authoritative Sources tables —
-     preserve the live-doc URL tables verbatim per PDR-051.
-   - Merged Must-Read + Consult-If-Relevant tables (the reviewer's set
-     is broader; merge into the wider one).
-   - Workflow section split into "Review mode" and "Active-workflow
-     mode" sub-sections.
-   - Review Checklist (review mode).
-   - Guardrails (both modes).
-   - Boundaries (both modes).
-   - Output Format with both Review-mode and Active-workflow-mode
-     templates.
-   - Update internal `*-reviewer` cross-references → `*-expert`.
-4. Update `.claude/agents/<domain>-expert.md` — frontmatter description
-   broadened, body H1 + body prose updated per the locked pattern.
-5. Update `.cursor/agents/<domain>-expert.md` — same.
-6. Update `.codex/agents/<domain>-expert.toml` — same.
-7. Update `.codex/config.toml` — description-sync line for this domain.
-8. Run `pnpm subagents:check` (must pass — count stays at 19 templates,
-   22 Cursor + 22 Codex adapters).
-
-After all 5 merges:
-
-1. Delete `.agent/skills/<domain>-expert/` for all 8 domains (the 3
-   already merged + the 5 just merged); also delete the
-   `.agent/skills/mcp-expert/installation-and-integration.md` companion
-   (now duplicated by the inlined section in the merged mcp-expert
-   template).
-2. Delete `.claude/skills/jc-<domain>-expert/` and
-   `.agents/skills/jc-<domain>-expert/` for all 8 domains.
-3. Remove the 8 `Skill(<domain>-expert)` entries from
-   `.claude/settings.json` permissions.allow.
-4. Run gates: `pnpm subagents:check`, `pnpm skills:check`,
-   `pnpm portability:check` (must not regress beyond pre-existing
-   failures), `pnpm test --filter @oaknational/agent-tools`,
-   `pnpm format:root`, `pnpm markdownlint:root`.
+Run gates: `pnpm subagents:check`, `pnpm skills:check`,
+`pnpm portability:check` (must not regress beyond pre-existing failures),
+`pnpm test --filter @oaknational/agent-tools`, `pnpm format:root`, and
+`pnpm markdownlint:root`.
 
 #### Reviewer dispatch (post-Commit)
 
@@ -248,13 +230,10 @@ Per the §"Reviewer dispatch matrix" below:
   primary post-Commit reviewer for the new merges).
 - `config-expert` — `.claude/settings.json` permission removals +
   skills-lock interaction (only after the cleanup pass).
-- `mcp-expert`, `clerk-expert`, `sentry-expert` — the three already
-  landed in this session; not re-reviewed unless cleanup phase touches
-  them.
-- Domain-specific experts for the new 5 (`accessibility-expert`,
-  `assumptions-expert`, `design-system-expert`, `elasticsearch-expert`,
-  `react-component-expert`). The first four have landed but still need
-  post-merge review alongside the remaining react-component merge and cleanup.
+- `mcp-expert`, `clerk-expert`, `sentry-expert`, `accessibility-expert`,
+  `assumptions-expert`, `design-system-expert`, `elasticsearch-expert`, and
+  `react-component-expert` — domain-specific checks for the merged unified
+  templates and cleanup impact.
 - `architecture-expert-fred` — PDR-051 alignment of the unified expert
   role across all 8 templates.
 
@@ -280,13 +259,10 @@ Per the §"Reviewer dispatch matrix" below:
 1. `/jc-start-right-thorough` to ground (Phase 1B continuation is
    plan-heavy though structurally locked-in).
 2. Read this opener + the §"Phase 1B status" section above + PDR-051.
-3. Mark `phase-1b-integrate-and-delete` `in_progress` in the todos
-   block (already in_progress from prior session; keep it there).
-4. Begin with `react-component-expert`, the only remaining unmerged paired
-   domain.
-5. After the merge, run `pnpm subagents:check` before cleanup.
-6. After the final merge lands, do the cleanup commit (deletion +
-   permission removal + gates).
+3. Coordinate with Stormbound Floating Current's active claim before landing
+   the current cleanup diff.
+4. Run the Phase 1B.5 gates, commit the cleanup bundle, then run reviewer
+   dispatch.
 
 ### 1B.1 — content merge per domain (8 domains)
 
@@ -434,8 +410,8 @@ asked.
 
 | Phase | Reviewers |
 |---|---|
-| 1B integration | code-reviewer (gateway), docs-adr-reviewer, config-reviewer, mcp-expert (own domain), clerk-expert, sentry-expert, architecture-reviewer-fred (PDR-051 alignment) |
-| 2 sweep | code-reviewer (gateway), docs-adr-reviewer, config-reviewer, onboarding-expert, test-reviewer |
+| 1B integration | code-expert (gateway), docs-adr-expert, config-expert, mcp-expert (own domain), clerk-expert, sentry-expert, architecture-expert-fred (PDR-051 alignment) |
+| 2 sweep | code-expert (gateway), docs-adr-expert, config-expert, onboarding-expert, test-expert |
 
 Note that the renamed templates already use `*-expert` names by the time
 Phase 1B reviewers run; the dispatch invocations use the new names.
