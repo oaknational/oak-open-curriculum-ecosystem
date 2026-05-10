@@ -2,9 +2,9 @@
 
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
-**Last Updated**: 2026-03-29
-**Phase**: Phases 1-2 complete; HTTP Phase 3 adoption near-complete (19/21 remediation findings resolved, all gates green on `feat/full-sentry-otel-support`). Search CLI adoption pending after HTTP merge.
-**Branch**: `feat/full-sentry-otel-support` head `de232b20`
+**Last Updated**: 2026-05-10
+**Phase**: Observability foundation active; orthogonal sink/fixture config
+replaces the historical `SENTRY_MODE` framing.
 
 ## Overview
 
@@ -23,16 +23,17 @@ constraints established in Phase 1 and Phase 2.
 
 ## Current Observability Contract
 
-For the HTTP MCP server, `SENTRY_MODE` now defines three supported runtime
-contracts:
+For the HTTP MCP server, observability runtime behaviour is defined by
+orthogonal sink and fixture axes:
 
-- `off`: true kill switch. Keep stdout JSON only. Do not initialise Sentry, do
-  not add a Sentry sink, and do not emit outbound Sentry traffic.
-- `fixture`: keep stdout JSON and exercise the observability adapters locally
-  with no network. MCP observations and handled-error captures stay in local
-  fixture stores only.
-- `sentry`: keep stdout JSON and add live Sentry init, sink fan-out, handled
-  exceptions, and tracing.
+- `OBSERVABILITY_SINKS=[]`: stdout JSON only; no external sink.
+- `OBSERVABILITY_SINKS=["sentry"]`: stdout JSON plus live Sentry sink fan-out,
+  handled exceptions, and tracing.
+- `OBSERVABILITY_FIXTURES=true`: tee post-redaction observations into the local
+  fixture store for no-network verification.
+
+Historical `SENTRY_MODE` values are legacy operator input and should be
+migrated to those axes.
 
 The HTTP capture boundary remains metadata-only:
 

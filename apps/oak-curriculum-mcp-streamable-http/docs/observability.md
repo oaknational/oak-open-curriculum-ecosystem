@@ -32,22 +32,26 @@ Upstream library: [`@oaknational/sentry-node`](../../../packages/libs/sentry-nod
   queries against this MCP server are pre-scoped to this app — no
   cross-project leak.
 
-## The three modes
+## Runtime Configuration Axes
 
-`SENTRY_MODE` controls runtime behaviour. Parsed once at startup via
-`@oaknational/env-resolution`; never re-read.
+Runtime behaviour is controlled by the orthogonal observability axes parsed at
+startup via `@oaknational/env-resolution`; they are never re-read:
 
-- `SENTRY_MODE=off` — default kill switch. No Sentry SDK init, no outbound
-  delivery, no fixture store. Structured JSON stdout via `@oaknational/logger`
-  remains the canonical local log surface (ADR-162 vendor-independence).
-- `SENTRY_MODE=fixture` — no-network local verification. Stdout JSON is
-  retained; MCP observations and handled-error captures are recorded in a
-  local fixture store used by tests and local validation. See
-  `createFixtureSentryStore` in `@oaknational/sentry-node`.
-- `SENTRY_MODE=sentry` — live mode. Stdout JSON is still retained; the Sentry
-  SDK is initialised, the logger sink is active, live error capture and
-  tracing are enabled, and every captured payload passes through the
-  redaction barrier before transmission.
+- `OBSERVABILITY_SINKS=[]` — stdout JSON only. No Sentry SDK init, no outbound
+  delivery. Structured JSON stdout via `@oaknational/logger` remains the
+  canonical local log surface (ADR-162 vendor-independence).
+- `OBSERVABILITY_SINKS=["sentry"]` — stdout JSON plus live Sentry. The Sentry
+  SDK is initialised, the logger sink is active, live error capture and tracing
+  are enabled, and every captured payload passes through the redaction barrier
+  before transmission.
+- `OBSERVABILITY_FIXTURES=true` — no-network local verification tee. Stdout
+  JSON is retained; MCP observations and handled-error captures are recorded in
+  a local fixture store used by tests and local validation.
+
+Historical `SENTRY_MODE` values are rejected by the environment schema with a
+migration message. Some server wiring snippets still refer to `SENTRY_MODE`
+until the code follow-through lands; treat those as implementation debt, not
+current operator guidance.
 
 ## Auto-instrumentation of MCP requests
 
@@ -63,7 +67,7 @@ wrapMcpServerWithSentry(server);
 Location: [`src/app/core-endpoints.ts:98`](../src/app/core-endpoints.ts).
 
 `wrapMcpServerWithSentry` is unconditional in the composition root; when
-`SENTRY_MODE=off` the underlying `@sentry/node` SDK is not initialised, so
+`OBSERVABILITY_SINKS=[]` the underlying `@sentry/node` SDK is not initialised, so
 the wrapper is inert. The vendor-independence clause of ADR-162 is therefore
 currently a _structural_ claim rather than a _tested invariant_; converting
 it to a tested invariant is tracked under
@@ -107,7 +111,7 @@ giving per-tool and per-method breakdowns without any custom dashboards.
 ## Express error handler registration
 
 The Sentry Express error handler is registered at the app composition root,
-gated on `SENTRY_MODE`:
+currently gated in code on legacy `SENTRY_MODE`:
 
 ```ts
 // src/index.ts:40-41
@@ -323,8 +327,8 @@ Sentry modes and for build-time release registration:
   `SENTRY_RELEASE_OVERRIDE=<version>` are set. See ADR-163 §4.
 
 Invalid override values and missing application version are startup errors
-where that identity is required (fail-fast, not silent drift). `SENTRY_MODE=off`
-does not require Sentry release metadata.
+where that identity is required (fail-fast, not silent drift). Empty
+`OBSERVABILITY_SINKS` does not require Sentry release metadata.
 
 The root package version is only bumped by the `semantic-release`
 workflow (`.github/workflows/release.yml`). Preview and local builds

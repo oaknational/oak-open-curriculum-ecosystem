@@ -16,7 +16,8 @@ If you find a security issue:
 
 ## Secret Scanning in Repo Hygiene
 
-- `pnpm check` runs `pnpm secrets:scan:all` before quality checks.
-- CI runs a full-history secret scan from full git history on each push/PR.
+- `pnpm check` runs routine branch/tag secret scanning before quality checks.
+- CI runs routine branch/tag secret scanning on each push/PR.
 - Pre-push hook blocks pushes when leaks are detected.
+- Full-history scanning across branches and tags is available via `pnpm secrets:scan:all` for bootstrap and audit work.
 - Full-history scan across all refs is available via `pnpm secrets:scan:all-refs` when auditing history.
