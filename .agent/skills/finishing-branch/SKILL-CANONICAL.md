@@ -47,5 +47,5 @@ Checklist for completing development work on a branch before merge or PR creatio
 
 ## References
 
-- `.agent/commands/gates.md` — quality gate workflow
-- `.agent/skills/commit/SKILL.md` — commit message conventions
+- [`../gates/SKILL-CANONICAL.md`](../gates/SKILL-CANONICAL.md) — quality gate workflow
+- [`../commit/SKILL-CANONICAL.md`](../commit/SKILL-CANONICAL.md) — commit message conventions

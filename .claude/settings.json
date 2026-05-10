@@ -20,6 +20,8 @@
       "Skill(jc-start-right-quick:*)",
       "Skill(jc-consolidate-docs)",
       "Skill(jc-consolidate-docs:*)",
+      "Skill(jc-ephemeral-to-permanent-homing)",
+      "Skill(jc-ephemeral-to-permanent-homing:*)",
       "Skill(jc-session-handoff)",
       "Skill(jc-session-handoff:*)",
       "Skill(jc-go)",

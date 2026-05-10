@@ -1,4 +1,0 @@
-description = "Reflective thinking — read and apply the metacognition directive"
-prompt = """Read and follow `.agent/commands/metacognition.md`.
-
-{{args}}"""

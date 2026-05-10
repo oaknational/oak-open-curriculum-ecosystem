@@ -1,10 +1,20 @@
+---
+name: ephemeral-to-permanent-homing
+classification: passive
+description: >-
+  Canonical methodology for moving content out of ephemeral surfaces (plans,
+  memory, platform entry points) into permanent homes. Referenced by
+  session-handoff and consolidate-docs so the homing discipline stays
+  single-sourced.
+---
+
 # Ephemeral-to-Permanent Homing
 
-**Shared workflow partial.** Not a slash command. Referenced by
-[`session-handoff`](session-handoff.md) (session-scoped sweep, especially
-platform-specific entry points) and [`consolidate-docs`](consolidate-docs.md)
-(thread-scoped deep sweep across napkin, distilled.md, plans, platform
-memory).
+**Shared workflow partial.** Not a standalone workflow. Referenced by
+[`session-handoff`](../session-handoff/SKILL-CANONICAL.md) (session-scoped
+sweep, especially platform-specific entry points) and
+[`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) (thread-scoped
+deep sweep across napkin, distilled.md, plans, platform memory).
 
 This file is the canonical methodology for moving content out of ephemeral
 surfaces and into permanent homes. Both the lightweight session closeout
@@ -107,7 +117,7 @@ Homing routinely surfaces dispositions that the owner defers (a candidate
 that is not promoted now, a destination that needs to be created later, a
 content piece left in distilled.md pending stability). Every deferral
 recorded by this methodology MUST satisfy
-[PDR-026 §Deferral-honesty discipline](../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline):
+[PDR-026 §Deferral-honesty discipline](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline):
 a named constraint (clock, cost, dependency, owner veto) or a named
 priority trade-off, plus evidence, plus falsifiability. Convenience
 phrasings — *"budget consumed"*, *"out of scope"*, *"for later"*,
@@ -115,16 +125,18 @@ phrasings — *"budget consumed"*, *"out of scope"*, *"for later"*,
 
 ## Related
 
-- [`session-handoff`](session-handoff.md) — session-scoped caller; sweeps
-  the session's drift surfaces (especially platform entry points).
-- [`consolidate-docs`](consolidate-docs.md) — thread-scoped caller; sweeps
-  the cross-session drift surfaces (napkin, distilled.md, completed
-  plans, platform memory) at deep convergence time.
-- [PDR-011 Continuity Surfaces and the Surprise Pipeline](../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)
+- [`session-handoff`](../session-handoff/SKILL-CANONICAL.md) —
+  session-scoped caller; sweeps the session's drift surfaces (especially
+  platform entry points).
+- [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) —
+  thread-scoped caller; sweeps the cross-session drift surfaces (napkin,
+  distilled.md, completed plans, platform memory) at deep convergence
+  time.
+- [PDR-011 Continuity Surfaces and the Surprise Pipeline](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)
   — the `capture → distil → graduate → enforce` pipeline this homing
   methodology operationalises at the graduate edge.
-- [PDR-014 Consolidation and Knowledge Flow Discipline](../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
+- [PDR-014 Consolidation and Knowledge Flow Discipline](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
   — the discipline this methodology serves.
-- [`.agent/rules/documentation-hygiene.md`](../rules/documentation-hygiene.md)
+- [`.agent/rules/documentation-hygiene.md`](../../rules/documentation-hygiene.md)
   — the always-applied rule tier counterpart (TSDoc presence, attribution
   on adoption, misleading-docs detection).
