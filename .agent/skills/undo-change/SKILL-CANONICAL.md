@@ -159,8 +159,13 @@ The skill does not authorise unilateral execution. It always halts.
   — the empirical-question reformulation; the same *render the
   diagnosis, then halt-ask* shape, applied to questions instead of
   to undo operations.
+- [PDR-057 (empirical-answerability)](../../practice-core/decision-records/PDR-057-empirical-answerability.md)
+  — the doctrinal frame that supersedes the quarantined
+  `apply-don't-ask` candidate; this skill remains the destructive-
+  action compensator for the same family of agent failure modes.
 - [Quarantined apply-don't-ask doctrine](../../memory/operational/quarantine/apply-dont-ask-doctrine.md)
-  — the doctrine this skill compensates for.
+  — the predecessor doctrine; quarantine cleared 2026-05-10 by
+  PDR-057 + PDR-058. Preserved as historical evidence.
 
 ## Platform Adapters
 

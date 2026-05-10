@@ -197,11 +197,12 @@ If the owner approves promotion, the natural next move is the
 structural verification that the type designs work in actual SDK
 code, not just plan-body sketches.
 
-**Out-of-band next-session candidate**: graduate *stop inventing
-optionality* to `.agent/rules/apply-dont-ask.md` per the
-pending-graduations register's `due` entry. Belongs to the
-`agentic-engineering-enhancements` thread, not `eef`; flagged here
-so the next EEF session does not re-trip on the pattern.
+**Out-of-band next-session candidate** (resolved 2026-05-10):
+*stop inventing optionality* graduated to PDR-058 (three-tier
+optionality decomposition). The `.agent/rules/apply-dont-ask.md`
+rule shape was rejected; the substance now lives at PDR-058 (with
+PDR-057 covering the empirical-answerability surface). No EEF
+follow-up action.
 
 ---
 

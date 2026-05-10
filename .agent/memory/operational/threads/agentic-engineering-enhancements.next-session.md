@@ -2251,17 +2251,15 @@ directed `/jc-metacognition` round on `feat/eef_exploration` branch.
 (held deliberately at this turn's tail per long-term-architectural-
 excellence direction):
 
-1. **Draft `.agent/rules/apply-dont-ask.md`** from the `due` *stop
-   inventing optionality* register entry (4 cross-session instances
-   plus owner direction). Rule must specify the two-pronged pre-question
-   gate: (a) have principles or a reviewer already named the path?
-   (b) is the answer in an artefact in the repo I have not read? If
-   either tripwire fires, apply / read; do not pose. Pose only when
-   neither principles nor data resolve the fork. Cite the four
-   worked instances (Iridescent's 12-question round, Briny's "Option B
-   disable canonical default", Iridescent's session-close doctrine
-   candidate, Fragrant Sheltering Petal's bucket-(c) escalation of an
-   empirically verifiable question).
+1. **Draft `.agent/rules/apply-dont-ask.md`** — **RESOLVED
+   2026-05-10**. The candidate was quarantined 2026-05-01 after a
+   destructive incident; the owner-named reformulations graduated
+   2026-05-10 (Quiet Lurking Mask session) as PDR-057
+   (empirical-answerability pre-question gate) and PDR-058
+   (three-tier optionality decomposition). The original
+   `apply-dont-ask.md` rule shape was rejected. Operational
+   expression of PDR-057 lives at `.agent/rules/read-before-asking.md`
+   (already authored). No follow-up authoring action.
 2. **Promote
    [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
    from `future/` to `current/`** — third-instance evidence landed
