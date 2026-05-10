@@ -11,7 +11,7 @@ namespace: "oak-kg-*"
 substrate_floor:
   - "graph-stack Inc.1 (Oak Curriculum Ontology Threads foundation: generic Turtle/SKOS ingestion, graph-project adjacency, graph-corpus-sdk curric:Thread adapter)"
 sequencing_gate: "STRICT after gate-1-eef-ships per owner direction"
-last_updated: 2026-05-08
+last_updated: 2026-05-10
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -69,14 +69,14 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-2-close
-    content: "WS7: update spine `gate-2-threads-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record. Triggers gate-3b authoring readiness check."
+    content: "WS7: update spine `gate-2-threads-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record. This does not gate slice 3b, which composes EEF and misconceptions only."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
 
 # Oak KG Threads MCP Surface — Slice 2 of the MVP Arc
 
-**Last Updated**: 2026-05-08
+**Last Updated**: 2026-05-10
 **Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
 Inc.1 Oak Curriculum Ontology Threads foundation) + gate-1-eef-ships.
 **Scope**: Slice 2 of the
@@ -162,7 +162,7 @@ discipline, not a downstream-composition dependency.
 - Generic IRI traverser (cut-scope; new plan queued)
 - Schema/class browser (cut-scope; new plan queued)
 - SPARQL endpoint
-  ([`direct-ontology-use-and-graph-serving-prototypes.plan.md`](direct-ontology-use-and-graph-serving-prototypes.plan.md);
+  ([`direct-ontology-use-and-graph-serving-prototypes.plan.md`](../future/direct-ontology-use-and-graph-serving-prototypes.plan.md);
   not part of MVP arc)
 - Forward-edge enrichment from Thread to Unit (Unit→Thread is the
   forward edge in the ontology; this slice surfaces the inverse on
@@ -302,7 +302,7 @@ Update spine
 `gate-2-threads-ships` todo to `completed`; record acceptance evidence;
 refresh
 [`connecting-oak-resources.next-session.md`](../../../../memory/operational/threads/connecting-oak-resources.next-session.md).
-Triggers downstream readiness check on slice 3b authoring.
+This does not gate slice 3b, which composes EEF and misconceptions only.
 
 ## Risks
 

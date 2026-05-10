@@ -1,9 +1,9 @@
 # ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
 
-**Status**: Proposed (skeleton, 2026-05-07) — pending owner approval
-before ratification.
+**Status**: Proposed (skeleton, 2026-05-07; NC-boundary amendment
+2026-05-10) — pending owner approval before ratification.
 
-**Date**: 2026-05-07
+**Date**: 2026-05-07; amended 2026-05-10
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -16,7 +16,11 @@ graph workspaces plus one deferred future-standards workspace;
 [ADR-157](157-multi-source-open-education-integration.md) — multi-source
 open education integration; this ADR is the structural carrier for that
 integration (Oak API + Oak Curriculum Ontology + EEF, with the EEF
-cross-cutting thread fully named).
+cross-cutting thread fully named);
+[`graph-mvp-arc.plan.md`](../../../.agent/plans/graph-mvp-arc.plan.md) —
+first vertical-slice consumer of this topology, keeping EEF and misconception
+cross-source value in scope while excluding NC graph/taxonomy work from the
+MVP.
 
 ## Context
 
@@ -96,12 +100,13 @@ Seven active graph workspaces plus one deferred:
 ### MCP-agnostic principle (proposed)
 
 **No graph workspace ships MCP-shaped code.** Tool definitions, resource
-constants, and registration helpers live with the application that surfaces
-them, not with the graph SDK that produces them. If a graph workspace starts
-wanting an MCP type or factory, that is the signal to extract a thin sibling
-adapter workspace — not to leak MCP into the substrate. ADR-123 is therefore
-unaffected by this ADR; future graph-derived MCP primitives amend ADR-123 at
-the point a consumer surfaces them.
+constants, and registration helpers live with the existing curriculum MCP
+consumer surface (the SDK MCP module plus HTTP app) or a future app-facing
+adapter, not with the graph SDK that produces the data. If a graph workspace
+starts wanting an MCP type or factory, that is the signal to extract a thin
+consumer adapter workspace — not to leak MCP into the substrate. ADR-123 is
+therefore unaffected by this ADR; future graph-derived MCP primitives amend
+ADR-123 at the point a consumer surfaces them.
 
 The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
 is a consumer-side concern with at most one home per transport.

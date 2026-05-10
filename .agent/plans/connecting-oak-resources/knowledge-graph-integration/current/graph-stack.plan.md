@@ -12,7 +12,7 @@ sibling_plans:
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md"
   - "../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md"
-specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-fred, architecture-reviewer-barney, mcp-reviewer, type-reviewer, code-reviewer, test-reviewer, docs-adr-reviewer, assumptions-reviewer"
+specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-fred, architecture-reviewer-barney, type-reviewer, code-reviewer, test-reviewer, docs-adr-reviewer, assumptions-reviewer"
 isProject: true
 todos:
   - id: ws0-topology-adr
@@ -105,7 +105,7 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-08
+**Last Updated**: 2026-05-10
 **Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR).
 **Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
@@ -208,7 +208,7 @@ owned by the agent-tooling/practice plan estate. The future organisation/wiring
 plan is
 [`../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md).
 
-**Every workspace in the topology is MCP-agnostic.** None of the graph workspaces ship MCP tool definitions, MCP resource constants, or MCP-server registration code. Surfacing graph capability through MCP — if Oak chooses to do so — is a *consumer-side* concern handled by an existing or future app workspace that imports `graph-corpus-sdk`. See §Surfacing.
+**Every graph workspace in the topology is MCP-agnostic.** None of the graph substrate workspaces ship MCP tool definitions, MCP resource constants, or MCP-server registration code. Surfacing graph capability through MCP — if Oak chooses to do so — is a *consumer-side* concern handled by the existing curriculum SDK MCP module plus the curriculum MCP HTTP app, or by a future consumer workspace that imports `graph-corpus-sdk`. See §Surfacing.
 
 ---
 
@@ -220,11 +220,11 @@ Possible surfaces, none privileged by the topology:
 
 - **In-process library imports** — application code imports `graph-corpus-sdk` directly. Always available; the default for any same-runtime consumer.
 - **CLI** — the existing `agent-tools/` workspace exposes commands over `agent-graphs/practice-graph` (per the Practice pilot's existing plan). A future curriculum-side CLI could do the same over `graph-corpus-sdk`.
-- **MCP** — at most one workspace surfaces graph tools via MCP. If Oak chooses MCP exposure, it lives in an existing app workspace (e.g. the curriculum MCP server) or a new sibling that imports `graph-corpus-sdk`. The graph workspaces themselves stay MCP-clean.
+- **MCP** — at most one consumer surface owns each graph MCP primitive. If Oak chooses MCP exposure, it lives in the existing curriculum SDK MCP module plus the curriculum MCP HTTP app, or in a new sibling that imports `graph-corpus-sdk`. The graph workspaces themselves stay MCP-clean.
 - **HTTP/JSON-LD export** — `graph-project` will eventually emit JSON-LD profiles for cross-organisation consumption (Increment 5).
 - **Search-augmentation** — Oak's Elasticsearch integration may consume `graph-corpus-sdk` to project graph-derived signals into search indices (a future plan, not committed here).
 
-**Discipline**: no graph workspace ships MCP-shaped code. Tool definitions, resource constants, and registration helpers live with the app that surfaces them, not with the graph SDK that produces them. If a graph workspace starts wanting an MCP type or factory, that is the signal to extract a thin sibling adapter workspace — not to leak MCP into the substrate.
+**Discipline**: no graph workspace ships MCP-shaped code. Tool definitions, resource constants, and registration helpers live with the existing curriculum MCP consumer surface (the SDK MCP module plus HTTP app) or a future app-facing adapter, not with the graph SDK that produces the data. If a graph workspace starts wanting an MCP type or factory, that is the signal to extract a thin consumer adapter workspace — not to leak MCP into the substrate.
 
 The foundation increment ships zero MCP exposure. Oak Curriculum Ontology Threads availability through `graph-corpus-sdk`'s typed query surface is the proof that the substrate works end-to-end. Whether to surface it through the curriculum MCP server is a follow-on decision handled by the MVP slice plan, with or without this spine in flight.
 
@@ -265,7 +265,7 @@ The full topology activates over seven increments. This plan ships **Increment 1
 | 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | future (depends on Increment 2 + the `agent-graphs/` organisation plan; consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
 | 5 | **Projection + export** | Full `graph-project` surface — visualisation export hooks, JSON-LD export profiles, GQL-friendly property-graph shapes; cross-corpus journey tooling | future |
 | 6 | **Public-asset positioning** | Publishing discipline, external-org adoption documentation, ontology IRI alignment guarantees, contribution model | future |
-| 7 | **Future-standards adapters** | `graph-future` workspace activated; first concrete adapter (likely RDF 1.2 statement-annotation export, or SPARQL 1.1 query) | future (consumer-driven) |
+| 7 | **Future-standards adapters** | `graph-future` workspace activated; first concrete adapter (likely RDF 1.2 statement-annotation export, or SPARQL 1.2 query) | future (consumer-driven) |
 
 Each increment is a separate plan when promoted. The foundation increment is the only executable plan today.
 
@@ -306,7 +306,7 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
-- **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, mcp-reviewer, docs-adr-reviewer.
+- **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, docs-adr-reviewer.
 
 ### Cycle dependencies and parallelisation
 
@@ -348,8 +348,8 @@ This plan does **not** wholesale supersede adjacent plans; it provides the spine
 | [`graph-query-layer.plan.md`](graph-query-layer.plan.md) | **Substrate subsumed into Increment 3.** The `GraphView<TNode, TEdgeType>` interface, the seven operations, projection discipline, and the tracer-matrix work all migrate into `graph-corpus-sdk` over the new substrate. **Whether and how those operations are exposed via MCP is no longer this plan's concern**; the 17-MCP-tool count and per-operation tool definitions become a separate consumer-side decision. The plan file is amended to declare the substrate home and to mark MCP exposure as an independent follow-on. |
 | [`../active/graph-resource-factory.plan.md`](../active/graph-resource-factory.plan.md) | **Status remains DONE.** The factory currently lives in the curriculum MCP app's surface layer; it stays where it is and continues to work. If MCP exposure of new graph capabilities is later chosen, the factory may be revisited then. No retroactive amendment needed. |
 | [`../active/misconception-graph-mcp-surface.plan.md`](../active/misconception-graph-mcp-surface.plan.md) | **Status remains DONE.** The current misconception MCP tool stays live and unchanged. If the misconception adapter is later rewritten onto `graph-corpus-sdk`, the MCP tool is a thin re-wrapping the owner can do at any point — independent of the substrate. |
-| [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **Amended.** The graph substrate and Oak Ontology Threads foundation are now executed via this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
-| [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | **Conditional `graph-core` gate is satisfied unconditionally by Increment 1.** The Practice plan is amended: its required workspace is `agent-graphs/practice-graph/`, and its `packages/core/graph-core/` is the one this plan lands. The Practice plan becomes an adjacent practice-facing consumer of the spine (Increment 4 in the topology sequencing), after the future `agent-graphs/` organisation plan wires the top-level area. |
+| [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **WS5 amendment target.** The graph substrate and Oak Ontology Threads foundation will be referenced through this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
+| [`../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | **WS5 amendment target.** Its required graph-core workspace should be the one this plan lands, and its practice-facing graph home should remain `agent-graphs/practice-graph/`. The Practice plan becomes an adjacent practice-facing consumer of the spine (Increment 4 in the topology sequencing), after the future `agent-graphs/` organisation plan wires the top-level area. |
 | [`../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`](../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | **Strategic brief; no amendment needed.** Practice-graph attribution discipline (Graphify / Safi Shamsi) carries forward through the Practice plan and into the eventual `practice-graph` workspace README. |
 
 WS5 in the cycle list executes these amendments.

@@ -6,7 +6,7 @@ type: cross-collection-coordination-spine
 status: current
 graph_layer: cross-cutting
 graph_portfolio_index: "graph-portfolio-index.md"
-last_updated: 2026-05-08
+last_updated: 2026-05-10
 related_indices:
   - "high-level-plan.md"
   - "graph-portfolio-index.md"
@@ -43,13 +43,13 @@ todos:
   - id: gate-2-threads-ships
     content: "Slice 2 ships: oak-kg-threads resource + oak-kg-get-thread-content tool complete via graph-corpus-sdk Oak Curriculum Ontology Threads adapter; inverse-edge query (Unit→Thread) verified; ADR-123 updated. STRICT GATE — slice 2 starts only after slice 1 ships and after graph-stack Inc.1 Oak Ontology Threads foundation lands."
     status: pending
-    depends_on: [gate-1-eef-ships]
+    depends_on: [gate-1-eef-ships, "graph-stack Inc.1 Oak Ontology Threads foundation"]
   - id: gate-3a-mcg-subgraph-ships
     content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on legacy graph factory data; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 (different substrate path)."
     status: pending
     depends_on: [gate-1-eef-ships]
   - id: gate-3b-cross-corpus-ships
-    content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread (or equivalent) cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
+    content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
     status: pending
     depends_on: [gate-1-eef-ships, gate-3a-mcg-subgraph-ships, "graph-stack Inc.3 graph-corpus-sdk EEF strand adapter + misconception adapter + cross-corpus join primitive"]
   - id: amend-eef-plan
@@ -89,7 +89,7 @@ todos:
 # Graph MVP Arc — Three-Slice Vertical Delivery Spine
 
 **Status**: CURRENT — committed-to-now; queued behind substrate floor.
-**Last Updated**: 2026-05-08
+**Last Updated**: 2026-05-10
 **Type**: Cross-collection coordination spine. Sequences existing plans;
 does not write code itself.
 
@@ -728,7 +728,7 @@ Spine-level non-goals — spine does **not**:
 | 2026-05-07 | **EEF plan internal contradiction surfaced (code-reviewer + assumptions-reviewer concurring FINDING)** — `eef-evidence-corpus.plan.md` t19 declares LLM/outcome verification out-of-scope until evaluation infrastructure exists, while §`Promotion Trigger from CURRENT to ACTIVE` and the closing acceptance lines treat outcome conditions as load-bearing. Slice 1 IS the EEF plan, so the MVP could not be decision-complete until resolved. **Superseded by the 2026-05-08 structural-only evaluation decision below.** | Phase 2 capture; superseded by PR #102 closeout |
 | 2026-05-08 | **EEF evaluation stance clarified** — structural citation/data/caveat preservation is load-bearing for slice 1; LLM paraphrase/outcome evaluation, teacher-trust measurement, and SENCO workflow-time measurement are follow-on evaluation-infrastructure work outside Vitest. The EEF plan, this spine, and slice-3b risk/non-goal text must carry this stance before PR #102 can be decision-complete. | PR #102 decision-complete closeout; owner clarification after load-bearing EEF discussion |
 | 2026-05-08 | **Practice graph location clarified** — practice-facing graph tooling belongs under the new top-level `agent-graphs/` area, with `agent-graphs/practice-graph/` documented as the Practice graph pilot home and a future plan responsible for workspace organisation/wiring. | PR #102 decision-complete closeout; owner structure clarification |
-| 2026-05-10 | **MVP NC boundary reconfirmed** — the MVP plan must not do anything with the NC graph or NC taxonomy. Graph-stack Increment 1, ADR-173, the portfolio index, and the slice-2 plan now name the Oak Curriculum Ontology Threads graph as the only ontology/graph foundation for the MVP. NC work remains outside the MVP and requires separate owner promotion. | Owner correction; Foamy Navigating Hull amendment pass |
+| 2026-05-10 | **MVP NC boundary reconfirmed** — the MVP plan must not do anything with the NC graph or NC taxonomy. The only thing brought in from the Oak Ontology repo is the Oak ontology/graph, currently the Threads graph foundation for slice 2. EEF and misconception graph work remain core MVP scope because the cross-source value is one of the main points. NC work remains outside the MVP and requires separate owner promotion. | Owner correction; Foamy Navigating Hull amendment pass plus owner clarification |
 | 2026-05-07 | **Three slice plans authored** — `oak-kg-threads-surface.plan.md` (slice 2), `oak-misconceptions-subgraph-mcp-surface.plan.md` (slice 3a), `oak-misconceptions-eef-cross-corpus-surface.plan.md` (slice 3b) created in `connecting-oak-resources/knowledge-graph-integration/current/`. All three inherit substance from the spine, follow the feature-workstream template, define TDD cycles with file scopes, and carry dispatch-ready reviewer briefs. `author-slice-N-plan` todos marked completed. | Phase 3, commit `776df6b7` (1062 insertions across 3 new files; all quality gates green) |
 | 2026-05-07 | **Slice-plan composition model corrected (code-reviewer BLOCKER B1 + assumptions-reviewer concurring BLOCKER on slice 3b)** — slice 2, 3a, and 3b all carried "slice 3b composes slice-1 / slice-3a tools by name" framing that contradicted slice 3b Design Principle 1 (both corpora flow through `graph-corpus-sdk` substrate, not through inter-tool MCP calls). Four edits across the three plans: slice 2 spine-lock principle reworded; slice 3a spine-lock principle and "Consumed by" entry reworded; slice 3b WS1 cycle 1 frontmatter, "Existing capabilities consumed" section, and "Related plans" annotation reworded. Slices 1 and 3a are now correctly named as sources of naming conventions and response shape compatibility — not runtime MCP dependencies. | Phase 4 BLOCKER remediation, commit `0899ba93` |
 | 2026-05-07 | **Phase 4 FINDINGS deferred to execution-prep absorption** — six FINDINGS surfaced by the Phase 4 reviewer batch did not retroactively block Breezy Navigating Sail's single-session planning closure. Two trivial documentation findings were later absorbed by Tidal Surfing Lighthouse in the closeout pass: the dead smoke gate command was removed, and the obsolete ADR-123 path was corrected. Four substantive findings remain and must be absorbed before slice execution starts: slice 2 adapter timing; slice 3a topic-context wording; slice 3a budget/fixture concretisation; slice 3b implementation-audit test shape. | Phase 4 capture; Tidal closeout absorbed trivial findings |
