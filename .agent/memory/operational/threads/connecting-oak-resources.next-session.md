@@ -1,6 +1,19 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-09 (owner direction via `jc-session-handoff` /
+**Last refreshed**: 2026-05-10 (Foamy Navigating Hull / `codex` / GPT-5 /
+`019e12` — graph MVP plan amendment + handoff. Owner clarified the boundary:
+the MVP still needs EEF + misconception graph + cross-source value; the
+restriction is that the Oak Ontology repo intake brings in only the Oak
+ontology/graph, not the NC graph/taxonomy. Plans now explicitly name the first
+graph work: graph-stack Inc.1's Oak Ontology Threads proof in
+`graph-corpus-sdk` — enumerate `curric:Thread` and resolve inverse
+`curric:includesThread` Unit lookup with a tiny fixture-backed test. This must
+land before NC work, EEF adapter migration, misconception replatform,
+cross-corpus joins, serving prototypes, or broader query-layer migration.
+Targeted markdownlint, prettier check, and `git diff --check` passed on the
+amended plan files.)
+
+**Prior refresh**: 2026-05-09 (owner direction via `jc-session-handoff` /
 Fronded Bending Blossom / `cursor` / Composer / `60775a` — **next engineering
 arc**: implement **graph MVP features** per slice plans after PR #102 merge
 prep completes (post-merge type-check + gates). **Parked until later**:
@@ -35,9 +48,13 @@ Proposed.
 Validation: markdownlint, format-check, git diff --check, branch-touched-files,
 gh pr checks on pushed head 309d9e5e, Sonar PR surface through PR checks,
 review-thread refresh with all threads resolved, non-mutating divergence probe.
-Next safe step after merge: **graph MVP feature implementation** per
-`knowledge-graph-integration/current/*` slice plans (owner sequencing
-2026-05-09). Defer monorepo topology ADR work until after that tranche.
+Next safe step after merge: **first graph MVP implementation piece** is
+graph-stack Inc.1's Oak Ontology Threads proof in `graph-corpus-sdk`
+(`curric:Thread` enumeration + inverse `curric:includesThread` Unit lookup
+with a tiny fixture-backed test). Defer NC taxonomy work, EEF adapter
+migration, misconception replatform, cross-corpus joins, serving prototypes,
+and broader query-layer migration until after that proof lands. Defer monorepo
+topology ADR work until after the graph MVP tranche.
 ```
 
 **Prior refresh**: 2026-05-08 (Fronded Branching Grove / codex /
@@ -201,6 +218,7 @@ promotion.)
 | `Fronded Branching Grove` | `codex` | `GPT-5` | `019e06` | `pr-102-final-closeout` | 2026-05-08 | 2026-05-08 |
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-graph-decision-complete-closeout-updater` | 2026-05-08 | 2026-05-08 |
 | `Fronded Bending Blossom` | `cursor` | `Composer` | `60775a` | `owner-sequencing-graph-mvp-next-topology-parked` | 2026-05-09 | 2026-05-09 |
+| `Foamy Navigating Hull` | `codex` | `GPT-5` | `019e12` | `graph-mvp-plan-amendment-and-first-implementation-handoff` | 2026-05-10 | 2026-05-10 |
 
 ## Plan Locations
 
