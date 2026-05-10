@@ -70,15 +70,16 @@ Each platform has thin wrappers that reference canonical content. Skill adapters
 | `.cursor/rules/*.mdc` | Markdown with `alwaysApply`/`globs`/`description` frontmatter | live  |
 | `.cursor/agents/*.md` | Markdown with `name`/`description`/`model`/`tools`/`readonly` | live  |
 
-Cursor reads skills from `.agents/skills/` per its current docs; the
-previously-emitted `.cursor/skills/` and `.cursor/commands/` adapters are
-retired per the 2026-05-09 amendment.
+Cursor reads skills from `.agents/skills/` per its current docs. The
+previously-emitted `.cursor/skills/` adapters are retired per the 2026-05-09
+amendment; `.cursor/commands/` remains a cleanup target while command-surface
+retirement finishes.
 
 #### Gemini CLI (`.gemini/`) — settings only
 
 Gemini CLI reads skills from `.agents/skills/` (documented as an alias
-for `.gemini/skills/`, with precedence). General custom-command adapters
-are retired per the 2026-05-09 amendment. If `review-*.toml` files remain
+for `.gemini/skills/`, with precedence). General custom-command adapters are a
+retirement target per the 2026-05-09 amendment. If `review-*.toml` files remain
 during migration, they are temporary sub-agent invocation adapters for a
 platform without native sub-agent spawning, not a user workflow command
 surface.
@@ -168,7 +169,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/memory/executive/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/memory/executive/invoke-code-reviewers.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/jc-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 #### Many-to-One Consolidation Pattern
 
@@ -227,7 +228,7 @@ directly.
 A trigger file (`.cursor/rules/*.mdc`) MUST:
 
 - Include `alwaysApply`/`globs`/`description` frontmatter (activation metadata)
-- Include a reference to its canonical source (`.agent/directives/*.md`, `.agent/skills/*/SKILL.md`, an ADR, or `docs/`)
+- Include a reference to its canonical source (`.agent/directives/*.md`, `.agent/skills/*/SKILL-CANONICAL.md`, an ADR, or `docs/`)
 
 A trigger file MAY:
 
@@ -376,9 +377,9 @@ as an exclusion.
 The "thin wrapper" contract established in §Layer 2 applies to **platform
 adapters wrapping canonical content**. This 2026-04-17 clarification is now
 historical for command-to-skill relationships: commands (`.agent/commands/`)
-are a retired canonical surface per the 2026-05-09 amendment, and skills
+are a retirement target per the 2026-05-09 amendment, and skills
 (`.agent/skills/`) are the durable user-and-model-invokable capability
-surface. A platform adapter that activates skills or invokes logic of its own
+surface once migration completes. A platform adapter that activates skills or invokes logic of its own
 is not a thin wrapper and does not satisfy this ADR's portability contract.
 
 This clarification graduated from `.agent/memory/active/distilled.md` (2026-04-16

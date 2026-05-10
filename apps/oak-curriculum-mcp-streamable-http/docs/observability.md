@@ -329,7 +329,8 @@ Sentry modes and for build-time release registration:
 
 Invalid override values and missing application version are startup errors
 where that identity is required (fail-fast, not silent drift). Empty
-`OBSERVABILITY_SINKS` does not require Sentry release metadata.
+Sentry runtime modes such as `SENTRY_MODE=off` and `SENTRY_MODE=fixture` do
+not require Sentry release metadata.
 
 The root package version is only bumped by the `semantic-release`
 workflow (`.github/workflows/release.yml`). Preview and local builds

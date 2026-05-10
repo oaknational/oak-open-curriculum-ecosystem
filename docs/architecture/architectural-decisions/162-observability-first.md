@@ -174,7 +174,7 @@ Phase 5 implementation work.
 4. **Vendor-independence emission test** in
    `multi-sink-vendor-independence-conformance.plan.md`'s output (plan
    to be authored under Phase 2 of the restructure): runs the MCP app
-   server + browser widget + Search CLI with `OBSERVABILITY_SINKS=[]` and
+   server + browser widget + Search CLI with no Sentry sink configured and
    asserts structural event information persists via stdout/err with
    no loss beyond the network hop. This proves the **stdout-sink
    fallback**.
@@ -314,7 +314,8 @@ Phased execution remains implementation follow-through. In summary:
    MVP-vs-MVP-deferred classification; `metrics.*` primary over
    span-metrics transitional).
 5. **Phase 5** (acceptance — ESLint rule landed at `warn`; reviewer-
-   matrix question codified; status flipped `Proposed` → `Accepted`).
+   matrix question codified; status can flip `Proposed` → `Accepted` once the
+   remaining acceptance follow-through is complete).
 
 ## Related Documentation
 

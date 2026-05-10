@@ -53,7 +53,11 @@ enter the relevant output or telemetry paths.
 - May need exemptions for certain use cases
 - Pattern matching might miss edge cases
 
-## Implementation
+## Historical Implementation Direction
+
+The original implementation sketch below is superseded by ADR-160 as the
+current proof surface. Email-like value redaction now belongs at the shared
+redaction barrier, not only in ad hoc user-data transformations.
 
 - Create pure function `scrubEmail(email: string): string`
 - Apply to all user data transformations

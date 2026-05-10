@@ -241,8 +241,10 @@ Separating the Authorization Server from the MCP server:
 
 2. **Token Validation Middleware**:
    - Extract token from `Authorization: Bearer` header
-   - Verify JWT signature using JWKS
-   - Check standard claims (iss, aud, exp)
+   - Verify the token through Clerk-supported verification for the current
+     opaque-token flow
+   - Treat local JWT/JWKS claim validation as historical unless the upstream
+     token format changes
    - Reject expired or invalid tokens
 
 3. **401 Responses**:
