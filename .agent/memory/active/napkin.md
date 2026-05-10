@@ -36,7 +36,9 @@ The most recent rotation is archived at
   path through gate-2, and slice-plan MCP wording that still needs exact
   runtime registration paths before execution.
 - **Owner correction absorbed**: the MVP must not do anything with the NC
-  graph or NC taxonomy. The amended direction is Oak ontology/graph only:
+  graph or NC taxonomy. Clarification: this narrows only what we bring in from
+  the Oak Ontology repo. EEF, the misconception graph, and cross-source value
+  remain core MVP scope. The ontology intake is Oak ontology/graph only:
   graph-stack Inc.1 proves the Oak Curriculum Ontology Threads graph
   (`curric:Thread` enumeration + inverse `curric:includesThread` lookup);
   NC taxonomy remains outside the MVP and requires separate owner promotion.

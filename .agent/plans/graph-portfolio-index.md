@@ -3,7 +3,7 @@ plan_id: graph-portfolio-index
 title: "Graph Portfolio — Index"
 type: cross-collection-index
 status: active
-last_updated: 2026-05-08
+last_updated: 2026-05-10
 indexed_collections:
   - "connecting-oak-resources/knowledge-graph-integration/"
   - "agent-tooling/"

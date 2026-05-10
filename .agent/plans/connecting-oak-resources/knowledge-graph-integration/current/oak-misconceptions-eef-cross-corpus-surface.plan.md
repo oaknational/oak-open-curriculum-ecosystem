@@ -188,7 +188,7 @@ the response shape, not as runtime dependencies.
 
 - Three-corpus joins (EEF + misconceptions + threads simultaneously,
   or with the prerequisite graph) — see existing future plan
-  [`cross-source-journeys.plan.md`](cross-source-journeys.plan.md).
+  [`cross-source-journeys.plan.md`](../future/cross-source-journeys.plan.md).
 - Open-ended sequencing recommendations beyond Thread IRI context
   (e.g. by unit, by lesson, by content descriptor) — future plan
   [`oak-misconceptions-eef-extended-contexts.plan.md`](../future/oak-misconceptions-eef-extended-contexts.plan.md).

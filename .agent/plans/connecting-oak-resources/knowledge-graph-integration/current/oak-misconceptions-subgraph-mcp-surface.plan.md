@@ -1,6 +1,6 @@
 ---
 name: "Oak Misconceptions Sub-Graph MCP Surface (Slice 3a of MVP arc)"
-overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy graph factory. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
+overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy misconception graph factory plus graph-stack Inc.1 Thread-to-Unit lookup. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
@@ -8,12 +8,13 @@ graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3a
 namespace: "oak-misconceptions-*"
-substrate_path: "legacy graph factory (interim)"
+substrate_path: "legacy misconception graph factory (interim) + graph-stack Inc.1 Thread-to-Unit lookup"
 substrate_floor:
   - "legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
+  - "graph-stack Inc.1 Oak Ontology Threads foundation (Thread IRI -> Unit lookup)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
-sequencing_gate: "STRICT after gate-1-eef-ships (owner sequencing); PARALLEL-SAFE with gate-2-threads-ships"
-last_updated: 2026-05-08
+sequencing_gate: "STRICT after gate-1-eef-ships + graph-stack Inc.1 (owner sequencing + Thread lookup); PARALLEL-SAFE with gate-2-threads-ships after those gates"
+last_updated: 2026-05-10
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -33,7 +34,7 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-bounded-extraction-thread
-    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) implements via legacy graph factory. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) resolves Thread->Units via graph-stack Inc.1 and traverses misconceptions via the legacy graph factory. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-bound-default
@@ -73,7 +74,7 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
-    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; refresh the named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b authoring readiness check."
+    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b execution readiness check with gate-1 + Inc.3."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
@@ -132,6 +133,8 @@ and record the fill in the manifest comment.
 - The legacy misconception graph factory currently surfaced by
   `packages/sdks/oak-curriculum-sdk/src/mcp/misconception-graph-resource.ts`
   and `aggregated-misconception-graph.ts`
+- Graph-stack Inc.1 Oak Ontology Threads foundation for resolving the input
+  Thread IRI to Units before misconception traversal.
 - The SDK's `classify-error-response` convention
 - The SDK's tool-guidance surface
 - Current MCP registration surfaces:
@@ -329,8 +332,9 @@ Dispatch:
 1. Update spine
    [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
    `gate-3a-mcg-subgraph-ships` todo to `completed`; record evidence.
-2. Create `oak-misconceptions-substrate-migration.plan.md` in
-   `future/` per spine cut-scope row 3a.
+2. Refresh/verify the existing
+   [`oak-misconceptions-substrate-migration.plan.md`](../future/oak-misconceptions-substrate-migration.plan.md)
+   in `future/` per spine cut-scope row 3a.
 3. Refresh
    [`connecting-oak-resources.next-session.md`](../../../../memory/operational/threads/connecting-oak-resources.next-session.md).
 
@@ -354,8 +358,9 @@ Dispatch:
 - ADR-157 (multi-source integration) — `oak-misconceptions-*` namespace
   already present.
 - ADR-173 (graph stack topology, Proposed) — names the substrate
-  workspaces; this slice intentionally lives on the legacy substrate
-  pending Inc.3 misconception replatform.
+  workspaces; this slice intentionally uses Inc.1 for Thread lookup while
+  keeping misconception traversal on the legacy substrate pending Inc.3
+  misconception replatform.
 
 ## Dependencies
 
@@ -363,12 +368,13 @@ Dispatch:
 
 - Spine `gate-1-eef-ships` (STRICT — owner sequencing; slice 1 first
   establishes the MVP-arc spine pattern + namespace discipline).
+- Graph-stack Inc.1 Oak Ontology Threads foundation for Thread→Unit lookup.
 
 **Parallel-safe with**:
 
 - [`oak-kg-threads-surface.plan.md`](oak-kg-threads-surface.plan.md)
-  (slice 2) — different substrate path (legacy misconception factory vs
-  Oak Ontology Threads substrate),
+  (slice 2) — shared Inc.1 Thread lookup but different implementation path
+  after lookup (legacy misconception factory vs Oak Ontology Threads surface),
   different namespace (`oak-misconceptions-*` vs `oak-kg-*`), different
   tool / resource files.
 

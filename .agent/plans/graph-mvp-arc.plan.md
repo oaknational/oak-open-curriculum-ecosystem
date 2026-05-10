@@ -45,9 +45,9 @@ todos:
     status: pending
     depends_on: [gate-1-eef-ships, "graph-stack Inc.1 Oak Ontology Threads foundation"]
   - id: gate-3a-mcg-subgraph-ships
-    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on legacy graph factory data; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 (different substrate path)."
+    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on legacy misconception graph factory data plus graph-stack Inc.1 Thread→Unit lookup; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with slice 2 after gate-1 + Inc.1."
     status: pending
-    depends_on: [gate-1-eef-ships]
+    depends_on: [gate-1-eef-ships, "graph-stack Inc.1 Oak Ontology Threads foundation"]
   - id: gate-3b-cross-corpus-ships
     content: "Slice 3b ships: oak-misconceptions-eef-recommend-for-thread cross-corpus tool complete on substrate; both EEF and misconception graph routed through graph-corpus-sdk + cross-corpus join primitive (graph-stack Inc.3); ADR-123 updated."
     status: pending
@@ -441,11 +441,15 @@ gate-learning-loop: /jc-consolidate-docs after each gate; archive after gate-3b
 - graph-stack Inc.1 → gate-2 (Oak Ontology Threads adapter and inverse-edge
   lookup)
 - gate-1 → gate-3a (owner-sequenced: slice 1 first establishes the MVP-arc spine pattern + namespace discipline; slice 3a follows once that pattern is proven — ADR-157 amendment + the `eef-*` prefix landed in Phase 0, so this gate is now sequencing discipline rather than an artefact dependency)
+- graph-stack Inc.1 → gate-3a (Thread IRI input requires Thread→Unit lookup
+  from the Oak Ontology Threads foundation; misconception traversal remains
+  on the legacy factory for slice 3a)
 - gate-1 + gate-3a → gate-3b (cross-corpus composes EEF [slice 1] + misconceptions [slice 3a]; Threads [slice 2] is not part of the cross-corpus payload)
 - graph-stack Inc.3 → gate-3b (cross-corpus join primitive)
 
-**Parallel-safe**: gate-2 and gate-3a may run concurrently after gate-1.
-They share no file scope and have independent substrate paths.
+**Parallel-safe**: gate-2 and gate-3a may run concurrently after gate-1 and
+graph-stack Inc.1. They share no file scope; both consume the Thread lookup,
+while only slice 3a traverses the legacy misconception factory.
 
 ## Sequencing of Spine-Owned Todos
 
