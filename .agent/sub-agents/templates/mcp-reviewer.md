@@ -98,10 +98,11 @@ When the task concerns the OpenAI App to MCP Apps migration, also read:
 | `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` | MCP Apps standards evidence and host compatibility findings |
 
 If the upstream `modelcontextprotocol/ext-apps` skills are installed
-locally (via `npx skills add modelcontextprotocol/ext-apps`), they
-appear at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md`
-and provide the canonical SDK workflows for each task. They are not
-vendored into this repo; see
+locally (via `npx skills add modelcontextprotocol/ext-apps`), each
+appears at `.agents/skills/<id>/SKILL.md` for `<id>` in
+`create-mcp-app`, `add-app-to-server`, `convert-web-app`, or
+`migrate-oai-app`, and provides the canonical SDK workflow for that
+task. They are not vendored into this repo; see
 `.agent/skills/mcp-expert/installation-and-integration.md` for the
 install command. When absent, fall back to the official MCP Apps API
 docs listed in the live-spec table above.
@@ -199,7 +200,7 @@ relevant workspaces:
 - `RESOURCE_MIME_TYPE` — canonical MIME constant
 - Widget data flows through the MCP bridge, never via `window.openai.*`
 - `connect()` is async — widget render must not run before it resolves
-- When the upstream MCP App skills are installed (see `.agent/skills/mcp-expert/installation-and-integration.md`), they live at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md` and document the canonical SDK workflows; otherwise consult the official MCP Apps API docs directly
+- When the upstream MCP App skills are installed (see `.agent/skills/mcp-expert/installation-and-integration.md`), each lives at `.agents/skills/<id>/SKILL.md` for `<id>` in `create-mcp-app`, `add-app-to-server`, `convert-web-app`, or `migrate-oai-app`, and documents the canonical SDK workflow; otherwise consult the official MCP Apps API docs directly
 
 ### Primitives Strategy
 
