@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-05-07
+last_updated: 2026-05-10
 related_indices:
   - "graph-portfolio-index.md"
 ---
@@ -16,6 +16,13 @@ related_indices:
 This file is a strategic index. Execution detail belongs in collection roadmaps
 and active plans. Per-milestone summaries (audience, value, progression gates):
 [milestones/](../milestones/).
+
+## Onboarding entry points
+
+- [good-first-issues.md](good-first-issues.md) — curated starter-task index
+  for new Oak teammates and AI coding teammates. Points to the live GitHub
+  `good first issue` label plus stable area onramps. Sibling plan index;
+  separate from the milestone sequence below.
 
 ## Repository Goal Narrative
 

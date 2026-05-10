@@ -13,6 +13,8 @@ This directory contains engineering workflow and implementation documentation fo
 ## Contents
 
 - [Root README Quick Start](../../README.md#quick-start) - Architecture, setup, and key commands for new developers
+- [Sibling Repositories](./sibling-repos.md) - Related Oak repos a teammate may need to clone
+- [MCP Servers for Contributors](./mcp-servers-for-contributors.md) - Sanctioned MCP server set for AI coding agents
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Build System](./build-system.md) - Turborepo tasks, caching, and quality gate commands
 - [Troubleshooting](../operations/troubleshooting.md) - Operational issues and resolutions

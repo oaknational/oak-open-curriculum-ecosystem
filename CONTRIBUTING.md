@@ -45,6 +45,24 @@ that apply equally to humans and agents. For the wider Practice, see
 and [Practice Index](.agent/practice-index.md) (this repository's
 local bridge).
 
+### Working with Claude Code (and other AI coding agents)
+
+Oak teammates whose primary AI coding tool is Claude Code (or Cursor, Codex,
+Gemini CLI, Copilot, Windsurf) start with three additional surfaces:
+
+- [Claude Code teammate onboarding prompt](.agent/prompts/onboarding-claude-teammate.md) —
+  guided first session
+- [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) —
+  the sanctioned MCP set; note that the Vercel CLI is forbidden, all Vercel
+  work goes through the project-scoped Vercel MCP plugin
+- [Sibling repositories](docs/engineering/sibling-repos.md) — related Oak
+  repos a teammate may need to clone
+
+The team's skill and command vocabulary lives under
+[`.agent/skills/`](.agent/skills/) (canonical) with platform adapters under
+[`.claude/skills/`](.claude/skills/) and equivalents for other agents. Open
+every session with `/start-right-quick` and close it with `/session-handoff`.
+
 ## Where the documentation lives
 
 Most of what you need as a contributor is grouped by section under
@@ -175,6 +193,13 @@ Before making changes, follow the install and verify steps in the
    ```bash
    pnpm test
    ```
+
+### Picking a first task
+
+For a curated list of starter tasks, see
+[good first issues](.agent/plans/good-first-issues.md) — a thin index that
+points to the live GitHub `good first issue` label plus a short list of stable
+area onramps.
 
 ### Contribution Levels
 

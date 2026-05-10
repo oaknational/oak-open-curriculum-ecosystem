@@ -14,6 +14,11 @@ dependency-graph.svg
 # Agent Interactions
 collaboration.txt
 
+# /team-onboarding slash command output (paste-into-Claude buddy guide).
+# Personal usage stats + Claude-only runbook; durable content lives in
+# docs/engineering/ and .agent/prompts/onboarding-claude-teammate.md.
+ONBOARDING.md
+
 # Local MCP server config
 .mcp.json
 
