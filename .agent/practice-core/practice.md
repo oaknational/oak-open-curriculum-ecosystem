@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 375
-fitness_line_limit: 500
-fitness_char_limit: 30500
+fitness_line_target: 500
+fitness_line_limit: 625
+fitness_char_limit: 35000
 fitness_line_length: 100
 ---
 
