@@ -99,7 +99,7 @@ the design token ecosystem evolves rapidly.
 |--------|-----|---------|
 | DTCG Format Specification | `https://www.designtokens.org/TR/2025.10/format/` | Token format, `$type`, `$value`, references, groups (stable report) |
 | W3C Design Tokens Community Group | `https://www.w3.org/community/design-tokens/` | Community direction, spec evolution |
-| Style Dictionary | `https://amzn.github.io/style-dictionary/` | Build pipeline patterns, transforms, platforms |
+| Style Dictionary | `https://styledictionary.com/` | Build pipeline patterns, transforms, platforms |
 
 ### CSS Standards
 

@@ -11,7 +11,7 @@ overview: >
 status: 🟡 IN PROGRESS
 todos:
   - id: phase-1b-integrate-and-delete
-    content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and inline the `mcp-expert` companion `installation-and-integration.md` (Option C). Resolved: 8 of 8 merges landed (sentry/clerk/mcp at 52c139c7; accessibility/assumptions/design-system/elasticsearch templates at 57de914f; elasticsearch adapters at 16c10cea; react-component at 31a2a9e1). Cleanup pass complete in the working tree: 24 standalone-skill directories deleted (8 canonical + 8 .claude jc- adapters + 8 .agents jc- adapters), the mcp-expert companion file deleted alongside, and 8 `Skill()` permissions removed from `.claude/settings.json`."
+    content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and inline the `mcp-expert` companion `installation-and-integration.md` (Option C). Resolved: 8 of 8 merges landed (sentry/clerk/mcp at 52c139c7; accessibility/assumptions/design-system/elasticsearch templates at 57de914f; elasticsearch adapters at 16c10cea; react-component at 31a2a9e1). Cleanup pass landed at ae36670a: 24 standalone-skill directories deleted (8 canonical + 8 .claude jc- adapters + 8 .agents jc- adapters), the mcp-expert companion file deleted alongside, and 8 `Skill()` permissions removed from `.claude/settings.json`."
     status: completed
   - id: phase-1b-reviewer-dispatch
     content: "Phase 1B reviewer dispatch: code-expert (gateway), docs-adr-expert (8 substantive content merges + role-broadening), config-expert (.claude/settings.json permission removals + skills-lock interaction), mcp-expert + clerk-expert + sentry-expert (each on their own paired domain), architecture-expert-fred (PDR-051 alignment of the unified expert role)."
@@ -39,6 +39,7 @@ anchored_commits:
   - 57de914f — Phase 1B continuation: accessibility/assumptions/design-system/elasticsearch templates + changed adapters updated
   - 16c10cea — Phase 1B follow-up: elasticsearch adapters synchronised
   - 31a2a9e1 — Phase 1B continuation: react-component template + adapters merged
+  - ae36670a — Phase 1B.2-4 cleanup: 24 standalone-skill dirs deleted + 8 Skill() permissions removed + plan updated
 ---
 
 # Sub-agent rename to `*-expert` + skill integration
@@ -108,8 +109,7 @@ of the now-redundant standalone skills, and the repo-wide reference sweep.
   split, adapters refreshed across `.claude`/`.cursor`/`.codex`,
   `.codex/config.toml` description sync'd. Landed at `31a2a9e1`.
 
-**Phase 1B.2-4 cleanup** (complete in the working tree; validation/commit
-still pending):
+**Phase 1B.2-4 cleanup** (landed at `ae36670a`):
 
 - 8 standalone `.agent/skills/<domain>-expert/` directories deleted
   (including the `mcp-expert/installation-and-integration.md` companion
@@ -248,15 +248,14 @@ Per the §"Reviewer dispatch matrix" below:
   the per-domain pattern (locked in by `subagents:check` failure on the
   first merge attempt). Future plans that add new sub-agents must
   include this step.
-- Working-tree carry-over from peer agents (napkin, repo-continuity,
-  thread record, agent-tools/* friction-closeout work) was not touched
-  this session; commit pathspec was scoped explicitly to avoid
-  foreign-stage absorption. The peer agent's commit will land their
-  staged content under their own SHA later.
+- Working-tree carry-over from peer agents remains present: napkin,
+  active-claims, the Oceanic insight-report disposition plan, and
+  continuity/thread surfaces include other agents' state. Land the cleanup
+  bundle with explicit pathspecs so unrelated peer work is not absorbed.
 
 #### Recommended session start
 
-1. `/jc-start-right-thorough` to ground (Phase 1B continuation is
+1. `/jc-start-right-thorough` to ground (Phase 1B cleanup/review is
    plan-heavy though structurally locked-in).
 2. Read this opener + the §"Phase 1B status" section above + PDR-051.
 3. Coordinate with Stormbound Floating Current's active claim before landing
