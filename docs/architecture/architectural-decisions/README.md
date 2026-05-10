@@ -172,10 +172,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   retains its original ADR-144 slug because the ADR was amended in place; see
   Status block in the ADR for history
 - [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
-- [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
+- [ADR-146: Assumptions Expert — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
 - [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
 - [ADR-148: Design Token Architecture](148-design-token-architecture.md)
-- [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
+- [ADR-149: Frontend Specialist Expert Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
 - [ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
 - [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
 - [ADR-152: Provenance UUID Migration](152-provenance-uuid-migration.md)
@@ -271,11 +271,11 @@ For understanding the agentic engineering practice:
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
-- **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions reviewer: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
+- **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions expert: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
 - **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
-- **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
+- **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist expert gateway cluster: accessibility-expert, design-system-expert, react-component-expert cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
 - **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
 

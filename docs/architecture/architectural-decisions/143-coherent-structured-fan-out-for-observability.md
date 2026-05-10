@@ -3,11 +3,12 @@
 ## Status
 
 Accepted (2026-03-27) — **Superseded in part by [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) (§6 only; 2026-04-17)**.
-Revised 2026-05-10 by
+Revised 2026-05-10 to align with
 [ADR-162](162-observability-first.md): the sink model, `OtelLogRecord`
-currency, workspace scope, and other out-of-scope clauses remain in force, but
-the historical `SENTRY_MODE` configuration key has been replaced by the
-orthogonal sink/fixture axes recorded in ADR-162.
+currency, workspace scope, and other out-of-scope clauses remain in force.
+ADR-162 records the target migration from historical `SENTRY_MODE`
+configuration to orthogonal sink/fixture axes; consuming runtimes may still
+use `SENTRY_MODE` until their env schemas and wiring are migrated.
 
 **Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md)
 

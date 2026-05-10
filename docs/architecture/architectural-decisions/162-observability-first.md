@@ -1,8 +1,8 @@
 # ADR-162: Observability-First — Every Capability Emits Across Five Axes
 
-**Status**: Accepted (2026-04-19). Amended 2026-05-10 to record that
-vendor-independence enforcement is partially implemented and still has
-follow-through work.
+**Status**: Proposed. Amended 2026-05-10 to record that
+vendor-independence enforcement and the sink/fixture axis migration are
+partially implemented and still have follow-through work before acceptance.
 **Date**: 2026-04-18
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry-compliant
@@ -23,10 +23,7 @@ to Cloudflare-layer telemetry;
 companion principle that every emission passes through redaction before
 any sink sees it;
 [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../explorations/2026-04-18-observability-strategy-and-restructure.md)
-— the session report that derived this ADR;
-[`.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md)
-— the execution plan under which this ADR is drafted, accepted, and
-operationalised.
+— the session report that derived this ADR.
 
 ## Context
 
@@ -115,7 +112,7 @@ wiring code. Phase 5 operationalises this distinction with a structural
 import lint (see Enforcement Mechanism #5).
 
 **Current enforcement status (2026-05-10).** The provider-neutral port and
-adapter direction is accepted, but the structural
+adapter direction is the target, but the structural
 `no-vendor-observability-import` rule is not yet the complete enforcement
 boundary. Existing composition-root imports of `@sentry/node` are allowed only
 as DI wiring. Any direct vendor SDK import in feature code remains a violation
@@ -138,20 +135,14 @@ For the principle to remain enforceable rather than aspirational:
    Sentry sink configured and asserts all structural event information
    persists via stdout/err.
 
-The plans that implement this closure property are catalogued under
-[`.agent/plans/observability/high-level-observability-plan.md`
-§Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
-The substrate distinction follows the convention recorded at
-[`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md):
-substrate plans enable axis-shipping work without themselves
-shipping axis output. The substrate inventory is the ADR-to-plan
-bridge for this section.
+The plans that implement this closure property maintain a substrate inventory:
+substrate plans enable axis-shipping work without themselves shipping axis
+output. The substrate inventory is the ADR-to-plan bridge for this section.
 
 ### Enforcement Mechanisms
 
-Four mechanisms, each concrete and testable. Details may be refined in
-Phase 5 of the
-[observability strategy restructure plan](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
+Four mechanisms, each concrete and testable. Details may be refined in the
+Phase 5 implementation work.
 
 1. **ESLint rule** `require-observability-emission` in
    `@oaknational/eslint-plugin-standards`:
@@ -308,9 +299,7 @@ through ADR-160's barrier before reaching any sink.
 
 ## Implementation Notes
 
-Phased execution is owned by the
-[observability strategy restructure plan](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
-In summary:
+Phased execution remains implementation follow-through. In summary:
 
 1. **Phase 1** (this ADR in `Proposed`; directory skeleton; plan moves).
 2. **Phase 2** (six MVP `current/` plans — including
@@ -331,8 +320,6 @@ In summary:
 
 - Direction-setting session report:
   [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../explorations/2026-04-18-observability-strategy-and-restructure.md).
-- Execution plan:
-  [`observability-strategy-restructure.plan.md`](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
 - Companion principles: ADR-143 (structural fan-out), ADR-160
   (redaction barrier), ADR-161 (network-free PR checks).
 - Implementation seams: ADR-078 (DI), ADR-154 (framework/consumer
@@ -366,7 +353,8 @@ In summary:
 
 - **2026-04-18** — Proposed. Structural skeleton (Phase 1 of the
   restructure plan) landed in commit `502af060`.
-- **2026-04-19** — Accepted. Phase 5 close: `require-observability-emission`
+- **2026-04-19** — Proposed implementation progress. Phase 5 close work:
+  `require-observability-emission`
   ESLint rule landed at `warn` in `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
   and wired at `warn` into every `apps/*` and `packages/sdks/*`
   workspace's `eslint.config.ts`. Reviewer-matrix axis-coverage
@@ -378,8 +366,8 @@ In summary:
   `@oaknational/observability-events` workspace lands. The
   vendor-independence conformance test (Enforcement Mechanism #4) and
   the `no-vendor-observability-import` structural import lint
-  (Enforcement Mechanism #5) are Phase-2-plan deliverables, not
-  blockers for acceptance.
+  (Enforcement Mechanism #5) remain follow-through items before this ADR can
+  be treated as fully accepted.
 - **2026-04-19** (later same day) — Wave-1 L-EH initial landed. The
   engineering-axis error-cause gate was re-scoped from a planned
   custom `require-error-cause` rule in
@@ -416,10 +404,8 @@ In summary:
   closure-rule redaction policy per sink. **This ADR's
   vendor-independence clause is unchanged**; the three-sink shape is
   a confirmation of the clause, not an extension of it. Sequencing
-  and per-sink promotion triggers are owned by
-  [`future/second-backend-evaluation.plan.md`](../../../.agent/plans/observability/future/second-backend-evaluation.plan.md)
-  (reframed 2026-04-19 from "second backend evaluation" to "three-sink
-  strategic brief"). The vendor-independence conformance scope
+  and per-sink promotion triggers are owned by the future three-sink
+  strategic brief. The vendor-independence conformance scope
   expands per sink as each adapter lands. The MVP usage question
   ("how many people are using the MCP and roughly for what") is
   Sentry-addressable via `wrapMcpServerWithSentry` traces +
@@ -427,19 +413,13 @@ In summary:
   deferred to public beta (warehouse) and post-public-beta on a
   named question (PostHog). Cross-referenced from the
   [Sentry vs PostHog capability matrix exploration](../../explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md)
-  and the
-  [strategic-parent maximisation plan](../../../.agent/plans/observability/future/sentry-observability-maximisation.plan.md)
-  L-15 input framing.
+  and the strategic-parent maximisation planning lane.
 - **2026-04-30** — §"The Closure Property and Test Gate" gained an
-  explicit ADR-to-plan bridge naming the substrate inventory at
-  [`.agent/plans/observability/high-level-observability-plan.md`
-  §Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
+  explicit ADR-to-plan bridge naming the substrate inventory.
   No principle change. Trigger: a new substrate plan
-  ([`future/observability-config-coherence.plan.md`](../../../.agent/plans/observability/future/observability-config-coherence.plan.md))
+  for observability config coherence
   exposed the implicit substrate category — the plan author had to
   invent a justification for not placing the plan under any single
   axis, signalling the categorisation was incomplete. The convention
-  is recorded as a reusable plan-collection component at
-  [`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md)
-  so future multi-axis collections (security, semantic-search,
+  is recorded as a reusable plan-collection component so future multi-axis collections (security, semantic-search,
   agentic-engineering) inherit the shape without re-deriving it.

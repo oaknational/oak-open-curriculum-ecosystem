@@ -23,7 +23,7 @@ through to the generic code-expert without specialist assessment.
 
 ### Create a UI/Frontend Triage Cluster
 
-Add a UI/Frontend cluster to the code-reviewer gateway's routing model.
+Add a UI/Frontend cluster to the code-expert gateway's routing model.
 The cluster contains three specialist agents created as a cohort:
 
 1. **accessibility-expert** — WCAG 2.2 AA compliance, keyboard
@@ -56,17 +56,17 @@ both clusters' reading sets.
 
 ### Overlap Boundaries
 
-| Domain                | UI/Frontend Cluster    | Existing Reviewer |
-| --------------------- | ---------------------- | ----------------- |
-| DOM accessibility     | accessibility-expert   | —                 |
-| Token tier violations | design-system-expert   | —                 |
-| React patterns        | react-component-expert | —                 |
-| MCP App packaging     | —                      | mcp-expert        |
-| Type safety in props  | react-component-expert | type-expert       |
-| Security in UI code   | —                      | security-expert   |
-| Test coverage gaps    | —                      | test-expert       |
+| Domain                | UI/Frontend Cluster    | Adjacent Expert |
+| --------------------- | ---------------------- | --------------- |
+| DOM accessibility     | accessibility-expert   | —               |
+| Token tier violations | design-system-expert   | —               |
+| React patterns        | react-component-expert | —               |
+| MCP App packaging     | —                      | mcp-expert      |
+| Type safety in props  | react-component-expert | type-expert     |
+| Security in UI code   | —                      | security-expert |
+| Test coverage gaps    | —                      | test-expert     |
 
-When overlap exists, both reviewers apply — their assessments are
+When overlap exists, both experts apply — their assessments are
 complementary, not competing.
 
 ### Agent Construction
@@ -77,13 +77,13 @@ Claude Code, Codex, and Gemini CLI. Reading requirements include ADR-147,
 ADR-148, ADR-149, and `docs/governance/accessibility-practice.md` and
 `docs/governance/design-token-practice.md`.
 
-### Testing Reviewer Cluster Pattern (Future-Facing)
+### Testing Expert Cluster Pattern (Future-Facing)
 
-This ADR documents a pattern that may influence test-reviewer evolution:
-make `test-reviewer` a cluster entry point, split testing reviewers by
+This ADR documents a pattern that may influence test-expert evolution:
+make `test-expert` a cluster entry point, split testing experts by
 test type (unit, integration, E2E, accessibility, visual), with shared
 principles in the entry point. This is not implemented in this plan —
-it is recorded as a future-facing recommendation for the testing reviewer
+it is recorded as a future-facing recommendation for the testing expert
 evolution plan.
 
 ## Rationale
@@ -99,7 +99,7 @@ an architectural pattern.
 
 ### Why three agents, not one
 
-A single "frontend-reviewer" would have too broad a scope: WCAG 2.2
+A single "frontend-expert" would have too broad a scope: WCAG 2.2
 compliance, token governance, and React architecture are distinct
 disciplines with different doctrine sources. Splitting enables focused
 prompts, targeted reading requirements, and independent evolution.
@@ -114,11 +114,11 @@ created at different times is higher.
 
 ## Risks
 
-| Risk                                                                                                | Mitigation                                                                                                                                 |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **ADR-135 naming deviation**: New agents use `-reviewer` suffix despite ADR-135 deciding to drop it | Intentional tech debt. All three agents will be included in the taxonomy rename batch when the Agent Classification Taxonomy plan executes |
-| Gateway triage routing may not trigger correctly                                                    | Phase 3 of the frontend plan is explicitly a validation step — the new agents review real changes, exercising the routing                  |
-| Overlap with existing reviewers creates noise                                                       | Overlap boundaries documented in this ADR; complementary assessment is intentional                                                         |
+| Risk                                                               | Mitigation                                                                                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **ADR-135 naming alignment**: New agents use the `*-expert` suffix | Current naming follows the amended ADR-129/ADR-135 model                                                                  |
+| Gateway triage routing may not trigger correctly                   | Phase 3 of the frontend plan is explicitly a validation step — the new agents review real changes, exercising the routing |
+| Overlap with existing experts creates noise                        | Overlap boundaries documented in this ADR; complementary assessment is intentional                                        |
 
 ## Consequences
 
@@ -127,13 +127,13 @@ created at different times is higher.
 - UI changes receive specialist review before WS3 Phase 4 begins
 - The cluster pattern is documented and reusable for future cohorts
 - MCP boundary is explicit — UI specialists own inside the view,
-  mcp-reviewer owns around it
+  mcp-expert owns around it
 
 ### Negative
 
-- Three new agents increase the reviewer roster from 16 to 19.
+- Three new agents increase the expert roster from 16 to 19.
   Mitigation: the gateway handles routing; agents are only invoked
   when their signals match
-- The testing reviewer cluster pattern is documented but not
+- The testing expert cluster pattern is documented but not
   implemented — may create expectation of near-term delivery.
   Mitigation: explicitly labelled as future-facing recommendation

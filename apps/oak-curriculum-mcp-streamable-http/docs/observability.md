@@ -32,26 +32,27 @@ Upstream library: [`@oaknational/sentry-node`](../../../packages/libs/sentry-nod
   queries against this MCP server are pre-scoped to this app — no
   cross-project leak.
 
-## Runtime Configuration Axes
+## Runtime Configuration
 
-Runtime behaviour is controlled by the orthogonal observability axes parsed at
-startup via `@oaknational/env-resolution`; they are never re-read:
+Runtime behaviour is currently controlled by `SENTRY_MODE`, parsed at startup
+via `@oaknational/env-resolution` and never re-read:
 
-- `OBSERVABILITY_SINKS=[]` — stdout JSON only. No Sentry SDK init, no outbound
+- `SENTRY_MODE=off` — stdout JSON only. No Sentry SDK init, no outbound
   delivery. Structured JSON stdout via `@oaknational/logger` remains the
   canonical local log surface (ADR-162 vendor-independence).
-- `OBSERVABILITY_SINKS=["sentry"]` — stdout JSON plus live Sentry. The Sentry
-  SDK is initialised, the logger sink is active, live error capture and tracing
-  are enabled, and every captured payload passes through the redaction barrier
+- `SENTRY_MODE=fixture` — no-network local validation. The SDK does not
+  initialise; MCP observations and handled-error captures are routed into the
+  fixture store used by tests and local inspection. Stdout JSON is retained.
+- `SENTRY_MODE=sentry` — stdout JSON plus live Sentry. The Sentry SDK is
+  initialised, the logger sink is active, live error capture and tracing are
+  enabled, and every captured payload passes through the redaction barrier
   before transmission.
-- `OBSERVABILITY_FIXTURES=true` — no-network local verification tee. Stdout
-  JSON is retained; MCP observations and handled-error captures are recorded in
-  a local fixture store used by tests and local validation.
 
-Historical `SENTRY_MODE` values are rejected by the environment schema with a
-migration message. Some server wiring snippets still refer to `SENTRY_MODE`
-until the code follow-through lands; treat those as implementation debt, not
-current operator guidance.
+ADR-162 records the target migration to orthogonal sink and fixture axes:
+`OBSERVABILITY_SINKS` and `OBSERVABILITY_FIXTURES`. The core env package has
+the target schema, but this HTTP MCP app still extends the legacy
+`SentryEnvSchema` and gates runtime wiring on `SENTRY_MODE`; treat the axis
+migration as implementation debt until the app schema changes.
 
 ## Auto-instrumentation of MCP requests
 
@@ -67,10 +68,10 @@ wrapMcpServerWithSentry(server);
 Location: [`src/app/core-endpoints.ts:98`](../src/app/core-endpoints.ts).
 
 `wrapMcpServerWithSentry` is unconditional in the composition root; when
-`OBSERVABILITY_SINKS=[]` the underlying `@sentry/node` SDK is not initialised, so
-the wrapper is inert. The vendor-independence clause of ADR-162 is therefore
-currently a _structural_ claim rather than a _tested invariant_; converting
-it to a tested invariant is tracked under
+`SENTRY_MODE=off` the underlying `@sentry/node` SDK is not initialised, so the
+wrapper is inert. The vendor-independence clause of ADR-162 is therefore
+currently a _structural_ claim rather than a _tested invariant_; converting it
+to a tested invariant is tracked under
 [`current/multi-sink-vendor-independence-conformance.plan.md`](../../../.agent/plans/observability/current/multi-sink-vendor-independence-conformance.plan.md)
 (Wave 5).
 

@@ -55,7 +55,8 @@ lint-staged checks are no longer the canonical model for this repository.
 - Slightly slower commit process
 - Can be frustrating if too strict
 - Developers need to understand hook failures
-- May need to bypass occasionally with --no-verify
+- Bypassing hooks is not an agent-default escape hatch; it requires fresh,
+  explicit owner authorisation for the exact operation
 
 ## Implementation
 
@@ -67,5 +68,5 @@ lint-staged checks are no longer the canonical model for this repository.
   pre-push, `pnpm check`, CI, and branch-protection surfaces.
 - Full repository and package gates take precedence over staged-file-only
   linting when the two models diverge.
-- Document how to bypass when necessary, but treat bypasses as exceptional and
-  owner-visible.
+- Document bypass procedures for owners, but agents must not use `--no-verify`
+  unless the owner has freshly authorised that exact invocation.

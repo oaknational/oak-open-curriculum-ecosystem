@@ -3,8 +3,9 @@
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
 **Last Updated**: 2026-05-10
-**Phase**: Observability foundation active; orthogonal sink/fixture config
-replaces the historical `SENTRY_MODE` framing.
+**Phase**: Observability foundation active; HTTP MCP still uses
+`SENTRY_MODE` while the orthogonal sink/fixture axis migration remains
+implementation follow-through.
 
 ## Overview
 
@@ -23,17 +24,20 @@ constraints established in Phase 1 and Phase 2.
 
 ## Current Observability Contract
 
-For the HTTP MCP server, observability runtime behaviour is defined by
-orthogonal sink and fixture axes:
+For the HTTP MCP server, current runtime behaviour is still defined by
+`SENTRY_MODE`:
 
-- `OBSERVABILITY_SINKS=[]`: stdout JSON only; no external sink.
-- `OBSERVABILITY_SINKS=["sentry"]`: stdout JSON plus live Sentry sink fan-out,
-  handled exceptions, and tracing.
-- `OBSERVABILITY_FIXTURES=true`: tee post-redaction observations into the local
-  fixture store for no-network verification.
+- `SENTRY_MODE=off`: stdout JSON only; no Sentry SDK init and no outbound
+  delivery.
+- `SENTRY_MODE=fixture`: stdout JSON plus no-network fixture capture for local
+  validation.
+- `SENTRY_MODE=sentry`: stdout JSON plus live Sentry sink fan-out, handled
+  exceptions, and tracing.
 
-Historical `SENTRY_MODE` values are legacy operator input and should be
-migrated to those axes.
+ADR-162 records the target migration to orthogonal sink and fixture axes
+(`OBSERVABILITY_SINKS` and `OBSERVABILITY_FIXTURES`). That target must not be
+documented as the HTTP MCP operator contract until the app env schema and
+runtime wiring consume it.
 
 The HTTP capture boundary remains metadata-only:
 

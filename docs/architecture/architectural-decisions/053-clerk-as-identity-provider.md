@@ -93,7 +93,7 @@ Use **Clerk** as the Identity Provider and Authorization Server for the MCP HTTP
 
 ### Integration Approach
 
-**MCP Server Role**: Resource Server only
+**Historical MCP Server Role**: Resource Server only
 
 - Validates Clerk-issued JWT tokens
 - Proxies Clerk's OAuth discovery to `/.well-known/oauth-authorization-server`
@@ -106,7 +106,15 @@ amendment plus ADR-142: Clerk remains the upstream IdP/AS, while the MCP server
 presents a same-origin proxy AS to clients and verifies Clerk opaque OAuth
 tokens through Clerk-supported verification.
 
-**Token Flow**:
+**Current Binding MCP Runtime Shape**:
+
+1. Clerk remains the canonical upstream IdP/AS.
+2. The MCP server presents a same-origin proxy AS to clients for compatibility.
+3. Clerk OAuth access tokens for this flow are opaque `oat_...` tokens.
+4. The MCP server verifies those opaque tokens through Clerk-supported
+   verification rather than local JWT/JWKS validation.
+
+**Historical Token Flow**:
 
 1. User authenticates via Clerk (in client application or browser)
 2. Client receives Clerk session token (JWT)

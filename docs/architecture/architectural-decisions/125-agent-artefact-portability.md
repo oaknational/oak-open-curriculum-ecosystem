@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-03-04
-**Amended**: 2026-05-09 — vendor-agnostic two-surface skills contract per [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md). Skill adapters retired from `.cursor/skills/`, `.gemini/skills/`, `.codex/skills/`, and `.windsurf/skills/`; only `.agents/skills/` (cross-tool alias) and `.claude/skills/` (Claude-native) remain. Canonical skill body filename is `SKILL-CANONICAL.md` (non-discoverable). Custom command surfaces (`.agent/commands/`, `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`) retired; canonical commands subsumed into skills. The thin-wrapper contract, three-layer model, and rules/sub-agent surfaces are unchanged.
+**Amended**: 2026-05-09 — vendor-agnostic two-surface skills contract per [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md). Skill adapters are retired from `.cursor/skills/`, `.gemini/skills/`, `.codex/skills/`, and `.windsurf/skills/`; only `.agents/skills/` (cross-tool alias) and `.claude/skills/` (Claude-native) remain. Canonical skill body filename is `SKILL-CANONICAL.md` (non-discoverable). Custom command surfaces (`.agent/commands/`, `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`) are a transition target for retirement, but cleanup is not complete while those directories still exist in the repo. Canonical command behaviour is being subsumed into skills. The thin-wrapper contract, three-layer model, and rules/sub-agent surfaces are unchanged.
 **Amended**: 2026-05-10 — clarified that Gemini `review-*.toml` files are
 transitional sub-agent invocation adapters only while Gemini lacks native
 sub-agent spawning. They are not a general custom-command surface and must be
@@ -213,14 +213,14 @@ directly.
 
 **Triggers that activate skills or directives:**
 
-| Trigger                          | What it activates                                                                         |
-| -------------------------------- | ----------------------------------------------------------------------------------------- |
-| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`         |
-| `napkin-always-active`           | `.agent/skills/napkin/SKILL.md`                                                           |
-| `use-start-right-skills`         | `.agent/skills/start-right-quick/SKILL.md`, `.agent/skills/start-right-thorough/SKILL.md` |
-| `follow-the-practice`            | Practice reading, which leads to skills                                                   |
-| `invoke-code-reviewers`          | All registered reviewers via `.agent/memory/executive/invoke-code-reviewers.md`           |
-| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                     |
+| Trigger                          | What it activates                                                                                 |
+| -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                 |
+| `napkin-always-active`           | `.agents/skills/jc-napkin/SKILL.md` -> `.agent/skills/napkin/SKILL-CANONICAL.md`                  |
+| `use-start-right-skills`         | `.agents/skills/jc-start-right-quick/SKILL.md`, `.agents/skills/jc-start-right-thorough/SKILL.md` |
+| `follow-the-practice`            | Practice reading, which leads to skills                                                           |
+| `invoke-code-reviewers`          | All registered reviewers via `.agent/memory/executive/invoke-code-reviewers.md`                   |
+| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                             |
 
 #### Trigger Content Contract
 
@@ -425,9 +425,11 @@ trees at `.cursor/skills/`, `.gemini/skills/`, `.codex/skills/`, and
 `.windsurf/skills/` are retired — those platforms read the cross-tool
 alias and the per-vendor surfaces produced duplicate registrations and
 drift. Custom command surfaces (`.agent/commands/`, `.cursor/commands/`,
-`.claude/commands/`, `.gemini/commands/`) are retired; canonical
-commands subsumed into skills as the unified user-and-model-invokable
-workflow surface. Adapters are emitted by
+`.claude/commands/`, `.gemini/commands/`) are targeted for retirement;
+until the directories are removed, their contents are transitional and must not
+be treated as the canonical workflow surface. Canonical command behaviour is
+being subsumed into skills as the unified user-and-model-invokable workflow
+surface. Adapters are emitted by
 `pnpm agent-tools:skills-adapter-generate`; manual edits forbidden by
 header comment in every emitted file; `pnpm portability:check` now
 includes a drift gate and the new contract checks. Owned skills carry

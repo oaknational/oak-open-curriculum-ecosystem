@@ -90,9 +90,9 @@ repository's local bridge.
 
 ## Implementation Plans
 
-- [Architectural Refinements Plan (completed)](../../.agent/plans/archive/completed/architectural-refinements-plan.md)
-- [Workspace Structure Options (completed analysis)](../../.agent/plans/archive/completed/workspace-structure-options.md)
-- [Serverless Hosting Plan (deferred)](../../.agent/plans/icebox/serverless-hosting-plan.md)
+Implementation plans are execution artefacts, not canonical architecture
+documentation. Durable decisions belong in ADRs; plan-path provenance belongs
+in plans and session notes.
 
 ## Historical Context
 

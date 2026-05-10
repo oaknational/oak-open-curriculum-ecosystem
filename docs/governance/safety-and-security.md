@@ -59,21 +59,22 @@ CLERK_SECRET_KEY=your_clerk_secret_key_here
 
 ### PII Scrubbing
 
-The system automatically scrubs Personally Identifiable Information (PII) to protect user privacy:
+The binding privacy architecture is ADR-160's non-bypassable redaction barrier:
+payloads that would otherwise leave the process must pass through the shared
+redaction policy before any sink receives them.
 
-- **Email Addresses**: Automatically redacted to show only first 3 characters
-  - Example: `john.doe@example.com` → `joh...@example.com`
-- **Consistent Application**: Applied to all user data across all outputs
-- **Pure Function Implementation**: Testable and reliable
+Current proven coverage includes sensitive keys, bearer tokens, OAuth fields,
+and IP-like headers in the telemetry redaction paths. ADR-160 records
+arbitrary email-like value scrubbing as implementation debt unless a data-flow
+proof shows those values cannot enter the path under test.
 
-### Implementation
+### Implementation Direction
 
 ```typescript
-// Located in src/utils/scrubbing.ts
-export function scrubEmail(email: string): string {
-  const [localPart, domain] = email.split('@');
-  if (!domain || localPart.length <= 3) return email;
-  return `${localPart.slice(0, 3)}...@${domain}`;
+// Pattern only: concrete coverage belongs at the ADR-160 redaction barrier.
+export function scrubEmailLikeValue(value: string): string {
+  // Redact the local part before an email-like value leaves the process.
+  return value.replace(/[^@\s]{1,64}@[^@\s]+/g, '[redacted-email]');
 }
 ```
 

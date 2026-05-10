@@ -20,10 +20,8 @@ types that the policy must cover: `beforeSend`,
 breadcrumb filtering.
 
 The enumerated form of §6 is a footgun. The Sentry Observability
-Maximisation work (see
-[`sentry-observability-maximisation-mcp.plan.md`](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md))
-introduces a new fan-out path, `beforeSendMetric`, for Sentry's
-dedicated metrics pipeline. A future lane introduces
+Maximisation work introduces a new fan-out path, `beforeSendMetric`, for
+Sentry's dedicated metrics pipeline. A future lane introduces
 `captureFeedback` — another fan-out the original list does not
 anticipate. The MCP App browser widget (L-12) will introduce a
 browser-side variant of the redaction pathway via `@sentry/browser`'s
@@ -252,10 +250,8 @@ The first Node-side conformance test is
 - **Workspace conformance tests** as described above.
 - **`packages/libs/sentry-node/README.md`** will carry a "Redaction
   barrier" section citing this ADR as the authoritative doctrine.
-- **Cross-referenced from**
-  [`sentry-observability-maximisation-mcp.plan.md`](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-  (L-0 authors this ADR; L-1 / L-4b / L-9 / L-12 are the first
-  conformance targets).
+- **Cross-referenced from observability implementation plans** as the
+  authoritative redaction-barrier doctrine for the first conformance targets.
 
 ## History
 

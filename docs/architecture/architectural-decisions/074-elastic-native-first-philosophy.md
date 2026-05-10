@@ -128,7 +128,11 @@ const results = await buildThreeWayLessonRrfRequest(esClient, {
 // 3. E5 dense vectors (.multilingual-e5-small-elasticsearch)
 ```
 
-### Planned Implementation (Phase 1B-3)
+### Historical Planned Implementation Sketch (Phase 1B-3)
+
+The following sketch is historical where it refers to dense-vector
+`three-way-hybrid` retrieval. The current accepted retrieval baseline is
+BM25 + ELSER with RRF per ADR-076.
 
 ```typescript
 // Phase 1B: Elastic Native ReRank
@@ -145,7 +149,7 @@ const entities = await extractEntities(transcript, {
 // Phase 3: RAG with Elastic Native LLM
 const answer = await generateRAGResponse(query, {
   llm: '.gp-llm-v2-chat_completion',
-  retrievalStrategy: 'three-way-hybrid',
+  retrievalStrategy: 'bm25-elser-rrf',
   contextWindow: 5,
 });
 ```

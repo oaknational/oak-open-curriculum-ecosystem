@@ -98,7 +98,11 @@ If Clerk later moves this OAuth flow to JWT access tokens, this ADR must be
 revisited with ADR-115 because issuer/audience validation would become
 load-bearing again.
 
-### Architecture
+### Historical 2025 Architecture
+
+The diagram below records the original token-validation shape. It is not the
+current binding implementation posture after the 2026 proxy-AS and Clerk
+opaque-token amendments.
 
 ```text
 ┌─────────────────┐
@@ -132,19 +136,19 @@ load-bearing again.
 └─────────────────┘
 ```
 
-### Key Principles
+### Current Binding Principles
 
 1. **MCP Server = Resource Server Only**
    - Does NOT manage user sessions
    - Does NOT handle login/logout flows
    - Does NOT store passwords or credentials
-   - ONLY validates access tokens
+   - Validates bearer access tokens through Clerk-supported verification
 
-2. **Stateless Token Validation**
-   - Verify JWT signature using JWKS from Authorization Server
-   - Check token expiration (`exp` claim)
-   - Validate audience (`aud` claim matches MCP server URI)
-   - Validate issuer (`iss` claim matches Authorization Server)
+2. **Token Verification**
+   - Clerk opaque OAuth access tokens are verified through Clerk-supported
+     verification
+   - JWT/JWKS local claim validation is historical for this flow unless Clerk
+     changes the OAuth token format
 
 3. **Standards Compliance**
    - Expose `/.well-known/oauth-authorization-server` (RFC 8414)
@@ -153,10 +157,10 @@ load-bearing again.
    - Never accept tokens in URL parameters (security risk)
 
 4. **Token Format**
-   - JWT with standard claims (`iss`, `aud`, `exp`, `sub`, `iat`)
-   - Short-lived access tokens (10-15 minutes)
-   - Optional refresh tokens for longer sessions
-   - Custom claims for authorization (email, org, roles)
+   - The runtime must not assume JWT access-token structure for Clerk OAuth
+     access tokens in this flow
+   - If JWT access tokens become load-bearing later, this ADR and ADR-115 must
+     be revisited together
 
 ## Rationale
 

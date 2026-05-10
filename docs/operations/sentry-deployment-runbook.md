@@ -121,9 +121,10 @@ Sentry-side state.
    which conditionally injects `@sentry/esbuild-plugin` based on the
    ADR-163 §3 / §4 policy (resolved by
    [`build-scripts/sentry-build-plugin.ts`](../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts)).
-   When the policy says "register", the plugin embeds Debug IDs into
-   each `.js` and matching `.map` under `dist/` and uploads the
-   artefact bundle keyed by those Debug IDs.
+   When the policy says "register", the current plugin config embeds Debug IDs
+   into the deployed server entrypoint and uploads its matching source map as
+   an artefact bundle keyed by those Debug IDs. Broader bundle-wide source-map
+   upload coverage remains ADR-163 follow-through work.
 3. Confirm in Sentry UI: **Project Settings → Source Maps → Artifact
    Bundles** — this is the authoritative Debug-ID-keyed surface and is
    the primary evidence that symbolication will resolve at event time.

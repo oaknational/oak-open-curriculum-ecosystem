@@ -114,10 +114,10 @@ export default createDeployEntryHandler({
 });
 ```
 
-Note: the observability environment schema now rejects non-empty
-`SENTRY_MODE` in favour of `OBSERVABILITY_SINKS` and
-`OBSERVABILITY_FIXTURES`. This snippet reflects the current server wiring
-until that migration follow-through lands; it should be updated with the code.
+Note: ADR-162 records a target migration from `SENTRY_MODE` to
+`OBSERVABILITY_SINKS` and `OBSERVABILITY_FIXTURES`, but this HTTP MCP runtime
+still uses `SENTRY_MODE` in its app env schema and server wiring. Update this
+snippet only when the code migration lands.
 
 `createApp` remains async because startup includes OAuth metadata work and MCP
 factory/readiness setup. `src/server.ts` keeps that async work behind a
