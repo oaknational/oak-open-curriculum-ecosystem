@@ -48,6 +48,7 @@ index in the same commit.
 - `.agent/rules/invoke-clerk-expert.md`
 - `.agent/rules/invoke-code-experts.md`
 - `.agent/rules/invoke-design-system-expert.md`
+- `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md`
 - `.agent/rules/invoke-elasticsearch-expert.md`
 - `.agent/rules/invoke-mcp-expert.md`
 - `.agent/rules/invoke-react-component-expert.md`

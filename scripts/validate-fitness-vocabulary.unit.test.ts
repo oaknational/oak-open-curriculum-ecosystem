@@ -40,7 +40,7 @@ describe('shouldReportMatch', () => {
 
 describe('shouldInspectFile', () => {
   it('inspects live markdown files', () => {
-    expect(shouldInspectFile('.agent/commands/consolidate-docs.md')).toBe(true);
+    expect(shouldInspectFile('.agent/skills/consolidate-docs/SKILL-CANONICAL.md')).toBe(true);
     expect(shouldInspectFile('docs/governance/development-practice.md')).toBe(true);
   });
 

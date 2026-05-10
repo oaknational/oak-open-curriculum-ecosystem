@@ -2,11 +2,6 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 export const CLAUDE_HOOK_COMMAND = 'pnpm exec tsx scripts/check-blocked-patterns.ts';
-const COMMANDS_DIR = '.agent/commands';
-export const CURSOR_COMMANDS_DIR = '.cursor/commands';
-export const CLAUDE_COMMANDS_DIR = '.claude/commands';
-export const GEMINI_COMMANDS_DIR = '.gemini/commands';
-const PORTABLE_COMMANDS_DIR = '.agents/skills';
 export const CURSOR_AGENTS_DIR = '.cursor/agents';
 export const CLAUDE_AGENTS_DIR = '.claude/agents';
 export const CODEX_AGENTS_DIR = '.codex/agents';
@@ -17,38 +12,7 @@ export const PRACTICE_BOX_DIR = '.agent/practice-core/incoming';
 export const CONTINUITY_CONTRACT_PATH = '.agent/memory/operational/repo-continuity.md';
 export const FRESHNESS_WARNING_DAYS = 7;
 
-const SUPERSEDED_COMMANDS = new Set(['experience']);
 type JsonLikeObject = Readonly<Record<PropertyKey, unknown>>;
-
-export function listCanonicalCommandNames(repoRoot: string): string[] {
-  return listBasenames(repoRoot, COMMANDS_DIR, '.md').filter(
-    (commandName) => !SUPERSEDED_COMMANDS.has(commandName),
-  );
-}
-
-export function listCommandAdapterNames(
-  repoRoot: string,
-  relativeDir: string,
-  extension: string,
-): string[] {
-  return listBasenames(repoRoot, relativeDir, extension)
-    .filter((fileName) => fileName.startsWith('jc-'))
-    .map((fileName) => fileName.replace(/^jc-/u, ''))
-    .sort((a, b) => a.localeCompare(b));
-}
-
-export function listPortableCommandAdapterNames(repoRoot: string): string[] {
-  const skillsDir = join(repoRoot, PORTABLE_COMMANDS_DIR);
-  if (!existsSync(skillsDir)) {
-    return [];
-  }
-
-  return readdirSync(skillsDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name.startsWith('jc-'))
-    .filter((entry) => existsSync(join(skillsDir, entry.name, 'SKILL.md')))
-    .map((entry) => entry.name.replace(/^jc-/u, ''))
-    .sort((a, b) => a.localeCompare(b));
-}
 
 export function listBasenames(repoRoot: string, relativeDir: string, extension: string): string[] {
   const absoluteDir = join(repoRoot, relativeDir);
