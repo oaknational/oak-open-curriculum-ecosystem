@@ -14,7 +14,7 @@ definition, see
 ([ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)):
 
 ```text
-.agent/              ← canonical content (rules, skills, commands)
+.agent/              ← canonical content (rules, skills, sub-agents)
   ↓ referenced by
 .claude/, .cursor/,  ← thin platform adapters (one-line pointers)
 .gemini/, .codex/,
@@ -79,7 +79,7 @@ docs, READMEs) via the consolidation workflow.
 | `plans/` | Executable work plans with lifecycle management (`future/` → `current/` → `active/` → `archive/`) |
 | `milestones/` | Per-milestone summaries: audience, value delivered, and progression gates |
 | `prompts/` | Reusable prompt playbooks for common workflows |
-| `commands/` | Slash-command definitions for agent workflows (`/jc-gates`, `/jc-go`, etc.). The commit workflow is an always-active skill, not a slash command — see [`skills/commit/`](skills/commit/SKILL.md) with thin pointers at `.cursor/skills/commit/` and `.agents/skills/commit/`. |
+| `skills/` | Canonical skills (sole user-and-model-invokable workflow surface; `.agent/commands/` was retired per ADR-125 §2026-05-10). Each skill lives at `skills/<name>/SKILL-CANONICAL.md`; adapters at `.agents/skills/jc-*/SKILL.md` and `.claude/skills/jc-*/SKILL.md` are emitted by `pnpm agent-tools:skills-adapter-generate`. |
 
 ### Knowledge and learning
 

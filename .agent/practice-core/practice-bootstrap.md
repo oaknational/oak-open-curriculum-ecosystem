@@ -419,11 +419,11 @@ adapters land at `.agents/skills/jc-<name>/` and
 
 ## Skills (.agent/skills/)
 
-### SKILL.md Format
+### SKILL-CANONICAL.md Format
 
-Canonical skills use YAML frontmatter. Platform adapters in `.cursor/skills/`,
-`.claude/skills/`, `.gemini/skills/`, `.github/skills/`, and `.agents/skills/`
-are thin wrappers where the local matrix says they are supported.
+Canonical skill bodies use a non-discoverable filename
+(`SKILL-CANONICAL.md`) so only the host repo's tooling reads them
+directly; agents see the generated adapter copies. Frontmatter:
 
 ```yaml
 ---
@@ -434,18 +434,22 @@ description: {When to invoke this skill — one sentence trigger condition}
 
 # {Skill Title}
 
-## Goal
-{What the skill achieves}
-
-## Workflow
-1. {Step 1}
+{Body — fully inlined; not a thin pointer.}
 ```
 
-Cursor adapter (`.cursor/skills/{name}/SKILL.md`): `name`/`description`
-frontmatter + `Read and follow @.agent/skills/{name}/SKILL.md`. Native
-Claude/Gemini/GitHub skill adapters use the same thin shape. Codex adapter
-(`.agents/skills/{name}/SKILL.md`): `name`/`description` frontmatter + reads
-the canonical path without `@`.
+Adapters are emitted by `pnpm agent-tools:skills-adapter-generate` at
+two surfaces and **must not be edited manually** (a header comment in
+each emitted file states this):
+
+- `.agents/skills/jc-{name}/SKILL.md` — cross-tool alias (read by
+  Cursor, Codex, Gemini CLI, Amp).
+- `.claude/skills/jc-{name}/SKILL.md` — Claude Code native.
+
+Each adapter carries thin frontmatter (`name`, `description`) and a
+body that contains the substantive skill content as bytewise-generated
+output. Per-vendor surfaces (`.cursor/skills/`, `.gemini/skills/`,
+`.codex/skills/`, `.windsurf/skills/`) are retired — those platforms
+read the cross-tool alias.
 
 ### Session-Entry Skills
 

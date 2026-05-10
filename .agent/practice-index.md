@@ -249,10 +249,10 @@ reusable knowledge:
 | Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
 | Operational continuity | [`memory/operational/repo-continuity.md`](memory/operational/repo-continuity.md) | Repo-wide active-thread register, standing decisions, pending-graduations |
 
-The patterns skill ([`.agent/skills/patterns/SKILL.md`](skills/patterns/SKILL.md))
+The patterns skill ([`.agent/skills/patterns/SKILL-CANONICAL.md`](skills/patterns/SKILL-CANONICAL.md))
 teaches agents to check the pattern library before inventing new approaches.
-Platform adapters exist at `.cursor/skills/patterns/`, `.claude/skills/patterns/`,
-and `.agents/skills/patterns/`.
+Generated adapters live at `.claude/skills/jc-patterns/SKILL.md` and
+`.agents/skills/jc-patterns/SKILL.md`.
 
 ### Pattern instances cited by Practice Core
 
