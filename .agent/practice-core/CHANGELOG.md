@@ -4,6 +4,42 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-10 — QUAR-1 reformulation (Quiet Lurking Mask session)
+
+Owner-directed graduation of the quarantined `apply-don't-ask` /
+`stop-inventing-optionality` doctrine candidates per the 2026-05-01
+reframings. The carry-over briefing surfaced the owner-decision; the
+owner chose (a) reformulate-and-land. Pair-reviewed by docs-adr-expert,
+onboarding-expert, and assumptions-expert before staging. Practice
+Core changes:
+
+- **Added**: `PDR-057 empirical-answerability`. Pre-question gate:
+  before posing a fork to the owner, the agent first determines
+  whether the question is empirically answerable from code, data,
+  vendor docs, generator output, schema, or log files; if so, the
+  agent reads those surfaces. The discharge action is reading, not
+  acting — the destructive-operation guard problem that quarantined
+  the predecessor doctrine is structurally absent. Supersedes the
+  quarantined `apply-don't-ask` candidate.
+- **Added**: `PDR-058 three-tier-optionality-decomposition`.
+  Decomposes `stop-inventing-optionality` into three impact-named
+  surfaces — decision optionality (subsumed by PDR-057), design
+  optionality (closed-shape cure), outcome optionality
+  (falsifiability cure) — each with its own diagnostic and home in
+  the Practice graph. The single-rule shape is rejected as
+  wrong-layer. Decomposition is open to further surfaces as evidence
+  emerges (interface, sequencing, scope optionality). Supersedes the
+  quarantined `stop-inventing-optionality` candidate.
+- **Updated**: `quarantine/apply-dont-ask-doctrine.md` frontmatter
+  flipped to `status: quarantine-cleared` with PDR-057/058 cleared-by
+  reference; original substance preserved as historical evidence of
+  the 2026-05-01 destructive incident.
+- **Updated**: `pending-graduations.md` quarantined-status section
+  drained to empty; QUAR-1 entry body updated to graduated; new
+  routing-label entries opened for design-optionality and
+  outcome-optionality per PDR-058 §Surfaces 2 and 3.
+- **Updated**: PDR README index now lists PDR-057 and PDR-058.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-10 — pending-graduations full drain (knowledge graduation session)
 
 Owner-invoked deep consolidation pass (Sylvan Fruiting Glade / claude-code /

@@ -103,13 +103,8 @@ not a verdict.
 
 ### `quarantined`
 
-+ `apply-don't-ask` / `stop-inventing-optionality` — quarantined
-  2026-05-01 by owner direction; reformulations explicitly named
-  by owner (empirical-answerability + three-tier optionality).
-  Owner-rethink remains the legitimate gate (substance was rejected,
-  not deferred). Surfaced for owner decision at 2026-05-10 session
-  close: (a) reformulate-and-land vs (b) re-quarantine vs
-  (c) retire. [L1759]
+(empty — apply-don't-ask / stop-inventing-optionality reformulations
+graduated 2026-05-10 to PDR-057 + PDR-058; quarantine cleared)
 
 ### `pending` (~82 entries — second-instance or owner-direction gated)
 
@@ -133,15 +128,22 @@ the queue churns.
 | observability orthogonal axes | ADR-171 + amendments to ADR-116/143/162/163 | L1508–1544 |
 | inter-agent collaboration protocol gaps | PDR-056 (ten cures, hypothesis-status preserved) | L1556–1632 |
 
+### 2026-05-10 graduations log (Quiet Lurking Mask — QUAR-1 reformulation)
+
+| Entry | Graduated to | Lines |
+| --- | --- | --- |
+| apply-don't-ask reformulation (empirical-answerability) | PDR-057 | L1988–2036 (quarantine entry) |
+| stop-inventing-optionality reformulation (three-tier decomposition) | PDR-058 | L1988–2036 (quarantine entry) |
+
 ### Entry counts (2026-05-10 — post-Sylvan-Fruiting-Glade drain)
 
 | Status | Count | Notes |
 | --- | --- | --- |
 | due | 0 | all drained 2026-05-10 — fabricated-gate vocabulary retired |
 | partially-graduated | 0 | both completed 2026-05-10 |
-| quarantined | 1 | apply-don't-ask owner-rethink (substance rejected, not deferred); reformulations named — owner choice surfaced at session close |
+| quarantined | 0 | apply-don't-ask + stop-inventing-optionality reformulations graduated 2026-05-10 to PDR-057 + PDR-058 (Quiet Lurking Mask session) |
 | pending | ~82 | second-instance or owner-direction gated |
-| **total** | **~83** | down from ~93 (10 graduated entries retained inline as audit trail; archive snapshot to follow) |
+| **total** | **~82** | down from ~93 (10 + 2 graduated entries retained inline as audit trail; archive snapshot scheduled this session to clear HARD char zone) |
 
 ## Entries
 
@@ -1986,8 +1988,14 @@ continuity snapshots.
   2025-01 cluster, 2025-08 cluster) for batch processing.
 
 + 2026-05-01; **`stop inventing optionality` / apply-don't-ask** —
-  **QUARANTINED 2026-05-01 by owner direction**.
-  `[captured: 2026-05-01 | source: owner-direction-after-incident | target: none | trigger: owner-direction(rejection-OR-reformulation) | size: XL | status: quarantined]`
+  **QUARANTINE CLEARED 2026-05-10 by graduation to PDR-057 + PDR-058
+  (Quiet Lurking Mask session)**. The original candidates remain
+  DO NOT APPLY in their original shapes; the substance is now
+  governed by the supersessor PDRs. Quarantine record at
+  [`quarantine/apply-dont-ask-doctrine.md`](quarantine/apply-dont-ask-doctrine.md)
+  is preserved as historical evidence of the 2026-05-01
+  destructive incident and the owner reformulations that followed.
+  `[captured: 2026-05-01 | source: owner-direction-after-incident | target: PDR-057 + PDR-058 | trigger: owner-direction(rejection-OR-reformulation) | size: XL | status: graduated 2026-05-10]`
   The doctrine
   contributed to (or ran alongside) a destructive `git checkout --`
   that discarded parallel-agent uncommitted work; the bias toward
@@ -2032,8 +2040,40 @@ continuity snapshots.
       unfalsifiable plans, see the don't-shoehorn-a-value-claim
       doctrine candidate above).
 
-    Both candidates remain quarantined. The reformulations are not
-    yet drafted; the rethink is owed before any new authoring.
+    **Status update 2026-05-10 (Quiet Lurking Mask)**: both
+    reformulations drafted and graduated. *apply-don't-ask* →
+    [PDR-057 (empirical-answerability)](../../practice-core/decision-records/PDR-057-empirical-answerability.md).
+    *stop-inventing-optionality* → [PDR-058 (three-tier optionality
+    decomposition)](../../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md);
+    Surface 1 (decision optionality) is fully subsumed by PDR-057;
+    Surfaces 2 (design optionality) and 3 (outcome optionality) are
+    routed to standalone graduation candidates below.
+
++ 2026-05-10; **design optionality** (per PDR-058 §Surface 2) —
+  routing label for the standalone rule sibling. Impact: erodes
+  types, bakes in fragility, mints maintenance load. Diagnostic:
+  surface being authored or reviewed admits a configurable /
+  optional / extensible shape with no concrete second instantiation
+  in scope. Cure: the closed-shape rule — author the closed shape
+  the known instances need; defer extensibility until a real second
+  instance forces decomposition. Status: pending. Trigger: second
+  named instance with concrete cure draft, OR owner direction. Source:
+  PDR-058 §Surface 2.
+
++ 2026-05-10; **outcome optionality** (per PDR-058 §Surface 3) —
+  routing label for the standalone rule sibling. Impact: produces
+  unfalsifiable plans; shoehorns value-claims into infrastructure
+  that cannot carry them. Diagnostic: a plan, ADR, acceptance
+  criterion, or test conditions its outcome on a fork that has a
+  determinate answer or on infrastructure not currently in the
+  repo. Cure: the falsifiability rule — outcome must name a single
+  observable signal that distinguishes success from failure;
+  if infrastructure to observe is absent, the plan says so and
+  ships structural enforcement. Sibling: *don't shoehorn a value-
+  claim* candidate (2026-04-30 entry below) — may merge or remain
+  distinct depending on evidence. Status: pending. Trigger: second
+  named instance with concrete cure draft, OR owner direction. Source:
+  PDR-058 §Surface 3.
 + 2026-04-30; **don't shoehorn a value-claim into infrastructure that
   cannot carry it** — when the right way to verify something does not
   exist yet, the honest plan says so and ships the structural enforcement

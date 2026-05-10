@@ -20,3 +20,12 @@ or workflow shape:
 
 The pressure signal is not "this feels reusable"; it is "the next caller
 would make three places that must evolve together."
+
+## See Also
+
+[PDR-058 §Surface 2 (design optionality)](../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md)
+governs *when to shape* (close-the-shape until a real second
+instance forces decomposition); this rule governs *when to extract*
+(third consumer triggers consolidation). The two compose: design-
+optionality discipline keeps the shape closed up to the second
+consumer; this rule extracts at the third.

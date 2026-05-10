@@ -1,15 +1,25 @@
 ---
-status: quarantine
+status: quarantine-cleared
 do_not_apply: true
 quarantined_on: 2026-05-01
 quarantined_by: owner
 quarantined_reason: contributed to a destructive `git checkout --` that destroyed parallel-agent uncommitted work; bias toward action lacks a destructive-operation guard
+cleared_on: 2026-05-10
+cleared_by: PDR-057, PDR-058
+cleared_reason: 2026-05-01 owner reformulations graduated as PDR-057 (empirical-answerability) and PDR-058 (three-tier optionality decomposition); the original candidates remain DO NOT APPLY but the substance is now governed by the supersessor PDRs
 ---
 
-# Apply, Don't Ask — QUARANTINED
+# Apply, Don't Ask — QUARANTINE CLEARED (superseded by PDR-057 + PDR-058)
 
-**This doctrine is NOT to be applied. It is preserved here for deep
-human review, not for adoption.**
+**The original `apply-don't-ask` and `stop-inventing-optionality`
+doctrine candidates remain DO NOT APPLY in their original shapes.
+Their reformulations are graduated to
+[PDR-057 (empirical-answerability)](../../../practice-core/decision-records/PDR-057-empirical-answerability.md)
+and
+[PDR-058 (three-tier optionality decomposition)](../../../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md)
+respectively. This file is preserved as historical evidence of the
+2026-05-01 destructive incident and the owner reformulations that
+followed.**
 
 The doctrine candidate `stop inventing optionality` (target
 `.agent/rules/apply-dont-ask.md`, never authored) was removed from

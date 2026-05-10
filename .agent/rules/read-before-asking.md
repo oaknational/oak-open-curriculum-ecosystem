@@ -58,8 +58,11 @@ action on the basis of the read has misapplied the rule.
 
 ## What This Rule Replaces
 
-This rule is the empirical-only sharpening of the previously-broader
-*apply, don't ask* doctrine. The broader doctrine was
+This rule is the operational expression of
+[PDR-057 (empirical-answerability)](../practice-core/decision-records/PDR-057-empirical-answerability.md),
+the doctrinal frame under which the rule's substance lives. PDR-057
+supersedes the quarantined `apply-don't-ask` candidate; the original
+doctrine was
 [quarantined on 2026-05-01](../memory/operational/quarantine/apply-dont-ask-doctrine.md)
 because it lacked a destructive-operation guard and contributed to
 the action landscape that produced a destructive
@@ -92,10 +95,13 @@ the action that information enabled.
 
 ## Related Surfaces
 
+- [PDR-057 (empirical-answerability)](../practice-core/decision-records/PDR-057-empirical-answerability.md)
+  — the doctrinal frame this rule implements.
 - [`undo-change` skill](../skills/undo-change/SKILL.md) — the same
   *render the diagnosis, then halt-ask* shape applied to undo
   operations.
 - [Quarantined apply-don't-ask doctrine](../memory/operational/quarantine/apply-dont-ask-doctrine.md)
-  — the doctrine this rule replaces; preserved for review.
+  — the predecessor doctrine; preserved for review (quarantine
+  cleared 2026-05-10 by PDR-057 + PDR-058).
 - [Pending-graduations register](../memory/operational/pending-graduations.md)
-  — quarantine entry pointer.
+  — graduation log + design/outcome optionality routing labels.

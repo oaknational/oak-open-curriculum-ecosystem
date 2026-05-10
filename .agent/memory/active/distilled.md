@@ -21,6 +21,20 @@ understanding — fitness management handles the consequences. What
 remains here is repo/domain-specific context with no natural
 permanent home, plus entries explicitly held pending validation.
 
+**Recent graduations (2026-05-10 — Quiet Lurking Mask)**: QUAR-1
+reformulation landed. *apply-don't-ask* → PDR-057 (empirical-
+answerability pre-question gate; discharge action is reading, not
+acting; destructive-operation guard problem structurally absent).
+*stop-inventing-optionality* → PDR-058 (three-tier decomposition by
+impact: decision optionality subsumed by PDR-057; design optionality
+routes to closed-shape cure; outcome optionality routes to
+falsifiability cure). Quarantine cleared at
+`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`;
+pending-graduations entry flipped to graduated; PDR README index
+updated; `read-before-asking` rule back-cites PDR-057 as its
+doctrinal frame; `consolidate-at-third-consumer` cross-references
+PDR-058 §Surface 2 boundary.
+
 **Recent graduations (2026-05-09)** — focused consolidation pass on
 `distilled.md` (Woodland Sheltering Glade): five planning-discipline
 rules → PDR-018 amendment (lead-with-narrative, CLI-first
