@@ -38,11 +38,11 @@ todos:
     status: pending
     depends_on: []
   - id: ws1-cycle-2-bound-default
-    content: "WS1 cycle 2: extend test to assert default bound chosen so 95th-percentile responses from the committed `20`-context fixture manifest fit `maxResponseTokens = 16000` (per spine acceptance #1); product-code adjustment minimal. One commit."
+    content: "WS1 cycle 2: extend test to assert the default bound keeps every context in the committed `20`-context fixture manifest within `maxResponseTokens = 16000`, including model-visible serialized content; product-code adjustment minimal. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-3-completeness-control
-    content: "WS1 cycle 3: completeness test — for sample queries, all reachable misconceptions WITHIN THE BOUND are present versus a full-graph control. Property-style assertion across the committed `20`-context fixture manifest selected deterministically from reachable-misconception counts. One commit."
+    content: "WS1 cycle 3: bounded-traversal behaviour tests over small literal graph fixtures — include high/median/low/zero density shapes without implementing a second full traversal in the test. Integration keeps using the committed 20-context manifest for response-budget proof. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-4-error-shapes
@@ -54,7 +54,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-3-completeness-control]
   - id: ws3-cycle-1-mcp-wiring
-    content: "WS3 cycle 1: integration test wires the tool(s) through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS3 cycle 1: integration test wires the tool(s) through the current in-process MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert registry discoverability + executor invocation. Transport-level list/invoke coverage, if needed, belongs in an e2e test. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-3-completeness-control, ws1-cycle-4-error-shapes]
   - id: ws3-cycle-2-tool-meta-legacy-disclosure
@@ -233,9 +233,9 @@ classified as `integration.test.ts` at implementation time.
 
 #### Cycle 1.2 — default bound
 
-- **Test**: with no bound supplied, the default chosen makes 95th
-  percentile of the committed `20`-context fixture manifest fit
-  `maxResponseTokens = 16000`.
+- **Test**: with no bound supplied, the default chosen makes every context
+  in the committed `20`-context fixture manifest fit `maxResponseTokens =
+  16000`, including model-visible serialized `content` text.
 - **Product code**: default constant + comment naming the empirical
   basis. The fixture manifest is selected deterministically from
   reachable-misconception counts, covering high, median, low, and
@@ -247,16 +247,13 @@ containing a short summary plus serialized JSON, `structuredContent` containing
 the bounded sub-graph payload, a declared `outputSchema`, and `isError: true`
 on tool execution errors.
 
-#### Cycle 1.3 — completeness control
+#### Cycle 1.3 — bounded traversal behaviour
 
-- **Test**: for each fixture in the committed `20`-context manifest, assert
-  that every
-  misconception reachable within the bound IS present in the
-  response (versus a full-graph control walked separately in the
-  test).
-- **Product code**: any traversal-completeness fixes the test
-  exposes.
-- **Acceptance**: completeness test passes; cycles 1.1 + 1.2 still
+- **Test**: small literal graph fixtures describe the expected bounded
+  traversal behaviour directly, including high/median/low/zero density
+  shapes. Do not implement a second full traversal in the test.
+- **Product code**: any traversal fixes the behaviour tests expose.
+- **Acceptance**: behaviour tests pass; cycles 1.1 + 1.2 still
   pass.
 
 #### Cycle 1.4 — error paths
@@ -280,8 +277,10 @@ If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
 
 #### Cycle 3.1 — MCP integration test
 
-- **Test**: integration exercises the full MCP path; tool discoverable
-  and invocable end-to-end.
+- **Test**: integration exercises in-process registry composition and the
+  universal-tool executor; tool is discoverable and invocable through those
+  surfaces. A transport-level MCP list/invoke proof uses an e2e test file if
+  execution needs it.
 - **Product code**: add the tool to the SDK universal registry
   (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
   export it through `public/mcp-tools.ts`. `handlers.ts` registers tools by

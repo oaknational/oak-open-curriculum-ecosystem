@@ -49,7 +49,7 @@ todos:
     status: pending
     depends_on: [ws2-cycle-1-tool-inverse-edge]
   - id: ws3-cycle-1-mcp-wiring
-    content: "WS3 cycle 1: integration test (`oak-kg-threads-mcp.integration.test.ts`) wires the resource + tool through the current MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS` + `registerAllResources`); assert tool/resource discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS3 cycle 1: integration test (`oak-kg-threads-mcp.integration.test.ts`) wires the resource + tool through the current in-process MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS` + `registerAllResources`); assert registry/resource discoverability + executor invocation. Transport-level list/read/invoke coverage, if needed, belongs in an e2e test. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-2-resource-grouping, ws2-cycle-2-tool-grouping, ws2-cycle-3-tool-error-shapes]
   - id: ws3-cycle-2-tool-descriptors
@@ -194,9 +194,11 @@ following the convention set by the existing `*-resource.ts` files
 
 #### Cycle 1.1 — list every Thread with label
 
-- **Test** (Red): `oak-kg-threads-resource.integration.test.ts` — load
-  fixture ontology with N known Threads; assert resource returns
-  exactly N entries, each with IRI + `rdfs:label`.
+- **Test** (Red): `oak-kg-threads-resource.integration.test.ts` — use an
+  imported/literal fixture ontology with N known Threads; assert resource
+  returns exactly N entries, each with IRI + `rdfs:label`. Auditing the real
+  pinned ontology revision belongs in a standalone validator, not this
+  in-process test.
 - **Product code** (Green): minimal adapter call surface; no grouping
   yet.
 - **Acceptance**: test passes; full tree green.
@@ -250,14 +252,15 @@ execution errors.
 
 ### WS3 — MCP wiring + descriptor
 
-Two cycles bringing the resource + tool through the MCP server
-registration and into the SDK's tool-guidance / NL surface.
+Two cycles bringing the resource + tool through the in-process MCP registry
+composition and into the SDK's tool-guidance / NL surface.
 
 #### Cycle 3.1 — MCP integration test
 
-- **Test**: `oak-kg-threads-mcp.integration.test.ts` exercises the
-  full MCP path (server registers resource + tool; client lists +
-  invokes both successfully).
+- **Test**: `oak-kg-threads-mcp.integration.test.ts` exercises in-process
+  registry composition (`AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`,
+  `registerAllResources`) and executor invocation. A transport-level MCP
+  list/read/invoke proof uses an e2e test file if execution needs it.
 - **Product code**: add the tool to the SDK universal registry
   (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
   export it through `public/mcp-tools.ts`; add the resource constant/getter
