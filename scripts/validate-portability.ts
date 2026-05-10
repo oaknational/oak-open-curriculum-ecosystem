@@ -198,6 +198,10 @@ for (const ruleFile of canonicalRules) {
 
 // --- Trigger content contract (≤10 content lines) ---
 
+function stripFrontmatter(content) {
+  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/u, '');
+}
+
 const ruleAdapterFiles = [...cursorRules, ...claudeRules, ...agentsRules];
 
 for (const ruleFile of ruleAdapterFiles) {
@@ -211,10 +215,6 @@ for (const ruleFile of ruleAdapterFiles) {
       `${ruleFile}: ${contentLines} content lines exceeds Trigger Content Contract maximum of 10`,
     );
   }
-}
-
-function stripFrontmatter(content) {
-  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/u, '');
 }
 
 // --- Skills lock entry-shape consistency ---

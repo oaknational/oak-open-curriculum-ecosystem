@@ -14,7 +14,7 @@ and
 its ritual moved to
 [`start-right-quick`](../skills/start-right-quick/shared/start-right.md)
 (session open) and
-[`session-handoff`](../commands/session-handoff.md) (session close).
+[`session-handoff`](../skills/session-handoff/SKILL-CANONICAL.md) (session close).
 Live state lives in
 [`.agent/memory/operational/`](../memory/operational/). Remaining
 prompts below are domain-specific handover briefs for focused work.

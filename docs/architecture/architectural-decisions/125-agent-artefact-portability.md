@@ -77,17 +77,17 @@ Each platform has thin wrappers that reference canonical content. Skill adapters
 
 Cursor reads skills from `.agents/skills/` per its current docs. The
 previously-emitted `.cursor/skills/` adapters are retired per the 2026-05-09
-amendment; `.cursor/commands/` remains a cleanup target while command-surface
-retirement finishes.
+amendment; `.cursor/commands/` is retired in full per the 2026-05-10
+amendment.
 
 #### Gemini CLI (`.gemini/`) — settings only
 
 Gemini CLI reads skills from `.agents/skills/` (documented as an alias
-for `.gemini/skills/`, with precedence). General custom-command adapters are a
-retirement target per the 2026-05-09 amendment. If `review-*.toml` files remain
-during migration, they are temporary sub-agent invocation adapters for a
-platform without native sub-agent spawning, not a user workflow command
-surface.
+for `.gemini/skills/`, with precedence). General custom-command adapters
+are retired per the 2026-05-10 amendment. `review-*.toml` files in
+`.gemini/commands/` remain as transitional sub-agent invocation adapters
+for a platform without native sub-agent spawning, not a user workflow
+command surface.
 
 #### Codex (`.codex/`)
 

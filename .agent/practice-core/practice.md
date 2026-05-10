@@ -49,7 +49,7 @@ graph TB
     end
 
     subgraph Tooling ["Tooling — how it is used"]
-        CANON["Canonical content<br/>.agent/skills · .agent/commands<br/>.agent/sub-agents"]
+        CANON["Canonical content<br/>.agent/skills · .agent/sub-agents"]
         ADAPT["Platform adapters<br/>.cursor · .claude · .gemini · .agents · .codex"]
         ENTRY["Entry points<br/>AGENT.md · CLAUDE.md · AGENTS.md · GEMINI.md"]
     end

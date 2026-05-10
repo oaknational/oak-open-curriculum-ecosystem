@@ -390,7 +390,7 @@ After renaming or adding commands in `package.json`:
    - `CONTRIBUTING.md`
    - `docs/governance/development-practice.md`
    - `.agent/directives/AGENT.md`
-   - `.claude/commands/jc-quality-gates.md`
+   - `.agent/skills/gates/SKILL-CANONICAL.md`
 
 ## Documentation Link Integrity
 

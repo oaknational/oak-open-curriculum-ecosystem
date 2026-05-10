@@ -229,4 +229,4 @@ the plan content.
 - `.agent/plans/templates/` — templates and components
 - `.agent/plans/templates/README.md` — usage instructions
 - ADR-114 — analogous pattern for sub-agent prompts
-- `.cursor/commands/jc-consolidate-docs.md` — consolidation flow
+- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` — consolidation flow

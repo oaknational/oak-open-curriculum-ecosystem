@@ -401,16 +401,21 @@ Skills are the sole user-and-model-invokable workflow surface — custom
 command surfaces are retired. Unsupported states belong in the local
 surface matrix.
 
-### Required Commands
+### Required Skills
 
-| Command          | File                     | Core logic                                                                                                                                                                                                                             |
-| ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| start-right      | `jc-start-right.md`      | Read and follow the start-right-quick skill.                                                                                                                                                                                           |
-| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, close own collaboration claims, update decision threads, capture surprises, and escalate into `jc-consolidate-docs` only when due.                          |
-| gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test`. All blocking; restart after any fix.                                                                                                                            |
-| commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, and use a conventional commit. Never force push, amend pushed commits, or use `--no-verify`.                                                                     |
-| consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract patterns. Rotate napkin. Manage fitness. Integrate incoming Practice Box. Broadcast outgoing context. See §Consolidation Workflow. |
-| plan             | `jc-plan.md`             | Read directives. Create plan with outcome, impact, value mechanism, acceptance criteria, risks, and non-goals.                                                                                                      |
+Each receiving repo MUST provide canonical bodies for these named
+workflows under `.agent/skills/<name>/SKILL-CANONICAL.md`. Generated
+adapters land at `.agents/skills/jc-<name>/` and
+`.claude/skills/jc-<name>/`.
+
+| Skill            | Canonical body                                                | Core logic                                                                                                                                                                                                                             |
+| ---------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| start-right      | `.agent/skills/start-right-quick/SKILL-CANONICAL.md`          | Read and follow the start-right-quick skill at session open.                                                                                                                                                                           |
+| session-handoff  | `.agent/skills/session-handoff/SKILL-CANONICAL.md`            | Refresh the continuity contract, close own collaboration claims, update decision threads, capture surprises, and escalate into the consolidate-docs skill only when due.                     |
+| gates            | `.agent/skills/gates/SKILL-CANONICAL.md`                      | Run `type-check -> lint -> build -> test`. All blocking; restart after any fix.                                                                                                                                                        |
+| commit           | `.agent/skills/commit/SKILL-CANONICAL.md`                     | Check status, review diff, verify gates, stage selectively, and use a conventional commit. Never force push, amend pushed commits, or use `--no-verify`.                                                                                |
+| consolidate-docs | `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`           | Verify docs current. Graduate settled content. Extract patterns. Rotate napkin. Manage fitness. Integrate incoming Practice Box. Broadcast outgoing context. See §Consolidation Workflow.                                              |
+| plan             | `.agent/skills/plan/SKILL-CANONICAL.md`                       | Read directives. Create plan with outcome, impact, value mechanism, acceptance criteria, risks, and non-goals.                                                                                                                         |
 
 ## Skills (.agent/skills/)
 
