@@ -9,6 +9,40 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Umbral Creeping Night / `claude-code` /
+opus-4.7 / `188baa`, owner-directed commit drain)**: owner invoked
+`/jc-start-right-quick please commit files in logical chunks` against a
+working tree carrying ~305 in-flight files from three preceding sessions
+(Shaded Rustling Pollen Phase 2 sweep, Sylvan Fruiting Glade drain
+Phase 0 doctrine, Fragrant Regrowing Root ADR-173 amendments). Landed
+7 commit chunks: `25a8ee6b` (Phase 2 reviewer→expert sweep, 304 files);
+`d1e9433b` (polarity discipline backfill, 95 files); `ab12fb3b` (drain
+Phase 0 doctrine — 5 PDRs, 3 ADRs, doctrine + tooling, 23 files);
+`cb5b791e` (ADR-173 source-authority split); `2380ba6f` (ADR-171
+observability orthogonal axes + 4 ADR amendments); `132c74d3` (ADR-173
+GitHub raw-import correction); `9a69e293` (drain Phase 1 + post-Phase-0
+housekeeping); `ae2d415f` (ADR-173/plan boundary cleanup —
+**subject hijacked by prepare-commit-msg hook to "docs(memory): break
+long line in distilled.md graduation pointer", body partially
+truncated mid-word**). Coordination signals: owner forbade `git reset`
+and `git stash` mid-session — used explicit-pathspec `git commit --
+<paths>` to leave staged peer files for later chunks; foreign
+`.git/index.lock` appeared once and cleared on its own (Shaded Rustling
+Pollen finishing in parallel) — surfaced rather than deleted; multiple
+parallel agents (Sylvan, Fragrant) were authoring new files DURING my
+commit run, so each pre-commit hook retry surfaced different
+format/markdownlint failures requiring iterative repair.
+**Next safe step**: post-commit reviewer dispatch on the 7 doctrine
+chunks if the owner wants validation; otherwise the working tree is
+clean, all in-flight work is durable, and Sylvan's claim 07a92f67
+remains open for their drain Phase 1+ continuation (PDRs 053–056 are
+already landed — their remaining scope is pending-graduations-md
+ongoing curation + repo-continuity hard-fitness remediation).
+**Hook-overridden-commit-subject signal to surface to owner**: a
+prepare-commit-msg hook silently overrode the manually-drafted Chunk 8
+subject and truncated one body line mid-word; this is a coordination
+risk worth investigating (candidate registered).
+
 **Session close (2026-05-10 — Windswept Sweeping Gale / `claude-code` /
 opus-4.7 / `726fcb`, claude-insight-report disposition plan executed end-to-end)**:
 landed all four phases of the disposition plan authored by the prior
@@ -136,9 +170,9 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
-| `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Windswept Sweeping Gale / `claude-code` / opus-4.7 / `726fcb` / 2026-05-10 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Foamy Navigating Hull / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -163,6 +197,12 @@ This branch also depends on the Practice/tooling substrate work from main in
 [threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
 
 ## Current Session Focus
+
+**Latest focus (2026-05-10 — Umbral Creeping Night, commit drain)**:
+working tree is clean. Three preceding sessions' in-flight work was
+absorbed into 7 logical commits on `feat/mcp-graph-support-foundation`.
+No arc progress was made on any thread; the session was pure
+transport. The branch-primary graph MVP focus is unchanged.
 
 **Latest focus (2026-05-10 — Sylvan Sprouting Grove handoff)**:
 owner-requested deep consolidation has completed. The active napkin was rotated
@@ -407,7 +447,16 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-10 Windswept Sweeping Gale, claude-code, opus-4.7,
+**Status (2026-05-10 Umbral Creeping Night, claude-code, opus-4.7,
+`188baa`, owner-directed commit drain)**: `not due — pure transport
+session, no substantive content authored. The 7 chunk commits absorb
+already-authored doctrine; consolidation triggers (deep convergence,
+pattern extraction, napkin rotation) do not fire on commit-drain
+sessions. The "subject-hijacked-by-hook" signal is captured as a
+candidate for a future consolidation pass if a second instance
+appears.`
+
+**Prior status (2026-05-10 Windswept Sweeping Gale, claude-code, opus-4.7,
 `726fcb`, claude-insight-report disposition plan executed):
 `not due — small-scope doctrine integration (one new pattern + one
 batched candidate entry); no consolidation triggers fired. Napkin
@@ -431,7 +480,7 @@ should mine the convergent-reviewer-finding pattern (3 independent
 reviewers surfacing the same trigger-surface break) and the
 ADR-146-area-count drift as documentation-integrity captures`.**
 
-**Status (2026-05-10 Sylvan Fruiting Glade, claude-code, opus-4.7,
+**Prior status (2026-05-10 Sylvan Fruiting Glade, claude-code, opus-4.7,
 `a53e45`, knowledge graduation session): `completed this handoff —
 owner-reframed the pending-graduations register's deferral vocabulary
 as fabricated avoidance and directed full backlog drain in session.

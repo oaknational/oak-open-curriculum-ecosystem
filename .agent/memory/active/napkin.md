@@ -279,3 +279,87 @@ The most recent rotation is archived at
   worked: it pipes the HEAD content to the working-tree file,
   produces a clean zero-diff state, and never touches git's index
   or HEAD. This is the correct revert pattern under the hook policy.
+
+## 2026-05-10 — Umbral Creeping Night / claude-code / opus-4.7 / `188baa`
+
+### Surprise — prepare-commit-msg hook silently overrode a manually-drafted commit subject
+
+- **Expected**: `git commit -m "<my subject>" -m "<body>"` lands the
+  commit with the literal `-m` arguments as the message. This held
+  for chunks 1–7 (subjects matched my drafts; chunk 1's subject was
+  pre-set by Shaded Rustling Pollen's queued message which was
+  reasonable).
+- **Actual**: chunk 8 (ADR-173 / graph-stack plan boundary cleanup,
+  staged 7 files) committed as `ae2d415f` with subject
+  `docs(memory): break long line in distilled.md graduation pointer`
+  and a first paragraph rewritten to describe the distilled.md ref-
+  link conversion. My drafted subject and first paragraph never
+  reached the commit object. One body line was truncated mid-word
+  (`source set,` became `ce set,`), so a hook ran a string-replace or
+  partial concatenation pass against my message rather than a clean
+  override.
+- **Why expectation failed**: a prepare-commit-msg hook (or
+  equivalent) appears to inspect the staged diff, decide which file's
+  change is "dominant" by some heuristic, and rewrite the subject +
+  intro accordingly. The heuristic picked a 3-line distilled.md
+  ref-link tweak over the 84-line ADR-173 restructure. The hijack
+  did not fire on chunks 2–7 — likely because those were
+  single-domain commits where the heuristic's choice happened to
+  align with my draft.
+- **Behaviour change**: when committing a multi-domain bundle,
+  inspect the resulting commit subject after `git commit` returns.
+  If a hook overrode the subject, surface to owner before pushing —
+  amending is destructive but a wrong subject is a permanent record.
+  Diagnostic command: `git log -1 --format=%s` immediately after
+  commit. Candidate registered for a future structural cure
+  (PDR-053 surface-polarity treatment for prepare-commit-msg vs
+  blocking commit-msg hooks).
+
+### Surprise — `pnpm format:root` and `pnpm markdownlint:root` find different files on each run
+
+- **Expected**: running `pnpm format:root && pnpm markdownlint:root`
+  once would resolve all formatting/markdown issues across the tree;
+  the next pre-commit hook would pass.
+- **Actual**: each commit retry surfaced a NEW unrelated file
+  needing formatting (ADR-176 → ADR-178 → ADR-171 → ADR-163 →
+  ADR-173 → ADR-116 → repo-continuity.md). Each individual fix took
+  one round-trip through the pre-commit hook and a re-run of the
+  fixers. The pattern repeated 5+ times during the commit drain.
+- **Why expectation failed**: parallel agents (Sylvan, Fragrant)
+  were authoring new files DURING my commit run. Each newly-created
+  file arrived in an unformatted state (the authoring agent didn't
+  format-on-save), and `pnpm format:root` against the whole tree
+  picked them up only after they appeared. The retry loop wasn't a
+  bug in the formatters — it was real work appearing live in a
+  multi-agent shared working tree.
+- **Behaviour change**: in a multi-agent active session, expect
+  whole-tree gate hooks to surface peer-authored files repeatedly.
+  Repair immediately per the gateable-repo discipline; do not treat
+  the loop as a hook failure or attempt to narrow hook scope. Time
+  budget: each retry costs ~30s of pre-commit hook + fix; budget
+  for 3–5 retries on a busy multi-agent commit drain.
+
+### Surprise — `git commit -- <pathspec>` is the cleanest way to leave staged peer files for next chunk
+
+- **Expected**: when I needed to commit a subset of staged files
+  (Chunk 2 = patterns + PDR-014, leaving 2 staged scripts for
+  Chunk 3), my first reach was `git reset HEAD -- <scripts>` to
+  unstage them.
+- **Actual**: owner interrupted: "no resets, no stash" — both are
+  destructive-shaped operations under the never-use-git-to-remove-
+  work rule. The clean alternative is `git commit -m ... --
+  <explicit pathspec>`: git commits ONLY the listed paths and
+  leaves other staged files in the index untouched, ready for the
+  next chunk.
+- **Why expectation failed**: I read `git reset HEAD -- <path>` as
+  "non-destructive unstaging" because it doesn't touch the working
+  tree. But it DOES drop the staged content, and in a multi-agent
+  shared tree where staging is contested, dropping any staged
+  content risks losing peer-authored work that someone else expected
+  to be in the index. Owner's rule treats reset as destructive
+  because it discards information from the index in a way that's
+  not recoverable from working-tree state alone.
+- **Behaviour change**: for "commit a subset of staged files",
+  default to `git commit -- <pathspec>`. For "remove a file from
+  staging entirely without committing it", surface the use case to
+  owner — there's no current session-tested clean path.

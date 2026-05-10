@@ -16226,6 +16226,61 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "07a92f67-acbb-444a-b165-8a1d1d48e9aa",
+      "agent_id": {
+        "agent_name": "Sylvan Fruiting Glade",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "a53e45"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/patterns/fabricated-gate-as-avoidance.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/practice-core/decision-records/PDR-052-directive-file-context-budget.md",
+            ".agent/practice-core/decision-records/PDR-053-orchestrator-vs-gate-structural-cure.md",
+            ".agent/practice-core/decision-records/PDR-054-asymmetric-cure-followup-discipline.md",
+            ".agent/practice-core/decision-records/PDR-055-cli-affordance-set-discipline.md",
+            ".agent/practice-core/decision-records/PDR-056-inter-agent-collaboration-protocol.md",
+            ".agent/practice-core/decision-records/PDR-014-pattern-routing-discipline.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/CHANGELOG.md",
+            ".agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md",
+            ".agent/rules/no-moving-targets-in-permanent-docs.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T15:53:08Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Drain pending-graduations in full this session: 7 due + 2 partial + 1 quarantined; HARD-zone curation on pending-graduations.md and repo-continuity.md; capture fabricated-gate-as-avoidance pattern",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T16:56:19Z",
+        "closed_by": {
+          "agent_name": "Quiet Lurking Mask",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "88b0a5"
+        },
+        "summary": "Inadvertent duplicate from prior Sylvan Fruiting Glade close ceremony; carry-over briefing flagged safe-to-close at fresh session open. Graduations were committed (ab12fb3b..ae2d415f) before this claim was opened.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07a92f67-acbb-444a-b165-8a1d1d48e9aa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
