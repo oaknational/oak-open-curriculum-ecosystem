@@ -675,36 +675,5 @@
       "notes": "Re-enqueuing with full coordination bundle"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "e0487e09-8261-426f-bbaf-a5a18ac6e31a",
-      "agent_id": {
-        "agent_name": "Quiet Lurking Mask",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "88b0a5"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/practice-core/decision-records/PDR-057-empirical-answerability.md",
-            ".agent/practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md",
-            ".agent/practice-core/decision-records/README.md",
-            ".agent/practice-core/CHANGELOG.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/memory/operational/quarantine/apply-dont-ask-doctrine.md",
-            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-10.md",
-            "/Users/jim/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/project_apply_dont_ask_superseded.md",
-            "/Users/jim/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/MEMORY.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-10T16:56:36Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "QUAR-1 reformulation: author PDR-057 (empirical-answerability) and PDR-058 (three-tier optionality decomposition); graduate quarantined apply-don't-ask entry; clear pending-graduations.md HARD char zone via dated archive snapshot."
-    }
-  ]
+  "claims": []
 }

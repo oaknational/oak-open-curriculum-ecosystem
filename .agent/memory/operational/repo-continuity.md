@@ -9,6 +9,39 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Quiet Lurking Mask / `claude-code` /
+opus-4-7-1m / `88b0a5`, QUAR-1 reformulation, dead-doctrine
+retirement, archive snapshot)**: owner authorised (a)
+Reformulate-and-land on the
+QUAR-1 owner-decision carried over from the prior Sylvan Fruiting
+Glade session. Graduated quarantined `apply-don't-ask` /
+`stop-inventing-optionality` to PDR-057 (empirical-answerability
+pre-question gate) and PDR-058 (three-tier optionality decomposition).
+Pair-reviewed by docs-adr-expert + onboarding-expert +
+assumptions-expert; review findings folded into both PDRs (destructive-
+action family naming in PDR-057 Anti-Pattern §1; PDR-046 §Move 3
+boundary clarification; orthogonality claim softened in PDR-058; pre-
+investigation triage scoped out of PDR-057 Forbids). Three commits
+landed: `1bd9a18b` (QUAR-1 graduation, 9 files), `67350e82` (dead-
+doctrine retro-edits in 4 live-operative surfaces), `a098d709`
+(archive snapshot, dropped `pending-graduations.md` 157,255 → 149,079
+chars, cleared HARD char zone). User-memory
+`project_apply_dont_ask_superseded.md` retired (substance fully
+canonical in PDRs). **Surprise — foreign-stage absorption fired
+post-verify-staged**: `a098d709` landed 11 files when verify-staged
+confirmed a 2-file bundle. The pre-commit hook chain (lint:fix,
+format-fix, RULES_INDEX regen, platform-adapter regen) modified files
+and auto-staged them between verify-staged returning OK and `git
+commit` invoking the hook chain. PDR-054 / ADR-177's verify-staged
+check runs BEFORE the hook chain, so cannot catch hook-introduced
+absorption. Pending-graduations entry added as PDR-054 / ADR-177
+amendment candidate (post-hook verify-staged or hook-staged
+classification by regenerator-vs-arbitrary). **Next safe step**:
+napkin.md is at 453 lines (HARD limit 300, critical 450) after this
+session — owner direction needed on napkin drain or rotation; the
+graduated-substance was authored against the load-bearing imperative
+to preserve substance over budget.
+
 **Session close (2026-05-10 — Fragrant Regrowing Root / `codex` /
 GPT-5 / `019e12`, source-authority clarification + handoff)**:
 recorded the graph/EEF source model across ADRs and executable plans.
@@ -187,7 +220,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Quiet Lurking Mask / `claude-code` / opus-4-7-1m / `88b0a5` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |

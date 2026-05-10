@@ -388,3 +388,66 @@ The most recent rotation is archived at
   or supplied by EEF, and that the repo copy is definitive until EEF clarifies
   provenance and refresh mechanics. Behaviour change: never describe the EEF
   JSON as reconstructed or scraped unless a future EEF source confirms that.
+
+## 2026-05-10 — Quiet Lurking Mask / claude-code / claude-opus-4-7-1m / `88b0a5`
+
+### What Was Done
+
+- Owner-directed QUAR-1 reformulation (a) Reformulate-and-land:
+  graduated quarantined `apply-don't-ask` / `stop-inventing-optionality`
+  to PDR-057 (empirical-answerability pre-question gate) and PDR-058
+  (three-tier optionality decomposition). Pair-reviewed by
+  docs-adr-expert + onboarding-expert + assumptions-expert.
+- Retired 4 dead-doctrine references (eef.next-session,
+  agentic-engineering-enhancements.next-session, graph-query-layer.plan.md,
+  undo-change SKILL-CANONICAL).
+- Retired user-memory `project_apply_dont_ask_superseded.md`.
+- Archive snapshot: 3 graduated entries (pattern polarity, 30%
+  context budget, orchestrator-vs-gate) moved to dated archive.
+  pending-graduations dropped 157,255 → 149,079 chars (cleared HARD).
+- Three commits: 1bd9a18b, 67350e82, a098d709.
+
+### Surprise — foreign-stage absorption fired post-verify-staged
+
+- **Expected**: stage-by-explicit-pathspec + verify-staged
+  (PDR-054 + ADR-177) protects the authorial bundle. Verify-staged
+  passed cleanly on the archive-snapshot commit with my explicit
+  2-file scope.
+- **Actual**: the resulting commit `a098d709` landed 11 files.
+  Between `verify-staged` returning OK and `git commit` invoking
+  the hook chain, the pre-commit hook (which runs `lint:fix`,
+  format-fix, RULES_INDEX regen, platform-adapter regen) modified
+  files and auto-staged them. Files swept in: 3 platform-adapter
+  rule files (regenerated from canonical), `.claude/settings.json`,
+  `RULES_INDEX.md`, `agent-tools/src/core/health-probe-{parity,shared}.ts`
+  (substantive `-100` line changes), and two scripts including a
+  `-264` line change in `validate-portability.ts`.
+- **Diagnosis**: PDR-054 / ADR-177's verify-staged fingerprint
+  divergence check runs BEFORE the hook chain. The hook chain
+  itself stages new files (this is its design — auto-fix and
+  re-stage). So the verify-staged window does not cover
+  hook-introduced absorption. The asymmetric-cure framing is
+  precise: my disciplined pathspec staging protected the inbound
+  scope, but not the post-hook scope.
+- **Behaviour change**: surface this as a PDR-054 + ADR-177
+  amendment candidate — symmetric cure requires either (i) a
+  post-hook verify-staged INSIDE the hook chain that fails the
+  commit if non-queued files appear, or (ii) a separate
+  post-commit "absorption audit" that surfaces the absorption
+  with high visibility. Adding to pending-graduations as a
+  candidate at this handoff per step 6b.
+
+### Insight — hook-chain re-staging is design, not bug
+
+- Pre-commit hooks in this repo do real work: lint:fix, format-fix,
+  RULES_INDEX regen, platform-adapter regen. Each of these makes
+  edits that need to land with the commit. The hook stages those
+  edits. That is the hook chain doing its job correctly.
+- The conflict is between "hook chain stages necessary fixes" and
+  "agent staged exactly the intent bundle". These are both correct
+  in isolation; the friction is at the seam.
+- The PDR-054 / ADR-177 cure was framed around peer-staged work
+  (parallel agent's WIP being absorbed). The hook-staged case is
+  structurally identical but has different intent: hook-staged
+  files are *meant* to land. Telling them apart is the design
+  question.

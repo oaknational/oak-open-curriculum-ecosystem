@@ -95,7 +95,28 @@ not a verdict.
 
 ### `due` (graduation candidates for next consolidation)
 
-(empty — full backlog drained 2026-05-10)
++ 2026-05-10; **hook-chain re-staging absorbs files post-verify-staged
+  — PDR-054 / ADR-177 amendment candidate (asymmetric-cure symmetry
+  re-imported)**.
+  `[captured: 2026-05-10 | source: napkin (Quiet Lurking Mask 2026-05-10) | target: amendment:PDR-054+ADR-177 OR new-PDR:post-hook-verify-staged | trigger: second-instance OR owner-direction | size: M | status: due]`
+  Observed instance: commit `a098d709` landed 11 files when verify-
+  staged confirmed a 2-file bundle. Between verify-staged returning OK
+  and `git commit` invoking the hook chain, the pre-commit hook
+  (`lint:fix`, format-fix, RULES_INDEX regen, platform-adapter regen)
+  modified files and auto-staged them. PDR-054 / ADR-177's
+  verify-staged fingerprint divergence check runs *before* the hook
+  chain; the hook chain itself stages new files (this is its design —
+  auto-fix and re-stage). The verify-staged window does not cover
+  hook-introduced absorption. Asymmetric-cure framing: my disciplined
+  pathspec staging protected inbound scope, but not post-hook scope.
+  Symmetric cure shapes: (i) post-hook verify-staged INSIDE the hook
+  chain that fails the commit if non-queued files appear; (ii)
+  separate post-commit absorption-audit step that surfaces the
+  absorption with high visibility; (iii) classify hook-staged files
+  by intent (regenerator output is *meant* to land; auto-fixed
+  arbitrary peer work is not) and only absorb regenerator output.
+  Trigger: second instance OR owner direction. Source-surface:
+  `.agent/memory/active/napkin.md` (Quiet Lurking Mask session entry).
 
 ### `partially-graduated`
 

@@ -2,9 +2,78 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`claude-code` / opus-4.7 / Windswept Sweeping
-Gale / `726fcb`, claude-insight-report disposition plan executed end-to-end:
-pattern landed + pending-graduations batch entry registered).
+**Last refreshed**: 2026-05-10 (`claude-code` / opus-4-7-1m / Quiet Lurking
+Mask / `88b0a5`, QUAR-1 reformulation + dead-doctrine retirement +
+archive snapshot).
+
+### 2026-05-10 session record — QUAR-1 reformulation (Quiet Lurking Mask)
+
+**Landed outcome**: owner authorised (a) Reformulate-and-land on the
+QUAR-1 owner-decision carried over from the prior Sylvan Fruiting
+Glade session. Three commits:
+
+- `1bd9a18b` — graduated quarantined `apply-don't-ask` /
+  `stop-inventing-optionality` to PDR-057 (empirical-answerability
+  pre-question gate) and PDR-058 (three-tier optionality
+  decomposition). 9 files: 2 new PDRs, README index, CHANGELOG,
+  quarantine clear, pending-graduations status flip,
+  read-before-asking + consolidate-at-third-consumer back-cites,
+  distilled.md graduation entry.
+- `67350e82` — retired 4 dead-doctrine references in live-operative
+  surfaces (eef.next-session, agentic-engineering-enhancements.next-session
+  itself, graph-query-layer.plan.md, undo-change SKILL-CANONICAL).
+- `a098d709` — archive snapshot moved 3 graduated entry bodies
+  (pattern polarity, 30% context budget, orchestrator-vs-gate) to
+  `.agent/memory/operational/archive/pending-graduations-archive-2026-05-10.md`.
+  pending-graduations.md dropped 157,255 → 149,079 chars (cleared
+  HARD).
+
+**Reviewer dispatch**:
+
+- `docs-adr-expert` (PDR-057/058): GAPS FOUND (1 BLOCKER, 5
+  WARNINGS, 2 DEFERRED). Blocker on PDR-058 supersedes-link
+  phrasing fixed before staging; warnings on destructive-action
+  family naming + Anti-Patterns symmetry partly folded in.
+- `onboarding-expert` (PDR-057/058): GAPS FOUND (3 BLOCKERS, 5
+  WARNINGS). PDR README index missing rows + quarantine file
+  back-update + PDR-058 supersedes wording fixed before staging.
+- `assumptions-expert` (PDR-057/058): no INVALID assumptions; 3
+  WEAK assumptions partly folded in (destructive-action family
+  naming hardened in PDR-057 Anti-Pattern §1; pre-investigation
+  triage scoped out of PDR-057 Forbids; PDR-058 orthogonality
+  claim softened to "observed in evidence; open to additional
+  surfaces").
+
+**Surprise — foreign-stage absorption fired post-verify-staged**:
+commit `a098d709` landed 11 files when verify-staged confirmed a
+2-file bundle. Pre-commit hook chain (lint:fix, format-fix,
+RULES_INDEX regen, platform-adapter regen) modified files and
+auto-staged them between verify-staged returning OK and `git commit`
+invoking the hook chain. PDR-054 / ADR-177's verify-staged check
+runs BEFORE the hook chain; the hook chain itself stages new files
+(this is its design). Logged to napkin and pending-graduations as
+PDR-054 / ADR-177 amendment candidate.
+
+**Follow-ups completed**:
+
+- User-memory `project_apply_dont_ask_superseded.md` retired entirely
+  (substance fully canonical in PDRs); MEMORY.md index updated.
+- PDR-058 §Surfaces 2 (design optionality) + 3 (outcome optionality)
+  registered as standalone graduation-candidate routing labels in
+  `pending-graduations.md`.
+
+**Fitness signal to surface to owner**: napkin.md is at 453 lines
+(HARD limit 300, critical 450) after this session's substantive
+entry. Owner direction needed on napkin drain or rotation. The
+substance was preserved over budget per the load-bearing imperative.
+pending-graduations.md is back under HARD char zone after archive
+snapshot.
+
+### Prior session record (Windswept Sweeping Gale 2026-05-10)
+
+[Retained below: claude-insight-report disposition plan executed
+end-to-end — pattern landed + pending-graduations batch entry
+registered.]
 
 ### 2026-05-10 session record — disposition plan executed (Windswept Sweeping Gale)
 
