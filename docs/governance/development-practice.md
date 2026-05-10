@@ -27,7 +27,8 @@ The quality gates must be run after all major changes, and before each commit:
 
 Locally we can also run
 
-- `pnpm test:e2e` - E2E tests (requires appropriate API keys set in the root `.env`)
+- `pnpm test:e2e` - E2E tests (use mocks and dependency injection; no service
+  credentials required)
 
 For AI agent execution order, follow directive-defined one-gate-at-a-time runs
 from the grounding directives/prompts first; aggregate commands remain

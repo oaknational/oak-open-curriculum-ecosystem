@@ -181,7 +181,6 @@ pnpm test:ui
 pnpm test:a11y
 pnpm test:widget:ui
 pnpm test:widget:a11y
-pnpm smoke:dev:stub
 
 # Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)

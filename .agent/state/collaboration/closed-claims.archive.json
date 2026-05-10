@@ -14436,6 +14436,226 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "32fe8cf8-bd49-4b94-b466-c591b0c6e76f",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "onboarding-entrypoint-review",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:15:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Read-only onboarding entrypoint review orchestration; dispatch onboarding-reviewer and summarise findings for owner.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:19:28Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Closed duplicate/narrow onboarding review claim after corrected full file-area claim covered the intended read-only audit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "32fe8cf8-bd49-4b94-b466-c591b0c6e76f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b22f67fd-1ac3-44e8-9acd-479b0f3771b1",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "onboarding-entrypoint-review",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            "CONTRIBUTING.md",
+            "AGENTS.md",
+            "RULES_INDEX.md",
+            ".agent/directives/AGENT.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:16:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Read-only onboarding entrypoint review orchestration; corrected full entrypoint area after area-pattern repetition preserved only the final pattern.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:19:28Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Onboarding-reviewer completed read-only audit of root onboarding entry points; findings reported to owner in current chat.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b22f67fd-1ac3-44e8-9acd-479b0f3771b1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ce9c9a75-ab65-4f8a-a2f0-352a4dc76294",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "onboarding-entrypoint-review",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            "CONTRIBUTING.md",
+            "docs/operations/environment-variables.md",
+            "docs/operations/troubleshooting.md",
+            "docs/engineering/build-system.md",
+            "docs/README.md",
+            ".agent/directives/AGENT.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:24:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement owner-requested remediation for onboarding-reviewer findings; docs and agent entrypoint cleanup only.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:29:20Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Patched root onboarding docs for per-workspace env config, retired smoke gate references, start-right wording, AI skill links, and pathspec staging guidance.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ce9c9a75-ab65-4f8a-a2f0-352a4dc76294",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a60f3a52-8a3b-41ef-a59e-9bf1329c1e48",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "onboarding-entrypoint-review",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-search-cli/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:25:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Extend onboarding remediation to stale root pnpm check description in search CLI README; docs-only.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:29:20Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Updated Oak search CLI onboarding docs for current root gates and retired smoke gate references.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a60f3a52-8a3b-41ef-a59e-9bf1329c1e48",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7b26ff86-3e5f-4031-b06b-4eae84b8af38",
+      "agent_id": {
+        "agent_name": "Velvet Creeping Mask",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e11"
+      },
+      "thread": "onboarding-entrypoint-review",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/governance/accessibility-practice.md",
+            "docs/governance/development-practice.md",
+            "apps/oak-search-cli/docs/IR-METRICS.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T11:34:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Extend onboarding remediation to live docs found by stale root smoke/env scan; docs-only.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T11:29:20Z",
+        "closed_by": {
+          "agent_name": "Velvet Creeping Mask",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e11"
+        },
+        "summary": "Updated secondary governance and search CLI docs to reflect retired root smoke gate and current live search verification wording.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7b26ff86-3e5f-4031-b06b-4eae84b8af38",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

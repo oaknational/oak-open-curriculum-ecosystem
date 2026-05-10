@@ -2,7 +2,28 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`claude-code` / Opus 4.7 / Iridescent Dancing Nebula / `04cca8`, Wave 2 plan-file pivot).
+**Last refreshed**: 2026-05-10 (`codex` / GPT-5 / Velvet Creeping Mask / `019e11`, onboarding entrypoint remediation).
+
+### 2026-05-10 session record — onboarding entrypoint remediation landed
+
+**Landed outcome**: root onboarding entry points now match current repo
+reality after the onboarding-reviewer audit. Root env setup points to
+per-workspace `.env.local` files; retired root smoke-test references
+were removed from live onboarding surfaces; AGENT skill links point at
+`SKILL-CANONICAL.md`; start-right wording names the current platform
+adapter shape; CONTRIBUTING no longer recommends wildcard staging.
+
+**Touched surfaces**: `README.md`, `CONTRIBUTING.md`, `docs/README.md`,
+operations docs, build-system docs, governance docs, search CLI docs,
+`.agent/directives/AGENT.md`, and the start-right shared workflows.
+
+**Validation**: `pnpm markdownlint:root`, `pnpm format:root`, targeted
+stale-reference scan, canonical-link existence check, and `git diff
+--check` on edited files passed before handoff.
+
+**Thread/lane impact**: sidecar docs cleanup only. The active
+agent-tooling objective remains Phase 1 of
+`agent-commands-retirement.plan.md`.
 
 ### 2026-05-10 session record — Wave 2 Item 1 landed; full retirement opened as plan
 

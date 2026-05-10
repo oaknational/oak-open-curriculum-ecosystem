@@ -21,7 +21,11 @@ last_reviewed: 2026-04-20
   [high-level plan](../.agent/plans/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
-- **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `$jc-start-right-quick` in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).
+- **Working with AI?** → Start with the canonical
+  [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md),
+  or invoke the `jc-start-right-quick` platform adapter (`/jc-start-right-quick`
+  in Claude Code, Cursor, and Gemini; `$jc-start-right-quick` in Codex). Then
+  read [AGENT.md](../.agent/directives/AGENT.md).
 - **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Research Lanes & Hub](../.agent/research/agentic-engineering/README.md) — concept-and-deep-dive hub linking canon, deep dives, research, evidence, reports, and docs surfaces
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 - **Browsing by section?** → [Foundation](foundation/README.md) · [Governance](governance/README.md) · [Architecture](architecture/README.md) · [Engineering](engineering/README.md) · [Operations](operations/README.md) · [Domain](domain/README.md)

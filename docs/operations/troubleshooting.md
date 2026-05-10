@@ -34,7 +34,7 @@ pnpm test                # Run unit and integration tests
 
 Real credentials must be kept in local `.env` / `.env.local` files only.
 Those files are gitignored and should never be committed.
-Use `.env.example` and other docs as placeholders.
+Use workspace `.env.example` files and other docs as placeholders.
 
 ### Type Generation Fails
 
@@ -42,7 +42,7 @@ Use `.env.example` and other docs as placeholders.
 
 **Steps**:
 
-1. Ensure `OAK_API_KEY` is set in root `.env`
+1. Ensure `OAK_API_KEY` is set in the relevant workspace `.env.local`
 2. Check network access to `open-api.thenational.academy`
 3. Run `pnpm clean && pnpm sdk-codegen` for a fresh generation
 
@@ -88,9 +88,13 @@ than missing env vars.
 
 **Steps**:
 
-1. Copy `.env.example` to `.env` at the repo root
-2. For search CLI: copy `apps/oak-search-cli/.env.example` to `apps/oak-search-cli/.env.local`
-3. See [environment-variables.md](./environment-variables.md) for the complete reference
+1. Copy the example file for the workspace you are running:
+   `apps/oak-curriculum-mcp-streamable-http/.env.example` or
+   `apps/oak-search-cli/.env.example`
+2. Write credentials to that workspace's `.env.local`; there is no root
+   `.env.example`
+3. See [environment-variables.md](./environment-variables.md) for the complete
+   reference
 
 ## Search Reindex Boundary
 

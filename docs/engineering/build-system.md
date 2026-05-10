@@ -127,7 +127,6 @@ for the full decision record.
 | test:e2e          | --         | Yes      | Yes         | Yes                     |
 | test:ui           | --         | Yes      | Yes         | Yes                     |
 | test:a11y         | --         | --       | --          | Yes                     |
-| smoke:dev:stub    | --         | Yes      | Yes         | Yes                     |
 | doc-gen           | --         | --       | --          | Yes                     |
 
 **Key principle**: pre-push and CI run the same check set. A CI-only failure
@@ -199,7 +198,7 @@ stories.
 
 Runs all test surfaces declared in the root `package.json` script. The script
 currently covers `test`, `test:widget`, `test:e2e`, `test:ui`, `test:a11y`,
-`test:widget:ui`, `test:widget:a11y`, and `smoke:dev:stub`.
+`test:widget:ui`, and `test:widget:a11y`.
 
 ```bash
 pnpm test:all
@@ -239,9 +238,8 @@ See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/0
 ```text
 sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
               ▼
-         build → test, type-check, lint / lint:fix, doc-gen  (via ^build)
-              ↘ test:e2e, test:ui  (via same-package build)
-              ↘ smoke:dev:stub    (via same-package build + test:e2e)
+          build → test, type-check, lint / lint:fix, doc-gen  (via ^build)
+               ↘ test:e2e, test:ui  (via same-package build)
 ```
 
 | Task                | Depends On            | Why                                                   |
@@ -255,7 +253,6 @@ sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
 | `doc-gen`           | `^build`              | Source must be built before doc generation            |
 | `test:e2e`          | `build`               | Same-package build needed for built-server tests      |
 | `test:ui`           | `build`               | Same-package build needed for Playwright tests        |
-| `smoke:dev:stub`    | `build`, `test:e2e`   | Needs built app and passing E2E tests                 |
 
 ## Caching
 

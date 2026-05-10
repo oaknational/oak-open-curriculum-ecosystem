@@ -9,6 +9,20 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Velvet Creeping Mask / `codex` / GPT-5 /
+`019e11`, onboarding entrypoint remediation)**: landed the owner-requested
+follow-up to the onboarding-reviewer audit. Root README, CONTRIBUTING,
+environment/troubleshooting/build docs, start-right shared workflows,
+agent directive links, and related search/governance docs now reflect
+per-workspace `.env.local` setup, retired root smoke tests, canonical
+skill links, current start-right invocation language, and explicit
+pathspec staging guidance. Validation before handoff: `pnpm
+markdownlint:root`, `pnpm format:root`, targeted stale-reference scan,
+canonical-link check, and `git diff --check`. **Next safe step**:
+unchanged for branch-primary work — continue the graph/agent-tooling
+lane below; onboarding entrypoint remediation has no open follow-up in
+this continuity file.
+
 **Session close (2026-05-10 — Iridescent Dancing Nebula /
 `claude-code` / Opus 4.7 / `04cca8`, Wave 2 plan-file pivot)**: landed
 Wave 2 Item 1 as commit `fae57312` on `feat/mcp-graph-support-foundation`
@@ -113,7 +127,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Iridescent Dancing Nebula / `claude-code` / Opus 4.7 / `04cca8` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Velvet Creeping Mask / `codex` / GPT-5 / `019e11` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -270,7 +284,13 @@ Glade closeout (agent-collaboration directive evolution; tactical
 directive-edit pass on a single file; three findings captured in
 napkin as session-scoped observations; foreign-stage cure-naming
 reinforced an already partially-graduated entry) also recorded
-`not due` and stands.**
+`not due` and stands. Velvet Creeping Mask's 2026-05-10 onboarding
+entrypoint remediation marks consolidation due: the bounded docs
+correction itself closed cleanly, but the session-close fitness
+pre-screen shows `napkin.md` HARD and `practice.md` still HARD. This
+is not well-bounded for the owner-requested commit closeout, so a later
+consolidation pass should route the fitness pressure without trimming
+capture substance.**
 
 **Status (2026-05-09 Mistbound Glimmering Threshold, claude-code,
 Opus 4.7, `03f9bc`, skills-standardisation follow-up): `due — 3rd

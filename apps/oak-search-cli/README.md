@@ -216,7 +216,7 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
 
    ```bash
    pnpm make    # install → build/code-generation → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
-   pnpm check   # secrets:scan → clean → test:root-scripts → sdk-codegen → build → type-check → doc-gen → lint:fix → unit/int/ui/e2e/a11y/widget tests → smoke:dev:stub → lint:shell → subagents:check → portability:check → knip → depcruise → markdownlint:root → format:root
+   pnpm check   # secrets:scan → clean → test:root-scripts → sdk-codegen → build → type-check → doc-gen → lint:fix → unit/int/ui/e2e/a11y/widget tests → lint:shell → subagents:check → portability:check → skills:check → knip → depcruise → markdownlint:root → format:root
    ```
 
 4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**

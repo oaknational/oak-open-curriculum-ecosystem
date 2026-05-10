@@ -138,7 +138,10 @@ and
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
 - **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
-- **sentry** (optional, for dev-time Sentry issue triage, event inspection, and Sentry Seer via `sentry issue list` / `sentry api`) — install via [cli.sentry.dev](https://cli.sentry.dev/) (`curl https://cli.sentry.dev/install -fsS | bash`) or `brew install getsentry/tools/sentry`. Required only for humans and agents using Seer or `sentry api` locally; the HTTP MCP server's Vercel-build source-map upload + release/deploy linkage is performed by [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/) inside the workspace's `build` script (see [`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`](apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts) and [ADR-163 §6 amendment 2026-04-21](docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)). Operator-driven `sentry-cli` invocations resolve via `pnpm exec sentry-cli` from the MCP app workspace (where `@sentry/cli` arrives as a transitive devDependency of `@sentry/esbuild-plugin`), or via `pnpm dlx @sentry/cli` from elsewhere. Any script that invokes the dev `sentry` CLI must wrap the invocation in the `require_command "sentry" "https://cli.sentry.dev/"` fail-fast pattern; each script currently defines `require_command` inline — see [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh) for the canonical dev-`sentry` helper. Both patterns and the full `sentry-cli` vs dev-`sentry` split are documented in [docs/operations/sentry-cli-usage.md](docs/operations/sentry-cli-usage.md) (see also [ADR-159](docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)).
+- **sentry** (optional, for dev-time Sentry issue triage, event inspection,
+  and Sentry Seer) — install only when you need local Sentry operator tooling;
+  see [Sentry CLI usage](docs/operations/sentry-cli-usage.md) for the
+  `sentry-cli` vs dev-`sentry` split and workspace invocation details.
 
 ### Install and verify
 
@@ -158,11 +161,18 @@ If these pass, your toolchain is working. No API keys are required for unit test
 Many tasks work without environment variables. To run dev servers, integration tests, or search workflows, you need an Oak API key:
 
 1. Request a free key: <https://open-api.thenational.academy/docs/about-oaks-api/api-keys>
-2. Copy the example environment file and add your key:
+2. Copy the example environment file for the workspace you are running and add
+   your key there:
 
 ```bash
-cp .env.example .env
-# Edit .env: set OAK_API_KEY=your_key_here
+# HTTP MCP server
+cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+  apps/oak-curriculum-mcp-streamable-http/.env.local
+
+# Search CLI
+cp apps/oak-search-cli/.env.example apps/oak-search-cli/.env.local
+
+# Edit the relevant .env.local and set OAK_API_KEY=your_key_here
 ```
 
 See [environment variables guide](docs/operations/environment-variables.md) for Elasticsearch, Clerk, and other service credentials.

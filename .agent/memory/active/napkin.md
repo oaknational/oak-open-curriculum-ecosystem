@@ -22,6 +22,43 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-10 — Velvet Creeping Mask / codex / GPT-5 / `019e11`
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state claims open`
+- **Signal**: surprise
+- **Observation**: Repeated `--area-pattern` flags on `claims open` preserved
+  only the final pattern in the written claim, while repeated `--file` flags
+  correctly preserved the full file list. I caught this immediately because I
+  read the command's JSON response before proceeding.
+- **Behaviour change / candidate follow-up**: Prefer `--file` for file-area
+  claims until the CLI either documents single-value `--area-pattern` semantics
+  or accumulates repeated patterns consistently. Always inspect the written
+  claim response, not just the command exit code.
+  Source plane: operational
+
+## 2026-05-10 — Midnight Stealing Candle / codex / GPT-5 / `019e11`
+
+### Surprise
+
+- **Expected**: Codex CLI thread naming would be limited to documented
+  `/title` and `/statusline` surfaces, or require owner-only interactive use.
+- **Actual**: Installed `codex-cli 0.130.0` exposes `/rename` for the current
+  thread even though the public slash-command docs inspected this session did
+  not list it. The renamed title is visible to agent-side shell inspection in
+  `~/.codex/session_index.jsonl` and `~/.codex/state_5.sqlite` for the active
+  `CODEX_THREAD_ID`.
+- **Why expectation failed**: I treated the public docs page as complete for
+  the current installed CLI. The binary's embedded command list and local
+  state schema were the fresher evidence.
+- **Behaviour change**: For Codex CLI identity/display questions, check three
+  surfaces before concluding a capability is unavailable: official docs,
+  installed binary strings/help, and local `~/.codex` state. Treat `/rename`
+  as a useful human-visible display aid, while keeping PDR-027 identity
+  preflight as the correctness surface.
+- **Source plane**: operational
+
 ## 2026-05-10 — Iridescent Dancing Nebula / claude-code / Opus 4.7 / `04cca8`
 
 **Wave 2 Item 1 closed cure for Wave 1 trust-boundary, but the brief itself
@@ -210,35 +247,35 @@ fitness levels in distillation.
 Distilled behaviour changes from the rotation merged into
 [`distilled.md`](distilled.md) §Recently Distilled — 2026-05-09:
 
-+ PR closeout has two distinct evidence loops (gate state +
+- PR closeout has two distinct evidence loops (gate state +
   reviewer-comment state); a green PR can still need a comment-harvest
   pass.
-+ PR title/body need the same source-of-truth discipline as code
+- PR title/body need the same source-of-truth discipline as code
   comments — when branch scope changes, stale metadata is an
   actionable defect.
-+ For planning PRs, report PR technical readiness and plan
+- For planning PRs, report PR technical readiness and plan
   decision-completeness as separate verdicts; do not let a green PR
   collapse unresolved planning questions into implicit acceptance.
-+ When closeout transitions local/pending → pushed, refresh PR body
+- When closeout transitions local/pending → pushed, refresh PR body
   and next-session records in the same handoff pass.
-+ Generators that consume bulk data are valid only when the source
+- Generators that consume bulk data are valid only when the source
   directory is populated; verify the expected dataset size before
   trusting generated output.
-+ Check `active-claims.schema.json` or `<cli> --help` before
+- Check `active-claims.schema.json` or `<cli> --help` before
   authoring claims/areas from memory; CLI accepts `files` not `file`.
-+ ESLint plugin self-lint surfaces deprecated helper drift; when
+- ESLint plugin self-lint surfaces deprecated helper drift; when
   core helper types reject a local plugin, split the config at the
   type boundary rather than weakening the plugin type.
-+ WS0 multi-reviewer dispatch shrinks different parts of audit-shape
+- WS0 multi-reviewer dispatch shrinks different parts of audit-shape
   surface per lens; deferred "decide at write time" boundaries are
   unmade load-bearing decisions, not flexibility.
 
 ADR/PDR candidates already routed to
 [`pending-graduations.md`](../operational/pending-graduations.md):
 
-+ pre-commit gate scope (whole-tree vs staged-set) — ADR-shaped
+- pre-commit gate scope (whole-tree vs staged-set) — ADR-shaped
   coordination-tax property (entry of 2026-05-09).
-+ deferred-at-write-time-decisions-are-unmade-load-bearing-decisions
+- deferred-at-write-time-decisions-are-unmade-load-bearing-decisions
   — pattern candidate from WS0 dispatch (entry of 2026-05-09 to be
   added in step-7a/owner-action lane).
 

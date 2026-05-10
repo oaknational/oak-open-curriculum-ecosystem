@@ -46,7 +46,7 @@ Start with:
 
 All work MUST start with the `start-right-quick` or `start-right-thorough`
 skills. If neither has been specified then read
-[`.agent/skills/start-right-quick/SKILL.md`](../skills/start-right-quick/SKILL.md)
+[`start-right-quick/SKILL-CANONICAL.md`](../skills/start-right-quick/SKILL-CANONICAL.md)
 immediately after reading this file, and apply it.
 
 For the layering contract, authority order, and routing rule, see
@@ -112,9 +112,9 @@ Agent artefacts follow ADR-125's three-layer model: canonical content in
 [docs/engineering/extending.md](../../docs/engineering/extending.md) before
 adding rules, skills, commands, sub-agents, adapters, or ADRs.
 
-Use the [commit skill](../skills/commit/SKILL.md) for commits. It enumerates
-live commitlint constraints and validates the drafted message via
-`scripts/check-commit-message.sh` before `git commit`.
+Use the [commit skill canonical](../skills/commit/SKILL-CANONICAL.md) for
+commits. It enumerates live commitlint constraints and validates the drafted
+message via `scripts/check-commit-message.sh` before `git commit`.
 
 ## Memory And Continuity
 
